@@ -1,0 +1,32 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Example Request
+:operation-http-response-title: Example Response
+
+[[resources]]
+= Resources
+
+[[resources-users]]
+== User
+
+[[resources-users-create]]
+=== 회원 가입
+
+operation::users/create[snippets='http-request,http-response']
+operation::users/create[snippets='request-fields,response-fields']
+
+---
+
+[[resources-users-me]]
+=== 내정보 조회
+
+operation::users/me[snippets='http-request,http-response']
+operation::users/me[snippets='request-headers']
+operation::users/me[snippets='response-fields']
