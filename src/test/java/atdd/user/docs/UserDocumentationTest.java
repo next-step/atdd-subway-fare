@@ -1,14 +1,16 @@
 package atdd.user.docs;
 
 import atdd.AbstractDocumentationTest;
-import atdd.user.application.UserService;
-import atdd.user.domain.User;
-import atdd.user.web.UserController;
+import atdd.path.domain.User;
+import atdd.path.repository.UserRepository;
+import atdd.path.web.UserController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+
+import java.util.Optional;
 
 import static atdd.TestConstant.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,17 +31,17 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
     public static final String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
 
     @MockBean
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Test
     void create() throws Exception {
-        User user = new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME);
+        User user = new User(1L, TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PASSWORD);
 
         String inputJson = "{\"email\":\"" + user.getEmail() + "\"," +
                 "\"password\":\"" + user.getPassword() + "\"," +
                 "\"name\":\"" + user.getName() + "\"}";
 
-        given(userService.save(any())).willReturn(user);
+        given(userRepository.save(any())).willReturn(user);
 
         this.mockMvc.perform(post("/users")
                 .content(inputJson)
@@ -50,14 +52,14 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
 //                                links(linkWithRel("profile").description("Link to the profile resource")),
                                 requestFields(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name")
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password")
                                 ),
                                 responseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("The user's id"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name")
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password")
                                 )
                         ))
                 .andDo(print());
@@ -65,7 +67,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
 
     @Test
     void me() throws Exception {
-        given(userService.findUserByEmail(anyString())).willReturn(new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME));
+        given(userRepository.findByEmail(anyString())).willReturn(Optional.of(new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME)));
 
         this.mockMvc.perform(get("/users/me")
                 .header("Authorization", "Bearer " + TEST_USER_TOKEN)

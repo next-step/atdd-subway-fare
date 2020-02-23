@@ -1,4 +1,4 @@
-package atdd.user.web;
+package atdd.path.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

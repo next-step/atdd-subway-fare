@@ -1,7 +1,7 @@
 package atdd;
 
-import atdd.user.domain.User;
-import atdd.user.web.LoginUser;
+import atdd.path.auth.LoginUser;
+import atdd.path.domain.User;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

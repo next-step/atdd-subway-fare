@@ -1,11 +1,11 @@
 package atdd.path.web;
 
-import atdd.AbstractAcceptanceTest;
+import atdd.path.AbstractAcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static atdd.TestConstant.*;
+import static atdd.path.TestConstant.*;
 
 public class GraphAcceptanceTest extends AbstractAcceptanceTest {
     private StationHttpTest stationHttpTest;

@@ -1,8 +1,9 @@
 package atdd;
 
-import atdd.config.WebMvcConfig;
-import atdd.user.web.LoginInterceptor;
-import atdd.user.web.LoginUserMethodArgumentResolver;
+import atdd.path.auth.JwtTokenProvider;
+import atdd.path.auth.SignInInterceptor;
+import atdd.path.auth.SignInResolver;
+import atdd.path.configuration.WebMvcConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,11 +21,13 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @Import(WebMvcTestConfig.class)
 public class AbstractDocumentationTest {
     @MockBean
-    public LoginInterceptor loginInterceptor;
+    public SignInInterceptor signInInterceptor;
     @MockBean
-    public LoginUserMethodArgumentResolver methodArgumentResolver;
+    public SignInResolver signInResolver;
     @MockBean
     public WebMvcConfig webMvcConfig;
+    @MockBean
+    public JwtTokenProvider jwtTokenProvider;
 
     public MockMvc mockMvc;
 
