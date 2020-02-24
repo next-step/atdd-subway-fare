@@ -30,3 +30,12 @@ operation::users/create[snippets='request-fields,response-fields']
 operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
+
+[[resources-path]]
+== Path
+
+[[resources-path-findPath]]
+=== 최단 경로 조회
+
+operation::paths[snippets='http-request,http-response']
+operation::paths[snippets='response-fields']

@@ -31,7 +31,7 @@ public class StationResponseView {
 
     public static List<StationResponseView> listOf(List<Station> stations) {
         return stations.stream()
-                .map(it -> new StationResponseView(it.getId(), it.getName()))
+                .map(it -> new StationResponseView(it.getId(), it.getName(), it.getLines()))
                 .collect(Collectors.toList());
     }
 
