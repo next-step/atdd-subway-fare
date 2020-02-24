@@ -2,7 +2,9 @@ package atdd.docs;
 
 import atdd.Constant;
 import atdd.user.application.UserService;
+import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.LoginRequestView;
+import atdd.user.application.dto.UserResponseView;
 import atdd.user.domain.User;
 import atdd.user.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,9 +21,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static atdd.Constant.USER_BASE_URI;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -79,5 +83,25 @@ public class LoginDocumentationTest {
                         ))
                 .andDo(print());
 
+    }
+
+    @Test
+    public void showUserInfo() throws Exception {
+        CreateUserRequestView requestView = new CreateUserRequestView(EMAIL2, NAME, PASSWORD);
+        UserResponseView responseView = userService.createUser(requestView);
+        String token = jwtTokenProvider.createToken(EMAIL2);
+
+        mockMvc.perform(get(USER_BASE_URI + "/me")
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.mail").value(EMAIL2))
+                .andExpect(jsonPath("$.password").value(PASSWORD))
+                .andExpect(jsonPath("_links.self.href").exists())
+                .andExpect(jsonPath("_links.users-delete.href").exists())
+                .andDo(print())
+                .andDo(document("users-me"));
     }
 }

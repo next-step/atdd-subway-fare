@@ -24,8 +24,8 @@ public class UserResponseView {
         this.password = password;
     }
 
-    public void insertId(Long id){
-        this.id=id;
+    public void insertId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
