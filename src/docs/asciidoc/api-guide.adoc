@@ -30,3 +30,13 @@ operation::users/create[snippets='request-fields,response-fields']
 operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
+
+---
+
+[[resources-stations]]
+== Station
+
+[[resources-stations-create]]
+=== 지하철역 생성
+operation::stations/create[snippets='http-request,http-response']
+operation::stations/create[snippets='request-fields,response-fields']
