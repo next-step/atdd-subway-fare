@@ -68,6 +68,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
     @Test
     void me() throws Exception {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME)));
+        given(jwtTokenProvider.parseToken(anyString())).willReturn(TEST_USER_EMAIL);
 
         this.mockMvc.perform(get("/users/me")
                 .header("Authorization", "Bearer " + TEST_USER_TOKEN)
