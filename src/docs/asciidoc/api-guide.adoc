@@ -16,9 +16,17 @@ endif::[]
 [[resources-users]]
 == User
 
+
 [[resources-users-create]]
 === 회원 가입
 
 operation::users-create[snippets='http-request,request-headers']
 operation::users-create[snippets='request-fields,http-response']
 operation::users-create[snippets='response-headers,response-fields']
+
+
+[[resources-users-delete]]
+=== 회원 탈퇴
+
+operation::users-delete[snippets='http-request,request-headers']
+operation::users-delete[snippets='http-response,response-headers']

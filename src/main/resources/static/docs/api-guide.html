@@ -449,6 +449,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-users-create_response_fields">Response fields</a></li>
 </ul>
 </li>
+<li><a href="#resources-users-delete">회원 탈퇴</a>
+<ul class="sectlevel3">
+<li><a href="#resources-users-delete_http_request">Example Request</a></li>
+<li><a href="#resources-users-delete_request_headers">Request headers</a></li>
+<li><a href="#resources-users-delete_http_response">Example Response</a></li>
+<li><a href="#resources-users-delete_response_headers">Response headers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -654,12 +662,100 @@ Content-Length: 419
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resources-users-delete"><a class="link" href="#resources-users-delete">회원 탈퇴</a></h3>
+<div class="sect3">
+<h4 id="resources-users-delete_http_request"><a class="link" href="#resources-users-delete_http_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /users/2 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-users-delete_request_headers"><a class="link" href="#resources-users-delete_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Accept</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It accepts MediaType.APPLICATION_JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its contentType is MediaType.APPLICATION_JSON</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="resources-users-delete_http_response"><a class="link" href="#resources-users-delete_http_response">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 319
+
+{
+  "id" : 2,
+  "email" : null,
+  "name" : null,
+  "password" : null,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/2"
+    },
+    "users-create" : {
+      "href" : "http://localhost:8080/users"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resources-users-delete"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-users-delete_response_headers"><a class="link" href="#resources-users-delete_response_headers">Response headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The contentType is MediaType.APPLICATION_JSON</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-25 03:15:48 +0900
+Last updated 2020-02-25 05:54:47 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

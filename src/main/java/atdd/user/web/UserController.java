@@ -45,6 +45,7 @@ public class UserController {
         }
         UserResponseView response = userService.createUser(request);
         UserResource userResource = new UserResource(response);
+        userResource.add(linkTo(UserController.class).slash(response.getId()).withSelfRel());
         userResource.add(linkTo(UserController.class).slash(response.getId()).withRel("users-delete"));
         userResource.add(linkTo(UserController.class).slash("me").withRel("users-me"));
         userResource.add(new Link("/docs/api-guide.html#resources-users-create").withRel("profile"));
@@ -55,11 +56,18 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserResponseView> delete(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<UserResource> delete(@PathVariable Long id) {
+        Long userId = userService.deleteUser(id);
+        UserResponseView response = new UserResponseView();
+        response.insertId(id);
+        UserResource userResource = new UserResource(response);
+        userResource.add(linkTo(UserController.class).slash(response.getId()).withSelfRel());
+        userResource.add(linkTo(UserController.class).withRel("users-create"));
+        userResource.add(new Link("/docs/api-guide.html#resources-users-delete").withRel("profile"));
         return ResponseEntity
-                .notFound()
-                .build();
+                .ok(userResource);
+
+
     }
 
     @GetMapping("/me")

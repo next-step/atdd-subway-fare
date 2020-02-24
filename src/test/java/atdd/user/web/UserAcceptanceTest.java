@@ -40,6 +40,6 @@ public class UserAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.delete().uri(USER_BASE_URI + "/" + userId)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
-                .expectStatus().isNotFound();
+                .expectStatus().isOk();
     }
 }
