@@ -30,3 +30,10 @@ operation::users-create[snippets='response-headers,response-fields']
 
 operation::users-delete[snippets='http-request,request-headers']
 operation::users-delete[snippets='http-response,response-headers']
+
+[[resources-login]]
+=== 로그인 요청
+
+operation::login[snippets='http-request,request-headers']
+operation::login[snippets='request-fields,http-response']
+operation::login[snippets='response-headers,response-fields']

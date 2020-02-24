@@ -9,6 +9,9 @@ public class LoginResponseView {
         this.tokenType = tokenType;
     }
 
+    public LoginResponseView() {
+    }
+
     public String getAccessToken() {
         return accessToken;
     }

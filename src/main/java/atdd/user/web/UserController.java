@@ -22,7 +22,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(USER_BASE_URI)
-@JsonComponent
 public class UserController {
     private final UserService userService;
 
