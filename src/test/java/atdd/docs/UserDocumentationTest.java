@@ -1,6 +1,8 @@
 package atdd.docs;
 
 import atdd.user.application.dto.CreateUserRequestView;
+import atdd.user.domain.User;
+import atdd.user.domain.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +42,9 @@ public class UserDocumentationTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void createUser() throws Exception {
@@ -83,5 +89,42 @@ public class UserDocumentationTest {
                                         fieldWithPath("_links.profile.href").type(JsonFieldType.STRING).description("link to describe it by itself")
                                 )
                         ));
+    }
+
+    @Test
+    public void deleteUser() throws Exception {
+        CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
+        User user = userRepository.save(requestView.toEntity());
+        Long userId = user.getId();
+
+        mockMvc.perform(
+                delete(USER_BASE_URI + "/" + userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(
+                        document("delete-users",
+                                links(halLinks(),
+                                        linkWithRel("self").description("link to self"),
+                                        linkWithRel("users-me").description("link to show user's info")
+                                ),
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.ACCEPT).description("It accepts MediaType.APPLICATION_JSON"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Its contentType is MediaType.APPLICATION_JSON")
+                                ),
+                                requestFields(
+                                        fieldWithPath("id").description("user's id")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("The contentType is MediaType.APPLICATION_JSON")
+                                ),
+                                responseFields(
+                                        fieldWithPath("_links.self.href").type(JsonFieldType.STRING).description("link to self"),
+                                        fieldWithPath("_links.users-me.href").type(JsonFieldType.STRING).description("link to show user's info")
+                                )
+                        ));
+
+
     }
 }
