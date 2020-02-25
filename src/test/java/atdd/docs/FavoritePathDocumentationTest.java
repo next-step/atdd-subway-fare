@@ -28,6 +28,7 @@ import java.time.LocalTime;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.path.TestConstant.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,6 +54,7 @@ public class FavoritePathDocumentationTest {
     private Station station3;
     private Station station4;
     private Station station5;
+    private Line line;
     private String token;
 
     @Autowired
@@ -85,8 +87,7 @@ public class FavoritePathDocumentationTest {
         station3 = stationDao.save(new Station(STATION_NAME_19));
         station4 = stationDao.save(new Station(STATION_NAME_18));
         station5 = stationDao.save(new Station(STATION_NAME_17));
-
-        Line line = lineDao.save(Line.of(LINE_NAME, START_TIME, END_TIME, INTERVAL_MIN));
+        line = lineDao.save(Line.of(LINE_NAME_2, START_TIME, END_TIME, INTERVAL_MIN));
         lineService.addEdge(line.getId(), station1.getId(), station2.getId(), DISTANCE_KM);
         lineService.addEdge(line.getId(), station2.getId(), station3.getId(), DISTANCE_KM);
         lineService.addEdge(line.getId(), station3.getId(), station4.getId(), DISTANCE_KM);
@@ -99,13 +100,16 @@ public class FavoritePathDocumentationTest {
         stationDao.deleteById(station1.getId());
         stationDao.deleteById(station2.getId());
         stationDao.deleteById(station3.getId());
+        stationDao.deleteById(station4.getId());
+        stationDao.deleteById(station5.getId());
+        lineDao.deleteById(line.getId());
     }
 
     @Test
     public void createFavoritePathTest() throws Exception {
         //given
         CreateFavoritePathRequestView requestView
-                = new CreateFavoritePathRequestView(EMAIL, station1.getId(), station3.getId());
+                = new CreateFavoritePathRequestView(EMAIL, station1.getId(), station5.getId());
         String inputJson = objectMapper.writeValueAsString(requestView);
 
         //when, then
@@ -120,6 +124,8 @@ public class FavoritePathDocumentationTest {
                 .andExpect(jsonPath("userEmail").exists())
                 .andExpect(jsonPath("favoritePath").exists())
                 .andExpect(jsonPath("_links.self.href").exists())
-                .andDo(print());
+                .andExpect(jsonPath("_links.profile").exists())
+                .andDo(print())
+                .andDo(document("favorite-path-create"));
     }
 }
