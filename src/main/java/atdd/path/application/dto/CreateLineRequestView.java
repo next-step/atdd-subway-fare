@@ -10,6 +10,13 @@ public class CreateLineRequestView {
     private String endTime;
     private int interval;
 
+    public CreateLineRequestView(String name, String startTime, String endTime, int interval) {
+        this.name = name;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.interval = interval;
+    }
+
     public Line toLine() {
         return Line.of(name, LocalTime.parse(startTime), LocalTime.parse(endTime), interval);
     }

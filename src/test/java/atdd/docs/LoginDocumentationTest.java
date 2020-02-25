@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.Constant.USER_BASE_URI;
 import static org.mockito.BDDMockito.given;
@@ -55,9 +53,6 @@ public class LoginDocumentationTest {
 
     @MockBean
     UserService userService;
-
-    @MockBean
-    HttpServletRequest httpServletRequest;
 
     @Test
     public void loginTest() throws Exception {
