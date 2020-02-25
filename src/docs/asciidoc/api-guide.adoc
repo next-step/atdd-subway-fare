@@ -72,3 +72,8 @@ operation::favorite-path-create[snippets='http-request,http-response']
 [[resource-favorite-path-delete]]
 === 지하철경로 즐겨찾기 삭제 요청
 operation::favorite-path-delete[snippets='http-request,http-response']
+
+
+[[resource-favorite-path-showAllFavoritePaths]]
+=== 지하철경로 즐겨찾기 목록 보기 요청
+operation::favorite-path-showAllFavoritePaths[snippets='http-request,http-response']

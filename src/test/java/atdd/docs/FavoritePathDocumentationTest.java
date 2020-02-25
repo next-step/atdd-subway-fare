@@ -31,8 +31,7 @@ import java.time.LocalTime;
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.path.TestConstant.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -151,5 +150,26 @@ public class FavoritePathDocumentationTest {
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-path-delete"));
+    }
+
+    @Test
+    public void showAllFavoritePaths() throws Exception{
+        //given
+        favoritePathRepository.save(new FavoritePath(EMAIL, station1.getId(), station4.getId()));
+        favoritePathRepository.save(new FavoritePath(EMAIL, station2.getId(), station4.getId()));
+        favoritePathRepository.save(new FavoritePath(EMAIL, station3.getId(), station4.getId()));
+        favoritePathRepository.save(new FavoritePath(EMAIL, station4.getId(), station4.getId()));
+
+        //when, then
+        mockMvc.perform(
+                get(FAVORITE_PATH_BASE_URI)
+                .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER+token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("favoritePaths.[3].userEmail").exists())
+                .andExpect(jsonPath("_links.self.href").exists())
+                .andDo(print())
+                .andDo(document("favorite-path-showAllFavoritePaths"));
     }
 }
