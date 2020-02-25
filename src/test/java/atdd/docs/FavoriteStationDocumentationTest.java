@@ -26,10 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalTime;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
-import static atdd.path.TestConstant.STATION_NAME_20;
+import static atdd.path.TestConstant.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,6 +50,8 @@ public class FavoriteStationDocumentationTest {
     public static final int INTERVAL_MIN = 10;
     public static final int DISTANCE_KM = 5;
     private Station station1;
+    private Station station2;
+    private Station station3;
     private String token;
 
     @Autowired
@@ -75,6 +76,8 @@ public class FavoriteStationDocumentationTest {
     void setUp() {
         userRepository.save(new User(NAME, EMAIL, PASSWORD));
         station1 = stationDao.save(new Station(STATION_NAME_20));
+        station2 = stationDao.save(new Station(STATION_NAME_21));
+        station3 = stationDao.save(new Station(STATION_NAME_19));
         token = jwtTokenProvider.createToken(EMAIL);
     }
 
@@ -125,5 +128,25 @@ public class FavoriteStationDocumentationTest {
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-station-delete"));
+    }
+
+    @Test
+    public void showAllFavoriteStations() throws Exception {
+        //given
+        favoriteStationRepository.save(new FavoriteStation(EMAIL, station1.getId()));
+        favoriteStationRepository.save(new FavoriteStation(EMAIL, station2.getId()));
+        favoriteStationRepository.save(new FavoriteStation(EMAIL, station3.getId()));
+
+        //when, then
+        mockMvc.perform(
+                get(FAVORITE_STATION_BASE_URI)
+                        .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("favoriteStations[2].id").value(station3.getId()))
+                .andExpect(jsonPath("_links.self.href").exists())
+                .andDo(print())
+                .andDo(document("favorite-station-showAllFavoriteStations"));
     }
 }
