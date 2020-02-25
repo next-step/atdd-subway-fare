@@ -42,7 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(RestDocsConfig.class)
 public class FavoritePathDocumentationTest {
-    public static final String FAVORITE_STATION_BASE_URI = "/favorite-stations";
     public static final String FAVORITE_PATH_BASE_URI = "/favorite-paths";
     public static final String NAME = "brown";
     public static final String EMAIL = "boorwonie@email.com";
@@ -158,7 +157,7 @@ public class FavoritePathDocumentationTest {
         favoritePathRepository.save(new FavoritePath(EMAIL, station1.getId(), station4.getId()));
         favoritePathRepository.save(new FavoritePath(EMAIL, station2.getId(), station4.getId()));
         favoritePathRepository.save(new FavoritePath(EMAIL, station3.getId(), station4.getId()));
-        favoritePathRepository.save(new FavoritePath(EMAIL, station4.getId(), station4.getId()));
+        favoritePathRepository.save(new FavoritePath(EMAIL, station2.getId(), station1.getId()));
 
         //when, then
         mockMvc.perform(
@@ -169,6 +168,7 @@ public class FavoritePathDocumentationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("favoritePaths.[3].userEmail").exists())
                 .andExpect(jsonPath("_links.self.href").exists())
+                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-path-showAllFavoritePaths"));
     }

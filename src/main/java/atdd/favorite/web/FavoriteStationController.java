@@ -60,6 +60,7 @@ public class FavoriteStationController {
                 = new FavoriteStationsListResponseView(email, favoriteStations);
         FavoriteStationListResource resource = new FavoriteStationListResource(responseView);
         resource.add(linkTo(FavoriteStationController.class).withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-station-showAllFavoriteStations").withRel("profile"));
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)

@@ -1,10 +1,7 @@
 package atdd.favorite.web;
 
 import atdd.favorite.application.FavoritePathService;
-import atdd.favorite.application.dto.CreateFavoritePathRequestView;
-import atdd.favorite.application.dto.FavoritePathListResponseView;
-import atdd.favorite.application.dto.FavoritePathResource;
-import atdd.favorite.application.dto.FavoritePathResponseView;
+import atdd.favorite.application.dto.*;
 import atdd.favorite.domain.FavoritePath;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
@@ -53,14 +50,17 @@ public class FavoritePathController {
     }
 
     @GetMapping
-    public ResponseEntity<FavoritePathListResponseView> showFavoritePaths(HttpServletRequest request) {
+    public ResponseEntity showFavoritePaths(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         List<FavoritePath> favoritePaths = service.findAllByEmail(email);
         FavoritePathListResponseView responseView
                 = new FavoritePathListResponseView(email, favoritePaths);
+        FavoritePathListResource resource = new FavoritePathListResource(responseView);
+        resource.add(linkTo(FavoritePathController.class).withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-showAllFavoritePaths").withRel("profile"));
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(responseView);
+                .body(resource);
     }
 }

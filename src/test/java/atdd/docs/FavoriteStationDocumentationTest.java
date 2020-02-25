@@ -140,6 +140,7 @@ public class FavoriteStationDocumentationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("favoriteStations[2].id").value(station3.getId()))
                 .andExpect(jsonPath("_links.self.href").exists())
+                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-station-showAllFavoriteStations"));
     }

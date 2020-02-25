@@ -513,6 +513,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resource-favorite-path-delete_http_response">Example Response</a></li>
 </ul>
 </li>
+<li><a href="#resource-favorite-path-showAllFavoritePaths">지하철경로 즐겨찾기 목록 보기 요청</a>
+<ul class="sectlevel3">
+<li><a href="#resource-favorite-path-showAllFavoritePaths_http_request">Example Request</a></li>
+<li><a href="#resource-favorite-path-showAllFavoritePaths_http_response">Example Response</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -821,7 +827,7 @@ Host: localhost:8080
 {
   "email" : "boorwonie@email.com",
   "password" : "subway",
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTIzLCJleHAiOjE1ODI2MzkzMjN9.fg2fShcz75Kv0JqJCdM9isfDVoQ2jntNknjVnKNSDBU",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODc2LCJleHAiOjE1ODI2NDEwNzZ9.elC3dSLWyjXMgdpPgf3uRY1_8eKcOKUrocrzD_3mpFM",
   "tokenType" : "Bearer "
 }</code></pre>
 </div>
@@ -868,7 +874,7 @@ Content-Type: application/json
 Content-Length: 526
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTIzLCJleHAiOjE1ODI2MzkzMjN9.fg2fShcz75Kv0JqJCdM9isfDVoQ2jntNknjVnKNSDBU",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODc2LCJleHAiOjE1ODI2NDEwNzZ9.elC3dSLWyjXMgdpPgf3uRY1_8eKcOKUrocrzD_3mpFM",
   "tokenType" : "Bearer ",
   "_links" : {
     "self" : {
@@ -924,7 +930,7 @@ Content-Length: 526
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI2MzkxMjMsImV4cCI6MTU4MjYzOTMyM30.TPyTAjBr8KDY3lmGR4gAXiB92uZogjb7LmqzXxCpEyg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI2NDA4NzYsImV4cCI6MTU4MjY0MTA3Nn0.hIRy7tWP9VvZArbBSilBRz2Dt1GpcqIgqCuKDD3-neM
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1082,7 +1088,7 @@ Content-Length: 620
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /favorite-stations HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTE3LCJleHAiOjE1ODI2MzkzMTd9.0Gue6pZnAtD5Wa7gfRmrsEvkEN0uXgo_XUas2B9RH4w
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODcyLCJleHAiOjE1ODI2NDEwNzJ9.H1Bioj39jdztZlB6S1kBcrmt0fFaJ9Lf6xUkEFTtHI0
 Accept: application/json
 Content-Length: 58
 Host: localhost:8080
@@ -1133,7 +1139,7 @@ Content-Length: 367
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /favorite-stations/4 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTE3LCJleHAiOjE1ODI2MzkzMTd9.0Gue6pZnAtD5Wa7gfRmrsEvkEN0uXgo_XUas2B9RH4w
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODcyLCJleHAiOjE1ODI2NDEwNzJ9.H1Bioj39jdztZlB6S1kBcrmt0fFaJ9Lf6xUkEFTtHI0
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1171,7 +1177,7 @@ Content-Length: 262
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /favorite-stations HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTE1LCJleHAiOjE1ODI2MzkzMTV9.iMAvaYx_GeUMSV3aao7LPm0daZ6AmF5vdyI7quaSzDw
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODcxLCJleHAiOjE1ODI2NDEwNzF9.8iCV7fxy-Ii3ZuNReeAd4LLNjmvZZqvYRgXS88HULAY
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1183,7 +1189,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 412
+Content-Length: 525
 
 {
   "userEmail" : "boorwonie@email.com",
@@ -1203,6 +1209,9 @@ Content-Length: 412
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/favorite-stations"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resource-favorite-station-showAllFavoriteStations"
     }
   }
 }</code></pre>
@@ -1218,15 +1227,15 @@ Content-Length: 412
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /favorite-paths HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTE4LCJleHAiOjE1ODI2MzkzMTh9.OCgDSVxRAEqLfNUtTv5tjw1rvBw_ZC4HNri3d5V4ZJA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODczLCJleHAiOjE1ODI2NDEwNzN9.DOL-9N1VpcuSoE9sAmQuP2XrsRBhH1xjT90n0wPFaYs
 Accept: application/json
 Content-Length: 89
 Host: localhost:8080
 
 {
   "userEmail" : "boorwonie@email.com",
-  "startStationId" : 20,
-  "endStationId" : 24
+  "startStationId" : 25,
+  "endStationId" : 29
 }</code></pre>
 </div>
 </div>
@@ -1236,31 +1245,31 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /favorite-paths/2
+Location: /favorite-paths/6
 Content-Type: application/json
 Content-Length: 606
 
 {
-  "id" : 2,
+  "id" : 6,
   "userEmail" : "boorwonie@email.com",
   "favoritePath" : [ {
-    "id" : 20,
+    "id" : 25,
     "name" : "구룡역",
     "lines" : [ ]
   }, {
-    "id" : 21,
+    "id" : 26,
     "name" : "한티역",
     "lines" : [ ]
   }, {
-    "id" : 22,
+    "id" : 27,
     "name" : "개포동역",
     "lines" : [ ]
   }, {
-    "id" : 23,
+    "id" : 28,
     "name" : "대모산입구역",
     "lines" : [ ]
   }, {
-    "id" : 24,
+    "id" : 29,
     "name" : "수서역",
     "lines" : [ ]
   } ],
@@ -1285,7 +1294,7 @@ Content-Length: 606
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /favorite-paths/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM5MTE4LCJleHAiOjE1ODI2MzkzMTh9.OCgDSVxRAEqLfNUtTv5tjw1rvBw_ZC4HNri3d5V4ZJA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODczLCJleHAiOjE1ODI2NDEwNzN9.DOL-9N1VpcuSoE9sAmQuP2XrsRBhH1xjT90n0wPFaYs
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1316,12 +1325,70 @@ Content-Length: 251
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resource-favorite-path-showAllFavoritePaths"><a class="link" href="#resource-favorite-path-showAllFavoritePaths">지하철경로 즐겨찾기 목록 보기 요청</a></h3>
+<div class="sect3">
+<h4 id="resource-favorite-path-showAllFavoritePaths_http_request"><a class="link" href="#resource-favorite-path-showAllFavoritePaths_http_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /favorite-paths HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjQwODczLCJleHAiOjE1ODI2NDEwNzN9.DOL-9N1VpcuSoE9sAmQuP2XrsRBhH1xjT90n0wPFaYs
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-favorite-path-showAllFavoritePaths_http_response"><a class="link" href="#resource-favorite-path-showAllFavoritePaths_http_response">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 719
+
+{
+  "userEmail" : "boorwonie@email.com",
+  "favoritePaths" : [ {
+    "id" : 2,
+    "userEmail" : "boorwonie@email.com",
+    "startStationId" : 20,
+    "endStationId" : 23
+  }, {
+    "id" : 3,
+    "userEmail" : "boorwonie@email.com",
+    "startStationId" : 21,
+    "endStationId" : 23
+  }, {
+    "id" : 4,
+    "userEmail" : "boorwonie@email.com",
+    "startStationId" : 22,
+    "endStationId" : 23
+  }, {
+    "id" : 5,
+    "userEmail" : "boorwonie@email.com",
+    "startStationId" : 21,
+    "endStationId" : 20
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/favorite-paths"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resource-favorite-path-showAllFavoritePaths"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-25 22:55:33 +0900
+Last updated 2020-02-25 23:03:56 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
