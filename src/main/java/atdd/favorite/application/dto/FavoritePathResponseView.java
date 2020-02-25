@@ -16,6 +16,10 @@ public class FavoritePathResponseView {
         this.favoritePath=favoritePath;
     }
 
+    public FavoritePathResponseView(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

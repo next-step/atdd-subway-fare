@@ -44,9 +44,12 @@ public class FavoritePathController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteFavoritePath(@PathVariable Long id) {
         service.delete(id);
+        FavoritePathResponseView responseView = new FavoritePathResponseView(id);
+        FavoritePathResource resource = new FavoritePathResource(responseView);
+        resource.add(linkTo(FavoritePathController.class).slash(id).withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create").withRel("profile"));
         return ResponseEntity
-                .ok()
-                .build();
+                .ok(resource);
     }
 
     @GetMapping

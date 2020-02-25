@@ -148,6 +148,7 @@ public class FavoritePathDocumentationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href").exists())
+                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-path-delete"));
     }
