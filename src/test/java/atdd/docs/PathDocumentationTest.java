@@ -32,10 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(RestDocsConfig.class)
 public class PathDocumentationTest {
-    public static final String NAME = "brown";
-    public static final String EMAIL = "boorwonie@email.com";
-    public static final String EMAIL2 = "brown@email.com";
-    public static final String PASSWORD = "subway";
     public static final LocalTime START_TIME = LocalTime.of(5, 0);
     public static final LocalTime END_TIME = LocalTime.of(11, 55);
     public static final int INTERVAL_MIN = 10;

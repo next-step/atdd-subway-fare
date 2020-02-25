@@ -1,5 +1,6 @@
 package atdd.docs;
 
+import atdd.path.dao.StationDao;
 import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseView;
