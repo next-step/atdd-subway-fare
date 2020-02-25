@@ -50,4 +50,9 @@ operation::users-me[snippets='response-headers,response-fields']
 === 최소경로 조회 요청
 operation::find-path[snippets='http-request,http-response']
 
+[[resource-favorite-station-create]]
+=== 지하철역 즐겨찾기 추가 요청
+operation::favorite-station-create[snippets='http-request,http-response']
+
+
 

@@ -89,6 +89,9 @@ public class FavoriteStationDocumentationTest {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("userEmail").exists())
                 .andExpect(jsonPath("favoriteStationId").exists())
+                .andExpect(jsonPath("_links.self.href").exists())
+                .andExpect(jsonPath("_links.favorite-station-showAllStations").exists())
+                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-station-create"));
     }

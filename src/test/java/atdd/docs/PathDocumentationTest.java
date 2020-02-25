@@ -52,11 +52,11 @@ public class PathDocumentationTest {
     @Test
     public void findPathTest() throws Exception {
         //given
-        Station station1 = stationDao.save(new Station(STATION_NAME));
-        Station station2 = stationDao.save(new Station(STATION_NAME_2));
-        Station station3 = stationDao.save(new Station(STATION_NAME_3));
-        Station station4 = stationDao.save(new Station(STATION_NAME_4));
-        Station station5 = stationDao.save(new Station(STATION_NAME_5));
+        Station station1 = stationDao.save(new Station(STATION_NAME_2));
+        Station station2 = stationDao.save(new Station(STATION_NAME_3));
+        Station station3 = stationDao.save(new Station(STATION_NAME_4));
+        Station station4 = stationDao.save(new Station(STATION_NAME_5));
+        Station station5 = stationDao.save(new Station(STATION_NAME_6));
         Line line = lineDao.save(Line.of(LINE_NAME, START_TIME, END_TIME, INTERVAL_MIN));
         lineService.addEdge(line.getId(), station1.getId(), station2.getId(), DISTANCE_KM);
         lineService.addEdge(line.getId(), station2.getId(), station3.getId(), DISTANCE_KM);

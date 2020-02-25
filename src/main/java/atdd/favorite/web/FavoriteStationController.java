@@ -2,9 +2,11 @@ package atdd.favorite.web;
 
 import atdd.favorite.application.FavoriteStationService;
 import atdd.favorite.application.dto.CreateFavoriteStationRequestView;
+import atdd.favorite.application.dto.FavoriteStationResource;
 import atdd.favorite.application.dto.FavoriteStationResponseView;
 import atdd.favorite.application.dto.FavoriteStationsListResponseView;
 import atdd.favorite.domain.FavoriteStation;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 import static atdd.Constant.FAVORITE_STATION_BASE_URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(FAVORITE_STATION_BASE_URI)
@@ -25,15 +28,19 @@ public class FavoriteStationController {
     }
 
     @PostMapping
-    public ResponseEntity<FavoriteStationResponseView> createFavoriteStation(@RequestBody CreateFavoriteStationRequestView createRequestView,
-                                                                             HttpServletRequest request) {
+    public ResponseEntity createFavoriteStation(@RequestBody CreateFavoriteStationRequestView createRequestView,
+                                                HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         createRequestView.insertUserEmail(email);
-        FavoriteStationResponseView response = service.createFavoriteStation(createRequestView);
+        FavoriteStationResponseView responseView = service.createFavoriteStation(createRequestView);
+        FavoriteStationResource resource = new FavoriteStationResource(responseView);
+        resource.add(linkTo(FavoriteStationController.class).withSelfRel());
+        resource.add(linkTo(FavoriteStationController.class).withRel("favorite-station-showAllStations"));
+        resource.add(new Link("/docs/api-guide.html#resource-find-path").withRel("profile"));
         return ResponseEntity
-                .created(URI.create(FAVORITE_STATION_BASE_URI + "/" + response.getId()))
+                .created(URI.create(FAVORITE_STATION_BASE_URI + "/" + responseView.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+                .body(resource);
     }
 
     @DeleteMapping("/{id}")
