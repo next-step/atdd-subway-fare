@@ -45,3 +45,9 @@ operation::login[snippets='response-headers,response-fields']
 operation::users-me[snippets='http-request,request-headers']
 operation::users-me[snippets='request-fields,http-response']
 operation::users-me[snippets='response-headers,response-fields']
+
+[[resource-find-path]]
+=== 최소경로 조회 요청
+operation::find-path[snippets='http-request,http-response']
+
+

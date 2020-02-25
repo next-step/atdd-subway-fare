@@ -23,6 +23,9 @@ public class EdgeDao {
                 .usingGeneratedKeyColumns("ID");
     }
 
+    @Autowired
+    StationDao stationDao;
+
     public EdgeDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

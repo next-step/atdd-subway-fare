@@ -477,6 +477,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-users-me_response_fields">Response fields</a></li>
 </ul>
 </li>
+<li><a href="#resource-find-path">최소경로 조회 요청</a>
+<ul class="sectlevel3">
+<li><a href="#resource-find-path_http_request">Example Request</a></li>
+<li><a href="#resource-find-path_http_response">Example Response</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -785,7 +791,7 @@ Host: localhost:8080
 {
   "email" : "boorwonie@email.com",
   "password" : "subway",
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNTkwNzEzLCJleHAiOjE1ODI1OTA5MTN9.JY1ohguT5Mm0XZyuTW5YGs51tX-_lxckMfZQHfRuf7M",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjMwMTc2LCJleHAiOjE1ODI2MzAzNzZ9.l19FZ-hGUgq-gay4DVU0GXwk6t6KlVdKvnROvqavmwQ",
   "tokenType" : "Bearer "
 }</code></pre>
 </div>
@@ -832,7 +838,7 @@ Content-Type: application/json
 Content-Length: 526
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNTkwNzEzLCJleHAiOjE1ODI1OTA5MTN9.JY1ohguT5Mm0XZyuTW5YGs51tX-_lxckMfZQHfRuf7M",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjMwMTc2LCJleHAiOjE1ODI2MzAzNzZ9.l19FZ-hGUgq-gay4DVU0GXwk6t6KlVdKvnROvqavmwQ",
   "tokenType" : "Bearer ",
   "_links" : {
     "self" : {
@@ -888,7 +894,7 @@ Content-Length: 526
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI1OTA3MTQsImV4cCI6MTU4MjU5MDkxNH0.Gpjv19W49zTkO-NAPGMslaJQuixVxpV1yslrgYDYvbI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI2MzAxNzcsImV4cCI6MTU4MjYzMDM3N30.Y6pmm7XMZZ6liQw1bI2L6v0Fq6M_sXvoelOLSaLW_3A
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -981,12 +987,69 @@ Content-Length: 339
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resource-find-path"><a class="link" href="#resource-find-path">최소경로 조회 요청</a></h3>
+<div class="sect3">
+<h4 id="resource-find-path_http_request"><a class="link" href="#resource-find-path_http_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /paths?startId=2&amp;endId=5 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-find-path_http_response"><a class="link" href="#resource-find-path_http_response">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 612
+
+{
+  "startStationId" : 2,
+  "endStationId" : 5,
+  "stations" : [ {
+    "id" : 2,
+    "name" : "역삼역",
+    "lines" : null
+  }, {
+    "id" : 3,
+    "name" : "선릉역",
+    "lines" : null
+  }, {
+    "id" : 4,
+    "name" : "삼성역",
+    "lines" : null
+  }, {
+    "id" : 5,
+    "name" : "종합운동장역",
+    "lines" : null
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/paths?startId=2&amp;endId=5"
+    },
+    "favorite-paths" : {
+      "href" : "http://localhost:8080/favorite-paths"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resource-find-path"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-25 09:21:37 +0900
+Last updated 2020-02-25 20:25:11 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

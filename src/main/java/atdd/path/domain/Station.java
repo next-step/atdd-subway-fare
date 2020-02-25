@@ -16,6 +16,11 @@ public class Station {
         this.name = name;
     }
 
+    public Station(String name, List<Line> lines){
+        this.name=name;
+        this.lines=lines;
+    }
+
     public Station(Long id, String name) {
         this.id = id;
         this.name = name;
@@ -37,6 +42,10 @@ public class Station {
 
     public List<Line> getLines() {
         return lines;
+    }
+
+    public void insertLine(Line line){
+        this.lines.add(line);
     }
 
     @Override

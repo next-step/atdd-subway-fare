@@ -1,10 +1,9 @@
 package atdd.docs;
 
-import atdd.path.application.GraphService;
-import atdd.path.dao.EdgeDao;
+import atdd.Constant;
+import atdd.path.application.LineService;
 import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
-import atdd.path.domain.Edge;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import org.junit.jupiter.api.Test;
@@ -14,19 +13,14 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalTime;
 
 import static atdd.path.TestConstant.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,10 +51,7 @@ public class PathDocumentationTest {
     LineDao lineDao;
 
     @Autowired
-    EdgeDao edgeDao;
-
-    @Autowired
-    GraphService graphService;
+    LineService lineService;
 
     @Test
     public void findPathTest() throws Exception {
@@ -71,34 +62,26 @@ public class PathDocumentationTest {
         Station station4 = stationDao.save(new Station(STATION_NAME_4));
         Station station5 = stationDao.save(new Station(STATION_NAME_5));
         Line line = lineDao.save(Line.of(LINE_NAME, START_TIME, END_TIME, INTERVAL_MIN));
-        edgeDao.save(line.getId(), Edge.of(station1, station2, DISTANCE_KM));
-        edgeDao.save(line.getId(), Edge.of(station2, station3, DISTANCE_KM));
-        edgeDao.save(line.getId(), Edge.of(station3, station4, DISTANCE_KM));
-        edgeDao.save(line.getId(), Edge.of(station4, station5, DISTANCE_KM));
+        lineService.addEdge(line.getId(), station1.getId(), station2.getId(), DISTANCE_KM);
+        lineService.addEdge(line.getId(), station2.getId(), station3.getId(), DISTANCE_KM);
+        lineService.addEdge(line.getId(), station3.getId(), station4.getId(), DISTANCE_KM);
+        lineService.addEdge(line.getId(), station4.getId(), station5.getId(), DISTANCE_KM);
 
         //when, then
         mockMvc.perform(
-                get("/paths?startId=" + station2.getId() + "&endId=" + station5.getId())
+                get(Constant.PATH_BASE_URI)
+                        .param("startId", station2.getId().toString())
+                        .param("endId", station5.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.startStationId").exists())
                 .andExpect(jsonPath("$.endStationId").exists())
                 .andExpect(jsonPath("$.stations.length()").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.favorite-paths").exists())
+                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
-                .andDo(document("find-path",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.ACCEPT).description("It accepts MediaType.APPLICATION_JSON"),
-                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Its contentType is MediaType.APPLICATION_JSON")
-                        ),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.CONTENT_TYPE).description("The contentType is MediaType.APPLICATION_JSON")
-                        ),
-                        responseFields(
-                                fieldWithPath("startStationId").type(JsonFieldType.STRING).description("The id of the station to start"),
-                                fieldWithPath("endStationId").type(JsonFieldType.STRING).description("The id of the station to end"),
-                                fieldWithPath("stations.length()").type(JsonFieldType.NUMBER).description("The number of the stations in the path")
-                        )
-                ));
+                .andDo(document("find-path"));
     }
 }
