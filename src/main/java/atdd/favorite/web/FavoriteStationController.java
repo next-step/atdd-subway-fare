@@ -46,10 +46,13 @@ public class FavoriteStationController {
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         service.delete(id);
+        FavoriteStationResponseView responseView = new FavoriteStationResponseView();
+        responseView.issertId(id);
+        FavoriteStationResource resource = new FavoriteStationResource(responseView);
+        resource.add(linkTo(FavoriteStationController.class).slash(id).withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-station-delete").withRel("profile"));
         return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .build();
+                .ok(resource);
     }
 
     @GetMapping

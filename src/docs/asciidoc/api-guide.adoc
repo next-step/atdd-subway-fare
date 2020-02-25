@@ -54,5 +54,8 @@ operation::find-path[snippets='http-request,http-response']
 === 지하철역 즐겨찾기 추가 요청
 operation::favorite-station-create[snippets='http-request,http-response']
 
+[[resource-favorite-station-delete]]
+=== 지하철역 즐겨찾기 삭제 요청
+operation::favorite-station-delete[snippets='http-request,http-response']
 
 

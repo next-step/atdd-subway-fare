@@ -489,6 +489,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resource-favorite-station-create_http_response">Example Response</a></li>
 </ul>
 </li>
+<li><a href="#resource-favorite-station-delete">지하철역 즐겨찾기 삭제 요청</a>
+<ul class="sectlevel3">
+<li><a href="#resource-favorite-station-delete_http_request">Example Request</a></li>
+<li><a href="#resource-favorite-station-delete_http_response">Example Response</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -582,21 +588,21 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /2
+Location: /3
 Content-Type: application/json
 Content-Length: 419
 
 {
-  "id" : 2,
+  "id" : 3,
   "email" : "boorwonie@email.com",
   "name" : "brown",
   "password" : "subway",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/users/2"
+      "href" : "http://localhost:8080/users/3"
     },
     "users-delete" : {
-      "href" : "http://localhost:8080/users/2"
+      "href" : "http://localhost:8080/users/3"
     },
     "users-me" : {
       "href" : "http://localhost:8080/users/me"
@@ -700,7 +706,7 @@ Content-Length: 419
 <h4 id="resources-users-delete_http_request"><a class="link" href="#resources-users-delete_http_request">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /users/3 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /users/4 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -741,13 +747,13 @@ Content-Type: application/json
 Content-Length: 319
 
 {
-  "id" : 3,
+  "id" : 4,
   "email" : null,
   "name" : null,
   "password" : null,
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/users/3"
+      "href" : "http://localhost:8080/users/4"
     },
     "users-create" : {
       "href" : "http://localhost:8080/users"
@@ -797,7 +803,7 @@ Host: localhost:8080
 {
   "email" : "boorwonie@email.com",
   "password" : "subway",
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjMyNjU5LCJleHAiOjE1ODI2MzI4NTl9.z5BIZz1WJo-W_UPObqocbPjQQCHDatRLhMm2CNDX9n8",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM0MTA2LCJleHAiOjE1ODI2MzQzMDZ9.YDcYhjFHOo9hTDKL7EYEvMosYYijFtS_R5cjZx5APmM",
   "tokenType" : "Bearer "
 }</code></pre>
 </div>
@@ -844,7 +850,7 @@ Content-Type: application/json
 Content-Length: 526
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjMyNjU5LCJleHAiOjE1ODI2MzI4NTl9.z5BIZz1WJo-W_UPObqocbPjQQCHDatRLhMm2CNDX9n8",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM0MTA2LCJleHAiOjE1ODI2MzQzMDZ9.YDcYhjFHOo9hTDKL7EYEvMosYYijFtS_R5cjZx5APmM",
   "tokenType" : "Bearer ",
   "_links" : {
     "self" : {
@@ -900,7 +906,7 @@ Content-Length: 526
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI2MzI2NTksImV4cCI6MTU4MjYzMjg1OX0.wSVitGiNRGpLUrCl9ffzzP_xTc5pKiCb7KLvWXMldNA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI2MzQxMDYsImV4cCI6MTU4MjYzNDMwNn0.Ty3PSF_mU6R_8EgVV2KNch4HuFxmqeg4J3JFskwjSSI
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -999,7 +1005,7 @@ Content-Length: 339
 <h4 id="resource-find-path_http_request"><a class="link" href="#resource-find-path_http_request">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /paths?startId=3&amp;endId=6 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /paths?startId=4&amp;endId=7 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -1015,28 +1021,28 @@ Content-Type: application/json
 Content-Length: 612
 
 {
-  "startStationId" : 3,
-  "endStationId" : 6,
+  "startStationId" : 4,
+  "endStationId" : 7,
   "stations" : [ {
-    "id" : 3,
+    "id" : 4,
     "name" : "선릉역",
     "lines" : null
   }, {
-    "id" : 4,
+    "id" : 5,
     "name" : "삼성역",
     "lines" : null
   }, {
-    "id" : 5,
+    "id" : 6,
     "name" : "종합운동장역",
     "lines" : null
   }, {
-    "id" : 6,
+    "id" : 7,
     "name" : "양재역",
     "lines" : null
   } ],
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/paths?startId=3&amp;endId=6"
+      "href" : "http://localhost:8080/paths?startId=4&amp;endId=7"
     },
     "favorite-paths" : {
       "href" : "http://localhost:8080/favorite-paths"
@@ -1058,7 +1064,7 @@ Content-Length: 612
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /favorite-stations HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjMyNjU0LCJleHAiOjE1ODI2MzI4NTR9.IJcYRod8XnCLW7nTSO39O1sk1s8lyhP8OQX0LB0XR3U
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM0MTAyLCJleHAiOjE1ODI2MzQzMDJ9.vxs2fzQXcbr1oB7CWV5Mzd0oHLdOD999XvDVo5xFTUo
 Accept: application/json
 Content-Length: 58
 Host: localhost:8080
@@ -1066,7 +1072,7 @@ Host: localhost:8080
 {
   "id" : null,
   "userEmail" : null,
-  "stationId" : 1
+  "stationId" : 2
 }</code></pre>
 </div>
 </div>
@@ -1076,14 +1082,14 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /favorite-stations/1
+Location: /favorite-stations/2
 Content-Type: application/json
 Content-Length: 367
 
 {
-  "id" : 1,
+  "id" : 2,
   "userEmail" : "boorwonie@email.com",
-  "favoriteStationId" : 1,
+  "favoriteStationId" : 2,
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/favorite-stations"
@@ -1100,12 +1106,51 @@ Content-Length: 367
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resource-favorite-station-delete"><a class="link" href="#resource-favorite-station-delete">지하철역 즐겨찾기 삭제 요청</a></h3>
+<div class="sect3">
+<h4 id="resource-favorite-station-delete_http_request"><a class="link" href="#resource-favorite-station-delete_http_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /favorite-stations/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNjM0MTAxLCJleHAiOjE1ODI2MzQzMDF9.AS5Jtapa2z7Fj5XUFN30xDFK4Hp8z9rBI2F2O4gO2hc
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-favorite-station-delete_http_response"><a class="link" href="#resource-favorite-station-delete_http_response">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 262
+
+{
+  "id" : 1,
+  "userEmail" : null,
+  "favoriteStationId" : null,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/favorite-stations/1"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resource-favorite-station-delete"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-25 20:56:54 +0900
+Last updated 2020-02-25 21:25:12 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

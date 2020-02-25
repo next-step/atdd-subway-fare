@@ -35,4 +35,8 @@ public class FavoriteStationResponseView {
                 createdFavoriteStation.getStationId()
         );
     }
+
+    public void issertId(Long id) {
+        this.id = id;
+    }
 }
