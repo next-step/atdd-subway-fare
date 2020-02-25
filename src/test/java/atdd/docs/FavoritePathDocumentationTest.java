@@ -1,6 +1,8 @@
 package atdd.docs;
 
 import atdd.favorite.application.dto.CreateFavoritePathRequestView;
+import atdd.favorite.domain.FavoritePath;
+import atdd.favorite.domain.FavoritePathRepository;
 import atdd.path.application.LineService;
 import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
@@ -29,6 +31,7 @@ import java.time.LocalTime;
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.path.TestConstant.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,6 +62,9 @@ public class FavoritePathDocumentationTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    FavoritePathRepository favoritePathRepository;
 
     @Autowired
     LineDao lineDao;
@@ -127,5 +133,22 @@ public class FavoritePathDocumentationTest {
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("favorite-path-create"));
+    }
+
+    @Test
+    public void deleteFavoritePathTest() throws Exception {
+        //given
+        FavoritePath favoritePath = favoritePathRepository.save(new FavoritePath(EMAIL, station1.getId(), station4.getId()));
+
+        //when, then
+        mockMvc.perform(
+                delete(FAVORITE_PATH_BASE_URI + "/" + favoritePath.getId())
+                        .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href").exists())
+                .andDo(print())
+                .andDo(document("favorite-path-delete"));
     }
 }
