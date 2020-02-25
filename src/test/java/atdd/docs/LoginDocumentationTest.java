@@ -4,7 +4,6 @@ import atdd.Constant;
 import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.LoginRequestView;
-import atdd.user.application.dto.UserResponseView;
 import atdd.user.domain.User;
 import atdd.user.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.Constant.USER_BASE_URI;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -54,6 +56,9 @@ public class LoginDocumentationTest {
     @MockBean
     UserService userService;
 
+    @MockBean
+    HttpServletRequest httpServletRequest;
+
     @Test
     public void loginTest() throws Exception {
         LoginRequestView loginRequestView = new LoginRequestView(EMAIL, PASSWORD, jwtTokenProvider);
@@ -71,6 +76,7 @@ public class LoginDocumentationTest {
                 .andExpect(jsonPath("$.tokenType").exists())
                 .andExpect(jsonPath("_links.self.href").exists())
                 .andExpect(jsonPath("_links.users-delete.href").exists())
+                .andExpect(jsonPath("_links.profile.href").exists())
                 .andDo(
                         document("login",
                                 requestHeaders(
@@ -88,20 +94,30 @@ public class LoginDocumentationTest {
     @Test
     public void showUserInfo() throws Exception {
         CreateUserRequestView requestView = new CreateUserRequestView(EMAIL2, NAME, PASSWORD);
-        UserResponseView responseView = userService.createUser(requestView);
+        userService.createUser(requestView);
         String token = jwtTokenProvider.createToken(EMAIL2);
+        given(userService.findByEmail(EMAIL2)).willReturn(requestView.toEntity());
 
         mockMvc.perform(get(USER_BASE_URI + "/me")
-                .header(HttpHeaders.AUTHORIZATION, token)
+                .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(NAME))
-                .andExpect(jsonPath("$.mail").value(EMAIL2))
+                .andExpect(jsonPath("$.email").value(EMAIL2))
                 .andExpect(jsonPath("$.password").value(PASSWORD))
                 .andExpect(jsonPath("_links.self.href").exists())
                 .andExpect(jsonPath("_links.users-delete.href").exists())
+                .andExpect(jsonPath("_links.profile.href").exists())
                 .andDo(print())
-                .andDo(document("users-me"));
+                .andDo(document("users-me",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT).description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Its contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("The contentType is MediaType.APPLICATION_JSON")
+                        )
+                ));
     }
 }

@@ -467,6 +467,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-login_response_fields">Response fields</a></li>
 </ul>
 </li>
+<li><a href="#resources-users-me">회원정보 요청</a>
+<ul class="sectlevel3">
+<li><a href="#resources-users-me_http_request">Example Request</a></li>
+<li><a href="#resources-users-me_request_headers">Request headers</a></li>
+<li><a href="#resources-users-me_request_fields">Request fields</a></li>
+<li><a href="#resources-users-me_http_response">Example Response</a></li>
+<li><a href="#resources-users-me_response_headers">Response headers</a></li>
+<li><a href="#resources-users-me_response_fields">Response fields</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -775,7 +785,7 @@ Host: localhost:8080
 {
   "email" : "boorwonie@email.com",
   "password" : "subway",
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNTg2MjE4LCJleHAiOjE1ODI1ODY0MTh9.2bCIUvxaRIyQ3yly620jkV04JF-paP-ovLvDyK94HwU",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNTkwNzEzLCJleHAiOjE1ODI1OTA5MTN9.JY1ohguT5Mm0XZyuTW5YGs51tX-_lxckMfZQHfRuf7M",
   "tokenType" : "Bearer "
 }</code></pre>
 </div>
@@ -819,10 +829,10 @@ Host: localhost:8080
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
 Location: /oauth/token
 Content-Type: application/json
-Content-Length: 447
+Content-Length: 526
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNTg2MjE4LCJleHAiOjE1ODI1ODY0MTh9.2bCIUvxaRIyQ3yly620jkV04JF-paP-ovLvDyK94HwU",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgyNTkwNzEzLCJleHAiOjE1ODI1OTA5MTN9.JY1ohguT5Mm0XZyuTW5YGs51tX-_lxckMfZQHfRuf7M",
   "tokenType" : "Bearer ",
   "_links" : {
     "self" : {
@@ -833,6 +843,9 @@ Content-Length: 447
     },
     "users-me" : {
       "href" : "http://localhost:8080/users/me"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resources-login"
     }
   }
 }</code></pre>
@@ -867,12 +880,113 @@ Content-Length: 447
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resources-users-me"><a class="link" href="#resources-users-me">회원정보 요청</a></h3>
+<div class="sect3">
+<h4 id="resources-users-me_http_request"><a class="link" href="#resources-users-me_http_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/me HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicm93bkBlbWFpbC5jb20iLCJpYXQiOjE1ODI1OTA3MTQsImV4cCI6MTU4MjU5MDkxNH0.Gpjv19W49zTkO-NAPGMslaJQuixVxpV1yslrgYDYvbI
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-users-me_request_headers"><a class="link" href="#resources-users-me_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Accept</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It accepts MediaType.APPLICATION_JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its contentType is MediaType.APPLICATION_JSON</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="resources-users-me_request_fields"><a class="link" href="#resources-users-me_request_fields">Request fields</a></h4>
+<div class="paragraph">
+<p>Snippet request-fields not found for operation::users-me</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-users-me_http_response"><a class="link" href="#resources-users-me_http_response">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 339
+
+{
+  "id" : null,
+  "email" : "brown@email.com",
+  "name" : "brown",
+  "password" : "subway",
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/me"
+    },
+    "users-delete" : {
+      "href" : "http://localhost:8080/users"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resources-users-me"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-users-me_response_headers"><a class="link" href="#resources-users-me_response_headers">Response headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The contentType is MediaType.APPLICATION_JSON</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="resources-users-me_response_fields"><a class="link" href="#resources-users-me_response_fields">Response fields</a></h4>
+<div class="paragraph">
+<p>Snippet response-fields not found for operation::users-me</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-25 08:13:58 +0900
+Last updated 2020-02-25 09:21:37 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

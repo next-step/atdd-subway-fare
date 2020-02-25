@@ -5,7 +5,6 @@ import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResource;
 import atdd.user.application.dto.UserResponseView;
 import atdd.user.domain.User;
-import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -70,13 +69,17 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponseView> retrieveInfo(HttpServletRequest request) {
+    public ResponseEntity retrieveInfo(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         User user = userService.findByEmail(email);
         UserResponseView response = new UserResponseView(user.getEmail(), user.getName(), user.getPassword());
+        UserResource userResource = new UserResource(response);
+        userResource.add(linkTo(UserController.class).slash("/me").withSelfRel());
+        userResource.add(linkTo(UserController.class).slash(user.getId()).withRel("users-delete"));
+        userResource.add(new Link("/docs/api-guide.html#resources-users-me").withRel("profile"));
         return ResponseEntity
                 .ok()
-                .body(response);
+                .body(userResource);
     }
 
     private User isExistingUser(CreateUserRequestView request) {

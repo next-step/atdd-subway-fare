@@ -37,3 +37,11 @@ operation::users-delete[snippets='http-response,response-headers']
 operation::login[snippets='http-request,request-headers']
 operation::login[snippets='request-fields,http-response']
 operation::login[snippets='response-headers,response-fields']
+
+
+[[resources-users-me]]
+=== 회원정보 요청
+
+operation::users-me[snippets='http-request,request-headers']
+operation::users-me[snippets='request-fields,http-response']
+operation::users-me[snippets='response-headers,response-fields']

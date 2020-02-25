@@ -6,6 +6,7 @@ import atdd.user.application.dto.LoginResource;
 import atdd.user.application.dto.LoginResponseView;
 import atdd.user.domain.User;
 import atdd.user.jwt.JwtTokenProvider;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,7 @@ public class LoginController {
         resource.add(linkTo(LoginController.class).slash("oauth/token").withSelfRel());
         resource.add(linkTo(UserController.class).slash(user.getId()).withRel("users-delete"));
         resource.add(linkTo(UserController.class).slash("me").withRel("users-me"));
+        resource.add(new Link("/docs/api-guide.html#resources-login").withRel("profile"));
         return ResponseEntity
                 .created(URI.create("/oauth/token"))
                 .body(resource);
