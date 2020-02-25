@@ -85,6 +85,8 @@ public class FavoriteStationDocumentationTest {
     void clean() {
         userRepository.deleteAll();
         stationDao.deleteById(station1.getId());
+        stationDao.deleteById(station2.getId());
+        stationDao.deleteById(station3.getId());
     }
 
     @Test

@@ -59,3 +59,8 @@ operation::favorite-station-create[snippets='http-request,http-response']
 operation::favorite-station-delete[snippets='http-request,http-response']
 
 
+[[resource-favorite-station-showAllFavoriteStations]]
+=== 지하철역 즐겨찾기 목록 보기 요청
+operation::favorite-station-showAllFavoriteStations[snippets='http-request,http-response']
+
+

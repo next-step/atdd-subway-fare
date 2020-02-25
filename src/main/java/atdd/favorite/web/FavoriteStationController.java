@@ -1,10 +1,7 @@
 package atdd.favorite.web;
 
 import atdd.favorite.application.FavoriteStationService;
-import atdd.favorite.application.dto.CreateFavoriteStationRequestView;
-import atdd.favorite.application.dto.FavoriteStationResource;
-import atdd.favorite.application.dto.FavoriteStationResponseView;
-import atdd.favorite.application.dto.FavoriteStationsListResponseView;
+import atdd.favorite.application.dto.*;
 import atdd.favorite.domain.FavoriteStation;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
@@ -56,15 +53,16 @@ public class FavoriteStationController {
     }
 
     @GetMapping
-    public ResponseEntity<FavoriteStationsListResponseView> showAll(HttpServletRequest request) {
+    public ResponseEntity showAll(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         List<FavoriteStation> favoriteStations = service.findAllByEmail(email);
-        FavoriteStationsListResponseView favoriteStationsListResponseView
+        FavoriteStationsListResponseView responseView
                 = new FavoriteStationsListResponseView(email, favoriteStations);
-        System.out.println(favoriteStations.size());
+        FavoriteStationListResource resource = new FavoriteStationListResource(responseView);
+        resource.add(linkTo(FavoriteStationController.class).withSelfRel());
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(favoriteStationsListResponseView);
+                .body(resource);
     }
 }
