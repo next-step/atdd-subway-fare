@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.Constant.LOGIN_BASE_URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -39,7 +40,8 @@ public class LoginController {
                     .status(HttpStatus.CONFLICT)
                     .build();
         }
-        LoginResponseView response = new LoginResponseView(request.getAccessToken(), request.getTokenType());
+        String token = jwtTokenProvider.createToken(request.getEmail());
+        LoginResponseView response = new LoginResponseView(token, AUTH_SCHEME_BEARER);
         LoginResource resource = new LoginResource(response);
         resource.add(linkTo(LoginController.class).slash("oauth/token").withSelfRel());
         resource.add(linkTo(UserController.class).slash(user.getId()).withRel("users-delete"));

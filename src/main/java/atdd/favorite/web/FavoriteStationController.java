@@ -44,7 +44,7 @@ public class FavoriteStationController {
     public ResponseEntity delete(@PathVariable Long id) {
         service.delete(id);
         FavoriteStationResponseView responseView = new FavoriteStationResponseView();
-        responseView.issertId(id);
+        responseView.insertId(id);
         FavoriteStationResource resource = new FavoriteStationResource(responseView);
         resource.add(linkTo(FavoriteStationController.class).slash(id).withSelfRel());
         resource.add(new Link("/docs/api-guide.html#resource-favorite-station-delete").withRel("profile"));

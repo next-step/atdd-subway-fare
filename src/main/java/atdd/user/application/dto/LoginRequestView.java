@@ -29,6 +29,11 @@ public class LoginRequestView {
     public LoginRequestView() {
     }
 
+    public LoginRequestView(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public LoginRequestView(String email, String password, JwtTokenProvider jwtTokenProvider) {
         this.email = email;
         this.password = password;

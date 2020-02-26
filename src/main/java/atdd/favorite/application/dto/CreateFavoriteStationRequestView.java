@@ -2,7 +2,6 @@ package atdd.favorite.application.dto;
 
 import atdd.favorite.domain.FavoriteStation;
 
-
 public class CreateFavoriteStationRequestView {
     private Long id;
     private String userEmail;
@@ -21,6 +20,11 @@ public class CreateFavoriteStationRequestView {
     }
 
     public CreateFavoriteStationRequestView() {
+    }
+
+    public CreateFavoriteStationRequestView(String userEmail, Long stationId) {
+        this.userEmail = userEmail;
+        this.stationId = stationId;
     }
 
     public CreateFavoriteStationRequestView(Long stationId) {

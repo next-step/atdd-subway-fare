@@ -34,4 +34,8 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         return user;
     }
+
+    public void deleteAll(){
+        userRepository.deleteAll();
+    }
 }

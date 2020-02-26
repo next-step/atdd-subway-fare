@@ -57,6 +57,22 @@ public class TestConstant {
     public static final String STATION_NAME_21 = "한티역";
     public static final String STATION_NAME_22 = "산정릉역";
 
+    public static final String STATION_NAME_23 = "서초역";
+    public static final String STATION_NAME_24="방배역";
+    public static final String STATION_NAME_25="사당역";
+    public static final String STATION_NAME_26="낙성대역";
+    public static final String STATION_NAME_27="서울대입구역";
+    public static final String STATION_NAME_28="봉천역";
+    public static final String STATION_NAME_29="신림역";
+    public static final String STATION_NAME_30="신대방역";
+
+    public static final String STATION_NAME_31="영등포구청역";
+    public static final String STATION_NAME_32="당산역";
+    public static final String STATION_NAME_33="합정역";
+    public static final String STATION_NAME_34="홍대입구역";
+    public static final String STATION_NAME_35="신촌역";
+    public static final String STATION_NAME_36="이대역";
+
     public static final Long LINE_ID = 1L;
     public static final Long LINE_ID_2 = 2L;
     public static final Long LINE_ID_3 = 3L;
@@ -66,6 +82,10 @@ public class TestConstant {
     public static final String LINE_NAME_2 = "신분당선";
     public static final String LINE_NAME_3 = "3호선";
     public static final String LINE_NAME_4 = "분당선";
+
+    public static final String LINE_NAME_5="4호선";
+    public static final String LINE_NAME_6="9호선";
+    public static final String LINE_NAME_7="7호선";
 
     public static final Long EDGE_ID = 1L;
     public static final Long EDGE_ID_2 = 2L;

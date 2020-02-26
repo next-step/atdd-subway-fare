@@ -31,7 +31,7 @@ public class GraphAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.get().uri("/paths?startId=" + stationId + "&endId=" + stationId4)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType("application/hal+json")
                 .expectBody()
                 .jsonPath("$.startStationId").isEqualTo(stationId)
                 .jsonPath("$.endStationId").isEqualTo(stationId4)

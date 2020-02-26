@@ -6,18 +6,11 @@ import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalTime;
+import org.springframework.transaction.annotation.Transactional;
 
 import static atdd.path.TestConstant.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -26,19 +19,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureRestDocs
-@AutoConfigureMockMvc
-@Import(RestDocsConfig.class)
-public class PathDocumentationTest {
-    public static final LocalTime START_TIME = LocalTime.of(5, 0);
-    public static final LocalTime END_TIME = LocalTime.of(11, 55);
-    public static final int INTERVAL_MIN = 10;
-    public static final int DISTANCE_KM = 5;
-
-    @Autowired
-    MockMvc mockMvc;
+@Transactional
+public class PathDocumentationTest extends BaseDocumentationTest {
+    private Station station1;
+    private Station station2;
+    private Station station3;
+    private Station station4;
+    private Station station5;
+    private Line line;
 
     @Autowired
     StationDao stationDao;
@@ -50,18 +38,10 @@ public class PathDocumentationTest {
     LineService lineService;
 
     @Test
+    @DisplayName("최소 경로 조회하기")
     public void findPathTest() throws Exception {
         //given
-        Station station1 = stationDao.save(new Station(STATION_NAME_2));
-        Station station2 = stationDao.save(new Station(STATION_NAME_3));
-        Station station3 = stationDao.save(new Station(STATION_NAME_4));
-        Station station4 = stationDao.save(new Station(STATION_NAME_5));
-        Station station5 = stationDao.save(new Station(STATION_NAME_6));
-        Line line = lineDao.save(Line.of(LINE_NAME, START_TIME, END_TIME, INTERVAL_MIN));
-        lineService.addEdge(line.getId(), station1.getId(), station2.getId(), DISTANCE_KM);
-        lineService.addEdge(line.getId(), station2.getId(), station3.getId(), DISTANCE_KM);
-        lineService.addEdge(line.getId(), station3.getId(), station4.getId(), DISTANCE_KM);
-        lineService.addEdge(line.getId(), station4.getId(), station5.getId(), DISTANCE_KM);
+        setUpForPathTest();
 
         //when, then
         mockMvc.perform(
@@ -79,5 +59,18 @@ public class PathDocumentationTest {
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
                 .andDo(document("find-path"));
+    }
+
+    public void setUpForPathTest() {
+        station1 = stationDao.save(new Station(STATION_NAME_23));
+        station2 = stationDao.save(new Station(STATION_NAME_24));
+        station3 = stationDao.save(new Station(STATION_NAME_25));
+        station4 = stationDao.save(new Station(STATION_NAME_26));
+        station5 = stationDao.save(new Station(STATION_NAME_27));
+        line = lineDao.save(Line.of(LINE_NAME_3, START_TIME, END_TIME, INTERVAL_MIN));
+        lineService.addEdge(line.getId(), station1.getId(), station2.getId(), DISTANCE_KM);
+        lineService.addEdge(line.getId(), station2.getId(), station3.getId(), DISTANCE_KM);
+        lineService.addEdge(line.getId(), station3.getId(), station4.getId(), DISTANCE_KM);
+        lineService.addEdge(line.getId(), station4.getId(), station5.getId(), DISTANCE_KM);
     }
 }

@@ -7,20 +7,19 @@ public class FavoriteStation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String userEmail;
     private Long stationId;
 
     public FavoriteStation() {
     }
 
-    public FavoriteStation(String userEmail, Long stationId) {
+    public FavoriteStation(Long id, String userEmail, Long stationId) {
+        this.id = id;
         this.userEmail = userEmail;
         this.stationId = stationId;
     }
 
-    public FavoriteStation(Long id, String userEmail, Long stationId) {
-        this.id = id;
+    public FavoriteStation(String userEmail, Long stationId) {
         this.userEmail = userEmail;
         this.stationId = stationId;
     }

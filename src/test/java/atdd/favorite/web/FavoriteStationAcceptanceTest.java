@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
+
 public class FavoriteStationAcceptanceTest extends AbstractAcceptanceTest {
     public static final String FAVORITE_STATION_BASE_URI = "/favorite-stations";
     public static final String EMAIL = "boorwonie@email.com";
@@ -77,6 +77,7 @@ public class FavoriteStationAcceptanceTest extends AbstractAcceptanceTest {
     @Test
     public void 지하철역_즐겨찾기_목록보기() throws Exception {
         //given
+        int theNumberOfStations = 2;
         String token = jwtTokenProvider.createToken(EMAIL);
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
@@ -90,7 +91,7 @@ public class FavoriteStationAcceptanceTest extends AbstractAcceptanceTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(2)))
+                .andExpect(jsonPath("$.favoriteStations.*", hasSize(theNumberOfStations)))
                 .andDo(print());
     }
 }

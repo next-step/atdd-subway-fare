@@ -6,19 +6,11 @@ import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.LoginRequestView;
 import atdd.user.domain.User;
 import atdd.user.jwt.JwtTokenProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.Constant.USER_BASE_URI;
@@ -31,33 +23,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureRestDocs
-@AutoConfigureMockMvc
-@Import(RestDocsConfig.class)
-public class LoginDocumentationTest {
-    public static final String NAME = "brown";
-    public static final String EMAIL = "boorwonie@email.com";
-    public static final String EMAIL2 = "brown@email.com";
-    public static final String PASSWORD = "subway";
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
+public class LoginDocumentationTest extends BaseDocumentationTest {
+    private JwtTokenProvider jwtTokenProvider;
 
     @MockBean
     UserService userService;
 
+    @Autowired
+    public LoginDocumentationTest(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     @Test
     public void loginTest() throws Exception {
-        LoginRequestView loginRequestView = new LoginRequestView(EMAIL, PASSWORD, jwtTokenProvider);
-        String token = jwtTokenProvider.createToken(EMAIL);
+        LoginRequestView loginRequestView = new LoginRequestView(EMAIL, PASSWORD);
         String inputJson = objectMapper.writeValueAsString(loginRequestView);
         given(userService.findByEmail(EMAIL)).willReturn(new User(NAME, EMAIL, PASSWORD));
 
@@ -88,10 +67,10 @@ public class LoginDocumentationTest {
 
     @Test
     public void showUserInfo() throws Exception {
-        CreateUserRequestView requestView = new CreateUserRequestView(EMAIL2, NAME, PASSWORD);
+        CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         userService.createUser(requestView);
-        String token = jwtTokenProvider.createToken(EMAIL2);
-        given(userService.findByEmail(EMAIL2)).willReturn(requestView.toEntity());
+        String token = jwtTokenProvider.createToken(EMAIL);
+        given(userService.findByEmail(EMAIL)).willReturn(requestView.toEntity());
 
         mockMvc.perform(get(USER_BASE_URI + "/me")
                 .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
@@ -99,7 +78,7 @@ public class LoginDocumentationTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(NAME))
-                .andExpect(jsonPath("$.email").value(EMAIL2))
+                .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.password").value(PASSWORD))
                 .andExpect(jsonPath("_links.self.href").exists())
                 .andExpect(jsonPath("_links.users-delete.href").exists())

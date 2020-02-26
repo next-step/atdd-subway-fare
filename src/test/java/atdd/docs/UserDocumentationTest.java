@@ -1,22 +1,14 @@
 package atdd.docs;
 
-import atdd.path.dao.StationDao;
 import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseView;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static atdd.Constant.USER_BASE_URI;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -29,28 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureRestDocs
-@AutoConfigureMockMvc
-@Import(RestDocsConfig.class)
-public class UserDocumentationTest {
-    public static final String NAME = "brown";
-    public static final String EMAIL = "boorwonie@email.com";
-    public static final String EMAIL2 = "brown@email.com";
-    public static final String PASSWORD = "subway";
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
+public class UserDocumentationTest extends BaseDocumentationTest {
     @Autowired
     UserService userService;
 
     @Test
-    public void createUser() throws Exception {
+    @DisplayName("회원 등록하기")
+    void createUser() throws Exception {
         CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         String inputJson = objectMapper.writeValueAsString(requestView);
         mockMvc.perform(
@@ -95,8 +72,9 @@ public class UserDocumentationTest {
     }
 
     @Test
-    public void deleteUser() throws Exception {
-        CreateUserRequestView requestView = new CreateUserRequestView(EMAIL2, NAME, PASSWORD);
+    @DisplayName("회원 삭제하기")
+    void deleteUser() throws Exception {
+        CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         UserResponseView responseView = userService.createUser(requestView);
 
         mockMvc.perform(
