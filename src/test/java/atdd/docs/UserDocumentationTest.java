@@ -3,7 +3,6 @@ package atdd.docs;
 import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseView;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +25,7 @@ public class UserDocumentationTest extends BaseDocumentationTest {
     UserService userService;
 
     @Test
-    @DisplayName("회원 등록하기")
-    void createUser() throws Exception {
+    void 회원_등록하기() throws Exception {
         CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         String inputJson = objectMapper.writeValueAsString(requestView);
         mockMvc.perform(
@@ -99,8 +97,7 @@ public class UserDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    @DisplayName("회원 삭제하기")
-    void deleteUser() throws Exception {
+    void 회원_삭제하기() throws Exception {
         CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         UserResponseView responseView = userService.createUser(requestView);
 

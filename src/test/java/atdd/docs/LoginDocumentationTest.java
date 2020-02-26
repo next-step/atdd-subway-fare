@@ -37,7 +37,7 @@ public class LoginDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    public void loginTest() throws Exception {
+    public void 로그인하면_토큰이_발급된다() throws Exception {
         LoginRequestView loginRequestView = new LoginRequestView(EMAIL, PASSWORD);
         String inputJson = objectMapper.writeValueAsString(loginRequestView);
         given(userService.findByEmail(EMAIL)).willReturn(new User(NAME, EMAIL, PASSWORD));
@@ -107,7 +107,7 @@ public class LoginDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    public void showUserInfo() throws Exception {
+    public void 사용자_정보_조회하기() throws Exception {
         CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         userService.createUser(requestView);
         String token = jwtTokenProvider.createToken(EMAIL);

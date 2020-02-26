@@ -6,7 +6,6 @@ import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,8 +42,7 @@ public class PathDocumentationTest extends BaseDocumentationTest {
     LineService lineService;
 
     @Test
-    @DisplayName("최소 경로 조회하기")
-    public void findPathTest() throws Exception {
+    public void 최소_경로_조회하기() throws Exception {
         //given
         setUpForPathTest();
 

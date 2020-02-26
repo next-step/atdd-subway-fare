@@ -30,9 +30,13 @@ public class FavoritePathController {
         String email = (String) httpServletRequest.getAttribute("email");
         request.insertUserEmail(email);
         FavoritePathResponseView response = service.create(request);
+
         FavoritePathResource resource = new FavoritePathResource(response);
-        resource.add(linkTo(FavoritePathController.class).withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create").withRel("profile"));
+        resource.add(linkTo(FavoritePathController.class)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create")
+                .withRel("profile"));
+
         return ResponseEntity
                 .created(URI.create(FAVORITE_PATH_BASE_URI + "/" + response.getId()))
                 .body(resource);
@@ -42,9 +46,14 @@ public class FavoritePathController {
     public ResponseEntity deleteFavoritePath(@PathVariable Long id) {
         service.delete(id);
         FavoritePathResponseView responseView = new FavoritePathResponseView(id);
+
         FavoritePathResource resource = new FavoritePathResource(responseView);
-        resource.add(linkTo(FavoritePathController.class).slash(id).withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create").withRel("profile"));
+        resource.add(linkTo(FavoritePathController.class)
+                .slash(id)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create")
+                .withRel("profile"));
+
         return ResponseEntity
                 .ok(resource);
     }
@@ -55,9 +64,13 @@ public class FavoritePathController {
         List<FavoritePath> favoritePaths = service.findAllByEmail(email);
         FavoritePathListResponseView responseView
                 = new FavoritePathListResponseView(email, favoritePaths);
+
         FavoritePathListResource resource = new FavoritePathListResource(responseView);
-        resource.add(linkTo(FavoritePathController.class).withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-showAllFavoritePaths").withRel("profile"));
+        resource.add(linkTo(FavoritePathController.class)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-showAllFavoritePaths")
+                .withRel("profile"));
+
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)

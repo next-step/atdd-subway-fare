@@ -10,17 +10,21 @@ import atdd.path.dao.StationDao;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import atdd.user.jwt.JwtTokenProvider;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.transaction.annotation.Transactional;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.Constant.FAVORITE_PATH_BASE_URI;
 import static atdd.path.TestConstant.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -52,8 +56,7 @@ public class FavoritePathDocumentationTest extends BaseDocumentationTest {
     FavoritePathService favoritePathService;
 
     @Test
-    @DisplayName("지하철경로 즐겨찾기 등록하기")
-    public void createFavoritePathTest() throws Exception {
+    public void 지하철경로_즐겨찾기_등록하기() throws Exception {
         //given
         setUpForPathTest(LINE_NAME_5);
         CreateFavoritePathRequestView requestView
@@ -74,12 +77,56 @@ public class FavoritePathDocumentationTest extends BaseDocumentationTest {
                 .andExpect(jsonPath("_links.self.href").exists())
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
-                .andDo(document("favorite-path-create"));
+                .andDo(document("favorite-path-create",
+                        links(halLinks(),
+                                linkWithRel("self")
+                                        .description("link to self"),
+                                linkWithRel("profile")
+                                        .description("link to describe it by itself")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT)
+                                        .description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("Its contentType is MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("It has the token to check if the user is valid")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("The contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseFields(
+                                fieldWithPath("id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the favorite-path"),
+                                fieldWithPath("userEmail")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The email address of the user"),
+                                fieldWithPath("favoritePath")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("The list of the registered favorite path "),
+                                fieldWithPath("favoritePath[0].id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the favoriteStation"),
+                                fieldWithPath("favoritePath[0].name")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The name of the user"),
+                                fieldWithPath("favoritePath[0].lines")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("The list of the lines of the station"),
+                                fieldWithPath("_links.self.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to self"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to describe it by itself")
+                        )
+                ));
     }
 
     @Test
-    @DisplayName("지하철경로 즐겨찾기 삭제하기")
-    public void deleteFavoritePathTest() throws Exception {
+    public void 지하철경로_즐겨찾기_삭제하기() throws Exception {
         //given
         setUpForPathTest(LINE_NAME_7);
         FavoritePathResponseView favoritePaths
@@ -95,12 +142,47 @@ public class FavoritePathDocumentationTest extends BaseDocumentationTest {
                 .andExpect(jsonPath("_links.self.href").exists())
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
-                .andDo(document("favorite-path-delete"));
+                .andDo(document("favorite-path-delete",
+                        links(halLinks(),
+                                linkWithRel("self")
+                                        .description("link to self"),
+                                linkWithRel("profile")
+                                        .description("link to describe it by itself")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT)
+                                        .description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("Its contentType is MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("It has the token to check if the user is valid")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("The contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseFields(
+                                fieldWithPath("id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the favorite-path"),
+                                fieldWithPath("userEmail")
+                                        .type(JsonFieldType.NULL)
+                                        .description("The email address of the user"),
+                                fieldWithPath("favoritePath")
+                                        .type(JsonFieldType.NULL)
+                                        .description("The list of the registered favorite-path "),
+                                fieldWithPath("_links.self.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to self"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to describe it by itself")
+                        )
+                ));
     }
 
     @Test
-    @DisplayName("지하철경로 즐겨찾기 목록보기")
-    public void showAllFavoritePaths() throws Exception {
+    public void 지하철경로_즐겨찾기_목록보기() throws Exception {
         //given
         setUpForPathTest(LINE_NAME_6);
         createFavoritePaths(EMAIL_2, station1.getId(), station5.getId());
@@ -120,7 +202,52 @@ public class FavoritePathDocumentationTest extends BaseDocumentationTest {
                 .andExpect(jsonPath("_links.self.href").exists())
                 .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
-                .andDo(document("favorite-path-showAllFavoritePaths"));
+                .andDo(document("favorite-path-showAllFavoritePaths",
+                        links(halLinks(),
+                                linkWithRel("self")
+                                        .description("link to self"),
+                                linkWithRel("profile")
+                                        .description("link to describe it by itself")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT)
+                                        .description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("Its contentType is MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("It has the token to check if the user is valid")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("The contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseFields(
+                                fieldWithPath("userEmail")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The email address of the user"),
+                                fieldWithPath("favoritePaths")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("The list of the registered favorite-path "),
+                                fieldWithPath("favoritePaths[0].id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The of the favorite-path-Id in the list "),
+                                fieldWithPath("favoritePaths[0].userEmail")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The email address of the user"),
+                                fieldWithPath("favoritePaths[0].startStationId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the startStationId in a favorite-path"),
+                                fieldWithPath("favoritePaths[0].endStationId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the endStationId in a favorite-path"),
+                                fieldWithPath("_links.self.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to self"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to describe it by itself")
+                        )
+                ));
     }
 
     public void setUpForPathTest(String lineName) {
