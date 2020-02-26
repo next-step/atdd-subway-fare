@@ -34,7 +34,7 @@ public class PathController {
                 .slash("?startId=" + startId + "&endId=" + endId)
                 .withSelfRel());
         pathResource.add(linkTo(FavoritePathController.class)
-                .withRel("favorite-paths"));
+                .withRel("favorite-path-create"));
         pathResource.add(new Link("/docs/api-guide.html#resource-find-path")
                 .withRel("profile"));
         return ResponseEntity.ok(pathResource);

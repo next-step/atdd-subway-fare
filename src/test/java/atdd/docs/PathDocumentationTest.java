@@ -9,14 +9,19 @@ import atdd.path.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.transaction.annotation.Transactional;
 
 import static atdd.path.TestConstant.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
@@ -51,14 +56,56 @@ public class PathDocumentationTest extends BaseDocumentationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.startStationId").exists())
-                .andExpect(jsonPath("$.endStationId").exists())
-                .andExpect(jsonPath("$.stations.length()").exists())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.favorite-paths").exists())
-                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(print())
-                .andDo(document("find-path"));
+                .andDo(document("find-path",
+                        links(halLinks(),
+                                linkWithRel("self")
+                                        .description("link to self"),
+                                linkWithRel("favorite-path-create")
+                                        .description("link to create a favorite-path"),
+                                linkWithRel("profile")
+                                        .description("link to describe it by itself")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT)
+                                        .description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("Its contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("The contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseFields(
+                                fieldWithPath("startStationId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the station to start"),
+                                fieldWithPath("endStationId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the station to arrive"),
+                                fieldWithPath("stations")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("It shows the list of the station in the path"),
+                                fieldWithPath("stations[0].id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The station Id"),
+                                fieldWithPath("stations[0].name")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The station name"),
+                                fieldWithPath("stations[0].lines")
+                                        .type(JsonFieldType.NULL)
+                                        .description("The line list of a station"),
+                                fieldWithPath("_links.self.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to self"),
+                                fieldWithPath("_links.favorite-path-create.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to create a favorite-path"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to describe it by itself")
+                        )
+                ));
     }
 
     public void setUpForPathTest() {

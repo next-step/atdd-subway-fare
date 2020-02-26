@@ -138,7 +138,8 @@ public class LoginDocumentationTest extends BaseDocumentationTest {
                                                 .description("It has the combination of accessToken and tokenType values")
                                 ),
                                 responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("The contentType is MediaType.APPLICATION_JSON")
+                                        headerWithName(HttpHeaders.CONTENT_TYPE)
+                                                .description("The contentType is MediaType.APPLICATION_JSON")
                                 ),
                                 responseFields(
                                         fieldWithPath("id")
