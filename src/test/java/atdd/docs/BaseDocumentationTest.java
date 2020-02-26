@@ -1,6 +1,7 @@
 package atdd.docs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -21,6 +22,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode;
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @Import(RestDocsConfig.class)
+@Ignore
 public class BaseDocumentationTest {
     public static final String NAME = "brown";
     public static final String EMAIL = "boorwonie@email.com";
