@@ -30,10 +30,17 @@ public class FavoriteStationController {
         String email = (String) request.getAttribute("email");
         createRequestView.insertUserEmail(email);
         FavoriteStationResponseView responseView = service.createFavoriteStation(createRequestView);
+
         FavoriteStationResource resource = new FavoriteStationResource(responseView);
-        resource.add(linkTo(FavoriteStationController.class).withSelfRel());
-        resource.add(linkTo(FavoriteStationController.class).withRel("favorite-station-showAllStations"));
-        resource.add(new Link("/docs/api-guide.html#resource-find-path").withRel("profile"));
+        resource.add(linkTo(FavoriteStationController.class)
+                .withSelfRel());
+        resource.add(linkTo(FavoriteStationController.class)
+                .withRel("favorite-station-showAllStations"));
+        resource.add(linkTo(FavoriteStationController.class)
+                .slash(responseView.getId()).withRel("favorite-station-delete"));
+        resource.add(new Link("/docs/api-guide.html#resource-find-path")
+                .withRel("profile"));
+
         return ResponseEntity
                 .created(URI.create(FAVORITE_STATION_BASE_URI + "/" + responseView.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -45,9 +52,16 @@ public class FavoriteStationController {
         service.delete(id);
         FavoriteStationResponseView responseView = new FavoriteStationResponseView();
         responseView.insertId(id);
+
         FavoriteStationResource resource = new FavoriteStationResource(responseView);
-        resource.add(linkTo(FavoriteStationController.class).slash(id).withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-station-delete").withRel("profile"));
+        resource.add(linkTo(FavoriteStationController.class)
+                .slash(id)
+                .withSelfRel());
+        resource.add(linkTo(FavoriteStationController.class)
+                .withRel("favorite-station-showAllStations"));
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-station-delete")
+                .withRel("profile"));
+
         return ResponseEntity
                 .ok(resource);
     }
@@ -58,9 +72,13 @@ public class FavoriteStationController {
         List<FavoriteStation> favoriteStations = service.findAllByEmail(email);
         FavoriteStationsListResponseView responseView
                 = new FavoriteStationsListResponseView(email, favoriteStations);
+
         FavoriteStationListResource resource = new FavoriteStationListResource(responseView);
-        resource.add(linkTo(FavoriteStationController.class).withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-station-showAllFavoriteStations").withRel("profile"));
+        resource.add(linkTo(FavoriteStationController.class)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resource-favorite-station-showAllFavoriteStations")
+                .withRel("profile"));
+
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
