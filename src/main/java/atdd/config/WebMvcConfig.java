@@ -1,7 +1,7 @@
 package atdd.config;
 
-import atdd.user.web.LoginInterceptor;
-import atdd.user.web.LoginUserMethodArgumentResolver;
+import atdd.member.web.LoginInterceptor;
+import atdd.member.web.LoginUserMethodArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -23,8 +23,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns(
-                        "/users/me",
-                        "/favorites"
+                        "/members/me",
+                        "/favorites/**"
                 );
     }
 

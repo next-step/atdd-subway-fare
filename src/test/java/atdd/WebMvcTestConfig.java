@@ -1,7 +1,7 @@
 package atdd;
 
-import atdd.user.domain.User;
-import atdd.user.web.LoginUser;
+import atdd.member.domain.Member;
+import atdd.member.web.LoginUser;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -45,7 +45,7 @@ public class WebMvcTestConfig implements WebMvcConfigurer {
 
         @Override
         public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-            return new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME);
+            return new Member(1L, TEST_MEMBER_EMAIL, TEST_MEMBER_PASSWORD, TEST_MEMBER_NAME);
         }
     }
 }

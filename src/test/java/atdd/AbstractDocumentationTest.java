@@ -1,8 +1,8 @@
 package atdd;
 
 import atdd.config.WebMvcConfig;
-import atdd.user.web.LoginInterceptor;
-import atdd.user.web.LoginUserMethodArgumentResolver;
+import atdd.member.web.LoginInterceptor;
+import atdd.member.web.LoginUserMethodArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;

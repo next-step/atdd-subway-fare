@@ -11,11 +11,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static atdd.TestConstant.*;
+import static atdd.path.web.LineController.EDGE_URL;
+import static atdd.path.web.LineController.LINE_URL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LineAcceptanceTest extends AbstractAcceptanceTest {
-    public static final String LINE_URL = "/lines";
-    public static final String EDGE_URL = "/edges";
 
     private StationHttpTest stationHttpTest;
     private LineHttpTest lineHttpTest;
