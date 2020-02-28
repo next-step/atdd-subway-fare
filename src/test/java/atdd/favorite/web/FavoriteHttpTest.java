@@ -8,6 +8,9 @@ import atdd.favorite.application.dto.FavoriteStationsResponseView;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.Map;
+
+import static atdd.TestUtils.jsonOf;
 import static atdd.favorite.web.FavoriteController.FAVORITES_PATH_URL;
 import static atdd.favorite.web.FavoriteController.FAVORITES_STATIONS_URL;
 
@@ -24,7 +27,8 @@ public class FavoriteHttpTest extends AbstractHttpTest {
     }
 
     public EntityExchangeResult<FavoriteStationResponseView> createForStationRequest(Long stationId, String token) {
-        return createRequestWithToken(FavoriteStationResponseView.class, FAVORITES_STATIONS_URL + "/" + stationId, token);
+        String inputJson = jsonOf(Map.of("stationId", stationId));
+        return createRequestWithToken(FavoriteStationResponseView.class, FAVORITES_STATIONS_URL, token, inputJson);
     }
 
     public FavoriteStationsResponseView findForStations(String token) {
@@ -42,8 +46,9 @@ public class FavoriteHttpTest extends AbstractHttpTest {
     }
 
     public EntityExchangeResult<FavoritePathResponseView> createForPathRequest(Long startId, Long endId, String token) {
+        String inputJson = jsonOf(Map.of("startId", startId, "endId", endId));
         return createRequestWithToken(FavoritePathResponseView.class,
-                FAVORITES_PATH_URL + "?startId=" + startId + "&endId=" + endId, token);
+                FAVORITES_PATH_URL, token, inputJson);
     }
 
     public FavoritePathsResponseView findForPaths(String token) {

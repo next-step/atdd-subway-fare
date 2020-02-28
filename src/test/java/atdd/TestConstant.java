@@ -171,4 +171,7 @@ public class TestConstant {
 
     // 경로 즐겨찾기
     public static FavoritePath TEST_FAVORITE_PATH = new FavoritePath(FAVORITE_PATH_ID, TEST_MEMBER, TEST_STATION, TEST_STATION_4);
+
+    // 테스트 토큰
+    public static final String TEST_MEMBER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
 }

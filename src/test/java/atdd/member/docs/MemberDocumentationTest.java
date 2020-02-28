@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(MemberController.class)
 public class MemberDocumentationTest extends AbstractDocumentationTest {
-    public static final String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
+
 
     @MockBean
     private MemberService memberService;
@@ -69,7 +69,7 @@ public class MemberDocumentationTest extends AbstractDocumentationTest {
         given(memberService.findMemberByEmail(anyString())).willReturn(new Member(1L, TEST_MEMBER_EMAIL, TEST_MEMBER_PASSWORD, TEST_MEMBER_NAME));
 
         this.mockMvc.perform(get(MEMBER_URL + "/me")
-                .header("Authorization", "Bearer " + TEST_USER_TOKEN)
+                .header("Authorization", "Bearer " + TEST_MEMBER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(TEST_MEMBER_EMAIL))

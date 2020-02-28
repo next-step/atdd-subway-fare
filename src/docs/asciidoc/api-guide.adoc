@@ -40,3 +40,32 @@ operation::members/me[snippets='response-fields']
 operation::paths[snippets='http-request,http-response']
 operation::paths[snippets='request-parameters']
 operation::paths[snippets='response-fields']
+
+[[resources-favorites]]
+== Favorite
+
+[[resources-favorites-stations-create]]
+=== 지하철역 즐겨찾기 등록
+
+operation::favorites/stations/create[snippets='http-request,http-response']
+operation::favorites/stations/create[snippets='request-Headers,request-fields']
+operation::favorites/stations/create[snippets='response-headers,response-fields']
+
+---
+
+[[resources-favorites-stations-find]]
+=== 지하철역 즐겨찾기 목록 조회
+
+operation::favorites/stations/find[snippets='http-request,http-response']
+operation::favorites/stations/find[snippets='request-Headers']
+operation::favorites/stations/find[snippets='response-headers,response-fields']
+
+---
+
+[[resources-favorites-stations-delete]]
+=== 지하철역 즐겨찾기 삭제
+
+operation::favorites/stations/delete[snippets='http-request,http-response']
+operation::favorites/stations/delete[snippets='path-Parameters']
+
+---

@@ -28,9 +28,11 @@ public abstract class AbstractHttpTest {
                 .returnResult();
     }
 
-    protected <T> EntityExchangeResult<T> createRequestWithToken(Class<T> classT, String uri, String token) {
+    protected <T> EntityExchangeResult<T> createRequestWithToken(Class<T> classT, String uri, String token, String inputJson) {
         return webTestClient.post().uri(uri)
                 .header(HttpHeaders.AUTHORIZATION, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(inputJson), String.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)

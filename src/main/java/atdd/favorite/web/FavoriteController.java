@@ -1,10 +1,7 @@
 package atdd.favorite.web;
 
 import atdd.favorite.application.FavoriteService;
-import atdd.favorite.application.dto.FavoritePathResponseView;
-import atdd.favorite.application.dto.FavoritePathsResponseView;
-import atdd.favorite.application.dto.FavoriteStationResponseView;
-import atdd.favorite.application.dto.FavoriteStationsResponseView;
+import atdd.favorite.application.dto.*;
 import atdd.favorite.domain.FavoritePath;
 import atdd.favorite.domain.FavoriteStation;
 import atdd.member.domain.Member;
@@ -34,11 +31,11 @@ public class FavoriteController {
         this.graphService = graphService;
     }
 
-    @PostMapping("/stations/{id}")
-    public ResponseEntity<FavoriteStationResponseView> createFavoriteStation(@PathVariable("id") Long stationId,
+    @PostMapping("/stations")
+    public ResponseEntity<FavoriteStationResponseView> createFavoriteStation(@RequestBody CreateFavoriteStationRequestView view,
                                                                              @LoginUser Member member) {
 
-        final FavoriteStation savedFavoriteStation = favoriteService.saveForStation(member, stationId);
+        final FavoriteStation savedFavoriteStation = favoriteService.saveForStation(member, view.getStationId());
 
         return ResponseEntity.created(URI.create(FAVORITES_STATIONS_URL +"/"+ savedFavoriteStation.getId()))
                 .body(new FavoriteStationResponseView(savedFavoriteStation));
@@ -57,11 +54,10 @@ public class FavoriteController {
     }
 
     @PostMapping("/paths")
-    public ResponseEntity<FavoritePathResponseView> createFavoritePath(@RequestParam Long startId,
-                                                                       @RequestParam Long endId,
+    public ResponseEntity<FavoritePathResponseView> createFavoritePath(@RequestBody CreateFavoritePathRequestView view,
                                                                        @LoginUser Member member) {
 
-        final FavoritePath savedFavoritePath = favoriteService.saveForPath(member, startId, endId);
+        final FavoritePath savedFavoritePath = favoriteService.saveForPath(member, view.getStartId(), view.getEndId());
         final List<Station> stations = graphService.findPath(savedFavoritePath);
 
         return ResponseEntity.created(URI.create(FAVORITES_PATH_URL +"/"+ savedFavoritePath.getId()))
