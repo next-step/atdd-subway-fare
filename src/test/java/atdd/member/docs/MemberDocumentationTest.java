@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static atdd.TestConstant.*;
+import static atdd.member.web.MemberController.MEMBER_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -41,12 +42,12 @@ public class MemberDocumentationTest extends AbstractDocumentationTest {
 
         given(memberService.save(any())).willReturn(member);
 
-        this.mockMvc.perform(post("/users")
+        this.mockMvc.perform(post(MEMBER_URL)
                 .content(inputJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(
-                        document("users/create",
+                        document(MEMBER_URL + "/create",
 //                                links(linkWithRel("profile").description("Link to the profile resource")),
                                 requestFields(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
@@ -67,13 +68,13 @@ public class MemberDocumentationTest extends AbstractDocumentationTest {
     void me() throws Exception {
         given(memberService.findMemberByEmail(anyString())).willReturn(new Member(1L, TEST_MEMBER_EMAIL, TEST_MEMBER_PASSWORD, TEST_MEMBER_NAME));
 
-        this.mockMvc.perform(get("/users/me")
+        this.mockMvc.perform(get(MEMBER_URL + "/me")
                 .header("Authorization", "Bearer " + TEST_USER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(TEST_MEMBER_EMAIL))
                 .andDo(
-                        document("users/me",
+                        document(MEMBER_URL + "/me",
 //                                links(linkWithRel("profile").description("Link to the profile resource")),
                                 requestHeaders(
                                         headerWithName("Authorization").description(

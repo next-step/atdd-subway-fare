@@ -13,20 +13,30 @@ endif::[]
 [[resources]]
 = Resources
 
-[[resources-users]]
-== User
+[[resources-members]]
+== Member
 
 [[resources-users-create]]
 === 회원 가입
 
-operation::users/create[snippets='http-request,http-response']
-operation::users/create[snippets='request-fields,response-fields']
+operation::members/create[snippets='http-request,http-response']
+operation::members/create[snippets='request-fields,response-fields']
 
 ---
 
 [[resources-users-me]]
 === 내정보 조회
 
-operation::users/me[snippets='http-request,http-response']
-operation::users/me[snippets='request-headers']
-operation::users/me[snippets='response-fields']
+operation::members/me[snippets='http-request,http-response']
+operation::members/me[snippets='request-headers']
+operation::members/me[snippets='response-fields']
+
+[[resources-paths]]
+== Path
+
+[[resources-paths-shortest-distance-Path]]
+=== 최단 거리 경로 조회
+
+operation::paths[snippets='http-request,http-response']
+operation::paths[snippets='request-parameters']
+operation::paths[snippets='response-fields']
