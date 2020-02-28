@@ -40,3 +40,17 @@ operation::users/me[snippets='response-fields']
 === 지하철역 생성
 operation::stations/create[snippets='http-request,http-response']
 operation::stations/create[snippets='request-fields,response-fields']
+
+[[resources-stations-read]]
+=== 지하철역 목록 조회
+operation::stations/read[snippets='http-request,http-response']
+operation::stations/read[snippets='response-fields']
+
+[[resources-stations-single-read]]
+=== 지하철역 조회
+operation::stations/read/{id}[snippets='http-request,http-response']
+operation::stations/read/{id}[snippets='response-fields']
+
+[[resources-stations-delete]]
+=== 지하철역 삭제
+operation::stations/delete/{id}[snippets='http-request,http-response']
