@@ -9,7 +9,10 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -93,4 +96,5 @@ public class StationDao {
     private boolean hasLine(List<Map<String, Object>> result) {
         return result.size() == 0 || result.get(0).get("LINE_ID") == null;
     }
+
 }

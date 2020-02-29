@@ -1,6 +1,6 @@
 package atdd.user.web;
 
-import atdd.path.AbstractAcceptanceTest;
+import atdd.AbstractAcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,6 @@ public class UserAcceptanceTest extends AbstractAcceptanceTest {
         this.userHttpTest = new UserHttpTest(webTestClient);
     }
 
-    @DisplayName("회원 가입하기")
     @Test
     public void 회원_가입하기() {
         //when
@@ -30,7 +29,6 @@ public class UserAcceptanceTest extends AbstractAcceptanceTest {
         assertEquals(1, userId);
     }
 
-    @DisplayName("회원 탈퇴하기")
     @Test
     public void 회원_탈퇴하기() {
         //given
@@ -40,6 +38,6 @@ public class UserAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.delete().uri(USER_BASE_URI + "/" + userId)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isNotFound();
     }
 }

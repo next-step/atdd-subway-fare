@@ -1,79 +1,59 @@
 package atdd.favorite.web;
 
-import atdd.favorite.application.FavoritePathService;
-import atdd.favorite.application.dto.*;
-import atdd.favorite.domain.FavoritePath;
-import org.springframework.hateoas.Link;
+import atdd.favorite.application.dto.FavoritePathListResponseView;
+import atdd.favorite.application.dto.FavoritePathRequestView;
+import atdd.favorite.application.dto.FavoritePathResponseView;
+import atdd.favorite.application.dto.LoginUser;
+import atdd.favorite.service.FavoritePathService;
+import atdd.user.domain.User;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.List;
 
-import static atdd.Constant.FAVORITE_PATH_BASE_URI;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static atdd.favorite.FavoriteConstant.FAVORITE_PATH_BASE_URI;
 
 @RestController
 @RequestMapping(FAVORITE_PATH_BASE_URI)
 public class FavoritePathController {
-    private FavoritePathService service;
+    private FavoritePathService favoritePathService;
 
-    private FavoritePathController(FavoritePathService service) {
-        this.service = service;
+    public FavoritePathController(FavoritePathService favoritePathService) {
+        this.favoritePathService = favoritePathService;
     }
 
     @PostMapping
-    public ResponseEntity createFavoritePath(@RequestBody CreateFavoritePathRequestView request,
-                                             HttpServletRequest httpServletRequest) {
-        String email = (String) httpServletRequest.getAttribute("email");
-        request.insertUserEmail(email);
-        FavoritePathResponseView response = service.create(request);
-
-        FavoritePathResource resource = new FavoritePathResource(response);
-        resource.add(linkTo(FavoritePathController.class)
-                .withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create")
-                .withRel("profile"));
-
+    public ResponseEntity create(@LoginUser User user,
+                                 @RequestBody FavoritePathRequestView requestView) throws Exception {
+        requestView.insertEmail(user.getEmail());
+        FavoritePathResponseView responseView = favoritePathService.create(requestView);
         return ResponseEntity
-                .created(URI.create(FAVORITE_PATH_BASE_URI + "/" + response.getId()))
-                .body(resource);
+                .created(URI.create(FAVORITE_PATH_BASE_URI + "/" + responseView.getId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(responseView);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFavoritePath(@PathVariable Long id) {
-        service.delete(id);
-        FavoritePathResponseView responseView = new FavoritePathResponseView(id);
-
-        FavoritePathResource resource = new FavoritePathResource(responseView);
-        resource.add(linkTo(FavoritePathController.class)
-                .slash(id)
-                .withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-create")
-                .withRel("profile"));
-
+    public ResponseEntity delete(@LoginUser User user,
+                                 @PathVariable Long id) throws Exception {
+        FavoritePathRequestView requestView = new FavoritePathRequestView();
+        requestView.insertEmail(user.getEmail());
+        requestView.insertId(id);
+        favoritePathService.delete(requestView);
         return ResponseEntity
-                .ok(resource);
+                .ok()
+                .build();
     }
 
     @GetMapping
-    public ResponseEntity showFavoritePaths(HttpServletRequest request) {
-        String email = (String) request.getAttribute("email");
-        List<FavoritePath> favoritePaths = service.findAllByEmail(email);
+    public ResponseEntity showAll(@LoginUser User user){
+        FavoritePathRequestView requestView = new FavoritePathRequestView();
+        requestView.insertEmail(user.getEmail());
         FavoritePathListResponseView responseView
-                = new FavoritePathListResponseView(email, favoritePaths);
-
-        FavoritePathListResource resource = new FavoritePathListResource(responseView);
-        resource.add(linkTo(FavoritePathController.class)
-                .withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resource-favorite-path-showAllFavoritePaths")
-                .withRel("profile"));
-
+                = favoritePathService.showAllFavoritePath(requestView);
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(resource);
+                .body(responseView.getFavoritePaths());
     }
 }

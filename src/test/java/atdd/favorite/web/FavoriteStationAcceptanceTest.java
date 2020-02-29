@@ -1,97 +1,87 @@
 package atdd.favorite.web;
 
-import atdd.path.AbstractAcceptanceTest;
+import atdd.AbstractAcceptanceTest;
+import atdd.favorite.application.dto.FavoriteStationListResponseVIew;
 import atdd.path.web.StationHttpTest;
 import atdd.user.jwt.JwtTokenProvider;
 import atdd.user.web.UserHttpTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.context.annotation.Description;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
-import static atdd.path.TestConstant.STATION_NAME;
-import static atdd.path.TestConstant.STATION_NAME_2;
+import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 public class FavoriteStationAcceptanceTest extends AbstractAcceptanceTest {
     public static final String FAVORITE_STATION_BASE_URI = "/favorite-stations";
-    public static final String EMAIL = "boorwonie@email.com";
-    private UserHttpTest userHttpTest;
-    private StationHttpTest stationHttpTest;
-    private FavoriteStationHttpTest favoriteStationHttpTest;
+    public static final String NAME = "브라운";
+    public static final String EMAIL2 = "boorwonie2@email.com";
+    public static final String EMAIL3 = "boorwonie3@email.com";
+    public static final String PASSWORD = "subway";
+    private static UserHttpTest userHttpTest;
+    private static StationHttpTest stationHttpTest;
+    private static FavoriteStationHttpTest favoriteStationHttpTest;
+    private String token;
+    private Long stationId;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    MockMvc mockMvc;
+    JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     void setUp() {
+        this.favoriteStationHttpTest = new FavoriteStationHttpTest(webTestClient);
         this.userHttpTest = new UserHttpTest(webTestClient);
         this.stationHttpTest = new StationHttpTest(webTestClient);
-        this.favoriteStationHttpTest = new FavoriteStationHttpTest(webTestClient, jwtTokenProvider);
+        userHttpTest.createUser(EMAIL2, NAME, PASSWORD);
+        userHttpTest.createUser(EMAIL3, NAME, PASSWORD);
     }
 
     @Test
-    public void 지하철역_즐겨찾기_등록하기() {
-        //given
-        String token = jwtTokenProvider.createToken(EMAIL);
-        Long stationId = stationHttpTest.createStation(STATION_NAME);
-
-        //when
-        Long favoriteStationId = favoriteStationHttpTest.createFavoriteStation(EMAIL, stationId, token);
+    public void 지하철역을_즐겨찾기에_등록한다() throws Exception {
+        //given, when
+        Long favoriteStationId = makeFavoriteStationForTest(EMAIL2, STATION_NAME);
 
         //then
-        assertThat(1L).isEqualTo(favoriteStationId);
+        assertThat(favoriteStationId).isEqualTo(1L);
     }
 
     @Test
-    public void 지하철역_즐겨찾기_삭제하기() throws Exception {
+    public void 지하철역_즐겨찾기를_삭제한다() throws Exception {
         //given
-        String token = jwtTokenProvider.createToken(EMAIL);
-        Long stationId = stationHttpTest.createStation(STATION_NAME);
-        Long favoriteStationId = favoriteStationHttpTest.createFavoriteStation(EMAIL, stationId, token);
+        Long favoriteStationId = makeFavoriteStationForTest(EMAIL2, STATION_NAME_2);
 
         //when, then
-        mockMvc.perform(
-                delete(FAVORITE_STATION_BASE_URI + "/" + favoriteStationId)
-                        .header("Authorization", AUTH_SCHEME_BEARER + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print());
+        webTestClient.delete().uri(FAVORITE_STATION_BASE_URI + "/" + favoriteStationId)
+                .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody().isEmpty();
     }
 
     @Test
-    public void 지하철역_즐겨찾기_목록보기() throws Exception {
+    void 지하철역_즐겨찾기_목록을_불러온다() throws Exception {
         //given
-        int theNumberOfStations = 2;
-        String token = jwtTokenProvider.createToken(EMAIL);
-        Long stationId = stationHttpTest.createStation(STATION_NAME);
-        Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
-        favoriteStationHttpTest.createFavoriteStation(EMAIL, stationId, token);
-        favoriteStationHttpTest.createFavoriteStation(EMAIL, stationId2, token);
+        int theNumberOfFavoriteStations = 2;
+        makeFavoriteStationForTest(EMAIL3, STATION_NAME_3);
+        makeFavoriteStationForTest(EMAIL3, STATION_NAME_4);
 
         //when, then
-        mockMvc.perform(
-                get(FAVORITE_STATION_BASE_URI)
-                        .header("Authorization", AUTH_SCHEME_BEARER + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.favoriteStations.*", hasSize(theNumberOfStations)))
-                .andDo(print());
+        webTestClient.get().uri(FAVORITE_STATION_BASE_URI)
+                .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(FavoriteStationListResponseVIew.class)
+                .hasSize(theNumberOfFavoriteStations);
+    }
+
+    private Long makeFavoriteStationForTest(String email, String stationName) throws Exception {
+        stationId = stationHttpTest.createStation(stationName);
+        token = jwtTokenProvider.createToken(email);
+        return favoriteStationHttpTest.createFavoriteStationHttpTest(stationId, token);
     }
 }

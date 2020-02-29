@@ -5,16 +5,23 @@ import atdd.favorite.domain.FavoritePath;
 import java.util.List;
 
 public class FavoritePathListResponseView {
-    private String userEmail;
+    private String email;
     private List<FavoritePath> favoritePaths;
 
-    public FavoritePathListResponseView(String userEmail, List<FavoritePath> favoritePaths) {
-        this.userEmail = userEmail;
+    public FavoritePathListResponseView() {
+    }
+
+    public FavoritePathListResponseView(String email) {
+        this.email = email;
+    }
+
+    public FavoritePathListResponseView(String email, List<FavoritePath> favoritePaths) {
+        this.email = email;
         this.favoritePaths = favoritePaths;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 
     public List<FavoritePath> getFavoritePaths() {

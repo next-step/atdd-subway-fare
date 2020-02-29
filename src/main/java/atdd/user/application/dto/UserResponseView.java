@@ -12,9 +12,7 @@ public class UserResponseView {
     }
 
     public UserResponseView(String email, String name, String password) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
+        this(0L, email, name, password);
     }
 
     public UserResponseView(Long id, String email, String name, String password) {
@@ -22,10 +20,6 @@ public class UserResponseView {
         this.email = email;
         this.name = name;
         this.password = password;
-    }
-
-    public void insertId(Long id) {
-        this.id = id;
     }
 
     public Long getId() {

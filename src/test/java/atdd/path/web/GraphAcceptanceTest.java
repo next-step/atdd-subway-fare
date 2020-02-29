@@ -1,11 +1,12 @@
 package atdd.path.web;
 
-import atdd.path.AbstractAcceptanceTest;
+import atdd.AbstractAcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static atdd.path.TestConstant.*;
+import static atdd.TestConstant.*;
+
 
 public class GraphAcceptanceTest extends AbstractAcceptanceTest {
     private StationHttpTest stationHttpTest;
@@ -31,7 +32,7 @@ public class GraphAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.get().uri("/paths?startId=" + stationId + "&endId=" + stationId4)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType("application/hal+json")
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$.startStationId").isEqualTo(stationId)
                 .jsonPath("$.endStationId").isEqualTo(stationId4)

@@ -24,18 +24,14 @@ public class UserService {
         return UserResponseView.of(createdUser);
     }
 
-    public Long deleteUser(Long id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 존재하지 않습니다."));
-        return user.getId();
+        userRepository.delete(user);
     }
 
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
+        User user=userRepository.findByEmail(email);
         return user;
-    }
-
-    public void deleteAll(){
-        userRepository.deleteAll();
     }
 }

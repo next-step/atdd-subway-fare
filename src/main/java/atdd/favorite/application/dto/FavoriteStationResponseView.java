@@ -4,39 +4,34 @@ import atdd.favorite.domain.FavoriteStation;
 
 public class FavoriteStationResponseView {
     private Long id;
-    private String userEmail;
+    private String email;
     private Long stationId;
 
-    public Long getFavoriteStationId() {
-        return stationId;
+    public FavoriteStationResponseView() {
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public FavoriteStationResponseView(Long id, String email, Long stationId) {
+        this.id = id;
+        this.email = email;
+        this.stationId = stationId;
     }
 
     public Long getId() {
         return id;
     }
 
-    public FavoriteStationResponseView() {
+    public String getEmail() {
+        return email;
     }
 
-    public FavoriteStationResponseView(Long id, String userEmail, Long stationId) {
-        this.id = id;
-        this.userEmail = userEmail;
-        this.stationId = stationId;
+    public Long getStationId() {
+        return stationId;
     }
 
-    public static FavoriteStationResponseView of(FavoriteStation createdFavoriteStation) {
+    public static FavoriteStationResponseView of(FavoriteStation favoriteStation) {
         return new FavoriteStationResponseView(
-                createdFavoriteStation.getId(),
-                createdFavoriteStation.getUserEmail(),
-                createdFavoriteStation.getStationId()
-        );
-    }
-
-    public void insertId(Long id) {
-        this.id = id;
+                favoriteStation.getId(),
+                favoriteStation.getEmail(),
+                favoriteStation.getStationId());
     }
 }
