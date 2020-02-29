@@ -1,9 +1,6 @@
 package atdd.favorite.web;
 
-import atdd.favorite.application.dto.FavoriteStationListResponseVIew;
-import atdd.favorite.application.dto.FavoriteStationRequestView;
-import atdd.favorite.application.dto.FavoriteStationResponseView;
-import atdd.favorite.application.dto.LoginUser;
+import atdd.favorite.application.dto.*;
 import atdd.favorite.service.FavoriteStationService;
 import atdd.user.domain.User;
 import org.springframework.http.MediaType;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 import static atdd.favorite.FavoriteConstant.FAVORITE_STATION_BASE_URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(FAVORITE_STATION_BASE_URI)
@@ -28,10 +26,19 @@ public class FavoriteStationController {
                                  @RequestBody FavoriteStationRequestView requestView) {
         requestView.insertEmail(user.getEmail());
         FavoriteStationResponseView responseView = favoriteStationService.create(requestView);
+        FavoriteStationResponseResource resource
+                = new FavoriteStationResponseResource(responseView);
+        resource.add(linkTo(FavoriteStationController.class)
+                        .withSelfRel());
+        resource.add(linkTo(FavoriteStationController.class)
+                        .withRel("favorite-station-showAll"));
+        resource.add(linkTo(FavoriteStationController.class)
+                        .slash(responseView.getId())
+                        .withRel("favorite-station-delete"));
         return ResponseEntity
                 .created(URI.create(FAVORITE_STATION_BASE_URI + "/" + responseView.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(responseView);
+                .body(resource);
     }
 
     @DeleteMapping("/{id}")
