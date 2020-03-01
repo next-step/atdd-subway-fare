@@ -53,9 +53,7 @@ public class LoginDocumentationTest extends AbstractDocumentationTest {
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("The member's email address"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("The member's password")
                                 ),
-                                responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
-                                ),
+                                responseHeaders(getHeaderContentType()),
                                 responseFields(
                                         fieldWithPath("tokenType").type(JsonFieldType.STRING).description("Type auth credentials"),
                                         fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Bearer auth credentials")

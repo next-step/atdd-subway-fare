@@ -8,14 +8,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.util.List;
 import java.util.Map;
 
 import static atdd.TestConstant.*;
 import static atdd.TestUtils.jsonOf;
 import static atdd.member.web.MemberController.MEMBER_URL;
 import static atdd.security.JwtTokenProvider.TOKEN_TYPE;
+import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -54,21 +57,9 @@ public class MemberDocumentationTest extends AbstractDocumentationTest {
                 .andDo(
                         document(MEMBER_URL + "/create",
 //                                links(linkWithRel("profile").description("Link to the profile resource")),
-                                requestFields(
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("The member's email address"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The member's password"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The member's name")
-                                ),
-                                responseHeaders(
-                                        headerWithName(HttpHeaders.LOCATION).description("Location header"),
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
-                                ),
-                                responseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("The member's id"),
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("The member's email address"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The member's password"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The member's name")
-                                )
+                                requestFields(getDescriptionMemberWithoutId()),
+                                responseHeaders(getHeaderLocationAndContentType()),
+                                responseFields(getDescriptionMember())
                         ))
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -82,9 +73,7 @@ public class MemberDocumentationTest extends AbstractDocumentationTest {
                 .header(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + " " + TEST_MEMBER_TOKEN))
                 .andDo(
                         document(MEMBER_URL + "/delete",
-                                requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")
-                                ),
+                                requestHeaders(getHeaderAuthorization() ),
                                 pathParameters(
                                         parameterWithName("id").description("The member's id")
                                 )))
@@ -102,20 +91,26 @@ public class MemberDocumentationTest extends AbstractDocumentationTest {
                 .andDo(
                         document(MEMBER_URL + "/me",
 //                                links(linkWithRel("profile").description("Link to the profile resource")),
-                                requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")),
-                                responseHeaders(
-                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
-                                ),
-                                responseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("The member's id"),
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("The member's email address"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The member's password"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("The member's name")
-                                )
+                                requestHeaders(getHeaderAuthorization()),
+                                responseHeaders(getHeaderContentType() ),
+                                responseFields(getDescriptionMember())
                         ))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(TEST_MEMBER_EMAIL));
     }
+
+    private List<FieldDescriptor> getDescriptionMemberWithoutId() {
+        return getDescriptionMember().stream().skip(1).collect(toList());
+    }
+
+    private List<FieldDescriptor> getDescriptionMember() {
+        return List.of(
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The member's id"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("The member's email address"),
+                fieldWithPath("password").type(JsonFieldType.STRING).description("The member's password"),
+                fieldWithPath("name").type(JsonFieldType.STRING).description("The member's name")
+        );
+    }
+
 }
