@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import java.util.stream.Collectors;
+
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,8 +60,7 @@ public class FavoriteStationAcceptanceTest extends AbstractAcceptanceTest {
                 .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody().isEmpty();
+                .expectStatus().isOk();
     }
 
     @Test
@@ -70,13 +71,19 @@ public class FavoriteStationAcceptanceTest extends AbstractAcceptanceTest {
         makeFavoriteStationForTest(EMAIL3, STATION_NAME_4);
 
         //when, then
-        webTestClient.get().uri(FAVORITE_STATION_BASE_URI)
+        int size = webTestClient.get().uri(FAVORITE_STATION_BASE_URI)
                 .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBodyList(FavoriteStationListResponseVIew.class)
-                .hasSize(theNumberOfFavoriteStations);
+                .returnResult(FavoriteStationListResponseVIew.class)
+                .getResponseBody()
+                .toStream()
+                .collect(Collectors.toList())
+                .get(0)
+                .getFavoriteStations()
+                .size();
+        assertThat(size).isEqualTo(theNumberOfFavoriteStations);
     }
 
     private Long makeFavoriteStationForTest(String email, String stationName) throws Exception {

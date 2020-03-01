@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.util.stream.Collectors;
+
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -90,13 +92,19 @@ public class FavoritePathAcceptanceTest extends AbstractAcceptanceTest {
         FavoritePathRequestView requestView = new FavoritePathRequestView(EMAIL3);
 
         //then
-        webTestClient.get().uri(FAVORITE_PATH_BASE_URI)
+        int size = webTestClient.get().uri(FAVORITE_PATH_BASE_URI)
                 .header("Authorization", AUTH_SCHEME_BEARER + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBodyList(FavoritePathListResponseView.class)
-                .hasSize(theNumberOfFavoritePaths);
+                .returnResult(FavoritePathListResponseView.class)
+                .getResponseBody()
+                .toStream()
+                .collect(Collectors.toList())
+                .get(0)
+                .getFavoritePaths()
+                .size();
+        assertThat(size).isEqualTo(theNumberOfFavoritePaths);
     }
 
     void setUpForTest(String email) {
