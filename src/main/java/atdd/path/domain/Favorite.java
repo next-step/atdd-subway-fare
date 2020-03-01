@@ -30,6 +30,12 @@ public class Favorite {
         this.stations = stations;
     }
 
+    public Favorite(Long id, User user, List<Station> stations) {
+        this.id = id;
+        this.user = user;
+        this.stations = stations;
+    }
+
     public Long getId() {
         return id;
     }
