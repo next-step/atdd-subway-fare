@@ -37,6 +37,17 @@ operation::users-delete[snippets='response-fields']
 
 ---
 
+[[resources-login]]
+=== 로그인 요청
+
+operation::login[snippets='http-request,http-response']
+operation::login[snippets='request-headers']
+operation::login[snippets='request-fields']
+operation::login[snippets='response-headers']
+operation::login[snippets='response-fields']
+
+---
+
 [[resources-users-me]]
 === 내정보 조회
 
@@ -44,6 +55,8 @@ operation::users-me[snippets='http-request,http-response']
 operation::users-me[snippets='request-headers']
 operation::users-me[snippets='response-headers']
 operation::users-me[snippets='response-fields']
+
+---
 
 [[resources-find-path]]
 == 최소 경로 조회

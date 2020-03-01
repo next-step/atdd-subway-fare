@@ -17,7 +17,6 @@ import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginAcceptanceTest extends AbstractAcceptanceTest {
-    public static final String LOGIN_BASE_URI = "/login";
     public static final String NAME = "브라운";
     public static final String EMAIL = "boorwonie@email.com";
     public static final String PASSWORD = "subway";
@@ -43,7 +42,7 @@ public class LoginAcceptanceTest extends AbstractAcceptanceTest {
         LoginRequestView requestView = new LoginRequestView(EMAIL, PASSWORD, jwtTokenProvider);
 
         //when
-        LoginResponseView response = loginHttpTest.login(EMAIL, PASSWORD, requestView);
+        LoginResponseView response = loginHttpTest.login(requestView);
 
         //then
         assertThat(response.getAccessToken()).isNotEmpty();

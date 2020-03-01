@@ -15,7 +15,7 @@ public class LoginHttpTest {
         this.webTestClient = webTestClient;
     }
 
-    public LoginResponseView login(String email, String password, LoginRequestView requestView) {
+    public LoginResponseView login(LoginRequestView requestView) {
         return webTestClient.post().uri("/login")
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestView), LoginRequestView.class)
