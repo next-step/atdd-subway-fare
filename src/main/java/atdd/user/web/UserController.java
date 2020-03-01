@@ -51,7 +51,7 @@ public class UserController {
     public ResponseEntity<UserResponseView> delete(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity
-                .notFound()
+                .ok()
                 .build();
     }
 

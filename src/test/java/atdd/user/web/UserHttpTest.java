@@ -4,9 +4,11 @@ import atdd.Constant;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseView;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.stream.Collectors;
 
 import static atdd.Constant.USER_BASE_URI;
@@ -31,5 +33,13 @@ public class UserHttpTest {
                 .map(UserResponseView::getId)
                 .collect(Collectors.toList())
                 .get(0);
+    }
+
+    public URI deleteUser(Long id){
+        return webTestClient.delete().uri(USER_BASE_URI + "/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(UserResponseView.class).getResponseHeaders().getLocation();
     }
 }
