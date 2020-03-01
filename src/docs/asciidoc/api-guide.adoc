@@ -54,3 +54,30 @@ operation::stations/read/{id}[snippets='response-fields']
 [[resources-stations-delete]]
 === 지하철역 삭제
 operation::stations/delete/{id}[snippets='http-request,http-response']
+
+[[resources-lines]]
+== Lines
+
+=== 지하철 노선 생성
+operation::lines/create[snippets='http-request,http-response']
+operation::lines/create[snippets='request-fields,response-fields']
+
+=== 지하철 노선 목록 받기
+operation::lines/read[snippets='http-request,http-response']
+operation::lines/read[snippets='response-fields']
+
+=== 지하철 단일 노선 받기
+operation::lines/{id}/read[snippets='http-request,http-response']
+operation::lines/{id}/read[snippets='path-parameters,response-fields']
+
+=== 지하철 단일 노선 삭제
+operation::lines/{id}/delete[snippets='http-request,http-response']
+operation::lines/{id}/delete[snippets='path-parameters']
+
+=== 지하철 구간 등록
+operation::lines/{id}/edges/create[snippets='http-request,http-response']
+operation::lines/{id}/edges/create[snippets='path-parameters,request-fields']
+
+=== 지하철 구간에서 지하철역 삭제
+operation::lines/{id}/edges/delete[snippets='http-request,http-response']
+operation::lines/{id}/edges/delete[snippets='path-parameters,request-parameters']
