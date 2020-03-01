@@ -2,7 +2,7 @@ package atdd.login.web;
 
 import atdd.login.application.dto.LoginRequestView;
 import atdd.login.application.dto.LoginResponseView;
-import atdd.member.dao.MemberDao;
+import atdd.member.application.MemberService;
 import atdd.member.domain.Member;
 import atdd.security.JwtTokenProvider;
 import atdd.security.UnauthorizedException;
@@ -20,18 +20,18 @@ public class LoginController {
 
     public static final String LOGIN_URL = "/login";
 
-    private final MemberDao memberDao;
+    private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public LoginController(MemberDao memberDao, JwtTokenProvider jwtTokenProvider) {
-        this.memberDao = memberDao;
+    public LoginController(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
+        this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping
     public ResponseEntity<LoginResponseView> login(@RequestBody LoginRequestView view) {
         final String email = view.getEmail();
-        final Member findMember = memberDao.findByEmail(email).orElseThrow(UnauthorizedException::new);
+        final Member findMember = memberService.findMemberByEmail(email);
 
         if (!findMember.isMatchPassword(view.getPassword())) {
             throw new UnauthorizedException();
