@@ -4,7 +4,6 @@ import atdd.BaseDocumentationTest;
 import atdd.favorite.application.dto.*;
 import atdd.favorite.domain.FavoriteStation;
 import atdd.favorite.service.FavoriteStationService;
-import atdd.path.domain.Station;
 import atdd.user.application.UserService;
 import atdd.user.domain.User;
 import atdd.user.jwt.JwtTokenProvider;
@@ -17,9 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.favorite.FavoriteConstant.FAVORITE_STATION_BASE_URI;

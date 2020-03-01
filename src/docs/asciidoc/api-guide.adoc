@@ -31,6 +31,17 @@ operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
 
+
+[[resources-find-path]]
+== 최소 경로 조회
+
+operation::find-path[snippets='http-request,http-response']
+operation::find-path[snippets='request-headers']
+operation::find-path[snippets='response-headers']
+operation::find-path[snippets='response-fields']
+
+---
+
 [[resources-favorite]]
 == 즐겨찾기
 
