@@ -20,7 +20,8 @@ endif::[]
 === 회원 가입
 
 operation::members/create[snippets='http-request,http-response']
-operation::members/create[snippets='request-fields,response-fields']
+operation::members/create[snippets='request-fields']
+operation::members/create[snippets='response-fields']
 
 ---
 
@@ -38,6 +39,18 @@ operation::members/delete[snippets='request-Headers,path-Parameters']
 operation::members/me[snippets='http-request,http-response']
 operation::members/me[snippets='request-headers']
 operation::members/me[snippets='response-headers,response-fields']
+
+[[resources-login]]
+== Login
+
+[[resources-login]]
+=== 로그인
+
+operation::login[snippets='http-request,http-response']
+operation::login[snippets='request-fields']
+operation::login[snippets='response-headers,response-fields']
+
+---
 
 [[resources-paths]]
 == Path
