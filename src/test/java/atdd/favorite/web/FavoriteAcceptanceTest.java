@@ -5,6 +5,7 @@ import atdd.favorite.application.dto.FavoritePathResponseView;
 import atdd.favorite.application.dto.FavoritePathsResponseView;
 import atdd.favorite.application.dto.FavoriteStationResponseView;
 import atdd.favorite.application.dto.FavoriteStationsResponseView;
+import atdd.login.web.LoginHttpTest;
 import atdd.member.web.MemberHttpTest;
 import atdd.path.application.dto.PathResponseView;
 import atdd.path.web.GraphHttpTest;
@@ -25,6 +26,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
 
     private FavoriteHttpTest favoriteHttpTest;
     private MemberHttpTest memberHttpTest;
+    private LoginHttpTest loginHttpTest;
     private StationHttpTest stationHttpTest;
     private LineHttpTest lineHttpTest;
     private GraphHttpTest graphHttpTest;
@@ -33,6 +35,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
     void setUp() {
         favoriteHttpTest = new FavoriteHttpTest(webTestClient);
         memberHttpTest = new MemberHttpTest(webTestClient);
+        loginHttpTest = new LoginHttpTest(webTestClient);
         stationHttpTest = new StationHttpTest(webTestClient);
         lineHttpTest = new LineHttpTest(webTestClient);
         graphHttpTest = new GraphHttpTest(webTestClient);
@@ -44,7 +47,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(STATION_NAME);
 
         memberHttpTest.createMemberRequest(TEST_MEMBER);
-        String token = memberHttpTest.loginMember(TEST_MEMBER);
+        String token = loginHttpTest.loginMember(TEST_MEMBER);
 
         FavoriteStationResponseView view = favoriteHttpTest.createForStation(stationId, token);
 
@@ -61,7 +64,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
 
         memberHttpTest.createMemberRequest(TEST_MEMBER);
-        String token = memberHttpTest.loginMember(TEST_MEMBER);
+        String token = loginHttpTest.loginMember(TEST_MEMBER);
 
         favoriteHttpTest.createForStationRequest(stationId, token);
         favoriteHttpTest.createForStationRequest(stationId2, token);
@@ -82,7 +85,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(STATION_NAME);
 
         memberHttpTest.createMemberRequest(TEST_MEMBER);
-        String token = memberHttpTest.loginMember(TEST_MEMBER);
+        String token = loginHttpTest.loginMember(TEST_MEMBER);
 
         FavoriteStationResponseView createView = favoriteHttpTest.createForStation(stationId, token);
 
@@ -165,7 +168,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         lineHttpTest.createEdgeRequest(lineId, stationId3, stationId4);
 
         memberHttpTest.createMemberRequest(TEST_MEMBER);
-        return memberHttpTest.loginMember(TEST_MEMBER);
+        return loginHttpTest.loginMember(TEST_MEMBER);
     }
 
 }

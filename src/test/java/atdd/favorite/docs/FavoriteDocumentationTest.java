@@ -51,7 +51,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .andDo(
                         document(FAVORITES_STATIONS_URL + "/create",
                                 requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("The bearer token"),
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials"),
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
                                 ),
                                 requestFields(
@@ -80,7 +80,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .andDo(
                         document(FAVORITES_STATIONS_URL + "/find",
                                 requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("The bearer token")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")
                                 ),
                                 responseHeaders(
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
@@ -104,6 +104,9 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .header(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + " " + TEST_MEMBER_TOKEN))
                 .andDo(
                         document(FAVORITES_STATIONS_URL + "/delete",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")
+                                ),
                                 pathParameters(
                                         parameterWithName("id").description("The favorite station's id")
                                 )))
@@ -123,7 +126,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .andDo(
                         document(FAVORITES_PATH_URL + "/create",
                                 requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("The bearer token"),
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials"),
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
                                 ),
                                 requestFields(
@@ -157,7 +160,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .andDo(
                         document(FAVORITES_PATH_URL + "/find",
                                 requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("The bearer token")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")
                                 ),
                                 responseHeaders(
                                         headerWithName(HttpHeaders.CONTENT_TYPE).description("Content type")
@@ -184,6 +187,9 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .header(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + " " + TEST_MEMBER_TOKEN))
                 .andDo(
                         document(FAVORITES_PATH_URL + "/delete",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")
+                                ),
                                 pathParameters(
                                         parameterWithName("id").description("The favorite path's id")
                                 )))

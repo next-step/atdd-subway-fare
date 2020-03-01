@@ -16,7 +16,7 @@ endif::[]
 [[resources-members]]
 == Member
 
-[[resources-users-create]]
+[[resources-members-create]]
 === 회원 가입
 
 operation::members/create[snippets='http-request,http-response']
@@ -24,12 +24,20 @@ operation::members/create[snippets='request-fields,response-fields']
 
 ---
 
-[[resources-users-me]]
+[[resources-members-delete]]
+=== 회원 탈퇴
+
+operation::members/delete[snippets='http-request,http-response']
+operation::members/delete[snippets='request-Headers,path-Parameters']
+
+---
+
+[[resources-members-me]]
 === 내정보 조회
 
 operation::members/me[snippets='http-request,http-response']
 operation::members/me[snippets='request-headers']
-operation::members/me[snippets='response-fields']
+operation::members/me[snippets='response-headers,response-fields']
 
 [[resources-paths]]
 == Path
@@ -66,7 +74,7 @@ operation::favorites/stations/find[snippets='response-headers,response-fields']
 === 지하철역 즐겨찾기 삭제
 
 operation::favorites/stations/delete[snippets='http-request,http-response']
-operation::favorites/stations/delete[snippets='path-Parameters']
+operation::favorites/stations/delete[snippets='request-Headers,path-Parameters']
 
 ---
 
@@ -92,6 +100,6 @@ operation::favorites/paths/find[snippets='response-headers,response-fields']
 === 경로 즐겨찾기 삭제
 
 operation::favorites/paths/delete[snippets='http-request,http-response']
-operation::favorites/paths/delete[snippets='path-Parameters']
+operation::favorites/paths/delete[snippets='request-Headers,path-Parameters']
 
 ---

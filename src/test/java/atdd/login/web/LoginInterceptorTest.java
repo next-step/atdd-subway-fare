@@ -1,4 +1,4 @@
-package atdd.member.web;
+package atdd.login.web;
 
 import org.junit.jupiter.api.Test;
 

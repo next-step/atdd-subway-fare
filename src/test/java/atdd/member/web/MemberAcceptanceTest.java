@@ -1,6 +1,7 @@
 package atdd.member.web;
 
 import atdd.AbstractAcceptanceTest;
+import atdd.login.web.LoginHttpTest;
 import atdd.member.application.dto.MemberResponseView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MemberAcceptanceTest extends AbstractAcceptanceTest {
 
     private MemberHttpTest memberHttpTest;
+    private LoginHttpTest loginHttpTest;
 
     @BeforeEach
     void setUp() {
         memberHttpTest = new MemberHttpTest(webTestClient);
+        loginHttpTest = new LoginHttpTest(webTestClient);
     }
 
     @DisplayName("회원 가입을 할 수 있다")
@@ -49,7 +52,7 @@ public class MemberAcceptanceTest extends AbstractAcceptanceTest {
     void beAbleToLogin() {
         memberHttpTest.createMemberRequest(TEST_MEMBER);
 
-        String authorization = memberHttpTest.loginMember(TEST_MEMBER);
+        String authorization = loginHttpTest.loginMember(TEST_MEMBER);
         final String[] splits = authorization.split(" ");
 
         assertThat(authorization).isNotEmpty();
@@ -62,7 +65,7 @@ public class MemberAcceptanceTest extends AbstractAcceptanceTest {
     void beAbleToFindMe() {
         memberHttpTest.createMemberRequest(TEST_MEMBER);
 
-        String token = memberHttpTest.loginMember(TEST_MEMBER);
+        String token = loginHttpTest.loginMember(TEST_MEMBER);
 
         webTestClient.get().uri(MEMBER_URL + "/me")
                 .header(HttpHeaders.AUTHORIZATION, token)
