@@ -27,6 +27,16 @@ operation::users-create[snippets='response-fields']
 
 ---
 
+[[resources-users-delete]]
+=== 회원 탈퇴
+
+operation::users-delete[snippets='http-request,http-response']
+operation::users-delete[snippets='request-headers']
+operation::users-delete[snippets='response-headers']
+operation::users-delete[snippets='response-fields']
+
+---
+
 [[resources-users-me]]
 === 내정보 조회
 

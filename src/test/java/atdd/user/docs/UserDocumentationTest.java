@@ -1,19 +1,30 @@
 package atdd.user.docs;
 
 import atdd.BaseDocumentationTest;
+import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
+import atdd.user.application.dto.UserResponseView;
+import atdd.user.domain.User;
+import atdd.user.domain.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,16 +34,26 @@ public class UserDocumentationTest extends BaseDocumentationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    public UserDocumentationTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public UserDocumentationTest(MockMvc mockMvc,
+                                 ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
     }
 
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    UserService userService;
+
     @Test
     void 문서화_회원_가입하기() throws Exception {
         //given
+        User user = new User(1L, EMAIL, NAME, PASSWORD);
         CreateUserRequestView requestView = new CreateUserRequestView(EMAIL, NAME, PASSWORD);
         String inputJson = objectMapper.writeValueAsString(requestView);
+        given(userService.createUser(any(CreateUserRequestView.class)))
+                .willReturn(UserResponseView.of(user));
 
         //when, then
         mockMvc.perform(post("/users")
@@ -81,6 +102,58 @@ public class UserDocumentationTest extends BaseDocumentationTest {
                                         .description("The name of the user"),
                                 fieldWithPath("password")
                                         .type(JsonFieldType.STRING)
+                                        .description("The password of the user"),
+                                fieldWithPath("_links.self.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to self"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to profile")
+                        )
+                ));
+    }
+
+    @Test
+    void 문서화_회원_탈퇴하기() throws Exception {
+        //given
+        User user = new User(1L, EMAIL, NAME, PASSWORD);
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+
+        //when
+        mockMvc.perform(delete("/users/" + user.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("users-delete",
+                        links(halLinks(),
+                                linkWithRel("self")
+                                        .description("link to self"),
+                                linkWithRel("profile")
+                                        .description("link to profile")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT)
+                                        .description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("Its contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("The contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseFields(
+                                fieldWithPath("id")
+                                        .type(JsonFieldType.NULL)
+                                        .description("The id that the server gives to user "),
+                                fieldWithPath("email")
+                                        .type(JsonFieldType.NULL)
+                                        .description("The email address of the user"),
+                                fieldWithPath("name")
+                                        .type(JsonFieldType.NULL)
+                                        .description("The name of the user"),
+                                fieldWithPath("password")
+                                        .type(JsonFieldType.NULL)
                                         .description("The password of the user"),
                                 fieldWithPath("_links.self.href")
                                         .type(JsonFieldType.STRING)

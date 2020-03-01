@@ -56,11 +56,15 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserResponseView> delete(@PathVariable Long id) {
+    public ResponseEntity delete(@PathVariable Long id) {
         userService.deleteUser(id);
+        UserResponseResource resource = new UserResponseResource(new UserResponseView());
+        resource.add(linkTo(UserController.class)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resources-users-delete")
+                .withRel("profile"));
         return ResponseEntity
-                .ok()
-                .build();
+                .ok(resource);
     }
 
     @GetMapping("/me")
