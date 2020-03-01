@@ -2,6 +2,7 @@ package atdd.user.web;
 
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseView;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -9,6 +10,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.stream.Collectors;
 
+import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.Constant.USER_BASE_URI;
 
 public class UserHttpTest {
@@ -41,5 +43,18 @@ public class UserHttpTest {
                 .returnResult(UserResponseView.class)
                 .getResponseHeaders()
                 .getLocation();
+    }
+
+    public UserResponseView retrieveUserInfo(String token) {
+        return webTestClient.get().uri(USER_BASE_URI + "/me")
+                .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(UserResponseView.class)
+                .getResponseBody()
+                .toStream()
+                .collect(Collectors.toList())
+                .get(0);
     }
 }

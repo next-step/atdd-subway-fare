@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        User user=userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         return user;
     }
 }

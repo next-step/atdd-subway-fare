@@ -1,5 +1,6 @@
 package atdd.user.web;
 
+import atdd.favorite.application.dto.LoginUser;
 import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseResource;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -68,10 +68,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponseView> retrieveInfo(HttpServletRequest request) {
-        String email = (String) request.getAttribute("email");
-        User user = userService.findByEmail(email);
-        UserResponseView response = new UserResponseView(user.getEmail(), user.getName(), user.getPassword());
+    public ResponseEntity retrieveInfo(@LoginUser User user) {
+        UserResponseView response
+                = new UserResponseView(user.getEmail(), user.getName(), user.getPassword());
         return ResponseEntity
                 .ok()
                 .body(response);
