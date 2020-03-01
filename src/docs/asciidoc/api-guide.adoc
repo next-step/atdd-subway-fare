@@ -81,3 +81,10 @@ operation::lines/{id}/edges/create[snippets='path-parameters,request-fields']
 === 지하철 구간에서 지하철역 삭제
 operation::lines/{id}/edges/delete[snippets='http-request,http-response']
 operation::lines/{id}/edges/delete[snippets='path-parameters,request-parameters']
+
+[[resources-path]]
+== Paths
+
+=== 지하철 경로 받기
+operation::paths/read[snippets='http-request,http-response']
+operation::paths/read[snippets='request-parameters,response-fields']

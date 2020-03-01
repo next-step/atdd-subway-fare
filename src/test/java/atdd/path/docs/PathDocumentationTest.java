@@ -66,8 +66,12 @@ public class PathDocumentationTest extends AbstractDocumentationTest {
                                                 .description("The start station id"),
                                         fieldWithPath("endStationId").type(JsonFieldType.NUMBER)
                                                 .description("The end station id"),
-                                        fieldWithPath("stations").type(JsonFieldType.ARRAY)
-                                                .description("stations between start station and end station")
+                                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER)
+                                                .description("station id in stations"),
+                                        fieldWithPath("stations[].name").type(JsonFieldType.STRING)
+                                                .description("station name in stations"),
+                                        fieldWithPath("stations[].lines").type(JsonFieldType.ARRAY)
+                                                .description("lines to which station is belonged").optional()
                                 )
                         )
                 )
