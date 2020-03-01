@@ -70,8 +70,13 @@ public class FavoriteStationController {
         requestView.insertEmail(user.getEmail());
         FavoriteStationListResponseVIew responseVIew
                 = favoriteStationService.showAllFavoriteStations(requestView);
+        FavoriteStationListResponseResource resource
+                = new FavoriteStationListResponseResource(responseVIew);
+        resource.add(linkTo(FavoriteStationController.class)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resources-favorite-station-showAll")
+                .withRel("profile"));
         return ResponseEntity
-                .ok()
-                .body(responseVIew.getFavoriteStations());
+                .ok(resource);
     }
 }
