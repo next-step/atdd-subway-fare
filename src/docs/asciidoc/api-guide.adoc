@@ -88,3 +88,14 @@ operation::lines/{id}/edges/delete[snippets='path-parameters,request-parameters'
 === 지하철 경로 받기
 operation::paths/read[snippets='http-request,http-response']
 operation::paths/read[snippets='request-parameters,response-fields']
+
+[[resources-favorite]]
+== Favorites
+
+=== 즐겨찾기에 지하철 등록
+operation::favorites/stations/create[snippets='http-request,http-response']
+operation::favorites/stations/create[snippets='request-fields']
+
+=== 즐겨찾기에 지하철 조회
+operation::favorites/stations/read[snippets='http-request,http-response']
+operation::favorites/stations/read[snippets='response-fields']
