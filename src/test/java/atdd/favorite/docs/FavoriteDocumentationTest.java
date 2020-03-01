@@ -120,7 +120,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                                 responseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("The favorite path's id"))
                                         .andWithPrefix("path.", getDescriptionForPath())
-                                        .andWithPrefix("path.stations[]", getDescriptionForStation())
+                                        .andWithPrefix("path.stations[].", getDescriptionForStation())
                         ))
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -141,7 +141,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                                         fieldWithPath("count").type(JsonFieldType.NUMBER).description("The favorite path's count"),
                                         fieldWithPath("favorites[].id").type(JsonFieldType.NUMBER).description("The favorite path's id"))
                                         .andWithPrefix("favorites[].path.", getDescriptionForPath())
-                                        .andWithPrefix("favorites[].path.stations[]", getDescriptionForStation())
+                                        .andWithPrefix("favorites[].path.stations[].", getDescriptionForStation())
                         ))
                 .andDo(print())
                 .andExpect(status().isOk());
