@@ -32,6 +32,11 @@ public class LineService {
         persistLine.addEdge(newEdge);
 
         edgeDao.save(lineId, newEdge);
+
+        source.getLines().add(persistLine);
+        stationDao.save(source);
+        target.getLines().add(persistLine);
+        stationDao.save(target);
     }
 
     public void deleteStation(Long lineId, Long stationId) {

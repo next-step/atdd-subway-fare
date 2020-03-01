@@ -1,9 +1,6 @@
 package atdd.favorite.web;
 
-import atdd.favorite.application.dto.FavoritePathListResponseView;
-import atdd.favorite.application.dto.FavoritePathRequestView;
-import atdd.favorite.application.dto.FavoritePathResponseView;
-import atdd.favorite.application.dto.LoginUser;
+import atdd.favorite.application.dto.*;
 import atdd.favorite.service.FavoritePathService;
 import atdd.user.domain.User;
 import org.springframework.http.MediaType;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 import static atdd.favorite.FavoriteConstant.FAVORITE_PATH_BASE_URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(FAVORITE_PATH_BASE_URI)
@@ -28,10 +26,18 @@ public class FavoritePathController {
                                  @RequestBody FavoritePathRequestView requestView) throws Exception {
         requestView.insertEmail(user.getEmail());
         FavoritePathResponseView responseView = favoritePathService.create(requestView);
+        FavoritePathResponseResource resource = new FavoritePathResponseResource(responseView);
+        resource.add(linkTo(FavoritePathController.class)
+                .withSelfRel());
+        resource.add(linkTo(FavoritePathController.class)
+                .withRel("favorite-path-showAll"));
+        resource.add(linkTo(FavoritePathController.class)
+                .slash(responseView.getId())
+                .withRel("favorite-path-delete"));
         return ResponseEntity
                 .created(URI.create(FAVORITE_PATH_BASE_URI + "/" + responseView.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(responseView);
+                .body(resource);
     }
 
     @DeleteMapping("/{id}")

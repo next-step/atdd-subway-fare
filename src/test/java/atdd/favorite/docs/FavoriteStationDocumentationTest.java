@@ -4,6 +4,7 @@ import atdd.BaseDocumentationTest;
 import atdd.favorite.application.dto.*;
 import atdd.favorite.domain.FavoriteStation;
 import atdd.favorite.service.FavoriteStationService;
+import atdd.path.domain.Station;
 import atdd.user.application.UserService;
 import atdd.user.domain.User;
 import atdd.user.jwt.JwtTokenProvider;
@@ -16,7 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.favorite.FavoriteConstant.FAVORITE_STATION_BASE_URI;
@@ -36,9 +39,9 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     private FavoriteStation FAVORITE_STATION_3 = new FavoriteStation(3L, EMAIL, stationId3);
     private FavoriteStationRequestView requestView;
     private FavoriteStationResponseView responseView;
+    private FavoriteStationResponseResource resource;
     private FavoriteStationListResponseVIew listResponseVIew;
     private FavoriteStationListResponseResource listResource;
-    private FavoriteStationResponseResource resource;
     private User user;
     private String inputJson;
     private String token;
@@ -62,7 +65,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     FavoriteStationService favoriteStationService;
 
     @Test
-    void createForDocumentation() throws Exception {
+    void 문서화__지하철역_즐겨찾기_등록하기() throws Exception {
         //given
         requestForOneFavoriteStation(EMAIL, stationId1);
         given(favoriteStationService.create(any())).willReturn(responseView);
@@ -138,7 +141,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    void deleteForDocumentation() throws Exception {
+    void 문서화__지하철역_즐겨찾기_삭제하기() throws Exception {
         //given
         requestForOneFavoriteStation(EMAIL, stationId1);
         given(favoriteStationService.create(any())).willReturn(responseView);
@@ -196,7 +199,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    void showAllForDocumentation() throws Exception {
+    void 문서화__지하철역_즐겨찾기_목록보기() throws Exception {
         //given
         requestForThreeFavoriteStations(EMAIL);
         given(favoriteStationService.create(any()))

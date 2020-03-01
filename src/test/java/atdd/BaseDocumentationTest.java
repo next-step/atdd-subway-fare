@@ -1,6 +1,7 @@
 package atdd;
 
 import atdd.RestDocsConfig;
+import atdd.path.domain.Station;
 import atdd.user.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalTime;
+
+import static atdd.TestConstant.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -34,4 +37,7 @@ public class BaseDocumentationTest {
     public static Long stationId1=1L;
     public static Long stationId2=2L;
     public static Long stationId3=3L;
+    public static Station STATION_1 = new Station(1L, STATION_NAME);
+    public static Station STATION_2 = new Station(2L, STATION_NAME_2);
+    public static Station STATION_3 = new Station(3L, STATION_NAME_3);
 }

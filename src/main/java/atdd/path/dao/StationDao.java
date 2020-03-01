@@ -96,5 +96,4 @@ public class StationDao {
     private boolean hasLine(List<Map<String, Object>> result) {
         return result.size() == 0 || result.get(0).get("LINE_ID") == null;
     }
-
 }
