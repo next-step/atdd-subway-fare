@@ -19,8 +19,11 @@ endif::[]
 [[resources-users-create]]
 === 회원 가입
 
-operation::users/create[snippets='http-request,http-response']
-operation::users/create[snippets='request-fields,response-fields']
+operation::users-create[snippets='http-request,http-response']
+operation::users-create[snippets='request-headers']
+operation::users-create[snippets='request-fields']
+operation::users-create[snippets='response-headers']
+operation::users-create[snippets='response-fields']
 
 ---
 

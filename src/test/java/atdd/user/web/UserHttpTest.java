@@ -1,10 +1,8 @@
 package atdd.user.web;
 
-import atdd.Constant;
 import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.application.dto.UserResponseView;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -35,11 +33,13 @@ public class UserHttpTest {
                 .get(0);
     }
 
-    public URI deleteUser(Long id){
+    public URI deleteUser(Long id) {
         return webTestClient.delete().uri(USER_BASE_URI + "/" + id)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .returnResult(UserResponseView.class).getResponseHeaders().getLocation();
+                .returnResult(UserResponseView.class)
+                .getResponseHeaders()
+                .getLocation();
     }
 }

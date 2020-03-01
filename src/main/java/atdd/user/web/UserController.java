@@ -2,8 +2,10 @@ package atdd.user.web;
 
 import atdd.user.application.UserService;
 import atdd.user.application.dto.CreateUserRequestView;
+import atdd.user.application.dto.UserResponseResource;
 import atdd.user.application.dto.UserResponseView;
 import atdd.user.domain.User;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 import static atdd.Constant.USER_BASE_URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(USER_BASE_URI)
@@ -26,7 +29,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseView> create(@RequestBody @Valid CreateUserRequestView request, BindingResult bindingResult) {
+    public ResponseEntity create(@RequestBody @Valid CreateUserRequestView request,
+                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .badRequest()
@@ -41,10 +45,14 @@ public class UserController {
         }
 
         UserResponseView response = userService.createUser(request);
+        UserResponseResource resource = new UserResponseResource(response);
+        resource.add(linkTo(UserController.class).withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resources-users-create")
+                .withRel("profile"));
         return ResponseEntity
                 .created(URI.create("/" + response.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+                .body(resource);
     }
 
     @DeleteMapping("/{id}")
