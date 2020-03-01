@@ -47,3 +47,13 @@ operation::favorite-station-create[snippets='response-fields']
 
 ---
 
+[[resources-favorite-station-delete]]
+=== 지하철역 즐겨찾기 삭제
+
+operation::favorite-station-delete[snippets='http-request,http-response']
+operation::favorite-station-delete[snippets='request-headers']
+operation::favorite-station-delete[snippets='response-headers']
+operation::favorite-station-delete[snippets='response-fields']
+
+---
+

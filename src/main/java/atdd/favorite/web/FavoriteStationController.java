@@ -51,9 +51,17 @@ public class FavoriteStationController {
         requestView.insertEmail(user.getEmail());
         requestView.insertId(id);
         favoriteStationService.delete(requestView);
+        FavoriteStationResponseView responseView = new FavoriteStationResponseView();
+        FavoriteStationResponseResource resource = new FavoriteStationResponseResource(responseView);
+        resource.add(linkTo(FavoriteStationController.class)
+                .slash(id)
+                .withSelfRel());
+        resource.add(linkTo(FavoriteStationController.class)
+                .withRel("favorite-station-showAll"));
+        resource.add(new Link("/docs/api-guide.html#resources-favorite-station-delete")
+                .withRel("profile"));
         return ResponseEntity
-                .ok()
-                .build();
+                .ok(resource);
     }
 
     @GetMapping

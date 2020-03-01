@@ -26,6 +26,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +35,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     private FavoriteStationRequestView requestView;
     private FavoriteStationResponseView responseView;
     private FavoriteStationResponseResource resource;
-    private static User user;
+    private User user;
     private String inputJson;
     private String token;
     private JwtTokenProvider jwtTokenProvider;
@@ -122,6 +123,62 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
                                 fieldWithPath("_links.favorite-station-delete.href")
                                         .type(JsonFieldType.STRING)
                                         .description("link to delete a favorite path"),
+                                fieldWithPath("_links.favorite-station-showAll.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to show all favorite stations"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to profile")
+                        )
+                ));
+    }
+
+    @Test
+    void deleteForDocumentation() throws Exception {
+        makeCreateRequest(EMAIL, stationId1);
+        given(favoriteStationService.create(any())).willReturn(responseView);
+        given(userService.findByEmail(EMAIL)).willReturn(user);
+
+        mockMvc.perform(delete(FAVORITE_STATION_BASE_URI + "/" + responseView.getId())
+                .header(HttpHeaders.AUTHORIZATION, AUTH_SCHEME_BEARER + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("favorite-station-delete",
+                        links(halLinks(),
+                                linkWithRel("self")
+                                        .description("link to self"),
+                                linkWithRel("favorite-station-showAll")
+                                        .description("link to show all favorite stations"),
+                                linkWithRel("profile")
+                                        .description("link to profile")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT)
+                                        .description("It accepts MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("Its contentType is MediaType.APPLICATION_JSON"),
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("It has the token to check if the user is valid")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE)
+                                        .description("The contentType is MediaType.APPLICATION_JSON")
+                        ),
+                        responseFields(
+                                fieldWithPath("id")
+                                        .type(JsonFieldType.NULL)
+                                        .description("It should be null"),
+                                fieldWithPath("email")
+                                        .type(JsonFieldType.NULL)
+                                        .description("It should be null"),
+                                fieldWithPath("stationId")
+                                        .type(JsonFieldType.NULL)
+                                        .description("It should be null"),
+                                fieldWithPath("_links.self.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to self"),
                                 fieldWithPath("_links.favorite-station-showAll.href")
                                         .type(JsonFieldType.STRING)
                                         .description("link to show all favorite stations"),
