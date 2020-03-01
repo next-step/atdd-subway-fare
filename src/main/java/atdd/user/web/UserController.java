@@ -71,9 +71,14 @@ public class UserController {
     public ResponseEntity retrieveInfo(@LoginUser User user) {
         UserResponseView response
                 = new UserResponseView(user.getEmail(), user.getName(), user.getPassword());
+        UserResponseResource resource
+                = new UserResponseResource(response);
+        resource.add(linkTo(UserController.class).slash("me")
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resources-users-me")
+                .withRel("profile"));
         return ResponseEntity
-                .ok()
-                .body(response);
+                .ok(resource);
     }
 
     private User isExistingUser(CreateUserRequestView request) {

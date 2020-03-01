@@ -463,6 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-users-me_http_request">Example Request</a></li>
 <li><a href="#resources-users-me_http_response">Example Response</a></li>
 <li><a href="#resources-users-me_request_headers">Request headers</a></li>
+<li><a href="#resources-users-me_response_headers">Response headers</a></li>
 <li><a href="#resources-users-me_response_fields">Response fields</a></li>
 </ul>
 </li>
@@ -739,7 +740,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 159
+Content-Length: 245
 
 {
   "id" : null,
@@ -749,6 +750,9 @@ Content-Length: 159
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/users"
+    },
+    "profile" : {
+      "href" : "/docs/api-guide.html#resources-users-delete"
     }
   }
 }</code></pre>
@@ -842,6 +846,11 @@ Content-Length: 159
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">link to self</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>_links.profile.href</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">link to profile</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -851,27 +860,131 @@ Content-Length: 159
 <h3 id="resources-users-me"><a class="link" href="#resources-users-me">내정보 조회</a></h3>
 <div class="sect3">
 <h4 id="resources-users-me_http_request"><a class="link" href="#resources-users-me_http_request">Example Request</a></h4>
-<div class="paragraph">
-<p>Snippet http-request not found for operation::users/me</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/me HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxNDAxLCJleHAiOjE1ODMwNjE2MDF9.fLda7Yq7NCIJPvcxBktqYR2uEyA6WAzUDaK4LzyPWkg
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="resources-users-me_http_response"><a class="link" href="#resources-users-me_http_response">Example Response</a></h4>
-<div class="paragraph">
-<p>Snippet http-response not found for operation::users/me</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 186
+
+{
+  "id" : null,
+  "email" : "boorwonie@email.com",
+  "name" : "brown",
+  "password" : "subway",
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/users/me"
+    }
+  }
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="resources-users-me_request_headers"><a class="link" href="#resources-users-me_request_headers">Request headers</a></h4>
-<div class="paragraph">
-<p>Snippet request-headers not found for operation::users/me</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Accept</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It accepts MediaType.APPLICATION_JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its contentType is MediaType.APPLICATION_JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The client should send the token received from the server</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+<div class="sect3">
+<h4 id="resources-users-me_response_headers"><a class="link" href="#resources-users-me_response_headers">Response headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The contentType is MediaType.APPLICATION_JSON</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="resources-users-me_response_fields"><a class="link" href="#resources-users-me_response_fields">Response fields</a></h4>
-<div class="paragraph">
-<p>Snippet response-fields not found for operation::users/me</p>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It should be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The email address of the user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>_links.self.href</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">link to self</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -1045,7 +1158,7 @@ Content-Length: 452
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /favorite-stations HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDU4NTE2LCJleHAiOjE1ODMwNTg3MTZ9.vo60ta-ESq2teOt1TjpEJA22pnhoQdJ-F1OHLvnInO8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxMzgxLCJleHAiOjE1ODMwNjE1ODF9.yqFw6l02Bh2P-ckTKzM_ub2lbSyFnpCNU4JjcuiARFk
 Accept: application/json
 Content-Length: 68
 Host: localhost:8080
@@ -1237,7 +1350,7 @@ Content-Length: 462
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /favorite-stations/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDU4NTIxLCJleHAiOjE1ODMwNTg3MjF9.cvIYHOUy8eYzUcHYX7MMSOW9ComGx0hosdQQU921vy8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxMzg3LCJleHAiOjE1ODMwNjE1ODd9.2UAFWiCUGfDcP9VejmThz8xfYJ96l3U38TonmxBDRUI
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1379,7 +1492,7 @@ Content-Length: 353
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /favorite-stations HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDU4NTE5LCJleHAiOjE1ODMwNTg3MTl9.6JfXVS-NmsIeTCkA6BQcbbzkY3TkzZrLMCtSlpEJ0nk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxMzg0LCJleHAiOjE1ODMwNjE1ODR9.Z9jeBVHEwBw39I05EFMuwpAQyKCKxeXpHYiK82qV9Ms
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1534,7 +1647,7 @@ Content-Length: 494
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /favorite-paths HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDU4NTI0LCJleHAiOjE1ODMwNTg3MjR9.ih7J5fM5SQlBjGtmexl14wGGmHTTDcjZVlDTpdgZaSY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxMzkyLCJleHAiOjE1ODMwNjE1OTJ9.e-rjQI-aop9tIX1i8aXcbe1RUEFiK-Ij_4KLlP-xd9g
 Accept: application/json
 Content-Length: 84
 Host: localhost:8080
@@ -1720,7 +1833,7 @@ Content-Length: 651
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /favorite-paths/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDU4NTI2LCJleHAiOjE1ODMwNTg3MjZ9.Z37l2p9e8uNjGorPeSREQ6z7AT0JmwCjxKkxxSullLc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxMzk0LCJleHAiOjE1ODMwNjE1OTR9.cup_evIhGSCcbt_Nk6rXoJjtR4w5TsV7RopetsEyGak
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1854,7 +1967,7 @@ Content-Length: 259
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /favorite-paths HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDU4NTIyLCJleHAiOjE1ODMwNTg3MjJ9.RZwJ4T3GuVaS5Jg1K4yS2yR8a2POfY6dsCPpal4fmNk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgzMDYxMzkwLCJleHAiOjE1ODMwNjE1OTB9.OBs5bjCvt4tEB1FUuJxmQw8haYpluTAxDMuqMB9MBSs
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -2013,7 +2126,7 @@ Content-Length: 530
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-01 19:28:17 +0900
+Last updated 2020-03-01 20:15:34 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
