@@ -65,3 +65,30 @@ operation::favorite-station-showAll[snippets='response-fields']
 
 ---
 
+[[resources-favorite-path-create]]
+=== 지하철경로 즐겨찾기 등록
+
+operation::favorite-path-create[snippets='http-request,http-response']
+operation::favorite-path-create[snippets='request-headers']
+operation::favorite-path-create[snippets='response-headers']
+operation::favorite-path-create[snippets='response-fields']
+
+---
+
+[[resources-favorite-path-delete]]
+=== 지하철경로 즐겨찾기 삭제
+
+operation::favorite-path-delete[snippets='http-request,http-response']
+operation::favorite-path-delete[snippets='request-headers']
+operation::favorite-path-delete[snippets='response-headers']
+operation::favorite-path-delete[snippets='response-fields']
+
+---
+
+[[resources-favorite-path-showAll]]
+=== 지하철경로 즐겨찾기 목록
+
+operation::favorite-path-showAll[snippets='http-request,http-response']
+operation::favorite-path-showAll[snippets='request-headers']
+operation::favorite-path-showAll[snippets='response-headers']
+operation::favorite-path-showAll[snippets='response-fields']

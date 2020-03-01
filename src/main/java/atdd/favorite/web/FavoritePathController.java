@@ -3,7 +3,7 @@ package atdd.favorite.web;
 import atdd.favorite.application.dto.*;
 import atdd.favorite.service.FavoritePathService;
 import atdd.user.domain.User;
-import org.springframework.http.MediaType;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +34,10 @@ public class FavoritePathController {
         resource.add(linkTo(FavoritePathController.class)
                 .slash(responseView.getId())
                 .withRel("favorite-path-delete"));
+        resource.add(new Link("/docs/api-guide.html#resources-favorite-path-create")
+                .withRel("profile"));
         return ResponseEntity
                 .created(URI.create(FAVORITE_PATH_BASE_URI + "/" + responseView.getId()))
-                .contentType(MediaType.APPLICATION_JSON)
                 .body(resource);
     }
 
@@ -47,19 +48,30 @@ public class FavoritePathController {
         requestView.insertEmail(user.getEmail());
         requestView.insertId(id);
         favoritePathService.delete(requestView);
+        FavoritePathResponseResource resource
+                = new FavoritePathResponseResource(new FavoritePathResponseView());
+        resource.add(linkTo(FavoritePathController.class)
+                .slash(id)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resources-favorite-path-delete")
+                .withRel("profile"));
         return ResponseEntity
-                .ok()
-                .build();
+                .ok(resource);
     }
 
     @GetMapping
-    public ResponseEntity showAll(@LoginUser User user){
+    public ResponseEntity showAll(@LoginUser User user) {
         FavoritePathRequestView requestView = new FavoritePathRequestView();
         requestView.insertEmail(user.getEmail());
         FavoritePathListResponseView responseView
                 = favoritePathService.showAllFavoritePath(requestView);
+        FavoritePathListResponseResource resource
+                = new FavoritePathListResponseResource(responseView);
+        resource.add(linkTo(FavoritePathController.class)
+                .withSelfRel());
+        resource.add(new Link("/docs/api-guide.html#resources-favorite-path-showAll")
+                .withRel("profile"));
         return ResponseEntity
-                .ok()
-                .body(responseView.getFavoritePaths());
+                .ok(resource);
     }
 }

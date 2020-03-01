@@ -65,7 +65,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     FavoriteStationService favoriteStationService;
 
     @Test
-    void 문서화__지하철역_즐겨찾기_등록하기() throws Exception {
+    void 문서화_지하철역_즐겨찾기_등록하기() throws Exception {
         //given
         requestForOneFavoriteStation(EMAIL, stationId1);
         given(favoriteStationService.create(any())).willReturn(responseView);
@@ -141,7 +141,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    void 문서화__지하철역_즐겨찾기_삭제하기() throws Exception {
+    void 문서화_지하철역_즐겨찾기_삭제하기() throws Exception {
         //given
         requestForOneFavoriteStation(EMAIL, stationId1);
         given(favoriteStationService.create(any())).willReturn(responseView);
@@ -199,7 +199,7 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     }
 
     @Test
-    void 문서화__지하철역_즐겨찾기_목록보기() throws Exception {
+    void 문서화_지하철역_즐겨찾기_목록보기() throws Exception {
         //given
         requestForThreeFavoriteStations(EMAIL);
         given(favoriteStationService.create(any()))

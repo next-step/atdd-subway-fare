@@ -10,23 +10,23 @@ public class FavoritePathRequestView {
     }
 
     public FavoritePathRequestView(Long id) {
-        this(id, "", 0L, 0L);
+        this(id, null, null, null);
     }
 
     public FavoritePathRequestView(String email) {
-        this(0L, email, 0L, 0L);
+        this(null, email, null, null);
     }
 
     public FavoritePathRequestView(Long id, String email) {
-        this(id, email, 0L, 0L);
+        this(id, email, null, null);
     }
 
     public FavoritePathRequestView(Long startId, Long endId) {
-        this(0L, "", startId, endId);
+        this(null, null, startId, endId);
     }
 
     public FavoritePathRequestView(String email, Long startId, Long endId) {
-        this(0L, email, startId, endId);
+        this(null, email, startId, endId);
     }
 
     public FavoritePathRequestView(Long id, String email, Long startId, Long endId) {
