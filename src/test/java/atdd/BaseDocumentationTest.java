@@ -1,5 +1,6 @@
-package atdd.favorite.web;
+package atdd;
 
+import atdd.RestDocsConfig;
 import atdd.user.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -23,20 +24,14 @@ import java.time.LocalTime;
 @Import(RestDocsConfig.class)
 @Ignore
 public class BaseDocumentationTest {
+    public static final LocalTime START_TIME = LocalTime.of(5, 0);
+    public static final LocalTime END_TIME = LocalTime.of(11, 55);
+    public static final int INTERVAL_MIN = 10;
+    public static final int DISTANCE_KM = 5;
     public static final String NAME = "brown";
     public static final String EMAIL = "boorwonie@email.com";
     public static final String PASSWORD = "subway";
-    public static final int INTERVAL_MIN = 10;
-    public static final int DISTANCE_KM = 5;
-    public static final LocalTime START_TIME = LocalTime.of(5, 0);
-    public static final LocalTime END_TIME = LocalTime.of(11, 55);
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    public static Long stationId1=1L;
+    public static Long stationId2=2L;
+    public static Long stationId3=3L;
 }

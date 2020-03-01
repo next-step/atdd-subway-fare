@@ -1,17 +1,22 @@
-package atdd.favorite.web;
+package atdd.favorite.docs;
 
+import atdd.BaseDocumentationTest;
 import atdd.favorite.application.dto.FavoriteStationRequestView;
 import atdd.favorite.application.dto.FavoriteStationResponseResource;
 import atdd.favorite.application.dto.FavoriteStationResponseView;
-import atdd.favorite.domain.FavoriteStation;
 import atdd.favorite.service.FavoriteStationService;
 import atdd.user.application.UserService;
 import atdd.user.domain.User;
+import atdd.user.jwt.JwtTokenProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static atdd.Constant.AUTH_SCHEME_BEARER;
 import static atdd.favorite.FavoriteConstant.FAVORITE_STATION_BASE_URI;
@@ -20,20 +25,30 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
-    private static Long stationId1=1L;
-    private static Long stationId2=2L;
-    private static Long stationId3=3L;
-    private static FavoriteStation FAVORITE_STATION_1= new FavoriteStation(1L, EMAIL, stationId1);
-    private static FavoriteStation FAVORITE_STATION_2= new FavoriteStation(2L, EMAIL, stationId2);
-    private static FavoriteStation FAVORITE_STATION_3= new FavoriteStation(3L, EMAIL, stationId3);
-    private static User USER_1 = new User(EMAIL, NAME, PASSWORD);
+    private FavoriteStationRequestView requestView;
+    private FavoriteStationResponseView responseView;
+    private FavoriteStationResponseResource resource;
+    private static User user;
+    private String inputJson;
+    private String token;
+    private JwtTokenProvider jwtTokenProvider;
+    private ObjectMapper objectMapper;
+    private MockMvc mockMvc;
+
+    @Autowired
+    public FavoriteStationDocumentationTest(MockMvc mockMvc,
+                                            JwtTokenProvider jwtTokenProvider,
+                                            ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.objectMapper = objectMapper;
+    }
 
     @MockBean
     UserService userService;
@@ -44,17 +59,9 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
     @Test
     void createForDocumentation() throws Exception {
         //given
-        String token = jwtTokenProvider.createToken(EMAIL);
-        FavoriteStationRequestView requestView
-                = new FavoriteStationRequestView(EMAIL, stationId1);
-        FavoriteStationResponseView responseView
-                = new FavoriteStationResponseView(1L, EMAIL, stationId1);
-        FavoriteStationResponseResource resource
-                = new FavoriteStationResponseResource(responseView);
-
-        String inputJson = objectMapper.writeValueAsString(requestView);
+        makeCreateRequest(EMAIL, stationId1);
         given(favoriteStationService.create(any())).willReturn(responseView);
-        given(userService.findByEmail(EMAIL)).willReturn(USER_1);
+        given(userService.findByEmail(EMAIL)).willReturn(user);
 
         //when, then
         mockMvc.perform(
@@ -72,7 +79,9 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
                                 linkWithRel("favorite-station-delete")
                                         .description("link to delete a favorite-station"),
                                 linkWithRel("favorite-station-showAll")
-                                        .description("link to show all favorite stations")
+                                        .description("link to show all favorite stations"),
+                                linkWithRel("profile")
+                                        .description("link to profile")
                         ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.ACCEPT)
@@ -81,6 +90,17 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
                                         .description("Its contentType is MediaType.APPLICATION_JSON"),
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("It has the token to check if the user is valid")
+                        ),
+                        requestFields(
+                                fieldWithPath("id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("It should be NULL"),
+                                fieldWithPath("email")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The email address of the user"),
+                                fieldWithPath("stationId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the station to be registered ")
                         ),
                         responseHeaders(
                                 headerWithName(HttpHeaders.CONTENT_TYPE)
@@ -104,9 +124,20 @@ public class FavoriteStationDocumentationTest extends BaseDocumentationTest {
                                         .description("link to delete a favorite path"),
                                 fieldWithPath("_links.favorite-station-showAll.href")
                                         .type(JsonFieldType.STRING)
-                                        .description("link to show all favorite stations")
+                                        .description("link to show all favorite stations"),
+                                fieldWithPath("_links.profile.href")
+                                        .type(JsonFieldType.STRING)
+                                        .description("link to profile")
                         )
                 ));
     }
 
+    void makeCreateRequest(String email, Long stationId) throws JsonProcessingException {
+        token = jwtTokenProvider.createToken(email);
+        user = new User(email, NAME, PASSWORD);
+        requestView = new FavoriteStationRequestView(email, stationId);
+        responseView = new FavoriteStationResponseView(1L, email, stationId);
+        resource = new FavoriteStationResponseResource(responseView);
+        inputJson = objectMapper.writeValueAsString(requestView);
+    }
 }

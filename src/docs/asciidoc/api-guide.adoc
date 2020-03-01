@@ -1,0 +1,49 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 6
+:sectlinks:
+:operation-http-request-title: Example Request
+:operation-http-response-title: Example Response
+
+[[resources]]
+= Resources
+
+[[resources-users]]
+== User
+
+[[resources-users-create]]
+=== 회원 가입
+
+operation::users/create[snippets='http-request,http-response']
+operation::users/create[snippets='request-fields,response-fields']
+
+---
+
+[[resources-users-me]]
+=== 내정보 조회
+
+operation::users/me[snippets='http-request,http-response']
+operation::users/me[snippets='request-headers']
+operation::users/me[snippets='response-fields']
+
+---
+
+[[resources-favorite]]
+== 즐겨찾기
+
+[[resources-favorite-station-create]]
+=== 지하철역 즐겨찾기 등록
+
+operation::favorite-station-create[snippets='http-request,http-response']
+operation::favorite-station-create[snippets='request-headers']
+operation::favorite-station-create[snippets='request-fields']
+operation::favorite-station-create[snippets='response-headers']
+operation::favorite-station-create[snippets='response-fields']
+
+---
+

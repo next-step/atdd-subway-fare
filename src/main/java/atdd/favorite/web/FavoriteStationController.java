@@ -3,6 +3,7 @@ package atdd.favorite.web;
 import atdd.favorite.application.dto.*;
 import atdd.favorite.service.FavoriteStationService;
 import atdd.user.domain.User;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,8 @@ public class FavoriteStationController {
         resource.add(linkTo(FavoriteStationController.class)
                         .slash(responseView.getId())
                         .withRel("favorite-station-delete"));
+        resource.add(new Link("/docs/api-guide.html#resources-favorite-station-create")
+                .withRel("profile"));
         return ResponseEntity
                 .created(URI.create(FAVORITE_STATION_BASE_URI + "/" + responseView.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
