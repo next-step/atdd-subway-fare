@@ -5,17 +5,21 @@ import atdd.user.domain.User;
 public class UserResponseView {
     private Long id;
     private String email;
-    private String password;
     private String name;
+    private String password;
 
     public UserResponseView() {
     }
 
-    public UserResponseView(User persistUser) {
-        this.id = persistUser.getId();
-        this.email = persistUser.getEmail();
-        this.password = persistUser.getPassword();
-        this.name = persistUser.getName();
+    public UserResponseView(String email, String name, String password) {
+        this(null, email, name, password);
+    }
+
+    public UserResponseView(Long id, String email, String name, String password) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.password = password;
     }
 
     public Long getId() {
@@ -26,11 +30,20 @@ public class UserResponseView {
         return email;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public String getName() {
-        return name;
+    public static UserResponseView of(User user) {
+        return new UserResponseView(
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getPassword()
+        );
     }
 }

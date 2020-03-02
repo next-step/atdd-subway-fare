@@ -33,7 +33,7 @@ public class Line {
         return new Line(name, startTime, endTime, interval);
     }
 
-    private Line(String name, LocalTime startTime, LocalTime endTime, int interval) {
+    public Line(String name, LocalTime startTime, LocalTime endTime, int interval) {
         this(null, name, Collections.EMPTY_LIST, startTime, endTime, interval);
     }
 

@@ -1,4 +1,4 @@
-package atdd.user.web;
+package atdd.favorite.application.dto;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

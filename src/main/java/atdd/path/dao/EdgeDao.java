@@ -1,6 +1,7 @@
 package atdd.path.dao;
 
 import atdd.path.domain.Edge;
+import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

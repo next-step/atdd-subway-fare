@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 
 import static atdd.TestConstant.*;
 
+
 public class GraphAcceptanceTest extends AbstractAcceptanceTest {
     private StationHttpTest stationHttpTest;
     private LineHttpTest lineHttpTest;
@@ -31,7 +32,7 @@ public class GraphAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.get().uri("/paths?startId=" + stationId + "&endId=" + stationId4)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType("application/hal+json")
                 .expectBody()
                 .jsonPath("$.startStationId").isEqualTo(stationId)
                 .jsonPath("$.endStationId").isEqualTo(stationId4)

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+import static atdd.Constant.*;
+
 @RestController
-@RequestMapping("/lines")
+@RequestMapping(LINE_BASE_URI)
 public class LineController {
     private LineDao lineDao;
     private LineService lineService;

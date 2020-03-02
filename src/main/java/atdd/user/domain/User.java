@@ -1,19 +1,37 @@
 package atdd.user.domain;
 
+import lombok.Builder;
+
+import javax.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String email;
-    private String password;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String password;
 
     public User() {
     }
 
-    public User(Long id, String email, String password, String name) {
+    public User(String email, String name, String password) {
+        this(null, email, name, password);
+    }
+
+    public User(Long id, String email, String name, String password) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.name = name;
+        this.password = password;
     }
 
     public Long getId() {
@@ -24,11 +42,11 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

@@ -1,7 +1,7 @@
-package atdd.user.web;
+package atdd.favorite.application.dto;
 
-import atdd.user.domain.User;
 import atdd.user.application.UserService;
+import atdd.user.domain.User;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 @Component
 public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
-    private final UserService userService;
+    private UserService userService;
 
     public LoginUserMethodArgumentResolver(UserService userService) {
         this.userService = userService;
@@ -26,17 +26,15 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String email = (String) webRequest.getAttribute("loginUserEmail", SCOPE_REQUEST);
+    public User resolveArgument(MethodParameter parameter,
+                                ModelAndViewContainer mavContainer,
+                                NativeWebRequest webRequest,
+                                WebDataBinderFactory binderFactory) throws Exception {
+        String email = (String) webRequest.getAttribute("email", SCOPE_REQUEST);
         if (Strings.isBlank(email)) {
-            return new User();
+            return null;
         }
-
-        try {
-            return userService.findUserByEmail(email);
-        } catch (Exception e) {
-            return new User();
-        }
+        User user = userService.findByEmail(email);
+        return user;
     }
 }

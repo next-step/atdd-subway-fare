@@ -1,10 +1,8 @@
 package atdd.user.web;
 
-import atdd.security.BearerTokenExtractor;
-import atdd.security.InvalidJwtAuthenticationException;
-import atdd.security.JwtTokenProvider;
+import atdd.user.jwt.JwtTokenProvider;
+import atdd.user.jwt.ReadProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,27 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
-    private final JwtTokenProvider jwtTokenProvider;
-    private final BearerTokenExtractor tokenExtractor;
+    private JwtTokenProvider jwtTokenProvider;
+    private ReadProperties readProperties;
 
-    public LoginInterceptor(JwtTokenProvider jwtTokenProvider, BearerTokenExtractor tokenExtractor) {
+    public LoginInterceptor(JwtTokenProvider jwtTokenProvider, ReadProperties readProperties) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.tokenExtractor = tokenExtractor;
+        this.readProperties = readProperties;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String token = tokenExtractor.extract(request);
-        if (StringUtils.isEmpty(token)) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String token = jwtTokenProvider.resolveToken(request);
+        String secretKey = readProperties.getSecretKey();
+        boolean isValidToken = jwtTokenProvider.validateToken(token);
+        if (isValidToken) {
+            String email = jwtTokenProvider.getUserEmail(token);
+            request.setAttribute("email", email);
             return true;
         }
-
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new InvalidJwtAuthenticationException("invalid token");
-        }
-
-        String email = jwtTokenProvider.getUserEmail(token);
-        request.setAttribute("loginUserEmail", email);
-        return true;
+        return false;
     }
 }
