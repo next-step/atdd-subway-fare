@@ -1,9 +1,9 @@
 package atdd.path.web;
 
-import atdd.path.domain.Station;
 import atdd.path.application.dto.CreateStationRequestView;
 import atdd.path.application.dto.StationResponseView;
 import atdd.path.dao.StationDao;
+import atdd.path.domain.Station;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,9 @@ import java.util.List;
 
 @RestController
 public class StationController {
+
+    public static final String STATION_URL = "/stations";
+
     private StationDao stationDao;
 
     public StationController(StationDao stationDao) {
@@ -23,7 +26,7 @@ public class StationController {
     public ResponseEntity createStation(@RequestBody CreateStationRequestView view) {
         Station persistStation = stationDao.save(view.toStation());
         return ResponseEntity
-                .created(URI.create("/stations/" + persistStation.getId()))
+                .created(URI.create(STATION_URL + "/" + persistStation.getId()))
                 .body(StationResponseView.of(persistStation));
     }
 

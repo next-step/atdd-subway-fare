@@ -13,20 +13,106 @@ endif::[]
 [[resources]]
 = Resources
 
-[[resources-users]]
-== User
+[[resources-members]]
+== Member
 
-[[resources-users-create]]
+[[resources-members-create]]
 === 회원 가입
 
-operation::users/create[snippets='http-request,http-response']
-operation::users/create[snippets='request-fields,response-fields']
+operation::members/create[snippets='http-request,http-response']
+operation::members/create[snippets='request-fields']
+operation::members/create[snippets='response-fields']
 
 ---
 
-[[resources-users-me]]
+[[resources-members-delete]]
+=== 회원 탈퇴
+
+operation::members/delete[snippets='http-request,http-response']
+operation::members/delete[snippets='request-Headers,path-Parameters']
+
+---
+
+[[resources-members-me]]
 === 내정보 조회
 
-operation::users/me[snippets='http-request,http-response']
-operation::users/me[snippets='request-headers']
-operation::users/me[snippets='response-fields']
+operation::members/me[snippets='http-request,http-response']
+operation::members/me[snippets='request-headers']
+operation::members/me[snippets='response-headers,response-fields']
+
+[[resources-login]]
+== Login
+
+[[resources-login]]
+=== 로그인
+
+operation::login[snippets='http-request,http-response']
+operation::login[snippets='request-fields']
+operation::login[snippets='response-headers,response-fields']
+
+---
+
+[[resources-paths]]
+== Path
+
+[[resources-paths-shortest-distance-Path]]
+=== 최단 거리 경로 조회
+
+operation::paths[snippets='http-request,http-response']
+operation::paths[snippets='request-parameters']
+operation::paths[snippets='response-fields']
+
+[[resources-favorites]]
+== Favorite
+
+[[resources-favorites-stations-create]]
+=== 지하철역 즐겨찾기 등록
+
+operation::favorites/stations/create[snippets='http-request,http-response']
+operation::favorites/stations/create[snippets='request-Headers,request-fields']
+operation::favorites/stations/create[snippets='response-headers,response-fields']
+
+---
+
+[[resources-favorites-stations-find]]
+=== 지하철역 즐겨찾기 목록 조회
+
+operation::favorites/stations/find[snippets='http-request,http-response']
+operation::favorites/stations/find[snippets='request-Headers']
+operation::favorites/stations/find[snippets='response-headers,response-fields']
+
+---
+
+[[resources-favorites-stations-delete]]
+=== 지하철역 즐겨찾기 삭제
+
+operation::favorites/stations/delete[snippets='http-request,http-response']
+operation::favorites/stations/delete[snippets='request-Headers,path-Parameters']
+
+---
+
+[[resources-favorites-paths-create]]
+=== 경로 즐겨찾기 등록
+
+operation::favorites/paths/create[snippets='http-request,http-response']
+operation::favorites/paths/create[snippets='request-Headers,request-fields']
+operation::favorites/paths/create[snippets='response-headers,response-fields']
+
+---
+
+[[resources-favorites-paths-find]]
+=== 경로 즐겨찾기 목록 조회
+
+operation::favorites/paths/find[snippets='http-request,http-response']
+operation::favorites/paths/find[snippets='request-Headers']
+operation::favorites/paths/find[snippets='response-headers,response-fields']
+
+---
+
+[[resources-favorites-paths-delete]]
+=== 경로 즐겨찾기 삭제
+
+operation::favorites/paths/delete[snippets='http-request,http-response']
+operation::favorites/paths/delete[snippets='request-Headers,path-Parameters']
+
+---

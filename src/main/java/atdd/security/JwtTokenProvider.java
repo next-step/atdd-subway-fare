@@ -9,6 +9,9 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
+
+    public static final String TOKEN_TYPE = "bearer";
+
     private String secretKey;
     private long expireLength;
 

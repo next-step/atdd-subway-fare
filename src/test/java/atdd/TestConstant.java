@@ -1,5 +1,8 @@
 package atdd;
 
+import atdd.favorite.domain.FavoritePath;
+import atdd.favorite.domain.FavoriteStation;
+import atdd.member.domain.Member;
 import atdd.path.domain.Edge;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
@@ -91,6 +94,12 @@ public class TestConstant {
     public static final Long EDGE_ID_22 = 22L;
     public static final Long EDGE_ID_23 = 23L;
 
+    public static final Long MEMBER_ID = 1L;
+
+    public static final Long FAVORITE_STATION_ID = 1L;
+
+    public static final Long FAVORITE_PATH_ID = 1L;
+
     public static Station TEST_STATION = new Station(STATION_ID, STATION_NAME);
     public static Station TEST_STATION_2 = new Station(STATION_ID_2, STATION_NAME_2);
     public static Station TEST_STATION_3 = new Station(STATION_ID_3, STATION_NAME_3);
@@ -150,7 +159,19 @@ public class TestConstant {
     public static Line TEST_LINE_3 = new Line(LINE_ID_3, LINE_NAME_3, Lists.list(TEST_EDGE_10, TEST_EDGE_11, TEST_EDGE_12, TEST_EDGE_13, TEST_EDGE_14, TEST_EDGE_15), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
     public static Line TEST_LINE_4 = new Line(LINE_ID_4, LINE_NAME_4, Lists.list(TEST_EDGE_16, TEST_EDGE_17, TEST_EDGE_18, TEST_EDGE_19, TEST_EDGE_20, TEST_EDGE_21, TEST_EDGE_22), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
 
-    public static final String TEST_USER_EMAIL = "boorwonie@email.com";
-    public static final String TEST_USER_NAME = "브라운";
-    public static final String TEST_USER_PASSWORD = "subway";
+    // 회원
+    public static final String TEST_MEMBER_EMAIL = "dev@gmail.com";
+    public static final String TEST_MEMBER_NAME = "개발자";
+    public static final String TEST_MEMBER_PASSWORD = "1234";
+
+    public static final Member TEST_MEMBER = new Member(MEMBER_ID, TEST_MEMBER_EMAIL, TEST_MEMBER_NAME, TEST_MEMBER_PASSWORD);
+
+    // 지하철역 즐겨찾기
+    public static FavoriteStation TEST_FAVORITE_STATION = new FavoriteStation(FAVORITE_STATION_ID, TEST_MEMBER, TEST_STATION);
+
+    // 경로 즐겨찾기
+    public static FavoritePath TEST_FAVORITE_PATH = new FavoritePath(FAVORITE_PATH_ID, TEST_MEMBER, TEST_STATION, TEST_STATION_4);
+
+    // 테스트 토큰
+    public static final String TEST_MEMBER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
 }

@@ -1,5 +1,6 @@
 package atdd.path.application;
 
+import atdd.favorite.domain.FavoritePath;
 import atdd.path.dao.LineDao;
 import atdd.path.domain.Graph;
 import atdd.path.domain.Line;
@@ -21,4 +22,9 @@ public class GraphService {
         Graph graph = new Graph(lines);
         return graph.getShortestDistancePath(startId, endId);
     }
+
+    public List<Station> findPath(FavoritePath favoritePath) {
+        return findPath(favoritePath.getSourceStationId(), favoritePath.getTargetStationId());
+    }
+
 }

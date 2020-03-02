@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PathController {
+
+    public static final String PATH_URL = "/paths";
+
     private GraphService graphService;
 
     public PathController(GraphService graphService) {
