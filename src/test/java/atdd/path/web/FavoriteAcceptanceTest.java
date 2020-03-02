@@ -91,30 +91,4 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
                     assertThat(favoritedStation).isNotNull();
                 });
     }
-
-    @DisplayName("지하철역 즐겨찾기 삭제")
-    @Test
-    public void deleteFavoriteForStations() {
-        String inputJson = String.format("{\"name\": \"%s\"}", "강남역");
-
-
-        // 지하철역 id 정보 get 요청으로 받아오기?
-
-        webTestClient
-                .delete()
-                .uri(FAVORITE_URI + "/stations" + "/" + 1L)
-                .header("Authorization", tokenInfo)
-                .exchange()
-                .expectStatus().isNoContent();
-
-        webTestClient.get().uri(FAVORITE_URI + "/stations").header("Authorization", tokenInfo)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(FavoriteResponseView.class)
-                .consumeWith(result -> {
-                    List<Station> stationList = result.getResponseBody().getStations();
-                    Station favoritedStation = stationList.stream().filter(station -> station.getName().equals("강남역")).findFirst().orElse(null);
-                    assertThat(favoritedStation).isNotNull();
-                });
-    }
 }
