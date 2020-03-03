@@ -15,8 +15,10 @@ public enum ErrorType {
 
     NOT_FOUND_STATION(-300, HttpStatus.NOT_FOUND, "not found station"),
 
-    INVALID_PASSWORD(-350, HttpStatus.UNAUTHORIZED, "invalid password");
+    INVALID_PASSWORD(-350, HttpStatus.UNAUTHORIZED, "invalid password"),
 
+    NOT_FOUND_FAVORITE_STATION(-400, HttpStatus.NOT_FOUND, "not found favorite station"),
+    NOT_FOUND_FAVORITE_PATH(-401, HttpStatus.NOT_FOUND, "not found favorite path");
 
     private int code;
     private HttpStatus status;

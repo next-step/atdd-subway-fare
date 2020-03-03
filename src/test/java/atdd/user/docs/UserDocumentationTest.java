@@ -120,7 +120,4 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                         ))
                 .andDo(print());
     }
-
-//    @Test
-//    void
 }
