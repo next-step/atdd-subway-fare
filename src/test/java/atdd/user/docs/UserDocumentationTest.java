@@ -1,12 +1,10 @@
 package atdd.user.docs;
 
 import atdd.AbstractDocumentationTest;
-import atdd.security.JwtTokenProvider;
 import atdd.user.application.UserService;
 import atdd.user.domain.User;
 import atdd.user.web.UserController;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
