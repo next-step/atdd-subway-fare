@@ -23,9 +23,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponseView> createUser(@RequestBody CreateUserRequestView view) {
-        final User savedUser = userService.save(view.toUser());
-        return ResponseEntity.created(URI.create("/users/" + savedUser.getId()))
-                .body(new UserResponseView(savedUser));
+        User user = userService.createUser(view.toUser());
+        return ResponseEntity.created(URI.create("/users/" + user.getId()))
+                .body(new UserResponseView(user));
     }
 
     @GetMapping("/me")

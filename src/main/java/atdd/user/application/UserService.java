@@ -2,7 +2,6 @@ package atdd.user.application;
 
 import atdd.security.JwtTokenProvider;
 import atdd.user.application.dao.UserDao;
-import atdd.user.application.dto.CreateUserRequestView;
 import atdd.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public User createUser(CreateUserRequestView view) {
-        User user = view.toUser();
+    public User createUser(User user) {
         user.encryptPassword();
 
         return userDao.save(user);
@@ -43,10 +41,6 @@ public class UserService {
 
     public User findUserByEmail(final String email) {
         return userDao.findByEmail(email);
-    }
-
-    public User save(User user) {
-        return userDao.save(user);
     }
 }
 
