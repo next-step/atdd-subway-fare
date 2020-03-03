@@ -1,4 +1,4 @@
-package atdd.user.docs;
+package atdd.path.docs;
 
 import atdd.AbstractDocumentationTest;
 import atdd.path.application.GraphService;
