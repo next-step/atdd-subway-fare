@@ -20,6 +20,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,6 +57,10 @@ public class GraphDocumentationTest extends AbstractDocumentationTest {
         result.andExpect(status().isOk())
                 .andDo(
                         document("paths",
+                                requestParameters(
+                                        parameterWithName("startId").description("start station's ID"),
+                                        parameterWithName("endId").description("end station's ID")
+                                ),
                                 responseFields(
                                         fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
                                         fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
