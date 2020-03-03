@@ -1,10 +1,12 @@
 package atdd.user.docs;
 
 import atdd.AbstractDocumentationTest;
+import atdd.security.JwtTokenProvider;
 import atdd.user.application.UserService;
 import atdd.user.domain.User;
 import atdd.user.web.UserController;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -15,8 +17,7 @@ import static atdd.TestConstant.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 public class UserDocumentationTest extends AbstractDocumentationTest {
+    public static final String HEADER_NAME = "Authorization";
     public static final String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
 
     @MockBean
@@ -40,7 +42,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                 "\"password\":\"" + user.getPassword() + "\"," +
                 "\"name\":\"" + user.getName() + "\"}";
 
-        given(userService.save(any())).willReturn(user);
+        given(userService.createUser(any())).willReturn(user);
 
         this.mockMvc.perform(post("/users")
                 .content(inputJson)
@@ -67,26 +69,31 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
     @Test
     void login() throws Exception {
         //given
+        User user = new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME);
+
+        String inputJson = "{\"email\":\"" + user.getEmail() + "\"," +
+                "\"password\":\"" + user.getPassword() + "\"}";
+
+        given(userService.login(TEST_USER_EMAIL, TEST_USER_PASSWORD)).willReturn(TEST_USER_TOKEN);
 
         //when
-        ResultActions result = this.mockMvc.perform(post("/paths?startId=" + sourceStationId + "&endId=" + targetStationId)
+        ResultActions result = this.mockMvc.perform(post("/users/login")
+                .content(inputJson)
                 .contentType(MediaType.APPLICATION_JSON));
 
         //then
-        result.andExpect(status().isOk())
+        result.andExpect(status().isNoContent())
                 .andDo(
-                        document("paths",
-                                responseFields(
-                                        fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
-                                        fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
-                                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
-                                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
-                                        fieldWithPath("stations[].lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
-                                        fieldWithPath("stations[].lines[].name").type(JsonFieldType.STRING).description("The line's name")
+                        document("users/login",
+                                responseHeaders(
+                                        headerWithName(HEADER_NAME).description("Bearer auth credentials")
+                                ),
+                                requestFields(
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password")
                                 )
                         ))
                 .andDo(print());
-
     }
 
     @Test
@@ -102,7 +109,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                         document("users/me",
 //                                links(linkWithRel("profile").description("Link to the profile resource")),
                                 requestHeaders(
-                                        headerWithName("Authorization").description(
+                                        headerWithName(HEADER_NAME).description(
                                                 "Bearer auth credentials")),
                                 responseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("The user's id"),
@@ -113,4 +120,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                         ))
                 .andDo(print());
     }
+
+//    @Test
+//    void
 }

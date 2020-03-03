@@ -31,6 +31,14 @@ operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
 
+[[resources-users-login]]
+=== 로그인
+
+operation::users/login[snippets='http-request,http-response']
+operation::users/login[snippets='request-fields']
+operation::users/login[snippets='response-headers']
+
+
 [[resources-path]]
 == Path
 
@@ -38,4 +46,4 @@ operation::users/me[snippets='response-fields']
 === 최단 경로 조회
 
 operation::paths[snippets='http-request,http-response']
-operation::paths[snippets='response-fields']
+operation::paths[snippets='request-parameters,response-fields']
