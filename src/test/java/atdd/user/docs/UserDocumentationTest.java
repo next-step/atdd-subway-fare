@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static atdd.TestConstant.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,6 +62,31 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                                 )
                         ))
                 .andDo(print());
+    }
+
+    @Test
+    void login() throws Exception {
+        //given
+
+        //when
+        ResultActions result = this.mockMvc.perform(post("/paths?startId=" + sourceStationId + "&endId=" + targetStationId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("paths",
+                                responseFields(
+                                        fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
+                                        fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
+                                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
+                                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
+                                        fieldWithPath("stations[].lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
+                                        fieldWithPath("stations[].lines[].name").type(JsonFieldType.STRING).description("The line's name")
+                                )
+                        ))
+                .andDo(print());
+
     }
 
     @Test
