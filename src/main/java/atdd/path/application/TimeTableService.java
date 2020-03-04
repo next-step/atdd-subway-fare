@@ -23,13 +23,6 @@ public class TimeTableService {
         this.edgeDao = edgeDao;
     }
 
-//    public LocalTime findFirstTimeForUp(Line line, Station station) {
-//        List<Station> stationsInLine = line.getStations();
-//        int index = calculateIndex(stationsInLine, station);
-//        LocalTime firstTimeOdStation = calculateFirstTime(line, index);
-//        return firstTimeOdStation;
-//    }
-
     public LocalTime calculateFirstTime(Line line, int index){
         int intervalOfLine = line.getInterval();
         int minutesFromLineFirst = (intervalOfLine)*(index);
@@ -48,16 +41,19 @@ public class TimeTableService {
         return indexOfStation;
     }
 
-    public List<LocalTime> makeTimeTable(LocalTime firstTime, LocalTime lastTime, int interval) {
+    public List<LocalTime> makeTimeTable(LocalTime firstTimeOfLine,
+                                         LocalTime lastTimeOfLine, int interval) {
         List<LocalTime> timeTable = new ArrayList<>();
-        timeTable.add(firstTime);
-        LocalTime nextTime=firstTime.plusMinutes(interval);
-
-        while(nextTime.isBefore(lastTime)){
+        timeTable.add(firstTimeOfLine);
+        LocalTime nextTime=firstTimeOfLine.plusMinutes(interval);
+        while(nextTime.isBefore(lastTimeOfLine)){
            timeTable.add(nextTime);
            nextTime=nextTime.plusMinutes(interval);
         }
-
         return timeTable;
+    }
+
+    public int calculateIndexReverse(List<Station> stations, Station testStation) {
+        return 0;
     }
 }
