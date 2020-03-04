@@ -48,7 +48,7 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
 
         // then
         assertThat(getResponse.getResponseBody().getName()).isEqualTo(LINE_NAME);
-        assertThat(getResponse.getResponseBody().getStartTime()).isEqualTo(LocalTime.of(0, 0).toString());
+        assertThat(getResponse.getResponseBody().getStartTime()).isEqualTo(LocalTime.of(5, 0).toString());
         assertThat(getResponse.getResponseBody().getEndTime()).isEqualTo(LocalTime.of(23, 30).toString());
         assertThat(getResponse.getResponseBody().getInterval()).isEqualTo(30);
     }

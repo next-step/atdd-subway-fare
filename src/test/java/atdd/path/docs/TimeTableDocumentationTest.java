@@ -39,7 +39,7 @@ public class TimeTableDocumentationTest extends BaseDocumentationTest {
     @Test
     void 문서화_지하철역_시간표_조회하기() throws Exception {
         String inputJson = "{\"name\":\"" + station.getName() + "\"}";
-        mockMvc.perform(post(URI.create("/stations/"+station.getId()+"/timetables"))
+        mockMvc.perform(post("/stations/"+station.getId()+"/timetables")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(inputJson))

@@ -96,7 +96,7 @@ public class StationController {
                         .withSelfRel());
 
         return ResponseEntity
-                .created(URI.create("/stations/"+id+"/timetables"))
+                .created(URI.create("/stations"+id+"/timetables"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(resource);
     }

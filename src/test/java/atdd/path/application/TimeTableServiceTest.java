@@ -96,7 +96,6 @@ public class TimeTableServiceTest {
         LocalTime firstTime = LocalTime.of(05, 00);
         LocalTime lastTime = LocalTime.of(07, 00);
         int interval = 10;
-        int howManyStopAtStation = 12;
         Line line = new Line(1L, LINE_NAME,
                 LocalTime.of(05, 00), LocalTime.of(20, 00), 10);
 
@@ -104,8 +103,7 @@ public class TimeTableServiceTest {
         List<LocalTime> timeTable = timeTableService.makeTimeTable(line, firstTime, lastTime, interval);
 
         //then
-        assertThat(timeTable.size()).isEqualTo(howManyStopAtStation);
-        assertThat(timeTable.get(timeTable.size() - 1)).isBefore(lastTime);
+        assertThat(timeTable.get(timeTable.size() - 1)).isBeforeOrEqualTo(lastTime);
     }
 
     @Test
