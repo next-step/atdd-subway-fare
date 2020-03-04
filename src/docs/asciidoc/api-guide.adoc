@@ -77,14 +77,14 @@ operation::favorites/deleteFavoriteStation[snippets='path-parameters']
 
 operation::favorites/addFavoritePath[snippets='http-request,http-response']
 operation::favorites/addFavoritePath[snippets='request-headers']
-operation::favorites/addFavoritePath[snippets='request-fields, response-fields']
+operation::favorites/addFavoritePath[snippets='request-fields,response-fields']
 
 [[resources-favorite-findFavoritePaths]]
 === 경로 즐겨찾기 조회
 
-operation::favorites/findFavoritePath[snippets='http-request,http-response']
-operation::favorites/findFavoritePath[snippets='request-headers']
-operation::favorites/findFavoritePath[snippets='response-fields']
+operation::favorites/findFavoritePaths[snippets='http-request,http-response']
+operation::favorites/findFavoritePaths[snippets='request-headers']
+operation::favorites/findFavoritePaths[snippets='response-fields']
 
 [[resources-favorite-deleteFavoritePath]]
 === 경로 즐겨찾기 삭제
