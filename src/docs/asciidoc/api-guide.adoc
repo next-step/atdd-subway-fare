@@ -39,3 +39,12 @@ operation::users/me[snippets='response-fields']
 operation::routes/distance[snippets='http-request,http-response']
 operation::routes/distance[snippets='request-parameters']
 operation::routes/distance[snippets='response-fields']
+
+---
+
+[[resources-route-time]]
+=== 거리 시간 경로 찾기간
+
+operation::routes/time[snippets='http-request,http-response']
+operation::routes/time[snippets='request-parameters']
+operation::routes/time[snippets='response-fields']

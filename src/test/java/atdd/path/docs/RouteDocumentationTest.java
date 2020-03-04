@@ -65,4 +65,38 @@ public class RouteDocumentationTest extends AbstractDocumentationTest {
                         )))
                 .andDo(print());
     }
+
+    @Test
+    void time() throws Exception {
+        given(routeService.findShortestTimePath(anyLong(), anyLong()))
+                .willReturn(RouteResponseDto.builder()
+                        .startStationId(1L)
+                        .endStationId(2L)
+                        .stations(Arrays.asList(StationDto.builder()
+                                .id(TestConstant.STATION_ID)
+                                .name(TestConstant.STATION_NAME)
+                                .lines(Sets.newHashSet())
+                                .build()))
+                        .estimatedTime(8)
+                        .build());
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/routes/time?startId=1&endId=2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("routes/time",
+                        requestParameters(
+                                parameterWithName("startId").description("The start station id"),
+                                parameterWithName("endId").description("The end station Id")
+                        ),
+                        responseFields(
+                                fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station id"),
+                                fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description("The end station Id"),
+                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The route stations's id"),
+                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The route stations's name"),
+                                fieldWithPath("stations[].lines").type(JsonFieldType.ARRAY).description("The route stations's lines"),
+                                fieldWithPath("estimatedTime").type(JsonFieldType.NUMBER).description("The total estimated Time (minutes)")
+                        )))
+                .andDo(print());
+    }
 }
