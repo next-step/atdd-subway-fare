@@ -116,15 +116,15 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
         Long stationId4 = stationHttpTest.createStation(STATION_NAME_6);
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
         Long lineId2 = lineHttpTest.createLine(LINE_NAME_2);
+        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        lineHttpTest.createEdgeRequest(lineId2, stationId4, stationId);
+        int theNumberOfLinesForStation = 2;
         lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
         lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3);
-        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId4);
-        int theNumberOfLinesForStation = 2;
 
         //when
-        String inputJson = "{\"name\":\"" + STATION_NAME_3 + "\"}";
+        String inputJson = "{\"name\":\"" + STATION_NAME + "\"}";
         List<TimeTableResponseView> timeTables
                 = webTestClient.post().uri(STATION_URL + "/" + stationId + "/" + TIMETABLES_URL)
                 .contentType(MediaType.APPLICATION_JSON)

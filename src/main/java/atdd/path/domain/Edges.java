@@ -54,7 +54,7 @@ public class Edges {
         return stations;
     }
 
-    private Station findFirstStation(List<Edge> edges) {
+    public Station findFirstStation(List<Edge> edges) {
         List<Station> sourceStations = edges.stream()
                 .map(it -> it.getTargetStation())
                 .collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class Edges {
                 .orElseThrow(RuntimeException::new);
     }
 
-    private Station findNextStationOf(List<Edge> edges, Station firstStation) {
+    public Station findNextStationOf(List<Edge> edges, Station firstStation) {
         return edges.stream()
                 .filter(it -> firstStation.equals(it.getSourceStation()))
                 .map(it -> it.getTargetStation())
