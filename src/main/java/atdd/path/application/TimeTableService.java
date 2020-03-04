@@ -46,4 +46,8 @@ public class TimeTableService {
         }
         return indexOfStation;
     }
+
+    public List<LocalTime> showTimeTable(LocalTime firstTime, LocalTime lastTime, int interval) {
+        return null;
+    }
 }

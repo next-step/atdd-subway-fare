@@ -81,4 +81,19 @@ public class TimeTableServiceTest {
         //then
         assertThat(firstTime).isEqualTo(line.getStartTime().plusMinutes(line.getInterval()*2));
     }
+
+    @Test
+    void 첫차막차_시간_노선의_배차간격을_주면_열차시간표_목록을_반환한다(){
+        //given
+        LocalTime firstTime = LocalTime.of(05, 00);
+        LocalTime lastTime = LocalTime.of(07, 00);
+        int interval = 10;
+        int howManyStopAtStation = 12;
+
+        //when
+        List<LocalTime> timeTable = timeTableService.showTimeTable(firstTime, lastTime, interval);
+
+        //then
+        assertThat(timeTable.size()).isEqualTo(howManyStopAtStation);
+    }
 }
