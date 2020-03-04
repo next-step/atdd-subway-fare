@@ -1,11 +1,17 @@
 package atdd;
 
+import atdd.path.application.dto.FavoriteStationResponse;
+import atdd.path.application.dto.StationResponseView;
 import atdd.path.domain.Edge;
+import atdd.path.domain.FavoriteStation;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
+import atdd.user.domain.User;
 import org.assertj.core.util.Lists;
 
+import java.lang.reflect.Array;
 import java.time.LocalTime;
+import java.util.Arrays;
 
 public class TestConstant {
     public static final Long STATION_ID = 1L;
@@ -148,9 +154,23 @@ public class TestConstant {
     public static Line TEST_LINE = new Line(LINE_ID, LINE_NAME, Lists.list(TEST_EDGE_23, TEST_EDGE, TEST_EDGE_2, TEST_EDGE_3, TEST_EDGE_4), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
     public static Line TEST_LINE_2 = new Line(LINE_ID_2, LINE_NAME_2, Lists.list(TEST_EDGE_5, TEST_EDGE_6, TEST_EDGE_7, TEST_EDGE_8, TEST_EDGE_9), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
     public static Line TEST_LINE_3 = new Line(LINE_ID_3, LINE_NAME_3, Lists.list(TEST_EDGE_10, TEST_EDGE_11, TEST_EDGE_12, TEST_EDGE_13, TEST_EDGE_14, TEST_EDGE_15), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
-    public static Line TEST_LINE_4 = new Line(LINE_ID_4, LINE_NAME_4, Lists.list(TEST_EDGE_16, TEST_EDGE_17, TEST_EDGE_18, TEST_EDGE_19, TEST_EDGE_20, TEST_EDGE_21, TEST_EDGE_22), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
+    public static Line TEST_LINE_4 = new Line(LINE_ID_4, LINE_NAME_4, Lists.list(TEST_EDGE_16, TEST_EDGE_17, TEST_EDGE_18, TEST_EDGE_19, TEST_EDGE_20, TEST_EDGE_21, TEST_EDGE_22), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);    public static String TEST_USER_EMAIL = "boorwonie@email.com";
+    public static String TEST_USER_NAME = "브라운";
+    public static String TEST_USER_PASSWORD = "subway";
 
-    public static final String TEST_USER_EMAIL = "boorwonie@email.com";
-    public static final String TEST_USER_NAME = "브라운";
-    public static final String TEST_USER_PASSWORD = "subway";
+    public static String TEST_USER_NAME2 = "과제가밀렸어요";
+    public static String TEST_USER_EMAIL2 = "homework@email.com";
+    public static String TEST_USER_PASSWORD2 = "rhkwprkalffuTekdk";
+
+    public static String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
+
+    public static User TEST_USER_1 = new User(1l, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME);
+    public static User TEST_USER_2 = new User(2l, TEST_USER_EMAIL2, TEST_USER_PASSWORD2, TEST_USER_NAME2);
+
+    public static FavoriteStation FAVORITE_STATION_1 = FavoriteStation.builder().id(1l).owner(TEST_USER_2.getId()).stationId(TEST_STATION.getId()).build();
+
+    public static Station TEST_STATION_23 = new Station(STATION_ID, STATION_NAME, Arrays.asList(TEST_LINE));
+    public static FavoriteStationResponse FAVORITE_STATION_RESPONSE = FavoriteStationResponse.builder().id(1l).owner(TEST_USER_2.getId()).station(StationResponseView.of(TEST_STATION_23)).build();
+
+
 }

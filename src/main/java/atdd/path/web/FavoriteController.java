@@ -6,6 +6,7 @@ import atdd.path.application.dto.FavoritePathRequestView;
 import atdd.path.application.dto.FavoritePathResponseView;
 import atdd.path.application.dto.FavoriteStationResponse;
 import atdd.path.domain.FavoritePath;
+import atdd.user.domain.User;
 import atdd.user.web.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,22 +26,22 @@ public class FavoriteController {
     private FavoritePathService favoritePathService;
 
     @PostMapping("/stations")
-    public ResponseEntity addFavoriteStation(@LoginUser final String email, @RequestBody final long stationId) {
-        FavoriteStationResponse response = favoriteStationService.addFavoriteStation(email, stationId);
+    public ResponseEntity addFavoriteStation(@LoginUser User user, @RequestBody final long stationId) {
+        FavoriteStationResponse response = favoriteStationService.addFavoriteStation(user.getEmail(), stationId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/stations")
-    public ResponseEntity findFavoriteStations(@LoginUser final String email) {
-        List<FavoriteStationResponse> responses = favoriteStationService.findAll(email);
+    public ResponseEntity findFavoriteStations(@LoginUser User user) {
+        List<FavoriteStationResponse> responses = favoriteStationService.findAll(user.getEmail());
 
         return ResponseEntity.ok(responses);
     }
 
     @DeleteMapping("/stations/{id}")
-    public ResponseEntity deleteFavoriteStation(@LoginUser final String email, @PathVariable Long id) {
-        favoriteStationService.deleteByIdAndOwner(email, id);
+    public ResponseEntity deleteFavoriteStation(@LoginUser User user, @PathVariable Long id) {
+        favoriteStationService.deleteByIdAndOwner(user.getEmail(), id);
 
         return ResponseEntity.noContent().build();
     }
