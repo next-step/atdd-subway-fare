@@ -6,13 +6,9 @@ import atdd.path.application.dto.TimeTableResponseView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -111,7 +107,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
 
     @DisplayName("지하철역 시간표 조회")
     @Test
-    public void retrieveTimeTables(){
+    public void retrieveTimeTables() {
         //given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_6);
@@ -120,15 +116,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         int theNumberOfLinesForStation = 1;
 
         //when
-        String inputJson = "{\"name\":\"" + STATION_NAME + "\"}";
-        List<TimeTableResponseView> responseBody = webTestClient.post().uri(STATION_URL + "/" + stationId + "/" + TIMETABLES_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(inputJson), String.class)
-                .exchange()
-                .expectBodyList(TimeTableResponseView.class)
-                .returnResult()
-                .getResponseBody();
+        List<TimeTableResponseView> responseBody
+                = stationHttpTest.showTimeTablesForUpAndDown(STATION_NAME, stationId);
 
         //then
         assertThat(responseBody.size()).isEqualTo(theNumberOfLinesForStation);
