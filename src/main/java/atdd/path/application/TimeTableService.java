@@ -72,6 +72,9 @@ public class TimeTableService {
            timeTable.add(nextTime);
            nextTime=nextTime.plusMinutes(interval);
         }
+        if(nextTime.equals(lastTime)){
+            timeTable.add(nextTime);
+        }
         return timeTable;
     }
 
@@ -79,10 +82,17 @@ public class TimeTableService {
     public TimeTables showTimeTables(Line line, List<Station> stations, Station station) {
         int index = calculateIndex(stations, station);
         int reverseIndex = calculateIndexReverse(stations, station);
+
         LocalTime firstTime = calculateFirstTime(line, index);
         LocalTime firstTimeReverse = calculateFirstTime(line, reverseIndex);
+        LocalTime lastTime = calculateLastTime(line, index);
+        LocalTime lastTimeReverse = calculateLastTime(line, reverseIndex);
 
-        return null;
+        List<LocalTime> timeTable = makeTimeTable(firstTime, lastTime, line.getInterval());
+        List<LocalTime> timeTableReverse = makeTimeTable(firstTimeReverse, lastTimeReverse, line.getInterval());
+
+        TimeTables timeTables = new TimeTables(timeTable, timeTableReverse);
+        return timeTables;
     }
 
 }

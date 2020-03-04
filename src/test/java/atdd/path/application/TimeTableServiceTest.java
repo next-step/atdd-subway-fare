@@ -105,21 +105,22 @@ public class TimeTableServiceTest {
         assertThat(timeTable.size()).isEqualTo(howManyStopAtStation);
         assertThat(timeTable.get(timeTable.size()-1)).isBefore(lastTime);
     }
-//    @Test
-//    void 노선정보와_지하철역목록과_지하철역정보를_주면_상하행선_열차시간표를_반환한다(){
-//        //given
-//        List<Station> stations
-//                = Arrays.asList(TEST_STATION_4, TEST_STATION, TEST_STATION_2, TEST_STATION_3);
-//        Line line = new Line(1L, LINE_NAME,
-//                LocalTime.of(05, 00), LocalTime.of(06, 00), 10);
-//
-//        //when
-//        TimeTables timeTables = timeTableService.showTimeTables(line, stations, TEST_STATION);
-//
-//        //then
-//        assertThat(timeTables.getUp()).isNotEmpty();
-//        assertThat(timeTables.getDown()).isNotEmpty();
-//        assertThat(timeTables.getUp().get(timeTables.getUp().size()-1)).isAfter(line.getEndTime());
-//        assertThat(timeTables.getDown().get(timeTables.getDown().size()-1)).isAfter(line.getEndTime());
-//    }
+
+    @Test
+    void 노선정보와_지하철역목록과_지하철역정보를_주면_상하행선_열차시간표를_반환한다(){
+        //given
+        List<Station> stations
+                = Arrays.asList(TEST_STATION_4, TEST_STATION, TEST_STATION_2, TEST_STATION_3);
+        Line line = new Line(1L, LINE_NAME,
+                LocalTime.of(05, 00), LocalTime.of(06, 00), 10);
+
+        //when
+        TimeTables timeTables = timeTableService.showTimeTables(line, stations, TEST_STATION);
+
+        //then
+        assertThat(timeTables.getUp()).isNotEmpty();
+        assertThat(timeTables.getDown()).isNotEmpty();
+        assertThat(timeTables.getUp().get(timeTables.getUp().size()-1)).isAfter(line.getEndTime());
+        assertThat(timeTables.getUp().get(timeTables.getDown().size()-1)).isAfter(line.getEndTime());
+    }
 }
