@@ -55,10 +55,10 @@ public class TimeTableServiceTest {
                 = Arrays.asList(TEST_STATION_4, TEST_STATION, TEST_STATION_2, TEST_STATION_3);
 
         //when
-        int index = timeTableService.calculateIndexReverse(stations, TEST_STATION);
+        int index = timeTableService.calculateIndexReverse(stations, TEST_STATION_4);
 
         //then
-        assertThat(index).isEqualTo(2);
+        assertThat(index).isEqualTo(3);
     }
 
     @Test

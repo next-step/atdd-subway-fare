@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -41,6 +42,19 @@ public class TimeTableService {
         return indexOfStation;
     }
 
+    public int calculateIndexReverse(List<Station> stations, Station station) {
+        int indexOfStation = -1;
+        Collections.reverse(stations);
+
+        for(Station tmp:stations){
+            indexOfStation++;
+            if(station.equals(tmp)){
+                break;
+            }
+        }
+        return indexOfStation;
+    }
+
     public List<LocalTime> makeTimeTable(LocalTime firstTimeOfLine,
                                          LocalTime lastTimeOfLine, int interval) {
         List<LocalTime> timeTable = new ArrayList<>();
@@ -53,7 +67,5 @@ public class TimeTableService {
         return timeTable;
     }
 
-    public int calculateIndexReverse(List<Station> stations, Station testStation) {
-        return 0;
-    }
+
 }
