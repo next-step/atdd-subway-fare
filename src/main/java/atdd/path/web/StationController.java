@@ -70,7 +70,7 @@ public class StationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping ("/{id}/timetables")
+    @GetMapping ("/{id}/timetables")
     public ResponseEntity retrieveTimetables(@PathVariable Long id){
         Station station = stationDao.findById(id);
         List<Line> lines = station.getLines();
@@ -86,7 +86,7 @@ public class StationController {
             timeTablesForUpDown.add(responseView);
         }
         return ResponseEntity
-                .created(URI.create("/stations"+id+"/timetables"))
+                .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(timeTablesForUpDown);
     }

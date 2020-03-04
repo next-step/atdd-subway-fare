@@ -59,10 +59,8 @@ public class StationHttpTest {
 
     public List<TimeTableResponseView> showTimeTablesForUpAndDown(String stationName, Long stationId){
         String inputJson = "{\"name\":\"" + stationName + "\"}";
-        return webTestClient.post().uri("/stations/" + stationId + "/timetables")
-                .contentType(MediaType.APPLICATION_JSON)
+        return webTestClient.get().uri("/stations/" + stationId + "/timetables")
                 .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(inputJson), String.class)
                 .exchange()
                 .expectBodyList(TimeTableResponseView.class)
                 .returnResult()

@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -22,6 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,24 +69,14 @@ public class TimeTableDocumentationTest extends BaseDocumentationTest {
         String inputJson = "{\"name\":\"" + station.getName() + "\"}";
 
         //when, then
-        mockMvc.perform(
-                post("/stations/" + station.getId() + "/timetables")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(inputJson))
-                .andExpect(status().isCreated())
+        mockMvc.perform(get("/stations/" + station.getId() + "/timetables")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("station-timetables",
                         requestHeaders(
                                 headerWithName(HttpHeaders.ACCEPT)
-                                        .description("It accepts MediaType.APPLICATION_JSON"),
-                                headerWithName(HttpHeaders.CONTENT_TYPE)
-                                        .description("Its contentType is MediaType.APPLICATION_JSON")
-                        ),
-                        requestFields(
-                                fieldWithPath("name")
-                                        .type(JsonFieldType.STRING)
-                                        .description("The name of the station")
+                                        .description("It accepts MediaType.APPLICATION_JSON")
                         ),
                         responseHeaders(
                                 headerWithName(HttpHeaders.CONTENT_TYPE)
