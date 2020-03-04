@@ -9,6 +9,7 @@ import atdd.path.dao.StationDao;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import atdd.path.domain.TimeTables;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +75,6 @@ public class StationController {
         Station station = stationDao.findById(id);
         List<Line> lines = station.getLines();
         List<TimeTableResponseView> timeTablesForUpDown = new ArrayList<>();
-        TimeTableResponseResource resource;
         TimeTableResponseView responseView;
         TimeTables timeTable = new TimeTables();
         for(Line line:lines){
@@ -85,20 +85,10 @@ public class StationController {
 
             timeTablesForUpDown.add(responseView);
         }
-
-        TimeTableFinalResponse timeTableFinalResponse
-                = new TimeTableFinalResponse(timeTablesForUpDown);
-        resource = new TimeTableResponseResource(timeTableFinalResponse);
-        resource.add(
-                linkTo(StationController.class)
-                        .slash(id)
-                        .slash("/timetables")
-                        .withSelfRel());
-
         return ResponseEntity
                 .created(URI.create("/stations"+id+"/timetables"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(resource);
+                .body(timeTablesForUpDown);
     }
 }
 

@@ -2,11 +2,8 @@ package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
 import atdd.path.application.dto.StationResponseView;
-import atdd.path.application.dto.TimeTableFinalResponse;
-import atdd.path.application.dto.TimeTableResponseResource;
 import atdd.path.application.dto.TimeTableResponseView;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
@@ -17,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StationAcceptanceTest extends AbstractAcceptanceTest {
     public static final String STATION_URL = "/stations";
-    public static final String TIMETABLES_URL = "/timetables";
     private LineHttpTest lineHttpTest;
     private StationHttpTest stationHttpTest;
 
@@ -27,9 +23,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         this.stationHttpTest = new StationHttpTest(webTestClient);
     }
 
-    @DisplayName("지하철역 등록")
     @Test
-    public void createStation() {
+    public void 지하철역_등록_요청하기() {
         // when
         Long stationId = stationHttpTest.createStation(STATION_NAME);
 
@@ -38,9 +33,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         assertThat(response.getResponseBody().getName()).isEqualTo(STATION_NAME);
     }
 
-    @DisplayName("지하철역 정보 조회")
     @Test
-    public void retrieveStation() {
+    public void 지하철역_정보_조회_요청하기() {
         // given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
 
@@ -52,9 +46,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         assertThat(response.getResponseBody().getName()).isEqualTo(STATION_NAME);
     }
 
-    @DisplayName("구간이 연결된 지하철역 정보 조회")
     @Test
-    public void retrieveStationWithLine() {
+    public void 구간이_연결된_지하철역_정보_조회_요청하기() {
         // given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
@@ -73,10 +66,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         assertThat(response.getResponseBody().getLines().size()).isEqualTo(2);
     }
 
-
-    @DisplayName("지하철역 목록 조회")
     @Test
-    public void showStations() {
+    public void 지하철역_목록_조회_요청하기() {
         // given
         stationHttpTest.createStationRequest(STATION_NAME);
         stationHttpTest.createStationRequest(STATION_NAME_2);
@@ -89,9 +80,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         assertThat(response.getResponseBody().size()).isEqualTo(3);
     }
 
-    @DisplayName("지하철역 삭제")
     @Test
-    public void deleteStation() {
+    public void 지하철역_삭제_요청하기() {
         // given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         EntityExchangeResult<StationResponseView> response = stationHttpTest.retrieveStation(stationId);
@@ -107,9 +97,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
                 .expectStatus().isNotFound();
     }
 
-    @DisplayName("지하철역 시간표 조회")
     @Test
-    public void retrieveTimeTables() {
+    public void 지하철역_시간표_조회_요청하기() {
         //given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_6);
@@ -118,15 +107,13 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         int theNumberOfLinesForStation = 1;
 
         //when
-        TimeTableFinalResponse timeTableFinalResponse
+        List<TimeTableResponseView> responseView
                 = stationHttpTest.showTimeTablesForUpAndDown(STATION_NAME, stationId);
 
         //then
-        assertThat(timeTableFinalResponse.getTimeTableResponseViews().get(0).getLineId())
-                .isEqualTo(lineId);
-        assertThat(timeTableFinalResponse.getTimeTableResponseViews().get(0).getLineName())
-                .isEqualTo(LINE_NAME_2);
-        assertThat(timeTableFinalResponse.getTimeTableResponseViews().get(0).getTimeTables())
-                .isNotNull();
+        assertThat(responseView.size()).isEqualTo(theNumberOfLinesForStation);
+        assertThat(responseView.get(0).getLineId()).isEqualTo(lineId);
+        assertThat(responseView.get(0).getLineName()).isEqualTo(LINE_NAME_2);
+        assertThat(responseView.get(0).getTimeTables()).isNotNull();
     }
 }

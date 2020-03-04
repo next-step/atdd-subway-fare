@@ -20,6 +20,10 @@ public class Line {
         this(id, name, Collections.EMPTY_LIST, startTime, endTime, interval);
     }
 
+    public Line(String name, LocalTime startTime, LocalTime endTime, int interval) {
+        this(null, name, Collections.EMPTY_LIST, startTime, endTime, interval);
+    }
+
     public Line(Long id, String name, List<Edge> edges, LocalTime startTime, LocalTime endTime, int interval) {
         this.id = id;
         this.name = name;
@@ -31,10 +35,6 @@ public class Line {
 
     public static Line of(String name, LocalTime startTime, LocalTime endTime, int interval) {
         return new Line(name, startTime, endTime, interval);
-    }
-
-    public Line(String name, LocalTime startTime, LocalTime endTime, int interval) {
-        this(null, name, Collections.EMPTY_LIST, startTime, endTime, interval);
     }
 
     public Long getId() {
