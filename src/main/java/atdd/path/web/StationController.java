@@ -2,10 +2,7 @@ package atdd.path.web;
 
 import atdd.path.application.GraphService;
 import atdd.path.application.TimeTableService;
-import atdd.path.application.dto.CreateStationRequestView;
-import atdd.path.application.dto.StationResponseView;
-import atdd.path.application.dto.TimeTableResponseResource;
-import atdd.path.application.dto.TimeTableResponseView;
+import atdd.path.application.dto.*;
 import atdd.path.dao.EdgeDao;
 import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
@@ -22,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static atdd.Constant.STATION_BASE_URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(STATION_BASE_URI)
@@ -76,6 +74,7 @@ public class StationController {
         Station station = stationDao.findById(id);
         List<Line> lines = station.getLines();
         List<TimeTableResponseView> timeTablesForUpDown = new ArrayList<>();
+        TimeTableResponseResource resource;
         TimeTableResponseView responseView;
         TimeTables timeTable = new TimeTables();
         for(Line line:lines){
@@ -83,15 +82,23 @@ public class StationController {
             TimeTables tmp
                     = timeTableService.showTimeTablesForUpDown(line, line.getStations(), station);
             responseView = new TimeTableResponseView(line.getId(), line.getName(), tmp);
+
             timeTablesForUpDown.add(responseView);
         }
-//        TimeTableResponseResource resource
-//                = new TimeTableResponseResource()
+
+        TimeTableFinalResponse timeTableFinalResponse
+                = new TimeTableFinalResponse(timeTablesForUpDown);
+        resource = new TimeTableResponseResource(timeTableFinalResponse);
+        resource.add(
+                linkTo(StationController.class)
+                        .slash(id)
+                        .slash("/timetables")
+                        .withSelfRel());
 
         return ResponseEntity
-                .created(URI.create("/stations/"+station.getId()+"/timetables"))
+                .created(URI.create("/stations/"+id+"/timetables"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(timeTablesForUpDown);
+                .body(resource);
     }
 }
 

@@ -31,7 +31,6 @@ public class TimeTableDocumentationTest extends BaseDocumentationTest {
             = new Line(1L, "신분당선",
             LocalTime.of(05, 00), LocalTime.of(23, 00), 10);
 
-
     @Autowired
     public TimeTableDocumentationTest(MockMvc mockMvc) {
         this.mockMvc = mockMvc;

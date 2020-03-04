@@ -2,6 +2,8 @@ package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
 import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.TimeTableFinalResponse;
+import atdd.path.application.dto.TimeTableResponseResource;
 import atdd.path.application.dto.TimeTableResponseView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -116,13 +118,15 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         int theNumberOfLinesForStation = 1;
 
         //when
-        List<TimeTableResponseView> responseBody
+        TimeTableFinalResponse timeTableFinalResponse
                 = stationHttpTest.showTimeTablesForUpAndDown(STATION_NAME, stationId);
 
         //then
-        assertThat(responseBody.size()).isEqualTo(theNumberOfLinesForStation);
-        assertThat(responseBody.get(0).getTimeTables()).isNotNull();
-        assertThat(responseBody.get(0).getLineId()).isEqualTo(lineId);
-        assertThat(responseBody.get(0).getLineName()).isEqualTo(LINE_NAME_2);
+        assertThat(timeTableFinalResponse.getTimeTableResponseViews().get(0).getLineId())
+                .isEqualTo(lineId);
+        assertThat(timeTableFinalResponse.getTimeTableResponseViews().get(0).getLineName())
+                .isEqualTo(LINE_NAME_2);
+        assertThat(timeTableFinalResponse.getTimeTableResponseViews().get(0).getTimeTables())
+                .isNotNull();
     }
 }
