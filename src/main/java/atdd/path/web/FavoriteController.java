@@ -47,8 +47,8 @@ public class FavoriteController {
     }
 
     @PostMapping("/paths")
-    public ResponseEntity addFavoritePath(@LoginUser final String email, @RequestBody FavoritePathRequestView view) {
-        FavoritePath favoritePath = favoritePathService.addFavoritePath(email, FavoritePath.builder()
+    public ResponseEntity addFavoritePath(@LoginUser final User user, @RequestBody FavoritePathRequestView view) {
+        FavoritePath favoritePath = favoritePathService.addFavoritePath(user.getEmail(), FavoritePath.builder()
                 .sourceStationId(view.getSourceStationId())
                 .targetStationId(view.getTargetStationId()).build());
 
@@ -56,8 +56,8 @@ public class FavoriteController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity findFavoritePaths(@LoginUser final String email) {
-        List<FavoritePath> favoritePaths = favoritePathService.findFavoritePath(email);
+    public ResponseEntity findFavoritePaths(@LoginUser final User user) {
+        List<FavoritePath> favoritePaths = favoritePathService.findFavoritePath(user.getEmail());
 
         List<FavoritePathResponseView> result = new ArrayList<>();
 
@@ -69,8 +69,8 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/paths/{id}")
-    public ResponseEntity deleteFavoritePath(@LoginUser final String email, @PathVariable Long id) {
-        favoritePathService.deleteFavoritePath(email, id);
+    public ResponseEntity deleteFavoritePath(@LoginUser final User user, @PathVariable Long id) {
+        favoritePathService.deleteFavoritePath(user.getEmail(), id);
 
         return ResponseEntity.noContent().build();
     }
