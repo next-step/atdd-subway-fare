@@ -1,53 +1,32 @@
 package atdd.path.web;
 
-import atdd.path.application.dto.RouteResponseDto;
-import atdd.path.application.dto.StationDto;
-import atdd.path.domain.Graph;
-import atdd.path.domain.Station;
-import atdd.path.repository.LineRepository;
+import atdd.path.application.RouteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("routes")
 public class RouteController {
 
-    private final LineRepository lineRepository;
+    private final RouteService routeService;
 
-    public RouteController(LineRepository lineRepository) {
-        this.lineRepository = lineRepository;
+    public RouteController(RouteService routeService) {
+        this.routeService = routeService;
     }
 
     @GetMapping("distance")
     public ResponseEntity findShortestDistancePath(@RequestParam("startId") Long startId, @RequestParam("endId") Long endId) {
-        Graph graph = new Graph(lineRepository.findAll());
-        List<Station> paths = graph.getShortestDistancePath(startId, endId);
-
         return ResponseEntity.ok()
-                .body(RouteResponseDto.builder()
-                        .startStationId(startId)
-                        .endStationId(endId)
-                        .stations(StationDto.listOf(paths))
-                        .estimatedTime(graph.getEstimatedTime(startId, endId))
-                        .build());
+                .body(routeService.findShortestDistancePath(startId, endId));
     }
 
     @GetMapping("time")
     public ResponseEntity findShortestTimePath(@RequestParam("startId") Long startId, @RequestParam("endId") Long endId) {
-        Graph graph = new Graph(lineRepository.findAll());
-        List<Station> paths = graph.getShortestTimePath(startId, endId);
 
         return ResponseEntity.ok()
-                .body(RouteResponseDto.builder()
-                        .startStationId(startId)
-                        .endStationId(endId)
-                        .stations(StationDto.listOf(paths))
-                        .estimatedTime(graph.getEstimatedTime(startId, endId))
-                        .build());
+                .body(routeService.findShortestTimePath(startId, endId));
     }
 }

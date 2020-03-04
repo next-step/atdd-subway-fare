@@ -30,3 +30,12 @@ operation::users/create[snippets='request-fields,response-fields']
 operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
+
+---
+
+[[resources-route-distance]]
+=== 거리 최단 경로 찾기
+
+operation::routes/distance[snippets='http-request,http-response']
+operation::routes/distance[snippets='request-parameters']
+operation::routes/distance[snippets='response-fields']
