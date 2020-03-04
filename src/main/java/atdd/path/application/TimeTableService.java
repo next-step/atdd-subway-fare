@@ -32,6 +32,13 @@ public class TimeTableService {
         return firstTime;
     }
 
+    public LocalTime calculateLastTime(Line line, int index) {
+        int intervalOfLine = line.getInterval();
+        int minutesFromLineLast = (intervalOfLine)*index;
+        LocalTime lastTime = line.getEndTime().plusMinutes(minutesFromLineLast);
+        return lastTime;
+    }
+
     public int calculateIndex(List<Station> stations, Station station){
         int indexOfStation = -1;
         for(Station tmp:stations){
@@ -78,7 +85,4 @@ public class TimeTableService {
         return null;
     }
 
-    public LocalTime calculateLastTime(Line line, int index) {
-        return null;
-    }
 }
