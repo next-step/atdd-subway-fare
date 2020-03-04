@@ -1,6 +1,6 @@
 package atdd.path.application.dto;
 
-import atdd.path.application.domain.TimeTables;
+import atdd.path.domain.TimeTables;
 
 public class TimeTableResponseView {
     private Long lineId;

@@ -1,4 +1,4 @@
-package atdd.path.application.domain;
+package atdd.path.domain;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -17,5 +17,13 @@ public class TimeTables {
     public TimeTables(List<LocalTime> up, List<LocalTime> down) {
         this.up = up;
         this.down = down;
+    }
+
+    public List<LocalTime> getUp() {
+        return up;
+    }
+
+    public List<LocalTime> getDown() {
+        return down;
     }
 }

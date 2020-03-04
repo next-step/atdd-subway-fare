@@ -1,27 +1,18 @@
 package atdd.path.web;
 
 import atdd.path.application.GraphService;
-import atdd.path.application.domain.TimeTables;
 import atdd.path.application.dto.CreateStationRequestView;
 import atdd.path.application.dto.StationResponseView;
-import atdd.path.application.dto.TimeTableResponseView;
 import atdd.path.dao.EdgeDao;
 import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
-import atdd.path.domain.Edge;
-import atdd.path.domain.Edges;
-import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static atdd.Constant.STATION_BASE_URI;
 

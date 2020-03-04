@@ -5,6 +5,7 @@ import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
+import atdd.path.domain.TimeTables;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -68,4 +69,9 @@ public class TimeTableService {
     }
 
 
+    public TimeTables showTimeTables(Line line, List<Station> stations, Station testStation) {
+
+
+        return null;
+    }
 }
