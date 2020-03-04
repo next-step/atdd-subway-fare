@@ -2,19 +2,23 @@ package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
 import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.TimeTableResponseView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StationAcceptanceTest extends AbstractAcceptanceTest {
     public static final String STATION_URL = "/stations";
-
+    public static final String TIMETABLES_URL = "/timetables";
     private LineHttpTest lineHttpTest;
     private StationHttpTest stationHttpTest;
 
@@ -102,5 +106,37 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.get().uri(STATION_URL + "/" + stationId)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @DisplayName("지하철역 시간표 조회")
+    @Test
+    public void retrieveTimeTables(){
+        //given
+        Long stationId = stationHttpTest.createStation(STATION_NAME);
+        Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
+        Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
+        Long stationId4 = stationHttpTest.createStation(STATION_NAME_6);
+        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        Long lineId2 = lineHttpTest.createLine(LINE_NAME_2);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
+        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3);
+        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId4);
+        int theNumberOfLinesForStation = 2;
+
+        //when
+        String inputJson = "{\"name\":\"" + STATION_NAME_3 + "\"}";
+        List<TimeTableResponseView> timeTables
+                = webTestClient.post().uri(STATION_URL + "/" + stationId + "/" + TIMETABLES_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(inputJson), String.class)
+                .exchange()
+                .returnResult(TimeTableResponseView.class)
+                .getResponseBody()
+                .toStream()
+                .collect(Collectors.toList());
+
+        //then
+        assertThat(timeTables.size()).isEqualTo(theNumberOfLinesForStation);
     }
 }
