@@ -37,7 +37,7 @@ public class TimeTableService {
     }
 
     public int calculateIndex(List<Station> stations, Station station){
-        int indexOfStation = 0;
+        int indexOfStation = -1;
         for(Station tmp:stations){
             indexOfStation++;
             if(station.equals(tmp)){
