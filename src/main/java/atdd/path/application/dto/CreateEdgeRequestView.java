@@ -1,19 +1,11 @@
 package atdd.path.application.dto;
 
+import lombok.Getter;
+
+@Getter
 public class CreateEdgeRequestView {
     private Long sourceId;
     private Long targetId;
     private int distance;
-
-    public Long getSourceId() {
-        return sourceId;
-    }
-
-    public Long getTargetId() {
-        return targetId;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
+    private int elapsedMinutes;
 }

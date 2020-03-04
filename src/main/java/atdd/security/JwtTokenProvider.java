@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class JwtTokenProvider {
@@ -18,7 +19,6 @@ public class JwtTokenProvider {
     }
 
     public String createToken(String email) {
-
         Claims claims = Jwts.claims().setSubject(email);
 
         Date now = new Date();
@@ -33,19 +33,30 @@ public class JwtTokenProvider {
     }
 
     public String getUserEmail(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        String resolvedToken = this.resolveToken(token);
+
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(resolvedToken)
+                .getBody()
+                .getSubject();
+    }
+
+    private String resolveToken(String token) {
+
+        return Optional.of(token)
+                .filter(it -> it.startsWith("Bearer "))
+                .map(it -> it.substring(7))
+                .orElse("");
     }
 
     public boolean validateToken(String token) {
+        String resolvedToken = this.resolveToken(token);
+
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
-
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(resolvedToken);
+            return claims.getBody().getExpiration().after(new Date());
+        } catch (JwtException e) {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
     }

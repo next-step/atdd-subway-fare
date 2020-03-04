@@ -1,14 +1,20 @@
 package atdd.path.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@NoArgsConstructor
+@Embeddable
 public class Edges {
+    @OneToMany(mappedBy = "line")
     private List<Edge> edges = new ArrayList<>();
-
-    public Edges() {
-    }
 
     public Edges(List<Edge> edges) {
         checkValidEdges(edges);
@@ -74,7 +80,7 @@ public class Edges {
                 .orElse(null);
     }
 
-    public Edges removeStation(Station station) {
+    public void removeStation(Station station) {
         List<Edge> replaceEdge = this.edges.stream()
                 .filter(it -> it.hasStation(station))
                 .collect(Collectors.toList());
@@ -89,13 +95,12 @@ public class Edges {
 
         if (replaceEdge.size() == 1) {
             this.edges = newEdges;
-            return new Edges(newEdges);
         }
 
         Edge newEdge = Edge.of(getSourceStationOf(station), getTargetStationOf(station), sum(replaceEdge));
         newEdges.add(newEdge);
 
-        return new Edges(newEdges);
+        this.edges = newEdges;
     }
 
     private Integer sum(List<Edge> replaceEdge) {

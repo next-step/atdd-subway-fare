@@ -1,14 +1,22 @@
 package atdd.user.application.dto;
 
 import atdd.user.domain.User;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class UserResponseView {
     private Long id;
     private String email;
     private String password;
     private String name;
 
-    public UserResponseView() {
+    @Builder
+    public UserResponseView(Long id, String email, String password, String name) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
     }
 
     public UserResponseView(User persistUser) {
@@ -32,5 +40,14 @@ public class UserResponseView {
 
     public String getName() {
         return name;
+    }
+
+
+    public static UserResponseView of(User user) {
+        return UserResponseView.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .build();
     }
 }

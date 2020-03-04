@@ -1,12 +1,33 @@
 package atdd.user.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Getter
+@Entity
+@NoArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String email;
-    private String password;
+
     private String name;
 
-    public User() {
+    private String password;
+
+    @Builder
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
     }
 
     public User(Long id, String email, String password, String name) {
@@ -30,5 +51,9 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public boolean validatePassword(String password) {
+        return this.password.equals(password);
     }
 }

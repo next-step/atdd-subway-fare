@@ -1,16 +1,34 @@
 package atdd.path.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
+@NoArgsConstructor
+@Entity
 public class Station {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    @Transient
     private List<Line> lines = new ArrayList<>();
 
-    public Station() {
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "sourceStation")
+    private List<Edge> sourceEdges = new ArrayList();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "targetStation")
+    private List<Edge> targetEdge = new ArrayList();
 
     public Station(String name) {
         this.name = name;
@@ -25,18 +43,6 @@ public class Station {
         this.id = id;
         this.name = name;
         this.lines = lines;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Line> getLines() {
-        return lines;
     }
 
     @Override
