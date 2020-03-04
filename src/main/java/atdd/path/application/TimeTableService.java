@@ -56,12 +56,12 @@ public class TimeTableService {
         return indexOfStation;
     }
 
-    public List<LocalTime> makeTimeTable(LocalTime firstTimeOfLine,
-                                         LocalTime lastTimeOfLine, int interval) {
+    public List<LocalTime> makeTimeTable(LocalTime firstTime,
+                                         LocalTime lastTime, int interval) {
         List<LocalTime> timeTable = new ArrayList<>();
-        timeTable.add(firstTimeOfLine);
-        LocalTime nextTime=firstTimeOfLine.plusMinutes(interval);
-        while(nextTime.isBefore(lastTimeOfLine)){
+        timeTable.add(firstTime);
+        LocalTime nextTime=firstTime.plusMinutes(interval);
+        while(nextTime.isBefore(lastTime)){
            timeTable.add(nextTime);
            nextTime=nextTime.plusMinutes(interval);
         }
@@ -69,9 +69,16 @@ public class TimeTableService {
     }
 
 
-    public TimeTables showTimeTables(Line line, List<Station> stations, Station testStation) {
+    public TimeTables showTimeTables(Line line, List<Station> stations, Station station) {
+        int index = calculateIndex(stations, station);
+        int reverseIndex = calculateIndexReverse(stations, station);
+        LocalTime firstTime = calculateFirstTime(line, index);
+        LocalTime firstTimeReverse = calculateFirstTime(line, reverseIndex);
 
+        return null;
+    }
 
+    public LocalTime calculateLastTime(Line line, int index) {
         return null;
     }
 }
