@@ -15,4 +15,16 @@ public class TimeTableResponseView {
         this.lineName = lineName;
         this.timeTables = timeTables;
     }
+
+    public Long getLineId() {
+        return lineId;
+    }
+
+    public String getLineName() {
+        return lineName;
+    }
+
+    public TimeTables getTimeTables() {
+        return timeTables;
+    }
 }

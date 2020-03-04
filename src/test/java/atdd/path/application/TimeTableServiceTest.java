@@ -50,7 +50,7 @@ public class TimeTableServiceTest {
     }
 
     @Test
-    void 노선의_지하철역_목록을_주면_지금_지하철역이_하행선일때_몇_번째인지_반환한다(){
+    void 노선의_지하철역_목록을_주면_지금_지하철역이_하행선일때_몇_번째인지_반환한다() {
         //given
         List<Station> stations
                 = Arrays.asList(TEST_STATION_4, TEST_STATION, TEST_STATION_2, TEST_STATION_3);
@@ -77,7 +77,7 @@ public class TimeTableServiceTest {
     }
 
     @Test
-    void 노선정보와_지하철역의_인덱스를_주면_지하철역에서의_막차_시간을_반환한다(){
+    void 노선정보와_지하철역의_인덱스를_주면_지하철역에서의_막차_시간을_반환한다() {
         //given
         int index = 2;
         Line line = new Line(1L, LINE_NAME,
@@ -97,17 +97,19 @@ public class TimeTableServiceTest {
         LocalTime lastTime = LocalTime.of(07, 00);
         int interval = 10;
         int howManyStopAtStation = 12;
+        Line line = new Line(1L, LINE_NAME,
+                LocalTime.of(05, 00), LocalTime.of(20, 00), 10);
 
         //when
-        List<LocalTime> timeTable = timeTableService.makeTimeTable(firstTime, lastTime, interval);
+        List<LocalTime> timeTable = timeTableService.makeTimeTable(line, firstTime, lastTime, interval);
 
         //then
         assertThat(timeTable.size()).isEqualTo(howManyStopAtStation);
-        assertThat(timeTable.get(timeTable.size()-1)).isBefore(lastTime);
+        assertThat(timeTable.get(timeTable.size() - 1)).isBefore(lastTime);
     }
 
     @Test
-    void 노선정보와_지하철역목록과_지하철역정보를_주면_상하행선_열차시간표를_반환한다(){
+    void 노선정보와_지하철역목록과_지하철역정보를_주면_상하행선_열차시간표를_반환한다() {
         //given
         List<Station> stations
                 = Arrays.asList(TEST_STATION_4, TEST_STATION, TEST_STATION_2, TEST_STATION_3);
@@ -115,12 +117,12 @@ public class TimeTableServiceTest {
                 LocalTime.of(05, 00), LocalTime.of(06, 00), 10);
 
         //when
-        TimeTables timeTables = timeTableService.showTimeTables(line, stations, TEST_STATION);
+        TimeTables timeTables = timeTableService.showTimeTablesForUpDown(line, stations, TEST_STATION);
 
         //then
         assertThat(timeTables.getUp()).isNotEmpty();
         assertThat(timeTables.getDown()).isNotEmpty();
-        assertThat(timeTables.getUp().get(timeTables.getUp().size()-1)).isAfter(line.getEndTime());
-        assertThat(timeTables.getUp().get(timeTables.getDown().size()-1)).isAfter(line.getEndTime());
+        assertThat(timeTables.getUp().get(timeTables.getUp().size() - 1)).isAfter(line.getEndTime());
+        assertThat(timeTables.getUp().get(timeTables.getDown().size() - 1)).isAfter(line.getEndTime());
     }
 }

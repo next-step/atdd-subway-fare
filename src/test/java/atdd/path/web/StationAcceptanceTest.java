@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,30 +114,26 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
     public void retrieveTimeTables(){
         //given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
-        Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
-        Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
-        Long stationId4 = stationHttpTest.createStation(STATION_NAME_6);
-        Long lineId2 = lineHttpTest.createLine(LINE_NAME_2);
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId2, stationId4, stationId);
-        int theNumberOfLinesForStation = 2;
+        Long stationId2 = stationHttpTest.createStation(STATION_NAME_6);
+        Long lineId = lineHttpTest.createLine(LINE_NAME_2);
         lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
-        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3);
+        int theNumberOfLinesForStation = 1;
 
         //when
         String inputJson = "{\"name\":\"" + STATION_NAME + "\"}";
-        List<TimeTableResponseView> timeTables
-                = webTestClient.post().uri(STATION_URL + "/" + stationId + "/" + TIMETABLES_URL)
+        List<TimeTableResponseView> responseBody = webTestClient.post().uri(STATION_URL + "/" + stationId + "/" + TIMETABLES_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(inputJson), String.class)
                 .exchange()
-                .returnResult(TimeTableResponseView.class)
-                .getResponseBody()
-                .toStream()
-                .collect(Collectors.toList());
+                .expectBodyList(TimeTableResponseView.class)
+                .returnResult()
+                .getResponseBody();
 
         //then
-        assertThat(timeTables.size()).isEqualTo(theNumberOfLinesForStation);
+        assertThat(responseBody.size()).isEqualTo(theNumberOfLinesForStation);
+        assertThat(responseBody.get(0).getTimeTables()).isNotNull();
+        assertThat(responseBody.get(0).getLineId()).isEqualTo(lineId);
+        assertThat(responseBody.get(0).getLineName()).isEqualTo(LINE_NAME_2);
     }
 }

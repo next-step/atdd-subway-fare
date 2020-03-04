@@ -63,7 +63,7 @@ public class TimeTableService {
         return indexOfStation;
     }
 
-    public List<LocalTime> makeTimeTable(LocalTime firstTime,
+    public List<LocalTime> makeTimeTable(Line line, LocalTime firstTime,
                                          LocalTime lastTime, int interval) {
         List<LocalTime> timeTable = new ArrayList<>();
         timeTable.add(firstTime);
@@ -79,17 +79,24 @@ public class TimeTableService {
     }
 
 
-    public TimeTables showTimeTables(Line line, List<Station> stations, Station station) {
+    public TimeTables showTimeTablesForUpDown(Line line, List<Station> stations, Station station) {
         int index = calculateIndex(stations, station);
         int reverseIndex = calculateIndexReverse(stations, station);
 
-        LocalTime firstTime = calculateFirstTime(line, index);
-        LocalTime firstTimeReverse = calculateFirstTime(line, reverseIndex);
-        LocalTime lastTime = calculateLastTime(line, index);
-        LocalTime lastTimeReverse = calculateLastTime(line, reverseIndex);
+        List<LocalTime> timeTable = new ArrayList<>();
+        if(reverseIndex != 0){
+            LocalTime firstTime = calculateFirstTime(line, index);
+            LocalTime lastTime = calculateLastTime(line, index);
+            timeTable = makeTimeTable(line, firstTime, lastTime, line.getInterval());
+        }
 
-        List<LocalTime> timeTable = makeTimeTable(firstTime, lastTime, line.getInterval());
-        List<LocalTime> timeTableReverse = makeTimeTable(firstTimeReverse, lastTimeReverse, line.getInterval());
+        List<LocalTime> timeTableReverse = new ArrayList<>();
+        if(index!=0){
+            LocalTime firstTimeReverse = calculateFirstTime(line, reverseIndex);
+            LocalTime lastTimeReverse = calculateLastTime(line, reverseIndex);
+            timeTableReverse = makeTimeTable(line, firstTimeReverse, lastTimeReverse, line.getInterval());
+
+        }
 
         TimeTables timeTables = new TimeTables(timeTable, timeTableReverse);
         return timeTables;
