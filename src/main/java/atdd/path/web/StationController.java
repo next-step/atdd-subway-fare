@@ -4,6 +4,7 @@ import atdd.path.application.GraphService;
 import atdd.path.application.TimeTableService;
 import atdd.path.application.dto.CreateStationRequestView;
 import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.TimeTableResponseResource;
 import atdd.path.application.dto.TimeTableResponseView;
 import atdd.path.dao.EdgeDao;
 import atdd.path.dao.LineDao;
@@ -84,6 +85,9 @@ public class StationController {
             responseView = new TimeTableResponseView(line.getId(), line.getName(), tmp);
             timeTablesForUpDown.add(responseView);
         }
+//        TimeTableResponseResource resource
+//                = new TimeTableResponseResource()
+
         return ResponseEntity
                 .created(URI.create("/stations/"+station.getId()+"/timetables"))
                 .contentType(MediaType.APPLICATION_JSON)
