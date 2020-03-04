@@ -91,7 +91,7 @@ public class TimeTableServiceTest {
         int howManyStopAtStation = 12;
 
         //when
-        List<LocalTime> timeTable = timeTableService.showTimeTable(firstTime, lastTime, interval);
+        List<LocalTime> timeTable = timeTableService.makeTimeTable(firstTime, lastTime, interval);
 
         //then
         assertThat(timeTable.size()).isEqualTo(howManyStopAtStation);

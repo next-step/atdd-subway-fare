@@ -8,6 +8,7 @@ import atdd.path.domain.Station;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,7 +48,16 @@ public class TimeTableService {
         return indexOfStation;
     }
 
-    public List<LocalTime> showTimeTable(LocalTime firstTime, LocalTime lastTime, int interval) {
-        return null;
+    public List<LocalTime> makeTimeTable(LocalTime firstTime, LocalTime lastTime, int interval) {
+        List<LocalTime> timeTable = new ArrayList<>();
+        timeTable.add(firstTime);
+        LocalTime nextTime=firstTime.plusMinutes(interval);
+
+        while(nextTime.isBefore(lastTime)){
+           timeTable.add(nextTime);
+           nextTime=nextTime.plusMinutes(interval);
+        }
+
+        return timeTable;
     }
 }
