@@ -2,10 +2,7 @@ package atdd;
 
 import atdd.path.application.dto.FavoriteStationResponse;
 import atdd.path.application.dto.StationResponseView;
-import atdd.path.domain.Edge;
-import atdd.path.domain.FavoriteStation;
-import atdd.path.domain.Line;
-import atdd.path.domain.Station;
+import atdd.path.domain.*;
 import atdd.user.domain.User;
 import org.assertj.core.util.Lists;
 
@@ -167,10 +164,12 @@ public class TestConstant {
     public static User TEST_USER_1 = new User(1l, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME);
     public static User TEST_USER_2 = new User(2l, TEST_USER_EMAIL2, TEST_USER_PASSWORD2, TEST_USER_NAME2);
 
-    public static FavoriteStation FAVORITE_STATION_1 = FavoriteStation.builder().id(1l).owner(TEST_USER_2.getId()).stationId(TEST_STATION.getId()).build();
-
     public static Station TEST_STATION_23 = new Station(STATION_ID, STATION_NAME, Arrays.asList(TEST_LINE));
+    public static Station TEST_STATION_24 = new Station(STATION_ID_2, STATION_NAME_2, Arrays.asList(TEST_LINE));
+
     public static FavoriteStationResponse FAVORITE_STATION_RESPONSE = FavoriteStationResponse.builder().id(1l).owner(TEST_USER_2.getId()).station(StationResponseView.of(TEST_STATION_23)).build();
+
+    public static FavoritePath FAVORITE_PATH_1 = FavoritePath.builder().id(1l).owner(TEST_USER_2.getId()).sourceStationId(TEST_STATION_23.getId()).targetStationId(TEST_STATION_23.getId()).build();
 
 
 }
