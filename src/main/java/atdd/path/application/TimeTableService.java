@@ -29,7 +29,7 @@ public class TimeTableService {
 //        return firstTimeOdStation;
 //    }
 
-    private LocalTime calculateFirstTime(Line line, int indexOfStation){
+    public LocalTime calculateFirstTime(Line line, int indexOfStation){
         int intervalOfLine = line.getInterval();
         int minutesFromLineFirst = (intervalOfLine)*(indexOfStation);
         LocalTime firstTime = line.getStartTime().plusMinutes(minutesFromLineFirst);

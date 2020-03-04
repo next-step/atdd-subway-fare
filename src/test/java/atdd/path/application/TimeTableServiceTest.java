@@ -3,6 +3,7 @@ package atdd.path.application;
 import atdd.path.dao.EdgeDao;
 import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
+import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import java.util.List;
 
 import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
+import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_TIME;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest(classes = TimeTableService.class)
@@ -63,5 +66,19 @@ public class TimeTableServiceTest {
 
         //then
         assertThat(index).isEqualTo(1);
+    }
+
+    @Test
+    void 노선정보와_지하철역의_인덱스를_주면_지하철역에서의_첫차_시간을_반환한다(){
+        //given
+        int index = 2;
+        Line line = new Line(1L, LINE_NAME,
+                LocalTime.of(05, 00), LocalTime.of(23, 50), 10);
+
+        //when
+        LocalTime firstTime = timeTableService.calculateFirstTime(line, index);
+
+        //then
+        assertThat(firstTime).isEqualTo(line.getStartTime().plusMinutes(line.getInterval()*2));
     }
 }
