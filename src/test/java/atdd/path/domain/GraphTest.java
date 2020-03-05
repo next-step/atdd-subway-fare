@@ -1,8 +1,11 @@
 package atdd.path.domain;
 
+import atdd.path.application.dto.MinTimePathResponseView;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static atdd.TestConstant.*;
@@ -29,16 +32,18 @@ public class GraphTest {
     }
 
     @Test
-    public void getMinTimePath(){
+    public void getMinTimePath() {
         //given
         Graph graph = new Graph(LINES);
-        graph.getShortestDistancePath(STATION_ID, STATION_ID_4);
 
         //when
-        List<Station> result = graph.getMinTimePath(STATION_ID, STATION_ID_4);
+        MinTimePathResponseView response
+                = graph.getMinTimePath(STATION_ID_21, STATION_ID_8);//from 한티 to 청계산입구
 
         //then
-        assertThat(result.get(0)).isEqualTo(TEST_LINE);
-        assertThat(result.get(3)).isEqualTo(TEST_EDGE_4);
+        assertThat(response.getStations().size()).isEqualTo(6);
+        assertThat(response.getLines().size()).isEqualTo(3);
+        assertThat(response.getStartStationId()).isEqualTo(21L);
+        assertThat(response.getEndStationId()).isEqualTo(8);
     }
 }

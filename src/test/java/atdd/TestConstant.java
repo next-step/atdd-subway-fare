@@ -123,7 +123,7 @@ public class TestConstant {
 
     // 신분당선
     public static Edge TEST_EDGE_5 = new Edge(EDGE_ID_5, TEST_STATION, TEST_STATION_6, 10);
-    public static Edge TEST_EDGE_6 = new Edge(EDGE_ID_6, TEST_STATION_6, TEST_STATION_7, 10);
+    public static Edge TEST_EDGE_6 = new Edge(EDGE_ID_6, TEST_STATION_6, TEST_STATION_7, 20);
     public static Edge TEST_EDGE_7 = new Edge(EDGE_ID_7, TEST_STATION_7, TEST_STATION_8, 10);
     public static Edge TEST_EDGE_8 = new Edge(EDGE_ID_8, TEST_STATION_8, TEST_STATION_9, 10);
     public static Edge TEST_EDGE_9 = new Edge(EDGE_ID_9, TEST_STATION_9, TEST_STATION_10, 10);
