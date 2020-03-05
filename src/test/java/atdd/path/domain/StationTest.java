@@ -25,7 +25,23 @@ public class StationTest {
         int index = STATIONS.indexOf(station);
 
         //when
-        assertThat(station.calculateFirstTime(LINE, index))
+        LocalTime startTime = station.calculateStartTime(LINE, index);
+
+        //then
+        assertThat(startTime)
                 .isEqualTo(LINE.getStartTime().plusMinutes(LINE.getInterval()));
+    }
+
+    @Test
+    void calculateLastTime(){
+        //given
+        Station station = TEST_STATION_2;
+        int index = STATIONS.indexOf(station);
+
+        //when
+        LocalTime endTime = station.calculateEndTime(LINE, index);
+
+        //then
+        assertThat(endTime).isEqualTo(LINE.getEndTime().plusMinutes(LINE.getInterval()));
     }
 }

@@ -54,14 +54,14 @@ public class Station {
         return Objects.hash(id, name);
     }
 
-    public LocalTime calculateFirstTime(Line line, int index) {
+    public LocalTime calculateStartTime(Line line, int index) {
         int intervalOfLine = line.getInterval();
         int minutesFromLineStartTIme = (intervalOfLine) * (index);
         LocalTime startTime = line.getStartTime().plusMinutes(minutesFromLineStartTIme);
         return startTime;
     }
 
-    public LocalTime calculateLastTime(Line line, int index) {
+    public LocalTime calculateEndTime(Line line, int index) {
         int intervalOfLine = line.getInterval();
         int minutesFromLineEnd = (intervalOfLine) * index;
         LocalTime endTime = line.getEndTime().plusMinutes(minutesFromLineEnd);
@@ -74,15 +74,15 @@ public class Station {
 
         List<LocalTime> timeTableUp = new ArrayList<>();
         if (reverseIndex != 0) {
-            LocalTime start = this.calculateFirstTime(line, index);
-            LocalTime end = this.calculateLastTime(line, index);
+            LocalTime start = this.calculateStartTime(line, index);
+            LocalTime end = this.calculateEndTime(line, index);
             timeTableUp = line.makeTimeTable(start, end);
         }
 
         List<LocalTime> timeTableDown = new ArrayList<>();
         if (index != 0) {
-            LocalTime startReverse = this.calculateFirstTime(line, reverseIndex);
-            LocalTime endReverse = this.calculateLastTime(line, reverseIndex);
+            LocalTime startReverse = this.calculateStartTime(line, reverseIndex);
+            LocalTime endReverse = this.calculateEndTime(line, reverseIndex);
             timeTableDown = line.makeTimeTable(startReverse, endReverse);
         }
 
