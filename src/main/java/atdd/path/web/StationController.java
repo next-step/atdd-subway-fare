@@ -1,7 +1,6 @@
 package atdd.path.web;
 
 import atdd.path.application.GraphService;
-import atdd.path.application.TimeTableService;
 import atdd.path.application.dto.*;
 import atdd.path.dao.EdgeDao;
 import atdd.path.dao.LineDao;
@@ -9,7 +8,6 @@ import atdd.path.dao.StationDao;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import atdd.path.domain.TimeTables;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +27,13 @@ public class StationController {
     private LineDao lineDao;
     private EdgeDao edgeDao;
     private GraphService graphService;
-    private TimeTableService timeTableService;
 
     public StationController(StationDao stationDao, LineDao lineDao, EdgeDao edgeDao,
-                             GraphService graphService, TimeTableService timeTableService) {
+                             GraphService graphService) {
         this.stationDao = stationDao;
         this.lineDao = lineDao;
         this.edgeDao = edgeDao;
         this.graphService = graphService;
-        this.timeTableService = timeTableService;
     }
 
     @PostMapping
@@ -80,7 +76,7 @@ public class StationController {
         for(Line line:lines){
             line = lineDao.findById(line.getId());
             TimeTables tmp
-                    = timeTableService.showTimeTablesForUpDown(line, line.getStations(), station);
+                    = station.showTimeTablesForUpDown(line, line.getStations());
             responseView = new TimeTableResponseView(line.getId(), line.getName(), tmp);
 
             timeTablesForUpDown.add(responseView);

@@ -1,7 +1,6 @@
 package atdd.path.docs;
 
 import atdd.BaseDocumentationTest;
-import atdd.path.application.TimeTableService;
 import atdd.path.dao.LineDao;
 import atdd.path.dao.StationDao;
 import atdd.path.domain.Edge;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -22,15 +20,14 @@ import java.util.Arrays;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TimeTableDocumentationTest extends BaseDocumentationTest {
     private MockMvc mockMvc;
-    private TimeTableService timeTableService;
     private Line line_sinbundang
             = new Line(1L, "Line_Sinbundang",
             LocalTime.of(06, 00), LocalTime.of(8, 30), 50);
@@ -46,9 +43,8 @@ public class TimeTableDocumentationTest extends BaseDocumentationTest {
     private Edge edge3 = new Edge(3L, station4, station, INTERVAL_MIN);
 
     @Autowired
-    public TimeTableDocumentationTest(MockMvc mockMvc, TimeTableService timeTableService) {
+    public TimeTableDocumentationTest(MockMvc mockMvc) {
         this.mockMvc = mockMvc;
-        this.timeTableService = timeTableService;
     }
 
     @MockBean
@@ -70,7 +66,7 @@ public class TimeTableDocumentationTest extends BaseDocumentationTest {
 
         //when, then
         mockMvc.perform(get("/stations/" + station.getId() + "/timetables")
-                        .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("station-timetables",

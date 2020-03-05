@@ -1,6 +1,7 @@
 package atdd.path.domain;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,4 +75,17 @@ public class Line {
         return this.edges;
     }
 
+    public List<LocalTime> makeTimeTable(LocalTime start, LocalTime end) {
+        List<LocalTime> timeTable = new ArrayList<>();
+        timeTable.add(start);
+        LocalTime nextTime = start.plusMinutes(this.interval);
+        while (nextTime.isBefore(end)) {
+            timeTable.add(nextTime);
+            nextTime = nextTime.plusMinutes(this.interval);
+        }
+        if (nextTime.equals(end)) {
+            timeTable.add(nextTime);
+        }
+        return timeTable;
+    }
 }

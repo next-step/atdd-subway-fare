@@ -60,10 +60,7 @@ public class FavoritePathRequestView {
         this.email = email;
     }
 
-    public boolean isSameStation(){
-        if(this.getStartId() == this.getEndId()){
-            return true;
-        }
-        return false;
+    public boolean isSameStation() {
+        return this.getStartId() == this.getEndId();
     }
 }
