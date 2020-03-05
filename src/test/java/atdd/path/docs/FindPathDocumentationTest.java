@@ -2,6 +2,9 @@ package atdd.path.docs;
 
 import atdd.BaseDocumentationTest;
 import atdd.path.application.GraphService;
+import atdd.path.application.dto.MinTimePathResponseView;
+import atdd.path.domain.Line;
+import atdd.path.domain.Station;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -10,12 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static atdd.TestConstant.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -25,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class FindPathDocumentationTest extends BaseDocumentationTest {
     private MockMvc mockMvc;
+    List<Station> stations = Arrays.asList(TEST_STATION_6, TEST_STATION, TEST_STATION_2);
+    Set<Line> lines = new HashSet<>();
 
     @Autowired
     public FindPathDocumentationTest(MockMvc mockMvc) {
@@ -37,24 +46,23 @@ public class FindPathDocumentationTest extends BaseDocumentationTest {
     @Test
     void 문서화_최소_경로_조회하기() throws Exception {
         //given
-        given(graphService.findPath(anyLong(), anyLong()))
-                .willReturn(Arrays.asList(STATION_1, STATION_2, STATION_3));
+        lines.add(TEST_LINE);
+        lines.add(TEST_LINE_2);
+        MinTimePathResponseView responseView
+                = new MinTimePathResponseView(6L, 2L, stations, lines, 20,
+                LocalTime.of(6, 00), LocalTime.of(6, 20));
+        given(graphService.findMinTimePath(any(), any()))
+                .willReturn(responseView);
 
         //when, then
         mockMvc.perform(get("/paths")
-                .param("startId", stationId1.toString())
-                .param("endId", stationId3.toString())
+                .param("startId", STATION_ID_6.toString())
+                .param("endId", STATION_ID_2.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("find-path",
-                        links(halLinks(),
-                                linkWithRel("self")
-                                        .description("link to self"),
-                                linkWithRel("profile")
-                                        .description("link to profile")
-                        ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.ACCEPT)
                                         .description("It accepts MediaType.APPLICATION_JSON"),
@@ -75,21 +83,28 @@ public class FindPathDocumentationTest extends BaseDocumentationTest {
                                 fieldWithPath("stations")
                                         .type(JsonFieldType.ARRAY)
                                         .description("The list of the stations in the path"),
-                                fieldWithPath("stations[0].id")
+                                fieldWithPath("stations[].id")
                                         .type(JsonFieldType.NUMBER)
                                         .description("The id of the station in the path"),
-                                fieldWithPath("stations[0].name")
+                                fieldWithPath("stations[].name")
                                         .type(JsonFieldType.STRING)
                                         .description("The name of the station in the path"),
-                                fieldWithPath("stations[0].lines")
+                                fieldWithPath("stations[].lines")
+                                        .type(JsonFieldType.NULL)
+                                        .description("It should be null"),
+                                fieldWithPath("lines")
                                         .type(JsonFieldType.NULL)
                                         .description("The list of the lines where the station belongs"),
-                                fieldWithPath("_links.self.href")
+                                fieldWithPath("distance")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The distance between two station"),
+                                fieldWithPath("departAt")
                                         .type(JsonFieldType.STRING)
-                                        .description("link to self"),
-                                fieldWithPath("_links.profile.href")
+                                        .description("The time to get on"),
+                                fieldWithPath("arriveBy")
                                         .type(JsonFieldType.STRING)
-                                        .description("link to profile")
+                                        .description("The time to arrive at")
+
                         )
                 ));
     }

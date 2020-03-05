@@ -7,10 +7,11 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
+
 public class MinTimePathResponseView {
     private Long startStationId;
     private Long endStationId;
-    private List<Station> stations;
+    private List<StationResponseView> stations;
     private Set<Line> lines;
     private double distance;
     private LocalTime departAt;
@@ -24,7 +25,7 @@ public class MinTimePathResponseView {
                                    LocalTime departAt, LocalTime arriveBy) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
-        this.stations = stations;
+        this.stations = StationResponseView.listOf(stations);
         this.lines = lines;
         this.distance = distance;
         this.departAt = departAt;
@@ -39,7 +40,7 @@ public class MinTimePathResponseView {
         return endStationId;
     }
 
-    public List<Station> getStations() {
+    public List<StationResponseView> getStations() {
         return stations;
     }
 
@@ -57,5 +58,11 @@ public class MinTimePathResponseView {
 
     public LocalTime getArriveBy() {
         return arriveBy;
+    }
+
+    public void changeLines() {
+        for (Line line : this.lines) {
+            line = new Line(line.getId(), line.getName());
+        }
     }
 }
