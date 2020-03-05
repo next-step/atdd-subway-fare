@@ -148,7 +148,7 @@ public class Graph {
         return time_min;
     }
 
-    private LocalTime calculateTimeToArrive(LocalTime departBy, double timeToTake) {
+    public LocalTime calculateTimeToArrive(LocalTime departBy, double timeToTake) {
         //도착시간 구하기
         return departBy.plusMinutes(Math.round(timeToTake));
     }

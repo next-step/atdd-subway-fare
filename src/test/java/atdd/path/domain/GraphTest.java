@@ -80,6 +80,21 @@ public class GraphTest {
     }
 
     @Test
+    public void calculateTimeToArriveTest(){
+        //given
+        List<Line> lines = LINES;
+        List<Station> stations = STATIONS;
+        LocalTime departBy = LocalTime.of(07, 30);
+        double timeToTake_min = 60;
+
+        //when
+        LocalTime arriveAt = graph.calculateTimeToArrive(departBy, timeToTake_min);
+
+        //then
+        assertThat(arriveAt).isEqualTo(LocalTime.of(8, 30));
+    }
+
+    @Test
     public void getMinTimePathTest() {
         //given
         Graph graph = new Graph(LINES);
