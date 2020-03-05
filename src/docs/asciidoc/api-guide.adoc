@@ -93,13 +93,13 @@ operation::favorite/route/create[snippets='response-fields']
 
 
 [[resources-favorite-route-find]]
-=== 지하철역 즐겨찾기 조회
+=== 경로 즐겨찾기 조회
 operation::favorite/route/find[snippets='http-request,http-response']
 operation::favorite/route/find[snippets='request-headers']
 operation::favorite/route/find[snippets='response-fields']
 
 [[resources-favorite-route-delete]]
-=== 지하철역 즐겨찾기 삭제
+=== 경로 즐겨찾기 삭제
 operation::favorite/route/delete[snippets='http-request,http-response']
 operation::favorite/route/delete[snippets='request-headers']
 operation::favorite/route/delete[snippets='path-parameters']
