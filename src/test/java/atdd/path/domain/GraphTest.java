@@ -1,9 +1,7 @@
 package atdd.path.domain;
 
-import atdd.TestConstant;
 import atdd.path.application.dto.MinTimePathResponseView;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -41,7 +39,7 @@ public class GraphTest {
 
 
     @Test
-    public void findLineToStart(){
+    public void findLineToStart() {
         //given
         List<Line> lines = LINES;
         List<Station> stations = STATIONS;
@@ -54,7 +52,7 @@ public class GraphTest {
     }
 
     @Test
-    public void findLinesForPath(){
+    public void findLinesForPath() {
         //given
         List<Line> lines = LINES;
         List<Station> stations = STATIONS;
@@ -67,7 +65,7 @@ public class GraphTest {
     }
 
     @Test
-    public void findLineToStartTest(){
+    public void findLineToStartTest() {
         //given
         List<Line> lines = LINES;
         List<Station> stations = STATIONS;
@@ -80,7 +78,7 @@ public class GraphTest {
     }
 
     @Test
-    public void calculateTimeToArriveTest(){
+    public void calculateTimeToArriveTest() {
         //given
         List<Line> lines = LINES;
         List<Station> stations = STATIONS;

@@ -26,6 +26,9 @@ public class PathController {
     public ResponseEntity findPath(@RequestParam Long startId, @RequestParam Long endId) {
         PathResponseView responseView
                 = new PathResponseView(startId, endId, graphService.findPath(startId, endId));
+
+
+
         PathResponseResource resource = new PathResponseResource(responseView);
         resource.add(linkTo(PathController.class)
                 .slash("?startId=" + startId + "&endId=" + endId)
