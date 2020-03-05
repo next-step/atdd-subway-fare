@@ -62,5 +62,4 @@ public class GraphAcceptanceTest extends AbstractAcceptanceTest {
                 .jsonPath("$.departAt").exists()
                 .jsonPath("$.arriveBy").exists();
     }
-
 }

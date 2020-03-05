@@ -27,4 +27,18 @@ public class GraphTest {
         assertThat(result.get(0)).isEqualTo(TEST_STATION);
         assertThat(result.get(2)).isEqualTo(TEST_STATION_3);
     }
+
+    @Test
+    public void getMinTimePath(){
+        //given
+        Graph graph = new Graph(LINES);
+        graph.getShortestDistancePath(STATION_ID, STATION_ID_4);
+
+        //when
+        List<Station> result = graph.getMinTimePath(STATION_ID, STATION_ID_4);
+
+        //then
+        assertThat(result.get(0)).isEqualTo(TEST_LINE);
+        assertThat(result.get(3)).isEqualTo(TEST_EDGE_4);
+    }
 }

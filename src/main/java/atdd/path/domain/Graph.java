@@ -50,4 +50,8 @@ public class Graph {
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
     }
+
+    public List<Station> getMinTimePath(Long stationId, Long stationId4) {
+        return null;
+    }
 }
