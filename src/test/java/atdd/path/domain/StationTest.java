@@ -19,7 +19,7 @@ public class StationTest {
             = Arrays.asList(TEST_STATION, TEST_STATION_2, TEST_STATION_3, TEST_STATION_4);
 
     @Test
-    void calculateFirstTime() {
+    void 지하철역의_첫차시간_구하기() {
         //given
         Station station = TEST_STATION_2;
         int index = STATIONS.indexOf(station);
@@ -29,11 +29,11 @@ public class StationTest {
 
         //then
         assertThat(startTime)
-                .isEqualTo(LINE.getStartTime().plusMinutes(LINE.getInterval()));
+                .isEqualTo(LocalTime.of(05, 10));
     }
 
     @Test
-    void calculateLastTime() {
+    void 지하철역의_막차시간_구하기() {
         //given
         Station station = TEST_STATION_2;
         int index = STATIONS.indexOf(station);
@@ -42,11 +42,12 @@ public class StationTest {
         LocalTime endTime = station.calculateEndTime(LINE, index);
 
         //then
-        assertThat(endTime).isEqualTo(LINE.getEndTime().plusMinutes(LINE.getInterval()));
+        assertThat(endTime)
+                .isEqualTo(LocalTime.of(07, 10));
     }
 
     @Test
-    void getTimeTables() {
+    void 지하철역의_상하행선_시간표_구하기() {
         //given
         Station station = TEST_STATION_2;
         int index = STATIONS.indexOf(station);
@@ -62,11 +63,11 @@ public class StationTest {
         int lastIndexForUp = timeTablesOfStation.getUp().size() - 1;
         int lastIndexForDown = timeTablesOfStation.getDown().size() - 1;
         assertThat(timeTablesOfStation.getUp().get(0))
-                .isEqualTo(startTimeOfLine.plusMinutes(lineInterval));
+                .isEqualTo(LocalTime.of(05, 10));
         assertThat(timeTablesOfStation.getUp().get(lastIndexForUp))
-                .isEqualTo(endTimeOfLine.plusMinutes(lineInterval*index));
+                .isEqualTo(LocalTime.of(07, 10));
         assertThat(timeTablesOfStation.getDown().get(lastIndexForDown))
-                .isEqualTo(endTimeOfLine.plusMinutes(lineInterval*indexReverse));
+                .isEqualTo(LocalTime.of(07, 20));
 
     }
 }
