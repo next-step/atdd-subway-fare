@@ -96,7 +96,7 @@ public class Graph {
         return responseView;
     }
 
-    private List<Station> findPathStationsForMinTime(GraphPath<Long, DefaultWeightedEdge> graphPath) {
+    public List<Station> findPathStationsForMinTime(GraphPath<Long, DefaultWeightedEdge> graphPath) {
         //지하철역 목록 구하기
         List<Station> stations = graphPath.getVertexList().stream()
                 .map(it -> findStation(it))
@@ -104,7 +104,7 @@ public class Graph {
         return stations;
     }
 
-    private Set<Line> findLinesForPath(List<Line> lines, List<Station> stations) {
+    public Set<Line> findLinesForPath(List<Line> lines, List<Station> stations) {
         //전체 노선 목록과 경로의 지하철역 목록 주어졌을 때, 지나가는 라인 구하기
         Set<Line> linesForPath = new HashSet<>();
         for (int i = 0; i < stations.size() - 1; i++) {

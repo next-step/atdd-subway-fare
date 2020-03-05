@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static atdd.TestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +39,7 @@ public class GraphTest {
         assertThat(result.get(2)).isEqualTo(TEST_STATION_3);
     }
 
+
     @Test
     public void findLineToStart(){
         //given
@@ -49,6 +51,19 @@ public class GraphTest {
 
         //then
         assertThat(lineToStart.getName()).isEqualTo("신분당선");
+    }
+
+    @Test
+    public void findLinesForPath(){
+        //given
+        List<Line> lines = LINES;
+        List<Station> stations = STATIONS;
+
+        //when
+        Set<Line> linesForPath = graph.findLinesForPath(lines, stations);
+
+        //then
+        assertThat(linesForPath.size()).isEqualTo(2);
     }
 
     @Test
