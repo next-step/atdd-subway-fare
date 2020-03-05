@@ -19,8 +19,6 @@ public class GraphTest {
 
     @Test
     public void createSubwayGraph() {
-//        Graph graph = new Graph(LINES);
-
         assertThat(graph.getLines().size()).isEqualTo(4);
     }
 
@@ -106,7 +104,6 @@ public class GraphTest {
         assertThat(response.getEndStationId()).isEqualTo(16L);
         assertThat(response.getLines().size()).isEqualTo(3);
         assertThat(response.getStations().size()).isEqualTo(6); // 출발역 포함
-        assertThat(response.getDepartAt()).isAfter(LocalTime.now());
         assertThat(response.getDistance()).isEqualTo(50);
     }
 }

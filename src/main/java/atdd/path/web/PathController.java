@@ -1,6 +1,7 @@
 package atdd.path.web;
 
 import atdd.path.application.GraphService;
+import atdd.path.application.dto.MinTimePathResponseView;
 import atdd.path.application.dto.PathResponseResource;
 import atdd.path.application.dto.PathResponseView;
 import org.springframework.hateoas.Link;
@@ -24,18 +25,8 @@ public class PathController {
 
     @GetMapping
     public ResponseEntity findPath(@RequestParam Long startId, @RequestParam Long endId) {
-        PathResponseView responseView
-                = new PathResponseView(startId, endId, graphService.findPath(startId, endId));
-
-
-
-        PathResponseResource resource = new PathResponseResource(responseView);
-        resource.add(linkTo(PathController.class)
-                .slash("?startId=" + startId + "&endId=" + endId)
-                .withSelfRel());
-        resource.add(new Link("/docs/api-guide.html#resources-find-path")
-                .withRel("profile"));
+        MinTimePathResponseView minTimePath = graphService.findMinTimePath(startId, endId);
         return ResponseEntity
-                .ok(resource);
+                .ok(minTimePath);
     }
 }

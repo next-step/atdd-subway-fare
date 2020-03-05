@@ -133,8 +133,7 @@ public class Graph {
             return timetable.get(0);
         }
         return timetable.stream()
-                .filter(it -> it.isAfter(now()))
-                .filter(it -> it.isBefore(now()))
+                .filter(it -> now().isAfter(it))
                 .collect(Collectors.toList())
                 .get(0);
     }
