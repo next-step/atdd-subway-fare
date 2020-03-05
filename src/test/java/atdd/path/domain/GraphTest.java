@@ -38,12 +38,14 @@ public class GraphTest {
 
         //when
         MinTimePathResponseView response
-                = graph.getMinTimePath(STATION_ID_21, STATION_ID_8);//from 한티 to 청계산입구
+                = graph.getMinTimePath(STATION_ID_5, STATION_ID_16);//from 종합운동장 to 대치
 
         //then
-        assertThat(response.getStations().size()).isEqualTo(6);
+        assertThat(response.getStartStationId()).isEqualTo(5L);
+        assertThat(response.getEndStationId()).isEqualTo(16L);
         assertThat(response.getLines().size()).isEqualTo(3);
-        assertThat(response.getStartStationId()).isEqualTo(21L);
-        assertThat(response.getEndStationId()).isEqualTo(8);
+        assertThat(response.getStations().size()).isEqualTo(6); // 출발역 포함
+        assertThat(response.getDepartAt()).isAfter(LocalTime.now());
+        assertThat(response.getDistance()).isEqualTo(50);
     }
 }
