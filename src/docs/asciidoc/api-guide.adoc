@@ -30,3 +30,65 @@ operation::users/create[snippets='request-fields,response-fields']
 operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
+
+[[resources-users-login]]
+=== 로그인
+
+operation::users/login[snippets='http-request,http-response']
+operation::users/login[snippets='request-fields']
+operation::users/login[snippets='response-headers']
+
+
+[[resources-path]]
+== Path
+
+[[resources-path-findPath]]
+=== 최단 경로 조회
+
+operation::paths[snippets='http-request,http-response']
+operation::paths[snippets='request-parameters,response-fields']
+
+[[resources-favorite]]
+== Favorite
+
+[[resources-favorite-addFavoriteStation]]
+=== 역 즐겨찾기 추가
+
+operation::favorites/addFavoriteStation[snippets='http-request,http-response']
+operation::favorites/addFavoriteStation[snippets='request-headers']
+operation::favorites/addFavoriteStation[snippets='response-fields']
+
+[[resources-favorite-findFavoriteStations]]
+=== 역 즐겨찾기 조회
+
+operation::favorites/findFavoriteStations[snippets='http-request,http-response']
+operation::favorites/findFavoriteStations[snippets='request-headers']
+operation::favorites/findFavoriteStations[snippets='response-fields']
+
+[[resources-favorite-deleteFavoriteStation]]
+=== 역 즐겨찾기 삭제
+
+operation::favorites/deleteFavoriteStation[snippets='http-request,http-response']
+operation::favorites/deleteFavoriteStation[snippets='request-headers']
+operation::favorites/deleteFavoriteStation[snippets='path-parameters']
+
+[[resources-favorite-addFavoritePath]]
+=== 경로 즐겨찾기 추가
+
+operation::favorites/addFavoritePath[snippets='http-request,http-response']
+operation::favorites/addFavoritePath[snippets='request-headers']
+operation::favorites/addFavoritePath[snippets='request-fields,response-fields']
+
+[[resources-favorite-findFavoritePaths]]
+=== 경로 즐겨찾기 조회
+
+operation::favorites/findFavoritePaths[snippets='http-request,http-response']
+operation::favorites/findFavoritePaths[snippets='request-headers']
+operation::favorites/findFavoritePaths[snippets='response-fields']
+
+[[resources-favorite-deleteFavoritePath]]
+=== 경로 즐겨찾기 삭제
+
+operation::favorites/deleteFavoritePath[snippets='http-request,http-response']
+operation::favorites/deleteFavoritePath[snippets='request-headers']
+operation::favorites/deleteFavoritePath[snippets='path-parameters']
