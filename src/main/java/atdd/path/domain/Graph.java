@@ -89,7 +89,6 @@ public class Graph {
         //도착시간 구하기
         LocalTime arriveBy = calculateTimeToArrive(departBy, timeToTake);
 
-
         MinTimePathResponseView responseView
                 = new MinTimePathResponseView(startId, endId, stations, linesForPath,
                 distance_km, departBy, arriveBy);

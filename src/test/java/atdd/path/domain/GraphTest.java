@@ -1,7 +1,9 @@
 package atdd.path.domain;
 
+import atdd.TestConstant;
 import atdd.path.application.dto.MinTimePathResponseView;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -13,26 +15,44 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GraphTest {
     public static final List<Line> LINES = Lists.list(TEST_LINE, TEST_LINE_2, TEST_LINE_3, TEST_LINE_4);
+    public static final List<Station> STATIONS = Arrays.asList(TEST_STATION_6, TEST_STATION, TEST_STATION_2);
+    public static final Graph graph = new Graph(LINES);
 
     @Test
     public void createSubwayGraph() {
-        Graph graph = new Graph(LINES);
+//        Graph graph = new Graph(LINES);
 
         assertThat(graph.getLines().size()).isEqualTo(4);
     }
 
     @Test
     public void getPath() {
+        //given
         Graph graph = new Graph(LINES);
 
+        //when
         List<Station> result = graph.getShortestDistancePath(STATION_ID, STATION_ID_3);
 
+        //then
         assertThat(result.get(0)).isEqualTo(TEST_STATION);
         assertThat(result.get(2)).isEqualTo(TEST_STATION_3);
     }
 
     @Test
-    public void getMinTimePath() {
+    public void findLineToStart(){
+        //given
+        List<Line> lines = LINES;
+        List<Station> stations = STATIONS;
+
+        //when
+        Line lineToStart = graph.findLineToStart(lines, stations);
+
+        //then
+        assertThat(lineToStart.getName()).isEqualTo("신분당선");
+    }
+
+    @Test
+    public void getMinTimePathTest() {
         //given
         Graph graph = new Graph(LINES);
 
