@@ -32,7 +32,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("me")
+    @GetMapping("me")
     public ResponseEntity retrieveUser(HttpServletRequest request) {
         String requestToken = request.getHeader("Authorization");
         return ResponseEntity.ok().body(userService.retrieveUser(requestToken));

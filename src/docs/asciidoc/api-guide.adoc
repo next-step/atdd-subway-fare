@@ -31,7 +31,11 @@ operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
 
+
 ---
+
+[[resources-users]]
+== Route
 
 [[resources-route-distance]]
 === 거리 최단 경로 찾기
@@ -43,8 +47,9 @@ operation::routes/distance[snippets='response-fields']
 ---
 
 [[resources-route-time]]
-=== 거리 시간 경로 찾기간
+=== 거리 시간 경로 찾기
 
 operation::routes/time[snippets='http-request,http-response']
 operation::routes/time[snippets='request-parameters']
 operation::routes/time[snippets='response-fields']
+

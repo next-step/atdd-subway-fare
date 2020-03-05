@@ -1,7 +1,9 @@
 package atdd.user.docs;
 
 import atdd.AbstractDocumentationTest;
+import atdd.security.JwtTokenProvider;
 import atdd.user.application.UserService;
+import atdd.user.application.dto.UserResponseView;
 import atdd.user.domain.User;
 import atdd.user.web.UserController;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,9 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
 
     @MockBean
     private UserService userService;
-/*
+
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
 
     @Test
     void create() throws Exception {
@@ -40,7 +44,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                 "\"password\":\"" + user.getPassword() + "\"," +
                 "\"name\":\"" + user.getName() + "\"}";
 
-        given(userService.save(any())).willReturn(user);
+        given(userService.createUser(any())).willReturn(UserResponseView.of(user));
 
         this.mockMvc.perform(post("/users")
                 .content(inputJson)
@@ -48,7 +52,6 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                 .andExpect(status().isCreated())
                 .andDo(
                         document("users/create",
-//                                links(linkWithRel("profile").description("Link to the profile resource")),
                                 requestFields(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password"),
@@ -66,7 +69,10 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
 
     @Test
     void me() throws Exception {
-        given(userService.findUserByEmail(anyString())).willReturn(new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME));
+        given(jwtTokenProvider.validateToken(any())).willReturn(true);
+        given(jwtTokenProvider.getUserEmail(any())).willReturn(TEST_USER_EMAIL);
+        given(userService.retrieveUser(anyString()))
+                .willReturn(UserResponseView.of(new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME)));
 
         this.mockMvc.perform(get("/users/me")
                 .header("Authorization", "Bearer " + TEST_USER_TOKEN)
@@ -75,10 +81,8 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                 .andExpect(jsonPath("$.email").value(TEST_USER_EMAIL))
                 .andDo(
                         document("users/me",
-//                                links(linkWithRel("profile").description("Link to the profile resource")),
                                 requestHeaders(
-                                        headerWithName("Authorization").description(
-                                                "Bearer auth credentials")),
+                                        headerWithName("Authorization").description("Bearer auth credentials")),
                                 responseFields(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("The user's id"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
@@ -87,5 +91,5 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
                                 )
                         ))
                 .andDo(print());
-    }*/
+    }
 }
