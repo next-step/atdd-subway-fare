@@ -59,4 +59,8 @@ public class FavoritePathRequestView {
     public void insertEmail(String email) {
         this.email = email;
     }
+
+    public boolean isSameStation() {
+        return this.getStartId() == this.getEndId();
+    }
 }

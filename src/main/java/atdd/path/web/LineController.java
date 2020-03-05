@@ -1,10 +1,10 @@
 package atdd.path.web;
 
-import atdd.path.application.dto.CreateEdgeRequestView;
-import atdd.path.dao.LineDao;
 import atdd.path.application.LineService;
+import atdd.path.application.dto.CreateEdgeRequestView;
 import atdd.path.application.dto.CreateLineRequestView;
 import atdd.path.application.dto.LineResponseView;
+import atdd.path.dao.LineDao;
 import atdd.path.domain.Line;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-import static atdd.Constant.*;
+import static atdd.Constant.LINE_BASE_URI;
 
 @RestController
 @RequestMapping(LINE_BASE_URI)

@@ -19,7 +19,7 @@ public class LineHttpTest {
 
     public EntityExchangeResult<LineResponseView> createLineRequest(String lineName) {
         String inputJson = "{\"name\":\"" + lineName + "\"," +
-                "\"startTime\":\"" + LocalTime.of(0, 0) + "\"," +
+                "\"startTime\":\"" + LocalTime.of(5, 0) + "\"," +
                 "\"endTime\":\"" + LocalTime.of(23, 30) + "\"," +
                 "\"interval\":\"" + 30 + "\"}";
 

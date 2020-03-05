@@ -26,7 +26,7 @@ public class FavoritePathService {
 
     public FavoritePathResponseView create(FavoritePathRequestView requestView)
             throws Exception {
-        if (requestView.getStartId() == requestView.getEndId()) {
+        if (requestView.isSameStation()) {
             throw new IllegalArgumentException("출발역과 도착역이 같습니다.");
         }
         FavoritePath savedFavoritePath

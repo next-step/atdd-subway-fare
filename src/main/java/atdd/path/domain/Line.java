@@ -1,6 +1,7 @@
 package atdd.path.domain;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +21,10 @@ public class Line {
         this(id, name, Collections.EMPTY_LIST, startTime, endTime, interval);
     }
 
+    public Line(String name, LocalTime startTime, LocalTime endTime, int interval) {
+        this(null, name, Collections.EMPTY_LIST, startTime, endTime, interval);
+    }
+
     public Line(Long id, String name, List<Edge> edges, LocalTime startTime, LocalTime endTime, int interval) {
         this.id = id;
         this.name = name;
@@ -31,10 +36,6 @@ public class Line {
 
     public static Line of(String name, LocalTime startTime, LocalTime endTime, int interval) {
         return new Line(name, startTime, endTime, interval);
-    }
-
-    public Line(String name, LocalTime startTime, LocalTime endTime, int interval) {
-        this(null, name, Collections.EMPTY_LIST, startTime, endTime, interval);
     }
 
     public Long getId() {
@@ -74,4 +75,17 @@ public class Line {
         return this.edges;
     }
 
+    public List<LocalTime> makeTimeTable(LocalTime start, LocalTime end) {
+        List<LocalTime> timeTable = new ArrayList<>();
+        timeTable.add(start);
+        LocalTime nextTime = start.plusMinutes(this.interval);
+        while (nextTime.isBefore(end)) {
+            timeTable.add(nextTime);
+            nextTime = nextTime.plusMinutes(this.interval);
+        }
+        if (nextTime.equals(end)) {
+            timeTable.add(nextTime);
+        }
+        return timeTable;
+    }
 }

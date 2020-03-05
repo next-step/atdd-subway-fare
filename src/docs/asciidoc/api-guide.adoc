@@ -58,6 +58,20 @@ operation::users-me[snippets='response-fields']
 
 ---
 
+[[resources-station]]
+== Station
+
+[[resources-station-timetables]]
+=== 지하철역 시간표 조회
+
+operation::station-timetables[snippets='http-request,http-response']
+operation::station-timetables[snippets='request-headers']
+operation::station-timetables[snippets='request-fields']
+operation::station-timetables[snippets='response-headers']
+operation::station-timetables[snippets='response-fields']
+
+---
+
 [[resources-find-path]]
 == 최소 경로 조회
 

@@ -125,7 +125,11 @@ public class FavoritePathDocumentationTest extends BaseDocumentationTest {
                                         .description("The id of the station to start"),
                                 fieldWithPath("endId")
                                         .type(JsonFieldType.NUMBER)
-                                        .description("The id of the station to end")
+                                        .description("The id of the station to end"),
+                                fieldWithPath("sameStation")
+                                        .type(JsonFieldType.BOOLEAN)
+                                        .description("It tells whether the station to start " +
+                                                "and the station to end is same or not")
                         ),
                         responseHeaders(
                                 headerWithName(HttpHeaders.CONTENT_TYPE)
