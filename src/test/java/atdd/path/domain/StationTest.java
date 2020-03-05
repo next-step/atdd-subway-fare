@@ -33,7 +33,7 @@ public class StationTest {
     }
 
     @Test
-    void calculateLastTime(){
+    void calculateLastTime() {
         //given
         Station station = TEST_STATION_2;
         int index = STATIONS.indexOf(station);
@@ -43,5 +43,30 @@ public class StationTest {
 
         //then
         assertThat(endTime).isEqualTo(LINE.getEndTime().plusMinutes(LINE.getInterval()));
+    }
+
+    @Test
+    void getTimeTables() {
+        //given
+        Station station = TEST_STATION_2;
+        int index = STATIONS.indexOf(station);
+        int indexReverse = STATIONS.size() - STATIONS.indexOf(station) - 1;
+        LocalTime startTimeOfLine = LINE.getStartTime();
+        LocalTime endTimeOfLine = LINE.getEndTime();
+        int lineInterval = LINE.getInterval();
+
+        //when
+        TimeTables timeTablesOfStation = station.showTimeTablesForUpDown(LINE, STATIONS);
+
+        //then
+        int lastIndexForUp = timeTablesOfStation.getUp().size() - 1;
+        int lastIndexForDown = timeTablesOfStation.getDown().size() - 1;
+        assertThat(timeTablesOfStation.getUp().get(0))
+                .isEqualTo(startTimeOfLine.plusMinutes(lineInterval));
+        assertThat(timeTablesOfStation.getUp().get(lastIndexForUp))
+                .isEqualTo(endTimeOfLine.plusMinutes(lineInterval*index));
+        assertThat(timeTablesOfStation.getDown().get(lastIndexForDown))
+                .isEqualTo(endTimeOfLine.plusMinutes(lineInterval*indexReverse));
+
     }
 }
