@@ -67,6 +67,19 @@ public class GraphTest {
     }
 
     @Test
+    public void findLineToStartTest(){
+        //given
+        List<Line> lines = LINES;
+        List<Station> stations = STATIONS;
+
+        //when
+        Line lineToStart = graph.findLineToStart(lines, stations);
+
+        //then
+        assertThat(lineToStart.getName()).isEqualTo("신분당선");
+    }
+
+    @Test
     public void getMinTimePathTest() {
         //given
         Graph graph = new Graph(LINES);
