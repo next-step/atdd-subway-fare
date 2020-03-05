@@ -24,7 +24,8 @@ public class GraphService {
     }
 
     public MinTimePathResponseView findMinTimePath(Long startId, Long endId) {
-
-        return null;
+        List<Line> lines = lineDao.findAll();
+        Graph graph = new Graph(lines);
+        return graph.getMinTimePath(startId, endId);
     }
 }

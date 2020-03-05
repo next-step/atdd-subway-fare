@@ -57,9 +57,11 @@ public class GraphServiceTest {
         MinTimePathResponseView minTimePath = graphService.findMinTimePath(startId, endId);
 
         //then
+        assertThat(minTimePath.getStartStationId()).isEqualTo(1L);
+        assertThat(minTimePath.getEndStationId()).isEqualTo(3L);
         assertThat(minTimePath.getLines().size()).isEqualTo(1);
-        assertThat(minTimePath.getStations()).isEqualTo(3);
-        assertThat(minTimePath.getDistance()).isEqualTo(20);
+        assertThat(minTimePath.getStations().size()).isEqualTo(3);
+        assertThat(minTimePath.getDistance()).isEqualTo(20.0);
         assertThat(minTimePath.getDepartAt()).isNotNull();
         assertThat(minTimePath.getArriveBy()).isNotNull();
     }
