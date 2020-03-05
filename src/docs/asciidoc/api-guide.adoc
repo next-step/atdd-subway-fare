@@ -55,8 +55,8 @@ operation::routes/time[snippets='response-fields']
 
 ---
 
-[[resources-favorite]]
-== Favorite
+[[resources-favorite-station]]
+== Favorite Station
 
 [[resources-favorite-station-create]]
 === 지하철역 즐겨찾기 추가
@@ -66,14 +66,41 @@ operation::favorite/station/create[snippets='request-fields']
 operation::favorite/station/create[snippets='response-fields']
 
 
-[[resources-favorite-find]]
-=== 지하철역 즐겨찾기 찾기
+[[resources-favorite-station-find]]
+=== 지하철역 즐겨찾기 조회
 operation::favorite/station/find[snippets='http-request,http-response']
 operation::favorite/station/find[snippets='request-headers']
 operation::favorite/station/find[snippets='response-fields']
 
-[[resources-favorite-delete]]
+[[resources-favorite-station-delete]]
 === 지하철역 즐겨찾기 삭제
 operation::favorite/station/delete[snippets='http-request,http-response']
 operation::favorite/station/delete[snippets='request-headers']
 operation::favorite/station/delete[snippets='path-parameters']
+
+
+---
+
+[[resources-favorite-route]]
+== Favorite Route
+
+[[resources-favorite-route-create]]
+=== 경로 즐겨찾기 추가
+operation::favorite/route/create[snippets='http-request,http-response']
+operation::favorite/route/create[snippets='request-headers']
+operation::favorite/route/create[snippets='request-fields']
+operation::favorite/route/create[snippets='response-fields']
+
+
+[[resources-favorite-route-find]]
+=== 지하철역 즐겨찾기 조회
+operation::favorite/route/find[snippets='http-request,http-response']
+operation::favorite/route/find[snippets='request-headers']
+operation::favorite/route/find[snippets='response-fields']
+
+[[resources-favorite-route-delete]]
+=== 지하철역 즐겨찾기 삭제
+operation::favorite/route/delete[snippets='http-request,http-response']
+operation::favorite/route/delete[snippets='request-headers']
+operation::favorite/route/delete[snippets='path-parameters']
+

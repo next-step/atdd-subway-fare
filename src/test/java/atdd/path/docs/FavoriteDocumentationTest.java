@@ -3,7 +3,9 @@ package atdd.path.docs;
 import atdd.AbstractDocumentationTest;
 import atdd.TestConstant;
 import atdd.path.application.FavoriteService;
+import atdd.path.application.dto.FavoriteRouteResponseView;
 import atdd.path.application.dto.FavoriteStationResponseView;
+import atdd.path.application.dto.ItemView;
 import atdd.path.domain.Station;
 import atdd.path.web.FavoriteController;
 import atdd.user.domain.User;
@@ -27,8 +29,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,7 +66,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
         String input = "{\"stationId\":" + TestConstant.STATION_ID + "}";
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.post("/favorites/station")
+                .perform(post("/favorites/station")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", String.format("Bearer %s", TEST_USER_TOKEN))
                         .content(input)
@@ -118,6 +120,89 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 )
                 .andExpect(status().isNoContent())
                 .andDo(document("favorite/station/delete",
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")),
+                        pathParameters(
+                                parameterWithName("id").description("The id of favorite-station")
+                        )
+                ))
+                .andDo(print());
+    }
+
+    @Test
+    void createFavoriteRoute() throws Exception {
+        String request = "{\"sourceStationId\":" + TestConstant.STATION_ID + ", \"targetStationId\":" + TestConstant.STATION_ID_2 + "}";
+        given(favoriteService.createRouteFavorite(any(), any(), any()))
+                .willReturn(FavoriteRouteResponseView.builder().id(1L)
+                        .sourceStation(ItemView.builder().id(TestConstant.STATION_ID).name(TestConstant.STATION_NAME).build())
+                        .targetStation(ItemView.builder().id(TestConstant.STATION_ID_2).name(TestConstant.STATION_NAME_2).build())
+                        .build());
+
+        this.mockMvc
+                .perform(post(FAVORITE_URI + "/route")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", String.format("Bearer %s", TEST_USER_TOKEN))
+                        .content(request)
+                )
+                .andDo(document("favorite/route/create",
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")),
+                        requestFields(
+                                fieldWithPath("sourceStationId").type(JsonFieldType.NUMBER).description("The start station's id for favorite route"),
+                                fieldWithPath("targetStationId").type(JsonFieldType.NUMBER).description("The end station's id for favorite route")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The created favorite route's id"),
+                                fieldWithPath("sourceStation.id").type(JsonFieldType.NUMBER).description("The start station's id for favorite route"),
+                                fieldWithPath("sourceStation.name").type(JsonFieldType.STRING).description("The start station's name for favorite route"),
+                                fieldWithPath("targetStation.id").type(JsonFieldType.NUMBER).description("The end station's id favorite route"),
+                                fieldWithPath("targetStation.name").type(JsonFieldType.STRING).description("The end station's name for favorite route")
+                        )
+                ))
+                .andDo(print());
+    }
+
+    @Test
+    void findFavoriteRoute() throws Exception {
+        given(favoriteService.findFavoriteRoute(any()))
+                .willReturn(Arrays.asList(FavoriteRouteResponseView.builder()
+                        .id(1L)
+                        .sourceStation(ItemView.builder()
+                                .id(TestConstant.STATION_ID)
+                                .name(TestConstant.STATION_NAME)
+                                .build())
+                        .targetStation(ItemView.builder()
+                                .id(TestConstant.STATION_ID_2)
+                                .name(TestConstant.STATION_NAME_2)
+                                .build())
+                        .build()));
+
+        this.mockMvc
+                .perform(get(FAVORITE_URI + "/route")
+                        .header("Authorization", String.format("Bearer %s", TEST_USER_TOKEN)))
+                .andExpect(status().isOk())
+                .andDo(document("favorite/route/find",
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")),
+                        responseFields(
+                                fieldWithPath("[]").description("An array Favorite-route"))
+                                .andWithPrefix("[].", new FieldDescriptor[]{
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("Id of Favorite-route"),
+                                        fieldWithPath("sourceStation.id").type(JsonFieldType.NUMBER).description("Start stations's id of Favorite-route"),
+                                        fieldWithPath("sourceStation.name").type(JsonFieldType.STRING).description("Start stations's name of Favorite-route"),
+                                        fieldWithPath("targetStation.id").type(JsonFieldType.NUMBER).description("End stations's id of Favorite-route"),
+                                        fieldWithPath("targetStation.name").type(JsonFieldType.STRING).description("End stations's name of Favorite-route")})
+                ))
+                .andDo(print());
+    }
+
+    @Test
+    void deleteFavoriteRoute() throws Exception {
+        this.mockMvc
+                .perform(RestDocumentationRequestBuilders.delete(FAVORITE_URI + "/route/{id}", 1)
+                        .header("Authorization", String.format("Bearer %s", TEST_USER_TOKEN)))
+                .andExpect(status().isNoContent())
+                .andDo(document("favorite/route/delete",
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")),
                         pathParameters(
