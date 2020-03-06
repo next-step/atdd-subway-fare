@@ -46,7 +46,7 @@ public class GraphServiceTest {
 
     @DisplayName("출발역과 도착역 사이의 최소 시간 경로 구하기")
     @Test
-    public void findMinTimePath(){
+    public void findMinTimePath() {
         //given
         Long startId = 1L;
         Long endId = 3L;

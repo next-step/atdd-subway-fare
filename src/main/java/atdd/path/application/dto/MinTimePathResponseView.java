@@ -65,4 +65,32 @@ public class MinTimePathResponseView {
             line = new Line(line.getId(), line.getName());
         }
     }
+
+    public void insertStations(List<Station> stations) {
+        this.stations = StationResponseView.listOf(stations);
+    }
+
+    public void insertLinesForPath(Set<Line> lines) {
+        this.lines = lines;
+    }
+
+    public void insertDistance(double distance_km) {
+        this.distance = distance_km;
+    }
+
+    public void insertArriveBy(LocalTime arriveBy){
+        this.arriveBy=arriveBy;
+    }
+
+    public void insertDepartAt(LocalTime departAt){
+        this.departAt = departAt;
+    }
+
+    public void insertStartId(Long startId){
+        this.startStationId = startId;
+    }
+
+    public void insertEndId(Long endId){
+        this.endStationId = endId;
+    }
 }
