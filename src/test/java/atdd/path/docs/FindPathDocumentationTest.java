@@ -46,8 +46,8 @@ public class FindPathDocumentationTest extends BaseDocumentationTest {
     @Test
     void 문서화_최소_경로_조회하기() throws Exception {
         //given
-        lines.add(TEST_LINE);
-        lines.add(TEST_LINE_2);
+        lines.add(TEST_LINE); //2호선
+        lines.add(TEST_LINE_2); //신분당선
         MinTimePathResponseView responseView
                 = new MinTimePathResponseView(6L, 2L, stations, lines, 20,
                 LocalTime.of(6, 00), LocalTime.of(6, 20));
@@ -56,13 +56,13 @@ public class FindPathDocumentationTest extends BaseDocumentationTest {
 
         //when, then
         mockMvc.perform(get("/paths")
-                .param("startId", STATION_ID_6.toString())
-                .param("endId", STATION_ID_2.toString())
+                .param("startId", STATION_ID_6.toString())  //신분당선-양재역
+                .param("endId", STATION_ID_2.toString())    //2호선-역삼역
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("find-path",
+                .andDo(document("path-find",
                         requestHeaders(
                                 headerWithName(HttpHeaders.ACCEPT)
                                         .description("It accepts MediaType.APPLICATION_JSON"),
@@ -89,25 +89,25 @@ public class FindPathDocumentationTest extends BaseDocumentationTest {
                                 fieldWithPath("stations[].name")
                                         .type(JsonFieldType.STRING)
                                         .description("The name of the station in the path"),
-                                fieldWithPath("stations[].lines")
-                                        .type(JsonFieldType.NULL)
-                                        .description("It should be null"),
                                 fieldWithPath("lines")
-                                        .type(JsonFieldType.NULL)
+                                        .type(JsonFieldType.ARRAY)
                                         .description("The list of the lines where the station belongs"),
+                                fieldWithPath("lines[].id")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("The id of the line where the station belongs"),
+                                fieldWithPath("lines[].name")
+                                        .type(JsonFieldType.STRING)
+                                        .description("The name of the line where the station belongs"),
                                 fieldWithPath("distance")
                                         .type(JsonFieldType.NUMBER)
-                                        .description("The distance between two station"),
+                                        .description("The distance between the stations"),
                                 fieldWithPath("departAt")
                                         .type(JsonFieldType.STRING)
                                         .description("The time to get on"),
                                 fieldWithPath("arriveBy")
                                         .type(JsonFieldType.STRING)
                                         .description("The time to arrive at")
-
                         )
                 ));
     }
-
-
 }

@@ -1,5 +1,7 @@
 package atdd.path.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class Station {
         return name;
     }
 
+    @JsonIgnore
     public List<Line> getLines() {
         return lines;
     }

@@ -63,7 +63,6 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         // then
         assertThat(response.getResponseBody().getId()).isEqualTo(stationId);
         assertThat(response.getResponseBody().getName()).isEqualTo(STATION_NAME);
-        assertThat(response.getResponseBody().getLines().size()).isEqualTo(2);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package atdd.path.application.dto;
 
 import atdd.path.domain.Station;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
