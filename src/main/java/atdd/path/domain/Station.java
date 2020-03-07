@@ -76,27 +76,22 @@ public class Station {
         int reverseIndex = stations.size() - index - 1;
         Station firstStation = stations.get(0);
 
-        List<LocalTime> timeTableUp
-                = makeTimeTableForOneWay(line, firstStation, index);
-        List<LocalTime> timeTableDown
-                = makeTimeTableForOneWay(line, firstStation, reverseIndex);
+        List<LocalTime> timeTableUp = makeTimeTableForOneWay(line, firstStation, index);
+        List<LocalTime> timeTableDown = makeTimeTableForOneWay(line, firstStation, reverseIndex);
 
         TimeTables timeTables = new TimeTables(timeTableUp, timeTableDown);
         return timeTables;
     }
 
     private List<LocalTime> makeTimeTableForOneWay(Line line, Station firstStationInPath, int indexOfStationInLine) {
-        List<LocalTime> timeTableForOneWay = new ArrayList<>();
         if (indexOfStationInLine == 0) {
-            timeTableForOneWay = line.makeTimeTable(line.getStartTime(), line.getEndTime());
+            return line.makeTimeTable(line.getStartTime(), line.getEndTime());
         }
 
-        LocalTime startTime
-                = firstStationInPath.calculateStartTime(line, indexOfStationInLine);
-        LocalTime endTime
-                = firstStationInPath.calculateEndTime(line, indexOfStationInLine);
+        LocalTime startTime = firstStationInPath.calculateStartTime(line, indexOfStationInLine);
+        LocalTime endTime = firstStationInPath.calculateEndTime(line, indexOfStationInLine);
 
-        timeTableForOneWay = line.makeTimeTable(startTime, endTime);
+        List<LocalTime> timeTableForOneWay = line.makeTimeTable(startTime, endTime);
         return timeTableForOneWay;
     }
 }
