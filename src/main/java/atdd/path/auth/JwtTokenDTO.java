@@ -4,6 +4,8 @@ public class JwtTokenDTO {
     String accessToken;
     String tokenType;
 
+    public JwtTokenDTO() {}
+
     public JwtTokenDTO(String accessToken, String tokenType) {
         this.accessToken = accessToken;
         this.tokenType = tokenType;
