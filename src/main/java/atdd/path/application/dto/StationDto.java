@@ -1,7 +1,6 @@
 package atdd.path.application.dto;
 
 import atdd.path.domain.Station;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,21 +9,26 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Builder
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class StationDto {
     private Long id;
     private String name;
-    private Set<Item> lines;
+    private Set<ItemView> lines;
+
+    @Builder
+    public StationDto(Long id, String name, Set<ItemView> lines) {
+        this.id = id;
+        this.name = name;
+        this.lines = lines;
+    }
 
     public static StationDto of(Station station) {
         return StationDto.builder()
                 .id(station.getId())
                 .name(station.getName())
                 .lines(station.getLines().stream()
-                        .map(it -> Item.of(it.getId(), it.getName()))
+                        .map(it -> ItemView.of(it.getId(), it.getName()))
                         .collect(Collectors.toSet()))
                 .build();
     }
@@ -35,7 +39,7 @@ public class StationDto {
                         .id(it.getId())
                         .name(it.getName())
                         .lines(it.getLines().stream()
-                                .map(it2 -> Item.of(it2.getId(), it2.getName()))
+                                .map(it2 -> ItemView.of(it2.getId(), it2.getName()))
                                 .collect(Collectors.toSet()))
                         .build())
                 .collect(Collectors.toList());

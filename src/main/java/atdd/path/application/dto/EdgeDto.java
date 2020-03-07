@@ -2,18 +2,26 @@ package atdd.path.application.dto;
 
 import atdd.path.domain.Edge;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
-@EqualsAndHashCode
+@NoArgsConstructor
 public class EdgeDto {
     private Long lineId;
     private Long sourceStationId;
     private Long targetStationId;
     private int distance;
-    private int elapsedMinutes;
+    private int elapsedTime;
+
+    @Builder
+    public EdgeDto(Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
+        this.lineId = lineId;
+        this.sourceStationId = sourceStationId;
+        this.targetStationId = targetStationId;
+        this.distance = distance;
+        this.elapsedTime = elapsedTime;
+    }
 
     public static EdgeDto of(Edge savedEdge) {
         return EdgeDto.builder()
@@ -29,7 +37,7 @@ public class EdgeDto {
                 .sourceStationId(this.sourceStationId)
                 .targetStationId(this.targetStationId)
                 .distance(this.distance)
-                .elapsedMinutes(this.elapsedMinutes)
+                .elapsedMinutes(this.elapsedTime)
                 .build();
     }
 }

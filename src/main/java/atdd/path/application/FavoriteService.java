@@ -57,6 +57,7 @@ public class FavoriteService {
         return FavoriteRouteResponseView.listOf(favorites);
     }
 
+    @Transactional
     public void deleteFavoriteRoute(Long id, User user) {
         favoriteRouteRepository.deleteByIdAndUserId(id, user.getId());
     }

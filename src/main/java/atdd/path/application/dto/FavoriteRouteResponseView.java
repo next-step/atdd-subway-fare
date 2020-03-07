@@ -3,16 +3,24 @@ package atdd.path.application.dto;
 import atdd.path.domain.FavoriteRoute;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class FavoriteRouteResponseView {
     private Long id;
     private ItemView sourceStation;
     private ItemView targetStation;
+
+    @Builder
+    public FavoriteRouteResponseView(Long id, ItemView sourceStation, ItemView targetStation) {
+        this.id = id;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
+    }
 
     public static FavoriteRouteResponseView of(FavoriteRoute favorite) {
         return FavoriteRouteResponseView.builder()

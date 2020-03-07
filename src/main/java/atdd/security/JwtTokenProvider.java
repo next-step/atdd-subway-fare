@@ -4,6 +4,8 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
@@ -58,7 +60,7 @@ public class JwtTokenProvider {
 
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(resolvedToken);
-            return claims.getBody().getExpiration().after(new Date());
+            return claims.getBody().getExpiration().after(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         } catch (JwtException e) {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }

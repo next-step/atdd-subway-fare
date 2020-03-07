@@ -23,7 +23,7 @@ public class WebMvcTestConfig implements WebMvcConfigurer {
         registry.addInterceptor(new MockLoginInterceptor())
                 .addPathPatterns(
                         "/users/me",
-                        "/favorites"
+                        "/favorites/**"
                 );
     }
 
