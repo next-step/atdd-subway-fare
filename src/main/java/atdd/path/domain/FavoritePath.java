@@ -13,11 +13,6 @@ public class FavoritePath {
     private long sourceStationId;
     private long targetStationId;
 
-    @Setter
-    private Station sourceStation;
-    @Setter
-    private Station targetStation;
-
     @Builder
     private FavoritePath(long id, long owner, long sourceStationId, long targetStationId) {
         this.id = id;

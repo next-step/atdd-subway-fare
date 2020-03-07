@@ -6,6 +6,7 @@ import atdd.path.application.dto.FavoritePathRequestView;
 import atdd.path.application.dto.FavoritePathResponseView;
 import atdd.path.application.dto.FavoriteStationResponse;
 import atdd.path.domain.FavoritePath;
+import atdd.path.domain.Station;
 import atdd.user.domain.User;
 import atdd.user.web.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,21 +49,28 @@ public class FavoriteController {
 
     @PostMapping("/paths")
     public ResponseEntity addFavoritePath(@LoginUser final User user, @RequestBody FavoritePathRequestView view) {
-        FavoritePath favoritePath = favoritePathService.addFavoritePath(user.getEmail(), FavoritePath.builder()
+        Station sourceStation = favoritePathService.findStationById(view.getSourceStationId());
+        Station targetStation = favoritePathService.findStationById(view.getTargetStationId());
+
+        FavoritePath favoritePath = favoritePathService.addFavoritePath(FavoritePath.builder()
+                .owner(user.getId())
                 .sourceStationId(view.getSourceStationId())
                 .targetStationId(view.getTargetStationId()).build());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(FavoritePathResponseView.of(favoritePath));
+        return ResponseEntity.status(HttpStatus.CREATED).body(FavoritePathResponseView.of(favoritePath, sourceStation, targetStation));
     }
 
     @GetMapping("/paths")
     public ResponseEntity findFavoritePaths(@LoginUser final User user) {
-        List<FavoritePath> favoritePaths = favoritePathService.findFavoritePath(user.getEmail());
+        List<FavoritePath> favoritePaths = favoritePathService.findFavoritePath(user.getId());
 
         List<FavoritePathResponseView> result = new ArrayList<>();
 
         for (FavoritePath favoritePath : favoritePaths) {
-            result.add(FavoritePathResponseView.of(favoritePath));
+            Station sourceStation = favoritePathService.findStationById(favoritePath.getSourceStationId());
+            Station targetStation = favoritePathService.findStationById(favoritePath.getTargetStationId());
+
+            result.add(FavoritePathResponseView.of(favoritePath, sourceStation, targetStation));
         }
 
         return ResponseEntity.ok(result);
