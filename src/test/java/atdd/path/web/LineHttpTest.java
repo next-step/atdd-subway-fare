@@ -60,8 +60,7 @@ public class LineHttpTest {
         return retrieveLineRequest(LINE_URL + "/" + lineId);
     }
 
-    public EntityExchangeResult createEdgeRequest(Long lineId, Long stationId, Long stationId2) {
-        int distance = 10;
+    public EntityExchangeResult createEdgeRequest(Long lineId, Long stationId, Long stationId2, int distance) {
         String inputJson = "{\"sourceId\":" + stationId +
                 ",\"targetId\":" + stationId2 +
                 ",\"distance\":" + distance + "}";

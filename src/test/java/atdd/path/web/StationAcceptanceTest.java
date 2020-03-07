@@ -2,6 +2,7 @@ package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
 import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.StationTimetablesResponseView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,8 +59,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
         Long lineId = lineHttpTest.createLine(LINE_NAME);
         Long lineId2 = lineHttpTest.createLine(LINE_NAME_2);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
-        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId3);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 10);
+        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId3, 10);
 
         // when
         EntityExchangeResult<StationResponseView> response = stationHttpTest.retrieveStation(stationId);
@@ -102,5 +103,50 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         webTestClient.get().uri(STATION_URL + "/" + stationId)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @DisplayName("지하철역 시간표 조회")
+    @Test
+    public void findStationTimetable() {
+        //given
+        Long stationId = stationHttpTest.createStation(STATION_NAME); // 강남역
+        Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
+        Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
+        Long stationId4 = stationHttpTest.createStation(STATION_NAME_4);
+        Long stationId5 = stationHttpTest.createStation(STATION_NAME_5);
+
+        Long stationId6 = stationHttpTest.createStation(STATION_NAME_6);
+        Long stationId7 = stationHttpTest.createStation(STATION_NAME_7);
+        Long stationId8 = stationHttpTest.createStation(STATION_NAME_8);
+        Long stationId9 = stationHttpTest.createStation(STATION_NAME_9);
+        Long stationId10 = stationHttpTest.createStation(STATION_NAME_10);
+
+        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        Long lineId2 = lineHttpTest.createLine(LINE_NAME_2);
+
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 10);
+        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3, 10);
+        lineHttpTest.createEdgeRequest(lineId, stationId3, stationId4, 10);
+        lineHttpTest.createEdgeRequest(lineId, stationId4, stationId5, 10);
+
+        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId6, 10);
+        lineHttpTest.createEdgeRequest(lineId2, stationId6, stationId7, 10);
+        lineHttpTest.createEdgeRequest(lineId2, stationId7, stationId8, 10);
+        lineHttpTest.createEdgeRequest(lineId2, stationId8, stationId9, 10);
+        lineHttpTest.createEdgeRequest(lineId2, stationId9, stationId10, 10);
+
+        //when
+        List<StationTimetablesResponseView> stationTimetablesResponseViews = stationHttpTest.showStationTimetables(stationId).getResponseBody();
+
+        //then
+        assertThat(stationTimetablesResponseViews.get(0).getLineId()).isEqualTo(lineId);
+        assertThat(stationTimetablesResponseViews.get(0).getLineName()).isEqualTo(LINE_NAME);
+        assertThat(stationTimetablesResponseViews.get(0).getTimetables().getUp().size()).isGreaterThan(0);
+        assertThat(stationTimetablesResponseViews.get(0).getTimetables().getDown().size()).isGreaterThan(0);
+
+        assertThat(stationTimetablesResponseViews.get(1).getLineId()).isEqualTo(lineId);
+        assertThat(stationTimetablesResponseViews.get(1).getLineName()).isEqualTo(LINE_NAME_2);
+        assertThat(stationTimetablesResponseViews.get(1).getTimetables().getUp().size()).isGreaterThan(0);
+        assertThat(stationTimetablesResponseViews.get(1).getTimetables().getDown().size()).isGreaterThan(0);
     }
 }

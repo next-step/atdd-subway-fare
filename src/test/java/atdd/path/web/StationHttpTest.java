@@ -1,6 +1,7 @@
 package atdd.path.web;
 
 import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.StationTimetablesResponseView;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -44,6 +45,15 @@ public class StationHttpTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(StationResponseView.class)
+                .returnResult();
+    }
+
+    public EntityExchangeResult<List<StationTimetablesResponseView>> showStationTimetables(long stationId) {
+        return webTestClient.get().uri("/stations/" + stationId + "/timetables")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(StationTimetablesResponseView.class)
                 .returnResult();
     }
 
