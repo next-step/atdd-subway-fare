@@ -63,7 +63,7 @@ public class Graph {
 
         lines.stream()
                 .flatMap(it -> it.getEdges().stream())
-                .forEach(it -> graph.setEdgeWeight(graph.addEdge(it.getSourceStation().getId(), it.getTargetStation().getId()), it.getElapsedMinutes()));
+                .forEach(it -> graph.setEdgeWeight(graph.addEdge(it.getSourceStation().getId(), it.getTargetStation().getId()), it.getElapsedTime()));
         return graph;
     }
 
@@ -73,7 +73,7 @@ public class Graph {
 
         return path.getEdgeList().stream()
                 .map(it -> findEdge(graph.getEdgeSource(it), graph.getEdgeTarget(it)))
-                .mapToInt(Edge::getElapsedMinutes)
+                .mapToInt(Edge::getElapsedTime)
                 .sum();
     }
 

@@ -1,5 +1,7 @@
 package atdd.path.application;
 
+import atdd.path.application.dto.CreateEdgeRequestView;
+import atdd.path.application.dto.EdgeDto;
 import atdd.path.domain.Edge;
 import atdd.path.domain.Edges;
 import atdd.path.domain.Line;
@@ -23,18 +25,20 @@ public class LineService {
         this.stationRepository = stationRepository;
     }
 
-    public void addEdge(Long lineId, Long sourceId, Long targetId, int distance, int elapsedMinutes) {
+    public EdgeDto addEdge(Long lineId, CreateEdgeRequestView view) {
         lineRepository.findById(lineId).orElseThrow(RuntimeException::new);
-        stationRepository.findById(sourceId).orElseThrow(RuntimeException::new);
-        stationRepository.findById(targetId).orElseThrow(RuntimeException::new);
+        stationRepository.findById(view.getSourceId()).orElseThrow(RuntimeException::new);
+        stationRepository.findById(view.getTargetId()).orElseThrow(RuntimeException::new);
 
         Edge savedEdge = edgeRepository.save(Edge.builder()
                 .lineId(lineId)
-                .sourceStationId(sourceId)
-                .targetStationId(targetId)
-                .distance(distance)
-                .elapsedMinutes(elapsedMinutes)
+                .sourceStationId(view.getSourceId())
+                .targetStationId(view.getTargetId())
+                .distance(view.getDistance())
+                .elapsedTime(view.getElapsedTime())
                 .build());
+
+        return EdgeDto.of(savedEdge);
     }
 
     public void deleteStation(Long lineId, Long stationId) {

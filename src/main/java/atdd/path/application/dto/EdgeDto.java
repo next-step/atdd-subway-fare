@@ -37,7 +37,7 @@ public class EdgeDto {
                 .sourceStationId(this.sourceStationId)
                 .targetStationId(this.targetStationId)
                 .distance(this.distance)
-                .elapsedMinutes(this.elapsedTime)
+                .elapsedTime(this.elapsedTime)
                 .build();
     }
 }

@@ -34,9 +34,9 @@ public class LineController {
 
     @GetMapping("{id}")
     public ResponseEntity retrieveLine(@PathVariable Long id) {
-       return lineRepository.findById(id)
-               .map(it -> ResponseEntity.ok().body(LineResponseView.of(it)))
-               .orElseGet(() -> ResponseEntity.notFound().build());
+        return lineRepository.findById(id)
+                .map(it -> ResponseEntity.ok().body(LineResponseView.of(it)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -53,8 +53,7 @@ public class LineController {
 
     @PostMapping("/{id}/edges")
     public ResponseEntity createEdge(@PathVariable Long id, @RequestBody CreateEdgeRequestView view) {
-        lineService.addEdge(id, view.getSourceId(), view.getTargetId(), view.getDistance(), view.getElapsedMinutes());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(lineService.addEdge(id, view));
     }
 
     @DeleteMapping("/{id}/edges")

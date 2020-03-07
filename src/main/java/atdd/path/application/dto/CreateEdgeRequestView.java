@@ -7,5 +7,5 @@ public class CreateEdgeRequestView {
     private Long sourceId;
     private Long targetId;
     private int distance;
-    private int elapsedMinutes;
+    private int elapsedTime;
 }
