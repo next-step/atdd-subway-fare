@@ -37,10 +37,10 @@ public class FavoritePathServiceTest {
         given(stationDao.findById(TEST_STATION_4.getId())).willReturn(TEST_STATION_4);
         given(favoritePathDao.save(any())).willReturn(FAVORITE_PATH_1);
 
-        FavoritePath favoritePath = favoritePathService.addFavoritePath(TEST_USER_EMAIL2, FAVORITE_PATH_1);
+        FavoritePath favoritePath = favoritePathService.addFavoritePath(FAVORITE_PATH_1);
 
-        assertThat(favoritePath.getSourceStation().getId()).isEqualTo(TEST_STATION.getId());
-        assertThat(favoritePath.getTargetStation().getId()).isEqualTo(TEST_STATION_4.getId());
+        assertThat(favoritePath.getSourceStationId()).isEqualTo(TEST_STATION.getId());
+        assertThat(favoritePath.getTargetStationId()).isEqualTo(TEST_STATION_4.getId());
     }
 
     @Test
@@ -50,10 +50,10 @@ public class FavoritePathServiceTest {
         given(stationDao.findById(TEST_STATION_4.getId())).willReturn(TEST_STATION_4);
         given(favoritePathDao.findAll(TEST_USER_2.getId())).willReturn(Arrays.asList(FAVORITE_PATH_1));
 
-        List<FavoritePath> favoritePaths = favoritePathService.findFavoritePath(TEST_USER_EMAIL2);
+        List<FavoritePath> favoritePaths = favoritePathService.findFavoritePath(TEST_USER_2.getId());
 
         assertThat(favoritePaths.size()).isEqualTo(1);
-        assertThat(favoritePaths.get(0).getSourceStation().getId()).isEqualTo(TEST_STATION.getId());
-        assertThat(favoritePaths.get(0).getTargetStation().getId()).isEqualTo(TEST_STATION_4.getId());
+        assertThat(favoritePaths.get(0).getSourceStationId()).isEqualTo(TEST_STATION.getId());
+        assertThat(favoritePaths.get(0).getTargetStationId()).isEqualTo(TEST_STATION_4.getId());
     }
 }
