@@ -1,5 +1,6 @@
 package atdd.path.application;
 
+import atdd.path.application.dto.MinTimePathResponseView;
 import atdd.path.dao.LineDao;
 import atdd.path.domain.Graph;
 import atdd.path.domain.Line;
@@ -20,5 +21,11 @@ public class GraphService {
         List<Line> lines = lineDao.findAll();
         Graph graph = new Graph(lines);
         return graph.getShortestDistancePath(startId, endId);
+    }
+
+    public MinTimePathResponseView findMinTimePath(Long startId, Long endId) {
+        List<Line> lines = lineDao.findAll();
+        Graph graph = new Graph(lines);
+        return graph.getMinTimePath(startId, endId);
     }
 }

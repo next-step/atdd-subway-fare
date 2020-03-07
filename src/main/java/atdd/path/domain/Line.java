@@ -1,5 +1,7 @@
 package atdd.path.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,22 +48,27 @@ public class Line {
         return name;
     }
 
+    @JsonIgnore
     public List<Edge> getEdges() {
         return edges.getEdges();
     }
 
+    @JsonIgnore
     public LocalTime getStartTime() {
         return startTime;
     }
 
+    @JsonIgnore
     public LocalTime getEndTime() {
         return endTime;
     }
 
+    @JsonIgnore
     public int getInterval() {
         return interval;
     }
 
+    @JsonIgnore
     public List<Station> getStations() {
         return edges.getStations();
     }

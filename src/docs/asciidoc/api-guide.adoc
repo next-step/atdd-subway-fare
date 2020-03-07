@@ -72,18 +72,20 @@ operation::station-timetables[snippets='response-fields']
 
 ---
 
-[[resources-find-path]]
-== 최소 경로 조회
+[[resources-path]]
+== Path
 
-operation::find-path[snippets='http-request,http-response']
-operation::find-path[snippets='request-headers']
-operation::find-path[snippets='response-headers']
-operation::find-path[snippets='response-fields']
+[[resources-path-find]]
+=== 최소 시간 경로 조회
+operation::path-find[snippets='http-request,http-response']
+operation::path-find[snippets='request-headers']
+operation::path-find[snippets='response-headers']
+operation::path-find[snippets='response-fields']
 
 ---
 
 [[resources-favorite]]
-== 즐겨찾기
+== Favorite
 
 [[resources-favorite-station-create]]
 === 지하철역 즐겨찾기 등록
@@ -143,3 +145,4 @@ operation::favorite-path-showAll[snippets='http-request,http-response']
 operation::favorite-path-showAll[snippets='request-headers']
 operation::favorite-path-showAll[snippets='response-headers']
 operation::favorite-path-showAll[snippets='response-fields']
+

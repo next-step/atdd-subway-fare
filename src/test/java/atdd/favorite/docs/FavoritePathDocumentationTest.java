@@ -151,9 +151,6 @@ public class FavoritePathDocumentationTest extends BaseDocumentationTest {
                                 fieldWithPath("favoritePathStations[0].name")
                                         .type(JsonFieldType.STRING)
                                         .description("The name of the station in a favorite-path"),
-                                fieldWithPath("favoritePathStations[0].lines")
-                                        .type(JsonFieldType.ARRAY)
-                                        .description("The list of the lines that the station belongs to"),
                                 fieldWithPath("_links.self.href")
                                         .type(JsonFieldType.STRING)
                                         .description("link to self"),

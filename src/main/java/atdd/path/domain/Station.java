@@ -1,5 +1,7 @@
 package atdd.path.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class Station {
         return name;
     }
 
+    @JsonIgnore
     public List<Line> getLines() {
         return lines;
     }
@@ -70,23 +73,25 @@ public class Station {
 
     public TimeTables showTimeTablesForUpDown(Line line, List<Station> stations) {
         int index = stations.indexOf(this);
-        int reverseIndex = stations.size() - stations.indexOf(this) - 1;
+        int reverseIndex = stations.size() - index - 1;
+        Station firstStation = stations.get(0);
 
-        List<LocalTime> timeTableUp = new ArrayList<>();
-        if (reverseIndex != 0) {
-            LocalTime start = this.calculateStartTime(line, index);
-            LocalTime end = this.calculateEndTime(line, index);
-            timeTableUp = line.makeTimeTable(start, end);
-        }
-
-        List<LocalTime> timeTableDown = new ArrayList<>();
-        if (index != 0) {
-            LocalTime startReverse = this.calculateStartTime(line, reverseIndex);
-            LocalTime endReverse = this.calculateEndTime(line, reverseIndex);
-            timeTableDown = line.makeTimeTable(startReverse, endReverse);
-        }
+        List<LocalTime> timeTableUp = makeTimeTableForOneWay(line, firstStation, index);
+        List<LocalTime> timeTableDown = makeTimeTableForOneWay(line, firstStation, reverseIndex);
 
         TimeTables timeTables = new TimeTables(timeTableUp, timeTableDown);
         return timeTables;
+    }
+
+    private List<LocalTime> makeTimeTableForOneWay(Line line, Station firstStationInPath, int indexOfStationInLine) {
+        if (indexOfStationInLine == 0) {
+            return line.makeTimeTable(line.getStartTime(), line.getEndTime());
+        }
+
+        LocalTime startTime = firstStationInPath.calculateStartTime(line, indexOfStationInLine);
+        LocalTime endTime = firstStationInPath.calculateEndTime(line, indexOfStationInLine);
+
+        List<LocalTime> timeTableForOneWay = line.makeTimeTable(startTime, endTime);
+        return timeTableForOneWay;
     }
 }

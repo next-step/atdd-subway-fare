@@ -1,7 +1,9 @@
 package atdd.path.domain;
 
+import atdd.path.application.dto.MinTimePathResponseView;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
@@ -23,7 +25,7 @@ public class Graph {
         return getPathStations(makeGraph(lines), startId, endId);
     }
 
-    private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraph(List<Line> lines) {
+    public WeightedMultigraph<Long, DefaultWeightedEdge> makeGraph(List<Line> lines) {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
@@ -37,17 +39,30 @@ public class Graph {
 
     private List<Station> getPathStations(WeightedMultigraph<Long, DefaultWeightedEdge> graph, Long startId, Long endId) {
         GraphPath<Long, DefaultWeightedEdge> path = new DijkstraShortestPath(graph).getPath(startId, endId);
-
         return path.getVertexList().stream()
                 .map(it -> findStation(it))
                 .collect(Collectors.toList());
     }
 
-    private Station findStation(Long stationId) {
+    public Station findStation(Long stationId) {
         return lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .filter(it -> it.getId() == stationId)
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
+    }
+
+    public MinTimePathResponseView getMinTimePath(Long stationId, Long stationId4) {
+        return getMinTimePathStations(makeGraph(lines), stationId, stationId4);
+    }
+
+    private MinTimePathResponseView getMinTimePathStations(WeightedMultigraph<Long, DefaultWeightedEdge> graph, Long startId, Long endId) {
+        List<GraphPath<Long, DefaultWeightedEdge>> paths
+                = new KShortestPaths(graph, 1000).getPaths(startId, endId);
+        GraphPath<Long, DefaultWeightedEdge> graphPath = paths.get(0);
+        MinTimePath minTimePath = new MinTimePath(lines, graphPath);
+        MinTimePathResponseView responseView
+                = minTimePath.findPathStationsResponseView(graphPath, startId, endId);
+        return responseView;
     }
 }
