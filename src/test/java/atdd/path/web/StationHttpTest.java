@@ -1,6 +1,6 @@
 package atdd.path.web;
 
-import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.StationResponseDto;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -15,7 +15,7 @@ public class StationHttpTest {
         this.webTestClient = webTestClient;
     }
 
-    public EntityExchangeResult<StationResponseView> createStationRequest(String stationName) {
+    public EntityExchangeResult<StationResponseDto> createStationRequest(String stationName) {
         String inputJson = "{\"name\":\"" + stationName + "\"}";
 
         return webTestClient.post().uri("/stations")
@@ -25,34 +25,34 @@ public class StationHttpTest {
                 .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectHeader().exists("Location")
-                .expectBody(StationResponseView.class)
+                .expectBody(StationResponseDto.class)
                 .returnResult();
     }
 
-    public EntityExchangeResult<StationResponseView> retrieveStationRequest(String uri) {
+    public EntityExchangeResult<StationResponseDto> retrieveStationRequest(String uri) {
         return webTestClient.get().uri(uri)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(StationResponseView.class)
+                .expectBody(StationResponseDto.class)
                 .returnResult();
     }
 
-    public EntityExchangeResult<List<StationResponseView>> showStationsRequest() {
+    public EntityExchangeResult<List<StationResponseDto>> showStationsRequest() {
         return webTestClient.get().uri("/stations")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBodyList(StationResponseView.class)
+                .expectBodyList(StationResponseDto.class)
                 .returnResult();
     }
 
     public Long createStation(String stationName) {
-        EntityExchangeResult<StationResponseView> stationResponse = createStationRequest(stationName);
+        EntityExchangeResult<StationResponseDto> stationResponse = createStationRequest(stationName);
         return stationResponse.getResponseBody().getId();
     }
 
-    public EntityExchangeResult<StationResponseView> retrieveStation(Long stationId) {
+    public EntityExchangeResult<StationResponseDto> retrieveStation(Long stationId) {
         return retrieveStationRequest("/stations/" + stationId);
     }
 }

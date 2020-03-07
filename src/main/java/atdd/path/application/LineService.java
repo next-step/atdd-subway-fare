@@ -1,7 +1,7 @@
 package atdd.path.application;
 
 import atdd.path.application.dto.CreateEdgeRequestView;
-import atdd.path.application.dto.EdgeDto;
+import atdd.path.application.dto.EdgeResponseDto;
 import atdd.path.domain.Edge;
 import atdd.path.domain.Edges;
 import atdd.path.domain.Line;
@@ -23,7 +23,7 @@ public class LineService {
         this.stationRepository = stationRepository;
     }
 
-    public EdgeDto addEdge(Long lineId, CreateEdgeRequestView view) {
+    public EdgeResponseDto addEdge(Long lineId, CreateEdgeRequestView view) {
         lineRepository.findById(lineId).orElseThrow(RuntimeException::new);
         stationRepository.findById(view.getSourceId()).orElseThrow(RuntimeException::new);
         stationRepository.findById(view.getTargetId()).orElseThrow(RuntimeException::new);
@@ -36,7 +36,7 @@ public class LineService {
                 .elapsedTime(view.getElapsedTime())
                 .build());
 
-        return EdgeDto.of(savedEdge);
+        return EdgeResponseDto.of(savedEdge);
     }
 
     public void deleteStation(Long lineId, Long stationId) {

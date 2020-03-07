@@ -11,11 +11,11 @@ import java.util.List;
 public class RouteResponseDto {
     private Long startStationId;
     private Long endStationId;
-    private List<StationDto> stations;
+    private List<StationResponseDto> stations;
     private int estimatedTime;
 
     @Builder
-    public RouteResponseDto(Long startStationId, Long endStationId, List<StationDto> stations, int estimatedTime) {
+    public RouteResponseDto(Long startStationId, Long endStationId, List<StationResponseDto> stations, int estimatedTime) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.stations = stations;

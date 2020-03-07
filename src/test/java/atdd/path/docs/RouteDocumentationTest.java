@@ -4,7 +4,7 @@ import atdd.AbstractDocumentationTest;
 import atdd.TestConstant;
 import atdd.path.application.RouteService;
 import atdd.path.application.dto.RouteResponseDto;
-import atdd.path.application.dto.StationDto;
+import atdd.path.application.dto.StationResponseDto;
 import atdd.path.web.RouteController;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class RouteDocumentationTest extends AbstractDocumentationTest {
                 .willReturn(RouteResponseDto.builder()
                         .startStationId(1L)
                         .endStationId(2L)
-                        .stations(Arrays.asList(StationDto.builder()
+                        .stations(Arrays.asList(StationResponseDto.builder()
                                 .id(TestConstant.STATION_ID)
                                 .name(TestConstant.STATION_NAME)
                                 .lines(Sets.newHashSet())
@@ -72,7 +72,7 @@ public class RouteDocumentationTest extends AbstractDocumentationTest {
                 .willReturn(RouteResponseDto.builder()
                         .startStationId(1L)
                         .endStationId(2L)
-                        .stations(Arrays.asList(StationDto.builder()
+                        .stations(Arrays.asList(StationResponseDto.builder()
                                 .id(TestConstant.STATION_ID)
                                 .name(TestConstant.STATION_NAME)
                                 .lines(Sets.newHashSet())

@@ -1,7 +1,7 @@
 package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
-import atdd.path.application.dto.StationResponseView;
+import atdd.path.application.dto.StationResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(STATION_NAME);
 
         // then
-        EntityExchangeResult<StationResponseView> response = stationHttpTest.retrieveStation(stationId);
+        EntityExchangeResult<StationResponseDto> response = stationHttpTest.retrieveStation(stationId);
         assertThat(response.getResponseBody().getName()).isEqualTo(STATION_NAME);
     }
 
@@ -42,7 +42,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(STATION_NAME);
 
         // when
-        EntityExchangeResult<StationResponseView> response = stationHttpTest.retrieveStation(stationId);
+        EntityExchangeResult<StationResponseDto> response = stationHttpTest.retrieveStation(stationId);
 
         // then
         assertThat(response.getResponseBody().getId()).isNotNull();
@@ -62,12 +62,12 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         lineHttpTest.createEdgeRequest(lineId2, stationId, stationId3);
 
         // when
-        EntityExchangeResult<StationResponseView> response = stationHttpTest.retrieveStation(stationId);
+        StationResponseDto response = stationHttpTest.retrieveStation(stationId).getResponseBody();
 
         // then
-        assertThat(response.getResponseBody().getId()).isEqualTo(stationId);
-        assertThat(response.getResponseBody().getName()).isEqualTo(STATION_NAME);
-        assertThat(response.getResponseBody().getLines().size()).isEqualTo(2);
+        assertThat(response.getId()).isEqualTo(stationId);
+        assertThat(response.getName()).isEqualTo(STATION_NAME);
+        assertThat(response.getLines().size()).isEqualTo(2);
     }
 
 
@@ -80,7 +80,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         stationHttpTest.createStationRequest(STATION_NAME_3);
 
         // when
-        EntityExchangeResult<List<StationResponseView>> response = stationHttpTest.showStationsRequest();
+        EntityExchangeResult<List<StationResponseDto>> response = stationHttpTest.showStationsRequest();
 
         // then
         assertThat(response.getResponseBody().size()).isEqualTo(3);
@@ -91,7 +91,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
     public void deleteStation() {
         // given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
-        EntityExchangeResult<StationResponseView> response = stationHttpTest.retrieveStation(stationId);
+        EntityExchangeResult<StationResponseDto> response = stationHttpTest.retrieveStation(stationId);
 
         // when
         webTestClient.delete().uri(STATION_URL + "/" + stationId)

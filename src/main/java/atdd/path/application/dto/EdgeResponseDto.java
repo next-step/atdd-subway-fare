@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class EdgeDto {
+public class EdgeResponseDto {
     private Long lineId;
     private Long sourceStationId;
     private Long targetStationId;
@@ -15,7 +15,7 @@ public class EdgeDto {
     private int elapsedTime;
 
     @Builder
-    public EdgeDto(Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
+    public EdgeResponseDto(Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
         this.lineId = lineId;
         this.sourceStationId = sourceStationId;
         this.targetStationId = targetStationId;
@@ -23,21 +23,11 @@ public class EdgeDto {
         this.elapsedTime = elapsedTime;
     }
 
-    public static EdgeDto of(Edge savedEdge) {
-        return EdgeDto.builder()
+    public static EdgeResponseDto of(Edge savedEdge) {
+        return EdgeResponseDto.builder()
                 .lineId(savedEdge.getLine().getId())
                 .sourceStationId(savedEdge.getSourceStation().getId())
                 .targetStationId(savedEdge.getTargetStation().getId())
-                .build();
-    }
-
-    public Edge toEdge() {
-        return Edge.builder()
-                .lineId(this.lineId)
-                .sourceStationId(this.sourceStationId)
-                .targetStationId(this.targetStationId)
-                .distance(this.distance)
-                .elapsedTime(this.elapsedTime)
                 .build();
     }
 }

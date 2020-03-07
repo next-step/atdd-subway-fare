@@ -12,7 +12,7 @@ public class LineResponseView {
     private String startTime;
     private String endTime;
     private int interval;
-    private List<StationResponseView> stations;
+    private List<StationResponseDto> stations;
 
     public LineResponseView() {
     }
@@ -23,7 +23,7 @@ public class LineResponseView {
         this.startTime = startTime;
         this.endTime = endTime;
         this.interval = interval;
-        this.stations = StationResponseView.listOf(stations);
+        this.stations = StationResponseDto.listOf(stations);
     }
 
     public static LineResponseView of(Line line) {
@@ -56,7 +56,7 @@ public class LineResponseView {
         return interval;
     }
 
-    public List<StationResponseView> getStations() {
+    public List<StationResponseDto> getStations() {
         return stations;
     }
 }

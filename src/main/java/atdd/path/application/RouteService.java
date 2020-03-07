@@ -1,7 +1,7 @@
 package atdd.path.application;
 
 import atdd.path.application.dto.RouteResponseDto;
-import atdd.path.application.dto.StationDto;
+import atdd.path.application.dto.StationResponseDto;
 import atdd.path.domain.Graph;
 import atdd.path.domain.Station;
 import atdd.path.repository.LineRepository;
@@ -25,7 +25,7 @@ public class RouteService {
         return RouteResponseDto.builder()
                 .startStationId(startId)
                 .endStationId(endId)
-                .stations(StationDto.listOf(paths))
+                .stations(StationResponseDto.listOf(paths))
                 .estimatedTime(graph.getEstimatedTime(startId, endId))
                 .build();
     }
@@ -37,7 +37,7 @@ public class RouteService {
         return RouteResponseDto.builder()
                 .startStationId(startId)
                 .endStationId(endId)
-                .stations(StationDto.listOf(paths))
+                .stations(StationResponseDto.listOf(paths))
                 .estimatedTime(graph.getEstimatedTime(startId, endId))
                 .build();
     }

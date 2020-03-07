@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @NoArgsConstructor
@@ -57,5 +59,11 @@ public class Station {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    public List<Line> getLines() {
+        return Stream.concat(sourceEdges.stream(), targetEdge.stream())
+                .map(it -> it.getLine())
+                .collect(Collectors.toList());
     }
 }

@@ -11,20 +11,20 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class StationDto {
+public class StationResponseDto {
     private Long id;
     private String name;
     private Set<ItemView> lines;
 
     @Builder
-    public StationDto(Long id, String name, Set<ItemView> lines) {
+    public StationResponseDto(Long id, String name, Set<ItemView> lines) {
         this.id = id;
         this.name = name;
         this.lines = lines;
     }
 
-    public static StationDto of(Station station) {
-        return StationDto.builder()
+    public static StationResponseDto of(Station station) {
+        return StationResponseDto.builder()
                 .id(station.getId())
                 .name(station.getName())
                 .lines(station.getLines().stream()
@@ -33,9 +33,9 @@ public class StationDto {
                 .build();
     }
 
-    public static List<StationDto> listOf(List<Station> station) {
+    public static List<StationResponseDto> listOf(List<Station> station) {
         return station.stream()
-                .map(it -> StationDto.builder()
+                .map(it -> StationResponseDto.builder()
                         .id(it.getId())
                         .name(it.getName())
                         .lines(it.getLines().stream()
