@@ -4,7 +4,6 @@ import atdd.path.application.dto.MinTimePathResponseView;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static atdd.TestConstant.*;
@@ -12,15 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MinTimePathTest {
     public static final List<Line> LINES = Lists.list(TEST_LINE, TEST_LINE_2, TEST_LINE_3, TEST_LINE_4);
-    public static final List<Station> STATIONS = Arrays.asList(TEST_STATION_6, TEST_STATION, TEST_STATION_2);
     public static final Graph graph = new Graph(LINES);
 
     @Test
     public void findMinTimeResponseViewTest() {
-        //given
-        List<Line> lines = LINES;
-        List<Station> stations = STATIONS;
-
         //when
         MinTimePathResponseView responseView = graph.getMinTimePath(STATION_ID_6, STATION_ID_2);
 
