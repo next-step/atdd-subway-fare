@@ -2,11 +2,8 @@ package atdd.path.application.dto;
 
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
-import atdd.path.domain.TimeTables;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,31 +48,4 @@ public class StationResponseView {
     public List<LineSimpleResponseView> getLines() {
         return lines;
     }
-
-    public TimeTables showTimeTablesForUpDown(Line line, List<Station> stations) {
-        int index = stations.indexOf(this);
-        int reverseIndex = stations.size() - stations.indexOf(this) - 1;
-
-        List<LocalTime> timeTableUp = new ArrayList<>();
-        if (reverseIndex != 0) {
-            LocalTime start
-                    = stations.get(0).calculateStartTime(line, index);
-            LocalTime end
-                    = stations.get(0).calculateEndTime(line, index);
-            timeTableUp = line.makeTimeTable(start, end);
-        }
-
-        List<LocalTime> timeTableDown = new ArrayList<>();
-        if (index != 0) {
-            LocalTime startReverse
-                    = stations.get(0).calculateStartTime(line, reverseIndex);
-            LocalTime endReverse
-                    = stations.get(0).calculateEndTime(line, reverseIndex);
-            timeTableDown = line.makeTimeTable(startReverse, endReverse);
-        }
-
-        TimeTables timeTables = new TimeTables(timeTableUp, timeTableDown);
-        return timeTables;
-    }
-
 }

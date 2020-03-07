@@ -26,4 +26,12 @@ public class TimeTables {
     public List<LocalTime> getDown() {
         return down;
     }
+
+    public void insertUp(List<LocalTime> up) {
+        this.up = up;
+    }
+
+    public void insertDown(List<LocalTime> down) {
+        this.down = down;
+    }
 }

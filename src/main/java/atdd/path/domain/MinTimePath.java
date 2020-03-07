@@ -5,6 +5,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,15 +57,20 @@ public class MinTimePath {
     }
 
     private MinTimePathResponseView findTimeTableOfTheDay(Line lineToStart, List<Station> stations) {
-        List<LocalTime> timeTables;
+        List<LocalTime> timeTables = new ArrayList<>();
         List<Edge> collect1 = lineToStart.getEdges().stream()
                 .filter(it -> it.getSourceStation().equals(stations.get(0)))
                 .filter(it -> it.getTargetStation().equals(stations.get(1)))
                 .collect(Collectors.toList());
+//        List<Edge> collect2 = lineToStart.getEdges().stream()
+//                .filter(it -> it.getSourceStation().equals(stations.get(1)))
+//                .filter(it -> it.getTargetStation().equals(stations.get(0)))
+//                .collect(Collectors.toList());
+
         if (collect1.size() != 0) {
-            timeTables = stations.get(0).showTimeTablesForUpDown(lineToStart, stations).getDown();
+            timeTables = stations.get(0).showTimeTablesForUpDown(lineToStart, stations).getUp();
         }
-        timeTables = stations.get(0).showTimeTablesForUpDown(lineToStart, stations).getUp();
+        timeTables = stations.get(0).showTimeTablesForUpDown(lineToStart, stations).getDown();
         return findNextTimeToGetOnTheSubway(timeTables);
     }
 
