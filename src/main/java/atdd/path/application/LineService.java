@@ -23,12 +23,12 @@ public class LineService {
         this.edgeDao = edgeDao;
     }
 
-    public void addEdge(Long lineId, Long sourceId, Long targetId, int distance) {
+    public void addEdge(Long lineId, Long sourceId, Long targetId, int elapsedTime, int distance) {
         Station source = stationDao.findById(sourceId);
         Station target = stationDao.findById(targetId);
         Line persistLine = lineDao.findById(lineId);
 
-        Edge newEdge = Edge.of(source, target, distance);
+        Edge newEdge = Edge.of(source, target, elapsedTime, distance);
         persistLine.addEdge(newEdge);
 
         edgeDao.save(lineId, newEdge);

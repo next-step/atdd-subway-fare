@@ -92,14 +92,18 @@ public class Edges {
             return new Edges(newEdges);
         }
 
-        Edge newEdge = Edge.of(getSourceStationOf(station), getTargetStationOf(station), sum(replaceEdge));
+        Edge newEdge = Edge.of(getSourceStationOf(station), getTargetStationOf(station), sumElapsedTime(replaceEdge), sumDistance(replaceEdge));
         newEdges.add(newEdge);
 
         return new Edges(newEdges);
     }
 
-    private Integer sum(List<Edge> replaceEdge) {
+    private Integer sumDistance(List<Edge> replaceEdge) {
         return replaceEdge.stream().map(it -> it.getDistance()).reduce(0, Integer::sum);
+    }
+
+    private Integer sumElapsedTime(List<Edge> replaceEdge) {
+        return replaceEdge.stream().map(it -> it.getElapsedTime()).reduce(0, Integer::sum);
     }
 
     private Station getSourceStationOf(Station station) {
