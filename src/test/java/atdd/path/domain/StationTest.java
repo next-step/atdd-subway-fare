@@ -47,14 +47,9 @@ public class StationTest {
     }
 
     @Test
-    void 지하철역의_상하행선_시간표_구하기() {
+    void 지하철역의_상하행선_시간표_요청하기() {
         //given
         Station station = TEST_STATION_2;
-        int index = STATIONS.indexOf(station);
-        int indexReverse = STATIONS.size() - STATIONS.indexOf(station) - 1;
-        LocalTime startTimeOfLine = LINE.getStartTime();
-        LocalTime endTimeOfLine = LINE.getEndTime();
-        int lineInterval = LINE.getInterval();
 
         //when
         TimeTables timeTablesOfStation = station.showTimeTablesForUpDown(LINE, STATIONS);
@@ -62,12 +57,12 @@ public class StationTest {
         //then
         int lastIndexForUp = timeTablesOfStation.getUp().size() - 1;
         int lastIndexForDown = timeTablesOfStation.getDown().size() - 1;
+
         assertThat(timeTablesOfStation.getUp().get(0))
                 .isEqualTo(LocalTime.of(05, 10));
         assertThat(timeTablesOfStation.getUp().get(lastIndexForUp))
                 .isEqualTo(LocalTime.of(07, 10));
         assertThat(timeTablesOfStation.getDown().get(lastIndexForDown))
                 .isEqualTo(LocalTime.of(07, 20));
-
     }
 }
