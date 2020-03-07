@@ -1,7 +1,6 @@
 package atdd.user.web;
 
 import atdd.user.domain.User;
-import atdd.user.application.UserService;
 import atdd.user.repository.UserRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.core.MethodParameter;
@@ -15,6 +14,8 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 @Component
 public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
+    private static final String LOGIN_USER_EMAIL = "loginUserEmail";
+
     private final UserRepository userRepository;
 
     public LoginUserMethodArgumentResolver(UserRepository userRepository) {
@@ -29,7 +30,7 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String email = (String) webRequest.getAttribute("loginUserEmail", SCOPE_REQUEST);
+        String email = (String) webRequest.getAttribute(LOGIN_USER_EMAIL, SCOPE_REQUEST);
         if (Strings.isBlank(email)) {
             return new User();
         }

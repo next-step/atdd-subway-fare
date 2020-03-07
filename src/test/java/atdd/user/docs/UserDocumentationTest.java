@@ -14,7 +14,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import static atdd.TestConstant.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -71,7 +70,7 @@ public class UserDocumentationTest extends AbstractDocumentationTest {
     void me() throws Exception {
         given(jwtTokenProvider.validateToken(any())).willReturn(true);
         given(jwtTokenProvider.getUserEmail(any())).willReturn(TEST_USER_EMAIL);
-        given(userService.retrieveUser(anyString()))
+        given(userService.retrieveUser(any()))
                 .willReturn(UserResponseView.of(new User(1L, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_NAME)));
 
         this.mockMvc.perform(get("/users/me")

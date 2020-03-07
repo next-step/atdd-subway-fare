@@ -3,10 +3,10 @@ package atdd.user.web;
 import atdd.user.application.UserService;
 import atdd.user.application.dto.UserRequestView;
 import atdd.user.application.dto.UserResponseView;
+import atdd.user.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 @RestController
@@ -33,8 +33,7 @@ public class UserController {
     }
 
     @GetMapping("me")
-    public ResponseEntity retrieveUser(HttpServletRequest request) {
-        String requestToken = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(userService.retrieveUser(requestToken));
+    public ResponseEntity retrieveUser(@LoginUser User user) {
+        return ResponseEntity.ok().body(userService.retrieveUser(user));
     }
 }

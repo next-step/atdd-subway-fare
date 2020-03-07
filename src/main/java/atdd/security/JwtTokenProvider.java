@@ -10,6 +10,9 @@ import java.util.Optional;
 
 @Component
 public class JwtTokenProvider {
+
+    private static final String BARER_TOKEN_PREFIX = "Bearer ";
+
     private String secretKey;
     private long expireLength;
 
@@ -45,9 +48,9 @@ public class JwtTokenProvider {
     private String resolveToken(String token) {
 
         return Optional.of(token)
-                .filter(it -> it.startsWith("Bearer "))
+                .filter(it -> it.startsWith(BARER_TOKEN_PREFIX))
                 .map(it -> it.substring(7))
-                .orElse("");
+                .orElseThrow(() -> new InvalidJwtAuthenticationException("Invalid JWT token"));
     }
 
     public boolean validateToken(String token) {

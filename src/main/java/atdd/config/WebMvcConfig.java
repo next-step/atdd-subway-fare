@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns(
                         "/users/me",
-                        "/favorites"
+                        "/favorites/**"
                 );
     }
 

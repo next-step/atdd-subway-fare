@@ -1,10 +1,8 @@
 package atdd.user.web;
 
-import atdd.security.BearerTokenExtractor;
 import atdd.security.InvalidJwtAuthenticationException;
 import atdd.security.JwtTokenProvider;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,26 +11,23 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
-    private final BearerTokenExtractor tokenExtractor;
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String LOGIN_USER_EMAIL = "loginUserEmail";
 
-    public LoginInterceptor(JwtTokenProvider jwtTokenProvider, BearerTokenExtractor tokenExtractor) {
+    public LoginInterceptor(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.tokenExtractor = tokenExtractor;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String token = tokenExtractor.extract(request);
-        if (StringUtils.isEmpty(token)) {
-            return true;
-        }
+        String token = request.getHeader(AUTHORIZATION);
 
         if (!jwtTokenProvider.validateToken(token)) {
-            throw new InvalidJwtAuthenticationException("invalid token");
+            throw new InvalidJwtAuthenticationException("Invalid token");
         }
 
         String email = jwtTokenProvider.getUserEmail(token);
-        request.setAttribute("loginUserEmail", email);
+        request.setAttribute(LOGIN_USER_EMAIL, email);
         return true;
     }
 }
