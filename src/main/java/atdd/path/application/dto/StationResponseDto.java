@@ -27,7 +27,7 @@ public class StationResponseDto {
         return StationResponseDto.builder()
                 .id(station.getId())
                 .name(station.getName())
-                .lines(station.getLines().stream()
+                .lines(station.getLinesByEdge().stream()
                         .map(it -> ItemView.of(it.getId(), it.getName()))
                         .collect(Collectors.toSet()))
                 .build();

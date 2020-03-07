@@ -61,7 +61,7 @@ public class Station {
         return Objects.hash(id, name);
     }
 
-    public List<Line> getLines() {
+    public List<Line> getLinesByEdge() {
         return Stream.concat(sourceEdges.stream(), targetEdge.stream())
                 .map(it -> it.getLine())
                 .collect(Collectors.toList());
