@@ -169,7 +169,9 @@ public class TestConstant {
 
     public static FavoriteStationResponse FAVORITE_STATION_RESPONSE = FavoriteStationResponse.builder().id(1l).owner(TEST_USER_2.getId()).station(StationResponseView.of(TEST_STATION_23)).build();
 
-    public static FavoritePath FAVORITE_PATH_1 = FavoritePath.builder().id(1l).owner(TEST_USER_2.getId()).sourceStationId(TEST_STATION_23.getId()).targetStationId(TEST_STATION_23.getId()).build();
+    public static FavoriteStation FAVORITE_STATION_1 = FavoriteStation.builder().id(1l).owner(TEST_USER_2.getId()).stationId(TEST_STATION.getId()).build();
+
+    public static FavoritePath FAVORITE_PATH_1 = FavoritePath.builder().id(1l).owner(TEST_USER_2.getId()).sourceStationId(TEST_STATION.getId()).targetStationId(TEST_STATION_4.getId()).build();
 
 
 }
