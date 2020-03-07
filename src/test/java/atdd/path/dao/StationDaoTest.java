@@ -81,10 +81,11 @@ public class StationDaoTest {
         Line savedLine = lineDao.save(TEST_LINE);
         Line savedLine2 = lineDao.save(TEST_LINE_2);
         int distance = 10;
-        edgeDao.save(savedLine.getId(), Edge.of(station1, station2, distance));
-        edgeDao.save(savedLine.getId(), Edge.of(station2, station3, distance));
-        edgeDao.save(savedLine2.getId(), Edge.of(station3, station4, distance));
-        edgeDao.save(savedLine2.getId(), Edge.of(station4, station1, distance));
+        int elapsedTime = 10;
+        edgeDao.save(savedLine.getId(), Edge.of(station1, station2, elapsedTime, distance));
+        edgeDao.save(savedLine.getId(), Edge.of(station2, station3, elapsedTime, distance));
+        edgeDao.save(savedLine2.getId(), Edge.of(station3, station4, elapsedTime, distance));
+        edgeDao.save(savedLine2.getId(), Edge.of(station4, station1, elapsedTime, distance));
 
         Station persistStation = stationDao.findById(station1.getId());
         assertThat(persistStation.getId()).isEqualTo(station1.getId());

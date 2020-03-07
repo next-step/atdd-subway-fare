@@ -118,35 +118,35 @@ public class TestConstant {
     public static Station TEST_STATION_22 = new Station(STATION_ID_22, STATION_NAME_22);
 
     // 2호선
-    public static Edge TEST_EDGE = new Edge(EDGE_ID, TEST_STATION, TEST_STATION_2, 10);
-    public static Edge TEST_EDGE_2 = new Edge(EDGE_ID_2, TEST_STATION_2, TEST_STATION_3, 10);
-    public static Edge TEST_EDGE_3 = new Edge(EDGE_ID_3, TEST_STATION_3, TEST_STATION_4, 10);
-    public static Edge TEST_EDGE_4 = new Edge(EDGE_ID_4, TEST_STATION_4, TEST_STATION_5, 10);
-    public static Edge TEST_EDGE_23 = new Edge(EDGE_ID_23, TEST_STATION_12, TEST_STATION, 10);
+    public static Edge TEST_EDGE = new Edge(EDGE_ID, TEST_STATION, TEST_STATION_2, 5, 10);
+    public static Edge TEST_EDGE_2 = new Edge(EDGE_ID_2, TEST_STATION_2, TEST_STATION_3, 5, 10);
+    public static Edge TEST_EDGE_3 = new Edge(EDGE_ID_3, TEST_STATION_3, TEST_STATION_4, 5, 10);
+    public static Edge TEST_EDGE_4 = new Edge(EDGE_ID_4, TEST_STATION_4, TEST_STATION_5, 5, 10);
+    public static Edge TEST_EDGE_23 = new Edge(EDGE_ID_23, TEST_STATION_12, TEST_STATION, 5, 10);
 
     // 신분당선
-    public static Edge TEST_EDGE_5 = new Edge(EDGE_ID_5, TEST_STATION, TEST_STATION_6, 10);
-    public static Edge TEST_EDGE_6 = new Edge(EDGE_ID_6, TEST_STATION_6, TEST_STATION_7, 10);
-    public static Edge TEST_EDGE_7 = new Edge(EDGE_ID_7, TEST_STATION_7, TEST_STATION_8, 10);
-    public static Edge TEST_EDGE_8 = new Edge(EDGE_ID_8, TEST_STATION_8, TEST_STATION_9, 10);
-    public static Edge TEST_EDGE_9 = new Edge(EDGE_ID_9, TEST_STATION_9, TEST_STATION_10, 10);
+    public static Edge TEST_EDGE_5 = new Edge(EDGE_ID_5, TEST_STATION, TEST_STATION_6, 5, 10);
+    public static Edge TEST_EDGE_6 = new Edge(EDGE_ID_6, TEST_STATION_6, TEST_STATION_7, 5, 10);
+    public static Edge TEST_EDGE_7 = new Edge(EDGE_ID_7, TEST_STATION_7, TEST_STATION_8, 5, 10);
+    public static Edge TEST_EDGE_8 = new Edge(EDGE_ID_8, TEST_STATION_8, TEST_STATION_9, 5, 10);
+    public static Edge TEST_EDGE_9 = new Edge(EDGE_ID_9, TEST_STATION_9, TEST_STATION_10, 5, 10);
 
     // 3호선
-    public static Edge TEST_EDGE_10 = new Edge(EDGE_ID_10, TEST_STATION_11, TEST_STATION_12, 10);
-    public static Edge TEST_EDGE_11 = new Edge(EDGE_ID_11, TEST_STATION_12, TEST_STATION_13, 10);
-    public static Edge TEST_EDGE_12 = new Edge(EDGE_ID_12, TEST_STATION_13, TEST_STATION_6, 10);
-    public static Edge TEST_EDGE_13 = new Edge(EDGE_ID_13, TEST_STATION_6, TEST_STATION_14, 10);
-    public static Edge TEST_EDGE_14 = new Edge(EDGE_ID_14, TEST_STATION_14, TEST_STATION_15, 10);
-    public static Edge TEST_EDGE_15 = new Edge(EDGE_ID_15, TEST_STATION_15, TEST_STATION_16, 10);
+    public static Edge TEST_EDGE_10 = new Edge(EDGE_ID_10, TEST_STATION_11, TEST_STATION_12, 5, 10);
+    public static Edge TEST_EDGE_11 = new Edge(EDGE_ID_11, TEST_STATION_12, TEST_STATION_13,5, 10);
+    public static Edge TEST_EDGE_12 = new Edge(EDGE_ID_12, TEST_STATION_13, TEST_STATION_6, 5, 10);
+    public static Edge TEST_EDGE_13 = new Edge(EDGE_ID_13, TEST_STATION_6, TEST_STATION_14, 5, 10);
+    public static Edge TEST_EDGE_14 = new Edge(EDGE_ID_14, TEST_STATION_14, TEST_STATION_15, 5, 10);
+    public static Edge TEST_EDGE_15 = new Edge(EDGE_ID_15, TEST_STATION_15, TEST_STATION_16, 5, 10);
 
     // 분당선
-    public static Edge TEST_EDGE_16 = new Edge(EDGE_ID_16, TEST_STATION_17, TEST_STATION_18, 10);
-    public static Edge TEST_EDGE_17 = new Edge(EDGE_ID_17, TEST_STATION_18, TEST_STATION_19, 10);
-    public static Edge TEST_EDGE_18 = new Edge(EDGE_ID_18, TEST_STATION_19, TEST_STATION_20, 10);
-    public static Edge TEST_EDGE_19 = new Edge(EDGE_ID_19, TEST_STATION_20, TEST_STATION_15, 10);
-    public static Edge TEST_EDGE_20 = new Edge(EDGE_ID_20, TEST_STATION_15, TEST_STATION_21, 10);
-    public static Edge TEST_EDGE_21 = new Edge(EDGE_ID_21, TEST_STATION_21, TEST_STATION_3, 10);
-    public static Edge TEST_EDGE_22 = new Edge(EDGE_ID_22, TEST_STATION_3, TEST_STATION_22, 10);
+    public static Edge TEST_EDGE_16 = new Edge(EDGE_ID_16, TEST_STATION_17, TEST_STATION_18, 5, 10);
+    public static Edge TEST_EDGE_17 = new Edge(EDGE_ID_17, TEST_STATION_18, TEST_STATION_19, 5, 10);
+    public static Edge TEST_EDGE_18 = new Edge(EDGE_ID_18, TEST_STATION_19, TEST_STATION_20, 5, 10);
+    public static Edge TEST_EDGE_19 = new Edge(EDGE_ID_19, TEST_STATION_20, TEST_STATION_15, 5, 10);
+    public static Edge TEST_EDGE_20 = new Edge(EDGE_ID_20, TEST_STATION_15, TEST_STATION_21, 5, 10);
+    public static Edge TEST_EDGE_21 = new Edge(EDGE_ID_21, TEST_STATION_21, TEST_STATION_3, 5, 10);
+    public static Edge TEST_EDGE_22 = new Edge(EDGE_ID_22, TEST_STATION_3, TEST_STATION_22, 5, 10);
 
     public static Line TEST_LINE = new Line(LINE_ID, LINE_NAME, Lists.list(TEST_EDGE_23, TEST_EDGE, TEST_EDGE_2, TEST_EDGE_3, TEST_EDGE_4), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
     public static Line TEST_LINE_2 = new Line(LINE_ID_2, LINE_NAME_2, Lists.list(TEST_EDGE_5, TEST_EDGE_6, TEST_EDGE_7, TEST_EDGE_8, TEST_EDGE_9), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
