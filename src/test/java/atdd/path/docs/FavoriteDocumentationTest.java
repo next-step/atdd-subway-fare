@@ -119,7 +119,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     @Test
     void addFavoritePath() throws Exception {
-        given(favoritePathService.addFavoritePath(anyString(), any())).willReturn(givenFavoritePath());
+        given(favoritePathService.addFavoritePath(any())).willReturn(givenFavoritePath());
 
         //when
         String input = "{\"sourceStationId\": 1, \"targetStationId\": 2}";
@@ -155,7 +155,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     @Test
     void findFavoritePaths() throws Exception {
-        given(favoritePathService.findFavoritePath(anyString())).willReturn(Arrays.asList(givenFavoritePath()));
+        given(favoritePathService.findFavoritePath(anyLong())).willReturn(Arrays.asList(givenFavoritePath()));
 
         //when
         ResultActions result = this.mockMvc.perform(get("/favorites/paths")
@@ -207,8 +207,6 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     private FavoritePath givenFavoritePath() {
         FavoritePath favoritePath = FAVORITE_PATH_1;
-        favoritePath.setSourceStation(TEST_STATION_23);
-        favoritePath.setTargetStation(TEST_STATION_24);
 
         return favoritePath;
     }
