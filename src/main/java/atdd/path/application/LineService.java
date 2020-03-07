@@ -11,8 +11,6 @@ import atdd.path.repository.LineRepository;
 import atdd.path.repository.StationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class LineService {
     private final EdgeRepository edgeRepository;
@@ -42,24 +40,22 @@ public class LineService {
     }
 
     public void deleteStation(Long lineId, Long stationId) {
-        Line line = lineRepository.findById(lineId)
-                .orElseThrow(RuntimeException::new);
-        Station station = stationRepository.findById(stationId)
-                .orElseThrow(RuntimeException::new);
+        Line line = lineRepository.findById(lineId).orElseThrow(RuntimeException::new);
+        Station station = stationRepository.findById(stationId).orElseThrow(RuntimeException::new);
 
-        List<Edge> oldEdges = line.getEdges();
         Edges edges = new Edges(line.getEdges());
         edges.removeStation(station);
 
-        Edge newEdge = edges.getEdges().stream()
-                .filter(it -> !oldEdges.contains(it))
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
+        Edge newEdge = edges.findNewEdge(line.getEdges());
         newEdge.updateLine(line);
 
-        line.getEdges().stream()
-                .filter(it -> it.hasStation(station))
-                .forEach(it -> edgeRepository.delete(it));
+        line.getEdges().forEach(it -> {
+            if (!it.hasStation(station)) {
+                return;
+            }
+            edgeRepository.delete(it);
+        });
+
         edgeRepository.save(newEdge);
     }
 }
