@@ -6,7 +6,6 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalTime;
 import java.util.List;
 
 public class LineHttpTest {
@@ -17,11 +16,14 @@ public class LineHttpTest {
         this.webTestClient = webTestClient;
     }
 
-    public EntityExchangeResult<LineResponseView> createLineRequest(String lineName) {
-        String inputJson = "{\"name\":\"" + lineName + "\"," +
-                "\"startTime\":\"" + LocalTime.of(0, 0) + "\"," +
-                "\"endTime\":\"" + LocalTime.of(23, 30) + "\"," +
-                "\"interval\":\"" + 30 + "\"}";
+    public EntityExchangeResult<LineResponseView> createLineRequest(String name,
+                                                                    String startTime,
+                                                                    String endTime,
+                                                                    int interval) {
+        String inputJson = "{\"name\":\"" + name + "\"," +
+                "\"startTime\":\"" + startTime + "\"," +
+                "\"endTime\":\"" + endTime + "\"," +
+                "\"interval\":\"" + interval + "\"}";
 
         return webTestClient.post().uri(LINE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,19 +53,14 @@ public class LineHttpTest {
                 .returnResult();
     }
 
-    public Long createLine(String lineName) {
-        EntityExchangeResult<LineResponseView> postResult = createLineRequest(lineName);
-        return postResult.getResponseBody().getId();
-    }
-
     public EntityExchangeResult<LineResponseView> retrieveLine(Long lineId) {
         return retrieveLineRequest(LINE_URL + "/" + lineId);
     }
 
-    public EntityExchangeResult createEdgeRequest(Long lineId, Long stationId, Long stationId2) {
-        int distance = 10;
+    public EntityExchangeResult createEdgeRequest(Long lineId, Long stationId, Long stationId2, int elapsedTime, int distance) {
         String inputJson = "{\"sourceId\":" + stationId +
                 ",\"targetId\":" + stationId2 +
+                ",\"elapsedTime\":" + elapsedTime +
                 ",\"distance\":" + distance + "}";
 
         return webTestClient.post().uri("/lines/" + lineId + "/edges")

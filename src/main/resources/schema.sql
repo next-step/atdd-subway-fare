@@ -21,6 +21,7 @@ create table if not exists EDGE
     line_id bigint not null,
     source_station_id bigint not null,
     target_station_id bigint not null,
+    elapsed_time int,
     distance int,
     primary key(id)
 );
@@ -31,5 +32,22 @@ create table if not exists USER
     email varchar(255) not null unique,
     password varchar(255) not null,
     name varchar(255) not null,
+    primary key(id)
+);
+
+create table if not exists FAVORITE_STATION
+(
+    id bigint auto_increment not null,
+    owner bigint not null,
+    station_Id bigint not null,
+    primary key(id)
+);
+
+create table if not exists FAVORITE_PATH
+(
+    id bigint auto_increment not null,
+    owner bigint not null,
+    source_station_id bigint not null,
+    target_station_id bigint not null,
     primary key(id)
 );

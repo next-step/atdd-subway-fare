@@ -92,3 +92,13 @@ operation::favorites/findFavoritePaths[snippets='response-fields']
 operation::favorites/deleteFavoritePath[snippets='http-request,http-response']
 operation::favorites/deleteFavoritePath[snippets='request-headers']
 operation::favorites/deleteFavoritePath[snippets='path-parameters']
+
+[[resources-Station]]
+== Station
+
+[[resources-Station-showTimetables]]
+=== 지하철역 시간표 조회
+
+operation::station/showTimetables[snippets='http-request,http-response']
+operation::station/showTimetables[snippets='path-parameters']
+operation::station/showTimetables[snippets='response-fields']

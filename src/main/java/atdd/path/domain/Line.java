@@ -1,6 +1,9 @@
 package atdd.path.domain;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,4 +77,44 @@ public class Line {
         return this.edges;
     }
 
+    public List<String> getUpTimetablesOf(long stationId) {
+        int delayTime = edges.calculateUpDelayTimeOf(stationId);
+
+        List<String> upTimetables = findTimeTable(delayTime);
+
+        return upTimetables;
+    }
+
+    public List<String> getDownTimetablesOf(long stationId) {
+        int delayTime = edges.calculateDownDelayTimeOf(stationId);
+
+        List<String> downTimetables = findTimeTable(delayTime);
+
+        return downTimetables;
+    }
+
+    private List<String> findTimeTable(int delayTime) {
+        List<String> timetables = new ArrayList<>();
+
+        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), startTime.plusMinutes(delayTime));
+        LocalDateTime endDateTime;
+
+        if (endTime.isBefore(LocalTime.of(23, 59))) {
+             endDateTime = LocalDateTime.of(LocalDate.now().plusDays(1), endTime);
+        }else {
+            endDateTime = LocalDateTime.of(LocalDate.now(), endTime);
+        }
+
+        while(true) {
+            if(startDateTime.isAfter(endDateTime)) {
+                break;
+            }
+
+            timetables.add(startDateTime.toLocalTime().toString());
+
+            startDateTime = startDateTime.plusMinutes(interval);
+        }
+
+        return timetables;
+    }
 }

@@ -46,7 +46,7 @@ public class LineDao {
 
     public Line findById(Long id) {
         String sql = "select L.id as line_id, L.name as line_name, L.start_time as start_time, L.end_time as end_time, L.interval_time as interval_time, " +
-                "E.id as edge_id, E.distance as distance, " +
+                "E.id as edge_id, E.elapsed_time as elapsed_time, E.distance as distance, " +
                 "S.id as source_station_id, S.name as source_station_name\n," +
                 "ST.id as target_station_id, ST.name as target_station_name\n" +
                 "from LINE L \n" +
@@ -59,9 +59,29 @@ public class LineDao {
         return mapLine(result);
     }
 
+    public List<Line> findByIds(List<Long> ids) {
+        String idsValue = ids.stream().map(String::valueOf).collect(Collectors.joining(","));
+
+        String sql = "select L.id as line_id, L.name as line_name, L.start_time as start_time, L.end_time as end_time, L.interval_time as interval_time, " +
+                "E.id as edge_id, E.elapsed_time as elapsed_time, E.distance as distance, " +
+                "S.id as source_station_id, S.name as source_station_name,\n" +
+                "ST.id as target_station_id, ST.name as target_station_name\n" +
+                "from LINE L \n" +
+                "left outer join EDGE E on L.id = E.line_id\n" +
+                "left outer join STATION S on E.source_station_id = S.id\n" +
+                "left outer join STATION ST on E.target_station_id = ST.id\n" +
+                "WHERE L.id in (" + idsValue + ")";
+
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+        Map<Long, List<Map<String, Object>>> resultByLine = result.stream().collect(Collectors.groupingBy(it -> (Long) it.get("line_id")));
+        return resultByLine.entrySet().stream()
+                .map(it -> mapLine(it.getValue()))
+                .collect(Collectors.toList());
+    }
+
     public List<Line> findAll() {
         String sql = "select L.id as line_id, L.name as line_name, L.start_time as start_time, L.end_time as end_time, L.interval_time as interval_time, " +
-                "E.id as edge_id, E.distance as distance, " +
+                "E.id as edge_id, E.elapsed_time as elapsed_time, E.distance as distance, " +
                 "S.id as source_station_id, S.name as source_station_name,\n" +
                 "ST.id as target_station_id, ST.name as target_station_name\n" +
                 "from LINE L \n" +
@@ -107,8 +127,8 @@ public class LineDao {
                         new Edge((Long) it.getKey(),
                                 new Station((Long) it.getValue().get(0).get("SOURCE_STATION_ID"), (String) it.getValue().get(0).get("SOURCE_STATION_Name")),
                                 new Station((Long) it.getValue().get(0).get("TARGET_STATION_ID"), (String) it.getValue().get(0).get("TARGET_STATION_Name")),
+                                (int) it.getValue().get(0).get("ELAPSED_TIME"),
                                 (int) it.getValue().get(0).get("DISTANCE")))
                 .collect(Collectors.toList());
     }
-
 }

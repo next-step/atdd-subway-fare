@@ -3,7 +3,10 @@ package atdd.path.docs;
 import atdd.AbstractDocumentationTest;
 import atdd.path.application.FavoritePathService;
 import atdd.path.application.FavoriteStationService;
+import atdd.path.domain.Edge;
 import atdd.path.domain.FavoritePath;
+import atdd.path.domain.Line;
+import atdd.path.domain.Station;
 import atdd.path.web.FavoriteController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,7 +16,9 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static atdd.TestConstant.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -119,10 +124,24 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     @Test
     void addFavoritePath() throws Exception {
-        given(favoritePathService.addFavoritePath(anyString(), any())).willReturn(givenFavoritePath());
+        FavoritePath favoritePath = givenFavoritePath();
+        List<Edge> edges1 = Arrays.asList(TEST_EDGE, TEST_EDGE_2, TEST_EDGE_3, TEST_EDGE_4); //2호선
+        List<Edge> edges2 = Arrays.asList(TEST_EDGE_5, TEST_EDGE_6, TEST_EDGE_7, TEST_EDGE_8); //신분당선
+
+        Line line1 = new Line(LINE_ID, LINE_NAME, edges1, LocalTime.of(5, 45), LocalTime.of(00, 05), 10);
+        Line line2 = new Line(LINE_ID_2, LINE_NAME_2, edges2, LocalTime.of(5, 45), LocalTime.of(00, 05), 10);
+
+        Station station = new Station(STATION_ID, STATION_NAME, Arrays.asList(line1, line2));
+        Station station2 = new Station(STATION_ID_4, STATION_NAME_4, Arrays.asList(line1));
+
+        given(favoritePathService.findFavoritePath(anyLong())).willReturn(Arrays.asList(favoritePath));
+        given(favoritePathService.findStationById(favoritePath.getSourceStationId())).willReturn(station);
+        given(favoritePathService.findStationById(favoritePath.getTargetStationId())).willReturn(station2);
+
+        given(favoritePathService.addFavoritePath(any())).willReturn(favoritePath);
 
         //when
-        String input = "{\"sourceStationId\": 1, \"targetStationId\": 2}";
+        String input = "{\"sourceStationId\": 1, \"targetStationId\": 4}";
 
         ResultActions result = this.mockMvc.perform(post("/favorites/paths")
                 .header(HEADER_NAME, "Bearer " + TEST_USER_TOKEN)
@@ -155,7 +174,21 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     @Test
     void findFavoritePaths() throws Exception {
-        given(favoritePathService.findFavoritePath(anyString())).willReturn(Arrays.asList(givenFavoritePath()));
+        FavoritePath favoritePath = givenFavoritePath();
+
+        List<Edge> edges1 = Arrays.asList(TEST_EDGE, TEST_EDGE_2, TEST_EDGE_3, TEST_EDGE_4); //2호선
+        List<Edge> edges2 = Arrays.asList(TEST_EDGE_5, TEST_EDGE_6, TEST_EDGE_7, TEST_EDGE_8); //신분당선
+
+        Line line1 = new Line(LINE_ID, LINE_NAME, edges1, LocalTime.of(5, 45), LocalTime.of(00, 05), 10);
+        Line line2 = new Line(LINE_ID_2, LINE_NAME_2, edges2, LocalTime.of(5, 45), LocalTime.of(00, 05), 10);
+
+        Station station = new Station(STATION_ID, STATION_NAME, Arrays.asList(line1, line2));
+        Station station2 = new Station(STATION_ID_4, STATION_NAME_4, Arrays.asList(line1));
+
+        given(favoritePathService.findFavoritePath(anyLong())).willReturn(Arrays.asList(favoritePath));
+        given(favoritePathService.findStationById(favoritePath.getSourceStationId())).willReturn(station);
+        given(favoritePathService.findStationById(favoritePath.getTargetStationId())).willReturn(station2);
+
 
         //when
         ResultActions result = this.mockMvc.perform(get("/favorites/paths")
@@ -207,8 +240,6 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     private FavoritePath givenFavoritePath() {
         FavoritePath favoritePath = FAVORITE_PATH_1;
-        favoritePath.setSourceStation(TEST_STATION_23);
-        favoritePath.setTargetStation(TEST_STATION_24);
 
         return favoritePath;
     }

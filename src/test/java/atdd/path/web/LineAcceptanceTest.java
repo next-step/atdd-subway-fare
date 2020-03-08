@@ -1,6 +1,7 @@
 package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
+import atdd.path.application.dto.CreateLineRequestView;
 import atdd.path.application.dto.LineResponseView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +31,7 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
     @Test
     public void createLine() {
         // when
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
 
         // then
         EntityExchangeResult<LineResponseView> getResponse = lineHttpTest.retrieveLine(lineId);
@@ -41,7 +42,7 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
     @Test
     public void retrieveLine() {
         // given
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
 
         // when
         EntityExchangeResult<LineResponseView> getResponse = lineHttpTest.retrieveLine(lineId);
@@ -59,8 +60,8 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
         // given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 5, 10);
 
         // when
         EntityExchangeResult<LineResponseView> lineResult = lineHttpTest.retrieveLineRequest(LINE_URL + "/" + lineId);
@@ -75,9 +76,9 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
     @Test
     public void showLines() {
         // given
-        lineHttpTest.createLineRequest(LINE_NAME);
-        lineHttpTest.createLineRequest(LINE_NAME_2);
-        lineHttpTest.createLineRequest(LINE_NAME_3);
+        lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10);
+        lineHttpTest.createLineRequest(LINE_NAME_2, "05:45", "00:05", 10);
+        lineHttpTest.createLineRequest(LINE_NAME_3, "05:45", "00:05", 10);
 
         // when
         EntityExchangeResult<List<LineResponseView>> response = lineHttpTest.showLinesRequest();
@@ -90,7 +91,7 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
     @Test
     public void deleteLine() {
         // given
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
 
         // when
         webTestClient.delete().uri(LINE_URL + "/" + lineId)
@@ -109,10 +110,10 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
         // given
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
 
         // when
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 5, 10);
 
         // then
         EntityExchangeResult<LineResponseView> lineResult = lineHttpTest.retrieveLineRequest(LINE_URL + "/" + lineId);
@@ -128,9 +129,9 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
-        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 5, 10);
+        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3, 5, 10);
 
         // when
         webTestClient.delete().uri(LINE_URL + "/" + lineId + EDGE_URL + "?stationId=" + stationId2)

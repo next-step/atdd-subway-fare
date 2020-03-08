@@ -49,6 +49,7 @@ public class StationDao {
                 "WHERE S.id = ?";
 
         List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+
         return mapStation(result);
     }
 
@@ -87,8 +88,8 @@ public class StationDao {
         return result.stream()
                 .map(it ->
                         new Line(
-                                (Long) result.get(0).get("LINE_ID"),
-                                (String) result.get(0).get("LINE_NAME")
+                                (Long) it.get("LINE_ID"),
+                                (String) it.get("LINE_NAME")
                         ))
                 .collect(Collectors.toList());
     }

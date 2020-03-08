@@ -92,14 +92,18 @@ public class Edges {
             return new Edges(newEdges);
         }
 
-        Edge newEdge = Edge.of(getSourceStationOf(station), getTargetStationOf(station), sum(replaceEdge));
+        Edge newEdge = Edge.of(getSourceStationOf(station), getTargetStationOf(station), sumElapsedTime(replaceEdge), sumDistance(replaceEdge));
         newEdges.add(newEdge);
 
         return new Edges(newEdges);
     }
 
-    private Integer sum(List<Edge> replaceEdge) {
+    private Integer sumDistance(List<Edge> replaceEdge) {
         return replaceEdge.stream().map(it -> it.getDistance()).reduce(0, Integer::sum);
+    }
+
+    private Integer sumElapsedTime(List<Edge> replaceEdge) {
+        return replaceEdge.stream().map(it -> it.getElapsedTime()).reduce(0, Integer::sum);
     }
 
     private Station getSourceStationOf(Station station) {
@@ -122,5 +126,46 @@ public class Edges {
         List<Edge> newEdges = this.edges.stream().collect(Collectors.toList());
         newEdges.add(edge);
         return new Edges(newEdges);
+    }
+
+    public int calculateUpDelayTimeOf(long stationId) {
+        if (edges.get(0).isSourceStation(stationId)) {
+            return 0;
+        }
+
+        int time = 0;
+
+        for (Edge edge : edges) {
+            if (edge.isTargetStation(stationId)) {
+                time += edge.getElapsedTime();
+
+                return time;
+            }
+
+            time += edge.getElapsedTime();
+        }
+
+        return time;
+    }
+
+    public int calculateDownDelayTimeOf(long stationId) {
+        if (edges.get(edges.size() - 1).isTargetStation(stationId)) {
+            return 0;
+        }
+
+        int time = 0;
+
+        for (int i = edges.size() - 1; i >= 0; i--) {
+            Edge edge = edges.get(i);
+            if (edge.isSourceStation(stationId)) {
+                time += edge.getElapsedTime();
+
+                return time;
+            }
+
+            time += edge.getElapsedTime();
+        }
+
+        return time;
     }
 }

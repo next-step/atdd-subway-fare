@@ -23,33 +23,16 @@ public class FavoritePathService {
         this.stationDao = stationDao;
     }
 
-    public FavoritePath addFavoritePath(final String email, FavoritePath favoritePath) {
-        User user = userDao.findByEmail(email);
-
-        favoritePath.setOwner(user.getId());
-
-        Station sourceStation = stationDao.findById(favoritePath.getSourceStationId());
-        Station tartStation = stationDao.findById(favoritePath.getTargetStationId());
-
-        long favoritePathId = favoritePathDao.save(favoritePath).getId();
-
-        favoritePath.setId(favoritePathId);
-        favoritePath.setSourceStation(sourceStation);
-        favoritePath.setTargetStation(tartStation);
-
-        return favoritePath;
+    public Station findStationById(final long stationId) {
+        return stationDao.findById(stationId);
     }
 
-    public List<FavoritePath> findFavoritePath(final String email) {
-        User user = userDao.findByEmail(email);
+    public FavoritePath addFavoritePath(final FavoritePath favoritePath) {
+        return favoritePathDao.save(favoritePath);
+    }
 
-        List<FavoritePath> favoritePaths = favoritePathDao.findAll(user.getId());
-        for (FavoritePath favoritePath : favoritePaths) {
-            favoritePath.setSourceStation(stationDao.findById(favoritePath.getSourceStationId()));
-            favoritePath.setTargetStation(stationDao.findById(favoritePath.getTargetStationId()));
-        }
-
-        return favoritePaths;
+    public List<FavoritePath> findFavoritePath(final long userId) {
+        return favoritePathDao.findAll(userId);
     }
 
     public void deleteFavoritePath(final String email, final long id) {

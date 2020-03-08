@@ -54,7 +54,7 @@ public class LineController {
 
     @PostMapping("/{id}/edges")
     public ResponseEntity createEdge(@PathVariable Long id, @RequestBody CreateEdgeRequestView view) {
-        lineService.addEdge(id, view.getSourceId(), view.getTargetId(), view.getDistance());
+        lineService.addEdge(id, view.getSourceId(), view.getTargetId(), view.getElapsedTime(), view.getDistance());
         return ResponseEntity.ok().build();
     }
 
