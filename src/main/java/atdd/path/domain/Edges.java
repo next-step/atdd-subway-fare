@@ -127,4 +127,45 @@ public class Edges {
         newEdges.add(edge);
         return new Edges(newEdges);
     }
+
+    public int calculateUpDelayTimeOf(long stationId) {
+        if (edges.get(0).isSourceStation(stationId)) {
+            return 0;
+        }
+
+        int time = 0;
+
+        for (Edge edge : edges) {
+            if (edge.isTargetStation(stationId)) {
+                time += edge.getElapsedTime();
+
+                return time;
+            }
+
+            time += edge.getElapsedTime();
+        }
+
+        return time;
+    }
+
+    public int calculateDownDelayTimeOf(long stationId) {
+        if (edges.get(edges.size() - 1).isTargetStation(stationId)) {
+            return 0;
+        }
+
+        int time = 0;
+
+        for (int i = edges.size() - 1; i >= 0; i--) {
+            Edge edge = edges.get(i);
+            if (edge.isSourceStation(stationId)) {
+                time += edge.getElapsedTime();
+
+                return time;
+            }
+
+            time += edge.getElapsedTime();
+        }
+
+        return time;
+    }
 }

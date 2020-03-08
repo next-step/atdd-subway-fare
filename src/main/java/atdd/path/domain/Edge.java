@@ -21,6 +21,22 @@ public class Edge {
         this.distance = distance;
     }
 
+    public boolean isTargetStation(long stationId) {
+        if(targetStation.getId() == stationId) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isSourceStation(long stationId) {
+        if(sourceStation.getId() == stationId) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static Edge of(Station sourceStation, Station targetStation, int elapsedTime, int distance) {
         return new Edge(null, sourceStation, targetStation, elapsedTime, distance);
     }
