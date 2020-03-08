@@ -41,7 +41,6 @@ public class GraphDocumentationTest extends AbstractDocumentationTest {
         Station station5 = new Station(STATION_ID_3, STATION_NAME_3, Arrays.asList(TEST_LINE));
         Station station6 = new Station(STATION_ID_4, STATION_NAME_4, Arrays.asList(TEST_LINE));
 
-
         List<Station> stations = Arrays.asList(station1, station2, station3, station4, station5, station6);
 
         given(graphService.findPath(anyLong(), anyLong())).willReturn(stations);
