@@ -23,10 +23,10 @@ public class GraphAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
         Long stationId4 = stationHttpTest.createStation(STATION_NAME_4);
-        Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 10);
-        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3, 10);
-        lineHttpTest.createEdgeRequest(lineId, stationId3, stationId4, 10);
+        Long lineId = lineHttpTest.createLineRequest(LINE_NAME, "05:45", "00:05", 10).getResponseBody().getId();
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 5, 10);
+        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3, 5, 10);
+        lineHttpTest.createEdgeRequest(lineId, stationId3, stationId4, 5, 10);
 
         webTestClient.get().uri("/paths?startId=" + stationId + "&endId=" + stationId4)
                 .exchange()
