@@ -7,12 +7,12 @@ import java.util.List;
 public class PathResponseView {
     private Long startStationId;
     private Long endStationId;
-    private List<StationResponseView> stations;
+    private List<StationResponseDto> stations;
 
     public PathResponseView(Long startStationId, Long endStationId, List<Station> stations) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
-        this.stations = StationResponseView.listOf(stations);
+        this.stations = StationResponseDto.listOf(stations);
     }
 
     public Long getStartStationId() {
@@ -23,7 +23,7 @@ public class PathResponseView {
         return endStationId;
     }
 
-    public List<StationResponseView> getStations() {
+    public List<StationResponseDto> getStations() {
         return stations;
     }
 }

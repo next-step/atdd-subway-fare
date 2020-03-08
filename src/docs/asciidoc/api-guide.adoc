@@ -30,3 +30,77 @@ operation::users/create[snippets='request-fields,response-fields']
 operation::users/me[snippets='http-request,http-response']
 operation::users/me[snippets='request-headers']
 operation::users/me[snippets='response-fields']
+
+
+---
+
+[[resources-route]]
+== Route
+
+[[resources-route-distance]]
+=== 거리 최단 경로 찾기
+
+operation::routes/distance[snippets='http-request,http-response']
+operation::routes/distance[snippets='request-parameters']
+operation::routes/distance[snippets='response-fields']
+
+---
+
+[[resources-route-time]]
+=== 거리 시간 경로 찾기
+
+operation::routes/time[snippets='http-request,http-response']
+operation::routes/time[snippets='request-parameters']
+operation::routes/time[snippets='response-fields']
+
+---
+
+[[resources-favorite-station]]
+== Favorite Station
+
+[[resources-favorite-station-create]]
+=== 지하철역 즐겨찾기 추가
+operation::favorite/station/create[snippets='http-request,http-response']
+operation::favorite/station/create[snippets='request-headers']
+operation::favorite/station/create[snippets='request-fields']
+operation::favorite/station/create[snippets='response-fields']
+
+
+[[resources-favorite-station-find]]
+=== 지하철역 즐겨찾기 조회
+operation::favorite/station/find[snippets='http-request,http-response']
+operation::favorite/station/find[snippets='request-headers']
+operation::favorite/station/find[snippets='response-fields']
+
+[[resources-favorite-station-delete]]
+=== 지하철역 즐겨찾기 삭제
+operation::favorite/station/delete[snippets='http-request,http-response']
+operation::favorite/station/delete[snippets='request-headers']
+operation::favorite/station/delete[snippets='path-parameters']
+
+
+---
+
+[[resources-favorite-route]]
+== Favorite Route
+
+[[resources-favorite-route-create]]
+=== 경로 즐겨찾기 추가
+operation::favorite/route/create[snippets='http-request,http-response']
+operation::favorite/route/create[snippets='request-headers']
+operation::favorite/route/create[snippets='request-fields']
+operation::favorite/route/create[snippets='response-fields']
+
+
+[[resources-favorite-route-find]]
+=== 경로 즐겨찾기 조회
+operation::favorite/route/find[snippets='http-request,http-response']
+operation::favorite/route/find[snippets='request-headers']
+operation::favorite/route/find[snippets='response-fields']
+
+[[resources-favorite-route-delete]]
+=== 경로 즐겨찾기 삭제
+operation::favorite/route/delete[snippets='http-request,http-response']
+operation::favorite/route/delete[snippets='request-headers']
+operation::favorite/route/delete[snippets='path-parameters']
+

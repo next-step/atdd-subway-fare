@@ -1,7 +1,7 @@
 package atdd.user.web;
 
 import atdd.user.application.UserService;
-import atdd.user.application.dto.CreateUserRequestView;
+import atdd.user.application.dto.UserRequestView;
 import atdd.user.application.dto.UserResponseView;
 import atdd.user.domain.User;
 import org.springframework.http.ResponseEntity;
@@ -10,24 +10,30 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("users")
 public class UserController {
-    private UserService userService;
+
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseView> createUser(@RequestBody CreateUserRequestView view) {
-        final User savedUser = userService.save(view.toUser());
-        return ResponseEntity.created(URI.create("/users/" + savedUser.getId()))
-                .body(new UserResponseView(savedUser));
+    public ResponseEntity createUser(@RequestBody UserRequestView userRequestView) {
+        UserResponseView savedUser = userService.createUser(userRequestView);
+        return ResponseEntity.created(URI.create("users/" + savedUser.getId()))
+                .body(savedUser);
     }
 
-    @GetMapping("/me")
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("me")
     public ResponseEntity retrieveUser(@LoginUser User user) {
-        User persistUser = userService.findUserByEmail(user.getEmail());
-        return ResponseEntity.ok().body(new UserResponseView(persistUser));
+        return ResponseEntity.ok().body(userService.retrieveUser(user));
     }
 }

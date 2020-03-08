@@ -50,4 +50,40 @@ public class Graph {
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
     }
+
+    public List<Station> getShortestTimePath(Long startId, Long endId) {
+        return getPathStations(makeGraphForTime(lines), startId, endId);
+    }
+
+    private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraphForTime(List<Line> lines) {
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
+        lines.stream()
+                .flatMap(it -> it.getStations().stream())
+                .forEach(it -> graph.addVertex(it.getId()));
+
+        lines.stream()
+                .flatMap(it -> it.getEdges().stream())
+                .forEach(it -> graph.setEdgeWeight(graph.addEdge(it.getSourceStation().getId(), it.getTargetStation().getId()), it.getElapsedTime()));
+        return graph;
+    }
+
+    public int getEstimatedTime(Long startId, Long endId) {
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphForTime(lines);
+        GraphPath<Long, DefaultWeightedEdge> path = new DijkstraShortestPath(graph).getPath(startId, endId);
+
+        return path.getEdgeList().stream()
+                .map(it -> findEdge(graph.getEdgeSource(it), graph.getEdgeTarget(it)))
+                .mapToInt(Edge::getElapsedTime)
+                .sum();
+    }
+
+
+    private Edge findEdge(Long edgeSource, Long edgeTarget) {
+        return lines.stream()
+                .flatMap(it -> it.getEdges().stream())
+                .filter(it -> it.getSourceStation().getId().equals(edgeSource)
+                        && it.getTargetStation().getId().equals(edgeTarget))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+    }
 }

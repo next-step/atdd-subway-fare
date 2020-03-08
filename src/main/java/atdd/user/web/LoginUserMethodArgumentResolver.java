@@ -1,7 +1,7 @@
 package atdd.user.web;
 
 import atdd.user.domain.User;
-import atdd.user.application.UserService;
+import atdd.user.repository.UserRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -14,10 +14,12 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 @Component
 public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
-    private final UserService userService;
+    private static final String LOGIN_USER_EMAIL = "loginUserEmail";
 
-    public LoginUserMethodArgumentResolver(UserService userService) {
-        this.userService = userService;
+    private final UserRepository userRepository;
+
+    public LoginUserMethodArgumentResolver(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -28,13 +30,13 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String email = (String) webRequest.getAttribute("loginUserEmail", SCOPE_REQUEST);
+        String email = (String) webRequest.getAttribute(LOGIN_USER_EMAIL, SCOPE_REQUEST);
         if (Strings.isBlank(email)) {
             return new User();
         }
 
         try {
-            return userService.findUserByEmail(email);
+            return userRepository.findUserByEmail(email);
         } catch (Exception e) {
             return new User();
         }

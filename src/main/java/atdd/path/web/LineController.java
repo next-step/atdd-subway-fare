@@ -1,12 +1,12 @@
 package atdd.path.web;
 
-import atdd.path.application.dto.CreateEdgeRequestView;
-import atdd.path.dao.LineDao;
 import atdd.path.application.LineService;
+import atdd.path.application.dto.CreateEdgeRequestView;
 import atdd.path.application.dto.CreateLineRequestView;
 import atdd.path.application.dto.LineResponseView;
+import atdd.path.dao.LineDao;
 import atdd.path.domain.Line;
-import org.springframework.dao.EmptyResultDataAccessException;
+import atdd.path.repository.LineRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +17,13 @@ import java.util.List;
 @RequestMapping("/lines")
 public class LineController {
     private LineDao lineDao;
+    private LineRepository lineRepository;
     private LineService lineService;
 
-    public LineController(LineDao lineDao, LineService lineService) {
+    public LineController(LineDao lineDao, LineService lineService, LineRepository lineRepository) {
         this.lineDao = lineDao;
         this.lineService = lineService;
+        this.lineRepository = lineRepository;
     }
 
     @PostMapping
@@ -32,12 +34,9 @@ public class LineController {
 
     @GetMapping("{id}")
     public ResponseEntity retrieveLine(@PathVariable Long id) {
-        try {
-            Line persistLine = lineDao.findById(id);
-            return ResponseEntity.ok().body(LineResponseView.of(persistLine));
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return lineRepository.findById(id)
+                .map(it -> ResponseEntity.ok().body(LineResponseView.of(it)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -54,8 +53,7 @@ public class LineController {
 
     @PostMapping("/{id}/edges")
     public ResponseEntity createEdge(@PathVariable Long id, @RequestBody CreateEdgeRequestView view) {
-        lineService.addEdge(id, view.getSourceId(), view.getTargetId(), view.getDistance());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(lineService.addEdge(id, view));
     }
 
     @DeleteMapping("/{id}/edges")

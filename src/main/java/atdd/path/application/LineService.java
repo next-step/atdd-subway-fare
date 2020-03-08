@@ -1,50 +1,74 @@
 package atdd.path.application;
 
-import atdd.path.dao.EdgeDao;
-import atdd.path.dao.LineDao;
-import atdd.path.dao.StationDao;
+import atdd.path.application.dto.CreateEdgeRequestView;
+import atdd.path.application.dto.EdgeResponseDto;
 import atdd.path.domain.Edge;
 import atdd.path.domain.Edges;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
+import atdd.path.repository.EdgeRepository;
+import atdd.path.repository.LineRepository;
+import atdd.path.repository.StationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class LineService {
-    private LineDao lineDao;
-    private StationDao stationDao;
-    private EdgeDao edgeDao;
+    private final EdgeRepository edgeRepository;
+    private final LineRepository lineRepository;
+    private final StationRepository stationRepository;
 
-    public LineService(LineDao lineDao, StationDao stationDao, EdgeDao edgeDao) {
-        this.lineDao = lineDao;
-        this.stationDao = stationDao;
-        this.edgeDao = edgeDao;
+    public LineService(EdgeRepository edgeRepository, LineRepository lineRepository, StationRepository stationRepository) {
+        this.edgeRepository = edgeRepository;
+        this.lineRepository = lineRepository;
+        this.stationRepository = stationRepository;
     }
 
-    public void addEdge(Long lineId, Long sourceId, Long targetId, int distance) {
-        Station source = stationDao.findById(sourceId);
-        Station target = stationDao.findById(targetId);
-        Line persistLine = lineDao.findById(lineId);
+    public EdgeResponseDto addEdge(Long lineId, CreateEdgeRequestView view) {
+        this.validate(lineId, view.getSourceId(), view.getTargetId());
 
-        Edge newEdge = Edge.of(source, target, distance);
-        persistLine.addEdge(newEdge);
+        Edge savedEdge = edgeRepository.save(Edge.builder()
+                .lineId(lineId)
+                .sourceStationId(view.getSourceId())
+                .targetStationId(view.getTargetId())
+                .distance(view.getDistance())
+                .elapsedTime(view.getElapsedTime())
+                .build());
 
-        edgeDao.save(lineId, newEdge);
+        return EdgeResponseDto.of(savedEdge);
     }
 
     public void deleteStation(Long lineId, Long stationId) {
-        Station station = stationDao.findById(stationId);
-        Line persistLine = lineDao.findById(lineId);
+        Line line = lineRepository.findById(lineId).orElseThrow(EntityNotFoundException::new);
+        Station station = stationRepository.findById(stationId).orElseThrow(EntityNotFoundException::new);
 
-        List<Edge> oldEdges = persistLine.getEdges();
-        Edges edges = persistLine.removeStation(station);
-        Edge newEdge = edges.getEdges().stream()
-                .filter(it -> !oldEdges.contains(it))
-                .findFirst().orElseThrow(RuntimeException::new);
+        Edges edges = new Edges(line.getEdges());
+        edges.removeStation(station);
 
-        edgeDao.deleteByStationId(stationId);
-        edgeDao.save(persistLine.getId(), newEdge);
+        Edge newEdge = edges.findNewEdge(line.getEdges());
+        newEdge.updateLine(line);
+
+        line.getEdges().forEach(it -> {
+            if (!it.hasStation(station)) {
+                return;
+            }
+            edgeRepository.delete(it);
+        });
+
+        edgeRepository.save(newEdge);
+    }
+
+    private void validate(Long lineId, Long sourceStationId, Long targetStationId) {
+        if (!lineRepository.existsById(lineId))
+            throw new EntityNotFoundException(lineId + "는 존재하지 않는 Line입니다.");
+
+        if (!stationRepository.existsById(sourceStationId)) {
+            throw new EntityNotFoundException(sourceStationId + "는 존재하지 않는 Station입니다.");
+        }
+
+        if (!stationRepository.existsById(targetStationId)) {
+            throw new EntityNotFoundException(sourceStationId + "는 존재하지 않는 Station입니다.");
+        }
     }
 }
