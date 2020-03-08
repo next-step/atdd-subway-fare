@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Getter
 @NoArgsConstructor
 public class FavoriteRouteResponseView {
@@ -34,21 +31,5 @@ public class FavoriteRouteResponseView {
                         .name(favorite.getTargetStation().getName())
                         .build())
                 .build();
-    }
-
-    public static List<FavoriteRouteResponseView> listOf(List<FavoriteRoute> favorites) {
-        return favorites.stream()
-                .map(it -> FavoriteRouteResponseView.builder()
-                        .id(it.getId())
-                        .sourceStation(ItemView.builder()
-                                .id(it.getSourceStation().getId())
-                                .name(it.getSourceStation().getName())
-                                .build())
-                        .targetStation(ItemView.builder()
-                                .id(it.getTargetStation().getId())
-                                .name(it.getTargetStation().getName())
-                                .build())
-                        .build())
-                .collect(Collectors.toList());
     }
 }

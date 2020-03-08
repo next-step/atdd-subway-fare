@@ -35,13 +35,7 @@ public class StationResponseDto {
 
     public static List<StationResponseDto> listOf(List<Station> station) {
         return station.stream()
-                .map(it -> StationResponseDto.builder()
-                        .id(it.getId())
-                        .name(it.getName())
-                        .lines(it.getLines().stream()
-                                .map(it2 -> ItemView.of(it2.getId(), it2.getName()))
-                                .collect(Collectors.toSet()))
-                        .build())
+                .map(it -> of(it))
                 .collect(Collectors.toList());
     }
 

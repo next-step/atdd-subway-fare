@@ -1,7 +1,9 @@
 package atdd.path.application;
 
-import atdd.path.application.dto.FavoriteStationResponseView;
 import atdd.path.application.dto.FavoriteRouteResponseView;
+import atdd.path.application.dto.FavoriteRoutesResponseView;
+import atdd.path.application.dto.FavoriteStationResponseView;
+import atdd.path.application.dto.FavoriteStationsResponseView;
 import atdd.path.domain.FavoriteRoute;
 import atdd.path.domain.FavoriteStation;
 import atdd.path.repository.FavoriteRouteRepository;
@@ -32,10 +34,10 @@ public class FavoriteService {
         return FavoriteStationResponseView.of(savedFavorite);
     }
 
-    public List<FavoriteStationResponseView> findFavoriteStation(User user) {
+    public FavoriteStationsResponseView findFavoriteStation(User user) {
         List<FavoriteStation> favorites = favoriteStationRepository.findAllByUserId(user.getId());
 
-        return FavoriteStationResponseView.listOf(favorites);
+        return FavoriteStationsResponseView.of(favorites);
     }
 
     @Transactional
@@ -52,9 +54,9 @@ public class FavoriteService {
         return FavoriteRouteResponseView.of(savedFavorite);
     }
 
-    public List<FavoriteRouteResponseView> findFavoriteRoute(User user) {
+    public FavoriteRoutesResponseView findFavoriteRoute(User user) {
         List<FavoriteRoute> favorites = favoriteRouteRepository.findAllByUserId(user.getId());
-        return FavoriteRouteResponseView.listOf(favorites);
+        return FavoriteRoutesResponseView.of(favorites);
     }
 
     @Transactional

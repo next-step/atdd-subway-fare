@@ -3,9 +3,7 @@ package atdd.path.docs;
 import atdd.AbstractDocumentationTest;
 import atdd.TestConstant;
 import atdd.path.application.FavoriteService;
-import atdd.path.application.dto.FavoriteRouteResponseView;
-import atdd.path.application.dto.FavoriteStationResponseView;
-import atdd.path.application.dto.ItemView;
+import atdd.path.application.dto.*;
 import atdd.path.domain.Station;
 import atdd.path.web.FavoriteController;
 import atdd.user.domain.User;
@@ -29,8 +27,10 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,10 +89,12 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
     @Test
     void findFavoriteStation() throws Exception {
         given(favoriteService.findFavoriteStation(any()))
-                .willReturn(Arrays.asList(FavoriteStationResponseView.builder()
-                        .id(1L)
-                        .station(new Station(TestConstant.STATION_ID, TestConstant.STATION_NAME))
-                        .build()));
+                .willReturn(FavoriteStationsResponseView.builder()
+                        .favoriteStations(Arrays.asList(FavoriteStationResponseView.builder()
+                                .id(1L)
+                                .station(new Station(TestConstant.STATION_ID, TestConstant.STATION_NAME))
+                                .build()))
+                        .build());
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get("/favorites/station")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -103,8 +105,8 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")),
                         responseFields(
-                                fieldWithPath("[]").description("An array Favorite-station"))
-                                .andWithPrefix("[].", new FieldDescriptor[]{
+                                fieldWithPath("favoriteStations").description("An array Favorite-station"))
+                                .andWithPrefix("favoriteStations[].", new FieldDescriptor[]{
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("Id of Favorite-station"),
                                         fieldWithPath("station.id").type(JsonFieldType.NUMBER).description("Stations's id of Favorite-station"),
                                         fieldWithPath("station.name").type(JsonFieldType.STRING).description("Stations's name of Favorite-station")})
@@ -165,17 +167,19 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
     @Test
     void findFavoriteRoute() throws Exception {
         given(favoriteService.findFavoriteRoute(any()))
-                .willReturn(Arrays.asList(FavoriteRouteResponseView.builder()
-                        .id(1L)
-                        .sourceStation(ItemView.builder()
-                                .id(TestConstant.STATION_ID)
-                                .name(TestConstant.STATION_NAME)
-                                .build())
-                        .targetStation(ItemView.builder()
-                                .id(TestConstant.STATION_ID_2)
-                                .name(TestConstant.STATION_NAME_2)
-                                .build())
-                        .build()));
+                .willReturn(FavoriteRoutesResponseView.builder()
+                        .favoriteRoutes(Arrays.asList(
+                                FavoriteRouteResponseView.builder()
+                                        .id(1L)
+                                        .sourceStation(ItemView.builder()
+                                                .id(TestConstant.STATION_ID)
+                                                .name(TestConstant.STATION_NAME)
+                                                .build())
+                                        .targetStation(ItemView.builder()
+                                                .id(TestConstant.STATION_ID_2)
+                                                .name(TestConstant.STATION_NAME_2)
+                                                .build())
+                                        .build())).build());
 
         this.mockMvc
                 .perform(get(FAVORITE_URI + "/route")
@@ -185,8 +189,8 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")),
                         responseFields(
-                                fieldWithPath("[]").description("An array Favorite-route"))
-                                .andWithPrefix("[].", new FieldDescriptor[]{
+                                fieldWithPath("favoriteRoutes").description("An array Favorite-route"))
+                                .andWithPrefix("favoriteRoutes[]", new FieldDescriptor[]{
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("Id of Favorite-route"),
                                         fieldWithPath("sourceStation.id").type(JsonFieldType.NUMBER).description("Start stations's id of Favorite-route"),
                                         fieldWithPath("sourceStation.name").type(JsonFieldType.STRING).description("Start stations's name of Favorite-route"),

@@ -3,14 +3,14 @@ package atdd.path.web;
 import atdd.AbstractAcceptanceTest;
 import atdd.TestConstant;
 import atdd.path.application.dto.FavoriteRouteResponseView;
+import atdd.path.application.dto.FavoriteRoutesResponseView;
 import atdd.path.application.dto.FavoriteStationResponseView;
+import atdd.path.application.dto.FavoriteStationsResponseView;
 import atdd.user.application.dto.LoginResponseView;
 import atdd.user.web.UserHttpTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,15 +53,15 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(TestConstant.STATION_NAME);
         favoriteHttpTest.createFavoriteStation(stationId, token).getResponseBody();
 
-        List<FavoriteStationResponseView> response = webTestClient.get().uri(FAVORITE_URI + "/station")
+        FavoriteStationsResponseView response = webTestClient.get().uri(FAVORITE_URI + "/station")
                 .header("Authorization", String.format("%s %s", token.getTokenType(), token.getAccessToken()))
                 .exchange()
                 .expectStatus().isOk()
-                .expectBodyList(FavoriteStationResponseView.class)
+                .expectBody(FavoriteStationsResponseView.class)
                 .returnResult().getResponseBody();
 
-        assertThat(response.size()).isEqualTo(1);
-        assertThat(response.get(0).getStation().getName()).isEqualTo(TestConstant.STATION_NAME);
+        assertThat(response.getFavoriteStations().size()).isEqualTo(1);
+        assertThat(response.getFavoriteStations().get(0).getStation().getName()).isEqualTo(TestConstant.STATION_NAME);
     }
 
     @DisplayName("지하철역 즐겨찾기 삭제")
@@ -102,11 +102,11 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId);
         favoriteHttpTest.createFavoriteRoute(firstStationId, secondStationId, token);
 
-        List<FavoriteRouteResponseView> response = favoriteHttpTest.findFavoriteRoute(token).getResponseBody();
+        FavoriteRoutesResponseView response = favoriteHttpTest.findFavoriteRoute(token).getResponseBody();
 
-        assertThat(response.size()).isEqualTo(1);
-        assertThat(response.get(0).getSourceStation().getName()).isEqualTo(TestConstant.STATION_NAME);
-        assertThat(response.get(0).getTargetStation().getName()).isEqualTo(TestConstant.STATION_NAME_2);
+        assertThat(response.getFavoriteRoutes().size()).isEqualTo(1);
+        assertThat(response.getFavoriteRoutes().get(0).getSourceStation().getName()).isEqualTo(TestConstant.STATION_NAME);
+        assertThat(response.getFavoriteRoutes().get(0).getTargetStation().getName()).isEqualTo(TestConstant.STATION_NAME_2);
     }
 
     @DisplayName("경로 즐겨찾기 삭제")
@@ -117,12 +117,11 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long secondStationId = stationHttpTest.createStation(TestConstant.STATION_NAME_2);
         Long lineId = lineHttpTest.createLine(TestConstant.LINE_NAME);
         lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId);
-        favoriteHttpTest.createFavoriteRoute(firstStationId, secondStationId, token)
-                .getResponseBody();
+        favoriteHttpTest.createFavoriteRoute(firstStationId, secondStationId, token);
 
-        List<FavoriteRouteResponseView> response = favoriteHttpTest.findFavoriteRoute(token).getResponseBody();
+        FavoriteRoutesResponseView response = favoriteHttpTest.findFavoriteRoute(token).getResponseBody();
 
-        webTestClient.delete().uri(FAVORITE_URI + "/route/" + response.get(0).getId())
+        webTestClient.delete().uri(FAVORITE_URI + "/route/" + response.getFavoriteRoutes().get(0).getId())
                 .header("Authorization", String.format("%s %s", token.getTokenType(), token.getAccessToken()))
                 .exchange()
                 .expectStatus().isNoContent();

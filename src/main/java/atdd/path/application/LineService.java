@@ -11,6 +11,8 @@ import atdd.path.repository.LineRepository;
 import atdd.path.repository.StationRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class LineService {
     private final EdgeRepository edgeRepository;
@@ -24,9 +26,7 @@ public class LineService {
     }
 
     public EdgeResponseDto addEdge(Long lineId, CreateEdgeRequestView view) {
-        lineRepository.findById(lineId).orElseThrow(RuntimeException::new);
-        stationRepository.findById(view.getSourceId()).orElseThrow(RuntimeException::new);
-        stationRepository.findById(view.getTargetId()).orElseThrow(RuntimeException::new);
+        this.validate(lineId, view.getSourceId(), view.getTargetId());
 
         Edge savedEdge = edgeRepository.save(Edge.builder()
                 .lineId(lineId)
@@ -40,8 +40,8 @@ public class LineService {
     }
 
     public void deleteStation(Long lineId, Long stationId) {
-        Line line = lineRepository.findById(lineId).orElseThrow(RuntimeException::new);
-        Station station = stationRepository.findById(stationId).orElseThrow(RuntimeException::new);
+        Line line = lineRepository.findById(lineId).orElseThrow(EntityNotFoundException::new);
+        Station station = stationRepository.findById(stationId).orElseThrow(EntityNotFoundException::new);
 
         Edges edges = new Edges(line.getEdges());
         edges.removeStation(station);
@@ -57,5 +57,18 @@ public class LineService {
         });
 
         edgeRepository.save(newEdge);
+    }
+
+    private void validate(Long lineId, Long sourceStationId, Long targetStationId) {
+        if (!lineRepository.existsById(lineId))
+            throw new EntityNotFoundException(lineId + "는 존재하지 않는 Line입니다.");
+
+        if (!stationRepository.existsById(sourceStationId)) {
+            throw new EntityNotFoundException(sourceStationId + "는 존재하지 않는 Station입니다.");
+        }
+
+        if (!stationRepository.existsById(targetStationId)) {
+            throw new EntityNotFoundException(sourceStationId + "는 존재하지 않는 Station입니다.");
+        }
     }
 }
