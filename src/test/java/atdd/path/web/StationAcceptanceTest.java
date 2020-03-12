@@ -103,4 +103,15 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
                 .exchange()
                 .expectStatus().isNotFound();
     }
+
+    @DisplayName("지하철역 시간표 정보 조회")
+    @Test
+    void retrieveStationTimetable() {
+        webTestClient.get().uri(STATION_URL + "/1/timetables")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.[0].timetables.up").isNotEmpty()
+                .jsonPath("$.[0].timetables.down").isNotEmpty();
+    }
 }
