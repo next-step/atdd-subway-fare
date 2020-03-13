@@ -1,5 +1,6 @@
 package atdd.path.web;
 
+import atdd.path.application.StationService;
 import atdd.path.application.dto.CreateStationRequestView;
 import atdd.path.application.dto.StationResponseDto;
 import atdd.path.domain.Station;
@@ -14,9 +15,11 @@ import java.util.List;
 @RequestMapping("stations")
 public class StationController {
     private StationRepository stationRepository;
+    private StationService stationService;
 
-    public StationController(StationRepository stationRepository) {
+    public StationController(StationRepository stationRepository, StationService stationService) {
         this.stationRepository = stationRepository;
+        this.stationService = stationService;
     }
 
     @PostMapping
@@ -48,6 +51,6 @@ public class StationController {
 
     @GetMapping("{stationId}/timetables")
     public ResponseEntity retrieveStationTimetable(@PathVariable Long stationId) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(stationService.retrieveStationTimetable(stationId));
     }
 }

@@ -41,7 +41,8 @@ public class Edge {
     }
 
     @Builder
-    public Edge(Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
+    public Edge(Long id, Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
+        this.id = id;
         this.line = new Line(lineId, null);
         this.sourceStation = new Station(sourceStationId, null);
         this.targetStation = new Station(targetStationId, null);

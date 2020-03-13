@@ -2,6 +2,7 @@ package atdd.path.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -26,7 +27,7 @@ public class Edges {
     }
 
     private void checkValidEdges(List<Edge> edges) {
-        if (edges.size() == 0) {
+        if (CollectionUtils.isEmpty(edges)) {
             return;
         }
 
@@ -40,7 +41,7 @@ public class Edges {
     }
 
     private List<Station> getStations(List<Edge> edges) {
-        if (edges.size() == 0) {
+        if (CollectionUtils.isEmpty(edges)) {
             return new ArrayList<>();
         }
 
