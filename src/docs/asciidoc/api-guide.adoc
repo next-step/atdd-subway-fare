@@ -48,6 +48,12 @@ operation::users/login[snippets='response-headers']
 operation::paths[snippets='http-request,http-response']
 operation::paths[snippets='request-parameters,response-fields']
 
+[[resources-path-findMinTimePath]]
+=== 최단 시간 경로 조회
+
+operation::paths/min-time[snippets='http-request,http-response']
+operation::paths/min-time[snippets='request-parameters,response-fields']
+
 [[resources-favorite]]
 == Favorite
 

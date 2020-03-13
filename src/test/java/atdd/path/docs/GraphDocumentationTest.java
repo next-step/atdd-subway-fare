@@ -2,6 +2,7 @@ package atdd.path.docs;
 
 import atdd.AbstractDocumentationTest;
 import atdd.path.application.GraphService;
+import atdd.path.domain.Line;
 import atdd.path.domain.Station;
 import atdd.path.web.PathController;
 import org.junit.jupiter.api.Test;
@@ -67,6 +68,41 @@ public class GraphDocumentationTest extends AbstractDocumentationTest {
                                         fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
                                         fieldWithPath("stations[].lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
                                         fieldWithPath("stations[].lines[].name").type(JsonFieldType.STRING).description("The line's name")
+                                )
+                        ))
+                .andDo(print());
+    }
+
+    @Test
+    void findMinTimePath() throws Exception {
+        List<Station> stations = Arrays.asList(TEST_STATION_11, TEST_STATION_12, TEST_STATION, TEST_STATION_2, TEST_STATION_3, TEST_STATION_4);
+        List<Line> lines = Arrays.asList(TEST_LINE, TEST_LINE_2, TEST_LINE_3, TEST_LINE_4);
+
+        given(graphService.findMinTimePath(anyLong(), anyLong())).willReturn(stations);
+        given(graphService.findAllLine()).willReturn(lines);
+
+        //when
+        ResultActions result = this.mockMvc.perform(get("/paths/min-time?startId=" + STATION_ID_11 + "&endId=" + STATION_ID_4)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        result.andExpect(status().isOk())
+                .andDo(
+                        document("paths/min-time",
+                                requestParameters(
+                                        parameterWithName("startId").description("start station's ID"),
+                                        parameterWithName("endId").description("end station's ID")
+                                ),
+                                responseFields(
+                                        fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
+                                        fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
+                                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
+                                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
+                                        fieldWithPath("lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
+                                        fieldWithPath("lines[].name").type(JsonFieldType.STRING).description("The line's name"),
+                                        fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance"),
+                                        fieldWithPath("departAt").type(JsonFieldType.STRING).description("The departAt"),
+                                        fieldWithPath("arriveBy").type(JsonFieldType.STRING).description("The arriveBy")
                                 )
                         ))
                 .andDo(print());
