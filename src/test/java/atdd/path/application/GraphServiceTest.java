@@ -42,4 +42,20 @@ public class GraphServiceTest {
         assertThat(shortestPath.get(0)).isEqualTo(TEST_STATION);
         assertThat(shortestPath.get(2)).isEqualTo(TEST_STATION_3);
     }
+
+    @DisplayName("출발역과 도착역 사이의 최단시간 경로 Station 목록을 응답받기")
+    @Test
+    public void findMinTimePath() {
+        Long startId = 11l;
+        Long endId = 4l;
+
+        List<Line> lines = Lists.list(TEST_LINE, TEST_LINE_2, TEST_LINE_3, TEST_LINE_4);
+        given(lineDao.findAll()).willReturn(lines);
+
+        List<Station> minTimePath = graphService.findMinTimePath(startId, endId);
+
+        assertThat(minTimePath.size()).isEqualTo(6);
+        assertThat(minTimePath.get(0).getId()).isEqualTo(startId);
+        assertThat(minTimePath.get(5).getId()).isEqualTo(endId);
+    }
 }

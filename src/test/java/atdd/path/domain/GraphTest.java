@@ -20,7 +20,7 @@ public class GraphTest {
 
     @Test
     public void getPath() {
-        Graph graph = new Graph(LINES);
+        PathGraph graph = new PathGraph(LINES);
 
         List<Station> result = graph.getShortestDistancePath(STATION_ID, STATION_ID_3);
 
