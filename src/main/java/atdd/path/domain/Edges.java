@@ -157,6 +157,7 @@ public class Edges {
 
         for (int i = edges.size() - 1; i >= 0; i--) {
             Edge edge = edges.get(i);
+
             if (edge.isSourceStation(stationId)) {
                 time += edge.getElapsedTime();
 

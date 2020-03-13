@@ -1,8 +1,9 @@
 package atdd.path.application;
 
 import atdd.path.dao.LineDao;
-import atdd.path.domain.Graph;
 import atdd.path.domain.Line;
+import atdd.path.domain.MinTimePathGraph;
+import atdd.path.domain.PathGraph;
 import atdd.path.domain.Station;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,20 @@ public class GraphService {
 
     public List<Station> findPath(long startId, long endId) {
         List<Line> lines = lineDao.findAll();
-        Graph graph = new Graph(lines);
+        PathGraph graph = new PathGraph(lines);
         return graph.getShortestDistancePath(startId, endId);
+    }
+
+    public List<Station> findMinTimePath(long startId, long endId) {
+        List<Line> lines = lineDao.findAll();
+
+        MinTimePathGraph graph = new MinTimePathGraph(lines);
+        List<Station> pathStation = graph.getShortestTimeDistancePath(startId, endId);
+
+        return pathStation;
+    }
+
+    public List<Line> findAllLine(){
+        return lineDao.findAll();
     }
 }
