@@ -3,11 +3,15 @@ package atdd.path.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
 @NoArgsConstructor
@@ -87,4 +91,41 @@ public class Line {
         return this.edges;
     }
 
+    public List<LocalTime> getTimetable(Long stationId, boolean isUp) {
+        Long elapsedTime = this.getElapsedTimeBy(stationId, isUp);
+
+        if (elapsedTime == 0) {
+            return Collections.emptyList();
+        }
+
+        return IntStream.iterate(0, i -> i + this.intervalTime)
+                .limit(Duration.between(this.startTime, this.endTime).dividedBy(this.intervalTime).toMinutes())
+                .mapToObj(it -> this.startTime.plusMinutes(it).plusMinutes(elapsedTime))
+                .collect(Collectors.toList());
+    }
+
+
+    private Long getElapsedTimeBy(Long stationId, boolean isUp) {
+        Long elapsedTime = 0L;
+
+        if (CollectionUtils.isEmpty(this.getEdges())) {
+            return elapsedTime;
+        }
+
+        List<Edge> edges = this.edges.getEdges();
+
+        if (!isUp) {
+            Collections.reverse(edges);
+        }
+
+        for (Edge edge : edges) {
+            if (edge.getSourceStation().getId().equals(stationId)) {
+                break;
+            }
+
+            elapsedTime += edge.getElapsedTime();
+        }
+
+        return elapsedTime;
+    }
 }
