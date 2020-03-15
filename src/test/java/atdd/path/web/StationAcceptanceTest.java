@@ -117,7 +117,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
 
         // when
         List<StationTimetableDto> timetableDto = webTestClient.get()
-                .uri(STATION_URL + "/" + stationId2 + "/timetables")
+                .uri(STATION_URL + "/" + stationId + "/timetables")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(StationTimetableDto.class).returnResult().getResponseBody();

@@ -40,6 +40,15 @@ public class Edge {
         this.distance = distance;
     }
 
+    public Edge(Long id, Line line, Station sourceStation, Station targetStation, int distance, int elapsedTime) {
+        this.id = id;
+        this.line = line;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
+        this.distance = distance;
+        this.elapsedTime = elapsedTime;
+    }
+
     @Builder
     public Edge(Long id, Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
         this.id = id;
