@@ -1,12 +1,14 @@
 package atdd.path.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @NoArgsConstructor
 public class Timetables {
     private List<LocalTime> up = new ArrayList<>();
