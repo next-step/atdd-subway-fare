@@ -3,7 +3,7 @@ package atdd.path.docs;
 import atdd.AbstractDocumentationTest;
 import atdd.TestConstant;
 import atdd.path.application.StationService;
-import atdd.path.application.dto.StationTimeTableDto;
+import atdd.path.application.dto.StationTimetableDto;
 import atdd.path.domain.Timetables;
 import atdd.path.repository.LineRepository;
 import atdd.path.repository.StationRepository;
@@ -43,7 +43,7 @@ public class StationDocumentationTest extends AbstractDocumentationTest {
     @Test
     void retrieveStationTimetable() throws Exception {
         given(stationService.retrieveStationTimetable(TestConstant.STATION_ID))
-                .willReturn(Arrays.asList(StationTimeTableDto.builder()
+                .willReturn(Arrays.asList(StationTimetableDto.builder()
                         .lineId(TestConstant.LINE_ID_2)
                         .lineName(TestConstant.LINE_NAME)
                         .timetables(Timetables.builder()

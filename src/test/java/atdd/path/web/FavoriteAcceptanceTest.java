@@ -84,7 +84,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long firstStationId = stationHttpTest.createStation(TestConstant.STATION_NAME);
         Long secondStationId = stationHttpTest.createStation(TestConstant.STATION_NAME_2);
         Long lineId = lineHttpTest.createLine(TestConstant.LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId);
+        lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId, 1);
 
         FavoriteRouteResponseView response = favoriteHttpTest.createFavoriteRoute(firstStationId, secondStationId, token)
                 .getResponseBody();
@@ -99,7 +99,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long firstStationId = stationHttpTest.createStation(TestConstant.STATION_NAME);
         Long secondStationId = stationHttpTest.createStation(TestConstant.STATION_NAME_2);
         Long lineId = lineHttpTest.createLine(TestConstant.LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId);
+        lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId, 1);
         favoriteHttpTest.createFavoriteRoute(firstStationId, secondStationId, token);
 
         FavoriteRoutesResponseView response = favoriteHttpTest.findFavoriteRoute(token).getResponseBody();
@@ -116,7 +116,7 @@ public class FavoriteAcceptanceTest extends AbstractAcceptanceTest {
         Long firstStationId = stationHttpTest.createStation(TestConstant.STATION_NAME);
         Long secondStationId = stationHttpTest.createStation(TestConstant.STATION_NAME_2);
         Long lineId = lineHttpTest.createLine(TestConstant.LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId);
+        lineHttpTest.createEdgeRequest(lineId, firstStationId, secondStationId, 1);
         favoriteHttpTest.createFavoriteRoute(firstStationId, secondStationId, token);
 
         FavoriteRoutesResponseView response = favoriteHttpTest.findFavoriteRoute(token).getResponseBody();

@@ -60,7 +60,7 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId = stationHttpTest.createStation(STATION_NAME);
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
         Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 1);
 
         // when
         EntityExchangeResult<LineResponseView> lineResult = lineHttpTest.retrieveLineRequest(LINE_URL + "/" + lineId);
@@ -112,7 +112,7 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
         Long lineId = lineHttpTest.createLine(LINE_NAME);
 
         // when
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 1);
 
         // then
         EntityExchangeResult<LineResponseView> lineResult = lineHttpTest.retrieveLineRequest(LINE_URL + "/" + lineId);
@@ -129,8 +129,8 @@ public class LineAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId2 = stationHttpTest.createStation(STATION_NAME_2);
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
         Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
-        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 1);
+        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3, 2);
 
         // when
         webTestClient.delete().uri(LINE_URL + "/" + lineId + EDGE_URL + "?stationId=" + stationId2)

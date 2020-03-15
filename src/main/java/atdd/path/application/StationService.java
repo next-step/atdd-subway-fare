@@ -1,8 +1,9 @@
 package atdd.path.application;
 
-import atdd.path.application.dto.StationTimeTableDto;
+import atdd.path.application.dto.StationTimetableDto;
 import atdd.path.domain.Line;
 import atdd.path.domain.Station;
+import atdd.path.domain.Timetables;
 import atdd.path.repository.LineRepository;
 import atdd.path.repository.StationRepository;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,20 @@ public class StationService {
         this.lineRepository = lineRepository;
     }
 
-    public List<StationTimeTableDto> retrieveStationTimetable(Long stationId) {
+    public List<StationTimetableDto> retrieveStationTimetable(Long stationId) {
         Station station = stationRepository.findById(stationId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid station id. stationId: " + stationId));
-        List<Long> lineIds = station.getLines().stream()
+        List<Long> lineIds = station.getLinesByEdge().stream()
                 .map(it -> it.getId())
                 .collect(Collectors.toList());
         List<Line> lines = lineRepository.findAllById(lineIds);
 
-        return StationTimeTableDto.listOf(lines, stationId);
+        return lines.stream()
+                .map(it -> StationTimetableDto.builder()
+                        .lineId(it.getId())
+                        .lineName(it.getName())
+                        .timetables(Timetables.of(it, stationId))
+                        .build())
+                .collect(Collectors.toList());
     }
 }

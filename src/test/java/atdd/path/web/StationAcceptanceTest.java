@@ -2,6 +2,7 @@ package atdd.path.web;
 
 import atdd.AbstractAcceptanceTest;
 import atdd.path.application.dto.StationResponseDto;
+import atdd.path.application.dto.StationTimetableDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,8 +59,8 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
         Long lineId = lineHttpTest.createLine(LINE_NAME);
         Long lineId2 = lineHttpTest.createLine(LINE_NAME_2);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
-        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId3);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 1);
+        lineHttpTest.createEdgeRequest(lineId2, stationId, stationId3, 2);
 
         // when
         StationResponseDto response = stationHttpTest.retrieveStation(stationId).getResponseBody();
@@ -107,11 +108,25 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
     @DisplayName("지하철역 시간표 정보 조회")
     @Test
     void retrieveStationTimetable() {
-        webTestClient.get().uri(STATION_URL + "/1/timetables")
+        // given
+        Long stationId = stationHttpTest.createStation(STATION_NAME);
+        Long stationId2 = stationHttpTest.createStation(STATION_NAME_6);
+        Long stationId3 = stationHttpTest.createStation(STATION_NAME_7);
+        Long lineId = lineHttpTest.createLine(LINE_NAME_2);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 1);
+
+        // when
+        List<StationTimetableDto> timetableDto = webTestClient.get()
+                .uri(STATION_URL + "/" + stationId2 + "/timetables")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.[0].timetables.up").isNotEmpty()
-                .jsonPath("$.[0].timetables.down").isNotEmpty();
+                .expectBodyList(StationTimetableDto.class).returnResult().getResponseBody();
+
+        // then
+        assertThat(timetableDto.size()).isEqualTo(1);
+        assertThat(timetableDto.get(0).getLineId()).isEqualTo(stationId);
+        assertThat(timetableDto.get(0).getLineName()).isEqualTo(LINE_NAME_2);
+        assertThat(timetableDto.get(0).getTimetables().getUp()).isEmpty();
+        assertThat(timetableDto.get(0).getTimetables().getDown()).isNotEmpty();
     }
 }

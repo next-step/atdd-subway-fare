@@ -1,7 +1,7 @@
 package atdd.path.application;
 
 import atdd.TestConstant;
-import atdd.path.application.dto.StationTimeTableDto;
+import atdd.path.application.dto.StationTimetableDto;
 import atdd.path.repository.LineRepository;
 import atdd.path.repository.StationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +41,7 @@ public class StationServiceTest {
                 .willReturn(Arrays.asList(TestConstant.TEST_LINE, TestConstant.TEST_LINE_2));
 
         // when
-        List<StationTimeTableDto> stationTimeTable = stationService.retrieveStationTimetable(TestConstant.STATION_ID);
+        List<StationTimetableDto> stationTimeTable = stationService.retrieveStationTimetable(TestConstant.STATION_ID);
 
         // then
         assertThat(stationTimeTable.size()).isEqualTo(2);

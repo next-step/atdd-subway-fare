@@ -119,7 +119,11 @@ public class Line {
         }
 
         for (Edge edge : edges) {
-            if (edge.getSourceStation().getId().equals(stationId)) {
+            if (isUp && edge.getSourceStation().getId().equals(stationId)) {
+                break;
+            }
+
+            if (!isUp && edge.getTargetStation().getId().equals(stationId)) {
                 break;
             }
 

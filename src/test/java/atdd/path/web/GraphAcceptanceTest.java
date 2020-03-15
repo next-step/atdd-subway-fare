@@ -24,9 +24,9 @@ public class GraphAcceptanceTest extends AbstractAcceptanceTest {
         Long stationId3 = stationHttpTest.createStation(STATION_NAME_3);
         Long stationId4 = stationHttpTest.createStation(STATION_NAME_4);
         Long lineId = lineHttpTest.createLine(LINE_NAME);
-        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2);
-        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3);
-        lineHttpTest.createEdgeRequest(lineId, stationId3, stationId4);
+        lineHttpTest.createEdgeRequest(lineId, stationId, stationId2, 1);
+        lineHttpTest.createEdgeRequest(lineId, stationId2, stationId3, 2);
+        lineHttpTest.createEdgeRequest(lineId, stationId3, stationId4, 1);
 
         webTestClient.get().uri("/paths?startId=" + stationId + "&endId=" + stationId4)
                 .exchange()
