@@ -119,11 +119,7 @@ public class Line {
         }
 
         for (Edge edge : edges) {
-            if (isUp && edge.getSourceStation().getId().equals(stationId)) {
-                break;
-            }
-
-            if (!isUp && edge.getTargetStation().getId().equals(stationId)) {
+            if (isThisStation(isUp, edge, stationId)) {
                 break;
             }
 
@@ -131,5 +127,17 @@ public class Line {
         }
 
         return elapsedTime;
+    }
+
+    private boolean isThisStation(boolean isUp, Edge edge, Long stationId) {
+        if (isUp && edge.getSourceStation().getId().equals(stationId)) {
+            return true;
+        }
+
+        if (!isUp && edge.getTargetStation().getId().equals(stationId)) {
+            return true;
+        }
+
+        return false;
     }
 }
