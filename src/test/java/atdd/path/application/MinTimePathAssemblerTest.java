@@ -3,6 +3,7 @@ package atdd.path.application;
 import atdd.path.application.dto.MinTimePathAssembler;
 import atdd.path.application.dto.MinTimePathResponseView;
 import atdd.path.domain.Line;
+import atdd.path.domain.MinTimePathLine;
 import atdd.path.domain.Station;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ public class MinTimePathAssemblerTest {
         List<Line> lines = Arrays.asList(TEST_LINE, TEST_LINE_2, TEST_LINE_3, TEST_LINE_4);
         List<Station> pathStations = Arrays.asList(TEST_STATION_11, TEST_STATION_12, TEST_STATION, TEST_STATION_2, TEST_STATION_3, TEST_STATION_4);
 
-        MinTimePathResponseView responseView = new MinTimePathAssembler(lines, pathStations, LocalDateTime.of(2020, 3, 13, 9, 27, 44)).assemble();
+        MinTimePathResponseView responseView = new MinTimePathAssembler(lines, pathStations, LocalDateTime.of(2020, 3, 13, 9, 27, 44), MinTimePathLine.listOf(lines, pathStations)).assemble();
 
         LocalDateTime localDateTime = LocalDateTime.of(2020, 3, 13, 10, 0, 0, 0);
 
