@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
@@ -55,21 +57,7 @@ public class GraphDocumentationTest extends AbstractDocumentationTest {
 
         //then
         result.andExpect(status().isOk())
-                .andDo(
-                        document("paths",
-                                requestParameters(
-                                        parameterWithName("startId").description("start station's ID"),
-                                        parameterWithName("endId").description("end station's ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
-                                        fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
-                                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
-                                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
-                                        fieldWithPath("stations[].lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
-                                        fieldWithPath("stations[].lines[].name").type(JsonFieldType.STRING).description("The line's name")
-                                )
-                        ))
+                .andDo(document("paths", pathsParameters(), pathsFields()))
                 .andDo(print());
     }
 
@@ -87,24 +75,42 @@ public class GraphDocumentationTest extends AbstractDocumentationTest {
 
         //then
         result.andExpect(status().isOk())
-                .andDo(
-                        document("paths/min-time",
-                                requestParameters(
-                                        parameterWithName("startId").description("start station's ID"),
-                                        parameterWithName("endId").description("end station's ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
-                                        fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
-                                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
-                                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
-                                        fieldWithPath("lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
-                                        fieldWithPath("lines[].name").type(JsonFieldType.STRING).description("The line's name"),
-                                        fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance"),
-                                        fieldWithPath("departAt").type(JsonFieldType.STRING).description("The departAt"),
-                                        fieldWithPath("arriveBy").type(JsonFieldType.STRING).description("The arriveBy")
-                                )
-                        ))
+                .andDo(document("paths/min-time", findMinTimePathParameters(), findMinTimePathFields()))
                 .andDo(print());
+    }
+
+    private RequestParametersSnippet pathsParameters() {
+        return requestParameters(
+                parameterWithName("startId").description("start station's ID"),
+                parameterWithName("endId").description("end station's ID"));
+    }
+
+    private ResponseFieldsSnippet pathsFields() {
+        return responseFields(
+                fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
+                fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
+                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
+                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
+                fieldWithPath("stations[].lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
+                fieldWithPath("stations[].lines[].name").type(JsonFieldType.STRING).description("The line's name"));
+    }
+
+    private RequestParametersSnippet findMinTimePathParameters() {
+        return requestParameters(
+                parameterWithName("startId").description("start station's ID"),
+                parameterWithName("endId").description("end station's ID"));
+    }
+
+    private ResponseFieldsSnippet findMinTimePathFields() {
+        return responseFields(
+                fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station's id"),
+                fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description(" The end station's id"),
+                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The station's id"),
+                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The station's name"),
+                fieldWithPath("lines[].id").type(JsonFieldType.NUMBER).description("The line's id"),
+                fieldWithPath("lines[].name").type(JsonFieldType.STRING).description("The line's name"),
+                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance"),
+                fieldWithPath("departAt").type(JsonFieldType.STRING).description("The departAt"),
+                fieldWithPath("arriveBy").type(JsonFieldType.STRING).description("The arriveBy"));
     }
 }
