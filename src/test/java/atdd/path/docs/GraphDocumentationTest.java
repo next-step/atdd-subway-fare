@@ -52,7 +52,7 @@ public class GraphDocumentationTest extends AbstractDocumentationTest {
         long targetStationId = TEST_STATION_4.getId();
 
         //when
-        ResultActions result = this.mockMvc.perform(get("/paths?startId=" + sourceStationId + "&endId=" + targetStationId)
+        ResultActions result = this.mockMvc.perform(get("/paths/short-path?startId=" + sourceStationId + "&endId=" + targetStationId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         //then

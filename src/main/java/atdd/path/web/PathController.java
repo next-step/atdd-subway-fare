@@ -22,7 +22,7 @@ public class PathController {
         this.graphService = graphService;
     }
 
-    @GetMapping
+    @GetMapping("/short-path")
     public ResponseEntity findPath(@RequestParam Long startId, @RequestParam Long endId) {
         return ResponseEntity.ok(new PathResponseView(startId, endId, graphService.findPath(startId, endId)));
     }
