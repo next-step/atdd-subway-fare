@@ -4,12 +4,12 @@ import atdd.exception.ErrorType;
 import atdd.exception.SubwayException;
 import atdd.path.domain.Edge;
 import atdd.path.domain.Line;
+import atdd.path.domain.MinTimePathLine;
 import atdd.path.domain.Station;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MinTimePathAssembler {
@@ -18,9 +18,9 @@ public class MinTimePathAssembler {
     private List<Line> lines;
     private LocalDateTime startDateTime;
 
-    public MinTimePathAssembler(List<Line> lines, List<Station> pathStations, LocalDateTime startDateTime) {
+    public MinTimePathAssembler(List<Line> lines, List<Station> pathStations, LocalDateTime startDateTime, List<MinTimePathLine> minTimePathLines) {
         this.pathStations = pathStations;
-        this.minTimePathLines = makeMinTimePathLines(lines, pathStations);
+        this.minTimePathLines = minTimePathLines;
         this.lines = lines;
         this.startDateTime = startDateTime;
     }
@@ -36,45 +36,6 @@ public class MinTimePathAssembler {
                 .distance(getDistance())
                 .departAt(localDateTime)
                 .arriveBy(calculateArriveBy(startDateTime)).build();
-    }
-
-    private List<MinTimePathLine> makeMinTimePathLines(List<Line> lines, List<Station> pathStations) {
-        List<MinTimePathLine> minTimePathLines = new ArrayList<>();
-
-        for (int i = 0; i < pathStations.size() - 1; i++) {
-            for (Line line : lines) {
-                Optional<Edge> edgeOptional = findEdge(line.getEdges(), pathStations.get(i).getId(), pathStations.get(i + 1).getId());
-
-                if (!edgeOptional.isPresent()) {
-                    continue;
-                }
-
-                Optional<MinTimePathLine> minTimePathLine = findMinTimePathLine(minTimePathLines, line.getId());
-
-                if (!minTimePathLine.isPresent()) {
-                    minTimePathLines.add(new MinTimePathLine(line, new ArrayList(Arrays.asList(edgeOptional.get()))));
-                    break;
-                }
-
-                minTimePathLine.get().addEdge(edgeOptional.get());
-
-                break;
-            }
-        }
-
-        return minTimePathLines;
-    }
-
-    private Optional<Edge> findEdge(List<Edge> edges, long sourceId, long endId) {
-        return edges.stream()
-                .filter(it -> it.isSourceStation(sourceId) && it.isTargetStation(endId))
-                .findFirst();
-    }
-
-    private Optional<MinTimePathLine> findMinTimePathLine(List<MinTimePathLine> minTimePathLines, long lineId) {
-        return minTimePathLines.stream()
-                .filter(it -> it.getLine().getId() == lineId)
-                .findFirst();
     }
 
     private List<Line> getLine() {
@@ -109,7 +70,7 @@ public class MinTimePathAssembler {
 
             // 막차
             if (endSubway) {
-                if(timeTables.get(0).isBefore(arriveDateTime.toLocalTime())) {
+                if (timeTables.get(0).isBefore(arriveDateTime.toLocalTime())) {
                     arriveDateTime = arriveDateTime.plusMinutes(1);
                 }
                 arriveDateTime = LocalDateTime.of(arriveDateTime.toLocalDate().plusDays(1), timeTables.get(0));
@@ -149,20 +110,5 @@ public class MinTimePathAssembler {
         }
 
         throw new SubwayException(ErrorType.NOT_FOUND_TIME_TABLES);
-    }
-
-    @Getter
-    private class MinTimePathLine {
-        private Line line;
-        private List<Edge> edges;
-
-        public MinTimePathLine(Line line, List<Edge> edges) {
-            this.line = line;
-            this.edges = edges;
-        }
-
-        public void addEdge(Edge edge) {
-            edges.add(edge);
-        }
     }
 }

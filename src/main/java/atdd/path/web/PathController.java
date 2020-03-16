@@ -3,6 +3,8 @@ package atdd.path.web;
 import atdd.path.application.GraphService;
 import atdd.path.application.dto.MinTimePathAssembler;
 import atdd.path.application.dto.PathResponseView;
+import atdd.path.domain.Line;
+import atdd.path.domain.MinTimePathLine;
 import atdd.path.domain.Station;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,8 @@ public class PathController {
     @GetMapping("/min-time")
     public ResponseEntity findMinTimePath(@RequestParam Long startId, @RequestParam Long endId) {
         List<Station> stations = graphService.findMinTimePath(startId, endId);
+        List<Line> lines = graphService.findAllLine();
 
-        return ResponseEntity.ok(new MinTimePathAssembler(graphService.findAllLine(), stations, LocalDateTime.now()).assemble());
+        return ResponseEntity.ok(new MinTimePathAssembler(lines, stations, LocalDateTime.now(), MinTimePathLine.listOf(lines, stations)).assemble());
     }
 }
