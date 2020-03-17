@@ -15,27 +15,19 @@ public class Graph {
         this.lines = lines;
     }
 
-    public List<Line> getLines() {
+    protected List<Line> getLines() {
         return lines;
     }
 
-    public List<Station> getShortestDistancePath(Long startId, Long endId) {
-        return getPathStations(makeGraph(lines), startId, endId);
-    }
-
-    private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraph(List<Line> lines) {
+    protected WeightedMultigraph<Long, DefaultWeightedEdge> makeGraph() {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .forEach(it -> graph.addVertex(it.getId()));
-
-        lines.stream()
-                .flatMap(it -> it.getEdges().stream())
-                .forEach(it -> graph.setEdgeWeight(graph.addEdge(it.getSourceStation().getId(), it.getTargetStation().getId()), it.getDistance()));
         return graph;
     }
 
-    private List<Station> getPathStations(WeightedMultigraph<Long, DefaultWeightedEdge> graph, Long startId, Long endId) {
+    protected List<Station> getPathStations(WeightedMultigraph<Long, DefaultWeightedEdge> graph, Long startId, Long endId) {
         GraphPath<Long, DefaultWeightedEdge> path = new DijkstraShortestPath(graph).getPath(startId, endId);
 
         return path.getVertexList().stream()

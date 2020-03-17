@@ -447,6 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-path">Path</a>
 <ul class="sectlevel2">
 <li><a href="#resources-path-findPath">최단 경로 조회</a></li>
+<li><a href="#resources-path-findMinTimePath">최단 시간 경로 조회</a></li>
 </ul>
 </li>
 <li><a href="#resources-favorite">Favorite</a>
@@ -834,6 +835,120 @@ Content-Length: 478
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].lines[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The line&#8217;s name</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="resources-path-findMinTimePath"><a class="link" href="#resources-path-findMinTimePath">최단 시간 경로 조회</a></h3>
+<div class="sect3">
+<h4 id="resources-path-findMinTimePath_http_request"><a class="link" href="#resources-path-findMinTimePath_http_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /paths/min-time?startId=11&amp;endId=4 HTTP/1.1
+Content-Type: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-path-findMinTimePath_http_response"><a class="link" href="#resources-path-findMinTimePath_http_response">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 382
+
+{"startStationId":11,"endStationId":4,"stations":[{"id":11,"name":"고속버스터미널역"},{"id":12,"name":"교대역"},{"id":1,"name":"강남역"},{"id":2,"name":"역삼역"},{"id":3,"name":"선릉역"},{"id":4,"name":"삼성역"}],"lines":[{"id":3,"name":"3호선"},{"id":1,"name":"2호선"}],"distance":50,"departAt":"2020-03-13T22:10:40.516","arriveBy":"2020-03-13T22:55:00"}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resources-path-findMinTimePath_request_parameters"><a class="link" href="#resources-path-findMinTimePath_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">start station&#8217;s ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>endId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">end station&#8217;s ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="resources-path-findMinTimePath_response_fields"><a class="link" href="#resources-path-findMinTimePath_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startStationId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The start station&#8217;s id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>endStationId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The end station&#8217;s id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The station&#8217;s id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The station&#8217;s name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>lines[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The line&#8217;s id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>lines[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The line&#8217;s name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The distance</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>departAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The departAt</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>arriveBy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The arriveBy</p></td>
 </tr>
 </tbody>
 </table>
@@ -1428,7 +1543,7 @@ Host: localhost:8080</code></pre>
 Content-Type: application/json
 Content-Length: 3656
 
-[{"lineId":1,"lineName":"2호선","timetables":{"up":["05:45","05:55","06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"],"down":["06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"]}},{"lineId":2,"lineName":"신분당선","timetables":{"up":["05:45","05:55","06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"],"down":["06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"]}}]</code></pre>
+[{"lineId":1,"lineName":"2호선","timetables":{"up":["06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"],"down":["05:45","05:55","06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"]}},{"lineId":2,"lineName":"신분당선","timetables":{"up":["06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"],"down":["05:45","05:55","06:05","06:15","06:25","06:35","06:45","06:55","07:05","07:15","07:25","07:35","07:45","07:55","08:05","08:15","08:25","08:35","08:45","08:55","09:05","09:15","09:25","09:35","09:45","09:55","10:05","10:15","10:25","10:35","10:45","10:55","11:05","11:15","11:25","11:35","11:45","11:55","12:05","12:15","12:25","12:35","12:45","12:55","13:05","13:15","13:25","13:35","13:45","13:55","14:05","14:15","14:25","14:35","14:45","14:55","15:05","15:15","15:25","15:35","15:45","15:55","16:05","16:15","16:25","16:35","16:45","16:55","17:05","17:15","17:25","17:35","17:45","17:55","18:05","18:15","18:25","18:35","18:45","18:55","19:05","19:15","19:25","19:35","19:45","19:55","20:05","20:15","20:25","20:35","20:45","20:55","21:05","21:15","21:25","21:35","21:45","21:55","22:05","22:15","22:25","22:35","22:45","22:55","23:05","23:15","23:25","23:35","23:45","23:55","00:05"]}}]</code></pre>
 </div>
 </div>
 </div>
@@ -1499,7 +1614,7 @@ Content-Length: 3656
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-08 17:50:24 +0900
+Last updated 2020-03-13 22:12:54 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

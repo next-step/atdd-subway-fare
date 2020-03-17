@@ -128,7 +128,7 @@ public class Edges {
         return new Edges(newEdges);
     }
 
-    public int calculateUpDelayTimeOf(long stationId) {
+    public int calculateDownDelayTimeOf(long stationId) {
         if (edges.get(0).isSourceStation(stationId)) {
             return 0;
         }
@@ -148,7 +148,7 @@ public class Edges {
         return time;
     }
 
-    public int calculateDownDelayTimeOf(long stationId) {
+    public int calculateUpDelayTimeOf(long stationId) {
         if (edges.get(edges.size() - 1).isTargetStation(stationId)) {
             return 0;
         }
@@ -157,6 +157,7 @@ public class Edges {
 
         for (int i = edges.size() - 1; i >= 0; i--) {
             Edge edge = edges.get(i);
+
             if (edge.isSourceStation(stationId)) {
                 time += edge.getElapsedTime();
 

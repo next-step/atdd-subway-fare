@@ -30,3 +30,6 @@ out/
 
 ### Mac ###
 *.DS_Store
+
+### docs ###
+api-guide.html
