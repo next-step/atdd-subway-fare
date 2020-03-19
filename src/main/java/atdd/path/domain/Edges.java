@@ -9,7 +9,11 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 @NoArgsConstructor
@@ -139,6 +143,7 @@ public class Edges {
     }
 
     public Long getElapsedTimeBy(Long stationId, boolean isUp) {
+        this.validateContainStationId(stationId);
         Long elapsedTime = 0L;
 
         if (CollectionUtils.isEmpty(this.getEdges())) {
@@ -160,5 +165,17 @@ public class Edges {
         }
 
         return elapsedTime;
+    }
+
+    private boolean validateContainStationId(Long stationId) {
+        Set<Long> stationIds = this.edges.stream()
+                .flatMap(it -> Stream.of(it.getSourceStation().getId(), it.getTargetStation().getId()))
+                .collect(toSet());
+
+        if (!stationIds.contains(stationId)) {
+            throw new IllegalArgumentException("Can not found station Id. stationId: " + stationId);
+        }
+
+        return true;
     }
 }

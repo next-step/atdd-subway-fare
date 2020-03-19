@@ -116,6 +116,8 @@ public class TestConstant {
 
     public static Line TEST_SIMPLE_LINE = new Line(LINE_ID, LINE_NAME);
     public static Line TEST_SIMPLE_LINE2 = new Line(LINE_ID_2, LINE_NAME_2);
+    public static Line TEST_SIMPLE_LINE3 = new Line(LINE_ID_3, LINE_NAME_3);
+    public static Line TEST_SIMPLE_LINE4 = new Line(LINE_ID_4, LINE_NAME_4);
 
     // 2호선
     public static Edge TEST_EDGE = new Edge(EDGE_ID, TEST_SIMPLE_LINE, TEST_STATION, TEST_STATION_2, 10, 1);
@@ -140,18 +142,18 @@ public class TestConstant {
     public static Edge TEST_EDGE_15 = new Edge(EDGE_ID_15, TEST_STATION_15, TEST_STATION_16, 10);
 
     // 분당선
-    public static Edge TEST_EDGE_16 = new Edge(EDGE_ID_16, TEST_STATION_17, TEST_STATION_18, 10);
-    public static Edge TEST_EDGE_17 = new Edge(EDGE_ID_17, TEST_STATION_18, TEST_STATION_19, 10);
-    public static Edge TEST_EDGE_18 = new Edge(EDGE_ID_18, TEST_STATION_19, TEST_STATION_20, 10);
-    public static Edge TEST_EDGE_19 = new Edge(EDGE_ID_19, TEST_STATION_20, TEST_STATION_15, 10);
-    public static Edge TEST_EDGE_20 = new Edge(EDGE_ID_20, TEST_STATION_15, TEST_STATION_21, 10);
-    public static Edge TEST_EDGE_21 = new Edge(EDGE_ID_21, TEST_STATION_21, TEST_STATION_3, 10);
-    public static Edge TEST_EDGE_22 = new Edge(EDGE_ID_22, TEST_STATION_3, TEST_STATION_22, 10);
+    public static Edge TEST_EDGE_16 = new Edge(EDGE_ID_16, TEST_SIMPLE_LINE4, TEST_STATION_17, TEST_STATION_18, 4, 4);
+    public static Edge TEST_EDGE_17 = new Edge(EDGE_ID_17, TEST_SIMPLE_LINE4, TEST_STATION_18, TEST_STATION_19, 1, 1);
+    public static Edge TEST_EDGE_18 = new Edge(EDGE_ID_18, TEST_SIMPLE_LINE4, TEST_STATION_19, TEST_STATION_20, 1, 1);
+    public static Edge TEST_EDGE_19 = new Edge(EDGE_ID_19, TEST_SIMPLE_LINE4, TEST_STATION_20, TEST_STATION_15, 1, 1);
+    public static Edge TEST_EDGE_20 = new Edge(EDGE_ID_20, TEST_SIMPLE_LINE4, TEST_STATION_15, TEST_STATION_21, 1, 1);
+    public static Edge TEST_EDGE_21 = new Edge(EDGE_ID_21, TEST_SIMPLE_LINE4, TEST_STATION_21, TEST_STATION_3, 2, 2);
+    public static Edge TEST_EDGE_22 = new Edge(EDGE_ID_22, TEST_SIMPLE_LINE4, TEST_STATION_3, TEST_STATION_22, 2, 2);
 
     public static Line TEST_LINE = new Line(LINE_ID, LINE_NAME, Lists.list(TEST_EDGE_23, TEST_EDGE, TEST_EDGE_2, TEST_EDGE_3, TEST_EDGE_4), LocalTime.of(5, 0), LocalTime.of(23, 30), 10);
     public static Line TEST_LINE_2 = new Line(LINE_ID_2, LINE_NAME_2, Lists.list(TEST_EDGE_5, TEST_EDGE_6, TEST_EDGE_7, TEST_EDGE_8, TEST_EDGE_9), LocalTime.of(5, 0), LocalTime.of(23, 30), 30);
     public static Line TEST_LINE_3 = new Line(LINE_ID_3, LINE_NAME_3, Lists.list(TEST_EDGE_10, TEST_EDGE_11, TEST_EDGE_12, TEST_EDGE_13, TEST_EDGE_14, TEST_EDGE_15), LocalTime.of(0, 0), LocalTime.of(23, 30), 5);
-    public static Line TEST_LINE_4 = new Line(LINE_ID_4, LINE_NAME_4, Lists.list(TEST_EDGE_16, TEST_EDGE_17, TEST_EDGE_18, TEST_EDGE_19, TEST_EDGE_20, TEST_EDGE_21, TEST_EDGE_22), LocalTime.of(0, 0), LocalTime.of(23, 30), 30);
+    public static Line TEST_LINE_4 = new Line(LINE_ID_4, LINE_NAME_4, Lists.list(TEST_EDGE_16, TEST_EDGE_17, TEST_EDGE_18, TEST_EDGE_19, TEST_EDGE_20, TEST_EDGE_21, TEST_EDGE_22), LocalTime.of(10, 0), LocalTime.of(11, 30), 30);
 
     public static final String TEST_USER_EMAIL = "boorwonie@email.com";
     public static final String TEST_USER_NAME = "브라운";
