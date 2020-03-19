@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -135,5 +136,29 @@ public class Edges {
                 .filter(it -> !oldEdges.contains(it))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
+    }
+
+    public Long getElapsedTimeBy(Long stationId, boolean isUp) {
+        Long elapsedTime = 0L;
+
+        if (CollectionUtils.isEmpty(this.getEdges())) {
+            return elapsedTime;
+        }
+
+        List<Edge> edges = this.edges;
+
+        if (!isUp) {
+            Collections.reverse(edges);
+        }
+
+        for (Edge edge : edges) {
+            if (edge.isThisStation(isUp, stationId)) {
+                break;
+            }
+
+            elapsedTime += edge.getElapsedTime();
+        }
+
+        return elapsedTime;
     }
 }

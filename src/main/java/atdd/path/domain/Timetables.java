@@ -20,10 +20,10 @@ public class Timetables {
         this.down = down;
     }
 
-    public static Timetables of(Line line, Long stationId) {
+    public static Timetables of(Line line, Station station) {
         return Timetables.builder()
-                .up(line.getTimetable(stationId, true))
-                .down(line.getTimetable(stationId, false))
+                .up(station.getTimetable(line, true))
+                .down(station.getTimetable(line, false))
                 .build();
     }
 

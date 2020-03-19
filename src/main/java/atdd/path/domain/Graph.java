@@ -30,7 +30,7 @@ public class Graph {
                 .forEach(it -> graph.addVertex(it.getId()));
 
         lines.stream()
-                .flatMap(it -> it.getEdges().stream())
+                .flatMap(it -> it.getAllEdges().stream())
                 .forEach(it -> graph.setEdgeWeight(graph.addEdge(it.getSourceStation().getId(), it.getTargetStation().getId()), it.getDistance()));
         return graph;
     }
@@ -62,7 +62,7 @@ public class Graph {
                 .forEach(it -> graph.addVertex(it.getId()));
 
         lines.stream()
-                .flatMap(it -> it.getEdges().stream())
+                .flatMap(it -> it.getAllEdges().stream())
                 .forEach(it -> graph.setEdgeWeight(graph.addEdge(it.getSourceStation().getId(), it.getTargetStation().getId()), it.getElapsedTime()));
         return graph;
     }
@@ -80,7 +80,7 @@ public class Graph {
 
     private Edge findEdge(Long edgeSource, Long edgeTarget) {
         return lines.stream()
-                .flatMap(it -> it.getEdges().stream())
+                .flatMap(it -> it.getAllEdges().stream())
                 .filter(it -> it.getSourceStation().getId().equals(edgeSource)
                         && it.getTargetStation().getId().equals(edgeTarget))
                 .findFirst()

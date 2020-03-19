@@ -35,7 +35,7 @@ public class StationService {
                 .map(it -> StationTimetableDto.builder()
                         .lineId(it.getId())
                         .lineName(it.getName())
-                        .timetables(Timetables.of(it, stationId))
+                        .timetables(Timetables.of(it, station))
                         .build())
                 .collect(Collectors.toList());
     }

@@ -71,4 +71,16 @@ public class Edge {
         this.line = line;
 
     }
+
+    public boolean isThisStation(boolean isUp, Long stationId) {
+        if (isUp && this.sourceStation.getId().equals(stationId)) {
+            return true;
+        }
+
+        if (!isUp && this.targetStation.getId().equals(stationId)) {
+            return true;
+        }
+
+        return false;
+    }
 }
