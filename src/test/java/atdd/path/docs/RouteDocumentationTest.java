@@ -11,10 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -52,16 +55,10 @@ public class RouteDocumentationTest extends AbstractDocumentationTest {
                 .andExpect(status().isOk())
                 .andDo(document("routes/distance",
                         requestParameters(
-                                parameterWithName("startId").description("The start station id"),
-                                parameterWithName("endId").description("The end station Id")
+                                this.pathParameters()
                         ),
                         responseFields(
-                                fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station id"),
-                                fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description("The end station Id"),
-                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The route stations's id"),
-                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The route stations's name"),
-                                fieldWithPath("stations[].lines").type(JsonFieldType.ARRAY).description("The route stations's lines"),
-                                fieldWithPath("estimatedTime").type(JsonFieldType.NUMBER).description("The total estimated Time (minutes)")
+                                this.pathResponse()
                         )))
                 .andDo(print());
     }
@@ -86,17 +83,27 @@ public class RouteDocumentationTest extends AbstractDocumentationTest {
                 .andExpect(status().isOk())
                 .andDo(document("routes/time",
                         requestParameters(
-                                parameterWithName("startId").description("The start station id"),
-                                parameterWithName("endId").description("The end station Id")
+                                this.pathParameters()
                         ),
                         responseFields(
-                                fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station id"),
-                                fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description("The end station Id"),
-                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The route stations's id"),
-                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The route stations's name"),
-                                fieldWithPath("stations[].lines").type(JsonFieldType.ARRAY).description("The route stations's lines"),
-                                fieldWithPath("estimatedTime").type(JsonFieldType.NUMBER).description("The total estimated Time (minutes)")
+                                this.pathResponse()
                         )))
                 .andDo(print());
+    }
+
+    private List<ParameterDescriptor> pathParameters() {
+        return Arrays.asList(
+                parameterWithName("startId").description("The start station id"),
+                parameterWithName("endId").description("The end station Id"));
+    }
+
+    private List<FieldDescriptor> pathResponse() {
+        return Arrays.asList(
+                fieldWithPath("startStationId").type(JsonFieldType.NUMBER).description("The start station id"),
+                fieldWithPath("endStationId").type(JsonFieldType.NUMBER).description("The end station Id"),
+                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The route stations's id"),
+                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The route stations's name"),
+                fieldWithPath("stations[].lines").type(JsonFieldType.ARRAY).description("The route stations's lines"),
+                fieldWithPath("estimatedTime").type(JsonFieldType.NUMBER).description("The total estimated Time (minutes)"));
     }
 }

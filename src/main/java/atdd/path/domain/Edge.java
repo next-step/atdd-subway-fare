@@ -72,7 +72,7 @@ public class Edge {
 
     }
 
-    public boolean isThisStation(boolean isUp, Long stationId) {
+    public boolean isThisStation(Long stationId, boolean isUp) {
         if (isUp && this.sourceStation.getId().equals(stationId)) {
             return true;
         }

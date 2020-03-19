@@ -13,10 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -59,12 +61,17 @@ public class StationDocumentationTest extends AbstractDocumentationTest {
                                 parameterWithName("stationId").description("The station id for timetable")
                         ),
                         responseFields(
-                                fieldWithPath("[].lineId").type(JsonFieldType.NUMBER).description("The line Id"),
-                                fieldWithPath("[].lineName").type(JsonFieldType.STRING).description("The line name"),
-                                fieldWithPath("[].timetables").type(JsonFieldType.OBJECT).description("The station timetable in line"),
-                                fieldWithPath("[].timetables.up").type(JsonFieldType.ARRAY).description("The up line timetable"),
-                                fieldWithPath("[].timetables.down").type(JsonFieldType.ARRAY).description("The down line timetable")
+                                this.timetableResponse()
                         )))
                 .andDo(print());
+    }
+
+    private List<FieldDescriptor> timetableResponse() {
+        return Arrays.asList(
+                fieldWithPath("[].lineId").type(JsonFieldType.NUMBER).description("The line Id"),
+                fieldWithPath("[].lineName").type(JsonFieldType.STRING).description("The line name"),
+                fieldWithPath("[].timetables").type(JsonFieldType.OBJECT).description("The station timetable in line"),
+                fieldWithPath("[].timetables.up").type(JsonFieldType.ARRAY).description("The up line timetable"),
+                fieldWithPath("[].timetables.down").type(JsonFieldType.ARRAY).description("The down line timetable"));
     }
 }

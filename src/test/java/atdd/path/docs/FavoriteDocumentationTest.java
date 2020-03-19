@@ -19,6 +19,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static atdd.TestConstant.TEST_USER_EMAIL;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,9 +80,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                                 fieldWithPath("stationId").type(JsonFieldType.NUMBER).description("The station's id for favorite")
                         ),
                         responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The favorite's id"),
-                                fieldWithPath("station.id").type(JsonFieldType.NUMBER).description("The station's id for favorite"),
-                                fieldWithPath("station.name").type(JsonFieldType.STRING).description("The station's name for favorite")
+                                this.stationResponse()
                         )))
                 .andDo(print());
     }
@@ -106,10 +105,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                                 headerWithName("Authorization").description("Bearer auth credentials")),
                         responseFields(
                                 fieldWithPath("favoriteStations").description("An array Favorite-station"))
-                                .andWithPrefix("favoriteStations[].", new FieldDescriptor[]{
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("Id of Favorite-station"),
-                                        fieldWithPath("station.id").type(JsonFieldType.NUMBER).description("Stations's id of Favorite-station"),
-                                        fieldWithPath("station.name").type(JsonFieldType.STRING).description("Stations's name of Favorite-station")})
+                                .andWithPrefix("favoriteStations[].", this.stationResponse())
                 ))
                 .andDo(print());
     }
@@ -154,11 +150,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                                 fieldWithPath("targetStationId").type(JsonFieldType.NUMBER).description("The end station's id for favorite route")
                         ),
                         responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The created favorite route's id"),
-                                fieldWithPath("sourceStation.id").type(JsonFieldType.NUMBER).description("The start station's id for favorite route"),
-                                fieldWithPath("sourceStation.name").type(JsonFieldType.STRING).description("The start station's name for favorite route"),
-                                fieldWithPath("targetStation.id").type(JsonFieldType.NUMBER).description("The end station's id favorite route"),
-                                fieldWithPath("targetStation.name").type(JsonFieldType.STRING).description("The end station's name for favorite route")
+                                this.favoriteRouteResponse()
                         )
                 ))
                 .andDo(print());
@@ -190,12 +182,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                                 headerWithName("Authorization").description("Bearer auth credentials")),
                         responseFields(
                                 fieldWithPath("favoriteRoutes").description("An array Favorite-route"))
-                                .andWithPrefix("favoriteRoutes[]", new FieldDescriptor[]{
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("Id of Favorite-route"),
-                                        fieldWithPath("sourceStation.id").type(JsonFieldType.NUMBER).description("Start stations's id of Favorite-route"),
-                                        fieldWithPath("sourceStation.name").type(JsonFieldType.STRING).description("Start stations's name of Favorite-route"),
-                                        fieldWithPath("targetStation.id").type(JsonFieldType.NUMBER).description("End stations's id of Favorite-route"),
-                                        fieldWithPath("targetStation.name").type(JsonFieldType.STRING).description("End stations's name of Favorite-route")})
+                                .andWithPrefix("favoriteRoutes[]", this.favoriteRouteResponse())
                 ))
                 .andDo(print());
     }
@@ -214,5 +201,21 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                         )
                 ))
                 .andDo(print());
+    }
+
+    private List<FieldDescriptor> stationResponse() {
+        return Arrays.asList(
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The favorite's id"),
+                fieldWithPath("station.id").type(JsonFieldType.NUMBER).description("The station's id for favorite"),
+                fieldWithPath("station.name").type(JsonFieldType.STRING).description("The station's name for favorite"));
+    }
+
+    private List<FieldDescriptor> favoriteRouteResponse() {
+        return Arrays.asList(
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The created favorite route's id"),
+                fieldWithPath("sourceStation.id").type(JsonFieldType.NUMBER).description("The start station's id for favorite route"),
+                fieldWithPath("sourceStation.name").type(JsonFieldType.STRING).description("The start station's name for favorite route"),
+                fieldWithPath("targetStation.id").type(JsonFieldType.NUMBER).description("The end station's id favorite route"),
+                fieldWithPath("targetStation.name").type(JsonFieldType.STRING).description("The end station's name for favorite route"));
     }
 }
