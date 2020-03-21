@@ -40,8 +40,18 @@ public class Edge {
         this.distance = distance;
     }
 
+    public Edge(Long id, Line line, Station sourceStation, Station targetStation, int distance, int elapsedTime) {
+        this.id = id;
+        this.line = line;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
+        this.distance = distance;
+        this.elapsedTime = elapsedTime;
+    }
+
     @Builder
-    public Edge(Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
+    public Edge(Long id, Long lineId, Long sourceStationId, Long targetStationId, int distance, int elapsedTime) {
+        this.id = id;
         this.line = new Line(lineId, null);
         this.sourceStation = new Station(sourceStationId, null);
         this.targetStation = new Station(targetStationId, null);
@@ -60,5 +70,17 @@ public class Edge {
     public void updateLine(Line line) {
         this.line = line;
 
+    }
+
+    public boolean isThisStation(Long stationId, boolean isUp) {
+        if (isUp && this.sourceStation.getId().equals(stationId)) {
+            return true;
+        }
+
+        if (!isUp && this.targetStation.getId().equals(stationId)) {
+            return true;
+        }
+
+        return false;
     }
 }

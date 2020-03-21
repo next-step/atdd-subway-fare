@@ -1,5 +1,6 @@
 package atdd.path.web;
 
+import atdd.path.application.StationService;
 import atdd.path.application.dto.CreateStationRequestView;
 import atdd.path.application.dto.StationResponseDto;
 import atdd.path.domain.Station;
@@ -11,14 +12,17 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("stations")
 public class StationController {
     private StationRepository stationRepository;
+    private StationService stationService;
 
-    public StationController(StationRepository stationRepository) {
+    public StationController(StationRepository stationRepository, StationService stationService) {
         this.stationRepository = stationRepository;
+        this.stationService = stationService;
     }
 
-    @PostMapping("/stations")
+    @PostMapping
     public ResponseEntity createStation(@RequestBody CreateStationRequestView view) {
         Station persistStation = stationRepository.save(view.toStation());
         return ResponseEntity
@@ -26,22 +30,27 @@ public class StationController {
                 .body(StationResponseDto.of(persistStation));
     }
 
-    @GetMapping("/stations/{id}")
+    @GetMapping("{id}")
     public ResponseEntity retrieveStation(@PathVariable Long id) {
         return stationRepository.findById(id)
                 .map(it -> ResponseEntity.ok().body(StationResponseDto.of(it)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/stations")
+    @GetMapping
     public ResponseEntity showStation() {
         List<Station> persistStations = stationRepository.findAll();
         return ResponseEntity.ok().body(StationResponseDto.listOf(persistStations));
     }
 
-    @DeleteMapping("/stations/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity deleteStation(@PathVariable Long id) {
         stationRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{stationId}/timetables")
+    public ResponseEntity retrieveStationTimetable(@PathVariable Long stationId) {
+        return ResponseEntity.ok().body(stationService.retrieveStationTimetable(stationId));
     }
 }

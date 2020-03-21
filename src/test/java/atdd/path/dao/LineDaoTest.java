@@ -82,7 +82,7 @@ public class LineDaoTest {
 
         assertThat(persistLine.getId()).isNotNull();
         assertThat(persistLine.getName()).isEqualTo(LINE_NAME);
-        assertThat(persistLine.getEdges().size()).isEqualTo(3);
+        assertThat(persistLine.getAllEdges().size()).isEqualTo(3);
     }
 
     @Test

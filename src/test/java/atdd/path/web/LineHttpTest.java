@@ -60,11 +60,12 @@ public class LineHttpTest {
         return retrieveLineRequest(LINE_URL + "/" + lineId);
     }
 
-    public EntityExchangeResult createEdgeRequest(Long lineId, Long stationId, Long stationId2) {
+    public EntityExchangeResult createEdgeRequest(Long lineId, Long stationId, Long stationId2, int elapsedTime) {
         int distance = 10;
         String inputJson = "{\"sourceId\":" + stationId +
                 ",\"targetId\":" + stationId2 +
-                ",\"distance\":" + distance + "}";
+                ",\"distance\":" + distance +
+                ",\"elapsedTime\":" + elapsedTime + "}";
 
         return webTestClient.post().uri("/lines/" + lineId + "/edges")
                 .contentType(MediaType.APPLICATION_JSON)

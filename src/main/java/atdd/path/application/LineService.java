@@ -43,13 +43,13 @@ public class LineService {
         Line line = lineRepository.findById(lineId).orElseThrow(EntityNotFoundException::new);
         Station station = stationRepository.findById(stationId).orElseThrow(EntityNotFoundException::new);
 
-        Edges edges = new Edges(line.getEdges());
+        Edges edges = new Edges(line.getAllEdges());
         edges.removeStation(station);
 
-        Edge newEdge = edges.findNewEdge(line.getEdges());
+        Edge newEdge = edges.findNewEdge(line.getAllEdges());
         newEdge.updateLine(line);
 
-        line.getEdges().forEach(it -> {
+        line.getAllEdges().forEach(it -> {
             if (!it.hasStation(station)) {
                 return;
             }

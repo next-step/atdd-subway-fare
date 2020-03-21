@@ -2,12 +2,15 @@ package atdd.path.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @NoArgsConstructor
@@ -26,7 +29,7 @@ public class Edges {
     }
 
     private void checkValidEdges(List<Edge> edges) {
-        if (edges.size() == 0) {
+        if (CollectionUtils.isEmpty(edges)) {
             return;
         }
 
@@ -40,7 +43,7 @@ public class Edges {
     }
 
     private List<Station> getStations(List<Edge> edges) {
-        if (edges.size() == 0) {
+        if (CollectionUtils.isEmpty(edges)) {
             return new ArrayList<>();
         }
 
@@ -134,5 +137,40 @@ public class Edges {
                 .filter(it -> !oldEdges.contains(it))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
+    }
+
+    public Long getElapsedTimeBy(Long stationId, boolean isUp) {
+        this.validateContainStationId(stationId);
+        Long elapsedTime = 0L;
+
+        if (CollectionUtils.isEmpty(this.getEdges())) {
+            return elapsedTime;
+        }
+
+        List<Edge> edges = this.edges;
+
+        if (!isUp) {
+            Collections.reverse(edges);
+        }
+
+        for (Edge edge : edges) {
+            if (edge.isThisStation(stationId, isUp)) {
+                break;
+            }
+
+            elapsedTime += edge.getElapsedTime();
+        }
+
+        return elapsedTime;
+    }
+
+    private void validateContainStationId(Long stationId) {
+        boolean isMatch = this.edges.stream()
+                .flatMap(it -> Stream.of(it.getSourceStation().getId(), it.getTargetStation().getId()))
+                .anyMatch(it -> it.equals(stationId));
+
+        if (!isMatch) {
+            throw new IllegalArgumentException("Can not found station Id. stationId: " + stationId);
+        }
     }
 }

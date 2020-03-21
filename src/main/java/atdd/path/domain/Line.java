@@ -58,7 +58,11 @@ public class Line {
         return name;
     }
 
-    public List<Edge> getEdges() {
+    public Edges getEdges() {
+        return edges;
+    }
+
+    public List<Edge> getAllEdges() {
         return edges.getEdges();
     }
 
@@ -86,5 +90,4 @@ public class Line {
         this.edges.removeStation(station);
         return this.edges;
     }
-
 }

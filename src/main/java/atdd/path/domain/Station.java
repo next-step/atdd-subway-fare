@@ -5,10 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Getter
@@ -64,6 +68,20 @@ public class Station {
     public List<Line> getLinesByEdge() {
         return Stream.concat(sourceEdges.stream(), targetEdge.stream())
                 .map(it -> it.getLine())
+                .collect(Collectors.toList());
+    }
+
+    public List<LocalTime> getTimetable(Line line, boolean isUp) {
+
+        Long elapsedTime = line.getEdges().getElapsedTimeBy(this.id, isUp);
+
+        if (elapsedTime == 0) {
+            return Collections.emptyList();
+        }
+
+        return IntStream.iterate(0, i -> i + line.getIntervalTime())
+                .limit(Duration.between(line.getStartTime(), line.getEndTime()).dividedBy(line.getIntervalTime()).toMinutes())
+                .mapToObj(it -> line.getStartTime().plusMinutes(it).plusMinutes(elapsedTime))
                 .collect(Collectors.toList());
     }
 }

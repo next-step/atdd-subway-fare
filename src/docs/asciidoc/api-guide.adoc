@@ -104,3 +104,13 @@ operation::favorite/route/delete[snippets='http-request,http-response']
 operation::favorite/route/delete[snippets='request-headers']
 operation::favorite/route/delete[snippets='path-parameters']
 
+
+---
+[[resources-statione]]
+== Station
+
+[[resources-station-timetable]]
+=== 역 시간표 조회
+operation::stations/timetable[snippets='http-request,http-response']
+operation::stations/timetable[snippets='path-parameters']
+operation::stations/timetable[snippets='response-fields']
