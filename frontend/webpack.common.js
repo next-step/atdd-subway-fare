@@ -7,7 +7,7 @@ const clientPath = path.resolve(__dirname, 'src')
 
 module.exports = {
   entry: {
-    'js/vendors': ['vue', 'vue-router', 'vuex', 'vuetify', 'axios', 'vue-axios'],
+    'js/vendors': ['vue', 'vue-router', 'vuex', 'vuetify', 'axios', 'vue-axios', 'dayjs'],
     'js/main': ['babel-polyfill', `${clientPath}/main.js`]
   },
   resolve: {
