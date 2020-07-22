@@ -1,11 +1,11 @@
 package nextstep.study.unit;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.line.application.LineService;
-import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.station.domain.StationRepository;
+import nextstep.subway.maps.line.application.LineService;
+import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.LineRepository;
+import nextstep.subway.maps.line.dto.LineResponse;
+import nextstep.subway.maps.station.application.StationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,16 +23,16 @@ public class MockitoExtensionTest {
     @Mock
     private LineRepository lineRepository;
     @Mock
-    private StationRepository stationRepository;
+    private StationService stationService;
 
     @Test
     void findAllLines() {
         // given
         when(lineRepository.findAll()).thenReturn(Lists.newArrayList(new Line()));
-        LineService lineService = new LineService(lineRepository, stationRepository);
+        LineService lineService = new LineService(lineRepository, stationService);
 
         // when
-        List<LineResponse> responses = lineService.findAllLines();
+        List<LineResponse> responses = lineService.findLineResponses();
 
         // then
         assertThat(responses).hasSize(1);

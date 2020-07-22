@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import static nextstep.subway.member.acceptance.step.MemberAcceptanceStep.*;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.*;
 
 @ContextConfiguration(classes = SubwayApplication.class)
 public class AuthAcceptanceTest extends AcceptanceTest {
