@@ -19,7 +19,7 @@
           outlined
         ></v-text-field>
         <v-row>
-          <v-col cols="4">
+          <v-col cols="6">
             <v-text-field
               v-model="lineForm.startTime"
               :rules="rules.line.startTime"
@@ -29,7 +29,7 @@
               outlined
             ></v-text-field>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="6">
             <v-text-field
               v-model="lineForm.endTime"
               :rules="rules.line.endTime"
@@ -39,13 +39,23 @@
               outlined
             ></v-text-field>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="6" class="pt-0">
             <v-text-field
               v-model="lineForm.intervalTime"
               :rules="rules.line.intervalTime"
               color="grey darken-1"
               label="간격"
               placeholder="간격"
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col cols="6" class="pt-0">
+            <v-text-field
+              v-model="lineForm.extraFare"
+              :rules="rules.line.extraFare"
+              color="grey darken-1"
+              label="추가 요금"
+              placeholder="추가 요금"
               outlined
             ></v-text-field>
           </v-col>
@@ -107,7 +117,8 @@ export default {
           color: '',
           startTime: '',
           endTime: '',
-          intervalTime: ''
+          intervalTime: '',
+          extraFare: ''
         }
         this.$refs.lineForm.resetValidation()
         this.closeDialog()
@@ -125,7 +136,8 @@ export default {
         color: '',
         startTime: '',
         endTime: '',
-        intervalTime: ''
+        intervalTime: '',
+        extraFare: ''
       },
       valid: false,
       lineColors: [
