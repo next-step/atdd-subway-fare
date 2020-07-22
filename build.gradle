@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.4.0-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "org.asciidoctor.convert" version "1.5.9.2"
     id 'java'
 }
 
@@ -32,6 +33,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     // rest docs
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
@@ -45,6 +47,29 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
 test {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/asciidoc/html5")
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
