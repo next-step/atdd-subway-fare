@@ -3,7 +3,7 @@ package nextstep.subway.auth.ui.interceptor.authorization;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
-import nextstep.subway.members.member.domain.EmptyMember;
+import nextstep.subway.auth.domain.EmptyMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

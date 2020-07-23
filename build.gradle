@@ -34,7 +34,6 @@ dependencies {
 
     // rest docs
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // rest assured
