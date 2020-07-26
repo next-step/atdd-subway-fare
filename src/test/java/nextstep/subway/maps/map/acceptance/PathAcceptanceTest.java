@@ -84,28 +84,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 4L, 3L));
     }
 
-    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
-    @Test
-    void findPathByDuration() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DURATION").
-                then().
-                log().all().
-                extract();
-
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
-        assertThat(pathResponse.getDuration()).isEqualTo(3);
-
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
-    }
-
     @DisplayName("두 역의 최소 시간 경로와 요금을 조회한다.")
     @Test
     void findPathByDurationForFare() {
