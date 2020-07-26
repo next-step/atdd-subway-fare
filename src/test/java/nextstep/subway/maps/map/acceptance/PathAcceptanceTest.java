@@ -25,11 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
-     * 교대역      -      강남역
+     * 교대역1      -      강남역2
      * |                 |
-     * 남부터미널역           |
+     * 남부터미널역4     |
      * |                 |
-     * 양재역      -       -|
+     * 양재역3      -    -|
      */
     @BeforeEach
     public void setUp() {
@@ -55,7 +55,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(lineId1, stationId1, stationId2, 2, 2);
 
         지하철_노선에_지하철역_등록되어_있음(lineId2, null, stationId2, 0, 0);
-        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId2, stationId3, 2, 1);
+        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId2, stationId3, 100, 1);
 
         지하철_노선에_지하철역_등록되어_있음(lineId3, null, stationId1, 0, 0);
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId1, stationId4, 1, 2);
@@ -108,6 +108,31 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(pathResponse.getFare()).isEqualTo(1250);
     }
 
+    @DisplayName("두 역의 최단 거리 비례제로 이용 요금을 조회한다.")
+    @Test
+    void findPathWithShortestDistanceFare() {
+        ExtractableResponse<Response> response = RestAssured.given().log().all().
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                get("/paths?source={sourceId}&target={targetId}&type={type}", 2L, 3L, "DURATION").
+                then().
+                log().all().
+                extract();
+
+        // that
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(100);
+        assertThat(pathResponse.getDuration()).isEqualTo(1);
+
+        List<Long> stationIds = pathResponse.getStations().stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
+
+        // 강남 -> 양재
+        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(2L, 3L));
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
+    }
+
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
@@ -120,7 +145,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
                 extract();
 
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
+        assertThat(pathResponse.getDistance()).isEqualTo(102);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
 
         List<Long> stationIds = pathResponse.getStations().stream()
