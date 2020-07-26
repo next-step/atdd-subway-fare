@@ -6,10 +6,14 @@ import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayPathTest {
     private Map<Long, Station> stations;
@@ -51,5 +55,13 @@ class SubwayPathTest {
                 new LineStationEdge(lineStation7, line3.getId())
         );
         subwayPath = new SubwayPath(lineStations);
+    }
+
+    @DisplayName("거리 별 요금 계산")
+    @Test
+    void calculateFare() {
+        int fare = subwayPath.calculateFare(10);
+
+        assertThat(fare).isEqualTo(1250);
     }
 }

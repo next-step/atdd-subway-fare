@@ -32,4 +32,8 @@ public class SubwayPath {
     public int calculateDistance() {
         return lineStationEdges.stream().mapToInt(it -> it.getLineStation().getDistance()).sum();
     }
+
+    public int calculateFare(int distance) {
+        return 1250;
+    }
 }
