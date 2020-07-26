@@ -1,25 +1,18 @@
 package nextstep.subway.maps.map.acceptance;
 
-import com.google.common.collect.Lists;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.maps.line.dto.LineResponse;
-import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
+import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.*;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -65,44 +58,23 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DISTANCE").
-                then().
-                log().all().
-                extract();
+        //when
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DISTANCE");
 
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(3);
-        assertThat(pathResponse.getDuration()).isEqualTo(4);
-
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 4L, 3L));
+        //then
+        총_거리와_소요_시간을_함께_응답함(response, 3, 4);
+        적절한_경로를_응답(response, 4L);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DURATION").
-                then().
-                log().all().
-                extract();
-
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
-        assertThat(pathResponse.getDuration()).isEqualTo(3);
-
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
+        //when
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION");
+        //then
+        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
+        적절한_경로를_응답(response, 2L);
     }
+
+
 }
