@@ -8,6 +8,8 @@ import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,10 +60,11 @@ class SubwayPathTest {
     }
 
     @DisplayName("거리 별 요금 계산")
-    @Test
-    void calculateFare() {
-        int fare = subwayPath.calculateFare(10);
+    @ParameterizedTest
+    @CsvSource({"7, 1250", "12, 1350"})
+    void calculateFareTest(int distance, int expected) {
+        int fare = subwayPath.calculateFare(distance);
 
-        assertThat(fare).isEqualTo(1250);
+        assertThat(fare).isEqualTo(expected);
     }
 }
