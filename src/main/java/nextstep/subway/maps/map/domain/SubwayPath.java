@@ -45,6 +45,15 @@ public class SubwayPath {
     }
 
     public int calculateOverFare(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+        int fare = 0;
+        if (distance <= 40) {
+            fare += (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+            return fare;
+        }
+
+        int leftDistance = distance - 40;
+        fare += 800;
+        fare += (int) ((Math.ceil((leftDistance - 1) / 8) + 1) * 100);
+        return fare;
     }
 }
