@@ -63,28 +63,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId4, stationId3, 2, 2);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-    @Test
-    void findPathByDistance() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DISTANCE").
-                then().
-                log().all().
-                extract();
-
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(3);
-        assertThat(pathResponse.getDuration()).isEqualTo(4);
-
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 4L, 3L));
-    }
-
     @DisplayName("두 역의 최소 시간 경로와 요금을 조회한다.")
     @Test
     void findPathByDurationForFare() {
