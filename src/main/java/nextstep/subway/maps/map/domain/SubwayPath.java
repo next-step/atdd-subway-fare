@@ -35,8 +35,12 @@ public class SubwayPath {
 
     public int calculateFare(int distance) {
         if (distance > 10) {
-            return 1350;
+            return 1250 + calculateOverFare(distance - 10);
         }
         return 1250;
+    }
+
+    public int calculateOverFare(int distance) {
+        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
     }
 }

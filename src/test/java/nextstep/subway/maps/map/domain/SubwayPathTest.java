@@ -67,4 +67,13 @@ class SubwayPathTest {
 
         assertThat(fare).isEqualTo(expected);
     }
+
+    @DisplayName("이용거리 초과 요금 계산")
+    @ParameterizedTest
+    @CsvSource({"3, 100", "6, 200", "11, 300"})
+    void calculateOverFare(int distance, int expected) {
+        int fare = subwayPath.calculateOverFare(distance);
+
+        assertThat(fare).isEqualTo(expected);
+    }
 }
