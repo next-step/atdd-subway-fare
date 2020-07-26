@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayPath {
+    public static int BASE_FARE = 1250;
+    public static int FIRST_LIMIT = 10;
+    public static int SECOND_LIMIT = 50;
+
     private List<LineStationEdge> lineStationEdges;
 
     public SubwayPath(List<LineStationEdge> lineStationEdges) {
@@ -34,10 +38,10 @@ public class SubwayPath {
     }
 
     public int calculateFare(int distance) {
-        if (distance > 10) {
-            return 1250 + calculateOverFare(distance - 10);
+        if (distance > FIRST_LIMIT) {
+            return BASE_FARE + calculateOverFare(distance - FIRST_LIMIT);
         }
-        return 1250;
+        return BASE_FARE;
     }
 
     public int calculateOverFare(int distance) {
