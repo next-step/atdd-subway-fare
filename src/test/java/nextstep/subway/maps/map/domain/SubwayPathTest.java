@@ -61,7 +61,7 @@ class SubwayPathTest {
 
     @DisplayName("거리 별 요금 계산")
     @ParameterizedTest
-    @CsvSource({"7, 1250", "12, 1350"})
+    @CsvSource({"7, 1250", "12, 1350", "50, 2050", "57, 2150"})
     void calculateFareTest(int distance, int expected) {
         int fare = subwayPath.calculateFare(distance);
 
@@ -70,7 +70,7 @@ class SubwayPathTest {
 
     @DisplayName("이용거리 초과 요금 계산")
     @ParameterizedTest
-    @CsvSource({"3, 100", "6, 200", "11, 300"})
+    @CsvSource({"3, 100", "6, 200", "11, 300", "47, 900"})
     void calculateOverFare(int distance, int expected) {
         int fare = subwayPath.calculateOverFare(distance);
 
