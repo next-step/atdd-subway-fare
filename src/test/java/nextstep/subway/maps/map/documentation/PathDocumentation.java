@@ -84,7 +84,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 아이디"),
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)")
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금(원)")
                         ))
                 ).extract();
     }
