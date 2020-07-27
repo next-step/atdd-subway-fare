@@ -49,7 +49,12 @@ public class MapService {
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
 
-        return new PathResponseAssembler(lineService, pathService).assemble(subwayPath, stations);
+        if (!type.equals(PathType.DISTANCE)) {
+            SubwayPath shortestDistancePath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+            return new PathResponseAssembler().assemble(subwayPath, shortestDistancePath, stations);
+        }
+
+        return new PathResponseAssembler().assemble(subwayPath, null, stations);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
