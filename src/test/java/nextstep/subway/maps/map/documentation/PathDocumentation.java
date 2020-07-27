@@ -58,7 +58,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "분당역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        PathResponse pathResponse = new PathResponse(stations, 20, 10);
+        PathResponse pathResponse = new PathResponse(stations, 20, 10, 1250);
         when(mapService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         given().log().all().
