@@ -24,7 +24,7 @@ class FareCalculatorTest {
      */
     @DisplayName("지하철 운임을 정책에 맞게 계산한다. ")
     @ParameterizedTest
-    @CsvSource({"5,1250", "13, 1350", "18,1450"})
+    @CsvSource({"5,1250", "13, 1350", "18,1450", "50,2050", "57,2150", "63,2250"})
     void calculate(int distance, int expectedFare) {
         //when
         int fare = fareCalculator.calculate(distance);
