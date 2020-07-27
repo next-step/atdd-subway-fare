@@ -6,10 +6,16 @@ import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayPathTest {
     private Map<Long, Station> stations;
@@ -51,5 +57,23 @@ class SubwayPathTest {
                 new LineStationEdge(lineStation7, line3.getId())
         );
         subwayPath = new SubwayPath(lineStations);
+    }
+
+    @DisplayName("거리 별 요금 계산")
+    @ParameterizedTest
+    @CsvSource({"7, 1250", "12, 1350", "50, 2050", "57, 2150"})
+    void calculateFareTest(int distance, int expected) {
+        int fare = subwayPath.calculateFare(distance);
+
+        assertThat(fare).isEqualTo(expected);
+    }
+
+    @DisplayName("이용거리 초과 요금 계산")
+    @ParameterizedTest
+    @CsvSource({"3, 100", "6, 200", "11, 300", "47, 900"})
+    void calculateOverFare(int distance, int expected) {
+        int fare = subwayPath.calculateOverFare(distance);
+
+        assertThat(fare).isEqualTo(expected);
     }
 }
