@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.maps.map.dto.FarePathResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.springframework.http.MediaType;
@@ -41,7 +40,7 @@ public class PathAcceptanceStep {
     }
 
     public static void 지하철_이용_요금도_함께_응답함(ExtractableResponse<Response> response) {
-        FarePathResponse pathResponse = response.as(FarePathResponse.class);
+        PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getFare()).isNotNull();
     }
 }

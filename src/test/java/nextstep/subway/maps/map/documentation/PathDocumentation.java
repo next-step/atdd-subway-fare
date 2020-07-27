@@ -25,7 +25,8 @@ import java.util.Map;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
@@ -53,7 +54,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
         when(mapService.findPath(1L, 2L, PathType.DISTANCE))
-                .thenReturn(new PathResponse(stations, 20, 10));
+                .thenReturn(new PathResponse(stations, 20, 10, 10));
 
         given().log().all().
                 contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -74,7 +75,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 아이디"),
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철 역 이름"),
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리")
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("지하철 요금")
                         )
                 )).
                 extract();
