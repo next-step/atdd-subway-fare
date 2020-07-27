@@ -6,8 +6,8 @@ import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.dto.MapResponse;
+import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
@@ -48,6 +48,10 @@ public class MapService {
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
 
+        if (type != PathType.DISTANCE) {
+            SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+            return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(shortestPath.calculateDistance()));
+        }
         return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath.calculateDistance()));
     }
 
