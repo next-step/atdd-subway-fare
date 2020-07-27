@@ -13,6 +13,7 @@ import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static nextstep.subway.maps.map.application.FareCalculator.BASIC_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -35,11 +37,14 @@ public class MapServiceTest {
     private StationService stationService;
     @Mock
     private PathService pathService;
+    @Mock
+    private FareCalculator fareCalculator;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
 
     private SubwayPath subwayPath;
+    private SubwayPath shortestPath;
 
     @BeforeEach
     void setUp() {
@@ -50,13 +55,16 @@ public class MapServiceTest {
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
         Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN");
-        line1.addLineStation(new LineStation(1L, null, 0, 0));
+        LineStation lineStation1 = new LineStation(1L, null, 0, 0);
         LineStation lineStation2 = new LineStation(2L, 1L, 2, 2);
-        line1.addLineStation(new LineStation(2L, 1L, 2, 2));
+        line1.addLineStation(lineStation1);
+        line1.addLineStation(lineStation2);
 
         Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED");
-        line2.addLineStation(new LineStation(2L, null, 0, 0));
-        line2.addLineStation(new LineStation(3L, 2L, 2, 1));
+        LineStation lineStation3 = new LineStation(2L, null, 0, 0);
+        LineStation lineStation4 = new LineStation(3L, 2L, 2, 1);
+        line2.addLineStation(lineStation3);
+        line2.addLineStation(lineStation4);
 
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
         line3.addLineStation(new LineStation(1L, null, 0, 0));
@@ -72,8 +80,15 @@ public class MapServiceTest {
                 new LineStationEdge(lineStation7, line3.getId())
         );
         subwayPath = new SubwayPath(lineStations);
+        List<LineStationEdge> shortestLineStations = Lists.newArrayList(
+                new LineStationEdge(lineStation1, line1.getId()),
+                new LineStationEdge(lineStation2, line1.getId()),
+                new LineStationEdge(lineStation3, line2.getId()),
+                new LineStationEdge(lineStation4, line2.getId())
+        );
 
-        mapService = new MapService(lineService, stationService, pathService);
+        shortestPath = new SubwayPath(shortestLineStations);
+        mapService = new MapService(lineService, stationService, pathService, fareCalculator);
     }
 
     @Test
@@ -81,13 +96,32 @@ public class MapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(fareCalculator.calculate(anyInt())).thenReturn(BASIC_FARE);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
+        assertThat(pathResponse.getFare()).isNotZero();
     }
+
+    @DisplayName("최단 거리 기준으로 요금을 책정한다")
+    @Test
+    void calculateFareWithShortestPath() {
+        when(lineService.findLines()).thenReturn(lines);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
+        when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(BASIC_FARE);
+
+        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION);
+
+        assertThat(pathResponse.getStations()).isNotEmpty();
+        assertThat(pathResponse.getDuration()).isNotZero();
+        assertThat(pathResponse.getDistance()).isNotZero();
+        assertThat(pathResponse.getFare()).isNotZero();
+    }
+
 
     @Test
     void findMap() {

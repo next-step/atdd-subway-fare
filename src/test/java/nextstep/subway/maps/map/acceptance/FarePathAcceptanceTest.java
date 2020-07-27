@@ -15,7 +15,7 @@ import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.*;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
-public class PathAcceptanceTest extends AcceptanceTest {
+public class FarePathAcceptanceTest extends AcceptanceTest {
 
     /**
      * 교대역      -      강남역
@@ -64,7 +64,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //then
         총_거리와_소요_시간을_함께_응답함(response, 3, 4);
         적절한_경로를_응답(response, 4L);
+        지하철_이용_요금도_함께_응답함(response);
     }
+
+
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
