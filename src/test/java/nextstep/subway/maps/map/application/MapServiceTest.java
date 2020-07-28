@@ -36,6 +36,9 @@ public class MapServiceTest {
     @Mock
     private PathService pathService;
 
+    @Mock
+    private FareCalculator fareCalculator;
+
     private Map<Long, Station> stations;
     private List<Line> lines;
 
@@ -73,7 +76,7 @@ public class MapServiceTest {
         );
         subwayPath = new SubwayPath(lineStations);
 
-        mapService = new MapService(lineService, stationService, pathService);
+        mapService = new MapService(lineService, stationService, pathService, fareCalculator);
     }
 
     @Test

@@ -5,6 +5,7 @@ import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
+import nextstep.subway.maps.map.domain.FareContext;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.MapResponse;
@@ -24,11 +25,13 @@ public class MapService {
     private LineService lineService;
     private StationService stationService;
     private PathService pathService;
+    private FareCalculator fareCalculator;
 
-    public MapService(LineService lineService, StationService stationService, PathService pathService) {
+    public MapService(LineService lineService, StationService stationService, PathService pathService, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;
+        this.fareCalculator = fareCalculator;
     }
 
     public MapResponse findMap() {
@@ -52,13 +55,17 @@ public class MapService {
     }
 
     private int calculateFare(List<Line> lines, Long source, Long target, SubwayPath subwayPath, PathType type) {
-        FareCalculator fareCalculator = new FareCalculator();
+        final int distance;
+
         if (type == PathType.DISTANCE) {
-            return fareCalculator.calculate(subwayPath.calculateDistance());
+            distance = subwayPath.calculateDistance();
         } else {
             SubwayPath pathByDistance = pathService.findPath(lines, source, target, PathType.DISTANCE);
-            return fareCalculator.calculate(pathByDistance.calculateDistance());
+            distance = pathByDistance.calculateDistance();
         }
+
+        FareContext fareContext = new FareContext(distance);
+        return fareCalculator.calculate(fareContext);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
