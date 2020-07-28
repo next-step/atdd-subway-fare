@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.application;
 
+import nextstep.subway.maps.boarding.service.BoardingService;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.dto.LineResponse;
@@ -23,14 +24,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class MapService {
-    private LineService lineService;
-    private StationService stationService;
-    private PathService pathService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final PathService pathService;
+    private final BoardingService boardingService;
 
-    public MapService(LineService lineService, StationService stationService, PathService pathService) {
+    public MapService(LineService lineService, StationService stationService, PathService pathService, BoardingService boardingService) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;
+        this.boardingService = boardingService;
     }
 
     public MapResponse findMap() {
@@ -48,8 +51,9 @@ public class MapService {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
+        final int fare = boardingService.calculateFare(subwayPath);
 
-        return PathResponseAssembler.assemble(subwayPath, stations);
+        return PathResponseAssembler.assemble(subwayPath, stations, fare);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {

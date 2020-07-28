@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.application;
 
 import com.google.common.collect.Lists;
+import nextstep.subway.maps.boarding.service.BoardingService;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -35,6 +36,9 @@ public class MapServiceTest {
     private StationService stationService;
     @Mock
     private PathService pathService;
+
+    @Mock
+    private BoardingService boardingService;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
@@ -73,7 +77,7 @@ public class MapServiceTest {
         );
         subwayPath = new SubwayPath(lineStations);
 
-        mapService = new MapService(lineService, stationService, pathService);
+        mapService = new MapService(lineService, stationService, pathService, boardingService);
     }
 
     @Test
