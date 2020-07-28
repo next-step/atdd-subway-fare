@@ -32,9 +32,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("양재역");
         ExtractableResponse<Response> createdStationResponse4 = 지하철역_등록되어_있음("남부터미널");
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN");
-        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED");
-        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE");
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 400);
+        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED", 0);
+        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE", 200);
 
         Long lineId1 = createLineResponse1.as(LineResponse.class).getId();
         Long lineId2 = createLineResponse2.as(LineResponse.class).getId();
@@ -77,6 +77,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //then
         총_거리와_소요_시간을_함께_응답함(response, 4, 3);
         적절한_경로를_응답(response, 2L);
+        지하철_이용_요금도_함께_응답함(response);
     }
 
 
