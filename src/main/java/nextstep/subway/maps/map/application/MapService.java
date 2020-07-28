@@ -48,8 +48,15 @@ public class MapService {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-
-        return PathResponseAssembler.assemble(subwayPath, stations);
+        FareCalculator fareCalculator = new FareCalculator();
+        int fare;
+        if (type == PathType.DISTANCE) {
+            fare = fareCalculator.calculate(subwayPath.calculateDistance());
+        } else {
+            SubwayPath pathByDistance = pathService.findPath(lines, source, target, PathType.DISTANCE);
+            fare = fareCalculator.calculate(pathByDistance.calculateDistance());
+        }
+        return PathResponseAssembler.assemble(subwayPath, stations, fare);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
