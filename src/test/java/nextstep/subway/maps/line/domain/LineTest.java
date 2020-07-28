@@ -17,7 +17,7 @@ class LineTest {
         Line line = new Line("2호선", "yellow", LocalTime.now(), LocalTime.now(), 3, 300);
 
         //when
-        int extraFare = line.getExtraFare();
+        Money extraFare = line.getExtraFare();
 
         //then
         assertThat(extraFare).isNotNull();
