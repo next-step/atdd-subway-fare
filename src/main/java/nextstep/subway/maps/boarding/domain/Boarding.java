@@ -26,6 +26,6 @@ public class Boarding {
     }
 
     public int getBoardingDistance() {
-        return 0;
+        return subwayPath.calculateDistance();
     }
 }
