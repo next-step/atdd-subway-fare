@@ -17,10 +17,10 @@ class DistanceProportionalFarePolicyTest {
         FareContext fareContext = new FareContext(distance);
 
         // when
-        int fare = fareCalculator.calculate(fareContext);
+        fareCalculator.calculate(fareContext);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(1250);
+        Assertions.assertThat(fareContext.getFare()).isEqualTo(1250);
     }
 
     @DisplayName("10km초과∼50km까지(5km마다 100원)")
@@ -31,10 +31,10 @@ class DistanceProportionalFarePolicyTest {
         DistanceProportionalFarePolicy policy = new DistanceProportionalFarePolicy();
 
         // when
-        int fare = policy.calculate(fareContext);
+        policy.calculate(fareContext);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(result);
+        Assertions.assertThat(fareContext.getFare()).isEqualTo(result);
     }
 
     @DisplayName("50km초과 시 (8km마다 100원)")
@@ -45,9 +45,9 @@ class DistanceProportionalFarePolicyTest {
         DistanceProportionalFarePolicy policy = new DistanceProportionalFarePolicy();
 
         // when
-        int fare = policy.calculate(fareContext);
+        policy.calculate(fareContext);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(result);
+        Assertions.assertThat(fareContext.getFare()).isEqualTo(result);
     }
 }
