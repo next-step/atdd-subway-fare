@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.application;
 
+import nextstep.subway.maps.map.domain.FareContext;
 import org.springframework.lang.Nullable;
 
 public class FareCalculator {
@@ -29,5 +30,9 @@ public class FareCalculator {
 
     private int calculateOverFare(int overDistance, int unitDistance) {
         return (int) ((Math.ceil((overDistance - 1) / unitDistance) + 1) * OVER_DISTANCE_FARE_UNIT);
+    }
+
+    public int calculate(FareContext fareContext) {
+        return 0;
     }
 }

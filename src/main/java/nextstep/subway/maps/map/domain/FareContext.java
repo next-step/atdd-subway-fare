@@ -6,4 +6,8 @@ public class FareContext {
     public FareContext(int distance) {
         this.distance = distance;
     }
+
+    public int getDistance() {
+        return this.distance;
+    }
 }

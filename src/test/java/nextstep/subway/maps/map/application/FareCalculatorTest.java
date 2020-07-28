@@ -1,12 +1,11 @@
 package nextstep.subway.maps.map.application;
 
+import nextstep.subway.maps.map.domain.FareContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FareCalculatorTest {
 
@@ -19,6 +18,21 @@ class FareCalculatorTest {
         // when
         int distance = 0;
         int fare = fareCalculator.calculate(distance);
+
+        // then
+        Assertions.assertThat(fare).isEqualTo(1250);
+    }
+
+    @DisplayName("기본 요금을 계산한다.")
+    @Test
+    void calculate2() {
+        // given
+        FareCalculator fareCalculator = new FareCalculator();
+
+        // when
+        int distance = 0;
+        FareContext fareContext = new FareContext(distance);
+        int fare = fareCalculator.calculate(fareContext);
 
         // then
         Assertions.assertThat(fare).isEqualTo(1250);
