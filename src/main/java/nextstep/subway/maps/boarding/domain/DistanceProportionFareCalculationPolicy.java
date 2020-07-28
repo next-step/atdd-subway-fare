@@ -1,5 +1,8 @@
 package nextstep.subway.maps.boarding.domain;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DistanceProportionFareCalculationPolicy implements FareCalculationPolicy {
 
     private static final int BASIC_FARE = 1250;
