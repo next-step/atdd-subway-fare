@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.application;
 
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
 import nextstep.subway.maps.map.domain.PathType;
@@ -12,11 +13,8 @@ import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
-import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,21 +46,25 @@ public class MapService {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        FareCalculator fareCalculator = new FareCalculator();
         int fare;
+        fare = calculateFare(lines, source, target, subwayPath, type);
+        return PathResponseAssembler.assemble(subwayPath, stations, fare);
+    }
+
+    private int calculateFare(List<Line> lines, Long source, Long target, SubwayPath subwayPath, PathType type) {
+        FareCalculator fareCalculator = new FareCalculator();
         if (type == PathType.DISTANCE) {
-            fare = fareCalculator.calculate(subwayPath.calculateDistance());
+            return fareCalculator.calculate(subwayPath.calculateDistance());
         } else {
             SubwayPath pathByDistance = pathService.findPath(lines, source, target, PathType.DISTANCE);
-            fare = fareCalculator.calculate(pathByDistance.calculateDistance());
+            return fareCalculator.calculate(pathByDistance.calculateDistance());
         }
-        return PathResponseAssembler.assemble(subwayPath, stations, fare);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
         List<Long> stationIds = lines.stream()
                 .flatMap(it -> it.getStationInOrder().stream())
-                .map(it -> it.getStationId())
+                .map(LineStation::getStationId)
                 .collect(Collectors.toList());
 
         return stationService.findStationsByIds(stationIds);
