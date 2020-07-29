@@ -36,4 +36,10 @@ class MoneyTest {
         assertThat(Money.wons(1000).compareTo(Money.wons(1000))).isZero();
         assertThat(Money.ZERO.compareTo(Money.wons(1000))).isNegative();
     }
+
+    @Test
+    @DisplayName("돈의 양을 주어진 퍼센트 만큼 리턴한다.")
+    void percent() {
+        assertThat(Money.wons(1000).percent(20)).isEqualTo(Money.wons(200));
+    }
 }

@@ -53,7 +53,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPath(1L, 2L, PathType.DISTANCE))
+        when(mapService.findPath(null, 1L, 2L, PathType.DISTANCE))
                 .thenReturn(new PathResponse(stations, 20, 10, 10));
 
         given().log().all().

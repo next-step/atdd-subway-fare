@@ -6,6 +6,7 @@ import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
+import nextstep.subway.maps.map.domain.DiscountPolicyType;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.MapResponse;
@@ -28,9 +29,9 @@ public class MapService {
     private LineService lineService;
     private StationService stationService;
     private PathService pathService;
-    private FareCalculator fareCalculator;
+    private DiscountFareCalculator fareCalculator;
 
-    public MapService(LineService lineService, StationService stationService, PathService pathService, FareCalculator fareCalculator) {
+    public MapService(LineService lineService, StationService stationService, PathService pathService, DiscountFareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;
@@ -48,19 +49,6 @@ public class MapService {
         return new MapResponse(lineResponses);
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
-        List<Line> lines = lineService.findLines();
-
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        Money fare = fareCalculator.calculate(shortestPath);
-
-        if (type == PathType.DISTANCE) {
-            return assemblePathResponse(shortestPath, fare);
-        }
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
-        return assemblePathResponse(subwayPath, fare);
-    }
-
     private Map<Long, Station> findStations(List<Line> lines) {
         List<Long> stationIds = lines.stream()
                 .flatMap(it -> it.getStationInOrder().stream())
@@ -76,7 +64,7 @@ public class MapService {
                 .collect(Collectors.toList());
     }
 
-    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type) {
         List<Line> lines = lineService.findLines();
 
         SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
@@ -85,8 +73,19 @@ public class MapService {
         if (type == PathType.DISTANCE) {
             return assemblePathResponse(shortestPath, fare);
         }
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
-        return assemblePathResponse(subwayPath, fare);
+        return assemblePathResponse(pathService.findPath(lines, source, target, type), fare);
+    }
+
+    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type) {
+        List<Line> lines = lineService.findLines();
+
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        Money fare = fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(member.getAge()));
+
+        if (type == PathType.DISTANCE) {
+            return assemblePathResponse(shortestPath, fare);
+        }
+        return assemblePathResponse(pathService.findPath(lines, source, target, type), fare);
     }
 
     private PathResponse assemblePathResponse(SubwayPath subwayPath, Money fare) {

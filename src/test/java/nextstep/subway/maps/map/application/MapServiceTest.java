@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.map.domain.DiscountPolicy;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
@@ -11,6 +12,7 @@ import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.members.member.domain.LoginMember;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static nextstep.subway.maps.map.application.FareCalculator.BASIC_FARE;
+import static nextstep.subway.maps.map.application.DiscountFareCalculator.BASIC_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -38,7 +40,7 @@ public class MapServiceTest {
     @Mock
     private PathService pathService;
     @Mock
-    private FareCalculator fareCalculator;
+    private DiscountFareCalculator fareCalculator;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
@@ -92,6 +94,22 @@ public class MapServiceTest {
     }
 
     @Test
+    void loginUserFindPath() {
+        LoginMember user = new LoginMember(1L, "email@email.com", "password", 20);
+        when(lineService.findLines()).thenReturn(lines);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(fareCalculator.calculate(any(SubwayPath.class), any(DiscountPolicy.class))).thenReturn(BASIC_FARE);
+
+        PathResponse pathResponse = mapService.findPath(user, 1L, 3L, PathType.DISTANCE);
+
+        assertThat(pathResponse.getStations()).isNotEmpty();
+        assertThat(pathResponse.getDuration()).isNotZero();
+        assertThat(pathResponse.getDistance()).isNotZero();
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE.amount());
+    }
+
+    @Test
     void findPath() {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
@@ -110,9 +128,9 @@ public class MapServiceTest {
     @Test
     void calculateFareWithShortestPath() {
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(shortestPath, subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath)).thenReturn(BASIC_FARE);
+        when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION);
 

@@ -53,7 +53,7 @@ public class Money implements Comparable<Money> {
         return Money.wons(this.amount - money.amount());
     }
 
-    public Money percentOff(int percent) {
+    public Money percent(int percent) {
         return Money.wons(this.amount * percent / 100);
     }
 }

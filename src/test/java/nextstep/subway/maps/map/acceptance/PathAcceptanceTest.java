@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.acceptance;
 
+import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
@@ -66,11 +67,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         //when
-        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DISTANCE");
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DISTANCE", 1L, 3L);
 
         //then
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 4L, 3L));
         총_거리와_소요_시간을_함께_응답함(response, 3, 4);
-        적절한_경로를_응답(response, 4L);
         지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }
 
@@ -79,41 +80,44 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         //when
-        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION");
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", 1L, 3L);
         //then
         총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, 2L);
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
         지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }
 
-    @DisplayName("청소년의 경우 요금에서 350원 공제 후 20% 할인을 받는다.")
+    @DisplayName("청소년의 경우  운임에서 350원을 공제한 금액의 20% 할인을 받는다.")
     @Test
     void discountForYouth() {
         //given
+        double discountAmount = (EXPECTED_FARE - 350) * 0.2;
         회원_등록되어_있음(EMAIl, PASSWORD, 15);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
 
         //when
-        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse);
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
         //then
         총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, 2L);
-        지하철_이용_요금도_함께_응답함(response, (int) ((EXPECTED_FARE - 350) * 0.8));
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
+        지하철_이용_요금도_함께_응답함(response, (int) (EXPECTED_FARE - discountAmount));
     }
 
-    @DisplayName("어린이의 경우 요금에서 350원 공제 후 50% 할인을 받는다.")
+    @DisplayName("어린이의 경우 운임에서 350원을 공제한 금액의 50% 할인을 받는다.")
     @Test
     void discountForChildren() {
         //given
-        회원_등록되어_있음(EMAIl, PASSWORD, 13);
+        double discountAmount = (EXPECTED_FARE - 350) * 0.5;
+
+        회원_등록되어_있음(EMAIl, PASSWORD, 10);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
 
         //when
-        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse);
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
         //then
         총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, 2L);
-        지하철_이용_요금도_함께_응답함(response, (int) ((EXPECTED_FARE - 350) * 0.8));
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
+        지하철_이용_요금도_함께_응답함(response, (int) (EXPECTED_FARE - discountAmount));
     }
 
     @DisplayName("성인의 경우 정상 요금을 받는다.")
@@ -124,10 +128,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
 
         //when
-        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse);
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
         //then
         총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, 2L);
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
         지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }
 

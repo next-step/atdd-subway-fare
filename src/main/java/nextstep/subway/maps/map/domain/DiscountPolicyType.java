@@ -2,9 +2,18 @@ package nextstep.subway.maps.map.domain;
 
 import nextstep.subway.maps.line.domain.Money;
 
+import static nextstep.subway.maps.map.domain.DiscountPolicyType.DiscountConstant.DEDUCT_AMOUNT;
+
 public enum DiscountPolicyType {
-    CHILDREN(money -> money.minus(Discount.BASE_DISCOUNT).percentOff(20)),
-    YOUTH(money -> money.minus(Discount.BASE_DISCOUNT).percentOff(50)),
+    CHILDREN(money -> {
+        Money discountPrice = money.minus(DEDUCT_AMOUNT).percent(50);
+        return money.minus(discountPrice);
+    }),
+    YOUTH(money -> {
+        Money deductedPrice = money.minus(DEDUCT_AMOUNT);
+        Money discountPrice = deductedPrice.percent(20);
+        return money.minus(discountPrice);
+    }),
     ADULT(money -> money);
 
     public static final int MAXIMUM_CHILDREN_AGE = 12;
@@ -16,25 +25,27 @@ public enum DiscountPolicyType {
         this.discountPolicy = discountPolicy;
     }
 
-    public static DiscountPolicyType ofAge(int age) {
+    public static DiscountPolicy ofAge(int age) {
         if (age <= MAXIMUM_CHILDREN_AGE && age >= MINIMUM_CHILDREN_AGE) {
-            return CHILDREN;
+            return CHILDREN.getDiscountPolicy();
         }
         if (age > MINIMUM_CHILDREN_AGE && age <= MAXIMUM_YOUTH_AGE) {
-            return YOUTH;
+            return YOUTH.getDiscountPolicy();
         }
 
         if (age > MAXIMUM_YOUTH_AGE) {
-            return ADULT;
+            return ADULT.getDiscountPolicy();
         }
         throw new RuntimeException("가입이 불가능한 나이 입니다.");
     }
 
-    public DiscountPolicy getDiscountPolicy() {
+    protected DiscountPolicy getDiscountPolicy() {
         return discountPolicy;
     }
 
-    private static class Discount {
-        public static final Money BASE_DISCOUNT = Money.wons(350);
+    static class DiscountConstant {
+        public static final Money DEDUCT_AMOUNT = Money.wons(350);
     }
 }
+
+
