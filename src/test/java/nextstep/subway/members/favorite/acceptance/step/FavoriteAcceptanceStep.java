@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.auth.dto.TokenResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -41,7 +42,7 @@ public class FavoriteAcceptanceStep {
     }
 
     public static ExtractableResponse<Response> 즐겨찾기_삭제_요청(TokenResponse tokenResponse, ExtractableResponse<Response> response) {
-        String uri = response.header("Location");
+        String uri = response.header(HttpHeaders.LOCATION);
 
         return RestAssured.given().log().all().
                 auth().oauth2(tokenResponse.getAccessToken()).

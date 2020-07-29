@@ -48,6 +48,7 @@ public class Line extends BaseEntity {
         this.endTime = line.getEndTime();
         this.intervalTime = line.getIntervalTime();
         this.color = line.getColor();
+        this.extraFare = line.getExtraFare();
     }
 
     public void addLineStation(LineStation lineStation) {
