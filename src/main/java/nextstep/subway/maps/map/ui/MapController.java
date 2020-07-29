@@ -1,13 +1,17 @@
 package nextstep.subway.maps.map.ui;
 
+import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.dto.MapResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 @RestController
 public class MapController {
@@ -18,9 +22,9 @@ public class MapController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target,
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember member, @RequestParam Long source, @RequestParam Long target,
                                                  @RequestParam PathType type) {
-        return ResponseEntity.ok(mapService.findPath(source, target, type));
+        return ResponseEntity.ok(mapService.findPath(member, source, target, type));
     }
 
     @GetMapping("/maps")

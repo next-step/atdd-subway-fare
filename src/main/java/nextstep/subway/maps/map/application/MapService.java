@@ -3,6 +3,7 @@ package nextstep.subway.maps.map.application;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
 import nextstep.subway.maps.map.domain.PathType;
@@ -13,6 +14,7 @@ import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,5 +73,10 @@ public class MapService {
         return line.getStationInOrder().stream()
                 .map(it -> LineStationResponse.of(line.getId(), it, StationResponse.of(stations.get(it.getStationId()))))
                 .collect(Collectors.toList());
+    }
+
+    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type) {
+
+        return findPath(source, target, type);
     }
 }
