@@ -3,6 +3,7 @@ package nextstep.subway.maps.map.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,9 +14,15 @@ import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지�
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
 import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.*;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.로그인_되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.회원_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
+
+    private static final String EMAIl = "email@email.com";
+    private static final String PASSWORD = "password";
+    private static final int EXPECTED_FARE = 1450;
 
     /**
      * 교대역      -      강남역
@@ -59,26 +66,69 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         //when
-        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DISTANCE");
+        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DISTANCE");
 
         //then
         총_거리와_소요_시간을_함께_응답함(response, 3, 4);
         적절한_경로를_응답(response, 4L);
-        지하철_이용_요금도_함께_응답함(response);
+        지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }
-
 
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         //when
-        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION");
+        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION");
         //then
         총_거리와_소요_시간을_함께_응답함(response, 4, 3);
         적절한_경로를_응답(response, 2L);
-        지하철_이용_요금도_함께_응답함(response);
+        지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }
 
+    @DisplayName("청소년의 경우 요금에서 350원 공제 후 20% 할인을 받는다.")
+    @Test
+    void discountForYouth() {
+        //given
+        회원_등록되어_있음(EMAIl, PASSWORD, 15);
+        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
+
+        //when
+        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse);
+        //then
+        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
+        적절한_경로를_응답(response, 2L);
+        지하철_이용_요금도_함께_응답함(response, (int) ((EXPECTED_FARE - 350) * 0.8));
+    }
+
+    @DisplayName("어린이의 경우 요금에서 350원 공제 후 50% 할인을 받는다.")
+    @Test
+    void discountForChildren() {
+        //given
+        회원_등록되어_있음(EMAIl, PASSWORD, 13);
+        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
+
+        //when
+        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse);
+        //then
+        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
+        적절한_경로를_응답(response, 2L);
+        지하철_이용_요금도_함께_응답함(response, (int) ((EXPECTED_FARE - 350) * 0.8));
+    }
+
+    @DisplayName("성인의 경우 정상 요금을 받는다.")
+    @Test
+    void normalPriceForAdult() {
+        //given
+        회원_등록되어_있음(EMAIl, PASSWORD, 25);
+        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
+
+        //when
+        ExtractableResponse<Response> response = 로그인된_사용자_출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse);
+        //then
+        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
+        적절한_경로를_응답(response, 2L);
+        지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
+    }
 
 }
