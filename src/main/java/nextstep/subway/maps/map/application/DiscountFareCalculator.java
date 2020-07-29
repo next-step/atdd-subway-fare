@@ -40,7 +40,6 @@ public class DiscountFareCalculator {
     }
 
     private int calculateOverFareInteger(int overDistance, int unit) {
-        return (int) ((Math.ceil((overDistance - 1) / unit) + 1) * ADDITIONAL_FARE.amount());
-    }
+        return (int) ((Math.ceil((overDistance - 1) / unit) + 1) * ADDITIONAL_FARE.amount()); }
 
 }

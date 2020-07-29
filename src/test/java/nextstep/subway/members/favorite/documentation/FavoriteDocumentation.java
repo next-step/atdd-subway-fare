@@ -2,6 +2,7 @@ package nextstep.subway.members.favorite.documentation;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.Documentation;
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import nextstep.subway.members.favorite.application.FavoriteService;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -38,6 +40,8 @@ public class FavoriteDocumentation extends Documentation {
     private FavoriteController favoriteController;
     @MockBean
     private FavoriteService favoriteService;
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     protected TokenResponse tokenResponse;
 
@@ -54,7 +58,7 @@ public class FavoriteDocumentation extends Documentation {
         params.put("target", 2L);
 
         given().log().all().
-                header("Authorization", "Bearer " + tokenResponse.getAccessToken()).
+                header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenResponse.getAccessToken()).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 body(params).
                 when().
@@ -65,7 +69,7 @@ public class FavoriteDocumentation extends Documentation {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")),
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")),
                         requestFields(
                                 fieldWithPath("source").type(JsonFieldType.NUMBER).description("출발역 아이디"),
                                 fieldWithPath("target").type(JsonFieldType.NUMBER).description("도착역 아이디")))).
@@ -81,7 +85,7 @@ public class FavoriteDocumentation extends Documentation {
         when(favoriteService.findFavorites(any())).thenReturn(favoriteResponses);
 
         given().log().all().
-                header("Authorization", "Bearer " + tokenResponse.getAccessToken()).
+                header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                 get("/favorites").
@@ -91,7 +95,7 @@ public class FavoriteDocumentation extends Documentation {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")),
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")),
                         responseFields(
                                 fieldWithPath("[]").type(JsonFieldType.ARRAY).description("즐겨찾기 목록"),
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("즐겨찾기 아이디"),
@@ -107,7 +111,7 @@ public class FavoriteDocumentation extends Documentation {
     @Test
     void deleteFavorite() {
         given().
-                header("Authorization", "Bearer " + tokenResponse.getAccessToken()).
+                header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenResponse.getAccessToken()).
                 when().
                 delete("/favorites/{favoriteId}", 1L).
                 then().
@@ -116,7 +120,7 @@ public class FavoriteDocumentation extends Documentation {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")),
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer auth credentials")),
                         pathParameters(
                                 parameterWithName("favoriteId").description("삭제할 즐겨찾기 아이디")))).
                 extract();

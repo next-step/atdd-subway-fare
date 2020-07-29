@@ -1,11 +1,13 @@
 package nextstep.subway.maps.map.documentation;
 
 import nextstep.subway.Documentation;
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.ui.MapController;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -37,6 +41,8 @@ public class PathDocumentation extends Documentation {
     private MapController mapController;
     @MockBean
     private MapService mapService;
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     @BeforeEach
     public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
@@ -53,7 +59,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPath(null, 1L, 2L, PathType.DISTANCE))
+        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class)))
                 .thenReturn(new PathResponse(stations, 20, 10, 10));
 
         given().log().all().
