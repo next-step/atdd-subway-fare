@@ -50,14 +50,15 @@ public class MapService {
 
     public PathResponse findPath(Long source, Long target, PathType type) {
         List<Line> lines = lineService.findLines();
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
-        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
 
-        if (type != PathType.DISTANCE) {
-            SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-            return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(shortestPath));
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        Money fare = fareCalculator.calculate(shortestPath);
+
+        if (type == PathType.DISTANCE) {
+            return assemblePathResponse(shortestPath, fare);
         }
-        return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath));
+        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
+        return assemblePathResponse(subwayPath, fare);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
@@ -76,7 +77,20 @@ public class MapService {
     }
 
     public PathResponse findPath(LoginMember member, Long source, Long target, PathType type) {
+        List<Line> lines = lineService.findLines();
 
-        return findPath(source, target, type);
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        Money fare = fareCalculator.calculate(shortestPath);
+
+        if (type == PathType.DISTANCE) {
+            return assemblePathResponse(shortestPath, fare);
+        }
+        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
+        return assemblePathResponse(subwayPath, fare);
+    }
+
+    private PathResponse assemblePathResponse(SubwayPath subwayPath, Money fare) {
+        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
+        return PathResponseAssembler.assemble(subwayPath, stations, fare);
     }
 }
