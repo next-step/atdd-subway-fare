@@ -54,19 +54,19 @@ public class NewFareMapServiceTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN");
+        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500);
         LineStation lineStation1 = new LineStation(1L, null, 0, 0);
         LineStation lineStation2 = new LineStation(2L, 1L, 2, 2);
         line1.addLineStation(lineStation1);
         line1.addLineStation(lineStation2);
 
-        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED");
+        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
         LineStation lineStation3 = new LineStation(2L, null, 0, 0);
         LineStation lineStation4 = new LineStation(3L, 2L, 2, 1);
         line2.addLineStation(lineStation3);
         line2.addLineStation(lineStation4);
 
-        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
         line3.addLineStation(new LineStation(1L, null, 0, 0));
         LineStation lineStation6 = new LineStation(4L, 1L, 1, 2);
         LineStation lineStation7 = new LineStation(3L, 4L, 2, 2);
@@ -76,15 +76,15 @@ public class NewFareMapServiceTest {
         lines = Lists.newArrayList(line1, line2, line3);
 
         List<LineStationEdge> lineStations = Lists.newArrayList(
-                new LineStationEdge(lineStation6, line3.getId()),
-                new LineStationEdge(lineStation7, line3.getId())
+                new LineStationEdge(lineStation6, line3),
+                new LineStationEdge(lineStation7, line3)
         );
         subwayPath = new SubwayPath(lineStations);
         List<LineStationEdge> shortestLineStations = Lists.newArrayList(
-                new LineStationEdge(lineStation1, line1.getId()),
-                new LineStationEdge(lineStation2, line1.getId()),
-                new LineStationEdge(lineStation3, line2.getId()),
-                new LineStationEdge(lineStation4, line2.getId())
+                new LineStationEdge(lineStation1, line1),
+                new LineStationEdge(lineStation2, line1),
+                new LineStationEdge(lineStation3, line2),
+                new LineStationEdge(lineStation4, line2)
         );
 
         shortestPath = new SubwayPath(shortestLineStations);
@@ -96,14 +96,14 @@ public class NewFareMapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(anyInt())).thenReturn(BASIC_FARE);
+        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
-        assertThat(pathResponse.getFare()).isNotZero();
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE);
     }
 
     @DisplayName("최단 거리 기준으로 요금을 책정한다")
@@ -112,14 +112,14 @@ public class NewFareMapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(BASIC_FARE);
+        when(fareCalculator.calculate(shortestPath)).thenReturn(BASIC_FARE);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
-        assertThat(pathResponse.getFare()).isNotZero();
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE);
     }
 
 
@@ -131,6 +131,5 @@ public class NewFareMapServiceTest {
         MapResponse mapResponse = mapService.findMap();
 
         assertThat(mapResponse.getLineResponses()).hasSize(3);
-
     }
 }
