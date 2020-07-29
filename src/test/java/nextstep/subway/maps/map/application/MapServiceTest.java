@@ -96,7 +96,7 @@ public class MapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(anyInt())).thenReturn(BASIC_FARE);
+        when(fareCalculator.calculate(anyInt())).thenReturn(BASIC_FARE.amount());
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
 
@@ -112,7 +112,7 @@ public class MapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(BASIC_FARE);
+        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(BASIC_FARE.amount());
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION);
 

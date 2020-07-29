@@ -59,9 +59,9 @@ class FareCalculatorTest {
         given(subwayPath.calculateMaxLineExtraFare()).willReturn(Money.wons(extraFare));
 
         //when
-        int fare = fareCalculator.calculate(subwayPath);
+        Money fare = fareCalculator.calculate(subwayPath);
         //then
-        assertThat(fare).isEqualTo(expectedFare);
+        assertThat(fare).isEqualTo(Money.wons(expectedFare));
     }
 
 

@@ -40,4 +40,12 @@ public class Money implements Comparable<Money> {
     public int compareTo(Money o) {
         return Integer.compare(this.amount, o.amount);
     }
+
+    public int amount() {
+        return amount;
+    }
+
+    public Money plus(Money money) {
+        return Money.wons(this.amount + money.amount());
+    }
 }

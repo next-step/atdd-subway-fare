@@ -103,7 +103,7 @@ public class NewFareMapServiceTest {
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
-        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE);
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE.amount());
     }
 
     @DisplayName("최단 거리 기준으로 요금을 책정한다")
@@ -119,7 +119,7 @@ public class NewFareMapServiceTest {
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
-        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE);
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE.amount());
     }
 
 
