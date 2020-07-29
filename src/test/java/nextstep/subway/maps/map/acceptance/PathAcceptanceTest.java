@@ -6,6 +6,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.maps.line.dto.LineResponse;
+import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,35 +63,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId4, stationId3, 2, 2);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최소 시간 경로와 요금을 조회한다.")
     @Test
-    void findPathByDistance() {
+    void findPathByDurationForFare() {
         ExtractableResponse<Response> response = RestAssured.given().log().all().
                 accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DISTANCE").
-                then().
-                log().all().
-                extract();
-
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(3);
-        assertThat(pathResponse.getDuration()).isEqualTo(4);
-
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 4L, 3L));
-    }
-
-    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
-    @Test
-    void findPathByDuration() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DURATION").
+                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, PathType.DURATION).
                 then().
                 log().all().
                 extract();
@@ -98,11 +77,35 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(4);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)
                 .collect(Collectors.toList());
 
         assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistanceForFare() {
+        ExtractableResponse<Response> response = RestAssured.given().log().all().
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, PathType.DISTANCE).
+                then().
+                log().all().
+                extract();
+
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(3);
+        assertThat(pathResponse.getDuration()).isEqualTo(4);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
+
+        List<Long> stationIds = pathResponse.getStations().stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
+
+        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 4L, 3L));
     }
 }
