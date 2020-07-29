@@ -14,20 +14,6 @@ public class FareCalculator {
     public static final int SUPER_OVER_FARE_CHARGE_UNIT = 8;
     public static final int OVER_FARE_CHARGE_UNIT = 5;
 
-    public int calculate(int distance) {
-        int overFare = 0;
-        if (distance > SUPER_OVER_FARE_DISTANCE) {
-            int overDistance = distance - SUPER_OVER_FARE_DISTANCE;
-            overFare += calculateOverFareInteger(overDistance, SUPER_OVER_FARE_CHARGE_UNIT);
-            distance -= overDistance;
-        }
-        if (distance > OVER_FARE_DISTANCE) {
-            int overDistance = distance - OVER_FARE_DISTANCE;
-            overFare += calculateOverFareInteger(overDistance, OVER_FARE_CHARGE_UNIT);
-        }
-        return 1250 + overFare;
-    }
-
     public Money calculate(SubwayPath path) {
         int distance = path.calculateDistance();
 

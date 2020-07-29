@@ -26,22 +26,6 @@ class FareCalculatorTest {
      * 이용 거리초과 시 추가운임 부과
      * 10km초과∼50km까지(5km마다 100원)
      * 50km초과 시 (8km마다 100원)
-     */
-    @DisplayName("지하철 운임을 정책에 맞게 계산한다. ")
-    @ParameterizedTest
-    @CsvSource({"5,1250", "13, 1350", "18,1450", "50,2050", "57,2150", "63,2250"})
-    void calculate(int distance, int expectedFare) {
-        //when
-        int fare = fareCalculator.calculate(distance);
-        //then
-        assertThat(fare).isEqualTo(expectedFare);
-    }
-
-    /**
-     * 기본운임(10㎞ 이내) : 기본운임 1,250원
-     * 이용 거리초과 시 추가운임 부과
-     * 10km초과∼50km까지(5km마다 100원)
-     * 50km초과 시 (8km마다 100원)
      * <p>
      * 추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가
      * ex) 900원 추가 요금이 있는 노선 8km 이용 시 1,250원 -> 2,150원

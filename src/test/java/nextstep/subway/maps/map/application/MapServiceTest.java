@@ -54,7 +54,7 @@ public class MapServiceTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0);
+        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500);
         LineStation lineStation1 = new LineStation(1L, null, 0, 0);
         LineStation lineStation2 = new LineStation(2L, 1L, 2, 2);
         line1.addLineStation(lineStation1);
@@ -96,14 +96,14 @@ public class MapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(anyInt())).thenReturn(BASIC_FARE.amount());
+        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
-        assertThat(pathResponse.getFare()).isNotZero();
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE.amount());
     }
 
     @DisplayName("최단 거리 기준으로 요금을 책정한다")
@@ -112,14 +112,14 @@ public class MapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(BASIC_FARE.amount());
+        when(fareCalculator.calculate(shortestPath)).thenReturn(BASIC_FARE);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
         assertThat(pathResponse.getDistance()).isNotZero();
-        assertThat(pathResponse.getFare()).isNotZero();
+        assertThat(pathResponse.getFare()).isEqualTo(BASIC_FARE.amount());
     }
 
 
@@ -131,6 +131,5 @@ public class MapServiceTest {
         MapResponse mapResponse = mapService.findMap();
 
         assertThat(mapResponse.getLineResponses()).hasSize(3);
-
     }
 }

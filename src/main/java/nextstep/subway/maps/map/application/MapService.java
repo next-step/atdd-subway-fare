@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.application;
 
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
 import nextstep.subway.maps.map.domain.PathType;
@@ -50,15 +51,15 @@ public class MapService {
 
         if (type != PathType.DISTANCE) {
             SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-            return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(shortestPath.calculateDistance()));
+            return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(shortestPath));
         }
-        return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath.calculateDistance()));
+        return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath));
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
         List<Long> stationIds = lines.stream()
                 .flatMap(it -> it.getStationInOrder().stream())
-                .map(it -> it.getStationId())
+                .map(LineStation::getStationId)
                 .collect(Collectors.toList());
 
         return stationService.findStationsByIds(stationIds);
