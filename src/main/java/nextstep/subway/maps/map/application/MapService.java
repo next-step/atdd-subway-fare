@@ -29,9 +29,9 @@ public class MapService {
     private LineService lineService;
     private StationService stationService;
     private PathService pathService;
-    private DiscountFareCalculator fareCalculator;
+    private FareCalculator fareCalculator;
 
-    public MapService(LineService lineService, StationService stationService, PathService pathService, DiscountFareCalculator fareCalculator) {
+    public MapService(LineService lineService, StationService stationService, PathService pathService, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;

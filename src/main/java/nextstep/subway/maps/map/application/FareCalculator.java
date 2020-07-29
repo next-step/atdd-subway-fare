@@ -6,7 +6,7 @@ import nextstep.subway.maps.map.domain.SubwayPath;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DiscountFareCalculator {
+public class FareCalculator {
 
     public static final Money BASIC_FARE = Money.wons(1250);
     public static final Money ADDITIONAL_FARE = Money.wons(100);

@@ -11,12 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class DiscountFareCalculatorTest {
-    private DiscountFareCalculator fareCalculator;
+class FareCalculatorTest {
+    private FareCalculator fareCalculator;
 
     @BeforeEach
     void setUp() {
-        this.fareCalculator = new DiscountFareCalculator();
+        this.fareCalculator = new FareCalculator();
     }
 
     /**

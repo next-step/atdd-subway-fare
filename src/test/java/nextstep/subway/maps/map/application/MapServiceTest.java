@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static nextstep.subway.maps.map.application.DiscountFareCalculator.BASIC_FARE;
+import static nextstep.subway.maps.map.application.FareCalculator.BASIC_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -40,7 +40,7 @@ public class MapServiceTest {
     @Mock
     private PathService pathService;
     @Mock
-    private DiscountFareCalculator fareCalculator;
+    private FareCalculator fareCalculator;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
