@@ -48,4 +48,12 @@ public class Money implements Comparable<Money> {
     public Money plus(Money money) {
         return Money.wons(this.amount + money.amount());
     }
+
+    public Money minus(Money money) {
+        return Money.wons(this.amount - money.amount());
+    }
+
+    public Money percentOff(int percent) {
+        return Money.wons(this.amount * percent / 100);
+    }
 }

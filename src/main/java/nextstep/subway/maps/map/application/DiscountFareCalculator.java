@@ -1,18 +1,23 @@
 package nextstep.subway.maps.map.application;
 
 import nextstep.subway.maps.line.domain.Money;
+import nextstep.subway.maps.map.domain.DiscountPolicy;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FareCalculator {
+public class DiscountFareCalculator {
 
     public static final Money BASIC_FARE = Money.wons(1250);
     public static final Money ADDITIONAL_FARE = Money.wons(100);
     public static final int OVER_FARE_DISTANCE = 10;
-    private static final int SUPER_OVER_FARE_DISTANCE = 50;
+    public static final int SUPER_OVER_FARE_DISTANCE = 50;
     public static final int SUPER_OVER_FARE_CHARGE_UNIT = 8;
     public static final int OVER_FARE_CHARGE_UNIT = 5;
+
+    public Money calculate(SubwayPath path, DiscountPolicy discountPolicy) {
+        return discountPolicy.discount(calculate(path));
+    }
 
     public Money calculate(SubwayPath path) {
         int distance = path.calculateDistance();
