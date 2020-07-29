@@ -30,3 +30,11 @@ operation::favorites/find-list[snippets='http-request,http-response,request-head
 === 즐겨찾기 제거
 
 operation::favorites/delete[snippets='http-request,http-response,request-headers']
+
+[[resources-paths]]
+== Path
+
+[[resources-paths-find]]
+=== 경로 찾기
+
+operation::paths/find[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
