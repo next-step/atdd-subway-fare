@@ -1,4 +1,4 @@
-package nextstep.subway.maps.map.domain;
+package nextstep.subway.maps.fare.domain;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

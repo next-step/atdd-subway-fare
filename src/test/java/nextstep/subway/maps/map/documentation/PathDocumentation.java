@@ -70,18 +70,6 @@ public class PathDocumentation extends Documentation {
                                 parameterWithName("target").description("도착역"),
                                 parameterWithName("type").description("최단 거리 산정 기준")
                         ),
-                        // {
-                        //  "stations" : [ {
-                        //    "id" : 1,
-                        //    "name" : "강남역"
-                        //  }, {
-                        //    "id" : 2,
-                        //    "name" : "강낭콩"
-                        //  } ],
-                        //  "duration" : 20,
-                        //  "distance" : 10,
-                        //  "fare" : 0
-                        //}
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경유역"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 id"),

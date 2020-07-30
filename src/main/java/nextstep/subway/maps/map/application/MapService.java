@@ -1,11 +1,11 @@
 package nextstep.subway.maps.map.application;
 
+import nextstep.subway.maps.fare.application.FareService;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
-import nextstep.subway.maps.map.domain.FareContext;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.MapResponse;
@@ -22,16 +22,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class MapService {
+
     private LineService lineService;
     private StationService stationService;
     private PathService pathService;
-    private FareCalculator fareCalculator;
+    private FareService fareService;
 
-    public MapService(LineService lineService, StationService stationService, PathService pathService, FareCalculator fareCalculator) {
+    public MapService(LineService lineService, StationService stationService, PathService pathService, FareService fareService) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;
-        this.fareCalculator = fareCalculator;
+        this.fareService = fareService;
     }
 
     public MapResponse findMap() {
@@ -49,23 +50,8 @@ public class MapService {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        int fare;
-        fare = calculateFare(lines, source, target, subwayPath, type);
+        int fare = fareService.calculateFare(lines, source, target, subwayPath.calculateDistance(), type);
         return PathResponseAssembler.assemble(subwayPath, stations, fare);
-    }
-
-    private int calculateFare(List<Line> lines, Long source, Long target, SubwayPath subwayPath, PathType type) {
-        final int distance;
-
-        if (type == PathType.DISTANCE) {
-            distance = subwayPath.calculateDistance();
-        } else {
-            SubwayPath pathByDistance = pathService.findPath(lines, source, target, PathType.DISTANCE);
-            distance = pathByDistance.calculateDistance();
-        }
-
-        FareContext fareContext = new FareContext(distance);
-        return fareCalculator.calculate(fareContext);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {

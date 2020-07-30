@@ -1,8 +1,8 @@
-package nextstep.subway.maps.map.application;
+package nextstep.subway.maps.fare.application;
 
-import nextstep.subway.maps.map.domain.DistanceProportionalFarePolicy;
-import nextstep.subway.maps.map.domain.FareContext;
-import nextstep.subway.maps.map.domain.FarePolicy;
+import nextstep.subway.maps.fare.domain.DistanceProportionalFarePolicy;
+import nextstep.subway.maps.fare.domain.FareContext;
+import nextstep.subway.maps.fare.domain.FarePolicy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

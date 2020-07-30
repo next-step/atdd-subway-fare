@@ -1,6 +1,6 @@
-package nextstep.subway.maps.map.application;
+package nextstep.subway.maps.fare.application;
 
-import nextstep.subway.maps.map.domain.FareContext;
+import nextstep.subway.maps.fare.domain.FareContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

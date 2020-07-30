@@ -1,4 +1,4 @@
-package nextstep.subway.maps.map.domain;
+package nextstep.subway.maps.fare.domain;
 
 public class FareContext {
     public static final int DEFAULT_FARE = 1250;

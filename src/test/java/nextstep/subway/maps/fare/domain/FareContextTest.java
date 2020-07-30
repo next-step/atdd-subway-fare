@@ -1,4 +1,4 @@
-package nextstep.subway.maps.map.domain;
+package nextstep.subway.maps.fare.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
