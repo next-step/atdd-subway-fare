@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.maps.map.dto.FarePathResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 
@@ -19,6 +20,11 @@ public class PathAcceptanceStep {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
+    }
+
+    public static void 지하철_이용요금이_함께_응답검증(ExtractableResponse<Response> response) {
+        FarePathResponse farePathResponse = response.as(FarePathResponse.class);
+        assertThat(farePathResponse.getFare()).isNotNull();
     }
 
     public static void 경로를_순서대로_정렬하여_응답검증(ExtractableResponse<Response> response, List<Long> expectedIds) {

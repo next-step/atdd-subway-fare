@@ -70,6 +70,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Arrays.asList(1L, 4L, 3L));
     }
 
+    @DisplayName("두 역의 최단 거리 경로를 조회할 때, 지하철 이용요금도 함께 응답된다.")
+    @Test
+    void findPathByDistanceWithFare() {
+        // when
+        ExtractableResponse<Response> response = PathAcceptanceStep.
+            출발역에서_도착역까지_최단_또는_최소시간_경로조회_요청(1L, 3L, "DISTANCE");
+
+        // then
+        PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 3, 4);
+        PathAcceptanceStep.지하철_이용요금이_함께_응답검증(response);
+        PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Arrays.asList(1L, 4L, 3L));
+    }
+
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
