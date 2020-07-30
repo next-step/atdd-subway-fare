@@ -1,9 +1,10 @@
 package nextstep.subway.auth.ui.interceptor.authorization;
 
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
-import nextstep.subway.auth.domain.EmptyMember;
+import nextstep.subway.members.member.domain.EmptyMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -14,6 +15,13 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final UserDetailsService userDetailsService;
+
+    public AuthenticationPrincipalArgumentResolver(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -23,7 +31,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            return new EmptyMember();
+            return userDetailsService.emptyMember();
         }
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);

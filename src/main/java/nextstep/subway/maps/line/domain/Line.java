@@ -18,6 +18,8 @@ public class Line extends BaseEntity {
     private LocalTime endTime;
     private int intervalTime;
     @Embedded
+    private Money extraFare = Money.ZERO;
+    @Embedded
     private LineStations lineStations = new LineStations();
 
     public Line() {
@@ -31,12 +33,22 @@ public class Line extends BaseEntity {
         this.intervalTime = intervalTime;
     }
 
+    public Line(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime, int extraFare) {
+        this.name = name;
+        this.color = color;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
+        this.extraFare = Money.wons(extraFare);
+    }
+
     public void update(Line line) {
         this.name = line.getName();
         this.startTime = line.getStartTime();
         this.endTime = line.getEndTime();
         this.intervalTime = line.getIntervalTime();
         this.color = line.getColor();
+        this.extraFare = line.getExtraFare();
     }
 
     public void addLineStation(LineStation lineStation) {
@@ -77,5 +89,9 @@ public class Line extends BaseEntity {
 
     public LineStations getLineStations() {
         return lineStations;
+    }
+
+    public Money getExtraFare() {
+        return extraFare;
     }
 }
