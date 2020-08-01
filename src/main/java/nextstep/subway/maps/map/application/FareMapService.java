@@ -50,7 +50,11 @@ public class FareMapService {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath.calculateDistance()));
+        if (pathType != PathType.DISTANCE) {
+            return findDurationPathWithFare(lines, source, target, subwayPath, stations);
+        }
+        return PathResponseAssembler.assemble(subwayPath, stations,
+            fareCalculator.calculate(subwayPath.calculateDistance()));
     }
 
     private Map<Long, Station> extractStationsWithIdsOfAllLines(List<Line> lines) {
@@ -67,5 +71,13 @@ public class FareMapService {
             .map(station -> LineStationResponse.of(
                 line.getId(), station, StationResponse.of(stations.get(station.getStationId()))
             )).collect(Collectors.toList());
+    }
+
+    private FarePathResponse findDurationPathWithFare(List<Line> lines, Long source, Long target, SubwayPath subwayPath,
+        Map<Long, Station> stations) {
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        return PathResponseAssembler.assemble(subwayPath, stations,
+            fareCalculator.calculate(shortestPath.calculateDistance())
+        );
     }
 }

@@ -44,14 +44,19 @@ public class FareMapServiceTest {
 
     private Map<Long, Station> stations;
     private List<Line> lines;
+
     private SubwayPath subwayPath;
+    private SubwayPath shortestPath;
+
+    private Station 교대역;
+    private Station 양재역;
 
     @BeforeEach
     void setUp() {
         stations = Maps.newHashMap();
-        Station 교대역 = TestObjectUtils.createStation(1L, "교대역");
+        교대역 = TestObjectUtils.createStation(1L, "교대역");
         Station 강남역 = TestObjectUtils.createStation(2L, "강남역");
-        Station 양재역 = TestObjectUtils.createStation(3L, "양재역");
+        양재역 = TestObjectUtils.createStation(3L, "양재역");
         Station 남부터미널역 = TestObjectUtils.createStation(4L, "남부터미널역");
 
         stations.put(1L, 교대역);
@@ -66,8 +71,10 @@ public class FareMapServiceTest {
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_강남역);
 
         Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED");
-        신분당선.addLineStation(new LineStation(강남역.getId(), null, 0, 0));
-        신분당선.addLineStation(new LineStation(양재역.getId(), 강남역.getId(), 2, 1));
+        LineStation 신분당선_강남역 = new LineStation(강남역.getId(), null, 0, 0);
+        LineStation 신분당선_양재역 = new LineStation(양재역.getId(), 강남역.getId(), 2, 1);
+        신분당선.addLineStation(신분당선_강남역);
+        신분당선.addLineStation(신분당선_양재역);
 
         Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
         LineStation 서울_지하철_3호선_교대역 = new LineStation(교대역.getId(), null, 0, 0);
@@ -85,7 +92,15 @@ public class FareMapServiceTest {
             new LineStationEdge(서울_지하철_3호선_양재역, 서울_지하철_3호선.getId())
         );
 
+        List<LineStationEdge> shortestLineStations = Arrays.asList(
+            new LineStationEdge(서울_지하철_2호선_교대역, 서울_지하철_2호선.getId()),
+            new LineStationEdge(서울_지하철_2호선_강남역, 서울_지하철_2호선.getId()),
+            new LineStationEdge(신분당선_강남역, 신분당선.getId()),
+            new LineStationEdge(신분당선_양재역, 신분당선.getId())
+        );
+
         subwayPath = new SubwayPath(lineStations);
+        shortestPath = new SubwayPath(shortestLineStations);
         fareMapService = new FareMapService(lineService, stationService, pathService, fareCalculator);
     }
 
@@ -123,5 +138,26 @@ public class FareMapServiceTest {
 
         // then
         assertThat(mapResponse.getLineResponses()).hasSize(3);
+    }
+
+    @DisplayName("최단 거리 기준으로 요금을 책정한다.")
+    @Test
+    void 거리비례제_기준으로_요금을_책정한다() {
+        // given
+        when(lineService.findLines()).thenReturn(lines);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
+        when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(FareCalculator.BASIC_FARE);
+
+        // when
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(), PathType.DURATION);
+
+        // then
+        assertAll(
+            () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
+            () -> assertThat(farePathResponse.getDuration()).isNotZero(),
+            () -> assertThat(farePathResponse.getDistance()).isNotZero(),
+            () -> assertThat(farePathResponse.getFare()).isNotZero()
+        );
     }
 }
