@@ -32,7 +32,7 @@ public class SubwayGraph extends WeightedMultigraph<Long, LineStationEdge> {
     }
 
     private void addEdge(PathType type, LineStation lineStation, Line line) {
-        LineStationEdge lineStationEdge = new LineStationEdge(lineStation, line.getId());
+        LineStationEdge lineStationEdge = new LineStationEdge(lineStation, line);
         addEdge(lineStation.getPreStationId(), lineStation.getStationId(), lineStationEdge);
         setEdgeWeight(lineStationEdge, type.findWeightOf(lineStation));
     }
