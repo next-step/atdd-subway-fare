@@ -28,7 +28,7 @@ public class FareService {
             return calculateFare(lines, lineStationEdges);
         }
 
-        FareContext fareContext = new FareContext(subwayPath.calculateDistance());
+        FareContext fareContext = new FareContext(subwayPath);
         return fareCalculator.calculate(fareContext);
     }
 
@@ -43,7 +43,7 @@ public class FareService {
                 .getLineStation().getStationId();
 
         SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        FareContext fareContext = new FareContext(pathForCalculate.calculateDistance());
+        FareContext fareContext = new FareContext(pathForCalculate);
         return fareCalculator.calculate(fareContext);
     }
 }

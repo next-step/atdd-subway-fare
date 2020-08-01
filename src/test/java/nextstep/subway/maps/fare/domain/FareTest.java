@@ -51,6 +51,6 @@ public class FareTest {
         fare.discountPercent(percent);
 
         // then
-        assertThat(fare.getValue()).isEqualTo((int) Math.floor(expected));
+        assertThat(fare.getValue()).isEqualTo((int) Math.floor(1000 * expected));
     }
 }
