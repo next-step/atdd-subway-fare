@@ -27,7 +27,7 @@ public class FareTest {
         fare.plusFare(400);
 
         // then
-        assertThat(fare.getFare()).isEqualTo(2000);
+        assertThat(fare.getValue()).isEqualTo(2000);
     }
 
     @DisplayName("요금을 할인한다")
@@ -40,7 +40,7 @@ public class FareTest {
         fare.discountFare(400);
 
         // then
-        assertThat(fare.getFare()).isEqualTo(0);
+        assertThat(fare.getValue()).isEqualTo(0);
     }
 
     @DisplayName("요금을 퍼센트 할인한다")
@@ -51,6 +51,6 @@ public class FareTest {
         fare.discountPercent(percent);
 
         // then
-        assertThat(fare.getFare()).isEqualTo((int) Math.floor(expected));
+        assertThat(fare.getValue()).isEqualTo((int) Math.floor(expected));
     }
 }

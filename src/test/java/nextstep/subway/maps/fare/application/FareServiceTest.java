@@ -1,5 +1,6 @@
 package nextstep.subway.maps.fare.application;
 
+import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.PathService;
 import nextstep.subway.maps.map.domain.PathType;
@@ -29,10 +30,10 @@ class FareServiceTest {
 
         // when
         // List<Line> lines, Long source, Long target, SubwayPath subwayPath, PathType type
-        int fare = fareService.calculateFare(lines, source, target, distance, type);
+        Fare fare = fareService.calculateFare(lines, source, target, distance, type);
 
         // then
-        assertThat(fare).isNotNegative();
+        assertThat(fare.getValue()).isNotNegative();
         verify(fareCalculator).calculate(any());
 
     }

@@ -1,5 +1,6 @@
 package nextstep.subway.maps.fare.application;
 
+import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.fare.domain.FareContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +17,9 @@ class FareCalculatorTest {
         // when
         int distance = 0;
         FareContext fareContext = new FareContext(distance);
-        int fare = fareCalculator.calculate(fareContext);
+        Fare fare = fareCalculator.calculate(fareContext);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(1250);
+        Assertions.assertThat(fare.getValue()).isEqualTo(1250);
     }
 }

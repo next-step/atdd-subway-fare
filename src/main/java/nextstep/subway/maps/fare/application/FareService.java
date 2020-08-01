@@ -1,5 +1,6 @@
 package nextstep.subway.maps.fare.application;
 
+import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.fare.domain.FareContext;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.PathService;
@@ -19,7 +20,7 @@ public class FareService {
         this.fareCalculator = fareCalculator;
     }
 
-    public int calculateFare(List<Line> lines, Long source, Long target, Integer distance, PathType type) {
+    public Fare calculateFare(List<Line> lines, Long source, Long target, Integer distance, PathType type) {
         if (type != PathType.DISTANCE) {
             SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
             FareContext fareContext = new FareContext(pathForCalculate.calculateDistance());

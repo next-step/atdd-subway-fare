@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.application;
 
 import nextstep.subway.maps.fare.application.FareService;
+import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -50,8 +51,8 @@ public class MapService {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        int fare = fareService.calculateFare(lines, source, target, subwayPath.calculateDistance(), type);
-        return PathResponseAssembler.assemble(subwayPath, stations, fare);
+        Fare fare = fareService.calculateFare(lines, source, target, subwayPath.calculateDistance(), type);
+        return PathResponseAssembler.assemble(subwayPath, stations, fare.getValue());
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {

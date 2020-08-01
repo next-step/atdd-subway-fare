@@ -28,7 +28,7 @@ public class Fare {
         this.fare = (int) Math.floor(this.fare * ((100 - percent) / 100f));
     }
 
-    public int getFare() {
+    public int getValue() {
         return this.fare;
     }
 }
