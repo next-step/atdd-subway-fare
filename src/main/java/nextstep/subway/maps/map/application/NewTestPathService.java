@@ -7,17 +7,20 @@ import nextstep.subway.maps.map.domain.SubwayGraph;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class NewTestPathService {
+
+    public static final int MAX_PATH_COUNT = 10000;
+
     public SubwayPath findPath(List<Line> lines, Long source, Long target, PathType type) {
-        SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
-        graph.addVertexWith(lines);
-        graph.addEdge(lines, type);
+        SubwayGraph graph = createSubwayGraph(lines, type);
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
@@ -26,7 +29,27 @@ public class NewTestPathService {
         return convertSubwayPath(path);
     }
 
+    private SubwayGraph createSubwayGraph(List<Line> lines, PathType type) {
+        SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
+        graph.addVertexWith(lines);
+        graph.addEdge(lines, type);
+        return graph;
+    }
+
+
     private SubwayPath convertSubwayPath(GraphPath graphPath) {
         return new SubwayPath((List<LineStationEdge>) graphPath.getEdgeList().stream().collect(Collectors.toList()));
+    }
+
+
+    public SubwayPath findPathByArrivalTime(List<Line> lines, Long source, Long target, LocalDateTime departTime) {
+        SubwayGraph graph = createSubwayGraph(lines, PathType.ARRIVAL_TIME);
+
+        KShortestPaths<Long, LineStationEdge> kShortestPaths = new KShortestPaths<>(graph, MAX_PATH_COUNT);
+        List<GraphPath<Long, LineStationEdge>> paths = kShortestPaths.getPaths(source, target);
+
+        TimePaths timePaths =  TimePaths.of(paths);
+
+        return null;
     }
 }

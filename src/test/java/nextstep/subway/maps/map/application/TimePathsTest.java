@@ -3,10 +3,14 @@ package nextstep.subway.maps.map.application;
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
-import nextstep.subway.maps.map.domain.SubwayPath;
+import nextstep.subway.maps.map.domain.SubwayGraph;
+import nextstep.subway.maps.map.domain.TimePath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static nextstep.subway.maps.map.application.NewTestPathService.MAX_PATH_COUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NewTestPathServiceTest {
-    private List<Line> lines;
-    private NewTestPathService pathService;
+class TimePathsTest {
+
+    private KShortestPaths<Long, LineStationEdge> kShortestPaths;
 
     @BeforeEach
     void setUp() {
@@ -42,22 +47,26 @@ class NewTestPathServiceTest {
         line3.addLineStation(new LineStation(4L, 1L, 1, 2));
         line3.addLineStation(new LineStation(3L, 4L, 2, 2));
 
-        lines = Lists.newArrayList(line1, line2, line3);
+        List<Line> lines = Lists.newArrayList(line1, line2, line3);
 
-        pathService = new NewTestPathService();
+        SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
+        graph.addVertexWith(lines);
+        graph.addEdge(lines, PathType.DURATION);
+
+        kShortestPaths = new KShortestPaths<>(graph, MAX_PATH_COUNT);
     }
 
     @Test
-    void findPathByArrivalTime() {
+    void findFastestArrivalPath() {
         //given
-        LocalDateTime departTime = LocalDateTime.of(2020, 7, 1, 6, 15);
-        // when
-        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, 1L, 3L, departTime);
+        List<GraphPath<Long, LineStationEdge>> paths = kShortestPaths.getPaths(1L, 3L);
+        TimePaths timePaths = TimePaths.of(paths);
 
-        // then
-        assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
-        assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
-        assertThat(subwayPath.extractStationId().get(1)).isEqualTo(4L);
-        assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
+        //when
+        TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
+
+        //then
+        assertThat(fastestArrivalPath.getPath().getVertexList())
+                .containsExactly(1L, 4L, 3L);
     }
 }
