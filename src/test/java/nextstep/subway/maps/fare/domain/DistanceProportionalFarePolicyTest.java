@@ -24,12 +24,12 @@ class DistanceProportionalFarePolicyTest {
     @Test
     void calculate() {
         // given
-        DistanceProportionalFarePolicy fareCalculator = new DistanceProportionalFarePolicy();
+        DistanceProportionalFarePolicy policy = new DistanceProportionalFarePolicy();
         when(subwayPath.calculateDistance()).thenReturn(10);
         FareContext fareContext = new FareContext(subwayPath);
 
         // when
-        fareCalculator.calculate(fareContext);
+        policy.calculate(fareContext);
 
         // then
         Assertions.assertThat(fareContext.getFare().getValue()).isEqualTo(1250);
