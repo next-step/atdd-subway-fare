@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 public class FareCalculator {
 
     public static final int BASIC_FARE = 1250;
+
     public static final int OVERFARE_DISTANCE_THRESHOLD = 10;
     public static final int SUPER_OVERFARE_DISTANCE_THRESHOLD = 50;
     public static final int OVERFARE_DISTANCE_DIVIDEND = 5;

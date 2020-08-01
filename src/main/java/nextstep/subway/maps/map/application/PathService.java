@@ -30,6 +30,5 @@ public class PathService {
 
     private SubwayPath convertSubwayPath(GraphPath<Long, LineStationEdge> graphPath) {
         return new SubwayPath(Lists.newArrayList(graphPath.getEdgeList()));
-        // return new SubwayPath((List<LineStationEdge>) graphPath.getEdgeList().stream().collect(Collectors.toList()));
     }
 }
