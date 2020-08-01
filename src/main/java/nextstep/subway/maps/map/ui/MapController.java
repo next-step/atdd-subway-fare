@@ -7,10 +7,13 @@ import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.members.member.domain.EmptyMember;
 import nextstep.subway.members.member.domain.LoginMember;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 public class MapController {
@@ -22,7 +25,7 @@ public class MapController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember user, @RequestParam Long source, @RequestParam Long target,
-                                                 @RequestParam PathType type) {
+                                                 @RequestParam PathType type, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMddHHmm") LocalDateTime time) {
         if (user instanceof EmptyMember) {
             return ResponseEntity.ok(mapService.findPath(source, target, type));
         }
