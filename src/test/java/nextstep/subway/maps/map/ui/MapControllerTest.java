@@ -5,7 +5,6 @@ import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.members.member.domain.EmptyMember;
 import nextstep.subway.members.member.domain.LoginMember;
-import nextstep.subway.members.member.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
