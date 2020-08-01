@@ -3,6 +3,7 @@ package nextstep.subway.maps.fare.application;
 import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.PathService;
+import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,26 @@ class FareServiceTest {
         // when
         // List<Line> lines, Long source, Long target, SubwayPath subwayPath, PathType type
         Fare fare = fareService.calculateFare(lines, source, target, distance, type);
+
+        // then
+        assertThat(fare.getValue()).isNotNegative();
+        verify(fareCalculator).calculate(any());
+
+    }
+
+    @Test
+    public void calculateFareTestNew() {
+        // given
+        FareCalculator fareCalculator = mock(FareCalculator.class);
+        PathService pathService = mock(PathService.class);
+        FareService fareService = new FareService(pathService, fareCalculator);
+        List<Line> lines = new ArrayList<>();
+        List<LineStationEdge> lineStationEdges = new ArrayList<>();
+        PathType type = PathType.DISTANCE;
+
+        // when
+        // List<Line> lines, Long source, Long target, SubwayPath subwayPath, PathType type
+        Fare fare = fareService.calculateFare(lines, lineStationEdges, type);
 
         // then
         assertThat(fare.getValue()).isNotNegative();
