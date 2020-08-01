@@ -16,10 +16,10 @@ public class SubwayGraph extends WeightedMultigraph<Long, LineStationEdge> {
         // 지하철 역(정점)을 등록
         lines.stream()
                 .flatMap(it -> it.getStationInOrder().stream())
-                .map(it -> it.getStationId())
+                .map(LineStation::getStationId)
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> addVertex(it));
+                .forEach(this::addVertex);
     }
 
     public void addEdge(List<Line> lines, PathType type) {
