@@ -48,7 +48,7 @@ public class NewTestPathService {
         KShortestPaths<Long, LineStationEdge> kShortestPaths = new KShortestPaths<>(graph, MAX_PATH_COUNT);
         List<GraphPath<Long, LineStationEdge>> paths = kShortestPaths.getPaths(source, target);
 
-        TimePaths timePaths =  TimePaths.of(paths);
+        TimePaths timePaths = TimePaths.of(paths.stream().map(this::convertSubwayPath).collect(Collectors.toList()));
 
         return null;
     }

@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.application;
 
 import nextstep.subway.maps.map.domain.LineStationEdge;
+import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.domain.TimePath;
 import org.jgrapht.GraphPath;
 
@@ -13,13 +14,13 @@ public class TimePaths {
 
     private final List<TimePath> paths;
 
-    private TimePaths(List<GraphPath<Long, LineStationEdge>> paths) {
+    private TimePaths(List<SubwayPath> paths) {
         this.paths = paths.stream()
                 .map(TimePath::new)
                 .collect(Collectors.toList());
     }
 
-    public static TimePaths of(List<GraphPath<Long, LineStationEdge>> paths) {
+    public static TimePaths of(List<SubwayPath> paths) {
         return new TimePaths(paths);
     }
 

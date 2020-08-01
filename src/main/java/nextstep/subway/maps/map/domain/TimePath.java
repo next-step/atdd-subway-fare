@@ -6,13 +6,13 @@ import java.time.LocalDateTime;
 
 public class TimePath {
 
-    private final GraphPath<Long, LineStationEdge> path;
+    private final SubwayPath path;
 
-    public TimePath(GraphPath<Long, LineStationEdge> path) {
+    public TimePath(SubwayPath path) {
         this.path = path;
     }
 
-    public GraphPath<Long, LineStationEdge> getPath() {
+    public SubwayPath getPath() {
         return path;
     }
 
