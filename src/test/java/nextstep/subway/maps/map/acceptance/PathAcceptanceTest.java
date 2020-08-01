@@ -92,6 +92,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    @DisplayName("두 역의 가장 빠른 도착 경로를 조회한다.")
     void findPathByArrivalTime() {
         //when
         ExtractableResponse<Response> response = 출발역에서_도착역까지의_가장_빠른_도착_경로_조회_요청(LocalDateTime.of(2020, 7, 22, 6, 15), 1L, 3L);

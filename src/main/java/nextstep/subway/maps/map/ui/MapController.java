@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @RestController
 public class MapController {
@@ -26,10 +27,10 @@ public class MapController {
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember user, @RequestParam Long source, @RequestParam Long target,
                                                  @RequestParam PathType type, @DateTimeFormat(pattern = "yyyyMMddHHmm") @RequestParam(required = false, value = "time") LocalDateTime time) {
-        if (user instanceof EmptyMember) {
-            return ResponseEntity.ok(mapService.findPath(source, target, type));
+        if (user instanceof EmptyMember || Objects.isNull(user)) {
+            return ResponseEntity.ok(mapService.findPath(source, target, type, time));
         }
-        return ResponseEntity.ok(mapService.findPath(user, source, target, type));
+        return ResponseEntity.ok(mapService.findPath(user, source, target, type, time));
     }
 
     @GetMapping("/maps")

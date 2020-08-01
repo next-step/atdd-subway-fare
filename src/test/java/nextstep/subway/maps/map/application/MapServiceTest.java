@@ -101,7 +101,7 @@ public class MapServiceTest {
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class), any(DiscountPolicy.class))).thenReturn(BASIC_FARE);
 
-        PathResponse pathResponse = mapService.findPath(user, 1L, 3L, PathType.DISTANCE);
+        PathResponse pathResponse = mapService.findPath(user, 1L, 3L, PathType.DISTANCE, null);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
@@ -116,7 +116,7 @@ public class MapServiceTest {
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
+        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE, null);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
@@ -132,7 +132,7 @@ public class MapServiceTest {
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION);
+        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION, null);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();

@@ -20,6 +20,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,12 +55,13 @@ public class PathDocumentation extends Documentation {
         Map<String, Object> params = new HashMap<>();
         params.put("source", 1L);
         params.put("target", 2L);
-        params.put("type", PathType.DISTANCE);
+        params.put("type", PathType.ARRIVAL_TIME);
+        params.put("time", "202007011700");
         List<StationResponse> stations = Lists.list(
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class)))
+        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class), any()))
                 .thenReturn(new PathResponse(stations, 20, 10, 10));
 
         given().log().all().

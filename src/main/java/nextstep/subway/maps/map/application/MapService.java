@@ -19,6 +19,7 @@ import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -64,7 +65,7 @@ public class MapService {
                 .collect(Collectors.toList());
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type, LocalDateTime time) {
         List<Line> lines = lineService.findLines();
 
         SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
@@ -76,7 +77,7 @@ public class MapService {
         return assemblePathResponse(pathService.findPath(lines, source, target, type), fare);
     }
 
-    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type) {
+    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type, LocalDateTime time) {
         List<Line> lines = lineService.findLines();
 
         SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
