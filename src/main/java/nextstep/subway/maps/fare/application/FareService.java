@@ -32,7 +32,29 @@ public class FareService {
         return fareCalculator.calculate(fareContext);
     }
 
-    public Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges, PathType type) {
-        return null;
+    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, PathType type) {
+        List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
+
+        if (type != PathType.DISTANCE) {
+            return calculateFare(lines, lineStationEdges);
+        }
+
+        FareContext fareContext = new FareContext(subwayPath.calculateDistance());
+        return fareCalculator.calculate(fareContext);
+    }
+
+    private Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges) {
+        Long source = lineStationEdges.stream().findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
+                .getLineStation().getStationId();
+
+        int size = lineStationEdges.size();
+        Long target = lineStationEdges.stream().skip(size - 1).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
+                .getLineStation().getStationId();
+
+        SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        FareContext fareContext = new FareContext(pathForCalculate.calculateDistance());
+        return fareCalculator.calculate(fareContext);
     }
 }
