@@ -14,7 +14,7 @@ public class LineExtraFarePolicyTest {
     public void calculate() {
         // given
         LineExtraFarePolicy lineExtraFarePolicyTest = new LineExtraFarePolicy();
-        SubwayPath subwayPath = FareTestUtils.sampleSubwayPath();
+        SubwayPath subwayPath = FareTestUtils.sampleSubwayPath(1000);
         FareContext fareContext = new FareContext(subwayPath);
 
         // when

@@ -17,6 +17,10 @@ public class LineStationEdge extends DefaultWeightedEdge {
         return lineStation;
     }
 
+    public Line getLine() {
+        return this.line;
+    }
+
     @Override
     protected Object getSource() {
         return this.lineStation.getPreStationId();
