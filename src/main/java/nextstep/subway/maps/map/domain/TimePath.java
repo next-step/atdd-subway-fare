@@ -1,8 +1,10 @@
 package nextstep.subway.maps.map.domain;
 
-import org.jgrapht.GraphPath;
+import nextstep.subway.maps.line.domain.Line;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class TimePath {
 
@@ -17,6 +19,16 @@ public class TimePath {
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departTime) {
-        return LocalDateTime.now();
+        // 추가 구현 필요
+        long waitingMinutes = 0;
+        for (LineStationEdge lineStationEdge : path.getLineStationEdges()) {
+            Line line = lineStationEdge.getLine();
+            Long source = (Long) lineStationEdge.getSource();
+            LocalTime departLocalTime = departTime.toLocalTime();
+
+            LocalTime nextTime = line.calculateNextTime(source, departLocalTime);
+            waitingMinutes += Duration.between(departLocalTime, nextTime).toMinutes();
+        }
+        return departTime.plusMinutes(path.calculateDuration()).plusMinutes(waitingMinutes);
     }
 }
