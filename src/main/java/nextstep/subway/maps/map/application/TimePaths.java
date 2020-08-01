@@ -5,6 +5,7 @@ import nextstep.subway.maps.map.domain.TimePath;
 import org.jgrapht.GraphPath;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,8 @@ public class TimePaths {
     }
 
     public TimePath findFastestArrivalPath(LocalDateTime departTime) {
-        return null;
+        return this.paths.stream()
+                .min(Comparator.comparing(timePath -> timePath.getArrivalTime(departTime)))
+                .orElseThrow(() -> new RuntimeException("경로가 존재하지 않는 요청입니다."));
     }
 }
