@@ -17,21 +17,17 @@ public class FareCalculator {
         int overFare = 0;
         if (distance > SUPER_OVERFARE_DISTANCE_THRESHOLD) {
             int overDistance = distance - SUPER_OVERFARE_DISTANCE_THRESHOLD;
-            overFare = overFare + calculateSuperOverFare(overDistance);
+            overFare = overFare + calculateOverFare(overDistance, SUPER_OVERFARE_DISTANCE_DIVIDEND);
             distance = distance - overDistance;
         }
         if (distance > OVERFARE_DISTANCE_THRESHOLD) {
             int overDistance = distance - OVERFARE_DISTANCE_THRESHOLD;
-            overFare = overFare + calculateOverFare(overDistance);
+            overFare = overFare + calculateOverFare(overDistance, OVERFARE_DISTANCE_DIVIDEND);
         }
         return BASIC_FARE + overFare;
     }
 
-    private int calculateOverFare(int overDistance) {
-        return (int)((Math.ceil(overDistance - 1) / OVERFARE_DISTANCE_DIVIDEND) + 1) * OVERFARE_ADDED_PRICE_PER_KM;
-    }
-
-    private int calculateSuperOverFare(int overDistance) {
-        return (int)((Math.ceil(overDistance - 1) / SUPER_OVERFARE_DISTANCE_DIVIDEND) + 1) * OVERFARE_ADDED_PRICE_PER_KM;
+    private int calculateOverFare(int overDistance, int unit) {
+        return (int)((Math.ceil(overDistance - 1) / unit) + 1) * OVERFARE_ADDED_PRICE_PER_KM;
     }
 }
