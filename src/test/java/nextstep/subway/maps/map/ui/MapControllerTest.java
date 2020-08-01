@@ -21,7 +21,7 @@ public class MapControllerTest {
         MapController controller = new MapController(mapService);
         when(mapService.findPath(any(), anyLong(), anyLong(), any())).thenReturn(new PathResponse());
 
-        ResponseEntity<PathResponse> entity = controller.findPath(null, 1L, 2L, PathType.DISTANCE);
+        ResponseEntity<PathResponse> entity = controller.findPath(null, 1L, 2L, PathType.DISTANCE,null);
 
         verify(mapService).findPath(nullable(LoginMember.class), anyLong(), anyLong(), any(PathType.class));
         assertThat(entity.getBody()).isNotNull();
@@ -35,7 +35,7 @@ public class MapControllerTest {
         MapController controller = new MapController(mapService);
         when(mapService.findPath(any(), anyLong(), anyLong(), any())).thenReturn(new PathResponse());
 
-        ResponseEntity<PathResponse> entity = controller.findPath(loginMember, 1L, 2L, PathType.DISTANCE);
+        ResponseEntity<PathResponse> entity = controller.findPath(loginMember, 1L, 2L, PathType.DISTANCE, null);
 
         verify(mapService).findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class));
         assertThat(entity.getBody()).isNotNull();
