@@ -97,7 +97,7 @@ public class FareMapServiceTest {
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
 
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(anyInt())).thenReturn(FareCalculator.BASIC);
+        when(fareCalculator.calculate(anyInt())).thenReturn(FareCalculator.BASIC_FARE);
 
         // when
         FarePathResponse farePathResponse = fareMapService.findPathWithFare(1L, 3L, PathType.DISTANCE);
