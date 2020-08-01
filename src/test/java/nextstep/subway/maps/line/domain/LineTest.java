@@ -21,7 +21,7 @@ class LineTest {
         //given
         Line line = new Line("2호선", "yellow", LocalTime.now(), LocalTime.now(), 3, 300);
         Line savedLine = lineRepository.save(line);
-        
+
         //when
         Money extraFare = savedLine.getExtraFare();
 
