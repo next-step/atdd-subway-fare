@@ -25,6 +25,7 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -44,6 +45,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void findPathDocumentation() {
+
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("source", 1L);
         requestParam.put("target", 2L);
@@ -53,6 +55,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "강낭콩", LocalDateTime.now(), LocalDateTime.now())
         );
+
         PathResponse pathResponse = new PathResponse(stations, 20, 10, 1250);
         when(mapService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
@@ -65,6 +68,9 @@ public class PathDocumentation extends Documentation {
                 .apply(document("path/find",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestHeaders(
+                                authorizationHeader(true)
+                        ),
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역"),

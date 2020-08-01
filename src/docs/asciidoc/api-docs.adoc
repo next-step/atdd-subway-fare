@@ -37,4 +37,4 @@ operation::favorites/delete[snippets='http-request,http-response,request-headers
 [[resources-path-find]]
 === 경로 찾기
 
-operation::path/find[snippets='http-request,http-response,request-parameters,response-fields']
+operation::path/find[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
