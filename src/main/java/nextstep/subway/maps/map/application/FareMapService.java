@@ -15,7 +15,6 @@ import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.FarePathResponse;
 import nextstep.subway.maps.map.dto.MapResponse;
-import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;

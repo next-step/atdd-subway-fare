@@ -1,9 +1,9 @@
 package nextstep.subway.maps.map.documentation;
 
 import nextstep.subway.Documentation;
-import nextstep.subway.maps.map.application.MapService;
+import nextstep.subway.maps.map.application.FareMapService;
 import nextstep.subway.maps.map.domain.PathType;
-import nextstep.subway.maps.map.dto.PathResponse;
+import nextstep.subway.maps.map.dto.FarePathResponse;
 import nextstep.subway.maps.map.ui.MapController;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.assertj.core.util.Lists;
@@ -36,7 +36,7 @@ public class PathDocumentation extends Documentation {
     private MapController mapController;
 
     @MockBean
-    private MapService mapService;
+    private FareMapService mapService;
 
     @BeforeEach
     public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
@@ -53,8 +53,8 @@ public class PathDocumentation extends Documentation {
             new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
             new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPath(1L, 2L, PathType.DISTANCE))
-            .thenReturn(new PathResponse(stations, 20, 10));
+        when(mapService.findPathWithFare(1L, 2L, PathType.DISTANCE))
+            .thenReturn(new FarePathResponse(stations, 20, 10, 10));
 
         given().log().all().
             contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -75,7 +75,8 @@ public class PathDocumentation extends Documentation {
                     fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 아이디"),
                     fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철 역 이름"),
                     fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
-                    fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리")
+                    fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리"),
+                    fieldWithPath("fare").type(JsonFieldType.NUMBER).description("지하철 운임")
                 )
             )).
             extract();

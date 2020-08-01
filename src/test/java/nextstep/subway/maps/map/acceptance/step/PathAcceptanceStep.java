@@ -11,13 +11,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.maps.map.dto.FarePathResponse;
-import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 
 public class PathAcceptanceStep {
 
     public static void 총_거리와_소요시간을_함께_응답검증(ExtractableResponse<Response> response, int distance, int duration) {
-        PathResponse pathResponse = response.as(PathResponse.class);
+        FarePathResponse pathResponse = response.as(FarePathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
     }
@@ -28,7 +27,7 @@ public class PathAcceptanceStep {
     }
 
     public static void 경로를_순서대로_정렬하여_응답검증(ExtractableResponse<Response> response, List<Long> expectedIds) {
-        PathResponse pathResponse = response.as(PathResponse.class);
+        FarePathResponse pathResponse = response.as(FarePathResponse.class);
         List<Long> stationIds = pathResponse.getStations().stream()
             .map(StationResponse::getId)
             .collect(Collectors.toList());
