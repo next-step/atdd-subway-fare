@@ -1,9 +1,6 @@
 package nextstep.subway.maps.fare.application;
 
-import nextstep.subway.maps.fare.domain.DistanceProportionalFarePolicy;
-import nextstep.subway.maps.fare.domain.Fare;
-import nextstep.subway.maps.fare.domain.FareContext;
-import nextstep.subway.maps.fare.domain.FarePolicy;
+import nextstep.subway.maps.fare.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ public class FareCalculator {
 
     public FareCalculator() {
         this.farePolicies.add(new DistanceProportionalFarePolicy());
+        this.farePolicies.add(new LineExtraFarePolicy());
     }
 
     public Fare calculate(FareContext fareContext) {
