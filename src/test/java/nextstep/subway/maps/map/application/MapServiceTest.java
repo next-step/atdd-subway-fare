@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.application;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.fare.application.FareService;
+import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -82,6 +83,7 @@ public class MapServiceTest {
 
     @Test
     void findPath() {
+        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(PathType.class))).thenReturn(new Fare(0));
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
