@@ -75,6 +75,7 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역"),
+                                parameterWithName("time").optional().description("현재 시각(yyyyMMddHHmm)"),
                                 parameterWithName("type").description("최단 거리 산정 기준")
                         ),
                         responseFields(
