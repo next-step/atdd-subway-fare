@@ -7,7 +7,7 @@ import nextstep.subway.maps.map.application.PathService;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class FareService {
         this.fareCalculator = fareCalculator;
     }
 
-    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, Member member, PathType type) {
+    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, MemberResponse member, PathType type) {
         List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
 
         if (type != PathType.DISTANCE) {
@@ -33,7 +33,7 @@ public class FareService {
         return fareCalculator.calculate(fareContext);
     }
 
-    private Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges, Member member) {
+    private Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges, MemberResponse member) {
         Long source = lineStationEdges.stream().findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
                 .getLineStation().getStationId();

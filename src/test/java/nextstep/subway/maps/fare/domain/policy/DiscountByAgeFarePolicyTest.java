@@ -2,7 +2,7 @@ package nextstep.subway.maps.fare.domain.policy;
 
 import nextstep.subway.maps.fare.domain.FareContext;
 import nextstep.subway.maps.fare.utils.FareTestUtils;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ class DiscountByAgeFarePolicyTest {
     @Test
     public void calculateYouthMember() {
         // given
-        Member member = new Member("email@email.com", "pasSw0rb", 15);
+        MemberResponse member = new MemberResponse(1L, "email@email.com", 15);
         FareContext fareContext = new FareContext(FareTestUtils.sampleSubwayPath(), member);
         DiscountByAgeFarePolicy discountByAgeFarePolicy = new DiscountByAgeFarePolicy();
 
@@ -28,7 +28,7 @@ class DiscountByAgeFarePolicyTest {
     @Test
     public void calculateChildrenMember() {
         // given
-        Member member = new Member("email@email.com", "pasSw0rb", 10);
+        MemberResponse member = new MemberResponse(1L, "email@email.com", 10);
         FareContext fareContext = new FareContext(FareTestUtils.sampleSubwayPath(), member);
         DiscountByAgeFarePolicy discountByAgeFarePolicy = new DiscountByAgeFarePolicy();
 

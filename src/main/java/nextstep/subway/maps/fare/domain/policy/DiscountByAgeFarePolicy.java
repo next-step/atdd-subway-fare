@@ -2,7 +2,7 @@ package nextstep.subway.maps.fare.domain.policy;
 
 import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.fare.domain.FareContext;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 
 public class DiscountByAgeFarePolicy implements FarePolicy {
     private static final int DISCOUNT_AGE_MAX = 19;
@@ -11,7 +11,7 @@ public class DiscountByAgeFarePolicy implements FarePolicy {
 
     @Override
     public void calculate(FareContext fareContext) {
-        Member member = fareContext.getMember();
+        MemberResponse member = fareContext.getMember();
         if (member == null) {
             return;
         }

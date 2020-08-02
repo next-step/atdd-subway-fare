@@ -13,8 +13,9 @@ import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.members.member.application.MemberService;
 import nextstep.subway.members.member.domain.LoginMember;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ public class MapServiceTest {
 
     @Mock
     private FareService fareService;
+
+    @Mock
+    private MemberService memberService;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
@@ -80,7 +84,7 @@ public class MapServiceTest {
         );
         subwayPath = new SubwayPath(lineStations);
 
-        mapService = new MapService(lineService, stationService, pathService, fareService);
+        mapService = new MapService(lineService, stationService, pathService, fareService, memberService);
     }
 
     @Test
@@ -99,11 +103,12 @@ public class MapServiceTest {
 
     @Test
     void findPathWithMember() {
-        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(Member.class), any(PathType.class))).thenReturn(new Fare(0));
+        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(MemberResponse.class), any(PathType.class))).thenReturn(new Fare(0));
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        LoginMember member = new LoginMember(1L, "dhlee@test.com", "password", 10);
+        when(memberService.findMember(anyLong())).thenReturn(new MemberResponse(1L, "dhlee@test.com", 10));
+        LoginMember member = new LoginMember(1L, "dhlee@test.com", "test", 10);
 
         PathResponse pathResponse = mapService.findPath(member, 1L, 3L, PathType.DISTANCE);
 

@@ -3,13 +3,13 @@ package nextstep.subway.maps.fare.domain;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 
 public class FareContext {
     public static final int DEFAULT_FARE = 1250;
     private final Fare fare;
     private final SubwayPath subwayPath;
-    private Member member;
+    private MemberResponse member;
 
 
     public FareContext(SubwayPath subwayPath) {
@@ -17,7 +17,7 @@ public class FareContext {
         this.subwayPath = subwayPath;
     }
 
-    public FareContext(SubwayPath sampleSubwayPath, Member member) {
+    public FareContext(SubwayPath sampleSubwayPath, MemberResponse member) {
         this(sampleSubwayPath);
         this.member = member;
     }
@@ -43,7 +43,7 @@ public class FareContext {
         return this.fare;
     }
 
-    public Member getMember() {
+    public MemberResponse getMember() {
         return this.member;
     }
 }

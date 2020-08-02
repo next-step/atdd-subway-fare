@@ -6,7 +6,7 @@ import nextstep.subway.maps.map.application.PathService;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class FareServiceTest {
         lineStationEdges.add(new LineStationEdge(lineStation, line));
         SubwayPath subwayPath = new SubwayPath(lineStationEdges);
 
-        Member member = new Member("dhlee@test.com", "password", 10);
+        MemberResponse member = new MemberResponse(1L, "dhlee@test.com", 10);
 
         PathType type = PathType.DISTANCE;
 
