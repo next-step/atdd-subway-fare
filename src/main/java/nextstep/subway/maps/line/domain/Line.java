@@ -88,4 +88,8 @@ public class Line extends BaseEntity {
     public LineStations getLineStations() {
         return lineStations;
     }
+
+    public Fare getExtraFare() {
+        return extraFare;
+    }
 }

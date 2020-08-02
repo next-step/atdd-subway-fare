@@ -16,4 +16,8 @@ public class Fare {
     public Fare(Integer amount) {
         this.amount = amount;
     }
+
+    public Integer getAmount() {
+        return amount;
+    }
 }

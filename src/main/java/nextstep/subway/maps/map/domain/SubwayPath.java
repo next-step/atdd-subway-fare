@@ -3,10 +3,11 @@ package nextstep.subway.maps.map.domain;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SubwayPath {
-    private List<LineStationEdge> lineStationEdges;
+    private final List<LineStationEdge> lineStationEdges;
 
     public SubwayPath(List<LineStationEdge> lineStationEdges) {
         this.lineStationEdges = lineStationEdges;
@@ -31,5 +32,15 @@ public class SubwayPath {
 
     public int calculateDistance() {
         return lineStationEdges.stream().mapToInt(it -> it.getLineStation().getDistance()).sum();
+    }
+
+    public int getMaximumExtraFare() {
+        return lineStationEdges.stream()
+                .filter(it -> it.getExtraFare() != null)
+                .mapToInt(LineStationEdge::getExtraFare)
+                .max()
+                .getAsInt();
+
+
     }
 }

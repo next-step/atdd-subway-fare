@@ -41,8 +41,10 @@ class SubwayPathTest {
         line1.addLineStation(new LineStation(2L, 1L, 2, 2));
 
         Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED", 신분당선_추가_요금);
-        line2.addLineStation(new LineStation(2L, null, 0, 0));
-        line2.addLineStation(new LineStation(3L, 2L, 2, 1));
+        final LineStation lineStation4 = new LineStation(2L, null, 0, 0);
+        final LineStation lineStation5 = new LineStation(3L, 2L, 2, 1);
+        line2.addLineStation(lineStation4);
+        line2.addLineStation(lineStation5);
 
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
         line3.addLineStation(new LineStation(1L, null, 0, 0));
@@ -54,6 +56,8 @@ class SubwayPathTest {
         lines = Lists.newArrayList(line1, line2, line3);
 
         List<LineStationEdge> lineStations = Lists.newArrayList(
+                new LineStationEdge(lineStation4, line2.getId(), 신분당선_추가_요금),
+                new LineStationEdge(lineStation5, line2.getId(), 신분당선_추가_요금),
                 new LineStationEdge(lineStation6, line3.getId()),
                 new LineStationEdge(lineStation7, line3.getId())
         );

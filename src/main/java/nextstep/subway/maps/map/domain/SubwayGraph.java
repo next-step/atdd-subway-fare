@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.domain;
 
+import nextstep.subway.maps.line.domain.Fare;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -32,7 +33,8 @@ public class SubwayGraph extends WeightedMultigraph<Long, LineStationEdge> {
     }
 
     private void addEdge(PathType type, LineStation lineStation, Line line) {
-        LineStationEdge lineStationEdge = new LineStationEdge(lineStation, line.getId());
+        final Fare extraFare = line.getExtraFare();
+        LineStationEdge lineStationEdge = new LineStationEdge(lineStation, line.getId(), extraFare.getAmount());
         addEdge(lineStation.getPreStationId(), lineStation.getStationId(), lineStationEdge);
         setEdgeWeight(lineStationEdge, type.findWeightOf(lineStation));
     }
