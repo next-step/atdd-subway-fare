@@ -26,14 +26,14 @@ public class FareService {
         List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
 
         if (type != PathType.DISTANCE) {
-            return calculateFare(lines, lineStationEdges);
+            return calculateFare(lines, lineStationEdges, null);
         }
 
         FareContext fareContext = new FareContext(subwayPath);
         return fareCalculator.calculate(fareContext);
     }
 
-    private Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges) {
+    private Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges, Member member) {
         Long source = lineStationEdges.stream().findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
                 .getLineStation().getStationId();
@@ -44,11 +44,18 @@ public class FareService {
                 .getLineStation().getStationId();
 
         SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        FareContext fareContext = new FareContext(pathForCalculate);
+        FareContext fareContext = new FareContext(pathForCalculate, member);
         return fareCalculator.calculate(fareContext);
     }
 
     public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, Member member, PathType type) {
-        return null;
+        List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
+
+        if (type != PathType.DISTANCE) {
+            return calculateFare(lines, lineStationEdges, member);
+        }
+
+        FareContext fareContext = new FareContext(subwayPath, member);
+        return fareCalculator.calculate(fareContext);
     }
 }
