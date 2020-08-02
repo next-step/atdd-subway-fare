@@ -68,7 +68,7 @@ class LineTest {
     @DisplayName("지하철 역과 시간이 주어지면 다음 열차시간을 계산한다.")
     void calculateNextTime() {
         //when
-        LocalTime nextTime = line3.calculateNextTime(4L, LocalTime.of(6, 17));
+        LocalTime nextTime = line3.calculateNextDepartureTime(4L, LocalTime.of(6, 17));
 
         //then
         assertThat(nextTime).isEqualTo(LocalTime.of(6, 17));

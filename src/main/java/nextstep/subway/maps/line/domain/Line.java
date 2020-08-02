@@ -3,11 +3,7 @@ package nextstep.subway.maps.line.domain;
 import nextstep.subway.config.BaseEntity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 @Entity
@@ -99,7 +95,7 @@ public class Line extends BaseEntity {
         return extraFare;
     }
 
-    public LocalTime calculateNextTime(Long stationId, LocalTime departTime) {
+    public LocalTime calculateNextDepartureTime(Long stationId, LocalTime departTime) {
         LocalTime nextTime = startTime.plusMinutes(lineStations.calculateDurationFromStart(stationId).toMinutes());
         while (nextTime.isBefore(departTime)) {
             nextTime = nextTime.plusMinutes(intervalTime);
