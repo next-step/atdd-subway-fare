@@ -39,8 +39,6 @@ public class SubwayPath {
                 .filter(it -> it.getExtraFare() != null)
                 .mapToInt(LineStationEdge::getExtraFare)
                 .max()
-                .getAsInt();
-
-
+                .orElse(0);
     }
 }

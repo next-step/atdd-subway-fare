@@ -1,5 +1,7 @@
 package nextstep.subway.maps.boarding.domain;
 
+import nextstep.subway.maps.line.domain.Fare;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public final class FareCalculationPolicyGroup {
         for (FareCalculationPolicy policy : policies) {
             policy.calculateFare(context);
         }
-        return context.previousResult();
+        final Fare fare = context.previousResult();
+        return fare.getAmount();
     }
 }

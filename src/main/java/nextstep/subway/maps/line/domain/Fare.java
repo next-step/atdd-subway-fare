@@ -20,4 +20,8 @@ public class Fare {
     public Integer getAmount() {
         return amount;
     }
+
+    public Fare plus(Fare other) {
+        return new Fare(amount + other.amount);
+    }
 }

@@ -1,5 +1,6 @@
 package nextstep.subway.maps.boarding.domain;
 
+import nextstep.subway.maps.line.domain.Fare;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.members.member.domain.Member;
 import org.springframework.lang.NonNull;
@@ -27,5 +28,10 @@ public class Boarding {
 
     public int getBoardingDistance() {
         return subwayPath.calculateDistance();
+    }
+
+    public Fare getMaximumExtraFare() {
+        final int amount = subwayPath.getMaximumExtraFare();
+        return new Fare(amount);
     }
 }

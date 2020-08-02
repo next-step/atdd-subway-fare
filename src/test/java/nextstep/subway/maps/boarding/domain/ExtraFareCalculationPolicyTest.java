@@ -1,5 +1,6 @@
 package nextstep.subway.maps.boarding.domain;
 
+import nextstep.subway.maps.line.domain.Fare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,7 +33,7 @@ class ExtraFareCalculationPolicyTest {
 
         // stubbing
         when(boarding.getBoardingDistance()).thenReturn(distance);
-        when(boarding.getMaximumFare()).thenReturn(extraFare);
+        when(boarding.getMaximumExtraFare()).thenReturn(new Fare(extraFare));
         final FareCalculationContext context = new FareCalculationContext(boarding);
         final DistanceProportionFareCalculationPolicy distancePolicy = new DistanceProportionFareCalculationPolicy();
         distancePolicy.calculateFare(context);
