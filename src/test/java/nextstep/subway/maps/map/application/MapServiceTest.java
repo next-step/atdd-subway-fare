@@ -13,6 +13,8 @@ import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.members.member.domain.LoginMember;
+import nextstep.subway.members.member.domain.Member;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,12 +85,27 @@ public class MapServiceTest {
 
     @Test
     void findPath() {
-        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(PathType.class))).thenReturn(new Fare(0));
+        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(), any(PathType.class))).thenReturn(new Fare(0));
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
+
+        assertThat(pathResponse.getStations()).isNotEmpty();
+        assertThat(pathResponse.getDuration()).isNotZero();
+        assertThat(pathResponse.getDistance()).isNotZero();
+    }
+
+    @Test
+    void findPathWithMember() {
+        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(Member.class), any(PathType.class))).thenReturn(new Fare(0));
+        when(lineService.findLines()).thenReturn(lines);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        LoginMember member = new LoginMember(1L, "dhlee@test.com", "password", 10);
+
+        PathResponse pathResponse = mapService.findPath(member, 1L, 3L, PathType.DISTANCE);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();

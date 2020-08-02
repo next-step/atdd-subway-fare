@@ -7,6 +7,7 @@ import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.ui.MapController;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ public class PathDocumentation extends Documentation {
         );
 
         PathResponse pathResponse = new PathResponse(stations, 20, 10, 1250);
-        when(mapService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         given().log().all()
                 .params(requestParam)

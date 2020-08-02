@@ -15,6 +15,7 @@ import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,6 +54,10 @@ public class MapService {
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
         Fare fare = fareService.calculateFare(lines, subwayPath, null, type);
         return PathResponseAssembler.assemble(subwayPath, stations, fare.getValue());
+    }
+
+    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type) {
+        return null;
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {
