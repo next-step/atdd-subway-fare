@@ -3,20 +3,20 @@ package nextstep.subway.maps.map.application;
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
-import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathServiceTest {
+class PathServiceTest {
     private List<Line> lines;
     private PathService pathService;
 
@@ -47,34 +47,11 @@ public class PathServiceTest {
     }
 
     @Test
-    void findPathByDistance() {
-        // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.DISTANCE);
-
-        // then
-        assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
-        assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
-        assertThat(subwayPath.extractStationId().get(1)).isEqualTo(4L);
-        assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
-
-    }
-
-    @Test
-    void findPathByDuration() {
-        // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.DURATION);
-
-        // then
-        assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
-        assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
-        assertThat(subwayPath.extractStationId().get(1)).isEqualTo(2L);
-        assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
-    }
-
-    @Test
     void findPathByArrivalTime() {
+        //given
+        LocalDateTime departTime = LocalDateTime.of(2020, 7, 1, 6, 15);
         // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.ARRIVAL_TIME);
+        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, 1L, 3L, departTime);
 
         // then
         assertThat(subwayPath.extractStationId().size()).isEqualTo(3);

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class MapServiceTest {
     void loginUserFindPath() {
         LoginMember user = new LoginMember(1L, "email@email.com", "password", 20);
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(), nullable(LocalDateTime.class))).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class), any(DiscountPolicy.class))).thenReturn(BASIC_FARE);
 
@@ -112,7 +113,7 @@ public class MapServiceTest {
     @Test
     void findPath() {
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(), nullable(LocalDateTime.class))).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 
@@ -128,7 +129,7 @@ public class MapServiceTest {
     @Test
     void calculateFareWithShortestPath() {
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(shortestPath, subwayPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class))).thenReturn(shortestPath, subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 

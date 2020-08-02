@@ -97,7 +97,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //when
         ExtractableResponse<Response> response = 출발역에서_도착역까지의_가장_빠른_도착_경로_조회_요청(LocalDateTime.of(2020, 7, 22, 6, 15), 1L, 3L);
         //then
-        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
+        총_거리와_소요_시간을_함께_응답함(response, 3, 4);
         적절한_경로를_응답(response, Lists.newArrayList(1L, 4L, 3L));
         지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }

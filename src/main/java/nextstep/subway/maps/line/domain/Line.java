@@ -100,7 +100,7 @@ public class Line extends BaseEntity {
     }
 
     public LocalTime calculateNextTime(Long stationId, LocalTime departTime) {
-        LocalTime nextTime = startTime.plusMinutes(lineStations.calculateDurationFromStart(stationId));
+        LocalTime nextTime = startTime.plusMinutes(lineStations.calculateDurationFromStart(stationId).toMinutes());
         while (nextTime.isBefore(departTime)) {
             nextTime = nextTime.plusMinutes(intervalTime);
         }

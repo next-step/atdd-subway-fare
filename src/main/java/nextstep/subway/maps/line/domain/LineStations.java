@@ -1,11 +1,13 @@
 package nextstep.subway.maps.line.domain;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class LineStations {
@@ -69,16 +71,19 @@ public class LineStations {
         lineStations.remove(lineStation);
     }
 
-    public int calculateDurationFromStart(Long stationId) {
+    public Duration calculateDurationFromStart(Long stationId) {
+        if (Objects.isNull(stationId)) {
+            return Duration.ZERO;
+        }
         List<LineStation> stationsInOrder = getStationsInOrder();
 
-        int totalDuration = 0;
+        long totalDuration = 0;
         for (LineStation lineStation : stationsInOrder) {
+            totalDuration += lineStation.getDuration();
             if (Objects.equals(lineStation.getStationId(), stationId)) {
                 break;
             }
-            totalDuration += lineStation.getDuration();
         }
-        return totalDuration;
+        return Duration.ofMinutes(totalDuration);
     }
 }

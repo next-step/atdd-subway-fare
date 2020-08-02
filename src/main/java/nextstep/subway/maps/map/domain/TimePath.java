@@ -1,11 +1,10 @@
 package nextstep.subway.maps.map.domain;
 
 import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.LineStation;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 
 public class TimePath {
 
@@ -20,21 +19,16 @@ public class TimePath {
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departTime) {
-        Long lastLineId = null;
-        LocalTime lastWaitingStartTime = departTime.toLocalTime();
+        LocalTime lastStationArrivedTime = departTime.toLocalTime();
         for (LineStationEdge lineStationEdge : path.getLineStationEdges()) {
-            lastWaitingStartTime = lastWaitingStartTime.plusMinutes(lineStationEdge.getLineStation().getDuration());
-            if (Objects.equals(lastLineId, lineStationEdge.getLine().getId())) {
-                continue;
-            }
+            LineStation lineStation = lineStationEdge.getLineStation();
             Line line = lineStationEdge.getLine();
-            Long waitingStationId = lineStationEdge.getLineStation().getStationId();
 
-
-            LocalTime nextTime = line.calculateNextTime(waitingStationId, lastWaitingStartTime);
-            lastWaitingStartTime = lastWaitingStartTime.plusMinutes(Duration.between(lastWaitingStartTime, nextTime).toMinutes());
-            lastLineId = line.getId();
+            Long waitingStationId = lineStation.getPreStationId();
+            LocalTime nextTime = line.calculateNextTime(waitingStationId, lastStationArrivedTime);
+            lastStationArrivedTime = nextTime.plusMinutes(lineStation.getDuration());
         }
-        return lastWaitingStartTime.atDate(departTime.toLocalDate());
+
+        return lastStationArrivedTime.atDate(departTime.toLocalDate());
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,5 +98,14 @@ public class LineStationsTest {
         // when
         assertThatThrownBy(() -> lineStations.removeByStationId(100L))
                 .isInstanceOf(RuntimeException.class);
+    }
+
+    @DisplayName("출발역에서 부터의 소요시간을 계산한다 ")
+    @Test
+    void calculateDurationFromStart() {
+        //when
+        Duration totalDuration = lineStations.calculateDurationFromStart(3L);
+        //then
+        assertThat(totalDuration).hasMinutes(9L);
     }
 }

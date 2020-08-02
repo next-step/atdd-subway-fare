@@ -68,25 +68,25 @@ public class MapService {
     public PathResponse findPath(Long source, Long target, PathType type, LocalDateTime time) {
         List<Line> lines = lineService.findLines();
 
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE, time);
         Money fare = fareCalculator.calculate(shortestPath);
 
         if (type == PathType.DISTANCE) {
             return assemblePathResponse(shortestPath, fare);
         }
-        return assemblePathResponse(pathService.findPath(lines, source, target, type), fare);
+        return assemblePathResponse(pathService.findPath(lines, source, target, type, time), fare);
     }
 
     public PathResponse findPath(LoginMember member, Long source, Long target, PathType type, LocalDateTime time) {
         List<Line> lines = lineService.findLines();
 
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE, time);
         Money fare = fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(member.getAge()));
 
         if (type == PathType.DISTANCE) {
             return assemblePathResponse(shortestPath, fare);
         }
-        return assemblePathResponse(pathService.findPath(lines, source, target, type), fare);
+        return assemblePathResponse(pathService.findPath(lines, source, target, type, time), fare);
     }
 
     private PathResponse assemblePathResponse(SubwayPath subwayPath, Money fare) {
