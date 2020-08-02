@@ -20,41 +20,23 @@ import static org.mockito.Mockito.verify;
 class FareServiceTest {
 
     @Test
-    public void calculateFareTest() {
-        // given
-        FareCalculator fareCalculator = mock(FareCalculator.class);
-        PathService pathService = mock(PathService.class);
-        FareService fareService = new FareService(pathService, fareCalculator);
-        LineStation lineStation = new LineStation(1L, null, 10, 10);
-        Line line = TestObjectUtils.createLine(1L, "테스트", "blue");
-        List<Line> lines = new ArrayList<>();
-        lines.add(line);
-        List<LineStationEdge> lineStationEdges = new ArrayList<>();
-        lineStationEdges.add(new LineStationEdge(lineStation, line));
-        SubwayPath subwayPath = new SubwayPath(lineStationEdges);
-        PathType type = PathType.DISTANCE;
-
-        // when
-        fareService.calculateFare(lines, subwayPath, type);
-
-        // then
-        verify(fareCalculator).calculate(any());
-    }
-
-    @Test
     public void calculateFareWithMemberTest() {
         // given
         FareCalculator fareCalculator = mock(FareCalculator.class);
         PathService pathService = mock(PathService.class);
         FareService fareService = new FareService(pathService, fareCalculator);
+
         LineStation lineStation = new LineStation(1L, null, 10, 10);
         Line line = TestObjectUtils.createLine(1L, "테스트", "blue");
         List<Line> lines = new ArrayList<>();
         lines.add(line);
+
         List<LineStationEdge> lineStationEdges = new ArrayList<>();
         lineStationEdges.add(new LineStationEdge(lineStation, line));
         SubwayPath subwayPath = new SubwayPath(lineStationEdges);
+
         Member member = new Member("dhlee@test.com", "password", 10);
+
         PathType type = PathType.DISTANCE;
 
         // when

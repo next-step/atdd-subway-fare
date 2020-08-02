@@ -22,14 +22,14 @@ public class FareService {
         this.fareCalculator = fareCalculator;
     }
 
-    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, PathType type) {
+    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, Member member, PathType type) {
         List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
 
         if (type != PathType.DISTANCE) {
-            return calculateFare(lines, lineStationEdges, null);
+            return calculateFare(lines, lineStationEdges, member);
         }
 
-        FareContext fareContext = new FareContext(subwayPath);
+        FareContext fareContext = new FareContext(subwayPath, member);
         return fareCalculator.calculate(fareContext);
     }
 
@@ -45,17 +45,6 @@ public class FareService {
 
         SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
         FareContext fareContext = new FareContext(pathForCalculate, member);
-        return fareCalculator.calculate(fareContext);
-    }
-
-    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, Member member, PathType type) {
-        List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
-
-        if (type != PathType.DISTANCE) {
-            return calculateFare(lines, lineStationEdges, member);
-        }
-
-        FareContext fareContext = new FareContext(subwayPath, member);
         return fareCalculator.calculate(fareContext);
     }
 }
