@@ -52,14 +52,6 @@ public class MapService {
         return new MapResponse(lineResponses);
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
-        List<Line> lines = lineService.findLines();
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
-        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        Fare fare = fareService.calculateFare(lines, subwayPath, null, type);
-        return PathResponseAssembler.assemble(subwayPath, stations, fare.getValue());
-    }
-
     public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType type) {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);

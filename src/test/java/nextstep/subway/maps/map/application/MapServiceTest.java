@@ -88,20 +88,6 @@ public class MapServiceTest {
     }
 
     @Test
-    void findPath() {
-        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(), any(PathType.class))).thenReturn(new Fare(0));
-        when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
-        when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
-
-        assertThat(pathResponse.getStations()).isNotEmpty();
-        assertThat(pathResponse.getDuration()).isNotZero();
-        assertThat(pathResponse.getDistance()).isNotZero();
-    }
-
-    @Test
     void findPathWithMember() {
         when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(MemberResponse.class), any(PathType.class))).thenReturn(new Fare(0));
         when(lineService.findLines()).thenReturn(lines);
