@@ -1,21 +1,24 @@
 package nextstep.subway.maps.map.dto;
 
-import nextstep.subway.maps.station.dto.StationResponse;
-
 import java.util.List;
 
-public class PathResponse {
+import nextstep.subway.maps.station.dto.StationResponse;
+
+public class FarePathResponse {
+
     private List<StationResponse> stations;
     private int duration;
     private int distance;
+    private int fare;
 
-    public PathResponse() {
+    public FarePathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int duration, int distance) {
+    public FarePathResponse(List<StationResponse> stations, int duration, int distance, int fare) {
         this.stations = stations;
         this.duration = duration;
         this.distance = distance;
+        this.fare = fare;
     }
 
     public List<StationResponse> getStations() {
@@ -28,5 +31,9 @@ public class PathResponse {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getFare() {
+        return fare;
     }
 }
