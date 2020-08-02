@@ -56,19 +56,19 @@ public class MapServiceTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500);
+        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500, 10);
         LineStation lineStation1 = new LineStation(1L, null, 0, 0);
         LineStation lineStation2 = new LineStation(2L, 1L, 2, 2);
         line1.addLineStation(lineStation1);
         line1.addLineStation(lineStation2);
 
-        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
+        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0, 10);
         LineStation lineStation3 = new LineStation(2L, null, 0, 0);
         LineStation lineStation4 = new LineStation(3L, 2L, 2, 1);
         line2.addLineStation(lineStation3);
         line2.addLineStation(lineStation4);
 
-        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 10);
         line3.addLineStation(new LineStation(1L, null, 0, 0));
         LineStation lineStation6 = new LineStation(4L, 1L, 1, 2);
         LineStation lineStation7 = new LineStation(3L, 4L, 2, 2);

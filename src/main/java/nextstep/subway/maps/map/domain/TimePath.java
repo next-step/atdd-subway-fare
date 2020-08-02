@@ -5,6 +5,7 @@ import nextstep.subway.maps.line.domain.Line;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class TimePath {
 
@@ -19,16 +20,21 @@ public class TimePath {
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departTime) {
-        // 추가 구현 필요
-        long waitingMinutes = 0;
+        Long lastLineId = null;
+        LocalTime lastWaitingStartTime = departTime.toLocalTime();
         for (LineStationEdge lineStationEdge : path.getLineStationEdges()) {
+            lastWaitingStartTime = lastWaitingStartTime.plusMinutes(lineStationEdge.getLineStation().getDuration());
+            if (Objects.equals(lastLineId, lineStationEdge.getLine().getId())) {
+                continue;
+            }
             Line line = lineStationEdge.getLine();
-            Long source = (Long) lineStationEdge.getSource();
-            LocalTime departLocalTime = departTime.toLocalTime();
+            Long waitingStationId = lineStationEdge.getLineStation().getStationId();
 
-            LocalTime nextTime = line.calculateNextTime(source, departLocalTime);
-            waitingMinutes += Duration.between(departLocalTime, nextTime).toMinutes();
+
+            LocalTime nextTime = line.calculateNextTime(waitingStationId, lastWaitingStartTime);
+            lastWaitingStartTime = lastWaitingStartTime.plusMinutes(Duration.between(lastWaitingStartTime, nextTime).toMinutes());
+            lastLineId = line.getId();
         }
-        return departTime.plusMinutes(path.calculateDuration()).plusMinutes(waitingMinutes);
+        return lastWaitingStartTime.atDate(departTime.toLocalDate());
     }
 }

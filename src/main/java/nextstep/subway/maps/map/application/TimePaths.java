@@ -1,9 +1,7 @@
 package nextstep.subway.maps.map.application;
 
-import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.domain.TimePath;
-import org.jgrapht.GraphPath;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

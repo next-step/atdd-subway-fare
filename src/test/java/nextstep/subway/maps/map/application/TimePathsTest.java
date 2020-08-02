@@ -6,17 +6,14 @@ import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.map.domain.*;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static nextstep.subway.maps.map.application.NewTestPathService.MAX_PATH_COUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TimePathsTest {
@@ -33,19 +30,19 @@ class TimePathsTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0);
+        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0, 3);
         LineStation lineStation1 = new LineStation(1L, null, 0, 0);
         LineStation lineStation2 = new LineStation(2L, 1L, 2, 2);
         line1.addLineStation(lineStation1);
         line1.addLineStation(lineStation2);
 
-        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
+        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0, 10);
         LineStation lineStation3 = new LineStation(2L, null, 0, 0);
         LineStation lineStation4 = new LineStation(3L, 2L, 2, 1);
         line2.addLineStation(lineStation3);
         line2.addLineStation(lineStation4);
 
-        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 5);
         LineStation lineStation5 = new LineStation(1L, null, 0, 0);
         LineStation lineStation6 = new LineStation(4L, 1L, 1, 2);
         LineStation lineStation7 = new LineStation(3L, 4L, 2, 2);
@@ -74,7 +71,10 @@ class TimePathsTest {
         TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
 
         //then
-        assertThat(fastestArrivalPath.getPath().extractStationId())
+        assertThat(fastestArrivalPath.getPath().getLineStationEdges().stream()
+                .map(LineStationEdge::getLineStation)
+                .mapToLong(LineStation::getStationId)
+                .distinct())
                 .containsExactly(1L, 4L, 3L);
     }
 }
