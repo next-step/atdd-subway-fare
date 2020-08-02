@@ -1,5 +1,6 @@
-package nextstep.subway.maps.fare.domain;
+package nextstep.subway.maps.fare.domain.policy;
 
+import nextstep.subway.maps.fare.domain.FareContext;
 import nextstep.subway.maps.fare.utils.FareTestUtils;
 import nextstep.subway.members.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;

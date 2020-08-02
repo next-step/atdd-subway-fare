@@ -1,5 +1,7 @@
-package nextstep.subway.maps.fare.domain;
+package nextstep.subway.maps.fare.domain.policy;
 
+import nextstep.subway.maps.fare.domain.Fare;
+import nextstep.subway.maps.fare.domain.FareContext;
 import org.springframework.lang.Nullable;
 
 public class DistanceProportionalFarePolicy implements FarePolicy {
@@ -38,6 +40,7 @@ public class DistanceProportionalFarePolicy implements FarePolicy {
     }
 
     private int calculateOverFare(int overDistance, int unitDistance) {
+        //noinspection IntegerDivisionInFloatingPointContext
         return (int) ((Math.ceil((overDistance - 1) / unitDistance) + 1) * OVER_DISTANCE_FARE_UNIT);
     }
 }

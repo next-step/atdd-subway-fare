@@ -1,4 +1,7 @@
-package nextstep.subway.maps.fare.domain;
+package nextstep.subway.maps.fare.domain.policy;
+
+import nextstep.subway.maps.fare.domain.Fare;
+import nextstep.subway.maps.fare.domain.FareContext;
 
 public class LineExtraFarePolicy implements FarePolicy {
     @Override
