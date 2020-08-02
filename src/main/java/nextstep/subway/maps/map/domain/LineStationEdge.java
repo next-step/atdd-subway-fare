@@ -4,14 +4,9 @@ import nextstep.subway.maps.line.domain.LineStation;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class LineStationEdge extends DefaultWeightedEdge {
-    private LineStation lineStation;
-    private Long lineId;
-    private Integer extraFare;
-
-    public LineStationEdge(LineStation lineStation, Long lineId) {
-        this.lineStation = lineStation;
-        this.lineId = lineId;
-    }
+    private final LineStation lineStation;
+    private final Long lineId;
+    private final Integer extraFare;
 
     public LineStationEdge(LineStation lineStation, Long lineId, Integer extraFare) {
         this.lineStation = lineStation;

@@ -58,8 +58,8 @@ class SubwayPathTest {
         List<LineStationEdge> lineStations = Lists.newArrayList(
                 new LineStationEdge(lineStation4, line2.getId(), 신분당선_추가_요금),
                 new LineStationEdge(lineStation5, line2.getId(), 신분당선_추가_요금),
-                new LineStationEdge(lineStation6, line3.getId()),
-                new LineStationEdge(lineStation7, line3.getId())
+                new LineStationEdge(lineStation6, line3.getId(), 0),
+                new LineStationEdge(lineStation7, line3.getId(), 0)
         );
         subwayPath = new SubwayPath(lineStations);
     }

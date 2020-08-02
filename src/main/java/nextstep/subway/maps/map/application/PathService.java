@@ -20,7 +20,7 @@ public class PathService {
         graph.addEdge(lines, type);
 
         // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+        final DijkstraShortestPath<Long, LineStationEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
 
         return convertSubwayPath(path);

@@ -23,13 +23,9 @@ public class Line extends BaseEntity {
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "extra_fare"))
     })
-    private Fare extraFare = new Fare();
+    private Fare extraFare;
 
     public Line() {
-    }
-
-    public Line(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime) {
-        this(name, color, startTime, endTime, intervalTime, 0);
     }
 
     public Line(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime, int extraFare) {
