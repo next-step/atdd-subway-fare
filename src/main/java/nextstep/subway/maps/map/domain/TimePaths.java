@@ -1,7 +1,4 @@
-package nextstep.subway.maps.map.application;
-
-import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.maps.map.domain.TimePath;
+package nextstep.subway.maps.map.domain;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

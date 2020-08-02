@@ -1,9 +1,8 @@
-package nextstep.subway.maps.map.application;
+package nextstep.subway.maps.map.domain;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
-import nextstep.subway.maps.map.domain.*;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
