@@ -19,16 +19,12 @@ public class TimePath {
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departTime) {
-        LocalTime StationArrivedTime = departTime.toLocalTime();
+        LocalTime stationArrivedTime = departTime.toLocalTime();
         for (LineStationEdge lineStationEdge : path.getLineStationEdges()) {
-            LineStation lineStation = lineStationEdge.getLineStation();
-            Line line = lineStationEdge.getLine();
-
-            Long waitingStationId = lineStation.getPreStationId();
-            LocalTime nextTime = line.calculateNextDepartureTime(waitingStationId, StationArrivedTime);
-            StationArrivedTime = nextTime.plusMinutes(lineStation.getDuration());
+            LocalTime nextTime = lineStationEdge.calculateNextDepartureTime(stationArrivedTime);
+            stationArrivedTime = lineStationEdge.calculateArrivedTime(nextTime);
         }
 
-        return StationArrivedTime.atDate(departTime.toLocalDate());
+        return stationArrivedTime.atDate(departTime.toLocalDate());
     }
 }
