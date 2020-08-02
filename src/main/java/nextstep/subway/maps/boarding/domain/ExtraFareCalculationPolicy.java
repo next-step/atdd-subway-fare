@@ -1,7 +1,9 @@
 package nextstep.subway.maps.boarding.domain;
 
 import nextstep.subway.maps.line.domain.Fare;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExtraFareCalculationPolicy implements FareCalculationPolicy {
 
     @Override

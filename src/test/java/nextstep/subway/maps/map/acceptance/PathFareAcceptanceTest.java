@@ -122,15 +122,15 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
         final ExtractableResponse<Response> response = 두_역의_경로를_조회한다(강남역, 양재시민의숲, "DURATION");
 
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(2);
-        assertThat(pathResponse.getDuration()).isEqualTo(2);
+        assertThat(pathResponse.getDistance()).isEqualTo(12);
+        assertThat(pathResponse.getDuration()).isEqualTo(4);
         assertThat(pathResponse.getFare()).isEqualTo(2250);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)
                 .collect(Collectors.toList());
 
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재시민의숲));
+        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 양재시민의숲));
     }
 
     @DisplayName("여러 노선 중 추가 요금이 가장 높은 금액만 추가되어 적용된다")
