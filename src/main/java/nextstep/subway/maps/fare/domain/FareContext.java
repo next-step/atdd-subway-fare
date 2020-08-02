@@ -3,16 +3,23 @@ package nextstep.subway.maps.fare.domain;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.SubwayPath;
+import nextstep.subway.members.member.domain.Member;
 
 public class FareContext {
     public static final int DEFAULT_FARE = 1250;
     private final Fare fare;
     private final SubwayPath subwayPath;
+    private Member member;
 
 
     public FareContext(SubwayPath subwayPath) {
         this.fare = new Fare(DEFAULT_FARE);
         this.subwayPath = subwayPath;
+    }
+
+    public FareContext(SubwayPath sampleSubwayPath, Member member) {
+        this(sampleSubwayPath);
+        this.member = member;
     }
 
     public int getDistance() {
@@ -34,5 +41,9 @@ public class FareContext {
 
     public Fare getFare() {
         return this.fare;
+    }
+
+    public Member getMember() {
+        return this.member;
     }
 }
