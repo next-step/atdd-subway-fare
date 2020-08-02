@@ -14,6 +14,7 @@ public class FareCalculator {
     public FareCalculator() {
         this.farePolicies.add(new DistanceProportionalFarePolicy());
         this.farePolicies.add(new LineExtraFarePolicy());
+        this.farePolicies.add(new DiscountByAgeFarePolicy());
     }
 
     public Fare calculate(FareContext fareContext) {

@@ -45,7 +45,7 @@ public class FareTest {
 
     @DisplayName("요금을 퍼센트 할인한다")
     @ParameterizedTest
-    @CsvSource({"55, 0.45", "30, 0.7", "10, 0.9"})
+    @CsvSource({"55, 0.45", "30, 0.7", "10, 0.9", "100, 0"})
     void discountPercent(int percent, float expected) {
         // when
         fare.discountPercent(percent);
