@@ -7,6 +7,7 @@ import nextstep.subway.maps.map.application.PathService;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
+import nextstep.subway.members.member.domain.Member;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,5 +46,9 @@ public class FareService {
         SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
         FareContext fareContext = new FareContext(pathForCalculate);
         return fareCalculator.calculate(fareContext);
+    }
+
+    public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, Member member, PathType type) {
+        return null;
     }
 }
