@@ -112,7 +112,7 @@ public class FareMapServiceTest {
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
 
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(anyInt())).thenReturn(FareCalculator.BASIC_FARE);
+        when(fareCalculator.calculate(anyInt())).thenReturn(FareCalculator.BASIC_FARE.value());
 
         // when
         FarePathResponse farePathResponse = fareMapService.findPathWithFare(1L, 3L, PathType.DISTANCE);
@@ -147,7 +147,7 @@ public class FareMapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(FareCalculator.BASIC_FARE);
+        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(FareCalculator.BASIC_FARE.value());
 
         // when
         FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(), PathType.DURATION);

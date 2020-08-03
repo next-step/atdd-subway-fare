@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.dto;
 
 import java.util.List;
 
+import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.station.dto.StationResponse;
 
 public class FarePathResponse {
@@ -9,12 +10,19 @@ public class FarePathResponse {
     private List<StationResponse> stations;
     private int duration;
     private int distance;
-    private int fare;
+    private Money fare;
 
     public FarePathResponse() {
     }
 
     public FarePathResponse(List<StationResponse> stations, int duration, int distance, int fare) {
+        this.stations = stations;
+        this.duration = duration;
+        this.distance = distance;
+        this.fare = Money.drawNewMoney(fare);
+    }
+
+    public FarePathResponse(List<StationResponse> stations, int duration, int distance, Money fare) {
         this.stations = stations;
         this.duration = duration;
         this.distance = distance;
@@ -33,7 +41,11 @@ public class FarePathResponse {
         return distance;
     }
 
-    public int getFare() {
+    public Money getFareMoney() {
         return fare;
+    }
+
+    public int getFare() {
+        return fare.value();
     }
 }
