@@ -64,7 +64,7 @@ public class FareMapServiceTest {
         stations.put(3L, 양재역);
         stations.put(4L, 남부터미널역);
 
-        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0);
+        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500);
         LineStation 서울_지하철_2호선_교대역 = new LineStation(교대역.getId(), null, 0, 0);
         LineStation 서울_지하철_2호선_강남역 = new LineStation(강남역.getId(), 교대역.getId(), 2, 2);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_교대역);
@@ -112,7 +112,7 @@ public class FareMapServiceTest {
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
 
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(anyInt())).thenReturn(FareCalculator.BASIC_FARE.value());
+        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(FareCalculator.BASIC_FARE);
 
         // when
         FarePathResponse farePathResponse = fareMapService.findPathWithFare(1L, 3L, PathType.DISTANCE);
@@ -140,14 +140,14 @@ public class FareMapServiceTest {
         assertThat(mapResponse.getLineResponses()).hasSize(3);
     }
 
-    @DisplayName("최단 거리 기준으로 요금을 책정한다.")
+    @DisplayName("최단 시간으로 요청시, 최단 거리 기준으로 요금을 책정한다.")
     @Test
-    void 거리비례제_기준으로_요금을_책정한다() {
+    void 최단시간으로_요청하면_거리비례제_기준으로_요금을_책정한다() {
         // given
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath.calculateDistance())).thenReturn(FareCalculator.BASIC_FARE.value());
+        when(fareCalculator.calculate(shortestPath)).thenReturn(FareCalculator.BASIC_FARE);
 
         // when
         FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(), PathType.DURATION);
@@ -157,7 +157,28 @@ public class FareMapServiceTest {
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.getFare()).isNotZero()
+            () -> assertThat(farePathResponse.getFare()).isEqualTo(FareCalculator.BASIC_FARE)
+        );
+    }
+
+    @DisplayName("최단 거리로 요청 시, 최단 거리 기준으로 요금을 책정한다.")
+    @Test
+    void 최단거리으로_요청하면_거리비례제_기준으로_요금을_책정한다() {
+        // given
+        when(lineService.findLines()).thenReturn(lines);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
+        when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(FareCalculator.BASIC_FARE);
+
+        // when
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+
+        // then
+        assertAll(
+            () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
+            () -> assertThat(farePathResponse.getDuration()).isNotZero(),
+            () -> assertThat(farePathResponse.getDistance()).isNotZero(),
+            () -> assertThat(farePathResponse.getFare()).isEqualTo(FareCalculator.BASIC_FARE)
         );
     }
 }

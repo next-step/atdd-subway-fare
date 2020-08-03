@@ -18,20 +18,6 @@ public class FareCalculator {
     public static final int OVERFARE_DISTANCE_DIVIDEND = 5;
     public static final int SUPER_OVERFARE_DISTANCE_DIVIDEND = 8;
 
-    public int calculate(int distance) {
-        int overFare = 0;
-        if (distance > SUPER_OVERFARE_DISTANCE_THRESHOLD) {
-            int overDistance = distance - SUPER_OVERFARE_DISTANCE_THRESHOLD;
-            overFare = overFare + calculateOverFare(overDistance, SUPER_OVERFARE_DISTANCE_DIVIDEND);
-            distance = distance - overDistance;
-        }
-        if (distance > OVERFARE_DISTANCE_THRESHOLD) {
-            int overDistance = distance - OVERFARE_DISTANCE_THRESHOLD;
-            overFare = overFare + calculateOverFare(overDistance, OVERFARE_DISTANCE_DIVIDEND);
-        }
-        return BASIC_FARE_VALUE + overFare;
-    }
-
     public Money calculate(SubwayPath subwayPath) {
         int distance = subwayPath.calculateDistance();
         Money overFare = subwayPath.calculateMaxLineExtraFare();

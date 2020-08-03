@@ -20,21 +20,6 @@ public class FareCalculatorTest {
         fareCalculator = new FareCalculator();
     }
 
-    @DisplayName("지하철 운임을 정책에 맞게 계산한다.")
-    @CsvSource({"10, 1250", "11, 1350", "50, 2050", "57, 2150", "63, 2250"})
-    @ParameterizedTest
-    void 지하철_운임을_정책에_맞게_계산한다(int distance, int expectedFare) {
-        // given
-        SubwayPath subwayPath = mock(SubwayPath.class);
-        given(subwayPath.calculateDistance()).willReturn(distance);
-
-        // when
-        int fare = fareCalculator.calculate(distance);
-
-        // then
-        assertThat(fare).isEqualTo(expectedFare);
-    }
-
     @DisplayName("추가 요금이 있는 노선을 이용할 경우, 측정된 요금에 추가되어 계산한다.")
     @CsvSource({"5, 0, 1250", "13, 100, 1450", "18, 100, 1550", "50, 1000, 3050", "57, 0, 2150"})
     @ParameterizedTest
