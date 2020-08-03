@@ -2,17 +2,19 @@ package nextstep.subway.maps.map.acceptance;
 
 import com.google.common.collect.Lists;
 import io.restassured.RestAssured;
+import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.AcceptanceTest;
-import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -21,8 +23,7 @@ import java.util.stream.Collectors;
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
-import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.로그인_되어_있음;
-import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.회원_등록되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로와 요금 검색")
@@ -154,34 +155,27 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
         assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 역삼역, 선릉역, 한티역, 도곡역, 구룡역));
     }
 
-    @DisplayName("나는 청소년이다")
-    @Test
-    void fareForYouth() {
+    @DisplayName("연령별 요금제 테스트")
+    @ParameterizedTest
+    @CsvSource({
+            "7, 650",
+            "19, 1040",
+            "25, 1650",
+    })
+    void fareForAge(int age, int expectedFare) {
 
         // given
-        회원_등록되어_있음("youth@nextstep.com", "1234abcd", 19);
-        final TokenResponse tokenResponse = 로그인_되어_있음("youth@nextstep.com", "1234abcd");
-        final RequestSpecification given = given(tokenResponse);
+        final String email = "youth@nextstep.com";
+        final String password = "1234abcd";
+        회원_등록되어_있음(email, password, age);
+        final RequestSpecification given = given(email, password);
 
         // when
         final ExtractableResponse<Response> response = 두_역의_경로를_조회한다(교대역, 구룡역, "DURATION", given);
 
         // then
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(12);
-        assertThat(pathResponse.getDuration()).isEqualTo(12);
-        assertThat(pathResponse.getFare()).isEqualTo(1040);
-        final List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 역삼역, 선릉역, 한티역, 도곡역, 구룡역));
-    }
-
-    @DisplayName("나는 어린이다")
-    @Test
-    void fareForChildren() {
-
+        assertThat(pathResponse.getFare()).isEqualTo(expectedFare);
     }
 
     private ExtractableResponse<Response> 두_역의_경로를_조회한다(long src, long dst, String pathType, RequestSpecification given) {
@@ -198,8 +192,8 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
         return 두_역의_경로를_조회한다(src, dst, pathType, RestAssured.given());
     }
 
-    private static RequestSpecification given(TokenResponse tokenResponse) {
+    private static RequestSpecification given(String email, String password) {
         return RestAssured.given().log().all().
-                auth().oauth2(tokenResponse.getAccessToken());
+                auth().form(email, password, new FormAuthConfig("/login/session", USERNAME_FIELD, PASSWORD_FIELD));
     }
 }

@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.ui;
 
+import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
@@ -21,11 +22,8 @@ public class MapController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target,
-                                                 @RequestParam PathType type, @AuthenticationPrincipal LoginMember loginMember) {
-        Long memberId = null;
-        if (loginMember != null) {
-            memberId = loginMember.getId();
-        }
+                                                 @RequestParam PathType type, @AuthenticationPrincipal UserDetails userDetails) {
+        final Long memberId = extractMemberIdFromUserDetails(userDetails);
         return ResponseEntity.ok(mapService.findPath(source, target, type, memberId));
     }
 
@@ -33,5 +31,13 @@ public class MapController {
     public ResponseEntity<MapResponse> findMap() {
         MapResponse response = mapService.findMap();
         return ResponseEntity.ok(response);
+    }
+
+    private Long extractMemberIdFromUserDetails(UserDetails userDetails) {
+        if (userDetails instanceof LoginMember) {
+            final LoginMember loginMember = (LoginMember) userDetails;
+            return loginMember.getId();
+        }
+        return null;
     }
 }
