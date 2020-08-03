@@ -1,8 +1,8 @@
 package nextstep.subway.maps.line.dto;
 
-import nextstep.subway.maps.line.domain.Line;
-
 import java.time.LocalTime;
+
+import nextstep.subway.maps.line.domain.Line;
 
 public class LineRequest {
     private String name;
@@ -15,12 +15,14 @@ public class LineRequest {
     public LineRequest() {
     }
 
-    public LineRequest(String name, String color, LocalTime startTime, LocalTime endTime, Integer intervalTime) {
+    public LineRequest(String name, String color, LocalTime startTime, LocalTime endTime, Integer intervalTime,
+        Integer extraFare) {
         this.name = name;
         this.color = color;
         this.startTime = startTime;
         this.endTime = endTime;
         this.intervalTime = intervalTime;
+        this.extraFare = extraFare;
     }
 
     public String getName() {
