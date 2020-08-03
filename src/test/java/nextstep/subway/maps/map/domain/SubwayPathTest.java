@@ -6,10 +6,14 @@ import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayPathTest {
     private Map<Long, Station> stations;
@@ -51,5 +55,25 @@ class SubwayPathTest {
                 new LineStationEdge(lineStation7, line3)
         );
         subwayPath = new SubwayPath(lineStations);
+    }
+
+    @DisplayName("출발역을 찾는 메소드 테스트")
+    @Test
+    void getSourceTest() {
+        // when
+        Long source = subwayPath.getSourceStationId();
+
+        // then
+        assertThat(source).isEqualTo(4L);
+    }
+
+    @DisplayName("도착역을 찾는 메소드 테스트")
+    @Test
+    void getTargetTest() {
+        // when
+        Long source = subwayPath.getTargetStationId();
+
+        // then
+        assertThat(source).isEqualTo(3L);
     }
 }

@@ -25,6 +25,19 @@ public class SubwayPath {
         return stationIds;
     }
 
+    public Long getSourceStationId() {
+        return lineStationEdges.stream().findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
+                .getLineStation().getStationId();
+    }
+
+    public Long getTargetStationId() {
+        int size = lineStationEdges.size();
+        return lineStationEdges.stream().skip(size - 1).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
+                .getLineStation().getStationId();
+    }
+
     public int calculateDuration() {
         return lineStationEdges.stream().mapToInt(it -> it.getLineStation().getDuration()).sum();
     }
