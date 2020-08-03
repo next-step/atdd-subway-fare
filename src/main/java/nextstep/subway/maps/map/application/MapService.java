@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.application;
 
+import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.maps.fare.application.FareService;
 import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.line.application.LineService;
@@ -52,15 +53,15 @@ public class MapService {
         return new MapResponse(lineResponses);
     }
 
-    public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType type) {
+    public PathResponse findPath(UserDetails userDetails, Long source, Long target, PathType type) {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
 
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
 
         MemberResponse memberResponse = null;
-        if (loginMember != null) {
-            memberResponse = memberService.findMember(loginMember.getId());
+        if (userDetails instanceof LoginMember) {
+            memberResponse = memberService.findMember(((LoginMember)userDetails).getId());
         }
 
         Fare fare = fareService.calculateFare(lines, subwayPath, memberResponse, type);
