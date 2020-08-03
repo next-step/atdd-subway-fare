@@ -1,9 +1,6 @@
 package nextstep.subway.maps.boarding.service;
 
-import nextstep.subway.maps.boarding.domain.Boarding;
-import nextstep.subway.maps.boarding.domain.DistanceProportionFareCalculationPolicy;
-import nextstep.subway.maps.boarding.domain.ExtraFareCalculationPolicy;
-import nextstep.subway.maps.boarding.domain.FareCalculationPolicyGroup;
+import nextstep.subway.maps.boarding.domain.*;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.members.member.application.MemberService;
 import nextstep.subway.members.member.dto.MemberResponse;
@@ -18,10 +15,12 @@ public class BoardingService {
     public BoardingService(
             MemberService memberService,
             DistanceProportionFareCalculationPolicy distanceProportionFareCalculationPolicy,
-            ExtraFareCalculationPolicy extraFareCalculationPolicy) {
+            ExtraFareCalculationPolicy extraFareCalculationPolicy,
+            MinorsFareCalculationPolicy minorsFareCalculationPolicy) {
         policyGroup = new FareCalculationPolicyGroup(
                 distanceProportionFareCalculationPolicy,
-                extraFareCalculationPolicy
+                extraFareCalculationPolicy,
+                minorsFareCalculationPolicy
         );
         this.memberService = memberService;
     }

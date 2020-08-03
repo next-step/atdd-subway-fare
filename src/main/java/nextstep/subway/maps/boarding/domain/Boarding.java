@@ -30,4 +30,20 @@ public class Boarding {
         final int amount = subwayPath.getMaximumExtraFare();
         return new Fare(amount);
     }
+
+    public Age getPassengerAge() {
+        if (passenger == null) {
+            return Age.ADULT;
+        }
+
+        final Integer age = passenger.getAge();
+        if (age == null || age > 19) {
+            return Age.ADULT;
+        }
+        if (age > 13) {
+            return Age.YOUTH;
+        }
+
+        return Age.CHILD;
+    }
 }

@@ -29,4 +29,8 @@ public class FareCalculationContext {
     public Fare getMaximumExtraFareOnBoarding() {
         return boarding.getMaximumExtraFare();
     }
+
+    public Age getPassengerAge() {
+        return boarding.getPassengerAge();
+    }
 }
