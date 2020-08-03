@@ -35,9 +35,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("양재역");
         ExtractableResponse<Response> createdStationResponse4 = 지하철역_등록되어_있음("남부터미널");
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN");
-        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED");
-        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE");
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 400);
+        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED", 0);
+        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE", 200);
 
         Long lineId1 = createLineResponse1.as(LineResponse.class).getId();
         Long lineId2 = createLineResponse2.as(LineResponse.class).getId();
@@ -58,18 +58,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId4, stationId3, 2, 2);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-    @Test
-    void findPathByDistance() {
-        // when
-        ExtractableResponse<Response> response = PathAcceptanceStep.
-            출발역에서_도착역까지_최단_또는_최소시간_경로조회_요청(1L, 3L, "DISTANCE");
-
-        // then
-        PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 3, 4);
-        PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Arrays.asList(1L, 4L, 3L));
-    }
-
     @DisplayName("두 역의 최단 거리 경로를 조회할 때, 지하철 이용요금도 함께 응답된다.")
     @Test
     void findPathByDistanceWithFare() {
@@ -85,13 +73,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
-    void findPathByDuration() {
+    void findPathByDurationWithFare() {
         // when
         ExtractableResponse<Response> response =
             PathAcceptanceStep.출발역에서_도착역까지_최단_또는_최소시간_경로조회_요청(1L, 3L, "DURATION");
 
         // then
         PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 4, 3);
+        PathAcceptanceStep.지하철_이용요금이_함께_응답검증(response);
         PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Arrays.asList(1L, 2L, 3L));
     }
 }
