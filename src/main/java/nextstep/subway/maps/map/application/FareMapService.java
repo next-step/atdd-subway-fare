@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
@@ -21,6 +22,7 @@ import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
 
 @Service
+@Transactional(readOnly = true)
 public class FareMapService {
 
     private final LineService lineService;
