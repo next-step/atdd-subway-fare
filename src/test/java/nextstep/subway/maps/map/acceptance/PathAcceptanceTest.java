@@ -11,10 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
-import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.경로가_정상적으로_조회됨;
-import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.최단_경로를_조회한다;
+import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.*;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
@@ -80,5 +81,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 최단_경로를_조회한다(1L, 2L, PathType.DISTANCE);
 
         경로가_정상적으로_조회됨(response, 2, 2, 2150, Lists.newArrayList(1L, 2L));
+    }
+
+    @DisplayName("추가 운임이 있는 노선에서의 두 역의 최단 거리 경로를 조회하고 요금을 계산한다.")
+    @Test
+    void findPathWithArrivalTime() {
+        LocalDateTime time = LocalDateTime.of(2020, 8, 7, 11, 30);
+        ExtractableResponse<Response> response = 도착시간이_가장_빠른_경로를_조회한다(1L, 3L, time);
+
+        경로가_정상적으로_조회됨(response, 4, 3, 1250, Lists.newArrayList(1L, 2L, 3L));
     }
 }

@@ -8,6 +8,8 @@ import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,17 @@ public class PathAcceptanceStep {
                 accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                 get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, duration).
+                then().
+                log().all().
+                extract();
+    }
+
+    public static ExtractableResponse<Response> 도착시간이_가장_빠른_경로를_조회한다(Long source, Long target, LocalDateTime time) {
+        String formattedTime = time.format(DateTimeFormatter.ofPattern("yyyyMMddhhmm"));
+        return RestAssured.given().log().all().
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                get("/paths?source={sourceId}&target={targetId}&type={type}&time={time}", source, target, PathType.ARRIVAL_TIME, formattedTime).
                 then().
                 log().all().
                 extract();
