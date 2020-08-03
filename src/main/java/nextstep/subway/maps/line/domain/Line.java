@@ -5,6 +5,7 @@ import nextstep.subway.config.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Line extends BaseEntity {
@@ -30,7 +31,7 @@ public class Line extends BaseEntity {
         this.startTime = startTime;
         this.endTime = endTime;
         this.intervalTime = intervalTime;
-        this.extraFare = Money.drawNewMoney(extraFare);
+        this.extraFare = Optional.of(Money.drawNewMoney(extraFare)).orElse(Money.NO_VALUE());
     }
 
     public void update(Line line) {
