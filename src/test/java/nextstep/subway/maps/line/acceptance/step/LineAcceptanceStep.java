@@ -27,7 +27,7 @@ public class LineAcceptanceStep {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        params.put("startTime", LocalTime.of(05, 30).format(DateTimeFormatter.ISO_TIME));
+        params.put("startTime", LocalTime.of(5, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("endTime", LocalTime.of(23, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("intervalTime", "5");
         params.put("extraFare", String.valueOf(extraFare));
@@ -74,7 +74,8 @@ public class LineAcceptanceStep {
                 extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_수정_요청(ExtractableResponse<Response> response, String name, String color) {
+    public static ExtractableResponse<Response> 지하철_노선_수정_요청(
+        ExtractableResponse<Response> response, String name, String color, int extraFare) {
         String uri = response.header(HttpHeaders.LOCATION);
 
         Map<String, String> params = new HashMap<>();
@@ -83,6 +84,7 @@ public class LineAcceptanceStep {
         params.put("startTime", LocalTime.of(05, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("endTime", LocalTime.of(23, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("intervalTime", "5");
+        params.put("extraFare", String.valueOf(extraFare));
 
         return RestAssured.given().log().all().
                 contentType(MediaType.APPLICATION_JSON_VALUE).
