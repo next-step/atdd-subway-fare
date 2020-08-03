@@ -12,10 +12,15 @@ public class LineStationEdges {
     }
 
     public Long getSourceStationId() {
-        return null;
+        return lineStationEdges.stream().findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
+                .getLineStation().getStationId();
     }
 
     public Long getTargetStationId() {
-        return null;
+        int size = lineStationEdges.size();
+        return lineStationEdges.stream().skip(size - 1).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
+                .getLineStation().getStationId();
     }
 }

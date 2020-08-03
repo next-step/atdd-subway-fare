@@ -43,6 +43,6 @@ class LineStationEdgesTest {
         Long source = lineStationEdges.getTargetStationId();
 
         // then
-        assertThat(source).isEqualTo(2L);
+        assertThat(source).isEqualTo(4L);
     }
 }
