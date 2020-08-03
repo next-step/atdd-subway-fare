@@ -6,6 +6,9 @@ import nextstep.subway.maps.line.domain.LineRepository;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.domain.StationRepository;
+import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.domain.MemberRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +18,13 @@ import java.time.LocalTime;
 public class DataLoaderConfig implements CommandLineRunner {
     private StationRepository stationRepository;
     private LineRepository lineRepository;
+    private MemberRepository memberRepository;
 
-    public DataLoaderConfig(StationRepository stationRepository, LineRepository lineRepository) {
+    public DataLoaderConfig(StationRepository stationRepository, LineRepository lineRepository,
+        MemberRepository memberRepository) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -44,5 +50,6 @@ public class DataLoaderConfig implements CommandLineRunner {
         line3.addLineStation(new LineStation(3L, 4L, 2, 10));
 
         lineRepository.saveAll(Lists.newArrayList(line1, line2, line3));
+        memberRepository.save(new Member("javajigi@gmail.com", "pobiconan", 20));
     }
 }
