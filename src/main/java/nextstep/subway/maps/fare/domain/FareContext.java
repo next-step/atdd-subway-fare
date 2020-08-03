@@ -1,7 +1,6 @@
 package nextstep.subway.maps.fare.domain;
 
 import nextstep.subway.maps.line.domain.Line;
-import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.members.member.dto.MemberResponse;
 
@@ -27,15 +26,7 @@ public class FareContext {
     }
 
     public int getExtraFare() {
-        Line expensiveLine = this.subwayPath.getLineStationEdges().stream()
-                .map(LineStationEdge::getLine)
-                .max((line, line2) -> {
-                    int extraFare = line.getExtraFare();
-                    int extraFare2 = line2.getExtraFare();
-
-                    return extraFare - extraFare2;
-                }).orElseThrow(RuntimeException::new);
-
+        Line expensiveLine = this.subwayPath.getExpensiveLine();
         return expensiveLine.getExtraFare();
     }
 

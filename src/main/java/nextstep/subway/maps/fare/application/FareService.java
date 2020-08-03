@@ -4,7 +4,6 @@ import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.fare.domain.FareContext;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.PathService;
-import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.members.member.dto.MemberResponse;
@@ -23,25 +22,18 @@ public class FareService {
     }
 
     public Fare calculateFare(List<Line> lines, SubwayPath subwayPath, MemberResponse member, PathType type) {
-        List<LineStationEdge> lineStationEdges = subwayPath.getLineStationEdges();
 
         if (type != PathType.DISTANCE) {
-            return calculateFare(lines, lineStationEdges, member);
+            return calculateFare(lines, subwayPath, member);
         }
 
         FareContext fareContext = new FareContext(subwayPath, member);
         return fareCalculator.calculate(fareContext);
     }
 
-    private Fare calculateFare(List<Line> lines, List<LineStationEdge> lineStationEdges, MemberResponse member) {
-        Long source = lineStationEdges.stream().findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
-                .getLineStation().getStationId();
-
-        int size = lineStationEdges.size();
-        Long target = lineStationEdges.stream().skip(size - 1).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
-                .getLineStation().getStationId();
+    private Fare calculateFare(List<Line> lines, SubwayPath subwayPath, MemberResponse member) {
+        Long source = subwayPath.getSourceStationId();
+        Long target = subwayPath.getTargetStationId();
 
         SubwayPath pathForCalculate = pathService.findPath(lines, source, target, PathType.DISTANCE);
         FareContext fareContext = new FareContext(pathForCalculate, member);
