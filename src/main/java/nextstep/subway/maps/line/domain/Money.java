@@ -16,7 +16,7 @@ public class Money implements Comparable<Money> {
         this.value = value;
     }
 
-    public static Money drawNewMoney(int value) {
+    public static Money drawNewMoney(Integer value) {
         if (value < 0) {
             throw new IllegalArgumentException("money cannot be less then zero.");
         }
@@ -45,5 +45,13 @@ public class Money implements Comparable<Money> {
     @Override
     public int compareTo(Money money) {
         return Integer.compare(this.value, money.value);
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public Money plus(Money money) {
+        return Money.drawNewMoney(this.value + money.value());
     }
 }
