@@ -41,11 +41,11 @@ public class FarePathResponse {
         return distance;
     }
 
-    public Money getFareMoney() {
+    public Money getFare() {
         return fare;
     }
 
-    public int getFare() {
+    public int fareValue() {
         return fare.value();
     }
 }
