@@ -10,6 +10,7 @@ public class LineRequest {
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer intervalTime;
+    private Integer extraFare;
 
     public LineRequest() {
     }
@@ -42,7 +43,11 @@ public class LineRequest {
         return intervalTime;
     }
 
+    public Integer getExtraFare() {
+        return extraFare;
+    }
+
     public Line toLine() {
-        return new Line(name, color, startTime, endTime, intervalTime);
+        return new Line(name, color, startTime, endTime, intervalTime, extraFare);
     }
 }

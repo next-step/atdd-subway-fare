@@ -13,7 +13,8 @@ public class LineStationResponse {
     public LineStationResponse() {
     }
 
-    public LineStationResponse(StationResponse station, Long preStationId, Long lineId, Integer distance, Integer duration) {
+    public LineStationResponse(StationResponse station, Long preStationId, Long lineId, Integer distance,
+        Integer duration) {
         this.station = station;
         this.preStationId = preStationId;
         this.lineId = lineId;

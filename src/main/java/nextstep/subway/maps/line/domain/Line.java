@@ -33,14 +33,6 @@ public class Line extends BaseEntity {
         this.extraFare = Money.drawNewMoney(extraFare);
     }
 
-    public Line(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime) {
-        this.name = name;
-        this.color = color;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.intervalTime = intervalTime;
-    }
-
     public void update(Line line) {
         this.name = line.getName();
         this.startTime = line.getStartTime();

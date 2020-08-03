@@ -64,19 +64,19 @@ public class FareMapServiceTest {
         stations.put(3L, 양재역);
         stations.put(4L, 남부터미널역);
 
-        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN");
+        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0);
         LineStation 서울_지하철_2호선_교대역 = new LineStation(교대역.getId(), null, 0, 0);
         LineStation 서울_지하철_2호선_강남역 = new LineStation(강남역.getId(), 교대역.getId(), 2, 2);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_교대역);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_강남역);
 
-        Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED");
+        Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
         LineStation 신분당선_강남역 = new LineStation(강남역.getId(), null, 0, 0);
         LineStation 신분당선_양재역 = new LineStation(양재역.getId(), 강남역.getId(), 2, 1);
         신분당선.addLineStation(신분당선_강남역);
         신분당선.addLineStation(신분당선_양재역);
 
-        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
         LineStation 서울_지하철_3호선_교대역 = new LineStation(교대역.getId(), null, 0, 0);
         LineStation 서울_지하철_3호선_남부터미널역 = new LineStation(남부터미널역.getId(), 교대역.getId(), 1, 2);
         LineStation 서울_지하철_3호선_양재역 = new LineStation(양재역.getId(), 남부터미널역.getId(), 2, 2);
@@ -88,15 +88,15 @@ public class FareMapServiceTest {
         lines = Arrays.asList(서울_지하철_2호선, 서울_지하철_3호선, 신분당선);
 
         List<LineStationEdge> lineStations = Arrays.asList(
-            new LineStationEdge(서울_지하철_3호선_남부터미널역, 서울_지하철_3호선.getId()),
-            new LineStationEdge(서울_지하철_3호선_양재역, 서울_지하철_3호선.getId())
+            new LineStationEdge(서울_지하철_3호선_남부터미널역, 서울_지하철_3호선),
+            new LineStationEdge(서울_지하철_3호선_양재역, 서울_지하철_3호선)
         );
 
         List<LineStationEdge> shortestLineStations = Arrays.asList(
-            new LineStationEdge(서울_지하철_2호선_교대역, 서울_지하철_2호선.getId()),
-            new LineStationEdge(서울_지하철_2호선_강남역, 서울_지하철_2호선.getId()),
-            new LineStationEdge(신분당선_강남역, 신분당선.getId()),
-            new LineStationEdge(신분당선_양재역, 신분당선.getId())
+            new LineStationEdge(서울_지하철_2호선_교대역, 서울_지하철_2호선),
+            new LineStationEdge(서울_지하철_2호선_강남역, 서울_지하철_2호선),
+            new LineStationEdge(신분당선_강남역, 신분당선),
+            new LineStationEdge(신분당선_양재역, 신분당선)
         );
 
         subwayPath = new SubwayPath(lineStations);

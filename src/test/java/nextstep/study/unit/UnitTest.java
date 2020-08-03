@@ -15,9 +15,9 @@ public class UnitTest {
     @Test
     void update() {
         // given
-        Line line = new Line("신분당선", "RED", LocalTime.now(), LocalTime.now(), 10);
+        Line line = new Line("신분당선", "RED", LocalTime.now(), LocalTime.now(), 10, 0);
         String newName = "새이름";
-        Line newLine = new Line(newName, "RED", LocalTime.now(), LocalTime.now(), 10);
+        Line newLine = new Line(newName, "RED", LocalTime.now(), LocalTime.now(), 10, 0);
 
         // when
         line.update(newLine);
@@ -30,7 +30,7 @@ public class UnitTest {
     @Test
     void addLineStation() {
         // given
-        Line line = new Line("신분당선", "RED", LocalTime.now(), LocalTime.now(), 10);
+        Line line = new Line("신분당선", "RED", LocalTime.now(), LocalTime.now(), 10, 0);
         LineStation lineStation = new LineStation(1L, null, 10, 10);
 
         // when
