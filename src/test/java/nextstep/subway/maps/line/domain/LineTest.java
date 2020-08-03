@@ -16,6 +16,6 @@ public class LineTest {
         Line line = new Line("2호선", "GREEN", LocalTime.now(), LocalTime.now(), 3, 400);
 
         // when
-        assertThat(line.getExtraFare()).isGreaterThan(0);
+        assertThat(line.getExtraFare()).isNotNull();
     }
 }
