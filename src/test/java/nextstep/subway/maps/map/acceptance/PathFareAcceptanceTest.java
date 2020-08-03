@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.AcceptanceTest;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.로그인_되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.회원_등록되어_있음;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로와 요금 검색")
@@ -154,6 +158,24 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
     @Test
     void fareForYouth() {
 
+        // given
+        회원_등록되어_있음("youth@nextstep.com", "1234abcd", 19);
+        final TokenResponse tokenResponse = 로그인_되어_있음("youth@nextstep.com", "1234abcd");
+        final RequestSpecification given = given(tokenResponse);
+
+        // when
+        final ExtractableResponse<Response> response = 두_역의_경로를_조회한다(교대역, 구룡역, "DURATION", given);
+
+        // then
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(12);
+        assertThat(pathResponse.getDuration()).isEqualTo(12);
+        assertThat(pathResponse.getFare()).isEqualTo(1040);
+        final List<Long> stationIds = pathResponse.getStations().stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
+
+        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 역삼역, 선릉역, 한티역, 도곡역, 구룡역));
     }
 
     @DisplayName("나는 어린이다")
@@ -162,13 +184,22 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
 
     }
 
-    private ExtractableResponse<Response> 두_역의_경로를_조회한다(long src, long dst, String pathType) {
-        return RestAssured.given().log().all().
+    private ExtractableResponse<Response> 두_역의_경로를_조회한다(long src, long dst, String pathType, RequestSpecification given) {
+        return given.log().all().
                 accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                 get("/paths?source={sourceId}&target={targetId}&type={type}", src, dst, pathType).
                 then().
                 log().all().
                 extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_경로를_조회한다(long src, long dst, String pathType) {
+        return 두_역의_경로를_조회한다(src, dst, pathType, RestAssured.given());
+    }
+
+    private static RequestSpecification given(TokenResponse tokenResponse) {
+        return RestAssured.given().log().all().
+                auth().oauth2(tokenResponse.getAccessToken());
     }
 }
