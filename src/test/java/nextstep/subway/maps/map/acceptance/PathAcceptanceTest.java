@@ -1,26 +1,21 @@
 package nextstep.subway.maps.map.acceptance;
 
 import com.google.common.collect.Lists;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.map.domain.PathType;
-import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
+import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.경로가_정상적으로_조회됨;
+import static nextstep.subway.maps.map.acceptance.step.PathAcceptanceStep.최단_경로를_조회한다;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -40,7 +35,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("양재역");
         ExtractableResponse<Response> createdStationResponse4 = 지하철역_등록되어_있음("남부터미널");
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN");
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 900);
         ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED");
         ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE");
 
@@ -56,7 +51,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(lineId1, stationId1, stationId2, 2, 2);
 
         지하철_노선에_지하철역_등록되어_있음(lineId2, null, stationId2, 0, 0);
-        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId2, stationId3, 2, 1);
+        지하철_노선에_지하철역_등록되어_있음(lineId2, stationId2, stationId3, 2, 1);
 
         지하철_노선에_지하철역_등록되어_있음(lineId3, null, stationId1, 0, 0);
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId1, stationId4, 1, 2);
@@ -66,46 +61,24 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최소 시간 경로와 요금을 조회한다.")
     @Test
     void findPathByDurationForFare() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, PathType.DURATION).
-                then().
-                log().all().
-                extract();
+        ExtractableResponse<Response> response = 최단_경로를_조회한다(1L, 3L, PathType.DURATION);
 
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
-        assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo(1250);
-
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
+        경로가_정상적으로_조회됨(response, 4, 3, 1250, Lists.newArrayList(1L, 2L, 3L));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistanceForFare() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, PathType.DISTANCE).
-                then().
-                log().all().
-                extract();
+        ExtractableResponse<Response> response = 최단_경로를_조회한다(1L, 3L, PathType.DISTANCE);
 
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(3);
-        assertThat(pathResponse.getDuration()).isEqualTo(4);
-        assertThat(pathResponse.getFare()).isEqualTo(1250);
+        경로가_정상적으로_조회됨(response, 3, 4, 1250, Lists.newArrayList(1L, 4L, 3L));
+    }
 
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
+    @DisplayName("추가 운임이 있는 노선에서의 두 역의 최단 거리 경로를 조회하고 요금을 계산한다.")
+    @Test
+    void findPathWithExtraFare() {
+        ExtractableResponse<Response> response = 최단_경로를_조회한다(1L, 2L, PathType.DISTANCE);
 
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 4L, 3L));
+        경로가_정상적으로_조회됨(response, 2, 2, 2150, Lists.newArrayList(1L, 2L));
     }
 }

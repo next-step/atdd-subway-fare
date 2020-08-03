@@ -7,6 +7,7 @@ import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.ui.MapController;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -44,6 +46,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void findPathDocumentation() {
+
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("source", 1L);
         requestParam.put("target", 2L);
@@ -53,8 +56,9 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "강낭콩", LocalDateTime.now(), LocalDateTime.now())
         );
+
         PathResponse pathResponse = new PathResponse(stations, 20, 10, 1250);
-        when(mapService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         given().log().all()
                 .params(requestParam)
@@ -65,23 +69,14 @@ public class PathDocumentation extends Documentation {
                 .apply(document("path/find",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestHeaders(
+                                authorizationHeader(true)
+                        ),
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역"),
                                 parameterWithName("type").description("최단 거리 산정 기준")
                         ),
-                        // {
-                        //  "stations" : [ {
-                        //    "id" : 1,
-                        //    "name" : "강남역"
-                        //  }, {
-                        //    "id" : 2,
-                        //    "name" : "강낭콩"
-                        //  } ],
-                        //  "duration" : 20,
-                        //  "distance" : 10,
-                        //  "fare" : 0
-                        //}
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경유역"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 id"),

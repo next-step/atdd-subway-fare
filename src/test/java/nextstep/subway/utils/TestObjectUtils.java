@@ -18,4 +18,10 @@ public class TestObjectUtils {
         ReflectionTestUtils.setField(line1, "id", id);
         return line1;
     }
+
+    public static Line createLine(Long id, String name, String color, int extraFare) {
+        Line line1 = new Line(name, color, LocalTime.of(05, 30), LocalTime.of(23, 30), 10, extraFare);
+        ReflectionTestUtils.setField(line1, "id", id);
+        return line1;
+    }
 }

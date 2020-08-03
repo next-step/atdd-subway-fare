@@ -1,6 +1,5 @@
 package nextstep.subway.maps.map.dto;
 
-import nextstep.subway.maps.map.application.FareCalculator;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;

@@ -16,7 +16,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청("신분당선", "RED");
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("신분당선", "RED", 0);
 
         // then
         지하철_노선_생성됨(response);
@@ -29,7 +29,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         지하철_노선_등록되어_있음("신분당선", "bg-red-600");
 
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청("신분당선", "RED");
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("신분당선", "RED", 0);
 
         // then
         지하철_노선_생성_실패됨(response);

@@ -1,6 +1,8 @@
 package nextstep.subway.maps.map.application;
 
 import com.google.common.collect.Lists;
+import nextstep.subway.maps.fare.application.FareService;
+import nextstep.subway.maps.fare.domain.Fare;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -11,6 +13,9 @@ import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.members.member.application.MemberService;
+import nextstep.subway.members.member.domain.LoginMember;
+import nextstep.subway.members.member.dto.MemberResponse;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +42,10 @@ public class MapServiceTest {
     private PathService pathService;
 
     @Mock
-    private FareCalculator fareCalculator;
+    private FareService fareService;
+
+    @Mock
+    private MemberService memberService;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
@@ -71,21 +79,24 @@ public class MapServiceTest {
         lines = Lists.newArrayList(line1, line2, line3);
 
         List<LineStationEdge> lineStations = Lists.newArrayList(
-                new LineStationEdge(lineStation6, line3.getId()),
-                new LineStationEdge(lineStation7, line3.getId())
+                new LineStationEdge(lineStation6, line3),
+                new LineStationEdge(lineStation7, line3)
         );
         subwayPath = new SubwayPath(lineStations);
 
-        mapService = new MapService(lineService, stationService, pathService, fareCalculator);
+        mapService = new MapService(lineService, stationService, pathService, fareService, memberService);
     }
 
     @Test
-    void findPath() {
+    void findPathWithMember() {
+        when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(MemberResponse.class), any(PathType.class))).thenReturn(new Fare(0));
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(memberService.findMember(anyLong())).thenReturn(new MemberResponse(1L, "dhlee@test.com", 10));
+        LoginMember member = new LoginMember(1L, "dhlee@test.com", "test", 10);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
+        PathResponse pathResponse = mapService.findPath(member, 1L, 3L, PathType.DISTANCE);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();

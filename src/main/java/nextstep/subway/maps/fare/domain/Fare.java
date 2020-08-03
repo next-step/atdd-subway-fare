@@ -1,17 +1,10 @@
-package nextstep.subway.maps.map.domain;
+package nextstep.subway.maps.fare.domain;
 
-public class FareContext {
-    public static final int DEFAULT_FARE = 1250;
-    private final int distance;
+public class Fare {
     private int fare;
 
-    public FareContext(int distance) {
-        this.distance = distance;
-        this.fare = DEFAULT_FARE;
-    }
-
-    public int getDistance() {
-        return this.distance;
+    public Fare(int fare) {
+        this.fare = fare;
     }
 
     public void plusFare(int fare) {
@@ -32,10 +25,10 @@ public class FareContext {
             throw new IllegalArgumentException("0 < percent <= 100");
         }
 
-        this.fare = (int) Math.floor(this.fare * ((100-percent)/100f));
+        this.fare = (int) Math.floor(this.fare * ((100 - percent) / 100f));
     }
 
-    public int getFare() {
+    public int getValue() {
         return this.fare;
     }
 }
