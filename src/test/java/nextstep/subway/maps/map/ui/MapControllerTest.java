@@ -19,7 +19,7 @@ public class MapControllerTest {
         MapController controller = new MapController(mapService);
         when(mapService.findPath(anyLong(), anyLong(), any())).thenReturn(new PathResponse());
 
-        ResponseEntity<PathResponse> entity = controller.findPath(1L, 2L, PathType.DISTANCE);
+        ResponseEntity<PathResponse> entity = controller.findPath(1L, 2L, PathType.DISTANCE, null);
 
         assertThat(entity.getBody()).isNotNull();
     }

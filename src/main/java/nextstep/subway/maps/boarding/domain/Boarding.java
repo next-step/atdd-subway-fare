@@ -2,7 +2,7 @@ package nextstep.subway.maps.boarding.domain;
 
 import nextstep.subway.maps.line.domain.Fare;
 import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.members.member.domain.Member;
+import nextstep.subway.members.member.dto.MemberResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -12,16 +12,12 @@ import org.springframework.lang.Nullable;
 public class Boarding {
 
     @Nullable
-    private Member passenger;
+    private MemberResponse passenger;
 
     @NonNull
     private final SubwayPath subwayPath;
 
-    public Boarding(@NonNull SubwayPath subwayPath) {
-        this.subwayPath = subwayPath;
-    }
-
-    public Boarding(@Nullable Member passenger, @NonNull SubwayPath subwayPath) {
+    public Boarding(@Nullable MemberResponse passenger, @NonNull SubwayPath subwayPath) {
         this.passenger = passenger;
         this.subwayPath = subwayPath;
     }

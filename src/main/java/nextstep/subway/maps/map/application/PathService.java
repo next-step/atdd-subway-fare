@@ -9,8 +9,8 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PathService {
@@ -26,7 +26,7 @@ public class PathService {
         return convertSubwayPath(path);
     }
 
-    private SubwayPath convertSubwayPath(GraphPath graphPath) {
-        return new SubwayPath((List<LineStationEdge>) graphPath.getEdgeList().stream().collect(Collectors.toList()));
+    private SubwayPath convertSubwayPath(GraphPath<Long, LineStationEdge> graphPath) {
+        return new SubwayPath(new ArrayList<>(graphPath.getEdgeList()));
     }
 }
