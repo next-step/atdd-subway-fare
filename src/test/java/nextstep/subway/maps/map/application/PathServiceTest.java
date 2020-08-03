@@ -28,7 +28,7 @@ public class PathServiceTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN");
+        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 2, 0);
         line1.addLineStation(new LineStation(1L, null, 0, 0));
         line1.addLineStation(new LineStation(2L, 1L, 2, 2));
 
@@ -36,7 +36,7 @@ public class PathServiceTest {
         line2.addLineStation(new LineStation(2L, null, 0, 0));
         line2.addLineStation(new LineStation(3L, 2L, 2, 1));
 
-        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 1, 0);
         line3.addLineStation(new LineStation(1L, null, 0, 0));
         line3.addLineStation(new LineStation(4L, 1L, 1, 2));
         line3.addLineStation(new LineStation(3L, 4L, 2, 2));
@@ -68,6 +68,18 @@ public class PathServiceTest {
         assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
         assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
         assertThat(subwayPath.extractStationId().get(1)).isEqualTo(2L);
+        assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
+    }
+
+    @Test
+    void findPathByArrivalTime() {
+        // when
+        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.ARRIVAL_TIME);
+
+        // then
+        assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
+        assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
+        assertThat(subwayPath.extractStationId().get(1)).isEqualTo(4L);
         assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
     }
 }
