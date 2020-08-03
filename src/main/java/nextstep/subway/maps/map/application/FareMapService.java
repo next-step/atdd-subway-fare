@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
 import nextstep.subway.maps.map.domain.PathType;
@@ -49,18 +50,15 @@ public class FareMapService {
         return new MapResponse(lineResponses);
     }
 
-    public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType) {
-        List<Line> lines = lineService.findLines();
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
-        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        if (pathType != PathType.DISTANCE) {
-            return findDurationPathWithFare(lines, source, target, subwayPath, stations);
-        }
-        return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath));
-    }
-
     public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
-        return findPathWithFare(source, target, pathType);
+        List<Line> lines = lineService.findLines();
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        Money fare = fareCalculator.calculate(shortestPath);
+        if (pathType == PathType.DISTANCE) {
+            return assemblePathResponse(shortestPath, fare);
+        }
+        SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
+        return assemblePathResponse(subwayPath, fare);
     }
 
     private Map<Long, Station> extractStationsWithIdsOfAllLines(List<Line> lines) {
@@ -79,9 +77,8 @@ public class FareMapService {
             )).collect(Collectors.toList());
     }
 
-    private FarePathResponse findDurationPathWithFare(List<Line> lines, Long source, Long target, SubwayPath subwayPath,
-        Map<Long, Station> stations) {
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(shortestPath));
+    private FarePathResponse assemblePathResponse(SubwayPath subwayPath, Money fare) {
+        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
+        return PathResponseAssembler.assemble(subwayPath, stations, fare);
     }
 }
