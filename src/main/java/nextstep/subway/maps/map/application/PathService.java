@@ -7,6 +7,7 @@ import nextstep.subway.maps.map.domain.SubwayGraph;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,13 @@ public class PathService {
         GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
 
         return convertSubwayPath(path);
+    }
+    public List<SubwayPath> findAllPath(List<Line> lines, Long source, Long target) {
+        SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
+        graph.addVertexWith(lines);
+        graph.addEdge(lines);
+        List<GraphPath<Long, LineStationEdge>> paths = new KShortestPaths<Long, LineStationEdge>(graph, 1000).getPaths(source, target);
+        return paths.stream().map(this::convertSubwayPath).collect(Collectors.toList());
     }
 
     private SubwayPath convertSubwayPath(GraphPath graphPath) {

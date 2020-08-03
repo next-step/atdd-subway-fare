@@ -72,14 +72,14 @@ public class PathServiceTest {
     }
 
     @Test
-    void findPathByArrivalTime() {
+    void findAllPath() {
         // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.ARRIVAL_TIME);
+        List<SubwayPath> subwayPaths = pathService.findAllPath(lines, 1L, 3L);
 
         // then
-        assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
-        assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
-        assertThat(subwayPath.extractStationId().get(1)).isEqualTo(4L);
-        assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
+        subwayPaths.forEach(subwayPath -> {
+            assertThat(subwayPath.getSourceStationId()).isEqualTo(1L);
+            assertThat(subwayPath.getTargetStationId()).isEqualTo(3L);
+        });
     }
 }

@@ -64,7 +64,7 @@ class SubwayPathTest {
         Long source = subwayPath.getSourceStationId();
 
         // then
-        assertThat(source).isEqualTo(4L);
+        assertThat(source).isEqualTo(1L);
     }
 
     @DisplayName("도착역을 찾는 메소드 테스트")

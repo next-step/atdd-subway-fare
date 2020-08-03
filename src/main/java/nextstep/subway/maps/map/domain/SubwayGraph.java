@@ -22,6 +22,15 @@ public class SubwayGraph extends WeightedMultigraph<Long, LineStationEdge> {
                 .forEach(this::addVertex);
     }
 
+    public void addEdge(List<Line> lines) {
+        lines.forEach(line -> line.getStationInOrder().stream()
+                .filter(it -> it.getPreStationId() != null)
+                .forEach(it -> {
+                    LineStationEdge lineStationEdge = new LineStationEdge(it, line);
+                    addEdge(it.getPreStationId(), it.getStationId(), lineStationEdge);
+                }));
+    }
+
     public void addEdge(List<Line> lines, PathType type) {
         // 지하철 역의 연결 정보(간선)을 등록
         for (Line line : lines) {

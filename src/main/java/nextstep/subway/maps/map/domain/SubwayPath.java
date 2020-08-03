@@ -25,7 +25,7 @@ public class SubwayPath {
     public Long getSourceStationId() {
         return lineStationEdges.stream().findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("lineStationEdges is empty"))
-                .getLineStation().getStationId();
+                .getLineStation().getPreStationId();
     }
 
     public Long getTargetStationId() {
