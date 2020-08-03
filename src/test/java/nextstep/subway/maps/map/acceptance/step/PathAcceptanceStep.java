@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.map.dto.FarePathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 
@@ -21,9 +22,10 @@ public class PathAcceptanceStep {
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
     }
 
-    public static void 지하철_이용요금이_함께_응답검증(ExtractableResponse<Response> response) {
+    public static void 지하철_이용요금이_함께_응답검증(ExtractableResponse<Response> response, int expectedFare) {
         FarePathResponse farePathResponse = response.as(FarePathResponse.class);
         assertThat(farePathResponse.fareValue()).isNotNull();
+        assertThat(farePathResponse.getFare()).isEqualTo(expectedFare);
     }
 
     public static void 경로를_순서대로_정렬하여_응답검증(ExtractableResponse<Response> response, List<Long> expectedIds) {
@@ -37,6 +39,18 @@ public class PathAcceptanceStep {
     public static ExtractableResponse<Response> 출발역에서_도착역까지_최단_또는_최소시간_경로조회_요청(Long sourceStation, Long targetStation,
         String type) {
         return RestAssured.given().log().all().
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            get("/paths?source={sourceId}&target={targetId}&type={type}", sourceStation, targetStation, type).
+            then().
+            log().all().
+            extract();
+    }
+
+    public static ExtractableResponse<Response> 로그인한_사용자_출발역에서_도착역까지_최단_또는_최소시간_경로조회_요청(Long sourceStation,
+        Long targetStation, String type, TokenResponse tokenResponse) {
+        return RestAssured.given().log().all().
+            auth().oauth2(tokenResponse.getAccessToken()).
             accept(MediaType.APPLICATION_JSON_VALUE).
             when().
             get("/paths?source={sourceId}&target={targetId}&type={type}", sourceStation, targetStation, type).
