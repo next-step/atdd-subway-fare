@@ -20,6 +20,7 @@ import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 
 @Service
 @Transactional(readOnly = true)
@@ -56,6 +57,10 @@ public class FareMapService {
             return findDurationPathWithFare(lines, source, target, subwayPath, stations);
         }
         return PathResponseAssembler.assemble(subwayPath, stations, fareCalculator.calculate(subwayPath));
+    }
+
+    public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
+        return findPathWithFare(source, target, pathType);
     }
 
     private Map<Long, Station> extractStationsWithIdsOfAllLines(List<Line> lines) {
