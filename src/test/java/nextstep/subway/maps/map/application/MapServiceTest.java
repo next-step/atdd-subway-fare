@@ -39,7 +39,7 @@ public class MapServiceTest {
     @Mock
     private StationService stationService;
     @Mock
-    private BidirectionalPathService pathService;
+    private PathService pathService;
     @Mock
     private FareCalculator fareCalculator;
 

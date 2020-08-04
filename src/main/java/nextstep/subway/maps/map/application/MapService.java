@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 public class MapService {
     private LineService lineService;
     private StationService stationService;
-    private BidirectionalPathService pathService;
+    private PathService pathService;
     private FareCalculator fareCalculator;
 
-    public MapService(LineService lineService, StationService stationService, BidirectionalPathService pathService, FareCalculator fareCalculator) {
+    public MapService(LineService lineService, StationService stationService, PathService pathService, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;

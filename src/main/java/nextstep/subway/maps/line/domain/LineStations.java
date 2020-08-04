@@ -76,12 +76,17 @@ public class LineStations {
 
         long totalDuration = 0;
         for (LineStation lineStation : stationsInOrder) {
-            if (Objects.equals(lineStation.getPreStationId(), stationId)) {
+            if (isStartStation(stationId, lineStation, direction)) {
                 break;
             }
             totalDuration += lineStation.getDuration();
         }
         return Duration.ofMinutes(totalDuration);
+    }
+
+    private boolean isStartStation(Long stationId, LineStation lineStation, PathDirection direction) {
+        Long startStationId = direction == PathDirection.FORWARD ? lineStation.getPreStationId() : lineStation.getStationId();
+        return Objects.equals(startStationId, stationId);
     }
 
     private List<LineStation> getStationsInOrder(PathDirection direction) {
