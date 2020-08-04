@@ -6,16 +6,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class TimePaths {
+public class SubwayPaths {
 
     private final List<SubwayPath> paths;
 
-    private TimePaths(List<SubwayPath> paths) {
+    private SubwayPaths(List<SubwayPath> paths) {
         this.paths = Collections.unmodifiableList(new ArrayList<>(paths));
     }
 
-    public static TimePaths of(List<SubwayPath> paths) {
-        return new TimePaths(paths);
+    public static SubwayPaths of(List<SubwayPath> paths) {
+        return new SubwayPaths(paths);
     }
 
     public SubwayPath findFastestArrivalPath(LocalDateTime departTime) {

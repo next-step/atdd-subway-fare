@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TimePathsTest {
+class SubwayPathsTest {
 
     private KShortestPaths<Long, LineStationEdge> kShortestPaths;
     private SubwayPath subwayPath1;
@@ -64,10 +64,10 @@ class TimePathsTest {
     @Test
     void findFastestArrivalPath() {
         //given
-        TimePaths timePaths = TimePaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
+        SubwayPaths subwayPaths = SubwayPaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
 
         //when
-        SubwayPath fastestArrivalPath = timePaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
+        SubwayPath fastestArrivalPath = subwayPaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
 
         //then
         assertThat(fastestArrivalPath.getLineStationEdges().stream()

@@ -37,7 +37,7 @@ public class PathService {
         List<SubwayPath> subwayPaths = paths.stream()
                 .map(this::convertSubwayPath)
                 .collect(Collectors.toList());
-        TimePaths timePaths = TimePaths.of(subwayPaths);
+        SubwayPaths timePaths = SubwayPaths.of(subwayPaths);
 
         return timePaths.findFastestArrivalPath(departTime);
     }
