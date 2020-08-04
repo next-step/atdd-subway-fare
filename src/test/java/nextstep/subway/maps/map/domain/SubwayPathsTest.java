@@ -49,16 +49,13 @@ class SubwayPathsTest {
         line3.addLineStation(lineStation6);
         line3.addLineStation(lineStation7);
 
-        LineStationEdge lineStationEdge1 = new LineStationEdge(lineStation1, line1);
-        LineStationEdge lineStationEdge2 = new LineStationEdge(lineStation2, line1);
-        LineStationEdge lineStationEdge3 = new LineStationEdge(lineStation3, line2);
-        LineStationEdge lineStationEdge4 = new LineStationEdge(lineStation4, line2);
-        subwayPath1 = new SubwayPath(Lists.newArrayList(lineStationEdge1, lineStationEdge2, lineStationEdge3, lineStationEdge4), 1L);
+        LineStationEdge lineStationEdge1 = new LineStationEdge(lineStation2, line1);
+        LineStationEdge lineStationEdge2 = new LineStationEdge(lineStation4, line2);
+        subwayPath1 = new SubwayPath(Lists.newArrayList(lineStationEdge1, lineStationEdge2), 1L);
 
-        LineStationEdge lineStationEdge5 = new LineStationEdge(lineStation5, line3);
-        LineStationEdge lineStationEdge6 = new LineStationEdge(lineStation6, line3);
-        LineStationEdge lineStationEdge7 = new LineStationEdge(lineStation7, line3);
-        subwayPath2 = new SubwayPath(Lists.newArrayList(lineStationEdge5, lineStationEdge6, lineStationEdge7), 1L);
+        LineStationEdge lineStationEdge3 = new LineStationEdge(lineStation6, line3);
+        LineStationEdge lineStationEdge4 = new LineStationEdge(lineStation7, line3);
+        subwayPath2 = new SubwayPath(Lists.newArrayList(lineStationEdge3, lineStationEdge4), 1L);
     }
 
     @Test
@@ -70,10 +67,7 @@ class SubwayPathsTest {
         SubwayPath fastestArrivalPath = subwayPaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
 
         //then
-        assertThat(fastestArrivalPath.getLineStationEdges().stream()
-                .map(LineStationEdge::getLineStation)
-                .mapToLong(LineStation::getStationId)
-                .distinct())
+        assertThat(fastestArrivalPath.extractStationId())
                 .containsExactly(1L, 4L, 3L);
     }
 }
