@@ -82,7 +82,7 @@ public class MapServiceTest {
                 new LineStationEdge(lineStation6, line3),
                 new LineStationEdge(lineStation7, line3)
         );
-        subwayPath = new SubwayPath(lineStations);
+        subwayPath = new SubwayPath(lineStations, 1L);
         List<LineStationEdge> shortestLineStations = Lists.newArrayList(
                 new LineStationEdge(lineStation1, line1),
                 new LineStationEdge(lineStation2, line1),
@@ -90,7 +90,7 @@ public class MapServiceTest {
                 new LineStationEdge(lineStation4, line2)
         );
 
-        shortestPath = new SubwayPath(shortestLineStations);
+        shortestPath = new SubwayPath(shortestLineStations, 1L);
         mapService = new MapService(lineService, stationService, pathService, fareCalculator);
     }
 

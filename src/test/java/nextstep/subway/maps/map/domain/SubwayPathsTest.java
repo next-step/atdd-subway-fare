@@ -53,12 +53,12 @@ class SubwayPathsTest {
         LineStationEdge lineStationEdge2 = new LineStationEdge(lineStation2, line1);
         LineStationEdge lineStationEdge3 = new LineStationEdge(lineStation3, line2);
         LineStationEdge lineStationEdge4 = new LineStationEdge(lineStation4, line2);
-        subwayPath1 = new SubwayPath(Lists.newArrayList(lineStationEdge1, lineStationEdge2, lineStationEdge3, lineStationEdge4));
+        subwayPath1 = new SubwayPath(Lists.newArrayList(lineStationEdge1, lineStationEdge2, lineStationEdge3, lineStationEdge4), 1L);
 
         LineStationEdge lineStationEdge5 = new LineStationEdge(lineStation5, line3);
         LineStationEdge lineStationEdge6 = new LineStationEdge(lineStation6, line3);
         LineStationEdge lineStationEdge7 = new LineStationEdge(lineStation7, line3);
-        subwayPath2 = new SubwayPath(Lists.newArrayList(lineStationEdge5, lineStationEdge6, lineStationEdge7));
+        subwayPath2 = new SubwayPath(Lists.newArrayList(lineStationEdge5, lineStationEdge6, lineStationEdge7), 1L);
     }
 
     @Test

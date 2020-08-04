@@ -31,7 +31,7 @@ class SubwayPathTest {
         LineStationEdge lineStationEdge2 = new LineStationEdge(lineStation2, line3);
         LineStationEdge lineStationEdge3 = new LineStationEdge(lineStation3, line3);
         List<LineStationEdge> lineStationEdges = Lists.newArrayList(lineStationEdge1, lineStationEdge2, lineStationEdge3);
-        subwayPath = new SubwayPath(lineStationEdges);
+        subwayPath = new SubwayPath(lineStationEdges, 1L);
     }
 
     @Test

@@ -24,10 +24,10 @@ public class PathService {
         SubwayGraph graph = createSubwayGraph(lines, type);
 
         // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+        DijkstraShortestPath<Long, LineStationEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
 
-        return convertSubwayPath(path);
+        return convertSubwayPath(path, source);
     }
 
     public SubwayPath findPathByArrivalTime(List<Line> lines, Long source, Long target, LocalDateTime departTime) {
@@ -35,7 +35,7 @@ public class PathService {
 
         List<GraphPath<Long, LineStationEdge>> paths = getAllPaths(source, target, graph);
         List<SubwayPath> subwayPaths = paths.stream()
-                .map(this::convertSubwayPath)
+                .map(path -> convertSubwayPath(path, source))
                 .collect(Collectors.toList());
         SubwayPaths timePaths = SubwayPaths.of(subwayPaths);
 
@@ -50,8 +50,8 @@ public class PathService {
     }
 
 
-    private SubwayPath convertSubwayPath(GraphPath graphPath) {
-        return new SubwayPath((List<LineStationEdge>) graphPath.getEdgeList().stream().collect(Collectors.toList()));
+    private SubwayPath convertSubwayPath(GraphPath<Long, LineStationEdge> graphPath, Long source) {
+        return new SubwayPath(graphPath.getEdgeList(), source);
     }
 
 
