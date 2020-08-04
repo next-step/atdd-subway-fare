@@ -38,9 +38,8 @@ public class PathService {
                 .map(this::convertSubwayPath)
                 .collect(Collectors.toList());
         TimePaths timePaths = TimePaths.of(subwayPaths);
-        TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(departTime);
 
-        return fastestArrivalPath.getPath();
+        return timePaths.findFastestArrivalPath(departTime);
     }
 
     private SubwayGraph createSubwayGraph(List<Line> lines, PathType type) {

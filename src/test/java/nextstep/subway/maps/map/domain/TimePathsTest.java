@@ -67,10 +67,10 @@ class TimePathsTest {
         TimePaths timePaths = TimePaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
 
         //when
-        TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
+        SubwayPath fastestArrivalPath = timePaths.findFastestArrivalPath(LocalDateTime.of(2020, 7, 22, 6, 15));
 
         //then
-        assertThat(fastestArrivalPath.getPath().getLineStationEdges().stream()
+        assertThat(fastestArrivalPath.getLineStationEdges().stream()
                 .map(LineStationEdge::getLineStation)
                 .mapToLong(LineStation::getStationId)
                 .distinct())
