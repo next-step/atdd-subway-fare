@@ -1,4 +1,4 @@
-package nextstep.subway;
+package nextstep.documentation;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import nextstep.subway.auth.utils.TestConfig;
@@ -9,11 +9,13 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
+import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.snippet.Attributes.key;
 
 @ExtendWith(RestDocumentationExtension.class)
 @Import(TestConfig.class)
@@ -34,4 +36,9 @@ public class Documentation {
     protected static OperationResponsePreprocessor getDocumentResponse() {
         return preprocessResponse(prettyPrint());
     }
+
+    protected Attributes.Attribute getDateFormat() {
+        return key("format").value("yyyyMMddHHmm");
+    }
+
 }

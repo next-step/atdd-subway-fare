@@ -31,9 +31,8 @@ public enum PathDirection {
         return stationIds;
     }
 
-    private Long getNextStationId(LineStationEdge it) {
-
-        return FORWARD == this ? it.getLineStation().getStationId() : it.getLineStation().getPreStationId();
+    private Long getNextStationId(LineStationEdge lineStationEdge) {
+        return FORWARD == this ? lineStationEdge.getLineStation().getStationId() : lineStationEdge.getLineStation().getPreStationId();
     }
 
     private Long getSourceId(List<LineStationEdge> lineStationEdges) {

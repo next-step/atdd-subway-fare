@@ -1,6 +1,6 @@
 package nextstep.subway.maps.map.documentation;
 
-import nextstep.subway.Documentation;
+import nextstep.documentation.Documentation;
 import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
@@ -20,7 +20,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,8 +76,8 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("출발역 아이디"),
                                 parameterWithName("target").description("도착역 아이디"),
-                                parameterWithName("time").description("경로 출발 시간"),
-                                parameterWithName("type").description("최단 시간 / 최단 거리")),
+                                parameterWithName("time").attributes(getDateFormat()).description("경로 출발 시간").optional(),
+                                parameterWithName("type").description("최단 시간 / 최단 거리 / 가장 빠른 경로")),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철 역 정보"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 아이디"),
