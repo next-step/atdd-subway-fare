@@ -30,7 +30,8 @@ public class Documentation {
         return preprocessRequest(
                 modifyUris()
                         .removePort(),
-                prettyPrint());
+                prettyPrint()
+        );
     }
 
     protected static OperationResponsePreprocessor getDocumentResponse() {

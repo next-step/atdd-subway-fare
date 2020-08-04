@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.documentation;
 
 import nextstep.documentation.Documentation;
+import nextstep.documentation.PathTypesSnippet;
 import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
@@ -77,7 +78,7 @@ public class PathDocumentation extends Documentation {
                                 parameterWithName("source").description("출발역 아이디"),
                                 parameterWithName("target").description("도착역 아이디"),
                                 parameterWithName("time").attributes(getDateFormat()).description("경로 출발 시간").optional(),
-                                parameterWithName("type").description("최단 시간 / 최단 거리 / 가장 빠른 경로")),
+                                parameterWithName("type").description("link:#resources-paths-find_path_types[경로 검색 타입,window=\"_blank\"]")),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철 역 정보"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 아이디"),
@@ -85,7 +86,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리"),
                                 fieldWithPath("fare").type(JsonFieldType.NUMBER).description("지하철 요금")
-                        )
+                        ),
+                        new PathTypesSnippet()
                 )).
                 extract();
     }
