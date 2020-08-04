@@ -1,13 +1,10 @@
 package nextstep.subway.maps.line.domain;
 
+import nextstep.subway.maps.map.domain.PathDirection;
+
 import javax.persistence.*;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Embeddable
 public class LineStations {
@@ -71,19 +68,31 @@ public class LineStations {
         lineStations.remove(lineStation);
     }
 
-    public Duration calculateDurationFromStart(Long stationId) {
+    public Duration calculateDurationFromStartByDirection(Long stationId, PathDirection direction) {
         if (Objects.isNull(stationId)) {
             return Duration.ZERO;
         }
-        List<LineStation> stationsInOrder = getStationsInOrder();
+        List<LineStation> stationsInOrder = getStationsInOrder(direction);
 
         long totalDuration = 0;
         for (LineStation lineStation : stationsInOrder) {
-            totalDuration += lineStation.getDuration();
-            if (Objects.equals(lineStation.getStationId(), stationId)) {
+            if (Objects.equals(lineStation.getPreStationId(), stationId)) {
                 break;
             }
+            totalDuration += lineStation.getDuration();
         }
         return Duration.ofMinutes(totalDuration);
     }
+
+    private List<LineStation> getStationsInOrder(PathDirection direction) {
+        if (direction == PathDirection.FORWARD) {
+            return getStationsInOrder();
+        }
+        List<LineStation> stationsInOrder = getStationsInOrder();
+        Collections.reverse(stationsInOrder);
+        return stationsInOrder;
+
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package nextstep.subway.maps.line.domain;
 
+import nextstep.subway.maps.map.domain.PathDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,7 +105,7 @@ public class LineStationsTest {
     @Test
     void calculateDurationFromStart() {
         //when
-        Duration totalDuration = lineStations.calculateDurationFromStart(3L);
+        Duration totalDuration = lineStations.calculateDurationFromStartByDirection(3L, PathDirection.FORWARD);
         //then
         assertThat(totalDuration).hasMinutes(9L);
     }

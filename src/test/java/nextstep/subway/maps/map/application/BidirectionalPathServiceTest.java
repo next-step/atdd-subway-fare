@@ -8,6 +8,7 @@ import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,7 +33,7 @@ class BidirectionalPathServiceTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0, 10);
+        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0, 3);
         line1.addLineStation(new LineStation(1L, null, 0, 0));
         line1.addLineStation(new LineStation(2L, 1L, 2, 2));
 
@@ -40,7 +41,7 @@ class BidirectionalPathServiceTest {
         line2.addLineStation(new LineStation(2L, null, 0, 0));
         line2.addLineStation(new LineStation(3L, 2L, 2, 1));
 
-        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 10);
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 5);
         line3.addLineStation(new LineStation(1L, null, 0, 0));
         line3.addLineStation(new LineStation(4L, 1L, 1, 2));
         line3.addLineStation(new LineStation(3L, 4L, 2, 2));
@@ -50,7 +51,8 @@ class BidirectionalPathServiceTest {
         pathService = new BidirectionalPathService();
     }
 
-    @ParameterizedTest
+    @DisplayName("최단 거리, 최소 소요시간 경로 응답")
+    @ParameterizedTest(name = "{0} 에서 {1} 까지 출발했을 때 {2}에 맞춰 적절한 경로를 응답한다.")
     @MethodSource("findPathSourceProvider")
     void findPath(Long source, Long target, PathType type, List<Long> expectedPath) {
         //when
@@ -69,13 +71,12 @@ class BidirectionalPathServiceTest {
         );
     }
 
-    @ParameterizedTest
+    @DisplayName("가장 빠른 경로 응답")
+    @ParameterizedTest(name = "{0} 에서 {1} 까지 {3} 에 출발했을 때 가장 빠른 경로를 응답한다.")
     @MethodSource("findPathByArrivalTimeSourceProvider")
-    void findPathByArrivalTime(Long source, Long target, List<Long> expectedPath) {
-        //given
-        LocalDateTime departTime = LocalDateTime.of(2020, 7, 1, 6, 15);
+    void findPathByArrivalTime(Long source, Long target, List<Long> expectedPath, LocalDateTime departureTime) {
         // when
-        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, source, target, departTime);
+        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, source, target, departureTime);
 
         // then
         assertThat(subwayPath.extractStationId())
@@ -84,8 +85,8 @@ class BidirectionalPathServiceTest {
 
     private static Stream<Arguments> findPathByArrivalTimeSourceProvider() {
         return Stream.of(
-                Arguments.of(1L, 3L, Lists.newArrayList(1L, 4L, 3L)),
-                Arguments.of(3L, 1L, Lists.newArrayList(3L, 4L, 1L))
+                Arguments.of(1L, 3L, Lists.newArrayList(1L, 4L, 3L), LocalDateTime.of(2020, 7, 1, 6, 15)),
+                Arguments.of(3L, 1L, Lists.newArrayList(3L, 4L, 1L), LocalDateTime.of(2020, 7, 1, 6, 5))
         );
     }
 }
