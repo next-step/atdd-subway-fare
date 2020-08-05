@@ -76,7 +76,7 @@ class PathServiceTest {
     @MethodSource("findPathByArrivalTimeSourceProvider")
     void findPathByArrivalTime(Long source, Long target, List<Long> expectedPath, LocalDateTime departureTime) {
         // when
-        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, source, target, departureTime);
+        SubwayPath subwayPath = pathService.findPath(lines, source, target, PathType.ARRIVAL_TIME, departureTime);
 
         // then
         assertThat(subwayPath.extractStationId())

@@ -30,7 +30,7 @@ public class PathService {
         return convertSubwayPath(path, source);
     }
 
-    public SubwayPath findPathByArrivalTime(List<Line> lines, Long source, Long target, LocalDateTime departTime) {
+    private SubwayPath findPathByArrivalTime(List<Line> lines, Long source, Long target, LocalDateTime departTime) {
         SubwayGraph graph = createSubwayGraph(lines, PathType.ARRIVAL_TIME);
 
         List<GraphPath<Long, LineStationEdge>> paths = getAllPaths(source, target, graph);
