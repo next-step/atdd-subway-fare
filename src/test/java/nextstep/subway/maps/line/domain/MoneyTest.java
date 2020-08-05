@@ -71,4 +71,10 @@ public class MoneyTest {
         // then
         assertThat(afterMoney.value()).isEqualTo(500);
     }
+
+    @DisplayName("돈을 주어진 퍼센트만큼 계산하여 반환한다.")
+    @Test
+    void 돈의_양을_퍼센트만큼_계산하여_반환한다() {
+        assertThat(Money.drawNewMoney(1000).percentOff(20)).isEqualTo(Money.drawNewMoney(200));
+    }
 }
