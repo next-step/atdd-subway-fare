@@ -1,29 +1,38 @@
 package nextstep.subway.auth.ui.interceptor.authorization;
 
-import nextstep.subway.auth.domain.Authentication;
-import nextstep.subway.auth.domain.AuthenticationPrincipal;
-import nextstep.subway.auth.infrastructure.SecurityContextHolder;
-import nextstep.subway.auth.domain.EmptyMember;
+import java.util.Arrays;
+import java.util.Map;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.Arrays;
-import java.util.Map;
+import nextstep.subway.auth.application.UserDetailsService;
+import nextstep.subway.auth.domain.Authentication;
+import nextstep.subway.auth.domain.AuthenticationPrincipal;
+import nextstep.subway.auth.infrastructure.SecurityContextHolder;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final UserDetailsService userDetailsService;
+
+    public AuthenticationPrincipalArgumentResolver(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            return new EmptyMember();
+            return userDetailsService.anonymousMember();
         }
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);

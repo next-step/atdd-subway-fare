@@ -1,11 +1,14 @@
 package nextstep.subway.auth.domain;
 
+import nextstep.subway.members.member.domain.LoginMember;
 
-import nextstep.subway.auth.application.UserDetails;
-
-public class EmptyMember implements UserDetails {
+public class EmptyMember extends LoginMember {
 
     public static final String EMPTY = "EMPTY";
+
+    public EmptyMember() {
+        super(null, EMPTY, EMPTY, null);
+    }
 
     @Override
     public Object getPrincipal() {
