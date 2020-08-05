@@ -126,7 +126,7 @@ public class FareMapServiceTest {
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.fareValue()).isEqualTo(BASIC_FARE.value())
+            () -> assertThat(farePathResponse.getFare()).isEqualTo(BASIC_FARE.value())
         );
     }
 
@@ -163,7 +163,7 @@ public class FareMapServiceTest {
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.fareValue()).isEqualTo(BASIC_FARE.value())
+            () -> assertThat(farePathResponse.getFare()).isEqualTo(BASIC_FARE.value())
         );
     }
 
@@ -185,7 +185,7 @@ public class FareMapServiceTest {
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.fareValue()).isEqualTo(BASIC_FARE.value())
+            () -> assertThat(farePathResponse.getFare()).isEqualTo(BASIC_FARE.value())
         );
     }
 }

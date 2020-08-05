@@ -4,6 +4,7 @@ import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.*;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.*;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.*;
 import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
@@ -25,9 +26,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private static final String EMAIL = "javajigi@gmail.com";
     private static final String PASSWORD = "pobiconan";
     private static final Integer EXPECTED_FARE = 1450;
+    private static final Integer DISCOUNT_FARE = 350;
 
-    private static final Integer EXPECTED_YOUTH_FARE = (int)((EXPECTED_FARE - 350) * 0.8);
-    private static final Integer EXPECTED_CHILD_FARE = (int)((EXPECTED_FARE - 350) * 0.5);
+    private static final Integer EXPECTED_YOUTH_FARE = EXPECTED_FARE - (int)((EXPECTED_FARE - DISCOUNT_FARE) * 0.2);
+    private static final Integer EXPECTED_CHILD_FARE = EXPECTED_FARE - (int)((EXPECTED_FARE - DISCOUNT_FARE) * 0.5);
 
     private static final Integer EXAMPLE_CHILD_AGE = 9;
     private static final Integer EXAMPLE_YOUTH_AGE = 13;
@@ -79,9 +81,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
             출발역에서_도착역까지_최단_또는_최소시간_경로조회_요청(1L, 3L, "DISTANCE");
 
         // then
-        PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 3, 4);
-        PathAcceptanceStep.지하철_이용요금이_함께_응답검증(response, EXPECTED_FARE);
-        PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Arrays.asList(1L, 4L, 3L));
+        assertAll(
+            () -> PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 3, 4),
+            () -> PathAcceptanceStep.지하철_이용요금이_함께_응답검증(response, EXPECTED_FARE),
+            () -> PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Arrays.asList(1L, 4L, 3L))
+        );
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")

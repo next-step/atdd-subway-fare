@@ -24,8 +24,7 @@ public class PathAcceptanceStep {
 
     public static void 지하철_이용요금이_함께_응답검증(ExtractableResponse<Response> response, int expectedFare) {
         FarePathResponse farePathResponse = response.as(FarePathResponse.class);
-        assertThat(farePathResponse.fareValue()).isNotNull();
-        assertThat(farePathResponse.getFare().value()).isEqualTo(expectedFare);
+        assertThat(farePathResponse.getFare()).isEqualTo(expectedFare);
     }
 
     public static void 경로를_순서대로_정렬하여_응답검증(ExtractableResponse<Response> response, List<Long> expectedIds) {
