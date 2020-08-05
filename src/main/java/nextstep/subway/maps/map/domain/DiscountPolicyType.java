@@ -9,7 +9,7 @@ public enum DiscountPolicyType {
         return money.minus(discountPrice);
     }),
     YOUTH(money -> {
-        Money discountPrice = money.minus(Discount.BASE_DISCOUNT).percentOff(50);
+        Money discountPrice = money.minus(Discount.BASE_DISCOUNT).percentOff(20);
         return money.minus(discountPrice);
     }),
     ADULT(money -> money);
