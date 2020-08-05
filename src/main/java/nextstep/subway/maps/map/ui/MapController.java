@@ -27,9 +27,6 @@ public class MapController {
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember user, @RequestParam Long source, @RequestParam Long target,
                                                  @RequestParam PathType type, @DateTimeFormat(pattern = "yyyyMMddHHmm") @RequestParam(required = false, value = "time") LocalDateTime time) {
-        if (user instanceof EmptyMember || Objects.isNull(user)) {
-            return ResponseEntity.ok(mapService.findPath(source, target, type, time));
-        }
         return ResponseEntity.ok(mapService.findPath(user, source, target, type, time));
     }
 

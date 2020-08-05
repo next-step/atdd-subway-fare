@@ -50,6 +50,18 @@ public class MapService {
         return new MapResponse(lineResponses);
     }
 
+    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type, LocalDateTime time) {
+        List<Line> lines = lineService.findLines();
+
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE, time);
+        Money fare = calculateFare(member, shortestPath);
+
+        if (type == PathType.DISTANCE) {
+            return assemblePathResponse(shortestPath, fare);
+        }
+        return assemblePathResponse(pathService.findPath(lines, source, target, type, time), fare);
+    }
+
     private Map<Long, Station> findStations(List<Line> lines) {
         List<Long> stationIds = lines.stream()
                 .flatMap(it -> it.getStationInOrder().stream())
@@ -65,28 +77,11 @@ public class MapService {
                 .collect(Collectors.toList());
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type, LocalDateTime time) {
-        List<Line> lines = lineService.findLines();
-
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE, time);
-        Money fare = fareCalculator.calculate(shortestPath);
-
-        if (type == PathType.DISTANCE) {
-            return assemblePathResponse(shortestPath, fare);
+    private Money calculateFare(LoginMember member, SubwayPath shortestPath) {
+        if (member.isLoggedIn()) {
+            return fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(member.getAge()));
         }
-        return assemblePathResponse(pathService.findPath(lines, source, target, type, time), fare);
-    }
-
-    public PathResponse findPath(LoginMember member, Long source, Long target, PathType type, LocalDateTime time) {
-        List<Line> lines = lineService.findLines();
-
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE, time);
-        Money fare = fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(member.getAge()));
-
-        if (type == PathType.DISTANCE) {
-            return assemblePathResponse(shortestPath, fare);
-        }
-        return assemblePathResponse(pathService.findPath(lines, source, target, type, time), fare);
+        return fareCalculator.calculate(shortestPath);
     }
 
     private PathResponse assemblePathResponse(SubwayPath subwayPath, Money fare) {

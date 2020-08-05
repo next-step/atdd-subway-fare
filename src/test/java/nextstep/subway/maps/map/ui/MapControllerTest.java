@@ -21,23 +21,9 @@ public class MapControllerTest {
     void findPath() {
         MapService mapService = mock(MapService.class);
         MapController controller = new MapController(mapService);
-        when(mapService.findPath(anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class))).thenReturn(new PathResponse());
+        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class))).thenReturn(new PathResponse());
 
         ResponseEntity<PathResponse> entity = controller.findPath(new EmptyMember(), 1L, 2L, PathType.DISTANCE, null);
-
-        verify(mapService).findPath(anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class));
-        assertThat(entity.getBody()).isNotNull();
-    }
-
-    @Test
-    void findPathWithUser() {
-        //given
-        LoginMember loginMember = new LoginMember(1L, "email@email.com", "password", 15);
-        MapService mapService = mock(MapService.class);
-        MapController controller = new MapController(mapService);
-        when(mapService.findPath(any(), anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class))).thenReturn(new PathResponse());
-
-        ResponseEntity<PathResponse> entity = controller.findPath(loginMember, 1L, 2L, PathType.DISTANCE, null);
 
         verify(mapService).findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class));
         assertThat(entity.getBody()).isNotNull();

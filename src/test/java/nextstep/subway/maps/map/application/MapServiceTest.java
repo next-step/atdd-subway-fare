@@ -12,6 +12,7 @@ import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.members.member.domain.EmptyMember;
 import nextstep.subway.members.member.domain.LoginMember;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +49,7 @@ public class MapServiceTest {
 
     private SubwayPath subwayPath;
     private SubwayPath shortestPath;
+    private EmptyMember emptyMember;
 
     @BeforeEach
     void setUp() {
@@ -90,6 +92,7 @@ public class MapServiceTest {
                 new LineStationEdge(lineStation4, line2)
         );
 
+        emptyMember = new EmptyMember();
         shortestPath = new SubwayPath(shortestLineStations, 1L);
         mapService = new MapService(lineService, stationService, pathService, fareCalculator);
     }
@@ -117,7 +120,7 @@ public class MapServiceTest {
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE, null);
+        PathResponse pathResponse = mapService.findPath(emptyMember, 1L, 3L, PathType.DISTANCE, null);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
@@ -133,7 +136,7 @@ public class MapServiceTest {
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DURATION, null);
+        PathResponse pathResponse = mapService.findPath(emptyMember, 1L, 3L, PathType.DURATION, null);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
