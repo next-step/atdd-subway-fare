@@ -19,7 +19,7 @@ class LineTest {
 
     @BeforeEach
     void setUp() {
-        line = new Line("1호선", "BLUE", LocalTime.of(5, 30), LocalTime.of(23, 00), 5);
+        line = new Line("1호선", "BLUE", LocalTime.of(5, 30), LocalTime.of(23, 30), 5);
         LineStation lineStation1 = new LineStation(1L, null, 10, 10);
         LineStation lineStation2 = new LineStation(2L, null, 10, 10);
         LineStation lineStation3 = new LineStation(3L, null, 10, 10);
@@ -48,7 +48,7 @@ class LineTest {
 
     @DisplayName("종점에서 다음 열차 출발 시간을 계산한다(역방향).")
     @ParameterizedTest
-    @CsvSource({"0530,0610", "1001,1005", "0007,0010"})
+    @CsvSource({"0610,0610", "1001,1005", "0007,0010"})
     public void calculateEarliestReverseDepartureTimeTest(
             @ConvertWith(SimpleLocalTimeConverter.class) LocalTime time,
             @ConvertWith(SimpleLocalTimeConverter.class) LocalTime expected

@@ -4,6 +4,7 @@ import nextstep.subway.config.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity
@@ -89,11 +90,70 @@ public class Line extends BaseEntity {
         return this.extraFare;
     }
 
+    private static boolean isShutdown(LocalTime start, LocalTime end, LocalTime currentTime) {
+        if (start.equals(currentTime) || end.equals(currentTime)) {
+            return false;
+        }
+
+        if (start.isAfter(end)) {
+            return currentTime.isBefore(start) && currentTime.isAfter(end);
+        } else {
+            return currentTime.isBefore(start) || currentTime.isAfter(end);
+        }
+    }
+
     public LocalTime calculateForwardDepartureTime(LocalTime time) {
-        return null;
+
+        if (isShutdown(startTime, endTime, time)) {
+            throw new SubwayNotOperatingTimeException();
+        }
+
+        LocalTime departureTime = this.startTime;
+        while (departureTime.isBefore(time)) {
+            departureTime = departureTime.plus(intervalTime, ChronoUnit.MINUTES);
+        }
+
+        return departureTime;
     }
 
     public LocalTime calculateReverseDepartureTime(LocalTime time) {
-        return null;
+        int forwardTotalDuration = sumTotalDuration();
+
+        LocalTime startTimeReverse = startTime.plus(forwardTotalDuration, ChronoUnit.MINUTES);
+        LocalTime endTimeReverse = endTime.plus(forwardTotalDuration, ChronoUnit.MINUTES);
+
+        if (isShutdown(startTimeReverse, endTimeReverse, time)) {
+            throw new SubwayNotOperatingTimeException();
+        }
+
+        if (isNextDay(time, endTimeReverse)) {
+            LocalTime result = endTimeReverse;
+            LocalTime temp = result;
+            while(result.isAfter(time)) {
+                temp = result;
+                result = result.minus(intervalTime, ChronoUnit.MINUTES);
+            }
+
+            return temp;
+        }
+
+        LocalTime result = startTimeReverse;
+        while (result.isBefore(time)) {
+            result = result.plus(intervalTime, ChronoUnit.MINUTES);
+        }
+
+        return result;
+    }
+
+    private boolean isNextDay(LocalTime time, LocalTime endTimeReverse) {
+        return time.isAfter(LocalTime.MIDNIGHT) && time.isBefore(endTimeReverse);
+    }
+
+    private int sumTotalDuration() {
+        List<LineStation> stationInOrder = this.getStationInOrder();
+        return stationInOrder.stream()
+                .skip(1)
+                .mapToInt(LineStation::getDuration)
+                .sum();
     }
 }
