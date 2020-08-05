@@ -115,7 +115,7 @@ public class FareMapServiceTest {
         when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(FareCalculator.BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(1L, 3L, PathType.DISTANCE);
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(null,1L, 3L, PathType.DISTANCE);
 
         // then
         assertAll(
@@ -150,7 +150,7 @@ public class FareMapServiceTest {
         when(fareCalculator.calculate(shortestPath)).thenReturn(FareCalculator.BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(), PathType.DURATION);
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(null, 교대역.getId(), 양재역.getId(), PathType.DURATION);
 
         // then
         assertAll(
@@ -171,7 +171,7 @@ public class FareMapServiceTest {
         when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(FareCalculator.BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(null, 교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
         assertAll(
