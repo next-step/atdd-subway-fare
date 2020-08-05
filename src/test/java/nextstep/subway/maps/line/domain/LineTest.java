@@ -1,7 +1,6 @@
 package nextstep.subway.maps.line.domain;
 
 import com.google.common.collect.Lists;
-import com.sun.org.apache.xpath.internal.Arg;
 import nextstep.subway.maps.map.domain.PathDirection;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.domain.StationRepository;
