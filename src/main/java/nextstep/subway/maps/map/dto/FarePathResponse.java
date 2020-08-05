@@ -10,7 +10,7 @@ public class FarePathResponse {
     private List<StationResponse> stations;
     private int duration;
     private int distance;
-    private Money fare;
+    private int fare;
 
     public FarePathResponse() {
     }
@@ -19,14 +19,14 @@ public class FarePathResponse {
         this.stations = stations;
         this.duration = duration;
         this.distance = distance;
-        this.fare = Money.drawNewMoney(fare);
+        this.fare = fare;
     }
 
     public FarePathResponse(List<StationResponse> stations, int duration, int distance, Money fare) {
         this.stations = stations;
         this.duration = duration;
         this.distance = distance;
-        this.fare = fare;
+        this.fare = fare.value();
     }
 
     public List<StationResponse> getStations() {
@@ -41,11 +41,7 @@ public class FarePathResponse {
         return distance;
     }
 
-    public Money getFare() {
+    public int getFare() {
         return fare;
-    }
-
-    public int fareValue() {
-        return fare.value();
     }
 }
