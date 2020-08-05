@@ -88,4 +88,12 @@ public class Line extends BaseEntity {
     public int getExtraFare() {
         return this.extraFare;
     }
+
+    public LocalTime calculateForwardDepartureTime(LocalTime time) {
+        return null;
+    }
+
+    public LocalTime calculateReverseDepartureTime(LocalTime time) {
+        return null;
+    }
 }
