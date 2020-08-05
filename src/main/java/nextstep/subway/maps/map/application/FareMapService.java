@@ -13,6 +13,7 @@ import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
+import nextstep.subway.maps.map.domain.DiscountPolicyType;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.FarePathResponse;
@@ -30,10 +31,10 @@ public class FareMapService {
     private final LineService lineService;
     private final StationService stationService;
     private final PathService pathService;
-    private final FareCalculator fareCalculator;
+    private final DiscountFareCalculator fareCalculator;
 
     public FareMapService(LineService lineService, StationService stationService, PathService pathService,
-        FareCalculator fareCalculator) {
+        DiscountFareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;
@@ -50,10 +51,21 @@ public class FareMapService {
         return new MapResponse(lineResponses);
     }
 
-    public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
+    public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType) {
         List<Line> lines = lineService.findLines();
         SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
         Money fare = fareCalculator.calculate(shortestPath);
+        if (pathType == PathType.DISTANCE) {
+            return assemblePathResponse(shortestPath, fare);
+        }
+        SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
+        return assemblePathResponse(subwayPath, fare);
+    }
+
+    public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
+        List<Line> lines = lineService.findLines();
+        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
+        Money fare = fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(loginMember.getAge()));
         if (pathType == PathType.DISTANCE) {
             return assemblePathResponse(shortestPath, fare);
         }
