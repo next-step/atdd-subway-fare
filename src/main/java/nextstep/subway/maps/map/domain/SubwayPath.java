@@ -53,4 +53,8 @@ public class SubwayPath {
                     return extraFare - extraFare2;
                 }).orElseThrow(RuntimeException::new);
     }
+
+    public List<LineStationEdge> getLineStationEdges() {
+        return lineStationEdges;
+    }
 }
