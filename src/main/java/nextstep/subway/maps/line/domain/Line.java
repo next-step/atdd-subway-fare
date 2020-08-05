@@ -1,5 +1,6 @@
 package nextstep.subway.maps.line.domain;
 
+import com.google.common.collect.Lists;
 import nextstep.subway.config.BaseEntity;
 
 import javax.persistence.*;
@@ -56,6 +57,10 @@ public class Line extends BaseEntity {
 
     public List<LineStation> getStationInOrder() {
         return lineStations.getStationsInOrder();
+    }
+
+    public List<LineStation> getStationsInReverseOrder() {
+        return Lists.reverse(this.getStationInOrder());
     }
 
     public Long getId() {

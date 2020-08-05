@@ -1,8 +1,11 @@
 package nextstep.subway.maps.map.domain;
 
 import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.line.domain.LineStations;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +43,40 @@ public class SubwayPathSection {
     }
 
     public LocalTime getRideTime(LocalTime time) {
+        PathDirection direction = getDirection();
+
+        Long firstStationId = this.getFirstStationId();
+
+        if (direction == PathDirection.FORWARD) {
+            LocalTime departureTime = line.calculateForwardDepartureTime(time);
+            LineStations lineStations = line.getLineStations();
+            List<LineStation> orderedLineStations = lineStations.getStationsInOrder();
+
+            int totalDuration = 0;
+
+            for (LineStation lineStation : orderedLineStations) {
+                if (lineStation.getPreStationId() == null) {
+                    continue;
+                }
+
+                totalDuration += lineStation.getDuration();
+
+                if (lineStation.getStationId().equals(firstStationId)) {
+                    break;
+                }
+            }
+
+            return departureTime.plus(totalDuration, ChronoUnit.MINUTES);
+        }
+
         return null;
     }
 
     public LocalTime getAlightTime(LocalTime time) {
-        return null;
+        LocalTime rideTime = this.getRideTime(time);
+        int totalDuration = this.getLineStationEdges().stream()
+                .map(LineStationEdge::getLineStation)
+                .mapToInt(LineStation::getDuration).sum();
+        return rideTime.plus(totalDuration, ChronoUnit.MINUTES);
     }
 }
