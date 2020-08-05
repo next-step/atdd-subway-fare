@@ -18,8 +18,8 @@ public class DiscountPolicyTypeTest {
     @CsvSource({"6, CHILDREN", "12, CHILDREN", "13, YOUTH", "18, YOUTH", "19, ADULT"})
     @ParameterizedTest
     void 나이를_판단한다(int age, DiscountPolicyType expectedType) {
-        DiscountPolicyType discountPolicyType = DiscountPolicyType.ofAge(age);
-        assertThat(discountPolicyType).isEqualTo(expectedType);
+        DiscountPolicy discountPolicyType = DiscountPolicyType.ofAge(age);
+        assertThat(discountPolicyType).isEqualTo(expectedType.getDiscountPolicy());
     }
 
     @CsvSource({"-1, 0, 5"})

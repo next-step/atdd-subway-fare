@@ -4,8 +4,14 @@ import nextstep.subway.maps.line.domain.Money;
 
 public enum DiscountPolicyType {
 
-    CHILDREN(money -> money.minus(Discount.BASE_DISCOUNT).percentOff(20)),
-    YOUTH(money -> money.minus(Discount.BASE_DISCOUNT).percentOff(50)),
+    CHILDREN(money -> {
+        Money discountPrice = money.minus(Discount.BASE_DISCOUNT).percentOff(50);
+        return money.minus(discountPrice);
+    }),
+    YOUTH(money -> {
+        Money discountPrice = money.minus(Discount.BASE_DISCOUNT).percentOff(50);
+        return money.minus(discountPrice);
+    }),
     ADULT(money -> money);
 
     public static final int MAXIMUM_CHILDREN_AGE_BOUND = 12;
@@ -19,15 +25,15 @@ public enum DiscountPolicyType {
         this.discountPolicy = discountPolicy;
     }
 
-    public static DiscountPolicyType ofAge(int age) {
+    public static DiscountPolicy ofAge(int age) {
         if (age <= MAXIMUM_CHILDREN_AGE_BOUND && age >= MINIMUM_CHILDREN_AGE_BOUND) {
-            return CHILDREN;
+            return CHILDREN.getDiscountPolicy();
         }
         if (age > MINIMUM_CHILDREN_AGE_BOUND && age <= MAXIMUM_YOUTH_AGE_BOUND) {
-            return YOUTH;
+            return YOUTH.getDiscountPolicy();
         }
         if (age > MAXIMUM_YOUTH_AGE_BOUND) {
-            return ADULT;
+            return ADULT.getDiscountPolicy();
         }
         throw new IllegalStateException("wrong age typed");
     }
