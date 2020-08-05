@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.application;
 
+import static nextstep.subway.maps.map.application.DiscountFareCalculator.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,6 +20,7 @@ import com.google.common.collect.Maps;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.map.domain.DiscountPolicy;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
@@ -26,6 +28,7 @@ import nextstep.subway.maps.map.dto.FarePathResponse;
 import nextstep.subway.maps.map.dto.MapResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.members.member.domain.LoginMember;
 import nextstep.subway.utils.TestObjectUtils;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +43,7 @@ public class FareMapServiceTest {
     @Mock
     private PathService pathService;
     @Mock
-    private FareCalculator fareCalculator;
+    private DiscountFareCalculator fareCalculator;
 
     private Map<Long, Station> stations;
     private List<Line> lines;
@@ -108,21 +111,22 @@ public class FareMapServiceTest {
     @Test
     void 기본_운임을_반환한다() {
         // given
+        LoginMember loginMember = new LoginMember(1L, "javajigi@slipp.net", "pobiconan", 20);
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
 
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(FareCalculator.BASIC_FARE);
+        when(fareCalculator.calculate(any(SubwayPath.class), any(DiscountPolicy.class))).thenReturn(BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(null,1L, 3L, PathType.DISTANCE);
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(loginMember, 1L, 3L, PathType.DISTANCE);
 
         // then
         assertAll(
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.fareValue()).isNotZero()
+            () -> assertThat(farePathResponse.fareValue()).isEqualTo(BASIC_FARE.value())
         );
     }
 
@@ -145,19 +149,21 @@ public class FareMapServiceTest {
     void 최단시간으로_요청하면_거리비례제_기준으로_요금을_책정한다() {
         // given
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(shortestPath,
+            subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(shortestPath)).thenReturn(FareCalculator.BASIC_FARE);
+        when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(null, 교대역.getId(), 양재역.getId(), PathType.DURATION);
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(),
+            PathType.DURATION);
 
         // then
         assertAll(
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.fareValue()).isEqualTo(FareCalculator.BASIC_FARE.value())
+            () -> assertThat(farePathResponse.fareValue()).isEqualTo(BASIC_FARE.value())
         );
     }
 
@@ -168,17 +174,18 @@ public class FareMapServiceTest {
         when(lineService.findLines()).thenReturn(lines);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
-        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(FareCalculator.BASIC_FARE);
+        when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(null, 교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(),
+            PathType.DISTANCE);
 
         // then
         assertAll(
             () -> assertThat(farePathResponse.getStations()).isNotEmpty(),
             () -> assertThat(farePathResponse.getDuration()).isNotZero(),
             () -> assertThat(farePathResponse.getDistance()).isNotZero(),
-            () -> assertThat(farePathResponse.fareValue()).isEqualTo(FareCalculator.BASIC_FARE.value())
+            () -> assertThat(farePathResponse.fareValue()).isEqualTo(BASIC_FARE.value())
         );
     }
 }
