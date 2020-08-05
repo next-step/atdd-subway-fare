@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.domain;
 
 import nextstep.subway.maps.line.domain.Line;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +33,17 @@ public class SubwayPathSection {
     public Long getLastStationId() {
         int lineStationSize = this.lineStationEdges.size();
         return this.lineStationEdges.get(lineStationSize - 1).getLineStation().getStationId();
+    }
+
+    public PathDirection getDirection() {
+        return PathDirection.getDirection(this.lineStationEdges);
+    }
+
+    public LocalTime getRideTime(LocalTime time) {
+        return null;
+    }
+
+    public LocalTime getAlightTime(LocalTime time) {
+        return null;
     }
 }
