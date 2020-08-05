@@ -44,4 +44,31 @@ public class MoneyTest {
             () -> assertThat(Money.NO_VALUE().compareTo(Money.drawNewMoney(1000))).isNegative()
         );
     }
+
+    @DisplayName("돈을 뺄셈할 수 있다.")
+    @Test
+    void 돈을_빼서_계산한다() {
+        // given
+        Money money = Money.drawNewMoney(1000);
+        Money subtractMoney = Money.drawNewMoney(500);
+
+        // when
+        Money afterMoney = money.minus(subtractMoney);
+
+        // then
+        assertThat(afterMoney.value()).isEqualTo(500);
+    }
+
+    @DisplayName("돈의 퍼센테이지에 따라 이에 맞는 돈을 계산할 수 있다.")
+    @Test
+    void 돈을_퍼센테지로_계산한다() {
+        // given
+        Money money = Money.drawNewMoney(1000);
+
+        // when
+        Money afterMoney = money.percentOff(50);
+
+        // then
+        assertThat(afterMoney.value()).isEqualTo(500);
+    }
 }

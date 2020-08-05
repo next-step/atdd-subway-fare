@@ -54,4 +54,13 @@ public class Money implements Comparable<Money> {
     public Money plus(Money money) {
         return Money.drawNewMoney(this.value + money.value());
     }
+
+    public Money minus(Money subtractMoney) {
+        return Money.drawNewMoney(value - subtractMoney.value());
+    }
+
+    public Money percentOff(int percent) {
+        int PERCENT_DIVIDEND = 100;
+        return Money.drawNewMoney(value * percent / PERCENT_DIVIDEND);
+    }
 }
