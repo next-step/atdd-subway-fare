@@ -21,4 +21,16 @@ public class SubwayPathSection {
     public List<LineStationEdge> getLineStationEdges() {
         return lineStationEdges;
     }
+
+    public Long getFirstStationId() {
+        if (this.lineStationEdges.isEmpty()) {
+            throw new RuntimeException("sections are empty");
+        }
+        return this.lineStationEdges.get(0).getLineStation().getPreStationId();
+    }
+
+    public Long getLastStationId() {
+        int lineStationSize = this.lineStationEdges.size();
+        return this.lineStationEdges.get(lineStationSize - 1).getLineStation().getStationId();
+    }
 }

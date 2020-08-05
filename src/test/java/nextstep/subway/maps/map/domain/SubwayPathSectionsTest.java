@@ -14,8 +14,8 @@ class SubwayPathSectionsTest {
     @BeforeEach
     void setUp() {
         SubwayPathTestFixture fixture = new SubwayPathTestFixture();
+        // new LineStationEdge(fixture.lineStation1, fixture.line1)
         subwayPath = new SubwayPath(Lists.newArrayList(
-                new LineStationEdge(fixture.lineStation1, fixture.line1),
                 new LineStationEdge(fixture.lineStation2, fixture.line1),
                 new LineStationEdge(fixture.lineStation4, fixture.line2),
                 new LineStationEdge(fixture.lineStation6, fixture.line3)
@@ -32,7 +32,7 @@ class SubwayPathSectionsTest {
         assertThat(subwayPathSections.countLines()).isEqualTo(3);
     }
 
-    @DisplayName("$DISPLAY_NAME$")
+    @DisplayName("출발역의 ID를 가져오는 테스트")
     @Test
     void getSourceStationId() {
         // given
@@ -45,7 +45,7 @@ class SubwayPathSectionsTest {
         assertThat(sourceStationId).isEqualTo(1L);
     }
 
-    @DisplayName("$DISPLAY_NAME$")
+    @DisplayName("도착역의 ID를 가져오는 테스트")
     @Test
     void getTargetStationId() {
         // given

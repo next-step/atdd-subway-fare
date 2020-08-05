@@ -43,10 +43,27 @@ public class SubwayPathSections {
     }
 
     public Long getSourceStationId() {
-        return 0L;
+        if (this.subwayPathSections.isEmpty()) {
+            throw new RuntimeException("sections are empty");
+        }
+        SubwayPathSection firstSection = getFirstSection();
+        return firstSection.getFirstStationId();
     }
 
     public Long getTargetStationId() {
-        return 0L;
+        if (this.subwayPathSections.isEmpty()) {
+            throw new RuntimeException("sections are empty");
+        }
+        SubwayPathSection lastSection = getLastSection();
+        return lastSection.getLastStationId();
+    }
+
+    private SubwayPathSection getFirstSection() {
+        return this.subwayPathSections.get(0);
+    }
+
+    private SubwayPathSection getLastSection() {
+        int size = this.subwayPathSections.size();
+        return this.subwayPathSections.get(size - 1);
     }
 }
