@@ -53,4 +53,36 @@ class SubwayPathSectionTest {
         // then
         assertThat(departureTime).isEqualTo(expected);
     }
+
+    @DisplayName("승차시간을 계산한다(역방향)")
+    @Test
+    void getReverseRideTimeTest() {
+        // given
+        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
+        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation5, fixture.line3));
+        LocalTime time = LocalTime.of(7, 35);
+        LocalTime expected = LocalTime.of(7, 44);
+
+        // when
+        LocalTime departureTime = subwayPathSection.getRideTime(time);
+
+        // then
+        assertThat(departureTime).isEqualTo(expected);
+    }
+
+    @DisplayName("하차시간을 계산한다(역방향)")
+    @Test
+    void getReverseAlightTimeTest() {
+        // given
+        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
+        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation5, fixture.line3));
+        LocalTime time = LocalTime.of(7, 35);
+        LocalTime expected = LocalTime.of(7, 48);
+
+        // when
+        LocalTime departureTime = subwayPathSection.getAlightTime(time);
+
+        // then
+        assertThat(departureTime).isEqualTo(expected);
+    }
 }
