@@ -56,6 +56,10 @@ public class SubwayPathSection {
 
             for (LineStation lineStation : orderedLineStations) {
                 if (lineStation.getPreStationId() == null) {
+                    if (lineStation.getStationId().equals(firstStationId)) {
+                        break;
+                    }
+
                     continue;
                 }
 

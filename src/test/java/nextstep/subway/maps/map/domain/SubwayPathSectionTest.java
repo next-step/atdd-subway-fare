@@ -29,7 +29,7 @@ class SubwayPathSectionTest {
         subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
         subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation7, fixture.line3));
         LocalTime time = LocalTime.of(7, 35);
-        LocalTime expected = LocalTime.of(7, 44);
+        LocalTime expected = LocalTime.of(7, 40);
 
         // when
         LocalTime departureTime = subwayPathSection.getRideTime(time);
@@ -45,7 +45,7 @@ class SubwayPathSectionTest {
         subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
         subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation7, fixture.line3));
         LocalTime time = LocalTime.of(7, 35);
-        LocalTime expected = LocalTime.of(7, 48);
+        LocalTime expected = LocalTime.of(7, 44);
 
         // when
         LocalTime departureTime = subwayPathSection.getAlightTime(time);
