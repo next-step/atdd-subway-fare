@@ -36,7 +36,11 @@ public class SubwayPathSections {
     }
 
     public LocalTime getAlightTime(LocalTime time) {
-        return null;
+        for (SubwayPathSection subwayPathSection : this.subwayPathSections) {
+            time = subwayPathSection.getAlightTime(time);
+        }
+
+        return time;
     }
 
     private SubwayPathSection getFirstSection() {
