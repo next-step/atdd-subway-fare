@@ -3,6 +3,7 @@ package nextstep.subway.maps.map.domain;
 import nextstep.subway.maps.line.domain.LineStation;
 
 import java.util.List;
+import java.util.Objects;
 
 public enum PathDirection {
     FORWARD, REVERS,
@@ -14,24 +15,24 @@ public enum PathDirection {
         }
 
         LineStation prevStation = lineStationEdges.get(0).getLineStation();
-        LineStation nextstation = lineStationEdges.get(1).getLineStation();
+        LineStation nextStation = lineStationEdges.get(1).getLineStation();
 
-        if (isForwardDirection(prevStation, nextstation)) {
+        if (isForwardDirection(prevStation, nextStation)) {
             return FORWARD;
         }
 
-        if (isReverseDirection(prevStation, nextstation)) {
+        if (isReverseDirection(prevStation, nextStation)) {
             return REVERS;
         }
 
         throw new RuntimeException("invalid line stations");
     }
 
-    private static boolean isForwardDirection(LineStation prevStation, LineStation nextstation) {
-        return nextstation.getPreStationId().equals(prevStation.getStationId());
+    private static boolean isForwardDirection(LineStation prevStation, LineStation nextStation) {
+        return Objects.equals(prevStation.getStationId(), nextStation.getPreStationId());
     }
 
-    private static boolean isReverseDirection(LineStation prevStation, LineStation nextstation) {
-        return prevStation.getPreStationId().equals(nextstation.getStationId());
+    private static boolean isReverseDirection(LineStation prevStation, LineStation nextStation) {
+        return Objects.equals(nextStation.getStationId(), prevStation.getPreStationId());
     }
 }
