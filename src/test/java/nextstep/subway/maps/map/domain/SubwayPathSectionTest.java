@@ -1,33 +1,38 @@
 package nextstep.subway.maps.map.domain;
 
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayPathSectionTest {
 
     private SubwayPathTestFixture fixture;
-    private SubwayPathSection subwayPathSection;
 
     @BeforeEach
     void setUp() {
-
         fixture = new SubwayPathTestFixture();
-        // given
-        // 5:30 첫차에 10분 간격, 역간 소요시간은 전부 2분
-        subwayPathSection = new SubwayPathSection(fixture.line3);
     }
 
     @DisplayName("승차시간을 계산한다(정방향)")
     @Test
     void getRideTimeTest() {
         // given
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation7, fixture.line3));
+        // 5:30 첫차에 10분 간격, 역간 소요시간은 전부 2분
+        List<LineStationEdge> lineStationEdges = Lists.newArrayList(
+                new LineStationEdge(fixture.lineStation6, fixture.line3),
+                new LineStationEdge(fixture.lineStation7, fixture.line3)
+        );
+
+        PathDirection direction = PathDirection.getDirection(lineStationEdges);
+
+        SubwayPathSection subwayPathSection = getSubwayPathSection(lineStationEdges, direction);
+
         LocalTime time = LocalTime.of(7, 35);
         LocalTime expected = LocalTime.of(7, 40);
 
@@ -42,8 +47,16 @@ class SubwayPathSectionTest {
     @Test
     void getAlightTimeTest() {
         // given
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation7, fixture.line3));
+        // 5:30 첫차에 10분 간격, 역간 소요시간은 전부 2분
+        List<LineStationEdge> lineStationEdges = Lists.newArrayList(
+                new LineStationEdge(fixture.lineStation6, fixture.line3),
+                new LineStationEdge(fixture.lineStation7, fixture.line3)
+        );
+
+        PathDirection direction = PathDirection.getDirection(lineStationEdges);
+
+        SubwayPathSection subwayPathSection = getSubwayPathSection(lineStationEdges, direction);
+
         LocalTime time = LocalTime.of(7, 35);
         LocalTime expected = LocalTime.of(7, 44);
 
@@ -58,8 +71,16 @@ class SubwayPathSectionTest {
     @Test
     void getReverseRideTimeTest() {
         // given
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation5, fixture.line3));
+        // 5:30 첫차에 10분 간격, 역간 소요시간은 전부 2분
+        List<LineStationEdge> lineStationEdges = Lists.newArrayList(
+                new LineStationEdge(fixture.lineStation6, fixture.line3),
+                new LineStationEdge(fixture.lineStation5, fixture.line3)
+        );
+
+        PathDirection direction = PathDirection.getDirection(lineStationEdges);
+
+        SubwayPathSection subwayPathSection = getSubwayPathSection(lineStationEdges, direction);
+
         LocalTime time = LocalTime.of(7, 35);
         LocalTime expected = LocalTime.of(7, 44);
 
@@ -74,8 +95,16 @@ class SubwayPathSectionTest {
     @Test
     void getReverseAlightTimeTest() {
         // given
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation6, fixture.line3));
-        subwayPathSection.addLineStationEdge(new LineStationEdge(fixture.lineStation5, fixture.line3));
+        // 5:30 첫차에 10분 간격, 역간 소요시간은 전부 2분
+        List<LineStationEdge> lineStationEdges = Lists.newArrayList(
+                new LineStationEdge(fixture.lineStation6, fixture.line3),
+                new LineStationEdge(fixture.lineStation5, fixture.line3)
+        );
+
+        PathDirection direction = PathDirection.getDirection(lineStationEdges);
+
+        SubwayPathSection subwayPathSection = getSubwayPathSection(lineStationEdges, direction);
+
         LocalTime time = LocalTime.of(7, 35);
         LocalTime expected = LocalTime.of(7, 48);
 
@@ -84,5 +113,9 @@ class SubwayPathSectionTest {
 
         // then
         assertThat(departureTime).isEqualTo(expected);
+    }
+
+    private SubwayPathSection getSubwayPathSection(List<LineStationEdge> lineStationEdges, PathDirection direction) {
+        return direction.createSection(fixture.line3, lineStationEdges);
     }
 }

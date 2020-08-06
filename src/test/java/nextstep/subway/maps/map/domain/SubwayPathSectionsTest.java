@@ -25,16 +25,6 @@ class SubwayPathSectionsTest {
 
     }
 
-    @DisplayName("$DISPLAY_NAME$")
-    @Test
-    void extractPathSections() {
-        // when
-        SubwayPathSections subwayPathSections = SubwayPathSections.from(lineStationEdges);
-
-        // then
-        assertThat(subwayPathSections.countLines()).isEqualTo(3);
-    }
-
     @DisplayName("출발역의 ID를 가져오는 테스트")
     @Test
     void getSourceStationId() {

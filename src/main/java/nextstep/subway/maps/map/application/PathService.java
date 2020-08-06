@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PathService {
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public SubwayPath findPath(List<Line> lines, Long source, Long target, PathType type) {
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
         graph.addVertexWith(lines);
@@ -26,15 +27,17 @@ public class PathService {
 
         return convertSubwayPath(path);
     }
+
     public List<SubwayPath> findAllPath(List<Line> lines, Long source, Long target) {
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
         graph.addVertexWith(lines);
         graph.addEdge(lines);
-        List<GraphPath<Long, LineStationEdge>> paths = new KShortestPaths<Long, LineStationEdge>(graph, 1000).getPaths(source, target);
+        List<GraphPath<Long, LineStationEdge>> paths = new KShortestPaths<>(graph, 1000).getPaths(source, target);
         return paths.stream().map(this::convertSubwayPath).collect(Collectors.toList());
     }
 
+    @SuppressWarnings({"unchecked", "SimplifyStreamApiCallChains", "rawtypes"})
     private SubwayPath convertSubwayPath(GraphPath graphPath) {
-        return new SubwayPath((List<LineStationEdge>) graphPath.getEdgeList().stream().collect(Collectors.toList()));
+        return new SubwayPath((List<LineStationEdge>) graphPath.getEdgeList().stream().collect(Collectors.<LineStationEdge>toList()));
     }
 }
