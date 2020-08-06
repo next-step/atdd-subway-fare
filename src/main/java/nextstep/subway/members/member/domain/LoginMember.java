@@ -68,4 +68,8 @@ public class LoginMember implements UserDetails {
         }
         return 0;
     }
+
+    public boolean isLoggedIn() {
+        return true;
+    }
 }

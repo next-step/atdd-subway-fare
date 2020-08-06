@@ -8,7 +8,10 @@ import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,23 @@ public class PathAcceptanceStep {
                 log().all().
                 extract();
     }
+
+    public static ExtractableResponse<Response> 출발역에서_도착역까지의_가장_빠른_도착_경로_조회_요청(LocalDateTime time, long source, long target) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("source", source);
+        params.put("target", target);
+        params.put("type", "ARRIVAL_TIME");
+        params.put("time", time.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
+        return RestAssured.given().log().all().
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                params(params).
+                when().
+                get("/paths").
+                then().
+                log().all().
+                extract();
+    }
+
 
     public static ExtractableResponse<Response> 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청(String type, TokenResponse tokenResponse, long source, long target) {
         return RestAssured.given().log().all().

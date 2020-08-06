@@ -10,6 +10,10 @@ import nextstep.subway.maps.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.time.LocalDateTime;
 
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
@@ -26,11 +30,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private static final int EXPECTED_FARE = 1450;
 
     /**
-     * 교대역      -      강남역
-     * |                 |
-     * 남부터미널역           |
-     * |                 |
-     * 양재역      -       -|
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
      */
     @BeforeEach
     public void setUp() {
@@ -40,9 +44,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("양재역");
         ExtractableResponse<Response> createdStationResponse4 = 지하철역_등록되어_있음("남부터미널");
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 400);
-        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED", 0);
-        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE", 200);
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 400, 3);
+        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED", 1000, 10);
+        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE", 200, 5);
 
         Long lineId1 = createLineResponse1.as(LineResponse.class).getId();
         Long lineId2 = createLineResponse2.as(LineResponse.class).getId();
@@ -56,7 +60,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(lineId1, stationId1, stationId2, 2, 2);
 
         지하철_노선에_지하철역_등록되어_있음(lineId2, null, stationId2, 0, 0);
-        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId2, stationId3, 2, 1);
+        지하철_노선에_지하철역_등록되어_있음(lineId2, stationId2, stationId3, 2, 1);
 
         지하철_노선에_지하철역_등록되어_있음(lineId3, null, stationId1, 0, 0);
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId1, stationId4, 1, 2);
@@ -87,52 +91,32 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
     }
 
-    @DisplayName("청소년의 경우  운임에서 350원을 공제한 금액의 20% 할인을 받는다.")
     @Test
-    void discountForYouth() {
-        //given
-        double discountAmount = (EXPECTED_FARE - 350) * 0.2;
-        회원_등록되어_있음(EMAIl, PASSWORD, 15);
-        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
-
+    @DisplayName("두 역의 가장 빠른 도착 경로를 조회한다.")
+    void findPathByArrivalTime() {
         //when
-        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_가장_빠른_도착_경로_조회_요청(LocalDateTime.of(2020, 7, 22, 6, 15), 1L, 3L);
         //then
-        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
-        지하철_이용_요금도_함께_응답함(response, (int) (EXPECTED_FARE - discountAmount));
-    }
-
-    @DisplayName("어린이의 경우 운임에서 350원을 공제한 금액의 50% 할인을 받는다.")
-    @Test
-    void discountForChildren() {
-        //given
-        double discountAmount = (EXPECTED_FARE - 350) * 0.5;
-
-        회원_등록되어_있음(EMAIl, PASSWORD, 10);
-        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
-
-        //when
-        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
-        //then
-        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
-        지하철_이용_요금도_함께_응답함(response, (int) (EXPECTED_FARE - discountAmount));
-    }
-
-    @DisplayName("성인의 경우 정상 요금을 받는다.")
-    @Test
-    void normalPriceForAdult() {
-        //given
-        회원_등록되어_있음(EMAIl, PASSWORD, 25);
-        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
-
-        //when
-        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
-        //then
-        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
-        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
+        총_거리와_소요_시간을_함께_응답함(response, 3, 4);
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 4L, 3L));
         지하철_이용_요금도_함께_응답함(response, EXPECTED_FARE);
+    }
+
+
+    @DisplayName("어린이의 경우 운임에서 350원을 공제한 금액의 50% 할인, 청소년의 경우 운임에서 350원을 공제한 금액의 20% 할인을 받고, 성인은 할인을 받지 않는다.")
+    @ParameterizedTest
+    @CsvSource({"10,550", "15,220", "25,0"})
+    void discount(int age, int expectedDiscountAmount) {
+        //given
+        회원_등록되어_있음(EMAIl, PASSWORD, age);
+        TokenResponse tokenResponse = 로그인_되어_있음(EMAIl, PASSWORD);
+
+        //when
+        ExtractableResponse<Response> response = 출발역에서_도착역까지의_최단_혹은_최소시간_거리_경로_조회_요청("DURATION", tokenResponse, 1L, 3L);
+        //then
+        총_거리와_소요_시간을_함께_응답함(response, 4, 3);
+        적절한_경로를_응답(response, Lists.newArrayList(1L, 2L, 3L));
+        지하철_이용_요금도_함께_응답함(response, (EXPECTED_FARE - expectedDiscountAmount));
     }
 
 }

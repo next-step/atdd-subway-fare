@@ -1,7 +1,7 @@
 package nextstep.subway.members.favorite.documentation;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.Documentation;
+import nextstep.documentation.Documentation;
 import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.station.dto.StationResponse;

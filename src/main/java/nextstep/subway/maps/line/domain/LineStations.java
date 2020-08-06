@@ -1,9 +1,10 @@
 package nextstep.subway.maps.line.domain;
 
+import nextstep.subway.maps.map.domain.PathDirection;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
+import java.util.*;
 
 @Embeddable
 public class LineStations {
@@ -66,4 +67,37 @@ public class LineStations {
 
         lineStations.remove(lineStation);
     }
+
+    public Duration calculateDurationFromStartByDirection(Long stationId, PathDirection direction) {
+        if (Objects.isNull(stationId)) {
+            return Duration.ZERO;
+        }
+        List<LineStation> stationsInOrder = getStationsInOrder(direction);
+
+        long totalDuration = 0;
+        for (LineStation lineStation : stationsInOrder) {
+            if (isStartStation(stationId, lineStation, direction)) {
+                break;
+            }
+            totalDuration += lineStation.getDuration();
+        }
+        return Duration.ofMinutes(totalDuration);
+    }
+
+    private boolean isStartStation(Long stationId, LineStation lineStation, PathDirection direction) {
+        Long startStationId = direction == PathDirection.FORWARD ? lineStation.getPreStationId() : lineStation.getStationId();
+        return Objects.equals(startStationId, stationId);
+    }
+
+    private List<LineStation> getStationsInOrder(PathDirection direction) {
+        if (direction == PathDirection.FORWARD) {
+            return getStationsInOrder();
+        }
+        List<LineStation> stationsInOrder = getStationsInOrder();
+        Collections.reverse(stationsInOrder);
+        return stationsInOrder;
+
+
+    }
+
 }

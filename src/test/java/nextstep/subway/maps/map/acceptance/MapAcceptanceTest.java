@@ -34,8 +34,8 @@ public class MapAcceptanceTest extends AcceptanceTest {
         super.setUp();
 
         // given
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 0);
-        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당성", "RED", 0);
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 0, 5);
+        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당성", "RED", 0, 5);
         ExtractableResponse<Response> createdStationResponse1 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("역삼역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("선릉역");

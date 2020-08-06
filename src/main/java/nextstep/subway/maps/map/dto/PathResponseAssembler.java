@@ -11,16 +11,6 @@ import java.util.stream.Collectors;
 
 public class PathResponseAssembler {
 
-    public static PathResponse assemble(SubwayPath subwayPath, Map<Long, Station> stations, int fare) {
-        List<StationResponse> stationResponses = subwayPath.extractStationId().stream()
-                .map(it -> StationResponse.of(stations.get(it)))
-                .collect(Collectors.toList());
-
-        int distance = subwayPath.calculateDistance();
-
-        return new PathResponse(stationResponses, subwayPath.calculateDuration(), distance, fare);
-    }
-
     public static PathResponse assemble(SubwayPath subwayPath, Map<Long, Station> stations, Money fare) {
         List<StationResponse> stationResponses = subwayPath.extractStationId().stream()
                 .map(it -> StationResponse.of(stations.get(it)))

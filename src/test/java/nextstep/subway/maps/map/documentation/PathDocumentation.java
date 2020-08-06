@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.documentation;
 
-import nextstep.subway.Documentation;
+import nextstep.documentation.Documentation;
+import nextstep.documentation.PathTypesSnippet;
 import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
@@ -54,12 +55,13 @@ public class PathDocumentation extends Documentation {
         Map<String, Object> params = new HashMap<>();
         params.put("source", 1L);
         params.put("target", 2L);
-        params.put("type", PathType.DISTANCE);
+        params.put("type", PathType.ARRIVAL_TIME);
+        params.put("time", "202007011700");
         List<StationResponse> stations = Lists.list(
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class)))
+        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class), any()))
                 .thenReturn(new PathResponse(stations, 20, 10, 10));
 
         given().log().all().
@@ -75,7 +77,8 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("출발역 아이디"),
                                 parameterWithName("target").description("도착역 아이디"),
-                                parameterWithName("type").description("최단 시간 / 최단 거리")),
+                                parameterWithName("time").attributes(getDateFormat()).description("경로 출발 시간").optional(),
+                                parameterWithName("type").description("link:#resources-paths-find_path_types[경로 검색 타입,window=\"_blank\"]")),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철 역 정보"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 아이디"),
@@ -83,7 +86,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리"),
                                 fieldWithPath("fare").type(JsonFieldType.NUMBER).description("지하철 요금")
-                        )
+                        ),
+                        new PathTypesSnippet()
                 )).
                 extract();
     }

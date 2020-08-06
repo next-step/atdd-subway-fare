@@ -23,4 +23,9 @@ public class EmptyMember extends LoginMember {
     public boolean checkCredentials(Object credentials) {
         return false;
     }
+
+    @Override
+    public boolean isLoggedIn() {
+        return false;
+    }
 }
