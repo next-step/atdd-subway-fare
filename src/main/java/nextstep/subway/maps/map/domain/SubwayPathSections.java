@@ -3,6 +3,7 @@ package nextstep.subway.maps.map.domain;
 import nextstep.subway.maps.line.domain.Line;
 import org.springframework.data.util.Pair;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +33,10 @@ public class SubwayPathSections {
         }
         SubwayPathSection lastSection = getLastSection();
         return lastSection.getLastStationId();
+    }
+
+    public LocalTime getAlightTime(LocalTime time) {
+        return null;
     }
 
     private SubwayPathSection getFirstSection() {
