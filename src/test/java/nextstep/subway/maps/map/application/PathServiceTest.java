@@ -5,6 +5,7 @@ import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
+import nextstep.subway.maps.map.dto.PathRequest;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +50,8 @@ public class PathServiceTest {
     @Test
     void findPathByDistance() {
         // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.DISTANCE);
+        PathRequest pathRequest = new PathRequest(1L, 3L, PathType.DISTANCE);
+        SubwayPath subwayPath = pathService.findPath(lines, pathRequest);
 
         // then
         assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
@@ -62,7 +64,8 @@ public class PathServiceTest {
     @Test
     void findPathByDuration() {
         // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.DURATION);
+        PathRequest pathRequest = new PathRequest(1L, 3L, PathType.DURATION);
+        SubwayPath subwayPath = pathService.findPath(lines, pathRequest);
 
         // then
         assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
@@ -74,7 +77,8 @@ public class PathServiceTest {
     @Test
     void findAllPath() {
         // when
-        List<SubwayPath> subwayPaths = pathService.findAllPath(lines, 1L, 3L);
+        PathRequest pathRequest = new PathRequest(1L, 3L);
+        List<SubwayPath> subwayPaths = pathService.findAllPath(lines, pathRequest);
 
         // then
         subwayPaths.forEach(subwayPath -> {

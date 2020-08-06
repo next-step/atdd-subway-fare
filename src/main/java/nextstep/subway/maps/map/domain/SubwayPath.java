@@ -3,6 +3,7 @@ package nextstep.subway.maps.map.domain;
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +54,9 @@ public class SubwayPath {
 
                     return extraFare - extraFare2;
                 }).orElseThrow(RuntimeException::new);
+    }
+
+    public LocalTime getAlightTime(LocalTime time) {
+        return this.subwayPathSections.getAlightTime(time);
     }
 }

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -58,7 +57,7 @@ public class PathDocumentation extends Documentation {
         );
 
         PathResponse pathResponse = new PathResponse(stations, 20, 10, 1250);
-        when(mapService.findPath(any(LoginMember.class), anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(mapService.findPath(any(LoginMember.class), any())).thenReturn(pathResponse);
 
         given().log().all()
                 .params(requestParam)

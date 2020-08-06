@@ -10,6 +10,7 @@ import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.MapResponse;
+import nextstep.subway.maps.map.dto.PathRequest;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
@@ -91,12 +92,13 @@ public class MapServiceTest {
     void findPathWithMember() {
         when(fareService.calculateFare(anyList(), any(SubwayPath.class), any(MemberResponse.class), any(PathType.class))).thenReturn(new Fare(0));
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(pathService.findPath(anyList(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(memberService.findMember(anyLong())).thenReturn(new MemberResponse(1L, "dhlee@test.com", 10));
         LoginMember member = new LoginMember(1L, "dhlee@test.com", "test", 10);
 
-        PathResponse pathResponse = mapService.findPath(member, 1L, 3L, PathType.DISTANCE);
+        PathRequest pathRequest = new PathRequest(1L, 3L, PathType.DISTANCE);
+        PathResponse pathResponse = mapService.findPath(member, pathRequest);
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();

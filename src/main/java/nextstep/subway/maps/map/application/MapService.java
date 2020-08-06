@@ -8,9 +8,9 @@ import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
-import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.MapResponse;
+import nextstep.subway.maps.map.dto.PathRequest;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
@@ -53,9 +53,9 @@ public class MapService {
         return new MapResponse(lineResponses);
     }
 
-    public PathResponse findPath(UserDetails userDetails, Long source, Long target, PathType type) {
+    public PathResponse findPath(UserDetails userDetails, PathRequest pathRequest) {
         List<Line> lines = lineService.findLines();
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
+        SubwayPath subwayPath = pathService.findPath(lines, pathRequest);
 
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
 
@@ -64,7 +64,7 @@ public class MapService {
             memberResponse = memberService.findMember(((LoginMember)userDetails).getId());
         }
 
-        Fare fare = fareService.calculateFare(lines, subwayPath, memberResponse, type);
+        Fare fare = fareService.calculateFare(lines, subwayPath, memberResponse, pathRequest.getType());
 
         return PathResponseAssembler.assemble(subwayPath, stations, fare.getValue());
     }
