@@ -35,7 +35,7 @@ public class PathService {
     private SubwayPath findPathByArrivalTime(List<Line> lines, PathRequest pathRequest) {
         List<SubwayPath> allPath = findAllPath(lines, pathRequest);
         SubwayPaths subwayPaths = new SubwayPaths(allPath);
-        return subwayPaths.getEarliestAlightTimePath(pathRequest.getTime());
+        return subwayPaths.getEarliestAlightTimePath(pathRequest.getLocalTime());
     }
 
     public List<SubwayPath> findAllPath(List<Line> lines, PathRequest pathRequest) {

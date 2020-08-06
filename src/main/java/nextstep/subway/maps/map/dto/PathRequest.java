@@ -3,12 +3,15 @@ package nextstep.subway.maps.map.dto;
 import nextstep.subway.maps.map.domain.PathType;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class PathRequest {
+
+    public final static String DATE_FORMAT_PATTERN = "yyyyMMddHHmm";
     private Long source;
     private Long target;
     private PathType type;
-    private LocalTime time;
+    private String time;
 
     public PathRequest() {
 
@@ -24,7 +27,7 @@ public class PathRequest {
         this.type = type;
     }
 
-    public PathRequest(Long source, Long target, PathType type, LocalTime time) {
+    public PathRequest(Long source, Long target, PathType type, String time) {
         this(source, target, type);
         this.time = time;
     }
@@ -53,11 +56,16 @@ public class PathRequest {
         this.type = type;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public LocalTime getLocalTime() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
+        return LocalTime.parse(this.time, dateTimeFormatter);
     }
 }
