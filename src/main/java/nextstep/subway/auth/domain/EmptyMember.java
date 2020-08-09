@@ -1,13 +1,21 @@
 package nextstep.subway.auth.domain;
 
-import nextstep.subway.members.member.domain.LoginMember;
+import nextstep.subway.auth.application.UserDetails;
 
-public class EmptyMember extends LoginMember {
+public class EmptyMember implements UserDetails {
+
+    private Long id;
+    private String email;
+    private String password;
+    private Integer age;
 
     public static final String EMPTY = "EMPTY";
 
     public EmptyMember() {
-        super(null, EMPTY, EMPTY, null);
+        this.id = null;
+        this.email = EMPTY;
+        this.password = EMPTY;
+        this.age = null;
     }
 
     @Override
