@@ -1,5 +1,6 @@
 package nextstep.subway.maps.map.application;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,7 +52,7 @@ public class FareMapService {
         return new MapResponse(lineResponses);
     }
 
-    public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType) {
+    public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType, LocalDateTime time) {
         SubwayPath shortestPath = extractShortestPath(source, target);
         Money fare = extractFare(shortestPath);
         if (isPathTypeDistance(pathType)) {
@@ -61,7 +62,8 @@ public class FareMapService {
         return assemblePathResponse(subwayPath, fare);
     }
 
-    public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
+    public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType,
+        LocalDateTime time) {
         SubwayPath shortestPath = extractShortestPath(source, target);
         Money fare = extractFare(shortestPath, loginMember);
         if (isPathTypeDistance(pathType)) {

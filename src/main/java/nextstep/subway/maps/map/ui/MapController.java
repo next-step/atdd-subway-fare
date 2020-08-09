@@ -30,9 +30,9 @@ public class MapController {
         @RequestParam Long source, @RequestParam Long target, @RequestParam PathType type,
         @DateTimeFormat(pattern = "yyyyMMddHHmm") @RequestParam(required = false, value = "time") LocalDateTime time) {
         if (loginMember instanceof EmptyMember) {
-            return ResponseEntity.ok(mapService.findPathWithFare(source, target, type));
+            return ResponseEntity.ok(mapService.findPathWithFare(source, target, type, time));
         }
-        return ResponseEntity.ok(mapService.findPathWithFare((LoginMember)loginMember, source, target, type));
+        return ResponseEntity.ok(mapService.findPathWithFare((LoginMember)loginMember, source, target, type, time));
     }
 
     @GetMapping("/maps")
