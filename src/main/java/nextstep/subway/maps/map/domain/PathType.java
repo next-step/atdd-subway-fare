@@ -1,13 +1,15 @@
 package nextstep.subway.maps.map.domain;
 
-import nextstep.subway.maps.line.domain.LineStation;
-
 import java.util.function.Function;
+
+import nextstep.subway.maps.line.domain.LineStation;
 
 public enum PathType {
     DISTANCE(lineStation -> lineStation.getDistance()),
 
-    DURATION(lineStation -> lineStation.getDuration());
+    DURATION(lineStation -> lineStation.getDuration()),
+
+    ARRIVAL(lineStation -> lineStation.getDuration());
 
     private Function<LineStation, Integer> expression;
 

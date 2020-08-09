@@ -36,7 +36,7 @@ public class MapControllerTest {
         when(mapService.findPathWithFare(any(), anyLong(), anyLong(), any())).thenReturn(new FarePathResponse());
 
         // when
-        ResponseEntity<FarePathResponse> entity = controller.findPath(loginMember, 1L, 2L, PathType.DISTANCE);
+        ResponseEntity<FarePathResponse> entity = controller.findPath(loginMember, 1L, 2L, PathType.DISTANCE, null);
 
         // then
         verify(mapService).findPathWithFare(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class));
