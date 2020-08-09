@@ -39,13 +39,21 @@ public class LineResponse {
     public static LineResponse of(Line line, List<LineStationResponse> stations) {
         return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getStartTime(), line.getEndTime(),
             line.getIntervalTime(), stations, line.getCreatedDate(), line.getModifiedDate(),
-            line.getExtraFare().value());
+            line.getExtraFare().extractValue());
     }
 
     public static LineResponse of(Line line) {
-        return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getStartTime(), line.getEndTime(),
-            line.getIntervalTime(), Lists.newArrayList(), line.getCreatedDate(), line.getModifiedDate(),
-            line.getExtraFare().value());
+        return new LineResponse(line.getId(),
+            line.getName(),
+            line.getColor(),
+            line.getStartTime(),
+            line.getEndTime(),
+            line.getIntervalTime(),
+            Lists.newArrayList(),
+            line.getCreatedDate(),
+            line.getModifiedDate(),
+            line.getExtraFare().extractValue()
+        );
     }
 
     public Long getId() {

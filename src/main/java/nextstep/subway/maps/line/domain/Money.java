@@ -7,6 +7,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Money implements Comparable<Money> {
 
+    private static int PERCENT_DIVIDEND = 100;
+
     private int value;
 
     protected Money() {
@@ -47,20 +49,19 @@ public class Money implements Comparable<Money> {
         return Integer.compare(this.value, money.value);
     }
 
-    public int value() {
+    public int extractValue() {
         return value;
     }
 
     public Money plus(Money money) {
-        return Money.drawNewMoney(this.value + money.value());
+        return Money.drawNewMoney(this.value + money.extractValue());
     }
 
     public Money minus(Money subtractMoney) {
-        return Money.drawNewMoney(value - subtractMoney.value());
+        return Money.drawNewMoney(value - subtractMoney.extractValue());
     }
 
     public Money percentOff(int percent) {
-        int PERCENT_DIVIDEND = 100;
         return Money.drawNewMoney(value * percent / PERCENT_DIVIDEND);
     }
 }

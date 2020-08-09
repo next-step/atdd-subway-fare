@@ -26,7 +26,7 @@ public class FarePathResponse {
         this.stations = stations;
         this.duration = duration;
         this.distance = distance;
-        this.fare = fare.value();
+        this.fare = fare.extractValue();
     }
 
     public List<StationResponse> getStations() {

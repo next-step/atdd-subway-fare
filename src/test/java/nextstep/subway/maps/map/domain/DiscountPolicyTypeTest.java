@@ -22,7 +22,7 @@ public class DiscountPolicyTypeTest {
         assertThat(discountPolicyType).isEqualTo(expectedType.getDiscountPolicy());
     }
 
-    @CsvSource({"-1, 0, 5"})
+    @CsvSource({"-1", "0", "5"})
     @ParameterizedTest
     void 잘못된_나이가_계산되면_오류를_반환한다(int age) {
         assertThatThrownBy(

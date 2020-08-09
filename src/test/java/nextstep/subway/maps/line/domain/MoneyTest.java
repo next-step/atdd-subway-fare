@@ -56,7 +56,7 @@ public class MoneyTest {
         Money afterMoney = money.minus(subtractMoney);
 
         // then
-        assertThat(afterMoney.value()).isEqualTo(500);
+        assertThat(afterMoney.extractValue()).isEqualTo(500);
     }
 
     @DisplayName("돈의 퍼센테이지에 따라 이에 맞는 돈을 계산할 수 있다.")
@@ -69,7 +69,7 @@ public class MoneyTest {
         Money afterMoney = money.percentOff(50);
 
         // then
-        assertThat(afterMoney.value()).isEqualTo(500);
+        assertThat(afterMoney.extractValue()).isEqualTo(500);
     }
 
     @DisplayName("돈을 주어진 퍼센트만큼 계산하여 반환한다.")
