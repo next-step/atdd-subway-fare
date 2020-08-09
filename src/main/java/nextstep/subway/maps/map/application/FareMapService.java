@@ -52,25 +52,43 @@ public class FareMapService {
     }
 
     public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType) {
-        List<Line> lines = lineService.findLines();
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        Money fare = fareCalculator.calculate(shortestPath);
-        if (pathType == PathType.DISTANCE) {
+        SubwayPath shortestPath = extractShortestPath(source, target);
+        Money fare = extractFare(shortestPath);
+        if (isPathTypeDistance(pathType)) {
             return assemblePathResponse(shortestPath, fare);
         }
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
+        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType);
         return assemblePathResponse(subwayPath, fare);
     }
 
     public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
-        List<Line> lines = lineService.findLines();
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        Money fare = fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(loginMember.getAge()));
-        if (pathType == PathType.DISTANCE) {
+        SubwayPath shortestPath = extractShortestPath(source, target);
+        Money fare = extractFare(shortestPath, loginMember);
+        if (isPathTypeDistance(pathType)) {
             return assemblePathResponse(shortestPath, fare);
         }
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
+        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType);
         return assemblePathResponse(subwayPath, fare);
+    }
+
+    private SubwayPath extractShortestPath(Long source, Long target) {
+        return pathService.findPath(lineService.findLines(), source, target, PathType.DISTANCE);
+    }
+
+    private Money extractFare(SubwayPath shortestPath, LoginMember loginMember) {
+        return fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(loginMember.getAge()));
+    }
+
+    private Money extractFare(SubwayPath shortestPath) {
+        return fareCalculator.calculate(shortestPath);
+    }
+
+    private SubwayPath extractFastDurationPath(Long source, Long target, PathType pathType) {
+        return pathService.findPath(lineService.findLines(), source, target, pathType);
+    }
+
+    private boolean isPathTypeDistance(PathType pathType) {
+        return pathType == PathType.DISTANCE;
     }
 
     private Map<Long, Station> extractStationsWithIdsOfAllLines(List<Line> lines) {
