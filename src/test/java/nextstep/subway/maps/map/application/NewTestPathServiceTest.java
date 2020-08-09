@@ -19,7 +19,7 @@ import nextstep.subway.utils.TestObjectUtils;
 
 public class NewTestPathServiceTest {
     private List<Line> lines;
-    private PathService pathService;
+    private NewTestPathService pathService;
 
     @BeforeEach
     void setUp() {
@@ -50,7 +50,7 @@ public class NewTestPathServiceTest {
         서울_지하철_3호선.addLineStation(서울_지하철_3호선_양재역);
 
         lines = Lists.newArrayList(서울_지하철_2호선, 신분당선, 서울_지하철_3호선);
-        pathService = new PathService();
+        pathService = new NewTestPathService();
     }
 
     @Test
