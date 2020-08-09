@@ -2,6 +2,9 @@ package nextstep.subway.maps.map.acceptance.step;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,24 @@ public class PathAcceptanceStep {
             accept(MediaType.APPLICATION_JSON_VALUE).
             when().
             get("/paths?source={sourceId}&target={targetId}&type={type}", sourceStation, targetStation, type).
+            then().
+            log().all().
+            extract();
+    }
+
+    public static ExtractableResponse<Response> 출발역에서_도착역까지의_가장_빠른_도착_경로_조회_요청(LocalDateTime time,
+        Long sourceStation, Long targetStation) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("source", sourceStation);
+        params.put("target", targetStation);
+        params.put("type", "ARRIVAL");
+        params.put("time", time.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
+
+        return RestAssured.given().log().all().
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            params(params).
+            when().
+            get("/paths").
             then().
             log().all().
             extract();

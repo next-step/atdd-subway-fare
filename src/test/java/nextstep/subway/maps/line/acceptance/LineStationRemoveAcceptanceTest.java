@@ -1,20 +1,20 @@
 package nextstep.subway.maps.line.acceptance;
 
+import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.*;
+import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.*;
+import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.*;
+
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-
-import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
-import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_조회_요청;
-import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.*;
-import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
 
 @DisplayName("지하철 노선에 역 제외 관련 기능")
 public class LineStationRemoveAcceptanceTest extends AcceptanceTest {
@@ -28,7 +28,7 @@ public class LineStationRemoveAcceptanceTest extends AcceptanceTest {
         super.setUp();
 
         // given
-        ExtractableResponse<Response> createLineResponse = 지하철_노선_등록되어_있음("2호선", "GREEN", 400);
+        ExtractableResponse<Response> createLineResponse = 지하철_노선_등록되어_있음("2호선", "GREEN", 400, 5);
         ExtractableResponse<Response> createdStationResponse1 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("역삼역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("선릉역");

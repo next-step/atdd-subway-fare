@@ -1,13 +1,6 @@
 package nextstep.subway.maps.line.acceptance.step;
 
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import nextstep.subway.maps.line.dto.LineResponse;
-
-import org.apache.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -16,24 +9,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import nextstep.subway.maps.line.dto.LineResponse;
 
 public class LineAcceptanceStep {
-    public static ExtractableResponse<Response> 지하철_노선_등록되어_있음(String name, String color, int extraFare) {
-        return 지하철_노선_생성_요청(name, color, extraFare);
+    public static ExtractableResponse<Response> 지하철_노선_등록되어_있음(String name, String color, int extraFare, int interval) {
+        return 지하철_노선_생성_요청(name, color, extraFare, interval);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int extraFare) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int extraFare, int interval) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("startTime", LocalTime.of(5, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("endTime", LocalTime.of(23, 30).format(DateTimeFormatter.ISO_TIME));
-        params.put("intervalTime", "5");
+        params.put("intervalTime", String.valueOf(interval));
         params.put("extraFare", String.valueOf(extraFare));
 
         return RestAssured.given().log().all().
-                contentType(MediaType.APPLICATION_JSON_VALUE).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
                 body(params).
                 when().
                 post("/lines").
