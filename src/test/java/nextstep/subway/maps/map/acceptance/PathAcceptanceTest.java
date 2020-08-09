@@ -122,11 +122,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(pathResponse.getDuration()).isEqualTo(3);
         assertThat(pathResponse.getFare()).isEqualTo(1250);
 
-        List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
-                .collect(Collectors.toList());
-
-        assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
+        assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }
 
 }
