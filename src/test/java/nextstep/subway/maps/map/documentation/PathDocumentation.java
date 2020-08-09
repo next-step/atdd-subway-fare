@@ -75,7 +75,9 @@ public class PathDocumentation extends Documentation {
                 requestParameters(
                     parameterWithName("source").description("출발역 아이디"),
                     parameterWithName("target").description("도착역 아이디"),
-                    parameterWithName("type").description("최단 시간 / 최단 거리")),
+                    parameterWithName("type").description("최단 시간 / 최단 거리"),
+                    parameterWithName("time").description("경로 출발 시간")
+                ),
                 responseFields(
                     fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철 역 정보"),
                     fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 아이디"),

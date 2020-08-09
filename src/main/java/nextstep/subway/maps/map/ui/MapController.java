@@ -1,5 +1,8 @@
 package nextstep.subway.maps.map.ui;
 
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +27,8 @@ public class MapController {
 
     @GetMapping("/paths")
     public ResponseEntity<FarePathResponse> findPath(@AuthenticationPrincipal UserDetails loginMember,
-        @RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
+        @RequestParam Long source, @RequestParam Long target, @RequestParam PathType type,
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMddHHmm") LocalDateTime time) {
         if (loginMember instanceof EmptyMember) {
             return ResponseEntity.ok(mapService.findPathWithFare(source, target, type));
         }
