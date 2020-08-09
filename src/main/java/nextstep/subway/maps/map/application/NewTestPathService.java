@@ -1,6 +1,5 @@
 package nextstep.subway.maps.map.application;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.jgrapht.GraphPath;
@@ -15,24 +14,16 @@ import nextstep.subway.maps.map.domain.SubwayGraph;
 import nextstep.subway.maps.map.domain.SubwayPath;
 
 @Service
-public class PathService {
-    public SubwayPath findPath(List<Line> lines, Long source, Long target, PathType type) {
+public class NewTestPathService {
+
+    public SubwayPath findPathWithFare(List<Line> lines, Long source, Long target, PathType type) {
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
         graph.addVertexWith(lines);
         graph.addEdge(lines, type);
 
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Long, LineStationEdge> dijkstraShortestPath = new DijkstraShortestPath(graph);
-        GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+        GraphPath<Long, LineStationEdge> graphPath = dijkstraShortestPath.getPath(source, target);
 
-        return convertSubwayPath(path);
-    }
-
-    private SubwayPath convertSubwayPath(GraphPath<Long, LineStationEdge> graphPath) {
         return new SubwayPath(Lists.newArrayList(graphPath.getEdgeList()));
-    }
-
-    public SubwayPath findPathByArrivalTime(List<Line> lines, long l, long l1, LocalDateTime departTime) {
-        return null;
     }
 }
