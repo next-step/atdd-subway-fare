@@ -13,6 +13,7 @@ import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
+import nextstep.subway.members.member.domain.LoginMember;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -41,29 +42,38 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return authentication.getPrincipal();
     }
 
+    public static Object toObject(Class clazz, String value) {
+        if (Boolean.class == clazz)
+            return Boolean.parseBoolean(value);
+        if (Byte.class == clazz)
+            return Byte.parseByte(value);
+        if (Short.class == clazz)
+            return Short.parseShort(value);
+        if (Integer.class == clazz)
+            return Integer.parseInt(value);
+        if (Long.class == clazz)
+            return Long.parseLong(value);
+        if (Float.class == clazz)
+            return Float.parseFloat(value);
+        if (Double.class == clazz)
+            return Double.parseDouble(value);
+        if (String.class == clazz)
+            return value;
+        return value;
+    }
+
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
         try {
-            Map<String, String> principal = (Map) authentication.getPrincipal();
+            Map<String, String> principal = (Map)authentication.getPrincipal();
 
-            Object[] params = Arrays.stream(parameter.getParameterType().getDeclaredFields())
-                    .map(it -> toObject(it.getType(), principal.get(it.getName())))
-                    .toArray();
+            Object[] params = Arrays.stream(LoginMember.class.getDeclaredFields())
+                .map(it -> toObject(it.getType(), principal.get(it.getName())))
+                .toArray();
 
-            return parameter.getParameterType().getConstructors()[0].newInstance(params);
+            return LoginMember.class.getConstructors()[0].newInstance(params);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static Object toObject(Class clazz, String value) {
-        if (Boolean.class == clazz) return Boolean.parseBoolean(value);
-        if (Byte.class == clazz) return Byte.parseByte(value);
-        if (Short.class == clazz) return Short.parseShort(value);
-        if (Integer.class == clazz) return Integer.parseInt(value);
-        if (Long.class == clazz) return Long.parseLong(value);
-        if (Float.class == clazz) return Float.parseFloat(value);
-        if (Double.class == clazz) return Double.parseDouble(value);
-        return value;
     }
 }
