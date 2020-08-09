@@ -6,6 +6,8 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.members.member.dto.MemberResponse;
+
+import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -56,7 +58,7 @@ public class MemberAcceptanceStep {
     }
 
     public static ExtractableResponse<Response> 회원_정보_조회_요청(ExtractableResponse<Response> response) {
-        String uri = response.header("Location");
+        String uri = response.header(HttpHeaders.LOCATION);
 
         return RestAssured.given().log().all().
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -68,7 +70,7 @@ public class MemberAcceptanceStep {
     }
 
     public static ExtractableResponse<Response> 회원_정보_수정_요청(ExtractableResponse<Response> response, String email, String password, Integer age) {
-        String uri = response.header("Location");
+        String uri = response.header(HttpHeaders.LOCATION);
 
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
@@ -86,7 +88,7 @@ public class MemberAcceptanceStep {
     }
 
     public static ExtractableResponse<Response> 회원_삭제_요청(ExtractableResponse<Response> response) {
-        String uri = response.header("Location");
+        String uri = response.header(HttpHeaders.LOCATION);
         return RestAssured.given().log().all().
                 when().
                 delete(uri).

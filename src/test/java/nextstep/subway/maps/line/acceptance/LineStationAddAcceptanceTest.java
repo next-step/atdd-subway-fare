@@ -29,7 +29,7 @@ public class LineStationAddAcceptanceTest extends AcceptanceTest {
         super.setUp();
 
         // given
-        ExtractableResponse<Response> createLineResponse = 지하철_노선_등록되어_있음("2호선", "GREEN");
+        ExtractableResponse<Response> createLineResponse = 지하철_노선_등록되어_있음("2호선", "GREEN", 400);
         ExtractableResponse<Response> createdStationResponse1 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("역삼역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("선릉역");

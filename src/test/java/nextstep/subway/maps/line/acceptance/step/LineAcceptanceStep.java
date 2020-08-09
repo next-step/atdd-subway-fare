@@ -4,6 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.maps.line.dto.LineResponse;
+
+import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -17,17 +19,18 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LineAcceptanceStep {
-    public static ExtractableResponse<Response> 지하철_노선_등록되어_있음(String name, String color) {
-        return 지하철_노선_생성_요청(name, color);
+    public static ExtractableResponse<Response> 지하철_노선_등록되어_있음(String name, String color, int extraFare) {
+        return 지하철_노선_생성_요청(name, color, extraFare);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int extraFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        params.put("startTime", LocalTime.of(05, 30).format(DateTimeFormatter.ISO_TIME));
+        params.put("startTime", LocalTime.of(5, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("endTime", LocalTime.of(23, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("intervalTime", "5");
+        params.put("extraFare", String.valueOf(extraFare));
 
         return RestAssured.given().log().all().
                 contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -71,8 +74,9 @@ public class LineAcceptanceStep {
                 extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_수정_요청(ExtractableResponse<Response> response, String name, String color) {
-        String uri = response.header("Location");
+    public static ExtractableResponse<Response> 지하철_노선_수정_요청(
+        ExtractableResponse<Response> response, String name, String color, int extraFare) {
+        String uri = response.header(HttpHeaders.LOCATION);
 
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -80,6 +84,7 @@ public class LineAcceptanceStep {
         params.put("startTime", LocalTime.of(05, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("endTime", LocalTime.of(23, 30).format(DateTimeFormatter.ISO_TIME));
         params.put("intervalTime", "5");
+        params.put("extraFare", String.valueOf(extraFare));
 
         return RestAssured.given().log().all().
                 contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -92,7 +97,7 @@ public class LineAcceptanceStep {
     }
 
     public static ExtractableResponse<Response> 지하철_노선_제거_요청(ExtractableResponse<Response> response) {
-        String uri = response.header("Location");
+        String uri = response.header(HttpHeaders.LOCATION);
 
         return RestAssured.given().log().all().
                 when().
@@ -122,7 +127,7 @@ public class LineAcceptanceStep {
 
     public static void 지하철_노선_목록_포함됨(ExtractableResponse<Response> response, List<ExtractableResponse<Response>> createdResponses) {
         List<Long> expectedLineIds = createdResponses.stream()
-                .map(it -> Long.parseLong(it.header("Location").split("/")[2]))
+                .map(it -> Long.parseLong(it.header(HttpHeaders.LOCATION).split("/")[2]))
                 .collect(Collectors.toList());
 
         List<Long> resultLineIds = response.jsonPath().getList(".", LineResponse.class).stream()

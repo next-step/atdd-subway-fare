@@ -1,11 +1,17 @@
 package nextstep.subway.maps.map.documentation;
 
-import nextstep.subway.Documentation;
-import nextstep.subway.maps.map.application.FareMapService;
-import nextstep.subway.maps.map.domain.PathType;
-import nextstep.subway.maps.map.dto.FarePathResponse;
-import nextstep.subway.maps.map.ui.MapController;
-import nextstep.subway.maps.station.dto.StationResponse;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,17 +23,14 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import nextstep.subway.Documentation;
+import nextstep.subway.auth.application.UserDetailsService;
+import nextstep.subway.maps.map.application.FareMapService;
+import nextstep.subway.maps.map.domain.PathType;
+import nextstep.subway.maps.map.dto.FarePathResponse;
+import nextstep.subway.maps.map.ui.MapController;
+import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 
 @WebMvcTest(controllers = {MapController.class})
 public class PathDocumentation extends Documentation {
@@ -37,6 +40,9 @@ public class PathDocumentation extends Documentation {
 
     @MockBean
     private FareMapService mapService;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     @BeforeEach
     public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
@@ -53,7 +59,7 @@ public class PathDocumentation extends Documentation {
             new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
             new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPathWithFare(1L, 2L, PathType.DISTANCE))
+        when(mapService.findPathWithFare(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class)))
             .thenReturn(new FarePathResponse(stations, 20, 10, 10));
 
         given().log().all().

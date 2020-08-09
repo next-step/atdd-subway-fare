@@ -1,12 +1,18 @@
 package nextstep.subway.members.favorite.documentation;
 
-import com.google.common.collect.Lists;
-import nextstep.subway.Documentation;
-import nextstep.subway.auth.dto.TokenResponse;
-import nextstep.subway.maps.station.dto.StationResponse;
-import nextstep.subway.members.favorite.application.FavoriteService;
-import nextstep.subway.members.favorite.dto.FavoriteResponse;
-import nextstep.subway.members.favorite.ui.FavoriteController;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +23,14 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import com.google.common.collect.Lists;
+import nextstep.subway.Documentation;
+import nextstep.subway.auth.application.UserDetailsService;
+import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.favorite.application.FavoriteService;
+import nextstep.subway.members.favorite.dto.FavoriteResponse;
+import nextstep.subway.members.favorite.ui.FavoriteController;
 
 @WebMvcTest(controllers = {FavoriteController.class})
 public class FavoriteDocumentation extends Documentation {
@@ -38,6 +38,8 @@ public class FavoriteDocumentation extends Documentation {
     private FavoriteController favoriteController;
     @MockBean
     private FavoriteService favoriteService;
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     protected TokenResponse tokenResponse;
 

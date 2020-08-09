@@ -1,11 +1,16 @@
 package nextstep.subway.maps.map.domain;
 
+import static org.assertj.core.api.Assertions.*;
+
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,34 +27,27 @@ class SubwayPathTest {
 
     @BeforeEach
     void setUp() {
-        stations = new HashMap<>();
-        stations.put(1L, TestObjectUtils.createStation(1L, "교대역"));
-        stations.put(2L, TestObjectUtils.createStation(2L, "강남역"));
-        stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
-        stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
-
-        Line line1 = TestObjectUtils.createLine(1L, "2호선", "GREEN");
-        line1.addLineStation(new LineStation(1L, null, 0, 0));
-        lineStation2 = new LineStation(2L, 1L, 2, 2);
-        line1.addLineStation(new LineStation(2L, 1L, 2, 2));
-
-        Line line2 = TestObjectUtils.createLine(2L, "신분당선", "RED");
-        line2.addLineStation(new LineStation(2L, null, 0, 0));
-        line2.addLineStation(new LineStation(3L, 2L, 2, 1));
-
-        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
-        line3.addLineStation(new LineStation(1L, null, 0, 0));
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 1000);
+        서울_지하철_3호선.addLineStation(new LineStation(1L, null, 0, 0));
         lineStation6 = new LineStation(4L, 1L, 1, 2);
         lineStation7 = new LineStation(3L, 4L, 2, 2);
-        line3.addLineStation(lineStation6);
-        line3.addLineStation(lineStation7);
-
-        lines = Lists.newArrayList(line1, line2, line3);
+        서울_지하철_3호선.addLineStation(lineStation6);
+        서울_지하철_3호선.addLineStation(lineStation7);
 
         List<LineStationEdge> lineStations = Lists.newArrayList(
-                new LineStationEdge(lineStation6, line3.getId()),
-                new LineStationEdge(lineStation7, line3.getId())
+            new LineStationEdge(lineStation6, 서울_지하철_3호선),
+            new LineStationEdge(lineStation7, 서울_지하철_3호선)
         );
         subwayPath = new SubwayPath(lineStations);
+    }
+
+    @DisplayName("경로를 지나가는 노선 중에서 최대 노선별 요금을 반환한다.")
+    @Test
+    void 최대_노선별_요금을_반환한다() {
+        // when
+        Money money = subwayPath.calculateMaxLineExtraFare();
+
+        // then
+        assertThat(money).isEqualTo(Money.drawNewMoney(1000));
     }
 }

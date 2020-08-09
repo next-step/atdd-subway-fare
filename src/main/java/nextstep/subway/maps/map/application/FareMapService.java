@@ -5,12 +5,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.line.dto.LineStationResponse;
+import nextstep.subway.maps.map.domain.DiscountPolicyType;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.map.dto.FarePathResponse;
@@ -19,17 +22,19 @@ import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 
 @Service
+@Transactional(readOnly = true)
 public class FareMapService {
 
     private final LineService lineService;
     private final StationService stationService;
     private final PathService pathService;
-    private final FareCalculator fareCalculator;
+    private final DiscountFareCalculator fareCalculator;
 
     public FareMapService(LineService lineService, StationService stationService, PathService pathService,
-        FareCalculator fareCalculator) {
+        DiscountFareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.pathService = pathService;
@@ -47,14 +52,43 @@ public class FareMapService {
     }
 
     public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType) {
-        List<Line> lines = lineService.findLines();
-        SubwayPath subwayPath = pathService.findPath(lines, source, target, pathType);
-        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
-        if (pathType != PathType.DISTANCE) {
-            return findDurationPathWithFare(lines, source, target, subwayPath, stations);
+        SubwayPath shortestPath = extractShortestPath(source, target);
+        Money fare = extractFare(shortestPath);
+        if (isPathTypeDistance(pathType)) {
+            return assemblePathResponse(shortestPath, fare);
         }
-        return PathResponseAssembler.assemble(subwayPath, stations,
-            fareCalculator.calculate(subwayPath.calculateDistance()));
+        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType);
+        return assemblePathResponse(subwayPath, fare);
+    }
+
+    public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType) {
+        SubwayPath shortestPath = extractShortestPath(source, target);
+        Money fare = extractFare(shortestPath, loginMember);
+        if (isPathTypeDistance(pathType)) {
+            return assemblePathResponse(shortestPath, fare);
+        }
+        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType);
+        return assemblePathResponse(subwayPath, fare);
+    }
+
+    private SubwayPath extractShortestPath(Long source, Long target) {
+        return pathService.findPath(lineService.findLines(), source, target, PathType.DISTANCE);
+    }
+
+    private Money extractFare(SubwayPath shortestPath, LoginMember loginMember) {
+        return fareCalculator.calculate(shortestPath, DiscountPolicyType.ofAge(loginMember.getAge()));
+    }
+
+    private Money extractFare(SubwayPath shortestPath) {
+        return fareCalculator.calculate(shortestPath);
+    }
+
+    private SubwayPath extractFastDurationPath(Long source, Long target, PathType pathType) {
+        return pathService.findPath(lineService.findLines(), source, target, pathType);
+    }
+
+    private boolean isPathTypeDistance(PathType pathType) {
+        return pathType == PathType.DISTANCE;
     }
 
     private Map<Long, Station> extractStationsWithIdsOfAllLines(List<Line> lines) {
@@ -73,11 +107,8 @@ public class FareMapService {
             )).collect(Collectors.toList());
     }
 
-    private FarePathResponse findDurationPathWithFare(List<Line> lines, Long source, Long target, SubwayPath subwayPath,
-        Map<Long, Station> stations) {
-        SubwayPath shortestPath = pathService.findPath(lines, source, target, PathType.DISTANCE);
-        return PathResponseAssembler.assemble(subwayPath, stations,
-            fareCalculator.calculate(shortestPath.calculateDistance())
-        );
+    private FarePathResponse assemblePathResponse(SubwayPath subwayPath, Money fare) {
+        Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
+        return PathResponseAssembler.assemble(subwayPath, stations, fare);
     }
 }

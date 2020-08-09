@@ -13,8 +13,8 @@ public class TestObjectUtils {
         return station;
     }
 
-    public static Line createLine(Long id, String name, String color) {
-        Line line1 = new Line(name, color, LocalTime.of(05, 30), LocalTime.of(23, 30), 10);
+    public static Line createLine(Long id, String name, String color, int overFare) {
+        Line line1 = new Line(name, color, LocalTime.of(5, 30), LocalTime.of(23, 30), 10, overFare);
         ReflectionTestUtils.setField(line1, "id", id);
         return line1;
     }

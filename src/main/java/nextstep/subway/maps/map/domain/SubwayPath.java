@@ -1,6 +1,8 @@
 package nextstep.subway.maps.map.domain;
 
 import com.google.common.collect.Lists;
+import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.Money;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,5 +33,13 @@ public class SubwayPath {
 
     public int calculateDistance() {
         return lineStationEdges.stream().mapToInt(it -> it.getLineStation().getDistance()).sum();
+    }
+
+    public Money calculateMaxLineExtraFare() {
+        return lineStationEdges.stream()
+            .map(LineStationEdge::getLine)
+            .map(Line::getExtraFare)
+            .max(Money::compareTo)
+            .orElse(Money.NO_VALUE());
     }
 }

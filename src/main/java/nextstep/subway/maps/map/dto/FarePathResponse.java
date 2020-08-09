@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.dto;
 
 import java.util.List;
 
+import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.station.dto.StationResponse;
 
 public class FarePathResponse {
@@ -19,6 +20,13 @@ public class FarePathResponse {
         this.duration = duration;
         this.distance = distance;
         this.fare = fare;
+    }
+
+    public FarePathResponse(List<StationResponse> stations, int duration, int distance, Money fare) {
+        this.stations = stations;
+        this.duration = duration;
+        this.distance = distance;
+        this.fare = fare.extractValue();
     }
 
     public List<StationResponse> getStations() {
