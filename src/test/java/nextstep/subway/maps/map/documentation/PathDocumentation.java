@@ -54,12 +54,13 @@ public class PathDocumentation extends Documentation {
         Map<String, Object> params = new HashMap<>();
         params.put("source", 1L);
         params.put("target", 2L);
-        params.put("type", PathType.DISTANCE);
+        params.put("type", PathType.ARRIVAL);
+        params.put("time", "202008211400");
         List<StationResponse> stations = Lists.list(
             new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
             new StationResponse(2L, "교대역", LocalDateTime.now(), LocalDateTime.now())
         );
-        when(mapService.findPathWithFare(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class)))
+        when(mapService.findPathWithFare(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class), any()))
             .thenReturn(new FarePathResponse(stations, 20, 10, 10));
 
         given().log().all().

@@ -1,5 +1,14 @@
 package nextstep.subway.maps.map.application;
 
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -7,14 +16,6 @@ import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathServiceTest {
     private List<Line> lines;
@@ -69,5 +70,15 @@ public class PathServiceTest {
         assertThat(subwayPath.extractStationId().get(0)).isEqualTo(1L);
         assertThat(subwayPath.extractStationId().get(1)).isEqualTo(2L);
         assertThat(subwayPath.extractStationId().get(2)).isEqualTo(3L);
+    }
+
+    @Test
+    void findPathOfFastestArrivalTime() {
+        // when
+        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.ARRIVAL);
+
+        // then
+        assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
+        assertThat(subwayPath.extractStationId()).containsExactly(1L, 4L, 3L);
     }
 }
