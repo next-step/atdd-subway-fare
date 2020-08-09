@@ -106,7 +106,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
     }
 
-    @DisplayName("두 역의 최소 시간 경로와 함께 조회한다.")
+    @DisplayName("두 역의 최소 시간 경로와 요금을 함께 조회한다.")
     @Test
     void findPathByDurationForFare() {
         ExtractableResponse<Response> response = RestAssured.given().log().all().
