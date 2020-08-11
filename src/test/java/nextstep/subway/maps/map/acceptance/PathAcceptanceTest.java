@@ -39,9 +39,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("양재역");
         ExtractableResponse<Response> createdStationResponse4 = 지하철역_등록되어_있음("남부터미널");
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN");
-        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED");
-        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE");
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 0);
+        ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED", 500);
+        ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE", 900);
 
         Long lineId1 = createLineResponse1.as(LineResponse.class).getId();
         Long lineId2 = createLineResponse2.as(LineResponse.class).getId();
@@ -139,7 +139,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(4);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo(1250);
+        assertThat(pathResponse.getFare()).isEqualTo(2250);
 
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }
