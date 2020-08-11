@@ -68,8 +68,8 @@ public class MapServiceTest {
         lines = Lists.newArrayList(line1, line2, line3);
 
         List<LineStationEdge> lineStations = Lists.newArrayList(
-                new LineStationEdge(lineStation6, line3.getId()),
-                new LineStationEdge(lineStation7, line3.getId())
+                new LineStationEdge(lineStation6, line3),
+                new LineStationEdge(lineStation7, line3)
         );
         subwayPath = new SubwayPath(lineStations);
 
