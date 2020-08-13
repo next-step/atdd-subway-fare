@@ -4,10 +4,10 @@ public class FareCalculator{
 
     public static final int BASIC_FARE = 1250;
 
-    public int calculate(int distance) {
+    public int calculate(int distance, int extraFare) {
         int overDistance = distance - 10;
         if (overDistance > 0) {
-            return BASIC_FARE + calculateOverFare(overDistance);
+            return BASIC_FARE + calculateOverFare(overDistance) + extraFare;
         }
         return BASIC_FARE;
     }

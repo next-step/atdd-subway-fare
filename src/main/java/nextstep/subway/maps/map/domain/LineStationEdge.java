@@ -17,8 +17,8 @@ public class LineStationEdge extends DefaultWeightedEdge {
         return lineStation;
     }
 
-    public Long getLineId() {
-        return line.getId();
+    public Line getLine() {
+        return line;
     }
 
     @Override

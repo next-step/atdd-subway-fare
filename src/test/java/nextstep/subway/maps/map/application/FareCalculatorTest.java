@@ -14,25 +14,26 @@ class FareCalculatorTest {
     void calculate() {
         FareCalculator fareCalculator = new FareCalculator();
         int distance = 8;
-        int fare = fareCalculator.calculate(distance);
+        int extraFare = 0;
+        int fare = fareCalculator.calculate(distance, extraFare);
         assertThat(fare).isEqualTo(1250);
     }
 
     @DisplayName("10Km 초과 ~ 50Km까지의 요금을 계산한다.")
     @ParameterizedTest
-    @CsvSource({"15, 1350", "50, 2050"})
-    void calculateFareUnderFiftyKM(int distance, int result) {
+    @CsvSource({"15, 1350, 0", "50, 2050, 0"})
+    void calculateFareUnderFiftyKM(int distance, int result, int extraFare) {
         FareCalculator fareCalculator = new FareCalculator();
-        int fare = fareCalculator.calculate(distance);
+        int fare = fareCalculator.calculate(distance, extraFare);
         assertThat(fare).isEqualTo(result);
     }
 
     @DisplayName("50Km 이상 요금을 계산한다.")
     @ParameterizedTest
-    @CsvSource({"51, 2150"})
-    void calculateFareOverFiftyKM(int distance, int result) {
+    @CsvSource({"51, 2150, 0"})
+    void calculateFareOverFiftyKM(int distance, int result, int extraFare) {
         FareCalculator fareCalculator = new FareCalculator();
-        int fare = fareCalculator.calculate(distance);
+        int fare = fareCalculator.calculate(distance, extraFare);
         assertThat(fare).isEqualTo(result);
     }
 }

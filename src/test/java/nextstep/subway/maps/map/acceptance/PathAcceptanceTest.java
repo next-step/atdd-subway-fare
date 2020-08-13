@@ -39,7 +39,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createdStationResponse2 = 지하철역_등록되어_있음("강남역");
         ExtractableResponse<Response> createdStationResponse3 = 지하철역_등록되어_있음("양재역");
         ExtractableResponse<Response> createdStationResponse4 = 지하철역_등록되어_있음("남부터미널");
-        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 0);
+        ExtractableResponse<Response> createLineResponse1 = 지하철_노선_등록되어_있음("2호선", "GREEN", 200);
         ExtractableResponse<Response> createLineResponse2 = 지하철_노선_등록되어_있음("신분당선", "RED", 500);
         ExtractableResponse<Response> createLineResponse3 = 지하철_노선_등록되어_있음("3호선", "ORANGE", 900);
 
@@ -52,14 +52,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
         Long stationId4 = createdStationResponse4.as(StationResponse.class).getId();
 
         지하철_노선에_지하철역_등록되어_있음(lineId1, null, stationId1, 0, 0);
-        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId1, stationId2, 2, 2);
+        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId1, stationId2, 12, 2);
 
         지하철_노선에_지하철역_등록되어_있음(lineId2, null, stationId2, 0, 0);
-        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId2, stationId3, 2, 1);
+        지하철_노선에_지하철역_등록되어_있음(lineId1, stationId2, stationId3, 12, 1);
 
         지하철_노선에_지하철역_등록되어_있음(lineId3, null, stationId1, 0, 0);
         지하철_노선에_지하철역_등록되어_있음(lineId3, stationId1, stationId4, 1, 2);
-        지하철_노선에_지하철역_등록되어_있음(lineId3, stationId4, stationId3, 2, 2);
+        지하철_노선에_지하철역_등록되어_있음(lineId3, stationId4, stationId3, 12, 2);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -106,25 +106,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(stationIds).containsExactlyElementsOf(Lists.newArrayList(1L, 2L, 3L));
     }
 
-    @DisplayName("두 역의 최소 시간 경로와 요금을 함께 조회한다.")
-    @Test
-    void findPathByDurationForFare() {
-        ExtractableResponse<Response> response = RestAssured.given().log().all().
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DURATION").
-                then().
-                log().all().
-                extract();
-
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
-        assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo(1250);
-
-        assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
-    }
-
     @DisplayName("두 역의 최소 시간 경로와 기본, 추가요금을 함께 조회한다.")
     @Test
     void findPathByDurationForExtraFare() {
@@ -137,9 +118,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
                 extract();
 
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
+        assertThat(pathResponse.getDistance()).isEqualTo(24);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo(2250);
+        assertThat(pathResponse.getFare()).isEqualTo(1750);
 
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }
