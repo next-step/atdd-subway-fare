@@ -9,7 +9,7 @@ public class FareCalculator{
         if (overDistance > 0) {
             return BASIC_FARE + calculateOverFare(overDistance) + extraFare;
         }
-        return BASIC_FARE;
+        return BASIC_FARE + extraFare;
     }
 
     private int calculateOverFare(int distance) {

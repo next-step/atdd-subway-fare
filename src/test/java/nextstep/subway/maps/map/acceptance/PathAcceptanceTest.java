@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.line.dto.LineResponse;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.station.dto.StationResponse;
@@ -19,11 +20,15 @@ import java.util.stream.Collectors;
 import static nextstep.subway.maps.line.acceptance.step.LineAcceptanceStep.지하철_노선_등록되어_있음;
 import static nextstep.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
 import static nextstep.subway.maps.station.acceptance.step.StationAcceptanceStep.지하철역_등록되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.로그인_되어_있음;
+import static nextstep.subway.members.member.acceptance.step.MemberAcceptanceStep.회원_등록되어_있음;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
-
+    public static final String EMAIL = "email@email.com";
+    public static final String PASSWORD = "password";
+    private TokenResponse loginResponse;
     /**
      * 교대역      -      강남역
      * |                 |
@@ -121,6 +126,29 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(pathResponse.getDistance()).isEqualTo(24);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
         assertThat(pathResponse.getFare()).isEqualTo(1750);
+
+        assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
+    }
+
+    @DisplayName("어린이 사용자의 두 역의 최소 시간 경로와 기본, 추가요금을 함께 조회한다.")
+    @Test
+    void findPathByChild() {
+        회원_등록되어_있음(EMAIL, PASSWORD, 20);
+        loginResponse = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all().
+                auth().oauth2(loginResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DURATION").
+                then().
+                log().all().
+                extract();
+
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(24);
+        assertThat(pathResponse.getDuration()).isEqualTo(3);
+        assertThat(pathResponse.getFare()).isEqualTo((1750 - 350) * 0.8);
 
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }
