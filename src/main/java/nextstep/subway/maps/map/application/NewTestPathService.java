@@ -15,6 +15,7 @@ import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayGraph;
 import nextstep.subway.maps.map.domain.SubwayPath;
+import nextstep.subway.maps.map.domain.path.TimePath;
 import nextstep.subway.maps.map.domain.path.TimePaths;
 
 @Service
@@ -45,16 +46,17 @@ public class NewTestPathService {
 
     public SubwayPath findPathByArrivalTime(List<Line> lines, Long source, Long target, LocalDateTime departTime) {
         SubwayGraph graph = createSubwayGraph(lines, PathType.ARRIVAL);
+        List<GraphPath<Long, LineStationEdge>> paths = getAllPaths(source, target, graph);
+        List<SubwayPath> subwayPaths = paths.stream()
+            .map(this::convertSubwayPath)
+            .collect(Collectors.toList());
+        TimePaths timePaths = TimePaths.of(subwayPaths);
+        TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(departTime);
+        return fastestArrivalPath.getPath();
+    }
 
+    private List<GraphPath<Long, LineStationEdge>> getAllPaths(Long source, Long target, SubwayGraph graph) {
         KShortestPaths<Long, LineStationEdge> kShortestPaths = new KShortestPaths<>(graph, MAX_PATH_COUNT);
-        List<GraphPath<Long, LineStationEdge>> paths = kShortestPaths.getPaths(source, target);
-
-        TimePaths timePaths = TimePaths.of(
-            paths.stream()
-                .map(this::convertSubwayPath)
-                .collect(Collectors.toList())
-        );
-
-        return null;
+        return kShortestPaths.getPaths(source, target);
     }
 }
