@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -48,7 +49,11 @@ public class NewTestPathService {
         KShortestPaths<Long, LineStationEdge> kShortestPaths = new KShortestPaths<>(graph, MAX_PATH_COUNT);
         List<GraphPath<Long, LineStationEdge>> paths = kShortestPaths.getPaths(source, target);
 
-        TimePaths timePaths = TimePaths.of(paths);
+        TimePaths timePaths = TimePaths.of(
+            paths.stream()
+                .map(this::convertSubwayPath)
+                .collect(Collectors.toList())
+        );
 
         return null;
     }

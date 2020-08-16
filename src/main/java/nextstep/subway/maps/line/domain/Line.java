@@ -1,11 +1,17 @@
 package nextstep.subway.maps.line.domain;
 
-import nextstep.subway.config.BaseEntity;
-
-import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import nextstep.subway.config.BaseEntity;
 
 @Entity
 public class Line extends BaseEntity {
@@ -48,6 +54,14 @@ public class Line extends BaseEntity {
 
     public void removeLineStationById(Long stationId) {
         lineStations.removeByStationId(stationId);
+    }
+
+    public LocalTime calculateNextTime(Long stationId, LocalTime departTime) {
+        LocalTime nextTime = startTime.plusMinutes(lineStations.calculateDurationFromStart(stationId));
+        while (nextTime.isBefore(departTime)) {
+            nextTime = nextTime.plusMinutes(intervalTime);
+        }
+        return nextTime;
     }
 
     public List<LineStation> getStationInOrder() {

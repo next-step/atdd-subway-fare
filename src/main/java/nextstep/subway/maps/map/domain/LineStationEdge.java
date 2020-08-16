@@ -1,8 +1,9 @@
 package nextstep.subway.maps.map.domain;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class LineStationEdge extends DefaultWeightedEdge {
     private LineStation lineStation;
@@ -22,7 +23,7 @@ public class LineStationEdge extends DefaultWeightedEdge {
     }
 
     @Override
-    protected Object getSource() {
+    public Object getSource() {
         return this.lineStation.getPreStationId();
     }
 
