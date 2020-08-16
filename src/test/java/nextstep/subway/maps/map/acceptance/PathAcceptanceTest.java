@@ -133,7 +133,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("어린이 사용자의 두 역의 최소 시간 경로와 기본, 추가요금을 함께 조회한다.")
     @Test
     void findPathByChild() {
-        회원_등록되어_있음(EMAIL, PASSWORD, 20);
+        회원_등록되어_있음(EMAIL, PASSWORD, 18);
         loginResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
         ExtractableResponse<Response> response = RestAssured.given().log().all().
@@ -148,7 +148,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(24);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo((1750 - 350) * 0.8);
+        assertThat(pathResponse.getFare()).isEqualTo((1750 - 350) * 80 / 100);
 
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }

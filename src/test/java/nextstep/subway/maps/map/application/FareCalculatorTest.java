@@ -15,7 +15,7 @@ class FareCalculatorTest {
         FareCalculator fareCalculator = new FareCalculator();
         int distance = 8;
         int extraFare = 0;
-        int fare = fareCalculator.calculate(distance, extraFare);
+        int fare = fareCalculator.calculate(distance, 0);
         assertThat(fare).isEqualTo(1250);
     }
 

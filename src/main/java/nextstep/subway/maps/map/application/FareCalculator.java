@@ -6,6 +6,7 @@ public class FareCalculator{
 
     public int calculate(int distance, int extraFare) {
         int overDistance = distance - 10;
+
         if (overDistance > 0) {
             return BASIC_FARE + calculateOverFare(overDistance) + extraFare;
         }

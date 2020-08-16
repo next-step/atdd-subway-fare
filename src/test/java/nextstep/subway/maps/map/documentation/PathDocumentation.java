@@ -1,13 +1,12 @@
 package nextstep.subway.maps.map.documentation;
 
 import nextstep.subway.Documentation;
-import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.PathResponse;
 import nextstep.subway.maps.map.ui.MapController;
 import nextstep.subway.maps.station.dto.StationResponse;
-import nextstep.subway.members.favorite.ui.FavoriteController;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,6 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -56,7 +54,7 @@ public class PathDocumentation extends Documentation {
 
         PathResponse pathResponse = new PathResponse(stations, 20, 40, 1250);
 
-        when(mapService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(mapService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
         given().log().all().
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
