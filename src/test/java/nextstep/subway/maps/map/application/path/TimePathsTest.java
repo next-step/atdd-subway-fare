@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.util.Lists;
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +19,7 @@ import nextstep.subway.maps.map.application.NewTestPathService;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayGraph;
+import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 
@@ -27,6 +27,8 @@ public class TimePathsTest {
 
     private List<Line> lines;
     private KShortestPaths<Long, LineStationEdge> kShortestPaths;
+    private SubwayPath subwayPath1;
+    private SubwayPath subwayPath2;
 
     @BeforeEach
     void setUp() {
@@ -38,9 +40,9 @@ public class TimePathsTest {
 
         Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0);
         LineStation 서울_지하철_2호선_교대역 = new LineStation(1L, null, 0, 0);
-        LineStation 서울_지하철_2호선_양재역 = new LineStation(2L, 1L, 2, 2);
+        LineStation 서울_지하철_2호선_강남역 = new LineStation(2L, 1L, 2, 2);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_교대역);
-        서울_지하철_2호선.addLineStation(서울_지하철_2호선_양재역);
+        서울_지하철_2호선.addLineStation(서울_지하철_2호선_강남역);
 
         Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
         LineStation 신분당선_강남역 = new LineStation(2L, null, 0, 0);
@@ -56,7 +58,26 @@ public class TimePathsTest {
         서울_지하철_3호선.addLineStation(서울_지하철_3호선_남부터미널역);
         서울_지하철_3호선.addLineStation(서울_지하철_3호선_양재역);
 
-        lines = Lists.newArrayList(서울_지하철_2호선, 신분당선, 서울_지하철_3호선);
+        LineStationEdge 서울_지하철_2호선_교대역_에지 = new LineStationEdge(서울_지하철_2호선_교대역, 서울_지하철_2호선);
+        LineStationEdge 서울_지하철_2호선_강남역_에지 = new LineStationEdge(서울_지하철_2호선_강남역, 서울_지하철_2호선);
+        LineStationEdge 신분당선_강남역_에지 = new LineStationEdge(신분당선_강남역, 신분당선);
+        LineStationEdge 신분당선_양재역_에지 = new LineStationEdge(신분당선_양재역, 신분당선);
+
+        subwayPath1 = new SubwayPath(Lists.newArrayList(
+            서울_지하철_2호선_교대역_에지,
+            서울_지하철_2호선_강남역_에지,
+            신분당선_강남역_에지, 신분당선_양재역_에지)
+        );
+
+        LineStationEdge 서울_지하철_3호선_교대역_에지 = new LineStationEdge(서울_지하철_3호선_교대역, 서울_지하철_3호선);
+        LineStationEdge 서울_지하철_3호선_남부터미널역_에지 = new LineStationEdge(서울_지하철_3호선_남부터미널역, 서울_지하철_3호선);
+        LineStationEdge 서울_지하철_3호선_양재역_에지 = new LineStationEdge(서울_지하철_3호선_양재역, 서울_지하철_3호선);
+
+        subwayPath2 = new SubwayPath(Lists.newArrayList(
+            서울_지하철_3호선_교대역_에지,
+            서울_지하철_3호선_남부터미널역_에지,
+            서울_지하철_3호선_양재역_에지
+        ));
 
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
         graph.addVertexWith(lines);
@@ -69,8 +90,7 @@ public class TimePathsTest {
     @Test
     void 최단_도착_경로를_반환한다() {
         // given
-        List<GraphPath<Long, LineStationEdge>> paths = kShortestPaths.getPaths(1L, 3L);
-        TimePaths timePaths = TimePaths.of(paths);
+        TimePaths timePaths = TimePaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
 
         // when
         TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(
@@ -78,6 +98,6 @@ public class TimePathsTest {
         );
 
         // then
-        assertThat(fastestArrivalPath.getPath().getVertexList()).containsExactly(1L, 4L, 3L);
+        assertThat(fastestArrivalPath.getPath().extractStationId()).containsExactly(1L, 4L, 3L);
     }
 }

@@ -5,21 +5,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jgrapht.GraphPath;
-
-import nextstep.subway.maps.map.domain.LineStationEdge;
+import nextstep.subway.maps.map.domain.SubwayPath;
 
 public class TimePaths {
 
     private final List<TimePath> paths;
 
-    private TimePaths(List<GraphPath<Long, LineStationEdge>> paths) {
+    private TimePaths(List<SubwayPath> paths) {
         this.paths = paths.stream()
             .map(TimePath::new)
             .collect(Collectors.toList());
     }
 
-    public static TimePaths of(List<GraphPath<Long, LineStationEdge>> paths) {
+    public static TimePaths of(List<SubwayPath> paths) {
         return new TimePaths(paths);
     }
 

@@ -2,23 +2,21 @@ package nextstep.subway.maps.map.application.path;
 
 import java.time.LocalDateTime;
 
-import org.jgrapht.GraphPath;
-
-import nextstep.subway.maps.map.domain.LineStationEdge;
+import nextstep.subway.maps.map.domain.SubwayPath;
 
 public class TimePath {
 
-    private final GraphPath<Long, LineStationEdge> path;
+    private final SubwayPath path;
 
-    public TimePath(GraphPath<Long, LineStationEdge> path) {
+    public TimePath(SubwayPath path) {
         this.path = path;
     }
 
-    public GraphPath<Long, LineStationEdge> getPath() {
+    public SubwayPath getPath() {
         return path;
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departTime) {
-        return LocalDateTime.now();
+        return departTime;
     }
 }
