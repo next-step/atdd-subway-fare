@@ -2,19 +2,19 @@ package nextstep.subway.maps.map.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.line.domain.Money;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 class SubwayPathTest {
     private Map<Long, Station> stations;
@@ -27,7 +27,7 @@ class SubwayPathTest {
 
     @BeforeEach
     void setUp() {
-        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 1000);
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 1000, 10);
         서울_지하철_3호선.addLineStation(new LineStation(1L, null, 0, 0));
         lineStation6 = new LineStation(4L, 1L, 1, 2);
         lineStation7 = new LineStation(3L, 4L, 2, 2);

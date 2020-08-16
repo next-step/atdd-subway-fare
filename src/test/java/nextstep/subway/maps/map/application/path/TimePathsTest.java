@@ -38,19 +38,19 @@ public class TimePathsTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0);
+        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0, 3);
         LineStation 서울_지하철_2호선_교대역 = new LineStation(1L, null, 0, 0);
         LineStation 서울_지하철_2호선_강남역 = new LineStation(2L, 1L, 2, 2);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_교대역);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_강남역);
 
-        Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
+        Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0, 10);
         LineStation 신분당선_강남역 = new LineStation(2L, null, 0, 0);
         LineStation 신분당선_양재역 = new LineStation(3L, 2L, 2, 1);
         신분당선.addLineStation(신분당선_강남역);
         신분당선.addLineStation(신분당선_양재역);
 
-        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 5);
         LineStation 서울_지하철_3호선_교대역 = new LineStation(1L, null, 0, 0);
         LineStation 서울_지하철_3호선_남부터미널역 = new LineStation(4L, 1L, 1, 2);
         LineStation 서울_지하철_3호선_양재역 = new LineStation(3L, 4L, 2, 2);
@@ -98,6 +98,10 @@ public class TimePathsTest {
         );
 
         // then
-        assertThat(fastestArrivalPath.getPath().extractStationId()).containsExactly(1L, 4L, 3L);
+        assertThat(fastestArrivalPath.getPath().getLineStationEdges().stream()
+            .map(LineStationEdge::getLineStation)
+            .mapToLong(LineStation::getStationId)
+            .distinct()
+        ).containsExactly(1L, 4L, 3L);
     }
 }

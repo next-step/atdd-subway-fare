@@ -1,12 +1,12 @@
 package nextstep.subway.maps.line.application;
 
-import com.google.common.collect.Maps;
-import nextstep.subway.maps.line.domain.Line;
-import nextstep.subway.maps.line.domain.LineStation;
-import nextstep.subway.maps.line.dto.LineStationCreateRequest;
-import nextstep.subway.utils.TestObjectUtils;
-import nextstep.subway.maps.station.application.StationService;
-import nextstep.subway.maps.station.domain.Station;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,14 +15,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import com.google.common.collect.Maps;
+import nextstep.subway.maps.line.domain.Line;
+import nextstep.subway.maps.line.domain.LineStation;
+import nextstep.subway.maps.line.dto.LineStationCreateRequest;
+import nextstep.subway.maps.station.application.StationService;
+import nextstep.subway.maps.station.domain.Station;
+import nextstep.subway.utils.TestObjectUtils;
 
 @DisplayName("지하철 노선 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +49,7 @@ public class LineStationServiceTest {
         stations.put(2L, station2);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
 
-        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED", 0);
+        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED", 0, 10);
         when(lineService.findLineById(anyLong())).thenReturn(line);
 
         // when
@@ -79,7 +78,7 @@ public class LineStationServiceTest {
     @Test
     void removeLineStation() {
         // given
-        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED", 0);
+        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED", 0, 10);
         line.addLineStation(new LineStation(1L, null, 10, 10));
         line.addLineStation(new LineStation(2L, 1L, 10, 10));
         when(lineService.findLineById(anyLong())).thenReturn(line);

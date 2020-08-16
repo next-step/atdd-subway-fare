@@ -21,7 +21,7 @@ public class TimePathTest {
 
     @BeforeEach
     void setUp() {
-        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 5);
         LineStation 교대역 = new LineStation(1L, null, 0, 0);
         LineStation 남부터미널역 = new LineStation(4L, 1L, 1, 2);
         LineStation 양재역 = new LineStation(3L, 4L, 2, 2);

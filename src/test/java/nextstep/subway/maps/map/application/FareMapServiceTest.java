@@ -67,19 +67,19 @@ public class FareMapServiceTest {
         stations.put(3L, 양재역);
         stations.put(4L, 남부터미널역);
 
-        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500);
+        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 500, 10);
         LineStation 서울_지하철_2호선_교대역 = new LineStation(교대역.getId(), null, 0, 0);
         LineStation 서울_지하철_2호선_강남역 = new LineStation(강남역.getId(), 교대역.getId(), 2, 2);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_교대역);
         서울_지하철_2호선.addLineStation(서울_지하철_2호선_강남역);
 
-        Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0);
+        Line 신분당선 = TestObjectUtils.createLine(2L, "신분당선", "RED", 0, 10);
         LineStation 신분당선_강남역 = new LineStation(강남역.getId(), null, 0, 0);
         LineStation 신분당선_양재역 = new LineStation(양재역.getId(), 강남역.getId(), 2, 1);
         신분당선.addLineStation(신분당선_강남역);
         신분당선.addLineStation(신분당선_양재역);
 
-        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0);
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 10);
         LineStation 서울_지하철_3호선_교대역 = new LineStation(교대역.getId(), null, 0, 0);
         LineStation 서울_지하철_3호선_남부터미널역 = new LineStation(남부터미널역.getId(), 교대역.getId(), 1, 2);
         LineStation 서울_지하철_3호선_양재역 = new LineStation(양재역.getId(), 남부터미널역.getId(), 2, 2);
