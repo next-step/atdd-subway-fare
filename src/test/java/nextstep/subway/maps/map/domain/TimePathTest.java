@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
-import nextstep.subway.maps.map.application.path.TimePath;
+import nextstep.subway.maps.map.domain.path.TimePath;
 import nextstep.subway.utils.TestObjectUtils;
 
 public class TimePathTest {

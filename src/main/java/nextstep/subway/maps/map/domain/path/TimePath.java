@@ -1,4 +1,4 @@
-package nextstep.subway.maps.map.application.path;
+package nextstep.subway.maps.map.domain.path;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

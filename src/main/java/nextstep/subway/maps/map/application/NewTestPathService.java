@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
-import nextstep.subway.maps.map.application.path.TimePaths;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayGraph;
 import nextstep.subway.maps.map.domain.SubwayPath;
+import nextstep.subway.maps.map.domain.path.TimePaths;
 
 @Service
 public class NewTestPathService {
