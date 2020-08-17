@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.ui;
 
 import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
+import nextstep.subway.auth.domain.EmptyMember;
 import nextstep.subway.maps.map.application.MapService;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.dto.MapResponse;
@@ -22,9 +23,9 @@ public class MapController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target,
-                                                 @RequestParam PathType type, @AuthenticationPrincipal LoginMember userDetails) {
+                                                 @RequestParam PathType type, @AuthenticationPrincipal LoginMember loginMember) {
 
-        return ResponseEntity.ok(mapService.findPath(source, target, type , userDetails));
+        return ResponseEntity.ok(mapService.findPath(source, target, type , loginMember));
     }
 
     @GetMapping("/maps")

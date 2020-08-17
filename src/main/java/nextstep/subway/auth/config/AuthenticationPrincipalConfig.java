@@ -1,5 +1,6 @@
 package nextstep.subway.auth.config;
 
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.ui.interceptor.authorization.AuthenticationPrincipalArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

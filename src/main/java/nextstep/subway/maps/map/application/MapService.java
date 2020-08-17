@@ -13,6 +13,7 @@ import nextstep.subway.maps.map.dto.PathResponseAssembler;
 import nextstep.subway.maps.station.application.StationService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,12 +43,12 @@ public class MapService {
         return new MapResponse(lineResponses);
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type, UserDetails userDetails) {
+    public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
         List<Line> lines = lineService.findLines();
         SubwayPath subwayPath = pathService.findPath(lines, source, target, type);
         Map<Long, Station> stations = stationService.findStationsByIds(subwayPath.extractStationId());
 
-        return PathResponseAssembler.assemble(subwayPath, stations, userDetails);
+        return PathResponseAssembler.assemble(subwayPath, stations, loginMember);
     }
 
     private Map<Long, Station> findStations(List<Line> lines) {

@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.dto;
 
 import nextstep.subway.auth.application.UserDetails;
+import nextstep.subway.auth.domain.EmptyMember;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.FareCalculator;
 import nextstep.subway.maps.map.domain.SubwayPath;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PathResponseAssembler {
-    public static PathResponse assemble(SubwayPath subwayPath, Map<Long, Station> stations, UserDetails userDetails) {
+    public static PathResponse assemble(SubwayPath subwayPath, Map<Long, Station> stations, LoginMember loginMember) {
         List<StationResponse> stationResponses = subwayPath.extractStationId().stream()
                 .map(it -> StationResponse.of(stations.get(it)))
                 .collect(Collectors.toList());
@@ -24,12 +25,15 @@ public class PathResponseAssembler {
         int distance = subwayPath.calculateDistance();
         int fare = new FareCalculator().calculate(distance, maxExtraFare);
 
-        if (userDetails instanceof LoginMember) {
-            LoginMember loginMember= (LoginMember) userDetails;
+        if (isLoginMember(loginMember)) {
             fare = loginMember.discountFare(fare);
         }
 
         return new PathResponse(stationResponses, subwayPath.calculateDuration(), distance, fare);
+    }
+
+    private static boolean isLoginMember(LoginMember loginMember) {
+        return !EmptyMember.class.isInstance(loginMember);
     }
 
     private static Integer getMaxExtraFare(SubwayPath subwayPath) {

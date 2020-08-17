@@ -79,7 +79,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
                 extract();
 
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(3);
+        assertThat(pathResponse.getDistance()).isEqualTo(13);
         assertThat(pathResponse.getDuration()).isEqualTo(4);
 
         List<Long> stationIds = pathResponse.getStations().stream()
@@ -101,7 +101,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
                 extract();
 
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(4);
+        assertThat(pathResponse.getDistance()).isEqualTo(24);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
 
         List<Long> stationIds = pathResponse.getStations().stream()
