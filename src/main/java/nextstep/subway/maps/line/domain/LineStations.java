@@ -1,5 +1,6 @@
 package nextstep.subway.maps.line.domain;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -73,15 +74,18 @@ public class LineStations {
         lineStations.remove(lineStation);
     }
 
-    public Integer calculateDurationFromStart(Long stationId) {
+    public Duration calculateDurationFromStart(Long stationId) {
+        if (Objects.isNull(stationId)) {
+            return Duration.ZERO;
+        }
         List<LineStation> stationsInOrder = getStationsInOrder();
-        int totalDuration = 0;
+        long totalDuration = 0;
         for (LineStation lineStation : stationsInOrder) {
+            totalDuration += lineStation.getDuration();
             if (Objects.equals(lineStation.getStationId(), stationId)) {
                 break;
             }
-            totalDuration += lineStation.getDuration();
         }
-        return totalDuration;
+        return Duration.ofMinutes(totalDuration);
     }
 }
