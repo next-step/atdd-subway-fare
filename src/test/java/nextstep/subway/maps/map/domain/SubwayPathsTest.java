@@ -54,24 +54,18 @@ public class SubwayPathsTest {
         서울_지하철_3호선.addLineStation(서울_지하철_3호선_남부터미널역);
         서울_지하철_3호선.addLineStation(서울_지하철_3호선_양재역);
 
-        LineStationEdge 서울_지하철_2호선_교대역_에지 = new LineStationEdge(서울_지하철_2호선_교대역, 서울_지하철_2호선);
         LineStationEdge 서울_지하철_2호선_강남역_에지 = new LineStationEdge(서울_지하철_2호선_강남역, 서울_지하철_2호선);
-        LineStationEdge 신분당선_강남역_에지 = new LineStationEdge(신분당선_강남역, 신분당선);
         LineStationEdge 신분당선_양재역_에지 = new LineStationEdge(신분당선_양재역, 신분당선);
 
         subwayPath1 = new SubwayPath(Lists.newArrayList(
-            서울_지하철_2호선_교대역_에지,
-            서울_지하철_2호선_강남역_에지,
-            신분당선_강남역_에지, 신분당선_양재역_에지),
+            서울_지하철_2호선_강남역_에지, 신분당선_양재역_에지),
             1L
         );
 
-        LineStationEdge 서울_지하철_3호선_교대역_에지 = new LineStationEdge(서울_지하철_3호선_교대역, 서울_지하철_3호선);
         LineStationEdge 서울_지하철_3호선_남부터미널역_에지 = new LineStationEdge(서울_지하철_3호선_남부터미널역, 서울_지하철_3호선);
         LineStationEdge 서울_지하철_3호선_양재역_에지 = new LineStationEdge(서울_지하철_3호선_양재역, 서울_지하철_3호선);
 
         subwayPath2 = new SubwayPath(Lists.newArrayList(
-            서울_지하철_3호선_교대역_에지,
             서울_지하철_3호선_남부터미널역_에지,
             서울_지하철_3호선_양재역_에지),
             1L
@@ -96,10 +90,6 @@ public class SubwayPathsTest {
         );
 
         // then
-        assertThat(fastestArrivalPath.getLineStationEdges().stream()
-            .map(LineStationEdge::getLineStation)
-            .mapToLong(LineStation::getStationId)
-            .distinct()
-        ).containsExactly(1L, 4L, 3L);
+        assertThat(fastestArrivalPath.extractStationId()).containsExactly(1L, 4L, 3L);
     }
 }

@@ -20,25 +20,27 @@ import nextstep.subway.utils.TestObjectUtils;
 class SubwayPathTest {
     private Map<Long, Station> stations;
     private List<Line> lines;
-    private LineStation lineStation2;
-    private LineStation lineStation6;
-    private LineStation lineStation7;
+    private LineStation 지하철_3호선_교대역;
+    private LineStation 지하철_3호선_남부터미널역;
+    private LineStation 지하철_3호선_양재역;
 
     private SubwayPath subwayPath;
 
     @BeforeEach
     void setUp() {
         Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 1000, 10);
-        서울_지하철_3호선.addLineStation(new LineStation(1L, null, 0, 0));
-        lineStation6 = new LineStation(4L, 1L, 1, 2);
-        lineStation7 = new LineStation(3L, 4L, 2, 2);
-        서울_지하철_3호선.addLineStation(lineStation6);
-        서울_지하철_3호선.addLineStation(lineStation7);
+        지하철_3호선_교대역 = new LineStation(1L, null, 0, 0);
+        지하철_3호선_남부터미널역 = new LineStation(4L, 1L, 1, 2);
+        지하철_3호선_양재역 = new LineStation(3L, 4L, 2, 2);
 
-        List<LineStationEdge> lineStations = Lists.newArrayList(
-            new LineStationEdge(lineStation6, 서울_지하철_3호선),
-            new LineStationEdge(lineStation7, 서울_지하철_3호선)
-        );
+        서울_지하철_3호선.addLineStation(지하철_3호선_교대역);
+        서울_지하철_3호선.addLineStation(지하철_3호선_남부터미널역);
+        서울_지하철_3호선.addLineStation(지하철_3호선_양재역);
+
+        LineStationEdge 남부터미널역_에찌 = new LineStationEdge(지하철_3호선_남부터미널역, 서울_지하철_3호선);
+        LineStationEdge 양재역_에찌 = new LineStationEdge(지하철_3호선_양재역, 서울_지하철_3호선);
+
+        List<LineStationEdge> lineStations = Lists.newArrayList(남부터미널역_에찌, 양재역_에찌);
         subwayPath = new SubwayPath(lineStations, 1L);
     }
 
@@ -59,6 +61,6 @@ class SubwayPathTest {
         LocalDateTime arrivalTime = subwayPath.getArrivalTime(LocalDateTime.of(2020, 8, 24, 6, 15));
 
         // then
-        assertThat(arrivalTime).isEqualTo(LocalDateTime.of(2020, 8, 24, 6, 19));
+        assertThat(arrivalTime).isEqualTo(LocalDateTime.of(2020, 8, 24, 6, 24));
     }
 }
