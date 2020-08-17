@@ -1,14 +1,14 @@
 package nextstep.subway.maps.line.domain;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 노선 단위 테스트")
 public class LineStationsTest {
@@ -88,7 +88,7 @@ public class LineStationsTest {
     void removeLineStation3() {
         // when
         assertThatThrownBy(() -> lineStations.removeByStationId(null))
-                .isInstanceOf(RuntimeException.class);
+            .isInstanceOf(RuntimeException.class);
     }
 
     @DisplayName("지하철 노선에서 등록되지 않는 역을 제외한다.")
@@ -96,6 +96,16 @@ public class LineStationsTest {
     void removeLineStation4() {
         // when
         assertThatThrownBy(() -> lineStations.removeByStationId(100L))
-                .isInstanceOf(RuntimeException.class);
+            .isInstanceOf(RuntimeException.class);
+    }
+
+    @DisplayName("출발역부터 도착역까지의 소요시간을 계산한다.")
+    @Test
+    void calculateDurationFromDepartureStation() {
+        // when
+        Duration totalDuration = lineStations.calculateDurationFromStart(3L);
+
+        // then
+        assertThat(totalDuration).hasMinutes(9L);
     }
 }
