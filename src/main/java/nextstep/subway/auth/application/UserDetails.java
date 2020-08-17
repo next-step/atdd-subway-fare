@@ -6,4 +6,6 @@ public interface UserDetails {
     Object getCredentials();
 
     boolean checkCredentials(Object credentials);
+
+    boolean isLoggedIn();
 }

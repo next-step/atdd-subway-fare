@@ -32,4 +32,9 @@ public class EmptyMember implements UserDetails {
     public boolean checkCredentials(Object credentials) {
         return false;
     }
+
+    @Override
+    public boolean isLoggedIn() {
+        return false;
+    }
 }

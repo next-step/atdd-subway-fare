@@ -68,4 +68,9 @@ public class LoginMember implements UserDetails {
         }
         return 0;
     }
+
+    @Override
+    public boolean isLoggedIn() {
+        return true;
+    }
 }
