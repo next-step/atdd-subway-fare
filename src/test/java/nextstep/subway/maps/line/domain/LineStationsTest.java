@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import nextstep.subway.maps.map.domain.PathDirection;
+
 @DisplayName("지하철 노선 단위 테스트")
 public class LineStationsTest {
     private LineStations lineStations;
@@ -103,7 +105,7 @@ public class LineStationsTest {
     @Test
     void calculateDurationFromDepartureStation() {
         // when
-        Duration totalDuration = lineStations.calculateDurationFromStart(3L);
+        Duration totalDuration = lineStations.calculateDurationFromStartByDirection(3L, PathDirection.UPBOUND);
 
         // then
         assertThat(totalDuration).hasMinutes(9L);

@@ -2,6 +2,7 @@ package nextstep.subway.maps.line.domain;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -11,6 +12,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import nextstep.subway.maps.map.domain.PathDirection;
 
 @Embeddable
 public class LineStations {
@@ -22,7 +25,7 @@ public class LineStations {
         return lineStations;
     }
 
-    public List<LineStation> getStationsInOrder() {
+    protected List<LineStation> getStationsInOrder() {
         // 출발지점 찾기
         Optional<LineStation> preLineStation = lineStations.stream()
             .filter(it -> it.getPreStationId() == null)
@@ -37,6 +40,15 @@ public class LineStations {
                 .findFirst();
         }
         return result;
+    }
+
+    private List<LineStation> getStationsInOrder(PathDirection direction) {
+        if (direction == PathDirection.UPBOUND) {
+            return getStationsInOrder();
+        }
+        List<LineStation> stationsInOrder = getStationsInOrder();
+        Collections.reverse(stationsInOrder);
+        return stationsInOrder;
     }
 
     public void add(LineStation lineStation) {
@@ -74,17 +86,17 @@ public class LineStations {
         lineStations.remove(lineStation);
     }
 
-    public Duration calculateDurationFromStart(Long stationId) {
+    public Duration calculateDurationFromStartByDirection(Long stationId, PathDirection pathDirection) {
         if (Objects.isNull(stationId)) {
             return Duration.ZERO;
         }
-        List<LineStation> stationsInOrder = getStationsInOrder();
+        List<LineStation> stationsInOrder = getStationsInOrder(pathDirection);
         long totalDuration = 0;
         for (LineStation lineStation : stationsInOrder) {
-            totalDuration += lineStation.getDuration();
-            if (Objects.equals(lineStation.getStationId(), stationId)) {
+            if (Objects.equals(lineStation.getPreStationId(), stationId)) {
                 break;
             }
+            totalDuration += lineStation.getDuration();
         }
         return Duration.ofMinutes(totalDuration);
     }
