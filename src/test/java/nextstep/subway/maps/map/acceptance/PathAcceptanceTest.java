@@ -130,9 +130,32 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }
 
-    @DisplayName("어린이 사용자의 두 역의 최소 시간 경로와 기본, 추가요금을 함께 조회한다.")
+    @DisplayName("로그인한 어린이 사용자의 두 역의 최소 시간 경로와 기본, 추가요금을 함께 조회한다.")
     @Test
     void findPathByChild() {
+        회원_등록되어_있음(EMAIL, PASSWORD, 8);
+        loginResponse = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all().
+                auth().oauth2(loginResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                get("/paths?source={sourceId}&target={targetId}&type={type}", 1L, 3L, "DURATION").
+                then().
+                log().all().
+                extract();
+
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(24);
+        assertThat(pathResponse.getDuration()).isEqualTo(3);
+        assertThat(pathResponse.getFare()).isEqualTo((1750 - 350) * 50 / 100);
+
+        assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
+    }
+
+    @DisplayName("로그인한 청소년 사용자의 두 역의 최소 시간 경로와 기본, 추가요금을 함께 조회한다.")
+    @Test
+    void findPathByYouth() {
         회원_등록되어_있음(EMAIL, PASSWORD, 18);
         loginResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
