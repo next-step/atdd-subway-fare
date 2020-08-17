@@ -1,5 +1,6 @@
 package nextstep.subway.maps.line.domain;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import nextstep.subway.config.BaseEntity;
+import nextstep.subway.maps.map.domain.PathDirection;
 
 @Entity
 public class Line extends BaseEntity {
@@ -64,14 +66,17 @@ public class Line extends BaseEntity {
         lineStations.removeByStationId(stationId);
     }
 
-    public LocalTime calculateNextDepartureTime(Long stationId, LocalTime departTime) {
-        LocalTime nextTime = startTime.plusMinutes(
-            lineStations.calculateDurationFromStart(stationId).toMinutes()
-        );
+    public LocalTime calculateNextDepartureTime(Long stationId, LocalTime departTime, PathDirection pathDirection) {
+        Duration duration = calculateDuration(stationId, pathDirection);
+        LocalTime nextTime = startTime.plusMinutes(duration.toMinutes());
         while (nextTime.isBefore(departTime)) {
             nextTime = nextTime.plusMinutes(intervalTime);
         }
         return nextTime;
+    }
+
+    private Duration calculateDuration(Long stationId, PathDirection pathDirection) {
+        return lineStations.calculateDurationFromStartByDirection(stationId, pathDirection);
     }
 
     public List<LineStation> getStationInOrder() {

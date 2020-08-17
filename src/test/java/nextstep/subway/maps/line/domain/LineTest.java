@@ -4,14 +4,19 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import nextstep.subway.maps.map.domain.PathDirection;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.domain.StationRepository;
 
@@ -28,6 +33,24 @@ public class LineTest {
     private Line 서울_지하철_2호선;
     private Line 서울_지하철_3호선;
 
+    private static Stream<Arguments> 다음_열차도착시간_테스트_데이터() {
+        return Stream.of(
+            Arguments.of(4L, LocalTime.of(6, 17), PathDirection.UPBOUND, LocalTime.of(6, 17)),
+            Arguments.of(4L, LocalTime.of(6, 20), PathDirection.DOWNBOUND, LocalTime.of(6, 32))
+        );
+    }
+
+    @DisplayName("지하철 노선에는 추가 요금 필드가 존재한다.")
+    @Test
+    void 지하철_노선에_추가요금이_존재한다() {
+        // given
+        Line line = new Line("인천1호선", "COLD_BLUE", LocalTime.now(), LocalTime.now(), 3, 400);
+        Line savedLine = lineRepository.save(line);
+
+        // when
+        assertThat(savedLine.getExtraFare()).isNotNull();
+    }
+
     @BeforeEach
     void setUp() {
         Station 강남역 = new Station("강남역");
@@ -43,7 +66,7 @@ public class LineTest {
 
         신분당선 = new Line("신분당선", "red lighten-1", startTime, endTime, 3);
         서울_지하철_2호선 = new Line("2호선", "green lighten-1", startTime, endTime, 10);
-        서울_지하철_3호선 = new Line("3호선", "orange darken-1", startTime, endTime, 5);
+        서울_지하철_3호선 = new Line("3호선", "orange darken-1", startTime, endTime, 15);
 
         LineStation 신분당선_강남역 = new LineStation(1L, null, 0, 0);
         LineStation 신분당선_양재역 = new LineStation(3L, 1L, 2, 2);
@@ -67,24 +90,15 @@ public class LineTest {
         ));
     }
 
-    @DisplayName("지하철 노선에는 추가 요금 필드가 존재한다.")
-    @Test
-    void 지하철_노선에_추가요금이_존재한다() {
-        // given
-        Line line = new Line("인천1호선", "COLD_BLUE", LocalTime.now(), LocalTime.now(), 3, 400);
-        Line savedLine = lineRepository.save(line);
-
-        // when
-        assertThat(savedLine.getExtraFare()).isNotNull();
-    }
-
     @DisplayName("지하철 역과 시간이 주어지면 다음 열차도착 시간을 계산한다.")
-    @Test
-    void 다음_열차도착시간을_계산한다() {
+    @MethodSource("다음_열차도착시간_테스트_데이터")
+    @ParameterizedTest
+    void 다음_열차도착시간을_계산한다(Long stationId, LocalTime departureTime, PathDirection pathDirection,
+        LocalTime expectedNextTime) {
         // when
-        LocalTime nextTime = 서울_지하철_3호선.calculateNextDepartureTime(4L, LocalTime.of(6, 17));
+        LocalTime actualNextTime = 서울_지하철_3호선.calculateNextDepartureTime(stationId, departureTime, pathDirection);
 
         // then
-        assertThat(nextTime).isEqualTo(LocalTime.of(6, 17));
+        assertThat(actualNextTime).isEqualTo(expectedNextTime);
     }
 }
