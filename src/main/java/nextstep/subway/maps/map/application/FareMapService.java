@@ -31,10 +31,10 @@ public class FareMapService {
 
     private final LineService lineService;
     private final StationService stationService;
-    private final PathService pathService;
+    private final BidirectionalPathService pathService;
     private final DiscountFareCalculator fareCalculator;
 
-    public FareMapService(LineService lineService, StationService stationService, PathService pathService,
+    public FareMapService(LineService lineService, StationService stationService, BidirectionalPathService pathService,
         DiscountFareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
