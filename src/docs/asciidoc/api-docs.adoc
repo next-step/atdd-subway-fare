@@ -13,6 +13,14 @@ endif::[]
 [[resources]]
 = Resources
 
+[[resources-maps]]
+== Map
+
+[[resources-map-find]]
+=== 지도 조회
+
+operation::maps/find[snippets='http-request,http-response,response-fields']
+
 [[resources-favorites]]
 == Favorite
 
@@ -36,5 +44,8 @@ operation::favorites/delete[snippets='http-request,http-response,request-headers
 
 [[resources-paths-find]]
 === 경로 찾기
+
+[[pathType]]
+operation::paths/find[snippets='path-types']
 
 operation::paths/find[snippets='http-request,http-response,request-parameters,response-fields']
