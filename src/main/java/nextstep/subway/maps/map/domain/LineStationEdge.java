@@ -1,5 +1,7 @@
 package nextstep.subway.maps.map.domain;
 
+import java.time.LocalTime;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import nextstep.subway.maps.line.domain.Line;
@@ -40,5 +42,13 @@ public class LineStationEdge extends DefaultWeightedEdge {
         } else {
             throw new RuntimeException();
         }
+    }
+
+    public LocalTime calculateNextDepartureTime(LocalTime stationArrivalTime) {
+        return line.calculateNextDepartureTime(lineStation.getPreStationId(), stationArrivalTime);
+    }
+
+    public LocalTime calculateArrivedTime(LocalTime time) {
+        return time.plusMinutes(lineStation.getDuration());
     }
 }
