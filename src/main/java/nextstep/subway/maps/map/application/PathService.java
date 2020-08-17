@@ -31,7 +31,7 @@ public class PathService {
         DijkstraShortestPath<Long, LineStationEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
 
-        return convertSubwayPath(path);
+        return convertSubwayPath(path, source);
     }
 
     protected SubwayPath findPathByArrivalTime(List<Line> lines, Long source, Long target,
@@ -39,7 +39,7 @@ public class PathService {
         SubwayGraph graph = createSubwayGraph(lines, PathType.ARRIVAL);
         List<GraphPath<Long, LineStationEdge>> paths = getAllPaths(source, target, graph);
         List<SubwayPath> subwayPaths = paths.stream()
-            .map(this::convertSubwayPath)
+            .map(path -> convertSubwayPath(path, source))
             .collect(Collectors.toList());
         SubwayPaths timePaths = SubwayPaths.of(subwayPaths);
         return timePaths.findFastestArrivalPath(departureTime);
@@ -59,7 +59,7 @@ public class PathService {
         DijkstraShortestPath<Long, LineStationEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
 
-        return convertSubwayPath(path);
+        return convertSubwayPath(path, source);
     }
 
     private SubwayGraph createSubwayGraph(List<Line> lines, PathType type) {
@@ -69,7 +69,7 @@ public class PathService {
         return graph;
     }
 
-    private SubwayPath convertSubwayPath(GraphPath<Long, LineStationEdge> graphPath) {
-        return new SubwayPath(Lists.newArrayList(graphPath.getEdgeList()));
+    private SubwayPath convertSubwayPath(GraphPath<Long, LineStationEdge> graphPath, Long source) {
+        return new SubwayPath(Lists.newArrayList(graphPath.getEdgeList()), source);
     }
 }

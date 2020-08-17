@@ -39,7 +39,7 @@ class SubwayPathTest {
             new LineStationEdge(lineStation6, 서울_지하철_3호선),
             new LineStationEdge(lineStation7, 서울_지하철_3호선)
         );
-        subwayPath = new SubwayPath(lineStations);
+        subwayPath = new SubwayPath(lineStations, 1L);
     }
 
     @DisplayName("경로를 지나가는 노선 중에서 최대 노선별 요금을 반환한다.")

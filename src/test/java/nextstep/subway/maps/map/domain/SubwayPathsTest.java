@@ -62,7 +62,8 @@ public class SubwayPathsTest {
         subwayPath1 = new SubwayPath(Lists.newArrayList(
             서울_지하철_2호선_교대역_에지,
             서울_지하철_2호선_강남역_에지,
-            신분당선_강남역_에지, 신분당선_양재역_에지)
+            신분당선_강남역_에지, 신분당선_양재역_에지),
+            1L
         );
 
         LineStationEdge 서울_지하철_3호선_교대역_에지 = new LineStationEdge(서울_지하철_3호선_교대역, 서울_지하철_3호선);
@@ -72,8 +73,9 @@ public class SubwayPathsTest {
         subwayPath2 = new SubwayPath(Lists.newArrayList(
             서울_지하철_3호선_교대역_에지,
             서울_지하철_3호선_남부터미널역_에지,
-            서울_지하철_3호선_양재역_에지
-        ));
+            서울_지하철_3호선_양재역_에지),
+            1L
+        );
 
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
         graph.addVertexWith(lines);
