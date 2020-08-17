@@ -53,28 +53,28 @@ public class FareMapService {
     }
 
     public FarePathResponse findPathWithFare(Long source, Long target, PathType pathType, LocalDateTime time) {
-        SubwayPath shortestPath = extractShortestPath(source, target);
+        SubwayPath shortestPath = extractShortestPath(source, target, time);
         Money fare = extractFare(shortestPath);
         if (isPathTypeDistance(pathType)) {
             return assemblePathResponse(shortestPath, fare);
         }
-        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType);
+        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType, time);
         return assemblePathResponse(subwayPath, fare);
     }
 
     public FarePathResponse findPathWithFare(LoginMember loginMember, Long source, Long target, PathType pathType,
-        LocalDateTime time) {
-        SubwayPath shortestPath = extractShortestPath(source, target);
+        LocalDateTime departureTime) {
+        SubwayPath shortestPath = extractShortestPath(source, target, departureTime);
         Money fare = extractFare(shortestPath, loginMember);
         if (isPathTypeDistance(pathType)) {
             return assemblePathResponse(shortestPath, fare);
         }
-        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType);
+        SubwayPath subwayPath = extractFastDurationPath(source, target, pathType, departureTime);
         return assemblePathResponse(subwayPath, fare);
     }
 
-    private SubwayPath extractShortestPath(Long source, Long target) {
-        return pathService.findPath(lineService.findLines(), source, target, PathType.DISTANCE);
+    private SubwayPath extractShortestPath(Long source, Long target, LocalDateTime departureTime) {
+        return pathService.findPath(lineService.findLines(), source, target, PathType.DISTANCE, departureTime);
     }
 
     private Money extractFare(SubwayPath shortestPath, LoginMember loginMember) {
@@ -85,8 +85,9 @@ public class FareMapService {
         return fareCalculator.calculate(shortestPath);
     }
 
-    private SubwayPath extractFastDurationPath(Long source, Long target, PathType pathType) {
-        return pathService.findPath(lineService.findLines(), source, target, pathType);
+    private SubwayPath extractFastDurationPath(Long source, Long target, PathType pathType,
+        LocalDateTime departureTime) {
+        return pathService.findPath(lineService.findLines(), source, target, pathType, departureTime);
     }
 
     private boolean isPathTypeDistance(PathType pathType) {
