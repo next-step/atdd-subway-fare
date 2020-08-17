@@ -31,6 +31,14 @@ public class Line extends BaseEntity {
     public Line() {
     }
 
+    public Line(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime) {
+        this.name = name;
+        this.color = color;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
+    }
+
     public Line(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime, int extraFare) {
         this.name = name;
         this.color = color;
@@ -57,7 +65,9 @@ public class Line extends BaseEntity {
     }
 
     public LocalTime calculateNextTime(Long stationId, LocalTime departTime) {
-        LocalTime nextTime = startTime.plusMinutes(lineStations.calculateDurationFromStart(stationId));
+        LocalTime nextTime = startTime.plusMinutes(
+            lineStations.calculateDurationFromStart(stationId).toMinutes()
+        );
         while (nextTime.isBefore(departTime)) {
             nextTime = nextTime.plusMinutes(intervalTime);
         }
