@@ -23,6 +23,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.context.WebApplicationContext;
 
+import nextstep.documentation.PathTypesSnippet;
 import nextstep.subway.Documentation;
 import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.maps.map.application.FareMapService;
@@ -76,8 +77,9 @@ public class PathDocumentation extends Documentation {
                 requestParameters(
                     parameterWithName("source").description("출발역 아이디"),
                     parameterWithName("target").description("도착역 아이디"),
-                    parameterWithName("type").description("최단 시간 / 최단 거리"),
-                    parameterWithName("time").description("경로 출발 시간")
+                    parameterWithName("time").attributes(getDateFormat()).description("경로 출발 시간").optional(),
+                    parameterWithName("type").description(
+                        "link:#resources-paths-find_path_types[경로 검색 타입,window=\\\"_blank\\\"]\"")
                 ),
                 responseFields(
                     fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철 역 정보"),
@@ -86,7 +88,8 @@ public class PathDocumentation extends Documentation {
                     fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
                     fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 거리"),
                     fieldWithPath("fare").type(JsonFieldType.NUMBER).description("지하철 운임")
-                )
+                ),
+                new PathTypesSnippet()
             )).
             extract();
     }
