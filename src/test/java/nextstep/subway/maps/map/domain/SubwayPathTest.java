@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +50,15 @@ class SubwayPathTest {
 
         // then
         assertThat(money).isEqualTo(Money.drawNewMoney(1000));
+    }
+
+    @DisplayName("목적지의 예상 도착시간을 계산한다.")
+    @Test
+    void 예상_도착시간을_계산한다() {
+        // when
+        LocalDateTime arrivalTime = subwayPath.getArrivalTime(LocalDateTime.of(2020, 8, 24, 6, 15));
+
+        // then
+        assertThat(arrivalTime).isEqualTo(LocalDateTime.of(2020, 8, 24, 6, 19));
     }
 }

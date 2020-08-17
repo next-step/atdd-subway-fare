@@ -1,11 +1,13 @@
 package nextstep.subway.maps.map.domain;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Lists;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.Money;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SubwayPath {
     private List<LineStationEdge> lineStationEdges;
@@ -41,5 +43,14 @@ public class SubwayPath {
             .map(Line::getExtraFare)
             .max(Money::compareTo)
             .orElse(Money.NO_VALUE());
+    }
+
+    public LocalDateTime getArrivalTime(LocalDateTime departureTime) {
+        LocalTime stationArrivalTime = departureTime.toLocalTime();
+        for (LineStationEdge lineStationEdge : lineStationEdges) {
+            LocalTime nextTime = lineStationEdge.calculateNextDepartureTime(stationArrivalTime);
+            stationArrivalTime = lineStationEdge.calculateArrivedTime(nextTime);
+        }
+        return stationArrivalTime.atDate(departureTime.toLocalDate());
     }
 }

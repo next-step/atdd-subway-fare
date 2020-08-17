@@ -1,4 +1,4 @@
-package nextstep.subway.maps.map.domain.path;
+package nextstep.subway.maps.map.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,10 +16,6 @@ import org.junit.jupiter.api.Test;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
 import nextstep.subway.maps.map.application.PathService;
-import nextstep.subway.maps.map.domain.LineStationEdge;
-import nextstep.subway.maps.map.domain.PathType;
-import nextstep.subway.maps.map.domain.SubwayGraph;
-import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 
@@ -93,12 +89,12 @@ public class TimePathsTest {
         TimePaths timePaths = TimePaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
 
         // when
-        TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(
+        SubwayPath fastestArrivalPath = timePaths.findFastestArrivalPath(
             LocalDateTime.of(2020, 8, 24, 14, 0)
         );
 
         // then
-        assertThat(fastestArrivalPath.getPath().getLineStationEdges().stream()
+        assertThat(fastestArrivalPath.getLineStationEdges().stream()
             .map(LineStationEdge::getLineStation)
             .mapToLong(LineStation::getStationId)
             .distinct()

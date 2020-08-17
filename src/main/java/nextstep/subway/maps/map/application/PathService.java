@@ -15,8 +15,7 @@ import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayGraph;
 import nextstep.subway.maps.map.domain.SubwayPath;
-import nextstep.subway.maps.map.domain.path.TimePath;
-import nextstep.subway.maps.map.domain.path.TimePaths;
+import nextstep.subway.maps.map.domain.TimePaths;
 
 @Service
 public class PathService {
@@ -43,8 +42,7 @@ public class PathService {
             .map(this::convertSubwayPath)
             .collect(Collectors.toList());
         TimePaths timePaths = TimePaths.of(subwayPaths);
-        TimePath fastestArrivalPath = timePaths.findFastestArrivalPath(departureTime);
-        return fastestArrivalPath.getPath();
+        return timePaths.findFastestArrivalPath(departureTime);
     }
 
     private List<GraphPath<Long, LineStationEdge>> getAllPaths(Long source, Long target, SubwayGraph graph) {
