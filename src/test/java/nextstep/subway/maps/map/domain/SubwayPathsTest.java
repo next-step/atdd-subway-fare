@@ -19,7 +19,7 @@ import nextstep.subway.maps.map.application.PathService;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.utils.TestObjectUtils;
 
-public class TimePathsTest {
+public class SubwayPathsTest {
 
     private List<Line> lines;
     private KShortestPaths<Long, LineStationEdge> kShortestPaths;
@@ -86,10 +86,10 @@ public class TimePathsTest {
     @Test
     void 최단_도착_경로를_반환한다() {
         // given
-        TimePaths timePaths = TimePaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
+        SubwayPaths subwayPaths = SubwayPaths.of(Lists.newArrayList(subwayPath1, subwayPath2));
 
         // when
-        SubwayPath fastestArrivalPath = timePaths.findFastestArrivalPath(
+        SubwayPath fastestArrivalPath = subwayPaths.findFastestArrivalPath(
             LocalDateTime.of(2020, 8, 24, 14, 0)
         );
 
