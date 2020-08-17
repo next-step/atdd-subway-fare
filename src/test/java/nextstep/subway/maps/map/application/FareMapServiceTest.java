@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,8 @@ public class FareMapServiceTest {
         // given
         LoginMember loginMember = new LoginMember(1L, "javajigi@slipp.net", "pobiconan", 20);
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(), nullable(LocalDateTime.class)))
+            .thenReturn(subwayPath);
 
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class), any(DiscountPolicy.class))).thenReturn(BASIC_FARE);
@@ -150,8 +152,8 @@ public class FareMapServiceTest {
     void 최단시간으로_요청하면_거리비례제_기준으로_요금을_책정한다() {
         // given
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(shortestPath,
-            subwayPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class),
+            nullable(LocalDateTime.class))).thenReturn(shortestPath, subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 
@@ -173,8 +175,8 @@ public class FareMapServiceTest {
     void 최단거리으로_요청하면_거리비례제_기준으로_요금을_책정한다() {
         // given
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class))).thenReturn(subwayPath,
-            shortestPath);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any(PathType.class),
+            nullable(LocalDateTime.class))).thenReturn(subwayPath, shortestPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(fareCalculator.calculate(any(SubwayPath.class))).thenReturn(BASIC_FARE);
 

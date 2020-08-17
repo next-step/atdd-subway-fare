@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
-import nextstep.subway.maps.map.application.NewTestPathService;
+import nextstep.subway.maps.map.application.PathService;
 import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.PathType;
 import nextstep.subway.maps.map.domain.SubwayGraph;
@@ -83,7 +83,7 @@ public class TimePathsTest {
         graph.addVertexWith(lines);
         graph.addEdge(lines, PathType.DURATION);
 
-        kShortestPaths = new KShortestPaths<>(graph, NewTestPathService.MAX_PATH_COUNT);
+        kShortestPaths = new KShortestPaths<>(graph, PathService.MAX_PATH_COUNT);
     }
 
     @DisplayName("현재 시간으로부터 가장 빠른 도착 경로를 반환한다.")

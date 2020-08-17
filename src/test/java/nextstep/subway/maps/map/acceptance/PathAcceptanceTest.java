@@ -157,12 +157,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역에서 도착역까지 가장 빠른 경로를 탐색하여 반환한다.")
     @Test
     void 출발역에서_도착역까지_가장_빠른_경로를_반환한다() {
-        //when
+        // when
         ExtractableResponse<Response> response = PathAcceptanceStep.출발역에서_도착역까지의_가장_빠른_도착_경로_조회_요청(
             LocalDateTime.of(2020, 8, 24, 14, 0), 1L, 3L
         );
-        //then
-        PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 4, 3);
+        // then
+        PathAcceptanceStep.총_거리와_소요시간을_함께_응답검증(response, 3, 4);
         PathAcceptanceStep.경로를_순서대로_정렬하여_응답검증(response, Lists.newArrayList(1L, 4L, 3L));
         PathAcceptanceStep.지하철_이용요금이_함께_응답검증(response, EXPECTED_FARE);
     }

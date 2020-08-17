@@ -2,6 +2,7 @@ package nextstep.subway.maps.map.application;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +75,11 @@ public class PathServiceTest {
 
     @Test
     void findPathOfFastestArrivalTime() {
+        // given
+        LocalDateTime departureTime = LocalDateTime.of(2020, 8, 24, 6, 15);
+
         // when
-        SubwayPath subwayPath = pathService.findPath(lines, 1L, 3L, PathType.ARRIVAL);
+        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, 1L, 3L, departureTime);
 
         // then
         assertThat(subwayPath.extractStationId().size()).isEqualTo(3);
