@@ -1,9 +1,7 @@
 package nextstep.subway.maps.map.domain.path;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -23,14 +21,14 @@ public class TimePath {
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departTime) {
-        LocalTime lastStationArrivalTime = departTime.toLocalTime();
+        LocalTime stationArrivalTime = departTime.toLocalTime();
         for (LineStationEdge lineStationEdge: path.getLineStationEdges()) {
             LineStation lineStation = lineStationEdge.getLineStation();
             Line line = lineStationEdge.getLine();
             Long pendingStationId = lineStation.getPreStationId();
-            LocalTime nextTime = line.calculateNextTime(pendingStationId, lastStationArrivalTime);
-            lastStationArrivalTime = nextTime.plusMinutes(lineStation.getDuration());
+            LocalTime nextTime = line.calculateNextDepartureTime(pendingStationId, stationArrivalTime);
+            stationArrivalTime = nextTime.plusMinutes(lineStation.getDuration());
         }
-        return lastStationArrivalTime.atDate(departTime.toLocalDate());
+        return stationArrivalTime.atDate(departTime.toLocalDate());
     }
 }

@@ -82,7 +82,7 @@ public class LineTest {
     @Test
     void 다음_열차도착시간을_계산한다() {
         // when
-        LocalTime nextTime = 서울_지하철_3호선.calculateNextTime(4L, LocalTime.of(6, 17));
+        LocalTime nextTime = 서울_지하철_3호선.calculateNextDepartureTime(4L, LocalTime.of(6, 17));
 
         // then
         assertThat(nextTime).isEqualTo(LocalTime.of(6, 17));

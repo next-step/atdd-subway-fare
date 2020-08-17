@@ -64,7 +64,7 @@ public class Line extends BaseEntity {
         lineStations.removeByStationId(stationId);
     }
 
-    public LocalTime calculateNextTime(Long stationId, LocalTime departTime) {
+    public LocalTime calculateNextDepartureTime(Long stationId, LocalTime departTime) {
         LocalTime nextTime = startTime.plusMinutes(
             lineStations.calculateDurationFromStart(stationId).toMinutes()
         );
