@@ -37,8 +37,8 @@ class BidirectionalPathServiceTest {
 
     private static Stream<Arguments> 도착시간_경로_반환_데이터() {
         return Stream.of(
-            Arguments.of(1L, 3L, Lists.newArrayList(1L, 4L, 3L)),
-            Arguments.of(3L, 1L, Lists.newArrayList(3L, 4L, 1L))
+            Arguments.of(1L, 3L, Lists.newArrayList(1L, 4L, 3L), LocalDateTime.of(2020, 8, 24, 6, 15)),
+            Arguments.of(3L, 1L, Lists.newArrayList(3L, 4L, 1L), LocalDateTime.of(2020, 8, 24, 6, 5))
         );
     }
 
@@ -50,7 +50,7 @@ class BidirectionalPathServiceTest {
         stations.put(3L, TestObjectUtils.createStation(3L, "양재역"));
         stations.put(4L, TestObjectUtils.createStation(4L, "남부터미널역"));
 
-        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0, 10);
+        Line 서울_지하철_2호선 = TestObjectUtils.createLine(1L, "2호선", "GREEN", 0, 3);
         LineStation 지하철_2호선_교대역 = new LineStation(1L, null, 0, 0);
         LineStation 지하철_2호선_강남역 = new LineStation(2L, 1L, 2, 2);
         서울_지하철_2호선.addLineStation(지하철_2호선_교대역);
@@ -62,7 +62,7 @@ class BidirectionalPathServiceTest {
         신분당선.addLineStation(신분당선_강남역);
         신분당선.addLineStation(신분당선_양재역);
 
-        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 10);
+        Line 서울_지하철_3호선 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", 0, 5);
         LineStation 지하철_3호선_교대역 = new LineStation(1L, null, 0, 0);
         LineStation 지하철_3호선_남부터미널역 = new LineStation(4L, 1L, 1, 2);
         LineStation 지하철_3호선_양재역 = new LineStation(3L, 4L, 2, 2);
@@ -75,9 +75,9 @@ class BidirectionalPathServiceTest {
         pathService = new BidirectionalPathService();
     }
 
-    @DisplayName("출발지와 도착지, 검색 유형에 따라 올바르게 경로를 반환할 수 있다.")
+    @DisplayName("출발지와 도착지, 검색 유형에 따라 최단 거리와 최단 소요시간 경로를 올바르게 반환할 수 있다.")
     @MethodSource("경로_반환_데이터")
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}: 출발역 {1}: 도착역 {2}: 검색 유형")
     void 경로를_반환한다(Long source, Long target, PathType type, List<Long> expectedPath) {
         // when
         SubwayPath path = pathService.findPath(lines, source, target, type, null);
@@ -87,14 +87,12 @@ class BidirectionalPathServiceTest {
             .containsExactlyElementsOf(expectedPath);
     }
 
-    @DisplayName("도착 시간을 기준으로 올바르게 경로를 반환할 수 있다.")
+    @DisplayName("도착 시간을 기준으로 가장 빠른 경로를 올바르게 반환할 수 있다.")
     @MethodSource("도착시간_경로_반환_데이터")
-    @ParameterizedTest
-    void 도착_시간을_기준으로_경로를_반환한다(Long source, Long target, List<Long> expectedPath) {
-        //given
-        LocalDateTime departTime = LocalDateTime.of(2020, 7, 1, 6, 15);
+    @ParameterizedTest(name = "{0}: 출발역 {1}: 도착역 {3}: 출발 시간")
+    void 도착_시간을_기준으로_경로를_반환한다(Long source, Long target, List<Long> expectedPath, LocalDateTime departureTime) {
         // when
-        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, source, target, departTime);
+        SubwayPath subwayPath = pathService.findPathByArrivalTime(lines, source, target, departureTime);
 
         // then
         assertThat(subwayPath.extractStationId())
