@@ -93,11 +93,23 @@ public class LineStations {
         List<LineStation> stationsInOrder = getStationsInOrder(pathDirection);
         long totalDuration = 0;
         for (LineStation lineStation : stationsInOrder) {
-            if (Objects.equals(lineStation.getPreStationId(), stationId)) {
+            if (isStartStation(stationId, lineStation, pathDirection)) {
                 break;
             }
             totalDuration += lineStation.getDuration();
         }
         return Duration.ofMinutes(totalDuration);
+    }
+
+    private boolean isStartStation(Long stationId, LineStation lineStation, PathDirection pathDirection) {
+        Long startStationId = null;
+        if (pathDirection == PathDirection.UPBOUND) {
+            startStationId = lineStation.getPreStationId();
+            return Objects.equals(startStationId, stationId);
+        }
+        if (pathDirection == PathDirection.DOWNBOUND) {
+            return Objects.equals(startStationId, stationId);
+        }
+        throw new IllegalStateException("something goes wrong");
     }
 }
