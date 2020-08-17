@@ -44,8 +44,8 @@ public class LineStationEdge extends DefaultWeightedEdge {
         }
     }
 
-    public LocalTime calculateNextDepartureTime(LocalTime stationArrivalTime) {
-        return line.calculateNextDepartureTime(lineStation.getPreStationId(), stationArrivalTime);
+    public LocalTime calculateNextDepartureTime(LocalTime stationArrivalTime, PathDirection pathDirection) {
+        return line.calculateNextDepartureTime(lineStation.getPreStationId(), stationArrivalTime, pathDirection);
     }
 
     public LocalTime calculateArrivedTime(LocalTime time) {
