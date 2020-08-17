@@ -50,18 +50,6 @@ public class PathService {
         return kShortestPaths.getPaths(source, target);
     }
 
-    public SubwayPath findPath(List<Line> lines, Long source, Long target, PathType type) {
-        SubwayGraph graph = createSubwayGraph(lines, type);
-        graph.addVertexWith(lines);
-        graph.addEdge(lines, type);
-
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Long, LineStationEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Long, LineStationEdge> path = dijkstraShortestPath.getPath(source, target);
-
-        return convertSubwayPath(path, source);
-    }
-
     private SubwayGraph createSubwayGraph(List<Line> lines, PathType type) {
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
         graph.addVertexWith(lines);
