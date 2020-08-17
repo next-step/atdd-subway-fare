@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.google.common.collect.Maps;
+import nextstep.subway.auth.domain.EmptyMember;
 import nextstep.subway.maps.line.application.LineService;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.line.domain.LineStation;
@@ -54,6 +55,8 @@ public class FareMapServiceTest {
 
     private Station 교대역;
     private Station 양재역;
+
+    private EmptyMember emptyMember;
 
     @BeforeEach
     void setUp() {
@@ -106,6 +109,7 @@ public class FareMapServiceTest {
         subwayPath = new SubwayPath(lineStations, 1L);
         shortestPath = new SubwayPath(shortestLineStations, 1L);
         fareMapService = new FareMapService(lineService, stationService, pathService, fareCalculator);
+        emptyMember = new EmptyMember();
     }
 
     @DisplayName("최단 경로를 반환할 때, 기본 운임에 해당하는 값을 포함하여 반환할 수 있다.")
@@ -158,7 +162,7 @@ public class FareMapServiceTest {
         when(fareCalculator.calculate(any())).thenReturn(BASIC_FARE);
 
         // when
-        FarePathResponse farePathResponse = fareMapService.findPathWithFare(교대역.getId(), 양재역.getId(),
+        FarePathResponse farePathResponse = fareMapService.findPathWithFare(emptyMember, 교대역.getId(), 양재역.getId(),
             PathType.DURATION, null);
 
         // then
@@ -182,7 +186,7 @@ public class FareMapServiceTest {
 
         // when
         FarePathResponse farePathResponse = fareMapService.findPathWithFare(
-            교대역.getId(), 양재역.getId(), PathType.DISTANCE, null);
+            emptyMember, 교대역.getId(), 양재역.getId(), PathType.DISTANCE, null);
 
         // then
         assertAll(
