@@ -45,7 +45,7 @@ public class SubwayPath {
     public LocalDateTime getArrivalTime(LocalDateTime departureTime) {
         LocalTime stationArrivalTime = departureTime.toLocalTime();
         for (LineStationEdge lineStationEdge : lineStationEdges) {
-            LocalTime nextTime = lineStationEdge.calculateNextDepartureTime(stationArrivalTime);
+            LocalTime nextTime = lineStationEdge.calculateNextDepartureTime(stationArrivalTime, pathDirection);
             stationArrivalTime = lineStationEdge.calculateArrivedTime(nextTime);
         }
         return stationArrivalTime.atDate(departureTime.toLocalDate());
