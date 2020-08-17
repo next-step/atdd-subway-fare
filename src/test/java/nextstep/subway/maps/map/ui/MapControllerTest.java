@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.auth.domain.EmptyMember;
 import nextstep.subway.maps.map.application.FareMapService;
 import nextstep.subway.maps.map.domain.PathType;
@@ -34,11 +35,13 @@ public class MapControllerTest {
     void findPath() {
         FareMapService mapService = mock(FareMapService.class);
         MapController controller = new MapController(mapService);
-        when(mapService.findPathWithFare(anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class)))
+        when(mapService.findPathWithFare(any(UserDetails.class), anyLong(), anyLong(), any(PathType.class),
+            nullable(LocalDateTime.class)))
             .thenReturn(new FarePathResponse());
         ResponseEntity<FarePathResponse> entity = controller.findPath(new EmptyMember(), 1L, 2L,
             PathType.DISTANCE, null);
-        verify(mapService).findPathWithFare(anyLong(), anyLong(), any(PathType.class), nullable(LocalDateTime.class));
+        verify(mapService).findPathWithFare(any(UserDetails.class), anyLong(), anyLong(), any(PathType.class),
+            nullable(LocalDateTime.class));
         assertThat(entity.getBody()).isNotNull();
     }
 

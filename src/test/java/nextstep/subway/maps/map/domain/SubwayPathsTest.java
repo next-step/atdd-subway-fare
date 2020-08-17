@@ -72,6 +72,7 @@ public class SubwayPathsTest {
         );
 
         SubwayGraph graph = new SubwayGraph(LineStationEdge.class);
+        lines = Lists.newArrayList(서울_지하철_2호선, 신분당선, 서울_지하철_3호선);
         graph.addVertexWith(lines);
         graph.addEdge(lines, PathType.DURATION);
 

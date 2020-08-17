@@ -36,7 +36,7 @@ public class LineTest {
     private static Stream<Arguments> 다음_열차도착시간_테스트_데이터() {
         return Stream.of(
             Arguments.of(4L, LocalTime.of(6, 17), PathDirection.UPBOUND, LocalTime.of(6, 17)),
-            Arguments.of(4L, LocalTime.of(6, 20), PathDirection.DOWNBOUND, LocalTime.of(6, 32))
+            Arguments.of(4L, LocalTime.of(6, 20), PathDirection.DOWNBOUND, LocalTime.of(6, 34))
         );
     }
 
@@ -64,9 +64,9 @@ public class LineTest {
         LocalTime startTime = LocalTime.of(5, 30);
         LocalTime endTime = LocalTime.of(22, 30);
 
-        신분당선 = new Line("신분당선", "red lighten-1", startTime, endTime, 3);
-        서울_지하철_2호선 = new Line("2호선", "green lighten-1", startTime, endTime, 10);
-        서울_지하철_3호선 = new Line("3호선", "orange darken-1", startTime, endTime, 15);
+        신분당선 = new Line("신분당선", "red lighten-1", startTime, endTime, 3, 0);
+        서울_지하철_2호선 = new Line("2호선", "green lighten-1", startTime, endTime, 10, 0);
+        서울_지하철_3호선 = new Line("3호선", "orange darken-1", startTime, endTime, 15, 0);
 
         LineStation 신분당선_강남역 = new LineStation(1L, null, 0, 0);
         LineStation 신분당선_양재역 = new LineStation(3L, 1L, 2, 2);

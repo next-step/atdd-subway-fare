@@ -20,4 +20,9 @@ public class TestUserDetails implements UserDetails {
     public boolean checkCredentials(Object credentials) {
         return true;
     }
+
+    @Override
+    public boolean isLoggedIn() {
+        return true;
+    }
 }

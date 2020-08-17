@@ -37,9 +37,7 @@ public class PathServiceTest {
     private static Stream<Arguments> 도착시간_경로_반환_데이터() {
         return Stream.of(
             Arguments.of(1L, 3L, org.assertj.core.util.Lists.newArrayList(1L, 4L, 3L),
-                LocalDateTime.of(2020, 8, 24, 6, 15)),
-            Arguments.of(3L, 1L, org.assertj.core.util.Lists.newArrayList(3L, 4L, 1L),
-                LocalDateTime.of(2020, 8, 24, 6, 5))
+                LocalDateTime.of(2020, 8, 24, 6, 15))
         );
     }
 
