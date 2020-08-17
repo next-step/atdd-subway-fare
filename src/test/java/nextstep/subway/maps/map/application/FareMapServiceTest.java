@@ -103,8 +103,8 @@ public class FareMapServiceTest {
             new LineStationEdge(신분당선_양재역, 신분당선)
         );
 
-        subwayPath = new SubwayPath(lineStations);
-        shortestPath = new SubwayPath(shortestLineStations);
+        subwayPath = new SubwayPath(lineStations, 1L);
+        shortestPath = new SubwayPath(shortestLineStations, 1L);
         fareMapService = new FareMapService(lineService, stationService, pathService, fareCalculator);
     }
 
