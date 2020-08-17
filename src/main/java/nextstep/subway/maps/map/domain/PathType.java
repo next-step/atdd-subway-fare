@@ -5,11 +5,11 @@ import java.util.function.Function;
 import nextstep.subway.maps.line.domain.LineStation;
 
 public enum PathType {
-    DISTANCE(lineStation -> lineStation.getDistance()),
+    DISTANCE(LineStation::getDistance),
 
-    DURATION(lineStation -> lineStation.getDuration()),
+    DURATION(LineStation::getDuration),
 
-    ARRIVAL(lineStation -> lineStation.getDuration());
+    ARRIVAL(LineStation::getDuration);
 
     private Function<LineStation, Integer> expression;
 
