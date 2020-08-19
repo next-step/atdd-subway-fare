@@ -53,6 +53,6 @@ public class LineRequest {
     }
 
     public Line toLine() {
-        return new Line(name, color, startTime, endTime, intervalTime, extraFare);
+        return new Line(name, color, startTime, endTime, intervalTime, extraFare == null ? 0 : extraFare);
     }
 }
