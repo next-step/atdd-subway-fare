@@ -148,7 +148,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(24);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo((1750 - 350) * 50 / 100);
+        assertThat(pathResponse.getFare()).isEqualTo(discountFare(1750, 8));
 
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
     }
@@ -171,9 +171,22 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(24);
         assertThat(pathResponse.getDuration()).isEqualTo(3);
-        assertThat(pathResponse.getFare()).isEqualTo((1750 - 350) * 80 / 100);
+        assertThat(pathResponse.getFare()).isEqualTo(discountFare(1750, 18));
 
         assertThat(pathResponse.getStations()).extracting(StationResponse::getId).containsExactly(1L, 2L, 3L);
+    }
+
+    private int discountFare(int fare, int age) {
+        if (age == 0 || age > 20) {
+            return fare;
+        }
+        if (age > 13) {
+            return (fare - 350) * 80 / 100;
+        }
+        if (age > 6) {
+            return (fare - 350) * 50 / 100;
+        }
+        return 0;
     }
 
 }
