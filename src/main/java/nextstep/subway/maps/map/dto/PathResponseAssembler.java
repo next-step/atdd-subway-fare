@@ -4,6 +4,7 @@ import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.auth.domain.EmptyMember;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.FareCalculator;
+import nextstep.subway.maps.map.domain.LineStationEdge;
 import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.maps.station.domain.Station;
 import nextstep.subway.maps.station.dto.StationResponse;
@@ -38,8 +39,8 @@ public class PathResponseAssembler {
 
     private static Integer getMaxExtraFare(SubwayPath subwayPath) {
         return subwayPath.getLineStationEdges().stream()
-                .map(it -> it.getLine())
-                .map(it -> it.getExtraFare())
+                .map(LineStationEdge::getLine)
+                .map(Line::getExtraFare)
                 .max(Integer::compareTo)
                 .get();
     }
