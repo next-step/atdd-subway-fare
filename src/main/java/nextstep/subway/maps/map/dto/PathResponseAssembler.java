@@ -1,6 +1,7 @@
 package nextstep.subway.maps.map.dto;
 
 import nextstep.subway.auth.application.UserDetails;
+import nextstep.subway.fare.*;
 import nextstep.subway.maps.line.domain.Line;
 import nextstep.subway.maps.map.application.FareCalculator;
 import nextstep.subway.maps.map.domain.LineStationEdge;
@@ -9,13 +10,21 @@ import nextstep.subway.members.member.domain.LoginMember;
 
 public class PathResponseAssembler {
 
+    private PathResponseAssembler() {
+    }
 
     public static PathResponse assemble(StationInfoDto stationInfoDto, UserDetails userDetails) {
 
-        int fare = new FareCalculator().calculate(stationInfoDto.getDistance(), stationInfoDto.getMaxExtraFare());
+        int fare = new FareCalculator().calculate(stationInfoDto.getDistance());
 
         if (isLoginMember(userDetails)) {
-            fare = ((LoginMember) userDetails).discountFare(fare);
+            LoginMember loginMember = (LoginMember) userDetails;
+            PolicyCalculator fareCalculator;
+
+            if (loginMember.getAge() > 6 && loginMember.getAge() < 13) {
+                fareCalculator = new PolicyCalculator(new ChildPolicy(new LineExtraFarePolicy()));
+                fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
+            }
         }
 
         return new PathResponse(stationInfoDto, fare);

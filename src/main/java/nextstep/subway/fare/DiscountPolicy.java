@@ -1,26 +1,22 @@
 package nextstep.subway.fare;
 
-import nextstep.subway.auth.domain.EmptyMember;
-import nextstep.subway.members.member.domain.LoginMember;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class DiscountPolicy {
-    private List<DiscountCondition> conditions = new ArrayList<>();
+    private List<ExtraFarePolicy> extraFarePolicies = new ArrayList<>();
 
-    public DiscountPolicy(DiscountCondition... conditions) {
-        this.conditions = Arrays.asList(conditions);
+    public DiscountPolicy(ExtraFarePolicy... extraFarePolicies) {
+        this.extraFarePolicies = Arrays.asList(extraFarePolicies);
     }
 
-    public int calculateDiscountAmount(int fare, LoginMember loginMember) {
-        for (DiscountCondition each : conditions) {
-            if (each.isSatisfiedBy(loginMember)) {
-                return getDiscountAmount(fare);
-            }
+    public int calculateDiscountAmount(int fare, int extraFare) {
+        int result = fare;
+        for (ExtraFarePolicy each : extraFarePolicies) {
+            result = getDiscountAmount(fare + each.addExtraFee(extraFare));
         }
-        return fare;
+        return result;
     }
 
     protected abstract int getDiscountAmount(int fare);
