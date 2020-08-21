@@ -10,6 +10,11 @@ import nextstep.subway.members.member.domain.LoginMember;
 
 public class PathResponseAssembler {
 
+    private static final int CHILD_MINIMUM_AGE = 6;
+    private static final int CHILD_MAXIMUM_AGE = 13;
+    private static final int YOUTH_MINIMUM_AGE = 13;
+    private static final int YOUTH_MAXIMUM_AGE = 20;
+
     private PathResponseAssembler() {
     }
 
@@ -26,11 +31,11 @@ public class PathResponseAssembler {
         if (isLoginMember(userDetails)) {
             LoginMember loginMember = (LoginMember) userDetails;
 
-            if (loginMember.getAge() >= 6 && loginMember.getAge() < 13) {
+            if (loginMember.getAge() >= CHILD_MINIMUM_AGE && loginMember.getAge() < CHILD_MAXIMUM_AGE) {
                 return new PolicyCalculator(new ChildPolicy(new LineExtraFarePolicy()));
             }
 
-            if (loginMember.getAge() >= 13 && loginMember.getAge() < 20) {
+            if (loginMember.getAge() >= YOUTH_MINIMUM_AGE && loginMember.getAge() < YOUTH_MAXIMUM_AGE) {
                 return new PolicyCalculator(new YouthPolicy(new LineExtraFarePolicy()));
             }
         }
