@@ -18,18 +18,11 @@ public class PathResponseAssembler {
             fare = ((LoginMember) userDetails).discountFare(fare);
         }
 
-        return new PathResponse(stationInfoDto.getStationResponses(), stationInfoDto.getDuration(), stationInfoDto.getDistance(), fare);
+        return new PathResponse(stationInfoDto, fare);
     }
 
     private static boolean isLoginMember(UserDetails userDetails) {
         return userDetails instanceof LoginMember;
     }
 
-    private static Integer getMaxExtraFare(SubwayPath subwayPath) {
-        return subwayPath.getLineStationEdges().stream()
-                .map(LineStationEdge::getLine)
-                .map(Line::getExtraFare)
-                .max(Integer::compareTo)
-                .orElseThrow(IllegalArgumentException::new);
-    }
 }

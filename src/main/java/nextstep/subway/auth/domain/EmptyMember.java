@@ -7,15 +7,6 @@ import nextstep.subway.members.member.domain.LoginMember;
 public class EmptyMember implements UserDetails {
 
     public static final String EMPTY = "EMPTY";
-
-//    public EmptyMember() {
-//        this(null, null, null, null);
-//    }
-//
-//    public EmptyMember(Long id, String email, String password, Integer age) {
-//        super(id, email, password, age);
-//    }
-
     @Override
     public Object getPrincipal() {
         return EMPTY;

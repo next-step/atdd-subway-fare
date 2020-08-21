@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class StationInfoDto {
 
-    private SubwayPath subwayPath;
-    private Map<Long, Station> stations;
+    private final SubwayPath subwayPath;
+    private final Map<Long, Station> stations;
 
     public StationInfoDto(SubwayPath subwayPath, Map<Long, Station> stations) {
         this.subwayPath = subwayPath;
