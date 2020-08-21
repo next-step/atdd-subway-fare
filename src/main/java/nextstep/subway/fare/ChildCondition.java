@@ -8,15 +8,8 @@ public class ChildCondition implements DiscountCondition{
 
     @Override
     public boolean isSatisfiedBy(LoginMember loginMember) {
-        if (isLoginMember(loginMember)) {
+
             return loginMember.getAge() > 13 && loginMember.getAge() < 20;
-        }
-        return false;
-    }
 
-
-
-    private boolean isLoginMember(LoginMember loginMember) {
-        return !EmptyMember.class.isInstance(loginMember);
     }
 }

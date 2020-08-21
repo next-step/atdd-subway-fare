@@ -1,7 +1,6 @@
 package nextstep.subway.fare;
 
 import nextstep.subway.auth.domain.EmptyMember;
-import nextstep.subway.maps.map.domain.SubwayPath;
 import nextstep.subway.members.member.domain.LoginMember;
 
 import java.util.ArrayList;
@@ -21,12 +20,8 @@ public abstract class DiscountPolicy {
                 return getDiscountAmount(fare);
             }
         }
-        return 0;
+        return fare;
     }
 
     protected abstract int getDiscountAmount(int fare);
-
-    public boolean isLoginMember(LoginMember loginMember) {
-        return !EmptyMember.class.isInstance(loginMember);
-    }
 }
