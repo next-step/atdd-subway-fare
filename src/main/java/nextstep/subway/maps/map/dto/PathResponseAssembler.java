@@ -16,15 +16,23 @@ public class PathResponseAssembler {
     public static PathResponse assemble(StationInfoDto stationInfoDto, UserDetails userDetails) {
 
         int fare = new FareCalculator().calculate(stationInfoDto.getDistance());
+        PolicyCalculator fareCalculator;
 
         if (isLoginMember(userDetails)) {
             LoginMember loginMember = (LoginMember) userDetails;
-            PolicyCalculator fareCalculator;
 
-            if (loginMember.getAge() > 6 && loginMember.getAge() < 13) {
+            if (loginMember.getAge() >= 6 && loginMember.getAge() < 13) {
                 fareCalculator = new PolicyCalculator(new ChildPolicy(new LineExtraFarePolicy()));
                 fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
             }
+
+            if (loginMember.getAge() >= 13 && loginMember.getAge() < 20) {
+                fareCalculator = new PolicyCalculator(new YouthPolicy(new LineExtraFarePolicy()));
+                fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
+            }
+        } else {
+            fareCalculator = new PolicyCalculator(new NoneLoginPolicy(new LineExtraFarePolicy()));
+            fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
         }
 
         return new PathResponse(stationInfoDto, fare);
