@@ -14,28 +14,27 @@ public class PathResponseAssembler {
     }
 
     public static PathResponse assemble(StationInfoDto stationInfoDto, UserDetails userDetails) {
+        PolicyCalculator policyCalculator = getFareCalculator(userDetails);
 
-        int fare = new FareCalculator().calculate(stationInfoDto.getDistance());
-        PolicyCalculator fareCalculator;
+        int distanceFare = new FareCalculator().calculate(stationInfoDto.getDistance());
+        int totalFare = policyCalculator.calculate(distanceFare, stationInfoDto.getMaxExtraFare());
 
+        return new PathResponse(stationInfoDto, totalFare);
+    }
+
+    private static PolicyCalculator getFareCalculator(UserDetails userDetails) {
         if (isLoginMember(userDetails)) {
             LoginMember loginMember = (LoginMember) userDetails;
 
             if (loginMember.getAge() >= 6 && loginMember.getAge() < 13) {
-                fareCalculator = new PolicyCalculator(new ChildPolicy(new LineExtraFarePolicy()));
-                fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
+                return new PolicyCalculator(new ChildPolicy(new LineExtraFarePolicy()));
             }
 
             if (loginMember.getAge() >= 13 && loginMember.getAge() < 20) {
-                fareCalculator = new PolicyCalculator(new YouthPolicy(new LineExtraFarePolicy()));
-                fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
+                return new PolicyCalculator(new YouthPolicy(new LineExtraFarePolicy()));
             }
-        } else {
-            fareCalculator = new PolicyCalculator(new NoneLoginPolicy(new LineExtraFarePolicy()));
-            fare = fareCalculator.calculate(fare, stationInfoDto.getMaxExtraFare());
         }
-
-        return new PathResponse(stationInfoDto, fare);
+        return new PolicyCalculator(new NoneLoginPolicy(new LineExtraFarePolicy()));
     }
 
     private static boolean isLoginMember(UserDetails userDetails) {
