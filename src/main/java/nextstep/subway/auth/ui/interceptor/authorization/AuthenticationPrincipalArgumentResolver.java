@@ -2,8 +2,9 @@ package nextstep.subway.auth.ui.interceptor.authorization;
 
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
-import nextstep.subway.auth.infrastructure.SecurityContextHolder;
 import nextstep.subway.auth.domain.EmptyMember;
+import nextstep.subway.auth.infrastructure.SecurityContextHolder;
+import nextstep.subway.members.member.domain.LoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -36,11 +38,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         try {
             Map<String, String> principal = (Map) authentication.getPrincipal();
 
-            Object[] params = Arrays.stream(parameter.getParameterType().getDeclaredFields())
+            Object[] params = Arrays.stream(LoginMember.class.getDeclaredFields())
                     .map(it -> toObject(it.getType(), principal.get(it.getName())))
                     .toArray();
 
-            return parameter.getParameterType().getConstructors()[0].newInstance(params);
+            return LoginMember.class.getConstructors()[0].newInstance(params);
         } catch (Exception e) {
             e.printStackTrace();
         }
