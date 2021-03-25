@@ -51,8 +51,8 @@ public class PathSteps extends Documentation {
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"))))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
+                .queryParam("source", source)
+                .queryParam("target", target)
                 .queryParam("type", "DISTANCE")
                 .when().get("/paths")
                 .then().log().all().extract();
