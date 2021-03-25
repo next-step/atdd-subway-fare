@@ -1,7 +1,7 @@
 package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
-import nextstep.subway.utils.Documentation;
+import nextstep.subway.Documentation;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
