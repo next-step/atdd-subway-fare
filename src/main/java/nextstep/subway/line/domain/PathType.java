@@ -3,9 +3,9 @@ package nextstep.subway.line.domain;
 import java.util.function.Function;
 
 public enum PathType {
-    DISTANCE(section -> section.getDistance()),
+    DISTANCE(Section::getDistance),
 
-    DURATION(section -> section.getDuration());
+    DURATION(Section::getDuration);
 
     private Function<Section, Integer> expression;
 
