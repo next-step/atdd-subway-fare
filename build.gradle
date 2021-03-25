@@ -75,3 +75,11 @@ task copyDocument(type: Copy) {
 	from file("build/asciidoc/html5/index.html")
 	into file("src/main/resources/static/docs")
 }
+
+task asciidoctorAndCopyDocument(type: Copy) {
+	dependsOn asciidoctor
+	dependsOn testDocument
+
+	from file("build/asciidoc/html5/index.html")
+	into file("src/main/resources/static/docs")
+}

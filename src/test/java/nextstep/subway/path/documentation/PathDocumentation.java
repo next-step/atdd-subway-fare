@@ -14,15 +14,15 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
@@ -51,6 +51,11 @@ public class PathDocumentation extends Documentation {
                     "path",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
+                    requestParameters(
+                        parameterWithName("source").description("출발역 ID"),
+                        parameterWithName("target").description("도착역 ID"),
+                        parameterWithName("type").description("탐색 방법 (DISTANCE|DURATION|ARRIVAL_TIME)")
+                    ),
                     responseFields(
                         fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 아이디"),
                         fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
