@@ -54,4 +54,23 @@ public class PathSteps {
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
     }
+
+    public static void 경로와_요금_응답됨(
+        ExtractableResponse<Response> response,
+        List<Long> expectedStationIds,
+        int distance,
+        int duration,
+        int fare
+    ) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(distance);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+
+        List<Long> stationIds = pathResponse.getStations().stream()
+            .map(StationResponse::getId)
+            .collect(Collectors.toList());
+
+        assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
 }

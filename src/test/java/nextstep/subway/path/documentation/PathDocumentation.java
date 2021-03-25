@@ -15,6 +15,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
 
+import static nextstep.subway.path.application.AdultFareCalculator.ADULT_DEFAULT_FARE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -39,7 +40,8 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
             ),
             10,
-            10
+            10,
+            ADULT_DEFAULT_FARE
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class)))
