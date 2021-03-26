@@ -80,7 +80,8 @@ public class PathSteps {
                 fieldWithPath("stations[].createdDate").description("지하철 역 생성일"),
                 fieldWithPath("stations[].modifiedDate").description("지하철 역 최종 변경일"),
                 fieldWithPath("distance").description("경로 구간 길이"),
-                fieldWithPath("duration").description("경로 구간 소요 시간")
+                fieldWithPath("duration").description("경로 구간 소요 시간"),
+                fieldWithPath("cost").description("경로 구간 지불해야하는 금액")
         );
     }
 
@@ -100,5 +101,11 @@ public class PathSteps {
                 .filter(document("{method-name}",
                         지하철_노선_경로탐색_파라미터_설명(),
                         지하철_노선_경로탐색_결과_필드_설명()));
+    }
+
+    public static void 경로_요금_일치함(ExtractableResponse<Response> response, int fee) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+
+        assertThat(pathResponse.getCost()).isEqualTo(fee);
     }
 }

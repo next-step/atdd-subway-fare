@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
@@ -23,6 +25,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 이호선;
     private LineResponse 신분당선;
     private LineResponse 삼호선;
+
+    /**
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
 
     @BeforeEach
     public void setUp() {
@@ -44,10 +54,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역 .getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20);
+        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -58,5 +68,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+    }
+
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void managePathFinder() {
+        //when
+        ExtractableResponse<Response> pathFindResponse = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
+
+        //then
+        경로_응답됨(pathFindResponse, Arrays.asList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+
+        경로_요금_일치함(pathFindResponse, 1250);
+
     }
 }
