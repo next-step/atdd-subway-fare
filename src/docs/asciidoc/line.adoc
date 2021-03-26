@@ -7,9 +7,9 @@
 
 include::{snippets}/line/http-request.adoc[]
 
-==== Request Parameter
+==== Request Body
 
-include::{snippets}/line/request-parameters.adoc[]
+include::{snippets}/line/request-fields.adoc[]
 
 ==== Response
 
