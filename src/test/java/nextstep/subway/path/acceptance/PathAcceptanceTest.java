@@ -48,14 +48,16 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> distanceResponse = 두_역의_최단거리_또는_최소시간_경로_조회_요청(교대역.getId(), 양재역.getId(),"DISTANCE");
 
         // then
-        경로_응답됨(distanceResponse, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20);
-
+        경로_응답됨(distanceResponse, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()));
+        총_거리와_소요_시간을_함께_응답함(distanceResponse,5, 20);
+        이용요금도_함께_응답함(distanceResponse, 1250);
 
         // when
         ExtractableResponse<Response> durationResponse = 두_역의_최단거리_또는_최소시간_경로_조회_요청(교대역.getId(), 양재역.getId(), "DURATION");
 
         // then
-        경로_응답됨(durationResponse, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
-
+        경로_응답됨(durationResponse, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()));
+        총_거리와_소요_시간을_함께_응답함(durationResponse, 20, 20);
+        이용요금도_함께_응답함(durationResponse, 1450);
     }
 }
