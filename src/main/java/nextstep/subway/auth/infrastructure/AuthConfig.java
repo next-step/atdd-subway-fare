@@ -3,9 +3,7 @@ package nextstep.subway.auth.infrastructure;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nextstep.subway.auth.ui.authentication.SessionAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authentication.TokenAuthenticationInterceptor;
-import nextstep.subway.auth.ui.authorization.AuthenticationPrincipalArgumentResolver;
-import nextstep.subway.auth.ui.authorization.SessionSecurityContextPersistenceInterceptor;
-import nextstep.subway.auth.ui.authorization.TokenSecurityContextPersistenceInterceptor;
+import nextstep.subway.auth.ui.authorization.*;
 import nextstep.subway.member.application.CustomUserDetailsService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,8 +13,8 @@ import java.util.List;
 
 @Configuration
 public class AuthConfig implements WebMvcConfigurer {
-    private CustomUserDetailsService userDetailsService;
-    private JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public AuthConfig(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
         this.userDetailsService = userDetailsService;
@@ -32,6 +30,7 @@ public class AuthConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
-        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
+        argumentResolvers.add(new RequiredAuthenticationPrincipalArgumentResolver());
+        argumentResolvers.add(new OptionalAuthenticationPrincipalArgumentResolver());
     }
 }

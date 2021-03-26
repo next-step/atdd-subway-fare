@@ -9,26 +9,30 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Map;
 
-public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+public abstract class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
+        return parameter.hasParameterAnnotation(getAuthenticationAnnotation());
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof Map) {
-            return extractPrincipal(parameter, authentication);
-        }
-
-        return authentication.getPrincipal();
+        Authentication authentication = getAuthentication();
+        return getPrincipalByAuthentication(parameter, authentication);
     }
 
-    private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
+    protected Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    abstract <A extends Annotation> Class<A> getAuthenticationAnnotation();
+    abstract protected Object getPrincipalByAuthentication(MethodParameter parameter, Authentication authentication);
+
+    protected Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
         try {
             Map<String, String> principal = (Map) authentication.getPrincipal();
 
@@ -43,7 +47,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return null;
     }
 
-    public static Object toObject(Class clazz, String value) {
+    protected static Object toObject(Class clazz, String value) {
         if (Boolean.class == clazz) return Boolean.parseBoolean(value);
         if (Byte.class == clazz) return Byte.parseByte(value);
         if (Short.class == clazz) return Short.parseShort(value);
