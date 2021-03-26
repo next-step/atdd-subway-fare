@@ -25,7 +25,8 @@ public class DistanceProportionFareCalculator implements FareCalculator {
         if (distance > OverFareCalculator.SECOND.getSection()) {
             fare += OverFareCalculator.SECOND.calculate(distance);
         }
-        return fare + lineFare.getDiscountRateOf(fare) + lineAdditionalFare;
+        fare += lineAdditionalFare;
+        return fare - lineFare.getDiscountRateOf(fare);
     }
 
     private enum OverFareCalculator {
