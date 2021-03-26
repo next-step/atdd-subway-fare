@@ -78,46 +78,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다: 이용 요금 추가")
-    @Test
-    void findPathByDistanceWithPare() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역.getId(), 양재역.getId());
-
-        // then
-        경로와_요금_응답됨(
-            response,
-            Lists.newArrayList(
-                교대역.getId(),
-                남부터미널역.getId(),
-                양재역.getId()
-            ),
-            5,
-            20,
-            LineFare.ADULT.getFare()
-        );
-    }
-
-    @DisplayName("두 역의 최소 소요 시간 거리 경로를 조회한다: 이용 요금 추가")
-    @Test
-    void findPathByDurationWithPare() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
-
-        // then
-        경로와_요금_응답됨(
-            response,
-            Lists.newArrayList(
-                교대역.getId(),
-                강남역.getId(),
-                양재역.getId()
-            ),
-            20,
-            20,
-            LineFare.ADULT.getFare() + 200
-        );
-    }
-
     @DisplayName("추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가")
     @Test
     void findPathByDurationWithAdditionalPareOfLine() {
