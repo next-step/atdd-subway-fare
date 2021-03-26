@@ -24,8 +24,8 @@ public enum DistanceOfFareType {
                 .orElseThrow(() -> new IllegalArgumentException("거리는 0보다 커야합니다."));
     }
 
-    public boolean isDistanceType(int age) {
-        return distanceType.apply(age);
+    private boolean isDistanceType(int distance) {
+        return distanceType.apply(distance);
     }
 
     public int calculate(int distance) {

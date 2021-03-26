@@ -23,8 +23,10 @@ public class PathService {
         SubwayGraph subwayGraph = graphService.findGraph(type);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
+
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
         Fare fare = new Fare(pathResult.getTotalDistance());
+
         return PathResponse.of(pathResult, fare);
     }
 }

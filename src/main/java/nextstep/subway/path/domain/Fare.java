@@ -3,7 +3,7 @@ package nextstep.subway.path.domain;
 public class Fare {
 
     private final int BASIC_FARE = 1250;
-    private int fare;
+    private final int fare;
 
     public Fare(int distance) {
         this.fare = BASIC_FARE + calculateOverFare(distance);
