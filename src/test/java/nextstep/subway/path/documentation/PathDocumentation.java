@@ -1,57 +1,77 @@
 package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
-import nextstep.subway.line.dto.LineRequest;
-import nextstep.subway.line.dto.LineResponse;
+import nextstep.subway.Documentation;
+import nextstep.subway.line.domain.PathType;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
-import nextstep.subway.utils.Documentation;
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.payload.JsonFieldType;
 
-import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_등록되어_있음;
-import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
-import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
+import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
-    private StationResponse 교대역;
-    private StationResponse 강남역;
-    private StationResponse 양재역;
-    private StationResponse 남부터미널역;
 
-    @BeforeEach
-    public void setUp(RestDocumentationContextProvider restDocumentation) {
-        super.setUp(restDocumentation);
-
-        교대역 = 지하철역_등록되어_있음("교대역").as(StationResponse.class);
-        강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
-        양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
-        남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
-
-        지하철_노선_등록되어_있음(new LineRequest("2호선", "bg-green-600", 교대역.getId(), 강남역.getId(), 10, 10));
-        지하철_노선_등록되어_있음(new LineRequest("신분당선", "bg-red-600", 강남역.getId(), 양재역.getId(), 10, 10));
-        LineResponse 삼호선 = 지하철_노선_등록되어_있음(new LineRequest("3호선", "bg-orange-600", 교대역.getId(), 남부터미널역.getId(), 2, 10)).as(LineResponse.class);
-
-        지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
-    }
+    @MockBean
+    private PathService pathService;
 
     @Test
+    @DisplayName("두_역의_최단_거리_경로_조회를_요청")
     void path() {
-        given("path")
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 교대역.getId())
-                .queryParam("target", 양재역.getId())
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
-    }
+        PathResponse pathResponse = new PathResponse(
+            Lists.newArrayList(
+                new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
+            ),
+            10,
+            10
+        );
 
-    private RequestSpecification given(String identifier) {
-        // TODO: 문서화를 위한 로직을 완성시키세요.
-        return RestAssured
-                .given().log().all();
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class)))
+            .thenReturn(pathResponse);
+
+        RestAssured.given(spec).log().all()
+            .filter(
+                document(
+                    "path",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestParameters(
+                        parameterWithName("source").description("출발역 ID"),
+                        parameterWithName("target").description("도착역 ID"),
+                        parameterWithName("type").description("탐색 방법 (DISTANCE|DURATION|ARRIVAL_TIME)")
+                    ),
+                    responseFields(
+                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 아이디"),
+                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
+                        fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("생성일"),
+                        fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("수정일"),
+                        fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로에 대한 거리"),
+                        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로에 대한 시간")
+                    )
+                )
+            )
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("source", 1L)
+            .queryParam("target", 2L)
+            .queryParam("type", "DISTANCE")
+            .when().get("/paths")
+            .then().log().all();
     }
 }
 
