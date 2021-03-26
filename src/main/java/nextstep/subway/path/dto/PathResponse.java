@@ -45,4 +45,8 @@ public class PathResponse {
     public int getDuration() {
         return duration;
     }
+
+    public int getFare() {
+        return fare;
+    }
 }

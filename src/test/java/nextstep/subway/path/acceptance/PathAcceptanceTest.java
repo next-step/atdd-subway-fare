@@ -34,13 +34,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 삼호선;
 
     @BeforeEach
-    @DisplayName("지하철역이 등록되어있음")
+    @DisplayName("지하철역과 회원 등록")
     public void setUp() {
         super.setUp();
-        지하철역_등록되어_있음();
+        모든_지하철역_등록되어_있음();
+        청소년과_어린이_회원_등록되어_있음();
     }
 
-    private void 지하철역_등록되어_있음() {
+    private void 모든_지하철역_등록되어_있음() {
         교대역 = 지하철역_등록되어_있음("교대역").as(StationResponse.class);
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
@@ -53,9 +54,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
     }
 
-    private void 회원_등록되어_있음() {
-        회원_생성_요청(청소년_이메일, 비밀번호, 13).as(MemberResponse.class);
-        회원_생성_요청(어린이_이메일, 비밀번호, 6).as(MemberResponse.class);
+    private void 청소년과_어린이_회원_등록되어_있음() {
+        회원_생성_요청(청소년_이메일, 비밀번호, 13);
+        회원_생성_요청(어린이_이메일, 비밀번호, 6);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -120,7 +121,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가")
     @Test
-    void findPathByDistanceWithAdditionalPareOfLine() {
+    void findPathByDurationWithAdditionalPareOfLine() {
         // when
         ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
 
@@ -134,13 +135,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            ADULT_DEFAULT_FARE + 신분당선.getAdditonalPare()
+            ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare()
         );
     }
 
     @DisplayName("경로 중 추가요금이 있는 노선을 환승 하여 이용 할 경우 가장 높은 금액의 추가 요금만 적용")
     @Test
-    void findPathByDistanceWithAdditionalPareOfLine() {
+    void findPathByDurationWithMaxFare() {
         // when
         ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
 
@@ -154,13 +155,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            ADULT_DEFAULT_FARE + 신분당선.getAdditonalPare()
+            ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare()
         );
     }
 
     @DisplayName("청소년 요금으로 계산")
     @Test
-    void findPathByDistanceWithAdditionalPareOfLine() {
+    void findPathByDurationWithYouth() {
         // given
         TokenResponse tokenResponse = 로그인_되어_있음(청소년_이메일, 비밀번호);
 
@@ -181,13 +182,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            (ADULT_DEFAULT_FARE + 신분당선.getAdditonalPare() - 350) * 0.2
+            (int)((ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare() - 350) * 0.2)
         );
     }
 
     @DisplayName("어린이 요금으로 계산")
     @Test
-    void findPathByDistanceWithAdditionalPareOfLine() {
+    void findPathByDurationWithChild() {
         // given
         TokenResponse tokenResponse = 로그인_되어_있음(어린이_이메일, 비밀번호);
 
@@ -208,7 +209,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            (ADULT_DEFAULT_FARE + 신분당선.getAdditonalPare() - 350) * 0.5
+            (int)((ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare() - 350) * 0.5)
         );
     }
 }

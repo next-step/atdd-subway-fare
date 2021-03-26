@@ -21,6 +21,26 @@ public class PathSteps {
         LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
+    public static LineResponse 지하철_노선_등록되어_있음(
+        String name,
+        String color,
+        StationResponse upStation,
+        StationResponse downStation,
+        int distance,
+        int duration,
+        int additionalFare
+    ) {
+        LineRequest lineRequest = new LineRequest(
+            name,
+            color,
+            upStation.getId(),
+            downStation.getId(),
+            distance,
+            duration,
+            additionalFare
+        );
+        return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
+    }
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured

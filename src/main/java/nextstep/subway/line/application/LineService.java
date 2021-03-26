@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class LineService {
-    private LineRepository lineRepository;
-    private StationService stationService;
+    private final LineRepository lineRepository;
+    private final StationService stationService;
 
     public LineService(LineRepository lineRepository, StationService stationService) {
         this.lineRepository = lineRepository;
@@ -27,7 +27,9 @@ public class LineService {
     public LineResponse saveLine(LineRequest request) {
         Station upStation = stationService.findById(request.getUpStationId());
         Station downStation = stationService.findById(request.getDownStationId());
-        Line persistLine = lineRepository.save(new Line(request.getName(), request.getColor()));
+        Line persistLine = lineRepository.save(
+            new Line(request.getName(), request.getColor(), request.getAdditionalFare())
+        );
         persistLine.addSection(upStation, downStation, request.getDistance(), request.getDuration());
         return LineResponse.of(persistLine);
     }
@@ -39,7 +41,7 @@ public class LineService {
     public List<LineResponse> findLineResponses() {
         List<Line> persistLines = lineRepository.findAll();
         return persistLines.stream()
-                .map(line -> LineResponse.of(line))
+                .map(LineResponse::of)
                 .collect(Collectors.toList());
     }
 
