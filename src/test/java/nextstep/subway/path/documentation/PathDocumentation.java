@@ -46,20 +46,10 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        //then
-        ExtractableResponse<Response> response = RestAssured
-                .given(spec)
-                .filter(document("{method-name}",
-                        지하철_노선_경로탐색_파라미터_설명(),
-                        지하철_노선_경로탐색_결과_필드_설명()))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 교대역.getId())
-                .queryParam("target", 강남역.getId())
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
-
         //when
+        ExtractableResponse<Response> response = 두_역의_최단거리_탐색_요청(spec, 교대역.getId(), 강남역.getId());
+
+        //then
         경로_응답됨(response, Arrays.asList(교대역.getId(), 강남역.getId()), 10, 10);
     }
 }
