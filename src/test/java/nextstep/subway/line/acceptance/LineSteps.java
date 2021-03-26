@@ -3,6 +3,7 @@ package nextstep.subway.line.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.line.dto.SectionRequest;
@@ -15,9 +16,14 @@ public class LineSteps {
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(LineRequest lineRequest) {
-        return RestAssured
-                .given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        return 지하철_노선_생성_요청(
+                RestAssured.given().log().all(),
+                lineRequest
+            );
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(RequestSpecification spec, LineRequest lineRequest) {
+        return spec.contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(lineRequest)
                 .when().post("/lines")
                 .then().log().all().extract();
