@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.Documentation;
 import nextstep.subway.line.domain.LineFare;
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -44,7 +45,7 @@ public class PathDocumentation extends Documentation {
             LineFare.ADULT.getFare()
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class)))
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), any(LoginMember.class)))
             .thenReturn(pathResponse);
 
         RestAssured.given(spec).log().all()

@@ -174,6 +174,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         );
 
         // then
+        int expectedFare = LineFare.CHILD.getFare() + 신분당선.getAdditionalFare() + 200;
         경로와_요금_응답됨(
             response,
             Lists.newArrayList(
@@ -183,7 +184,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            (int)((LineFare.ADULT.getFare() + 신분당선.getAdditionalFare() - 350) * 0.2)
+            expectedFare - (int)(expectedFare * 0.2)
         );
     }
 
@@ -194,13 +195,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
         TokenResponse tokenResponse = 로그인_되어_있음(어린이_이메일, 비밀번호);
 
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(
+        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(
             교대역.getId(),
             양재역.getId(),
             tokenResponse
         );
 
         // then
+        int sumFare = LineFare.CHILD.getFare() + 신분당선.getAdditionalFare() + 200;
         경로와_요금_응답됨(
             response,
             Lists.newArrayList(
@@ -210,7 +212,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            (int)((LineFare.ADULT.getFare() + 신분당선.getAdditionalFare() - 350) * 0.5)
+            sumFare - (int)(sumFare * 0.5)
         );
     }
 }
