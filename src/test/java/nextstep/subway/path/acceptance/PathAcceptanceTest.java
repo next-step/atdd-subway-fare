@@ -122,19 +122,21 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDurationWithAdditionalPareOfLine() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(
+            남부터미널역.getId(),
+            양재역.getId()
+        );
 
         // then
         경로와_요금_응답됨(
             response,
             Lists.newArrayList(
-                교대역.getId(),
-                강남역.getId(),
+                남부터미널역.getId(),
                 양재역.getId()
             ),
-            20,
-            20,
-            LineFare.ADULT.getFare() + 신분당선.getAdditionalFare()
+            3,
+            10,
+            LineFare.ADULT.getFare() + 삼호선.getAdditionalFare()
         );
     }
 
@@ -154,7 +156,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            LineFare.ADULT.getFare() + 신분당선.getAdditionalFare()
+            LineFare.ADULT.getFare() + 200 + 신분당선.getAdditionalFare()
         );
     }
 

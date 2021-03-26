@@ -5,6 +5,7 @@ import nextstep.subway.line.domain.Sections;
 import nextstep.subway.station.domain.Station;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PathResult {
     private Sections sections;
@@ -25,15 +26,9 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-    public int getAdditionalFareOf(List<Line> allLine) {
-        List<Station> pathStations = sections.getStations();
+    public List<Line> filterLineHasSection(List<Line> allLine) {
         return allLine.stream()
-                      .filter(line ->
-                          line.getStations()
-                              .stream()
-                              .anyMatch(pathStations::contains)
-                      )
-                      .map(Line::getAdditionalFare)
-                      .reduce(0, Math::max);
+                      .filter(sections::hasLine)
+                      .collect(Collectors.toList());
     }
 }
