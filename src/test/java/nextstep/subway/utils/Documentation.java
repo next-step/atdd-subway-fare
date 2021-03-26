@@ -25,14 +25,14 @@ public class Documentation {
     @Autowired
     private DatabaseCleanup databaseCleanup;
 
-    protected RequestSpecification spec;
+    protected static RequestSpecification spec;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.port = port;
         databaseCleanup.execute();
 
-        this.spec = new RequestSpecBuilder()
+        spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation))
                 .build();
     }
