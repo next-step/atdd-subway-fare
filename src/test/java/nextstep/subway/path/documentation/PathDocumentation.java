@@ -3,6 +3,7 @@ package nextstep.subway.path.documentation;
 import com.google.common.collect.Lists;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.Documentation;
@@ -37,7 +38,8 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "양재역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        PathResponse pathResponse = new PathResponse(stations, 10, 10);
+        Fare fare = new Fare(10);
+        PathResponse pathResponse = new PathResponse(stations, 10, 10, fare.getFare());
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
@@ -60,7 +62,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("지하철역 생성날짜"),
                                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("지하철역 수정날짜"),
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"))));
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금"))));
 
     }
 }

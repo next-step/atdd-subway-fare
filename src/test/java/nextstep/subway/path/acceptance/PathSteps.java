@@ -46,15 +46,24 @@ public class PathSteps extends Documentation {
                 .then().log().all().extract();
     }
 
-    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
+    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds) {
         PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(distance);
-        assertThat(pathResponse.getDuration()).isEqualTo(duration);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)
                 .collect(Collectors.toList());
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
+    public static void 총_거리와_소요_시간을_함께_응답함(ExtractableResponse<Response> response, int distance, int duration) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(distance);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+    }
+
+    public static void 이용요금도_함께_응답함(ExtractableResponse<Response> response, int fare) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
     }
 }
