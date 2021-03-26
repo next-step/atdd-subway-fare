@@ -1,24 +1,24 @@
 package nextstep.subway.path.application;
 
-import org.springframework.stereotype.Component;
+import nextstep.subway.line.domain.LineFare;
 
-@Component("adultFareCalculator")
-public class AdultFareCalculator implements FareCalculator {
+public class DistanceProportionFareCalculator implements FareCalculator {
 
-    public static int ADULT_DEFAULT_FARE = 1250;
+    private final LineFare lineFare;
 
-    public AdultFareCalculator() {
+    public DistanceProportionFareCalculator(LineFare lineFare) {
+        this.lineFare = lineFare;
     }
 
     public int calculateFare(int distance) {
-        int fare = ADULT_DEFAULT_FARE;
+        int fare = lineFare.getFare();
         if (distance > OverFareCalculator.FIRST.getSection()) {
             fare += OverFareCalculator.FIRST.calculate(Math.min(distance, 50));
         }
         if (distance > OverFareCalculator.SECOND.getSection()) {
             fare += OverFareCalculator.SECOND.calculate(distance);
         }
-        return fare;
+        return fare + lineFare.getDiscountRateOf(fare);
     }
 
     private enum OverFareCalculator {

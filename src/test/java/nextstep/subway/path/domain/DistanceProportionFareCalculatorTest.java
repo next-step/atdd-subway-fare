@@ -1,26 +1,26 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.application.AdultFareCalculator;
+import nextstep.subway.line.domain.LineFare;
+import nextstep.subway.path.application.DistanceProportionFareCalculator;
 import nextstep.subway.path.application.FareCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static nextstep.subway.path.application.AdultFareCalculator.ADULT_DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("운임 요금 계산기 테스트")
-public class FareCalculatorTest {
-    private final FareCalculator fareCalculator = new AdultFareCalculator();
+public class DistanceProportionFareCalculatorTest {
+
+    private final FareCalculator fareCalculator = new DistanceProportionFareCalculator(LineFare.ADULT);
 
     @DisplayName("기본운임(10㎞ 이내) : 기본운임 1,250원")
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
     @ParameterizedTest
     void calculateDefaultFareTest(int distance) {
-        assertThat(ADULT_DEFAULT_FARE)
+        assertThat(LineFare.ADULT.getFare())
             .isEqualTo(fareCalculator.calculateFare(distance));
     }
 

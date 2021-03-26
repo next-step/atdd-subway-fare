@@ -5,19 +5,17 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.line.domain.LineFare;
 import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.member.dto.MemberResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
 import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.member.MemberSteps.회원_생성_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
-import static nextstep.subway.path.application.AdultFareCalculator.ADULT_DEFAULT_FARE;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
@@ -25,6 +23,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private static final String 어린이_이메일 = "email1@email.com";
     private static final String 청소년_이메일 = "email2@email.com";
     private static final String 비밀번호 = "1234";
+
     private StationResponse 교대역;
     private StationResponse 강남역;
     private StationResponse 양재역;
@@ -95,7 +94,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             5,
             20,
-            ADULT_DEFAULT_FARE
+            LineFare.ADULT.getFare()
         );
     }
 
@@ -115,7 +114,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            ADULT_DEFAULT_FARE + 200
+            LineFare.ADULT.getFare() + 200
         );
     }
 
@@ -135,7 +134,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare()
+            LineFare.ADULT.getFare() + 신분당선.getAdditionalFare()
         );
     }
 
@@ -155,7 +154,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare()
+            LineFare.ADULT.getFare() + 신분당선.getAdditionalFare()
         );
     }
 
@@ -182,7 +181,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            (int)((ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare() - 350) * 0.2)
+            (int)((LineFare.ADULT.getFare() + 신분당선.getAdditionalFare() - 350) * 0.2)
         );
     }
 
@@ -209,7 +208,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            (int)((ADULT_DEFAULT_FARE + 신분당선.getAdditionalFare() - 350) * 0.5)
+            (int)((LineFare.ADULT.getFare() + 신분당선.getAdditionalFare() - 350) * 0.5)
         );
     }
 }

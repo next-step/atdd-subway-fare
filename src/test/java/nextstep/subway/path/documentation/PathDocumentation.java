@@ -2,6 +2,7 @@ package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
 import nextstep.subway.Documentation;
+import nextstep.subway.line.domain.LineFare;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
@@ -15,7 +16,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
 
-import static nextstep.subway.path.application.AdultFareCalculator.ADULT_DEFAULT_FARE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -41,7 +41,7 @@ public class PathDocumentation extends Documentation {
             ),
             10,
             10,
-            ADULT_DEFAULT_FARE
+            LineFare.ADULT.getFare()
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class)))

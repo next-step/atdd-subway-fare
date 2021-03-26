@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Sections;
 import nextstep.subway.station.domain.Station;
 
@@ -24,4 +25,15 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
+    public int getAdditionalFareOf(List<Line> allLine) {
+        List<Station> pathStations = sections.getStations();
+        return allLine.stream()
+                      .filter(line ->
+                          line.getStations()
+                              .stream()
+                              .anyMatch(pathStations::contains)
+                      )
+                      .map(Line::getAdditionalFare)
+                      .reduce(0, Math::max);
+    }
 }
