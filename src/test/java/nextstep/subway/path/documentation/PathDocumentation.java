@@ -1,6 +1,7 @@
 package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,7 +44,7 @@ class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         // when
-        RestAssured
+        RequestSpecification requestSpecification = RestAssured
                 .given(spec).log().all()
                 .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestParameters(
@@ -59,13 +61,8 @@ class PathDocumentation extends Documentation {
                                 fieldWithPath("distance").description("최단 경로 거리"),
                                 fieldWithPath("duration").description("최단 경로 시간")
                         )
-                ))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+                ));
+        두_역의_최단_거리_경로_조회를_요청(requestSpecification, 1L, 2L);
     }
 }
 
