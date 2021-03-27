@@ -8,4 +8,5 @@ include::{snippets}/path/request-parameters.adoc[]
 include::{snippets}/path/http-request.adoc[]
 
 ==== Response
+include::{snippets}/path/response-fields.adoc[]
 include::{snippets}/path/http-response.adoc[]
