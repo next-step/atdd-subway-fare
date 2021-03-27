@@ -38,10 +38,10 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "양재역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        Fare fare = new Fare(10);
+        Fare fare = new Fare(10, 19, 0);
         PathResponse pathResponse = new PathResponse(stations, 10, 10, fare.getFare());
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
 
         두_역의_최단_거리_경로_조회를_요청(경로_문서화_요청(), 1L, 2L);
     }
