@@ -47,7 +47,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         //when
-        ExtractableResponse<Response> response = 두_역의_최단거리_탐색_요청(spec, 양재역.getId(), 교대역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단거리_탐색_요청(this, 양재역.getId(), 교대역.getId());
 
         //then
         경로_응답됨(response, Arrays.asList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 38, 36);

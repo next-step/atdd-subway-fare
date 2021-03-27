@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.Documentation;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -11,6 +12,7 @@ import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import org.springframework.restdocs.snippet.Snippet;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,8 +87,8 @@ public class PathSteps {
         );
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단거리_탐색_요청(RequestSpecification spec, Long source, Long target) {
-        return given(spec)
+    public static ExtractableResponse<Response> 두_역의_최단거리_탐색_요청(Documentation doc, Long source, Long target) {
+        return given(doc)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -95,12 +97,8 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    private static RequestSpecification given(RequestSpecification spec) {
-        return RestAssured
-                .given(spec)
-                .filter(document("{method-name}",
-                        지하철_노선_경로탐색_파라미터_설명(),
-                        지하철_노선_경로탐색_결과_필드_설명()));
+    private static RequestSpecification given(Documentation doc) {
+        return doc.given(지하철_노선_경로탐색_파라미터_설명(), 지하철_노선_경로탐색_결과_필드_설명());
     }
 
     public static void 경로_요금_일치함(ExtractableResponse<Response> response, int fee) {
