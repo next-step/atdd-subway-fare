@@ -4,7 +4,16 @@
 === 역 생성
 
 ==== Request
-include::{snippets}/stations/http-request.adoc[]
+include::{snippets}/stations/create/http-request.adoc[]
 
 ==== Response
-include::{snippets}/stations/http-response.adoc[]
+include::{snippets}/stations/create/http-response.adoc[]
+
+
+=== 역 삭제
+
+==== Request
+include::{snippets}/stations/delete/http-request.adoc[]
+
+==== Response
+include::{snippets}/stations/delete/http-response.adoc[]
