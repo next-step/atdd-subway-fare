@@ -1,9 +1,8 @@
-package nextstep.subway;
+package nextstep.subway.utils;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import nextstep.subway.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +19,21 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension.class)
 public class Documentation {
+
     @LocalServerPort
     int port;
 
     @Autowired
     private DatabaseCleanup databaseCleanup;
 
-    protected RequestSpecification spec;
+    protected static RequestSpecification spec;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.port = port;
         databaseCleanup.execute();
 
-        this.spec = new RequestSpecBuilder()
+        spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation))
                 .build();
     }
