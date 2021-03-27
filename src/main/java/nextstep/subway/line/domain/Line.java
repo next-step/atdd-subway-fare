@@ -15,6 +15,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private int overFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -25,6 +26,13 @@ public class Line extends BaseEntity {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public Line(Long id, String name, String color, int overFare) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.overFare = overFare;
     }
 
     public void update(Line line) {
@@ -50,6 +58,10 @@ public class Line extends BaseEntity {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int getOverFare() {
+        return overFare;
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
