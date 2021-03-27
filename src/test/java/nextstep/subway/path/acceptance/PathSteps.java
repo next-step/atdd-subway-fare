@@ -3,6 +3,7 @@ package nextstep.subway.path.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -20,6 +21,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
     public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
@@ -78,7 +80,32 @@ public class PathSteps {
                 fieldWithPath("stations[].createdDate").description("지하철 역 생성일"),
                 fieldWithPath("stations[].modifiedDate").description("지하철 역 최종 변경일"),
                 fieldWithPath("distance").description("경로 구간 길이"),
-                fieldWithPath("duration").description("경로 구간 소요 시간")
+                fieldWithPath("duration").description("경로 구간 소요 시간"),
+                fieldWithPath("cost").description("경로 구간 지불해야하는 금액")
         );
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단거리_탐색_요청(RequestSpecification spec, Long source, Long target) {
+        return given(spec)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "DISTANCE")
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    private static RequestSpecification given(RequestSpecification spec) {
+        return RestAssured
+                .given(spec)
+                .filter(document("{method-name}",
+                        지하철_노선_경로탐색_파라미터_설명(),
+                        지하철_노선_경로탐색_결과_필드_설명()));
+    }
+
+    public static void 경로_요금_일치함(ExtractableResponse<Response> response, int fee) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+
+        assertThat(pathResponse.getCost()).isEqualTo(fee);
     }
 }

@@ -36,31 +36,22 @@ public class PathDocumentation extends Documentation {
         양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
 
-        LineResponse 이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10);
-        LineResponse 신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10);
-        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10);
+        LineResponse 이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 70, 70);
+        LineResponse 신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 30, 30);
+        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 16, 16);
 
-        지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
+        지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 22, 20);
     }
 
 
     @Test
     void path() {
-        //then
-        ExtractableResponse<Response> response = RestAssured
-                .given(spec)
-                .filter(document("{method-name}",
-                        지하철_노선_경로탐색_파라미터_설명(),
-                        지하철_노선_경로탐색_결과_필드_설명()))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 교대역.getId())
-                .queryParam("target", 강남역.getId())
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
-
         //when
-        경로_응답됨(response, Arrays.asList(교대역.getId(), 강남역.getId()), 10, 10);
+        ExtractableResponse<Response> response = 두_역의_최단거리_탐색_요청(spec, 양재역.getId(), 교대역.getId());
+
+        //then
+        경로_응답됨(response, Arrays.asList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 38, 36);
+        PathSteps.경로_요금_일치함(response, 1850);
     }
 }
 
