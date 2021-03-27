@@ -4,9 +4,9 @@
 === 경로 조회
 
 ==== Request
-
+include::{snippets}/path/request-parameters.adoc[]
 include::{snippets}/path/http-request.adoc[]
 
 ==== Response
-
+Example Response
 include::{snippets}/path/http-response.adoc[]
