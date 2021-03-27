@@ -20,7 +20,6 @@ import static nextstep.subway.station.StationSteps.지하철역_등록되어_있
 public class PathAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
-    public static final int AGE = 20;
     public static final int YOUNG_AGE = 13;
 
     private StationResponse 교대역;
