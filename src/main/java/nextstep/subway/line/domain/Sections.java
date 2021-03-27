@@ -6,10 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Embeddable
 public class Sections {
@@ -131,6 +128,13 @@ public class Sections {
 
         upLineStation.ifPresent(it -> sections.remove(it));
         downLineStation.ifPresent(it -> sections.remove(it));
+    }
+
+    public int getMaxOverFare() {
+        return sections.stream()
+                .mapToInt(it -> it.getLine().getOverFare())
+                .max()
+                .orElseThrow(NoSuchElementException::new);
     }
 
     public int getTotalDistance() {
