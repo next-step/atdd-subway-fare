@@ -26,4 +26,8 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
+
+    public long getMaximumAddedCost() {
+        return sections.getMaxAdditionalCost();
+    }
 }

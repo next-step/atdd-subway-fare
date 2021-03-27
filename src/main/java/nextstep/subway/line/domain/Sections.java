@@ -1,5 +1,6 @@
 package nextstep.subway.line.domain;
 
+import nextstep.subway.exceptions.InvalidLineCostException;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.CascadeType;
@@ -139,5 +140,13 @@ public class Sections {
 
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
+    }
+
+    public long getMaxAdditionalCost() {
+        return sections.stream()
+                .mapToLong(section -> section.getLine().getAddedCost()
+                )
+                .max()
+                .orElseThrow(InvalidLineCostException::new);
     }
 }
