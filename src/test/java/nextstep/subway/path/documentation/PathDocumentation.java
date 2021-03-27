@@ -1,8 +1,9 @@
 package nextstep.subway.path.documentation;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.line.domain.PathType;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.Documentation;
@@ -13,9 +14,17 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static io.restassured.RestAssured.given;
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
+import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
 
@@ -29,11 +38,33 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "양재역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        PathResponse pathResponse = new PathResponse(stations, 10, 10);
+        Fare fare = new Fare(10);
+        PathResponse pathResponse = new PathResponse(stations, 10, 10, fare.getFare());
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        두_역의_최단_거리_경로_조회를_요청(1L, 2L);
+        두_역의_최단_거리_경로_조회를_요청(경로_문서화_요청(), 1L, 2L);
+    }
+
+    private RequestSpecification 경로_문서화_요청() {
+        return given(spec).log().all()
+                .filter(document("path",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("source").description("출발역 아이디"),
+                                parameterWithName("target").description("도착역 아이디"),
+                                parameterWithName("type").description("조회 기준")),
+                        responseFields(
+                                fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철역 목록"),
+                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 아이디"),
+                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
+                                fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("지하철역 생성날짜"),
+                                fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("지하철역 수정날짜"),
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)"),
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금"))));
+
     }
 }
 
