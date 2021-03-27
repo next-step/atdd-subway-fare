@@ -23,4 +23,6 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
+
+    public int getMaxOverFare() { return sections.getMaxOverFare(); }
 }
