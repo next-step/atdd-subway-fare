@@ -10,6 +10,6 @@ public interface JpaStationRepository extends StationRepository, JpaRepository<S
     List<Station> findAll();
 
     @Override
-    List<Station> findAllById(Set<Long> stationIds);
+    List<Station> findAllById(Iterable<Long> stationIds);
 
 }

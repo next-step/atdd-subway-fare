@@ -13,5 +13,5 @@ public interface StationRepository {
 
     Optional<Station> findById(Long id);
 
-    List<Station> findAllById(Set<Long> stationIds);
+    List<Station> findAllById(Iterable<Long> ids);
 }

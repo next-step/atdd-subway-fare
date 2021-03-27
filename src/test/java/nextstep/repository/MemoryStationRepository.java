@@ -54,10 +54,10 @@ public class MemoryStationRepository implements StationRepository {
     }
 
     @Override
-    public List<Station> findAllById(Set<Long> stationIds) {
-        return stations.values()
-                .stream()
-                .filter(station -> stationIds.contains(station.getId()))
-                .collect(Collectors.toList());
+    public List<Station> findAllById(Iterable<Long> stationIds) {
+        List<Station> list = new ArrayList<>();
+        stationIds.forEach(stationId-> findById(stationId).ifPresent(list::add));
+
+        return list;
     }
 }
