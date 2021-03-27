@@ -6,4 +6,5 @@
 :toclevels: 2
 :sectlinks:
 
+include::stations.adoc[]
 include::path.adoc[]
