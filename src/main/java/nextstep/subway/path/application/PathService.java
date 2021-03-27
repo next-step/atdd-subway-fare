@@ -1,10 +1,8 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
-import nextstep.subway.path.domain.Cost;
-import nextstep.subway.path.domain.PathResult;
-import nextstep.subway.path.domain.PaymentPolicy;
-import nextstep.subway.path.domain.SubwayGraph;
+import nextstep.subway.member.domain.LoginMember;
+import nextstep.subway.path.domain.*;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -22,12 +20,18 @@ public class PathService {
         this.paymentPolicy = paymentPolicy;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType type) {
         SubwayGraph subwayGraph = graphService.findGraph(type);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        Cost cost = paymentPolicy.cost(pathResult);
+        Cost cost = calculateCost(pathResult, loginMember.getAge());
+
         return PathResponse.of(pathResult, cost);
+    }
+
+    private Cost calculateCost(PathResult pathResult, Integer age) {
+        Cost cost = paymentPolicy.cost(pathResult);
+        return CostByAge.applyDiscount(cost, age);
     }
 }
