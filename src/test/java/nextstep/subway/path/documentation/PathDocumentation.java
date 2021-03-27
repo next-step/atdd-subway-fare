@@ -1,23 +1,23 @@
 package nextstep.subway.path.documentation;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.Documentation;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.acceptance.PathSteps;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import java.util.Arrays;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
+import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.member.MemberSteps.회원_생성_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
 
@@ -27,9 +27,15 @@ public class PathDocumentation extends Documentation {
     private StationResponse 남부터미널역;
     private LineResponse 삼호선;
 
+    public static final String ADULT_EMAIL = "adult@email.com";
+    public static final String PASSWORD = "password";
+    public static final int ADULT_AGE = 22;
+    private TokenResponse adultTokenResponse;
+
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         super.setUp(restDocumentation);
+        회원_생성_요청(ADULT_EMAIL, PASSWORD, ADULT_AGE);
 
         교대역 = 지하철역_등록되어_있음("교대역").as(StationResponse.class);
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
@@ -46,8 +52,11 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
+        //given
+        adultTokenResponse = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+
         //when
-        ExtractableResponse<Response> response = 두_역의_최단거리_탐색_요청(this, 양재역.getId(), 교대역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단거리_탐색_요청(this,adultTokenResponse, 양재역.getId(), 교대역.getId());
 
         //then
         경로_응답됨(response, Arrays.asList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 38, 36);
