@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -46,7 +47,9 @@ class PathDocumentation extends Documentation {
         // when
         RequestSpecification requestSpecification = RestAssured
                 .given(spec).log().all()
-                .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                .filter(document("path",
+                        preprocessRequest(prettyPrint(), modifyUris().port(8080)),
+                        preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역"),

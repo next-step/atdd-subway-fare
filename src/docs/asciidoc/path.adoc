@@ -3,13 +3,17 @@
 
 === 경로 조회
 
-==== Request
+==== HTTP Request
 
 include::{snippets}/path/http-request.adoc[]
 
-==== Response
+==== HTTP Response
 
 include::{snippets}/path/http-response.adoc[]
+
+==== CURL Request
+
+include::{snippets}/path/curl-request.adoc[]
 
 ==== Request Parameters
 
@@ -18,7 +22,3 @@ include::{snippets}/path/request-parameters.adoc[]
 ==== Response Fields
 
 include::{snippets}/path/response-fields.adoc[]
-
-==== CURL Command
-
-include::{snippets}/path/curl-request.adoc[]
