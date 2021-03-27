@@ -1,0 +1,19 @@
+[[stations]]
+== 지하철역
+
+=== 역 생성
+
+==== Request
+include::{snippets}/stations/create/http-request.adoc[]
+
+==== Response
+include::{snippets}/stations/create/http-response.adoc[]
+
+
+=== 역 삭제
+
+==== Request
+include::{snippets}/stations/delete/http-request.adoc[]
+
+==== Response
+include::{snippets}/stations/delete/http-response.adoc[]

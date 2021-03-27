@@ -5,5 +5,7 @@
 :toc: left
 :toclevels: 2
 :sectlinks:
+:stylesheet: custom.css
 
+include::stations.adoc[]
 include::path.adoc[]
