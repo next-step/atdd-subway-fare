@@ -14,3 +14,7 @@ include::{snippets}/path/request-parameters.adoc[]
 ==== Response
 
 include::{snippets}/path/http-response.adoc[]
+
+==== Response.fields
+
+include::{snippets}/path/response-fields.adoc[]
