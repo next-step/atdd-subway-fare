@@ -35,7 +35,7 @@ public class MemoryLineRepository implements LineRepository {
         checkDuplicateName(entity);
 
         long id = lines.size()+1;
-        Line newLine = new Line(id, entity.getName(), entity.getName(), entity.getSections());
+        Line newLine = new Line(id, entity.getName(), entity.getName(), entity.getAddedCost(), entity.getSections());
         lines.put(id, newLine);
         return newLine;
     }

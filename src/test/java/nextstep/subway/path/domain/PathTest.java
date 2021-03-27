@@ -15,7 +15,7 @@ import nextstep.subway.station.dto.StationRequest;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 
-public class PaymentPolicyTest {
+public class PathTest {
     protected StationResponse 교대역;
     protected StationResponse 강남역;
     protected StationResponse 양재역;
@@ -46,9 +46,9 @@ public class PaymentPolicyTest {
         양재역 = stationService.saveStation(new StationRequest("양재역"));
         남부터미널역 = stationService.saveStation(new StationRequest("남부터미널역"));
 
-        이호선 = lineService.saveLine(new LineRequest("2호선", "green", 교대역.getId(), 강남역.getId(), 70, 70));
-        신분당선 = lineService.saveLine(new LineRequest("신분당선", "green", 강남역.getId(), 양재역.getId(), 7, 5));
-        삼호선 = lineService.saveLine(new LineRequest("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 16, 17));
+        이호선 = lineService.saveLine(new LineRequest("2호선", "green", 교대역.getId(), 강남역.getId(), 70, 70, 0));
+        신분당선 = lineService.saveLine(new LineRequest("신분당선", "green", 강남역.getId(), 양재역.getId(), 7, 5, 900));
+        삼호선 = lineService.saveLine(new LineRequest("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 16, 17, 500));
 
         lineService.addSection(삼호선.getId(), new SectionRequest(남부터미널역.getId(), 양재역.getId(), 43, 30));
     }

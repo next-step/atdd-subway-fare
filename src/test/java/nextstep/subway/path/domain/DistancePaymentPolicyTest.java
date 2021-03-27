@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DistancePaymentPolicy 클래스")
-public class DistancePaymentPolicyTest extends PaymentPolicyTest{
+public class DistancePaymentPolicyTest extends PathTest {
     private PaymentPolicy paymentPolicy = new DistancePaymentPolicy();
     private SubwayGraph subwayGraph;
     @BeforeEach
@@ -40,7 +40,7 @@ public class DistancePaymentPolicyTest extends PaymentPolicyTest{
                 Cost cost = paymentPolicy.cost(pathResult);
 
                 //then
-                assertThat(cost.getCost()).isEqualTo(PaymentPolicy.DEFAULT_COST);
+                assertThat(cost.getCost()).isEqualTo(PaymentPolicy.DEFAULT_COST + 900);
             }
         }
 
@@ -59,7 +59,7 @@ public class DistancePaymentPolicyTest extends PaymentPolicyTest{
                 Cost cost = paymentPolicy.cost(pathResult);
 
                 //then
-                assertThat(cost.getCost()).isEqualTo(1450);
+                assertThat(cost.getCost()).isEqualTo(1950);
             }
         }
 
@@ -78,7 +78,7 @@ public class DistancePaymentPolicyTest extends PaymentPolicyTest{
                 Cost cost = paymentPolicy.cost(pathResult);
 
                 //then 59km 1250 + 800 + 200
-                assertThat(cost.getCost()).isEqualTo(2250);
+                assertThat(cost.getCost()).isEqualTo(2750);
             }
         }
 
