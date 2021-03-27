@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
-import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
+import static nextstep.subway.station.acceptance.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {

@@ -15,7 +15,7 @@ import static nextstep.subway.favorite.FavoriteSteps.*;
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
 import static nextstep.subway.member.MemberSteps.*;
-import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
+import static nextstep.subway.station.acceptance.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("즐겨찾기 관련 기능")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
