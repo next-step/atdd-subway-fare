@@ -12,9 +12,7 @@ public class FareService {
     }
 
     public Fare calculateFare(PathResult pathResult) {
-        return new Fare(0);
+        return new Fare(pathResult.getTotalDistance());
     }
-
-
 
 }

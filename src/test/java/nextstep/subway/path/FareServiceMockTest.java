@@ -30,8 +30,14 @@ public class FareServiceMockTest {
         when(pathResult.getTotalDistance()).thenReturn(10);
         assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1250);
 
+        when(pathResult.getTotalDistance()).thenReturn(13);
+        assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1250);
+
         when(pathResult.getTotalDistance()).thenReturn(20);
         assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1450);
+
+        when(pathResult.getTotalDistance()).thenReturn(60);
+        assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(2250);
 
     }
 }
