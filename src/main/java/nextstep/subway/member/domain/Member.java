@@ -26,6 +26,18 @@ public class Member extends BaseEntity {
         this.age = age;
     }
 
+    public void update(Member member) {
+        this.email = member.email;
+        this.password = member.password;
+        this.age = member.age;
+    }
+
+    public void validatePassword(String password) {
+        if (!StringUtils.equals(this.password, password)) {
+            throw new RuntimeException();
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -40,17 +52,5 @@ public class Member extends BaseEntity {
 
     public Integer getAge() {
         return age;
-    }
-
-    public void update(Member member) {
-        this.email = member.email;
-        this.password = member.password;
-        this.age = member.age;
-    }
-
-    public void checkPassword(String password) {
-        if (!StringUtils.equals(this.password, password)) {
-            throw new RuntimeException();
-        }
     }
 }

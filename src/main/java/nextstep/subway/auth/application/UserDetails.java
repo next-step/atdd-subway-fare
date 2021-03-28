@@ -1,9 +1,9 @@
 package nextstep.subway.auth.application;
 
 public interface UserDetails {
-    Object getPrincipal();
 
+    Object getPrincipal();
     Object getCredentials();
 
-    boolean checkCredentials(Object credentials);
+    boolean validateCredentials(Object credentials);
 }
