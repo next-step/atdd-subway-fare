@@ -11,9 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.snippet.Snippet;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 
@@ -39,5 +41,13 @@ public class Documentation {
                         .withRequestDefaults(prettyPrint())
                         .withResponseDefaults(prettyPrint()))
                 .build();
+    }
+
+
+    public RequestSpecification given(Snippet ...snippets) {
+        return RestAssured
+                .given(spec)
+                .filter(document("{method-name}",snippets));
+
     }
 }

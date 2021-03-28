@@ -10,6 +10,10 @@ public class Cost {
         this.cost = cost;
     }
 
+    public static Cost from(int val) {
+        return new Cost(val);
+    }
+
     private void isValidCost(long cost) {
         if (cost < 0) {
             throw new InvalidCostException();
