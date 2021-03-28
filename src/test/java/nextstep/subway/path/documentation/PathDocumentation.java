@@ -31,7 +31,7 @@ class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10, 10
+                ), 10, 10, 1250
         );
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
@@ -48,7 +48,8 @@ class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].createdDate").description("(최단 경로 역) 생성일시"),
                 fieldWithPath("stations[].modifiedDate").description("(최단 경로 역) 수정일시"),
                 fieldWithPath("distance").description("최단 경로 거리"),
-                fieldWithPath("duration").description("최단 경로 시간")
+                fieldWithPath("duration").description("최단 경로 시간"),
+                fieldWithPath("fare").description("요금")
         };
 
         두_역의_최단_거리_경로_조회를_요청(given( "path", parameterDescriptors, fieldDescriptors), 1L, 2L);
