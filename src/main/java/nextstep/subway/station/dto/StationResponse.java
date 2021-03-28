@@ -27,10 +27,9 @@ public class StationResponse {
         return new StationResponse(station.getId(), station.getName(), station.getCreatedDate(), station.getModifiedDate());
     }
 
-    // TODO : 보완
     public static List<StationResponse> listOf(List<Station> stations) {
         return stations.stream()
-                .map(it -> StationResponse.of(it))
+                .map(StationResponse::of)
                 .collect(Collectors.toList());
     }
 

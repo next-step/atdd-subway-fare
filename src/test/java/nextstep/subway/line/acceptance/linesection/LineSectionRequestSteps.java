@@ -4,15 +4,32 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.dto.LineRequest;
-import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.line.dto.SectionRequest;
-import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
 public class LineSectionRequestSteps {
 
     public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance) {
         return new LineRequest(name, color, upStationId, downStationId, distance);
+    }
+
+    // TODO : Duration 보완
+    public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+        return new LineRequest(name, color, upStationId, downStationId, distance, duration);
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선에_구간_등록_요청2(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+        SectionRequest sectionRequest = new SectionRequest(upStationId, downStationId, distance, duration);
+
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(sectionRequest)
+                .when()
+                .pathParam("id", lineId)
+                .post("/lines/{id}/sections")
+                .then().log().all()
+                .extract();
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_구간_등록_요청(Long lineId, Long upStationId, Long downStationId, int distance) {

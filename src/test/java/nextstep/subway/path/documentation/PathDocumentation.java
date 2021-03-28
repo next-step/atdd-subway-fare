@@ -16,7 +16,7 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_경로_조회_요청;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +45,7 @@ public class PathDocumentation extends Documentation {
         given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         // when & then
-        두_역의_최단_거리_경로_조회를_요청(1L, 2L);
+        지하철_최단_거리_경로_조회_요청(1L, 2L);
     }
 
     public static RequestSpecification givenRestAssured() {

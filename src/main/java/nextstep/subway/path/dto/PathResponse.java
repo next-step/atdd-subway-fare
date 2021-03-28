@@ -6,6 +6,7 @@ import nextstep.subway.station.dto.StationResponse;
 import java.util.List;
 
 public class PathResponse {
+
     private List<StationResponse> stations;
     private int distance;
     private int duration;
@@ -22,7 +23,9 @@ public class PathResponse {
     public static PathResponse of(PathResult pathResult) {
         int distance = pathResult.getTotalDistance();
         int duration = pathResult.getTotalDuration();
-        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration);
+        List<StationResponse> stations = StationResponse.listOf(pathResult.getStations());
+
+        return new PathResponse(stations, distance, duration);
     }
 
     public List<StationResponse> getStations() {
