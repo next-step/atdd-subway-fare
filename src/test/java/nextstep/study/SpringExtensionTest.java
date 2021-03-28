@@ -14,24 +14,26 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 @DisplayName("단위 테스트 - SpringExtension을 활용한 가짜 협력 객체 사용")
 @ExtendWith(org.springframework.test.context.junit.jupiter.SpringExtension.class)
 public class SpringExtensionTest {
+
     @MockBean
     private LineRepository lineRepository;
+
     @MockBean
     private StationService stationService;
 
     @Test
     void findLines() {
         // given
-        when(lineRepository.findAll()).thenReturn(Lists.newArrayList(new Line()));
+        given(lineRepository.findAll()).willReturn(Lists.newArrayList(new Line()));
         LineService lineService = new LineService(lineRepository, stationService);
 
         // when
-        List<LineResponse> responses = lineService.findLineResponses();
+        List<LineResponse> responses = lineService.findAllLineResponses();
 
         // then
         assertThat(responses).hasSize(1);

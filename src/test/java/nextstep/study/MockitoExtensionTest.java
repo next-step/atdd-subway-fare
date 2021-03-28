@@ -18,9 +18,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@DisplayName("단위 테스트 - mockito의 MockitoExtension을 활용한 가짜 협력 객체 사용")
+@DisplayName("단위 테스트 - mockito MockitoExtension 을 활용한 가짜 협력 객체 사용")
 @ExtendWith(MockitoExtension.class)
 public class MockitoExtensionTest {
+
     @Mock
     private LineRepository lineRepository;
     @Mock
@@ -33,7 +34,7 @@ public class MockitoExtensionTest {
         LineService lineService = new LineService(lineRepository, stationService);
 
         // when
-        List<LineResponse> responses = lineService.findLineResponses();
+        List<LineResponse> responses = lineService.findAllLineResponses();
 
         // then
         assertThat(responses).hasSize(1);
