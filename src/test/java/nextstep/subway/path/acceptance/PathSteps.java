@@ -10,6 +10,7 @@ import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,5 +58,10 @@ public class PathSteps {
                 .collect(Collectors.toList());
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
+    public static void 경로_응답_요금포함(ExtractableResponse<Response> response, ArrayList<Long> expectedStationIds, int distance, int duration, int fare) {
+        경로_응답됨(response, expectedStationIds, distance, duration);
+        assertThat(response.as(PathResponse.class).getFare()).isEqualTo(fare);
     }
 }

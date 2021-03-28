@@ -59,4 +59,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
     }
+
+    @DisplayName("지하철 이용 요금을 조회한다.")
+    @Test
+    void findFareByPath() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 강남역.getId(), 남부터미널역.getId());
+
+        경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1250);
+    }
 }
