@@ -31,13 +31,13 @@ public class FareServiceMockTest {
         assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1250);
 
         when(pathResult.getTotalDistance()).thenReturn(13);
-        assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1250);
+        assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1350);
 
         when(pathResult.getTotalDistance()).thenReturn(20);
         assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1450);
 
-        when(pathResult.getTotalDistance()).thenReturn(60);
-        assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(2250);
+        when(pathResult.getTotalDistance()).thenReturn(50);
+        assertThat(fareService.calculateFare(pathResult).getFare()).isEqualTo(1250+700+100);
 
     }
 }

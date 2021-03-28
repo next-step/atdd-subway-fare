@@ -23,18 +23,18 @@ public class Fare {
             return DEFAULT_FARE;
         }
         if (distance <= ADD_100_FARE_DISTANCE) {
-            return DEFAULT_FARE + calculateOverFareBefore50(distance - DEFAULT_FARE_DISTANCE);
+            return DEFAULT_FARE + calculateOverFareBefore50(distance);
         }
-        return DEFAULT_FARE + calculateOverFareBefore50(distance - DEFAULT_FARE_DISTANCE)
-                + calculateOverFareAfter50(distance - ADD_100_FARE_DISTANCE);
+        return DEFAULT_FARE + calculateOverFareBefore50(distance)
+                + calculateOverFareAfter50(distance);
     }
 
-    private int calculateOverFareBefore50(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+    protected int calculateOverFareBefore50(int distance) {
+        return (int) ((Math.ceil((distance - DEFAULT_FARE_DISTANCE - 1) / 5) + 1) * 100);
     }
 
-    private int calculateOverFareAfter50(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+    protected int calculateOverFareAfter50(int distance) {
+        return (int) ((Math.ceil((distance - ADD_100_FARE_DISTANCE - 1) / 8) + 1) * 100);
     }
 
 }
