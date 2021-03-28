@@ -5,7 +5,7 @@ import nextstep.subway.member.domain.LoginMember;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import static nextstep.subway.path.application.PathService.DEFAULT_FARE;
+import static nextstep.subway.path.constant.PathConstant.DEFAULT_FARE;
 
 public class DiscountFareCalculator {
 

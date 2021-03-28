@@ -1,9 +1,7 @@
 package nextstep.subway.path.application;
 
-import nextstep.subway.path.domain.DiscountFareCalculator;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.member.domain.LoginMember;
-import nextstep.subway.path.domain.AdditionalFareCalculator;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.dto.PathResponse;
@@ -13,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static nextstep.subway.path.constant.PathConstant.DEFAULT_FARE;
+
 @Service
 public class PathService {
-    public static final int DEFAULT_FARE = 1250;
-
     private final GraphService graphService;
     private final StationService stationService;
     private final FareDiscountService fareDiscountService;

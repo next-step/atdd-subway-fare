@@ -15,7 +15,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
-import static nextstep.subway.path.application.PathService.DEFAULT_FARE;
+import static nextstep.subway.path.constant.PathConstant.DEFAULT_FARE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
