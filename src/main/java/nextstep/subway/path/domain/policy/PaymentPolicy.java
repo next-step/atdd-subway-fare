@@ -1,11 +1,13 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.policy;
+
+import nextstep.subway.path.dto.CostRequest;
 
 import java.util.Arrays;
 
 public interface PaymentPolicy {
     long DEFAULT_COST = 1250;
 
-    Cost cost(PathResult pathResult);
+    CostRequest cost(CostRequest costRequest);
 
     static long sum(long... values) {
         long sum = Arrays.stream(values).sum();
