@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class GraphService {
-    private LineService lineService;
+    private final LineService lineService;
 
     public GraphService(LineService lineService) {
         this.lineService = lineService;

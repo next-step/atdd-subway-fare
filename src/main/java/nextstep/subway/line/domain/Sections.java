@@ -139,4 +139,10 @@ public class Sections {
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
+
+    public boolean hasLine(Line line) {
+        return sections.stream()
+                       .map(Section::getLine)
+                       .anyMatch(line::equals);
+    }
 }

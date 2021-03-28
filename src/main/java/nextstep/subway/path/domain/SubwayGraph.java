@@ -16,7 +16,7 @@ public class SubwayGraph {
     private WeightedMultigraph<Station, SubwayEdge> graph;
 
     public SubwayGraph(List<Line> lines, PathType type) {
-        graph = new WeightedMultigraph(SubwayEdge.class);
+        this.graph = new WeightedMultigraph<>(SubwayEdge.class);
 
         // 지하철 역(정점)을 등록
         lines.stream()
@@ -39,10 +39,10 @@ public class SubwayGraph {
 
     public PathResult findPath(Station source, Station target) {
         // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+        DijkstraShortestPath<Station, SubwayEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SubwayEdge> result = dijkstraShortestPath.getPath(source, target);
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SubwayEdge::getSection)
                 .collect(Collectors.toList());
 
         return new PathResult(new Sections(sections));
