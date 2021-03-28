@@ -18,11 +18,12 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type, int age) {
         SubwayGraph subwayGraph = graphService.findGraph(type);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
+        pathResult.setAge(age);
         return PathResponse.of(pathResult);
     }
 }

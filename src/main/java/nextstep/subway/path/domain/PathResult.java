@@ -7,6 +7,7 @@ import java.util.List;
 
 public class PathResult {
     private Sections sections;
+    private int age;
 
     public PathResult(Sections sections) {
         this.sections = sections;
@@ -24,8 +25,18 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
+    public void setAge(final int age) {
+        this.age = age;
+    }
+
     public int getTotalFare() {
-        FareCalculator calculator = new FareCalculator();
-        return calculator.calculate(getTotalDistance());
+        final AgeDiscount ageDiscount = new AgeDiscount(age);
+        int totalFare = getLineMaxBaseFare() + new DistanceFare().calculate(getTotalDistance());
+        return ageDiscount.calculate(totalFare);
+
+    }
+
+    private Integer getLineMaxBaseFare() {
+        return sections.getLineMaxFare();
     }
 }

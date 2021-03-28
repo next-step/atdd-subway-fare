@@ -8,11 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 거리 가격 계산")
 public class FareCalculatorTest {
-    private FareCalculator calculator;
+    private DistanceFare calculator;
 
     @BeforeEach
     public void setup(){
-        this.calculator = new FareCalculator();
+        this.calculator = new DistanceFare();
 
     }
 
@@ -26,7 +26,7 @@ public class FareCalculatorTest {
         int fare = calculator.calculate(distance);
 
         // then
-        assertThat(fare).isEqualTo(FareCalculator.BASE_FARE);
+        assertThat(fare).isEqualTo(DistanceFare.BASE_FARE);
     }
 
     @DisplayName("10km~50km 사이의 경우")
@@ -40,7 +40,7 @@ public class FareCalculatorTest {
         int fare = calculator.calculate(distance);
 
         // then
-        assertThat(fare).isEqualTo(FareCalculator.BASE_FARE+overFare);
+        assertThat(fare).isEqualTo(DistanceFare.BASE_FARE+overFare);
     }
 
 
@@ -55,6 +55,6 @@ public class FareCalculatorTest {
         int fare = calculator.calculate(distance);
 
         // then
-        assertThat(fare).isEqualTo(FareCalculator.BASE_FARE+overFare);
+        assertThat(fare).isEqualTo(DistanceFare.BASE_FARE+overFare);
     }
 }

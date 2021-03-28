@@ -36,9 +36,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
 
-        이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10);
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10);
-        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10);
+        이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10, 900);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10, 1000);
+        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10, 800);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
     }
@@ -46,21 +46,53 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
+        // given
+        final int PASSENGER_AGE = 20;
+
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId(), PASSENGER_AGE);
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 1250);
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 2050);
+    }
+
+    @DisplayName("어린이가 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistanceChildPassenger() {
+        // given
+        final int PASSENGER_AGE = 6;
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId(), PASSENGER_AGE);
+
+        // then
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 850);
+    }
+
+    @DisplayName("청소년이 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistanceYouthPassenger() {
+        // given
+        final int PASSENGER_AGE = 13;
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId(), PASSENGER_AGE);
+
+        // then
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 1360);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDuration() {
+        // given
+        final int PASSENGER_AGE = 20;
+
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId(), PASSENGER_AGE);
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20 ,1550);
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20 ,2550);
     }
 
     private RequestSpecification getDefaultGiven() {

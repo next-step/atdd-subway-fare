@@ -35,6 +35,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         // given
+        final int PASSENGER_AGE = 20;
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
@@ -44,10 +45,10 @@ public class PathDocumentation extends Documentation {
                 10,
                 2000
         );
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), anyInt())).thenReturn(pathResponse);
 
         // when
-        ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getPathGiven(),1L,2L);
+        ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getPathGiven(),1L,2L, PASSENGER_AGE);
 
         // then
         경로_응답됨(response, com.google.common.collect.Lists.newArrayList(1L, 2L), 10, 10, 2000);
@@ -62,7 +63,8 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("The id of source station"),
                                 parameterWithName("target").description("The id of source destination"),
-                                parameterWithName("type").description("The request type of path")
+                                parameterWithName("type").description("The request type of path"),
+                                parameterWithName("age").description("The age of user")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("Path of stations"),

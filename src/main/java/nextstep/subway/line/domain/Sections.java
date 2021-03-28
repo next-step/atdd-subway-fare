@@ -139,4 +139,11 @@ public class Sections {
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
+
+    public Integer getLineMaxFare() {
+        return sections.stream()
+                .map(section -> section.getLine().getBaseFare())
+                .max(Integer::compare)
+                .orElse(0);
+    }
 }
