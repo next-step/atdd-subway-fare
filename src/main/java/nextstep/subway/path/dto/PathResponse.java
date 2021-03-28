@@ -1,6 +1,6 @@
 package nextstep.subway.path.dto;
 
-import nextstep.subway.path.application.FareCalculator;
+import nextstep.subway.path.domain.AdditionalFareCalculator;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.station.dto.StationResponse;
 
@@ -23,14 +23,14 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(PathResult pathResult, FareCalculator calculator) {
+    public static PathResponse of(PathResult pathResult, int fare) {
         int distance = pathResult.getTotalDistance();
         int duration = pathResult.getTotalDuration();
         return new PathResponse(
             StationResponse.listOf(pathResult.getStations()),
             distance,
             duration,
-            calculator.calculateFare(distance)
+            fare
         );
     }
 
