@@ -64,6 +64,4 @@ public class PathDocumentation extends Documentation {
                 .when().get("/paths")
                 .then().log().all();
     }
-
-
 }
