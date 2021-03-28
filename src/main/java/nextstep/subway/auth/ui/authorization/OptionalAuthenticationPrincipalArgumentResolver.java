@@ -29,7 +29,7 @@ public class OptionalAuthenticationPrincipalArgumentResolver extends Authenticat
 
         Object principal = authentication.getPrincipal();
 
-        return Optional.of(
+        return Optional.ofNullable(
             principal instanceof Map
                 ? extractPrincipal(parameter, authentication)
                 : principal

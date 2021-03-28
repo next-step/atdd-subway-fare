@@ -20,8 +20,8 @@ public class DiscountFareCalculator {
 
     private enum DiscountFare {
         BABY(age -> age < 6, 1350, 1),
-        YOUTH(age -> age < 13, 350, 0.2),
-        CHILD(age -> age < 19, 350, 0.5),
+        CHILD(age -> age < 13, 350, 0.5),
+        YOUTH(age -> age < 19, 350, 0.2),
         ADULT(age -> age >= 19, 0, 0);
 
         private final Function<Integer, Boolean> condition;
@@ -46,6 +46,7 @@ public class DiscountFareCalculator {
         }
 
         public int applyDiscount(int fare) {
+            System.out.println(fare - discountFare);
             return (int)((fare - discountFare) * discountRateAboutTotal);
         }
     }

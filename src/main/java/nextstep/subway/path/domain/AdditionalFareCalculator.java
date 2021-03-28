@@ -59,8 +59,8 @@ public class AdditionalFareCalculator {
         }
 
         private double getAdditionalFareOf(int distance) {
-            int remainderDistance = distance - overDistance;
-            return Math.ceil((remainderDistance - 1) / distanceUnit) + 1;
+            final int remainderDistance = distance - overDistance;
+            return Math.ceil((remainderDistance - 1) / distanceUnit);
         }
     }
 }
