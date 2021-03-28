@@ -2,6 +2,7 @@ package nextstep.subway.common.exception;
 
 //import nextstep.subway.auth.exception.UnauthorizedException;
 //import nextstep.subway.station.exception.CannotMatchingStationException;
+import nextstep.subway.station.exception.CannotMatchingStationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ControllerExceptionAdvice {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
-//    @ExceptionHandler({ExistResourceException.class, CannotMatchingStationException.class, CannotRemoveResourceException.class})
+    @ExceptionHandler({ExistResourceException.class, CannotMatchingStationException.class, CannotRemoveResourceException.class})
     public ResponseEntity<ErrorResponse> existResourceExceptionHandler(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);

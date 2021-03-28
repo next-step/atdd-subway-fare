@@ -5,7 +5,8 @@ import nextstep.subway.station.domain.Station;
 import javax.persistence.*;
 
 @Entity
-public class Section {
+public class Section implements Comparable<Section> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,11 +24,20 @@ public class Section {
     private Station downStation;
 
     private int distance;
-    private int duration;
+
+    private int duration; // TODO : 보완
 
     public Section() {
     }
 
+    public Section(Line line, Station upStation, Station downStation, int distance) {
+        this.line = line;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+    }
+
+    // TODO : 보완
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
@@ -60,6 +70,7 @@ public class Section {
         return duration;
     }
 
+    // TODO : 보완
     public void updateUpStation(Station station, int newDistance, int newDuration) {
         if (this.distance < newDistance) {
             throw new RuntimeException("역과 역 사이의 거리보다 좁은 거리를 입력해주세요");
@@ -73,6 +84,7 @@ public class Section {
         this.duration -= newDuration;
     }
 
+    // TODO : 보완
     public void updateDownStation(Station station, int newDistance, int newDuration) {
         if (this.distance < newDistance) {
             throw new RuntimeException("역과 역 사이의 거리보다 좁은 거리를 입력해주세요");
@@ -84,5 +96,19 @@ public class Section {
         this.downStation = station;
         this.distance -= newDistance;
         this.duration -= newDuration;
+    }
+
+    @Override
+    public int compareTo(Section section) {
+        if (this.upStation.equals(section.getDownStation())) {
+            return 1;
+        }
+        if (this.downStation.equals(section.getUpStation())) {
+            return -1;
+        }
+        if (!this.upStation.equals(section.getDownStation()) && !this.downStation.equals(section.upStation)) {
+            return -1;
+        }
+        return 0;
     }
 }
