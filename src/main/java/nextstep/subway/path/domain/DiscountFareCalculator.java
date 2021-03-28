@@ -47,6 +47,7 @@ public class DiscountFareCalculator {
         }
 
         public int applyDiscount(int fare) {
+            if (discountRateAboutTotal == 1) return fare;
             return (int)((fare - discountFare) * discountRateAboutTotal);
         }
     }
