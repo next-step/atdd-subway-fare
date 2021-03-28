@@ -1,8 +1,10 @@
 package nextstep.subway.path.acceptance;
 
 import com.google.common.collect.Lists;
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -23,6 +25,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 이호선;
     private LineResponse 신분당선;
     private LineResponse 삼호선;
+    private RequestSpecification defaultGiven;
 
     @BeforeEach
     public void setUp() {
@@ -44,19 +47,23 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20);
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 1250);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20 ,1550);
+    }
+
+    private RequestSpecification getDefaultGiven() {
+        return RestAssured.given().log().all();
     }
 }
