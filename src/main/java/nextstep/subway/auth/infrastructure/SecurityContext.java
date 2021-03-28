@@ -3,6 +3,7 @@ package nextstep.subway.auth.infrastructure;
 import nextstep.subway.auth.domain.Authentication;
 
 public class SecurityContext {
+
     private Authentication authentication;
 
     public SecurityContext() {

@@ -22,8 +22,8 @@ public class LoginMember implements UserDetails {
     }
 
     @Override
-    public boolean validateCredentials(Object credentials) {
-        return this.password.equals(credentials.toString());
+    public boolean validatePassword(Object password) {
+        return this.password.equals(password.toString());
     }
 
     public Long getId() {
@@ -38,17 +38,13 @@ public class LoginMember implements UserDetails {
         return age;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     @Override
-    public Object getPrincipal() {
+    public Object getUsername() {
         return email;
-    }
-
-    @Override
-    public Object getCredentials() {
-        return password;
     }
 }

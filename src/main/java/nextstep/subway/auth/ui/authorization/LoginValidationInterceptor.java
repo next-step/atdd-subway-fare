@@ -1,4 +1,4 @@
-package nextstep.subway.auth.ui;
+package nextstep.subway.auth.ui.authorization;
 
 import nextstep.subway.auth.exception.UnauthorizedException;
 import nextstep.subway.auth.infrastructure.SecurityContext;

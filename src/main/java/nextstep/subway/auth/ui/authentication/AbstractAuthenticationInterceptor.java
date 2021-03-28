@@ -1,9 +1,9 @@
 package nextstep.subway.auth.ui.authentication;
 
-import nextstep.subway.auth.application.handler.AuthenticationFailureHandler;
-import nextstep.subway.auth.application.handler.AuthenticationSuccessHandler;
+import nextstep.subway.auth.application.UserDetails;
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.domain.Authentication;
-import nextstep.subway.auth.infrastructure.SecurityContextHolder;
+import nextstep.subway.auth.domain.AuthenticationToken;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,38 +11,41 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public abstract class AbstractAuthenticationInterceptor implements HandlerInterceptor {
-    private AuthenticationSuccessHandler successHandler;
-    private AuthenticationFailureHandler failureHandler;
 
-    protected AbstractAuthenticationInterceptor(AuthenticationSuccessHandler successHandler, AuthenticationFailureHandler failureHandler) {
-        this.successHandler = successHandler;
-        this.failureHandler = failureHandler;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationConverter authenticationConverter;
+
+    protected AbstractAuthenticationInterceptor(UserDetailsService userDetailsService, AuthenticationConverter authenticationConverter) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationConverter = authenticationConverter;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        try {
-            Authentication authentication = attemptAuthentication(request, response);
-            successfulAuthentication(request, response, authentication);
-        } catch (AuthenticationException e) {
-            unsuccessfulAuthentication(request, response, e);
-        }
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        AuthenticationToken authenticationToken = authenticationConverter.convert(request);
+        Authentication authentication = authenticate(authenticationToken);
+        afterAuthentication(request, response, authentication);
 
         return false;
     }
 
-    private void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    public Authentication authenticate(AuthenticationToken authenticationToken) {
+        String principal = authenticationToken.getPrincipal();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal);
+        validateAuthentication(userDetails, authenticationToken);
 
-        successHandler.onAuthenticationSuccess(request, response, authentication);
+        return new Authentication(userDetails);
     }
 
-    protected void unsuccessfulAuthentication(HttpServletRequest request,
-                                              HttpServletResponse response, AuthenticationException failed) throws IOException {
-        SecurityContextHolder.clearContext();
+    private void validateAuthentication(UserDetails userDetails, AuthenticationToken token) {
+        if (userDetails == null) {
+            throw new RuntimeException();
+        }
 
-        failureHandler.onAuthenticationFailure(request, response, failed);
+        if (!userDetails.validatePassword(token.getCredentials())) {
+            throw new RuntimeException();
+        }
     }
 
-    protected abstract Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    protected abstract void afterAuthentication(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException;
 }
