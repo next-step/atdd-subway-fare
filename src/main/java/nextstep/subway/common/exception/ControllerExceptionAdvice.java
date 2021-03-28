@@ -1,19 +1,17 @@
 package nextstep.subway.common.exception;
 
-//import nextstep.subway.auth.exception.UnauthorizedException;
-//import nextstep.subway.station.exception.CannotMatchingStationException;
+import nextstep.subway.auth.exception.UnauthorizedException;
 import nextstep.subway.station.exception.CannotMatchingStationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-//import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionAdvice {
 
-//    @ExceptionHandler({UnauthorizedException.class})
+    @ExceptionHandler({UnauthorizedException.class})
     public ResponseEntity<ErrorResponse> unauthorizedExceptionHandler(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);

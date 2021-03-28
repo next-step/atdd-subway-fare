@@ -4,66 +4,71 @@ import nextstep.subway.favorite.domain.Favorite;
 import nextstep.subway.favorite.domain.FavoriteRepository;
 import nextstep.subway.favorite.dto.FavoriteRequest;
 import nextstep.subway.favorite.dto.FavoriteResponse;
-import nextstep.subway.member.domain.LoginMember;
+import nextstep.subway.favorite.exception.FavoriteAlreadyExistException;
+import nextstep.subway.favorite.exception.FavoriteNonExistException;
+import nextstep.subway.favorite.exception.InvalidFavoriteMemberException;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
-import nextstep.subway.station.dto.StationResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class FavoriteService {
-    private FavoriteRepository favoriteRepository;
-    private StationService stationService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, StationService stationService) {
-        this.favoriteRepository = favoriteRepository;
+    private final StationService stationService;
+    private final FavoriteRepository favoriteRepository;
+
+    public FavoriteService(StationService stationService, FavoriteRepository favoriteRepository) {
         this.stationService = stationService;
+        this.favoriteRepository = favoriteRepository;
     }
 
-    public void createFavorite(LoginMember loginMember, FavoriteRequest request) {
-        Favorite favorite = new Favorite(loginMember.getId(), request.getSource(), request.getTarget());
-        favoriteRepository.save(favorite);
+    public FavoriteResponse addFavorite(Long memberId, FavoriteRequest favoriteRequest) {
+        Station source = stationService.findStationById(favoriteRequest.getSourceId());
+        Station target = stationService.findStationById(favoriteRequest.getTargetId());
+
+        validateExistFavorite(memberId, source, target);
+
+        Favorite favorite = new Favorite(memberId, source, target);
+        Favorite savedFavorite = favoriteRepository.save(favorite);
+
+        return FavoriteResponse.of(savedFavorite);
     }
 
-    public List<FavoriteResponse> findFavorites(LoginMember loginMember) {
-        List<Favorite> favorites = favoriteRepository.findByMemberId(loginMember.getId());
-        Map<Long, Station> stations = extractStations(favorites);
+    private void validateExistFavorite(Long memberId, Station source, Station target) {
+        if (favoriteRepository.existsByMemberIdAndSourceAndTarget(memberId, source, target)) {
+            throw new FavoriteAlreadyExistException();
+        }
+    }
 
-        return favorites.stream()
-                .map(it -> FavoriteResponse.of(
-                        it,
-                        StationResponse.of(stations.get(it.getSourceStationId())),
-                        StationResponse.of(stations.get(it.getTargetStationId()))))
+    @Transactional(readOnly = true)
+    public List<FavoriteResponse> findAllFavoriteResponsesByMemberId(Long memberId) {
+        return findAllFavoritesByMemberId(memberId)
+                .stream()
+                .map(FavoriteResponse::of)
                 .collect(Collectors.toList());
     }
 
-    public void deleteFavorite(LoginMember loginMember, Long id) {
-        Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
-        if (!favorite.isCreatedBy(loginMember.getId())) {
-            throw new RuntimeException();
-        }
-        favoriteRepository.deleteById(id);
+    @Transactional(readOnly = true)
+    public List<Favorite> findAllFavoritesByMemberId(Long memberId) {
+        return favoriteRepository.findAllByMemberId(memberId);
     }
 
-    private Map<Long, Station> extractStations(List<Favorite> favorites) {
-        Set<Long> stationIds = extractStationIds(favorites);
-        return stationService.findAllStationsById(stationIds).stream()
-                .collect(Collectors.toMap(Station::getId, Function.identity()));
+    @Transactional(readOnly = true)
+    public Favorite findFavoriteById(Long favoriteId) {
+        return favoriteRepository.findById(favoriteId)
+                .orElseThrow(FavoriteNonExistException::new);
     }
 
-    private Set<Long> extractStationIds(List<Favorite> favorites) {
-        Set<Long> stationIds = new HashSet<>();
-        for (Favorite favorite : favorites) {
-            stationIds.add(favorite.getSourceStationId());
-            stationIds.add(favorite.getTargetStationId());
+    public void removeFavorite(Long favoriteId, Long memberId) {
+        Favorite favorite = findFavoriteById(favoriteId);
+        if (!favorite.isCreatedBy(memberId)) {
+            throw new InvalidFavoriteMemberException();
         }
-        return stationIds;
+        favoriteRepository.deleteById(favoriteId);
     }
 }

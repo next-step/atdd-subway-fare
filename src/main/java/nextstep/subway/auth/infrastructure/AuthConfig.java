@@ -1,6 +1,7 @@
 package nextstep.subway.auth.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nextstep.subway.auth.ui.LoginValidationInterceptor;
 import nextstep.subway.auth.ui.authentication.SessionAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authentication.TokenAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authorization.AuthenticationPrincipalArgumentResolver;
@@ -28,6 +29,7 @@ public class AuthConfig implements WebMvcConfigurer {
         registry.addInterceptor(new TokenAuthenticationInterceptor(userDetailsService, jwtTokenProvider, new ObjectMapper())).addPathPatterns("/login/token");
         registry.addInterceptor(new SessionSecurityContextPersistenceInterceptor());
         registry.addInterceptor(new TokenSecurityContextPersistenceInterceptor(jwtTokenProvider));
+        registry.addInterceptor(new LoginValidationInterceptor()).addPathPatterns("/favorites/**");
     }
 
     @Override
