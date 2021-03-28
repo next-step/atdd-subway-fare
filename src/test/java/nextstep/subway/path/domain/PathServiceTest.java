@@ -2,6 +2,11 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.PaymentPolicyHandler;
+import nextstep.subway.path.application.PaymentPolicyHandlerV1;
+import nextstep.subway.path.domain.policy.AddedCostPaymentPolicy;
+import nextstep.subway.path.domain.policy.AgePaymentPolicy;
+import nextstep.subway.path.domain.policy.DistancePaymentPolicy;
 import nextstep.subway.path.dto.PathResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +26,12 @@ public class PathServiceTest extends PathTest{
     @BeforeEach
     void setup() {
         super.setup();
-        pathService = new PathService(graphService, stationService, new DistancePaymentPolicy());
+        PaymentPolicyHandler paymentPolicyHandler = new PaymentPolicyHandlerV1()
+                .link(new DistancePaymentPolicy())
+                .link(new AddedCostPaymentPolicy())
+                .link(new AgePaymentPolicy());
+
+        pathService = new PathService(graphService, stationService, paymentPolicyHandler);
         adult = new LoginMember(1L, "adult@email.com", "password", 22);
         youth = new LoginMember(2L, "youth@email.com", "password", 17);
         kid = new LoginMember(3L, "kid@email.com", "password", 9);

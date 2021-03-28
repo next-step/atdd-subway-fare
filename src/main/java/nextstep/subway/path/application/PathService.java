@@ -3,6 +3,7 @@ package nextstep.subway.path.application;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.domain.*;
+import nextstep.subway.path.dto.CostRequest;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private GraphService graphService;
     private StationService stationService;
-    private PaymentPolicy paymentPolicy;
+    private PaymentPolicyHandler paymentPolicyHandler;
 
-    public PathService(GraphService graphService, StationService stationService, PaymentPolicy paymentPolicy) {
+    public PathService(GraphService graphService, StationService stationService,  PaymentPolicyHandler paymentPolicyHandler) {
         this.graphService = graphService;
         this.stationService = stationService;
-        this.paymentPolicy = paymentPolicy;
+        this.paymentPolicyHandler = paymentPolicyHandler;
     }
 
     public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType type) {
@@ -31,7 +32,9 @@ public class PathService {
     }
 
     private Cost calculateCost(PathResult pathResult, Integer age) {
-        Cost cost = paymentPolicy.cost(pathResult);
-        return CostByAge.applyDiscount(cost, age);
+        CostRequest costRequest = CostRequest.of(pathResult, age);
+        CostRequest result = paymentPolicyHandler.execute(costRequest);
+
+        return result.getCost();
     }
 }
