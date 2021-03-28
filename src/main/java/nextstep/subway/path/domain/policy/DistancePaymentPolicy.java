@@ -9,9 +9,6 @@ public class DistancePaymentPolicy implements PaymentPolicy {
     public static final int COST_DELIMITER_50 = 8;
     public static final int COST_DELIMITER_10 = 5;
 
-    private PaymentPolicy next;
-
-
     @Override
     public CostRequest cost(CostRequest costRequest) {
         int distance = costRequest.getDistance();

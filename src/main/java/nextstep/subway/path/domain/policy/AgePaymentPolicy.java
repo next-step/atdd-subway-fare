@@ -5,7 +5,6 @@ import nextstep.subway.path.domain.CostByAge;
 import nextstep.subway.path.dto.CostRequest;
 
 public class AgePaymentPolicy implements PaymentPolicy {
-    private PaymentPolicy next;
 
     @Override
     public CostRequest cost(CostRequest costRequest) {
