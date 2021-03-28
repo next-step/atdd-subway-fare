@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 public enum CostByAge {
-    BABY(age-> age < 6, 1),
-    KID(age-> age>=6 && age < 13, 0.5),
-    YOUTH(age-> age>=13 && age <19, 0.2),
-    ADULT(age-> age >= 19, 0);
+    BABY(age -> age > 0 && age < 6, 1),
+    KID(age -> age >= 6 && age < 13, 0.5),
+    YOUTH(age -> age >= 13 && age < 19, 0.2),
+    ADULT(age -> age >= 19 || age == 0, 0);
 
     private final Function<Integer, Boolean> function;
     private final double discountRate;
