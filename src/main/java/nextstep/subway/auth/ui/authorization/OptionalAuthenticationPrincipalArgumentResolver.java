@@ -12,6 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 public class OptionalAuthenticationPrincipalArgumentResolver extends AuthenticationPrincipalArgumentResolver {
 
@@ -23,13 +24,15 @@ public class OptionalAuthenticationPrincipalArgumentResolver extends Authenticat
     @Override
     public Object getPrincipalByAuthentication(MethodParameter parameter, Authentication authentication) {
         if (authentication == null) {
-            return null;
+            return Optional.empty();
         }
 
-        if (authentication.getPrincipal() instanceof Map) {
-            return extractPrincipal(parameter, authentication);
-        }
+        Object principal = authentication.getPrincipal();
 
-        return authentication.getPrincipal();
+        return Optional.of(
+            principal instanceof Map
+                ? extractPrincipal(parameter, authentication)
+                : principal
+        );
     }
 }

@@ -21,8 +21,10 @@ public abstract class AuthenticationPrincipalArgumentResolver implements Handler
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        Authentication authentication = getAuthentication();
-        return getPrincipalByAuthentication(parameter, authentication);
+        return getPrincipalByAuthentication(
+            parameter,
+            getAuthentication()
+        );
     }
 
     protected Authentication getAuthentication() {
