@@ -42,8 +42,8 @@ public class PathService {
 
         return PathResponse.of(
             pathResult,
-            loginMember.map(it -> fareDiscountService.calculateDiscount(it, fare))
-                       .orElse(fare)
+            fare - loginMember.map(it -> fareDiscountService.calculateDiscount(it, fare))
+                                   .orElse(0)
         );
     }
 }

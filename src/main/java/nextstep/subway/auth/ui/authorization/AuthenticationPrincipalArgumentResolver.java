@@ -1,7 +1,6 @@
 package nextstep.subway.auth.ui.authorization;
 
 import nextstep.subway.auth.domain.Authentication;
-import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

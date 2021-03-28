@@ -1,6 +1,5 @@
 package nextstep.subway.path.ui;
 
-import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.domain.OptionalAuthenticationPrincipal;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.member.domain.LoginMember;
@@ -28,8 +27,10 @@ public class PathController {
         @RequestParam Long source,
         @RequestParam Long target,
         @RequestParam PathType type,
-        @OptionalAuthenticationPrincipal Optional<LoginMember> loginMember
+        @OptionalAuthenticationPrincipal LoginMember loginMember
     ) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type, loginMember));
+        return ResponseEntity.ok(
+            pathService.findPath(source, target, type, Optional.ofNullable(loginMember))
+        );
     }
 }

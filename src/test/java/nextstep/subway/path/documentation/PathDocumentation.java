@@ -2,9 +2,7 @@ package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
 import nextstep.subway.Documentation;
-import nextstep.subway.line.domain.LineFare;
 import nextstep.subway.line.domain.PathType;
-import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -12,12 +10,12 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
 
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.path.application.PathService.DEFAULT_FARE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -43,7 +41,7 @@ public class PathDocumentation extends Documentation {
             ),
             10,
             10,
-            LineFare.ADULT.getFare()
+            DEFAULT_FARE
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), any()))

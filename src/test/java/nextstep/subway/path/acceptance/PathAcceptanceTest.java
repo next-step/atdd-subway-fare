@@ -5,7 +5,6 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
 import nextstep.subway.auth.dto.TokenResponse;
-import nextstep.subway.line.domain.LineFare;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +15,7 @@ import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지�
 import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.member.MemberSteps.회원_생성_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
+import static nextstep.subway.path.application.PathService.DEFAULT_FARE;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
@@ -96,7 +96,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             3,
             10,
-            LineFare.ADULT.getFare() + 삼호선.getAdditionalFare()
+            DEFAULT_FARE + 삼호선.getAdditionalFare()
         );
     }
 
@@ -116,7 +116,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            LineFare.ADULT.getFare() + 200 + 신분당선.getAdditionalFare()
+            DEFAULT_FARE + 200 + 신분당선.getAdditionalFare()
         );
     }
 
@@ -134,7 +134,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         );
 
         // then
-        int expectedFare = LineFare.CHILD.getFare() + 신분당선.getAdditionalFare() + 200;
+        int sumFare = DEFAULT_FARE + 신분당선.getAdditionalFare() + 200;
         경로와_요금_응답됨(
             response,
             Lists.newArrayList(
@@ -144,7 +144,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            expectedFare - (int)(expectedFare * 0.2)
+            sumFare - (int)((sumFare - 350) * 0.2)
         );
     }
 
@@ -162,7 +162,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
         );
 
         // then
-        int sumFare = LineFare.CHILD.getFare() + 신분당선.getAdditionalFare() + 200;
+        int sumFare = DEFAULT_FARE + 신분당선.getAdditionalFare() + 200;
+
         경로와_요금_응답됨(
             response,
             Lists.newArrayList(
@@ -172,7 +173,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
             ),
             20,
             20,
-            sumFare - (int)(sumFare * 0.5)
+            sumFare - (int)((sumFare - 350) * 0.5)
         );
     }
 }

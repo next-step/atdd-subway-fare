@@ -3,8 +3,9 @@ package nextstep.subway.path.domain;
 import nextstep.subway.member.domain.LoginMember;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Function;
+
+import static nextstep.subway.path.application.PathService.DEFAULT_FARE;
 
 public class DiscountFareCalculator {
 
@@ -19,7 +20,7 @@ public class DiscountFareCalculator {
     }
 
     private enum DiscountFare {
-        BABY(age -> age < 6, 1350, 1),
+        BABY(age -> age < 6, DEFAULT_FARE, 1),
         CHILD(age -> age < 13, 350, 0.5),
         YOUTH(age -> age < 19, 350, 0.2),
         ADULT(age -> age >= 19, 0, 0);
@@ -46,7 +47,6 @@ public class DiscountFareCalculator {
         }
 
         public int applyDiscount(int fare) {
-            System.out.println(fare - discountFare);
             return (int)((fare - discountFare) * discountRateAboutTotal);
         }
     }

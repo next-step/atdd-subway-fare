@@ -23,16 +23,15 @@ public class OptionalAuthenticationPrincipalArgumentResolver extends Authenticat
 
     @Override
     public Object getPrincipalByAuthentication(MethodParameter parameter, Authentication authentication) {
+
         if (authentication == null) {
-            return Optional.empty();
+            return null;
         }
 
-        Object principal = authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Map) {
+            return extractPrincipal(parameter, authentication);
+        }
 
-        return Optional.ofNullable(
-            principal instanceof Map
-                ? extractPrincipal(parameter, authentication)
-                : principal
-        );
+        return authentication.getPrincipal();
     }
 }
