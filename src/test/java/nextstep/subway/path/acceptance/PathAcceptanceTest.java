@@ -78,7 +78,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         adultTokenResponse = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 회원이_두_역의_최단_거리_경로_조회를_요청(adultTokenResponse, 양재역.getId(), 교대역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
 
         // then
         경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
@@ -91,7 +91,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         adultTokenResponse = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 회원이_두_역의_최단_거리_경로_조회를_요청(adultTokenResponse, 교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청( 교대역.getId(), 양재역.getId());
 
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20);
@@ -101,11 +101,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void managePathFinder() {
-        //given
-        adultTokenResponse = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
-
         //when
-        ExtractableResponse<Response> pathFindResponse = 회원이_두_역의_최단_거리_경로_조회를_요청(adultTokenResponse, 양재역.getId(), 교대역.getId());
+        ExtractableResponse<Response> pathFindResponse = 두_역의_최단_거리_경로_조회를_요청( 양재역.getId(), 교대역.getId());
 
         //then
         경로_응답됨(pathFindResponse, Arrays.asList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
@@ -117,11 +114,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("추가 요금이 있는 노선을 경유하는 최단 거리 경로를 조회하여 운임을 계산한다.")
     @Test
     void costWithAddedCostLine() {
-        //given
-        adultTokenResponse = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
-
         //when
-        ExtractableResponse<Response> pathFindResponse = 회원이_두_역의_최단_거리_경로_조회를_요청(adultTokenResponse, 강남역.getId(), 양재역.getId());
+        ExtractableResponse<Response> pathFindResponse = 두_역의_최단_거리_경로_조회를_요청( 강남역.getId(), 양재역.getId());
 
         //then
         경로_응답됨(pathFindResponse, Arrays.asList(강남역.getId(), 양재역.getId()), 10, 10);
