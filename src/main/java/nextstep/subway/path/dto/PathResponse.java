@@ -24,7 +24,8 @@ public class PathResponse {
     public static PathResponse of(PathResult pathResult) {
         int distance = pathResult.getTotalDistance();
         int duration = pathResult.getTotalDuration();
-        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration, 0);
+        int fare = pathResult.getFare();
+        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration, fare);
     }
 
     public List<StationResponse> getStations() {
@@ -40,6 +41,6 @@ public class PathResponse {
     }
 
     public int getFare() {
-        return 0;
+        return fare;
     }
 }
