@@ -63,7 +63,11 @@ public class PathServiceTest extends PathTest{
                 @DisplayName("공제액을 제외한 20% 할인된 요금이 청구된다.")
                 @Test
                 void it_is_20_percent_discounted_cost() {
+                    //when
+                    PathResponse response = pathService.findPath(youth, 강남역.getId(), 양재역.getId(), DISTANCE);
 
+                    //then
+                    assertThat(response.getCost()).isEqualTo(1790);
                 }
             }
             @Nested
@@ -72,7 +76,11 @@ public class PathServiceTest extends PathTest{
                 @DisplayName("공제액을 제외한 50% 할인된 요금이 청구된다.")
                 @Test
                 void it_is_50_percent_discounted_cost() {
+                    //when
+                    PathResponse response = pathService.findPath(kid, 강남역.getId(), 양재역.getId(), DISTANCE);
 
+                    //then
+                    assertThat(response.getCost()).isEqualTo(1250);
                 }
             }
         }
