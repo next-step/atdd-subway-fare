@@ -1,7 +1,7 @@
 package nextstep.subway.path.domain;
 
 public class FareCalculator {
-    private final int BASE_FARE = 1250;
+    public static final int BASE_FARE = 1250;
 
     public int calculate(int distance){
         return BASE_FARE + calculate10KmOverFare(distance) + calculate50KmOverFare(distance);

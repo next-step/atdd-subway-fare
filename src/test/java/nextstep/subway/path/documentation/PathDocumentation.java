@@ -53,9 +53,9 @@ public class PathDocumentation extends Documentation {
         경로_응답됨(response, com.google.common.collect.Lists.newArrayList(1L, 2L), 10, 10, 2000);
     }
 
-    public RequestSpecification getPathGiven(){
+    private RequestSpecification getPathGiven(){
        return RestAssured
-                .given().log().all()
+                .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
