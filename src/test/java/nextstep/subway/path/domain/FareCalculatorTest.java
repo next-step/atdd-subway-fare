@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static nextstep.subway.path.application.PathService.DEFAULT_FARE;
+import static nextstep.subway.path.constant.PathConstant.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -91,6 +91,17 @@ public class FareCalculatorTest {
     @TestInstance(PER_CLASS)
     @Nested
     class 요금_할인 {
+
+        @DisplayName("영유아 요금 면제")
+        @ValueSource(ints = {1, 2, 3, 4, 5})
+        @ParameterizedTest
+        void discountOfBabyTest(int age) {
+            LoginMember loginMember = new LoginMember(1L, "email@email.com", "1234", age);
+            DiscountFareCalculator discountFareCalculator = new DiscountFareCalculator(loginMember);
+
+            assertThat(0)
+                .isEqualTo(discountFareCalculator.calculate(DEFAULT_FARE));
+        }
 
         @DisplayName("어린이 요금 할인")
         @ValueSource(ints = {6, 7, 8, 9, 10, 11, 12})
