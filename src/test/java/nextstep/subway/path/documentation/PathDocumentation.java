@@ -47,8 +47,10 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").description("역이 생성된 시간"),
                                 fieldWithPath("stations[].modifiedDate").description("역이 변경된 시간"),
                                 fieldWithPath("distance").description("역간 최단거리"),
-                                fieldWithPath("duration").description("소요시간")
-                                )
+                                fieldWithPath("duration").description("소요시간"),
+                                fieldWithPath("fare").description("지하철 이용 요금")
+
+                        )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 강남역.getId())

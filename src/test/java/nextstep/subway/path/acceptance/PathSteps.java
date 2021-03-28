@@ -54,4 +54,9 @@ public class PathSteps {
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
     }
+
+    public static void 이용요금_응답됨(ExtractableResponse<Response> response, int fare) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
+    }
 }
