@@ -56,7 +56,9 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations.[].createdDate").description("지하철 역 생성시간"),
                                 fieldWithPath("stations.[].modifiedDate").description("지하철 역 수정시간"),
                                 fieldWithPath("distance").description("거리"),
-                                fieldWithPath("duration").description("(걸린)시간"))))
+                                fieldWithPath("duration").description("(걸린)시간"),
+                                fieldWithPath("fare").description("요금")
+                                )))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
