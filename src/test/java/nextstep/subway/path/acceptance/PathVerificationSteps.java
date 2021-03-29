@@ -26,30 +26,10 @@ public class PathVerificationSteps {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
-    public static void 지하철_최단_경로_거리(ExtractableResponse<Response> response, int resultDistance) {
-        PathResponse pathResponse = response.as(PathResponse.class);
-        assertThat(pathResponse.getDistance()).isEqualTo(resultDistance);
-    }
-
-    public static void 지하철_최단_경로_포함_역(ExtractableResponse<Response> response, List<StationResponse> expectedStations) {
-        List<String> expectedStationNames = expectedStations.stream()
-                .map(StationResponse::getName)
-                .collect(Collectors.toList());
-
-        PathResponse pathResponse = response.as(PathResponse.class);
-        List<StationResponse> stations = pathResponse.getStations();
-
-        List<String> resultStationNames = stations.stream()
-                .map(station -> station.getName())
-                .collect(Collectors.toList());
-
-        assertThat(resultStationNames).containsAll(expectedStationNames);
-    }
-
     public static void 경로_조회_응답_됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
-//        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)

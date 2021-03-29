@@ -64,7 +64,7 @@ public class PathServiceTest {
 
     @Test
     @DisplayName("지하철 최단 거리 경로 조회")
-    void findShortestPathStation() {
+    void findShortestPathDistance() {
         // given
         long source = savedStationGangNam.getId();
         long target = savedStationNambuTerminal.getId();
@@ -75,6 +75,21 @@ public class PathServiceTest {
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
         assertThat(pathResponse.getDistance()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("지하철 최소 시간 경로 조회")
+    void findShortestPathByDuration() {
+        // given
+        long source = savedStationGangNam.getId();
+        long target = savedStationNambuTerminal.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDuration()).isEqualTo(10);
     }
 
     @Test

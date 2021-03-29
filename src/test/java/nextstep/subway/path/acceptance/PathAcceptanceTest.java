@@ -46,11 +46,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
         남부터미널역 = 지하철_역_등록_됨("남부터미널역").as(StationResponse.class);
 
-        신분당선 = 지하철_노선_생성_요청(노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 10)).as(LineResponse.class);
-        이호선 = 지하철_노선_생성_요청(노선_요청("2호선", "green", 교대역.getId(), 강남역.getId(), 10, 10)).as(LineResponse.class);
-        삼호선 = 지하철_노선_생성_요청(노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 2, 10)).as(LineResponse.class);
+        신분당선 = 지하철_노선_생성_요청(노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5)).as(LineResponse.class);
+        이호선 = 지하철_노선_생성_요청(노선_요청("2호선", "green", 교대역.getId(), 강남역.getId(), 7, 7)).as(LineResponse.class);
+        삼호선 = 지하철_노선_생성_요청(노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3)).as(LineResponse.class);
 
-        지하철_노선에_구간_등록_요청(삼호선.getId(), 남부터미널역.getId(), 양재역.getId(), 3, 10);
+        지하철_노선에_구간_등록_요청(삼호선.getId(), 남부터미널역.getId(), 양재역.getId(), 3, 3);
     }
 
     @Test
@@ -61,17 +61,17 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         지하철_최단_경로_조회_됨(response);
-        경로_조회_응답_됨(response, Arrays.asList(양재역.getId(), 강남역.getId(), 교대역.getId()), 15, 20);
+        경로_조회_응답_됨(response, Arrays.asList(양재역.getId(), 강남역.getId(), 교대역.getId()), 12, 12);
     }
 
     @Test
     @DisplayName("지하철 최소 시간 경로 조회")
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 지하철_최소_시간_경로_조회_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 지하철_최소_시간_경로_조회_요청(양재역.getId(), 교대역.getId());
 
         // then
-        경로_조회_응답_됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+        경로_조회_응답_됨(response, Lists.newArrayList(양재역.getId(), 강남역.getId(), 교대역.getId()), 12, 12);
     }
 
     @Test
