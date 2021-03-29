@@ -1,7 +1,8 @@
 package nextstep.subway.line.domain;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -14,15 +15,16 @@ class SectionsTest {
     @Spy
     private Sections sections;
 
-    @Test
-    void getTotalFare() {
+    @ParameterizedTest
+    @CsvSource(value = {"7:1250", "45:1950", "50:2050", "66:2250"},  delimiter = ':')
+    void getTotalFare(int distance, int resultFare) {
         // given
-        when(sections.getTotalDistance()).thenReturn(45);
+        when(sections.getTotalDistance()).thenReturn(distance);
 
         // when
         int totalFare = sections.getTotalFare();
 
         // then
-        assertThat(totalFare).isEqualTo(1950);
+        assertThat(totalFare).isEqualTo(resultFare);
     }
 }
