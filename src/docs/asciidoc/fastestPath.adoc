@@ -1,0 +1,12 @@
+[[fastestPath]]
+== 최소 시간 지하철 경로
+
+=== 최소 시간 경로 조회
+
+==== Request
+
+include::{snippets}/fastestPath/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/fastestPath/http-response.adoc[]

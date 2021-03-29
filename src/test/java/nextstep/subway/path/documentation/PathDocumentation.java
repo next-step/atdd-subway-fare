@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import static nextstep.subway.path.acceptance.PathSteps.최단경로_조회_문서화;
+import static nextstep.subway.path.acceptance.PathSteps.최소시간경로_조회_문서화;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 public class PathDocumentation extends Documentation {
@@ -18,8 +19,13 @@ public class PathDocumentation extends Documentation {
     }
 
     @Test
-    void path() {
+    void shortest_path() {
         최단경로_조회_문서화(spec);
+    }
+
+    @Test
+    void fastest_path() {
+        최소시간경로_조회_문서화(spec);
     }
 }
 

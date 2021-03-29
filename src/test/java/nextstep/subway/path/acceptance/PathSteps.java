@@ -64,7 +64,28 @@ public class PathSteps {
     public static ExtractableResponse<Response> 최단경로_조회_문서화(RequestSpecification spec) {
         return RestAssured
                 .given(spec)
-                .filter(document("path",
+                .filter(document("shortestPath",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("출발역"),
+                                parameterWithName("target").description("도착역"),
+                                parameterWithName("type").description("최단 경로 검색 조건"))
+                ))
+                .log().all(true)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 1L)
+                .queryParam("target", 2L)
+                .queryParam("type", "DISTANCE")
+                .when().get("/paths")
+                .then().log().all(true)
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 최소시간경로_조회_문서화(RequestSpecification spec) {
+        return RestAssured
+                .given(spec)
+                .filter(document("fastestPath",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
