@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.Documentation;
@@ -42,7 +43,8 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        PathResponse pathResponse = new PathResponse(stationResponses, 10, 10);
+        Fare fare = new Fare(10);
+        PathResponse pathResponse = new PathResponse(stationResponses, 10, 10, fare.getFare());
         given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         // when & then

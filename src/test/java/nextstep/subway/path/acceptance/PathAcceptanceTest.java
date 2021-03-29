@@ -79,7 +79,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         지하철_최단_경로_조회_됨(response, Arrays.asList(삼성역.getId(), 강남역.getId(), 양재역.getId(), 남부터미널역.getId()));
         경로_조회_거리와_소요_시간_응답_됨(response, 21, 21);
-        지하철_역_경로_조회_요금_확인(response, 1450);
+        지하철_역_경로_조회_요금_확인(response, 1550);
     }
 
     @Test
