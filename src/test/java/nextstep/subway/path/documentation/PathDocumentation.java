@@ -3,6 +3,7 @@ package nextstep.subway.path.documentation;
 import com.google.common.collect.Lists;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -16,7 +17,7 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_경로_조회_요청;
+import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_및_최소_시간_경로_조회_요청;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +46,7 @@ public class PathDocumentation extends Documentation {
         given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         // when & then
-        지하철_최단_거리_경로_조회_요청(givenAndCreateDocument(), 1L, 2L);
+        지하철_최단_거리_및_최소_시간_경로_조회_요청(givenAndCreateDocument(), 1L, 2L, PathType.DISTANCE);
     }
 
     public static RequestSpecification givenDefault() {
