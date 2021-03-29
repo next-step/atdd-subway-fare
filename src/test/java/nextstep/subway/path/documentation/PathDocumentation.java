@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
-import static nextstep.subway.path.acceptance.PathSteps.지하철_노선_등록되어_있음;
+import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -47,7 +47,9 @@ public class PathDocumentation extends Documentation {
                 .given(spec).log().all()
                 .filter(document("{method-name}",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        preprocessResponse(prettyPrint()),
+                        지하철_노선_경로탐색_설명(),
+                        지하철_노선_경로탐색_결과_필드()))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 강남역.getId())
                 .queryParam("target", 양재역.getId())
