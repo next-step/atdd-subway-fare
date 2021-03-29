@@ -28,25 +28,11 @@ public class PathSteps {
     }
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+        return sendRequestWithType(RestAssured.given().log().all(), source, target, "DISTANCE");
     }
 
     public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DURATION")
-                .when().get("/paths")
-                .then().log().all().extract();
+        return sendRequestWithType(RestAssured.given().log().all(), source, target, "DURATION");
     }
 
     public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
@@ -75,42 +61,32 @@ public class PathSteps {
     }
 
     public static ExtractableResponse<Response> 최단경로_조회_문서화(RequestSpecification spec) {
-        return RestAssured
-                .given(spec)
-                .filter(document("shortestPath",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발역"),
-                                parameterWithName("target").description("도착역"),
-                                parameterWithName("type").description("최단 경로 검색 조건"))
-                ))
-                .log().all(true)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all(true)
-                .extract();
+        return sendRequestWithType(setFilter(spec, "shortestPath"), 1L, 2L, "DISTANCE");
     }
 
     public static ExtractableResponse<Response> 최소시간경로_조회_문서화(RequestSpecification spec) {
+        return  sendRequestWithType(setFilter(spec, "fastestPath"), 1L, 2L, "DURATION");
+
+    }
+
+    private static RequestSpecification setFilter(RequestSpecification spec, String identifier) {
         return RestAssured
-                .given(spec)
-                .filter(document("fastestPath",
+                .given(spec).log().all()
+                .filter(document(identifier,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역"),
                                 parameterWithName("type").description("최단 경로 검색 조건"))
-                ))
-                .log().all(true)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("type", "DURATION")
+                ));
+    }
+
+    private static ExtractableResponse<Response> sendRequestWithType(RequestSpecification spec, Long source, Long target, String type) {
+        return spec.accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", type)
                 .when().get("/paths")
                 .then().log().all(true)
                 .extract();
