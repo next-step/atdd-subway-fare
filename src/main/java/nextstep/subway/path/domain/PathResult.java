@@ -33,7 +33,6 @@ public class PathResult {
         final AgeDiscount ageDiscount = new AgeDiscount(age);
         int totalFare = getLineMaxBaseFare() + new DistanceFare().calculate(getTotalDistance());
         return ageDiscount.calculate(totalFare);
-
     }
 
     private Integer getLineMaxBaseFare() {
