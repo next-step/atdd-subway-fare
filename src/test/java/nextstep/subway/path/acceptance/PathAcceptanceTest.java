@@ -1,6 +1,5 @@
 package nextstep.subway.path.acceptance;
 
-import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.domain.PathType;
@@ -26,6 +25,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     private StationResponse 교대역;
     private StationResponse 강남역;
+    private StationResponse 삼성역;
     private StationResponse 양재역;
     private StationResponse 남부터미널역;
 
@@ -46,6 +46,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         교대역 = 지하철_역_등록_됨("교대역").as(StationResponse.class);
         강남역 = 지하철_역_등록_됨("강남역").as(StationResponse.class);
+        삼성역 = 지하철_역_등록_됨("역삼역").as(StationResponse.class);
         양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
         남부터미널역 = 지하철_역_등록_됨("남부터미널역").as(StationResponse.class);
 
@@ -54,27 +55,31 @@ public class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_생성_요청(노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3)).as(LineResponse.class);
 
         지하철_노선에_구간_등록_요청(삼호선.getId(), 남부터미널역.getId(), 양재역.getId(), 3, 3);
+        지하철_노선에_구간_등록_요청(이호선.getId(), 강남역.getId(), 삼성역.getId(), 13, 13);
     }
 
     @Test
     @DisplayName("지하철 최단 거리 경로 조회")
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 양재역.getId(), 교대역.getId(), PathType.DISTANCE);
+        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 강남역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
-        지하철_최단_경로_조회_됨(response);
-        경로_조회_응답_됨(response, Arrays.asList(양재역.getId(), 강남역.getId(), 교대역.getId()), 12, 12);
+        지하철_최단_경로_조회_됨(response, Arrays.asList(강남역.getId(), 양재역.getId()));
+        경로_조회_거리와_소요_시간_응답_됨(response, 5, 5);
+        지하철_역_경로_조회_요금_확인(response, 1250);
     }
 
     @Test
     @DisplayName("지하철 최소 시간 경로 조회")
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 양재역.getId(), 교대역.getId(), PathType.DURATION);
+        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 삼성역.getId(), 남부터미널역.getId(), PathType.DURATION);
 
         // then
-        경로_조회_응답_됨(response, Lists.newArrayList(양재역.getId(), 강남역.getId(), 교대역.getId()), 12, 12);
+        지하철_최단_경로_조회_됨(response, Arrays.asList(삼성역.getId(), 강남역.getId(), 양재역.getId(), 남부터미널역.getId()));
+        경로_조회_거리와_소요_시간_응답_됨(response, 21, 21);
+        지하철_역_경로_조회_요금_확인(response, 1450);
     }
 
     @Test
