@@ -39,18 +39,21 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10 , 10
+                ),
+                10,
+                10,
+                2000
         );
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         // when
-        ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getRequestPathSpecification(), 1L,2L);
+        ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getPathGiven(),1L,2L);
 
         // then
-        경로_응답됨(response, com.google.common.collect.Lists.newArrayList(1L, 2L), 10, 10);
+        경로_응답됨(response, com.google.common.collect.Lists.newArrayList(1L, 2L), 10, 10, 2000);
     }
 
-    private RequestSpecification getRequestPathSpecification(){
+    private RequestSpecification getPathGiven(){
        return RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
@@ -63,12 +66,13 @@ public class PathDocumentation extends Documentation {
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("Path of stations"),
-                                fieldWithPath("stations.[].id").type(JsonFieldType.NUMBER).description("The id of station"),
-                                fieldWithPath("stations.[].name").type(JsonFieldType.STRING).description("The name of station"),
-                                fieldWithPath("stations.[].createdDate").type(JsonFieldType.STRING).description("The registered date of station"),
-                                fieldWithPath("stations.[].modifiedDate").type(JsonFieldType.STRING).description("The updated date of station"),
+                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The id of station"),
+                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The name of station"),
+                                fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("The registered date of station"),
+                                fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("The updated date of station"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance between path"),
-                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("The taken time")
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("The taken time"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("The money to pay")
                         )));
     }
 }
