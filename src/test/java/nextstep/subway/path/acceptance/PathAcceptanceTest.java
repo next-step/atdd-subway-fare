@@ -13,9 +13,12 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static nextstep.subway.line.acceptance.line.LineRequestSteps.지하철_노선_생성_요청;
-import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.*;
-import static nextstep.subway.path.acceptance.PathRequestSteps.*;
+import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.노선_요청;
+import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.지하철_노선에_구간_등록_요청;
+import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_경로_조회_요청;
+import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최소_시간_경로_조회_요청;
 import static nextstep.subway.path.acceptance.PathVerificationSteps.*;
+import static nextstep.subway.path.documentation.PathDocumentation.givenDefault;
 import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
 
 @DisplayName("지하철 경로 검색")
@@ -57,7 +60,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 최단 거리 경로 조회")
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 지하철_최단_거리_경로_조회_요청(양재역.getId(),교대역 .getId());
+        ExtractableResponse<Response> response = 지하철_최단_거리_경로_조회_요청(givenDefault(), 양재역.getId(),교대역 .getId());
 
         // then
         지하철_최단_경로_조회_됨(response);
@@ -78,7 +81,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역과 도착역이 같은 경우 예외 발생")
     void notEqualsSourceAndTarget() {
         // given & when
-        ExtractableResponse<Response> response = 지하철_최단_거리_경로_조회_요청(강남역.getId(), 강남역.getId());
+        ExtractableResponse<Response> response = 지하철_최단_거리_경로_조회_요청(givenDefault(), 강남역.getId(), 강남역.getId());
 
         // then
         지하철_최단_경로_조회_실패_됨(response);
@@ -91,7 +94,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         StationResponse 명동역 = 지하철_역_등록_됨("명동역").as(StationResponse.class);
 
         // when
-        ExtractableResponse<Response> response = 지하철_최단_거리_경로_조회_요청(강남역.getId(), 명동역.getId());
+        ExtractableResponse<Response> response = 지하철_최단_거리_경로_조회_요청(givenDefault(), 강남역.getId(), 명동역.getId());
 
         // then
         지하철_최단_경로_조회_실패_됨(response);
@@ -101,7 +104,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("존재하지 않는 출발역, 도착역을 조회할 경우 예외 발생")
     void findNotExistSourceAndTarget() {
         // given & when
-        ExtractableResponse<Response> response = PathRequestSteps.지하철_최단_거리_경로_조회_요청(100L, 101L);
+        ExtractableResponse<Response> response = PathRequestSteps.지하철_최단_거리_경로_조회_요청(givenDefault(), 100L, 101L);
 
         // then
         지하철_역_조회_실패_됨(response);

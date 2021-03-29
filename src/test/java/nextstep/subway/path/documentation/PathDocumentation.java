@@ -45,10 +45,15 @@ public class PathDocumentation extends Documentation {
         given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         // when & then
-        지하철_최단_거리_경로_조회_요청(1L, 2L);
+        지하철_최단_거리_경로_조회_요청(givenAndCreateDocument(), 1L, 2L);
     }
 
-    public static RequestSpecification givenRestAssured() {
+    public static RequestSpecification givenDefault() {
+        return RestAssured
+                .given().log().all();
+    }
+
+    public static RequestSpecification givenAndCreateDocument() {
         return RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
@@ -74,7 +79,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("지하철 역 등록 날짜"),
                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("지하철 역 최종 수정 날짜"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리 (km)"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간 (분)")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간 (분)"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
         );
     }
 }
