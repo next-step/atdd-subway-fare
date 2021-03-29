@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static nextstep.subway.station.exception.StationExceptionMessage.EXCEPTION_MESSAGE_EXIST_STATION;
@@ -56,12 +55,5 @@ public class StationService {
 
     public void deleteStationById(Long id) {
         stationRepository.deleteById(id);
-    }
-
-    // TODO : 보완
-    @Transactional(readOnly = true)
-    public List<Station> findAllStationsById(Set<Long> stationIds) {
-        return stationRepository.findAllById(stationIds);
-
     }
 }

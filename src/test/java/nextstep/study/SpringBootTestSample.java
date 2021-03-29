@@ -49,7 +49,7 @@ public class SpringBootTestSample {
         lineService.addSectionToLine(이호선.getId(), 구간_추가_요청(강남역, 역삼역, 10, 10));
 
         // when
-        lineService.addSection(이호선.getId(), 구간_추가_요청(역삼역, 삼성역, 10, 10));
+        lineService.addSectionToLine(이호선.getId(), 구간_추가_요청(역삼역, 삼성역, 10, 10));
 
         // then
         Line line = lineService.findLineById(이호선.getId());

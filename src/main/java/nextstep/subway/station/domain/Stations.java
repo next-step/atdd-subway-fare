@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Stations {
 
-    // TODO : 보완
     private List<Station> stations;
 
     public Stations(List<Station> stations) {

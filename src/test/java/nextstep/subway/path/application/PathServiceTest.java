@@ -51,14 +51,14 @@ public class PathServiceTest {
         savedStationGyoDae = stationRepository.save(new Station("교대역"));
         savedStationNambuTerminal = stationRepository.save(new Station("남부터미널역"));
 
-        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGyoDae.getId(), savedStationGangNam.getId(), 10);
+        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGyoDae.getId(), savedStationGangNam.getId(), 7, 7);
         lineService.saveLine(line2Request);
 
-        line3Request = new LineRequest("3호선", "bg-orange-600", savedStationGyoDae.getId(), savedStationNambuTerminal.getId(), 5);
+        line3Request = new LineRequest("3호선", "bg-orange-600", savedStationGyoDae.getId(), savedStationNambuTerminal.getId(), 3, 3);
         LineResponse line3Response = lineService.saveLine(line3Request);
-        lineService.addSectionToLine(line3Response.getId(), createSectionRequest(savedStationNambuTerminal, savedStationYangJae, 3));
+        lineService.addSectionToLine(line3Response.getId(), createSectionRequest(savedStationNambuTerminal, savedStationYangJae, 3, 3));
 
-        lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5);
+        lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5);
         lineService.saveLine(lineNewBunDang);
     }
 
@@ -74,7 +74,7 @@ public class PathServiceTest {
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
-        assertThat(pathResponse.getDistance()).isEqualTo(15);
+        assertThat(pathResponse.getDistance()).isEqualTo(10);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class PathServiceTest {
                 .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
     }
 
-    private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance) {
-        return new SectionRequest(upStation.getId(), downStation.getId(), distance);
+    private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance, int duration) {
+        return new SectionRequest(upStation.getId(), downStation.getId(), distance, duration);
     }
 }

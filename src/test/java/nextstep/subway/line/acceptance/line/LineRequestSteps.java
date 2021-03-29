@@ -28,15 +28,6 @@ public class LineRequestSteps {
                 .extract();
     }
 
-    // TODO : 보완
-//    public static ExtractableResponse<Response> 지하철_노선_조회_요청(LineResponse response) {
-//        return RestAssured
-//                .given().log().all()
-//                .accept(MediaType.APPLICATION_JSON_VALUE)
-//                .when().get("/lines/{lineId}", response.getId())
-//                .then().log().all().extract();
-//    }
-
     public static ExtractableResponse<Response> 지하철_노선_조회_요청(String uri) {
         return RestAssured
                 .given().log().all()

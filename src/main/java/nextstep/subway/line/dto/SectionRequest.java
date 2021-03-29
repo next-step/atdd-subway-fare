@@ -5,15 +5,9 @@ public class SectionRequest {
     private Long upStationId;
     private Long downStationId;
     private int distance;
-    private int duration; //TODO : 보완
+    private int duration;
 
     public SectionRequest() {
-    }
-
-    public SectionRequest(Long upStationId, Long downStationId, int distance) {
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
-        this.distance = distance;
     }
 
     public SectionRequest(Long upStationId, Long downStationId, int distance, int duration) {

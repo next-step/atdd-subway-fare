@@ -28,13 +28,12 @@ public class Sections {
     private static final int FIRST_INDEX = 0;
 
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Section> sections = new ArrayList<>();
+    private List<Section> sections;
 
     public Sections() {
-
+        sections = new ArrayList<>();
     }
 
-    // TODO : 보완
     public Sections(List<Section> sections) {
         this.sections = sections;
     }
@@ -86,20 +85,24 @@ public class Sections {
         }
 
         int existingDistance = existingSection.getDistance();
+        int existingDuration = existingSection.getDuration();
         int newSectionDistance = section.getDistance();
+        int newSectionDuration = section.getDuration();
 
         validateSectionDistance(existingDistance, newSectionDistance);
+        validateSectionDuration(existingDuration, newSectionDuration);
 
         int existingSectionIndex = sections.indexOf(existingSection);
         int adjustedDistance = calculateNewDistance(existingDistance, newSectionDistance);
+        int adjustedDutation = calculateNewDuration(existingDuration, newSectionDuration);
 
         Line existingLine = section.getLine();
         Station existingUpStation = existingSection.getUpStation();
         Station existingDownStation = existingSection.getDownStation();
         Station newDownStation = section.getDownStation();
 
-        sections.set(existingSectionIndex, new Section(existingLine, existingUpStation, newDownStation, newSectionDistance));
-        sections.add(existingSectionIndex + SECTION_MIN_SIZE, new Section(existingLine, newDownStation, existingDownStation, adjustedDistance));
+        sections.set(existingSectionIndex, new Section(existingLine, existingUpStation, newDownStation, newSectionDistance, newSectionDuration));
+        sections.add(existingSectionIndex + SECTION_MIN_SIZE, new Section(existingLine, newDownStation, existingDownStation, adjustedDistance, adjustedDutation));
     }
 
     private void addForwardSection(Section section) {
@@ -112,18 +115,22 @@ public class Sections {
         }
 
         int existingDistance = existingSection.getDistance();
+        int existingDuration = existingSection.getDuration();
         int newSectionDistance = section.getDistance();
+        int newSectionDuration = section.getDuration();
 
         validateSectionDistance(existingDistance, newSectionDistance);
+        validateSectionDuration(existingDuration, newSectionDuration);
 
         int existingSectionIndex = sections.indexOf(existingSection);
         int adjustedDistance = calculateNewDistance(existingDistance, newSectionDistance);
+        int adjustedDuration = calculateNewDuration(existingDuration, newSectionDuration);
 
         Station existingUpStation = existingSection.getUpStation();
         Station newUpStation = section.getUpStation();
 
         sections.set(existingSectionIndex, section);
-        sections.add(existingSectionIndex, new Section(section.getLine(), existingUpStation, newUpStation, adjustedDistance));
+        sections.add(existingSectionIndex, new Section(section.getLine(), existingUpStation, newUpStation, adjustedDistance, adjustedDuration));
     }
 
     private Optional<Section> findSectionBy(Predicate<Section> predicate) {
@@ -146,8 +153,18 @@ public class Sections {
         }
     }
 
+    private void validateSectionDuration(int findSectionDuration, int newSectionDuration) {
+        if (findSectionDuration <= newSectionDuration) {
+            throw new CannotAddSectionException(EXCEPTION_MESSAGE_INVALID_SECTION_DURATION);
+        }
+    }
+
     private int calculateNewDistance(int findSectionDistance, int newSectionDistance) {
         return findSectionDistance - newSectionDistance;
+    }
+
+    private int calculateNewDuration(int findSectionDuration, int newSectionDuration) {
+        return findSectionDuration - newSectionDuration;
     }
 
     public void removeSection(Station deleteStation) {
@@ -196,9 +213,10 @@ public class Sections {
         Station newUpStation = frontSection.getUpStation();
         Station newDownStation = backSection.getDownStation();
         int newDistance = frontSection.getDistance() + backSection.getDistance();
+        int newDuration = frontSection.getDuration() + backSection.getDuration();
 
         Line existingLine = frontSection.getLine();
-        Section newSection = new Section(existingLine, newUpStation, newDownStation, newDistance);
+        Section newSection = new Section(existingLine, newUpStation, newDownStation, newDistance, newDuration);
 
         sections.remove(frontSection);
         sections.remove(backSection);
@@ -231,13 +249,15 @@ public class Sections {
                 .collect(Collectors.toList());
     }
 
-    // TODO : 보완
     public int getTotalDistance() {
-        return sections.stream().mapToInt(it -> it.getDistance()).sum();
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
     }
 
-    // TODO : 보완
     public int getTotalDuration() {
-        return sections.stream().mapToInt(it -> it.getDuration()).sum();
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }

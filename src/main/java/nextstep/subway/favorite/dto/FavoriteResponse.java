@@ -26,11 +26,6 @@ public class FavoriteResponse {
         return new FavoriteResponse(favorite.getId(), source, target);
     }
 
-    // TODO : 보완
-    public static FavoriteResponse of(Favorite favorite, StationResponse source, StationResponse target) {
-        return new FavoriteResponse(favorite.getId(), source, target);
-    }
-
     public Long getId() {
         return id;
     }

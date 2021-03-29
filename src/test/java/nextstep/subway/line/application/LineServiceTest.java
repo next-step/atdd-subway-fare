@@ -49,7 +49,7 @@ public class LineServiceTest {
         savedStationSeolleung = stationRepository.save(new Station("선릉역"));
         savedStationSamseong = stationRepository.save(new Station("삼성역"));
 
-        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGangnam.getId(), savedStationYeoksam.getId(), 10);
+        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGangnam.getId(), savedStationYeoksam.getId(), 5, 5);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class LineServiceTest {
         lineService.saveLine(line2Request);
 
         Station savedStationYangJae = stationRepository.save(new Station("양재역"));
-        LineRequest lineNewBundangRequest = new LineRequest("신분당선", "bg-red-600", savedStationGangnam.getId(), savedStationYangJae.getId(), 4);
+        LineRequest lineNewBundangRequest = new LineRequest("신분당선", "bg-red-600", savedStationGangnam.getId(), savedStationYangJae.getId(), 5, 5);
         lineService.saveLine(lineNewBundangRequest);
 
         // when
@@ -128,7 +128,7 @@ public class LineServiceTest {
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
 
         // when
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationGyoDae, savedStationGangnam, 5));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationGyoDae, savedStationGangnam, 7, 7));
 
         // then
         Line line = lineService.findLineById(savedLineResponse.getId());
@@ -140,10 +140,10 @@ public class LineServiceTest {
     void addSectionInMiddle() {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // when
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 3));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 4, 4));
 
         // then
         Line line = lineService.findLineById(savedLineResponse.getId());
@@ -157,7 +157,7 @@ public class LineServiceTest {
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
 
         // when
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // then
         Line line = lineService.findLineById(savedLineResponse.getId());
@@ -169,7 +169,7 @@ public class LineServiceTest {
     void removeUpStationSection() {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // when
         lineService.removeSectionToLine(savedLineResponse.getId(), savedStationGangnam.getId());
@@ -184,8 +184,8 @@ public class LineServiceTest {
     void removeMiddleSection() {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 3));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 4, 4));
 
         // when
         lineService.removeSectionToLine(savedLineResponse.getId(), savedStationYeoksam.getId());
@@ -201,7 +201,7 @@ public class LineServiceTest {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
 
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // when
         lineService.removeSectionToLine(savedLineResponse.getId(), savedStationSamseong.getId());
@@ -222,8 +222,8 @@ public class LineServiceTest {
                 .isThrownBy(() -> lineService.removeSectionToLine(savedLineResponse.getId(), savedStationYeoksam.getId()));
     }
 
-    private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance) {
-        return new SectionRequest(upStation.getId(), downStation.getId(), distance);
+    private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance, int duration) {
+        return new SectionRequest(upStation.getId(), downStation.getId(), distance, duration);
     }
 
     private List<LineResponse> getLineResponses() {

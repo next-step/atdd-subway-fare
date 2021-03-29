@@ -37,7 +37,7 @@ public class LineService {
         Station downStation = stationService.findStationById(lineRequest.getDownStationId());
 
         Line savedLine = lineRepository.save(lineRequest.toLine());
-        savedLine.addSection(upStation, downStation, lineRequest.getDistance());
+        savedLine.addSection(upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
 
         return LineResponse.of(savedLine);
     }
@@ -91,18 +91,10 @@ public class LineService {
         Station downStation = stationService.findStationById(sectionRequest.getDownStationId());
 
         Line line = findLineById(lineId);
-        line.addSection(upStation, downStation, sectionRequest.getDistance());
+        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
 
         Line savedLine = lineRepository.save(line);
         return LineResponse.of(savedLine);
-    }
-
-    // TODO : 보완
-    public void addSection(Long lineId, SectionRequest request) {
-        Line line = findLineById(lineId);
-        Station upStation = stationService.findStationById(request.getUpStationId());
-        Station downStation = stationService.findStationById(request.getDownStationId());
-        line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
     }
 
     public void removeSectionToLine(Long lineId, Long stationId) {

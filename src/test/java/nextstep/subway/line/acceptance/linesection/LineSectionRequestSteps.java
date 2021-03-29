@@ -9,16 +9,11 @@ import org.springframework.http.MediaType;
 
 public class LineSectionRequestSteps {
 
-    public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance) {
-        return new LineRequest(name, color, upStationId, downStationId, distance);
-    }
-
-    // TODO : Duration 보완
     public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         return new LineRequest(name, color, upStationId, downStationId, distance, duration);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선에_구간_등록_요청2(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+    public static ExtractableResponse<Response> 지하철_노선에_구간_등록_요청(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
         SectionRequest sectionRequest = new SectionRequest(upStationId, downStationId, distance, duration);
 
         return RestAssured
@@ -31,32 +26,6 @@ public class LineSectionRequestSteps {
                 .then().log().all()
                 .extract();
     }
-
-    public static ExtractableResponse<Response> 지하철_노선에_구간_등록_요청(Long lineId, Long upStationId, Long downStationId, int distance) {
-        SectionRequest sectionRequest = new SectionRequest(upStationId, downStationId, distance);
-
-        return RestAssured
-                .given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(sectionRequest)
-                .when()
-                .pathParam("id", lineId)
-                .post("/lines/{id}/sections")
-                .then().log().all()
-                .extract();
-    }
-
-    // TODO : 보완, Dutation
-//    public static ExtractableResponse<Response> 지하철_노선에_지하철역_등록_요청(LineResponse line, StationResponse upStation, StationResponse downStation, int distance, int duration) {
-//        SectionRequest sectionRequest = new SectionRequest(upStation.getId(), downStation.getId(), distance, duration);
-//
-//        return RestAssured
-//                .given().log().all()
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .body(sectionRequest)
-//                .when().post("/lines/{lineId}/sections", line.getId())
-//                .then().log().all().extract();
-//    }
 
     public static ExtractableResponse<Response> 지하철_노선에_등록된_구간_제거_요청(Long lineId, Long stationId) {
         return RestAssured

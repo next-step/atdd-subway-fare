@@ -64,7 +64,7 @@ public class LineServiceMockTest {
         line2 = createMockLine("2호선", "bg-green-600", 1L);
         lineNewBunDang = createMockLine("신분당선", "bg-red-600", 2L);
 
-        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGangnam.getId(), savedStationYeoksam.getId(), 10);
+        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGangnam.getId(), savedStationYeoksam.getId(), 5, 5);
     }
 
     @Test
@@ -133,7 +133,7 @@ public class LineServiceMockTest {
         lineService.saveLine(line2Request);
 
         createMockSaveLineNewBunDang();
-        LineRequest lineNewBunDangRequest = new LineRequest("신분당선", "bg-red-600", savedStationGangnam.getId(), savedStationYangJae.getId(), 4);
+        LineRequest lineNewBunDangRequest = new LineRequest("신분당선", "bg-red-600", savedStationGangnam.getId(), savedStationYangJae.getId(), 5, 5);
         lineService.saveLine(lineNewBunDangRequest);
 
         given(lineRepository.findAll()).willReturn(Arrays.asList(line2, lineNewBunDang));
@@ -150,12 +150,12 @@ public class LineServiceMockTest {
     void addSectionInUp() {
         // given
         createMockAddSectionToLine();
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         given(stationService.findStationById(5L)).willReturn(savedStationGyoDae);
 
         // when
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGyoDae, savedStationGangnam, 5));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGyoDae, savedStationGangnam, 7, 7));
 
         // then
         Line line = lineService.findLineById(line2.getId());
@@ -167,15 +167,15 @@ public class LineServiceMockTest {
     void addSectionInMiddle() {
         // given
         createMockAddSectionToLine();
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         given(stationService.findStationById(3L)).willReturn(savedStationSamseong);
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         given(stationService.findStationById(6L)).willReturn(savedStationSeolleung);
 
         // when
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 3));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 4, 4));
 
         // then
         Line line = lineService.findLineById(line2.getId());
@@ -188,12 +188,12 @@ public class LineServiceMockTest {
         // given
         createMockAddSectionToLine();
 
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         given(stationService.findStationById(3L)).willReturn(savedStationSamseong);
 
         // when
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // then
         Line line = lineService.findLineById(line2.getId());
@@ -206,10 +206,10 @@ public class LineServiceMockTest {
     void removeUpStationSection() {
         // given
         createMockAddSectionToLine();
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         given(stationService.findStationById(3L)).willReturn(savedStationSamseong);
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // when
         lineService.removeSectionToLine(line2.getId(), savedStationGangnam.getId());
@@ -223,13 +223,13 @@ public class LineServiceMockTest {
     void removeMiddleSection() {
         // given
         createMockAddSectionToLine();
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         given(stationService.findStationById(3L)).willReturn(savedStationSamseong);
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         given(stationService.findStationById(6L)).willReturn(savedStationSeolleung);
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 3));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 4, 4));
 
         // when
         lineService.removeSectionToLine(line2.getId(), savedStationYeoksam.getId());
@@ -237,16 +237,17 @@ public class LineServiceMockTest {
         // then
         assertThat(line2.getSections()).hasSize(2);
     }
+
     @Test
     @DisplayName("노선에 있는 하행 종점역 구간 제거")
     void removeDownStationSection() {
         // given
         createMockAddSectionToLine();
 
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         given(stationService.findStationById(3L)).willReturn(savedStationSamseong);
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 6));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
 
         // when
         lineService.removeSectionToLine(line2.getId(), savedStationSamseong.getId());
@@ -261,7 +262,7 @@ public class LineServiceMockTest {
         // given
         createMockAddSectionToLine();
 
-        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 10));
+        lineService.addSectionToLine(line2.getId(), createSectionRequest(savedStationGangnam, savedStationYeoksam, 5, 5));
 
         // when & then
         assertThatExceptionOfType(CannotRemoveSectionException.class)
@@ -304,7 +305,7 @@ public class LineServiceMockTest {
         return line;
     }
 
-    private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance) {
-        return new SectionRequest(upStation.getId(), downStation.getId(), distance);
+    private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance, int duration) {
+        return new SectionRequest(upStation.getId(), downStation.getId(), distance, duration);
     }
 }

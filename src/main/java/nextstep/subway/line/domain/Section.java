@@ -25,19 +25,11 @@ public class Section implements Comparable<Section> {
 
     private int distance;
 
-    private int duration; // TODO : 보완
+    private int duration;
 
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-    }
-
-    // TODO : 보완
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
@@ -68,34 +60,6 @@ public class Section implements Comparable<Section> {
 
     public int getDuration() {
         return duration;
-    }
-
-    // TODO : 보완
-    public void updateUpStation(Station station, int newDistance, int newDuration) {
-        if (this.distance < newDistance) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 거리를 입력해주세요");
-        }
-        if (this.duration < newDuration) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 소요 시간을 입력해주세요");
-        }
-
-        this.upStation = station;
-        this.distance -= newDistance;
-        this.duration -= newDuration;
-    }
-
-    // TODO : 보완
-    public void updateDownStation(Station station, int newDistance, int newDuration) {
-        if (this.distance < newDistance) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 거리를 입력해주세요");
-        }
-        if (this.duration < newDuration) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 소요 시간을 입력해주세요");
-        }
-
-        this.downStation = station;
-        this.distance -= newDistance;
-        this.duration -= newDuration;
     }
 
     @Override
