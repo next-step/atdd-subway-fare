@@ -61,6 +61,19 @@ public class PathSteps {
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
     }
 
+    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(distance);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
+
+        List<Long> stationIds = pathResponse.getStations().stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
+
+        assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
     public static ExtractableResponse<Response> 최단경로_조회_문서화(RequestSpecification spec) {
         return RestAssured
                 .given(spec)
