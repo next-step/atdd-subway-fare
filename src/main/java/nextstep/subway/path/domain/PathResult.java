@@ -27,8 +27,4 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
-
-    public int getFare() {
-        return FareCalculator.getFare(getTotalDistance());
-    }
 }
