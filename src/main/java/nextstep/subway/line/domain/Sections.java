@@ -142,6 +142,8 @@ public class Sections {
     }
 
     public int getTotalFare() {
-        return 0;
+        int resultFare = 0;
+
+        return resultFare;
     }
 }
