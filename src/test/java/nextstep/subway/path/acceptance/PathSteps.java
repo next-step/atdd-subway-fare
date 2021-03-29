@@ -22,13 +22,8 @@ public class PathSteps {
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        RequestSpecification requestSpecification = RestAssured.given().log().all();
-        return 두_역의_최단_거리_경로_조회를_요청(requestSpecification, source, target);
-    }
-
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification requestSpecification, Long source, Long target) {
-        return requestSpecification
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
+        return given
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -48,10 +43,11 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
+    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)
