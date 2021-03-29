@@ -3,6 +3,7 @@ package nextstep.subway.path.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -14,6 +15,11 @@ import java.util.stream.Collectors;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
     public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
@@ -53,5 +59,26 @@ public class PathSteps {
                 .collect(Collectors.toList());
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
+    public static ExtractableResponse<Response> 최단경로_조회_문서화(RequestSpecification spec) {
+        return RestAssured
+                .given(spec)
+                .filter(document("path",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("출발역"),
+                                parameterWithName("target").description("도착역"),
+                                parameterWithName("type").description("최단 경로 검색 조건"))
+                ))
+                .log().all(true)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 1L)
+                .queryParam("target", 2L)
+                .queryParam("type", "DISTANCE")
+                .when().get("/paths")
+                .then().log().all(true)
+                .extract();
     }
 }
