@@ -3,6 +3,11 @@ package nextstep.subway.path.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,26 +21,10 @@ public class FareCalculatorTest {
 
     }
 
-    @DisplayName("10km 미만인 경우")
-    @Test
-    public void calculateFareUnder10km() {
-        // given
-        int distance = 5;
-
-        // when
-        int fare = calculator.calculate(distance);
-
-        // then
-        assertThat(fare).isEqualTo(DistanceFare.BASE_FARE);
-    }
-
-    @DisplayName("10km~50km 사이의 경우")
-    @Test
-    public void calculateFareBetween10kmAnd50km() {
-        // given
-        int distance = 20;
-        int overFare = 300;
-
+    @ParameterizedTest
+    @DisplayName("거리에 따른 요금 계산")
+    @MethodSource("provideDistanceAndOverFare")
+    public void calculateFareByDistance(int distance, int overFare) {
         // when
         int fare = calculator.calculate(distance);
 
@@ -43,18 +32,11 @@ public class FareCalculatorTest {
         assertThat(fare).isEqualTo(DistanceFare.BASE_FARE+overFare);
     }
 
-
-    @DisplayName("50km 초과인 경우")
-    @Test
-    public  void calculateFareOver50km() {
-        // given
-        int distance = 51;
-        int overFare = 1000;
-
-        // when
-        int fare = calculator.calculate(distance);
-
-        // then
-        assertThat(fare).isEqualTo(DistanceFare.BASE_FARE+overFare);
+    private static Stream< Arguments > provideDistanceAndOverFare() {
+        return Stream.of(
+                Arguments.of(5, 0),
+                Arguments.of(20, 300),
+                Arguments.of(51, 1000)
+        );
     }
 }
