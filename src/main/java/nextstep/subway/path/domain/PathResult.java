@@ -17,6 +17,7 @@ public class PathResult {
     public static final int ONE = 1;
     public static final int PER_EIGHT = 8;
     public static final int PER_FIVE = 5;
+    private static final int ELEVEN = 11;
 
     private Sections sections;
     private Stations stations;
@@ -48,9 +49,9 @@ public class PathResult {
         }
 
         if(distance > DISTANCE_FIFTY) {
-            return (int) ((Math.ceil((distance - ONE) / PER_EIGHT) + ONE) * ADDITIONAL_FARE_PER_DISTANCE);
+            return (int) ((Math.ceil((distance - ELEVEN) / PER_EIGHT) + ONE) * ADDITIONAL_FARE_PER_DISTANCE);
         }
 
-        return (int) ((Math.ceil((distance - ONE) / PER_FIVE) + ONE) * ADDITIONAL_FARE_PER_DISTANCE);
+        return (int) ((Math.ceil((distance - ELEVEN) / PER_FIVE) + ONE) * ADDITIONAL_FARE_PER_DISTANCE);
     }
 }
