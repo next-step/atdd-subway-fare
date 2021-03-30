@@ -14,19 +14,15 @@ public class LineVerificationSteps {
 
     public static void 지하철_노선_생성_됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        생성된_지하철_노선_URI_경로_존재_함(response);
     }
 
     public static void 지하철_노선_생성_실패_됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
-    private static void 생성된_지하철_노선_URI_경로_존재_함(ExtractableResponse<Response> response) {
-        assertThat(생성된_지하철_노선의_URI_경로(response)).isNotBlank();
-    }
-
-    public static String 생성된_지하철_노선의_URI_경로(ExtractableResponse<Response> response) {
-        return response.header("Location");
+    public static Long 생성된_지하철_노선_ID(ExtractableResponse<Response> response) {
+        LineResponse lineResponse = response.as(LineResponse.class);
+        return lineResponse.getId();
     }
 
     public static void 지하철_노선_목록_조회_됨(ExtractableResponse<Response> response) {
