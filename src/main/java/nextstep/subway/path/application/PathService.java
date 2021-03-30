@@ -4,9 +4,7 @@ import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.domain.Section;
-import nextstep.subway.path.domain.Fare;
-import nextstep.subway.path.domain.PathResult;
-import nextstep.subway.path.domain.SubwayGraph;
+import nextstep.subway.path.domain.*;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -36,7 +34,10 @@ public class PathService {
 
         SubwayGraph subwayGraph = findGraph(type, source, target);
         PathResult pathResult = subwayGraph.findPath();
-        Fare fare = new Fare(pathResult.getTotalDistance());
+        int totalDistance = pathResult.getTotalDistance();
+
+        FareRuleStrategy fareRuleStrategy = FareStrategyFactory.from(totalDistance);
+        Fare fare = new Fare(fareRuleStrategy, totalDistance);
 
         return PathResponse.of(pathResult, fare);
     }
