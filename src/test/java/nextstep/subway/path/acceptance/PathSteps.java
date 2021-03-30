@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
