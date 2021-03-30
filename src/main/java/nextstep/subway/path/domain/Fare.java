@@ -1,5 +1,7 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Line;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +10,9 @@ public class Fare {
 
     private List<FarePolicy> farePolicies = new ArrayList<>();
 
-    public Fare(int distance) {
+    public Fare(int distance, List<Line> distinctLines) {
         farePolicies.add(new DistanceFarePolicy(distance));
+        farePolicies.add(new LineFarePolicy(distinctLines));
     }
 
     public int getTotalFare() {

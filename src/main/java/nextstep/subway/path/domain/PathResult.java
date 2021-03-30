@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Sections;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
@@ -14,7 +15,7 @@ public class PathResult {
     public PathResult(Stations stations, Sections sections) {
         this.stations = stations;
         this.sections = sections;
-        this.fare = new Fare(getTotalDistance());
+        this.fare = new Fare(getTotalDistance(), getDistinctLines());
     }
 
     public List<Station> getStations() {
@@ -31,5 +32,9 @@ public class PathResult {
 
     public int getTotalFare() {
         return fare.getTotalFare();
+    }
+
+    private List<Line> getDistinctLines() {
+        return sections.getDistinctLines();
     }
 }
