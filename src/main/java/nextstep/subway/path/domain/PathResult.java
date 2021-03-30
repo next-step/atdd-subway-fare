@@ -26,8 +26,4 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
-
-    public int getTotalFare() {
-        return sections.getTotalFare();
-    }
 }

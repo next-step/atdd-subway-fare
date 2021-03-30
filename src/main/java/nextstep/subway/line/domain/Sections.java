@@ -140,25 +140,4 @@ public class Sections {
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
-
-    public int getTotalFare() {
-        int basicFare = 1250;
-        int resultFare = 0;
-        int totalDistance = getTotalDistance();
-        resultFare += basicFare;
-        if (totalDistance > 50) {
-            int over50Distance = totalDistance - 50;
-            int over10Between50Distance = totalDistance - over50Distance - 10;
-            return resultFare + calculateOverFare(over10Between50Distance, 5) + calculateOverFare(over50Distance, 8);
-        }
-
-        if (totalDistance > 10) {
-            return resultFare + calculateOverFare(totalDistance - 10, 5);
-        }
-        return resultFare;
-    }
-
-    private int calculateOverFare(int distance, int perKillo) {
-        return (int) ((Math.ceil(distance / perKillo)) * 100);
-    }
 }
