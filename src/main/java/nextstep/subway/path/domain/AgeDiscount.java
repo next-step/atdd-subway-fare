@@ -57,11 +57,8 @@ public class AgeDiscount{
     }
 
     public int calculate(int fare){
-      if ( this.discountSpecification.isPresent()){
-          AgeDiscountSpecification discountSpecification = this.discountSpecification.get();
-          return discountSpecification.discount(fare);
-      }
-      return fare;
+        return Optional.ofNullable(this.discountSpecification.get())
+                .map(discountSpec -> discountSpec.discount(fare)).orElse(fare);
     }
 }
 
