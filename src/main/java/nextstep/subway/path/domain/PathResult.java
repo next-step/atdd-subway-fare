@@ -7,14 +7,14 @@ import nextstep.subway.station.domain.Stations;
 import java.util.List;
 
 public class PathResult {
-
-
     private Sections sections;
     private Stations stations;
+    private Fare fare;
 
     public PathResult(Stations stations, Sections sections) {
         this.stations = stations;
         this.sections = sections;
+        this.fare = new Fare(getTotalDistance());
     }
 
     public List<Station> getStations() {
@@ -30,7 +30,6 @@ public class PathResult {
     }
 
     public int getTotalFare() {
-        return sections.getTotalFare(getTotalDistance());
+        return fare.getTotalFare();
     }
-
 }
