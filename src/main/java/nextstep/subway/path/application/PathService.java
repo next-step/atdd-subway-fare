@@ -1,9 +1,7 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
-import nextstep.subway.path.domain.Fare;
-import nextstep.subway.path.domain.PathResult;
-import nextstep.subway.path.domain.SubwayGraph;
+import nextstep.subway.path.domain.*;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -25,7 +23,9 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        Fare fare = new Fare(pathResult.getTotalDistance());
+        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult.getTotalDistance());
+        Fare fare = new Fare(strategy);
         return PathResponse.of(pathResult, fare);
     }
+
 }
