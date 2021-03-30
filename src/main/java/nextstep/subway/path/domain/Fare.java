@@ -13,6 +13,7 @@ public class Fare {
     public Fare(int distance, List<Line> distinctLines) {
         farePolicies.add(new DistanceFarePolicy(distance));
         farePolicies.add(new LineFarePolicy(distinctLines));
+        farePolicies.add(new UserFarePolicy());
     }
 
     public int getTotalFare() {
