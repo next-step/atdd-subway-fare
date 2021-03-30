@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static nextstep.subway.station.acceptance.StationDocumentSteps.*;
 import static nextstep.subway.station.acceptance.StationRequestSteps.*;
 import static nextstep.subway.station.acceptance.StationVerificationSteps.*;
 
@@ -18,7 +19,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철역을 생성한다.")
     void createStation() {
         // given & when
-        ExtractableResponse<Response> response = 지하철_역_생성_요청("강남역");
+        ExtractableResponse<Response> response = 지하철_역_생성_요청(지하철_역_생성_문서화_요청(), "강남역");
 
         // then
         지하철_역_생성_됨(response);
@@ -31,21 +32,21 @@ public class StationAcceptanceTest extends AcceptanceTest {
         지하철_역_등록_됨(강남역);
 
         // when
-        ExtractableResponse<Response> response = 지하철_역_생성_요청(강남역);
+        ExtractableResponse<Response> response = 지하철_역_생성_요청(givenDefault(), 강남역);
 
         // then
         지하철_역_생성_실패_됨(response);
     }
 
     @Test
-    @DisplayName("지하철역을 조회한다.")
+    @DisplayName("지하철역 목록을 조회한다.")
     void getStations() {
         // given
         ExtractableResponse<Response> createResponse1 = 지하철_역_등록_됨(강남역);
         ExtractableResponse<Response> createResponse2 = 지하철_역_등록_됨(역삼역);
 
         // when
-        ExtractableResponse<Response> response = 지하철_역_목록_조회_요청();
+        ExtractableResponse<Response> response = 지하철_역_목록_조회_요청(지하철_역_목록_조회_문서화_요청());
 
         // then
         지하철_역_목록_조회_됨(response);
@@ -59,7 +60,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createResponse = 지하철_역_등록_됨(강남역);
 
         // when
-        ExtractableResponse<Response> response = 지하철_역_제거_요청(생성된_지하철_역_URI_경로_확인(createResponse));
+        ExtractableResponse<Response> response = 지하철_역_제거_요청(지하철_역_제거_문서화_요청(), 생성된_지하철_역_URI_경로_확인(createResponse));
 
         // then
         지하철_역_제거_됨(response);
