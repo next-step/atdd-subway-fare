@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -22,8 +23,14 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
+
     public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
         LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
+        return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
+    }
+
+    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration, int additionalLineFare) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, additionalLineFare);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
@@ -31,8 +38,16 @@ public class PathSteps {
         return sendRequestWithType(RestAssured.given().log().all(), source, target, "DISTANCE");
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(TokenResponse token, Long source, Long target) {
+        return sendRequestWithType(RestAssured.given().log().all().auth().oauth2(token.getAccessToken()), source, target, "DISTANCE");
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target) {
         return sendRequestWithType(RestAssured.given().log().all(), source, target, "DURATION");
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(TokenResponse token, Long source, Long target) {
+        return sendRequestWithType(RestAssured.given().log().all().auth().oauth2(token.getAccessToken()), source, target, "DURATION");
     }
 
     public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
