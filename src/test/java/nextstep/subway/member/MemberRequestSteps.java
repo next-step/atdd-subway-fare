@@ -4,11 +4,14 @@ import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.auth.dto.TokenRequest;
 import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.member.dto.MemberRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
+import static nextstep.subway.utils.AcceptanceTest.givenDefault;
 
 public class MemberRequestSteps {
 
@@ -16,13 +19,17 @@ public class MemberRequestSteps {
     public static final String PASSWORD_FIELD = "password";
 
     public static TokenResponse 로그인_되어_있음(String email, String password) {
-        ExtractableResponse<Response> response = 로그인_요청(email, password);
+        ExtractableResponse<Response> response = 로그인_요청(givenDefault(), email, password);
         return response.as(TokenResponse.class);
     }
 
-    public static ExtractableResponse<Response> 로그인_요청(String email, String password) {
-        return RestAssured
-                .given().log().all()
+    public static TokenResponse 로그인_되어_있음(RequestSpecification given, String email, String password) {
+        ExtractableResponse<Response> response = 로그인_요청(given, email, password);
+        return response.as(TokenResponse.class);
+    }
+
+    public static ExtractableResponse<Response> 로그인_요청(RequestSpecification given, String email, String password) {
+        return given
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createTokenRequest(email, password))
                 .when().post("/login/token")
@@ -31,9 +38,8 @@ public class MemberRequestSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 회원_생성_요청(String email, String password, Integer age) {
-        return RestAssured
-                .given().log().all()
+    public static ExtractableResponse<Response> 회원_생성_요청(RequestSpecification given, String email, String password, Integer age) {
+        return given
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createMemberRequest(email, password, age))
                 .when().post("/members")
@@ -83,11 +89,11 @@ public class MemberRequestSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 내_회원_정보_조회_요청(TokenResponse tokenResponse) {
-        return RestAssured
-                .given().log().all()
+    public static ExtractableResponse<Response> 내_회원_정보_조회_요청(RequestSpecification given, TokenResponse tokenResponse) {
+        return given
                 .auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
                 .when().get("/members/me")
                 .then().log().all()
                 .extract();

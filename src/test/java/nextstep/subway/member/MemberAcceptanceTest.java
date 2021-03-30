@@ -2,13 +2,13 @@ package nextstep.subway.member;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.utils.AcceptanceTest;
 import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.subway.member.MemberDocumentSteps.*;
 import static nextstep.subway.member.MemberRequestSteps.*;
-import static nextstep.subway.member.MemberRequestSteps.내_회원_정보_삭제_요청;
 import static nextstep.subway.member.MemberVerificationSteps.*;
 
 public class MemberAcceptanceTest extends AcceptanceTest {
@@ -23,19 +23,32 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("회원가입을 한다.")
     @Test
-    void createMember() {
+    void registerMember() {
         // when
-        ExtractableResponse<Response> response = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        ExtractableResponse<Response> response = 회원_생성_요청(사용자_회원가입_문서화_요청(), EMAIL, PASSWORD, AGE);
 
         // then
         회원_생성_됨(response);
+    }
+
+    @Test
+    @DisplayName("로그인을 한다.")
+    void loginMember() {
+        // given
+        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
+
+        // when
+        TokenResponse tokenResponse = 로그인_되어_있음(사용자_로그인_문서화_요청(), EMAIL, PASSWORD);
+
+        // then
+        회원_로그인_됨(tokenResponse);
     }
 
     @DisplayName("회원 정보를 조회한다.")
     @Test
     void getMember() {
         // given
-        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         // when
         ExtractableResponse<Response> response = 회원_정보_조회_요청(createResponse);
@@ -49,7 +62,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void updateMember() {
         // given
-        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         // when
         ExtractableResponse<Response> response = 회원_정보_수정_요청(createResponse, "new" + EMAIL, "new" + PASSWORD, AGE);
@@ -62,7 +75,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteMember() {
         // given
-        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         // when
         ExtractableResponse<Response> response = 회원_삭제_요청(createResponse);
@@ -75,7 +88,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void manageMember() {
         // when
-        ExtractableResponse<Response> createdMemberResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        ExtractableResponse<Response> createdMemberResponse = 회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         // then
         회원_생성_됨(createdMemberResponse);
@@ -103,11 +116,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("나의 정보를 조회한다.")
     void findMemberOfMine() {
         // given
-        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(tokenResponse);
+        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(회원_정보_조회_문서화_요청(), tokenResponse);
 
         // then
         회원_정보_조회_됨(response, EMAIL, AGE);
@@ -117,7 +130,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("나의 정보를 수정한다.")
     void updateMemberOfMine() {
         // given
-        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
@@ -132,7 +145,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("나의 정보를 삭제한다.")
     void deleteMemberOfMine() {
         // given
-        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
@@ -146,14 +159,14 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("나의 정보를 관리한다.")
     void manageMyInfo() {
         // when
-        ExtractableResponse<Response> createdMemberResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        ExtractableResponse<Response> createdMemberResponse = 회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         // then
         회원_생성_됨(createdMemberResponse);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> foundMemberResponse = 내_회원_정보_조회_요청(tokenResponse);
+        ExtractableResponse<Response> foundMemberResponse = 내_회원_정보_조회_요청(givenDefault(), tokenResponse);
 
         // then
         회원_정보_조회_됨(foundMemberResponse, EMAIL, AGE);

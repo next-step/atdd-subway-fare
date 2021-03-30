@@ -19,7 +19,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("Session 로그인 후 내 정보 조회")
     void myInfoWithSession() {
-        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         ExtractableResponse<Response> response = 내_회원_정보_조회_요청(EMAIL, PASSWORD);
 
@@ -29,10 +29,10 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("Bearer Auth")
     void myInfoWithBearerAuth() {
-        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 
-        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(tokenResponse);
+        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(givenDefault(), tokenResponse);
 
         회원_정보_조회_됨(response, EMAIL, AGE);
     }

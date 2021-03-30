@@ -1,0 +1,41 @@
+[[member]]
+== 회원
+
+=== 회원가입
+
+==== Request
+include::{snippets}/member/register-member/http-request.adoc[]
+
+==== Request.Body
+include::{snippets}/member/register-member/request-fields.adoc[]
+
+==== Response
+include::{snippets}/member/register-member/http-response.adoc[]
+
+==== Response.Body
+include::{snippets}/member/register-member/response-fields.adoc[]
+
+=== 로그인
+
+==== Request
+include::{snippets}/member/login-member/http-request.adoc[]
+
+==== Request.Body
+include::{snippets}/member/login-member/request-fields.adoc[]
+
+==== Response
+include::{snippets}/member/login-member/http-response.adoc[]
+
+==== Response.Body
+include::{snippets}/member/login-member/response-fields.adoc[]
+
+=== 내 정보 조회
+
+==== Request
+include::{snippets}/member/find-member-of-mine/http-request.adoc[]
+
+==== Response
+include::{snippets}/member/find-member-of-mine/http-response.adoc[]
+
+==== Response.Body
+include::{snippets}/member/find-member-of-mine/response-fields.adoc[]
