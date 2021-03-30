@@ -5,16 +5,16 @@
 
 ==== Request
 
-include::{snippets}/path/http-request.adoc[]
+include::{snippets}/path/find-path-by-distance/http-request.adoc[]
 
 ==== Request.parameters
 
-include::{snippets}/path/request-parameters.adoc[]
+include::{snippets}/path/find-path-by-distance/request-parameters.adoc[]
 
 ==== Response
 
-include::{snippets}/path/http-response.adoc[]
+include::{snippets}/path/find-path-by-distance/http-response.adoc[]
 
 ==== Response.fields
 
-include::{snippets}/path/response-fields.adoc[]
+include::{snippets}/path/find-path-by-distance/response-fields.adoc[]

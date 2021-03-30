@@ -9,15 +9,16 @@ import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import java.util.Arrays;
 
 import static nextstep.subway.line.acceptance.line.LineRequestSteps.지하철_노선_생성_요청;
 import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.노선_요청;
 import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.지하철_노선에_구간_등록_요청;
+import static nextstep.subway.path.acceptance.PathDocumentSteps.최단_경로_탐색_문서화_요청;
 import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_및_최소_시간_경로_조회_요청;
 import static nextstep.subway.path.acceptance.PathVerificationSteps.*;
-import static nextstep.subway.path.documentation.PathDocumentation.givenDefault;
 import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
 
 @DisplayName("지하철 경로 검색")
@@ -41,8 +42,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * 남부터미널역  --- *3호선* ---   양재
      */
     @BeforeEach
-    public void setUp() {
-        super.setUp();
+    public void setUp(RestDocumentationContextProvider restDocumentation) {
+        super.setUp(restDocumentation);
 
         교대역 = 지하철_역_등록_됨("교대역").as(StationResponse.class);
         강남역 = 지하철_역_등록_됨("강남역").as(StationResponse.class);
@@ -50,19 +51,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
         남부터미널역 = 지하철_역_등록_됨("남부터미널역").as(StationResponse.class);
 
-        신분당선 = 지하철_노선_생성_요청(노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5)).as(LineResponse.class);
-        이호선 = 지하철_노선_생성_요청(노선_요청("2호선", "green", 교대역.getId(), 강남역.getId(), 7, 7)).as(LineResponse.class);
-        삼호선 = 지하철_노선_생성_요청(노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3)).as(LineResponse.class);
+        신분당선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5)).as(LineResponse.class);
+        이호선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("2호선", "green", 교대역.getId(), 강남역.getId(), 7, 7)).as(LineResponse.class);
+        삼호선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3)).as(LineResponse.class);
 
-        지하철_노선에_구간_등록_요청(삼호선.getId(), 남부터미널역.getId(), 양재역.getId(), 3, 3);
-        지하철_노선에_구간_등록_요청(이호선.getId(), 강남역.getId(), 삼성역.getId(), 13, 13);
+        지하철_노선에_구간_등록_요청(givenDefault(), 삼호선.getId(), 남부터미널역.getId(), 양재역.getId(), 3, 3);
+        지하철_노선에_구간_등록_요청(givenDefault(), 이호선.getId(), 강남역.getId(), 삼성역.getId(), 13, 13);
     }
 
     @Test
     @DisplayName("지하철 최단 거리 경로 조회")
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 강남역.getId(), 양재역.getId(), PathType.DISTANCE);
+        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(최단_경로_탐색_문서화_요청(), 강남역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
         지하철_최단_경로_조회_됨(response, Arrays.asList(강남역.getId(), 양재역.getId()));
