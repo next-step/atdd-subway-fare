@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,6 +15,7 @@ public class FareTest {
 
     @ParameterizedTest
     @MethodSource("fareProvider")
+    @DisplayName("거리별 금액 계산")
     void calculateOverFare(int distance, int fare) {
         FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(distance);
         assertThat(new Fare(strategy).get()).isEqualTo(fare);
