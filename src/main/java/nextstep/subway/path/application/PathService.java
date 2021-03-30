@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private GraphService graphService;
     private StationService stationService;
-    private FareService fareService;
 
-    public PathService(GraphService graphService, StationService stationService, FareService fareService) {
+    public PathService(GraphService graphService, StationService stationService) {
         this.graphService = graphService;
         this.stationService = stationService;
-        this.fareService = fareService;
     }
 
     public PathResponse findPathAndFare(Long source, Long target, PathType type) {
@@ -27,7 +25,7 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        Fare fare = fareService.calculateFare(pathResult);
+        Fare fare = new Fare(pathResult.getTotalDistance());
         return PathResponse.of(pathResult, fare);
     }
 }
