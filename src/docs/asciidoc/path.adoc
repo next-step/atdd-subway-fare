@@ -10,3 +10,11 @@ include::{snippets}/path/http-request.adoc[]
 ==== Response
 
 include::{snippets}/path/http-response.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/path/request-parameters.adoc[]
+
+=== Response Fields
+
+include::{snippets}/path/response-fields.adoc[]
