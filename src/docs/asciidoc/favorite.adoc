@@ -1,0 +1,32 @@
+[[favorite]]
+== 즐겨찾기
+
+=== 추가
+
+==== Request
+include::{snippets}/favorite/add-favorite/http-request.adoc[]
+
+==== Request.Body
+include::{snippets}/favorite/add-favorite/request-fields.adoc[]
+
+==== Response
+include::{snippets}/favorite/add-favorite/http-response.adoc[]
+
+==== Response.Body
+include::{snippets}/favorite/add-favorite/response-fields.adoc[]
+
+=== 조회
+
+==== Request
+include::{snippets}/favorite/find-favorites/http-request.adoc[]
+
+==== Response
+include::{snippets}/favorite/find-favorites/http-response.adoc[]
+
+=== 제거
+
+==== Request
+include::{snippets}/favorite/remove-favorite/http-request.adoc[]
+
+==== Response
+include::{snippets}/favorite/remove-favorite/http-response.adoc[]
