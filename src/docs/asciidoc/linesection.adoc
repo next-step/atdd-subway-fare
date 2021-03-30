@@ -1,0 +1,21 @@
+[[linesection]]
+== 지하철 구간
+
+=== 구간 생성
+
+==== Request
+include::{snippets}/linesection/add-up-station-line-section/http-request.adoc[]
+
+==== Request.Body
+include::{snippets}/linesection/add-up-station-line-section/request-fields.adoc[]
+
+==== Response
+include::{snippets}/linesection/add-up-station-line-section/http-response.adoc[]
+
+=== 구간 제거
+
+==== Request
+include::{snippets}/linesection/remove-up-station-line-section/http-request.adoc[]
+
+==== Response
+include::{snippets}/linesection/remove-up-station-line-section/http-response.adoc[]
