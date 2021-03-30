@@ -2,9 +2,6 @@ package nextstep.subway.path.domain;
 
 public class Fare {
 
-    public static final int DEFAULT_FARE_DISTANCE = 10;
-    public static final int ADD_100_FARE_DISTANCE = 50;
-    public static final int DEFAULT_FARE = 1250;
 
     private int distance;
     private int fare;
@@ -13,6 +10,7 @@ public class Fare {
         this.distance = distance;
         this.fare = calculateFare(distance);
     }
+
 
     public int getFare() {
         return fare;
