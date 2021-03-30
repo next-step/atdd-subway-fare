@@ -29,21 +29,19 @@ public class PathSteps {
     }
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
-        return given
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+        return getPaths(given, source, target, "DISTANCE");
     }
 
     public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
+        return getPaths(given, source, target, "DURATION");
+    }
+
+    private static ExtractableResponse<Response> getPaths(RequestSpecification given, Long source, Long target, String distance) {
         return given
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", "DURATION")
+                .queryParam("type", distance)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
