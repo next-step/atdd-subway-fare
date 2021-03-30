@@ -39,9 +39,9 @@ public class LineController {
                 .body(allLineResponses);
     }
 
-    @GetMapping(value = "/{lindId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LineResponse> findLineById(@PathVariable Long lindId) {
-        LineResponse lineResponse = lineService.findLineResponseById(lindId);
+    @GetMapping(value = "/{lineId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LineResponse> findLineById(@PathVariable Long lineId) {
+        LineResponse lineResponse = lineService.findLineResponseById(lineId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .body(lineResponse);
