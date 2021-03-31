@@ -1,20 +1,20 @@
-package nextstep.subway.path.domain.policy;
+package nextstep.subway.path.domain.policy.distance;
 
-import nextstep.subway.path.domain.policy.distance.OverFiftyDistancePolicy;
+import nextstep.subway.path.domain.policy.distance.OverTenDistancePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class OverFiftyDistancePolicyTest {
+class OverTenDistancePolicyTest {
 
-    @DisplayName("거리 50킬로 넘을 때 요금 계산")
+    @DisplayName("거리 10킬로 넘을 때 요금 계산")
     @ParameterizedTest
-    @CsvSource(value = {"53:2150", "59:2250", "67:2350"},  delimiter = ':')
+    @CsvSource(value = {"11:1350", "16:1450", "26:1650"},  delimiter = ':')
     void calculate(int distance, int expectedFare) {
         // given
-        OverFiftyDistancePolicy policy = new OverFiftyDistancePolicy(distance);
+        OverTenDistancePolicy policy = new OverTenDistancePolicy(distance);
 
         // when
         int fare = policy.calculate();

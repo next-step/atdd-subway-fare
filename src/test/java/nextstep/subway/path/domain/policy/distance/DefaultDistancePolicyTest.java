@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain.policy;
+package nextstep.subway.path.domain.policy.distance;
 
 import nextstep.subway.path.domain.policy.distance.DefaultDistancePolicy;
 import org.assertj.core.api.Assertions;
