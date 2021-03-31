@@ -22,10 +22,10 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(PathResult pathResult, int fare) {
+    public static PathResponse of(PathResult pathResult, int age) {
         int distance = pathResult.getTotalDistance();
         int duration = pathResult.getTotalDuration();
-        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration, fare);
+        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration, pathResult.getTotalFare(age));
     }
 
     public List<StationResponse> getStations() {
