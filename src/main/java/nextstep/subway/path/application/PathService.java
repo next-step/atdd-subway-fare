@@ -27,9 +27,14 @@ public class PathService {
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
+
+        Fare fare = getFare(pathResult);
+        return PathResponse.of(pathResult, fare.getFareValue());
+    }
+
+    private Fare getFare(PathResult pathResult) {
         FarePolicy distancePolicy = DistancePolicyFactory.findPolicy(pathResult.getTotalDistance());
         FarePolicy linePolicy = LinePolicyFactory.findPolicy(pathResult.getMaxLineFare());
-        Fare fare = Fare.calculate(farePolicy, linePolicy);
-        return PathResponse.of(pathResult, fare.getFareValue());
+        return Fare.calculate(distancePolicy, linePolicy);
     }
 }
