@@ -2,9 +2,12 @@ package nextstep.subway.favorite.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.favorite.acceptance.documentation.FavoriteDocumentation;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
+import nextstep.subway.utils.BaseDocumentSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,15 +15,17 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import java.util.Arrays;
 
-import static nextstep.subway.favorite.acceptance.FavoriteDocumentSteps.*;
 import static nextstep.subway.favorite.acceptance.FavoriteRequestSteps.*;
 import static nextstep.subway.favorite.acceptance.FavoriteVerificationSteps.*;
-import static nextstep.subway.member.MemberRequestSteps.로그인_되어_있음;
-import static nextstep.subway.member.MemberRequestSteps.회원_생성_요청;
+import static nextstep.subway.member.acceptance.MemberRequestSteps.로그인_되어_있음;
+import static nextstep.subway.member.acceptance.MemberRequestSteps.회원_생성_요청;
 import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
+import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
 
 @DisplayName("지하철 즐겨찾기 관련 기능 인수 테스트")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
+
+    private static final String DOCUMENT_IDENTIFIER_FAVORITE = "favorite/{method-name}";
 
     private static final String EMAIL = "email@email.com";
     private static final String OTHER_EMAIL = "otherEmail@email.com";
@@ -32,6 +37,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     private StationResponse 양재역;
 
     private TokenResponse 로그인_멤버_토큰 = new TokenResponse("Unauthorized");
+
+    private BaseDocumentSteps baseDocumentSteps;
 
     @BeforeEach
     void init(RestDocumentationContextProvider restDocumentation) {
@@ -50,10 +57,13 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기 추가")
     void addFavorite() {
         // given
+        baseDocumentSteps = new FavoriteDocumentation(spec);
+        RequestSpecification 즐겨찾기_추가_문서화_요청 = baseDocumentSteps.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_FAVORITE);
+
         로그인_멤버_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 지하철_즐겨찾기_추가_요청(즐겨찾기_추가_문서화_요청(), 로그인_멤버_토큰, 강남역, 청계산입구역);
+        ExtractableResponse<Response> response = 지하철_즐겨찾기_추가_요청(즐겨찾기_추가_문서화_요청, 로그인_멤버_토큰, 강남역, 청계산입구역);
 
         // then
         지하철_즐겨찾기_추가_됨(response);
@@ -87,12 +97,15 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기 조회")
     void findFavorites() {
         // given
+        baseDocumentSteps = new FavoriteDocumentation(spec);
+        RequestSpecification 즐겨찾기_조회_문서화_요청 = baseDocumentSteps.requestDocumentOfDefault(DOCUMENT_IDENTIFIER_FAVORITE);
+
         로그인_멤버_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
         지하철_즐겨찾기_추가_요청(givenDefault(), 로그인_멤버_토큰, 강남역, 청계산입구역);
         지하철_즐겨찾기_추가_요청(givenDefault(), 로그인_멤버_토큰, 강남역, 양재역);
 
         // when
-        ExtractableResponse<Response> response = 지하철_즐겨찾기_목록_조회_요청(즐겨찾기_조회_문서화_요청(), 로그인_멤버_토큰);
+        ExtractableResponse<Response> response = 지하철_즐겨찾기_목록_조회_요청(즐겨찾기_조회_문서화_요청, 로그인_멤버_토큰);
 
         // then
         지하철_즐겨찾기_조회_됨(response);
@@ -103,11 +116,14 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기 제거")
     void removeFavorite() {
         // given
+        baseDocumentSteps = new FavoriteDocumentation(spec);
+        RequestSpecification 즐겨찾기_제거_문서화_요청 = baseDocumentSteps.requestDocumentOfDefault(DOCUMENT_IDENTIFIER_FAVORITE);
+
         로그인_멤버_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
         ExtractableResponse<Response> addFavoriteResponse = 지하철_즐겨찾기_추가_요청(givenDefault(), 로그인_멤버_토큰, 강남역, 청계산입구역);
 
         // when
-        ExtractableResponse<Response> response = 지하철_즐겨찾기_제거_요청(즐겨찾기_제거_문서화_요청(), 로그인_멤버_토큰, 지하철_즐겨찾기_생성된_ID(addFavoriteResponse));
+        ExtractableResponse<Response> response = 지하철_즐겨찾기_제거_요청(즐겨찾기_제거_문서화_요청, 로그인_멤버_토큰, 지하철_즐겨찾기_생성된_ID(addFavoriteResponse));
 
         // then
         지하철_즐겨찾기_제거_됨(response);
