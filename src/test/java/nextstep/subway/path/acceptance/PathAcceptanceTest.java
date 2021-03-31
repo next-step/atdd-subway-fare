@@ -47,7 +47,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역 .getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+        최단_거리_경로를_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()));
+        총_거리와_소요_시간을_함께_응답함(response, 5, 20);
+        지하철_이용_요금도_함께_응답함(response, 0);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -59,4 +61,5 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
     }
+
 }
