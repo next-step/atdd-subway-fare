@@ -2,10 +2,13 @@ package nextstep.subway.path.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.dto.LineResponse;
+import nextstep.subway.path.acceptance.documentation.PathDocumentation;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
+import nextstep.subway.utils.BaseDocumentSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,13 +19,15 @@ import java.util.Arrays;
 import static nextstep.subway.line.acceptance.line.LineRequestSteps.지하철_노선_생성_요청;
 import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.노선_요청;
 import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.지하철_노선에_구간_등록_요청;
-import static nextstep.subway.path.acceptance.PathDocumentSteps.최단_경로_탐색_문서화_요청;
 import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_및_최소_시간_경로_조회_요청;
 import static nextstep.subway.path.acceptance.PathVerificationSteps.*;
 import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
+import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
+
+    private static final String DOCUMENT_IDENTIFIER_PATH = "path/{method-name}";
 
     private StationResponse 교대역;
     private StationResponse 강남역;
@@ -33,6 +38,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 이호선;
     private LineResponse 신분당선;
     private LineResponse 삼호선;
+
+    private BaseDocumentSteps baseDocumentSteps;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -62,8 +69,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("지하철 최단 거리 경로 조회")
     void findPathByDistance() {
+        // given
+        baseDocumentSteps = new PathDocumentation(spec);
+        RequestSpecification 최단_경로_탐색_문서화_요청 = baseDocumentSteps.requestDocumentOfFind(DOCUMENT_IDENTIFIER_PATH);
+
         // when
-        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(최단_경로_탐색_문서화_요청(), 강남역.getId(), 양재역.getId(), PathType.DISTANCE);
+        ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(최단_경로_탐색_문서화_요청, 강남역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
         지하철_최단_경로_조회_됨(response, Arrays.asList(강남역.getId(), 양재역.getId()));

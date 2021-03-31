@@ -1,25 +1,35 @@
-package nextstep.subway.line.acceptance.line;
+package nextstep.subway.line.acceptance.documentation;
 
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.utils.BaseDocumentSteps;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
-import static nextstep.subway.utils.AcceptanceTest.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
-public class LineDocumentSteps {
+public class LineDocumentation extends BaseDocumentSteps {
 
-    private static final String DOCUMENT_IDENTIFIER_LINE = "line/{method-name}";
-
-    public static RequestSpecification 지하철_노선_생성_문서화_요청() {
-        return givenAndCreateDocumentForFields(DOCUMENT_IDENTIFIER_LINE, getLineDocumentCreateLineRequestBody(), getLineDocumentCreateLineResponseBody());
+    public LineDocumentation(RequestSpecification spec) {
+        super(spec);
     }
 
-    private static RequestFieldsSnippet getLineDocumentCreateLineRequestBody() {
+    @Override
+    public PathParametersSnippet initDocumentRequestPathVariable() {
+        return pathParameters();
+    }
+
+    @Override
+    public RequestParametersSnippet initDocumentRequestParameters() {
+        return requestParameters();
+    }
+
+    @Override
+    public RequestFieldsSnippet initDocumentRequestBody() {
         return requestFields(
                 fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
                 fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색상"),
@@ -30,7 +40,12 @@ public class LineDocumentSteps {
         );
     }
 
-    public static ResponseFieldsSnippet getLineDocumentCreateLineResponseBody() {
+    @Override
+    public ResponseFieldsSnippet initDocumentResponseBody() {
+        return initDocumentCommonResponseBody();
+    }
+
+    public static ResponseFieldsSnippet initDocumentCommonResponseBody() {
         return responseFields(
                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("노선 ID"),
                 fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
@@ -43,27 +58,5 @@ public class LineDocumentSteps {
                 fieldWithPath("createdDate").type(JsonFieldType.STRING).description("노선 등록 날짜"),
                 fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("노선 최종수정 날짜")
         );
-    }
-
-    public static RequestSpecification 지하철_노선_목록_조회_문서화_요청() {
-        return givenAndCreateDocumentForEmptyRequest(DOCUMENT_IDENTIFIER_LINE);
-    }
-
-    public static RequestSpecification 지하철_노선_조회_문서화_요청() {
-        return givenAndCreateDocumentForPathVariables(DOCUMENT_IDENTIFIER_LINE, getLineDocumentFindLineRequestPathVariable(), getLineDocumentCreateLineResponseBody());
-    }
-
-    private static PathParametersSnippet getLineDocumentFindLineRequestPathVariable() {
-        return pathParameters(
-                parameterWithName("lineId").description("지하철 노선 ID")
-        );
-    }
-
-    public static RequestSpecification 지하철_노선_수정_문서화_요청() {
-        return givenAndCreateDocumentForEmptyRequest(DOCUMENT_IDENTIFIER_LINE);
-    }
-
-    public static RequestSpecification 지하철_노선_제거_문서화_요청() {
-        return givenAndCreateDocumentForPathVariable(DOCUMENT_IDENTIFIER_LINE, getLineDocumentFindLineRequestPathVariable());
     }
 }
