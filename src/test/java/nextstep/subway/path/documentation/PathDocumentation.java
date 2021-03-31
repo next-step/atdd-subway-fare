@@ -1,12 +1,18 @@
 package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.subway.Documentation;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static nextstep.subway.favorite.FavoriteAcceptanceTest.EMAIL;
+import static nextstep.subway.favorite.FavoriteAcceptanceTest.PASSWORD;
+import static nextstep.subway.member.MemberSteps.*;
 import static nextstep.subway.path.acceptance.PathSteps.지하철_노선_등록되어_있음;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -20,12 +26,17 @@ public class PathDocumentation extends Documentation {
 
     StationResponse 강남역;
     StationResponse 교대역;
+    TokenResponse 사용자;
 
     @BeforeEach
     void setUp() {
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         교대역 = 지하철역_등록되어_있음("교대역").as(StationResponse.class);
         지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, 10);
+
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, 22);
+        회원_생성됨(createResponse);
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     @Test
@@ -53,6 +64,7 @@ public class PathDocumentation extends Documentation {
                         )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(사용자.getAccessToken())
                 .queryParam("source", 강남역.getId())
                 .queryParam("target", 교대역.getId())
                 .queryParam("type", "DISTANCE")
