@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
-import static nextstep.subway.path.acceptance.PathSteps.*;
+import static nextstep.subway.path.steps.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
@@ -40,7 +40,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. - 최단거리 + 요금조회")
     @Test
     void findPathByDistance() {
         // when
@@ -52,7 +52,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_이용_요금도_함께_응답함(response, 0);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.리 - 최소시간")
     @Test
     void findPathByDuration() {
         // when

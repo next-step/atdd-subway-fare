@@ -1,4 +1,4 @@
-package nextstep.subway.path.acceptance;
+package nextstep.subway.path.steps;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
