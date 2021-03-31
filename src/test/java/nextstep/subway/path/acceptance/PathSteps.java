@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import java.util.ArrayList;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -58,5 +59,10 @@ public class PathSteps {
         .collect(Collectors.toList());
 
     assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+  }
+
+  public static void 경로_응답_요금포함(ExtractableResponse<Response> response, ArrayList<Long> expectedStationIds, int distance, int duration, int fare) {
+    경로_응답됨(response, expectedStationIds, distance, duration);
+    assertThat(response.as(PathResponse.class).getFare()).isEqualTo(fare);
   }
 }
