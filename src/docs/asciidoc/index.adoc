@@ -6,4 +6,5 @@
 :toclevels: 2
 :sectlinks:
 
-include::path.adoc[]
+include::shortestPath.adoc[]
+include::fastestPath.adoc[]
