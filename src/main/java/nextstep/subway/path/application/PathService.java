@@ -6,6 +6,7 @@ import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.domain.policy.distance.DistancePolicyFactory;
 import nextstep.subway.path.domain.policy.FarePolicy;
+import nextstep.subway.path.domain.policy.line.LinePolicyFactory;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -26,8 +27,9 @@ public class PathService {
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        FarePolicy farePolicy = DistancePolicyFactory.findPolicy(pathResult.getTotalDistance());
-        Fare fare = Fare.calculate(farePolicy);
+        FarePolicy distancePolicy = DistancePolicyFactory.findPolicy(pathResult.getTotalDistance());
+        FarePolicy linePolicy = LinePolicyFactory.findPolicy(pathResult.getMaxLineFare());
+        Fare fare = Fare.calculate(farePolicy, linePolicy);
         return PathResponse.of(pathResult, fare.getFareValue());
     }
 }
