@@ -28,6 +28,6 @@ public class PathService {
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
         FarePolicy farePolicy = DistancePolicyFactory.findPolicy(pathResult.getTotalDistance());
         Fare fare = Fare.calculate(farePolicy);
-        return PathResponse.of(pathResult, fare);
+        return PathResponse.of(pathResult, fare.getFareValue());
     }
 }
