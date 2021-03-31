@@ -6,7 +6,7 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.subway.station.dto.StationRequest;
 import org.springframework.http.MediaType;
 
-import static nextstep.subway.utils.AcceptanceTest.givenDefault;
+import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
 
 public class StationRequestSteps {
 
