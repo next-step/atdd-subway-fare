@@ -33,11 +33,11 @@ class FareTest {
   @Test
   void calculateOver50NotAdditionalFare(){
     //given
-    Fare fare = new Fare(58);
+    Fare fare = new Fare(57);
     //when
     long cost = fare.getCost();
     //then
-    assertThat(cost).isEqualTo(2150);
+    assertThat(cost).isEqualTo(2050);
   }
 
   @DisplayName("경로의 총 길이가 58km 요금은 2150원")
