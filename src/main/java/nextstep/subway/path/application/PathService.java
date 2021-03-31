@@ -4,7 +4,7 @@ import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
-import nextstep.subway.path.domain.policy.DistancePolicyFactory;
+import nextstep.subway.path.domain.policy.distance.DistancePolicyFactory;
 import nextstep.subway.path.domain.policy.FarePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;

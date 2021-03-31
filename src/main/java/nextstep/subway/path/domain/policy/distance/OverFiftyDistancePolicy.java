@@ -1,7 +1,9 @@
-package nextstep.subway.path.domain.policy;
+package nextstep.subway.path.domain.policy.distance;
+
+import nextstep.subway.path.domain.policy.FarePolicy;
 
 import static nextstep.subway.path.domain.Fare.BASIC_FARE;
-import static nextstep.subway.path.domain.policy.DistancePolicyFactory.*;
+import static nextstep.subway.path.domain.policy.distance.DistancePolicyFactory.*;
 import static nextstep.subway.path.domain.policy.FarePolicy.calculateOverFare;
 
 public class OverFiftyDistancePolicy implements FarePolicy {

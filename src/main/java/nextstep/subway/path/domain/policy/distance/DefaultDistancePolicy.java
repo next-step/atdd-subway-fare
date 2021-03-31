@@ -1,4 +1,6 @@
-package nextstep.subway.path.domain.policy;
+package nextstep.subway.path.domain.policy.distance;
+
+import nextstep.subway.path.domain.policy.FarePolicy;
 
 import static nextstep.subway.path.domain.Fare.BASIC_FARE;
 
