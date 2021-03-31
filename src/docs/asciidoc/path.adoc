@@ -5,8 +5,24 @@
 
 ==== Request
 
+CURL:
+
+include::{snippets}/path/curl-request.adoc[]
+
+Request Parameters:
+
+include::{snippets}/path/request-parameters.adoc[]
+
+Request HTTP Example:
+
 include::{snippets}/path/http-request.adoc[]
 
 ==== Response
+
+Response Fields:
+
+include::{snippets}/path/response-fields.adoc[]
+
+Response HTTP Example:
 
 include::{snippets}/path/http-response.adoc[]
