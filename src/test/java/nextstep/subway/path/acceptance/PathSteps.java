@@ -3,9 +3,10 @@ package nextstep.subway.path.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.dto.FareResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
@@ -27,30 +28,30 @@ public class PathSteps {
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, Long source, Long target, int age) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, TokenResponse tokenResponse, Long source, Long target) {
         return  given
+                .auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", "DISTANCE")
-                .queryParam("age", age)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, Long source, Long target, int age) {
+    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, TokenResponse tokenResponse, Long source, Long target) {
         return given
+                .auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", "DURATION")
-                .queryParam("age", age)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
 
     public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
-        PathResponse pathResponse = response.as(PathResponse.class);
+        FareResponse pathResponse = response.as(FareResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
         assertThat(pathResponse.getFare()).isEqualTo(fare);

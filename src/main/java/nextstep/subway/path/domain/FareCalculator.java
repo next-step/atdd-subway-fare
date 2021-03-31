@@ -1,23 +1,22 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.path.domain.specification.discount.AgeDiscount;
+import nextstep.subway.path.domain.specification.distance.FirstDistanceFare;
+import nextstep.subway.path.domain.valueobject.Distance;
+import nextstep.subway.path.domain.valueobject.Fare;
+
 public class FareCalculator {
-    public static final int BASE_FARE = 1250;
 
-    public int calculate(int distance){
-        return BASE_FARE + calculate10KmOverFare(distance) + calculate50KmOverFare(distance);
+    private DistanceFare distanceFare;
+    private Discount fareDiscount;
+
+    public FareCalculator() {
+        this.distanceFare = new FirstDistanceFare();
+        this.fareDiscount = new AgeDiscount();
     }
 
-    private int calculate10KmOverFare(int distance) {
-        if (distance < 10) {
-            return 0;
-        }
-        return (int) ((Math.ceil((distance - 10) / 5) + 1) * 100);
-    }
-
-    private int calculate50KmOverFare(int distance) {
-        if (distance < 50) {
-            return 0;
-        }
-        return (int) ((Math.ceil((distance - 50) / 8) + 1) * 100);
+    public Fare calculate(Fare baseFare, Distance distance, DiscountCondition condition) {
+        final Fare totalBaseFare = Fare.sum(baseFare, distanceFare.calculate(distance));
+        return fareDiscount.discount(totalBaseFare, condition);
     }
 }

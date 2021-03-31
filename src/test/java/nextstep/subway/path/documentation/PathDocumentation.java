@@ -5,9 +5,11 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
-import nextstep.subway.line.domain.PathType;
+import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.path.application.FareService;
 import nextstep.subway.path.application.PathService;
-import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.dto.FareRequest;
+import nextstep.subway.path.dto.FareResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
 
+import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.member.MemberSteps.회원_생성_요청;
 import static nextstep.subway.path.acceptance.PathSteps.경로_응답됨;
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.Mockito.*;
@@ -28,15 +32,18 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 
 public class PathDocumentation extends Documentation {
+    public static final String EMAIL = "email@email.com";
+    public static final String PASSWORD = "password";
 
     @MockBean
-    private PathService pathService;
+    private FareService fareService;
 
     @Test
     void path() {
         // given
-        final int PASSENGER_AGE = 20;
-        PathResponse pathResponse = new PathResponse(
+        회원_생성_요청(EMAIL, PASSWORD, 20);
+        TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
+        FareResponse fareResponse = new FareResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
@@ -45,10 +52,10 @@ public class PathDocumentation extends Documentation {
                 10,
                 2000
         );
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), anyInt())).thenReturn(pathResponse);
+        when(fareService.calculate(any(FareRequest.class))).thenReturn(fareResponse);
 
         // when
-        ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getPathGiven(),1L,2L, PASSENGER_AGE);
+        ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getPathGiven(),tokenResponse, 1L,2L);
 
         // then
         경로_응답됨(response, com.google.common.collect.Lists.newArrayList(1L, 2L), 10, 10, 2000);
@@ -63,8 +70,7 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("The id of source station"),
                                 parameterWithName("target").description("The id of source destination"),
-                                parameterWithName("type").description("The request type of path"),
-                                parameterWithName("age").description("The age of user")
+                                parameterWithName("type").description("The request type of path")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("Path of stations"),
