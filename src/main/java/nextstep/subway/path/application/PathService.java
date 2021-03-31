@@ -16,8 +16,6 @@ import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class PathService {
     private GraphService graphService;
@@ -46,10 +44,8 @@ public class PathService {
     }
 
     private int excuteDiscount(LoginMember loginMember, int fare) {
-        if (!Objects.isNull(loginMember)) {
-            DiscountPolicy discountPolicy = DiscountPolicyFactory.findPolicy(loginMember.getAge());
-            fare = Discount.excute(fare, discountPolicy);
-        }
+        DiscountPolicy discountPolicy = DiscountPolicyFactory.findPolicy(loginMember.getAge());
+        fare = Discount.excute(fare, discountPolicy);
         return fare;
     }
 }
