@@ -66,6 +66,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 강남역.getId(), 남부터미널역.getId());
 
-        경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1250);
+        경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1350);
     }
 }
