@@ -1,9 +1,9 @@
 package nextstep.subway.path.domain.policy.distance;
 
-import nextstep.subway.path.domain.policy.distance.DefaultDistancePolicy;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DefaultDistancePolicyTest {
 
@@ -19,6 +19,6 @@ class DefaultDistancePolicyTest {
         int fare = policy.calculate();
 
         // then
-        Assertions.assertThat(fare).isEqualTo(BASIC_FARE);
+        assertThat(fare).isEqualTo(BASIC_FARE);
     }
 }

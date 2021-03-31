@@ -1,6 +1,5 @@
 package nextstep.subway.path.domain.policy.distance;
 
-import nextstep.subway.path.domain.policy.distance.OverFiftyDistancePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
