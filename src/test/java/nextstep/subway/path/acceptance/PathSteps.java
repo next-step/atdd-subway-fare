@@ -3,12 +3,14 @@ package nextstep.subway.path.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,24 +23,25 @@ public class PathSteps {
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    public static RequestSpecification given() {
         return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+                .given().log().all();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
+        return getPaths(given, source, target, "DISTANCE");
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
+        return getPaths(given, source, target, "DURATION");
+    }
+
+    private static ExtractableResponse<Response> getPaths(RequestSpecification given, Long source, Long target, String distance) {
+        return given
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", "DURATION")
+                .queryParam("type", distance)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -53,5 +56,10 @@ public class PathSteps {
                 .collect(Collectors.toList());
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
+    public static void 경로_응답_요금포함(ExtractableResponse<Response> response, ArrayList<Long> expectedStationIds, int distance, int duration, int fare) {
+        경로_응답됨(response, expectedStationIds, distance, duration);
+        assertThat(response.as(PathResponse.class).getFare()).isEqualTo(fare);
     }
 }
