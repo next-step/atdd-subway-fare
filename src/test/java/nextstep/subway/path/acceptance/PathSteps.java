@@ -27,17 +27,22 @@ public class PathSteps {
 
   public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
     RequestSpecification specification = RestAssured.given().log().all();
-    return 두_역의_최단_거리_경로_조회를_요청(specification, source, target);
+    return 두_역의_최단_거리_경로_조회를_요청(specification, source, target,"DISTANCE");
+  }
+
+  public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target) {
+    RequestSpecification specification = RestAssured.given().log().all();
+    return 두_역의_최단_거리_경로_조회를_요청(specification, source, target,"DURATION");
   }
 
   public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(
-      RequestSpecification requestSpecification, Long source, Long target
+      RequestSpecification requestSpecification, Long source, Long target, String type
   ) {
     return requestSpecification
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .queryParam("source", source)
         .queryParam("target", target)
-        .queryParam("type", "DISTANCE")
+        .queryParam("type", type)
         .when().get("/paths")
         .then().log().all().extract();
   }

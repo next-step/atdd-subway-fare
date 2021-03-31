@@ -74,7 +74,7 @@ public class PathDocumentation extends Documentation {
             responseFieldsSnippet)
         );
 
-    두_역의_최단_거리_경로_조회를_요청(requestSpecification, 1L, 2L);
+    두_역의_최단_거리_경로_조회를_요청(requestSpecification, 1L, 2L,"DISTANCE");
   }
 }
 
