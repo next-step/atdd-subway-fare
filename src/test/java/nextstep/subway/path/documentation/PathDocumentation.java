@@ -30,7 +30,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         //given
-        PathResponse pathResponse = 응답_만들기(10, 10,
+        PathResponse pathResponse = 응답_만들기(30, 10, 1650,
                 역_만들기(1L, "강남역"),
                 역_만들기(2L, "역삼역"),
                 역_만들기(3L, "선릉역")

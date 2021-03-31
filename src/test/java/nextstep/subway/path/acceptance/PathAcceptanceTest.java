@@ -20,6 +20,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private StationResponse 강남역;
     private StationResponse 양재역;
     private StationResponse 남부터미널역;
+    private StationResponse 신촌역;
     private LineResponse 이호선;
     private LineResponse 신분당선;
     private LineResponse 삼호선;
@@ -32,31 +33,43 @@ public class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
+        신촌역 = 지하철역_등록되어_있음("신촌역").as(StationResponse.class);
 
         이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10);
         신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10);
         삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
+        지하철_노선에_지하철역_등록_요청(이호선, 신촌역, 교대역, 60, 50);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역 .getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20, 1250);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.(거리 10km 이상)")
     @Test
-    void findPathByDuration() {
+    void findPathByDurationWithDistanceOver10Km() {
         // when
         ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20, 1450);
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.(거리 50km 이상)")
+    @Test
+    void findPathByDistanceWithDistanceOver50Km() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역.getId(), 신촌역.getId());
+
+        // then
+        경로_응답됨(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 신촌역.getId()), 70, 60, 2350);
     }
 }

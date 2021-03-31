@@ -54,10 +54,11 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
+    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)
@@ -81,8 +82,8 @@ public class PathSteps {
     }
 
 
-    public static PathResponse 응답_만들기(int distance, int duration, StationResponse... stationResponses){
-        return new PathResponse(Lists.newArrayList(stationResponses), distance, duration);
+    public static PathResponse 응답_만들기(int distance, int duration, int fare, StationResponse... stationResponses){
+        return new PathResponse(Lists.newArrayList(stationResponses), distance, duration, fare);
     }
 
     public static StationResponse 역_만들기(Long id, String name){

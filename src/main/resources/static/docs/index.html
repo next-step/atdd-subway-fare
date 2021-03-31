@@ -457,7 +457,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /paths?source=1&amp;target=3&amp;type=DISTANCE HTTP/1.1
 Accept: application/json
-Host: localhost:38008</code></pre>
+Host: localhost:8301</code></pre>
 </div>
 </div>
 </div>
@@ -466,33 +466,34 @@ Host: localhost:38008</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Set-Cookie: JSESSIONID=E3FB9EF34D2745C9C978A0562FBC879C; Path=/; HttpOnly
+Set-Cookie: JSESSIONID=CD46897B7AC6F2B39F0C6A24E843A7D0; Path=/; HttpOnly
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Mon, 29 Mar 2021 12:50:45 GMT
+Date: Tue, 30 Mar 2021 13:20:39 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 525
+Content-Length: 543
 
 {
   "stations" : [ {
     "id" : 1,
     "name" : "강남역",
-    "createdDate" : "2021-03-29T21:50:45.4377042",
-    "modifiedDate" : "2021-03-29T21:50:45.4377042"
+    "createdDate" : "2021-03-30T22:20:39.2813715",
+    "modifiedDate" : "2021-03-30T22:20:39.2813715"
   }, {
     "id" : 2,
     "name" : "역삼역",
-    "createdDate" : "2021-03-29T21:50:45.4377042",
-    "modifiedDate" : "2021-03-29T21:50:45.4377042"
+    "createdDate" : "2021-03-30T22:20:39.2813715",
+    "modifiedDate" : "2021-03-30T22:20:39.2813715"
   }, {
     "id" : 3,
     "name" : "선릉역",
-    "createdDate" : "2021-03-29T21:50:45.4377042",
-    "modifiedDate" : "2021-03-29T21:50:45.4377042"
+    "createdDate" : "2021-03-30T22:20:39.2813715",
+    "modifiedDate" : "2021-03-30T22:20:39.2813715"
   } ],
-  "distance" : 10,
-  "duration" : 10
+  "distance" : 30,
+  "duration" : 10,
+  "fare" : 1650
 }</code></pre>
 </div>
 </div>
