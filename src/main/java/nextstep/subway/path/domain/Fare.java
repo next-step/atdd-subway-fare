@@ -9,11 +9,7 @@ public class Fare {
     private final int fare;
 
     public Fare(FareRuleStrategy fareRuleStrategy, int distance) {
-        this.fare = calculateFare(fareRuleStrategy, distance);
-    }
-
-    private int calculateFare(FareRuleStrategy fareRuleStrategy, int distance) {
-        return fareRuleStrategy.calculateFare(distance);
+        this.fare = fareRuleStrategy.calculateFare(distance);
     }
 
     public int getFare() {

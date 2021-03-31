@@ -12,7 +12,7 @@ public class FareFirstRuleStrategy implements FareRuleStrategy {
         return DEFAULT_FARE + calculate10KmOverAnd50KmUnder(distance);
     }
 
-    public static int calculate10KmOverAnd50KmUnder(int distance) {
+    public int calculate10KmOverAnd50KmUnder(int distance) {
         int divisionTenDistance = (distance - TEN_KM_DISTANCE - NUMBER_ONE) / TEN_KM_DELIMITER;
         return (int) ((Math.ceil(divisionTenDistance) + NUMBER_ONE) * INCREASE_FARE);
     }

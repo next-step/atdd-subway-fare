@@ -10,7 +10,7 @@ public class FareStrategyFactory {
             return new FareFirstRuleStrategy();
         }
         if (distance > FIFTY_KM_DISTANCE) {
-            return new FareSecondRuleStrategy();
+            return new FareSecondRuleStrategy(new FareFirstRuleStrategy());
         }
         return new FareDefaultRuleStrategy();
     }
