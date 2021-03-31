@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.path.domain.policy.FarePolicy;
 import nextstep.subway.path.exception.IllegalFareException;
 
 public class Fare {
@@ -20,5 +21,9 @@ public class Fare {
 
     public int getFareValue() {
         return fare;
+    }
+
+    public static Fare calculate(FarePolicy farePolicy) {
+        return null;
     }
 }
