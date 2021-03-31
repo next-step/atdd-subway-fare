@@ -43,7 +43,8 @@ public class PathDocumentation extends Documentation {
             new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
             new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())),
         10,
-        10
+        10,
+        1250
     );
 
     when(pathService.findPath(anyLong(), anyLong(), any()))
@@ -61,7 +62,8 @@ public class PathDocumentation extends Documentation {
         fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("최단 경로 역 생성시간"),
         fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("최단 경로 역 수정시간"),
         fieldWithPath("distance").type(JsonFieldType.NUMBER).description("최단 경로 거리"),
-        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("최단 경로 시간")
+        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("최단 경로 시간"),
+        fieldWithPath("fare").type(JsonFieldType.NUMBER).description("최단 경로 요금")
     );
 
 
@@ -74,7 +76,7 @@ public class PathDocumentation extends Documentation {
             responseFieldsSnippet)
         );
 
-    두_역의_최단_거리_경로_조회를_요청(requestSpecification, 1L, 2L);
+    두_역의_최단_거리_경로_조회를_요청(requestSpecification, 1L, 2L,"DISTANCE");
   }
 }
 
