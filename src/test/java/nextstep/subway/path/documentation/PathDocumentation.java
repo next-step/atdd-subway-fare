@@ -42,7 +42,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(강남_역삼_경로);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(강남_역삼_경로);
 
         getSpec(spec, "path",
                 getRequestParametersSnippet(),
