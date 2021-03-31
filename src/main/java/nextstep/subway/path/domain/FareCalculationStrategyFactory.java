@@ -5,7 +5,8 @@ public class FareCalculationStrategyFactory {
     public static final int DEFAULT_FARE_DISTANCE = 10;
     public static final int ADD_100_FARE_DISTANCE = 50;
 
-    public static FareCalculationStrategy of(int distance) {
+    public static FareCalculationStrategy of(PathResult pathResult, int age) {
+        int distance = pathResult.getTotalDistance();
         if (distance <= DEFAULT_FARE_DISTANCE) {
             return new DistanceUnder10FareStrategy(distance);
         }
@@ -14,6 +15,7 @@ public class FareCalculationStrategyFactory {
         }
         return new DistanceOver50FareStrategy(distance);
     }
+
 
 
 
