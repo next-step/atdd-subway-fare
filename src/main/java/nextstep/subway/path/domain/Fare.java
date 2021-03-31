@@ -24,6 +24,6 @@ public class Fare {
     }
 
     public static Fare calculate(FarePolicy farePolicy) {
-        return null;
+        return new Fare(farePolicy.calculate());
     }
 }
