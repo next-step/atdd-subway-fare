@@ -1,4 +1,4 @@
-package nextstep.subway.member;
+package nextstep.subway.member.acceptance;
 
 import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;
@@ -11,7 +11,7 @@ import nextstep.subway.member.dto.MemberRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import static nextstep.subway.utils.AcceptanceTest.givenDefault;
+import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
 
 public class MemberRequestSteps {
 
