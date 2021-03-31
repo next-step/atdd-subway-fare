@@ -23,7 +23,11 @@ public class Fare {
         return fare;
     }
 
-    public static Fare calculate(FarePolicy farePolicy) {
-        return new Fare(farePolicy.calculate());
+    public static Fare calculate(FarePolicy... farePolicys) {
+        int calculatedFare = 0;
+        for (FarePolicy policy : farePolicys) {
+            calculatedFare += policy.calculate();
+        }
+        return new Fare(calculatedFare);
     }
 }
