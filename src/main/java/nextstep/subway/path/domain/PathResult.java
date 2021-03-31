@@ -28,6 +28,6 @@ public class PathResult {
     }
 
     public int getMaxLineFare() {
-        return 0;
+        return sections.getMaxFare();
     }
 }
