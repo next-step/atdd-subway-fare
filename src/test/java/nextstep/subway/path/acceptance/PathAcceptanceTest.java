@@ -62,6 +62,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
   }
 
   @DisplayName("지하철 이용 요금을 조회한다")
+  @Test
   void findFareByPath() {
     // when
     ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역.getId(), 남부터미널역.getId());
