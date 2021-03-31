@@ -1,6 +1,7 @@
 package nextstep.subway.auth.domain;
 
 public class AuthenticationToken {
+
     private String principal;
     private String credentials;
 

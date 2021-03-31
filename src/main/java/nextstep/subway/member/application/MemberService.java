@@ -4,11 +4,15 @@ import nextstep.subway.member.domain.Member;
 import nextstep.subway.member.domain.MemberRepository;
 import nextstep.subway.member.dto.MemberRequest;
 import nextstep.subway.member.dto.MemberResponse;
+import nextstep.subway.member.exception.MemberNonExistException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class MemberService {
-    private MemberRepository memberRepository;
+
+    private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -19,14 +23,22 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
-    public MemberResponse findMember(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
+    @Transactional(readOnly = true)
+    public MemberResponse findMemberResponseById(Long memberId) {
+        Member member = findMemberById(memberId);
         return MemberResponse.of(member);
     }
 
-    public void updateMember(Long id, MemberRequest param) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
-        member.update(param.toMember());
+    @Transactional(readOnly = true)
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNonExistException::new);
+    }
+
+    public MemberResponse updateMember(Long memberId, MemberRequest memberRequest) {
+        Member member = findMemberById(memberId);
+        member.update(memberRequest.toMember());
+        return MemberResponse.of(member);
     }
 
     public void deleteMember(Long id) {

@@ -1,51 +1,89 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.path.exception.DoesNotConnectedPathException;
+import nextstep.subway.path.exception.SameStationPathSearchException;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SubwayGraph {
-    private WeightedMultigraph<Station, SubwayEdge> graph;
 
-    public SubwayGraph(List<Line> lines, PathType type) {
-        graph = new WeightedMultigraph(SubwayEdge.class);
+    private final WeightedMultigraph<Station, SubwayEdge> subwayEdgeGraph;
+    private final GraphPath<Station, SubwayEdge> subwayGraph;
 
-        // 지하철 역(정점)을 등록
-        lines.stream()
-                .flatMap(it -> it.getStations().stream())
-                .distinct()
-                .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+    public SubwayGraph(List<Section> sections, PathType type, Station sourceStation, Station targetStation) {
+        validateSourceAndTargetStation(sourceStation, targetStation);
 
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().getSections().stream())
-                .forEach(it -> graph.setEdgeWeight(createEdge(it), type.findWeightOf(it)));
+        subwayEdgeGraph = new WeightedMultigraph<>(SubwayEdge.class);
+
+        subwayGraph = initShortestPathGraph(sections, type, sourceStation, targetStation);
     }
 
-    private SubwayEdge createEdge(Section section) {
-        SubwayEdge subwayEdge = graph.addEdge(section.getUpStation(), section.getDownStation());
-        subwayEdge.addSection(section);
-        return subwayEdge;
+    private void validateSourceAndTargetStation(Station source, Station target) {
+        if (source.equals(target)) {
+            throw new SameStationPathSearchException();
+        }
     }
 
-    public PathResult findPath(Station source, Station target) {
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-        GraphPath<Station, SubwayEdge> result = dijkstraShortestPath.getPath(source, target);
-        List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+    private GraphPath<Station, SubwayEdge> initShortestPathGraph(List<Section> sections, PathType type, Station source, Station target) {
+        Set<Station> stations = getDistinctStations(sections);
+
+        addVertex(stations);
+        addEdge(sections, type);
+
+        DijkstraShortestPath<Station, SubwayEdge> dijkstraShortestPath = new DijkstraShortestPath<>(subwayEdgeGraph);
+        validateConnectPathStation(stations, source, target);
+        return dijkstraShortestPath.getPath(source, target);
+    }
+
+    private Set<Station> getDistinctStations(List<Section> sections) {
+        Set<Station> stations = new HashSet<>();
+
+        for (Section section : sections) {
+            stations.add(section.getUpStation());
+            stations.add(section.getDownStation());
+        }
+        return stations;
+    }
+
+    private void addVertex(Set<Station> stations) {
+        for (Station station : stations) {
+            subwayEdgeGraph.addVertex(station);
+        }
+    }
+
+    private void addEdge(List<Section> sections, PathType type) {
+        for (Section section : sections) {
+            Station upStation = section.getUpStation();
+            Station downStation = section.getDownStation();
+
+            SubwayEdge subwayEdge = subwayEdgeGraph.addEdge(upStation, downStation);
+            subwayEdge.addSection(section);
+            type.findWeightOf(section);
+        }
+    }
+
+    private void validateConnectPathStation(Set<Station> stations, Station source, Station target) {
+        if (!stations.contains(source) || !stations.contains(target)) {
+            throw new DoesNotConnectedPathException();
+        }
+    }
+
+    public PathResult findPath() {
+        List<Section> sections = subwayGraph.getEdgeList().stream()
+                .map(SubwayEdge::getSection)
                 .collect(Collectors.toList());
 
-        return new PathResult(new Stations(result.getVertexList()), new Sections(sections));
+        return new PathResult(new Stations(subwayGraph.getVertexList()), new Sections(sections));
     }
 }

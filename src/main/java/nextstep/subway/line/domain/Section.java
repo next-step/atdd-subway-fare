@@ -5,7 +5,8 @@ import nextstep.subway.station.domain.Station;
 import javax.persistence.*;
 
 @Entity
-public class Section {
+public class Section implements Comparable<Section> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +24,7 @@ public class Section {
     private Station downStation;
 
     private int distance;
+
     private int duration;
 
     public Section() {
@@ -60,29 +62,17 @@ public class Section {
         return duration;
     }
 
-    public void updateUpStation(Station station, int newDistance, int newDuration) {
-        if (this.distance < newDistance) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 거리를 입력해주세요");
+    @Override
+    public int compareTo(Section section) {
+        if (this.upStation.equals(section.getDownStation())) {
+            return 1;
         }
-        if (this.duration < newDuration) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 소요 시간을 입력해주세요");
+        if (this.downStation.equals(section.getUpStation())) {
+            return -1;
         }
-
-        this.upStation = station;
-        this.distance -= newDistance;
-        this.duration -= newDuration;
-    }
-
-    public void updateDownStation(Station station, int newDistance, int newDuration) {
-        if (this.distance < newDistance) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 거리를 입력해주세요");
+        if (!this.upStation.equals(section.getDownStation()) && !this.downStation.equals(section.upStation)) {
+            return -1;
         }
-        if (this.duration < newDuration) {
-            throw new RuntimeException("역과 역 사이의 거리보다 좁은 소요 시간을 입력해주세요");
-        }
-
-        this.downStation = station;
-        this.distance -= newDistance;
-        this.duration -= newDuration;
+        return 0;
     }
 }

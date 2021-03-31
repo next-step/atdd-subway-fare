@@ -1,0 +1,48 @@
+[[line]]
+== 지하철 노선
+
+=== 생성
+
+==== Request
+include::{snippets}/line/create-line/http-request.adoc[]
+
+==== Request.Body
+include::{snippets}/line/create-line//request-fields.adoc[]
+
+==== Response
+include::{snippets}/line/create-line//http-response.adoc[]
+
+==== Response.Body
+include::{snippets}/line/create-line//response-fields.adoc[]
+
+=== 목록 조회
+
+==== Request
+include::{snippets}/line/get-lines/http-request.adoc[]
+
+==== Response
+include::{snippets}/line/get-lines/http-response.adoc[]
+
+=== 조회
+
+==== Request
+include::{snippets}/line/get-line/http-request.adoc[]
+
+==== Response
+include::{snippets}/line/get-line/http-response.adoc[]
+
+=== 수정
+
+==== Request
+include::{snippets}/line/update-line/http-request.adoc[]
+
+==== Response
+include::{snippets}/line/update-line/http-response.adoc[]
+
+=== 삭제
+
+==== Request
+include::{snippets}/line/delete-line/http-request.adoc[]
+
+==== Response
+include::{snippets}/line/delete-line/http-response.adoc[]

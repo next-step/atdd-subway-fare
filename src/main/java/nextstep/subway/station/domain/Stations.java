@@ -3,6 +3,7 @@ package nextstep.subway.station.domain;
 import java.util.List;
 
 public class Stations {
+
     private List<Station> stations;
 
     public Stations(List<Station> stations) {

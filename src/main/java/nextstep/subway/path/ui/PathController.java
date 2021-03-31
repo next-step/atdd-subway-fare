@@ -1,13 +1,16 @@
 package nextstep.subway.path.ui;
 
+import nextstep.subway.common.exception.ErrorResponse;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.exception.DoesNotConnectedPathException;
+import nextstep.subway.path.exception.SameStationPathSearchException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/paths")
@@ -19,8 +22,17 @@ public class PathController {
         this.pathService = pathService;
     }
 
-    @GetMapping()
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+        PathResponse pathResponse = pathService.findPath(source, target, type);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .body(pathResponse);
+    }
+
+    @ExceptionHandler({DoesNotConnectedPathException.class, SameStationPathSearchException.class})
+    public ResponseEntity<ErrorResponse> invalidPathExceptionHandler(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), HttpStatus.CONFLICT.value());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }
