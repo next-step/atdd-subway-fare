@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class Sections {
 
     public List<Station> getStations() {
         if (sections.isEmpty()) {
-            return Arrays.asList();
+            return Collections.emptyList();
         }
 
         List<Station> stations = new ArrayList<>();
@@ -134,10 +135,14 @@ public class Sections {
     }
 
     public int getTotalDistance() {
-        return sections.stream().mapToInt(it -> it.getDistance()).sum();
+        return sections.stream()
+            .mapToInt(Section::getDistance)
+            .sum();
     }
 
     public int getTotalDuration() {
-        return sections.stream().mapToInt(it -> it.getDuration()).sum();
+        return sections.stream()
+            .mapToInt(Section::getDuration)
+            .sum();
     }
 }
