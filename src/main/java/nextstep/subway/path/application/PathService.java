@@ -1,6 +1,7 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.domain.*;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
@@ -17,13 +18,13 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPathAndFare(Long source, Long target, PathType type, int age) {
+    public PathResponse findPathAndFare(Long source, Long target, PathType type, LoginMember member) {
         SubwayGraph subwayGraph = graphService.findGraph(type);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult, age);
+        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult, member);
         Fare fare = new Fare(strategy);
         return PathResponse.of(pathResult, fare);
     }
