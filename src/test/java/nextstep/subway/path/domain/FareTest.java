@@ -26,9 +26,6 @@ public class FareTest {
     @Mock
     PathResult pathResult;
 
-    @Mock
-    LoginMember member;
-
     private Sections sections;
 
     @BeforeEach
@@ -59,10 +56,5 @@ public class FareTest {
                 Arguments.of(52, 2250)
         );
     }
-
-
-
-
-
-
+    
 }
