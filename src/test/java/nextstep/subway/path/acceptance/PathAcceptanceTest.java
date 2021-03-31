@@ -48,6 +48,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+        이용요금_응답됨(response, 1250);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -58,17 +59,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
-    }
-
-    @DisplayName("두 역의 최단 거리 경로를 조회 시 요금 정보 포함")
-    @Test
-    void findFeeByPath() {
-        지하철역_등록되어_있음("양재역");
-        LineResponse lineResponse = 지하철_노선_등록되어_있음("삼호선", "bg-orange-600", 양재역, 교대역, 5, 10);
-        지하철_노선에_지하철역_등록_요청(lineResponse, 양재역, 교대역, 5, 10);
-
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
-        경로_응답됨(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 양재역.getId()), 20, 20);
-        이용요금_응답됨(response, 0);
+        이용요금_응답됨(response, 1350);
     }
 }
