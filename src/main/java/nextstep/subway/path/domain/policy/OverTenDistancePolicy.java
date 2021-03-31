@@ -7,4 +7,9 @@ public class OverTenDistancePolicy implements FarePolicy {
     public OverTenDistancePolicy(int distance) {
         this.distance = distance;
     }
+
+    @Override
+    public int calculate() {
+        return 0;
+    }
 }
