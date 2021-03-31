@@ -10,6 +10,10 @@ public class FareCalculationStrategyFactory {
     public static final int DEFAULT_FARE_DISTANCE = 10;
     public static final int ADD_100_FARE_DISTANCE = 50;
 
+    private static final int ADDED_LINE_FARE_MAX = 900;
+    private static final int ADDED_LINE_FARE_MIDDLE = 500;
+
+
     public static FareCalculationStrategy of(PathResult pathResult, LoginMember member) {
         int distance = pathResult.getTotalDistance();
         int fareByDistance = getFareByDistance(distance);
@@ -34,10 +38,10 @@ public class FareCalculationStrategyFactory {
     private static int getFareAddedByLines(List<Line> lines) {
         for (Line line : lines) {
             if ("신분당선".equals(line.getName())) {
-                return 900;
+                return ADDED_LINE_FARE_MAX;
             }
             if ("공항철도".equals(line.getName())) {
-                return 500;
+                return ADDED_LINE_FARE_MIDDLE;
             }
         }
         return 0;
