@@ -3,6 +3,7 @@ package nextstep.subway.auth.ui.authorization;
 import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
+import nextstep.subway.auth.exception.UnauthorizedException;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -30,7 +31,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         if (Objects.isNull(authentication)) {
+            checkRequired(authenticationPrincipal);
             return anonymous;
         }
 
@@ -39,6 +42,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         }
 
         return authentication.getPrincipal();
+    }
+
+    private void checkRequired(AuthenticationPrincipal authenticationPrincipal) {
+        if (authenticationPrincipal.required()) {
+            throw new UnauthorizedException("로그인 필수");
+        }
     }
 
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
