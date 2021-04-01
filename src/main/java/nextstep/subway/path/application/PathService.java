@@ -5,6 +5,8 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.path.domain.*;
+import nextstep.subway.path.domain.policy.line.LineFarePolicy;
+import nextstep.subway.path.domain.policy.line.LineFarePolicyFactory;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -37,7 +39,7 @@ public class PathService {
         int totalDistance = pathResult.getTotalDistance();
         int extraCharge = pathResult.getLineMaxExtraCharge();
 
-        FareRuleStrategy fareRuleStrategy = FareStrategyFactory.from(totalDistance);
+        LineFarePolicy fareRuleStrategy = LineFarePolicyFactory.from(totalDistance);
         Fare fare = new Fare(fareRuleStrategy, totalDistance);
         fare.addExtraCharge(extraCharge);
 

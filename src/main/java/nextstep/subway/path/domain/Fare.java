@@ -1,5 +1,7 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.path.domain.policy.line.LineFarePolicy;
+
 public class Fare {
 
     public static final int DEFAULT_FARE = 1250;
@@ -8,7 +10,7 @@ public class Fare {
 
     private int fare;
 
-    public Fare(FareRuleStrategy fareRuleStrategy, int distance) {
+    public Fare(LineFarePolicy fareRuleStrategy, int distance) {
         this.fare = fareRuleStrategy.calculateFare(distance);
     }
 

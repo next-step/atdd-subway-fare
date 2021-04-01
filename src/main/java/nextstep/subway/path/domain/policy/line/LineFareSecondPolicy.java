@@ -1,16 +1,16 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.policy.line;
 
 import static nextstep.subway.path.domain.Fare.*;
 
-public class FareSecondRuleStrategy implements FareRuleStrategy {
+public class LineFareSecondPolicy implements LineFarePolicy {
 
     public static final int FIFTY_KM_DISTANCE = 50;
     public static final int FIFTY_KM_DELIMITER = 8;
 
-    private final FareFirstRuleStrategy fareFirstRuleStrategy;
+    private final LineFareFirstPolicy lineFareFirstPolicy;
 
-    public FareSecondRuleStrategy(FareFirstRuleStrategy fareFirstRuleStrategy) {
-        this.fareFirstRuleStrategy = fareFirstRuleStrategy;
+    public LineFareSecondPolicy(LineFareFirstPolicy lineFareFirstPolicy) {
+        this.lineFareFirstPolicy = lineFareFirstPolicy;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class FareSecondRuleStrategy implements FareRuleStrategy {
         int secondRuleDistance =  distance - FIFTY_KM_DISTANCE;
         int firstRuleDistance = distance - secondRuleDistance;
 
-        int fareFirstRuleResult = fareFirstRuleStrategy.calculateFare(firstRuleDistance);
+        int fareFirstRuleResult = lineFareFirstPolicy.calculateFare(firstRuleDistance);
 
         return fareFirstRuleResult + calculate50KmOver(secondRuleDistance);
     }

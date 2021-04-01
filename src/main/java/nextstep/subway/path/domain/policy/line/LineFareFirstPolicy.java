@@ -1,8 +1,8 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.policy.line;
 
 import static nextstep.subway.path.domain.Fare.*;
 
-public class FareFirstRuleStrategy implements FareRuleStrategy {
+public class LineFareFirstPolicy implements LineFarePolicy {
 
     public static final int TEN_KM_DISTANCE = 10;
     public static final int TEN_KM_DELIMITER = 5;
