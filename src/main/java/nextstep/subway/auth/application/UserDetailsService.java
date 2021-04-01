@@ -4,4 +4,6 @@ public interface UserDetailsService {
 
     UserDetails loadUserByUsername(String principal);
 
+    UserDetails emptyUser();
+
 }
