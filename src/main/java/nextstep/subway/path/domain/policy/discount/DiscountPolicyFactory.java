@@ -8,7 +8,7 @@ public class DiscountPolicyFactory {
         if (age < 13 && age >= 6) {
             return new ChildrenDiscountPolicy();
         }
-        if (age < 19) {
+        if (age < 19 && age >= 13) {
             return new YouthDiscountPolicy();
         }
         return new NoDiscount();
