@@ -33,7 +33,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         광교역 = 지하철역_등록되어_있음("광교역").as(StationResponse.class);
 
-        lineCreateRequest = new LineRequest("신분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 10, 10);
+        lineCreateRequest = new LineRequest("신분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 10, 10, 900);
     }
 
     @DisplayName("지하철 노선을 생성한다.")
@@ -116,7 +116,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         지하철_노선_생성_실패됨(response);
     }
 
-    public void 지하철_노선_생성됨(ExtractableResponse response) {
+    public void 지하철_노선_생성됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.header("Location")).isNotBlank();
     }

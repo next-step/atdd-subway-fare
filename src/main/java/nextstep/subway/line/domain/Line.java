@@ -9,12 +9,14 @@ import java.util.Objects;
 
 @Entity
 public class Line extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String name;
     private String color;
+    private int addFare = 0;
 
     @Embedded
     private Sections sections = new Sections();
@@ -27,9 +29,16 @@ public class Line extends BaseEntity {
         this.color = color;
     }
 
+    public Line(String name, String color, int addFare) {
+        this.name = name;
+        this.color = color;
+        this.addFare = addFare;
+    }
+
     public void update(Line line) {
         this.name = line.getName();
         this.color = line.getColor();
+        this.addFare = line.getAddFare();
     }
 
     public Long getId() {
@@ -42,6 +51,10 @@ public class Line extends BaseEntity {
 
     public String getColor() {
         return color;
+    }
+
+    public int getAddFare() {
+        return addFare;
     }
 
     public Sections getSections() {
@@ -65,11 +78,11 @@ public class Line extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Line line = (Line) o;
-        return Objects.equals(id, line.id) && Objects.equals(name, line.name) && Objects.equals(color, line.color);
+        return Objects.equals(id, line.id) && Objects.equals(name, line.name) && Objects.equals(color, line.color) && Objects.equals(addFare, line.addFare);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, color);
+        return Objects.hash(id, name, color, addFare);
     }
 }

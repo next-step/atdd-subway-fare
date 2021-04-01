@@ -1,6 +1,10 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.path.domain.fare.Fare;
+import nextstep.subway.path.domain.fare.FareByAddFare;
+import nextstep.subway.path.domain.fare.FareDiscountByAge;
+import nextstep.subway.path.domain.fare.FareByDistance;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
@@ -26,5 +30,15 @@ public class PathResult {
 
     public int getTotalDuration() {
         return sections.getTotalDuration();
+    }
+
+    public int getTotalFare(int age) {
+        Fare fareByDistance = new FareByDistance(getTotalDistance());
+        Fare fareByAddFare = new FareByAddFare(sections);
+        int totalFare =  1250 + fareByDistance.calculate() + fareByAddFare.calculate();
+
+        Fare fareDiscountByAge = new FareDiscountByAge(totalFare, age);
+        int calculate = fareDiscountByAge.calculate();
+        return totalFare - calculate;
     }
 }

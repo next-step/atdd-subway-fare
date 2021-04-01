@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -33,7 +34,7 @@ class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10, 10, 1250
         );
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
 
         // when
         ParameterDescriptor[] parameterDescriptors = {
