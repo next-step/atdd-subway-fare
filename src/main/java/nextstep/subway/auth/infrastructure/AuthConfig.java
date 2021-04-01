@@ -1,6 +1,7 @@
 package nextstep.subway.auth.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nextstep.subway.auth.application.AnonymousUserDetailService;
 import nextstep.subway.auth.ui.authentication.SessionAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authentication.TokenAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authorization.AuthenticationPrincipalArgumentResolver;
@@ -15,14 +16,18 @@ import java.util.List;
 
 @Configuration
 public class AuthConfig implements WebMvcConfigurer {
-    private CustomUserDetailsService userDetailsService;
-    private JwtTokenProvider jwtTokenProvider;
 
-    public AuthConfig(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AnonymousUserDetailService anonymousUserDetailService;
+
+    public AuthConfig(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider, AnonymousUserDetailService anonymousUserDetailService) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.anonymousUserDetailService = anonymousUserDetailService;
     }
 
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SessionAuthenticationInterceptor(userDetailsService)).addPathPatterns("/login/session");
         registry.addInterceptor(new TokenAuthenticationInterceptor(userDetailsService, jwtTokenProvider, new ObjectMapper())).addPathPatterns("/login/token");
@@ -32,6 +37,6 @@ public class AuthConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
-        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
+        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(anonymousUserDetailService));
     }
 }
