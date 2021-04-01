@@ -14,8 +14,9 @@ class FareTest {
     @CsvSource(value = {"10:1250", "20:1450", "50:2050", "51:2150", "66:2250"}, delimiter = ':')
     @DisplayName("요금 계산")
     void getFare(int distance, int expected) {
+        Fare fare = new Fare(distance);
         LineFarePolicy strategy = LineFarePolicyFactory.from(distance);
-        Fare fare = new Fare(strategy, distance);
+        fare.applyLineFarePolicy(strategy);
         assertThat(fare.getFare()).isEqualTo(expected);
     }
 }

@@ -14,11 +14,11 @@ public class LineFareSecondPolicy implements LineFarePolicy {
     }
 
     @Override
-    public int calculateFare(int distance) {
+    public int calculateLineFare(int distance) {
         int secondRuleDistance =  distance - FIFTY_KM_DISTANCE;
         int firstRuleDistance = distance - secondRuleDistance;
 
-        int fareFirstRuleResult = lineFareFirstPolicy.calculateFare(firstRuleDistance);
+        int fareFirstRuleResult = lineFareFirstPolicy.calculateLineFare(firstRuleDistance);
 
         return fareFirstRuleResult + calculate50KmOver(secondRuleDistance);
     }

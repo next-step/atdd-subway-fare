@@ -8,7 +8,7 @@ public class LineFareFirstPolicy implements LineFarePolicy {
     public static final int TEN_KM_DELIMITER = 5;
 
     @Override
-    public int calculateFare(int distance) {
+    public int calculateLineFare(int distance) {
         return DEFAULT_FARE + calculate10KmOverAnd50KmUnder(distance);
     }
 
