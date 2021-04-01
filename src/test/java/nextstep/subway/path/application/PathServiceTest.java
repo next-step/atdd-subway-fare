@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @Transactional
 public class PathServiceTest {
 
-    private static final long ADULT_MEMBER_ID = 1L;
-    private static final long YOUTH_MEMBER_ID = 2L;
-    private static final long CHILD_MEMBER_ID = 3L;
+    private static final int ADULT_MEMBER_AGE = 20;
+    private static final int YOUTH_MEMBER_AGE = 17;
+    private static final int CHILD_MEMBER_AGE = 7;
 
     @Autowired
     private StationRepository stationRepository;
@@ -85,7 +85,7 @@ public class PathServiceTest {
         long target = savedStationNambuTerminal.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
@@ -101,7 +101,7 @@ public class PathServiceTest {
         long target = savedStationNambuTerminal.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_ID, source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
@@ -117,7 +117,7 @@ public class PathServiceTest {
         long target = savedStationNambuTerminal.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
@@ -132,7 +132,7 @@ public class PathServiceTest {
         long target = savedStationCheonggyesan.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
@@ -148,12 +148,12 @@ public class PathServiceTest {
         long target = savedStationCheonggyesan.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(YOUTH_MEMBER_ID, source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(YOUTH_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
         assertThat(pathResponse.getDuration()).isEqualTo(10);
-        assertThat(pathResponse.getFare()).isEqualTo(2150);
+        assertThat(pathResponse.getFare()).isEqualTo(1440);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class PathServiceTest {
         long target = savedStationYangJaeCitizensForest.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(4);
@@ -180,12 +180,12 @@ public class PathServiceTest {
         long target = savedStationYangJaeCitizensForest.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(CHILD_MEMBER_ID, source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(CHILD_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(4);
         assertThat(pathResponse.getDuration()).isEqualTo(13);
-        assertThat(pathResponse.getFare()).isEqualTo(2250);
+        assertThat(pathResponse.getFare()).isEqualTo(950);
     }
 
     @Test
@@ -197,7 +197,7 @@ public class PathServiceTest {
 
         // when & then
         assertThatExceptionOfType(SameStationPathSearchException.class)
-                .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
+                .isThrownBy(() -> pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE));
     }
 
     @Test
@@ -211,7 +211,7 @@ public class PathServiceTest {
 
         // when & then
         assertThatExceptionOfType(DoesNotConnectedPathException.class)
-                .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
+                .isThrownBy(() -> pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE));
     }
 
     @Test
@@ -223,7 +223,7 @@ public class PathServiceTest {
 
         // when & then
         assertThatExceptionOfType(StationNonExistException.class)
-                .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
+                .isThrownBy(() -> pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE));
     }
 
     private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance, int duration) {
