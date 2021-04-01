@@ -29,7 +29,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private TokenResponse token;
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
-    public static final int AGE = 19;
+    public static final int AGE = 18;
 
     @BeforeEach
     public void setUp() {
@@ -70,11 +70,20 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
     }
 
-    @DisplayName("지하철 이용 요금을 조회한다.")
+    @DisplayName("로그인시 지하철 이용 요금을 조회한다. - 청소년 할인 적용")
     @Test
-    void findFareByPath() {
+    void findFareByPathWithLogin() {
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), token, 강남역.getId(), 남부터미널역.getId());
+
+        경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1150);
+    }
+
+    @DisplayName("미로그인시 지하철 이용 요금을 조회한다. - 할인 미적용")
+    @Test
+    void findFareByPathWithOutLogin() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청_노_로그인(given(), 강남역.getId(), 남부터미널역.getId());
 
         경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1350);
     }

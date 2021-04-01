@@ -33,6 +33,10 @@ public class PathSteps {
         return getPaths(given, token, source, target, "DISTANCE");
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청_노_로그인(RequestSpecification given, Long source, Long target) {
+        return getPathsWithOutToken(given, source, target, "DISTANCE");
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, TokenResponse token, Long source, Long target) {
         return getPaths(given, token, source, target, "DURATION");
     }
@@ -40,6 +44,16 @@ public class PathSteps {
     private static ExtractableResponse<Response> getPaths(RequestSpecification given, TokenResponse token, Long source, Long target, String distance) {
         return given
                 .auth().oauth2(token.getAccessToken())
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", distance)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    private static ExtractableResponse<Response> getPathsWithOutToken(RequestSpecification given, Long source, Long target, String distance) {
+        return given
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
