@@ -9,11 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
 import static nextstep.subway.path.acceptance.PathSteps.지하철_노선_등록되어_있음;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
@@ -38,7 +44,9 @@ public class PathDocumentation extends Documentation {
                 .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        preprocessResponse(prettyPrint()),
+                        getPathRequestParamDescription(),
+                        getPathResponseFieldDescription()))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 교대역.getId())
                 .queryParam("target", 강남역.getId())
@@ -46,5 +54,24 @@ public class PathDocumentation extends Documentation {
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+
+    private RequestParametersSnippet getPathRequestParamDescription() {
+        return requestParameters(
+                parameterWithName("source").description("출발역 ID"),
+                parameterWithName("target").description("도착역 ID"),
+                parameterWithName("type").description("검색 방법 (DISTANCE|DURATION)"));
+    }
+
+    private ResponseFieldsSnippet getPathResponseFieldDescription() {
+        return responseFields(
+                fieldWithPath("stations").description("역정보 목록"),
+                fieldWithPath("stations[].id").description("ID"),
+                fieldWithPath("stations[].name").description("이름"),
+                fieldWithPath("stations[].createdDate").description("생성 시간"),
+                fieldWithPath("stations[].modifiedDate").description("변경 시간"),
+                fieldWithPath("distance").description("역간 거리"),
+                fieldWithPath("duration").description("역간 소요시간"));
+    }
+
 }
 
