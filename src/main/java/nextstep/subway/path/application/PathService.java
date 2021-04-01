@@ -5,6 +5,8 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.path.domain.*;
+import nextstep.subway.path.domain.policy.age.AgeFarePolicy;
+import nextstep.subway.path.domain.policy.age.AgeFarePolicyFactory;
 import nextstep.subway.path.domain.policy.line.LineFarePolicy;
 import nextstep.subway.path.domain.policy.line.LineFarePolicyFactory;
 import nextstep.subway.path.dto.PathResponse;
@@ -30,7 +32,7 @@ public class PathService {
     }
 
     @Transactional(readOnly = true)
-    public PathResponse findPath(Long sourceId, Long targetId, PathType type) {
+    public PathResponse findPath(int memberAge, Long sourceId, Long targetId, PathType type) {
         Station source = stationService.findStationById(sourceId);
         Station target = stationService.findStationById(targetId);
 
@@ -39,9 +41,15 @@ public class PathService {
         int totalDistance = pathResult.getTotalDistance();
         int extraCharge = pathResult.getLineMaxExtraCharge();
 
-        LineFarePolicy fareRuleStrategy = LineFarePolicyFactory.from(totalDistance);
-        Fare fare = new Fare(fareRuleStrategy, totalDistance);
+        Fare fare = new Fare(totalDistance);
+
+        LineFarePolicy lineFarePolicy = LineFarePolicyFactory.from(totalDistance);
+        fare.applyLineFarePolicy(lineFarePolicy);
+
         fare.addExtraCharge(extraCharge);
+
+        AgeFarePolicy ageFarePolicy = AgeFarePolicyFactory.from(memberAge, fare.getFare());
+        fare.applyAgeFarePolicy(ageFarePolicy);
 
         return PathResponse.of(pathResult, fare);
     }
