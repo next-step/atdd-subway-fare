@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.acceptance.documentation.LineSectionDocumentation;
+import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
@@ -47,8 +48,10 @@ public class LineSectionAcceptanceTest extends AcceptanceTest {
         청계산입구역 = 지하철_역_등록_됨("청계산입구역").as(StationResponse.class);
         판교역 = 지하철_역_등록_됨("판교역").as(StationResponse.class);
 
-        신분당선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("신분당선", "bg-red-600", 양재역.getId(), 청계산입구역.getId(), 7, 10))
-                .as(LineResponse.class);
+        LineRequest 신분당선_생성_요청 = 노선_요청("신분당선", "bg-red-600", 양재역.getId(), 청계산입구역.getId(), 7, 10);
+        신분당선_생성_요청.addExtraCharge(900);
+
+        신분당선 = 지하철_노선_생성_요청(givenDefault(), 신분당선_생성_요청).as(LineResponse.class);
     }
 
     @Test

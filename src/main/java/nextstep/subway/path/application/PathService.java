@@ -35,9 +35,11 @@ public class PathService {
         SubwayGraph subwayGraph = findGraph(type, source, target);
         PathResult pathResult = subwayGraph.findPath();
         int totalDistance = pathResult.getTotalDistance();
+        int extraCharge = pathResult.getLineMaxExtraCharge();
 
         FareRuleStrategy fareRuleStrategy = FareStrategyFactory.from(totalDistance);
         Fare fare = new Fare(fareRuleStrategy, totalDistance);
+        fare.addExtraCharge(extraCharge);
 
         return PathResponse.of(pathResult, fare);
     }

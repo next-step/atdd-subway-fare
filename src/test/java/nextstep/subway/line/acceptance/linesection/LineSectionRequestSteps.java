@@ -9,10 +9,6 @@ import org.springframework.http.MediaType;
 
 public class LineSectionRequestSteps {
 
-    public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int extraCharge) {
-        return new LineRequest(name, color, upStationId, downStationId, distance, duration, extraCharge);
-    }
-
     public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         return new LineRequest(name, color, upStationId, downStationId, distance, duration);
     }

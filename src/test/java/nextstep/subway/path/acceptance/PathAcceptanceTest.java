@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.acceptance.documentation.PathDocumentation;
 import nextstep.subway.station.dto.StationResponse;
@@ -24,7 +25,7 @@ import static nextstep.subway.path.acceptance.PathVerificationSteps.*;
 import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
 import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
 
-@DisplayName("지하철 경로 검색")
+@DisplayName("지하철 경로 검색 인수 테스트")
 public class PathAcceptanceTest extends AcceptanceTest {
 
     private static final String DOCUMENT_IDENTIFIER_PATH = "path/{method-name}";
@@ -64,7 +65,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         청계산입구역 = 지하철_역_등록_됨("청계산입구역").as(StationResponse.class);
         남부터미널역 = 지하철_역_등록_됨("남부터미널역").as(StationResponse.class);
 
-        신분당선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5, 900)).as(LineResponse.class);
+        LineRequest 신분당선_생성_요청 = 노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5);
+        신분당선_생성_요청.addExtraCharge(900);
+        신분당선 = 지하철_노선_생성_요청(givenDefault(), 신분당선_생성_요청).as(LineResponse.class);
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재역.getId(), 양재시민의숲역.getId(), 3, 3);
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재시민의숲역.getId(), 청계산입구역.getId(), 4, 7);
 
@@ -72,7 +75,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_구간_등록_요청(givenDefault(), 이호선.getId(), 강남역.getId(), 역삼역.getId(), 5, 5);
         지하철_노선에_구간_등록_요청(givenDefault(), 이호선.getId(), 역삼역.getId(), 삼성역.getId(), 8, 8);
 
-        삼호선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3)).as(LineResponse.class);
+        LineRequest 삼호선_생성_요청 = 노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3);
+        삼호선_생성_요청.addExtraCharge(500);
+        삼호선 = 지하철_노선_생성_요청(givenDefault(), 삼호선_생성_요청).as(LineResponse.class);
         지하철_노선에_구간_등록_요청(givenDefault(), 삼호선.getId(), 남부터미널역.getId(), 양재역.getId(), 3, 3);
     }
 
@@ -89,11 +94,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         지하철_최단_경로_조회_됨(response, Arrays.asList(강남역.getId(), 양재역.getId()));
         경로_조회_거리와_소요_시간_응답_됨(response, 5, 5);
-        지하철_역_경로_조회_요금_확인(response, 1250);
+        지하철_역_경로_조회_요금_확인(response, 2150);
     }
 
     @Test
-    @DisplayName("지하철 최소 시간 경로 조회")
+    @DisplayName("지하철 최소 시간 경로 조회 - 추가요금이 있는 3호선(500원), 신분당선(900원) 경유")
     void findPathByDuration() {
         // when
         ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 삼성역.getId(), 남부터미널역.getId(), PathType.DURATION);
@@ -101,7 +106,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         지하철_최단_경로_조회_됨(response, Arrays.asList(삼성역.getId(), 역삼역.getId(), 강남역.getId(), 양재역.getId(), 남부터미널역.getId()));
         경로_조회_거리와_소요_시간_응답_됨(response, 21, 21);
-        지하철_역_경로_조회_요금_확인(response, 1550);
+        지하철_역_경로_조회_요금_확인(response, 2450);
     }
 
     @Test

@@ -4,7 +4,7 @@ import nextstep.subway.line.domain.Line;
 
 public class LineRequest {
 
-    private static final int DEFAULT_EXTRA_CHARGE = 0;
+    public static final int DEFAULT_EXTRA_CHARGE = 0;
 
     private String name;
     private String color;
@@ -32,13 +32,7 @@ public class LineRequest {
         this.extraCharge = DEFAULT_EXTRA_CHARGE;
     }
 
-    public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int extraCharge) {
-        this.name = name;
-        this.color = color;
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
-        this.distance = distance;
-        this.duration = duration;
+    public void addExtraCharge(int extraCharge) {
         this.extraCharge = extraCharge;
     }
 

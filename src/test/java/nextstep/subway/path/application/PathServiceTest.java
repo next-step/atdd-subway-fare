@@ -66,7 +66,8 @@ public class PathServiceTest {
         LineResponse line3Response = lineService.saveLine(line3Request);
         lineService.addSectionToLine(line3Response.getId(), createSectionRequest(savedStationNambuTerminal, savedStationYangJae, 3, 3));
 
-        lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5, 900);
+        lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5);
+        lineNewBunDang.addExtraCharge(900);
         LineResponse lineNewBunDangResponse = lineService.saveLine(lineNewBunDang);
         lineService.addSectionToLine(lineNewBunDangResponse.getId(), createSectionRequest(savedStationYangJae, savedStationYangJaeCitizensForest, 3, 3));
         lineService.addSectionToLine(lineNewBunDangResponse.getId(), createSectionRequest(savedStationYangJaeCitizensForest, savedStationCheonggyesan, 4, 7));

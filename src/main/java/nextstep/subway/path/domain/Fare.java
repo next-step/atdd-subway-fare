@@ -6,10 +6,14 @@ public class Fare {
     public static final int INCREASE_FARE = 100;
     public static final int NUMBER_ONE = 1;
 
-    private final int fare;
+    private int fare;
 
     public Fare(FareRuleStrategy fareRuleStrategy, int distance) {
         this.fare = fareRuleStrategy.calculateFare(distance);
+    }
+
+    public void addExtraCharge(int extraCharge) {
+        this.fare += extraCharge;
     }
 
     public int getFare() {
