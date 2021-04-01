@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.policy;
 
 import nextstep.subway.path.domain.policy.age.AgeFarePolicy;
 import nextstep.subway.path.domain.policy.line.LineFarePolicy;
@@ -7,6 +7,7 @@ public abstract class FarePolicyTemplate {
 
     private final LineFarePolicy lineFarePolicy;
     private final AgeFarePolicy ageFarePolicy;
+
     protected int fare;
 
     public FarePolicyTemplate(LineFarePolicy lineFarePolicy, AgeFarePolicy ageFarePolicy, int distance) {
@@ -15,7 +16,7 @@ public abstract class FarePolicyTemplate {
         this.fare = distance;
     }
 
-    public final void applyPolicy(int extraCharge) {
+    public final void applyFarePolicy(int extraCharge) {
         applyLineFarePolicy(lineFarePolicy);
         addExtraCharge(extraCharge);
         applyAgeFarePolicy(ageFarePolicy);

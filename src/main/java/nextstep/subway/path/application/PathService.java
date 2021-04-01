@@ -5,6 +5,7 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.path.domain.*;
+import nextstep.subway.path.domain.policy.FarePolicyTemplate;
 import nextstep.subway.path.domain.policy.age.AgeFarePolicy;
 import nextstep.subway.path.domain.policy.age.AgeFarePolicyFactory;
 import nextstep.subway.path.domain.policy.line.LineFarePolicy;
@@ -51,7 +52,7 @@ public class PathService {
         AgeFarePolicy ageFarePolicy = AgeFarePolicyFactory.from(memberAge);
 
         FarePolicyTemplate fare = new Fare(lineFarePolicy, ageFarePolicy, totalDistance);
-        fare.applyPolicy(extraCharge);
+        fare.applyFarePolicy(extraCharge);
         return fare;
     }
 

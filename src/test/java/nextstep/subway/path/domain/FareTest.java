@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.path.domain.policy.FarePolicyTemplate;
 import nextstep.subway.path.domain.policy.age.AgeFarePolicy;
 import nextstep.subway.path.domain.policy.age.AgeFarePolicyFactory;
 import nextstep.subway.path.domain.policy.line.LineFarePolicy;
@@ -20,7 +21,7 @@ class FareTest {
         AgeFarePolicy ageFarePolicy = AgeFarePolicyFactory.from(age);
         FarePolicyTemplate fare = new Fare(lineFarePolicy, ageFarePolicy, distance);
 
-        fare.applyPolicy(0);
+        fare.applyFarePolicy(0);
         assertThat(fare.getFare()).isEqualTo(expected);
     }
 }
