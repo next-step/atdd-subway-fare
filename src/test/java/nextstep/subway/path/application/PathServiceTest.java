@@ -26,6 +26,10 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @Transactional
 public class PathServiceTest {
 
+    private static final long ADULT_MEMBER_ID = 1L;
+    private static final long YOUTH_MEMBER_ID = 2L;
+    private static final long CHILD_MEMBER_ID = 3L;
+
     @Autowired
     private StationRepository stationRepository;
 
@@ -74,7 +78,7 @@ public class PathServiceTest {
     }
 
     @Test
-    @DisplayName("지하철 최단 거리 경로 조회")
+    @DisplayName("비로그인 사용자 지하철 최단 거리 경로 조회")
     void findShortestPathDistance() {
         // given
         long source = savedStationGangNam.getId();
@@ -82,6 +86,22 @@ public class PathServiceTest {
 
         // when
         PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDistance()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
+    }
+
+    @Test
+    @DisplayName("로그인 사용자(성인) 지하철 최단 거리 경로 조회")
+    void findShortestPathDistanceAndAdultAge() {
+        // given
+        long source = savedStationGangNam.getId();
+        long target = savedStationNambuTerminal.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_ID, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
@@ -121,6 +141,22 @@ public class PathServiceTest {
     }
 
     @Test
+    @DisplayName("로그인 사용자(청소년) 지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 이하)")
+    void findPathByDistanceAndYouthAge() {
+        // given
+        long source = savedStationYangJae.getId();
+        long target = savedStationCheonggyesan.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(YOUTH_MEMBER_ID, source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDuration()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(2150);
+    }
+
+    @Test
     @DisplayName("지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 초과)")
     void findPathByDistanceToNewBunDang2() {
         // given
@@ -129,6 +165,22 @@ public class PathServiceTest {
 
         // when
         PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(4);
+        assertThat(pathResponse.getDuration()).isEqualTo(13);
+        assertThat(pathResponse.getFare()).isEqualTo(2250);
+    }
+
+    @Test
+    @DisplayName("로그인 사용자(어린이) 지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 초과)")
+    void findPathByDistanceAndChildAge() {
+        // given
+        long source = savedStationYeokSam.getId();
+        long target = savedStationYangJaeCitizensForest.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(CHILD_MEMBER_ID, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(4);
