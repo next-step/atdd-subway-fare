@@ -1,12 +1,14 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.path.domain.policy.BasicFarePolicy;
+import nextstep.subway.path.domain.policy.FarePolicy;
 import nextstep.subway.path.domain.policy.Over50KmPolicy;
 import nextstep.subway.path.domain.policy.Over10KmPolicy;
 
 public class Fare {
 
   private long cost;
+
 
   public Fare(int totalDistance) {
     if (totalDistance > 0) {
@@ -18,14 +20,18 @@ public class Fare {
     return this.cost;
   }
 
-  private long calculate(int totalDistance) {
-    BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
+  private FarePolicy setPolicy(){
+    FarePolicy farePolicy = new BasicFarePolicy();
     Over10KmPolicy over10KmPolicy = new Over10KmPolicy();
     Over50KmPolicy over50KmPolicy = new Over50KmPolicy();
+    farePolicy.setNextPolicy(over10KmPolicy);
+    over10KmPolicy.setNextPolicy(over50KmPolicy);
+    return farePolicy;
+  }
 
-    return basicFarePolicy.calculate(totalDistance) +
-        over10KmPolicy.calculate(totalDistance) +
-        over50KmPolicy.calculate(totalDistance);
+  private long calculate(int totalDistance) {
+    FarePolicy farePolicy = setPolicy();
+    return farePolicy.calculate(totalDistance,0);
   }
 
 }
