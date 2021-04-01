@@ -40,7 +40,7 @@ public class SpringBootTestSample {
         역삼역 = stationRepository.save(new Station("역삼역"));
         삼성역 = stationRepository.save(new Station("삼성역"));
 
-        이호선 = lineRepository.save(new Line("2호선", "green"));
+        이호선 = lineRepository.save(new Line("2호선", "green", 0));
     }
 
     @Test

@@ -64,7 +64,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         청계산입구역 = 지하철_역_등록_됨("청계산입구역").as(StationResponse.class);
         남부터미널역 = 지하철_역_등록_됨("남부터미널역").as(StationResponse.class);
 
-        신분당선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5)).as(LineResponse.class);
+        신분당선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5, 900)).as(LineResponse.class);
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재역.getId(), 양재시민의숲역.getId(), 3, 3);
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재시민의숲역.getId(), 청계산입구역.getId(), 4, 7);
 

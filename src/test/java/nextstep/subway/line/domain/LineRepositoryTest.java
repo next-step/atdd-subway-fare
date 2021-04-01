@@ -30,7 +30,7 @@ class LineRepositoryTest {
     @DisplayName("지하철 노선이 존재할 경우")
     void existLineName() {
         // given
-        Line savedLine = lineRepository.save(new Line("신분당선", "bg-red-600"));
+        Line savedLine = lineRepository.save(new Line("신분당선", "bg-red-600", 900));
 
         // when
         boolean result = lineRepository.existsByName(savedLine.getName());

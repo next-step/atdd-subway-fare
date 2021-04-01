@@ -1,6 +1,5 @@
 package nextstep.subway.line.acceptance.linesection;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -9,6 +8,10 @@ import nextstep.subway.line.dto.SectionRequest;
 import org.springframework.http.MediaType;
 
 public class LineSectionRequestSteps {
+
+    public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int extraCharge) {
+        return new LineRequest(name, color, upStationId, downStationId, distance, duration, extraCharge);
+    }
 
     public static LineRequest 노선_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         return new LineRequest(name, color, upStationId, downStationId, distance, duration);
