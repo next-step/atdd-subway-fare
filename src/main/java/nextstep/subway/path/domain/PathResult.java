@@ -9,10 +9,12 @@ import java.util.List;
 public class PathResult {
     private Sections sections;
     private Stations stations;
+    private Fare fare;
 
     public PathResult(Stations stations, Sections sections) {
         this.stations = stations;
         this.sections = sections;
+        this.fare = Fare.of(sections.getTotalDistance());
     }
 
     public List<Station> getStations() {
@@ -25,5 +27,9 @@ public class PathResult {
 
     public int getTotalDuration() {
         return sections.getTotalDuration();
+    }
+
+    public int getFare() {
+        return fare.getFare();
     }
 }
