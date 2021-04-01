@@ -5,8 +5,6 @@ import nextstep.subway.path.domain.valueobject.Distance;
 import nextstep.subway.path.domain.valueobject.Fare;
 
 public class FirstDistanceFare implements DistanceFare {
-    public static final int BASE_FARE = 1250;
-
     private int calculate10KmOverFare(int distance) {
         if (distance < 10) {
             return 0;

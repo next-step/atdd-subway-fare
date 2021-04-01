@@ -13,7 +13,11 @@ public class FareSpecification {
         this.age = age;
     }
 
-    public Age getAge(){
+    public Age getAge() {
         return age;
+    }
+
+    public boolean hasAge() {
+        return (age != null) ? true : false;
     }
 }

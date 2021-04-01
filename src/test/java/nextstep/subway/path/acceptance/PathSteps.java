@@ -34,7 +34,7 @@ public class PathSteps {
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", "DISTANCE")
-                .when().get("/paths")
+                .when().get("/paths/anonymous")
                 .then().log().all().extract();
     }
 

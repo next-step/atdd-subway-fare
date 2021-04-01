@@ -10,7 +10,9 @@ public class FareCalculatorFactory {
     public static FareCalculation getFareCalculator(FareSpecification specification){
         FareCalculator calculator = new FareCalculator();
         calculator.setBaseFareStrategy(new FirstDistanceFare());
-        calculator.setDiscountFareStrategy(AgeDiscount.of(specification.getAge()));
+        if (specification.hasAge()) {
+            calculator.setDiscountFareStrategy(AgeDiscount.of(specification.getAge()));
+        }
         return calculator;
     }
 }

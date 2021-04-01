@@ -32,8 +32,9 @@ public class AgeDiscount implements Discount {
     }
 
     private void searchDiscountSpec(Age age) {
-        spec = discountSpecifications.stream()
+        spec = Optional.of(discountSpecifications.stream()
                 .filter(spec -> spec.apply(age))
-                .findFirst();
+                .findFirst()
+                .orElse(new NoDiscount()));
     }
 }

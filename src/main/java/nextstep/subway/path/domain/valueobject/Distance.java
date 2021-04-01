@@ -3,18 +3,25 @@ package nextstep.subway.path.domain.valueobject;
 import java.util.Objects;
 
 public class Distance {
-    private int distance;
+    private int value;
 
     private Distance(int distance) {
-        this.distance = distance;
+        this.value = distance;
     }
 
     public static Distance of(int distance) {
         return new Distance(distance);
     }
 
+    public static boolean isLessThan(Distance distance, int maxDistance) {
+        if (distance.value < maxDistance){
+            return true;
+        }
+        return false;
+    }
+
     public int getDistance() {
-        return distance;
+        return value;
     }
 
     @Override
@@ -22,11 +29,11 @@ public class Distance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Distance distance1 = (Distance) o;
-        return distance == distance1.distance;
+        return value == distance1.value;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(distance);
+        return Objects.hash(value);
     }
 }
