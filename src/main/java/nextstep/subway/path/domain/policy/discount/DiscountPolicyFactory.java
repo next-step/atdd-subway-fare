@@ -1,10 +1,10 @@
 package nextstep.subway.path.domain.policy.discount;
 
-import nextstep.subway.path.domain.policy.DiscountPolicy;
+import nextstep.subway.path.domain.policy.FarePolicy;
 
 public class DiscountPolicyFactory {
 
-    public static DiscountPolicy findPolicy(int age) {
+    public static FarePolicy findPolicy(int age) {
         if (age < 13 && age >= 6) {
             return new ChildrenDiscountPolicy();
         }

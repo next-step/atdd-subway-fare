@@ -1,11 +1,11 @@
 package nextstep.subway.path.domain.policy.discount;
 
-import nextstep.subway.path.domain.policy.DiscountPolicy;
+import nextstep.subway.path.domain.policy.FarePolicy;
 
-public class ChildrenDiscountPolicy implements DiscountPolicy {
+public class ChildrenDiscountPolicy implements FarePolicy {
 
     @Override
-    public int discount(int fare) {
+    public int calculateFare(int fare) {
         int resultFare = (int) (fare -  Math.ceil((fare - 350) * 0.5));
         return resultFare;
     }

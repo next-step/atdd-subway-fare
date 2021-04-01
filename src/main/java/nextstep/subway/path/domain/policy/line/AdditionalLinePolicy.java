@@ -11,7 +11,7 @@ public class AdditionalLinePolicy implements FarePolicy {
     }
 
     @Override
-    public int calculate() {
-        return lineFare;
+    public int calculateFare(int fare) {
+        return fare + lineFare;
     }
 }
