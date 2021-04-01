@@ -6,6 +6,7 @@
 ==== Request
 
 include::{snippets}/path/http-request.adoc[]
+include::{snippets}/path/request-parameters.adoc[]
 
 ==== Response
 
