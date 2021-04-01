@@ -77,7 +77,13 @@ public class PathSteps {
                 fieldWithPath("stations[].createdDate").description("생성된 시간"),
                 fieldWithPath("stations[].modifiedDate").description("변경된 시간"),
                 fieldWithPath("distance").description("경로 길이"),
-                fieldWithPath("duration").description("경로 구간 소요 시간")
+                fieldWithPath("duration").description("경로 구간 소요 시간"),
+                fieldWithPath("fare").description("지하철 이용 요금")
         );
+    }
+
+    public static void 이용요금_응답됨(ExtractableResponse<Response> response, int fare) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
     }
 }
