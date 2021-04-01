@@ -13,13 +13,6 @@ public class Distance {
         return new Distance(distance);
     }
 
-    public static boolean isLessThan(Distance distance, int maxDistance) {
-        if (distance.value < maxDistance){
-            return true;
-        }
-        return false;
-    }
-
     public int getDistance() {
         return value;
     }
