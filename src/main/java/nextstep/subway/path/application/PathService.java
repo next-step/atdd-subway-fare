@@ -41,17 +41,18 @@ public class PathService {
         int totalDistance = pathResult.getTotalDistance();
         int extraCharge = pathResult.getLineMaxExtraCharge();
 
-        Fare fare = new Fare(totalDistance);
+        FarePolicyTemplate fare = applyFarePolicy(memberAge, totalDistance, extraCharge);
 
+        return PathResponse.of(pathResult, fare.getFare());
+    }
+
+    private FarePolicyTemplate applyFarePolicy(int memberAge, int totalDistance, int extraCharge) {
         LineFarePolicy lineFarePolicy = LineFarePolicyFactory.from(totalDistance);
-        fare.applyLineFarePolicy(lineFarePolicy);
+        AgeFarePolicy ageFarePolicy = AgeFarePolicyFactory.from(memberAge);
 
-        fare.addExtraCharge(extraCharge);
-
-        AgeFarePolicy ageFarePolicy = AgeFarePolicyFactory.from(memberAge, fare.getFare());
-        fare.applyAgeFarePolicy(ageFarePolicy);
-
-        return PathResponse.of(pathResult, fare);
+        FarePolicyTemplate fare = new Fare(lineFarePolicy, ageFarePolicy, totalDistance);
+        fare.applyPolicy(extraCharge);
+        return fare;
     }
 
     private SubwayGraph findGraph(PathType type, Station sourceStation, Station targetStation) {

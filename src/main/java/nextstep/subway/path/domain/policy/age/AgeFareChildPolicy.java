@@ -6,14 +6,8 @@ public class AgeFareChildPolicy implements AgeFarePolicy {
 
     private static final double DISCOUNT = 0.5;
 
-    private final int fare;
-
-    public AgeFareChildPolicy(int fare) {
-        this.fare = fare;
-    }
-
     @Override
-    public int calculateAgeFare() {
+    public int calculateAgeFare(int fare) {
         return (int) ((fare - DEDUCTION_AMOUNT) * DISCOUNT);
     }
 }

@@ -7,13 +7,13 @@ public class AgeFarePolicyFactory {
     private static final int CHILD_AGE_MAX = 12;
     private static final int CHILD_AGE_MIN = 6;
 
-    public static AgeFarePolicy from(int age, int fare) {
+    public static AgeFarePolicy from(int age) {
         if (age >= YOUTH_AGE_MIN && age <= YOUTH_AGE_MAX) {
-            return new AgeFareYouthPolicy(fare);
+            return new AgeFareYouthPolicy();
         }
         if (age >= CHILD_AGE_MIN && age <= CHILD_AGE_MAX) {
-            return new AgeFareChildPolicy(fare);
+            return new AgeFareChildPolicy();
         }
-        return new AgeFareAdultPolicy(fare);
+        return new AgeFareAdultPolicy();
     }
 }
