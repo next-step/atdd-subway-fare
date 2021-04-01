@@ -1,12 +1,13 @@
 package nextstep.subway.auth.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nextstep.subway.auth.application.AnonymousDetails;
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.ui.authentication.SessionAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authentication.TokenAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authorization.AuthenticationPrincipalArgumentResolver;
 import nextstep.subway.auth.ui.authorization.SessionSecurityContextPersistenceInterceptor;
 import nextstep.subway.auth.ui.authorization.TokenSecurityContextPersistenceInterceptor;
-import nextstep.subway.member.application.CustomUserDetailsService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,12 +16,14 @@ import java.util.List;
 
 @Configuration
 public class AuthConfig implements WebMvcConfigurer {
-    private CustomUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
     private JwtTokenProvider jwtTokenProvider;
+    private AnonymousDetails anonymousDetails;
 
-    public AuthConfig(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
+    public AuthConfig(UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider, AnonymousDetails anonymousDetails) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.anonymousDetails = anonymousDetails;
     }
 
     public void addInterceptors(InterceptorRegistry registry) {
@@ -32,6 +35,6 @@ public class AuthConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
-        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
+        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(anonymousDetails.getAnonymous()));
     }
 }
