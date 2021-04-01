@@ -13,10 +13,11 @@ class OverFiftyDistancePolicyTest {
     @CsvSource(value = {"53:2150", "59:2250", "67:2350"},  delimiter = ':')
     void calculate(int distance, int expectedFare) {
         // given
+        int basicFare = 1250;
         OverFiftyDistancePolicy policy = new OverFiftyDistancePolicy(distance);
 
         // when
-        int fare = policy.calculate();
+        int fare = policy.calculateFare(basicFare);
 
         // then
         assertThat(fare).isEqualTo(expectedFare);

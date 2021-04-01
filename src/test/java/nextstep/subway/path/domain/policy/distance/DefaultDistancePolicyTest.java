@@ -16,7 +16,7 @@ class DefaultDistancePolicyTest {
         DefaultDistancePolicy policy = new DefaultDistancePolicy();
 
         // when
-        int fare = policy.calculate();
+        int fare = policy.calculateFare(BASIC_FARE);
 
         // then
         assertThat(fare).isEqualTo(BASIC_FARE);

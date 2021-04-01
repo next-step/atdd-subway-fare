@@ -11,12 +11,13 @@ class DefaultLinePolicyTest {
     @Test
     void calculate() {
         // given
+        int basicFare = 1250;
         DefaultLinePolicy policy = new DefaultLinePolicy();
 
         // when
-        int fare = policy.calculate();
+        int fare = policy.calculateFare(basicFare);
 
         // then
-        assertThat(fare).isEqualTo(0);
+        assertThat(fare).isEqualTo(1250);
     }
 }

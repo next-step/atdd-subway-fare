@@ -12,9 +12,9 @@ class AdditionalLinePolicyTest {
         AdditionalLinePolicy policy = new AdditionalLinePolicy(900);
 
         // when
-        int fare = policy.calculate();
+        int fare = policy.calculateFare(200);
 
         // then
-        assertThat(fare).isEqualTo(900);
+        assertThat(fare).isEqualTo(1100);
     }
 }

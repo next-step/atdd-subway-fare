@@ -12,7 +12,7 @@ class YouthDiscountPolicyTest {
         YouthDiscountPolicy policy = new YouthDiscountPolicy();
 
         // when
-        int discounted = policy.discount(1250);
+        int discounted = policy.calculateFare(1250);
 
         // then  1250 - ((1250 - 350) * 0.2)
         assertThat(discounted).isEqualTo(1070);
