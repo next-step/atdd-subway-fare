@@ -43,7 +43,7 @@ public class SubwayGraphTest {
         line2 = new Line(1L, "2호선", "bg-green-600", 0);
         line2.addSection(savedStationGyoDae, savedStationGangNam, 7, 7);
 
-        line3 = new Line(2L, "3호선", "bg-orange-600", 0);
+        line3 = new Line(2L, "3호선", "bg-orange-600", 500);
         line3.addSection(savedStationGyoDae, savedStationNambuTerminal, 3, 3);
         line3.addSection(savedStationNambuTerminal, savedStationYangJae, 3, 3);
 
@@ -68,9 +68,9 @@ public class SubwayGraphTest {
         PathResult pathResult = subwayGraph.findPath();
 
         // then
-        assertThat(pathResult.getStations()).hasSize(3);
         assertThat(pathResult.getStations()).containsExactly(savedStationGangNam, savedStationGyoDae, savedStationNambuTerminal);
         assertThat(pathResult.getTotalDistance()).isEqualTo(10);
+        assertThat(pathResult.getLineMaxExtraCharge()).isEqualTo(500);
     }
 
     @Test
