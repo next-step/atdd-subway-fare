@@ -111,7 +111,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(givenDefault(), 양재역.getId(), 청계산입구역.getId(), PathType.DISTANCE);
 
         // then
-        지하철_최단_경로_조회_됨(response, Arrays.asList(역삼역.getId(), 강남역.getId(), 양재역.getId(), 양재시민의숲역.getId()));
+        지하철_최단_경로_조회_됨(response, Arrays.asList(양재역.getId(), 양재시민의숲역.getId(), 청계산입구역.getId()));
         경로_조회_거리와_소요_시간_응답_됨(response, 7, 10);
         지하철_역_경로_조회_요금_확인(response, 2150);
     }

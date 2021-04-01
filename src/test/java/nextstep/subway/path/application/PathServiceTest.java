@@ -36,7 +36,10 @@ public class PathServiceTest {
     private PathService pathService;
 
     private Station savedStationGangNam;
+    private Station savedStationYeokSam;
     private Station savedStationYangJae;
+    private Station savedStationYangJaeCitizensForest;
+    private Station savedStationCheonggyesan;
     private Station savedStationGyoDae;
     private Station savedStationNambuTerminal;
 
@@ -47,19 +50,26 @@ public class PathServiceTest {
     @BeforeEach
     void setUp() {
         savedStationGangNam = stationRepository.save(new Station("강남역"));
+        savedStationYeokSam = stationRepository.save(new Station("역삼역"));
         savedStationYangJae = stationRepository.save(new Station("양재역"));
+        savedStationYangJaeCitizensForest = stationRepository.save(new Station("양재시민의숲역"));
+        savedStationCheonggyesan = stationRepository.save(new Station("청계산입구역"));
         savedStationGyoDae = stationRepository.save(new Station("교대역"));
         savedStationNambuTerminal = stationRepository.save(new Station("남부터미널역"));
 
         line2Request = new LineRequest("2호선", "bg-green-600", savedStationGyoDae.getId(), savedStationGangNam.getId(), 7, 7);
-        lineService.saveLine(line2Request);
+        LineResponse line2Response = lineService.saveLine(line2Request);
+        lineService.addSectionToLine(line2Response.getId(), createSectionRequest(savedStationGangNam, savedStationYeokSam, 5, 5));
+
 
         line3Request = new LineRequest("3호선", "bg-orange-600", savedStationGyoDae.getId(), savedStationNambuTerminal.getId(), 3, 3);
         LineResponse line3Response = lineService.saveLine(line3Request);
         lineService.addSectionToLine(line3Response.getId(), createSectionRequest(savedStationNambuTerminal, savedStationYangJae, 3, 3));
 
-        lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5);
-        lineService.saveLine(lineNewBunDang);
+        lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5, 900);
+        LineResponse lineNewBunDangResponse = lineService.saveLine(lineNewBunDang);
+        lineService.addSectionToLine(lineNewBunDangResponse.getId(), createSectionRequest(savedStationYangJae, savedStationYangJaeCitizensForest, 3, 3));
+        lineService.addSectionToLine(lineNewBunDangResponse.getId(), createSectionRequest(savedStationYangJaeCitizensForest, savedStationCheonggyesan, 4, 7));
     }
 
     @Test
@@ -75,6 +85,7 @@ public class PathServiceTest {
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
         assertThat(pathResponse.getDistance()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
     }
 
     @Test
@@ -90,6 +101,38 @@ public class PathServiceTest {
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
         assertThat(pathResponse.getDuration()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 이하)")
+    void findPathByDistanceToNewBunDang1() {
+        // given
+        long source = savedStationYangJae.getId();
+        long target = savedStationCheonggyesan.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDuration()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(2150);
+    }
+
+    @Test
+    @DisplayName("지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 초과)")
+    void findPathByDistanceToNewBunDang2() {
+        // given
+        long source = savedStationYeokSam.getId();
+        long target = savedStationYangJaeCitizensForest.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(4);
+        assertThat(pathResponse.getDuration()).isEqualTo(13);
+        assertThat(pathResponse.getFare()).isEqualTo(2250);
     }
 
     @Test
