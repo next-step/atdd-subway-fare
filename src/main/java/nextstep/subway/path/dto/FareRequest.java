@@ -6,15 +6,14 @@ public class FareRequest {
     private Long source;
     private Long target;
     private PathType type;
-    private int age;
 
-    public FareRequest(){}
+    public FareRequest() {
+    }
 
-    public FareRequest(Long source, Long target, PathType type, int age) {
+    public FareRequest(Long source, Long target, PathType type) {
         this.source = source;
         this.target = target;
         this.type = type;
-        this.age = age;
     }
 
     public Long getSource() {
@@ -29,7 +28,4 @@ public class FareRequest {
         return type;
     }
 
-    public int getAge() {
-        return age;
-    }
 }

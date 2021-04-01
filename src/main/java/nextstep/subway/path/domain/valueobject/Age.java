@@ -33,4 +33,18 @@ public class Age {
     public int hashCode() {
         return Objects.hash(age);
     }
+
+    public boolean isGreatEqualThan(int minimumAge) {
+        if (age >= minimumAge) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isLessThan(int maximumAge) {
+        if (age < maximumAge){
+            return true;
+        }
+        return false;
+    }
 }

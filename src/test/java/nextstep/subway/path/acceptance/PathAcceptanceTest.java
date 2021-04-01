@@ -63,6 +63,16 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 2050);
     }
 
+    @DisplayName("로그인하지 않은 사용자가 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByAnonymous() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getDefaultGiven(), 교대역.getId(), 양재역.getId());
+
+        // then
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 2050);
+    }
+
     @DisplayName("어린이가 두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistanceChildPassenger() {

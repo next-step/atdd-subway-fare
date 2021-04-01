@@ -28,6 +28,16 @@ public class PathSteps {
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
+        return  given
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "DISTANCE")
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, TokenResponse tokenResponse, Long source, Long target) {
         return  given
                 .auth().oauth2(tokenResponse.getAccessToken())
