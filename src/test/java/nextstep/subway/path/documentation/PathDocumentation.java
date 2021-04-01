@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
 import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.FareService;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.FareRequest;
@@ -52,7 +53,7 @@ public class PathDocumentation extends Documentation {
                 10,
                 2000
         );
-        when(fareService.calculate(any(FareRequest.class))).thenReturn(fareResponse);
+        when(fareService.calculate(any(FareRequest.class), any(LoginMember.class))).thenReturn(fareResponse);
 
         // when
         ExtractableResponse< Response > response =  두_역의_최단_거리_경로_조회를_요청(getPathGiven(),tokenResponse, 1L,2L);

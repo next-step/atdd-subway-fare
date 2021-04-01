@@ -63,7 +63,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20, 2050);
     }
 
-    @DisplayName("로그인하지 않은 사용자가 두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("비로그인 사용자가 두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByAnonymous() {
         // when

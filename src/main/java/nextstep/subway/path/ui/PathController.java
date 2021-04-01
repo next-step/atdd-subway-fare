@@ -22,20 +22,12 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity< FareResponse > findPath(@AuthenticationPrincipal() LoginMember loginMember,
+    public ResponseEntity< FareResponse > findPath(@AuthenticationPrincipal(required = false) LoginMember loginMember,
                                                    @RequestParam Long source,
                                                    @RequestParam Long target,
                                                    @RequestParam PathType type) {
         final FareRequest fareRequest = new FareRequest(source, target, type);
         return ResponseEntity.ok(fareService.calculate(fareRequest, loginMember));
-    }
-
-    @GetMapping("/paths/anonymous")
-    public ResponseEntity< FareResponse > findPathByAnonymous(@RequestParam Long source,
-                                                   @RequestParam Long target,
-                                                   @RequestParam PathType type) {
-        final FareRequest fareRequest = new FareRequest(source, target, type);
-        return ResponseEntity.ok(fareService.calculate(fareRequest));
     }
 
     @ExceptionHandler({ InvalidFareAmountException.class })

@@ -24,14 +24,7 @@ public class FareService {
 
     public FareResponse calculate(FareRequest fareRequest, LoginMember loginMember) {
         final PathResult pathResult = pathService.findPath(fareRequest.getSource(), fareRequest.getTarget(), fareRequest.getType());
-        final FareCalculation fareCalculator = FareCalculatorFactory.getFareCalculator(new FareSpecification(Age.of(loginMember.getAge())));
-        final Fare totalFare = fareCalculator.calculate(Fare.of(pathResult.getLineMaxFare()), Distance.of(pathResult.getTotalDistance()));
-        return FareResponse.of(pathResult, Fare.parseInt(totalFare));
-    }
-
-    public FareResponse calculate(FareRequest fareRequest) {
-        final PathResult pathResult = pathService.findPath(fareRequest.getSource(), fareRequest.getTarget(), fareRequest.getType());
-        final FareCalculation fareCalculator = FareCalculatorFactory.getFareCalculator(new FareSpecification());
+        final FareCalculation fareCalculator = FareCalculatorFactory.getFareCalculator(new FareSpecification(loginMember));
         final Fare totalFare = fareCalculator.calculate(Fare.of(pathResult.getLineMaxFare()), Distance.of(pathResult.getTotalDistance()));
         return FareResponse.of(pathResult, Fare.parseInt(totalFare));
     }
