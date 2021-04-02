@@ -1,42 +1,71 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.domain.valueobject.Distance;
+import nextstep.subway.path.domain.specification.line.LineMaxFare;
 import nextstep.subway.path.domain.valueobject.Fare;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FareCalculator implements FareCalculation{
-    private Discount discount;
-    private DistanceFare distanceFare;
+public class FareCalculator implements FareCalculation {
+    private FareParameter parameter;
+    private List< BaseFarePolicy > baseFarePolicies = new ArrayList<>();
+    private List< LineFarePolicy > lineFarePolicies = new ArrayList<>();
+    private List< DiscountPolicy > discountPolicies = new ArrayList<>();
+    private List< FareDistancePolicy > distanceFarePolicies = new ArrayList<>();
 
-    public FareCalculator(){
-        this.discount = null;
-        this.distanceFare = null;
+    public FareCalculator(FareParameter parameter) {
+        this.parameter = parameter;
     }
 
     @Override
-    public Fare calculate(Fare base, Distance distance) {
-        final Fare distFare = calculateDistanceFare(distance);
-        return discountFare(Fare.sum(base, distFare));
+    public Fare calculate() {
+        final Fare distanceFare = Fare.sum(calculateBaseFare(), calculateDistanceFare());
+        final Fare  totalFare= Fare.sum(distanceFare, calculateLineFare());
+        return discountFare(totalFare);
+    }
+
+    public FareCalculator addDistanceFarePolicy(FareDistancePolicy distanceFarePolicy) {
+        distanceFarePolicies.add(distanceFarePolicy);
+        return this;
+    }
+
+    public FareCalculator addDiscountPolicy(DiscountPolicy discountPolicy) {
+        discountPolicies.add(discountPolicy);
+        return this;
+    }
+
+    public FareCalculator addBaseFarePolicy(BaseFarePolicy policy) {
+        baseFarePolicies.add(policy);
+        return this;
+    }
+
+    public FareCalculator addLineFarePolicy(LineMaxFare lineMaxFare) {
+        lineFarePolicies.add(lineMaxFare);
+        return this;
     }
 
     private Fare discountFare(Fare totalBaseFare) {
-        return Optional.ofNullable(discount)
-                .map(spec -> spec.apply(totalBaseFare))
-                .orElse(totalBaseFare);
+        return discountPolicies.stream()
+                .map(policy -> policy.apply(totalBaseFare))
+                .reduce(Fare.of(0), Fare::sum);
     }
 
-    private Fare calculateDistanceFare(Distance distance) {
-        return Optional.ofNullable(distanceFare)
-                                    .map(spec -> spec.calculate(distance))
-                                    .orElse(Fare.of(DistanceFare.BASE_FARE));
+    private Fare calculateDistanceFare() {
+        return distanceFarePolicies.stream()
+                .map(policy -> policy.calculate(parameter.getDistance()))
+                .reduce(Fare.of(0), Fare::sum);
     }
 
-    public void setBaseFareStrategy(DistanceFare distanceFare) {
-        this.distanceFare = distanceFare;
+    private Fare calculateBaseFare(){
+        return baseFarePolicies.stream()
+                .map(policy -> policy.calculate())
+                .reduce(Fare.of(0), Fare::sum);
     }
 
-    public void setDiscountFareStrategy(Discount discount) {
-        this.discount = discount;
+    private Fare calculateLineFare(){
+        return lineFarePolicies.stream()
+                .map(policy -> policy.calculate(parameter.getLineMaxFare()))
+                .reduce(Fare.of(0), Fare::sum);
     }
+
 }

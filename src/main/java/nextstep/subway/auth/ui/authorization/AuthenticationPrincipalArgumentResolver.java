@@ -3,6 +3,7 @@ package nextstep.subway.auth.ui.authorization;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
+import nextstep.subway.member.domain.NonLoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     public static Object toObject(Class clazz, String value) {
@@ -32,11 +34,14 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        if (!isPrincipalRequired(parameter)) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null ){
+            if (!isPrincipalRequired(parameter)) {
+                return new NonLoginMember();
+            }
             return null;
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
         }

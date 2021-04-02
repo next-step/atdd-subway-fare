@@ -1,10 +1,10 @@
 package nextstep.subway.path.domain.specification.distance;
 
-import nextstep.subway.path.domain.DistanceFare;
+import nextstep.subway.path.domain.FareDistancePolicy;
 import nextstep.subway.path.domain.valueobject.Distance;
 import nextstep.subway.path.domain.valueobject.Fare;
 
-public class FirstDistanceFare implements DistanceFare {
+public class DistanceFare implements FareDistancePolicy {
     private int calculate10KmOverFare(int distance) {
         if (distance < 10) {
             return 0;
@@ -21,7 +21,7 @@ public class FirstDistanceFare implements DistanceFare {
 
     @Override
     public Fare calculate(Distance dist) {
-        int fare = BASE_FARE + calculate10KmOverFare(dist.getDistance()) + calculate50KmOverFare(dist.getDistance());
+        final int fare = calculate10KmOverFare(dist.getDistance()) + calculate50KmOverFare(dist.getDistance());
         return Fare.of(fare);
     }
 }

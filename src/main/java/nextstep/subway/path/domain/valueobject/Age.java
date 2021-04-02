@@ -3,6 +3,7 @@ package nextstep.subway.path.domain.valueobject;
 import java.util.Objects;
 
 public class Age {
+    public static Age ZERO = of(0);
     private int age;
 
     private Age(int age) {

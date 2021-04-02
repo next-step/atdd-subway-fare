@@ -11,7 +11,7 @@ public class Fare {
     }
 
     public static Fare of(int fare) {
-        if ( fare <= 0 ){
+        if ( fare < 0 ){
             throw new InvalidFareAmountException("Fare should be greater than 0");
         }
         return new Fare(fare);
