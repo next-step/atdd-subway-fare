@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +12,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
+import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.member.MemberSteps.회원_생성_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
+    public static final String EMAIL = "email@email.com";
+    public static final String PASSWORD = "password";
+    public static final int AGE = 30;
     static final int DEFAULT_SURCHARGE = 0;
 
     private StationResponse 교대역;
@@ -25,6 +31,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 이호선;
     private LineResponse 신분당선;
     private LineResponse 삼호선;
+    private TokenResponse 사용자;
 
     @BeforeEach
     public void setUp() {
@@ -40,13 +47,16 @@ public class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10, DEFAULT_SURCHARGE);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
+
+        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId(), 사용자);
 
         // then
         경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
@@ -57,7 +67,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId(), 사용자);
 
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);

@@ -2,6 +2,7 @@ package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
 import nextstep.subway.Documentation;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +11,17 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
+import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.member.MemberSteps.회원_생성_요청;
 import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
+    public static final String EMAIL = "email@email.com";
+    public static final String PASSWORD = "password";
+    public static final int AGE = 30;
     static final int DEFAULT_SURCHARGE = 0;
 
     private LineResponse 신분당선;
@@ -25,6 +31,7 @@ public class PathDocumentation extends Documentation {
     private StationResponse 양재역;
     private StationResponse 교대역;
     private StationResponse 남부터미널역;
+    private TokenResponse 사용자;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -40,6 +47,9 @@ public class PathDocumentation extends Documentation {
         삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5, 10, DEFAULT_SURCHARGE);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 5, 15);
+
+        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     @Test
@@ -52,6 +62,7 @@ public class PathDocumentation extends Documentation {
                         지하철_노선_경로탐색_설명(),
                         지하철_노선_경로탐색_결과_필드()))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(사용자.getAccessToken())
                 .queryParam("source", 강남역.getId())
                 .queryParam("target", 양재역.getId())
                 .queryParam("type", "DISTANCE")
