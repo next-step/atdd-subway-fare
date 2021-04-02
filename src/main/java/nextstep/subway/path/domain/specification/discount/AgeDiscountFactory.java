@@ -1,14 +1,14 @@
 package nextstep.subway.path.domain.specification.discount;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.path.domain.DiscountPolicy;
+import nextstep.subway.path.domain.FarePolicy;
 import nextstep.subway.path.domain.valueobject.Age;
 import nextstep.subway.path.domain.valueobject.Fare;
 
 import java.util.List;
 import java.util.Optional;
 
-public class AgeDiscount implements DiscountPolicy {
+public class AgeDiscountFactory implements FarePolicy {
 
     private Optional<AgeSpecification> spec;
 
@@ -17,16 +17,16 @@ public class AgeDiscount implements DiscountPolicy {
             new YouthDiscount()
     );
 
-    private AgeDiscount() { }
+    private AgeDiscountFactory() { }
 
-    public static AgeDiscount of(Age age){
-        AgeDiscount discount = new AgeDiscount();
+    public static AgeDiscountFactory getDiscount(Age age){
+        AgeDiscountFactory discount = new AgeDiscountFactory();
         discount.searchDiscountSpec(age);
         return discount;
     }
 
     @Override
-    public Fare apply(Fare fare) {
+    public Fare calculate(Fare fare) {
         return spec.map(ageSpec -> ageSpec.discount(fare))
                 .orElse(fare);
     }

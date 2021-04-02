@@ -23,8 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FareCalculatorTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
-    public static final int AGE = 20;
-    private FareCalculatorFactory fareCalculator  = new FareCalculatorFactory();
 
     @ParameterizedTest
     @DisplayName("가격 덧셈")

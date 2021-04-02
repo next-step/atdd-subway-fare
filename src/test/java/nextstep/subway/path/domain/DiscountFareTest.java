@@ -15,23 +15,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 거리 가격 계산")
 public class DiscountFareTest {
-    private FareDistancePolicy distanceFareCalculator;
-
-    @BeforeEach
-    public void setup(){
-        this.distanceFareCalculator = new DistanceFare();
-
-    }
 
     @ParameterizedTest
     @DisplayName("거리에 따른 요금 계산")
     @MethodSource("provideDistanceAndOverFare")
-    public void calculateFareByDistance(Distance distance, Fare overFare) {
+    public void calculateFareByDistance(Distance distance, Fare expectFare) {
+        // given
+        DistanceFare distanceFare =  new DistanceFare(distance);
+
         // when
-        Fare fare = distanceFareCalculator.calculate(distance);
+        Fare overFare = distanceFare.calculate(Fare.of(0));
 
         // then
-        assertThat(fare).isEqualTo(overFare);
+        assertThat(overFare).isEqualTo(expectFare);
     }
 
     private static Stream< Arguments > provideDistanceAndOverFare() {
