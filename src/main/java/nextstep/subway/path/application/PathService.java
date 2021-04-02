@@ -3,7 +3,6 @@ package nextstep.subway.path.application;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
-import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;
@@ -18,11 +17,10 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
-        SubwayGraph subwayGraph = graphService.findGraph(type);
+    public PathResult findPath(Long source, Long target, PathType pathType) {
+        SubwayGraph subwayGraph = graphService.findGraph(pathType);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
-        PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        return PathResponse.of(pathResult);
+        return subwayGraph.findPath(sourceStation, targetStation);
     }
 }

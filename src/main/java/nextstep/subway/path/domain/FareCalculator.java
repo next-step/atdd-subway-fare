@@ -1,23 +1,30 @@
 package nextstep.subway.path.domain;
 
-public class FareCalculator {
-    public static final int BASE_FARE = 1250;
+import nextstep.subway.path.domain.valueobject.Fare;
 
-    public int calculate(int distance){
-        return BASE_FARE + calculate10KmOverFare(distance) + calculate50KmOverFare(distance);
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class FareCalculator implements FareCalculation {
+    private FareParameter parameter;
+    private List< FarePolicy > farePolicies = new ArrayList<>();
+
+    public FareCalculator(FareParameter parameter) {
+        this.parameter = parameter;
     }
 
-    private int calculate10KmOverFare(int distance) {
-        if (distance < 10) {
-            return 0;
+    @Override
+    public Fare calculate() {
+        Fare input = Fare.of(0);
+        for ( FarePolicy policy : farePolicies) {
+            input = policy.calculate(input);
         }
-        return (int) ((Math.ceil((distance - 10) / 5) + 1) * 100);
+        return input;
     }
 
-    private int calculate50KmOverFare(int distance) {
-        if (distance < 50) {
-            return 0;
-        }
-        return (int) ((Math.ceil((distance - 50) / 8) + 1) * 100);
+    public FareCalculator addAllBaseFarePolicy(FarePolicy... policies) {
+        farePolicies.addAll(Arrays.asList(policies));
+        return this;
     }
 }

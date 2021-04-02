@@ -12,7 +12,7 @@ public class PathResult {
         this.sections = sections;
     }
 
-    public List<Station> getStations() {
+    public List< Station > getStations() {
         return sections.getStations();
     }
 
@@ -24,8 +24,7 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-    public int getTotalFare() {
-        FareCalculator calculator = new FareCalculator();
-        return calculator.calculate(getTotalDistance());
+    public int getLineMaxFare() {
+        return sections.getLineMaxFare();
     }
 }

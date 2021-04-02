@@ -3,9 +3,10 @@ package nextstep.subway.path.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.dto.FareResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
@@ -22,6 +23,11 @@ public class PathSteps {
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
+    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration, int baseFare) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, baseFare);
+        return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
+    }
+
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
         return  given
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -32,8 +38,20 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, TokenResponse tokenResponse, Long source, Long target) {
+        return  given
+                .auth().oauth2(tokenResponse.getAccessToken())
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "DISTANCE")
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(RequestSpecification given, TokenResponse tokenResponse, Long source, Long target) {
         return given
+                .auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -43,7 +61,7 @@ public class PathSteps {
     }
 
     public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
-        PathResponse pathResponse = response.as(PathResponse.class);
+        FareResponse pathResponse = response.as(FareResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
         assertThat(pathResponse.getFare()).isEqualTo(fare);
