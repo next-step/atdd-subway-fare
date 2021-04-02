@@ -1,7 +1,5 @@
 package nextstep.subway.path.domain.policy;
 
-import nextstep.subway.path.domain.OverAddFareCalculate;
-
 public class DistancePolicy {
     private static final int TEN_DISTANCE = 10;
     private static final int FIFTY_DISTANCE = 50;
