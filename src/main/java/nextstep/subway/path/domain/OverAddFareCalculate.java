@@ -10,6 +10,14 @@ public enum OverAddFareCalculate {
     private final int overDistance;
     private final int overFare;
 
+    public int getOverDistance() {
+        return overDistance;
+    }
+
+    public int getOverFare() {
+        return overFare;
+    }
+
     OverAddFareCalculate(int overDistance, int overFare) {
         this.overDistance = overDistance;
         this.overFare = overFare;
