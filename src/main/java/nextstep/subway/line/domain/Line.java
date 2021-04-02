@@ -29,6 +29,10 @@ public class Line extends BaseEntity {
         this.surcharge = surcharge;
     }
 
+    public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
     public void update(Line line) {
         this.name = line.getName();
         this.color = line.getColor();
