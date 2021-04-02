@@ -300,7 +300,7 @@ public class LineServiceMockTest {
     }
 
     private static Line createMockLine(String lineName, String lineColor, Long lineId) {
-        Line line = new Line(lineName, lineColor);
+        Line line = new Line(lineName, lineColor, 0);
         ReflectionTestUtils.setField(line, "id", lineId);
         return line;
     }

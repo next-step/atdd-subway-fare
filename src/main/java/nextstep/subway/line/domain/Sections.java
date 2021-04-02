@@ -241,6 +241,15 @@ public class Sections {
         return Collections.unmodifiableList(sections);
     }
 
+    public List<Line> getSectionContainsLines() {
+        List<Line> lines = sections.stream()
+                .map(Section::getLine)
+                .collect(Collectors.toList());
+
+        return Collections.unmodifiableList(lines);
+
+    }
+
     public List<Station> getStations() {
         return sections.stream()
                 .sorted()

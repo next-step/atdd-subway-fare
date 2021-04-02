@@ -25,18 +25,22 @@ public class Line extends BaseEntity {
     @Embedded
     private Sections sections = new Sections();
 
+    private Integer extraCharge;
+
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, Integer extraCharge) {
         this.name = name;
         this.color = color;
+        this.extraCharge = extraCharge;
     }
 
-    public Line(Long id, String name, String color) {
+    public Line(Long id, String name, String color, Integer extraCharge) {
         this.id = id;
         this.name = name;
         this.color = color;
+        this.extraCharge = extraCharge;
     }
 
     public void update(Line line) {
@@ -78,6 +82,10 @@ public class Line extends BaseEntity {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public Integer getExtraCharge() {
+        return extraCharge;
     }
 
     @Override

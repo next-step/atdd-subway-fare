@@ -26,6 +26,10 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @Transactional
 public class PathServiceTest {
 
+    private static final int ADULT_MEMBER_AGE = 20;
+    private static final int YOUTH_MEMBER_AGE = 17;
+    private static final int CHILD_MEMBER_AGE = 7;
+
     @Autowired
     private StationRepository stationRepository;
 
@@ -36,7 +40,10 @@ public class PathServiceTest {
     private PathService pathService;
 
     private Station savedStationGangNam;
+    private Station savedStationYeokSam;
     private Station savedStationYangJae;
+    private Station savedStationYangJaeCitizensForest;
+    private Station savedStationCheonggyesan;
     private Station savedStationGyoDae;
     private Station savedStationNambuTerminal;
 
@@ -47,34 +54,59 @@ public class PathServiceTest {
     @BeforeEach
     void setUp() {
         savedStationGangNam = stationRepository.save(new Station("강남역"));
+        savedStationYeokSam = stationRepository.save(new Station("역삼역"));
         savedStationYangJae = stationRepository.save(new Station("양재역"));
+        savedStationYangJaeCitizensForest = stationRepository.save(new Station("양재시민의숲역"));
+        savedStationCheonggyesan = stationRepository.save(new Station("청계산입구역"));
         savedStationGyoDae = stationRepository.save(new Station("교대역"));
         savedStationNambuTerminal = stationRepository.save(new Station("남부터미널역"));
 
         line2Request = new LineRequest("2호선", "bg-green-600", savedStationGyoDae.getId(), savedStationGangNam.getId(), 7, 7);
-        lineService.saveLine(line2Request);
+        LineResponse line2Response = lineService.saveLine(line2Request);
+        lineService.addSectionToLine(line2Response.getId(), createSectionRequest(savedStationGangNam, savedStationYeokSam, 5, 5));
+
 
         line3Request = new LineRequest("3호선", "bg-orange-600", savedStationGyoDae.getId(), savedStationNambuTerminal.getId(), 3, 3);
         LineResponse line3Response = lineService.saveLine(line3Request);
         lineService.addSectionToLine(line3Response.getId(), createSectionRequest(savedStationNambuTerminal, savedStationYangJae, 3, 3));
 
         lineNewBunDang = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5);
-        lineService.saveLine(lineNewBunDang);
+        lineNewBunDang.addExtraCharge(900);
+        LineResponse lineNewBunDangResponse = lineService.saveLine(lineNewBunDang);
+        lineService.addSectionToLine(lineNewBunDangResponse.getId(), createSectionRequest(savedStationYangJae, savedStationYangJaeCitizensForest, 3, 3));
+        lineService.addSectionToLine(lineNewBunDangResponse.getId(), createSectionRequest(savedStationYangJaeCitizensForest, savedStationCheonggyesan, 4, 7));
     }
 
     @Test
-    @DisplayName("지하철 최단 거리 경로 조회")
+    @DisplayName("비로그인 사용자 지하철 최단 거리 경로 조회")
     void findShortestPathDistance() {
         // given
         long source = savedStationGangNam.getId();
         long target = savedStationNambuTerminal.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
         assertThat(pathResponse.getDistance()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
+    }
+
+    @Test
+    @DisplayName("로그인 사용자(성인) 지하철 최단 거리 경로 조회")
+    void findShortestPathDistanceAndAdultAge() {
+        // given
+        long source = savedStationGangNam.getId();
+        long target = savedStationNambuTerminal.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDistance()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
     }
 
     @Test
@@ -85,11 +117,75 @@ public class PathServiceTest {
         long target = savedStationNambuTerminal.getId();
 
         // when
-        PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
 
         // then
         assertThat(pathResponse.getStations()).hasSize(3);
         assertThat(pathResponse.getDuration()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 이하)")
+    void findPathByDistanceToNewBunDang1() {
+        // given
+        long source = savedStationYangJae.getId();
+        long target = savedStationCheonggyesan.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDuration()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(2150);
+    }
+
+    @Test
+    @DisplayName("로그인 사용자(청소년) 지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 이하)")
+    void findPathByDistanceAndYouthAge() {
+        // given
+        long source = savedStationYangJae.getId();
+        long target = savedStationCheonggyesan.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(YOUTH_MEMBER_AGE, source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(3);
+        assertThat(pathResponse.getDuration()).isEqualTo(10);
+        assertThat(pathResponse.getFare()).isEqualTo(1440);
+    }
+
+    @Test
+    @DisplayName("지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 초과)")
+    void findPathByDistanceToNewBunDang2() {
+        // given
+        long source = savedStationYeokSam.getId();
+        long target = savedStationYangJaeCitizensForest.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(4);
+        assertThat(pathResponse.getDuration()).isEqualTo(13);
+        assertThat(pathResponse.getFare()).isEqualTo(2250);
+    }
+
+    @Test
+    @DisplayName("로그인 사용자(어린이) 지하철 최단 거리 경로 조회 - 추가요금이 있는 신분당선을 경유할 경우 (10Km 초과)")
+    void findPathByDistanceAndChildAge() {
+        // given
+        long source = savedStationYeokSam.getId();
+        long target = savedStationYangJaeCitizensForest.getId();
+
+        // when
+        PathResponse pathResponse = pathService.findPath(CHILD_MEMBER_AGE, source, target, PathType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getStations()).hasSize(4);
+        assertThat(pathResponse.getDuration()).isEqualTo(13);
+        assertThat(pathResponse.getFare()).isEqualTo(950);
     }
 
     @Test
@@ -101,7 +197,7 @@ public class PathServiceTest {
 
         // when & then
         assertThatExceptionOfType(SameStationPathSearchException.class)
-                .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
+                .isThrownBy(() -> pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE));
     }
 
     @Test
@@ -115,7 +211,7 @@ public class PathServiceTest {
 
         // when & then
         assertThatExceptionOfType(DoesNotConnectedPathException.class)
-                .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
+                .isThrownBy(() -> pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE));
     }
 
     @Test
@@ -127,7 +223,7 @@ public class PathServiceTest {
 
         // when & then
         assertThatExceptionOfType(StationNonExistException.class)
-                .isThrownBy(() -> pathService.findPath(source, target, PathType.DISTANCE));
+                .isThrownBy(() -> pathService.findPath(ADULT_MEMBER_AGE, source, target, PathType.DISTANCE));
     }
 
     private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance, int duration) {

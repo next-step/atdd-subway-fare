@@ -36,7 +36,8 @@ public class LineDocumentation extends BaseDocumentSteps {
                 fieldWithPath("upStationId").type(JsonFieldType.NUMBER).description("노선 상행역 ID"),
                 fieldWithPath("downStationId").type(JsonFieldType.NUMBER).description("노선 하행역 ID"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("노선 거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("노선 소요시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("노선 소요시간"),
+                fieldWithPath("extraCharge").type(JsonFieldType.NUMBER).description("노선 추가요금")
         );
     }
 
@@ -50,6 +51,7 @@ public class LineDocumentation extends BaseDocumentSteps {
                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("노선 ID"),
                 fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
                 fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색상"),
+                fieldWithPath("extraCharge").type(JsonFieldType.NUMBER).description("노선 추가요금"),
                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("노선에 포함된 역 목록"),
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("노선에 포함된 역 ID"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("노선에 포함된 역 이름"),

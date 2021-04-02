@@ -44,6 +44,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
 
         신분당선_강남_양재_노선_요청 = new LineRequest("신분당선", "bg-red-600", 강남역.getId(), 양재역.getId(), 5, 5);
+        신분당선_강남_양재_노선_요청.addExtraCharge(900);
 
         역삼역 = 지하철_역_등록_됨("역삼역").as(StationResponse.class);
         이호선_강남_역삼_노선_요청 = new LineRequest("2호선", "bg-green-600", 강남역.getId(), 역삼역.getId(), 5, 5);

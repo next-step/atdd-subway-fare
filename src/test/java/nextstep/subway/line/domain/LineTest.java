@@ -32,7 +32,7 @@ public class LineTest {
         savedStationGyoDae = new Station(4L, "교대역");
         savedStationSeolleung = new Station(5L, "선릉역");
 
-        line2 = new Line(1L, "2호선", "bg-green-600");
+        line2 = new Line(1L, "2호선", "bg-green-600", 0);
         line2.addSection(savedStationGangNam, savedStationYeokSam, 5, 5);
     }
 

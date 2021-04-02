@@ -1,18 +1,31 @@
 package nextstep.subway.path.domain;
 
-public class Fare {
+import nextstep.subway.path.domain.policy.FarePolicyTemplate;
+import nextstep.subway.path.domain.policy.age.AgeFarePolicy;
+import nextstep.subway.path.domain.policy.line.LineFarePolicy;
+
+public class Fare extends FarePolicyTemplate {
 
     public static final int DEFAULT_FARE = 1250;
     public static final int INCREASE_FARE = 100;
     public static final int NUMBER_ONE = 1;
 
-    private final int fare;
-
-    public Fare(FareRuleStrategy fareRuleStrategy, int distance) {
-        this.fare = fareRuleStrategy.calculateFare(distance);
+    public Fare(LineFarePolicy lineFarePolicy, AgeFarePolicy ageFarePolicy, int distance) {
+        super(lineFarePolicy, ageFarePolicy, distance);
     }
 
-    public int getFare() {
-        return fare;
+    @Override
+    public void applyLineFarePolicy(LineFarePolicy farePolicy) {
+        this.fare = farePolicy.calculateLineFare(fare);
+    }
+
+    @Override
+    protected void applyAgeFarePolicy(AgeFarePolicy ageFarePolicy) {
+        this.fare = ageFarePolicy.calculateAgeFare(fare);
+    }
+
+    @Override
+    public void addExtraCharge(int extraCharge) {
+        this.fare += extraCharge;
     }
 }
