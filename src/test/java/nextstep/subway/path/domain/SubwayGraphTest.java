@@ -15,7 +15,7 @@ public class SubwayGraphTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 선릉역, 10, 10);
         SubwayGraph subwayGraph = new SubwayGraph(Lists.newArrayList(line), PathType.DISTANCE);

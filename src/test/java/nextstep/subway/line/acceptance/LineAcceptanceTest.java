@@ -21,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 노선 관련 기능")
 public class LineAcceptanceTest extends AcceptanceTest {
+    static final int SURCHARGE = 900;
+
     private StationResponse 강남역;
     private StationResponse 광교역;
     private LineRequest lineCreateRequest;
@@ -33,7 +35,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         광교역 = 지하철역_등록되어_있음("광교역").as(StationResponse.class);
 
-        lineCreateRequest = new LineRequest("신분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 10, 10);
+        lineCreateRequest = new LineRequest("신분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 10, 10, SURCHARGE);
     }
 
     @DisplayName("지하철 노선을 생성한다.")
@@ -50,7 +52,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        LineRequest lineRequest = new LineRequest("구분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 15, 10);
+        LineRequest lineRequest = new LineRequest("구분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 15, 10, SURCHARGE);
         ExtractableResponse<Response> createResponse1 = 지하철_노선_등록되어_있음(lineRequest);
         ExtractableResponse<Response> createResponse2 = 지하철_노선_등록되어_있음(lineCreateRequest);
 
@@ -83,7 +85,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createResponse = 지하철_노선_등록되어_있음(lineCreateRequest);
 
         // when
-        LineRequest lineRequest = new LineRequest("구분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 15, 10);
+        LineRequest lineRequest = new LineRequest("구분당선", "bg-red-600", 강남역.getId(), 광교역.getId(), 15, 10, SURCHARGE);
         ExtractableResponse<Response> response = 지하철_노선_수정_요청(createResponse, lineRequest);
 
         // then
