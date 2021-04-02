@@ -1,6 +1,11 @@
 package nextstep.subway.path.documentation;
 
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -9,13 +14,14 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.time.LocalDateTime;
 
-import static nextstep.subway.path.documentation.PathSteps.*;
+import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.member.MemberSteps.회원_생성_요청;
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -30,6 +36,10 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     private PathResponse 강남_역삼_경로;
+    private TokenResponse token;
+    public static final String EMAIL = "email@email.com";
+    public static final String PASSWORD = "password";
+    public static final int AGE = 18;
 
     @BeforeEach
     void setUp() {
@@ -38,21 +48,26 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10, 10, 1250
         );
+        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        token = 로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     @Test
     void path() {
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(강남_역삼_경로);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(강남_역삼_경로);
 
-        getSpec(spec, "path",
-                getRequestParametersSnippet(),
-                getResponseFieldsSnippet())
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all();
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(getSpec(spec, "path",
+                getRequestParametersSnippet(), getResponseFieldsSnippet()), token, 1L, 2L);
+    }
+
+    private RequestSpecification getSpec(RequestSpecification spec, String identifier,
+                                               RequestParametersSnippet request, ResponseFieldsSnippet response) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(document(identifier,
+                        getRequestParametersSnippet(), getResponseFieldsSnippet(),
+                        request, response));
     }
 
     private RequestParametersSnippet getRequestParametersSnippet() {

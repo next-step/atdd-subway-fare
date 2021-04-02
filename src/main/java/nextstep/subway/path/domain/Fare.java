@@ -3,7 +3,13 @@ package nextstep.subway.path.domain;
 import nextstep.subway.path.exception.IllegalFareException;
 
 public class Fare {
+    public static final int BASIC_FARE = 1250;
+
     private int fare;
+
+    public Fare() {
+        this.fare = BASIC_FARE;
+    }
 
     public Fare(int fare) {
         validateFare(fare);

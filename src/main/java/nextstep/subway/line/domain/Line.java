@@ -15,6 +15,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private int fare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -58,6 +59,10 @@ public class Line extends BaseEntity {
 
     public void removeSection(Station station) {
         sections.removeSection(station);
+    }
+
+    public int getFare() {
+        return fare;
     }
 
     @Override

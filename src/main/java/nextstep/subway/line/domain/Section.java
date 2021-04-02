@@ -85,4 +85,8 @@ public class Section {
         this.distance -= newDistance;
         this.duration -= newDuration;
     }
+
+    public int getLineFare() {
+        return line.getFare();
+    }
 }

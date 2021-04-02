@@ -1,7 +1,9 @@
 package nextstep.subway.auth.ui.authorization;
 
+import nextstep.subway.auth.application.UserDetails;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
+import nextstep.subway.auth.exception.UnauthorizedException;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -11,8 +13,16 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final UserDetails anonymous;
+
+    public AuthenticationPrincipalArgumentResolver(UserDetails anonymous) {
+        this.anonymous = anonymous;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -21,11 +31,23 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        if (Objects.isNull(authentication)) {
+            checkRequired(authenticationPrincipal);
+            return anonymous;
+        }
+
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
         }
 
         return authentication.getPrincipal();
+    }
+
+    private void checkRequired(AuthenticationPrincipal authenticationPrincipal) {
+        if (authenticationPrincipal.required()) {
+            throw new UnauthorizedException("로그인 필수");
+        }
     }
 
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
