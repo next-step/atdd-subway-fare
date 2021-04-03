@@ -15,7 +15,7 @@ public class Fare extends FarePolicyTemplate {
     }
 
     @Override
-    public void applyLineFarePolicy(LineFarePolicy farePolicy) {
+    protected void applyLineFarePolicy(LineFarePolicy farePolicy) {
         this.fare = farePolicy.calculateLineFare(fare);
     }
 
@@ -25,7 +25,7 @@ public class Fare extends FarePolicyTemplate {
     }
 
     @Override
-    public void addExtraCharge(int extraCharge) {
+    protected void addExtraCharge(int extraCharge) {
         this.fare += extraCharge;
     }
 }
