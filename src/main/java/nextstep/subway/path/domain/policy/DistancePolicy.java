@@ -59,8 +59,13 @@ public class DistancePolicy {
 
         @Override
         public int fareCalculate(int fare) {
+            if (distance < 50) {
+                return 0;
+            }
+
             int overDistance = distance - FIFTY_DISTANCE;
             int overDistanceSubtract = distance - overDistance - TEN_DISTANCE;
+
             return fare + calculate(overDistanceSubtract, FIFTH_OVER_FARE) + calculate(overDistance, EIGHT_OVER_FARE);
         }
 
