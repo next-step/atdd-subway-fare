@@ -43,7 +43,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
 
     이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10,0);
-    신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10,0);
+    신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10,900);
     삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10,0);
 
     지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
@@ -78,6 +78,15 @@ public class PathAcceptanceTest extends AcceptanceTest {
     경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1250);
   }
 
+  @DisplayName("추가운임요금이 붙는 경로를 조회")
+  @Test
+  void findFareWithAdditionalFare() {
+    // when
+    ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역.getId(), 양재역.getId());
+
+    경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 양재역.getId()), 10, 10, 2150);
+  }
+
   @DisplayName("로그인한 사용자가 최단 경로를 조회")
   @Test
   void findUserPaths() {
@@ -92,4 +101,5 @@ public class PathAcceptanceTest extends AcceptanceTest {
     // then
     경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1070);
   }
+
 }
