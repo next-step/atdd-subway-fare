@@ -27,7 +27,7 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-    public int getMaxFare() {
-        return sections.getMaxFare();
+    public int getHighSurcharge() {
+        return sections.getHighSurcharge();
     }
 }
