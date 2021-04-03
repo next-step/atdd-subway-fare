@@ -26,6 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails emptyUser() {
-        return new EmptyMember();
+        return EmptyMember.getInstance();
     }
 }
