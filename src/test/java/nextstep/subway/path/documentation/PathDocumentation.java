@@ -32,7 +32,7 @@ public class PathDocumentation extends Documentation {
     void setUp() {
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         교대역 = 지하철역_등록되어_있음("교대역").as(StationResponse.class);
-        지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, 10);
+        지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, 10, 0);
 
         ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, 22);
         회원_생성됨(createResponse);

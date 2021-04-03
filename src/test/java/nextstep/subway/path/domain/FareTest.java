@@ -56,5 +56,5 @@ public class FareTest {
                 Arguments.of(52, 2250)
         );
     }
-    
+
 }

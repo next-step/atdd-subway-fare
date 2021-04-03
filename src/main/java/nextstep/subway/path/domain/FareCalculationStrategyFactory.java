@@ -36,15 +36,10 @@ public class FareCalculationStrategyFactory {
     }
 
     private static int getFareAddedByLines(List<Line> lines) {
-        for (Line line : lines) {
-            if ("신분당선".equals(line.getName())) {
-                return ADDED_LINE_FARE_MAX;
-            }
-            if ("공항철도".equals(line.getName())) {
-                return ADDED_LINE_FARE_MIDDLE;
-            }
-        }
-        return 0;
+        return lines.stream()
+                    .mapToInt(Line::getAdditionalFare)
+                    .max()
+                    .orElse(0);
     }
 
     private static FareCalculationStrategy getFinalFareByAge(int baseFare, LoginMember member) {
