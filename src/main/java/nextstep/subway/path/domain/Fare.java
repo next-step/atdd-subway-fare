@@ -9,8 +9,15 @@ public class Fare {
         this.fareCalculationStrategy = fareCalculationStrategy;
     }
 
-    public int get() {
-        return fareCalculationStrategy.calculate();
+    public Fare(int fare) {
+        this.fare = fare;
     }
 
+//    public int get() {
+//        return fareCalculationStrategy.calculate();
+//    }
+
+    public int getFare() {
+        return fare;
+    }
 }

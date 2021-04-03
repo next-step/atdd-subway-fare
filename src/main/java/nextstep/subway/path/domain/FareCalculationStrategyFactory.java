@@ -10,10 +10,6 @@ public class FareCalculationStrategyFactory {
     public static final int DEFAULT_FARE_DISTANCE = 10;
     public static final int ADD_100_FARE_DISTANCE = 50;
 
-    private static final int ADDED_LINE_FARE_MAX = 900;
-    private static final int ADDED_LINE_FARE_MIDDLE = 500;
-
-
     public static FareCalculationStrategy of(PathResult pathResult, LoginMember member) {
         int distance = pathResult.getTotalDistance();
         int fareByDistance = getFareByDistance(distance);

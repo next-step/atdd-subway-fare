@@ -24,8 +24,13 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult, member);
-        Fare fare = new Fare(strategy);
+//        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult, member);
+//        Fare fare = new Fare(strategy);
+
+        ChainOfFareCalculation fareCalculation = new ChainOfFareCalculation();
+        FareCalculationCriteria criteria = new FareCalculationCriteria(pathResult, member);
+        Fare fare = fareCalculation.getChain().calculate(criteria, new Fare(0));
+
         return PathResponse.of(pathResult, fare);
     }
 

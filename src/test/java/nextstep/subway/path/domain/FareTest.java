@@ -43,8 +43,13 @@ public class FareTest {
     void calculateOverFare(int distance, int fare) {
         when(pathResult.getSections()).thenReturn(sections);
         when(pathResult.getTotalDistance()).thenReturn(distance);
-        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult, null);
-        assertThat(new Fare(strategy).get()).isEqualTo(fare);
+//        FareCalculationStrategy strategy = FareCalculationStrategyFactory.of(pathResult, null);
+//        assertThat(new Fare(strategy).get()).isEqualTo(fare);
+
+        ChainOfFareCalculation fareCalculation = new ChainOfFareCalculation();
+        FareCalculationCriteria criteria = new FareCalculationCriteria(pathResult, null);
+        Fare newFare = fareCalculation.getChain().calculate(criteria, new Fare(0));
+        assertThat(newFare.getFare()).isEqualTo(fare);
     }
 
     private static Stream<Arguments> fareProvider() {
