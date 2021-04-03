@@ -10,7 +10,7 @@ import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.acceptance.documentation.PathDocumentation;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
-import nextstep.subway.utils.BaseDocumentSteps;
+import nextstep.subway.utils.BaseDocumentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static nextstep.subway.member.acceptance.MemberRequestSteps.회원_생성
 import static nextstep.subway.path.acceptance.PathRequestSteps.지하철_최단_거리_및_최소_시간_경로_조회_요청;
 import static nextstep.subway.path.acceptance.PathVerificationSteps.*;
 import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
-import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
+import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 @DisplayName("지하철 경로 검색 인수 테스트")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -53,7 +53,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 신분당선;
     private LineResponse 삼호선;
 
-    private BaseDocumentSteps baseDocumentSteps;
+    private BaseDocumentation baseDocumentation;
 
     private TokenResponse 로그인_멤버_토큰 = new TokenResponse("Unauthorized");
 
@@ -101,8 +101,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("비로그인 사용자 지하철 최단 거리 경로 조회")
     void findPathByDistance() {
         // given
-        baseDocumentSteps = new PathDocumentation(spec);
-        RequestSpecification 최단_경로_탐색_문서화_요청 = baseDocumentSteps.requestDocumentOfFind(DOCUMENT_IDENTIFIER_PATH);
+        baseDocumentation = new PathDocumentation(spec);
+        RequestSpecification 최단_경로_탐색_문서화_요청 = baseDocumentation.requestDocumentOfFind(DOCUMENT_IDENTIFIER_PATH);
 
         // when
         ExtractableResponse<Response> response = 지하철_최단_거리_및_최소_시간_경로_조회_요청(최단_경로_탐색_문서화_요청, 로그인_멤버_토큰, 강남역.getId(), 역삼역.getId(), PathType.DISTANCE);

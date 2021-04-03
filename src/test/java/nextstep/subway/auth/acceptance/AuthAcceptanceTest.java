@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.member.acceptance.MemberRequestSteps.*;
 import static nextstep.subway.member.acceptance.MemberVerificationSteps.회원_정보_조회_됨;
-import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
+import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
 

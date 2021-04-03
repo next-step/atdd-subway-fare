@@ -1,7 +1,7 @@
 package nextstep.subway.member.acceptance.documentation;
 
 import io.restassured.specification.RequestSpecification;
-import nextstep.subway.utils.BaseDocumentSteps;
+import nextstep.subway.utils.BaseDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -12,7 +12,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
-public class MemberDocumentation extends BaseDocumentSteps {
+public class MemberDocumentation extends BaseDocumentation {
 
     public MemberDocumentation(RequestSpecification spec) {
         super(spec);

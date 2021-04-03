@@ -1,7 +1,7 @@
 package nextstep.subway.line.acceptance.documentation;
 
 import io.restassured.specification.RequestSpecification;
-import nextstep.subway.utils.BaseDocumentSteps;
+import nextstep.subway.utils.BaseDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
@@ -11,7 +11,7 @@ import static nextstep.subway.line.acceptance.documentation.LineDocumentation.in
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
-public class LineFindDocumentation extends BaseDocumentSteps {
+public class LineFindDocumentation extends BaseDocumentation {
 
     public LineFindDocumentation(RequestSpecification spec) {
         super(spec);

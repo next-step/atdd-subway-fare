@@ -7,13 +7,13 @@ import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.member.acceptance.documentation.MemberDocumentation;
 import nextstep.subway.member.acceptance.documentation.MemberLoginDocumentation;
 import nextstep.subway.utils.AcceptanceTest;
-import nextstep.subway.utils.BaseDocumentSteps;
+import nextstep.subway.utils.BaseDocumentation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.member.acceptance.MemberRequestSteps.*;
 import static nextstep.subway.member.acceptance.MemberVerificationSteps.*;
-import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
+import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 public class MemberAcceptanceTest extends AcceptanceTest {
 
@@ -26,14 +26,14 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     public static final String NEW_PASSWORD = "newpassword";
     public static final int NEW_AGE = 21;
 
-    private BaseDocumentSteps baseDocumentSteps;
+    private BaseDocumentation baseDocumentation;
 
     @DisplayName("회원가입을 한다.")
     @Test
     void registerMember() {
         // given
-        baseDocumentSteps = new MemberDocumentation(spec);
-        RequestSpecification 사용자_회원가입_문서화_요청 = baseDocumentSteps.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_MEMBER);
+        baseDocumentation = new MemberDocumentation(spec);
+        RequestSpecification 사용자_회원가입_문서화_요청 = baseDocumentation.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_MEMBER);
 
         // when
         ExtractableResponse<Response> response = 회원_생성_요청(사용자_회원가입_문서화_요청, EMAIL, PASSWORD, AGE);
@@ -46,8 +46,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("로그인을 한다.")
     void loginMember() {
         // given
-        baseDocumentSteps = new MemberLoginDocumentation(spec);
-        RequestSpecification 사용자_로그인_문서화_요청 = baseDocumentSteps.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_MEMBER);
+        baseDocumentation = new MemberLoginDocumentation(spec);
+        RequestSpecification 사용자_로그인_문서화_요청 = baseDocumentation.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_MEMBER);
         회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
 
         // when
@@ -129,8 +129,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("나의 정보를 조회한다.")
     void findMemberOfMine() {
         // given
-        baseDocumentSteps = new MemberDocumentation(spec);
-        RequestSpecification 회원_정보_조회_문서화_요청 = baseDocumentSteps.requestDocumentOfFind(DOCUMENT_IDENTIFIER_MEMBER);
+        baseDocumentation = new MemberDocumentation(spec);
+        RequestSpecification 회원_정보_조회_문서화_요청 = baseDocumentation.requestDocumentOfFind(DOCUMENT_IDENTIFIER_MEMBER);
         회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
         TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
 

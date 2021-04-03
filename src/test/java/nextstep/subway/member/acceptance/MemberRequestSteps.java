@@ -11,7 +11,7 @@ import nextstep.subway.member.dto.MemberRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
+import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 public class MemberRequestSteps {
 
