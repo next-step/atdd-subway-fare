@@ -65,4 +65,9 @@ public class PathSteps {
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+
+    public static void 경로_요금_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
+        경로_응답됨(response, expectedStationIds, distance, duration);
+        assertThat(response.as(PathResponse.class).getFare()).isEqualTo(fare);
+    }
 }
