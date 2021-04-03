@@ -9,29 +9,18 @@ import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.exception.DoesNotConnectedPathException;
 import nextstep.subway.path.exception.SameStationPathSearchException;
 import nextstep.subway.station.domain.Station;
-import nextstep.subway.station.domain.StationRepository;
 import nextstep.subway.station.exception.StationNonExistException;
+import nextstep.subway.utils.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("지하철 경로 조회 비즈니스 로직 단위 테스트")
-@SpringBootTest
-@Transactional
-public class PathServiceTest {
-
-    private static final int ADULT_MEMBER_AGE = 20;
-    private static final int YOUTH_MEMBER_AGE = 17;
-    private static final int CHILD_MEMBER_AGE = 7;
-
-    @Autowired
-    private StationRepository stationRepository;
+public class PathServiceTest extends UnitTest {
 
     @Autowired
     private LineService lineService;
@@ -39,28 +28,14 @@ public class PathServiceTest {
     @Autowired
     private PathService pathService;
 
-    private Station savedStationGangNam;
-    private Station savedStationYeokSam;
-    private Station savedStationYangJae;
-    private Station savedStationYangJaeCitizensForest;
-    private Station savedStationCheonggyesan;
-    private Station savedStationGyoDae;
-    private Station savedStationNambuTerminal;
-
     private LineRequest line2Request;
     private LineRequest line3Request;
     private LineRequest lineNewBunDang;
 
     @BeforeEach
-    void setUp() {
-        savedStationGangNam = stationRepository.save(new Station("강남역"));
-        savedStationYeokSam = stationRepository.save(new Station("역삼역"));
-        savedStationYangJae = stationRepository.save(new Station("양재역"));
-        savedStationYangJaeCitizensForest = stationRepository.save(new Station("양재시민의숲역"));
-        savedStationCheonggyesan = stationRepository.save(new Station("청계산입구역"));
-        savedStationGyoDae = stationRepository.save(new Station("교대역"));
-        savedStationNambuTerminal = stationRepository.save(new Station("남부터미널역"));
-
+    public void setUp() {
+        super.setUp();
+        // given
         line2Request = new LineRequest("2호선", "bg-green-600", savedStationGyoDae.getId(), savedStationGangNam.getId(), 7, 7);
         LineResponse line2Response = lineService.saveLine(line2Request);
         lineService.addSectionToLine(line2Response.getId(), createSectionRequest(savedStationGangNam, savedStationYeokSam, 5, 5));
@@ -204,7 +179,7 @@ public class PathServiceTest {
     @DisplayName("출발역과 도착역이 연결되어 있지 않은 경우 예외 발생")
     void notConnectedSourceAndTarget() {
         // given
-        Station savedStationMyeongDong = stationRepository.save(new Station("명동역"));
+
 
         long source = savedStationGangNam.getId();
         long target = savedStationMyeongDong.getId();
