@@ -4,13 +4,17 @@ import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.subway.favorite.FavoriteAcceptanceTest.EMAIL;
+import static nextstep.subway.favorite.FavoriteAcceptanceTest.PASSWORD;
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
+import static nextstep.subway.member.MemberSteps.*;
 import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
@@ -23,6 +27,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 이호선;
     private LineResponse 신분당선;
     private LineResponse 삼호선;
+    private TokenResponse 사용자_어린이;
 
     @BeforeEach
     public void setUp() {
@@ -33,11 +38,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
 
-        이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10);
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10);
-        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10);
+        이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10, 0);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10, 900);
+        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10, 0);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
+
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, 7);
+        회원_생성됨(createResponse);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -59,6 +67,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
-        이용요금_응답됨(response, 1450);
+        이용요금_응답됨(response, 1450+900);
     }
+
+    @DisplayName("어린이 요금 할인 적용을 확인한다.")
+    @Test
+    void findPathAndFareByDurationWithChildAge() {
+        // given
+        사용자_어린이 = 로그인_되어_있음(EMAIL, PASSWORD);
+        // when
+        ExtractableResponse<Response> response = 로그인한_상태_두_역의_최소_소요_시간_경로_조회를_요청(사용자_어린이, 교대역.getId(), 양재역.getId());
+        // then
+        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+        이용요금_응답됨(response, (1450+900-350)/2);
+    }
+
 }

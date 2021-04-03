@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
@@ -139,5 +140,9 @@ public class Sections {
 
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
+    }
+
+    public List<Line> getLinesIncluded() {
+        return sections.stream().map(Section::getLine).collect(Collectors.toList());
     }
 }

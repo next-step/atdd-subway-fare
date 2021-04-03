@@ -19,6 +19,8 @@ public class PathResult {
         return stations.getStations();
     }
 
+    public Sections getSections() { return sections; }
+
     public int getTotalDistance() {
         return sections.getTotalDistance();
     }
@@ -26,6 +28,5 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
-
 
 }
