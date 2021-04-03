@@ -3,12 +3,9 @@ package nextstep.subway.path.application;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.domain.Fare;
+import nextstep.subway.path.domain.FarePolicies;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
-import nextstep.subway.path.domain.policy.AgeDiscountPolicy;
-import nextstep.subway.path.domain.policy.DistancePolicy;
-import nextstep.subway.path.domain.policy.FarePolicy;
-import nextstep.subway.path.domain.policy.LinePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -18,10 +15,12 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private GraphService graphService;
     private StationService stationService;
+    private FareService fareService;
 
-    public PathService(GraphService graphService, StationService stationService) {
+    public PathService(GraphService graphService, StationService stationService, FareService fareService) {
         this.graphService = graphService;
         this.stationService = stationService;
+        this.fareService = fareService;
     }
 
     public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
@@ -33,13 +32,10 @@ public class PathService {
 
         Fare fare = new Fare();
 
-        FarePolicy fareDistancePolicy = DistancePolicy.getDistancePolicy(pathResult.getTotalDistance());
-        FarePolicy linePolicy = LinePolicy.getLinePolicy(pathResult.getMaxFare());
-        FarePolicy discountPolicy = AgeDiscountPolicy.getAgeDiscountPolicy(loginMember.getAge());
+        FarePolicies farePolicies = fareService.calculate(pathResult, loginMember);
+        int resultFare = farePolicies.calculate(fare.getFare());
 
-        fare.addAllFarePolicy(fareDistancePolicy, linePolicy, discountPolicy);
-        fare.calculate(fare.getFare());
-        return PathResponse.of(pathResult, fare);
+        return PathResponse.of(pathResult, new Fare(resultFare));
     }
 
 }
