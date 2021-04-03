@@ -49,10 +49,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         최단_거리_경로를_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()));
         총_거리와_소요_시간을_함께_응답함(response, 5, 20);
-        지하철_이용_요금도_함께_응답함(response, 0);
+        지하철_이용_요금도_함께_응답함(response, 1250);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.리 - 최소시간")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. - 최소시간")
     @Test
     void findPathByDuration() {
         // when
