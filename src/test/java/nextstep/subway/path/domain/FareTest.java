@@ -48,7 +48,7 @@ class FareTest {
         assertThat(fare.getFare()).isEqualTo(1450);
     }
 
-    @DisplayName("총 거리가 50km인 경우, 1350의 요금이 발생한다")
+    @DisplayName("총 거리가 50km인 경우, 2050의 요금이 발생한다")
     @Test
     void getFareAt50() {
         // when

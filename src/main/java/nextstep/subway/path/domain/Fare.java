@@ -2,21 +2,31 @@ package nextstep.subway.path.domain;
 
 public class Fare {
 
+    private static final int DEFAULT_FARE = 1250;
+    private static final int FIRST_FARE_THRESHOLD = 10;
+    private static final int FIRST_FARE_OFFSET = 5;
+    private static final int FIRST_FARE_LIMIT = 800;
+    private static final int SECOND_FARE_THRESHOLD = 50;
+    private static final int SECOND_FARE_OFFSET = 8;
+
     private int fare;
 
     public Fare(int distance) {
+        if(distance < 0) {
+            throw new RuntimeException("요금은 양수입니다.");
+        }
         calculate(distance);
     }
 
     private void calculate(int distance) {
-        int fare = 1250;
+        int fare = DEFAULT_FARE;
 
-        if(distance > 10) {
-            fare += Math.min(calculateOverFare(distance - 10, 5), 800);
+        if(distance > FIRST_FARE_THRESHOLD) {
+            fare += Math.min(calculateOverFare(distance - FIRST_FARE_THRESHOLD, FIRST_FARE_OFFSET), FIRST_FARE_LIMIT);
         }
 
-        if(distance > 50) {
-            fare += calculateOverFare(distance - 50, 8);
+        if(distance > SECOND_FARE_THRESHOLD) {
+            fare += calculateOverFare(distance - SECOND_FARE_THRESHOLD, SECOND_FARE_OFFSET);
         }
 
         this.fare = fare ;
