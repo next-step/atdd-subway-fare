@@ -15,4 +15,5 @@ public class ChainOfFareCalculation {
     public FareCalculationChain getChain() {
         return c1;
     }
+
 }
