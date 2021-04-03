@@ -1,5 +1,17 @@
 package nextstep.subway.path.acceptance;
 
+import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
+import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.member.MemberSteps.회원_생성_요청;
+import static nextstep.subway.member.MemberSteps.회원_생성됨;
+import static nextstep.subway.path.acceptance.PathSteps.경로_응답_요금포함;
+import static nextstep.subway.path.acceptance.PathSteps.경로_응답됨;
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_최소_소요_시간_경로_조회를_요청;
+import static nextstep.subway.path.acceptance.PathSteps.로그인한_사용자가_최단_거리_경로_조회_요청;
+import static nextstep.subway.path.acceptance.PathSteps.지하철_노선_등록되어_있음;
+import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
+
 import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -10,13 +22,6 @@ import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
-import static nextstep.subway.member.MemberSteps.로그인_되어_있음;
-import static nextstep.subway.member.MemberSteps.회원_생성_요청;
-import static nextstep.subway.member.MemberSteps.회원_생성됨;
-import static nextstep.subway.path.acceptance.PathSteps.*;
-import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -78,13 +83,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
     경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1250);
   }
 
-  @DisplayName("추가운임요금이 붙는 경로를 조회")
+  @DisplayName("추가요금이 붙는 노선의 지하철 이용 요금을 조회한다")
   @Test
-  void findFareWithAdditionalFare() {
+  void findFareWithAdditionalFeeByPath() {
     // when
     ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역.getId(), 양재역.getId());
 
-    경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 양재역.getId()), 10, 10, 2150);
+    경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(),양재역.getId()), 10, 10, 2150);
   }
 
   @DisplayName("로그인한 사용자가 최단 경로를 조회")
@@ -101,5 +106,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
     // then
     경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1070);
   }
+
 
 }
