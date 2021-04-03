@@ -28,6 +28,7 @@ public class PathResult {
     }
 
     public int getTotalFare() {
-        return sections.getTotalFare();
+        FareCalculator fareCalculator = new FareCalculator(sections);
+        return fareCalculator.getTotalFare();
     }
 }

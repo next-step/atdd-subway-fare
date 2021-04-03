@@ -1,6 +1,7 @@
 package nextstep.subway.path.documentation;
 
 import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.path.application.PathService;
@@ -40,7 +41,8 @@ public class PathDocumentation extends Documentation {
         경로_탐색할_때(pathService, pathResponse);
 
         //then
-        문서를_위한_두_역의_최단_거리_경로_조회를_요청(1L, 3L, spec);
+        RequestSpecification requestSpecification = specificationForMakeDocument("path");
+        두_역의_최단_거리_경로_조회를_요청(requestSpecification, 1L, 3L);
     }
 }
 
