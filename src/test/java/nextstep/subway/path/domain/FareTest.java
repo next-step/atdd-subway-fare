@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.path.domain.fare.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

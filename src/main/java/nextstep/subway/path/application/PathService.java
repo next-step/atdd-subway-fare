@@ -1,7 +1,7 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
-import nextstep.subway.path.domain.Fare;
+import nextstep.subway.path.domain.fare.Fare;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.dto.PathResponse;
