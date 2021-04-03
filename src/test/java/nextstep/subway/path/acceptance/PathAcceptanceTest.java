@@ -28,6 +28,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
     public void setUp() {
         super.setUp();
 
+        /**
+         *         교대역 ----- 10(10) ----- 강남역
+         *           |                       |
+         *          2(10)                  10(10)
+         *           |                       |
+         *       남부터미널역 ---- 3(10) ----  양재역
+         */
+
         교대역 = 지하철역_등록되어_있음("교대역").as(StationResponse.class);
         강남역 = 지하철역_등록되어_있음("강남역").as(StationResponse.class);
         양재역 = 지하철역_등록되어_있음("양재역").as(StationResponse.class);
@@ -50,7 +58,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         // when
@@ -58,5 +66,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회하고 기본운임인지 확인한다.")
+    @Test
+    void findPathByDistanceWithExtraInfo() {
+        // given
+        final int 기본운임 = 1250;
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역 .getId());
+
+        // then
+        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+        요금_응답됨(response, 기본운임);
     }
 }
