@@ -13,28 +13,24 @@ import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
 
-    private static final String EMAIL = "email@email.com";
-    private static final String PASSWORD = "password";
-    private static final Integer AGE = 20;
-
     @Test
     @DisplayName("Session 로그인 후 내 정보 조회")
     void myInfoWithSession() {
-        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
+        회원_생성_요청(givenDefault(), ADULT_EMAIL, PASSWORD, ADULT_AGE);
 
-        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(ADULT_EMAIL, PASSWORD);
 
-        회원_정보_조회_됨(response, EMAIL, AGE);
+        회원_정보_조회_됨(response, ADULT_EMAIL, ADULT_AGE);
     }
 
     @Test
     @DisplayName("Bearer Auth")
     void myInfoWithBearerAuth() {
-        회원_생성_요청(givenDefault(), EMAIL, PASSWORD, AGE);
-        TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
+        회원_생성_요청(givenDefault(), ADULT_EMAIL, PASSWORD, ADULT_AGE);
+        TokenResponse tokenResponse = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
 
         ExtractableResponse<Response> response = 내_회원_정보_조회_요청(givenDefault(), tokenResponse);
 
-        회원_정보_조회_됨(response, EMAIL, AGE);
+        회원_정보_조회_됨(response, ADULT_EMAIL, ADULT_AGE);
     }
 }

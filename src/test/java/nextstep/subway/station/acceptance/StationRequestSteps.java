@@ -10,9 +10,6 @@ import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 public class StationRequestSteps {
 
-    public static final String 강남역 = "강남역";
-    public static final String 역삼역 = "역삼역";
-
     public static ExtractableResponse<Response> 지하철_역_등록_됨(String name) {
         return 지하철_역_생성_요청(givenDefault(), name);
     }

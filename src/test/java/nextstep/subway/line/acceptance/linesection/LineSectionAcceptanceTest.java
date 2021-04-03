@@ -6,9 +6,7 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.acceptance.documentation.LineSectionDocumentation;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
-import nextstep.subway.utils.BaseDocumentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,6 @@ import java.util.Arrays;
 import static nextstep.subway.line.acceptance.line.LineRequestSteps.지하철_노선_생성_요청;
 import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.*;
 import static nextstep.subway.line.acceptance.linesection.LineSectionVerificationSteps.*;
-import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
 import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 @DisplayName("지하철 노선에 역 등록 관련 기능")
@@ -27,27 +24,11 @@ public class LineSectionAcceptanceTest extends AcceptanceTest {
 
     private static final String DOCUMENT_IDENTIFIER_LINE_SECTION = "linesection/{method-name}";
 
-    private StationResponse 강남역;
-    private StationResponse 양재역;
-    private StationResponse 양재시민의숲역;
-    private StationResponse 청계산입구역;
-    private StationResponse 판교역;
-
-    private LineResponse 신분당선;
-
-    private BaseDocumentation baseDocumentation;
-
     @BeforeEach
     public void init(RestDocumentationContextProvider restDocumentation) {
         super.setUp(restDocumentation);
 
         // given
-        강남역 = 지하철_역_등록_됨("강남역").as(StationResponse.class);
-        양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
-        양재시민의숲역 = 지하철_역_등록_됨("양재시민의숲역").as(StationResponse.class);
-        청계산입구역 = 지하철_역_등록_됨("청계산입구역").as(StationResponse.class);
-        판교역 = 지하철_역_등록_됨("판교역").as(StationResponse.class);
-
         LineRequest 신분당선_생성_요청 = 노선_요청("신분당선", "bg-red-600", 양재역.getId(), 청계산입구역.getId(), 7, 10);
         신분당선_생성_요청.addExtraCharge(900);
 

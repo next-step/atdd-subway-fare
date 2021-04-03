@@ -10,7 +10,6 @@ import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.acceptance.documentation.PathDocumentation;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
-import nextstep.subway.utils.BaseDocumentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,28 +31,6 @@ import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 public class PathAcceptanceTest extends AcceptanceTest {
 
     private static final String DOCUMENT_IDENTIFIER_PATH = "path/{method-name}";
-    private static final String ADULT_EMAIL = "adult-email@email.com";
-    private static final String YOUTH_EMAIL = "youth-email@email.com";
-    private static final String CHILD_EMAIL = "child-email@email.com";
-    private static final String PASSWORD = "password";
-    private static final int ADULT_AGE = 20;
-    private static final int YOUTH_AGE = 17;
-    private static final int CHILD_AGE = 7;
-
-    private StationResponse 교대역;
-    private StationResponse 강남역;
-    private StationResponse 역삼역;
-    private StationResponse 삼성역;
-    private StationResponse 양재역;
-    private StationResponse 양재시민의숲역;
-    private StationResponse 청계산입구역;
-    private StationResponse 남부터미널역;
-
-    private LineResponse 이호선;
-    private LineResponse 신분당선;
-    private LineResponse 삼호선;
-
-    private BaseDocumentation baseDocumentation;
 
     private TokenResponse 로그인_멤버_토큰 = new TokenResponse("Unauthorized");
 
@@ -68,23 +45,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         super.setUp(restDocumentation);
 
-        교대역 = 지하철_역_등록_됨("교대역").as(StationResponse.class);
-        강남역 = 지하철_역_등록_됨("강남역").as(StationResponse.class);
-        역삼역 = 지하철_역_등록_됨("역삼역").as(StationResponse.class);
-        삼성역 = 지하철_역_등록_됨("삼성역").as(StationResponse.class);
-        양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
-        양재시민의숲역 = 지하철_역_등록_됨("양재시민의숲역").as(StationResponse.class);
-        청계산입구역 = 지하철_역_등록_됨("청계산입구역").as(StationResponse.class);
-        남부터미널역 = 지하철_역_등록_됨("남부터미널역").as(StationResponse.class);
-
         LineRequest 신분당선_생성_요청 = 노선_요청("신분당선", "green", 강남역.getId(), 양재역.getId(), 5, 5);
         신분당선_생성_요청.addExtraCharge(900);
         신분당선 = 지하철_노선_생성_요청(givenDefault(), 신분당선_생성_요청).as(LineResponse.class);
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재역.getId(), 양재시민의숲역.getId(), 3, 3);
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재시민의숲역.getId(), 청계산입구역.getId(), 4, 7);
 
-        이호선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("2호선", "green", 교대역.getId(), 강남역.getId(), 7, 7)).as(LineResponse.class);
-        지하철_노선에_구간_등록_요청(givenDefault(), 이호선.getId(), 강남역.getId(), 역삼역.getId(), 5, 5);
+        이호선 = 지하철_노선_생성_요청(givenDefault(), 노선_요청("2호선", "green", 강남역.getId(), 역삼역.getId(), 5, 5)).as(LineResponse.class);
+        지하철_노선에_구간_등록_요청(givenDefault(), 이호선.getId(), 교대역.getId(), 강남역.getId(), 7, 7);
         지하철_노선에_구간_등록_요청(givenDefault(), 이호선.getId(), 역삼역.getId(), 삼성역.getId(), 8, 8);
 
         LineRequest 삼호선_생성_요청 = 노선_요청("3호선", "green", 교대역.getId(), 남부터미널역.getId(), 3, 3);

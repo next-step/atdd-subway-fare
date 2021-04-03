@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.station.acceptance.documentation.StationDocumentation;
 import nextstep.subway.utils.AcceptanceTest;
-import nextstep.subway.utils.BaseDocumentation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,8 @@ public class StationAcceptanceTest extends AcceptanceTest {
 
     private static final String DOCUMENT_IDENTIFIER_STATION = "station/{method-name}";
 
-    private BaseDocumentation baseDocumentation;
+    private static final String 시청역 = "시청역";
+    private static final String 을지로3가역 = "을지로3가역";
 
     @Test
     @DisplayName("지하철역을 생성한다.")
@@ -30,7 +30,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         RequestSpecification 지하철_역_생성_문서화_요청 = baseDocumentation.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_STATION);
 
         // when
-        ExtractableResponse<Response> response = 지하철_역_생성_요청(지하철_역_생성_문서화_요청, "강남역");
+        ExtractableResponse<Response> response = 지하철_역_생성_요청(지하철_역_생성_문서화_요청, 시청역);
 
         // then
         지하철_역_생성_됨(response);
@@ -40,10 +40,10 @@ public class StationAcceptanceTest extends AcceptanceTest {
     @DisplayName("기존에 존재하는 지하철역 이름으로 지하철역을 생성한다.")
     void createStationWithDuplicateName() {
         //given
-        지하철_역_등록_됨(강남역);
+        지하철_역_등록_됨(시청역);
 
         // when
-        ExtractableResponse<Response> response = 지하철_역_생성_요청(givenDefault(), 강남역);
+        ExtractableResponse<Response> response = 지하철_역_생성_요청(givenDefault(), 시청역);
 
         // then
         지하철_역_생성_실패_됨(response);
@@ -56,8 +56,8 @@ public class StationAcceptanceTest extends AcceptanceTest {
         baseDocumentation = new StationDocumentation(spec);
         RequestSpecification 지하철_역_목록_조회_문서화_요청 = baseDocumentation.requestDocumentOfDefault(DOCUMENT_IDENTIFIER_STATION);
 
-        ExtractableResponse<Response> createResponse1 = 지하철_역_등록_됨(강남역);
-        ExtractableResponse<Response> createResponse2 = 지하철_역_등록_됨(역삼역);
+        ExtractableResponse<Response> createResponse1 = 지하철_역_등록_됨(시청역);
+        ExtractableResponse<Response> createResponse2 = 지하철_역_등록_됨(을지로3가역);
 
         // when
         ExtractableResponse<Response> response = 지하철_역_목록_조회_요청(지하철_역_목록_조회_문서화_요청);
@@ -74,7 +74,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         baseDocumentation = new StationDocumentation(spec);
         RequestSpecification 지하철_역_제거_문서화_요청 = baseDocumentation.requestDocumentOfDefault(DOCUMENT_IDENTIFIER_STATION);
 
-        ExtractableResponse<Response> createResponse = 지하철_역_등록_됨(강남역);
+        ExtractableResponse<Response> createResponse = 지하철_역_등록_됨(시청역);
 
         // when
         ExtractableResponse<Response> response = 지하철_역_제거_요청(지하철_역_제거_문서화_요청, 생성된_지하철_역_URI_경로_확인(createResponse));
