@@ -17,8 +17,9 @@ import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
-    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
+    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation,
+        StationResponse downStation, int distance, int duration, int charge) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, charge);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
