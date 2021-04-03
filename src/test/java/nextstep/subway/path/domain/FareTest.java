@@ -13,9 +13,9 @@ class FareTest {
   @DisplayName("경로의 총 길이별로 요금을 계산한다")
   @ParameterizedTest
   @MethodSource("testParameters")
-  void calculate(int kilometer, long price) {
+  void calculate(int kilometer, long price, int lineAdditionalPrice) {
     //given
-    Fare fare = new Fare(kilometer);
+    Fare fare = new Fare(kilometer, lineAdditionalPrice);
     //when
     long cost = fare.getCost();
     //then
@@ -24,10 +24,11 @@ class FareTest {
 
   private static Stream<Arguments> testParameters() {
     return Stream.of(
-        Arguments.of(10, 1250),
-        Arguments.of(15, 1350),
-        Arguments.of(57, 2050),
-        Arguments.of(58, 2150)
+        Arguments.of(10, 1250, 0),
+        Arguments.of(15, 1350, 0),
+        Arguments.of(57, 2050, 0),
+        Arguments.of(58, 2150, 0),
+        Arguments.of(58, 3050, 900)
     );
   }
 
