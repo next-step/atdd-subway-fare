@@ -17,13 +17,13 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import java.time.LocalDateTime;
 import nextstep.subway.Documentation;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
@@ -47,7 +47,7 @@ public class PathDocumentation extends Documentation {
         1250
     );
 
-    when(pathService.findPath(anyLong(), anyLong(), any()))
+    when(pathService.findPath(anyLong(), anyLong(), any(),new LoginMember(1L,"test@test.com","password",7)))
         .thenReturn(강남역_역삼역_경로);
 
     RequestParametersSnippet requestParametersSnippet = requestParameters(

@@ -90,6 +90,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
     ExtractableResponse<Response> response = 로그인한_사용자가_최단_거리_경로_조회_요청(강남역.getId(), 남부터미널역.getId(), "DISTANCE", tokenResponse);
 
     // then
-    경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 800);
+    경로_응답_요금포함(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 남부터미널역.getId()), 12, 20, 1070);
   }
 }
