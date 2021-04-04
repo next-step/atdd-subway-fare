@@ -1,10 +1,10 @@
 package nextstep.subway.path.dto;
 
+import java.util.List;
+
 import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.station.dto.StationResponse;
-
-import java.util.List;
 
 public class PathResponse {
     private List<StationResponse> stations;
