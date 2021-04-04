@@ -10,12 +10,12 @@ public class LinePolicy implements FarePolicy {
 		this.charge = charge;
 	}
 
-	public static FarePolicy of(int charge) {
+	public static LinePolicy of(int charge) {
 		return new LinePolicy(charge);
 	}
 
 	@Override
-	public Fare getFare() {
-		return Fare.of(charge);
+	public Fare getFare(int fare) {
+		return Fare.of(charge + fare);
 	}
 }

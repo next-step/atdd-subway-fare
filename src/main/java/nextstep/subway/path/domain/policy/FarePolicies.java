@@ -22,7 +22,7 @@ public class FarePolicies {
 	public Fare calculate() {
 		Fare fare = Fare.of(ZERO);
 		for (FarePolicy farePolicy : farePolicies) {
-			fare = fare.addFare(farePolicy.getFare());
+			fare = farePolicy.getFare(fare.getFare());
 		}
 		return fare;
 	}

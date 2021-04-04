@@ -1,7 +1,8 @@
 package nextstep.subway.path.application;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
+import nextstep.subway.member.domain.Member;
+import nextstep.subway.member.domain.MemberRepository;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
@@ -29,6 +33,9 @@ class PathServiceTest {
 
 	@Autowired
 	private LineRepository lineRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	private Station 강남역;
 	private Station 역삼역;
@@ -59,8 +66,9 @@ class PathServiceTest {
 	@DisplayName("최단 경로 찾기")
 	@Test
 	void findPath() {
+		final Member member = memberRepository.save(new Member("test@test.com", "123", 20));
 		// when
-		PathResponse pathResponse = pathService.findPath(양재역.getId(), 교대역.getId(), PathType.DISTANCE);
+		PathResponse pathResponse = pathService.findPath(LoginMember.of(member), 양재역.getId(), 교대역.getId(), PathType.DISTANCE);
 
 		// then
 		assertThat(pathResponse.getDistance()).isEqualTo(5);

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
+import static nextstep.subway.member.MemberAcceptanceTest.*;
+import static nextstep.subway.member.MemberSteps.*;
 import static nextstep.subway.path.acceptance.PathSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
@@ -50,13 +53,18 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20, 2150);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. - 사용자 로그인(어린이 할인)")
     @Test
-    void findPathByDuration() {
+    void findPathByDistanceWithChildMember() {
+        // given
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, 12);
+        회원_생성됨(createResponse);
+        TokenResponse tokenResponse = 로그인_되어_있음(EMAIL, PASSWORD);
+
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId(), tokenResponse.getAccessToken());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20, 1950);
+        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20, 1250);
     }
 }

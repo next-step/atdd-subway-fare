@@ -21,7 +21,7 @@ class DistancePolicyTest {
 		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		Fare fare = distancePolicy.getFare();
+		Fare fare = distancePolicy.getFare(0);
 
 		// then
 		assertThat(fare.getFare()).isEqualTo(DEFAULT);
@@ -37,7 +37,7 @@ class DistancePolicyTest {
 		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		Fare fare = distancePolicy.getFare();
+		Fare fare = distancePolicy.getFare(0);
 
 		// then
 		assertThat(fare.getFare()).isEqualTo(DEFAULT + expectedFare);
@@ -53,7 +53,7 @@ class DistancePolicyTest {
 		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		Fare fare = distancePolicy.getFare();
+		Fare fare = distancePolicy.getFare(0);
 
 		// then
 		assertThat(fare.getFare()).isEqualTo(DEFAULT + expectedFare);

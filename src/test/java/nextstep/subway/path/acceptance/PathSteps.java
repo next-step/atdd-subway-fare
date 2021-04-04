@@ -39,6 +39,23 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
+        final RequestSpecification specification = RestAssured.given().log().all();
+        return 두_역의_최단_거리_경로_조회를_요청(specification, source, target, accessToken);
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(
+        RequestSpecification requestSpecification, Long source, Long target, String accessToken) {
+        return requestSpecification
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .auth().oauth2(accessToken)
+            .queryParam("source", source)
+            .queryParam("target", target)
+            .queryParam("type", "DISTANCE")
+            .when().get("/paths")
+            .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()

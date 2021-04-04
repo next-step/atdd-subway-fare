@@ -29,9 +29,9 @@ public class DistancePolicy implements FarePolicy {
 	}
 
 	@Override
-	public Fare getFare() {
+	public Fare getFare(int fare) {
 		return policies.stream()
-			.map(FarePolicy::getFare)
+			.map(farePolicy -> farePolicy.getFare(fare))
 			.reduce(Fare::addFare)
 			.orElse(Fare.of(ZERO));
 	}
@@ -46,8 +46,8 @@ public class DistancePolicy implements FarePolicy {
 		}
 
 		@Override
-		public Fare getFare() {
-			return Fare.of(DEFAULT_FARE);
+		public Fare getFare(int fare) {
+			return Fare.of(fare + DEFAULT_FARE);
 		}
 	}
 
@@ -57,13 +57,13 @@ public class DistancePolicy implements FarePolicy {
 			this.distance = distance;
 		}
 		@Override
-		public Fare getFare() {
+		public Fare getFare(int fare) {
 			if (distance <= FIRST_SECTION_LENGTH) {
 				return Fare.of(ZERO);
 			}
 
 			return Fare.of(
-				calculateOverFare(getPolicyDistance(distance) - FIRST_SECTION_LENGTH, FIRST_SURCHARGE_LENGTH)
+				fare + calculateOverFare(getPolicyDistance(distance) - FIRST_SECTION_LENGTH, FIRST_SURCHARGE_LENGTH)
 			);
 		}
 
@@ -79,13 +79,13 @@ public class DistancePolicy implements FarePolicy {
 		}
 
 		@Override
-		public Fare getFare() {
+		public Fare getFare(int fare) {
 			if (distance <= SECOND_SECTION_LENGTH) {
 				return Fare.of(ZERO);
 			}
 
 			return Fare.of(
-				calculateOverFare(distance - SECOND_SECTION_LENGTH, SECTION_SURCHARGE_LENGTH)
+				fare + calculateOverFare(distance - SECOND_SECTION_LENGTH, SECTION_SURCHARGE_LENGTH)
 			);
 		}
 	}
