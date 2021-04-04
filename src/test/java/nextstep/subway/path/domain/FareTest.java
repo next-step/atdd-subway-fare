@@ -2,7 +2,6 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.path.domain.fare.Fare;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -14,11 +13,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("요금 관련 테스트")
 class FareTest {
 
-    @ParameterizedTest(name = "총 거리가 {0}km일 경우, {1}의 요금이 발생한다")
+    @ParameterizedTest(name = "성인이 총 거리 {0}km를 탈 경우, {1}의 요금이 발생한다")
     @MethodSource("farePerDistance")
     void getFareAt10(int distance, int expected) {
         // when
-        Fare fare = new Fare(distance);
+        Fare fare = new Fare(distance, 20);
 
         // then
         assertThat(fare.getFare()).isEqualTo(expected);
