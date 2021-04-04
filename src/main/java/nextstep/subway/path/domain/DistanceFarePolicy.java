@@ -1,15 +1,15 @@
 package nextstep.subway.path.domain;
 
-public enum FarePolicy {
+public enum DistanceFarePolicy {
 
-    TENKM(10, 5, 800),
-    FIFTYKM(50, 8, Integer.MAX_VALUE);
+    TEN_KM(10, 5, 800),
+    FIFTY_KM(50, 8, Integer.MAX_VALUE);
 
     final private int overChargeDistance;
     final private int chargeEveryNKm;
     final private int maximumFare;
 
-    FarePolicy(int overChargeDistance, int chargeEveryNKm, int maximumFare) {
+    DistanceFarePolicy(int overChargeDistance, int chargeEveryNKm, int maximumFare) {
         this.overChargeDistance = overChargeDistance;
         this.chargeEveryNKm = chargeEveryNKm;
         this.maximumFare = maximumFare;
@@ -19,7 +19,7 @@ public enum FarePolicy {
         return overChargeDistance;
     }
 
-    public int takeChargeEveryNKm() {
+    public int doChargeEveryNKm() {
         return chargeEveryNKm;
     }
 

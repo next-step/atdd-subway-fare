@@ -27,8 +27,8 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-    public int getTotalFare() {
-        FareCalculator fareCalculator = new FareCalculator(sections);
+    public int getTotalFare(int age) {
+        FareCalculator fareCalculator = new FareCalculator(sections, age);
         return fareCalculator.getTotalFare();
     }
 }
