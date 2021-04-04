@@ -7,13 +7,11 @@ import nextstep.subway.line.dto.SectionRequest;
 import nextstep.subway.line.exception.CannotRemoveSectionException;
 import nextstep.subway.line.exception.LineAlreadyExistException;
 import nextstep.subway.station.domain.Station;
-import nextstep.subway.station.domain.StationRepository;
+import nextstep.subway.utils.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,33 +21,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("노선 비즈니스 로직 단위 테스트")
-@SpringBootTest
-@Transactional
-public class LineServiceTest {
-
-    @Autowired
-    private StationRepository stationRepository;
+public class LineServiceTest extends IntegrationTest {
 
     @Autowired
     private LineService lineService;
 
-    private Station savedStationGyoDae;
-    private Station savedStationGangnam;
-    private Station savedStationYeoksam;
-    private Station savedStationSeolleung;
-    private Station savedStationSamseong;
-
     private LineRequest line2Request;
 
     @BeforeEach
-    void setUp() {
-        savedStationGyoDae = stationRepository.save(new Station("교대역"));
-        savedStationGangnam = stationRepository.save(new Station("강남역"));
-        savedStationYeoksam = stationRepository.save(new Station("역삼역"));
-        savedStationSeolleung = stationRepository.save(new Station("선릉역"));
-        savedStationSamseong = stationRepository.save(new Station("삼성역"));
-
-        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGangnam.getId(), savedStationYeoksam.getId(), 5, 5);
+    public void setUp() {
+        super.setUp();
+        // given
+        line2Request = new LineRequest("2호선", "bg-green-600", savedStationGangNam.getId(), savedStationYeokSam.getId(), 5, 5);
     }
 
     @Test
@@ -110,8 +93,7 @@ public class LineServiceTest {
         // given
         lineService.saveLine(line2Request);
 
-        Station savedStationYangJae = stationRepository.save(new Station("양재역"));
-        LineRequest lineNewBundangRequest = new LineRequest("신분당선", "bg-red-600", savedStationGangnam.getId(), savedStationYangJae.getId(), 5, 5);
+        LineRequest lineNewBundangRequest = new LineRequest("신분당선", "bg-red-600", savedStationGangNam.getId(), savedStationYangJae.getId(), 5, 5);
         lineService.saveLine(lineNewBundangRequest);
 
         // when
@@ -128,11 +110,11 @@ public class LineServiceTest {
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
 
         // when
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationGyoDae, savedStationGangnam, 7, 7));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationGyoDae, savedStationGangNam, 7, 7));
 
         // then
         Line line = lineService.findLineById(savedLineResponse.getId());
-        assertThat(line.getStations()).containsExactlyElementsOf(Arrays.asList(savedStationGyoDae, savedStationGangnam, savedStationYeoksam));
+        assertThat(line.getStations()).containsExactlyElementsOf(Arrays.asList(savedStationGyoDae, savedStationGangNam, savedStationYeokSam));
     }
 
     @Test
@@ -140,14 +122,14 @@ public class LineServiceTest {
     void addSectionInMiddle() {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSamseong, 8, 8));
 
         // when
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 4, 4));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSeolleung, 4, 4));
 
         // then
         Line line = lineService.findLineById(savedLineResponse.getId());
-        assertThat(line.getStations()).containsExactlyElementsOf(Arrays.asList(savedStationGangnam, savedStationYeoksam, savedStationSeolleung, savedStationSamseong));
+        assertThat(line.getStations()).containsExactlyElementsOf(Arrays.asList(savedStationGangNam, savedStationYeokSam, savedStationSeolleung, savedStationSamseong));
     }
 
     @Test
@@ -157,11 +139,11 @@ public class LineServiceTest {
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
 
         // when
-        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
+        lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSamseong, 8, 8));
 
         // then
         Line line = lineService.findLineById(savedLineResponse.getId());
-        assertThat(line.getStations()).containsExactlyElementsOf(Arrays.asList(savedStationGangnam, savedStationYeoksam, savedStationSamseong));
+        assertThat(line.getStations()).containsExactlyElementsOf(Arrays.asList(savedStationGangNam, savedStationYeokSam, savedStationSamseong));
     }
 
     @Test
@@ -169,10 +151,10 @@ public class LineServiceTest {
     void removeUpStationSection() {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSamseong, 8, 8));
 
         // when
-        lineService.removeSectionToLine(savedLineResponse.getId(), savedStationGangnam.getId());
+        lineService.removeSectionToLine(savedLineResponse.getId(), savedStationGangNam.getId());
 
         // then
         Line resultLine = lineService.findLineById(savedLineResponse.getId());
@@ -184,11 +166,11 @@ public class LineServiceTest {
     void removeMiddleSection() {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSeolleung, 4, 4));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSamseong, 8, 8));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSeolleung, 4, 4));
 
         // when
-        lineService.removeSectionToLine(savedLineResponse.getId(), savedStationYeoksam.getId());
+        lineService.removeSectionToLine(savedLineResponse.getId(), savedStationYeokSam.getId());
 
         // then
         Line resultLine = lineService.findLineById(savedLineResponse.getId());
@@ -201,7 +183,7 @@ public class LineServiceTest {
         // given
         LineResponse savedLineResponse = lineService.saveLine(line2Request);
 
-        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeoksam, savedStationSamseong, 8, 8));
+        savedLineResponse = lineService.addSectionToLine(savedLineResponse.getId(), createSectionRequest(savedStationYeokSam, savedStationSamseong, 8, 8));
 
         // when
         lineService.removeSectionToLine(savedLineResponse.getId(), savedStationSamseong.getId());
@@ -219,7 +201,7 @@ public class LineServiceTest {
 
         // when & then
         assertThatExceptionOfType(CannotRemoveSectionException.class)
-                .isThrownBy(() -> lineService.removeSectionToLine(savedLineResponse.getId(), savedStationYeoksam.getId()));
+                .isThrownBy(() -> lineService.removeSectionToLine(savedLineResponse.getId(), savedStationYeokSam.getId()));
     }
 
     private SectionRequest createSectionRequest(Station upStation, Station downStation, int distance, int duration) {

@@ -31,7 +31,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class LineServiceMockTest {
 
-
     @Mock
     private LineRepository lineRepository;
     @Mock

@@ -11,11 +11,11 @@ import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
-public abstract class BaseDocumentSteps {
+public abstract class BaseDocumentation {
 
     private final RequestSpecification spec;
 
-    public BaseDocumentSteps(RequestSpecification spec) {
+    public BaseDocumentation(RequestSpecification spec) {
         this.spec = spec;
     }
 

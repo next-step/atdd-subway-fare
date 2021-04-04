@@ -6,9 +6,7 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.subway.line.acceptance.documentation.LineSectionDocumentation;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
-import nextstep.subway.utils.BaseDocumentSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,35 +17,18 @@ import java.util.Arrays;
 import static nextstep.subway.line.acceptance.line.LineRequestSteps.지하철_노선_생성_요청;
 import static nextstep.subway.line.acceptance.linesection.LineSectionRequestSteps.*;
 import static nextstep.subway.line.acceptance.linesection.LineSectionVerificationSteps.*;
-import static nextstep.subway.station.acceptance.StationRequestSteps.지하철_역_등록_됨;
-import static nextstep.subway.utils.BaseDocumentSteps.givenDefault;
+import static nextstep.subway.utils.BaseDocumentation.givenDefault;
 
 @DisplayName("지하철 노선에 역 등록 관련 기능")
 public class LineSectionAcceptanceTest extends AcceptanceTest {
 
     private static final String DOCUMENT_IDENTIFIER_LINE_SECTION = "linesection/{method-name}";
 
-    private StationResponse 강남역;
-    private StationResponse 양재역;
-    private StationResponse 양재시민의숲역;
-    private StationResponse 청계산입구역;
-    private StationResponse 판교역;
-
-    private LineResponse 신분당선;
-
-    private BaseDocumentSteps baseDocumentSteps;
-
     @BeforeEach
     public void init(RestDocumentationContextProvider restDocumentation) {
         super.setUp(restDocumentation);
 
         // given
-        강남역 = 지하철_역_등록_됨("강남역").as(StationResponse.class);
-        양재역 = 지하철_역_등록_됨("양재역").as(StationResponse.class);
-        양재시민의숲역 = 지하철_역_등록_됨("양재시민의숲역").as(StationResponse.class);
-        청계산입구역 = 지하철_역_등록_됨("청계산입구역").as(StationResponse.class);
-        판교역 = 지하철_역_등록_됨("판교역").as(StationResponse.class);
-
         LineRequest 신분당선_생성_요청 = 노선_요청("신분당선", "bg-red-600", 양재역.getId(), 청계산입구역.getId(), 7, 10);
         신분당선_생성_요청.addExtraCharge(900);
 
@@ -58,8 +39,8 @@ public class LineSectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선에 등록된 구간에 새로운 상행 역을 등록한다.")
     void addUpStationLineSection() {
         // given
-        baseDocumentSteps = new LineSectionDocumentation(spec);
-        RequestSpecification 지하철_노선_구간_생성_문서화_요청 = baseDocumentSteps.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_LINE_SECTION);
+        baseDocumentation = new LineSectionDocumentation(spec);
+        RequestSpecification 지하철_노선_구간_생성_문서화_요청 = baseDocumentation.requestDocumentOfAllType(DOCUMENT_IDENTIFIER_LINE_SECTION);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선에_구간_등록_요청(지하철_노선_구간_생성_문서화_요청, 신분당선.getId(), 강남역.getId(), 양재역.getId(), 5, 5);
@@ -140,8 +121,8 @@ public class LineSectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선에 등록된 상행 종점역을 제거한다.")
     void removeUpStationLineSection() {
         // given
-        baseDocumentSteps = new LineSectionDocumentation(spec);
-        RequestSpecification 지하철_노선_구간_제거_문서화_요청 = baseDocumentSteps.requestDocumentOfDefault(DOCUMENT_IDENTIFIER_LINE_SECTION);
+        baseDocumentation = new LineSectionDocumentation(spec);
+        RequestSpecification 지하철_노선_구간_제거_문서화_요청 = baseDocumentation.requestDocumentOfDefault(DOCUMENT_IDENTIFIER_LINE_SECTION);
 
         지하철_노선에_구간_등록_요청(givenDefault(), 신분당선.getId(), 양재역.getId(), 양재시민의숲역.getId(), 3, 3);
 

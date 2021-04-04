@@ -10,10 +10,10 @@ public abstract class FarePolicyTemplate {
 
     protected int fare;
 
-    public FarePolicyTemplate(LineFarePolicy lineFarePolicy, AgeFarePolicy ageFarePolicy, int distance) {
+    public FarePolicyTemplate(LineFarePolicy lineFarePolicy, AgeFarePolicy ageFarePolicy, int distanceToFare) {
         this.lineFarePolicy = lineFarePolicy;
         this.ageFarePolicy = ageFarePolicy;
-        this.fare = distance;
+        this.fare = distanceToFare;
     }
 
     public final void applyFarePolicy(int extraCharge) {
