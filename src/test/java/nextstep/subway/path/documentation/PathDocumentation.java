@@ -3,6 +3,7 @@ package nextstep.subway.path.documentation;
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -17,6 +18,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import java.time.LocalDateTime;
 import nextstep.subway.Documentation;
+import nextstep.subway.line.domain.PathType;
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
@@ -47,7 +49,7 @@ public class PathDocumentation extends Documentation {
         1250
     );
 
-    when(pathService.findPath(anyLong(), anyLong(), any(),new LoginMember(1L,"test@test.com","password",7)))
+    when(pathService.findPath(anyLong(), anyLong(), any(PathType.class),nullable(LoginMember.class)))
         .thenReturn(강남역_역삼역_경로);
 
     RequestParametersSnippet requestParametersSnippet = requestParameters(
