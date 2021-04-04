@@ -26,4 +26,8 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
+
+    public int getHighSurcharge() {
+        return sections.getHighSurcharge();
+    }
 }

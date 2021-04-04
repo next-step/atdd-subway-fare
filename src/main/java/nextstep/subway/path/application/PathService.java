@@ -1,7 +1,9 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.domain.Fare;
+import nextstep.subway.path.domain.FarePolicies;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.dto.PathResponse;
@@ -13,18 +15,27 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private GraphService graphService;
     private StationService stationService;
+    private FareService fareService;
 
-    public PathService(GraphService graphService, StationService stationService) {
+    public PathService(GraphService graphService, StationService stationService, FareService fareService) {
         this.graphService = graphService;
         this.stationService = stationService;
+        this.fareService = fareService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
         SubwayGraph subwayGraph = graphService.findGraph(type);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
+
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        Fare fare = Fare.of(pathResult.getTotalDistance());
-        return PathResponse.of(pathResult, fare);
+
+        Fare fare = new Fare();
+
+        FarePolicies farePolicies = fareService.calculate(pathResult, loginMember);
+        int resultFare = farePolicies.calculate(fare.getFare());
+
+        return PathResponse.of(pathResult, new Fare(resultFare));
     }
+
 }
