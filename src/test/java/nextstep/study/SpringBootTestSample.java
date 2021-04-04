@@ -30,7 +30,7 @@ public class SpringBootTestSample {
         Station 강남역 = stationRepository.save(new Station("강남역"));
         Station 역삼역 = stationRepository.save(new Station("역삼역"));
         Station 삼성역 = stationRepository.save(new Station("삼성역"));
-        Line green = new Line("2호선", "green");
+        Line green = new Line("2호선", "green",0);
         green.addSection(강남역, 역삼역, 10, 10);
 
         Line 이호선 = lineRepository.save(green);

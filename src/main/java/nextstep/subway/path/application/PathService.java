@@ -1,6 +1,7 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
@@ -11,20 +12,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PathService {
-    private GraphService graphService;
-    private StationService stationService;
 
-    public PathService(GraphService graphService, StationService stationService) {
-        this.graphService = graphService;
-        this.stationService = stationService;
-    }
+  private GraphService graphService;
+  private StationService stationService;
+  private FareService fareService;
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
-        SubwayGraph subwayGraph = graphService.findGraph(type);
-        Station sourceStation = stationService.findStationById(source);
-        Station targetStation = stationService.findStationById(target);
-        PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        Fare fare = new Fare(pathResult.getTotalDistance());
-        return PathResponse.of(pathResult,fare.getCost());
-    }
+  public PathService(GraphService graphService, StationService stationService, FareService fareService) {
+    this.graphService = graphService;
+    this.stationService = stationService;
+    this.fareService = fareService;
+  }
+
+  public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
+    SubwayGraph subwayGraph = graphService.findGraph(type);
+    Station sourceStation = stationService.findStationById(source);
+    Station targetStation = stationService.findStationById(target);
+    PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
+    Fare fare = fareService.calculate(pathResult,loginMember);
+    return PathResponse.of(pathResult, fare.getCost());
+  }
 }

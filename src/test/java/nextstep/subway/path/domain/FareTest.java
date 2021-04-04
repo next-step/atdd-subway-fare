@@ -2,53 +2,35 @@ package nextstep.subway.path.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class FareTest {
 
-  @DisplayName("경로의 총 길이가 10Km이내면 요금은 1250원")
-  @Test
-  void calculate(){
+  @DisplayName("경로의 총 길이별로 요금을 계산한다")
+  @ParameterizedTest
+  @MethodSource("testParameters")
+  void calculate(int kilometer, long price, int lineAdditionalPrice) {
     //given
-    Fare fare = new Fare(10);
+    Fare fare = new Fare(kilometer, lineAdditionalPrice);
     //when
     long cost = fare.getCost();
     //then
-    assertThat(cost).isEqualTo(1250);
+    assertThat(cost).isEqualTo(price);
   }
 
-  @DisplayName("경로의 총 길이가 15km 요금은 1350원")
-  @Test
-  void calculateOver10(){
-    //given
-    Fare fare = new Fare(15);
-    //when
-    long cost = fare.getCost();
-    //then
-    assertThat(cost).isEqualTo(1350);
+  private static Stream<Arguments> testParameters() {
+    return Stream.of(
+        Arguments.of(10, 1250, 0),
+        Arguments.of(15, 1350, 0),
+        Arguments.of(57, 2050, 0),
+        Arguments.of(58, 2150, 0),
+        Arguments.of(58, 3050, 900)
+    );
   }
 
-  @DisplayName("경로의 총 길이가 57km 요금은 2050원")
-  @Test
-  void calculateOver50NotAdditionalFare(){
-    //given
-    Fare fare = new Fare(57);
-    //when
-    long cost = fare.getCost();
-    //then
-    assertThat(cost).isEqualTo(2050);
-  }
-
-  @DisplayName("경로의 총 길이가 58km 요금은 2150원")
-  @Test
-  void calculateOver50(){
-    //given
-    Fare fare = new Fare(58);
-    //when
-    long cost = fare.getCost();
-    //then
-    assertThat(cost).isEqualTo(2150);
-  }
 
 }

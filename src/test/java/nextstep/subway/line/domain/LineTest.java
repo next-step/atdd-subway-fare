@@ -14,7 +14,7 @@ public class LineTest {
     void getStations() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
         line.addSection(강남역, 역삼역, 10, 10);
 
         // when
@@ -29,7 +29,7 @@ public class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
@@ -43,7 +43,7 @@ public class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(강남역, 삼성역, 5, 10);
@@ -57,7 +57,7 @@ public class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
 
         line.addSection(강남역, 역삼역, 10, 10);
 
@@ -69,7 +69,7 @@ public class LineTest {
     void addSectionAlreadyIncluded() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.addSection(역삼역, 강남역, 5, 10)).isInstanceOf(RuntimeException.class);
@@ -80,7 +80,7 @@ public class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
         line.addSection(강남역, 역삼역, 5, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
 
@@ -94,7 +94,7 @@ public class LineTest {
     void removeSectionNotEndOfList() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green",0);
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.removeSection(역삼역)).isInstanceOf(RuntimeException.class);

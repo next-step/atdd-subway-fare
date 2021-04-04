@@ -1,46 +1,52 @@
 package nextstep.subway.line.dto;
 
 public class LineRequest {
-    private String name;
-    private String color;
-    private Long upStationId;
-    private Long downStationId;
-    private int distance;
-    private int duration;
 
-    public LineRequest() {
-    }
+  private String name;
+  private String color;
+  private Long upStationId;
+  private Long downStationId;
+  private int distance;
+  private int duration;
+  private int additionalFare = 0;
 
-    public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
-        this.name = name;
-        this.color = color;
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
-        this.distance = distance;
-        this.duration = duration;
-    }
+  public LineRequest() {
+  }
 
-    public String getName() {
-        return name;
-    }
+  public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance,
+      int duration, int additionalFare) {
+    this.name = name;
+    this.color = color;
+    this.upStationId = upStationId;
+    this.downStationId = downStationId;
+    this.distance = distance;
+    this.duration = duration;
+    this.additionalFare = additionalFare;
+  }
 
-    public String getColor() {
-        return color;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Long getUpStationId() {
-        return upStationId;
-    }
+  public String getColor() {
+    return color;
+  }
 
-    public Long getDownStationId() {
-        return downStationId;
-    }
+  public Long getUpStationId() {
+    return upStationId;
+  }
 
-    public int getDistance() {
-        return distance;
-    }
+  public Long getDownStationId() {
+    return downStationId;
+  }
 
-    public int getDuration() {
-        return duration;
-    }
+  public int getDistance() {
+    return distance;
+  }
+
+  public int getDuration() {
+    return duration;
+  }
+
+  public int getAdditionalFare() { return additionalFare; }
 }
