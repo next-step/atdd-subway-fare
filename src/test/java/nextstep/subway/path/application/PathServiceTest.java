@@ -10,7 +10,7 @@ import nextstep.subway.path.exception.DoesNotConnectedPathException;
 import nextstep.subway.path.exception.SameStationPathSearchException;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.exception.StationNonExistException;
-import nextstep.subway.utils.UnitTest;
+import nextstep.subway.utils.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("지하철 경로 조회 비즈니스 로직 단위 테스트")
-public class PathServiceTest extends UnitTest {
+public class PathServiceTest extends IntegrationTest {
 
     @Autowired
     private LineService lineService;

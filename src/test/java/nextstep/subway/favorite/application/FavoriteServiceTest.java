@@ -5,7 +5,7 @@ import nextstep.subway.favorite.dto.FavoriteResponse;
 import nextstep.subway.favorite.exception.FavoriteAlreadyExistException;
 import nextstep.subway.favorite.exception.InvalidFavoriteMemberException;
 import nextstep.subway.station.dto.StationResponse;
-import nextstep.subway.utils.UnitTest;
+import nextstep.subway.utils.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("지하철 즐겨찾기 비즈니스 로직 단위 테스트")
-public class FavoriteServiceTest extends UnitTest {
+public class FavoriteServiceTest extends IntegrationTest {
 
     private static final long MEMBER_ID = 1L;
 

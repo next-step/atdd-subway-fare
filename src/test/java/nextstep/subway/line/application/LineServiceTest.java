@@ -7,7 +7,7 @@ import nextstep.subway.line.dto.SectionRequest;
 import nextstep.subway.line.exception.CannotRemoveSectionException;
 import nextstep.subway.line.exception.LineAlreadyExistException;
 import nextstep.subway.station.domain.Station;
-import nextstep.subway.utils.UnitTest;
+import nextstep.subway.utils.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("노선 비즈니스 로직 단위 테스트")
-public class LineServiceTest extends UnitTest {
+public class LineServiceTest extends IntegrationTest {
 
     @Autowired
     private LineService lineService;

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-public class UnitTest {
+public class IntegrationTest {
 
     protected static final int ADULT_MEMBER_AGE = 20;
     protected static final int YOUTH_MEMBER_AGE = 17;
