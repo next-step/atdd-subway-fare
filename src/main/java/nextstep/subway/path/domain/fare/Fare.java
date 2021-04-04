@@ -21,10 +21,6 @@ public class Fare {
         this.fare = chain10.calculate(distance, DEFAULT_FARE); ;
     }
 
-    private int calculateOverFare(int distance, int offset) {
-        return (int) ((Math.ceil((distance - 1) / offset) + 1) * 100);
-    }
-
     public int getFare() {
         return fare;
     }
