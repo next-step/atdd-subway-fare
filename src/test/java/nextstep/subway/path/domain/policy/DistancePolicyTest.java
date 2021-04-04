@@ -8,8 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import nextstep.subway.path.domain.Fare;
-import nextstep.subway.path.domain.policy.distance.DistancePolicy;
-import nextstep.subway.path.domain.policy.distance.DistancePolicyCondition;
 
 class DistancePolicyTest {
 
@@ -20,11 +18,10 @@ class DistancePolicyTest {
 	@ValueSource(ints = {1, 3, 7, 10})
 	void fareDefault(int distance) {
 		// given
-		DistancePolicy distancePolicy = new DistancePolicy();
-		FarePolicyCondition<Integer> condition = new DistancePolicyCondition(distance);
+		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		Fare fare = distancePolicy.getFare(condition);
+		Fare fare = distancePolicy.getFare();
 
 		// then
 		assertThat(fare.getFare()).isEqualTo(DEFAULT);
@@ -37,11 +34,10 @@ class DistancePolicyTest {
 	})
 	void fareOver10(int distance, int expectedFare) {
 		// given
-		DistancePolicy distancePolicy = new DistancePolicy();
-		FarePolicyCondition<Integer> condition = new DistancePolicyCondition(distance);
+		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		Fare fare = distancePolicy.getFare(condition);
+		Fare fare = distancePolicy.getFare();
 
 		// then
 		assertThat(fare.getFare()).isEqualTo(DEFAULT + expectedFare);
@@ -54,11 +50,10 @@ class DistancePolicyTest {
 	})
 	void fareOver50(int distance, int expectedFare) {
 		// given
-		DistancePolicy distancePolicy = new DistancePolicy();
-		FarePolicyCondition<Integer> condition = new DistancePolicyCondition(distance);
+		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		Fare fare = distancePolicy.getFare(condition);
+		Fare fare = distancePolicy.getFare();
 
 		// then
 		assertThat(fare.getFare()).isEqualTo(DEFAULT + expectedFare);
