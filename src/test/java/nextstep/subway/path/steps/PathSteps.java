@@ -1,4 +1,4 @@
-package nextstep.subway.path.acceptance;
+package nextstep.subway.path.steps;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -59,4 +59,25 @@ public class PathSteps {
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
     }
+
+    public static void 최단_거리_경로를_응답(ExtractableResponse<Response> response, List<Long> expectedStationIds) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        List<Long> stationIds = pathResponse.getStations().stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
+
+        assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
+    public static void 총_거리와_소요_시간을_함께_응답함(ExtractableResponse<Response> response, int distance, int duration) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(distance);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+    }
+
+    public static void 지하철_이용_요금도_함께_응답함(ExtractableResponse<Response> response, int fare) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
+    }
+
 }
