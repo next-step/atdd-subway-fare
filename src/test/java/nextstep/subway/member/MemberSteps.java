@@ -36,7 +36,7 @@ public class MemberSteps {
                 .statusCode(HttpStatus.OK.value()).extract();
     }
 
-    public static ExtractableResponse<Response> 회원_생성_되어있음(String email, String password, Integer age) {
+    public static ExtractableResponse<Response> 회원_생성_되어_있음(String email, String password, Integer age) {
         return 회원_생성_요청(email, password, age);
     }
 

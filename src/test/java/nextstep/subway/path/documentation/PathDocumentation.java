@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -45,7 +46,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now()))
                 , 10, 10, 1250);
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), any(LoginMember.class))).thenReturn(pathResponse);
 
         RequestParametersSnippet requestParametersSnippet = requestParameters(
                 parameterWithName("source").description("출발역 아이디"),
