@@ -19,10 +19,10 @@ public enum DistanceRule {
     }
 
     public Distance getRestDistance(Distance distance) {
-        if(maxDistance.minus(distance).toIntValue() == 0){ // maxDistance <= distance
+        if(maxDistance.isLessThan(distance)){
             return maxDistance.minus(minDistance);
-        } else {
-            return distance.minus(minDistance);
         }
+        return distance.minus(minDistance);
     }
+
 }
