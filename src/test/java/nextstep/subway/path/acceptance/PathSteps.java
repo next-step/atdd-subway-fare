@@ -45,9 +45,10 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최소_소요_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -68,9 +69,10 @@ public class PathSteps {
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회_요청(RequestSpecification requestSpecification, Long source, Long target, String type) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회_요청(RequestSpecification requestSpecification, Long source, Long target, String type, String accessToken) {
 
         return requestSpecification.accept(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", type)
