@@ -10,10 +10,12 @@ import nextstep.subway.path.domain.policy.Over50KmPolicy;
 
 public class Fare {
 
+  private FarePolicy farePolicy;
   private long cost;
 
   public Fare(int totalDistance,int lineAdditionalFee) {
     if (totalDistance > 0) {
+      farePolicy = setPolicy(lineAdditionalFee);
       this.cost = calculate(totalDistance,lineAdditionalFee);
     }
   }
@@ -42,7 +44,6 @@ public class Fare {
   }
 
   private long calculate(int totalDistance,int lineAdditionalFee) {
-    FarePolicy farePolicy = setPolicy(lineAdditionalFee);
     return farePolicy.calculate(totalDistance,0);
   }
 

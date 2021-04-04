@@ -4,7 +4,7 @@ public class BasicFarePolicy implements FarePolicy {
 
   private static final int DEFAULT_COST = 1250;
   private int lineAdditionalFee = 0;
-  private FarePolicy farePolicy;
+  private FarePolicy nextFarePolicy;
 
   public BasicFarePolicy(int lineAdditionalFee) {
     this.lineAdditionalFee = lineAdditionalFee;
@@ -12,7 +12,7 @@ public class BasicFarePolicy implements FarePolicy {
 
   @Override
   public void setNextPolicy(FarePolicy farePolicy) {
-    this.farePolicy = farePolicy;
+    this.nextFarePolicy = farePolicy;
   }
 
   @Override
@@ -20,7 +20,7 @@ public class BasicFarePolicy implements FarePolicy {
     if (remainDistance < 10) {
       return DEFAULT_COST + lineAdditionalFee;
     }
-    return farePolicy.calculate(remainDistance, DEFAULT_COST+lineAdditionalFee);
+    return nextFarePolicy.calculate(remainDistance, DEFAULT_COST+lineAdditionalFee);
   }
 
 }

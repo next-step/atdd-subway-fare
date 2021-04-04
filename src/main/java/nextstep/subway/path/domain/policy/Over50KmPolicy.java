@@ -5,11 +5,11 @@ public class Over50KmPolicy implements FarePolicy {
 
   public static final int MIN_DISTANCE = 8;
   public static final int POLICY_DISTANCE = 8;
-  private FarePolicy farePolicy;
+  private FarePolicy nextFarePolicy;
 
   @Override
   public void setNextPolicy(FarePolicy farePolicy) {
-    this.farePolicy = farePolicy;
+    this.nextFarePolicy = farePolicy;
   }
 
   @Override
