@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.policy;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,7 +7,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class FareTest {
+import nextstep.subway.path.domain.Fare;
+
+class DistancePolicyTest {
 
 	private static final int DEFAULT = 1250;
 
@@ -16,13 +18,13 @@ class FareTest {
 	@ValueSource(ints = {1, 3, 7, 10})
 	void fareDefault(int distance) {
 		// given
-		Fare fare = Fare.of(distance);
+		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		final int calculateFare = fare.getFare();
+		Fare fare = distancePolicy.getFare(0);
 
 		// then
-		assertThat(calculateFare).isEqualTo(DEFAULT);
+		assertThat(fare.getFare()).isEqualTo(DEFAULT);
 	}
 
 	@DisplayName("10km 초과 ~ 50km 까지 5km 마다 100원 부과")
@@ -32,13 +34,13 @@ class FareTest {
 	})
 	void fareOver10(int distance, int expectedFare) {
 		// given
-		Fare fare = Fare.of(distance);
+		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		final int calculateFare = fare.getFare();
+		Fare fare = distancePolicy.getFare(0);
 
 		// then
-		assertThat(calculateFare).isEqualTo(DEFAULT + expectedFare);
+		assertThat(fare.getFare()).isEqualTo(DEFAULT + expectedFare);
 	}
 
 	@DisplayName("50km 초과시 8km 마다 100원 부과")
@@ -48,12 +50,12 @@ class FareTest {
 	})
 	void fareOver50(int distance, int expectedFare) {
 		// given
-		Fare fare = Fare.of(distance);
+		FarePolicy distancePolicy = DistancePolicy.of(distance);
 
 		// when
-		final int calculateFare = fare.getFare();
+		Fare fare = distancePolicy.getFare(0);
 
 		// then
-		assertThat(calculateFare).isEqualTo(DEFAULT + expectedFare);
+		assertThat(fare.getFare()).isEqualTo(DEFAULT + expectedFare);
 	}
 }

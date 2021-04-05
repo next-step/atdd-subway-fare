@@ -14,6 +14,9 @@ import java.util.Optional;
 
 @Embeddable
 public class Sections {
+
+    private static final int DEFAULT_LINE_CHARGE = 0;
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Section> sections = new ArrayList<>();
 
@@ -144,5 +147,12 @@ public class Sections {
         return sections.stream()
             .mapToInt(Section::getDuration)
             .sum();
+    }
+
+    public int getHighCharge() {
+        return sections.stream()
+            .map(it -> it.getLine().getCharge())
+            .max(Integer::compareTo)
+            .orElse(DEFAULT_LINE_CHARGE);
     }
 }
