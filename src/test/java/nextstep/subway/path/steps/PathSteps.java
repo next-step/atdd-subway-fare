@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -17,18 +18,19 @@ import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
-    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
+    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration, int extraFare) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, extraFare);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(TokenResponse tokenResponse, Long source, Long target) {
         RequestSpecification requestSpecification = RestAssured.given().log().all();
-        return 두_역의_최단_거리_경로_조회를_요청(requestSpecification, source, target);
+        return 두_역의_최단_거리_경로_조회를_요청(requestSpecification, tokenResponse, source, target);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification requestSpecification, Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification requestSpecification, TokenResponse tokenResponse, Long source, Long target) {
         return requestSpecification
+                .auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
