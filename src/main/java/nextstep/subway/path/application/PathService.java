@@ -13,6 +13,8 @@ public class PathService {
     private GraphService graphService;
     private StationService stationService;
 
+    private static final int DEFAULT_FARE = 1_250;
+
     public PathService(GraphService graphService, StationService stationService) {
         this.graphService = graphService;
         this.stationService = stationService;
@@ -24,5 +26,9 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
         return PathResponse.of(pathResult);
+    }
+
+    public int calculateOverFare(int distance) {
+        return (int) ((Math.ceil((distance-1)/5)+1)*100);
     }
 }
