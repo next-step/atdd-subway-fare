@@ -24,7 +24,7 @@ public class PathService {
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        int fare = PolicyApplier.applyDistancePolicy(pathResult).getFare();
+        int fare = PolicyApplier.applyFarePolicy(pathResult).getFare();
         return PathResponse.of(pathResult, fare);
     }
 }

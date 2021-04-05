@@ -6,10 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
@@ -139,5 +137,12 @@ public class Sections {
 
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
+    }
+
+    public List<Line> getLines(){
+        List<Line> lines = sections.stream()
+                            .map(section -> section.getLine())
+                            .collect(Collectors.toList());
+        return Collections.unmodifiableList(lines);
     }
 }

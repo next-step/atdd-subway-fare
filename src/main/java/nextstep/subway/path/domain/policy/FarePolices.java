@@ -21,6 +21,7 @@ public class FarePolices {
                 cur = farePolicy;
             } else {
                 cur.setNext(farePolicy);
+                cur = farePolicy;
             }
         }
     }

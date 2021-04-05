@@ -46,6 +46,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10, 900);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
+        // 로그인
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, 20);
+        회원_생성됨(createResponse);
+
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
+
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. - 최단거리")
