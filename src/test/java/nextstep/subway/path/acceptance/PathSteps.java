@@ -43,10 +43,23 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare) {
+    public static ExtractableResponse<Response> 두_역의_가장_빠른_도착_경로_조회를_요청(Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "ARRIVAL_TIME")
+                .queryParam("time", "202007221800")
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration, int fare, String arrivalTime) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
         assertThat(pathResponse.getFare()).isEqualTo(fare);
 
         List<Long> stationIds = pathResponse.getStations().stream()
