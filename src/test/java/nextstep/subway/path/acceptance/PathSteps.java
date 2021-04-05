@@ -8,6 +8,7 @@ import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -54,7 +55,11 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로_응답됨(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
+    public static void 경로_응답됨(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    public static void 총_거리와_소요시간을_함께_응답(ExtractableResponse<Response> response, List<Long> expectedStationIds, int distance, int duration) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
@@ -64,5 +69,10 @@ public class PathSteps {
                 .collect(Collectors.toList());
 
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
+    }
+
+    public static void 요금_조회_함께_응답(ExtractableResponse<Response> response, int fare) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
     }
 }
