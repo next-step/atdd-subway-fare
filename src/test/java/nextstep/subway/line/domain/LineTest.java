@@ -99,4 +99,25 @@ public class LineTest {
 
         assertThatThrownBy(() -> line.removeSection(역삼역)).isInstanceOf(RuntimeException.class);
     }
+
+    @DisplayName("구간을 순서대로 조회한다")
+    @Test
+    void getSections() {
+        // given
+        Station 강남역 = new Station("강남역");
+        Station 역삼역 = new Station("역삼역");
+        Station 삼성역 = new Station("삼성역");
+        Station 잠실역 = new Station("잠실역");
+        Line line = new Line("2호선", "green");
+        line.addSection(역삼역, 삼성역, 5, 10);
+        line.addSection(삼성역, 잠실역, 5, 10);
+        line.addSection(강남역, 역삼역, 5, 10);
+
+        // when
+        Sections sections = line.getSections();
+
+        // then
+        assertThat(sections.getSections()).extracting(Section::getUpStation)
+                .containsExactly(강남역, 역삼역, 삼성역);
+    }
 }

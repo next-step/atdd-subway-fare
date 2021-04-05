@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,28 @@ public class Sections {
     }
 
     public List<Section> getSections() {
-        return sections;
+        Section section = findNextSection(findUpStation());
+        List<Section> sortedSections = new ArrayList<>(Collections.singletonList(section));
+
+        while (findNextSectionCount(section.getDownStation()) > 0) {
+            section = findNextSection(section.getDownStation());
+            sortedSections.add(section);
+        }
+
+        return sortedSections;
+    }
+
+    private long findNextSectionCount(Station station) {
+        return sections.stream()
+                .filter(it -> it.getUpStation().equals(station))
+                .count();
+    }
+
+    private Section findNextSection(Station station) {
+        return sections.stream()
+                .filter(it -> it.getUpStation().equals(station))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
     }
 
     public List<Station> getStations() {
