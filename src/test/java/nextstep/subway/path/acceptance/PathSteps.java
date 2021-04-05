@@ -94,7 +94,7 @@ public class PathSteps {
         return new StationResponse(id, name, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public static void 경로_탐색할_때(PathService pathService, PathResponse pathResponse){
+    public static void 경로_탐색시(PathService pathService, PathResponse pathResponse){
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
     }
 }

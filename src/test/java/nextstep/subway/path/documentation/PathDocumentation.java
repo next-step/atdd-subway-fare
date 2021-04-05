@@ -7,11 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static nextstep.subway.path.acceptance.PathSteps.*;
-import static nextstep.subway.path.acceptance.PathSteps.문서화_두_역의_최단_거리_경로_조회를_요청;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
 
@@ -28,7 +23,7 @@ public class PathDocumentation extends Documentation {
         );
 
         //when
-        경로_탐색할_때(pathService, pathResponse);
+        경로_탐색시(pathService, pathResponse);
 
         //then
         문서화_두_역의_최단_거리_경로_조회를_요청(spec,1L, 3L);
