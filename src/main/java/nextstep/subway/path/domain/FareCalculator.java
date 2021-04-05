@@ -2,6 +2,9 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.path.enums.AgeFarePolicy;
+import nextstep.subway.path.enums.DistanceFarePolicy;
+import nextstep.subway.path.enums.LineFarePolicy;
 
 import java.util.NoSuchElementException;
 import java.util.Set;

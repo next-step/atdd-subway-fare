@@ -66,7 +66,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", "DISTANCE")
+                .queryParam("type", "DURATION")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -93,6 +93,6 @@ public class PathSteps {
     }
 
     public static void 경로_탐색할_때(PathService pathService, PathResponse pathResponse) {
-        when(pathService.findPath(null, anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
     }
 }
