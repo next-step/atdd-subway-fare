@@ -1,11 +1,5 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.auth.infrastructure.SecurityContextHolder;
-import nextstep.subway.path.exception.CannotParseUserAgeException;
-import org.springframework.util.ObjectUtils;
-
-import java.util.Map;
-
 public class UserFarePolicy implements FarePolicy {
     private static final int FIVE = 5;
     private static final int SIX = 6;

@@ -1,8 +1,5 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.line.domain.Line;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Fare {
