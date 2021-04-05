@@ -16,32 +16,10 @@ public class UserFarePolicy implements FarePolicy {
 
     private static final int DISCOUNT_AMOUNT = 350;
 
-    private static final String AGE = "age";
-
     private int userAge;
 
-    public UserFarePolicy() {
-        this.userAge = getUserAge();
-    }
-
-    private int getUserAge() {
-        if(isAuthenticationExists()) {
-            return parseUserAge();
-        }
-        return -1;
-    }
-
-    private boolean isAuthenticationExists() {
-        return !ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication());
-    }
-
-    private int parseUserAge() {
-        try{
-            Map<String, String> principal = (Map) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return Integer.parseInt(principal.get(AGE));
-        } catch (Exception e) {
-            throw new CannotParseUserAgeException();
-        }
+    public UserFarePolicy(int userAge) {
+        this.userAge = userAge;
     }
 
     @Override

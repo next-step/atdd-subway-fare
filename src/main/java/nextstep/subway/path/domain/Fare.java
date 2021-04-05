@@ -8,15 +8,11 @@ import java.util.List;
 public class Fare {
     private static final int BASE_FARE = 1250;
 
-    private List<FarePolicy> farePolicies = new ArrayList<>();
+    public int getTotalFare(List<FarePolicy> farePolicies) {
+        if(farePolicies.isEmpty()) {
+            return BASE_FARE;
+        }
 
-    public Fare(int distance, List<Line> distinctLines) {
-        farePolicies.add(new DistanceFarePolicy(distance));
-        farePolicies.add(new LineFarePolicy(distinctLines));
-        farePolicies.add(new UserFarePolicy());
-    }
-
-    public int getTotalFare() {
         int total = BASE_FARE;
 
         for(FarePolicy farePolicy : farePolicies) {
