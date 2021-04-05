@@ -26,12 +26,12 @@ public class FarePolices {
         }
     }
 
-    public int calculateFare(int fare){
+    public int calculateFare(){
         if (farePolicies.isEmpty()) {
-            return fare;
+            return 0;
         }
         farePolicies.getFirst().apply();
-        return fare += farePolicies.stream().mapToInt(it -> it.getFare()).sum();
+        return farePolicies.getLast().getFare();
     }
 
 }

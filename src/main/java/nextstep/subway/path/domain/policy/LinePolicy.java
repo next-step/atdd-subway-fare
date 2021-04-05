@@ -9,9 +9,8 @@ public class LinePolicy extends FarePolicy {
     }
 
     @Override
-    protected int calculate() {
-        System.out.println("extraFare = " + extraFare);
-        return extraFare;
+    protected void calculate() {
+        fare += extraFare;
     }
 
     @Override

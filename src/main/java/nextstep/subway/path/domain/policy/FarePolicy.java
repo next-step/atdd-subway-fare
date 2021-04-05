@@ -2,7 +2,7 @@ package nextstep.subway.path.domain.policy;
 
 public abstract class FarePolicy {
 
-    protected int fare = 0;
+    protected int fare;
     protected FarePolicy next = null;
 
     public void setNext(FarePolicy next){
@@ -11,18 +11,21 @@ public abstract class FarePolicy {
 
     public void apply(){
         if (isValidate()) {
-            fare += calculate();
+            calculate();
         }
         if (next != null) {
+            next.setFare(fare);
             next.apply();
         }
     }
 
-    abstract protected int calculate();
+    abstract protected void calculate();
 
     abstract protected boolean isValidate();
 
     public int getFare(){
         return fare;
     }
+
+    private void setFare(int fare) {this.fare = fare;}
 }
