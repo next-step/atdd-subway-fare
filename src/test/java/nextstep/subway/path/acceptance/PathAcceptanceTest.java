@@ -52,17 +52,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         회원_생성됨(createResponse);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-    @Test
-    void findPathByDistance() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
-
-        // then
-        //기본요금 1250원 + 노선 추가요금 200원
-        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20, 1450);
-    }
-
     @DisplayName("두 역의 최소 거리 경로를 조회한다.")
     @Test
     void findPathByDuration() {

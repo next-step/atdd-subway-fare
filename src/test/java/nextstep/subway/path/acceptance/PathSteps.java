@@ -75,7 +75,7 @@ public class PathSteps {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
-        assertThat(pathResponse.getFare()).isEqualTo(fare);
+        assertThat(pathResponse.getTotalFare()).isEqualTo(fare);
 
         List<Long> stationIds = pathResponse.getStations().stream()
                 .map(StationResponse::getId)

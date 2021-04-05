@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.path.application.FareCalculator;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
@@ -27,8 +28,7 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-    public int getTotalFare(int age) {
-        FareCalculator fareCalculator = new FareCalculator(sections, age);
-        return fareCalculator.getTotalFare();
+    public Sections getSections() {
+        return sections;
     }
 }

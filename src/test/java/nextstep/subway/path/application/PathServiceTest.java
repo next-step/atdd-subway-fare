@@ -7,6 +7,7 @@ import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.line.dto.SectionRequest;
 import nextstep.subway.member.application.MemberService;
+import nextstep.subway.member.domain.EmptyMember;
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.member.dto.MemberRequest;
 import nextstep.subway.member.dto.MemberResponse;
@@ -98,30 +99,30 @@ public class PathServiceTest {
     @Test
     void findPathByDuration() {
         //when
-        PathResponse pathResponse = pathService.findPath(null, 강남역.getId(), 양재역.getId(), PathType.DURATION);
+        PathResponse pathResponse = pathService.findPath(new EmptyMember(), 강남역.getId(), 양재역.getId());
 
         //then
-        assertThat(pathResponse.getFare()).isEqualTo(1550); //총 6km, 기본요금 1250원 + 노선추가요금 300원
+        assertThat(pathResponse.getTotalFare()).isEqualTo(1550); //총 6km, 기본요금 1250원 + 노선추가요금 300원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다(10km 이상)")
     @Test
     void findPathByDistanceWithDistanceOver10Km() {
         //when
-        PathResponse pathResponse = pathService.findPath(null, 강남역.getId(), 도곡역.getId(), PathType.DURATION);
+        PathResponse pathResponse = pathService.findPath(new EmptyMember(), 강남역.getId(), 도곡역.getId());
 
         //then
-        assertThat(pathResponse.getFare()).isEqualTo(1650); //총 14km, 기본요금 1250원 + 노선추가요금 300원 + 거리추가요금 100원
+        assertThat(pathResponse.getTotalFare()).isEqualTo(1650); //총 14km, 기본요금 1250원 + 노선추가요금 300원 + 거리추가요금 100원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다(50km 이상)")
     @Test
     void findPathByDistanceWithDistanceOver50Km() {
         //when
-        PathResponse pathResponse = pathService.findPath(null, 신촌역.getId(), 양재역.getId(), PathType.DURATION);
+        PathResponse pathResponse = pathService.findPath(new EmptyMember(), 신촌역.getId(), 양재역.getId());
 
         //then
-        assertThat(pathResponse.getFare()).isEqualTo(2550); //총 60km, 기본요금 1250원 + 노선추가요금 300원 + 거리추가요금 1000원
+        assertThat(pathResponse.getTotalFare()).isEqualTo(2550); //총 60km, 기본요금 1250원 + 노선추가요금 300원 + 거리추가요금 1000원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다(청소년 + 50km)")
@@ -131,10 +132,10 @@ public class PathServiceTest {
         MemberResponse memberResponse = memberService.createMember(new MemberRequest(E_MAIL, PASSWORD, AGE));
         LoginMember loginMember = new LoginMember(memberResponse.getId(), E_MAIL, PASSWORD, AGE);
         //when
-        PathResponse pathResponse = pathService.findPath(loginMember, 신촌역.getId(), 양재역.getId(), PathType.DURATION);
+        PathResponse pathResponse = pathService.findPath(loginMember, 신촌역.getId(), 양재역.getId());
 
         //then
         //총 60km, (기본요금 1250원 + 노선추가요금 300원 + 거리추가요금 1000원 - 공제액 350원)*(1- 할인율 0.2)
-        assertThat(pathResponse.getFare()).isEqualTo(1760);
+        assertThat(pathResponse.getTotalFare()).isEqualTo(1760);
     }
 }
