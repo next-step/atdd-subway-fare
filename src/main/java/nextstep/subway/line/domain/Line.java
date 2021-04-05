@@ -3,8 +3,13 @@ package nextstep.subway.line.domain;
 import nextstep.subway.common.BaseEntity;
 import nextstep.subway.station.domain.Station;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,8 +23,8 @@ public class Line extends BaseEntity {
     private String name;
     private String color;
     private int addFare = 0;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int intervalTime;
 
     @Embedded
@@ -37,6 +42,15 @@ public class Line extends BaseEntity {
         this.name = name;
         this.color = color;
         this.addFare = addFare;
+    }
+
+    public Line(String name, String color, int addFare, LocalTime startTime, LocalTime endTime, int intervalTime) {
+        this.name = name;
+        this.color = color;
+        this.addFare = addFare;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
     }
 
     public void update(Line line) {
@@ -72,11 +86,11 @@ public class Line extends BaseEntity {
         return sections.getStations();
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 

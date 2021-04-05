@@ -4,6 +4,7 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.dto.StationResponse;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,14 +16,14 @@ public class LineResponse {
     private List<StationResponse> stations;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int intervalTime;
 
     public LineResponse() {
     }
 
-    public LineResponse(Long id, String name, String color, int addFare, LocalDateTime startTime, LocalDateTime endTime, int intervalTime,
+    public LineResponse(Long id, String name, String color, int addFare, LocalTime startTime, LocalTime endTime, int intervalTime,
                         List<StationResponse> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
@@ -31,6 +32,9 @@ public class LineResponse {
         this.stations = stations;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
     }
 
     public static LineResponse of(Line line) {
@@ -58,11 +62,11 @@ public class LineResponse {
         return addFare;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 

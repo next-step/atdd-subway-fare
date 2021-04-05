@@ -1,6 +1,7 @@
 package nextstep.subway.line.dto;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class LineRequest {
     private String name;
@@ -10,8 +11,8 @@ public class LineRequest {
     private int distance;
     private int duration;
     private int addFare = 0;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int intervalTime;
 
     public LineRequest() {
@@ -64,11 +65,11 @@ public class LineRequest {
         return addFare;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
