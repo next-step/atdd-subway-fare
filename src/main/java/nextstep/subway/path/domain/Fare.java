@@ -4,7 +4,7 @@ import nextstep.subway.path.domain.policy.FarePolices;
 
 public class Fare {
 
-    private FarePolices farePolices = new FarePolices();
+    private FarePolices farePolices;
 
     public Fare(FarePolices farePolices) {
         this.farePolices = farePolices;
