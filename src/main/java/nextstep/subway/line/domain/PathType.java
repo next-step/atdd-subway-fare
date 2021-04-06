@@ -5,7 +5,9 @@ import java.util.function.Function;
 public enum PathType {
     DISTANCE(section -> section.getDistance()),
 
-    DURATION(section -> section.getDuration());
+    DURATION(section -> section.getDuration()),
+
+    ARRIVAL_TIME(section -> section.getDuration());
 
     private Function<Section, Integer> expression;
 
