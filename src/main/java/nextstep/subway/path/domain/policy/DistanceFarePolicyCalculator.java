@@ -1,6 +1,8 @@
 package nextstep.subway.path.domain.policy;
 
-public class DistanceFarePolicyCalculator implements FarePolicyCalculator {
+import nextstep.subway.path.enums.DistanceFarePolicy;
+
+public class DistanceFarePolicyCalculator extends FarePolicyCalculator {
 
     private final int distance;
 
@@ -9,19 +11,19 @@ public class DistanceFarePolicyCalculator implements FarePolicyCalculator {
     }
 
     @Override
-    public int calculate() {
-        return calculateOverFare(distance);
+    public int calculate(int total) {
+        return total + calculateOverFare(distance);
     }
 
     private int calculateOverFare(int distance) {
-        int over10KmFare = calculateOverDistanceFare(nextstep.subway.path.enums.DistanceFarePolicy.TEN_KM, distance);
-        int over50KmFare = calculateOverDistanceFare(nextstep.subway.path.enums.DistanceFarePolicy.FIFTY_KM, distance);
+        int over10KmFare = calculateOverDistanceFare(DistanceFarePolicy.TEN_KM, distance);
+        int over50KmFare = calculateOverDistanceFare(DistanceFarePolicy.FIFTY_KM, distance);
         return over10KmFare + over50KmFare;
     }
 
-    private int calculateOverDistanceFare(nextstep.subway.path.enums.DistanceFarePolicy distanceFarePolicy, int distance){
+    private int calculateOverDistanceFare(nextstep.subway.path.enums.DistanceFarePolicy distanceFarePolicy, int distance) {
         distance -= distanceFarePolicy.getOverChargeDistance();
-        if(distance>0){
+        if (distance > 0) {
             int calculatedFare = (int) ((Math.ceil((distance - 1) / distanceFarePolicy.doChargeEveryNKm()) + 1) * 100);
             return Math.min(distanceFarePolicy.getMaximumFare(), calculatedFare);
         }

@@ -5,6 +5,7 @@ import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
 import nextstep.subway.auth.ui.authentication.AuthenticationException;
+import nextstep.subway.member.domain.EmptyMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -34,7 +35,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         if(Objects.isNull(authentication)){
             checkRequired(authenticationPrincipal);
-            return userDetailsService.getEmptyUser();
+            return new EmptyMember();
         }
 
         if (authentication.getPrincipal() instanceof Map) {

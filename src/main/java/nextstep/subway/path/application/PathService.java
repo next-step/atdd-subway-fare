@@ -24,8 +24,8 @@ public class PathService {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathResponse findPath(LoginMember loginMember, Long source, Long target){
-        return findPath(loginMember, source,target, PathType.DURATION);
+    public PathResponse findPath(LoginMember loginMember, Long source, Long target) {
+        return findPath(loginMember, source, target, PathType.DURATION);
     }
 
     public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType type) {
@@ -33,7 +33,7 @@ public class PathService {
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        int totalFare = fareCalculator.getTotalFare(pathResult.getSections(), loginMember.getAge());
+        int totalFare = fareCalculator.getTotalFare(pathResult.getGoThroughLine(), pathResult.getTotalDistance(), loginMember.getAge());
         return PathResponse.of(pathResult, totalFare);
     }
 }

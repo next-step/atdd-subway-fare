@@ -1,32 +1,26 @@
 package nextstep.subway.path.domain.policy;
 
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.domain.Sections;
 import nextstep.subway.path.enums.LineFarePolicy;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class LineFarePolicyCalculator implements FarePolicyCalculator {
+public class LineFarePolicyCalculator extends FarePolicyCalculator {
 
-    private final Sections sections;
+    private final Set<Line> goThroughLine;
 
-    public LineFarePolicyCalculator(Sections sections) {
-        this.sections = sections;
+    public LineFarePolicyCalculator(Set<Line> goThroughLine) {
+        this.goThroughLine = goThroughLine;
     }
 
     @Override
-    public int calculate() {
-        return getAdditionalFare();
+    public int calculate(int total) {
+        return total + getAdditionalFare();
     }
 
-    private int getAdditionalFare(){
-        Set<Line> goThroughLine = sections.getSections()
-                .stream()
-                .map(section -> section.getLine())
-                .collect(Collectors.toSet());
-
+    private int getAdditionalFare() {
         int maxFare = goThroughLine
                 .stream()
                 .mapToInt(line -> LineFarePolicy.find(line.getId()))

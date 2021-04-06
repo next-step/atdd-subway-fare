@@ -7,7 +7,10 @@ import java.util.stream.Stream;
 
 public enum LineFarePolicy {
 
-    LINE_ONE(1L, 0), LINE_TWO(2L, 100), LINE_THREE(3L, 200), LINE_FOUR(4L, 300);
+    LINE_ONE(1L, 0),
+    LINE_TWO(2L, 100),
+    LINE_THREE(3L, 200),
+    LINE_FOUR(4L, 300);
 
     private final Long id;
     private final int additionalFare;
@@ -29,7 +32,7 @@ public enum LineFarePolicy {
             Collections.unmodifiableMap(Stream.of(values())
                     .collect(Collectors.toMap(LineFarePolicy::getId, LineFarePolicy::getAdditionalFare)));
 
-    public static int find(Long id){
+    public static int find(Long id) {
         return lineFareMap.get(id);
     }
 }

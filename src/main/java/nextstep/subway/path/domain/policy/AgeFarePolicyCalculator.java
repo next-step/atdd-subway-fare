@@ -2,7 +2,7 @@ package nextstep.subway.path.domain.policy;
 
 import nextstep.subway.path.enums.AgeFarePolicy;
 
-public class AgeFarePolicyCalculator{
+public class AgeFarePolicyCalculator extends FarePolicyCalculator {
 
     private final int age;
 
@@ -10,15 +10,20 @@ public class AgeFarePolicyCalculator{
         this.age = age;
     }
 
-    private AgeFarePolicy matchingAgeFarePolicy(){
+    @Override
+    public int calculate(int total) {
+        return (int) ((total - getAgeDeduction()) * (1 - getAgeDiscount()));
+    }
+
+    private AgeFarePolicy matchingAgeFarePolicy() {
         return AgeFarePolicy.getMatchingAgeFarePolicy(age);
     }
 
-    public double getAgeDiscount(){
+    public double getAgeDiscount() {
         return matchingAgeFarePolicy().getDiscount();
     }
 
-    public int getAgeDeduction(){
+    public int getAgeDeduction() {
         return matchingAgeFarePolicy().getDeduction();
     }
 }

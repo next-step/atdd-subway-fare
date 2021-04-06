@@ -20,9 +20,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
         return LoginMember.of(member);
     }
-
-    @Override
-    public UserDetails getEmptyUser() {
-        return new EmptyMember();
-    }
 }
