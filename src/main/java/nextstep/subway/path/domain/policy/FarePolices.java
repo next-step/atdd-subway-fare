@@ -14,24 +14,12 @@ public class FarePolices {
         farePolicies.add(farePolicy);
     }
 
-    public void linkFarePolicy(){
-        FarePolicy cur = null;
-        for (FarePolicy farePolicy : farePolicies) {
-            if (cur == null) {
-                cur = farePolicy;
-            } else {
-                cur.setNext(farePolicy);
-                cur = farePolicy;
-            }
-        }
-    }
-
     public int calculateFare(){
-        if (farePolicies.isEmpty()) {
-            return 0;
+        int fare = 0;
+        for (FarePolicy farePolicy : farePolicies) {
+            fare = farePolicy.apply(fare);
         }
-        farePolicies.getFirst().apply();
-        return farePolicies.getLast().getFare();
+        return fare;
     }
 
 }

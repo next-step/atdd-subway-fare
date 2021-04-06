@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain.policy;
 
+import nextstep.subway.path.domain.Distance;
 import nextstep.subway.path.domain.rule.DistancePolicyRule;
 
 public class DistancePolicy extends FarePolicy {

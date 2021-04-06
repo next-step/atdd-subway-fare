@@ -1,9 +1,6 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.domain.policy.AgePolicy;
-import nextstep.subway.path.domain.policy.BasePolicy;
-import nextstep.subway.path.domain.policy.DistancePolicy;
-import nextstep.subway.path.domain.policy.LinePolicy;
+import nextstep.subway.path.domain.policy.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,18 +16,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("요금 테스트")
 class FareTest {
 
-    Fare fare;
+    FarePolices farePolices;
 
     @BeforeEach
     void setUp(){
-        fare = new Fare();
+        farePolices = new FarePolices();
     }
 
     @DisplayName("요금계산 테스트 : 기본요금")
     @Test
     void 기본요금(){
-        fare.addFarePolicy(new BasePolicy());
-        assertThat(fare.getFare()).isEqualTo(1250);
+        farePolices.addFarePolicy(new BasePolicy());
+        assertThat(new Fare(farePolices).getFare()).isEqualTo(1250);
     }
 
     @ParameterizedTest(name = "요금계산 테스트 : 거리정책")
@@ -43,12 +40,12 @@ class FareTest {
                 })
     void 요금계산_테스트_거리정책(int distance, int expectedFare){
         // when
-        fare.addFarePolicy(new BasePolicy());
-        fare.addFarePolicy(new DistancePolicy(FIRST_RULE, distance));
-        fare.addFarePolicy(new DistancePolicy(SECOND_RULE, distance));
+        farePolices.addFarePolicy(new BasePolicy());
+        farePolices.addFarePolicy(new DistancePolicy(FIRST_RULE, distance));
+        farePolices.addFarePolicy(new DistancePolicy(SECOND_RULE, distance));
 
         // then
-        assertThat(fare.getFare()).isEqualTo(expectedFare);
+        assertThat(new Fare(farePolices).getFare()).isEqualTo(expectedFare);
     }
 
     @ParameterizedTest(name = "요금계산 테스트 : 거리정책 + 노선정책")
@@ -64,13 +61,13 @@ class FareTest {
         int extraFare = 900;
 
         // when
-        fare.addFarePolicy(new BasePolicy());
-        fare.addFarePolicy(new DistancePolicy(FIRST_RULE, distance));
-        fare.addFarePolicy(new DistancePolicy(SECOND_RULE, distance));
-        fare.addFarePolicy(new LinePolicy(extraFare));
+        farePolices.addFarePolicy(new BasePolicy());
+        farePolices.addFarePolicy(new DistancePolicy(FIRST_RULE, distance));
+        farePolices.addFarePolicy(new DistancePolicy(SECOND_RULE, distance));
+        farePolices.addFarePolicy(new LinePolicy(extraFare));
 
         // then
-        assertThat(fare.getFare()).isEqualTo(expectedFare + extraFare);
+        assertThat(new Fare(farePolices).getFare()).isEqualTo(expectedFare + extraFare);
     }
 
     @ParameterizedTest(name = "요금계산 테스트 : 거리정책 + 노선정책 + 연령정책")
@@ -87,15 +84,15 @@ class FareTest {
         int age = 15;
 
         // when
-        fare.addFarePolicy(new BasePolicy());
-        fare.addFarePolicy(new DistancePolicy(FIRST_RULE, distance));
-        fare.addFarePolicy(new DistancePolicy(SECOND_RULE, distance));
-        fare.addFarePolicy(new LinePolicy(extraFare));
-        fare.addFarePolicy(new AgePolicy(KID, age));
-        fare.addFarePolicy(new AgePolicy(YOUTH, age));
+        farePolices.addFarePolicy(new BasePolicy());
+        farePolices.addFarePolicy(new DistancePolicy(FIRST_RULE, distance));
+        farePolices.addFarePolicy(new DistancePolicy(SECOND_RULE, distance));
+        farePolices.addFarePolicy(new LinePolicy(extraFare));
+        farePolices.addFarePolicy(new AgePolicy(KID, age));
+        farePolices.addFarePolicy(new AgePolicy(YOUTH, age));
 
         // then
-        assertThat(fare.getFare()).isEqualTo( (int) Math.floor((expectedFare + extraFare - 350) * 0.8) );
+        assertThat(new Fare(farePolices).getFare()).isEqualTo( (int) Math.floor((expectedFare + extraFare - 350) * 0.8) );
     }
 
 }
