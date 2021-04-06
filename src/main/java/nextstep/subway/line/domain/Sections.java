@@ -163,10 +163,26 @@ public class Sections {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
 
-    public int getAddTimeFromUpStation(Station station) {
+    public int getAddTimeFromUpStation(Station target) {
+        return getAddTimeBetweenSourceAndTarget(findUpStation(), target);
+    }
+
+    public int getAddTimeBetweenSourceAndTarget(Station source, Station target) {
         int addTime = 0;
-        for (Section section : sections) {
-            if (section.getUpStation().equals(station)) {
+        List<Section> filteredSections = new ArrayList<>();
+
+        boolean isFind = false;
+        for (Section section : getSections()) {
+            if (section.getUpStation().equals(source)) {
+                isFind = true;
+            }
+            if (isFind) {
+                filteredSections.add(section);
+            }
+        }
+
+        for (Section section : filteredSections) {
+            if (section.getUpStation().equals(target)) {
                 break;
             }
             addTime += section.getDuration();

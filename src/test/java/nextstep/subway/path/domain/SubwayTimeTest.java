@@ -55,4 +55,30 @@ class SubwayTimeTest {
         // then
         assertThat(nextTime).isEqualTo(LocalDateTime.of(2021, 4, 6, 5, 0));
     }
+
+    @Test
+    @DisplayName("도착 시간 구하기")
+    void getArriveTime() {
+        // given
+        LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 9, 3);
+
+        // when
+        LocalDateTime arriveTime = subwayTime.getArriveTime(역삼역, 선릉역, dateTime);
+
+        // then
+        assertThat(arriveTime).isEqualTo(LocalDateTime.of(2021, 4, 5, 9, 12));
+    }
+
+    @Test
+    @DisplayName("도착 시간 구하기 - 다음날")
+    void getArriveTimeTomorrow() {
+        // given
+        LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 23, 8);
+
+        // when
+        LocalDateTime arriveTime = subwayTime.getArriveTime(역삼역, 선릉역, dateTime);
+
+        // then
+        assertThat(arriveTime).isEqualTo(LocalDateTime.of(2021, 4, 6, 5, 5));
+    }
 }

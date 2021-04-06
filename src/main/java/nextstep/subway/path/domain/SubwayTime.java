@@ -35,4 +35,10 @@ public class SubwayTime {
         return LocalDateTime.of(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDayOfMonth(),
                 line.getStartTime().getHour(), line.getStartTime().getMinute());
     }
+
+    public LocalDateTime getArriveTime(Station source, Station target, LocalDateTime dateTime) {
+        LocalDateTime nextStartTime = getNextStartTime(source, dateTime);
+        int addTime = line.getSections().getAddTimeBetweenSourceAndTarget(source, target);
+        return nextStartTime.plusMinutes(addTime);
+    }
 }
