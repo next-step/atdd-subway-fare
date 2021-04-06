@@ -162,4 +162,15 @@ public class Sections {
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
+
+    public int getAddTimeFromUpStation(Station station) {
+        int addTime = 0;
+        for (Section section : sections) {
+            if (section.getUpStation().equals(station)) {
+                break;
+            }
+            addTime += section.getDuration();
+        }
+        return addTime;
+    }
 }

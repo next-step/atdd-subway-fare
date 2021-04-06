@@ -1,13 +1,10 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.domain.Section;
 import nextstep.subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class SubwayTime {
 
@@ -21,15 +18,8 @@ public class SubwayTime {
         LocalTime startTime = line.getStartTime();
         LocalTime endTime = line.getEndTime();
         LocalTime findTime = LocalTime.of(dateTime.getHour(), dateTime.getMinute());
-        List<Section> sections = line.getSections().getSections();
-        int addTime = 0;
 
-        for (Section section : sections) {
-            if (section.getUpStation().equals(source)) {
-                break;
-            }
-            addTime += section.getDuration();
-        }
+        int addTime = line.getSections().getAddTimeFromUpStation(source);
 
         while (startTime.isBefore(endTime) || startTime.equals(endTime)) {
             LocalTime calculatedTime = startTime.plusMinutes(addTime);
