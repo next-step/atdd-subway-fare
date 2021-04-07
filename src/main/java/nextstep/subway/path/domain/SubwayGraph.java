@@ -4,6 +4,7 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 import org.jgrapht.GraphPath;
@@ -38,7 +39,7 @@ public class SubwayGraph {
         return subwayEdge;
     }
 
-    public PathResult findPath(Station source, Station target) {
+    public PathResult createPathResult(Station source, Station target, LoginMember loginMember) {
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
         GraphPath<Station, SubwayEdge> result = dijkstraShortestPath.getPath(source, target);
@@ -46,6 +47,6 @@ public class SubwayGraph {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return new PathResult(new Stations(result.getVertexList()), new Sections(sections));
+        return new PathResult(new Stations(result.getVertexList()), new Sections(sections), loginMember);
     }
 }

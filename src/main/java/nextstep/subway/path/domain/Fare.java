@@ -5,7 +5,7 @@ import java.util.List;
 public class Fare {
     private static final int BASE_FARE = 1250;
 
-    public int getTotalFare(List<FarePolicy> farePolicies) {
+    public int calculateFare(List<FarePolicy> farePolicies) {
         if(farePolicies.isEmpty()) {
             return BASE_FARE;
         }

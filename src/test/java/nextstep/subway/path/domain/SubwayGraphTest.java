@@ -21,7 +21,7 @@ public class SubwayGraphTest {
         SubwayGraph subwayGraph = new SubwayGraph(Lists.newArrayList(line), PathType.DISTANCE);
 
         // when
-        PathResult pathResult = subwayGraph.findPath(선릉역, 강남역);
+        PathResult pathResult = subwayGraph.createPathResult(선릉역, 강남역, null);
 
         // then
         assertThat(pathResult.getStations()).containsExactly(선릉역, 역삼역, 강남역);
