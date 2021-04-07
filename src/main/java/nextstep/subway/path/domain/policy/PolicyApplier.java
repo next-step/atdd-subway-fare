@@ -13,8 +13,10 @@ import static nextstep.subway.path.domain.rule.DistancePolicyRule.SECOND_RULE;
 @Component
 public class PolicyApplier {
 
-    public static Fare applyFarePolicy(PathResult pathResult, LoginMember loginMember){
-        FarePolices farePolices = new FarePolices();
+    private FarePolices farePolices;
+
+    public Fare applyFarePolicy(PathResult pathResult, LoginMember loginMember){
+        farePolices = new FarePolices();
 
         // 기본요금
         farePolices.addFarePolicy(new BasePolicy());
@@ -27,7 +29,7 @@ public class PolicyApplier {
         farePolices.addFarePolicy(new AgePolicy(KID, loginMember.getAge()));
         farePolices.addFarePolicy(new AgePolicy(YOUTH, loginMember.getAge()));
 
-        return new Fare(farePolices);
+        return new Fare(farePolices.calculateFare());
     }
 
 }

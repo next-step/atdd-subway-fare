@@ -1,16 +1,14 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.domain.policy.FarePolices;
-
 public class Fare {
 
-    private FarePolices farePolices;
+    private int fare;
 
-    public Fare(FarePolices farePolices) {
-        this.farePolices = farePolices;
+    public Fare(int fare) {
+        this.fare = fare;
     }
 
     public int getFare(){
-        return farePolices.calculateFare();
+        return this.fare;
     }
 }
