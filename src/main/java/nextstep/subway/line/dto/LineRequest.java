@@ -1,6 +1,5 @@
 package nextstep.subway.line.dto;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class LineRequest {
@@ -35,6 +34,19 @@ public class LineRequest {
         this.distance = distance;
         this.duration = duration;
         this.addFare = addFare;
+    }
+
+    public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int addFare, LocalTime startTime, LocalTime endTime, int intervalTime) {
+        this.name = name;
+        this.color = color;
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
+        this.distance = distance;
+        this.duration = duration;
+        this.addFare = addFare;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
     }
 
     public String getName() {

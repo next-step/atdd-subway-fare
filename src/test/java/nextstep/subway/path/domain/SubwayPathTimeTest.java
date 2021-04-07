@@ -45,6 +45,6 @@ class SubwayPathTimeTest {
         LocalDateTime arriveTime = subwayPathTime.getArriveTime(dateTime);
 
         // then
-        assertThat(arriveTime).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 20));
+        assertThat(arriveTime).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 21));
     }
 }
