@@ -32,15 +32,16 @@ class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10, 10, 1250
+                ), 10, 10, 1250, LocalDateTime.now()
         );
-        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt(), any())).thenReturn(pathResponse);
 
         // when
         ParameterDescriptor[] parameterDescriptors = {
                 parameterWithName("source").description("출발역"),
                 parameterWithName("target").description("도착역"),
-                parameterWithName("type").description("최단 경로 타입")
+                parameterWithName("type").description("최단 경로 타입"),
+                parameterWithName("time").description("조회 기준 시간")
         };
         FieldDescriptor[] fieldDescriptors = {
                 fieldWithPath("stations[]").description("최단 경로 역 리스트"),
@@ -50,7 +51,8 @@ class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].modifiedDate").description("(최단 경로 역) 수정일시"),
                 fieldWithPath("distance").description("최단 경로 거리"),
                 fieldWithPath("duration").description("최단 경로 시간"),
-                fieldWithPath("fare").description("요금")
+                fieldWithPath("fare").description("요금"),
+                fieldWithPath("arrivalTime").description("최단 도착 시간")
         };
 
         두_역의_최단_거리_경로_조회를_요청(given( "path", parameterDescriptors, fieldDescriptors), 1L, 2L);
