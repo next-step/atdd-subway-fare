@@ -41,9 +41,9 @@ public class Documentation {
                 .build();
     }
 
-    public RequestSpecification makeDocument() {
+    public RequestSpecification specificationForMakeDocument(String identifier) {
         return given(spec).log().all()
-                .filter(document("path",
+                .filter(document(identifier,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
     }

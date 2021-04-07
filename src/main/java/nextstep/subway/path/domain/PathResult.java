@@ -1,10 +1,13 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.path.application.FareCalculator;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
 import java.util.List;
+import java.util.Set;
 
 public class PathResult {
     private Sections sections;
@@ -27,7 +30,7 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-    public int getTotalFare() {
-        return sections.getTotalFare();
+    public Set<Line> getGoThroughLine() {
+        return sections.getGoThroughLine();
     }
 }

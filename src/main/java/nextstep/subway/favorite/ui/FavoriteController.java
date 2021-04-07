@@ -1,6 +1,7 @@
 package nextstep.subway.favorite.ui;
 
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
+import nextstep.subway.auth.ui.authentication.AuthenticationException;
 import nextstep.subway.favorite.application.FavoriteService;
 import nextstep.subway.favorite.dto.FavoriteRequest;
 import nextstep.subway.favorite.dto.FavoriteResponse;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@ControllerAdvice
 public class FavoriteController {
     private FavoriteService favoriteService;
 
@@ -37,5 +39,10 @@ public class FavoriteController {
     public ResponseEntity deleteFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable Long id) {
         favoriteService.deleteFavorite(loginMember, id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity authenticationHandler(){
+        return ResponseEntity.badRequest().build();
     }
 }
