@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 public class Distance {
+
     private int distance;
 
     public Distance(int distance) {
@@ -10,19 +11,16 @@ public class Distance {
         this.distance = distance;
     }
 
-    public int toIntValue() {
+    public int toInt() {
         return distance;
     }
 
     public Distance minus(Distance operand){
-        int result = (distance - operand.toIntValue() < 0) ? 0 : (distance - operand.toIntValue());
+        int result = (distance - operand.toInt() < 0) ? 0 : (distance - operand.toInt());
         return new Distance(result);
     }
 
     public boolean isLessThan(Distance operand){
-        if (distance <= operand.toIntValue()) {
-            return true;
-        }
-        return false;
+        return distance < operand.toInt();
     }
 }

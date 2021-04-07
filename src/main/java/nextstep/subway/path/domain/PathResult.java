@@ -26,4 +26,11 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
+
+    public int getMaxExtraFare() {
+        return sections.getLines()
+                        .stream()
+                        .mapToInt(line -> line.getExtraFare())
+                        .max().orElse(0);
+    }
 }

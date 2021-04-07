@@ -5,6 +5,7 @@ import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.auth.dto.TokenResponse;
+import nextstep.subway.member.dto.MemberRequest;
 import nextstep.subway.member.dto.MemberResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MemberSteps {
     public static final String USERNAME_FIELD = "username";
     public static final String PASSWORD_FIELD = "password";
+
+    public static TokenResponse 유효한_토큰_생성됨(MemberRequest memberRequest) {
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge());
+        회원_생성됨(createResponse);
+
+        return 로그인_되어_있음(memberRequest.getEmail(), memberRequest.getPassword());
+    }
 
     public static TokenResponse 로그인_되어_있음(String email, String password) {
         ExtractableResponse<Response> response = 로그인_요청(email, password);
