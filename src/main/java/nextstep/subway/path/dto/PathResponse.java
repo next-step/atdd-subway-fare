@@ -14,16 +14,17 @@ public class PathResponse {
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int distance, int duration) {
+    public PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 
-    public static PathResponse of(PathResult pathResult) {
+    public static PathResponse of(PathResult pathResult, int fare) {
         int distance = pathResult.getTotalDistance();
         int duration = pathResult.getTotalDuration();
-        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration);
+        return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration, fare);
     }
 
     public List<StationResponse> getStations() {
