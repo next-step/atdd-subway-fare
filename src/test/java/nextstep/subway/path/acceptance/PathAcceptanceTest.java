@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.AcceptanceTest;
-import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.dto.LineResponse;
-import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.dto.StationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +13,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철역_등록_요청;
-import static nextstep.subway.path.acceptance.PathSteps.*;
+import static nextstep.subway.path.acceptance.PathSteps.경로_응답됨;
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_가장_빠른_도착_경로_조회를_요청;
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.path.acceptance.PathSteps.두_역의_최소_소요_시간_경로_조회를_요청;
+import static nextstep.subway.path.acceptance.PathSteps.지하철_노선_등록되어_있음;
 import static nextstep.subway.station.StationSteps.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 검색")

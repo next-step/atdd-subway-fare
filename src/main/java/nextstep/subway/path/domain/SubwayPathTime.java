@@ -11,14 +11,45 @@ import java.util.stream.Collectors;
 
 public class SubwayPathTime {
 
-    private final PathResult pathResults;
+    private final List<PathResult> pathResults;
 
-    public SubwayPathTime(PathResult pathResults) {
+
+    public SubwayPathTime(List<PathResult> pathResults) {
         this.pathResults = pathResults;
     }
 
-    public LocalDateTime getArriveTime(LocalDateTime dateTime) {
-        Map<Line, List<Section>> linesMap = pathResults.getSections()
+    public LocalDateTime getFastArriveTime(LocalDateTime datetime) {
+        LocalDateTime fastArriveTime = LocalDateTime.MAX;
+
+        for (PathResult pathResult : pathResults) {
+            LocalDateTime arriveTime = getArriveTime(pathResult, datetime);
+
+            if (arriveTime.isBefore(fastArriveTime)) {
+                fastArriveTime = arriveTime;
+            }
+        }
+
+        return fastArriveTime;
+    }
+
+    public PathResult getFastPathResult(LocalDateTime datetime) {
+        PathResult fastPathResult = null;
+        LocalDateTime fastArriveTime = LocalDateTime.MAX;
+
+        for (PathResult pathResult : pathResults) {
+            LocalDateTime arriveTime = getArriveTime(pathResult, datetime);
+
+            if (arriveTime.isBefore(fastArriveTime)) {
+                fastPathResult = pathResult;
+                fastArriveTime = arriveTime;
+            }
+        }
+
+        return fastPathResult;
+    }
+
+    public LocalDateTime getArriveTime(PathResult pathResult, LocalDateTime dateTime) {
+        Map<Line, List<Section>> linesMap = pathResult.getSections()
                 .stream()
                 .collect(Collectors.groupingBy(Section::getLine));
 

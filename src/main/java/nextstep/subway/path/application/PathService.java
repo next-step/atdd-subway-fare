@@ -10,6 +10,7 @@ import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,32 +30,19 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
 
         if (type == PathType.ARRIVAL_TIME) {
-            return getPathResponseByArrivalTime(subwayGraph, sourceStation, targetStation, age, datetime);
+            List<PathResult> pathResults = subwayGraph.findAllPath(sourceStation, targetStation);
+            SubwayPathTime subwayPathTime = new SubwayPathTime(pathResults);
+
+            LocalDateTime fastArriveTime = subwayPathTime.getFastArriveTime(datetime);
+            PathResult fastPathResult = subwayPathTime.getFastPathResult(datetime);
+
+            return PathResponse.of(fastPathResult, age, fastArriveTime);
         }
 
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        SubwayPathTime subwayPathTime = new SubwayPathTime(pathResult);
-        LocalDateTime arriveTime = subwayPathTime.getArriveTime(datetime);
+        SubwayPathTime subwayPathTime = new SubwayPathTime(Collections.singletonList(pathResult));
+        LocalDateTime arriveTime = subwayPathTime.getArriveTime(pathResult, datetime);
 
         return PathResponse.of(pathResult, age, arriveTime);
-    }
-
-    // TODO: 도메인 로직으로 리팩토링 필요
-    private PathResponse getPathResponseByArrivalTime(SubwayGraph subwayGraph, Station sourceStation, Station targetStation, int age, LocalDateTime datetime) {
-        List<PathResult> pathResults = subwayGraph.findAllPath(sourceStation, targetStation);
-
-        PathResult fastPathResult = null;
-        LocalDateTime fastArriveTime = LocalDateTime.MAX;
-        for (PathResult pathResult : pathResults) {
-            SubwayPathTime subwayPathTime = new SubwayPathTime(pathResult);
-            LocalDateTime arriveTime = subwayPathTime.getArriveTime(datetime);
-
-            if (arriveTime.isBefore(fastArriveTime)) {
-                fastPathResult = pathResult;
-                fastArriveTime = arriveTime;
-            }
-        }
-
-        return PathResponse.of(fastPathResult, age, fastArriveTime);
     }
 }

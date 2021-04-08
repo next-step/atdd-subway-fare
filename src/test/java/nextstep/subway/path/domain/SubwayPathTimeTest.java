@@ -38,11 +38,11 @@ class SubwayPathTimeTest {
         // given
         SubwayGraph subwayGraph = new SubwayGraph(Lists.newArrayList(이호선, 삼호선, 사호선), PathType.ARRIVAL_TIME);
         List<PathResult> pathResults = subwayGraph.findAllPath(강남역, 사당역);
-        SubwayPathTime subwayPathTime = new SubwayPathTime(pathResults.get(0));
+        SubwayPathTime subwayPathTime = new SubwayPathTime(pathResults);
         LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 5, 3);
 
         // when
-        LocalDateTime arriveTime = subwayPathTime.getArriveTime(dateTime);
+        LocalDateTime arriveTime = subwayPathTime.getFastArriveTime(dateTime);
 
         // then
         assertThat(arriveTime).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 21));
