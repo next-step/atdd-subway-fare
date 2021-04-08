@@ -1,30 +1,19 @@
 package nextstep.subway.path.domain;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class DistanceFarePolicyTest {
     private DistanceFarePolicy distanceFarePolicy;
+    private static final int BASIC_FEE = 1250;
 
-    @Test
-    void calculateFareByPolicyTest_WithDistance58() {
-        distanceFarePolicy = new DistanceFarePolicy(58);
+    @ParameterizedTest
+    @CsvSource(value = {"58:2150", "5:1250", "15:1350"}, delimiter = ':')
+    void calculateFareByPolicyTest_WithDistance(int distance, int fare) {
+        distanceFarePolicy = new DistanceFarePolicy(distance);
 
-        assertThat(distanceFarePolicy.calculateFareByPolicy(1250)).isEqualTo(2150);
-    }
-
-    @Test
-    void calculateFareByPolicyTest_WithDistanceUnder10() {
-        distanceFarePolicy = new DistanceFarePolicy(5);
-
-        assertThat(distanceFarePolicy.calculateFareByPolicy(1250)).isEqualTo(1250);
-    }
-
-    @Test
-    void calculateFareByPolicyTest_WithDistance15() {
-        distanceFarePolicy = new DistanceFarePolicy(15);
-
-        assertThat(distanceFarePolicy.calculateFareByPolicy(1250)).isEqualTo(1350);
+        assertThat(distanceFarePolicy.calculateFareByPolicy(BASIC_FEE)).isEqualTo(fare);
     }
 }
