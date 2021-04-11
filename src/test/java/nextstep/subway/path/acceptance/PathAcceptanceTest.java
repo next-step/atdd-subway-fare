@@ -50,7 +50,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재시민의숲역.getId(), 남부터미널역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회_요청(양재시민의숲역.getId(), 남부터미널역.getId());
 
         // then
         경로_응답됨(response, Lists.newArrayList(양재시민의숲역.getId(), 교대역.getId(), 남부터미널역.getId()), 8, 15, 1250);
@@ -70,7 +70,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistanceWithDistanceOver50Km() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역.getId(), 문래역.getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회_요청(강남역.getId(), 문래역.getId());
 
         // then
         경로_응답됨(response, Lists.newArrayList(강남역.getId(), 교대역.getId(), 문래역.getId()),65, 50, 2250);

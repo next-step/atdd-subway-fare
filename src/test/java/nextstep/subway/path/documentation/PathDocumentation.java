@@ -1,8 +1,14 @@
 package nextstep.subway.path.documentation;
 
+import com.google.common.collect.Lists;
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -21,12 +27,11 @@ public class PathDocumentation extends Documentation {
                 역_만들기(2L, "역삼역"),
                 역_만들기(3L, "선릉역")
         );
+        경로_탐색시(pathService, pathResponse);
+        RequestSpecification requestSpecification = RestAssured.given().log().all();
 
         //when
-        경로_탐색시(pathService, pathResponse);
-
-        //then
-        문서화_두_역의_최단_거리_경로_조회를_요청(spec,1L, 3L);
+        ExtractableResponse<Response> response =  두_역의_최단_거리_경로_조회를_요청(requestSpecification,1L, 3L);
     }
 }
 
