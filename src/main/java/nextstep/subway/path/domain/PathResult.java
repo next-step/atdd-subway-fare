@@ -29,10 +29,6 @@ public class PathResult {
         return sections.getTotalDuration();
     }
 
-//    public int getTotalFare() {
-//        return sections.getTotalFare();
-//    }
-
     public Set<Line> getGoThroughLine() {
         return sections.getGoThroughLine();
     }
