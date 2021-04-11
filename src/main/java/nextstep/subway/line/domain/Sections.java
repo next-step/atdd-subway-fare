@@ -6,10 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
@@ -167,5 +165,11 @@ public class Sections {
     private int calculateOver50KmFare(int distance) {
         distance -= 50;
         return distance > 0 ? (int) ((Math.ceil((distance - 1) / 8) + 1) * 100) : 0;
+    }
+
+    public Set<Line> getGoThroughLine() {
+        return sections.stream()
+                .map(section -> section.getLine())
+                .collect(Collectors.toSet());
     }
 }

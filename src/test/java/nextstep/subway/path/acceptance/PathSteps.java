@@ -80,6 +80,6 @@ public class PathSteps {
     }
 
     public static void 경로_탐색시(PathService pathService, PathResponse pathResponse){
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(),anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
     }
 }
