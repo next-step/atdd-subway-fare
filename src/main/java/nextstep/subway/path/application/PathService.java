@@ -1,6 +1,7 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.path.domain.FastPathResult;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.domain.SubwayPathTime;
@@ -32,11 +33,9 @@ public class PathService {
         if (type == PathType.ARRIVAL_TIME) {
             List<PathResult> pathResults = subwayGraph.findAllPath(sourceStation, targetStation);
             SubwayPathTime subwayPathTime = new SubwayPathTime(pathResults);
+            FastPathResult fastPathResult = subwayPathTime.getFastPathResult(datetime);
 
-            LocalDateTime fastArriveTime = subwayPathTime.getFastArriveTime(datetime);
-            PathResult fastPathResult = subwayPathTime.getFastPathResult(datetime);
-
-            return PathResponse.of(fastPathResult, age, fastArriveTime);
+            return PathResponse.of(fastPathResult.getPathResult(), age, fastPathResult.getArriveTime());
         }
 
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);

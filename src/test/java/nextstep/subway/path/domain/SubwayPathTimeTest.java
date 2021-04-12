@@ -42,9 +42,9 @@ class SubwayPathTimeTest {
         LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 5, 3);
 
         // when
-        LocalDateTime arriveTime = subwayPathTime.getFastArriveTime(dateTime);
+        FastPathResult fastPathResult = subwayPathTime.getFastPathResult(dateTime);
 
         // then
-        assertThat(arriveTime).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 21));
+        assertThat(fastPathResult.getArriveTime()).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 21));
     }
 }

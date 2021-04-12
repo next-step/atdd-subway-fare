@@ -13,26 +13,11 @@ public class SubwayPathTime {
 
     private final List<PathResult> pathResults;
 
-
     public SubwayPathTime(List<PathResult> pathResults) {
         this.pathResults = pathResults;
     }
 
-    public LocalDateTime getFastArriveTime(LocalDateTime datetime) {
-        LocalDateTime fastArriveTime = LocalDateTime.MAX;
-
-        for (PathResult pathResult : pathResults) {
-            LocalDateTime arriveTime = getArriveTime(pathResult, datetime);
-
-            if (arriveTime.isBefore(fastArriveTime)) {
-                fastArriveTime = arriveTime;
-            }
-        }
-
-        return fastArriveTime;
-    }
-
-    public PathResult getFastPathResult(LocalDateTime datetime) {
+    public FastPathResult getFastPathResult(LocalDateTime datetime) {
         PathResult fastPathResult = null;
         LocalDateTime fastArriveTime = LocalDateTime.MAX;
 
@@ -45,7 +30,7 @@ public class SubwayPathTime {
             }
         }
 
-        return fastPathResult;
+        return FastPathResult.of(fastPathResult, fastArriveTime);
     }
 
     public LocalDateTime getArriveTime(PathResult pathResult, LocalDateTime dateTime) {
