@@ -14,7 +14,13 @@ public class SubwayTime {
         this.line = line;
     }
 
-    public LocalDateTime getNextStartTime(Station source, LocalDateTime dateTime) {
+    public LocalDateTime getArriveTime(Station source, Station target, LocalDateTime dateTime) {
+        LocalDateTime nextStartTime = getNextStartTime(source, dateTime);
+        int addTime = line.getSections().getAddTimeBetweenSourceAndTarget(source, target);
+        return nextStartTime.plusMinutes(addTime);
+    }
+
+    private LocalDateTime getNextStartTime(Station source, LocalDateTime dateTime) {
         LocalTime startTime = line.getStartTime();
         LocalTime endTime = line.getEndTime();
         LocalTime findTime = LocalTime.of(dateTime.getHour(), dateTime.getMinute());
@@ -34,11 +40,5 @@ public class SubwayTime {
         LocalDateTime tomorrow = dateTime.plusDays(1);
         return LocalDateTime.of(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDayOfMonth(),
                 line.getStartTime().getHour(), line.getStartTime().getMinute());
-    }
-
-    public LocalDateTime getArriveTime(Station source, Station target, LocalDateTime dateTime) {
-        LocalDateTime nextStartTime = getNextStartTime(source, dateTime);
-        int addTime = line.getSections().getAddTimeBetweenSourceAndTarget(source, target);
-        return nextStartTime.plusMinutes(addTime);
     }
 }

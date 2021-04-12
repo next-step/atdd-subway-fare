@@ -31,32 +31,6 @@ class SubwayTimeTest {
     }
 
     @Test
-    @DisplayName("가장 빠른 출발 시간 구하기")
-    void getNextStartTime() {
-        // given
-        LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 9, 3);
-
-        // when
-        LocalDateTime nextTime = subwayTime.getNextStartTime(역삼역, dateTime);
-
-        // then
-        assertThat(nextTime).isEqualTo(LocalDateTime.of(2021, 4, 5, 9, 7));
-    }
-
-    @Test
-    @DisplayName("가장 빠른 출발 시간 구하기 - 다음날")
-    void getNextStartTimeTomorrow() {
-        // given
-        LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 23, 8);
-
-        // when
-        LocalDateTime nextTime = subwayTime.getNextStartTime(역삼역, dateTime);
-
-        // then
-        assertThat(nextTime).isEqualTo(LocalDateTime.of(2021, 4, 6, 5, 0));
-    }
-
-    @Test
     @DisplayName("도착 시간 구하기")
     void getArriveTime() {
         // given
