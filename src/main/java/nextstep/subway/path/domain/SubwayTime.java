@@ -16,7 +16,7 @@ public class SubwayTime {
 
     public LocalDateTime getArriveTime(Station source, Station target, LocalDateTime dateTime) {
         LocalDateTime nextStartTime = getNextStartTime(source, dateTime);
-        int addTime = line.getSections().getAddTimeBetweenSourceAndTarget(source, target);
+        int addTime = line.getAddTimeBetweenSourceAndTarget(source, target);
         return nextStartTime.plusMinutes(addTime);
     }
 
@@ -25,7 +25,7 @@ public class SubwayTime {
         LocalTime endTime = line.getEndTime();
         LocalTime findTime = LocalTime.of(dateTime.getHour(), dateTime.getMinute());
 
-        int addTime = line.getSections().getAddTimeFromUpStation(source);
+        int addTime = line.getAddTimeFromUpStation(source);
 
         while (startTime.isBefore(endTime) || startTime.equals(endTime)) {
             LocalTime calculatedTime = startTime.plusMinutes(addTime);

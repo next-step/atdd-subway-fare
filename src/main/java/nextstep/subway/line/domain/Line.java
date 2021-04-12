@@ -106,6 +106,14 @@ public class Line extends BaseEntity {
         sections.removeSection(station);
     }
 
+    public int getAddTimeFromUpStation(Station station) {
+        return sections.getAddTimeFromUpStation(station);
+    }
+
+    public int getAddTimeBetweenSourceAndTarget(Station source, Station target) {
+        return sections.getAddTimeBetweenSourceAndTarget(source, target);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
