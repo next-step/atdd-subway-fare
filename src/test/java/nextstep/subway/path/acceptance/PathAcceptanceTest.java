@@ -81,4 +81,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로_요금_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20, 450);
     }
+
+    @DisplayName("로그인 하지 않은 경우, 두 역의 지하철 요금을 조회한다.")
+    @Test
+    void findPathWithFareWithoutAuthentication() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
+
+        // then
+        경로_요금_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20, 1250);
+    }
 }

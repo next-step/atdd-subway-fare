@@ -1,17 +1,13 @@
 package nextstep.subway.path.domain.fare;
 
-import nextstep.subway.path.domain.fare.age.AdultFareChain;
-import nextstep.subway.path.domain.fare.age.AgeChain;
-import nextstep.subway.path.domain.fare.age.ChildFareChain;
-import nextstep.subway.path.domain.fare.age.YouthFareChain;
-import nextstep.subway.path.domain.fare.distance.Distance10FareChain;
-import nextstep.subway.path.domain.fare.distance.Distance50FareChain;
-import nextstep.subway.path.domain.fare.distance.DistanceDefaultFareChain;
-import nextstep.subway.path.domain.fare.distance.DistanceFareChain;
+import nextstep.subway.path.domain.fare.age.*;
+import nextstep.subway.path.domain.fare.distance.*;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class FareCalculator {
 
     private List<DistanceFareChain> distanceChains;
