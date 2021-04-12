@@ -45,6 +45,6 @@ class SubwayPathTimeTest {
         FastPathResult fastPathResult = subwayPathTime.getFastPathResult(dateTime);
 
         // then
-        assertThat(fastPathResult.getArriveTime()).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 21));
+        assertThat(fastPathResult.getArriveTime()).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 20));
     }
 }
