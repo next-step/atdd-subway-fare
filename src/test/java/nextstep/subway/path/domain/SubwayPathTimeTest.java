@@ -33,8 +33,8 @@ class SubwayPathTimeTest {
     }
 
     @Test
-    @DisplayName("도착 시간 구하기")
-    void getArriveTime() {
+    @DisplayName("가장 빠른 도착 경로 구하기")
+    void getFastPathResult() {
         // given
         SubwayGraph subwayGraph = new SubwayGraph(Lists.newArrayList(이호선, 삼호선, 사호선), PathType.ARRIVAL_TIME);
         List<PathResult> pathResults = subwayGraph.findAllPath(강남역, 사당역);
@@ -45,6 +45,7 @@ class SubwayPathTimeTest {
         FastPathResult fastPathResult = subwayPathTime.getFastPathResult(dateTime);
 
         // then
+        assertThat(fastPathResult.getPathResult().getStations()).containsExactly(강남역, 삼성역, 사당역);
         assertThat(fastPathResult.getArriveTime()).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 20));
     }
 }
