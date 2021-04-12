@@ -26,7 +26,7 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
 
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
-        Fare fare = new Fare(pathResult.getTotalDistance(), member.getAge());
+        Fare fare = new Fare(pathResult.getTotalDistance(), member.getAge(), pathResult.getLineFare());
 
         return PathResponse.of(pathResult, fare.getFare());
     }

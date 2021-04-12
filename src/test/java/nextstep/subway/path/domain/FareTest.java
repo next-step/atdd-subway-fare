@@ -17,7 +17,7 @@ class FareTest {
     @MethodSource("farePerDistance")
     void getFareAt10(int distance, int expected) {
         // when
-        Fare fare = new Fare(distance, 20);
+        Fare fare = new Fare(distance, 20, 0);
 
         // then
         assertThat(fare.getFare()).isEqualTo(expected);
@@ -27,7 +27,17 @@ class FareTest {
     @MethodSource("farePerAge")
     void getFareForChild(int age, int distance, int expected) {
         // when
-        Fare fare = new Fare(distance, age);
+        Fare fare = new Fare(distance, age, 0);
+
+        // then
+        assertThat(fare.getFare()).isEqualTo(expected);
+    }
+
+    @ParameterizedTest(name = "추가 요금인 {0}라인을 타고 {1}km를 탈 경우, {2}의 요금이 발생한다")
+    @MethodSource("fareWithExtra")
+    void getFareWithExtra(int extra, int distance, int expected) {
+        // when
+        Fare fare = new Fare(distance, 20, extra);
 
         // then
         assertThat(fare.getFare()).isEqualTo(expected);
@@ -55,5 +65,11 @@ class FareTest {
         );
     }
 
-
+    private static Stream<Arguments> fareWithExtra() {
+        return Stream.of(
+                Arguments.of(900, 10, 2150),
+                Arguments.of(500, 11, 1850),
+                Arguments.of(0, 15, 1350)
+        );
+    }
 }
