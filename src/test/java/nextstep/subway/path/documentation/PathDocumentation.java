@@ -41,7 +41,7 @@ public class PathDocumentation extends Documentation {
 
         List<StationResponse> stationResponses = Lists.newArrayList(new StationResponse(1L, "을지로3가역", LocalDateTime.now(), LocalDateTime.now())
                                                 ,new StationResponse(2L, "시청역", LocalDateTime.now(), LocalDateTime.now()));
-        을지로3가_시청역경로 = new PathResponse( stationResponses, 10, 10);
+        을지로3가_시청역경로 = new PathResponse( stationResponses, 10, 10, 1_250);
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(을지로3가_시청역경로);
 
@@ -58,7 +58,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("최단경로 생성시간"),
                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("최단경로 수정시간"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("최단경로 역 거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("최단경로 역 시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("최단경로 역 시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금 정보")
 
         );
 

@@ -24,6 +24,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 신분당선;
     private LineResponse 삼호선;
 
+    private final static int DEFAULT_FARE = 1_250;
     @BeforeEach
     public void setUp() {
         super.setUp();
@@ -69,6 +70,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //then
         경로_응답됨(response);
         총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
-        요금_조회_함께_응답(response, 1250);
+        요금_조회_함께_응답(response, DEFAULT_FARE+100);
     }
 }
