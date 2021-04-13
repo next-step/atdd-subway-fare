@@ -140,4 +140,12 @@ public class Sections {
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
+
+    public int getMaxLineFare() {
+        return sections.stream()
+                .map(Section::getLineFare)
+                .max(Integer::compare)
+                .orElse(0);
+
+    }
 }

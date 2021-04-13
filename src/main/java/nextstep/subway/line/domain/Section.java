@@ -56,6 +56,10 @@ public class Section {
         return distance;
     }
 
+    public int getLineFare() {
+        return line.getFare();
+    }
+
     public int getDuration() {
         return duration;
     }

@@ -15,6 +15,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private int fare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -46,6 +47,10 @@ public class Line extends BaseEntity {
 
     public Sections getSections() {
         return sections;
+    }
+
+    public int getFare() {
+        return fare;
     }
 
     public List<Station> getStations() {

@@ -1,28 +1,18 @@
 package nextstep.subway.path.domain.fare;
 
-public class Fare {
+import nextstep.subway.path.domain.fare.age.AgePolicy;
+import nextstep.subway.path.domain.fare.distance.DistancePolicy;
 
-    private static final int DEFAULT_FARE = 1250;
+public class Fare {
 
     private int fare;
 
-    public Fare(int distance) {
-        if(distance < 0) {
-            throw new RuntimeException("요금은 양수입니다.");
-        }
-        calculate(distance);
-    }
+    public Fare(int distance, int age, int extra) {
+        DistancePolicy distancePolicy = new DistancePolicy(distance);
+        AgePolicy agePolicy = new AgePolicy(age);
 
-    private void calculate(int distance) {
-        Distance10FareChain chain10 = new Distance10FareChain();
-        Distance50FareChain chain50 = new Distance50FareChain();
-        chain10.setFareChain(chain50);
-
-        this.fare = chain10.calculate(distance, DEFAULT_FARE); ;
-    }
-
-    private int calculateOverFare(int distance, int offset) {
-        return (int) ((Math.ceil((distance - 1) / offset) + 1) * 100);
+        final int fare = distancePolicy.calculate();
+        this.fare = agePolicy.calculate(fare) + extra;
     }
 
     public int getFare() {
