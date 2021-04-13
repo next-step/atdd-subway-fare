@@ -5,21 +5,24 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SubwayGraphTest {
+class SubwayPathTimeTest {
 
     private final Station 강남역 = new Station("강남역");
     private final Station 역삼역 = new Station("역삼역");
     private final Station 삼성역 = new Station("삼성역");
     private final Station 사당역 = new Station("사당역");
-    private final Line 이호선 = new Line("2호선", "green");
-    private final Line 삼호선 = new Line("3호선", "orange");
-    private final Line 사호선 = new Line("4호선", "blue");
+    private final Line 이호선 = new Line("2호선", "green", 0, LocalTime.of(5, 0), LocalTime.of(23, 0), 13);
+    private final Line 삼호선 = new Line("3호선", "orange", 0, LocalTime.of(5, 0), LocalTime.of(23, 0), 10);
+    private final Line 사호선 = new Line("4호선", "blue", 0, LocalTime.of(5, 0), LocalTime.of(23, 0), 8);
 
     @BeforeEach
     void setUp() {
@@ -30,27 +33,19 @@ class SubwayGraphTest {
     }
 
     @Test
-    void findPath() {
-        // given
-        SubwayGraph subwayGraph = new SubwayGraph(Lists.newArrayList(이호선, 삼호선, 사호선), PathType.DISTANCE);
-
-        // when
-        PathResult pathResult = subwayGraph.findPath(강남역, 사당역);
-
-        // then
-        assertThat(pathResult.getStations()).containsExactly(강남역, 삼성역, 사당역);
-    }
-
-    @Test
-    void findAllPath() {
+    @DisplayName("가장 빠른 도착 경로 구하기")
+    void getFastPathResult() {
         // given
         SubwayGraph subwayGraph = new SubwayGraph(Lists.newArrayList(이호선, 삼호선, 사호선), PathType.ARRIVAL_TIME);
+        List<PathResult> pathResults = subwayGraph.findAllPath(강남역, 사당역);
+        SubwayPathTime subwayPathTime = new SubwayPathTime(pathResults);
+        LocalDateTime dateTime = LocalDateTime.of(2021, 4, 5, 5, 3);
 
         // when
-        List<PathResult> pathResults = subwayGraph.findAllPath(강남역, 사당역);
+        FastPathResult fastPathResult = subwayPathTime.getFastPathResult(dateTime);
 
         // then
-        assertThat(pathResults.get(0).getStations()).containsExactly(강남역, 삼성역, 사당역);
-        assertThat(pathResults.get(1).getStations()).containsExactly(강남역, 역삼역, 삼성역, 사당역);
+        assertThat(fastPathResult.getPathResult().getStations()).containsExactly(강남역, 삼성역, 사당역);
+        assertThat(fastPathResult.getArriveTime()).isEqualTo(LocalDateTime.of(2021, 4, 5, 5, 20));
     }
 }

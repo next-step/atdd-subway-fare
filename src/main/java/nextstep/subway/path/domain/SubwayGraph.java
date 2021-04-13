@@ -8,8 +8,10 @@ import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.WeightedMultigraph;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,11 +43,23 @@ public class SubwayGraph {
     public PathResult findPath(Station source, Station target) {
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-        GraphPath<Station, SubwayEdge> result = dijkstraShortestPath.getPath(source, target);
-        List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
-                .collect(Collectors.toList());
+        GraphPath<Station, SubwayEdge> graphPath = dijkstraShortestPath.getPath(source, target);
+        return makePathResult(graphPath);
+    }
 
-        return new PathResult(new Stations(result.getVertexList()), new Sections(sections));
+    public List<PathResult> findAllPath(Station source, Station target) {
+        List<GraphPath<Station, SubwayEdge>> graphPaths = new KShortestPaths(graph, 100).getPaths(source, target);
+        List<PathResult> pathResults = new ArrayList<>();
+        for (GraphPath<Station, SubwayEdge> graphPath : graphPaths) {
+            pathResults.add(makePathResult(graphPath));
+        }
+        return pathResults;
+    }
+
+    private PathResult makePathResult(GraphPath<Station, SubwayEdge> graphPath) {
+        List<Section> sections = graphPath.getEdgeList().stream()
+                .map(SubwayEdge::getSection)
+                .collect(Collectors.toList());
+        return new PathResult(new Stations(graphPath.getVertexList()), new Sections(sections));
     }
 }

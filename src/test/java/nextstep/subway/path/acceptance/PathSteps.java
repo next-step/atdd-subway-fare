@@ -10,6 +10,7 @@ import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import org.springframework.http.MediaType;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
-    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
+    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration, int addFare, LocalTime startTime, LocalTime endTime, int intervalTime) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, addFare, startTime, endTime, intervalTime);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
@@ -28,6 +29,7 @@ public class PathSteps {
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", "DISTANCE")
+                .queryParam("time", "202104050503")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -39,6 +41,19 @@ public class PathSteps {
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", "DURATION")
+                .queryParam("time", "202104050503")
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_가장_빠른_도착_경로_조회를_요청(Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "ARRIVAL_TIME")
+                .queryParam("time", "202104050503")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -47,6 +62,7 @@ public class PathSteps {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(distance);
         assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
         assertThat(pathResponse.getFare()).isEqualTo(fare);
 
         List<Long> stationIds = pathResponse.getStations().stream()

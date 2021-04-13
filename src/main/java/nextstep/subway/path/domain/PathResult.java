@@ -1,5 +1,6 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
 import nextstep.subway.path.domain.fare.Fare;
 import nextstep.subway.path.domain.fare.FareByAddFare;
@@ -22,6 +23,10 @@ public class PathResult {
 
     public List<Station> getStations() {
         return stations.getStations();
+    }
+
+    public List<Section> getSections() {
+        return sections.getSections();
     }
 
     public int getTotalDistance() {
