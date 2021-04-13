@@ -21,10 +21,9 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(PathResult pathResult) {
+    public static PathResponse of(PathResult pathResult, int fare) {
         int distance = pathResult.getTotalDistance();
         int duration = pathResult.getTotalDuration();
-        int fare = pathResult.getFare();
         return new PathResponse(StationResponse.listOf(pathResult.getStations()), distance, duration, fare);
     }
 

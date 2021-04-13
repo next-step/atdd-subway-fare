@@ -70,6 +70,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //then
         경로_응답됨(response);
         총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
-        요금_조회_함께_응답(response, DEFAULT_FARE+100);
+        요금_조회_함께_응답(response, DEFAULT_FARE);
     }
 }
