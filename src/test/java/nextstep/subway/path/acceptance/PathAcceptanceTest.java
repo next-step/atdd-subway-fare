@@ -24,6 +24,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 신분당선;
     private LineResponse 삼호선;
 
+    private final static int DEFAULT_FARE = 1_250;
     @BeforeEach
     public void setUp() {
         super.setUp();
@@ -44,10 +45,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역 .getId());
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역.getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -57,6 +58,18 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
 
         // then
-        경로_응답됨(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+    }
+
+    @DisplayName("지하철 경로 검색 With 요금")
+    @Test
+    void findPathByDistanceWithFare() {
+        //when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
+
+        //then
+        경로_응답됨(response);
+        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
+        요금_조회_함께_응답(response, DEFAULT_FARE);
     }
 }
