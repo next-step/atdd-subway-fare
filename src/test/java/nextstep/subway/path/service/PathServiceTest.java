@@ -77,7 +77,7 @@ public class PathServiceTest {
     @DisplayName("거리가 10 이하일때 기본 요금임을 확인")
     @Test
     public void defaultFare() {
-        int fare = pathService.calculateFare(10);
+        int fare = pathService.calculateFareWithDistance(10);
 
         assertThat(fare).isEqualTo(DEFAULT_FARE);
     }
@@ -85,7 +85,7 @@ public class PathServiceTest {
     @DisplayName("거리가 10 초과 50 이하 일때 요금 확인")
     @Test
     public void over10KmFare() {
-        int fare = pathService.calculateFare(12);
+        int fare = pathService.calculateFareWithDistance(12);
 
         assertThat(fare).isEqualTo(DEFAULT_FARE + 100);
     }
@@ -93,7 +93,7 @@ public class PathServiceTest {
     @DisplayName("거리가 10 초과 50 이하 일때 요금 확인2")
     @Test
     public void over10KmFare2() {
-        int fare = pathService.calculateFare(16);
+        int fare = pathService.calculateFareWithDistance(16);
 
         assertThat(fare).isEqualTo(DEFAULT_FARE + 200);
     }
@@ -101,9 +101,17 @@ public class PathServiceTest {
     @DisplayName("거리가 50 초과 일때 요금 확인")
     @Test
     public void over50KmFare() {
-        int fare = pathService.calculateFare(51);
+        int fare = pathService.calculateFareWithDistance(51);
 
         assertThat(fare).isEqualTo(DEFAULT_FARE + 600);
+    }
+
+    @DisplayName("거리가 10이하인데 추가요금 부과 확인")
+    @Test
+    public void defaultFareWithAdditionalFee() {
+        int fare = pathService.calculateFareWithDistance(10);
+
+        //assertThat(fare)
     }
 
 }

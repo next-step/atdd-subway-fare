@@ -25,10 +25,11 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        return PathResponse.of(pathResult, calculateFare(pathResult.getTotalDistance()));
+        int totFare = calculateFareWithDistance(pathResult.getTotalDistance());
+        return PathResponse.of(pathResult, totFare);
     }
 
-    public int calculateFare(int distance) {
+    public int calculateFareWithDistance(int distance) {
         if (distance > 10 && distance <= 50) {
             return FareType.OVER_10_KM_BELOW_50_KM.calucate(distance);
         }
