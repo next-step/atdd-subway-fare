@@ -1,7 +1,6 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Sections;
-import nextstep.subway.path.domain.enumeration.FareType;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 

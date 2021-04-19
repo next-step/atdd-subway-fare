@@ -1,9 +1,11 @@
 package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
+import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
-import nextstep.subway.path.domain.enumeration.FareType;
+import nextstep.subway.path.domain.enumeration.FareDistanceType;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -19,25 +21,31 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
         SubwayGraph subwayGraph = graphService.findGraph(type);
         Station sourceStation = stationService.findStationById(source);
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        int totFare = calculateFareWithDistance(pathResult.getTotalDistance());
-        return PathResponse.of(pathResult, totFare);
+        Fare fare = calculate(pathResult, loginMember);
+        return PathResponse.of(pathResult, fare.getFare());
     }
 
-    public int calculateFareWithDistance(int distance) {
-        if (distance > 10 && distance <= 50) {
-            return FareType.OVER_10_KM_BELOW_50_KM.calucate(distance);
-        }
 
-        if (distance > 50) {
-            return FareType.OVER_50_KM.calucate(distance);
-        }
+    public Fare calculate(PathResult pathResult, LoginMember loginMember) {
+        Fare fare = new Fare(pathResult.getTotalDistance(), pathResult.);
 
-        return FareType.DEFAULT.calucate(distance);
+        if (loginMember != null) {
+            fare.setAgePolicy(loginMember);
+        }
+    }
+
+    public Fare calculate(PathResult pathResult, LoginMember loginMember) {
+        Fare fare = new Fare(pathResult.getTotalDistance(), pathResult.getMaxAdditionalFare());
+
+        if (loginMember != null) {
+            fare.setAgePolicy(loginMember);
+        }
+        return fare;
     }
 }
