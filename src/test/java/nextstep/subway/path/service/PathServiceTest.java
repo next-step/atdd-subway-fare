@@ -2,8 +2,10 @@ package nextstep.subway.path.service;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.GraphService;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
@@ -36,6 +38,9 @@ public class PathServiceTest {
     private Line 이호선;
     private Line 신분당선;
 
+    private LoginMember loginMember;
+    private PathResult pathResult;
+
     private final static int DEFAULT_FARE = 1_250;
 
     @BeforeEach
@@ -49,14 +54,17 @@ public class PathServiceTest {
         강남역 = new Station("강남역");
         서초역 = new Station("서초역");
 
-        이호선 = new Line("이호선", "green");
-        신분당선 = new Line("신분당선", "red");
+        이호선 = new Line("이호선", "green", 0);
+        신분당선 = new Line("신분당선", "red", 1_000);
+
         이호선.addSection(역삼역, 양재역, 9, 10);
         이호선.addSection(양재역, 강남역, 3, 5);
         이호선.addSection(강남역, 서초역, 50, 5);
 
         lines = Lists.newArrayList(이호선, 신분당선);
         subwayGraph = new SubwayGraph(lines, PathType.DISTANCE);
+
+        loginMember = new LoginMember(1L, "gpwls", "1234", 100);
     }
 
     @Test
@@ -69,7 +77,7 @@ public class PathServiceTest {
         when(stationService.findStationById(2L)).thenReturn(targetStation);
 
         //then
-        PathResponse response = pathService.findPath(1L, 2L, PathType.DISTANCE);
+        PathResponse response = pathService.findPath(1L, 2L, PathType.DISTANCE, loginMember);
         assertThat(response.getDistance()).isEqualTo(9);
         assertThat(response.getFare()).isEqualTo(DEFAULT_FARE);
     }
@@ -77,7 +85,7 @@ public class PathServiceTest {
     @DisplayName("거리가 10 이하일때 기본 요금임을 확인")
     @Test
     public void defaultFare() {
-        int fare = pathService.calculateFareWithDistance(10);
+        int fare = pathService.calculate(10, 0, loginMember).getCost();
 
         assertThat(fare).isEqualTo(DEFAULT_FARE);
     }
@@ -85,7 +93,7 @@ public class PathServiceTest {
     @DisplayName("거리가 10 초과 50 이하 일때 요금 확인")
     @Test
     public void over10KmFare() {
-        int fare = pathService.calculateFareWithDistance(12);
+        int fare = pathService.calculate(12, 0, loginMember).getCost();
 
         assertThat(fare).isEqualTo(DEFAULT_FARE + 100);
     }
@@ -93,7 +101,7 @@ public class PathServiceTest {
     @DisplayName("거리가 10 초과 50 이하 일때 요금 확인2")
     @Test
     public void over10KmFare2() {
-        int fare = pathService.calculateFareWithDistance(16);
+        int fare = pathService.calculate(16, 0, loginMember).getCost();
 
         assertThat(fare).isEqualTo(DEFAULT_FARE + 200);
     }
@@ -101,7 +109,7 @@ public class PathServiceTest {
     @DisplayName("거리가 50 초과 일때 요금 확인")
     @Test
     public void over50KmFare() {
-        int fare = pathService.calculateFareWithDistance(51);
+        int fare = pathService.calculate(51, 0, loginMember).getCost();
 
         assertThat(fare).isEqualTo(DEFAULT_FARE + 600);
     }
@@ -109,9 +117,26 @@ public class PathServiceTest {
     @DisplayName("거리가 10이하인데 추가요금 부과 확인")
     @Test
     public void defaultFareWithAdditionalFee() {
-        int fare = pathService.calculateFareWithDistance(10);
+        int fare = pathService.calculate(10, 2000, loginMember).getCost();
 
-        //assertThat(fare)
+        assertThat(fare).isEqualTo(DEFAULT_FARE+2000);
     }
 
+    @DisplayName("거리가 10이하에 청소년 할인 확인")
+    @Test
+    public void defaultFareWithTeenagerDiscount() {
+        loginMember = new LoginMember(1L, "gpwls", "1234", 15);
+        int fare = pathService.calculate(10, 0, loginMember).getCost();
+
+        assertThat(fare).isEqualTo(DEFAULT_FARE - ((DEFAULT_FARE - 350) * 20 / 100));
+    }
+
+    @DisplayName("거리가 10이하에 어린이 할인 확인")
+    @Test
+    public void defaultFareWithChildDiscount() {
+        loginMember = new LoginMember(1L, "gpwls", "1234", 10);
+        int fare = pathService.calculate(10, 0, loginMember).getCost();
+
+        assertThat(fare).isEqualTo(DEFAULT_FARE - ((DEFAULT_FARE - 350) * 50 / 100));
+    }
 }

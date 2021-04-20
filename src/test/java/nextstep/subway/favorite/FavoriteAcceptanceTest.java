@@ -79,7 +79,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     private LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, 0);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 }

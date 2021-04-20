@@ -9,10 +9,12 @@ import java.util.List;
 public class PathResult {
     private Sections sections;
     private Stations stations;
+    private int maxAdditionalFare;
 
     public PathResult(Stations stations, Sections sections) {
         this.stations = stations;
         this.sections = sections;
+        this.maxAdditionalFare = sections.maxMaxAdditionalFee();
     }
 
     public List<Station> getStations() {
@@ -26,4 +28,6 @@ public class PathResult {
     public int getTotalDuration() {
         return sections.getTotalDuration();
     }
+
+    public int getMaxAdditionalFare() { return sections.maxMaxAdditionalFee(); }
 }

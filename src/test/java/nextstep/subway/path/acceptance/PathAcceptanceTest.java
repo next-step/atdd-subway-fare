@@ -38,9 +38,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역").as(StationResponse.class);
         고속터미널역 = 지하철역_등록되어_있음("고속터미널역").as(StationResponse.class);
 
-        이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10);
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10);
-        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10);
+        이호선 = 지하철_노선_등록되어_있음("2호선", "green", 교대역, 강남역, 10, 10, 0);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "green", 강남역, 양재역, 10, 10, 0);
+        삼호선 = 지하철_노선_등록되어_있음("3호선", "green", 교대역, 남부터미널역, 2, 10, 0);
 
         지하철_노선에_지하철역_등록_요청(삼호선, 남부터미널역, 양재역, 3, 10);
         지하철_노선에_지하철역_등록_요청(삼호선, 양재역, 고속터미널역, 3, 20);
@@ -50,7 +50,15 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(),교대역.getId());
+        String email = "gpwls@gmail.com";
+        String password = "1234";
+        int age = 100;
+
+        //given
+        ExtractableResponse<Response> memberResponse = 회원_생성_요청(email, password, age);
+        회원_생성됨(memberResponse);
+        TokenResponse tokenResponse = 로그인_되어_있음(email, password);
+        ExtractableResponse<Response> response = 로그인_후_두_역_최단_경로_조회_요청(양재역.getId(),교대역.getId(), "DISTANCE", tokenResponse);
 
         // then
         총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
@@ -59,18 +67,35 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDuration() {
+
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_경로_조회를_요청(교대역.getId(), 양재역.getId());
+        String email = "gpwls@gmail.com";
+        String password = "1234";
+        int age = 100;
+
+        //given
+        ExtractableResponse<Response> memberResponse = 회원_생성_요청(email, password, age);
+        회원_생성됨(memberResponse);
+        TokenResponse tokenResponse = 로그인_되어_있음(email, password);
+        ExtractableResponse<Response> response = 로그인_후_두_역_최단_경로_조회_요청(교대역.getId(),양재역.getId(), "DISTANCE", tokenResponse);
 
         // then
-        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(교대역.getId(), 강남역.getId(), 양재역.getId()), 20, 20);
+        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(교대역.getId(), 남부터미널역.getId(), 양재역.getId()), 5, 20);
     }
 
     @DisplayName("지하철 경로 요금조회")
     @Test
     void findPathByDistanceWithFare() {
         //when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역.getId(), 교대역.getId());
+        String email = "gpwls@gmail.com";
+        String password = "1234";
+        int age = 100;
+
+        //given
+        ExtractableResponse<Response> memberResponse = 회원_생성_요청(email, password, age);
+        회원_생성됨(memberResponse);
+        TokenResponse tokenResponse = 로그인_되어_있음(email, password);
+        ExtractableResponse<Response> response = 로그인_후_두_역_최단_경로_조회_요청(양재역.getId(),교대역.getId(), "DISTANCE", tokenResponse);
 
         //then
         경로_응답됨(response);
@@ -82,12 +107,20 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistanceWithFareAndSpecialFee() {
         //when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(남부터미널역.getId(), 고속터미널역.getId());
+        String email = "gpwls@gmail.com";
+        String password = "1234";
+        int age = 100;
+
+        //given
+        ExtractableResponse<Response> memberResponse = 회원_생성_요청(email, password, age);
+        회원_생성됨(memberResponse);
+        TokenResponse tokenResponse = 로그인_되어_있음(email, password);
+        ExtractableResponse<Response> response = 로그인_후_두_역_최단_경로_조회_요청(남부터미널역.getId(),고속터미널역.getId(), "DISTANCE", tokenResponse);
 
         //then
         경로_응답됨(response);
-        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(남부터미널역.getId(), 양재역.getId(), 고속터미널역.getId()), 5, 20);
-        요금_조회_함께_응답(response, DEFAULT_FARE + 900);
+        총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(남부터미널역.getId(), 양재역.getId(), 고속터미널역.getId()), 6, 30);
+        요금_조회_함께_응답(response, DEFAULT_FARE);
     }
 
     @DisplayName("로그인 후 최단 경로 조회")
@@ -108,7 +141,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //then
         경로_응답됨(response);
         총_거리와_소요시간을_함께_응답(response, Lists.newArrayList(양재역.getId(), 남부터미널역.getId(), 교대역.getId()), 5, 20);
-        요금_조회_함께_응답(response, (DEFAULT_FARE - 350)/2);
+        요금_조회_함께_응답(response, DEFAULT_FARE - ((DEFAULT_FARE - 350) * 50 / 100));
     }
 
 }

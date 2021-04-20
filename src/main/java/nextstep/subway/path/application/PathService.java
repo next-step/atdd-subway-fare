@@ -5,7 +5,6 @@ import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.domain.Fare;
 import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
-import nextstep.subway.path.domain.enumeration.FareDistanceType;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
@@ -27,25 +26,14 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        Fare fare = calculate(pathResult, loginMember);
-        return PathResponse.of(pathResult, fare.getFare());
+        Fare fare = calculate(pathResult.getTotalDistance(), pathResult.getMaxAdditionalFare(), loginMember);
+        return PathResponse.of(pathResult, fare.getCost());
     }
 
+    public Fare calculate(int totalDistance, int maxAdditionalFare, LoginMember loginMember) {
+        int age = loginMember == null ? Integer.MIN_VALUE : loginMember.getAge();
 
-    public Fare calculate(PathResult pathResult, LoginMember loginMember) {
-        Fare fare = new Fare(pathResult.getTotalDistance(), pathResult.);
-
-        if (loginMember != null) {
-            fare.setAgePolicy(loginMember);
-        }
-    }
-
-    public Fare calculate(PathResult pathResult, LoginMember loginMember) {
-        Fare fare = new Fare(pathResult.getTotalDistance(), pathResult.getMaxAdditionalFare());
-
-        if (loginMember != null) {
-            fare.setAgePolicy(loginMember);
-        }
-        return fare;
+        Fare fare = Fare.createInstance(totalDistance, maxAdditionalFare, age);
+        return fare.calculateCost();
     }
 }
