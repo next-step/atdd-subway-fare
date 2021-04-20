@@ -1,8 +1,11 @@
 package nextstep.subway.auth.ui.authorization;
 
+import nextstep.subway.auth.application.UserDetailsService;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
+import nextstep.subway.auth.ui.authentication.AuthenticationException;
+import nextstep.subway.member.domain.EmptyMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -11,8 +14,16 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final UserDetailsService userDetailsService;
+
+    public AuthenticationPrincipalArgumentResolver(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -21,11 +32,23 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        if(Objects.isNull(authentication)){
+            checkRequired(authenticationPrincipal);
+            return new EmptyMember();
+        }
+
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
         }
 
         return authentication.getPrincipal();
+    }
+
+    private void checkRequired(AuthenticationPrincipal authenticationPrincipal){
+        if(authenticationPrincipal.required()){
+            throw new AuthenticationException("로그인이 필요합니다");
+        }
     }
 
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {

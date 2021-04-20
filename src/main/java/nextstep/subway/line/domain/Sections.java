@@ -6,16 +6,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
-
-    private final int BASIC_FARE = 1250;
-    private final int OVER_10KM_MAX_FARE = 800;
 
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Section> sections = new ArrayList<>();
@@ -143,29 +138,9 @@ public class Sections {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
 
-    public int getTotalFare() {
-        int distance = getTotalDistance();
-
-        return BASIC_FARE + calculateOverFare(distance);
-    }
-
-    private int calculateOverFare(int distance) {
-        int over10KmFare = calculateOver10KmFare(distance);
-        int over50KmFare = calculateOver50KmFare(distance);
-        return over10KmFare + over50KmFare;
-    }
-
-    private int calculateOver10KmFare(int distance) {
-        distance -= 10;
-        if (distance > 0) {
-            int calculatedFare = (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
-            return Math.min(OVER_10KM_MAX_FARE, calculatedFare);
-        }
-        return 0;
-    }
-
-    private int calculateOver50KmFare(int distance) {
-        distance -= 50;
-        return distance > 0 ? (int) ((Math.ceil((distance - 1) / 8) + 1) * 100) : 0;
+    public Set<Line> getGoThroughLine() {
+        return sections.stream()
+                .map(section -> section.getLine())
+                .collect(Collectors.toSet());
     }
 }

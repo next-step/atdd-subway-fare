@@ -32,7 +32,7 @@ public class PathSteps {
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회_요청(Long source, Long target) {
         RequestSpecification requestSpecification = RestAssured.given().log().all();
         return 두_역의_최단_거리_경로_조회를_요청(requestSpecification, source, target);
     }
@@ -71,21 +71,6 @@ public class PathSteps {
         assertThat(stationIds).containsExactlyElementsOf(expectedStationIds);
     }
 
-
-    public static ExtractableResponse<Response> 문서화_두_역의_최단_거리_경로_조회를_요청(RequestSpecification spec, Long source, Long target) {
-        return RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
-    }
-
     public static PathResponse 응답_만들기(int distance, int duration, int fare, StationResponse... stationResponses){
         return new PathResponse(Lists.newArrayList(stationResponses), distance, duration, fare);
     }
@@ -95,6 +80,6 @@ public class PathSteps {
     }
 
     public static void 경로_탐색시(PathService pathService, PathResponse pathResponse){
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(),anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
     }
 }
