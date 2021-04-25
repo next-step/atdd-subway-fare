@@ -1,5 +1,6 @@
 package nextstep.subway.auth.ui.authorization;
 
+import nextstep.subway.auth.application.AnonymousUserDetailService;
 import nextstep.subway.auth.domain.Authentication;
 import nextstep.subway.auth.domain.AuthenticationPrincipal;
 import nextstep.subway.auth.infrastructure.SecurityContextHolder;
@@ -13,6 +14,13 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private AnonymousUserDetailService anonymousUserDetailService;
+
+    public AuthenticationPrincipalArgumentResolver(AnonymousUserDetailService anonymousUserDetailService) {
+        this.anonymousUserDetailService  = anonymousUserDetailService;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -23,7 +31,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
-            return null;
+            return anonymousUserDetailService.getAnonymousUser();
         }
 
         if (authentication.getPrincipal() instanceof Map) {

@@ -2,6 +2,7 @@ package nextstep.subway.member.domain;
 
 
 import nextstep.subway.auth.application.UserDetails;
+import org.springframework.util.StringUtils;
 
 public class LoginMember implements UserDetails {
     private Long id;
@@ -11,6 +12,14 @@ public class LoginMember implements UserDetails {
 
     public static LoginMember of(Member member) {
         return new LoginMember(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
+    }
+
+    public boolean isAnonymous() {
+        if (StringUtils.hasLength(email)) {
+            return false;
+        }
+
+        return true;
     }
 
     public LoginMember(Long id, String email, String password, Integer age) {

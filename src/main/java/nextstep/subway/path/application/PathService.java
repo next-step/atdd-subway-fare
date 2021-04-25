@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private GraphService graphService;
     private StationService stationService;
+    private FareService fareService;
 
-    public PathService(GraphService graphService, StationService stationService) {
+    public PathService(GraphService graphService, StationService stationService, FareService fareService) {
         this.graphService = graphService;
         this.stationService = stationService;
+        this.fareService = fareService;
     }
 
     public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
@@ -26,14 +28,10 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        Fare fare = calculate(pathResult.getTotalDistance(), pathResult.getMaxAdditionalFare(), loginMember);
+        int maxAdditionalFare = pathResult.getMaxAdditionalFee();
+
+        Fare fare = fareService.calculate(pathResult.getTotalDistance(), maxAdditionalFare, loginMember);
         return PathResponse.of(pathResult, fare.getCost());
     }
 
-    public Fare calculate(int totalDistance, int maxAdditionalFare, LoginMember loginMember) {
-        int age = loginMember == null ? Integer.MIN_VALUE : loginMember.getAge();
-
-        Fare fare = Fare.createInstance(totalDistance, maxAdditionalFare, age);
-        return fare.calculateCost();
-    }
 }
