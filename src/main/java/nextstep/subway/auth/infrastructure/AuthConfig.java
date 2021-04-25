@@ -1,7 +1,6 @@
 package nextstep.subway.auth.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nextstep.subway.auth.application.AnonymousUserDetailService;
 import nextstep.subway.auth.ui.authentication.SessionAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authentication.TokenAuthenticationInterceptor;
 import nextstep.subway.auth.ui.authorization.AuthenticationPrincipalArgumentResolver;
@@ -18,12 +17,10 @@ import java.util.List;
 public class AuthConfig implements WebMvcConfigurer {
     private CustomUserDetailsService userDetailsService;
     private JwtTokenProvider jwtTokenProvider;
-    private AnonymousUserDetailService anonymousUserDetailService;
 
-    public AuthConfig(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider, AnonymousUserDetailService anonymousUserDetailService) {
+    public AuthConfig(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.anonymousUserDetailService = anonymousUserDetailService;
     }
 
     public void addInterceptors(InterceptorRegistry registry) {
@@ -35,6 +32,6 @@ public class AuthConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
-        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(anonymousUserDetailService));
+        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(userDetailsService));
     }
 }
