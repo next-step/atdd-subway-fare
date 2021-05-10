@@ -7,14 +7,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FareService {
 
-    public Fare calculate(int totalDistance, int maxAdditionalFare, LoginMember loginMember) {
-        Fare fare = Fare.createInstance(totalDistance, maxAdditionalFare);
-        fare.calculateCost();
-
-        if (!loginMember.isAnonymous()) {
-            fare.discountByAge(loginMember.getAge());
-        }
-
-        return fare;
+    public int calculate(int maxAdditionalFee, int totalDistance, LoginMember loginMember) {
+        Fare fare = Fare.createInstance(maxAdditionalFee, totalDistance, loginMember);
+        return fare.calculateCost();
     }
 }

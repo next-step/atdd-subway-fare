@@ -35,3 +35,4 @@ public class AuthConfig implements WebMvcConfigurer {
         argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(userDetailsService));
     }
 }
+

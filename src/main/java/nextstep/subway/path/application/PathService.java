@@ -28,10 +28,7 @@ public class PathService {
         Station targetStation = stationService.findStationById(target);
         PathResult pathResult = subwayGraph.findPath(sourceStation, targetStation);
 
-        int maxAdditionalFare = pathResult.getMaxAdditionalFee();
-
-        Fare fare = fareService.calculate(pathResult.getTotalDistance(), maxAdditionalFare, loginMember);
-        return PathResponse.of(pathResult, fare.getCost());
+        int cost = fareService.calculate(pathResult.getMaxAdditionalFee(), pathResult.getTotalDistance(), loginMember);
+        return PathResponse.of(pathResult, cost);
     }
-
 }

@@ -1,51 +1,49 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.domain.enumeration.DiscountType;
-import nextstep.subway.path.domain.enumeration.FareDistanceType;
+import nextstep.subway.member.domain.LoginMember;
 
 public class Fare {
 
     private final static int DEFAULT_FARE = 1_250;
+
     private int cost;
-    private int totalDistance;
-    private FareDistanceType distanceType;
+
     private int additionalFee;
+    private int totalDistance;
 
-    public static Fare createInstance(int totalDistance, int additionalFee) {
-       return new Fare(DEFAULT_FARE, totalDistance, FareDistanceType.typeFromDistance(totalDistance), additionalFee);
+    private LoginMember loginMember;
+
+
+    public static Fare createInstance(int additionalFee, int totalDistance, LoginMember loginMember) {
+       return new Fare(DEFAULT_FARE, additionalFee, totalDistance, loginMember);
     }
 
-    private Fare(int cost, int totalDistance, FareDistanceType distanceType, int additionalFee) {
+    private Fare(int cost, int additionalFee, int totalDistance, LoginMember loginMember) {
         this.cost = cost;
-        this.totalDistance = totalDistance;
-        this.distanceType = distanceType;
         this.additionalFee = additionalFee;
+        this.totalDistance = totalDistance;
+        this.loginMember= loginMember;
     }
 
-    public void calculateCost() {
+    public int calculateCost() {
         calculateCostByDistance();
         applyAdditionalFee();
+
+        discountByUser();
+        return this.cost;
     }
 
     private void calculateCostByDistance() {
-        this.cost = DEFAULT_FARE;
-
-        //거리에 따른 요금 계산
-        if (totalDistance > 0) {
-            this.cost += this.distanceType.calucate(this.totalDistance);
-        }
+        FarePolicy distancePolicy = new FareDistancePolicy(this.totalDistance);
+        this.cost = distancePolicy.calculate(this.cost);
     }
 
     private void applyAdditionalFee() {
         this.cost += this.additionalFee;
     }
 
-    public void discountByAge(int age) {
-        DiscountType discountType = DiscountType.typeFromAge(age);
-        this.cost -= discountType.discount(this.cost);
-    }
-
-    public int getCost() {
-        return this.cost;
+    public void discountByUser() {
+        FarePolicy discountPolicy = new FareDiscountPolicy(loginMember);
+        this.cost = discountPolicy.calculate(this.cost);
     }
 }
