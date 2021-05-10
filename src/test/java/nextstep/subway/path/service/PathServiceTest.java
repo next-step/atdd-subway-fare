@@ -2,14 +2,12 @@ package nextstep.subway.path.service;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.PathType;
-import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.FareService;
 import nextstep.subway.path.application.GraphService;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.domain.Fare;
-import nextstep.subway.path.domain.PathResult;
 import nextstep.subway.path.domain.SubwayGraph;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.application.StationService;
@@ -75,7 +73,7 @@ public class PathServiceTest {
 
         loginMember = new LoginMember(1L, "gpwls", "1234", 100);
 
-        fare = Fare.createInstance(10,0);
+        fare = Fare.createInstance(10,0, loginMember);
     }
 
     @Test
@@ -87,12 +85,10 @@ public class PathServiceTest {
         when(stationService.findStationById(1L)).thenReturn(sourceStation);
         when(stationService.findStationById(2L)).thenReturn(targetStation);
         when(stationService.findStationById(2L)).thenReturn(targetStation);
-        when(sections.getTotalDistance()).thenReturn(10);
-        when(fareService.calculate(subwayGraph.findPath(sourceStation, targetStation).getTotalDistance(), 0, loginMember)).thenReturn(fare);
+        when(sections.getTotalDistance()).thenReturn(9);
 
         //then
         PathResponse response = pathService.findPath(1L, 2L, PathType.DISTANCE, loginMember);
         assertThat(response.getDistance()).isEqualTo(9);
-        assertThat(response.getFare()).isEqualTo(DEFAULT_FARE);
     }
 }
