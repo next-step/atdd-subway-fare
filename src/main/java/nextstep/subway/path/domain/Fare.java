@@ -25,6 +25,8 @@ public class Fare {
         this.loginMember= loginMember;
     }
 
+    private Fare() {}
+
     public int calculateCost() {
         calculateCostByDistance();
         applyAdditionalFee();
@@ -45,5 +47,9 @@ public class Fare {
     public void discountByUser() {
         FarePolicy discountPolicy = new FareDiscountPolicy(loginMember);
         this.cost = discountPolicy.calculate(this.cost);
+    }
+
+    public int getCost() {
+        return this.cost;
     }
 }

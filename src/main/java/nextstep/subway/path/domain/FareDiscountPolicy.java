@@ -8,7 +8,6 @@ public class FareDiscountPolicy implements FarePolicy {
     private DiscountType discountType;
 
     public FareDiscountPolicy(LoginMember loginMember) {
-
         DiscountType type = DiscountType.NONE;
 
         if (!loginMember.isAnonymous()) {
@@ -21,6 +20,8 @@ public class FareDiscountPolicy implements FarePolicy {
     private FareDiscountPolicy(DiscountType discountType) {
         this.discountType = discountType;
     }
+
+    private FareDiscountPolicy() {}
 
     @Override
     public int calculate(int beforeCost) {

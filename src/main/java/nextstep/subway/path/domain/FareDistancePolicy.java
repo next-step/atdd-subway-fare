@@ -16,6 +16,8 @@ public class FareDistancePolicy implements FarePolicy {
         this.fareDistanceType = distanceType;
     }
 
+    private FareDistancePolicy() {}
+
     @Override
     public int calculate(int beforeCost) {
         return beforeCost + this.fareDistanceType.calucate(this.distance);
