@@ -8,20 +8,16 @@ public class FareDiscountPolicy implements FarePolicy {
     private DiscountType discountType;
 
     public FareDiscountPolicy(LoginMember loginMember) {
-        DiscountType type = DiscountType.NONE;
+        this(DiscountType.NONE);
 
         if (!loginMember.isAnonymous()) {
-            type = DiscountType.typeFromAge(loginMember.getAge());
+            this.discountType = DiscountType.typeFromAge(loginMember.getAge());
         }
-
-        new FareDiscountPolicy(type);
     }
 
     private FareDiscountPolicy(DiscountType discountType) {
         this.discountType = discountType;
     }
-
-    private FareDiscountPolicy() {}
 
     @Override
     public int calculate(int beforeCost) {

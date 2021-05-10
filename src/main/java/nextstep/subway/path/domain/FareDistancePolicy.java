@@ -8,7 +8,7 @@ public class FareDistancePolicy implements FarePolicy {
     private int distance;
 
     public FareDistancePolicy(int distance) {
-        new FareDistancePolicy(distance, FareDistanceType.typeFromDistance(distance));
+        this(distance, FareDistanceType.typeFromDistance(distance));
     }
 
     private FareDistancePolicy(int distance, FareDistanceType distanceType) {
