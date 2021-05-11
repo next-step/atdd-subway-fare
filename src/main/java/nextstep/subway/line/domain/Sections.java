@@ -140,4 +140,15 @@ public class Sections {
     public int getTotalDuration() {
         return sections.stream().mapToInt(it -> it.getDuration()).sum();
     }
+
+    public int getMaxAdditionalFee() {
+
+        int maxFee = 0;
+
+        for (Section section : sections) {
+            maxFee = Math.max(maxFee, section.getLine().getAdditionalFare());
+        }
+
+        return maxFee;
+    }
 }

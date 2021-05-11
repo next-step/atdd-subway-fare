@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.auth.dto.TokenResponse;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.path.dto.PathResponse;
@@ -18,8 +19,8 @@ import static nextstep.subway.line.acceptance.LineSteps.지하철_노선_생성_
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
-    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration);
+    public static LineResponse 지하철_노선_등록되어_있음(String name, String color, StationResponse upStation, StationResponse downStation, int distance, int duration, int additionalFee) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation.getId(), downStation.getId(), distance, duration, additionalFee);
         return 지하철_노선_생성_요청(lineRequest).as(LineResponse.class);
     }
 
@@ -30,6 +31,18 @@ public class PathSteps {
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", "DISTANCE")
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 로그인_후_두_역_최단_경로_조회_요청(Long source, Long target, String type, TokenResponse tokenResponse) {
+        return RestAssured
+                .given().log().all()
+                .auth().oauth2(tokenResponse.getAccessToken())
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", type)
                 .when().get("/paths")
                 .then().log().all().extract();
     }

@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.Documentation;
 import nextstep.subway.line.domain.PathType;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
@@ -19,8 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static nextstep.subway.path.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
                                                 ,new StationResponse(2L, "시청역", LocalDateTime.now(), LocalDateTime.now()));
         을지로3가_시청역경로 = new PathResponse( stationResponses, 10, 10, 1_250);
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(을지로3가_시청역경로);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), nullable(LoginMember.class))).thenReturn(을지로3가_시청역경로);
 
         RequestParametersSnippet requestParametersSnippet = requestParameters(
                 parameterWithName("source").description("출발역 ID"),
