@@ -37,7 +37,8 @@
             <div v-if="pathResult" class="d-flex justify-center mt-4">
               <v-card width="400" flat>
                 <v-tabs v-model="tab" background-color="transparent" color="amber" grow>
-                  <v-tab>최단 거리</v-tab>
+                  <v-tab @click="onChangePathType(PATH_TYPE.DISTANCE)">최단 거리</v-tab>
+                  <v-tab @click="onChangePathType(PATH_TYPE.DURATION)">최소 시간</v-tab>
                 </v-tabs>
                 <v-tabs-items v-model="tab">
                   <v-tab-item>
@@ -45,11 +46,13 @@
                       <template v-slot:default>
                         <thead>
                         <tr>
+                          <th>소요시간</th>
                           <th>거리</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
+                          <td>{{ pathResult.duration }}분</td>
                           <td>{{ pathResult.distance }}km</td>
                         </tr>
                         </tbody>
@@ -61,11 +64,13 @@
                       <template v-slot:default>
                         <thead>
                         <tr>
+                          <th>소요시간</th>
                           <th>거리</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
+                          <td>{{ pathResult.duration }}분</td>
                           <td>{{ pathResult.distance }}km</td>
                         </tr>
                         </tbody>
@@ -140,16 +145,25 @@
         } catch (e) {
           this.showSnackbar(SNACKBAR_MESSAGES.COMMON.FAIL)
         }
+      },
+      onChangePathType(type) {
+        this.path.type = type
+        this.onSearchResult()
       }
     },
     data() {
       return {
         path: {
           source: '',
-          target: ''
+          target: '',
+          type: 'DISTANCE'
         },
         allStationsView: [],
         rules: { ...validator },
+        PATH_TYPE: {
+          DISTANCE: 'DISTANCE',
+          DURATION: 'DURATION'
+        },
         tab: null
       }
     }

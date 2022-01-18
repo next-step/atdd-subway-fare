@@ -18,6 +18,45 @@
           placeholder="노선 이름"
           outlined
         ></v-text-field>
+        <v-text-field
+            v-model="lineEditForm.extraFare"
+            color="grey darken-1"
+            label="추가 요금"
+            placeholder="추가 요금"
+            outlined
+        ></v-text-field>
+<!--        <v-row>-->
+<!--          <v-col cols="4">-->
+<!--            <v-text-field-->
+<!--                v-model="lineEditForm.startTime"-->
+<!--                :rules="rules.line.startTime"-->
+<!--                color="grey darken-1"-->
+<!--                label="첫차 시간"-->
+<!--                placeholder="첫차 시간"-->
+<!--                outlined-->
+<!--            ></v-text-field>-->
+<!--          </v-col>-->
+<!--          <v-col cols="4">-->
+<!--            <v-text-field-->
+<!--                v-model="lineEditForm.endTime"-->
+<!--                :rules="rules.line.endTime"-->
+<!--                color="grey darken-1"-->
+<!--                label="막차 시간"-->
+<!--                placeholder="막차 시간"-->
+<!--                outlined-->
+<!--            ></v-text-field>-->
+<!--          </v-col>-->
+<!--          <v-col cols="4">-->
+<!--            <v-text-field-->
+<!--                v-model="lineEditForm.intervalTime"-->
+<!--                :rules="rules.line.intervalTime"-->
+<!--                color="grey darken-1"-->
+<!--                label="간격"-->
+<!--                placeholder="간격"-->
+<!--                outlined-->
+<!--            ></v-text-field>-->
+<!--          </v-col>-->
+<!--        </v-row>-->
         <div>
           <v-text-field
             v-model="lineEditForm.color"
