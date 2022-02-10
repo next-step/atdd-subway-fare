@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import support.auth.authorization.secured.Secured;
 
 import java.net.URI;
 import java.util.List;
@@ -18,6 +19,7 @@ public class StationController {
         this.stationService = stationService;
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/stations")
     public ResponseEntity<StationResponse> createStation(@RequestBody StationRequest stationRequest) {
         StationResponse station = stationService.saveStation(stationRequest);
@@ -29,6 +31,7 @@ public class StationController {
         return ResponseEntity.ok().body(stationService.findAllStations());
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/stations/{id}")
     public ResponseEntity<Void> deleteStation(@PathVariable Long id) {
         stationService.deleteStationById(id);

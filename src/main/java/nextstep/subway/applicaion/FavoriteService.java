@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
-import nextstep.member.domain.LoginMember;
+import nextstep.member.application.MemberService;
+import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
 import nextstep.subway.applicaion.dto.FavoriteResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -19,20 +20,24 @@ import java.util.stream.Collectors;
 @Service
 public class FavoriteService {
     private FavoriteRepository favoriteRepository;
+    private MemberService memberService;
     private StationService stationService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, StationService stationService) {
+    public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService) {
         this.favoriteRepository = favoriteRepository;
+        this.memberService = memberService;
         this.stationService = stationService;
     }
 
-    public void createFavorite(LoginMember loginMember, FavoriteRequest request) {
-        Favorite favorite = new Favorite(loginMember.getId(), request.getSource(), request.getTarget());
+    public void createFavorite(String email, FavoriteRequest request) {
+        MemberResponse member = memberService.findMember(email);
+        Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
     }
 
-    public List<FavoriteResponse> findFavorites(LoginMember loginMember) {
-        List<Favorite> favorites = favoriteRepository.findByMemberId(loginMember.getId());
+    public List<FavoriteResponse> findFavorites(String email) {
+        MemberResponse member = memberService.findMember(email);
+        List<Favorite> favorites = favoriteRepository.findByMemberId(member.getId());
         Map<Long, Station> stations = extractStations(favorites);
 
         return favorites.stream()
@@ -43,9 +48,10 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteFavorite(LoginMember loginMember, Long id) {
+    public void deleteFavorite(String email, Long id) {
+        MemberResponse member = memberService.findMember(email);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
-        if (!favorite.isCreatedBy(loginMember.getId())) {
+        if (!favorite.isCreatedBy(member.getId())) {
             throw new RuntimeException();
         }
         favoriteRepository.deleteById(id);

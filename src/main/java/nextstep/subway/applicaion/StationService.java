@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class StationService {
     private StationRepository stationRepository;
 
@@ -20,30 +20,34 @@ public class StationService {
         this.stationRepository = stationRepository;
     }
 
+    @Transactional
     public StationResponse saveStation(StationRequest stationRequest) {
         Station station = stationRepository.save(new Station(stationRequest.getName()));
         return StationResponse.of(station);
     }
 
-    @Transactional(readOnly = true)
     public List<StationResponse> findAllStations() {
-        List<Station> stations = stationRepository.findAll();
-
-        return stations.stream()
+        return stationRepository.findAll().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteStationById(Long id) {
         stationRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
+    public StationResponse createStationResponse(Station station) {
+        return new StationResponse(
+                station.getId(),
+                station.getName()
+        );
+    }
+
     public Station findById(Long id) {
         return stationRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    @Transactional(readOnly = true)
     public List<Station> findAllStationsById(Set<Long> stationIds) {
         return stationRepository.findAllById(stationIds);
     }
