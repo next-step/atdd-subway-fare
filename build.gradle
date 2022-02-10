@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id "org.asciidoctor.convert" version "1.5.9.2"
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
 	id 'java'
 }
 
@@ -31,7 +31,6 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	// rest docs
-	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured:2.0.5.RELEASE'
 
 	// test
@@ -72,8 +71,8 @@ bootJar {
 }
 
 task copyDocument(type: Copy) {
-	dependsOn testDocument
+	dependsOn asciidoctor
 
-	from file("build/asciidoc/html5/index.html")
+	from file("build/docs/asciidoc")
 	into file("src/main/resources/static/docs")
 }
