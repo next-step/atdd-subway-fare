@@ -1,21 +1,21 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.applicaion.dto.StationResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static nextstep.subway.documentation.PathDocumentationFixture.PATH_RESPONSE_FIXTURE;
+import static nextstep.subway.documentation.PathDocumentationSteps.최단_경로_조회_됨;
+import static nextstep.subway.documentation.PathDocumentationSteps.최단_경로_조회_요청;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -27,46 +27,52 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class PathDocumentation extends Documentation {
 
+    public static final String DOCUMENT_NAME = "path";
+
     @MockBean
     private PathService pathService;
 
     @DisplayName("최단 경로 조회 문서화")
     @Test
     void path() {
-        PathResponse pathResponse = new PathResponse(
-                Arrays.asList(
-                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
-                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now()),
-                        new StationResponse(3L, "선릉역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10
+        //given
+        when(pathService.findPath(anyLong(), anyLong())).thenReturn(PATH_RESPONSE_FIXTURE);
+
+        RequestParametersSnippet requestParameters = requestParameters(
+                parameterWithName("source").description("출발 역 ID"),
+                parameterWithName("target").description("도착 역 ID")
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        ResponseFieldsSnippet responseFields = responseFields(
+                fieldWithPath("stations").description("역 목록"),
+                fieldWithPath("stations[].id").description("고유번호"),
+                fieldWithPath("stations[].name").description("역 이름"),
+                fieldWithPath("stations[].createdDate").description("생성 시간"),
+                fieldWithPath("stations[].modifiedDate").description("최종 수정 시간"),
+                fieldWithPath("distance").type(Integer.TYPE).description("전체 거리")
+        );
 
-        ExtractableResponse<Response> response = RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발 역 ID"),
-                                parameterWithName("target").description("도착 역 ID")),
-                        responseFields(
-                                fieldWithPath("stations").description("역 목록"),
-                                fieldWithPath("stations[].id").description("고유번호"),
-                                fieldWithPath("stations[].name").description("역 이름"),
-                                fieldWithPath("stations[].createdDate").description("생성 시간"),
-                                fieldWithPath("stations[].modifiedDate").description("최종 수정 시간"),
-                                fieldWithPath("distance").description("전체 거리"))
-                ))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 3L)
-                .when().get("/paths")
-                .then().log().all().extract();
+        RestDocumentationFilter filter = createFilter(requestParameters, responseFields);
 
+        Map<String, Long> params = new HashMap<>();
+        params.put("source", 1L);
+        params.put("target", 3L);
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        //when
+        ExtractableResponse<Response> 최단_경로_조회_응답 = 최단_경로_조회_요청(spec, filter, params);
+
+        //then
+        최단_경로_조회_됨(최단_경로_조회_응답);
+    }
+
+    private RestDocumentationFilter createFilter(RequestParametersSnippet requestParametersSnippet,
+                                                 ResponseFieldsSnippet responseFieldsSnippet) {
+        return document(DOCUMENT_NAME,
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestParametersSnippet,
+                responseFieldsSnippet
+        );
     }
 
 }
