@@ -59,4 +59,12 @@ public class Line extends BaseEntity {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
+    public int totalDistance() {
+        return sections.totalDistance();
+    }
+
+    public int totalDuration() {
+        return sections.totalDuration();
+    }
 }
