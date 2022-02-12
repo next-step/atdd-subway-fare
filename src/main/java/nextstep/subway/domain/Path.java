@@ -26,6 +26,6 @@ public class Path {
     }
 
     public int extractFare() {
-        return 1250;
+        return FareCalculator.calculateFare(extractDistance());
     }
 }
