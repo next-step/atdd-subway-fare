@@ -52,7 +52,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
     }
 
-    @ParameterizedTest(name = "두 역의 최단 거리 경로를 조회한다. [{arguments}]")
+    @ParameterizedTest(name = "두 역의 경로를 조회한다. [{arguments}]")
     @MethodSource
     void findPath(PathType pathType) {
         // when

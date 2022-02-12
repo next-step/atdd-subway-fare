@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import static nextstep.subway.documentation.PathDocumentationFixture.PATH_RESPONSE_FIXTURE;
 import static nextstep.subway.documentation.PathDocumentationSteps.경로_조회_됨;
 import static nextstep.subway.documentation.PathDocumentationSteps.경로_조회_요청;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -39,7 +40,7 @@ public class PathDocumentation extends Documentation {
     @MethodSource
     void path(PathType pathType) {
         //given
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(PATH_RESPONSE_FIXTURE);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(PATH_RESPONSE_FIXTURE);
 
         RequestParametersSnippet requestParameters = getRequestParametersSnippet();
         ResponseFieldsSnippet responseFields = getResponseFieldsSnippet();
