@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.PathSteps.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +30,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         // given
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(getMockPathResponse());
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(getMockPathResponse());
 
         // when
         ExtractableResponse<Response> 조회_응답 = 두_역의_최소_시간_경로_조회를_요청_문서화(강남역, 분당역, spec);
