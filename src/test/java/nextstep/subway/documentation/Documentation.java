@@ -21,13 +21,11 @@ public class Documentation {
     int port;
 
     protected RequestSpecification spec;
+    protected RestDocumentationContextProvider restDocumentation;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.port = port;
-
-        this.spec = new RequestSpecBuilder()
-                .addFilter(documentationConfiguration(restDocumentation))
-                .build();
+        this.restDocumentation = restDocumentation;
     }
 }
