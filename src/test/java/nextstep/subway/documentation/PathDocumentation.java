@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -24,14 +25,14 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Arrays.asList(
-                        new StationResponse(1L, "강남역", null, null),
-                        new StationResponse(2L, "역삼역", null, null)
+                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10
         );
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         RestAssured
-                .given().log().all()
+                .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())))
