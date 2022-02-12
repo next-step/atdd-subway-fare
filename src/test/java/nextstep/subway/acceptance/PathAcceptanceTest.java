@@ -57,6 +57,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
     }
 
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathByDuration() {
+        // when
+        // 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+
+        // then
+        // 최소 시간 기준 경로를 응답
+        // 총 거리와 소요 시간을 함께 응답함
+    }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
