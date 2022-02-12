@@ -16,9 +16,9 @@ public class PathDocumentationSteps {
 
     private static final String PATH_URI = "/paths";
 
-    public static ExtractableResponse<Response> 최단_경로_조회_요청(RequestSpecification specification,
-                                                            RestDocumentationFilter filter,
-                                                            Map<String, ?> params) {
+    public static ExtractableResponse<Response> 경로_조회_요청(RequestSpecification specification,
+                                                         RestDocumentationFilter filter,
+                                                         Map<String, ?> params) {
         return RestAssured
                 .given(specification).log().all()
                 .filter(filter)
@@ -28,7 +28,7 @@ public class PathDocumentationSteps {
                 .then().log().all().extract();
     }
 
-    public static void 최단_경로_조회_됨(ExtractableResponse<Response> response) {
+    public static void 경로_조회_됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }
