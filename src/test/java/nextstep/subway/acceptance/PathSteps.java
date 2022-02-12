@@ -5,6 +5,8 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.HashMap;
@@ -33,10 +35,13 @@ public class PathSteps {
         return params;
     }
 
-    public static RestDocumentationFilter 경로관련_문서_필터생성() {
+    public static RestDocumentationFilter 경로관련_문서_필터생성(RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
         RestDocumentationFilter filter = document("path",
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()));
+                preprocessResponse(prettyPrint()),
+                requestParametersSnippet,
+                responseFieldsSnippet
+        );
         return filter;
     }
 
