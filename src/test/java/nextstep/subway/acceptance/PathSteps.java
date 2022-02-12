@@ -54,7 +54,8 @@ public class PathSteps {
 						responseFields(
 								subsectionWithPath("stations[]").description("출발역부터 도착역까지 역 경로"),
 								fieldWithPath("distance").description("출발역과 도착역까지 총 거리"),
-								fieldWithPath("duration").description("출발역과 도착역까지 소요시간")
+								fieldWithPath("duration").description("출발역과 도착역까지 소요시간"),
+								fieldWithPath("fare").description("지하철 이용 요금")
 						)
 				));
 	}
@@ -100,5 +101,9 @@ public class PathSteps {
 
 	public static void 경로_거리_조회됨(ExtractableResponse<Response> response, int distance) {
 		assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+	}
+
+	public static void 지하철_요금_조회됨(ExtractableResponse<Response> response, int amount) {
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(amount);
 	}
 }

@@ -26,6 +26,7 @@ public class PathDocumentation extends Documentation {
     Long 분당역 = 2L;
     int 거리 = 10;
     int 소요시간 = 60;
+    int 요금 = 1250;
 
     @Test
     void path() {
@@ -38,6 +39,7 @@ public class PathDocumentation extends Documentation {
         // then
         경로_조회됨(조회_응답, 강남역, 분당역);
         경로_소요시간_조회됨(조회_응답, 소요시간);
+        지하철_요금_조회됨(조회_응답, 1250);
     }
 
     private PathResponse getMockPathResponse() {
@@ -46,6 +48,8 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(강남역, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(분당역, "분당역", LocalDateTime.now(), LocalDateTime.now()))
                 , 거리
-                , 소요시간);
+                , 소요시간
+                , 요금
+        );
     }
 }
