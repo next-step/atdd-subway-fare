@@ -1,7 +1,7 @@
 package nextstep.subway.documentation;
 
 import com.google.common.collect.Lists;
-import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -35,9 +35,8 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
+        RequestSpecification spec = this.spec.filter(
+                document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
@@ -45,13 +44,11 @@ public class PathDocumentation extends Documentation {
                                 parameterWithName("target").description("Target Station Id")
                         ),
                         responseFields(
-                                subsectionWithPath("stations").description("경로 내 있는 역 목록"),
-                                fieldWithPath("distance").description("경로 거리")
-                        )))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .when().get("/paths")
-                .then().log().all().extract();
+                                subsectionWithPath("stations").description("경로 내 있는 역 목록록롹"),
+                                fieldWithPath("distance").description("경로 거리"))
+                )
+        );
+
+        두_역의_최단_거리_경로_조회를_요청(1L, 2L, spec);
     }
 }
