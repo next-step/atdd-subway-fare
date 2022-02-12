@@ -80,14 +80,6 @@ public class PathSteps {
 		return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
 	}
 
-	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
-		return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, 0);
-	}
-
-	public static Map<String, String> 구간_파라미터_생성(Long upStationId, Long downStationId, int distance) {
-		return 구간_파라미터_생성(upStationId, downStationId, distance, 0);
-	}
-
 	public static Map<String, String> 구간_파라미터_생성(Long upStationId, Long downStationId, int distance, int duration) {
 		Map<String, String> params = new HashMap<>();
 		params.put("upStationId", upStationId + "");
