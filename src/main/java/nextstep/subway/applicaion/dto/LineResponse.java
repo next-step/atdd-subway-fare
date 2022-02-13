@@ -13,21 +13,27 @@ public class LineResponse {
     private List<StationResponse> stations;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private int distance;
+    private int duration;
 
     public static LineResponse of(Line line) {
         List<StationResponse> stations = line.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-        return new LineResponse(line.getId(), line.getName(), line.getColor(), stations, line.getCreatedDate(), line.getModifiedDate());
+        return new LineResponse(line.getId(), line.getName(), line.getColor(), stations,
+                line.getCreatedDate(), line.getModifiedDate(), line.totalDistance(), line.totalDuration());
     }
 
-    public LineResponse(Long id, String name, String color, List<StationResponse> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public LineResponse(Long id, String name, String color, List<StationResponse> stations,
+                        LocalDateTime createdDate, LocalDateTime modifiedDate, int distance, int duration) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.stations = stations;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -52,6 +58,14 @@ public class LineResponse {
 
     public LocalDateTime getModifiedDate() {
         return modifiedDate;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }
 
