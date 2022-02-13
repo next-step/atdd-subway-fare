@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private PathEdgeWeightMapper pathEdgeWeightMapper;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(List<Line> lines, PathEdgeWeightMapper pathEdgeWeightMapper) {
         this.lines = lines;
+        this.pathEdgeWeightMapper = pathEdgeWeightMapper;
     }
 
     public Path findPath(Station source, Station target) {
@@ -23,7 +25,7 @@ public class SubwayMap {
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
@@ -45,7 +47,7 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
     }
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
@@ -55,7 +57,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, pathEdgeWeightMapper.map(it));
                 });
     }
 
@@ -63,7 +65,7 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
