@@ -60,10 +60,6 @@ public class PathSteps {
 				));
 	}
 
-	public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청_문서화(Long source, Long target, RequestSpecification spec) {
-		return requestPath(source, target, TYPE_DISTANCE, createRestAssuredWithDocument(spec));
-	}
-
 	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청_문서화(Long source, Long target, RequestSpecification spec) {
 		return requestPath(source, target, TYPE_DURATION, createRestAssuredWithDocument(spec));
 	}

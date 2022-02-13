@@ -1,12 +1,18 @@
 package nextstep.subway.domain;
 
+import java.util.function.Function;
+
 public enum PathType {
-	DISTANCE, DURATION;
+	DISTANCE(Section::getDistance),
+	DURATION(Section::getDuration);
+
+	private final Function<Section, Integer> weightFunction;
+
+	PathType(Function<Section, Integer> weightFunction) {
+		this.weightFunction = weightFunction;
+	}
 
 	public int getWeight(Section section) {
-		if (this == DISTANCE) {
-			return section.getDistance();
-		}
-		return section.getDuration();
+		return this.weightFunction.apply(section);
 	}
 }

@@ -21,10 +21,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
-     * Given 지하철역이 등록되어있음
-     * And 지하철 노선이 등록되어있음
-     * And 지하철 노선에 지하철역이 등록되어있음
-     * <p>
      * 교대역    --- *2호선*(10m, 5min) ---    강남역
      * |                                      |
      * *3호선*                              *신분당선*
