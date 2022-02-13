@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.acceptance.PathSteps.경로관련_문서_필터생성;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -71,14 +73,14 @@ class PathAcceptanceTest extends AcceptanceTest {
      *     And 총 거리와 소요 시간을 함께 응답함
      */
 
-    @DisplayName("두 역의 최소 시간 경로를 조회")
-    @Test
-    void findPathByDuration() {
-        //when
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
-
-        //then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getLong("duration")).isEqualTo(5);
-    }
+//    @DisplayName("두 역의 최소 시간 경로를 조회")
+//    @Test
+//    void findPathByDuration() {
+//        //when
+//        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+//
+//        //then
+//        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+//        assertThat(response.jsonPath().getLong("duration")).isEqualTo(5);
+//    }
 }
