@@ -23,7 +23,7 @@ public class SubwayMap {
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
@@ -45,7 +45,7 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
     }
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
