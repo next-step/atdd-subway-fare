@@ -49,11 +49,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 3);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
     }
 
     /**
@@ -90,7 +90,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
             .queryParam("target", target)
-            .when().get("/paths")
+            .when().get("/paths/distance")
             .then().log().all().extract();
     }
 
@@ -100,7 +100,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
             .queryParam("target", target)
-            .when().get("/paths")
+            .when().get("/paths/duration")
             .then().log().all().extract();
     }
 

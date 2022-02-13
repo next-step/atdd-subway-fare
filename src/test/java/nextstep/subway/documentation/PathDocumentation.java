@@ -56,6 +56,7 @@ public class PathDocumentation extends Documentation {
         params.put("upStationId", 교대역.getId().toString());
         params.put("downStationId", 양재역.getId().toString());
         params.put("distance", "20");
+        params.put("duration", "10");
         지하철_노선에_지하철_구간_생성_요청(이호선.getId(), params);
 
         ExtractableResponse<Response> response = RestAssured
@@ -63,7 +64,7 @@ public class PathDocumentation extends Documentation {
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", 교대역.getId())
             .queryParam("target", 양재역.getId())
-            .when().get("/paths")
+            .when().get("/paths/distance")
             .then().assertThat().statusCode(is(200))
             .log().all().extract();
 
@@ -71,6 +72,7 @@ public class PathDocumentation extends Documentation {
 
         assertThat(pathResponse.getStations().size()).isEqualTo(2);
         assertThat(pathResponse.getDistance()).isEqualTo(20);
+        assertThat(pathResponse.getDuration()).isEqualTo(10);
     }
 
 }

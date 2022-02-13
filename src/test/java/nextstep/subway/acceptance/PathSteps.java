@@ -24,14 +24,15 @@ public class PathSteps {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestParameters(
-                    parameterWithName("source").description("즐겨찾기의 시작역 아이디"),
-                    parameterWithName("target").description("즐겨찾기의 도착역 아이디")),
+                    parameterWithName("source").description("경로조회의 시작역 아이디"),
+                    parameterWithName("target").description("경로조회의 도착역 아이디")),
                 responseFields(
                     fieldWithPath("stations[].id").type(Long.class).description("역 아이디"),
                     fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
                     fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("역 생성날짜"),
                     fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정날짜"),
-                    fieldWithPath("distance").type(Integer.class).description("즐겨찾기 총 거리")
+                    fieldWithPath("distance").type(Integer.class).description("경로조회 총 거리"),
+                    fieldWithPath("duration").type(Integer.class).description("경로조회 총 소요시간")
                 )))
             .build();
     }

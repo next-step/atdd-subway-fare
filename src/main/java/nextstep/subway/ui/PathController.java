@@ -15,8 +15,13 @@ public class PathController {
         this.pathService = pathService;
     }
 
-    @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPath(source, target));
+    @GetMapping("/paths/distance")
+    public ResponseEntity<PathResponse> findPathByDistance(@RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findPathByDistance(source, target));
+    }
+
+    @GetMapping("/paths/duration")
+    public ResponseEntity<PathResponse> findPathByDuration(@RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findPathByDuration(source, target));
     }
 }
