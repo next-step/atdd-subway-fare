@@ -32,7 +32,7 @@ public class PathDocumentation extends Documentation {
             .thenReturn(pathResponse);
 
         지하철_최단_거리_조회_요청(
-            PathSnippet.PATH.toGiven(spec, "path"),
+            PathSnippet.PATH.toGiven(spec, DocumentationName.PATH.name()),
             1L, 2L
         );
     }

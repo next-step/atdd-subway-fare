@@ -11,4 +11,10 @@
 
 === 경로 조회
 
-operation::path[snippets='http-request,http-response,request-parameters,response-fields']
+operation::PATH[snippets='http-request,http-response,request-parameters,response-fields']
+
+== 지하철 노선
+
+=== 노선 생성
+
+operation::LINE_ADD[snippets='http-request,http-response,request-fields,response-fields']
