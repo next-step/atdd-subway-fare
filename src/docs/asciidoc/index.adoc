@@ -7,4 +7,4 @@
 :sectlinks:
 
 
-include::{includedir}/path.adoc[]
+link:path.html[지하철 경로 API]
