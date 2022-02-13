@@ -39,15 +39,11 @@ class FareTypeTest {
             "51, 1850",
     })
     void fare(int distance, int expectedFare) {
-        //given
-        FareType fareType = FareType.from(distance);
-
         //when
-        int fare = fareType.fare();
+        int fare = FareType.fare(distance);
 
         //then
         assertThat(fare).isEqualTo(expectedFare);
-
     }
 
 }
