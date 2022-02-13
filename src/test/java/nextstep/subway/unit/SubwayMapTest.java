@@ -15,7 +15,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
-
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
