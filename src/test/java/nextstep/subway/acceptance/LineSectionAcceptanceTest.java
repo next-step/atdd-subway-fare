@@ -31,8 +31,9 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
 
-        Map<String, String> lineCreateParams = LineSteps.createLineCreateParams(강남역, 양재역, 10, 10);
-        신분당선 = 지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성_요청_하고_ID_반환(
+            createLineCreateParams("신분당선", "RED", 강남역, 양재역, 10, 10)
+        );
     }
 
     /**

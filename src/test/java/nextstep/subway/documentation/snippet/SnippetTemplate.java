@@ -10,7 +10,6 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 
 public interface SnippetTemplate {
-
     Snippet[] getSnippets();
 
     default RequestSpecification toGiven(RequestSpecification spec, String identifier) {
@@ -20,7 +19,7 @@ public interface SnippetTemplate {
             preprocessResponse(prettyPrint()),
             getSnippets()
         );
-        return RestAssured.given(spec).log().all()
+        return RestAssured.given(spec)
                           .filter(document);
     }
 }

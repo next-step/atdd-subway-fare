@@ -11,9 +11,11 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.documentation.snippet.PathSnippet;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+@DisplayName("Path 문서화")
 public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
