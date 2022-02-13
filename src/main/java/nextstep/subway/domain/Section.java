@@ -23,6 +23,7 @@ public class Section extends DefaultWeightedEdge {
     private Station downStation;
 
     private int distance;
+    private int duration;
 
     public Section() {
 
@@ -34,6 +35,15 @@ public class Section extends DefaultWeightedEdge {
         this.downStation = downStation;
         this.distance = distance;
     }
+
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        this.line = line;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+        this.duration = duration;
+    }
+
 
     public Long getId() {
         return id;
@@ -53,6 +63,10 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public boolean isSameUpStation(Station station) {
