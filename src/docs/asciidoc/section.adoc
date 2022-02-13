@@ -1,0 +1,21 @@
+[[section]]
+== 지하철 구간
+
+=== 구간 추가
+
+==== Request
+
+include::{snippets}/section/http-request.adoc[]
+
+=== Path Parameters
+
+include::{snippets}/section/path-parameters.adoc[]
+
+=== Request Parameters
+
+include::{snippets}/section/request-fields.adoc[]
+
+
+==== Response
+
+include::{snippets}/section/http-response.adoc[]
