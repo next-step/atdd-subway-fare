@@ -18,17 +18,17 @@ public class PathDocumentationSteps {
     public static ExtractableResponse<Response> 경로_조회_요청(RequestSpecification specification,
                                                          RestDocumentationFilter filter,
                                                          Map<String, Object> parameters) {
-        RequestSpecification requestSpecification = createRequestSpecification(specification, parameters);
 
-        return response(requestSpecification.filter(filter));
+        RequestSpecification requestSpecification = given(specification, filter);
+        RequestSpecification given = givenWithJsonParameters(requestSpecification, parameters);
+        Response when = when(given);
+        return then(when);
     }
 
-    public static RequestSpecification createRequestSpecification(RequestSpecification specification,
-                                                                  Map<String, Object> parameters) {
+    private static RequestSpecification given(RequestSpecification specification, RestDocumentationFilter filter) {
         return RestAssured
                 .given(specification).log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParams(parameters);
+                .filter(filter);
     }
 
     public static void 경로_조회_됨(ExtractableResponse<Response> response) {

@@ -20,20 +20,39 @@ public class PathAcceptanceSteps {
         parameters.put("target", target);
         parameters.put("pathType", pathType.name());
 
-        return response(requestSpecification(parameters));
+        RequestSpecification given = givenWithJsonParameters(parameters);
+        Response when = when(given);
+        return then(when);
     }
 
-    public static ExtractableResponse<Response> response(RequestSpecification requestSpecification) {
-        return requestSpecification
-                .when().get(PATH_URI)
-                .then().log().all().extract();
-    }
-
-    public static RequestSpecification requestSpecification(Map<String, Object> params) {
+    public static RequestSpecification given() {
         return RestAssured
-                .given().log().all()
+                .given().log().all();
+    }
+
+    public static RequestSpecification givenWithJsonParameters(RequestSpecification requestSpecification,
+                                                               Map<String, Object> parameters) {
+        return requestSpecification
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParams(params);
+                .queryParams(parameters);
+    }
+
+    public static RequestSpecification givenWithJsonParameters(Map<String, Object> parameters) {
+        return givenWithJsonParameters(given(), parameters);
+    }
+
+    public static Response when(RequestSpecification requestSpecification) {
+        return requestSpecification
+                .when()
+                .get(PATH_URI);
+    }
+
+    public static ExtractableResponse<Response> then(Response response) {
+        return response
+                .then()
+                .log()
+                .all()
+                .extract();
     }
 
 }
