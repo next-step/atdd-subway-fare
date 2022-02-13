@@ -6,5 +6,8 @@
 :toclevels: 2
 :sectlinks:
 
+[[path]]
+== 지하철 경로
 
-include::path.adoc[]
+=== 경로 조회
+operation::path[snippets='http-request,request-parameters,http-response,response-fields']
