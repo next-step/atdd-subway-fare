@@ -90,24 +90,24 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
+    public static Map<String, String> createLineCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", "신분당선");
         lineCreateParams.put("color", "bg-red-600");
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", 10 + "");
-        lineCreateParams.put("duration", 10 + "");
+        lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
         return lineCreateParams;
     }
 
-    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
+    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
-        params.put("distance", 6 + "");
-        params.put("duration", 6 + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
         return params;
     }
 }

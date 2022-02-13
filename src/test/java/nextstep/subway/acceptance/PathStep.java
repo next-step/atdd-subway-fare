@@ -14,30 +14,29 @@ public class PathStep {
     private PathStep() {
     }
 
-    public static ExtractableResponse<Response> 지하철_최단_거리_조회_요청(RequestSpecification given, long source, long target) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification given, long source, long target) {
         return given.log().all()
                     .accept(MediaType.APPLICATION_JSON_VALUE)
                     .queryParam("source", source)
                     .queryParam("target", target)
-                    .when().get("/paths")
+                    .when().get("/paths/distance")
                     .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-            .given().log().all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("source", source)
-            .queryParam("target", target)
-            .when().get("/paths")
-            .then().log().all().extract();
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(long source, long target) {
+        return 두_역의_최단_거리_경로_조회를_요청(RestAssured.given(), source, target);
     }
 
-    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        return params;
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(RequestSpecification given, long source, long target) {
+        return given.log().all()
+                    .accept(MediaType.APPLICATION_JSON_VALUE)
+                    .queryParam("source", source)
+                    .queryParam("target", target)
+                    .when().get("/paths/duration")
+                    .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(long source, long target) {
+        return 두_역의_최소_시간_경로_조회를_요청(RestAssured.given(), source, target);
     }
 }

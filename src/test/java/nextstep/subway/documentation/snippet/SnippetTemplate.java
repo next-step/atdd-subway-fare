@@ -1,4 +1,4 @@
-package nextstep.subway.documentation.given;
+package nextstep.subway.documentation.snippet;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 

@@ -12,10 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import nextstep.subway.acceptance.LineSteps;
 import nextstep.subway.applicaion.LineService;
-import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.documentation.given.LineSnippet;
+import nextstep.subway.documentation.snippet.LineSnippet;
 
 @DisplayName("Section 문서화")
 public class LineDocumentation extends Documentation {
@@ -28,7 +27,7 @@ public class LineDocumentation extends Documentation {
         Long 상행_ID = 1L;
         Long 하행_ID = 2L;
 
-        Map<String, String> lineRequest = LineSteps.createLineCreateParams(상행_ID, 하행_ID);
+        Map<String, String> lineRequest = LineSteps.createLineCreateParams(상행_ID, 하행_ID, 10, 10);
         LineResponse lineResponse = LineResponse.builder()
             .id(1L)
             .name(lineRequest.get("name"))
