@@ -3,59 +3,50 @@ package nextstep.subway.documentation;
 import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.documentation.step.PathDocumentSteps;
+import nextstep.subway.domain.Station;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
 
+import static nextstep.subway.documentation.step.PathDocumentSteps.경로_조회_문서화;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
 
     @MockBean
     private PathService pathService;
 
+    private Station 강남역;
+    private Station 판교역;
+
+    @BeforeEach
+    void setUp() {
+        강남역 = new Station("강남역");
+        판교역 = new Station("판교역");
+
+        ReflectionTestUtils.setField(강남역, "id", 1L);
+        ReflectionTestUtils.setField(판교역, "id", 2L);
+
+    }
+
     @Test
     void path() {
-
-        PathResponse pathResponse = new PathResponse(
-                Arrays.asList(new StationResponse(1L, "강남역", null, null),
-                        new StationResponse(2L, "판교역", null, null)),
-                10
-        );
-
+        PathResponse 응답 = PathDocumentSteps.경로_조회_응답_생성(Arrays.asList(강남역, 판교역));
         when(pathService.findPath(anyLong(), anyLong()))
-                .thenReturn(pathResponse);
+                .thenReturn(응답);
 
         RestAssured
                 .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발역 ID"),
-                                parameterWithName("target").description("도착역 ID")),
-                        responseFields(
-                                fieldWithPath("stations").description("지하철역"),
-                                fieldWithPath("stations[].id").description("지하철역 ID"),
-                                fieldWithPath("stations[].name").description("지하철역 이름"),
-                                fieldWithPath("stations[].createdDate").description("지하철역 생성일"),
-                                fieldWithPath("stations[].modifiedDate").description("지하철역 수정일"),
-                                fieldWithPath("distance").description("거리")
-                        )
-                ))
+                .filter(경로_조회_문서화())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
+                .queryParam("source", 강남역.getId())
+                .queryParam("target", 판교역.getId())
                 .when().get("/paths")
                 .then().log().all().extract();
     }
