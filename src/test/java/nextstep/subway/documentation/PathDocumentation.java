@@ -42,8 +42,8 @@ public class PathDocumentation extends Documentation {
         //given
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(PATH_RESPONSE_FIXTURE);
 
-        RequestParametersSnippet requestParameters = getRequestParametersSnippet();
-        ResponseFieldsSnippet responseFields = getResponseFieldsSnippet();
+        RequestParametersSnippet requestParameters = createRequestParametersSnippet();
+        ResponseFieldsSnippet responseFields = createResponseFieldsSnippet();
 
         RestDocumentationFilter filter = createFilter(requestParameters, responseFields);
         Map<String, Object> params = new HashMap<>();
@@ -65,7 +65,7 @@ public class PathDocumentation extends Documentation {
         );
     }
 
-    private ResponseFieldsSnippet getResponseFieldsSnippet() {
+    private ResponseFieldsSnippet createResponseFieldsSnippet() {
         return responseFields(
                 fieldWithPath("stations").description("역 목록"),
                 fieldWithPath("stations[].id").description("고유번호"),
@@ -77,7 +77,7 @@ public class PathDocumentation extends Documentation {
         );
     }
 
-    private RequestParametersSnippet getRequestParametersSnippet() {
+    private RequestParametersSnippet createRequestParametersSnippet() {
         return requestParameters(
                 parameterWithName("source").description("출발 역 ID"),
                 parameterWithName("target").description("도착 역 ID"),

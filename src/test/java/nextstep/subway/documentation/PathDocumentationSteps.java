@@ -10,22 +10,25 @@ import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.Map;
 
+import static nextstep.subway.acceptance.PathAcceptanceSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathDocumentationSteps {
 
-    private static final String PATH_URI = "/paths";
-
     public static ExtractableResponse<Response> 경로_조회_요청(RequestSpecification specification,
                                                          RestDocumentationFilter filter,
-                                                         Map<String, ?> params) {
+                                                         Map<String, Object> parameters) {
+        RequestSpecification requestSpecification = createRequestSpecification(specification, parameters);
+
+        return response(requestSpecification.filter(filter));
+    }
+
+    public static RequestSpecification createRequestSpecification(RequestSpecification specification,
+                                                                  Map<String, Object> parameters) {
         return RestAssured
                 .given(specification).log().all()
-                .filter(filter)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParams(params)
-                .when().get(PATH_URI)
-                .then().log().all().extract();
+                .queryParams(parameters);
     }
 
     public static void 경로_조회_됨(ExtractableResponse<Response> response) {
