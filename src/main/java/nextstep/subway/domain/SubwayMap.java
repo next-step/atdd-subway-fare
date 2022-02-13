@@ -70,4 +70,8 @@ public class SubwayMap {
                     graph.setEdgeWeight(sectionEdge, it.getDistance());
                 });
     }
+
+    public Path findPathByDuration(Station upStation, Station downStation) {
+        return null;
+    }
 }

@@ -81,8 +81,8 @@ class LineNewTest {
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(역삼역);
-        assertThat(section.getDistance()).isEqualTo(5);
-        assertThat(section.getDuration()).isEqualTo(3);
+        assertThat(section.getDistance()).isEqualTo(10);
+        assertThat(section.getDuration()).isEqualTo(5);
     }
 
     @DisplayName("목록 뒤에 추가할 경우")
