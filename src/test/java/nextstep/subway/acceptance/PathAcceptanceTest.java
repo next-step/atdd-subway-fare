@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.PathAcceptanceSteps.경로_전체_요금_조회됨;
 import static nextstep.subway.acceptance.PathAcceptanceSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
@@ -60,6 +61,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_역_목록_조회됨(response, 교대역, 남부터미널역, 양재역);
         경로_전체_거리_조회됨(response, 5);
         경로_전체_시간_조회됨(response, 5);
+        경로_전체_요금_조회됨(response, 1450);
     }
 
     private static Stream<Arguments> findPath() {

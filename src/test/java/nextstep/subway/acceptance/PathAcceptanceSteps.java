@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class PathAcceptanceSteps {
 
     public static final String PATH_URI = "/paths";
@@ -53,6 +55,10 @@ public class PathAcceptanceSteps {
                 .log()
                 .all()
                 .extract();
+    }
+
+    public static void 경로_전체_요금_조회됨(ExtractableResponse<Response> response, int fare) {
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
 }
