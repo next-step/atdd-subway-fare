@@ -47,7 +47,7 @@ public class PathDocumentation extends Documentation {
         Map<String, Object> params = new HashMap<>();
         params.put("source", 1L);
         params.put("target", 3L);
-        params.put("pathType", pathType);
+        params.put("type", pathType);
 
         //when
         ExtractableResponse<Response> 경로_조회_응답 = 경로_조회_요청(spec, filter, params);
@@ -73,7 +73,7 @@ public class PathDocumentation extends Documentation {
         return requestParameters(
                 parameterWithName("source").description("출발 역 ID"),
                 parameterWithName("target").description("도착 역 ID"),
-                parameterWithName("pathType").description("DISTANCE: 최단 경로, DURATION: 최소 소요 시간")
+                parameterWithName("type").description("DISTANCE: 최단 경로, DURATION: 최소 소요 시간")
         );
     }
 

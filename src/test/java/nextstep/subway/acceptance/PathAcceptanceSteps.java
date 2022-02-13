@@ -20,7 +20,7 @@ public class PathAcceptanceSteps {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("source", source);
         parameters.put("target", target);
-        parameters.put("pathType", pathType.name());
+        parameters.put("type", pathType.name());
 
         RequestSpecification given = givenWithJsonParameters(parameters);
         Response when = when(given);
