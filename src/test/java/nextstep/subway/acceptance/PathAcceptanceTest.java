@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,33 +60,25 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .when().get("/paths")
-                .then().log().all().extract();
-    }
+    /**
+     * Feature: 지하철 경로 검색
+     *   Scenario: 두 역의 최소 시간 경로를 조회
+     *     Given 지하철역이 등록되어있음 O
+     *     And 지하철 노선이 등록되어있음 O
+     *     And 지하철 노선에 지하철역이 등록되어있음 O
+     *     When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     *     Then 최소 시간 기준 경로를 응답
+     *     And 총 거리와 소요 시간을 함께 응답함
+     */
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", name);
-        lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
+    @DisplayName("두 역의 최소 시간 경로를 조회")
+    @Test
+    void findPathByDuration() {
+        //when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
-        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        return params;
+        //then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(5);
     }
 }
