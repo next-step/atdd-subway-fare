@@ -6,12 +6,10 @@ import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static nextstep.subway.acceptance.LineSteps.*;
 import static nextstep.subway.acceptance.PathAcceptanceSteps.경로_전체_요금_조회됨;
@@ -52,7 +50,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     @ParameterizedTest(name = "두 역의 경로를 조회한다. [{arguments}]")
-    @MethodSource
+    @EnumSource(PathType.class)
     void findPath(PathType pathType) {
         // when
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, pathType);
@@ -62,13 +60,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_전체_거리_조회됨(response, 5);
         경로_전체_시간_조회됨(response, 5);
         경로_전체_요금_조회됨(response, 1450);
-    }
-
-    private static Stream<Arguments> findPath() {
-        return Stream.of(
-                Arguments.of(PathType.DISTANCE),
-                Arguments.of(PathType.DURATION)
-        );
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

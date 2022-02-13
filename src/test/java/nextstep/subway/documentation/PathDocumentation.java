@@ -5,8 +5,7 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
@@ -14,7 +13,6 @@ import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static nextstep.subway.documentation.PathDocumentationFixture.PATH_RESPONSE_FIXTURE;
 import static nextstep.subway.documentation.PathDocumentationSteps.경로_조회_됨;
@@ -37,7 +35,7 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @ParameterizedTest(name = "경로 조회 문서화 [{index}] [{arguments}]")
-    @MethodSource
+    @EnumSource(PathType.class)
     void path(PathType pathType) {
         //given
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(PATH_RESPONSE_FIXTURE);
@@ -56,13 +54,6 @@ public class PathDocumentation extends Documentation {
 
         //then
         경로_조회_됨(경로_조회_응답);
-    }
-
-    private static Stream<Arguments> path() {
-        return Stream.of(
-                Arguments.of(PathType.DISTANCE),
-                Arguments.of(PathType.DURATION)
-        );
     }
 
     private ResponseFieldsSnippet createResponseFieldsSnippet() {
