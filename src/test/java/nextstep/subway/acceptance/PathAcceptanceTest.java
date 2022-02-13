@@ -59,7 +59,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_역_목록_조회됨(response, 교대역, 남부터미널역, 양재역);
         경로_전체_거리_조회됨(response, 5);
         경로_전체_시간_조회됨(response, 5);
-        경로_전체_요금_조회됨(response, 1450);
+        경로_전체_요금_조회됨(response, 1250);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

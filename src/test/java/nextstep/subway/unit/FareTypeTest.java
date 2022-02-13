@@ -35,7 +35,7 @@ class FareTypeTest {
     @CsvSource(value = {
             "10, 1250",
             "11, 1350",
-            "50, 2050",
+            "50, 2150",
             "51, 1850",
     })
     void fare(int distance, int expectedFare) {
