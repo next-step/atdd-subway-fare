@@ -73,7 +73,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].createdDate").description("생성 시간"),
                 fieldWithPath("stations[].modifiedDate").description("최종 수정 시간"),
                 fieldWithPath("distance").description("전체 거리"),
-                fieldWithPath("duration").description("소요 시간")
+                fieldWithPath("duration").description("소요 시간"),
+                fieldWithPath("fare").description("요금")
         );
     }
 

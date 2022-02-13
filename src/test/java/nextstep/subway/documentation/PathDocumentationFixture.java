@@ -16,7 +16,7 @@ public class PathDocumentationFixture {
                         createStationResponse(1L, "강남역"),
                         createStationResponse(2L, "역삼역"),
                         createStationResponse(3L, "선릉역")
-                ), 10, 15
+                ), 10, 15, 1250
         );
     }
 
