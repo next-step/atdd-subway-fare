@@ -17,7 +17,8 @@ public enum PathSnippet implements SnippetTemplate {
             fieldWithPath("stations[].createdDate").description("지하철 역 생성 일자"),
             fieldWithPath("stations[].modifiedDate").description("지하철 역 수정 일자"),
             fieldWithPath("distance").description("총 거리"),
-            fieldWithPath("duration").description("총 소요 시간")
+            fieldWithPath("duration").description("총 소요 시간"),
+            fieldWithPath("totalCost").description("총 요금")
         )
     );
 
