@@ -24,7 +24,7 @@ public class OppositeOneFieldSubwayMapGraphFactory extends SubwayMapGraphFactory
              .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
              .forEach(it -> {
                  SectionEdge sectionEdge = SectionEdge.of(it);
-                 graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                 graph.addEdge(it.getDownStation(), it.getUpStation(), sectionEdge);
                  graph.setEdgeWeight(sectionEdge, getFieldStrategy.apply(it));
              });
     }
