@@ -20,6 +20,10 @@ public class PathSteps {
 		return 두_역의_경로_조회를_요청(source, target, TYPE_DURATION, RestAssured.given().log().all());
 	}
 
+	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
+		return 두_역의_경로_조회를_요청(source, target, TYPE_DURATION, RestAssured.given().log().all().auth().oauth2(accessToken));
+	}
+
 	public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
 		return 두_역의_경로_조회를_요청(source, target, TYPE_DISTANCE, RestAssured.given().log().all());
 	}

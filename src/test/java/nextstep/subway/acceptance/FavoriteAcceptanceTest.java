@@ -12,12 +12,12 @@ import java.util.Map;
 import static nextstep.subway.acceptance.FavoriteSteps.*;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.*;
+import static nextstep.subway.acceptance.MemberTestFixture.EMAIL;
+import static nextstep.subway.acceptance.MemberTestFixture.PASSWORD;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 @DisplayName("즐겨찾기 관련 기능")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
-    public static final String EMAIL = "email@email.com";
-    public static final String PASSWORD = "password";
 
     private Long 신분당선;
     private Long 이호선;
