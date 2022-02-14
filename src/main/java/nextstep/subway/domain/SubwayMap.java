@@ -34,19 +34,22 @@ public class SubwayMap {
             = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         addVertex(graph);
-        switch (pathType) {
-            case DISTANCE:
-                addEdgeDistanceWeight(graph);
-                addOppositeEdgeDistanceWeight(graph);
-            break;
-            case DURATION:
-                addEdgeDurationWeight(graph);
-                addOppositeEdgeDurationWeight(graph);
-            break;
-        }
+        addWeights(graph, pathType);
 
         return graph;
     }
+
+    private void addWeights(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathType pathType) {
+        if (pathType.equals(PathType.DISTANCE)) {
+            addEdgeDistanceWeight(graph);
+            addOppositeEdgeDistanceWeight(graph);
+            return;
+        }
+
+        addEdgeDurationWeight(graph);
+        addOppositeEdgeDurationWeight(graph);
+    }
+
 
     private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역(정점)을 등록

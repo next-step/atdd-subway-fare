@@ -12,10 +12,14 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.PathType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 public class PathDocumentation extends Documentation {
+
+    private final int distance = 20;
+    private final int duration = 10;
 
     @Test
     void pathTypeDistance() {
@@ -24,7 +28,7 @@ public class PathDocumentation extends Documentation {
         StationResponse 교대역 = 지하철역_생성_요청("교대역").as(StationResponse.class);
         StationResponse 양재역 = 지하철역_생성_요청("양재역").as(StationResponse.class);
 
-        지하철_노선_생성_요청("이호선", "이호선색상", 교대역.getId(), 양재역.getId(), 20, 10);
+        지하철_노선_생성_요청("이호선", "이호선색상", 교대역.getId(), 양재역.getId(), distance, duration);
 
         ExtractableResponse<Response> response = RestAssured
             .given(spec).log().all()
@@ -38,9 +42,15 @@ public class PathDocumentation extends Documentation {
 
         PathResponse pathResponse = response.as(PathResponse.class);
 
-        assertThat(pathResponse.getStations().size()).isEqualTo(2);
-        assertThat(pathResponse.getDistance()).isEqualTo(20);
-        assertThat(pathResponse.getDuration()).isEqualTo(10);
+        경로조회의_결과가_예상대로_조회된다(pathResponse, 2, distance, duration);
+    }
+
+    private void 경로조회의_결과가_예상대로_조회된다(PathResponse pathResponse, int size, int distance, int duration) {
+        Assertions.assertAll(
+            () -> assertThat(pathResponse.getStations()).hasSize(size),
+            () -> assertThat(pathResponse.getDistance()).isEqualTo(distance),
+            () -> assertThat(pathResponse.getDuration()).isEqualTo(duration)
+        );
     }
 
 }
