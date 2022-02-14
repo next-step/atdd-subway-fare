@@ -25,10 +25,11 @@ public class PathResponse {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
+        int duration = path.extractDuration();
         //Todo : Total Duration 구하기
 
 
-        return new PathResponse(stations, distance);
+        return new PathResponse(stations, distance, duration);
     }
 
     public List<StationResponse> getStations() {
