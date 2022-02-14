@@ -7,10 +7,10 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubwayMap {
+public class SubwayDistanceMap {
     private List<Line> lines;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayDistanceMap(List<Line> lines) {
         this.lines = lines;
     }
 
