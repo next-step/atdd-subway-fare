@@ -1,25 +1,22 @@
 package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
-import nextstep.subway.applicaion.LineService;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Map;
 
-import static nextstep.subway.acceptance.step.LineSectionSteps.구간_추가_요청_생성;
+import static nextstep.subway.acceptance.step.LineSteps.구간_추가_요청_생성;
 import static nextstep.subway.documentation.step.LineSectionDocumentSteps.구간_생성_문서화;
 
 public class LineSectionDocumentation extends Documentation {
 
-    @MockBean
-    private LineService lineService;
-
+    private int DISTANCE = 100;
+    private int DURATION = 10;
     private Line 신분당선;
     private Station 강남역;
     private Station 판교역;
@@ -36,12 +33,11 @@ public class LineSectionDocumentation extends Documentation {
 
         신분당선 = new Line("신분당선", "red");
         ReflectionTestUtils.setField(신분당선, "id", 1L);
-
     }
 
     @Test
     void addSection() {
-        Map<String, String> 요청 = 구간_추가_요청_생성(강남역.getId(), 판교역.getId());
+        Map<String, String> 요청 = 구간_추가_요청_생성(강남역.getId(), 판교역.getId(), DISTANCE, DURATION);
 
         RestAssured
                 .given(spec).log().all()

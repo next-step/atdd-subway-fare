@@ -7,12 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.FavoriteSteps.*;
 import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static nextstep.subway.acceptance.step.LineSteps.구간_추가_요청_생성;
 import static nextstep.subway.acceptance.step.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 
 @DisplayName("즐겨찾기 관련 기능")
@@ -49,7 +49,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 10);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_추가_요청_생성(남부터미널역, 양재역, 3, 10));
 
         ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, 20);
         회원_생성됨(createResponse);
@@ -77,23 +77,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", name);
-        lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", String.valueOf(duration));
-
+        Map<String, String> lineCreateParams = LineSteps.노선_생성_Param_생성(name, color, upStation, downStation, distance, duration);
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        return params;
-    }
 }

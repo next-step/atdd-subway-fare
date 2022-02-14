@@ -88,6 +88,16 @@ public class LineSteps {
         return params;
     }
 
+    public static Map<String, String> 구간_추가_요청_생성(Long upStationId, Long downStationId,
+                                                  int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", String.valueOf(upStationId));
+        params.put("downStationId", String.valueOf(downStationId));
+        params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
+        return params;
+    }
+
     public static void 노선_생성_응답상태_검증(ExtractableResponse<Response> response) {
         노선_응답_상태코드_검증(response.statusCode(), HttpStatus.CREATED);
         assertThat(response.header("Location")).isNotBlank();
