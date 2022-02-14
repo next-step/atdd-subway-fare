@@ -6,8 +6,9 @@
 :toclevels: 2
 :sectlinks:
 
-
 link:path.html[지하철 경로 API]
+
+link:line.html[지하철 노선 API]
 
 link:section.html[지하철 구간 API]
 

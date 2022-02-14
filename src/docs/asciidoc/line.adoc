@@ -1,0 +1,24 @@
+[[line]]
+== 지하철 노선
+
+=== 노선 추가
+
+==== Request
+
+include::{snippets}/line/http-request.adoc[]
+
+=== Request Parameters
+
+include::{snippets}/line/request-fields.adoc[]
+
+==== Response
+
+include::{snippets}/line/response-body.adoc[]
+
+==== Response Headers
+
+include::{snippets}/line/response-headers.adoc[]
+
+==== Response Headers
+
+include::{snippets}/line/response-fields.adoc[]
