@@ -3,10 +3,13 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
@@ -63,5 +66,21 @@ public class LineSteps {
         return RestAssured.given().log().all()
                 .when().delete("/lines/{lineId}/sections?stationId={stationId}", lineId, stationId)
                 .then().log().all().extract();
+    }
+
+    public static void 경로_조회됨(ExtractableResponse<Response> response, HttpStatus httpStatus) {
+        assertThat(response.statusCode()).isEqualTo(httpStatus.value());
+    }
+
+    public static void 경로_역_목록_조회됨(ExtractableResponse<Response> response, Long... idsOfStations) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(idsOfStations);
+    }
+
+    public static void 경로_전체_거리_조회됨(ExtractableResponse<Response> response, int distance) {
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+    }
+
+    public static void 경로_전체_시간_조회됨(ExtractableResponse<Response> response, int duration) {
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
     }
 }
