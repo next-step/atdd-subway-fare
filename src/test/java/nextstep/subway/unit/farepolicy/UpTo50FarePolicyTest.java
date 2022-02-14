@@ -14,6 +14,7 @@ import nextstep.subway.domain.farepolicy.UpTo50FarePolicy;
 @DisplayName("50km 까지의 요금 정책 테스트")
 public class UpTo50FarePolicyTest {
     @CsvSource({
+        "10,0",
         "12,100",
         "16,200",
         "21,300"
