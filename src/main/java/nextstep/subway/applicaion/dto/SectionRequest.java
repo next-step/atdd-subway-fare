@@ -27,7 +27,5 @@ public class SectionRequest {
         return distance;
     }
 
-    public int getDuration() {
-        return duration;
-    }
+    public int getDuration() { return duration; }
 }
