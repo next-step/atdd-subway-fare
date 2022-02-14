@@ -44,11 +44,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 60, 1);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 20, 2);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 4));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 30, 4));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -59,7 +59,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        경로_확인(response, 5, 6);
+        경로_확인(response, 50, 6);
+        요금_확인(response, 2_150);
     }
 
     @DisplayName("두 역의 최소 시간 거리 경로를 조회한다.")
@@ -70,12 +71,17 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        경로_확인(response, 20, 4);
+        경로_확인(response, 70, 4);
+        요금_확인(response, 2_150);
     }
 
     private void 경로_확인(final ExtractableResponse<Response> response, final int distance, final int duration) {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+    }
+
+    private void 요금_확인(final ExtractableResponse<Response> response, final int fare) {
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

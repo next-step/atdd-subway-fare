@@ -21,7 +21,6 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.ui.PathType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
@@ -80,7 +79,7 @@ public class PathDocumentation extends Documentation {
                         station(1L, "강남역"),
                         station(2L, "양재역")
                 ),
-                1, 2
+                1, 2, 100
         );
     }
 
