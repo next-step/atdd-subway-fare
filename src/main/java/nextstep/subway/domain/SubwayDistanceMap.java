@@ -7,13 +7,15 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubwayDistanceMap {
+public class SubwayDistanceMap implements SubwayMap {
+
     private List<Line> lines;
 
     public SubwayDistanceMap(List<Line> lines) {
         this.lines = lines;
     }
 
+    @Override
     public Path findPath(Station source, Station target) {
         // 그래프 만들기
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
@@ -70,4 +72,5 @@ public class SubwayDistanceMap {
                     graph.setEdgeWeight(sectionEdge, it.getDistance());
                 });
     }
+
 }
