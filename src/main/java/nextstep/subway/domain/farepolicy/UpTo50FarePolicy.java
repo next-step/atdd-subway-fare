@@ -8,6 +8,9 @@ public class UpTo50FarePolicy implements FarePolicy {
 
     @Override
     public int calculate(int distance) {
+        if (distance <= EXCLUDED_DISTANCE) {
+            return 0;
+        }
         int unitSize = distanceForFare(distance) / UNIT_DISTANCE + 1;
         return unitSize * RATE_PER_UNIT;
     }
