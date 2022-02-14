@@ -1,7 +1,6 @@
-package nextstep.subway.unit;
+package nextstep.subway.domain;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -10,7 +9,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SubwayDistanceMapTest {
+class SubwayDurationMapTest {
 
     private Station 교대역;
     private Station 강남역;
@@ -31,10 +30,10 @@ class SubwayDistanceMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3, 10);
-        이호선.addSection(교대역, 강남역, 3, 10);
-        삼호선.addSection(교대역, 남부터미널역, 5, 10);
-        삼호선.addSection(남부터미널역, 양재역, 5, 10);
+        신분당선.addSection(강남역, 양재역, 3, 30);
+        이호선.addSection(교대역, 강남역, 3, 30);
+        삼호선.addSection(교대역, 남부터미널역, 5, 50);
+        삼호선.addSection(남부터미널역, 양재역, 5, 50);
     }
 
     @Test
@@ -69,4 +68,5 @@ class SubwayDistanceMapTest {
 
         return station;
     }
+
 }
