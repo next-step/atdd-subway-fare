@@ -35,16 +35,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("2호선", "green", 교대역, 강남역, 100, 2)
+            createLineCreateParams("2호선", "green", 교대역, 강남역, 6, 2)
         );
         신분당선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("신분당선", "red", 강남역, 양재역, 100, 3)
+            createLineCreateParams("신분당선", "red", 강남역, 양재역, 10, 3)
         );
         삼호선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 100)
+            createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 2)
         );
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 100));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 10, 4));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -52,7 +52,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void findPathByDistance() {
         경로_조회_성공(
             두_역의_최단_거리_경로_조회를_요청(교대역, 양재역),
-            5, 200,
+            12, 6, 1350,
             교대역, 남부터미널역, 양재역
         );
     }
@@ -62,7 +62,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void findPathByDuration() {
         경로_조회_성공(
             두_역의_최소_시간_경로_조회를_요청(교대역, 양재역),
-            200, 5,
+            16, 5,1450,
             교대역, 강남역, 양재역
         );
     }
