@@ -7,10 +7,14 @@ import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,15 +62,22 @@ class PathServiceTest {
         lineService.addSection(삼호선.getId(), createSectionRequest(양재역, 5, 20));
     }
 
-    @ParameterizedTest(name = "경로 조회 타입과 무관하게 최단거리 기준 요금 조회 [{arguments}]")
-    @EnumSource(PathType.class)
-    void findPath(PathType pathType) {
+    @ParameterizedTest(name = "거리비례제 요금 조회 [{arguments}]")
+    @MethodSource
+    void findPath(PathType pathType, int expected) {
         //when
         PathResponse path = pathService.findPath(교대역.getId(), 역삼역.getId(), pathType);
         int fare = path.getFare();
 
         //then
-        assertThat(fare).isEqualTo(1_250);
+        assertThat(fare).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> findPath() {
+        return Stream.of(
+                Arguments.of(PathType.DISTANCE, 1250),
+                Arguments.of(PathType.DURATION, 1650)
+        );
     }
 
     private Line createLine(String name, Station upStation, Station downStation) {
