@@ -33,13 +33,6 @@ public class Section extends DefaultWeightedEdge {
     protected Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-    }
-
     private Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         validate(distance, duration);
         this.line = line;
@@ -106,4 +99,5 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
 }
