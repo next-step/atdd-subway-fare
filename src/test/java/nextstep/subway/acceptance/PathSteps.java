@@ -38,7 +38,7 @@ public class PathSteps {
 				.then().log().all().extract();
 	}
 
-	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
 		Map<String, String> lineCreateParams;
 		lineCreateParams = new HashMap<>();
 		lineCreateParams.put("name", name);
@@ -47,8 +47,14 @@ public class PathSteps {
 		lineCreateParams.put("downStationId", downStation + "");
 		lineCreateParams.put("distance", distance + "");
 		lineCreateParams.put("duration", duration + "");
+		lineCreateParams.put("extraFare", extraFare + "");
 
 		return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+	}
+
+
+	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+		return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
 	}
 
 	public static Map<String, String> 구간_파라미터_생성(Long upStationId, Long downStationId, int distance, int duration) {

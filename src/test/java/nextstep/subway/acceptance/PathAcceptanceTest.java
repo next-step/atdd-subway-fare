@@ -21,12 +21,12 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
-     * 교대역    --- *2호선*(10m, 5min) ---    강남역
-     * |                                      |
-     * *3호선*                              *신분당선*
-     * (2m, 10min)                       (10m, 5min)
-     * |                                     |
-     * 남부터미널역  --- *3호선*(3m, 10min) ---  양재
+     * 교대역    --- *2호선*(10m, 5min, 500원)  ---  강남역
+     * |                                         |
+     * *3호선*                                 *신분당선*
+     * (2m, 10min)                        (10m, 5min, 900원)
+     * |                                        |
+     * 남부터미널역  --- *3호선*(3m, 10min)   ---   양재
      */
     @BeforeEach
     public void setUp() {
@@ -37,8 +37,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5, 500);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5, 900);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_파라미터_생성(남부터미널역, 양재역, 3, 10));
@@ -67,7 +67,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회됨(response, 교대역, 강남역, 양재역);
         경로_거리_조회됨(response, 20);
         경로_소요시간_조회됨(response, 10);
-        지하철_요금_조회됨(response, 1450);
+        지하철_요금_조회됨(response, 2350);
     }
 
 }
