@@ -17,19 +17,20 @@ public class PathAcceptanceSteps {
     public static final String PATH_URI = "/paths";
 
     public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathType pathType) {
+        RequestSpecification requestSpecification = RestAssured.given().log().all();
+
+        return 두_역의_경로_조회를_요청(requestSpecification, source, target, pathType);
+    }
+
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(RequestSpecification requestSpecification, Long source, Long target, PathType pathType) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("source", source);
         parameters.put("target", target);
         parameters.put("type", pathType.name());
 
-        RequestSpecification given = givenWithJsonParameters(parameters);
+        RequestSpecification given = givenWithJsonParameters(requestSpecification, parameters);
         Response when = when(given);
         return then(when);
-    }
-
-    public static RequestSpecification given() {
-        return RestAssured
-                .given().log().all();
     }
 
     public static RequestSpecification givenWithJsonParameters(RequestSpecification requestSpecification,
@@ -37,10 +38,6 @@ public class PathAcceptanceSteps {
         return requestSpecification
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParams(parameters);
-    }
-
-    public static RequestSpecification givenWithJsonParameters(Map<String, Object> parameters) {
-        return givenWithJsonParameters(given(), parameters);
     }
 
     public static Response when(RequestSpecification requestSpecification) {
