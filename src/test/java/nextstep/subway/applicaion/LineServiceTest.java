@@ -72,20 +72,9 @@ class LineServiceTest {
                 .isInstanceOf(StationNotFoundException.class);
     }
 
-    @Test
-    void addSection() {
-        Line 이호선 = lineRepository.save(createLine(강남역, 역삼역));
-
-        lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 삼성역.getId(), 10));
-
-        Line line = lineService.findById(이호선.getId());
-
-        assertThat(line.getSections().size()).isEqualTo(2);
-    }
-
     @DisplayName("노선에 구간을 추가")
     @Test
-    void addSection2() {
+    void addSection() {
         // given
         int distance = 10;
         int duration = 20;
@@ -110,7 +99,7 @@ class LineServiceTest {
 
     private Line createLine(Station 강남역, Station 역삼역) {
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection2(강남역, 역삼역, 10, 10);
         return line;
     }
 
