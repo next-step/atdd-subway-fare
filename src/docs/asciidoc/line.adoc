@@ -19,6 +19,6 @@ include::{snippets}/line/response-body.adoc[]
 
 include::{snippets}/line/response-headers.adoc[]
 
-==== Response Headers
+==== Response body
 
 include::{snippets}/line/response-fields.adoc[]
