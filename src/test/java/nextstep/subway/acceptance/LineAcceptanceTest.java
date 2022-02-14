@@ -65,8 +65,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     void getLines() {
         // given
         String 구분당선 = "구분당선";
-        지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 판교역.getId());
-        지하철_노선_생성_요청(구분당선, "orange", 정자역.getId(), 미금역.getId());
+        지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 판교역.getId(), DISTANCE, DURATION);
+        지하철_노선_생성_요청(구분당선, "orange", 정자역.getId(), 미금역.getId(), DISTANCE, DURATION);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
@@ -85,7 +85,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 판교역.getId());
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 판교역.getId(), DISTANCE, DURATION);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
@@ -104,7 +104,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId());
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId(), DISTANCE, DURATION);
 
         // when
         Map<String, String> params = new HashMap<>();
@@ -129,7 +129,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId());
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId(), DISTANCE, DURATION);
 
         // when
         ExtractableResponse<Response> response = RestAssured
@@ -150,10 +150,10 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void duplicateName() {
         // given
-        지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId());
+        지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId(), DISTANCE, DURATION);
 
         // when
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId());
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId(), DISTANCE, DURATION);
 
         // then
         assertThat(createResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

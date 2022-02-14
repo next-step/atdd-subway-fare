@@ -30,12 +30,6 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    @Deprecated
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color,
-                                                             long upStationId, long downStationId) {
-        return 지하철_노선_생성_요청(name, color, upStationId, downStationId, 100, 10);
-    }
-
     public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
         return RestAssured
                 .given().log().all()
