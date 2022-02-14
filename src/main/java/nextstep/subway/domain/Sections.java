@@ -33,8 +33,10 @@ public class Sections {
 
         checkDuplicateSection(section);
 
-        rearrangeSectionWithUpStation(section);
-        rearrangeSectionWithDownStation(section);
+//        rearrangeSectionWithUpStation(section);
+//        rearrangeSectionWithDownStation(section);
+        rearrangeSectionWithUpStation2(section);
+        rearrangeSectionWithDownStation2(section);
 
         sections.add(section);
     }
@@ -97,6 +99,17 @@ public class Sections {
                 });
     }
 
+    private void rearrangeSectionWithDownStation2(Section section) {
+        sections.stream()
+                .filter(it -> it.isSameDownStation(section.getDownStation()))
+                .findFirst()
+                .ifPresent(it -> {
+                    // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
+                    sections.add(Section.of(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
+                    sections.remove(it);
+                });
+    }
+
     private void rearrangeSectionWithUpStation(Section section) {
         sections.stream()
                 .filter(it -> it.isSameUpStation(section.getUpStation()))
@@ -104,6 +117,17 @@ public class Sections {
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
                     sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance()));
+                    sections.remove(it);
+                });
+    }
+
+    private void rearrangeSectionWithUpStation2(Section section) {
+        sections.stream()
+                .filter(it -> it.isSameUpStation(section.getUpStation()))
+                .findFirst()
+                .ifPresent(it -> {
+                    // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
+                    sections.add(Section.of(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
                     sections.remove(it);
                 });
     }
