@@ -51,13 +51,13 @@ class LineNewTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line 이호선 = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10, 10);
-        line.addSection(삼성역, 역삼역, 5, 5);
+        이호선.addSection(강남역, 역삼역, 10, 10);
+        이호선.addSection(삼성역, 역삼역, 5, 5);
 
-        assertThat(line.getSections().size()).isEqualTo(2);
-        Section section = line.getSections().stream()
+        assertThat(이호선.getSections().size()).isEqualTo(2);
+        Section section = 이호선.getSections().stream()
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
