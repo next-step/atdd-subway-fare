@@ -47,7 +47,8 @@ public class Sections {
         Optional<Section> upSection = findSectionAsUpStation(station);
         Optional<Section> downSection = findSectionAsDownStation(station);
 
-        addNewSectionForDelete(upSection, downSection);
+//        addNewSectionForDelete(upSection, downSection);
+        addNewSectionForDelete2(upSection, downSection);
 
         upSection.ifPresent(it -> this.sections.remove(it));
         downSection.ifPresent(it -> this.sections.remove(it));
@@ -129,6 +130,20 @@ public class Sections {
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
                     upSection.get().getDistance() + downSection.get().getDistance()
+            );
+
+            this.sections.add(newSection);
+        }
+    }
+
+    private void addNewSectionForDelete2(Optional<Section> upSection, Optional<Section> downSection) {
+        if (upSection.isPresent() && downSection.isPresent()) {
+            Section newSection = Section.of(
+                    upSection.get().getLine(),
+                    downSection.get().getUpStation(),
+                    upSection.get().getDownStation(),
+                    upSection.get().getDistance() + downSection.get().getDistance(),
+                    upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);

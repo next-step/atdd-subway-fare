@@ -76,4 +76,29 @@ class SectionsTest {
         Assertions.assertThat(totalDuration).isEqualTo(12);
     }
 
+    @DisplayName("구간 삭제")
+    @Test
+    void delete() {
+        // given
+        Sections sections = new Sections(Lists.newArrayList(강남_정자));
+        Section 정자_미금 = Section.of(신분당선, 정자역, 미금역, 20, 2);
+        sections.add(정자_미금);
+
+        // when
+        sections.delete(정자역);
+
+        // then
+        Integer totalDistance = sections.getSections()
+                .stream()
+                .map(Section::getDistance)
+                .reduce(0, Integer::sum);
+        Integer totalDuration = sections.getSections()
+                .stream()
+                .map(Section::getDuration)
+                .reduce(0, Integer::sum);
+        Assertions.assertThat(sections.getSections().size()).isEqualTo(1);
+        Assertions.assertThat(totalDistance).isEqualTo(120);
+        Assertions.assertThat(totalDuration).isEqualTo(12);
+    }
+
 }
