@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.step.LineSteps.*;
 import static nextstep.subway.acceptance.step.StationSteps.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
@@ -73,7 +73,7 @@ class LineAcceptanceTest extends AcceptanceTest {
 
         // then
         노선_조회_응답상태_검증(response);
-        assertThat(response.jsonPath().getList("name")).contains(신분당선_이름, 구분당선);
+        노선_조회_응답_데이터_검증(response, Arrays.asList(신분당선_이름, 구분당선));
     }
 
     /**
@@ -92,7 +92,7 @@ class LineAcceptanceTest extends AcceptanceTest {
 
         // then
         노선_조회_응답상태_검증(response);
-        assertThat(response.jsonPath().getString("name")).isEqualTo(신분당선_이름);
+        노선_조회_응답_데이터_검증(response, 신분당선_이름);
     }
 
     /**
@@ -117,7 +117,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        노선_응답_상태코드_검증(response.statusCode(), HttpStatus.OK);
     }
 
     /**
@@ -138,7 +138,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+        노선_삭제_응답상태_검증(response);
     }
 
     /**
@@ -156,7 +156,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(신분당선_이름, "red", 강남역.getId(), 정자역.getId(), DISTANCE, DURATION);
 
         // then
-        assertThat(createResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        노선_생성_실패_응답상태_검증(createResponse);
     }
 
 }

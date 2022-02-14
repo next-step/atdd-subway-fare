@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +16,6 @@ public class LineSteps {
 
     public static final String 신분당선_이름 = "신분당선";
     public static final String 신분당선_색 = "red";
-    public static final String 이호선_이름 = "2호선";
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color,
                                                              long upStationId, long downStationId,
@@ -99,6 +99,14 @@ public class LineSteps {
 
     public static void 노선_조회_응답상태_검증(ExtractableResponse<Response> response) {
         노선_응답_상태코드_검증(response.statusCode(), HttpStatus.OK);
+    }
+
+    public static void 노선_조회_응답_데이터_검증(ExtractableResponse<Response> response, List<String> lineNames) {
+        assertThat(response.jsonPath().getList("name")).isEqualTo(lineNames);
+    }
+
+    public static void 노선_조회_응답_데이터_검증(ExtractableResponse<Response> response, String lineName) {
+        assertThat(response.jsonPath().getString("name")).isEqualTo(lineName);
     }
 
     public static void 노선_삭제_응답상태_검증(ExtractableResponse<Response> response) {
