@@ -1,5 +1,7 @@
 package nextstep.subway.domain.farepolicy;
 
+import nextstep.subway.domain.Path;
+
 public final class DistanceFarePolicy implements FarePolicy {
     private final DistanceFareRange distanceFareRange;
     private final int fareDistanceUnit;
@@ -12,15 +14,22 @@ public final class DistanceFarePolicy implements FarePolicy {
     }
 
     @Override
-    public int calculate(int distance) {
-        if (distance <= distanceFareRange.getMinRange()) {
+    public int calculate(Path path) {
+        return unitSize(path.extractDistance()) * ratePerUnit;
+    }
+
+    private int unitSize(int distance) {
+        if (distanceFareRange.isSmallerThan(distance)) {
             return 0;
         }
-        int unitSize = distanceForFare(distance) / fareDistanceUnit + 1;
-        return unitSize * ratePerUnit;
+        int unitSize = distanceForFare(distance) / fareDistanceUnit;
+        if (distance > distanceFareRange.getMinRange()) {
+            unitSize += 1;
+        }
+        return unitSize;
     }
 
     private int distanceForFare(int distance) {
-        return Math.min(distance - distanceFareRange.getMinRange(), distanceFareRange.getMaxRange());
+        return Math.min(distance - distanceFareRange.getMinRange(), distanceFareRange.getMaximumChargedRange(fareDistanceUnit));
     }
 }

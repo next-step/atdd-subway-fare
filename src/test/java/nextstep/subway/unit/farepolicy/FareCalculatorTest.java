@@ -1,9 +1,8 @@
-package nextstep.subway.unit;
+package nextstep.subway.unit.farepolicy;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.*;
 import static org.mockito.Mockito.*;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,36 +17,39 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.farepolicy.BasicFarePolicy;
 import nextstep.subway.domain.farepolicy.DistanceFarePolicy;
 import nextstep.subway.domain.farepolicy.DistanceFareRange;
+import nextstep.subway.domain.farepolicy.FareCalculator;
 import nextstep.subway.domain.farepolicy.FarePolicy;
 
 @DisplayName("경로 결과 테스트")
 @ExtendWith(MockitoExtension.class)
-public class PathTest {
+public class FareCalculatorTest {
     @Mock
     private Path path;
 
-
     @CsvSource({
         "9,1250",
-        "12,1350",
+        "10,1250",
+        "11,1350",
         "50,2150",
         "51,2250",
-        "59,2350",
+        "59,2350"
     })
     @DisplayName("요금 계산 테스트")
     @ParameterizedTest
-    void extractTotalCost(int distance, int totalCost) {
-        List<FarePolicy> farePolicies = Arrays.asList(
-            new BasicFarePolicy(),
-            new DistanceFarePolicy(
-                new DistanceFareRange(50, Integer.MAX_VALUE), 8, 100
-            ),
-            new DistanceFarePolicy(
-                new DistanceFareRange(10, 50), 5, 100
-            )
-        );
+    void calculate(int distance, int totalCost) {
+        // Given
         when(path.extractDistance()).thenReturn(distance);
 
-        assertThat(path.extractTotalCost(farePolicies)).isEqualTo(totalCost);
+        // When, Then
+        FareCalculator calculator = new FareCalculator(Arrays.asList(
+            new BasicFarePolicy(),
+            new DistanceFarePolicy(
+                new DistanceFareRange(10, 50), 5, 100
+            ),
+            new DistanceFarePolicy(
+                new DistanceFareRange(50, Integer.MAX_VALUE), 8, 100
+            )
+        ));
+        assertThat(calculator.calculate(path)).isEqualTo(totalCost);
     }
 }

@@ -2,6 +2,8 @@ package nextstep.subway.domain.farepolicy;
 
 import java.util.List;
 
+import nextstep.subway.domain.Path;
+
 public interface FarePolicy {
-    int calculate(int distance);
+    int calculate(Path path);
 }

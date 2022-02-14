@@ -5,6 +5,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.SectionEdgeToWeightStrategy;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.farepolicy.FarePolicy;
 import nextstep.subway.domain.map.SubwayMap;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
@@ -24,12 +25,12 @@ public class PathService {
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target, SubwayMapGraphFactory subwayMapGraphFactory) {
+    public PathResponse findPath(Long source, Long target, SubwayMapGraphFactory subwayMapGraphFactory, FarePolicy farePolicy) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
         Path path = subwayMap.findPath(subwayMapGraphFactory.createGraph(lines), upStation, downStation);
-        return PathResponse.of(path);
+        return PathResponse.of(path, farePolicy.calculate(path));
     }
 }

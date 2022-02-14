@@ -13,7 +13,11 @@ public class DistanceFareRange {
         return minRange;
     }
 
-    public int getMaxRange() {
-        return maxRange;
+    public int getMaximumChargedRange(int fareDistanceUnit) {
+        return maxRange - fareDistanceUnit * 2;
+    }
+
+    public boolean isSmallerThan(int distance) {
+        return distance < minRange;
     }
 }

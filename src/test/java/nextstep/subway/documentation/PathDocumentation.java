@@ -20,21 +20,21 @@ public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
 
-    private PathResponse createPathResponse(int distance, int duration) {
+    private PathResponse createPathResponse(int distance, int duration, int totalCost) {
         LocalDateTime DUMMY_DATE = LocalDateTime.now();
         return new PathResponse(
             Arrays.asList(
                 new StationResponse(1L, "구리역", DUMMY_DATE, DUMMY_DATE),
                 new StationResponse(2L, "수원역", DUMMY_DATE, DUMMY_DATE)
             ),
-            distance, duration
+            distance, duration, totalCost
         );
     }
 
     @Test
     void pathByDistance() {
-        when(pathService.findPath(anyLong(), anyLong(), any()))
-            .thenReturn(createPathResponse(100, 200));
+        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
+            .thenReturn(createPathResponse(100, 200, 10000));
 
         PathStep.두_역의_최단_거리_경로_조회를_요청(
             PathSnippet.PATH.toGiven(spec, DocumentationName.PATH_BY_DISTANCE.name()),
@@ -44,8 +44,8 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDuration() {
-        when(pathService.findPath(anyLong(), anyLong(), any()))
-            .thenReturn(createPathResponse(200, 100));
+        when(pathService.findPath(anyLong(), anyLong(), any(), any() ))
+            .thenReturn(createPathResponse(200, 100, 20000));
 
         PathStep.두_역의_최소_시간_경로_조회를_요청(
             PathSnippet.PATH.toGiven(spec, DocumentationName.PATH_BY_DURATION.name()),
