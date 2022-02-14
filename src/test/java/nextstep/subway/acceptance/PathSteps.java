@@ -55,8 +55,8 @@ public class PathSteps {
         return params;
     }
 
-    public static RestDocumentationFilter 경로관련_문서_필터생성(RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
-        RestDocumentationFilter filter = document("path",
+    public static RestDocumentationFilter 경로관련_문서_필터생성(String identifier, RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
+        RestDocumentationFilter filter = document(identifier,
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestParametersSnippet,
