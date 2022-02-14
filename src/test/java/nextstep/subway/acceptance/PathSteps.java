@@ -10,58 +10,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
 
-	static String TYPE_DURATION = "DURATION";
-	static String TYPE_DISTANCE = "DISTANCE";
+	static final String TYPE_DURATION = "DURATION";
+	static final String TYPE_DISTANCE = "DISTANCE";
 
 	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-
-		return requestPath(source, target, TYPE_DURATION, RestAssured.given().log().all());
+		return 두_역의_경로_조회를_요청(source, target, TYPE_DURATION, RestAssured.given().log().all());
 	}
 
 	public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-		return requestPath(source, target, TYPE_DISTANCE, RestAssured.given().log().all());
+		return 두_역의_경로_조회를_요청(source, target, TYPE_DISTANCE, RestAssured.given().log().all());
 	}
 
-	private static ExtractableResponse<Response> requestPath(Long source, Long target, String type, RequestSpecification requestSpecification) {
-		return requestSpecification
+	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, RequestSpecification spec) {
+		return 두_역의_경로_조회를_요청(source, target, TYPE_DURATION, spec);
+	}
+
+	public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String type, RequestSpecification spec) {
+		return spec
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.queryParam("source", source)
 				.queryParam("target", target)
 				.queryParam("type", type)
 				.when().get("/paths")
 				.then().log().all().extract();
-	}
-
-	private static RequestSpecification createRestAssuredWithDocument(RequestSpecification documentSpecification) {
-		return RestAssured
-				.given(documentSpecification).log().all()
-				.filter(document("path",
-						preprocessRequest(prettyPrint()),
-						preprocessResponse(prettyPrint()),
-						requestParameters(
-								parameterWithName("source").description("출발역 아이디"),
-								parameterWithName("target").description("도착역 아이디"),
-								parameterWithName("type").description("거리기준/시간기준")
-						),
-						responseFields(
-								subsectionWithPath("stations[]").description("출발역부터 도착역까지 역 경로"),
-								fieldWithPath("distance").description("출발역과 도착역까지 총 거리"),
-								fieldWithPath("duration").description("출발역과 도착역까지 소요시간"),
-								fieldWithPath("fare").description("지하철 이용 요금")
-						)
-				));
-	}
-
-	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청_문서화(Long source, Long target, RequestSpecification spec) {
-		return requestPath(source, target, TYPE_DURATION, createRestAssuredWithDocument(spec));
 	}
 
 	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

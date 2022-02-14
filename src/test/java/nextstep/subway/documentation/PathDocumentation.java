@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.documentation.PathDocumentationStep.경로_조회_문서화;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -34,7 +36,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(getMockPathResponse());
 
         // when
-        ExtractableResponse<Response> 조회_응답 = 두_역의_최소_시간_경로_조회를_요청_문서화(강남역, 분당역, spec);
+        ExtractableResponse<Response> 조회_응답 = PathSteps.두_역의_최소_시간_경로_조회를_요청(강남역, 분당역, 경로_조회_문서화(spec));
 
         // then
         경로_조회됨(조회_응답, 강남역, 분당역);

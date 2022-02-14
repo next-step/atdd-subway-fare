@@ -7,14 +7,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-class FareCalculatorTest {
+class FareTest {
 
 	@DisplayName("10km 이내 기본 운임 1,250원")
 	@ParameterizedTest
 	@ValueSource(ints = {1, 2, 3, 5, 7, 10})
-	void calculateFareWithin10km() {
+	void calculateFareWithin10km(int distance) {
 		// when
-		int fare = FareCalculator.calculateFare(10);
+		int fare = Fare.calculateAmount(distance);
 
 		// then
 		assertThat(fare).isEqualTo(1250);
@@ -25,7 +25,7 @@ class FareCalculatorTest {
 	@CsvSource({"11,1350", "12,1350", "20,1450", "49,2050", "50,2050"})
 	void calculateFareGreaterThan10kmLessThanOrEqualTo50km(int distance, int expectedFare) {
 		// when
-		int fare = FareCalculator.calculateFare(distance);
+		int fare = Fare.calculateAmount(distance);
 
 		// then
 		assertThat(fare).isEqualTo(expectedFare);
@@ -36,7 +36,7 @@ class FareCalculatorTest {
 	@CsvSource({"51,2150", "58,2150", "59,2250", "100,2750", "686,10050"})
 	void calculateFareGreaterThan50km(int distance, int expectedFare) {
 		// when
-		int fare = FareCalculator.calculateFare(distance);
+		int fare = Fare.calculateAmount(distance);
 
 		// then
 		assertThat(fare).isEqualTo(expectedFare);
