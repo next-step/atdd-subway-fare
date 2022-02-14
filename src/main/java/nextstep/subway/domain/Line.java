@@ -5,6 +5,7 @@ import java.util.List;
 
 @Entity
 public class Line extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +22,16 @@ public class Line extends BaseEntity {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    private Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
+        this.name = name;
+        this.color = color;
+        this.sections.add(Section.of(this, upStation, downStation, distance, duration));
+    }
+
+    public static Line of(String name, String color, Station upStation, Station downStation, int distance, int duration) {
+        return new Line(name, color, upStation, downStation, distance, duration);
     }
 
     public Long getId() {
@@ -53,7 +64,7 @@ public class Line extends BaseEntity {
     }
 
     public void addSection2(Station upStation, Station downStation, int distance, int duration) {
-        sections.add(new Section(this, upStation, downStation, distance, duration));
+        sections.add(Section.of(this, upStation, downStation, distance, duration));
     }
 
     public List<Station> getStations() {

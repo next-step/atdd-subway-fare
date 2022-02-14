@@ -1,7 +1,10 @@
-package nextstep.subway.unit;
+package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.LineService;
+import nextstep.exception.station.StationNotFoundException;
+import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
+import nextstep.subway.applicaion.step.LineServiceSteps;
 import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -35,6 +39,38 @@ class LineServiceTest {
         삼성역 = stationRepository.save(new Station("삼성역"));
     }
 
+    @DisplayName("노선을 추가")
+    @Test
+    void saveLine2() {
+        // given
+        String name = "노선이름";
+        String color = "red";
+        LineRequest 요청 = LineServiceSteps.노선_추가_요청_생성(name, color,
+                강남역.getId(), 역삼역.getId(),
+                100, 10);
+
+        // when
+        LineResponse response = lineService.saveLine2(요청);
+
+        // then
+        assertThat(response.getName()).isEqualTo(name);
+        assertThat(response.getColor()).isEqualTo(color);
+    }
+
+    @DisplayName("노선에 없는 역윽 구간으로 추가 하면 실패")
+    @Test
+    void saveLine2_notFoundStation() {
+        // given
+        String name = "노선이름";
+        String color = "red";
+        LineRequest 요청 = LineServiceSteps.노선_추가_요청_생성(name, color,
+                1000L, 1000L,
+                100, 10);
+
+        // then
+        assertThatThrownBy(() -> lineService.saveLine2(요청))
+                .isInstanceOf(StationNotFoundException.class);
+    }
 
     @Test
     void addSection() {
@@ -77,4 +113,5 @@ class LineServiceTest {
         line.addSection(강남역, 역삼역, 10);
         return line;
     }
+
 }
