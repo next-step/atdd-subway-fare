@@ -167,4 +167,12 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int totalFare() {
+        return calculateOverFare(totalDistance());
+    }
+
+    private int calculateOverFare(int distance) {
+        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+    }
 }
