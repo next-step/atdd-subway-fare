@@ -26,6 +26,10 @@ public class Path {
     }
 
     public int extractFare() {
-        return Fare.calculateAmount(extractDistance());
+        return Fare.calculateAmount(extractDistance()) + getExtraFareOnLine();
+    }
+
+    private int getExtraFareOnLine() {
+        return sections.getMaxExtraFareOnLine();
     }
 }
