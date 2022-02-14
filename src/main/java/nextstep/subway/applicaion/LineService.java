@@ -31,21 +31,11 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
-            Station upStation = stationService.findById(request.getUpStationId());
-            Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(upStation, downStation, request.getDistance());
-        }
-        return LineResponse.of(line);
-    }
-
-    public LineResponse saveLine2(LineRequest request) {
         Station upStation = findStationsById(request.getUpStationId());
         Station downStation = findStationsById(request.getDownStationId());
 
         Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        line.addSection2(upStation, downStation, request.getDistance(), request.getDuration());
+        line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
 
         return LineResponse.of(line);
     }
@@ -85,8 +75,7 @@ public class LineService {
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
         Line line = findById(lineId);
 
-//        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
-        line.addSection2(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
+        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
     }
 
     public void deleteSection(Long lineId, Long stationId) {

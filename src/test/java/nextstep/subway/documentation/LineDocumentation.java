@@ -58,7 +58,7 @@ public class LineDocumentation extends Documentation {
     void createLine() {
         Map<String, String> 요청 = LineSteps.노선_생성_Param_생성(신분당선.getName(), 신분당선.getColor(), 강남역.getId(), 판교역.getId(), 100, 10);
         LineResponse 응답 = LineResponse.of(신분당선);
-        Mockito.when(lineService.saveLine2(any()))
+        Mockito.when(lineService.saveLine(any()))
                 .thenReturn(응답);
 
         RestAssured

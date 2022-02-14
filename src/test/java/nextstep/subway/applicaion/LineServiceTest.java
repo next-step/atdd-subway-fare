@@ -50,7 +50,7 @@ class LineServiceTest {
                 100, 10);
 
         // when
-        LineResponse response = lineService.saveLine2(요청);
+        LineResponse response = lineService.saveLine(요청);
 
         // then
         assertThat(response.getName()).isEqualTo(name);
@@ -68,7 +68,7 @@ class LineServiceTest {
                 100, 10);
 
         // then
-        assertThatThrownBy(() -> lineService.saveLine2(요청))
+        assertThatThrownBy(() -> lineService.saveLine(요청))
                 .isInstanceOf(StationNotFoundException.class);
     }
 
@@ -93,13 +93,13 @@ class LineServiceTest {
 
     private Line createLine2(Station 강남역, Station 역삼역, int distance, int duration) {
         Line line = new Line("2호선", "green");
-        line.addSection2(강남역, 역삼역, distance, duration);
+        line.addSection(강남역, 역삼역, distance, duration);
         return line;
     }
 
     private Line createLine(Station 강남역, Station 역삼역) {
         Line line = new Line("2호선", "green");
-        line.addSection2(강남역, 역삼역, 10, 10);
+        line.addSection(강남역, 역삼역, 10, 10);
         return line;
     }
 
