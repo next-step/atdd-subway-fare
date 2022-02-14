@@ -41,15 +41,7 @@ public class FareCalculatorTest {
         when(path.extractDistance()).thenReturn(distance);
 
         // When, Then
-        FareCalculator calculator = new FareCalculator(Arrays.asList(
-            new BasicFarePolicy(),
-            new DistanceFarePolicy(
-                new DistanceFareRange(10, 50), 5, 100
-            ),
-            new DistanceFarePolicy(
-                new DistanceFareRange(50, Integer.MAX_VALUE), 8, 100
-            )
-        ));
+        FareCalculator calculator = new FareCalculator();
         assertThat(calculator.calculate(path)).isEqualTo(totalCost);
     }
 }

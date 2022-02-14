@@ -27,11 +27,7 @@ public class PathController {
     private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION = new OneFieldSubwayMapGraphFactory(
         section -> (double) section.getDuration()
     );
-    private static final FarePolicy SUBWAY_FARE_POLICY = new FareCalculator(Arrays.asList(
-        new BasicFarePolicy(), // 기본 요금 거리 정책
-        new DistanceFarePolicy(new DistanceFareRange(10, 50), 5, 100), // 10km부터 50km 까지의 거리 정책
-        new DistanceFarePolicy(new DistanceFareRange(50, Integer.MAX_VALUE), 8, 100) // 50km 초과의 거리 정책
-    ));
+    private static final FarePolicy SUBWAY_FARE_POLICY = new FareCalculator();
 
     private final PathService pathService;
 
