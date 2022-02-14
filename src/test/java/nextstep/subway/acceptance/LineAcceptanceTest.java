@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.step.LineSteps.*;
-import static nextstep.subway.acceptance.step.StationStepFeature.*;
+import static nextstep.subway.acceptance.step.StationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 노선 관리 기능")
