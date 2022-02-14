@@ -40,7 +40,8 @@ public class PathSteps {
                     fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("역 생성날짜"),
                     fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정날짜"),
                     fieldWithPath("distance").type(Integer.class).description("경로조회 총 거리"),
-                    fieldWithPath("duration").type(Integer.class).description("경로조회 총 소요시간")
+                    fieldWithPath("duration").type(Integer.class).description("경로조회 총 소요시간"),
+                    fieldWithPath("fare").type(Integer.class).description("경로조회 총 비용")
                 )))
             .build();
     }

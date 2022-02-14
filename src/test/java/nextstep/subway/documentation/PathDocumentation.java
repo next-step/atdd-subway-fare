@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 
 public class PathDocumentation extends Documentation {
 
-    private final int distance = 20;
+    private final int distance = 9;
     private final int duration = 10;
 
     @Test
@@ -42,14 +42,16 @@ public class PathDocumentation extends Documentation {
 
         PathResponse pathResponse = response.as(PathResponse.class);
 
-        경로조회의_결과가_예상대로_조회된다(pathResponse, 2, distance, duration);
+        경로조회의_결과가_예상대로_조회된다(pathResponse, 2, distance, duration, 1250);
     }
 
-    private void 경로조회의_결과가_예상대로_조회된다(PathResponse pathResponse, int size, int distance, int duration) {
+    private void 경로조회의_결과가_예상대로_조회된다(PathResponse pathResponse
+        , int size, int distance, int duration, int fare) {
         Assertions.assertAll(
             () -> assertThat(pathResponse.getStations()).hasSize(size),
             () -> assertThat(pathResponse.getDistance()).isEqualTo(distance),
-            () -> assertThat(pathResponse.getDuration()).isEqualTo(duration)
+            () -> assertThat(pathResponse.getDuration()).isEqualTo(duration),
+            () -> assertThat(pathResponse.getFare()).isEqualTo(fare)
         );
     }
 
