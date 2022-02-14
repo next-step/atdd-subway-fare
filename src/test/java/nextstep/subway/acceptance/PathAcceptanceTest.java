@@ -6,15 +6,13 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경�
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.ui.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,8 +56,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        경로_확인(response, 50, 6);
+        경로_확인(response, 50, 6, 교대역, 남부터미널역, 양재역);
         요금_확인(response, 2_150);
     }
 
@@ -70,12 +67,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        경로_확인(response, 70, 4);
+        경로_확인(response, 70, 4, 교대역, 강남역, 양재역);
         요금_확인(response, 2_150);
     }
 
-    private void 경로_확인(final ExtractableResponse<Response> response, final int distance, final int duration) {
+    private void 경로_확인(final ExtractableResponse<Response> response, final int distance, final int duration, Long... stationIds) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
     }

@@ -1,6 +1,5 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.ui.PathType;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;

@@ -1,10 +1,4 @@
-package nextstep.subway.applicaion;
-
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.ui.PathType;
+package nextstep.subway.domain;
 
 import java.util.Arrays;
 import java.util.List;

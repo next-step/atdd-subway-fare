@@ -18,7 +18,7 @@ import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.ui.PathType;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
