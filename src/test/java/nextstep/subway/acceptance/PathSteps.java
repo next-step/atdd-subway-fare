@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -18,6 +19,7 @@ import io.restassured.specification.RequestSpecification;
 import java.util.HashMap;
 import java.util.Map;
 import nextstep.subway.domain.PathType;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -90,5 +92,20 @@ public class PathSteps {
         params.put("distance", distance + "");
         params.put("duration", duration + "");
         return params;
+    }
+
+    public static void 경로조회의_결과_경로가_예상과_같다(ExtractableResponse<Response> response
+    , Long... stationIdList) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class))
+            .containsExactly(stationIdList);
+    }
+
+    public static void 경로조회의_결과_정보가_예상과_같다(ExtractableResponse<Response> response
+        , int distance, int duration, int fare) {
+        Assertions.assertAll(
+            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration),
+            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance),
+            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare)
+        );
     }
 }
