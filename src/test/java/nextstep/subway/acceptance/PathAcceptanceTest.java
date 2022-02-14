@@ -59,7 +59,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        경로_확인(response, 5, 6);
     }
 
     @DisplayName("두 역의 최소 시간 거리 경로를 조회한다.")
@@ -70,7 +70,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(4);
+        경로_확인(response, 20, 4);
+    }
+
+    private void 경로_확인(final ExtractableResponse<Response> response, final int distance, final int duration) {
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
