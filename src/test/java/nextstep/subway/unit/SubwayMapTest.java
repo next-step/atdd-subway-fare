@@ -92,6 +92,20 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
+    @DisplayName("경로 탐색 결과에 포함되는 Section이 Line을 가지고 있는지 확인")
+    @Test
+    void findPathResultIsLineNull() {
+        // given
+        SubwayMapGraphFactory factory = new OneFieldSubwayMapGraphFactory(section -> (double) section.getDistance());
+
+        // when
+        Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
+
+        // then
+        assertThat(path.getSections().getSections())
+            .doesNotContainNull();
+    }
+
     private Station createStation(long id, String name) {
         Station station = new Station(name);
         ReflectionTestUtils.setField(station, "id", id);
