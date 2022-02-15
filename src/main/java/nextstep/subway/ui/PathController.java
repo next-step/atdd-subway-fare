@@ -6,8 +6,8 @@ import nextstep.auth.authorization.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondtion;
-import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondtion;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
+import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
 import nextstep.subway.domain.map.OneFieldSubwayMapGraphFactory;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
@@ -51,8 +51,8 @@ public class PathController {
         return ResponseEntity.ok(pathResponse);
     }
 
-    private FareDiscountCondtion fareDiscountPolicy(Optional<LoginMember> loginMember) {
-        return new KidsFareDiscountCondtion(
+    private FareDiscountCondition fareDiscountPolicy(Optional<LoginMember> loginMember) {
+        return new KidsFareDiscountCondition(
             loginMember.map(LoginMember::getAge).orElse(0)
         );
     }

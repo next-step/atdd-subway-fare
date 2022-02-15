@@ -9,7 +9,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.farepolicy.FareCalculator;
-import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondtion;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
 import nextstep.subway.domain.map.SubwayMap;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
@@ -30,7 +30,7 @@ public class PathService {
 
     public PathResponse findPath(Long source, Long target,
                                  SubwayMapGraphFactory subwayMapGraphFactory,
-                                 FareDiscountCondtion fareDiscountPolicy) {
+                                 FareDiscountCondition fareDiscountPolicy) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();

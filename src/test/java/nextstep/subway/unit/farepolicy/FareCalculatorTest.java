@@ -19,8 +19,8 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.farepolicy.FareCalculator;
-import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondtion;
-import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondtion;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
+import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
 
 @DisplayName("경로 요금 계산 결과 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -61,7 +61,7 @@ public class FareCalculatorTest {
         Path path = new Path(sections);
 
         // When, Then
-        FareDiscountCondtion fareDiscountPolicy = new KidsFareDiscountCondtion(age);
+        FareDiscountCondition fareDiscountPolicy = new KidsFareDiscountCondition(age);
         assertThat(calculator.calculate(path, fareDiscountPolicy)).isEqualTo(totalCost);
     }
 }

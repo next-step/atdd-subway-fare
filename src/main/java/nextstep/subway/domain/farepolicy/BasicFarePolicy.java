@@ -1,6 +1,7 @@
 package nextstep.subway.domain.farepolicy;
 
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.farepolicy.base.FarePolicy;
 
 public class BasicFarePolicy implements FarePolicy {
     private static final int BASIC_COST = 1250;

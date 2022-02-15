@@ -1,5 +1,5 @@
 package nextstep.subway.domain.farepolicy.discountcondition;
 
-public interface FareDiscountCondtion {
+public interface FareDiscountCondition {
     int discount(int totalCost);
 }

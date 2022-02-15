@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondtion;
-import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondtion;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
+import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
 
 @DisplayName("연령별 할인 정책 - 키즈")
 public class KidsFareDiscountConditionTest {
@@ -25,7 +25,7 @@ public class KidsFareDiscountConditionTest {
     @DisplayName("연령별 요금 할인 정책 테스트")
     @ParameterizedTest
     void discount(int age, int totalCost, int correct) {
-        FareDiscountCondtion fareDiscountPolicy = new KidsFareDiscountCondtion(age);
+        FareDiscountCondition fareDiscountPolicy = new KidsFareDiscountCondition(age);
         assertThat(fareDiscountPolicy.discount(totalCost)).isEqualTo(correct);
     }
 }

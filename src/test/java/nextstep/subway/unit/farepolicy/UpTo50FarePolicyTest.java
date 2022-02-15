@@ -3,6 +3,7 @@ package nextstep.subway.unit.farepolicy;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,32 +12,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.farepolicy.DistanceFarePolicy;
-import nextstep.subway.domain.farepolicy.DistanceFareRange;
-import nextstep.subway.domain.farepolicy.FarePolicy;
+import nextstep.subway.domain.farepolicy.UpTo50FarePolicy;
+import nextstep.subway.domain.farepolicy.base.FarePolicy;
 
-@DisplayName("50km 초과의 요금 정책 테스트")
+@DisplayName("50km 까지의 요금 정책 테스트")
 @ExtendWith(MockitoExtension.class)
-public class DistanceFarePolicyTest {
+public class UpTo50FarePolicyTest {
     @Mock
     private Path path;
+    private FarePolicy farePolicy;
 
-    @CsvSource({
-        "50,0",
-        "51,100",
-        "59,200",
-        "67,300"
-    })
-    @DisplayName("50km를 초과하면 8km당 100원이 부과된다.")
-    @ParameterizedTest
-    void calculateMoreThan50(int distance, int cost) {
-        when(path.extractDistance()).thenReturn(distance);
-
-        FarePolicy farePolicy = new DistanceFarePolicy(
-            new DistanceFareRange(50, Integer.MAX_VALUE), 8, 100
-        );
-
-        assertThat(farePolicy.calculate(path)).isEqualTo(cost);
+    @BeforeEach
+    void setUp() {
+        farePolicy = new UpTo50FarePolicy();
     }
 
     @CsvSource({
@@ -51,9 +39,6 @@ public class DistanceFarePolicyTest {
     void calculateUpTo50(int distance, int cost) {
         when(path.extractDistance()).thenReturn(distance);
 
-        FarePolicy farePolicy = new DistanceFarePolicy(
-            new DistanceFareRange(10, 50), 5, 100
-        );
         assertThat(farePolicy.calculate(path)).isEqualTo(cost);
     }
 }
