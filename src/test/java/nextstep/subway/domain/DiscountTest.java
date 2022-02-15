@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DiscountTest {
 
 	@ParameterizedTest
-	@CsvSource({"6, 1000, 325", "12, 2000, 825", "18, 2500, 1720"})
+	@CsvSource({"6, 1000, 325", "12, 2000, 825", "18, 2500, 1720", "100, 1000, 1000", "1, 100, 100"})
 	void calculateDiscountAmount(int age, int fare, int expectedDiscountFare) {
 		int discountFare = Discount.calculateDiscountAmount(fare, age);
 

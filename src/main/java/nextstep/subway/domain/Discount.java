@@ -6,7 +6,9 @@ import java.util.function.Function;
 public enum Discount {
 
 	TEENAGER(13, 19, (amount) -> (int) ((amount - 350) * 0.8)),
-	CHILD(6, 13, (amount) -> (int) ((amount - 350) * 0.5));
+	CHILD(6, 13, (amount) -> (int) ((amount - 350) * 0.5)),
+	ADULT(14, Integer.MAX_VALUE, (amount) -> amount),
+	NONE(0, 0, (amount) -> amount);
 
 	private final int minAgeIncluded;
 	private final int maxAgeExcluded;
@@ -22,7 +24,7 @@ public enum Discount {
 		return Arrays.stream(Discount.values())
 				.filter(discount -> discount.minAgeIncluded <= age && age < discount.maxAgeExcluded)
 				.findFirst()
-				.orElseThrow(IllegalArgumentException::new);
+				.orElse(NONE);
 	}
 
 	public static int calculateDiscountAmount(int fare, Integer age) {
