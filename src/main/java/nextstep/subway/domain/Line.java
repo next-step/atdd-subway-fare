@@ -7,10 +7,17 @@ import java.util.List;
 public class Line extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
-    @Column(unique = true)
+
+    @Column(name = "LINE_NAME", unique = true, nullable = false)
     private String name;
+
+    @Column(name = "LINE_COLOR", nullable = false)
     private String color;
+
+    @Column(name = "LINE_ADDITIONAL_FARE", nullable = false)
+    private int additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -18,9 +25,10 @@ public class Line extends BaseEntity {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int additionalFare) {
         this.name = name;
         this.color = color;
+        this.additionalFare = additionalFare;
     }
 
     public Long getId() {
@@ -33,6 +41,10 @@ public class Line extends BaseEntity {
 
     public String getColor() {
         return color;
+    }
+
+    public int getAdditionalFare() {
+        return additionalFare;
     }
 
     public List<Section> getSections() {
