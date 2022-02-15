@@ -31,9 +31,9 @@ class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = Line.of("신분당선", "red");
+        이호선 = Line.of("2호선", "red");
+        삼호선 = Line.of("3호선", "red");
 
         신분당선.addSection(강남역, 양재역, 3, 5);
         이호선.addSection(교대역, 강남역, 3, 5);
@@ -94,7 +94,7 @@ class SubwayMapTest {
     }
 
     private Station createStation(long id, String name) {
-        Station station = new Station(name);
+        Station station = Station.of(name);
         ReflectionTestUtils.setField(station, "id", id);
 
         return station;

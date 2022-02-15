@@ -15,12 +15,16 @@ public class Line extends BaseEntity {
     @Embedded
     private Sections sections = new Sections();
 
-    public Line() {
+    protected Line() {
     }
 
-    public Line(String name, String color) {
+    private Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public static Line of(String name, String color) {
+        return new Line(name, color);
     }
 
     public Long getId() {
