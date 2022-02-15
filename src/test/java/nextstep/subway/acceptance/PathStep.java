@@ -1,5 +1,7 @@
 package nextstep.subway.acceptance;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +40,12 @@ public class PathStep {
 
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(long source, long target) {
         return 두_역의_최소_시간_경로_조회를_요청(RestAssured.given(), source, target);
+    }
+
+    public static void 경로_조회_성공(ExtractableResponse<Response> response, int distance, int duration, int totalCost, Long... stationIds) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getInt("totalCost")).isEqualTo(totalCost);
     }
 }
