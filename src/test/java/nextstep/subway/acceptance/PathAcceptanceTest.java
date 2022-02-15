@@ -2,7 +2,6 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.domain.DiscountPolicy;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +18,7 @@ import static nextstep.subway.acceptance.LineSteps.*;
 import static nextstep.subway.acceptance.MemberAcceptanceTest.PASSWORD;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
-import static nextstep.subway.acceptance.PathAcceptanceSteps.경로_전체_요금_조회됨;
-import static nextstep.subway.acceptance.PathAcceptanceSteps.두_역의_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathAcceptanceSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 @DisplayName("지하철 경로 검색")
@@ -71,24 +69,24 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @ParameterizedTest(name = "로그인 상태에서 두 역의 경로를 조회한다. [{arguments}]")
     @MethodSource("findPathWithLogin")
-    void findPathWithLogin(PathType pathType, String email, int age, int expected) {
+    void findPathWithLogin(String email, int age, int expected) {
         // when
         회원_생성_요청(email, PASSWORD, age);
         String 로그인_토큰 = 로그인_되어_있음(email, PASSWORD);
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(givenWithLogin(로그인_토큰), 교대역, 양재역, pathType);
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(givenWithLogin(로그인_토큰), 교대역, 양재역, PathType.DISTANCE);
 
         // then
         경로_역_목록_조회됨(response, 교대역, 남부터미널역, 양재역);
         경로_전체_거리_조회됨(response, 5);
         경로_전체_시간_조회됨(response, 5);
-        경로_전체_요금_조회됨(response, expected);
+        경로_할인_적용_요금_조회됨(response, expected);
     }
 
     private static Stream<Arguments> findPathWithLogin() {
         return Stream.of(
-                Arguments.of(DiscountPolicy.CHILD, "child@email.com", 10, 450),
-                Arguments.of(DiscountPolicy.YOUTH, "youth@email.com", 15, 720),
-                Arguments.of(DiscountPolicy.ADULT, "adult@email.com", 20, 1250)
+                Arguments.of("child@email.com", 10, 1800),
+                Arguments.of("youth@email.com", 15, 2070),
+                Arguments.of("adult@email.com", 20, 2250)
         );
     }
 

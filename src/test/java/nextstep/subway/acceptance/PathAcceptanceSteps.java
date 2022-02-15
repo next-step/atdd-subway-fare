@@ -51,4 +51,8 @@ public class PathAcceptanceSteps {
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
+    public static void 경로_할인_적용_요금_조회됨(ExtractableResponse<Response> response, int fare) {
+        assertThat(response.jsonPath().getInt("totalFare")).isEqualTo(fare);
+    }
+
 }
