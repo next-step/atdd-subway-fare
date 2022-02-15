@@ -12,11 +12,8 @@ import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.Map;
 import static nextstep.subway.acceptance.PathSteps.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
 public class PathDocumentation extends Documentation {
     @MockBean
