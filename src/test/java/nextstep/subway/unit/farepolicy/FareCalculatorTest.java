@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,12 +14,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import nextstep.subway.FarePolicyConfig;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.farepolicy.FareCalculator;
-import nextstep.subway.domain.farepolicy.discount.FareDiscountPolicy;
-import nextstep.subway.domain.farepolicy.discount.KidsFareDiscountPolicy;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondtion;
+import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondtion;
 
 @DisplayName("경로 요금 계산 결과 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +29,13 @@ public class FareCalculatorTest {
     @Mock private Section section2;
     @Mock private Section section3;
     @Mock private Sections sections;
+
+    private FareCalculator calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator = new FarePolicyConfig().fareCalculator();
+    }
 
     @CsvSource({
         "6,9,900",
@@ -52,8 +61,7 @@ public class FareCalculatorTest {
         Path path = new Path(sections);
 
         // When, Then
-        FareDiscountPolicy fareDiscountPolicy = new KidsFareDiscountPolicy(age);
-        FareCalculator calculator = new FareCalculator();
+        FareDiscountCondtion fareDiscountPolicy = new KidsFareDiscountCondtion(age);
         assertThat(calculator.calculate(path, fareDiscountPolicy)).isEqualTo(totalCost);
     }
 }

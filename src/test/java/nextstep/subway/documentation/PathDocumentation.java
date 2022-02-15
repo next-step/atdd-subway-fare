@@ -33,7 +33,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDistance() {
-        when(pathService.findPath(anyLong(), anyLong(), any(), any(), any()))
+        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
             .thenReturn(createPathResponse(100, 200, 10000));
 
         PathStep.두_역의_최단_거리_경로_조회를_요청(
@@ -44,7 +44,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDuration() {
-        when(pathService.findPath(anyLong(), anyLong(), any(), any(), any()))
+        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
             .thenReturn(createPathResponse(200, 100, 20000));
 
         PathStep.두_역의_최소_시간_경로_조회를_요청(

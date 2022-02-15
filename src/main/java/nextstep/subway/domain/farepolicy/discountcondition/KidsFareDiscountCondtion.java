@@ -1,6 +1,6 @@
-package nextstep.subway.domain.farepolicy.discount;
+package nextstep.subway.domain.farepolicy.discountcondition;
 
-public class KidsFareDiscountPolicy implements FareDiscountPolicy {
+public class KidsFareDiscountCondtion implements FareDiscountCondtion {
     private static final int FARE_FOR_EXCLUDED_DISCOUNT  = 350;
     private static final int DISCOUNT_PERCENT_FOR_CHILD = 50;
     private static final int DISCOUNT_PERCENT_FOR_TEENAGER = 20;
@@ -9,7 +9,7 @@ public class KidsFareDiscountPolicy implements FareDiscountPolicy {
 
     private final int age;
 
-    public KidsFareDiscountPolicy(int age) {
+    public KidsFareDiscountCondtion(int age) {
         this.age = age;
     }
 

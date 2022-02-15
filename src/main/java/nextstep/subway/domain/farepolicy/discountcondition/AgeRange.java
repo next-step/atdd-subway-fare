@@ -1,4 +1,4 @@
-package nextstep.subway.domain.farepolicy.discount;
+package nextstep.subway.domain.farepolicy.discountcondition;
 
 public class AgeRange {
     private final int minAge;
