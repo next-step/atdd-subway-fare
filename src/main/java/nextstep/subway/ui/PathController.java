@@ -1,9 +1,12 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.farepolicy.FareCalculator;
 import nextstep.subway.domain.farepolicy.FarePolicy;
+import nextstep.subway.domain.farepolicy.discount.KidsFareDiscountPolicy;
 import nextstep.subway.domain.map.OneFieldSubwayMapGraphFactory;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
@@ -22,7 +25,6 @@ public class PathController {
     private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION = new OneFieldSubwayMapGraphFactory(
         section -> (double) section.getDuration()
     );
-    private static final FarePolicy SUBWAY_FARE_POLICY = new FareCalculator();
 
     private final PathService pathService;
 
@@ -31,17 +33,21 @@ public class PathController {
     }
 
     @GetMapping("distance")
-    public ResponseEntity<PathResponse> findPathByDistance(@RequestParam Long source, @RequestParam Long target) {
+    public ResponseEntity<PathResponse> findPathByDistance(@AuthenticationPrincipal LoginMember loginMember,
+                                                           @RequestParam Long source, @RequestParam Long target) {
         PathResponse pathResponse = pathService.findPath(
-            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE, SUBWAY_FARE_POLICY
+            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE,
+            new FareCalculator(), new KidsFareDiscountPolicy(loginMember.getAge())
         );
         return ResponseEntity.ok(pathResponse);
     }
 
     @GetMapping("duration")
-    public ResponseEntity<PathResponse> findPathByDuration(@RequestParam Long source, @RequestParam Long target) {
+    public ResponseEntity<PathResponse> findPathByDuration(@AuthenticationPrincipal LoginMember loginMember,
+                                                           @RequestParam Long source, @RequestParam Long target) {
         PathResponse pathResponse = pathService.findPath(
-            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION, SUBWAY_FARE_POLICY
+            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION,
+            new FareCalculator(), new KidsFareDiscountPolicy(loginMember.getAge())
         );
         return ResponseEntity.ok(pathResponse);
     }

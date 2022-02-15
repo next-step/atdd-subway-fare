@@ -17,6 +17,8 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.farepolicy.FareCalculator;
+import nextstep.subway.domain.farepolicy.discount.FareDiscountPolicy;
+import nextstep.subway.domain.farepolicy.discount.KidsFareDiscountPolicy;
 
 @DisplayName("경로 요금 계산 결과 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -27,16 +29,17 @@ public class FareCalculatorTest {
     @Mock private Sections sections;
 
     @CsvSource({
-        "9,2150",
-        "10,2150",
-        "11,2250",
-        "50,3050",
-        "51,3150",
-        "59,3250"
+        "6,9,900",
+        "6,10,900",
+        "12,11,950",
+        "13,50,2160",
+        "18,51,2240",
+        "19,51,3150",
+        "19,59,3250"
     })
     @DisplayName("요금 계산 테스트")
     @ParameterizedTest
-    void calculate(int distance, int totalCost) {
+    void calculate(int age, int distance, int totalCost) {
         // Given
         when(section1.getAdditionalFare()).thenReturn(0);
         when(section2.getAdditionalFare()).thenReturn(500);
@@ -49,7 +52,8 @@ public class FareCalculatorTest {
         Path path = new Path(sections);
 
         // When, Then
+        FareDiscountPolicy fareDiscountPolicy = new KidsFareDiscountPolicy(age);
         FareCalculator calculator = new FareCalculator();
-        assertThat(calculator.calculate(path)).isEqualTo(totalCost);
+        assertThat(calculator.calculate(path, fareDiscountPolicy)).isEqualTo(totalCost);
     }
 }

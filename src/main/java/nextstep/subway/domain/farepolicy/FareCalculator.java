@@ -3,9 +3,12 @@ package nextstep.subway.domain.farepolicy;
 import java.util.Arrays;
 import java.util.List;
 
-import nextstep.subway.domain.Path;
+import org.springframework.stereotype.Component;
 
-public class FareCalculator implements FarePolicy {
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.farepolicy.discount.FareDiscountPolicy;
+
+public class FareCalculator {
     private final List<FarePolicy> farePolicies;
 
     public FareCalculator(List<FarePolicy> farePolicies) {
@@ -21,10 +24,10 @@ public class FareCalculator implements FarePolicy {
         ));
     }
 
-    @Override
-    public int calculate(Path path) {
-        return farePolicies.stream()
-                           .mapToInt(eachPolicy -> eachPolicy.calculate(path))
-                           .sum();
+    public int calculate(Path path, FareDiscountPolicy fareDiscountPolicy) {
+        int totalCost = farePolicies.stream()
+                                    .mapToInt(eachPolicy -> eachPolicy.calculate(path))
+                                    .sum();
+        return fareDiscountPolicy.discount(totalCost);
     }
 }
