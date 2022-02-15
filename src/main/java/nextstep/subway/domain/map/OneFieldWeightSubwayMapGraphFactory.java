@@ -10,10 +10,10 @@ import nextstep.subway.domain.Section;
 import nextstep.subway.domain.SectionEdge;
 import nextstep.subway.domain.Station;
 
-public class OneFieldSubwayMapGraphFactory extends SubwayMapGraphFactory {
+public class OneFieldWeightSubwayMapGraphFactory extends SubwayMapGraphFactory {
     private final Function<Section, Double> getFieldStrategy;
 
-    public OneFieldSubwayMapGraphFactory(Function<Section, Double> getFieldStrategy) {
+    public OneFieldWeightSubwayMapGraphFactory(Function<Section, Double> getFieldStrategy) {
         this.getFieldStrategy = getFieldStrategy;
     }
 

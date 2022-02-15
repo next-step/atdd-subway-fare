@@ -8,7 +8,7 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
 import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
-import nextstep.subway.domain.map.OneFieldSubwayMapGraphFactory;
+import nextstep.subway.domain.map.OneFieldWeightSubwayMapGraphFactory;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
 import org.springframework.http.ResponseEntity;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("paths")
 @RestController
 public class PathController {
-    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE = new OneFieldSubwayMapGraphFactory(
+    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE = new OneFieldWeightSubwayMapGraphFactory(
         section -> (double) section.getDistance()
     );
-    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION = new OneFieldSubwayMapGraphFactory(
+    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION = new OneFieldWeightSubwayMapGraphFactory(
         section -> (double) section.getDuration()
     );
 
