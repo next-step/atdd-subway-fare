@@ -15,18 +15,14 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target) {
-        // 그래프 만들기
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
 
-        // 다익스트라 최단 경로 찾기
         return getPath(source, target, graph);
     }
 
     public Path findPathByDuration(Station source, Station target) {
-        // 그래프 만들기
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraphByDuration();
 
-        // 다익스트라 최단 경로 찾기
         return getPath(source, target, graph);
 
     }
@@ -65,7 +61,6 @@ public class SubwayMap {
     }
 
     private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역(정점)을 등록
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
@@ -74,7 +69,6 @@ public class SubwayMap {
     }
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
@@ -85,7 +79,6 @@ public class SubwayMap {
     }
 
     private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
@@ -97,7 +90,6 @@ public class SubwayMap {
     }
 
     private void addEdgeByDuration(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
@@ -108,7 +100,6 @@ public class SubwayMap {
     }
 
     private void addOppositeEdgeByDuration(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
