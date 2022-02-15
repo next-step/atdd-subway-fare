@@ -20,11 +20,18 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null && isOptional(parameter)) {
+            return null;
+        }
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
         }
 
         return authentication.getPrincipal();
+    }
+
+    private boolean isOptional(MethodParameter parameter) {
+        return parameter.getParameterAnnotation(AuthenticationPrincipal.class).optional();
     }
 
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {

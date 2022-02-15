@@ -8,11 +8,11 @@ public enum Fare {
 	EXTRA_OVER_50KM(EXTRA_LESS_THAN_50KM, 100, 51, Integer.MAX_VALUE, 8),
 	;
 
-	private Fare parentFare;
-	private int amount;
-	private int minDistance;
-	private int maxDistance;
-	private int dividend;
+	private final Fare parentFare;
+	private final int amount;
+	private final int minDistance;
+	private final int maxDistance;
+	private final int dividend;
 
 	Fare(Fare parentFare, int amount, int minDistance, int maxDistance, int dividend) {
 		this.parentFare = parentFare;
@@ -20,6 +20,12 @@ public enum Fare {
 		this.minDistance = minDistance;
 		this.maxDistance = maxDistance;
 		this.dividend = dividend;
+	}
+
+	public static int calculateAmount(Path path) {
+		int distance = path.extractDistance();
+		Fare fare = valueOfDistance(distance);
+		return fare.calculate(distance);
 	}
 
 	public static int calculateAmount(int distance) {

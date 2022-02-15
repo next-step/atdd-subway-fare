@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
-
+	static final String SESSION_COOKIE_KEY = "JSESSIONID";
 	static final String TYPE_DURATION = "DURATION";
 	static final String TYPE_DISTANCE = "DISTANCE";
 

@@ -37,7 +37,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     public void setUp() {
         super.setUp();
-
         교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
@@ -60,7 +59,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회됨(response, 교대역, 남부터미널역, 양재역);
         경로_거리_조회됨(response, 5);
         경로_소요시간_조회됨(response, 20);
-        지하철_요금_조회됨(response, 1250);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -73,7 +71,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회됨(response, 교대역, 강남역, 양재역);
         경로_거리_조회됨(response, 20);
         경로_소요시간_조회됨(response, 10);
-        지하철_요금_조회됨(response, 2350);
     }
 
 
