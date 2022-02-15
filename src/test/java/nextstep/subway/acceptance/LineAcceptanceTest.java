@@ -49,7 +49,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("name")).contains("2호선", "3호선");
-        assertThat(response.jsonPath().getList("extraFare", Integer.class)).contains(0, 1000);
+        assertThat(response.jsonPath().getList("extraCharge", Integer.class)).contains(0, 1000);
     }
 
     /**
