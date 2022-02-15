@@ -16,7 +16,7 @@ import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.documentation.snippet.LineSnippet;
 
-@DisplayName("Section 문서화")
+@DisplayName("Line 문서화")
 public class LineDocumentation extends Documentation {
     @MockBean
     private LineService lineService;
