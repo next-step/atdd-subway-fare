@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
+    private DiscountPolicy discountPolicy;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -31,6 +32,18 @@ public class Path {
                 .mapToInt(Line::getExtraCharge)
                 .max()
                 .orElse(0);
+    }
+
+    public void addDiscountPolicy(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
+
+    public int discount() {
+        return discountPolicy.applyDiscount(fare());
+    }
+
+    public int totalFare() {
+        return fare() + extraCharge() - discount();
     }
 
     public List<Station> getStations() {

@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class PathServiceTest {
 
+    public static final int MEMBER_AGE = 20;
     @Autowired
     private StationRepository stationRepository;
 
@@ -67,7 +68,7 @@ class PathServiceTest {
     @MethodSource
     void findPath(PathType pathType, int expected) {
         //when
-        PathResponse path = pathService.findPath(교대역.getId(), 역삼역.getId(), pathType);
+        PathResponse path = pathService.findPath(MEMBER_AGE, 교대역.getId(), 역삼역.getId(), pathType);
         int fare = path.getFare();
 
         //then
@@ -85,7 +86,7 @@ class PathServiceTest {
     @Test
     void applyHighestExtraCharge() {
         //when
-        PathResponse path = pathService.findPath(교대역.getId(), 역삼역.getId(), PathType.DISTANCE);
+        PathResponse path = pathService.findPath(MEMBER_AGE, 교대역.getId(), 역삼역.getId(), PathType.DISTANCE);
         int fare = path.getExtraCharge();
 
         //then

@@ -30,11 +30,11 @@ class DiscountPolicyTest {
         );
     }
 
-    @ParameterizedTest(name = "연령대별 할인 적용 [{arguments}]")
+    @ParameterizedTest(name = "연령대별 할인 금액 [{arguments}]")
     @CsvSource(value = {
             "10, 825",
-            "15, 1320",
-            "20, 2000"
+            "15, 330",
+            "20, 0"
     })
     void discount(int age, int expected) {
         //given

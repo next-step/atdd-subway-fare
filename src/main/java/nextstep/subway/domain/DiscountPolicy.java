@@ -5,8 +5,8 @@ import java.util.function.Predicate;
 
 public enum DiscountPolicy {
     CHILD(age -> age >= 6 && age < 13, 0.5),
-    YOUTH(age -> age >= 13 && age < 20, 0.8),
-    ADULT(age -> age >= 20, 1);
+    YOUTH(age -> age >= 13 && age < 20, 0.2),
+    ADULT(age -> age >= 20, 0);
 
     private static final int DEDUCTION = 350;
 
@@ -27,7 +27,7 @@ public enum DiscountPolicy {
 
     public int applyDiscount(int fare) {
         if (this == ADULT) {
-            return fare;
+            return (int) discountRate;
         }
 
         return (int) ((fare - DEDUCTION) * discountRate);
