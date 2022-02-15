@@ -85,7 +85,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 강남역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 6, 16, 1350)
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 16, 6, 1350)
         );
     }
 
@@ -98,7 +98,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 10, 12, 1350)
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 12, 10, 1350)
         );
     }
 }

@@ -95,7 +95,7 @@ class PathServiceTest {
         );
     }
 
-    @DisplayName("11km 거리의 경로조회를 한다.")
+    @DisplayName("11km 거리의 경로조회 (최소시긴 경로와 다른 경로) 를 한다.")
     @Test
     void findPathTest_2() {
         PathResponse response = pathService.findPath(강남역.getId(), 남부터미널역.getId(), PathType.DURATION);
@@ -109,7 +109,7 @@ class PathServiceTest {
         );
     }
 
-    @DisplayName("15km 거리의 경로조회를 한다.")
+    @DisplayName("15km 거리의 경로조회 (최소시긴 경로와 다른 경로) 를 한다.")
     @Test
     void findPathTest_3() {
         PathResponse response = pathService.findPath(교대역.getId(), 대치역.getId(), PathType.DURATION);

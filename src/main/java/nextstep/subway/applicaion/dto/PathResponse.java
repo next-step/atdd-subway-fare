@@ -24,7 +24,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.extractFare();
+        int fare = path.getFare();
 
         return new PathResponse(stations, distance, duration, fare);
     }

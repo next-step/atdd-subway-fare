@@ -5,8 +5,20 @@ import java.util.List;
 public class Path {
     private Sections sections;
 
-    public Path(Sections sections) {
+    private static final int DEFAULT_FARE = 1250;
+
+    private int fareDistance;
+
+    protected Path() {
+    }
+
+    public Path(Sections sections, int fareDistance) {
         this.sections = sections;
+        this.fareDistance = fareDistance;
+    }
+
+    public static Path of(Sections sections, int fareDistance) {
+        return new Path(sections, fareDistance);
     }
 
     public Sections getSections() {
@@ -21,11 +33,15 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare() {
-        return sections.totalFare();
-    }
-
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int getFare() {
+        return DEFAULT_FARE + calculateOverFare(fareDistance);
+    }
+
+    protected int calculateOverFare(int distance) {
+        return (int) ((Math.ceil(((distance) - 1) / 5) + 1) * 100) - 200;
     }
 }
