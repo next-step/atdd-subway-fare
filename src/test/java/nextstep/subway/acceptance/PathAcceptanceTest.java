@@ -59,6 +59,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
     }
 
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathByDuration() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()
@@ -66,6 +78,16 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .when().get("/paths/duration")
                 .then().log().all().extract();
     }
 
