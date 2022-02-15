@@ -1,4 +1,6 @@
 [[path]]
+:snippets: {docdir}/build/generated-snippets
+
 == 지하철 경로
 
 === 경로 조회
