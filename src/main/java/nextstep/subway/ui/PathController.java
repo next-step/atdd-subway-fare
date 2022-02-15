@@ -17,7 +17,7 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target,
-                                                 @RequestParam(defaultValue = "distance") String type) {
-        return ResponseEntity.ok(pathService.findPath(source, target));
+                                                 @RequestParam(defaultValue = "DISTANCE") String type) {
+        return ResponseEntity.ok(pathService.findPath(source, target, type));
     }
 }
