@@ -30,8 +30,10 @@ public class PathDocumentationSteps {
                 fieldWithPath("stations[].modifiedDate").description("최종 수정 시간"),
                 fieldWithPath("distance").description("전체 거리"),
                 fieldWithPath("duration").description("소요 시간"),
-                fieldWithPath("fare").description("요금"),
-                fieldWithPath("extraCharge").description("추가 요금")
+                fieldWithPath("fare").description("거리 비례 요금"),
+                fieldWithPath("extraCharge").description("추가 요금"),
+                fieldWithPath("discount").description("할인 요금"),
+                fieldWithPath("totalFare").description("합계 요금")
         );
     }
 
