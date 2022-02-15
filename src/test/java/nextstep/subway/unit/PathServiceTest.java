@@ -6,9 +6,10 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,10 +56,10 @@ class PathServiceTest {
         역삼역 = stationRepository.save(new Station("역삼역"));
         양재역 = stationRepository.save(new Station("양재역"));
 
-        이호선 = lineRepository.save(createLine("이호선", 교대역, 강남역));
+        이호선 = lineRepository.save(createLine("이호선", 교대역, 강남역, 500));
         lineService.addSection(이호선.getId(), createSectionRequest(강남역, 20, 5));
 
-        삼호선 = lineRepository.save(createLine("삼호선", 교대역, 양재역));
+        삼호선 = lineRepository.save(createLine("삼호선", 교대역, 양재역, 1000));
         lineService.addSection(삼호선.getId(), createSectionRequest(양재역, 5, 20));
     }
 
@@ -80,8 +81,19 @@ class PathServiceTest {
         );
     }
 
-    private Line createLine(String name, Station upStation, Station downStation) {
-        Line line = new Line(name, "green");
+    @DisplayName("여러 노선 환승 시 가장 높은 추가요금만 적용")
+    @Test
+    void applyHighestExtraCharge() {
+        //when
+        PathResponse path = pathService.findPath(교대역.getId(), 역삼역.getId(), PathType.DISTANCE);
+        int fare = path.getExtraCharge();
+
+        //then
+        assertThat(fare).isEqualTo(1000);
+    }
+
+    private Line createLine(String name, Station upStation, Station downStation, int extraCharge) {
+        Line line = new Line(name, "green", extraCharge);
         line.addSection(upStation, downStation, 5, 5);
         return line;
     }

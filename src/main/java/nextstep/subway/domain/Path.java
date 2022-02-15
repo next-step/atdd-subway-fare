@@ -25,6 +25,14 @@ public class Path {
         return FareType.fare(extractDistance());
     }
 
+    public int extraCharge() {
+        List<Line> lines = sections.containsLines();
+        return lines.stream()
+                .mapToInt(Line::getExtraCharge)
+                .max()
+                .orElse(0);
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }
