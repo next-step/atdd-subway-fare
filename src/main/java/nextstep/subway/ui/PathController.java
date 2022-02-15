@@ -1,12 +1,7 @@
 package nextstep.subway.ui;
 
-import java.util.Arrays;
-
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.farepolicy.BasicFarePolicy;
-import nextstep.subway.domain.farepolicy.DistanceFarePolicy;
-import nextstep.subway.domain.farepolicy.DistanceFareRange;
 import nextstep.subway.domain.farepolicy.FareCalculator;
 import nextstep.subway.domain.farepolicy.FarePolicy;
 import nextstep.subway.domain.map.OneFieldSubwayMapGraphFactory;
