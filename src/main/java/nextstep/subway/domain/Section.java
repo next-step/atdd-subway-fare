@@ -79,6 +79,6 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getAdditionalFare() {
-        return 0;
+        return line.getAdditionalFare();
     }
 }
