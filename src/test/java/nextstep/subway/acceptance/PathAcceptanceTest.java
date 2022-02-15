@@ -2,7 +2,7 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.domain.AgeGroup;
+import nextstep.subway.domain.DiscountPolicy;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -86,9 +86,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private static Stream<Arguments> findPathWithLogin() {
         return Stream.of(
-                Arguments.of(AgeGroup.CHILD, "child@email.com", 10, 450),
-                Arguments.of(AgeGroup.YOUTH, "youth@email.com", 15, 720),
-                Arguments.of(AgeGroup.ADULT, "adult@email.com", 20, 1250)
+                Arguments.of(DiscountPolicy.CHILD, "child@email.com", 10, 450),
+                Arguments.of(DiscountPolicy.YOUTH, "youth@email.com", 15, 720),
+                Arguments.of(DiscountPolicy.ADULT, "adult@email.com", 20, 1250)
         );
     }
 
