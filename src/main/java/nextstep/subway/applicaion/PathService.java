@@ -24,7 +24,7 @@ public class PathService {
 
 		SubwayMap subwayMap = new SubwayMap(lines);
 		Path path = subwayMap.findPath(upStation, downStation, request.getType());
-		int totalFare = FareCalculator.calculate(path, age);
+		int totalFare = Fare.calculateAmount(path, age);
 		return PathResponse.of(path, totalFare);
 	}
 }

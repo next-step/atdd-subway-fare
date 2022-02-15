@@ -28,17 +28,6 @@ public class PathResponse {
         return new PathResponse(stations, distance, duration, fare);
     }
 
-    public static PathResponse of(Path path) {
-        List<StationResponse> stations = path.getStations().stream()
-                .map(StationResponse::of)
-                .collect(Collectors.toList());
-        int distance = path.extractDistance();
-        int duration = path.extractDuration();
-        int amount = path.extractFare();
-
-        return new PathResponse(stations, distance, duration, amount);
-    }
-
     public List<StationResponse> getStations() {
         return stations;
     }

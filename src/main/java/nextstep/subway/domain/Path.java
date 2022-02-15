@@ -25,11 +25,6 @@ public class Path {
         return sections.getStations();
     }
 
-    @Deprecated
-    public int extractFare() {
-        return Fare.calculateAmount(extractDistance()) + getExtraFareOnLine();
-    }
-
     public int getExtraFareOnLine() {
         return sections.getMaxExtraFareOnLine();
     }
