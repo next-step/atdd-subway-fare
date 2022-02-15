@@ -35,13 +35,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("2호선", "green", 교대역, 강남역, 6, 2)
+            createLineCreateParams("2호선", "green", 교대역, 강남역, 6, 2, 0)
         );
         신분당선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("신분당선", "red", 강남역, 양재역, 10, 3)
+            createLineCreateParams("신분당선", "red", 강남역, 양재역, 10, 3, 0)
         );
         삼호선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 2)
+            createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 2, 0)
         );
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 10, 4));

@@ -2,8 +2,6 @@ package nextstep.subway.domain;
 
 import java.util.List;
 
-import nextstep.subway.domain.farepolicy.FarePolicy;
-
 public class Path {
     private Sections sections;
 
