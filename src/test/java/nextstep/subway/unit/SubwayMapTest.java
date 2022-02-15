@@ -5,7 +5,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.map.OneFieldWeightSubwayMapGraphFactory;
-import nextstep.subway.domain.map.OppositeOneFieldSubwayMapGraphFactory;
+import nextstep.subway.domain.map.OppositeOneFieldWeightSubwayMapGraphFactory;
 import nextstep.subway.domain.map.SubwayMap;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
@@ -65,7 +65,7 @@ class SubwayMapTest {
     @Test
     void findPathByOppositeDistance() {
         // given
-        SubwayMapGraphFactory factory = new OppositeOneFieldSubwayMapGraphFactory(section -> (double) section.getDistance());
+        SubwayMapGraphFactory factory = new OppositeOneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDistance());
 
         // when
         Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
