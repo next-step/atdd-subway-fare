@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
@@ -36,7 +40,17 @@ public class PathDocumentation extends Documentation {
                 .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("시작역"),
+                                parameterWithName("target").description("도착역")),
+                        responseFields(
+                                fieldWithPath("stations").description("경로에 포함된 역 목록"),
+                                fieldWithPath("stations[].id").description("지하철 역 ID"),
+                                fieldWithPath("stations[].name").description("지하철 역 이름"),
+                                fieldWithPath("stations[].createdDate").description("역 생성일"),
+                                fieldWithPath("stations[].modifiedDate").description("역 최근 수정일"),
+                                fieldWithPath("distance").description("시작역과 도착역 사이 거리"))))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
