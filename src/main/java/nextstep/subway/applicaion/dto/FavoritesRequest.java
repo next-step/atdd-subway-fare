@@ -1,13 +1,10 @@
 package nextstep.subway.applicaion.dto;
 
-public class FavoriteRequest {
+public class FavoritesRequest {
     private Long source;
     private Long target;
 
-    public FavoriteRequest() {
-    }
-
-    public FavoriteRequest(Long source, Long target) {
+    public FavoritesRequest(Long source, Long target) {
         this.source = source;
         this.target = target;
     }

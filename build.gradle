@@ -63,6 +63,7 @@ task testDocument(type: Test) {
 	}
 }
 
+// API 문서 생성
 asciidoctor {
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
