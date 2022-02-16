@@ -19,6 +19,7 @@ public class PathController {
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPathByDistance(@RequestParam Long source
         , @RequestParam Long target, @RequestParam PathType pathType) {
+        //TODO if login 사용자라면 (SecurityContext 에 로그인정보가 있으면, 나이 확인)
         return ResponseEntity.ok(pathService.findPath(source, target, pathType));
     }
 }

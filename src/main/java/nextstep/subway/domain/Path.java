@@ -33,12 +33,27 @@ public class Path {
         return sections.totalDuration();
     }
 
+    private int additionalFare() {
+        if (hasAdditionalFareLine()) {
+            return maxAdditionalFareLine();
+        }
+        return 0;
+    }
+
+    private boolean hasAdditionalFareLine() {
+        return false;
+    }
+
+    private int maxAdditionalFareLine() {
+        return 0;
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }
 
     public int getFare() {
-        return DEFAULT_FARE + calculateOverFare(fareDistance);
+        return DEFAULT_FARE + calculateOverFare(fareDistance) + additionalFare();
     }
 
     protected int calculateOverFare(int distance) {
