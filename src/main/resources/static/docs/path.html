@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Subway Application API Document</title>
+<title>지하철 경로</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,20 +435,81 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book">
+<body class="article">
 <div id="header">
-<h1>Subway Application API Document</h1>
-<div class="details">
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="path">지하철 경로</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::path.adoc[]</p>
+<div class="sect2">
+<h3 id="_경로_조회">경로 조회</h3>
+<div class="sect3">
+<h4 id="_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /paths?source=1&amp;target=2 HTTP/1.1
+Accept: application/json
+Host: localhost:53844</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Set-Cookie: JSESSIONID=6024962D32856C4C494466679CB38A25; Path=/; HttpOnly
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 16 Feb 2022 15:54:04 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+Content-Length: 238
+
+{
+  "stations" : [ {
+    "id" : 1,
+    "name" : "가양역",
+    "createdDate" : null,
+    "modifiedDate" : null
+  }, {
+    "id" : 2,
+    "name" : "역삼역",
+    "createdDate" : null,
+    "modifiedDate" : null
+  } ],
+  "distance" : 10
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requestparameter">RequestParameter</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>source</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">출발역</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>target</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도착역</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -456,11 +517,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-02-17 00:43:46 +0900
+Last updated 2022-02-17 00:25:02 +0900
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>
 </body>
 </html>
