@@ -23,7 +23,7 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.take(
+        LocalDateTime answer = subwayDispatchTime.takeOnce(
             LocalTime.of(6, 0), Arrays.asList(10, 5)
         );
 
@@ -43,7 +43,7 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.take(
+        LocalDateTime answer = subwayDispatchTime.takeOnce(
             LocalTime.of(4, 0), Arrays.asList(10, 5)
         );
 
@@ -63,7 +63,7 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.take(
+        LocalDateTime answer = subwayDispatchTime.takeOnce(
             LocalTime.of(6, 0), Arrays.asList(10, 5)
         );
 
