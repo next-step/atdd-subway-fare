@@ -38,4 +38,8 @@ public class PathService {
 
         return PathResponse.of(path);
     }
+
+    public PathResponse findPathByMinimumFee(Long source, Long target) {
+        return null;
+    }
 }

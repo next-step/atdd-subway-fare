@@ -24,4 +24,9 @@ public class PathController {
     public ResponseEntity<PathResponse> findPathByDuration(@RequestParam Long source, @RequestParam Long target) {
         return ResponseEntity.ok(pathService.findPathByMinimumTime(source, target));
     }
+
+    @GetMapping("/paths/minimum-fee")
+    public ResponseEntity<PathResponse> findPathByFee(@RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findPathByMinimumFee(source, target));
+    }
 }
