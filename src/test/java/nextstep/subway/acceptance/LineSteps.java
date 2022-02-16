@@ -80,8 +80,8 @@ public class LineSteps {
         return lineCreateParams;
     }
 
-    public static Map<String, String> createLineCreateParams(String name, String color, long upStationId,
-                                                             long downStationId, int distance, int duration, int additionalFare) {
+    public static Map<String, String> createLineCreateParams(String name, String color, long upStationId, long downStationId,
+                                                             int distance, int duration, int additionalFare) {
         return createLineCreateParams(
             name, color, upStationId, downStationId, distance, duration, additionalFare,
             LocalTime.of(5, 0), LocalTime.of(23, 0), LocalTime.of(0, 10)

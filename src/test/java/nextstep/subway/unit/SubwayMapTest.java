@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,9 +38,12 @@ class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red", 0);
-        이호선 = new Line("2호선", "red", 0);
-        삼호선 = new Line("3호선", "red", 0);
+        final LocalTime START_TIME = LocalTime.of(5, 0);
+        final LocalTime END_TIME = LocalTime.of(23, 0);
+        final LocalTime INTERVAL_TIME = LocalTime.of(0, 10);
+        신분당선 = new Line("신분당선", "red", 0, START_TIME, END_TIME, INTERVAL_TIME);
+        이호선 = new Line("2호선", "red", 0, START_TIME, END_TIME, INTERVAL_TIME);
+        삼호선 = new Line("3호선", "red", 0, START_TIME, END_TIME, INTERVAL_TIME);
 
         신분당선.addSection(강남역, 양재역, 3, 3);
         이호선.addSection(교대역, 강남역, 3, 3);

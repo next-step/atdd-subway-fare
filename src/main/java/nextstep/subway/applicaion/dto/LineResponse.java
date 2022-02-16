@@ -28,6 +28,9 @@ public class LineResponse {
             .name(line.getName())
             .color(line.getColor())
             .additionalFare(line.getAdditionalFare())
+            .startTime(line.getStartTime())
+            .endTime(line.getEndTime())
+            .intervalTime(line.getIntervalTime())
             .stations(stations)
             .createdDate(line.getCreatedDate())
             .modifiedDate(line.getModifiedDate())
@@ -62,6 +65,18 @@ public class LineResponse {
 
     public int getAdditionalFare() {
         return additionalFare;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalTime getIntervalTime() {
+        return intervalTime;
     }
 
     public List<StationResponse> getStations() {
