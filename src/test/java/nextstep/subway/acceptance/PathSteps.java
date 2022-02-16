@@ -28,7 +28,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 경로조회_및_문서_생성_최단_거리_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+    public static ExtractableResponse<Response> 경로조회_문서생성_최단거리_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
         return RestAssured
                 .given(spec).log().all()
                 .filter(filter)
@@ -38,7 +38,7 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 경로조회_및_문서_생성_최소_시간_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+    public static ExtractableResponse<Response> 경로조회_문서생성_최소시간_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
         return RestAssured
                 .given(spec).log().all()
                 .filter(filter)
@@ -48,21 +48,14 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> 경로_조회_파라미터_생성() {
-        Map<String, String> params = new HashMap<>();
-        params.put("source", "1");
-        params.put("target", "2");
-        return params;
-    }
-
-    public static RestDocumentationFilter 경로관련_문서_필터생성(String identifier, RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
-        RestDocumentationFilter filter = document(identifier,
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestParametersSnippet,
-                responseFieldsSnippet
-        );
-        return filter;
+    public static ExtractableResponse<Response> 경로조회_문서생성_최소금액_거리_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(filter)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .params(params)
+                .when().get("/paths/minimum-fee")
+                .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
@@ -127,7 +120,8 @@ public class PathSteps {
                 fieldWithPath("stations[].createdDate").description("해당 역 생성 일"),
                 fieldWithPath("stations[].modifiedDate").description("해당 역 마지막 수정 일"),
                 fieldWithPath("distance").description("해당 경로 사이의 거리"),
-                fieldWithPath("duration").description("해당 경로 소요 시간")
+                fieldWithPath("duration").description("해당 경로 소요 시간"),
+                fieldWithPath("fee").description("해당 경로의 금액")
         );
         return responseFieldsSnippet;
     }
@@ -145,7 +139,7 @@ public class PathSteps {
                 Arrays.asList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10, 3
+                ), 10, 3, 1250
         );
         return pathResponse;
     }
@@ -155,6 +149,31 @@ public class PathSteps {
         assertThat(response.jsonPath().getList("stations.id")).containsExactly(1, 2);
         assertThat(response.jsonPath().getList("stations.name")).containsExactly("강남역", "역삼역");
     }
+
+    public static RestDocumentationFilter 경로관련_문서_필터생성(String identifier) {
+        RequestParametersSnippet requestParametersSnippet = getRequestParameters();
+        ResponseFieldsSnippet responseFieldsSnippet = getResponseFields();
+        return 문서_필터생성(identifier, requestParametersSnippet, responseFieldsSnippet);
+    }
+
+    public static RestDocumentationFilter 문서_필터생성(String identifier, RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
+        return document(identifier,
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestParametersSnippet,
+                responseFieldsSnippet
+        );
+    }
+
+
+    public static Map<String, String> 경로_조회_파라미터_생성() {
+        Map<String, String> params = new HashMap<>();
+        params.put("source", "1");
+        params.put("target", "2");
+        return params;
+    }
+
+
 
 
 }

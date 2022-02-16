@@ -2,12 +2,11 @@ package nextstep.subway.documentation;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.Map;
@@ -25,14 +24,10 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = getPathResponse();
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성();
-        RequestParametersSnippet requestParametersSnippet = getRequestParameters();
-        ResponseFieldsSnippet responseFieldsSnippet = getResponseFields();
-
-
-        RestDocumentationFilter filter = 경로관련_문서_필터생성("path", requestParametersSnippet, responseFieldsSnippet);
+        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_및_문서_생성_최단_거리_기준(spec, filter, params);
+        ExtractableResponse<Response> response = 경로조회_문서생성_최단거리_기준(spec, filter, params);
 
         //then
         경로조회_검증됨(response);
@@ -46,14 +41,10 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = getPathResponse();
         when(pathService.findPathByMinimumTime(anyLong(), anyLong())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성();
-        RequestParametersSnippet requestParametersSnippet = getRequestParameters();
-        ResponseFieldsSnippet responseFieldsSnippet = getResponseFields();
-
-
-        RestDocumentationFilter filter = 경로관련_문서_필터생성("pathByDuration", requestParametersSnippet, responseFieldsSnippet);
+        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("pathByDuration");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_및_문서_생성_최소_시간_기준(spec, filter, params);
+        ExtractableResponse<Response> response = 경로조회_문서생성_최소시간_기준(spec, filter, params);
 
         //then
         경로조회_검증됨(response);
@@ -65,16 +56,13 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = getPathResponse();
         when(pathService.findPathByMinimumTime(anyLong(), anyLong())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성();
-        RequestParametersSnippet requestParametersSnippet = getRequestParameters();
-        ResponseFieldsSnippet responseFieldsSnippet = getResponseFields();
-
-
-        RestDocumentationFilter filter = 경로관련_문서_필터생성("pathByDuration", requestParametersSnippet, responseFieldsSnippet);
+        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("pathByFee");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_및_문서_생성_최소_시간_기준(spec, filter, params);
+        ExtractableResponse<Response> response = 경로조회_문서생성_최소금액_거리_기준(spec, filter, params);
 
         //then
         경로조회_검증됨(response);
     }
+
 }
