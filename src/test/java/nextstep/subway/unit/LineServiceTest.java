@@ -32,7 +32,7 @@ class LineServiceTest extends ServiceTestFixture {
         Line line = lineService.findById(신분당선.getId());
 
         assertThat(line.getSections().size()).isEqualTo(2);
-        assertThat(line.getSections().get(0).getDistance()).isEqualTo(10);
-        assertThat(line.getSections().get(0).getDuration()).isEqualTo(6);
+        assertThat(line.getSections().get(1).getDistance()).isEqualTo(10);
+        assertThat(line.getSections().get(1).getDuration()).isEqualTo(6);
     }
 }
