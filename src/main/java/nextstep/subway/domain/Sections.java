@@ -3,10 +3,11 @@ package nextstep.subway.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
+
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -168,5 +169,9 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public LocalTime arrivalTime(LocalTime of) {
+        return null;
     }
 }
