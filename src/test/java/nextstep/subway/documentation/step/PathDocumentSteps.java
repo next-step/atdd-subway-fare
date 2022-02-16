@@ -7,6 +7,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class PathDocumentSteps {
                 .map(it -> new StationResponse(it.getId(), it.getName(), now, now))
                 .collect(Collectors.toList());
 
-        return new PathResponse(stationResponses, 10);
+        return new PathResponse(stationResponses, 100, 10, BigDecimal.valueOf(1250));
     }
 
     private static ResponseFieldsSnippet 경로_조회_응답_정의() {
@@ -58,7 +59,13 @@ public class PathDocumentSteps {
                         .description("지하철역 수정일"),
                 fieldWithPath("distance")
                         .type(NUMBER)
-                        .description("거리")
+                        .description("거리"),
+                fieldWithPath("duration")
+                        .type(NUMBER)
+                        .description("소요 시간"),
+                fieldWithPath("fare")
+                        .type(NUMBER)
+                        .description("요금")
         );
     }
 
