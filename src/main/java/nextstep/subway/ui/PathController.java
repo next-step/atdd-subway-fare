@@ -17,12 +17,6 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam String type) {
-        if ("distance".equalsIgnoreCase(type)) {
-            return ResponseEntity.ok(pathService.findPath(source, target));
-        } else if ("duration".equalsIgnoreCase(type)) {
-            return ResponseEntity.ok(pathService.findPathDuration(source, target));
-        }
-
-        throw new IllegalArgumentException();
+        return ResponseEntity.ok(pathService.findPath(source, target, type));
     }
 }
