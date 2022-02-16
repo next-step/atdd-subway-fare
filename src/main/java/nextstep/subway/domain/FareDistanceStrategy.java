@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 
 public class FareDistanceStrategy implements FareCalculator {
 
-    private static BigDecimal BASIC_FARE = BigDecimal.valueOf(1250);
+    private static BigDecimal BASIC_FARE = BigDecimal.valueOf(1_250);
 
     @Override
     public BigDecimal calculate(int distance) {
         BigDecimal fare = BASIC_FARE;
-        if (distance <= 10) {
+        if (distance <= AdditionalFare.OVER_10KM.critical) {
             return fare;
         }
 
