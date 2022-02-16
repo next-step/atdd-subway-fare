@@ -15,17 +15,6 @@ class LineServiceTest extends ServiceTestFixture {
     @Test
     void addSection() {
         // when
-        lineService.addSection(신분당선.getId(), new SectionRequest(양재역.getId(), 판교역.getId(), 10));
-
-        // then
-        Line line = lineService.findById(신분당선.getId());
-
-        assertThat(line.getSections().size()).isEqualTo(2);
-    }
-
-    @Test
-    void addSection2() {
-        // when
         lineService.addSection(신분당선.getId(), new SectionRequest(양재역.getId(), 판교역.getId(), 10, 6));
 
         // then

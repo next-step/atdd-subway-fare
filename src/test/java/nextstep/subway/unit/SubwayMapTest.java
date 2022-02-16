@@ -47,34 +47,7 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPath() {
-        // when
-        Path path = subwayMap.findPath(교대역, 양재역);
-
-        // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-    }
-
-    @Test
-    void findPathOppositely() {
-        // when
-        Path path = subwayMap.findPath(양재역, 교대역);
-
-        // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
-    }
-
-    @Test
-    void findPathDuration() {
-        // when
-        Path path = subwayMap.findPathDuration(교대역, 양재역);
-
-        // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
-    }
-
-    @Test
-    void findPath2ByDistance() {
+    void findPathByDistance() {
         // when
         Path path = subwayMap.findPath(교대역, 양재역, "DISTANCE");
 
@@ -83,7 +56,7 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPath2ByDistanceOppositely() {
+    void findPathByDistanceOppositely() {
         // when
         Path path = subwayMap.findPath(양재역, 교대역, "DISTANCE");
 
@@ -92,7 +65,7 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPath2ByDuration() {
+    void findPathByDuration() {
         // when
         Path path = subwayMap.findPath(교대역, 양재역, "DURATION");
 
@@ -101,7 +74,7 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPath2ByDurationOppositely() {
+    void findPathByDurationOppositely() {
         // when
         Path path = subwayMap.findPath(양재역, 교대역, "DURATION");
 
