@@ -3,17 +3,16 @@ package nextstep.subway.unit;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
-import nextstep.subway.domain.Station;
 
 @DisplayName("Sections 테스트")
 public class SectionsTest {
@@ -49,11 +48,14 @@ public class SectionsTest {
 
         // When
         final LocalTime START_TIME = LocalTime.of(10, 0);
-        LocalTime arrivalTime = sections.arrivalTime(START_TIME);
+        LocalDateTime arrivalTime = sections.arrivalTime(
+            LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.of(10, 0))
+        );
 
         // Then
-        final LocalTime EXPECTED_TIME = LocalTime.of(10, 10);
+        final LocalDateTime EXPECTED_TIME = LocalDateTime.of(
+            LocalDateTime.now().toLocalDate(), LocalTime.of(10, 10)
+        );
         assertThat(arrivalTime).isEqualTo(EXPECTED_TIME);
-
     }
 }
