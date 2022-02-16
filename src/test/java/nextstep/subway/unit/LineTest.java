@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LineTest {
     @Test
@@ -40,8 +41,10 @@ class LineTest {
         Section section = line.getSections().stream()
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+        assertAll(
+                () -> assertThat(section.getDownStation()).isEqualTo(삼성역),
+                () -> assertThat(section.getDistance()).isEqualTo(5)
+        );
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
@@ -59,8 +62,10 @@ class LineTest {
         Section section = line.getSections().stream()
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+        assertAll(
+                () -> assertThat(section.getDownStation()).isEqualTo(삼성역),
+                () -> assertThat(section.getDistance()).isEqualTo(5)
+        );
     }
 
     @DisplayName("목록 앞에 추가할 경우")
@@ -78,8 +83,10 @@ class LineTest {
         Section section = line.getSections().stream()
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(역삼역);
-        assertThat(section.getDistance()).isEqualTo(10);
+        assertAll(
+                () -> assertThat(section.getDownStation()).isEqualTo(역삼역),
+                () -> assertThat(section.getDistance()).isEqualTo(10)
+        );
     }
 
     @DisplayName("목록 뒤에 추가할 경우")
@@ -97,8 +104,12 @@ class LineTest {
         Section section = line.getSections().stream()
                 .filter(it -> it.getUpStation() == 역삼역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+
+
+        assertAll(
+                () -> assertThat(section.getDownStation()).isEqualTo(삼성역),
+                () -> assertThat(section.getDistance()).isEqualTo(5)
+        );
     }
 
     @Test

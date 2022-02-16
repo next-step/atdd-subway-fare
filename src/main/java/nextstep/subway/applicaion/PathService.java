@@ -28,4 +28,14 @@ public class PathService {
 
         return PathResponse.of(path);
     }
+
+    public PathResponse findPathByMinimumTime(Long source, Long target) {
+        Station upStation = stationService.findById(source);
+        Station downStation = stationService.findById(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPathByDuration(upStation, downStation);
+
+        return PathResponse.of(path);
+    }
 }

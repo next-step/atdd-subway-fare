@@ -6,4 +6,15 @@
 :toclevels: 2
 :sectlinks:
 
-include::path.adoc[]
+[[path]]
+== 지하철 경로
+
+=== 경로 조회
+
+==== 최단 거리 경로조회
+operation::path[snippets='http-request,http-response,request-parameters,response-fields']
+
+
+==== 최소 시간 경로조회
+operation::pathByDuration[snippets='http-request,http-response,request-parameters,response-fields']
+
