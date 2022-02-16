@@ -105,6 +105,19 @@ class SubwayMapTest {
             .doesNotContainNull();
     }
 
+    @DisplayName("소요 시간을 기준으로 모든 경로 탐색")
+    @Test
+    void findPathsByDuration() {
+        // given
+        SubwayMapGraphFactory factory = new OneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDuration());
+
+        // when
+        List<Path> paths = subwayMap.findPaths(factory.createGraph(lines), 교대역, 양재역);
+
+        // then
+        assertThat(paths.size()).isEqualTo(2);
+    }
+
     private Station createStation(long id, String name) {
         Station station = new Station(name);
         ReflectionTestUtils.setField(station, "id", id);
