@@ -27,6 +27,7 @@ class LineTest {
         line = new Line("2호선", "green");
     }
 
+    @DisplayName("노선에 구간을 순서대로 추가할 수 있다")
     @Test
     void addSection() {
         // when
@@ -37,7 +38,7 @@ class LineTest {
         assertThat(line.getStations()).containsExactly(강남역, 역삼역, 삼성역);
     }
 
-    @DisplayName("상행 기준으로 목록 중간에 추가할 경우")
+    @DisplayName("상행 기준으로 구간 중간에 역을 추가하고 거리를 재할당 한다")
     @Test
     void addSectionInMiddle() {
         // when
@@ -53,7 +54,7 @@ class LineTest {
         assertThat(section.getDistance()).isEqualTo(20);
     }
 
-    @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
+    @DisplayName("하행 기준으로 구간 중간에 역을 추가하고 거리를 재할당 한다")
     @Test
     void addSectionInMiddle2() {
         // when
@@ -69,7 +70,7 @@ class LineTest {
         assertThat(section.getDistance()).isEqualTo(80);
     }
 
-    @DisplayName("목록 앞에 추가할 경우")
+    @DisplayName("노선의 앞쪽에 역을 추가하고 거리를 할당 한다")
     @Test
     void addSectionInFront() {
         // when
@@ -85,7 +86,7 @@ class LineTest {
         assertThat(section.getDistance()).isEqualTo(100);
     }
 
-    @DisplayName("목록 뒤에 추가할 경우")
+    @DisplayName("노선의 뒤쪽에 역을 추가하고 거리를 할당 한다")
     @Test
     void addSectionBehind() {
         // when
@@ -101,6 +102,7 @@ class LineTest {
         assertThat(section.getDistance()).isEqualTo(20);
     }
 
+    @DisplayName("노선에 속한 역을 조회할 수 있다")
     @Test
     void getStations() {
         // given
@@ -125,6 +127,7 @@ class LineTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("노선의 마지먹 역을 삭제할 수 있다")
     @Test
     void removeSection() {
         // given
@@ -138,6 +141,7 @@ class LineTest {
         assertThat(line.getStations()).containsExactly(강남역, 역삼역);
     }
 
+    @DisplayName("노선의 마지막 역을 삭제할 수 있다")
     @Test
     void removeSectionInFront() {
         // given
@@ -151,6 +155,7 @@ class LineTest {
         assertThat(line.getStations()).containsExactly(역삼역, 삼성역);
     }
 
+    @DisplayName("노선의 중간 역을 삭제할 수 있다")
     @Test
     void removeSectionInMiddle() {
         // given
