@@ -99,4 +99,8 @@ public class Line extends BaseEntity {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
+    public SubwayDispatchTime getDispatchTime() {
+        return new SubwayDispatchTime(startTime, endTime, intervalTime);
+    }
 }

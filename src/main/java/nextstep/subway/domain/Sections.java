@@ -11,9 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import jdk.vm.ci.meta.Local;
 
 @Embeddable
 public class Sections {
@@ -175,54 +172,20 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public LocalDateTime arrivalTime(LocalDateTime startTime) {
-        /**
-         1. 강남역에서 선릉역으로 가는 방향으로 강남역에 가장 빨리 도착하는 시간 찾기
-         10:00 기준 강남역->선릉역 방향 // 강남역에 가장 빨리 도착하는 시간은 10:03
-         10:00에 서초역에서 선릉역 방향으로 출발한 지하철
-         3분 소요시간 후 강남역에 도착하기 때문에 10:03
-         2. 강남역에서 선릉역 까지 소요시간 계산
-         강남역에서 선릉역까지 소요시간은 7분
-         * */
-        // 1. 첫번째 역에서 지정한 시간에 출발해 두번째 역에 가장 빨리 도착하는 시간 찾기
-        // -- 첫차 시간부터 입력 받은 시간보다 클때까지 소요 시간을 더한다.
-        // 2. 두번째 역에서 마지막 까지의 역을 모두 합산하기
-        Section firstSection = sections.get(0);
-        LocalTime lineStartTime = firstSection.getLine()
-                                              .getStartTime();
-        LocalTime lineEndTime = firstSection.getLine()
-                                            .getEndTime();
-        LocalTime lineIntervalTime = firstSection.getLine()
-                                                 .getIntervalTime();
-
-
-        //LocalDateTime firstSectionStartTime = firstSectionStartTime();
-        //return firstSectionStartTime.plusMinutes(totalDuration());
-        return null;
+    public LocalDateTime arrivalTime(LocalTime takeTime) {
+        SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
+        LocalDateTime takableTime = dispatchTime.takableTime(takeTime);
+        return dispatchTime.arrivalTime(takableTime, durations());
     }
 
-    private LocalDateTime firstSectionStartTime(LocalDateTime startTime, LocalTime lineStartTime,
-                                                LocalTime lineEndTime, LocalTime lineIntervalTime) {
-        /*
-        LocalDateTime lineEndDateTime = LocalDateTime.of(startTime.toLocalDate(), lineEndTime);
-        LocalDateTime firstSectionStartTime = LocalDateTime.of(startTime.toLocalDate(), lineStartTime);
-        while (firstSectionStartTime.isBefore(startTime)) {
-            firstSectionStartTime = plusTime(firstSectionStartTime, lineIntervalTime);
-        }
-        return firstSectionStartTime;
-
-         */
-        return  null;
+    private List<Integer> durations() {
+        return sections.stream()
+                       .map(Section::getDuration)
+                       .collect(Collectors.toList());
     }
 
-    private LocalDateTime plusTime(LocalDateTime localDateTime, LocalTime time, LocalDateTime lineEndDateTime) {
-        LocalDateTime nextTime = localDateTime.plusHours(time.getHour())
-                                              .plusMinutes(time.getMinute())
-                                              .plusHours(time.getSecond());
-        return null;
-    }
-
-    private void addSectionTime(LocalDateTime ongoingTime, LocalTime duration) {
-        //LocalDateTime nextTime = ongoingTime.plusMinutes(duration)
+    private SubwayDispatchTime dispatchTime(Section section) {
+        return section.getLine()
+                      .getDispatchTime();
     }
 }
