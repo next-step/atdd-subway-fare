@@ -12,16 +12,16 @@ public enum DiscountPolicy {
 
     private final int minAge;
     private final int maxAge;
-    private final Function<Integer, Integer> discountPolicy;
+    private final Function<Integer, Integer> fareToDiscountFare;
 
-    DiscountPolicy(final int minAge, final int maxAge, final Function<Integer, Integer> discountPolicy) {
+    DiscountPolicy(final int minAge, final int maxAge, final Function<Integer, Integer> fareToDiscountFare) {
         this.minAge = minAge;
         this.maxAge = maxAge;
-        this.discountPolicy = discountPolicy;
+        this.fareToDiscountFare = fareToDiscountFare;
     }
 
     public static int discount(int age, int fare) {
-        return getPolicyFromAge(age).discountPolicy.apply(fare);
+        return getPolicyFromAge(age).fareToDiscountFare.apply(fare);
     }
 
     public static DiscountPolicy getPolicyFromAge(int age) {
