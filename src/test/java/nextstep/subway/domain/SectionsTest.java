@@ -24,48 +24,48 @@ class SectionsTest {
 
 
 
-    @DisplayName("총 금액 기본운임 요금 14KM 기준")
+    @DisplayName("총 금액 기본운임 요금 15KM 기준")
     @Test
     void totalFee_additional_case01() {
         //given
-        Sections sections = getSections(5, 5, 4);
+        Sections sections = getSections(5, 5, 5);
         //when
         int fee = sections.totalFee();
         //then
-        assertThat(fee).isEqualTo(1350);
+        assertThat(fee).isEqualTo(1250 + 100);
 
     }
-    @DisplayName("총 금액 기본운임 요금 15KM 기준")
+    @DisplayName("총 금액 기본운임 요금 16KM 기준")
     @Test
     void totalFee_additional_case02() {
         //given
-        Sections sections = getSections(4, 6, 4);
+        Sections sections = getSections(5, 6, 5);
         //when
         int fee = sections.totalFee();
         //then
-        assertThat(fee).isEqualTo(1450);
+        assertThat(fee).isEqualTo(1250 + 200);
 
-    }
-    @DisplayName("총 금액 기본운임 요금 57KM 기준")
-    @Test
-    void totalFee_additional_case03() {
-        //given
-        Sections sections = getSections(20, 23, 14);
-
-        //when
-        int fee = sections.totalFee();
-        //then
-        assertThat(fee).isEqualTo(2050);
     }
     @DisplayName("총 금액 기본운임 요금 58KM 기준")
     @Test
-    void totalFee_additional_case04() {
+    void totalFee_additional_case03() {
         //given
-        Sections sections = getSections(20, 20, 18);
+        Sections sections = getSections(20, 23, 15);
+
         //when
         int fee = sections.totalFee();
         //then
-        assertThat(fee).isEqualTo(2150);
+        assertThat(fee).isEqualTo(1250 + 900);
+    }
+    @DisplayName("총 금액 기본운임 요금 59KM 기준")
+    @Test
+    void totalFee_additional_case04() {
+        //given
+        Sections sections = getSections(20, 20, 19);
+        //when
+        int fee = sections.totalFee();
+        //then
+        assertThat(fee).isEqualTo(1250 + 1000);
     }
 
     private Sections getSections(int distance1, int distance2, int distance3) {

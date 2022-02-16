@@ -154,4 +154,25 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int totalFee() {
+        int distance = totalDistance();
+        int basicFee = 1250;
+
+        if (distance > 50) {
+            return basicFee + 800 + getAdditionalFeePerEight(distance - 50);
+        }
+        if (distance > 10) {
+            return basicFee + getAdditionalFeePerFive(distance - 10);
+        }
+        return basicFee;
+    }
+
+    private int getAdditionalFeePerEight(int distance) {
+        return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+    }
+
+    private int getAdditionalFeePerFive(int distance) {
+        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+    }
 }
