@@ -30,6 +30,12 @@ public class PathService {
     }
 
     public PathResponse findPathDuration(Long source, Long target) {
-        return null;
+        Station sourceStation = stationService.findById(source);
+        Station targetStation = stationService.findById(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPathDuration(sourceStation, targetStation);
+
+        return PathResponse.of(path);
     }
 }

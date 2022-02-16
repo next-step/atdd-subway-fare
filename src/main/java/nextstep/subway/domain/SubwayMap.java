@@ -29,6 +29,10 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
+    public Path findPathDuration(Station source, Station target) {
+        return null;
+    }
+
     private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph() {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
