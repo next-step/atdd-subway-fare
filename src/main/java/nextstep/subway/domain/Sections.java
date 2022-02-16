@@ -174,8 +174,8 @@ public class Sections {
 
     public LocalDateTime arrivalTime(LocalTime takeTime) {
         SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        LocalDateTime takableTime = dispatchTime.takableTime(takeTime);
-        return dispatchTime.arrivalTime(takableTime, durations());
+        LocalDateTime takableDateTime = dispatchTime.takableDateTime(takeTime);
+        return dispatchTime.arrivalDateTime(takableDateTime, durations());
     }
 
     private List<Integer> durations() {
