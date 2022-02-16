@@ -8,12 +8,12 @@ public enum PathType {
     ;
 
     public double weight(final Section section) {
-        return expression.apply(section);
+        return sectionToWeight.apply(section);
     }
 
-    private final Function<Section, Integer> expression;
+    private final Function<Section, Integer> sectionToWeight;
 
-    PathType(final Function<Section, Integer> expression) {
-        this.expression = expression;
+    PathType(final Function<Section, Integer> sectionToWeight) {
+        this.sectionToWeight = sectionToWeight;
     }
 }

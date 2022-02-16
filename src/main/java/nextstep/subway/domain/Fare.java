@@ -18,10 +18,10 @@ public class Fare {
     public int calculateFare() {
         int distance = path.extractDistance();
 
-        return Arrays.stream(FaresPerSection.values()).mapToInt(it -> it.calculate(distance)).sum();
+        return Arrays.stream(FaresPerDistance.values()).mapToInt(it -> it.calculate(distance)).sum();
     }
 
-    public enum FaresPerSection {
+    public enum FaresPerDistance {
         BASE_SECTION(value -> 1_250),
         FIRST_OVER_SECTION(distance -> {
             if (distance < 10) {
@@ -39,14 +39,14 @@ public class Fare {
         }),
         ;
 
-        private final Function<Integer, Integer> expression;
+        private final Function<Integer, Integer> distanceToOverFare;
 
-        FaresPerSection(final Function<Integer, Integer> expression) {
-            this.expression = expression;
+        FaresPerDistance(final Function<Integer, Integer> distanceToOverFare) {
+            this.distanceToOverFare = distanceToOverFare;
         }
 
         public int calculate(int distance) {
-            return expression.apply(distance);
+            return distanceToOverFare.apply(distance);
         }
     }
 
