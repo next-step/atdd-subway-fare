@@ -38,4 +38,20 @@ public class PathService {
 
         return PathResponse.of(path);
     }
+
+    public PathResponse findPath2(Long source, Long target, String type) {
+        Station sourceStation = stationService.findById(source);
+        Station targetStation = stationService.findById(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        if ("DISTANCE".equalsIgnoreCase(type)) {
+            Path path = subwayMap.findPath(sourceStation, targetStation);
+            return PathResponse.of(path);
+        } else if ("DURATION".equalsIgnoreCase(type)) {
+            Path path = subwayMap.findPathDuration(sourceStation, targetStation);
+            return PathResponse.of(path);
+        }
+        throw new IllegalArgumentException();
+    }
 }
