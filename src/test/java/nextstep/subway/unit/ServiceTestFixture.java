@@ -42,8 +42,8 @@ public class ServiceTestFixture {
     @BeforeEach
     public void setUp() {
         강남역 = stationRepository.save(new Station("강남역"));
-        양재역 = stationRepository.save(new Station("역삼역"));
-        판교역 = stationRepository.save(new Station("삼성역"));
+        양재역 = stationRepository.save(new Station("양재역"));
+        판교역 = stationRepository.save(new Station("판교역"));
         신분당선 = lineRepository.save(createLine("신분당선", "red", 강남역, 양재역, 5, 4));
 
         교대역 = stationRepository.save(new Station("교대역"));
