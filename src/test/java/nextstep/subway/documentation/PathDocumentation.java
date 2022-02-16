@@ -58,4 +58,23 @@ public class PathDocumentation extends Documentation {
         //then
         경로조회_검증됨(response);
     }
+
+    @Test
+    void pathByFee() {
+        //given
+        PathResponse pathResponse = getPathResponse();
+        when(pathService.findPathByMinimumTime(anyLong(), anyLong())).thenReturn(pathResponse);
+        Map<String, String> params = 경로_조회_파라미터_생성();
+        RequestParametersSnippet requestParametersSnippet = getRequestParameters();
+        ResponseFieldsSnippet responseFieldsSnippet = getResponseFields();
+
+
+        RestDocumentationFilter filter = 경로관련_문서_필터생성("pathByDuration", requestParametersSnippet, responseFieldsSnippet);
+
+        //when
+        ExtractableResponse<Response> response = 경로조회_및_문서_생성_최소_시간_기준(spec, filter, params);
+
+        //then
+        경로조회_검증됨(response);
+    }
 }
