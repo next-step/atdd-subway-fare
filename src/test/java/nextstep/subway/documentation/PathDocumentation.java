@@ -54,7 +54,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].name").description("지하철 역 이름"),
                                 fieldWithPath("stations[].createdDate").description("역 생성일"),
                                 fieldWithPath("stations[].modifiedDate").description("역 최근 수정일"),
-                                fieldWithPath("distance").description("시작역과 도착역 사이 거리"))))
+                                fieldWithPath("distance").description("시작역과 도착역 사이 거리"),
+                                fieldWithPath("duration").description("총 소요시간"))))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
@@ -89,7 +90,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].name").description("지하철 역 이름"),
                                 fieldWithPath("stations[].createdDate").description("역 생성일"),
                                 fieldWithPath("stations[].modifiedDate").description("역 최근 수정일"),
-                                fieldWithPath("distance").description("시작역과 도착역 사이 거리"))))
+                                fieldWithPath("distance").description("시작역과 도착역 사이 거리"),
+                                fieldWithPath("duration").description("총 소요시간"))))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
