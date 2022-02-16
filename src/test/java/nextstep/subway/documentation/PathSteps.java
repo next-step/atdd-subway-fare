@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 
 public class PathSteps {
@@ -11,6 +12,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("type", PathType.DISTANCE)
                 .when().get("/paths")
                 .then().log().all().extract();
     }

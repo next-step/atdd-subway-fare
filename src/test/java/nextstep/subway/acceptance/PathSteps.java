@@ -32,7 +32,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("pathType", PathType.DISTANCE)
+                .queryParam("type", PathType.DISTANCE)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -43,7 +43,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("pathType", PathType.DURATION)
+                .queryParam("type", PathType.DURATION)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
