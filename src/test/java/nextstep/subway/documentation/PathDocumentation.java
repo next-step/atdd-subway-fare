@@ -18,10 +18,9 @@ import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.ui.PathType;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
@@ -70,7 +69,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].createdDate").description("생성 수정 날짜"),
                 fieldWithPath("stations[].modifiedDate").description("최종 수정 날짜"),
                 fieldWithPath("distance").description("경로 거리"),
-                fieldWithPath("duration").description("경로 소요 시간")
+                fieldWithPath("duration").description("경로 소요 시간"),
+                fieldWithPath("fare").description("운임 요금")
         );
     }
 
@@ -80,7 +80,7 @@ public class PathDocumentation extends Documentation {
                         station(1L, "강남역"),
                         station(2L, "양재역")
                 ),
-                1, 2
+                1, 2, 100
         );
     }
 
