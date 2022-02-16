@@ -5,19 +5,17 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Fare {
-    private final Path path;
+    private final int distance;
 
-    private Fare(final Path path) {
-        this.path = path;
+    Fare(final int distance) {
+        this.distance = distance;
     }
 
     public Fare(final Station upStation, final Station downStation, final List<Line> lines) {
-        this(new SubwayMap(lines).findPath(upStation, downStation, PathType.DISTANCE));
+        this(new SubwayMap(lines).findPath(upStation, downStation, PathType.DISTANCE).extractDistance());
     }
 
     public int calculateFare() {
-        int distance = path.extractDistance();
-
         return Arrays.stream(FaresPerDistance.values()).mapToInt(it -> it.calculate(distance)).sum();
     }
 
