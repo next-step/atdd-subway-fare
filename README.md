@@ -47,7 +47,5 @@ npm run dev
 - 우선 여기까지.
 
 ### step1
-- 구현을 다 하고 검증을 하다보니, lineService.saveLine()할 때, duration을 추가해주지 않은 부분이 있었다. duration에 대한 리팩토링을 잘 하고 있다고 생각했었는데 놓친 부분이 있었던 것. 그래서 해당 부분 또한 검증을 해야한다고 생각을 했고, 테스트 코드를 작성하려다 보니, 검증이 쉽지 않았다. line을 save하는 것이지만 section이 잘 save되었는지 확인해야했기 때문, 하지만 Section의 save와 조회의 경우 cascade와 연관관계로 하고 있어서 Repository가 존재하지 않았고 결과적으로 테스트 검증을 위해 repository를 만들어야하는 상황이 옴. 
-따라서 질문, cascade로 영속화를 하여 저장한 경우는 검증을 어떻게 해야하는가?
 - Steps클래스는 단계를 나타내는 역할로 알고 있는데, parameter를 만드는 메서드를 둬도 되는지? ex) LineSteps.createSectionCreateParams()메서드.
 - 문서화실습 맨 마지막에 중복 제거가 있는데 PathSteps처럼 하는 게 맞는지 잘 모르겠음.
