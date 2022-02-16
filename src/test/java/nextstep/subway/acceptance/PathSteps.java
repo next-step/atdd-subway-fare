@@ -75,6 +75,17 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 최단거리_경로조회_시간_요금_포함(Long source, Long target) {
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .when().get("/pathsNew")
+                .then().log().all().extract();
+        return response;
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()

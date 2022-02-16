@@ -88,14 +88,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistanceWithDurationAndFee() {
         // when
-        ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 교대역)
-                .queryParam("target", 양재역)
-                .when().get("/pathsNew")
-                .then().log().all().extract();
-
+        ExtractableResponse<Response> response = 최단거리_경로조회_시간_요금_포함(교대역, 양재역);
 
         // then
         assertAll(
@@ -105,6 +98,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1250)
         );
     }
+
 
 
 }
