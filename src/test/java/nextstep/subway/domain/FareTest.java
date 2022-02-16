@@ -2,18 +2,24 @@ package nextstep.subway.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 class FareTest {
 
-    @ParameterizedTest(name = "최단거리가 {0}일때 {1}원의 요금이 부가된다.")
-    @CsvSource(value = {"0,1250", "1,1250", "10,1350", "50,2150", "100,2750"})
-    void calculateFare(int distance, int fare) {
+    @Test
+    void calculateFare() {
+        //given
+        int distance = 100;
+        int age = 20;
+        List<String> lineNames = Arrays.asList("일호선", "이호선", "삼호선");
+
         //when
-        int result = new Fare(distance).calculateFare();
+        int result = new Fare(distance, age, lineNames).calculateFare();
 
         //then
-        assertThat(result).isEqualTo(fare);
+        assertThat(result).isEqualTo(3_250);
     }
 }
