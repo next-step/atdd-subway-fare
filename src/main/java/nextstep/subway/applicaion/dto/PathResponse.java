@@ -30,7 +30,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        //Todo : Fee 계산 결과
+        int fee = path.extractFee();
         return new PathResponse(stations, distance, duration);
     }
 

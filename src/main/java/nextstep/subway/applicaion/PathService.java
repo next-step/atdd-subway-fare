@@ -40,6 +40,12 @@ public class PathService {
     }
 
     public PathResponse findPathByMinimumFee(Long source, Long target) {
+        Station upStation = stationService.findById(source);
+        Station downStation = stationService.findById(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPath(upStation, downStation);
+
         return null;
     }
 }
