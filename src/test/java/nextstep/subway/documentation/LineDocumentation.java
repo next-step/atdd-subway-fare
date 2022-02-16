@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -38,6 +39,9 @@ public class LineDocumentation extends Documentation {
             .additionalFare(Integer.parseInt(
                 lineRequest.get("additionalFare")
             ))
+            .startTime(LocalTime.of(5, 0))
+            .endTime(LocalTime.of(23, 0))
+            .intervalTime(LocalTime.of(5, 10))
             .createdDate(DUMMY_DATE)
             .modifiedDate(DUMMY_DATE)
             .stations(Arrays.asList(
