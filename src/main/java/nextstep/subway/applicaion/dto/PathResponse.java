@@ -11,12 +11,6 @@ public class PathResponse {
     private int duration;
     private int fee;
 
-    public PathResponse(List<StationResponse> stations, int distance, int duration) {
-        this.stations = stations;
-        this.distance = distance;
-        this.duration = duration;
-    }
-
     public PathResponse(List<StationResponse> stations, int distance, int duration, int fee) {
         this.stations = stations;
         this.distance = distance;
@@ -31,7 +25,7 @@ public class PathResponse {
         int distance = path.extractDistance();
         int duration = path.extractDuration();
         int fee = path.extractFee();
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, distance, duration, fee);
     }
 
     public List<StationResponse> getStations() {

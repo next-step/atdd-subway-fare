@@ -46,6 +46,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
 
-        return null;
+        return PathResponse.of(path);
     }
 }
