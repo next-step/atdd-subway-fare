@@ -75,13 +75,13 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 최단거리_경로조회_시간_요금_포함(Long source, Long target) {
+    public static ExtractableResponse<Response> 최단금액_거리_경로조회_시간_요금_포함(Long source, Long target) {
         ExtractableResponse<Response> response = RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .when().get("/pathsNew")
+                .when().get("/paths/minimum-fee")
                 .then().log().all().extract();
         return response;
     }
