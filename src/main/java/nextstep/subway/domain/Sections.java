@@ -196,12 +196,33 @@ public class Sections {
                                                  .getIntervalTime();
 
 
+        //LocalDateTime firstSectionStartTime = firstSectionStartTime();
+        //return firstSectionStartTime.plusMinutes(totalDuration());
+        return null;
+    }
+
+    private LocalDateTime firstSectionStartTime(LocalDateTime startTime, LocalTime lineStartTime,
+                                                LocalTime lineEndTime, LocalTime lineIntervalTime) {
+        /*
+        LocalDateTime lineEndDateTime = LocalDateTime.of(startTime.toLocalDate(), lineEndTime);
         LocalDateTime firstSectionStartTime = LocalDateTime.of(startTime.toLocalDate(), lineStartTime);
-        while(firstSectionStartTime.isBefore(startTime)) {
-            firstSectionStartTime = firstSectionStartTime.plusHours(lineIntervalTime.getHour())
-                                                         .plusMinutes(lineIntervalTime.getMinute())
-                                                         .plusHours(lineIntervalTime.getSecond());
+        while (firstSectionStartTime.isBefore(startTime)) {
+            firstSectionStartTime = plusTime(firstSectionStartTime, lineIntervalTime);
         }
-        return firstSectionStartTime.plusMinutes(totalDuration());
+        return firstSectionStartTime;
+
+         */
+        return  null;
+    }
+
+    private LocalDateTime plusTime(LocalDateTime localDateTime, LocalTime time, LocalDateTime lineEndDateTime) {
+        LocalDateTime nextTime = localDateTime.plusHours(time.getHour())
+                                              .plusMinutes(time.getMinute())
+                                              .plusHours(time.getSecond());
+        return null;
+    }
+
+    private void addSectionTime(LocalDateTime ongoingTime, LocalTime duration) {
+        //LocalDateTime nextTime = ongoingTime.plusMinutes(duration)
     }
 }
