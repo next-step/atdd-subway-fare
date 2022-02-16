@@ -57,11 +57,11 @@ class LineTest {
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
-                .filter(it -> it.getUpStation() == 강남역)
+                .filter(it -> it.getUpStation() == 삼성역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(삼성역);
+        assertThat(section.getDownStation()).isEqualTo(역삼역);
         assertThat(section.getDistance()).isEqualTo(5);
-        assertThat(section.getDuration()).isEqualTo(2);
+        assertThat(section.getDuration()).isEqualTo(4);
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
