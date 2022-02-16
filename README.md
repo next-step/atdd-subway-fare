@@ -1,37 +1,11 @@
-<p align="center">
-    <img width="200px;" src="https://raw.githubusercontent.com/woowacourse/atdd-subway-admin-frontend/master/images/main_logo.png"/>
-</p>
-<p align="center">
-  <img alt="npm" src="https://img.shields.io/badge/npm-6.14.15-blue">
-  <img alt="node" src="https://img.shields.io/badge/node-14.18.2-blue">
-  <a href="https://edu.nextstep.camp/c/R89PYi5H" alt="nextstep atdd">
-    <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fedu.nextstep.camp%2Fc%2FR89PYi5H">
-  </a>
-</p>
 
-<br>
+## 🚀 제약 사항
+###1. 경로 탐색시 초 단위는 고려하지 않는다.
 
-# 지하철 노선도 미션
-[ATDD 강의](https://edu.nextstep.camp/c/R89PYi5H) 실습을 위한 지하철 노선도 애플리케이션
+###2. 지하철의 운행은 이전날 또는 다음날과 걸쳐서 운행될 수 없다.
+- 최소 첫차 시간 : 0시 0분
+- 최대 막차 시간 : 23시 59분
 
-<br>
+###3. 경로 탐색 당일의 날짜를 기준으로 경로 탐색을 진행한다.
 
-## 🚀 Getting Started
 
-### Install
-#### npm 설치
-```
-cd frontend
-npm install
-```
-> `frontend` 디렉토리에서 수행해야 합니다.
-
-### Usage
-#### webpack server 구동
-```
-npm run dev
-```
-#### application 구동
-```
-./gradlew bootRun
-```
