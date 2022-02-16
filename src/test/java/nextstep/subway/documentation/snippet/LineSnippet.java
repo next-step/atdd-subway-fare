@@ -9,6 +9,7 @@ public enum LineSnippet implements SnippetTemplate {
         requestFields(
             fieldWithPath("name").description("노선 이름"),
             fieldWithPath("color").description("노선 색상"),
+            fieldWithPath("additionalFare").description("추가 요금"),
             fieldWithPath("upStationId").description("상행 ID"),
             fieldWithPath("downStationId").description("하행 ID"),
             fieldWithPath("distance").description("상행과 하행의 거리"),
@@ -18,6 +19,7 @@ public enum LineSnippet implements SnippetTemplate {
             fieldWithPath("id").description("ID"),
             fieldWithPath("name").description("이름"),
             fieldWithPath("color").description("색상"),
+            fieldWithPath("additionalFare").description("추가 요금"),
             fieldWithPath("createdDate").description("생성 일자"),
             fieldWithPath("modifiedDate").description("수정 일자"),
             fieldWithPath("stations[].id").description("노선 내 지하철역 ID"),

@@ -25,7 +25,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     void createLine() {
         // when
         ExtractableResponse<Response> response = 지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green")
+            createLineCreateParams("2호선", "green", 0)
         );
 
         // then
@@ -43,9 +43,10 @@ class LineAcceptanceTest extends AcceptanceTest {
     void getLines() {
         // given
         지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green"));
+            createLineCreateParams("2호선", "green", 0)
+        );
         지하철_노선_생성_요청(
-            createLineCreateParams("3호선", "orange")
+            createLineCreateParams("3호선", "orange", 0)
         );
 
         // when
@@ -66,7 +67,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     void getLine() {
         // given
         ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green")
+            createLineCreateParams("2호선", "green", 0)
         );
 
         // when
@@ -87,7 +88,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     void updateLine() {
         // given
         ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green")
+            createLineCreateParams("2호선", "green", 0)
         );
 
         // when
@@ -114,7 +115,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     void deleteLine() {
         // given
         ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green")
+            createLineCreateParams("2호선", "green", 0)
         );
 
         // when
@@ -137,12 +138,12 @@ class LineAcceptanceTest extends AcceptanceTest {
     void duplicateName() {
         // given
         지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green")
+            createLineCreateParams("2호선", "green", 0)
         );
 
         // when
         ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(
-            createLineCreateParams("2호선", "green")
+            createLineCreateParams("2호선", "green", 0)
         );
 
         // then

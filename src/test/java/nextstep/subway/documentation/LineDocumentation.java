@@ -16,7 +16,7 @@ import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.documentation.snippet.LineSnippet;
 
-@DisplayName("Section 문서화")
+@DisplayName("Line 문서화")
 public class LineDocumentation extends Documentation {
     @MockBean
     private LineService lineService;
@@ -27,11 +27,17 @@ public class LineDocumentation extends Documentation {
         Long 상행_ID = 1L;
         Long 하행_ID = 2L;
 
-        Map<String, String> lineRequest = LineSteps.createLineCreateParams("신분단선", "RED", 상행_ID, 하행_ID, 10, 10);
+        Map<String, String> lineRequest = LineSteps.createLineCreateParams(
+            "신분단선", "RED",
+            상행_ID, 하행_ID, 10, 10, 0
+        );
         LineResponse lineResponse = LineResponse.builder()
             .id(1L)
             .name(lineRequest.get("name"))
             .color(lineRequest.get("color"))
+            .additionalFare(Integer.parseInt(
+                lineRequest.get("additionalFare")
+            ))
             .createdDate(DUMMY_DATE)
             .modifiedDate(DUMMY_DATE)
             .stations(Arrays.asList(

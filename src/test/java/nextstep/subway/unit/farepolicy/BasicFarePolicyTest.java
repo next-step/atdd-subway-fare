@@ -28,8 +28,8 @@ public class BasicFarePolicyTest {
         assertThat(new BasicFarePolicy().calculate(path)).isZero();
     }
 
-    @ValueSource(ints = { 10, 100, 1000 })
-    @DisplayName("1키로라도 타면 무조건 1250원의 요금이 부과 된다.")
+    @ValueSource(ints = { 1, 10 })
+    @DisplayName("1km 이상 타면 무조건 1250원의 요금이 부과 된다.")
     @ParameterizedTest
     void calculate(int distance) {
         when(path.extractDistance()).thenReturn(distance);

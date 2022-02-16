@@ -62,15 +62,16 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> createLineCreateParams(String name, String color) {
+    public static Map<String, String> createLineCreateParams(String name, String color, int additionalFare) {
         Map<String, String> lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
+        lineCreateParams.put("additionalFare", additionalFare + "");
         return lineCreateParams;
     }
 
-    public static Map<String, String> createLineCreateParams(String name, String color, long upStationId, long downStationId, int distance, int duration) {
-        Map<String, String> lineCreateParams = createLineCreateParams(name, color);
+    public static Map<String, String> createLineCreateParams(String name, String color, long upStationId, long downStationId, int distance, int duration, int additionalFare) {
+        Map<String, String> lineCreateParams = createLineCreateParams(name, color, additionalFare);
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
         lineCreateParams.put("distance", distance + "");

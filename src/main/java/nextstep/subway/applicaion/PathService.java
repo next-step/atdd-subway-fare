@@ -1,36 +1,42 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.SectionEdgeToWeightStrategy;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.farepolicy.FarePolicy;
-import nextstep.subway.domain.map.SubwayMap;
-import nextstep.subway.domain.map.SubwayMapGraphFactory;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.Station;
+import nextstep.subway.domain.farepolicy.FareCalculator;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
+import nextstep.subway.domain.map.SubwayMap;
+import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
 @Service
 public class PathService {
+    private final FareCalculator fareCalculator;
     private final LineService lineService;
     private final StationService stationService;
     private final SubwayMap subwayMap;
 
-    public PathService(LineService lineService, StationService stationService, SubwayMap subwayMap) {
+    public PathService(FareCalculator fareCalculator, LineService lineService, StationService stationService,
+                       SubwayMap subwayMap) {
+        this.fareCalculator = fareCalculator;
         this.lineService = lineService;
         this.stationService = stationService;
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target, SubwayMapGraphFactory subwayMapGraphFactory, FarePolicy farePolicy) {
+    public PathResponse findPath(Long source, Long target,
+                                 SubwayMapGraphFactory subwayMapGraphFactory,
+                                 FareDiscountCondition fareDiscountPolicy) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
         Path path = subwayMap.findPath(subwayMapGraphFactory.createGraph(lines), upStation, downStation);
-        return PathResponse.of(path, farePolicy.calculate(path));
+        int totalCost = fareCalculator.calculate(path, fareDiscountPolicy);
+        return PathResponse.of(path, totalCost);
     }
 }

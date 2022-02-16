@@ -10,10 +10,10 @@ import nextstep.subway.domain.Section;
 import nextstep.subway.domain.SectionEdge;
 import nextstep.subway.domain.Station;
 
-public class OppositeOneFieldSubwayMapGraphFactory extends SubwayMapGraphFactory {
+public class OneFieldWeightSubwayMapGraphFactory extends SubwayMapGraphFactory {
     private final Function<Section, Double> getFieldStrategy;
 
-    public OppositeOneFieldSubwayMapGraphFactory(Function<Section, Double> getFieldStrategy) {
+    public OneFieldWeightSubwayMapGraphFactory(Function<Section, Double> getFieldStrategy) {
         this.getFieldStrategy = getFieldStrategy;
     }
 
@@ -21,10 +21,9 @@ public class OppositeOneFieldSubwayMapGraphFactory extends SubwayMapGraphFactory
     protected void addEdge(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
              .flatMap(it -> it.getSections().stream())
-             .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
              .forEach(it -> {
                  SectionEdge sectionEdge = SectionEdge.of(it);
-                 graph.addEdge(it.getDownStation(), it.getUpStation(), sectionEdge);
+                 graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                  graph.setEdgeWeight(sectionEdge, getFieldStrategy.apply(it));
              });
     }

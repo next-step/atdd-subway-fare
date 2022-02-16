@@ -1,15 +1,14 @@
 package nextstep.subway.ui;
 
-import java.util.Arrays;
+import java.util.Optional;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.farepolicy.BasicFarePolicy;
-import nextstep.subway.domain.farepolicy.DistanceFarePolicy;
-import nextstep.subway.domain.farepolicy.DistanceFareRange;
-import nextstep.subway.domain.farepolicy.FareCalculator;
-import nextstep.subway.domain.farepolicy.FarePolicy;
-import nextstep.subway.domain.map.OneFieldSubwayMapGraphFactory;
+import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
+import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
+import nextstep.subway.domain.map.OneFieldWeightSubwayMapGraphFactory;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 
 import org.springframework.http.ResponseEntity;
@@ -21,13 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("paths")
 @RestController
 public class PathController {
-    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE = new OneFieldSubwayMapGraphFactory(
+    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE = new OneFieldWeightSubwayMapGraphFactory(
         section -> (double) section.getDistance()
     );
-    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION = new OneFieldSubwayMapGraphFactory(
+    private static final SubwayMapGraphFactory SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION = new OneFieldWeightSubwayMapGraphFactory(
         section -> (double) section.getDuration()
     );
-    private static final FarePolicy SUBWAY_FARE_POLICY = new FareCalculator();
 
     private final PathService pathService;
 
@@ -36,18 +34,26 @@ public class PathController {
     }
 
     @GetMapping("distance")
-    public ResponseEntity<PathResponse> findPathByDistance(@RequestParam Long source, @RequestParam Long target) {
+    public ResponseEntity<PathResponse> findPathByDistance(@AuthenticationPrincipal Optional<LoginMember> loginMember,
+                                                           @RequestParam Long source, @RequestParam Long target) {
         PathResponse pathResponse = pathService.findPath(
-            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE, SUBWAY_FARE_POLICY
+            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DISTANCE, fareDiscountPolicy(loginMember)
         );
         return ResponseEntity.ok(pathResponse);
     }
 
     @GetMapping("duration")
-    public ResponseEntity<PathResponse> findPathByDuration(@RequestParam Long source, @RequestParam Long target) {
+    public ResponseEntity<PathResponse> findPathByDuration(@AuthenticationPrincipal Optional<LoginMember> loginMember,
+                                                           @RequestParam Long source, @RequestParam Long target) {
         PathResponse pathResponse = pathService.findPath(
-            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION, SUBWAY_FARE_POLICY
+            source, target, SUBWAY_MAP_GRAPH_FACTORY_FOR_DURATION, fareDiscountPolicy(loginMember)
         );
         return ResponseEntity.ok(pathResponse);
+    }
+
+    private FareDiscountCondition fareDiscountPolicy(Optional<LoginMember> loginMember) {
+        return new KidsFareDiscountCondition(
+            loginMember.map(LoginMember::getAge).orElse(0)
+        );
     }
 }

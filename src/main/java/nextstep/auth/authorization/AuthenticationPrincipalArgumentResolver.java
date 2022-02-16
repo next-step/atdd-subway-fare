@@ -10,6 +10,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -20,6 +22,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.isNull(authentication) && parameter.isOptional()) {
+            return Optional.empty();
+        }
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
         }
