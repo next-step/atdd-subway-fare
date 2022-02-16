@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 @RestController
 public class PathController {
     private PathService pathService;
@@ -20,17 +18,9 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal(optional = true) LoginMember loginMember,
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember,
                                                  FindPathRequest request) {
-        int age = getAge(loginMember);
-        return ResponseEntity.ok(pathService.findPath(request, age));
-    }
-
-    private int getAge(LoginMember loginMember) {
-        if (Objects.isNull(loginMember)) {
-            return 0;
-        }
-        return loginMember.getAge();
+        return ResponseEntity.ok(pathService.findPath(request, loginMember.getAge()));
     }
 
 }

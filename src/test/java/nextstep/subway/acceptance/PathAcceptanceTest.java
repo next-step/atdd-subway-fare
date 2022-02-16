@@ -26,14 +26,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
     String 요청_토큰;
 
-    /**
-     * 교대역    --- *2호선*(10m, 5min, 500원)  ---  강남역
-     * |                                         |
-     * *3호선*                                 *신분당선*
-     * (2m, 10min)                        (10m, 5min, 900원)
-     * |                                        |
-     * 남부터미널역  --- *3호선*(3m, 10min)   ---   양재
-     */
     @BeforeEach
     public void setUp() {
         super.setUp();
@@ -59,6 +51,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회됨(response, 교대역, 남부터미널역, 양재역);
         경로_거리_조회됨(response, 5);
         경로_소요시간_조회됨(response, 20);
+        지하철_요금_조회됨(response, 1250);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -71,6 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회됨(response, 교대역, 강남역, 양재역);
         경로_거리_조회됨(response, 20);
         경로_소요시간_조회됨(response, 10);
+        지하철_요금_조회됨(response, 2350);
     }
 
 
@@ -85,6 +79,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, 요청_토큰);
 
         // then
+        경로_조회됨(response, 교대역, 강남역, 양재역);
+        경로_거리_조회됨(response, 20);
+        경로_소요시간_조회됨(response, 10);
         지하철_요금_조회됨(response, 1600);
     }
 
@@ -99,6 +96,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, 요청_토큰);
 
         // then
+        경로_조회됨(response, 교대역, 강남역, 양재역);
+        경로_거리_조회됨(response, 20);
+        경로_소요시간_조회됨(response, 10);
         지하철_요금_조회됨(response, 1000);
     }
 }

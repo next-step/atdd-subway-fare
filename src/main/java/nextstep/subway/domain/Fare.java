@@ -12,6 +12,7 @@ public enum Fare {
 	private final int amount;
 	private final int minDistanceIncluded;
 	private final int maxDistanceExcluded;
+	private final int maxDistance;
 	private final int dividend;
 
 	Fare(Fare parentFare, int amount, int minDistanceIncluded, int maxDistanceExcluded, int dividend) {
@@ -19,12 +20,8 @@ public enum Fare {
 		this.amount = amount;
 		this.minDistanceIncluded = minDistanceIncluded;
 		this.maxDistanceExcluded = maxDistanceExcluded;
+		this.maxDistance = maxDistanceExcluded - 1;
 		this.dividend = dividend;
-	}
-
-	public static int calculateAmount(Path path, Integer age) {
-		int fare = Fare.calculateAmount(path) + path.getExtraFareOnLine();
-		return Discount.calculateDiscountAmount(fare, age);
 	}
 
 	public static int calculateAmount(Path path) {
@@ -33,16 +30,15 @@ public enum Fare {
 		return fare.calculate(distance);
 	}
 
-	public static int calculateAmount(int distance) {
-		Fare fare = valueOfDistance(distance);
-		return fare.calculate(distance);
-	}
-
-	public static Fare valueOfDistance(int distance) {
+	private static Fare valueOfDistance(int distance) {
 		return Arrays.stream(Fare.values())
-				.filter(fare -> fare.minDistanceIncluded <= distance && distance < fare.maxDistanceExcluded)
+				.filter(fare -> fare.isWithinDistance(distance))
 				.findFirst()
 				.orElseThrow(IllegalArgumentException::new);
+	}
+
+	private boolean isWithinDistance(int distance) {
+		return minDistanceIncluded <= distance && distance < maxDistanceExcluded;
 	}
 
 	private int calculate(int distance) {
@@ -52,7 +48,7 @@ public enum Fare {
 		if (parentFare == null) {
 			return amount;
 		}
-		return parentFare.calculate(parentFare.maxDistanceExcluded - 1)
+		return parentFare.calculate(parentFare.maxDistance)
 				+ ((int) (Math.ceil(distance - (minDistanceIncluded - 1) - 1) / dividend) + 1) * amount;
 	}
 }

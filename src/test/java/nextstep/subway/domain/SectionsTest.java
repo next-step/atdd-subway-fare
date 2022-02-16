@@ -11,6 +11,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class SectionsTest {
 
+	@ParameterizedTest
+	@MethodSource("provideGetMaxExtraFareOnLine")
+	void getMaxExtraFareOnLine(Sections sections, int expectedMaxExtraFare) {
+		// when
+		int maxExtraFare = sections.getMaxExtraFareOnLine();
+
+		// then
+		assertThat(maxExtraFare).isEqualTo(expectedMaxExtraFare);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideGetMaxExtraFareOnLineWhenHasNoExtraFare")
+	void getMaxExtraFareOnLineWhenHasNoExtraFare(Sections sections, int expectedMaxExtraFare) {
+		// when
+		int maxExtraFare = sections.getMaxExtraFareOnLine();
+
+		// then
+		assertThat(maxExtraFare).isEqualTo(expectedMaxExtraFare);
+	}
+
 	static Stream<Arguments> provideGetMaxExtraFareOnLine() {
 		return Stream.of(
 				Arguments.of(
@@ -61,25 +81,5 @@ class SectionsTest {
 										10))),
 						0
 				));
-	}
-
-	@ParameterizedTest
-	@MethodSource("provideGetMaxExtraFareOnLine")
-	void getMaxExtraFareOnLine(Sections sections, int expectedMaxExtraFare) {
-		// when
-		int maxExtraFare = sections.getMaxExtraFareOnLine();
-
-		// then
-		assertThat(maxExtraFare).isEqualTo(expectedMaxExtraFare);
-	}
-
-	@ParameterizedTest
-	@MethodSource("provideGetMaxExtraFareOnLineWhenHasNoExtraFare")
-	void getMaxExtraFareOnLineWhenHasNoExtraFare(Sections sections, int expectedMaxExtraFare) {
-		// when
-		int maxExtraFare = sections.getMaxExtraFareOnLine();
-
-		// then
-		assertThat(maxExtraFare).isEqualTo(expectedMaxExtraFare);
 	}
 }
