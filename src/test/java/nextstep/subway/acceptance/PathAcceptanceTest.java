@@ -84,20 +84,20 @@ class PathAcceptanceTest extends AcceptanceTest {
      *     And 총 거리와 소요 시간을 함께 응답함
      *     And 지하철 이용 요금도 함께 응답함
      */
-    @DisplayName("두 역의 1.최소금액 + 2.최소거리 경로를 조회한다.(With 소요 시간, 요금)")
-    @Test
-    void findPathByDistanceWithDurationAndFee() {
-        // when
-        ExtractableResponse<Response> response = 최단금액_거리_경로조회_시간_요금_포함(교대역, 양재역);
-
-        // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(6),
-                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1250)
-        );
-    }
+//    @DisplayName("두 역의 1.최소금액 + 2.최소거리 경로를 조회한다.(With 소요 시간, 요금)")
+//    @Test
+//    void findPathByDistanceWithDurationAndFee() {
+//        // when
+//        ExtractableResponse<Response> response = 최단금액_거리_경로조회_시간_요금_포함(교대역, 양재역);
+//
+//        // then
+//        assertAll(
+//                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+//                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
+//                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(6),
+//                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1250)
+//        );
+//    }
 
 
 }
