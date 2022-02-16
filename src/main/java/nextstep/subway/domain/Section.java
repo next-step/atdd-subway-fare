@@ -69,6 +69,18 @@ public class Section extends DefaultWeightedEdge {
         return duration;
     }
 
+    public int getWeightOf(String type) {
+        if ("DISTANCE".equalsIgnoreCase(type)) {
+            return distance;
+        }
+
+        if ("DURATION".equalsIgnoreCase(type)) {
+            return duration;
+        }
+
+        throw new IllegalArgumentException();
+    }
+
     public boolean isSameUpStation(Station station) {
         return this.upStation == station;
     }
