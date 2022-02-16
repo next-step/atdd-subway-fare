@@ -42,6 +42,25 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
+    public Path findPath(Station source, Station target, String type) {
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = null;
+
+        if ("DISTANCE".equalsIgnoreCase(type)) {
+            graph = createGraph();
+        }else if ("DURATION".equalsIgnoreCase(type)) {
+            graph = createGraphDuration();
+        }
+
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+
+        List<Section> sections = result.getEdgeList().stream()
+                .map(it -> it.getSection())
+                .collect(Collectors.toList());
+
+        return new Path(new Sections(sections));
+    }
+
     private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph() {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
