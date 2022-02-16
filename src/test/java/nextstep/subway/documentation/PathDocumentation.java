@@ -47,7 +47,8 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("시작역"),
-                                parameterWithName("target").description("도착역")),
+                                parameterWithName("target").description("도착역"),
+                                parameterWithName("type").description("조회타입")),
                         responseFields(
                                 fieldWithPath("stations").description("경로에 포함된 역 목록"),
                                 fieldWithPath("stations[].id").description("지하철 역 ID"),
@@ -59,6 +60,7 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("type", "DISTANCE")
                 .when().get("/paths")
                 .then().log().all().extract();
 
@@ -83,7 +85,8 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("시작역"),
-                                parameterWithName("target").description("도착역")),
+                                parameterWithName("target").description("도착역"),
+                                parameterWithName("type").description("조회타입")),
                         responseFields(
                                 fieldWithPath("stations").description("경로에 포함된 역 목록"),
                                 fieldWithPath("stations[].id").description("지하철 역 ID"),
@@ -95,7 +98,8 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
-                .when().get("/paths/duration")
+                .queryParam("type", "DURATION")
+                .when().get("/paths")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

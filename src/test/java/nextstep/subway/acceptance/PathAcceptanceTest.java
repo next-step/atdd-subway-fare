@@ -77,6 +77,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
+                .queryParam("type", "DISTANCE")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -87,7 +88,8 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .when().get("/paths/duration")
+                .queryParam("type", "DURATION")
+                .when().get("/paths")
                 .then().log().all().extract();
     }
 
