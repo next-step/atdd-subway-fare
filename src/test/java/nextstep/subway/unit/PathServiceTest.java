@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,7 @@ public class PathServiceTest extends ServiceTestFixture {
         PathResponse path = pathService.findPath2(교대역.getId(), 양재역.getId(), "DISTANCE");
 
         // then
-        assertThat(path.getStations().get(0).getName()).isEqualTo(교대역.getName());
-        assertThat(path.getStations().get(1).getName()).isEqualTo(남부터미널역.getName());
-        assertThat(path.getStations().get(2).getName()).isEqualTo(양재역.getName());
-        assertThat(path.getDistance()).isEqualTo(8);
-        assertThat(path.getDuration()).isEqualTo(12);
+        경로_조회됨(path, new Station[]{교대역, 남부터미널역, 양재역}, 8, 12);
     }
 
     @DisplayName("DURATION 타입으로 경로 조회")
@@ -33,11 +30,14 @@ public class PathServiceTest extends ServiceTestFixture {
         PathResponse path = pathService.findPath2(교대역.getId(), 양재역.getId(), "DURATION");
 
         // then
-        assertThat(path.getStations().get(0).getName()).isEqualTo(교대역.getName());
-        assertThat(path.getStations().get(1).getName()).isEqualTo(강남역.getName());
-        assertThat(path.getStations().get(2).getName()).isEqualTo(양재역.getName());
-        assertThat(path.getDistance()).isEqualTo(15);
-        assertThat(path.getDuration()).isEqualTo(10);
+        경로_조회됨(path, new Station[]{교대역, 강남역, 양재역}, 15, 10);
     }
 
+    private void 경로_조회됨(PathResponse path, Station[] stations, int distance, int duration) {
+        assertThat(path.getStations().get(0).getName()).isEqualTo(stations[0].getName());
+        assertThat(path.getStations().get(1).getName()).isEqualTo(stations[1].getName());
+        assertThat(path.getStations().get(2).getName()).isEqualTo(stations[2].getName());
+        assertThat(path.getDistance()).isEqualTo(distance);
+        assertThat(path.getDuration()).isEqualTo(duration);
+    }
 }
