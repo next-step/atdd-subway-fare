@@ -36,7 +36,9 @@ public class PathService {
         List<Line> lines = lineService.findLines();
 
         Path path = subwayMap.findPath(subwayMapGraphFactory.createGraph(lines), upStation, downStation);
-        int totalCost = fareCalculator.calculate(path, fareDiscountPolicy);
+        int totalCost = fareDiscountPolicy.discount(
+            fareCalculator.calculate(path)
+        );
         return PathResponse.of(path, totalCost);
     }
 }
