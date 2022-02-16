@@ -4,26 +4,18 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.common.Documentation;
-import nextstep.subway.common.DocumentationUtils;
-import nextstep.subway.path.acceptance.PathUtils;
 import nextstep.subway.path.application.PathService;
-import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static nextstep.subway.common.DocumentationUtils.given;
 import static nextstep.subway.path.acceptance.PathUtils.두_역의_경로_조회를_요청;

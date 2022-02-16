@@ -13,9 +13,11 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private PathType type;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(List<Line> lines, PathType type) {
         this.lines = lines;
+        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
@@ -37,8 +39,8 @@ public class SubwayMap {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         addVertex(graph);
-        addEdge(graph);
-        addOppositeEdge(graph);
+        addEdge(graph, type);
+        addOppositeEdge(graph, type);
 
         return graph;
     }
@@ -52,18 +54,18 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathType type) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, type.value(it));
                 });
     }
 
-    private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathType type) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -71,7 +73,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, type.value(it));
                 });
     }
 }

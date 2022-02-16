@@ -1,24 +1,14 @@
 package nextstep.subway.path.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.common.AcceptanceTest;
-import nextstep.subway.line.acceptance.LineSteps;
 import nextstep.subway.path.domain.PathType;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.http.MediaType;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
 
 import static nextstep.subway.line.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.path.acceptance.PathUtils.*;
@@ -74,15 +64,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, type);
 
         // then
-        assertAll(() -> {
-            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-            assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-            assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
-        });
-        /*
-            어느 리뷰어님의 리뷰를 보니 하나의 테스트에는 하나의 검증이 있는 것을 추천한다면서
-            여러 검증이 필요한 경우 assertAll을 사용하라고 추천했습니다.
-            제가 생각하기에는 assertAll을 써도 검증하는 것이 3개인데 차이점이 궁금합니다 :)
-         */
+        경로_조회_성공(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 }

@@ -11,6 +11,9 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 public class PathUtils {
 
     private PathUtils() {
@@ -31,6 +34,19 @@ public class PathUtils {
                 .queryParams(params)
                 .when().get("/paths")
                 .then().log().all().extract();
+    }
+
+    public static void 경로_조회_성공(ExtractableResponse<Response> response, Iterable<Long> stations) {
+        assertAll(() -> {
+            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stations);
+            assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+            assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        });
+         /*
+            어느 리뷰어님의 리뷰를 보니 하나의 테스트에는 하나의 검증이 있는 것을 추천한다면서
+            여러 검증이 필요한 경우 assertAll을 사용하라고 추천했습니다.
+            제가 생각하기에는 assertAll을 써도 검증하는 것이 3개인데 차이점이 궁금합니다 :)
+         */
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
