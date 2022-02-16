@@ -3,7 +3,7 @@
 
 == 지하철 경로
 
-=== 경로 조회
+=== 최단 경로 조회
 
 ==== Request
 
@@ -20,3 +20,22 @@ include::{snippets}/path/http-response.adoc[]
 ==== Response Fields
 
 include::{snippets}/path/response-fields.adoc[]
+
+
+=== 최소 시간 경로 조회
+
+==== Request
+
+include::{snippets}/pathDuration/http-request.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/pathDuration/request-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/pathDuration/http-response.adoc[]
+
+==== Response Fields
+
+include::{snippets}/pathDuration/response-fields.adoc[]
