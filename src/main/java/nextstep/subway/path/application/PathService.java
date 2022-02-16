@@ -1,5 +1,6 @@
 package nextstep.subway.path.application;
 
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.domain.SubwayMap;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.dto.PathResponse;
@@ -21,7 +22,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
+    public PathResponse findPath(Long source, Long target, PathType type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();

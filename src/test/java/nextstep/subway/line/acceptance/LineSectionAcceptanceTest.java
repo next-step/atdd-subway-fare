@@ -15,6 +15,11 @@ import static nextstep.subway.line.acceptance.LineSteps.*;
 import static nextstep.subway.station.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/*
+    이 인수테스트를 통해 느낀 점은 요구사항이 바뀌었지만 테스트가 거의 깨지지 않았다는 점이다.
+    검증을 빡세게 할 수록 깨지기 쉬운 테스트코드가 되기 쉬운데 어디까지 검증해야하는가에 대한 기준은 없지만
+    이 예시를 잘 관찰하자. -> 요구사항이 바뀌었지만 테스트코드를 바꾼 것은 없음
+ */
 @DisplayName("지하철 구간 관리 기능")
 class LineSectionAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
@@ -134,6 +139,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
         lineCreateParams.put("distance", 10 + "");
+        lineCreateParams.put("duration", 10 + "");
         return lineCreateParams;
     }
 
@@ -142,6 +148,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", 6 + "");
+        params.put("duration", 6 + "");
         return params;
     }
 }
