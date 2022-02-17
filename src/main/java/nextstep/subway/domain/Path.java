@@ -42,19 +42,21 @@ public class Path {
     }
 
     public int getFare() {
-        return DEFAULT_FARE + calculateOverFare(fareDistance);
+        return DEFAULT_FARE + getOverFare(fareDistance);
     }
 
-    protected int calculateOverFare(int distance) {
+    protected int getOverFare(int distance) {
         if (distance <= EXTRA_CHARGE_START_DISTANCE) {
-            return (int) ((Math.ceil(((distance) - 1)
-                / DEFAULT_OVER_CHARGE_DISTANCE) + 1) * 100) - 200;
+            return caculateDefaultOverFare(distance);
         }
 
-        int overFare = (int) ((Math.ceil(((EXTRA_CHARGE_START_DISTANCE) - 1)
-            / DEFAULT_OVER_CHARGE_DISTANCE) + 1) * 100) - 200;
+        int overFare = caculateDefaultOverFare(EXTRA_CHARGE_START_DISTANCE);
 
         return overFare + caculateExtraFare(distance - EXTRA_CHARGE_START_DISTANCE);
+    }
+
+    private int caculateDefaultOverFare(int distance) {
+        return (int) ((Math.ceil(((distance) - 1) / DEFAULT_OVER_CHARGE_DISTANCE) + 1) * 100) - 200;
     }
 
     private int caculateExtraFare(int extraDistance) {
