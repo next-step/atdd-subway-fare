@@ -10,7 +10,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.map.SubwayMap;
 import nextstep.subway.domain.map.graphfactory.OneFieldWeightGraphFactory;
-import nextstep.subway.domain.map.graphfactory.OppositeOneFieldWeightSubwayMapGraphFactory;
+import nextstep.subway.domain.map.graphfactory.OppositeOneFieldWeightGraphFactory;
 import nextstep.subway.domain.map.graphfactory.SubwayMapGraphFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +67,7 @@ class SubwayMapTest {
     @Test
     void findPathByOppositeDistance() {
         // given
-        SubwayMapGraphFactory factory = new OppositeOneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDistance());
+        SubwayMapGraphFactory factory = new OppositeOneFieldWeightGraphFactory(section -> (double) section.getDistance());
 
         // when
         Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);

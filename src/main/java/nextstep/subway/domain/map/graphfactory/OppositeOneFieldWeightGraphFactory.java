@@ -8,10 +8,10 @@ import nextstep.subway.domain.SectionEdge;
 import nextstep.subway.domain.Station;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-public class OppositeOneFieldWeightSubwayMapGraphFactory extends SubwayMapGraphFactory {
+public class OppositeOneFieldWeightGraphFactory extends SubwayMapGraphFactory {
     private final Function<Section, Double> getFieldStrategy;
 
-    public OppositeOneFieldWeightSubwayMapGraphFactory(Function<Section, Double> getFieldStrategy) {
+    public OppositeOneFieldWeightGraphFactory(Function<Section, Double> getFieldStrategy) {
         this.getFieldStrategy = getFieldStrategy;
     }
 
