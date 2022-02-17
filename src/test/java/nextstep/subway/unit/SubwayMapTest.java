@@ -64,6 +64,19 @@ class SubwayMapTest {
     }
 
     @Test
+    void findPathMinDistanceOppositely() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+    }
+
+    @Test
     void findPathMinDuration() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
@@ -77,10 +90,10 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPathOppositely() {
+    void findPathMinDurationOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DURATION);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
