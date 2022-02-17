@@ -17,6 +17,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    private static final String DISTANCE_TYPE = "distance";
+    private static final String DURATION_TYPE = "duration";
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -48,25 +51,36 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 1));
     }
 
-    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathByDuration() {
+    void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역, DISTANCE_TYPE);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target) {
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
+    @Test
+    void findPathByDuration() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역, DURATION_TYPE);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(2);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target, String type) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .when().get("/paths")
+                .queryParam("type", type)
+                .when().get("/paths/duration")
                 .then().log().all().extract();
     }
 

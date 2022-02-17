@@ -24,13 +24,13 @@ public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
 
-    @DisplayName("경로 찾기 요청")
+    @DisplayName("경로 찾기 요청 - 거리")
     @Test
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "이호선", LocalDateTime.now(), LocalDateTime.now()),
-                        new StationResponse(1L, "이호선", LocalDateTime.now(), LocalDateTime.now())
+                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ),
                 10,
                 7
@@ -38,7 +38,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L);
+        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, "distance");
 
         assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
