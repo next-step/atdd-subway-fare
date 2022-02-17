@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Path {
     private final int DEFAULT_FARE = 1250;
@@ -22,7 +23,7 @@ public class Path {
 
     public Path(Sections sections, int fareDistance) {
         this.sections = sections;
-        this.fare = DEFAULT_FARE + getOverFare(fareDistance);
+        this.fare = DEFAULT_FARE + getOverFare(fareDistance) + maxLineFare();
     }
 
     public static Path of(Sections sections, int fareDistance) {
@@ -42,7 +43,9 @@ public class Path {
     }
 
     private int maxLineFare() {
-        return 0;
+        return sections.getSections().stream()
+            .mapToInt(value -> value.getLine().getFare())
+            .max().getAsInt();
     }
 
     public List<Station> getStations() {
@@ -50,7 +53,7 @@ public class Path {
     }
 
     public int getFare() {
-        return fare + maxLineFare();
+        return fare;
     }
 
     protected int getOverFare(int distance) {
@@ -78,12 +81,12 @@ public class Path {
         }
 
         if (age < AGE_YOUTH_MIN) {
-            fare = (int) ((fare - DEDUCTION_FARE) * FARE_RATIO_CHILD);
+            fare = (fare - DEDUCTION_FARE) / 10 * 5;
             return;
         }
 
         if (age < AGE_ADULT_MIN) {
-            fare = (int) ((fare - DEDUCTION_FARE) * FARE_RATIO_YOUTH);
+            fare = (fare - DEDUCTION_FARE) / 10 * 8;
             return;
         }
     }

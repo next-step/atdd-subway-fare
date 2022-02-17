@@ -24,6 +24,7 @@ public class PathDocumentation extends Documentation {
 
     private final int distance = 9;
     private final int duration = 10;
+    private final int lineFare = 0;
 
     @Test
     void pathTypeDistance() {
@@ -34,8 +35,7 @@ public class PathDocumentation extends Documentation {
 
         StationResponse 교대역 = 지하철역_생성_요청("교대역").as(StationResponse.class);
         StationResponse 양재역 = 지하철역_생성_요청("양재역").as(StationResponse.class);
-
-        지하철_노선_생성_요청("이호선", "이호선색상", 교대역.getId(), 양재역.getId(), distance, duration);
+        지하철_노선_생성_요청("이호선", "이호선색상", 교대역.getId(), 양재역.getId(), distance, duration, lineFare);
 
         ExtractableResponse<Response> response = RestAssured
             .given(spec).log().all()

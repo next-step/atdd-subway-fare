@@ -102,17 +102,17 @@ class PathServiceTest {
         광교역 = stationRepository.save(Station.of("광교역"));
         교판역 = stationRepository.save(Station.of("교판역"));
 
-        이호선 = Line.of("이호선", "green");
+        이호선 = Line.of("이호선", "green", 900);
         이호선.addSection(교대역, 강남역, 8, 4);
         이호선.addSection(강남역, 삼성역, 8, 3);
 
-        신분당선 = Line.of("신분당선", "red");
+        신분당선 = Line.of("신분당선", "red", 2000);
         신분당선.addSection(강남역, 양재역, 6, 3);
         신분당선.addSection(양재역, 판교역, 40, 20);
         신분당선.addSection(판교역, 광교역, 8, 5);
         신분당선.addSection(광교역, 교판역, 1, 1);
 
-        삼호선 = Line.of("삼호선", "orange");
+        삼호선 = Line.of("삼호선", "orange", 1100);
         삼호선.addSection(교대역, 남부터미널역, 5, 5);
         삼호선.addSection(남부터미널역, 양재역, 5, 5);
         삼호선.addSection(양재역, 대치역, 5, 5);
@@ -132,7 +132,7 @@ class PathServiceTest {
                 .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(10),
             () -> assertThat(response.getDuration()).isEqualTo(10),
-            () -> assertThat(response.getFare()).isEqualTo(1250)
+            () -> assertThat(response.getFare()).isEqualTo(2350)
         );
     }
 
@@ -146,7 +146,7 @@ class PathServiceTest {
                 .mapToLong(value -> value.getId())).containsExactly(강남역.getId(), 양재역.getId(), 남부터미널역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(11),
             () -> assertThat(response.getDuration()).isEqualTo(8),
-            () -> assertThat(response.getFare()).isEqualTo(1350)
+            () -> assertThat(response.getFare()).isEqualTo(3350)
         );
     }
 
@@ -160,7 +160,7 @@ class PathServiceTest {
                 .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 강남역.getId(), 양재역.getId(), 대치역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(19),
             () -> assertThat(response.getDuration()).isEqualTo(12),
-            () -> assertThat(response.getFare()).isEqualTo(1350)    // 최단거리는 15
+            () -> assertThat(response.getFare()).isEqualTo(3350)    // 최단거리는 15
         );
     }
 
@@ -174,7 +174,7 @@ class PathServiceTest {
                 .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 강남역.getId(), 삼성역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(16),
             () -> assertThat(response.getDuration()).isEqualTo(7),
-            () -> assertThat(response.getFare()).isEqualTo(1450)
+            () -> assertThat(response.getFare()).isEqualTo(2350)
         );
     }
 
@@ -189,7 +189,7 @@ class PathServiceTest {
                 .containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 판교역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(50),
             () -> assertThat(response.getDuration()).isEqualTo(30),
-            () -> assertThat(response.getFare()).isEqualTo(2050)
+            () -> assertThat(response.getFare()).isEqualTo(4050)
         );
     }
 
@@ -204,7 +204,7 @@ class PathServiceTest {
                 .containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 판교역.getId(), 광교역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(58),
             () -> assertThat(response.getDuration()).isEqualTo(35),
-            () -> assertThat(response.getFare()).isEqualTo(2150)
+            () -> assertThat(response.getFare()).isEqualTo(4150)
         );
     }
 
@@ -220,7 +220,7 @@ class PathServiceTest {
                     교판역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(59),
             () -> assertThat(response.getDuration()).isEqualTo(36),
-            () -> assertThat(response.getFare()).isEqualTo(2250)
+            () -> assertThat(response.getFare()).isEqualTo(4250)
         );
     }
 }
