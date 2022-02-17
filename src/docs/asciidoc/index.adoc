@@ -6,4 +6,17 @@
 :toclevels: 2
 :sectlinks:
 
-include::path.adoc[]
+//include::path.adoc[]
+
+== 경로 조회
+=== HTTP request
+include::{snippets}/path/http-request.adoc[]
+
+=== HTTP response
+include::{snippets}/path/http-response.adoc[]
+
+=== RequestParameter
+include::{snippets}/path/request-parameters.adoc[]
+
+=== ResponseFields
+include::{snippets}/path/response-fields.adoc[]
