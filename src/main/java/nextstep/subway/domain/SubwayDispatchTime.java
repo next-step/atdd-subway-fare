@@ -36,13 +36,8 @@ public class SubwayDispatchTime {
         );
     }
 
-    private long takableTimestamp(LocalDateTime firstTakeDateTime) {
-        long takeTimestamp = Timestamp.valueOf(firstTakeDateTime)
-                                      .getTime();
-        return takableTimestamp(takeTimestamp);
-    }
-
-    private long takableTimestamp(long takeTimestamp) {
+    private long takableTimestamp(LocalDateTime takeDateTime) {
+        long takeTimestamp = Timestamp.valueOf(takeDateTime).getTime();
         long intervalTimeStamp = TimeUnit.MILLISECONDS.convert(
             intervalTime.getHour() + intervalTime.getMinute() * 60, TimeUnit.SECONDS
         );
