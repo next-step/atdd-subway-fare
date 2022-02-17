@@ -1,5 +1,8 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.auth.userdetails.UserDetails;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.PathType;
@@ -17,9 +20,9 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPathByDistance(@RequestParam Long source
+    public ResponseEntity<PathResponse> findPathByDistance(@AuthenticationPrincipal LoginMember loginMember
+        , @RequestParam Long source
         , @RequestParam Long target, @RequestParam PathType pathType) {
-        //TODO if login 사용자라면 (SecurityContext 에 로그인정보가 있으면, 나이 확인)
-        return ResponseEntity.ok(pathService.findPath(source, target, pathType));
+        return ResponseEntity.ok(pathService.findPath(loginMember, source, target, pathType));
     }
 }

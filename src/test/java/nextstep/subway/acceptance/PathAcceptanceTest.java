@@ -1,11 +1,5 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import static nextstep.subway.acceptance.AuthAcceptanceTest.AGE_ADULT;
 import static nextstep.subway.acceptance.AuthAcceptanceTest.AGE_CHILD;
 import static nextstep.subway.acceptance.AuthAcceptanceTest.AGE_YOUTH;
@@ -17,14 +11,17 @@ import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.PathSteps.경로조회의_결과_경로가_예상과_같다;
 import static nextstep.subway.acceptance.PathSteps.경로조회의_결과_정보가_예상과_같다;
-import static nextstep.subway.acceptance.PathSteps.로그인유저가_두_역의_최단_거리_경로_조회를_요청;
-import static nextstep.subway.acceptance.PathSteps.비로그인유저가_두_역의_최단_거리_경로_조회를_요청;
-import static nextstep.subway.acceptance.PathSteps.비로그인유저가_두_역의_최소_시간_경로_조회를_요청;
-import static nextstep.subway.acceptance.PathSteps.로그인유저가_두_역의_최소_시간_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.유저가_두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.유저가_두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -37,6 +34,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private String invalidToken = "invalidToken";
 
     /**
      * 교대역    --- *2호선*  ---    강남역  ---  *2호선*  --- 삼성역
@@ -107,7 +105,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 로그인유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -124,7 +122,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 로그인유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -137,7 +135,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPath_3() {
         // when
-        ExtractableResponse<Response> response = 비로그인유저가_두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(invalidToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -150,7 +148,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPath_4() {
         // when
-        ExtractableResponse<Response> response = 비로그인유저가_두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(invalidToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -167,7 +165,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 로그인유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -184,7 +182,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 로그인유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -201,7 +199,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 로그인유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
 
         // then
         assertAll(
@@ -218,7 +216,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 로그인유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
 
         // then
         assertAll(

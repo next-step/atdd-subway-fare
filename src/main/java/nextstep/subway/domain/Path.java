@@ -8,17 +8,21 @@ public class Path {
     private final int EXTRA_CHARGE_START_DISTANCE = 50;
     private final int EXTRA_CHARGE = 100;
     private final int EXTRA_CHARGE_DISTANCE = 8;
-
+    private final int AGE_CHILD_MIN = 6;
+    private final long FARE_RATIO_CHILD = (long) 0.5;
+    private final int AGE_YOUTH_MIN = 13;
+    private final long FARE_RATIO_YOUTH = (long) 0.8;
+    private final int AGE_ADULT_MIN = 19;
+    private final int DEDUCTION_FARE = 350;
     private Sections sections;
-
-    private int fareDistance;
+    private int fare;
 
     protected Path() {
     }
 
     public Path(Sections sections, int fareDistance) {
         this.sections = sections;
-        this.fareDistance = fareDistance;
+        this.fare = DEFAULT_FARE + getOverFare(fareDistance);
     }
 
     public static Path of(Sections sections, int fareDistance) {
@@ -37,18 +41,7 @@ public class Path {
         return sections.totalDuration();
     }
 
-    private int additionalFare() {
-        if (hasAdditionalFareLine()) {
-            return maxAdditionalFareLine();
-        }
-        return 0;
-    }
-
-    private boolean hasAdditionalFareLine() {
-        return false;
-    }
-
-    private int maxAdditionalFareLine() {
+    private int maxLineFare() {
         return 0;
     }
 
@@ -57,7 +50,7 @@ public class Path {
     }
 
     public int getFare() {
-        return DEFAULT_FARE + getOverFare(fareDistance);
+        return fare + maxLineFare();
     }
 
     protected int getOverFare(int distance) {
@@ -77,4 +70,22 @@ public class Path {
     private int caculateExtraFare(int extraDistance) {
         return ((extraDistance-1) / EXTRA_CHARGE_DISTANCE + 1) * EXTRA_CHARGE;
     }
+
+    public void changeFareByAge(int age) {
+        if (age < AGE_CHILD_MIN) {
+            fare = 0;
+            return;
+        }
+
+        if (age < AGE_YOUTH_MIN) {
+            fare = (int) ((fare - DEDUCTION_FARE) * FARE_RATIO_CHILD);
+            return;
+        }
+
+        if (age < AGE_ADULT_MIN) {
+            fare = (int) ((fare - DEDUCTION_FARE) * FARE_RATIO_YOUTH);
+            return;
+        }
+    }
+
 }

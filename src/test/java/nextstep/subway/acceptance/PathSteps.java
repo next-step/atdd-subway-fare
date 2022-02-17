@@ -48,18 +48,7 @@ public class PathSteps {
             .build();
     }
 
-    public static ExtractableResponse<Response> 비로그인유저가_두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-            .given().log().all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("source", source)
-            .queryParam("target", target)
-            .queryParam("pathType", PathType.DISTANCE)
-            .when().get("/paths")
-            .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 로그인유저가_두_역의_최단_거리_경로_조회를_요청(String accessToken
+    public static ExtractableResponse<Response> 유저가_두_역의_최단_거리_경로_조회를_요청(String accessToken
         , Long source, Long target) {
         return RestAssured
             .given().log().all()
@@ -72,18 +61,7 @@ public class PathSteps {
             .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 비로그인유저가_두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-            .given().log().all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("source", source)
-            .queryParam("target", target)
-            .queryParam("pathType", PathType.DURATION)
-            .when().get("/paths")
-            .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 로그인유저가_두_역의_최소_시간_경로_조회를_요청(String accessToken
+    public static ExtractableResponse<Response> 유저가_두_역의_최소_시간_경로_조회를_요청(String accessToken
         , Long source, Long target) {
         return RestAssured
             .given().log().all()
