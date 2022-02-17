@@ -10,9 +10,22 @@ import java.util.stream.Collectors;
 public class SubwayMap {
     private List<Line> lines;
 
-    public SubwayMap(List<Line> lines) {
+    private SectionPathType sectionPathType;
+
+    public SubwayMap(List<Line> lines, SectionPathType sectionPathType) {
         this.lines = lines;
+        this.sectionPathType = sectionPathType;
     }
+
+//    public Path findPathDistance(Station source, Station target) {
+//        this.sectionPathType = SectionPathType.DISTANCE;
+//        return findPath(source, target);
+//    }
+//
+//    public Path findPathDuration(Station source, Station target) {
+//        this.sectionPathType = SectionPathType.DURATION;
+//        return findPath(source, target);
+//    }
 
     public Path findPath(Station source, Station target) {
         // 그래프 만들기
@@ -55,7 +68,8 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+
+                    extractedEdgeWeight(graph, it, sectionEdge);
                 });
     }
 
@@ -63,11 +77,23 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+
+                    extractedEdgeWeight(graph, it, sectionEdge);
                 });
+    }
+
+    private void extractedEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it, SectionEdge sectionEdge) {
+        switch (sectionPathType) {
+            case DISTANCE:
+                graph.setEdgeWeight(sectionEdge, it.getDistance());
+                break;
+            case DURATION:
+                graph.setEdgeWeight(sectionEdge, it.getDuration());
+                break;
+        }
     }
 }

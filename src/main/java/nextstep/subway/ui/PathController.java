@@ -19,4 +19,9 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
         return ResponseEntity.ok(pathService.findPath(source, target));
     }
+
+    @GetMapping("/paths-duration")
+    public ResponseEntity<PathResponse> findPathDuration(@RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findPathDuration(source, target));
+    }
 }

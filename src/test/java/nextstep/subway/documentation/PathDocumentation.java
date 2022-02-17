@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", null, null),
                         new StationResponse(2L, "역삼역", null, null)
-                ), 10
+                ), 10, 0
         );
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
@@ -49,12 +49,49 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].name").description("역 이름"),
                                 fieldWithPath("stations[].createdDate").description("생성일"),
                                 fieldWithPath("stations[].modifiedDate").description("변경일"),
-                                fieldWithPath("distance").description("거리")
+                                fieldWithPath("distance").description("거리"),
+                                fieldWithPath("duration").description("시간")
                         )))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
                 .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    @Test
+    void pathDuration() {
+        PathResponse pathResponse = new PathResponse(
+                Lists.newArrayList(
+                        new StationResponse(1L, "강남역", null, null),
+                        new StationResponse(2L, "역삼역", null, null)
+                ), 10, 5000
+        );
+
+        when(pathService.findPathDuration(anyLong(), anyLong())).thenReturn(pathResponse);
+
+        RestAssured
+                .given(spec).log().all()
+                .filter(document("path-duration",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("경로 시작역 ID"),
+                                parameterWithName("target").description("경로 도착역 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("stations").description("역 리스트"),
+                                fieldWithPath("stations[].id").description("역 아이디"),
+                                fieldWithPath("stations[].name").description("역 이름"),
+                                fieldWithPath("stations[].createdDate").description("생성일"),
+                                fieldWithPath("stations[].modifiedDate").description("변경일"),
+                                fieldWithPath("distance").description("거리"),
+                                fieldWithPath("duration").description("시간")
+                        )))
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 1L)
+                .queryParam("target", 2L)
+                .when().get("/paths-duration")
                 .then().log().all().extract();
     }
 }
