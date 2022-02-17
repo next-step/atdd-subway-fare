@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 
@@ -26,26 +27,23 @@ public class PathSteps {
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathType type, RequestSpecification spec) {
         return RestAssured
-                .given().log().all()
+                .given(spec).log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", PathType.DISTANCE)
+                .queryParam("type", type)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+        return 두_역의_경로_조회를_요청(source, target, PathType.DISTANCE, RestAssured.given());
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", PathType.DURATION)
-                .when().get("/paths")
-                .then().log().all().extract();
+        return 두_역의_경로_조회를_요청(source, target, PathType.DURATION, RestAssured.given());
     }
 
     public static void 두_역의_최단_거리_경로_조회_완료(ExtractableResponse<Response> response, int distance, Long ...stations) {
