@@ -21,9 +21,6 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("경로 관리(문서화)")
 public class PathDocumentation extends Documentation {
-    private static final String DISTANCE_TYPE = "distance";
-    private static final String DURATION_TYPE = "duration";
-
     @MockBean
     private PathService pathService;
 
@@ -41,7 +38,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
-        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, DISTANCE_TYPE);
+        ExtractableResponse<Response> 최단_경로_요청 = 최단_거리_경로_요청(spec, 1L, 2L);
 
         assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
@@ -60,7 +57,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
-        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, DURATION_TYPE);
+        ExtractableResponse<Response> 최단_경로_요청 = 최단_시간_경로_요청(spec, 1L, 2L);
 
         assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
     }

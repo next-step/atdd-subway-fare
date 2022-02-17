@@ -11,8 +11,18 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
+    private static final String DISTANCE_TYPE = "distance";
+    private static final String DURATION_TYPE = "duration";
 
-    public static ExtractableResponse<Response> 최단_경로_요청(RequestSpecification spec, Long source, Long target, String type) {
+    public static ExtractableResponse<Response> 최단_거리_경로_요청(RequestSpecification spec, Long source, Long target) {
+        return 최단_경로_요청(spec, source, target, DISTANCE_TYPE);
+    }
+
+    public static ExtractableResponse<Response> 최단_시간_경로_요청(RequestSpecification spec, Long source, Long target) {
+        return 최단_경로_요청(spec, source, target, DURATION_TYPE);
+    }
+
+    private static ExtractableResponse<Response> 최단_경로_요청(RequestSpecification spec, Long source, Long target, String type) {
         return RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
