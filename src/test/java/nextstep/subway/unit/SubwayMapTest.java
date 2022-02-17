@@ -6,6 +6,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -43,7 +44,7 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPath() {
+    void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines, DISTANCE_TYPE);
@@ -53,6 +54,21 @@ class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.extractDistance()).isEqualTo(6);
+    }
+
+    @Test
+    void findPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, DURATION_TYPE);
+
+        // when
+        Path path = subwayMap.findPath(강남역, 남부터미널역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역));
+        assertThat(path.extractDuration()).isEqualTo(3);
     }
 
     @Test

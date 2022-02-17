@@ -21,13 +21,15 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("경로 관리(문서화)")
 public class PathDocumentation extends Documentation {
+    private static final String DISTANCE_TYPE = "distance";
+    private static final String DURATION_TYPE = "duration";
 
     @MockBean
     private PathService pathService;
 
     @DisplayName("경로 찾기 요청 - 거리")
     @Test
-    void path() {
+    void pathByDistance() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
@@ -39,7 +41,26 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
-        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, "distance");
+        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, DISTANCE_TYPE);
+
+        assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @DisplayName("경로 찾기 요청 - 시간")
+    @Test
+    void pathByDuration() {
+        PathResponse pathResponse = new PathResponse(
+                Lists.newArrayList(
+                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
+                ),
+                10,
+                7
+        );
+
+        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+
+        ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, DURATION_TYPE);
 
         assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
