@@ -18,8 +18,7 @@ public class PathService {
     private final StationService stationService;
     private final SubwayMap subwayMap;
 
-    public PathService(FareCalculator fareCalculator, LineService lineService, StationService stationService,
-                       SubwayMap subwayMap) {
+    public PathService(FareCalculator fareCalculator, LineService lineService, StationService stationService, SubwayMap subwayMap) {
         this.fareCalculator = fareCalculator;
         this.lineService = lineService;
         this.stationService = stationService;

@@ -20,7 +20,7 @@ public class SubwayDispatchTime {
         this.intervalTime = intervalTime;
     }
 
-    public LocalDateTime arrivalDateTime(LocalTime takeTime, List<Integer> durations) {
+    public LocalDateTime findArrivalDateTime(LocalTime takeTime, List<Integer> durations) {
         LocalDateTime ongoingDateTime = takableDateTime(takeTime);
         for (int eachDuration : durations) {
             ongoingDateTime = takeTrain(ongoingDateTime, eachDuration);
@@ -37,24 +37,21 @@ public class SubwayDispatchTime {
     }
 
     private long takableTimestamp(LocalDateTime firstTakeDateTime) {
-        long takeTimestamp = Timestamp.valueOf(firstTakeDateTime).getTime();
-        long intervalTimeStamp = intervalTimestamp();
-
-        long takableTimestamp = takeTimestamp / intervalTimeStamp * intervalTimeStamp;
-        if (isTrainNotReady(takeTimestamp, intervalTimeStamp)) {
-            takableTimestamp += intervalTimeStamp;
-        }
-        return takableTimestamp;
+        long takeTimestamp = Timestamp.valueOf(firstTakeDateTime)
+                                      .getTime();
+        return takableTimestamp(takeTimestamp);
     }
 
-    private long intervalTimestamp() {
-        return TimeUnit.MILLISECONDS.convert(
+    private long takableTimestamp(long takeTimestamp) {
+        long intervalTimeStamp = TimeUnit.MILLISECONDS.convert(
             intervalTime.getHour() + intervalTime.getMinute() * 60, TimeUnit.SECONDS
         );
-    }
 
-    private boolean isTrainNotReady(long takeTimestamp, long intervalTimeStamp) {
-        return takeTimestamp % intervalTimeStamp > 0;
+        long takableTimestamp = takeTimestamp / intervalTimeStamp * intervalTimeStamp;
+        if (takeTimestamp % intervalTimeStamp == 0) {
+            return takableTimestamp;
+        }
+        return takableTimestamp + intervalTimeStamp;
     }
 
     private LocalDateTime firstTakableDateTime(LocalTime takeTime) {

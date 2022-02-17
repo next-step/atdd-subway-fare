@@ -173,7 +173,7 @@ public class Sections {
 
     public LocalDateTime arrivalTime(LocalTime takeTime) {
         SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        return dispatchTime.arrivalDateTime(takeTime, durations());
+        return dispatchTime.findArrivalDateTime(takeTime, durations());
     }
 
     private List<Integer> durations() {

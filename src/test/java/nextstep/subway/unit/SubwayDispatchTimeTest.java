@@ -21,7 +21,7 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.arrivalDateTime(
+        LocalDateTime answer = subwayDispatchTime.findArrivalDateTime(
             LocalTime.of(7, 0), Arrays.asList(10, 5)
         );
 
@@ -41,7 +41,7 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.arrivalDateTime(
+        LocalDateTime answer = subwayDispatchTime.findArrivalDateTime(
             LocalTime.of(6, 0), Arrays.asList(10, 5)
         );
 
@@ -61,7 +61,7 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.arrivalDateTime(
+        LocalDateTime answer = subwayDispatchTime.findArrivalDateTime(
             LocalTime.of(6, 0), Arrays.asList(10, 5)
         );
 
