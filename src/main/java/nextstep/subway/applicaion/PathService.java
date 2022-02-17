@@ -28,7 +28,7 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
         Path shortestPath = new SubwayMap(lines).findPath(upStation, downStation, PathType.DISTANCE);
-        Fare fare = new Fare(shortestPath.extractDistance(), age, isLoggedIn, shortestPath.extractLineNames());
+        Fare fare = new Fare(shortestPath.extractDistance(), age, isLoggedIn, shortestPath.extractLines());
 
         return PathResponse.of(path, fare);
     }

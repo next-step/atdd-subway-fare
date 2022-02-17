@@ -24,7 +24,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getCharge()));
         if (request.getUpStationId() != null && request.getDownStationId() != null
                 && request.getDistance() != 0 && request.getDuration() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());

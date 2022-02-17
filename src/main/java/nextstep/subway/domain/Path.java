@@ -22,8 +22,8 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public List<String> extractLineNames() {
-        return sections.getStations().stream().map(Station::getName).collect(Collectors.toList());
+    public List<Line> extractLines() {
+        return sections.getSections().stream().map(Section::getLine).collect(Collectors.toList());
     }
 
     public List<Station> getStations() {
