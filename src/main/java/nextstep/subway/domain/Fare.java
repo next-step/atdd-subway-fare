@@ -12,11 +12,23 @@ public class Fare {
         this.calculator = calculator;
     }
 
+    private Fare(BigDecimal fare) {
+        this.fare = fare;
+    }
+
+    public static Fare of(BigDecimal fare) {
+        return new Fare(fare);
+    }
+
     public static Fare of(FareCalculator calculator, int distance) {
         Fare fare = new Fare(calculator);
         fare.update(distance);
 
         return fare;
+    }
+
+    public void add(BigDecimal fare) {
+        this.fare = this.fare.add(fare);
     }
 
     public void update(int distance) {
@@ -28,4 +40,18 @@ public class Fare {
         return this.fare;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Fare fare1 = (Fare) o;
+
+        return fare.equals(fare1.fare);
+    }
+
+    @Override
+    public int hashCode() {
+        return fare.hashCode();
+    }
 }

@@ -6,4 +6,6 @@ public interface FareCalculator {
 
     BigDecimal calculate(int distance);
 
+    Fare calculate2(int distance);
+
 }

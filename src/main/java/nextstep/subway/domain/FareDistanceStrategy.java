@@ -19,6 +19,18 @@ public class FareDistanceStrategy implements FareCalculator {
         return fare;
     }
 
+    public Fare calculate2(int distance) {
+        BigDecimal fare = BASIC_FARE;
+        if (distance <= AdditionalFare.OVER_10KM.critical) {
+            return Fare.of(fare);
+        }
+
+        fare = fare.add(calculateUnder50Km(distance));
+        fare = fare.add(calculateOver50Km(distance));
+
+        return Fare.of(fare);
+    }
+
     private BigDecimal calculateUnder50Km(int distance) {
         int fareDistance = distance;
         if (distance > AdditionalFare.OVER_50KM.critical) {
