@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import static nextstep.subway.documentation.PathSteps.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @DisplayName("경로 관리(문서화)")
@@ -36,7 +37,7 @@ public class PathDocumentation extends Documentation {
                 7
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         ExtractableResponse<Response> 최단_경로_요청 = 최단_경로_요청(spec, 1L, 2L, "distance");
 

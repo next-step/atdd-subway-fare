@@ -55,7 +55,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역, DISTANCE_TYPE);
+        ExtractableResponse<Response> response = 두_역의_최단_경로_조회를_요청(교대역, 양재역, DISTANCE_TYPE);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
@@ -66,21 +66,21 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역, DURATION_TYPE);
+        ExtractableResponse<Response> response = 두_역의_최단_경로_조회를_요청(교대역, 양재역, DURATION_TYPE);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(2);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target, String type) {
+    private ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(Long source, Long target, String type) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", type)
-                .when().get("/paths/duration")
+                .when().get("/paths")
                 .then().log().all().extract();
     }
 

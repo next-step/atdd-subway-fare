@@ -14,6 +14,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
+    private static final String DISTANCE_TYPE = "distance";
+    private static final String DURATION_TYPE = "duration";
 
     private Station 교대역;
     private Station 강남역;
@@ -44,7 +46,7 @@ class SubwayMapTest {
     void findPath() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, DISTANCE_TYPE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -57,7 +59,7 @@ class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, DISTANCE_TYPE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
