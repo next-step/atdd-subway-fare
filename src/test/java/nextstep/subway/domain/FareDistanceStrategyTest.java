@@ -47,18 +47,7 @@ class FareDistanceStrategyTest {
     @ParameterizedTest
     void basic(int distance) {
         // when
-        BigDecimal fare = strategy.calculate(distance);
-
-        // then
-        assertThat(fare).isEqualTo(BigDecimal.valueOf(1250));
-    }
-
-    @DisplayName("10km 이하의 경로는 기본요금을 반환 한다")
-    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    @ParameterizedTest
-    void basic2(int distance) {
-        // when
-        Fare fare = strategy.calculate2(distance);
+        Fare fare = strategy.calculate(distance);
 
         // then
         assertThat(fare).isEqualTo(BASIC_FARE);
@@ -69,41 +58,18 @@ class FareDistanceStrategyTest {
     @ParameterizedTest
     void under_50Km(int distance, int addFare) {
         // when
-        BigDecimal fare = strategy.calculate(distance);
-
-        // then
-        assertThat(fare).isEqualTo(BigDecimal.valueOf(addFare));
-    }
-
-    @DisplayName("10~50km 범위는 기본 요금에 5Km 마다 100원을 추가한다")
-    @MethodSource("under50Fare")
-    @ParameterizedTest
-    void under_50Km2(int distance, int addFare) {
-        // when
-        Fare fare = strategy.calculate2(distance);
+        Fare fare = strategy.calculate(distance);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(BigDecimal.valueOf(addFare)));
     }
-
 
     @DisplayName("50km 이상의 범위는 이전 정책을 적용 후, 8km 마다 100원을 추가한다")
     @MethodSource("over50Fare")
     @ParameterizedTest
     void over_50Km(int distance, int addFare) {
         // when
-        BigDecimal fare = strategy.calculate(distance);
-
-        // then
-        assertThat(fare).isEqualTo(BigDecimal.valueOf(addFare));
-    }
-
-    @DisplayName("50km 이상의 범위는 이전 정책을 적용 후, 8km 마다 100원을 추가한다")
-    @MethodSource("over50Fare")
-    @ParameterizedTest
-    void over_50Km2(int distance, int addFare) {
-        // when
-        Fare fare = strategy.calculate2(distance);
+        Fare fare = strategy.calculate(distance);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(BigDecimal.valueOf(addFare)));
