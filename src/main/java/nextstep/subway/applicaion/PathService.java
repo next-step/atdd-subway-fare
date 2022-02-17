@@ -8,8 +8,9 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+
+    private final LineService lineService;
+    private final StationService stationService;
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
@@ -20,9 +21,10 @@ public class PathService {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayDurationMap(lines);
+        SubwayMap subwayMap = new SubwayDistanceMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
+        Fare fare = Fare.of(new FareDistanceStrategy(), path.extractDistance());
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fare);
     }
 }

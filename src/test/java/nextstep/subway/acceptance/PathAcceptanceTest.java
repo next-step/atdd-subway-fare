@@ -60,6 +60,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
     }
 
+    @DisplayName("경로 조회시, 요금과 소요 시간을 응답 받는다")
+    @Test
+    void path_manage() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getInt("duration")).isNotNull();
+        assertThat(response.jsonPath().getInt("fare")).isNotNull();
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()

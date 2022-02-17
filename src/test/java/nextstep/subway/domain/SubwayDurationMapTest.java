@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -36,6 +37,7 @@ class SubwayDurationMapTest {
         삼호선.addSection(남부터미널역, 양재역, 5, 50);
     }
 
+    @DisplayName("등록된 노선에서 목적지 까지 가장 빠른 시간의 경로를 찾는다")
     @Test
     void findPath() {
         // given
@@ -49,6 +51,7 @@ class SubwayDurationMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
     }
 
+    @DisplayName("등록된 노선에서 목적지 까지 반대 방향의 가장 빠른 시간의 경로를 찾는다")
     @Test
     void findPathOppositely() {
         // given
