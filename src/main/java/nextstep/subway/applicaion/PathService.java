@@ -23,7 +23,9 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayDistanceMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
-        Fare fare = Fare.of(new FareDistanceStrategy(), path.extractDistance());
+        FareCalculator fareCalculator = new FareDistanceStrategy();
+        Fare fare = fareCalculator.calculate2(path.extractDistance());
+//        Fare fare = Fare.of(new FareDistanceStrategy(), path.extractDistance());
 
         return PathResponse.of(path, fare);
     }
