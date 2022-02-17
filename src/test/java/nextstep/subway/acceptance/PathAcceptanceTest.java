@@ -56,9 +56,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 60, 1);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 20, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 60, 1, 1_000);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3, 300);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 20, 2, 500);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 30, 4));
 
@@ -81,7 +81,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_확인(response, 50, 6, 교대역, 남부터미널역, 양재역);
-        요금_확인(response, 2_150);
+        요금_확인(response, 2_650);
     }
 
     @DisplayName("어른 사용자의 두 역의 최단 거리 경로를 조회한다.")
@@ -92,7 +92,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_확인(response, 50, 6, 교대역, 남부터미널역, 양재역);
-        요금_확인(response, 2_150);
+        요금_확인(response, 2_650);
     }
 
     @DisplayName("어른 사용자의 두 역의 최소 시간 거리 경로를 조회한다.")
@@ -103,7 +103,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_확인(response, 70, 4, 교대역, 강남역, 양재역);
-        요금_확인(response, 2_150);
+        요금_확인(response, 2_650);
     }
 
     @Test
@@ -114,7 +114,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_확인(response, 70, 4, 교대역, 강남역, 양재역);
-        요금_확인(response, 1_250);
+        요금_확인(response, 1_500);
     }
 
     @Test
@@ -136,7 +136,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_확인(response, 70, 4, 교대역, 강남역, 양재역);
-        요금_확인(response, 1_790);
+        요금_확인(response, 2_190);
     }
 
     private void 경로_확인(final ExtractableResponse<Response> response, final int distance, final int duration, Long... stationIds) {
@@ -149,7 +149,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int charge) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -158,6 +158,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("charge", charge + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
