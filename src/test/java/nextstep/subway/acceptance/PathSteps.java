@@ -27,20 +27,33 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 최단_경로_조회_문서화_학습(Long source, Long target, RequestSpecification spec,
+    public static ExtractableResponse<Response> 경로_조회(Long source, Long target, RequestSpecification spec,
                                                                 ParameterDescriptor[] parameterDescriptors,
-                                                                FieldDescriptor[] fieldDescriptors) {
+                                                                FieldDescriptor[] fieldDescriptors,
+                                                                String type) {
         return RestAssured
                 .given(spec).log().all()
                 .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        requestParameters(parameterDescriptors),
-                        relaxedResponseFields(fieldDescriptors)
+                        requestParameters(parameterDescriptors)
+//                        relaxedResponseFields(fieldDescriptors)
                         )
                 )
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .when().get("/paths")
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", type)
+                .when().get("/paths/durationTest")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 최소_시간_경로_조회(Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(String.valueOf(ContentType.APPLICATION_JSON))
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "DURATION")
+                .when().get("/paths/durationTest")
                 .then().log().all().extract();
     }
 }

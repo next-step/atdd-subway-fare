@@ -36,4 +36,8 @@ public class PathService {
 
         return new PathResponse(stations, distance);
     }
+
+    public PathResponse findPathDurationTest(Long source, Long target, String type) {
+        return null;
+    }
 }

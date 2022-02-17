@@ -10,8 +10,9 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.ParameterDescriptor;
 
-import static nextstep.subway.acceptance.PathSteps.최단_경로_조회_문서화_학습;
+import static nextstep.subway.acceptance.PathSteps.경로_조회;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -28,24 +29,28 @@ class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new Station(source, "가양역"),
                         new Station(target, "역삼역")
-                ), 10
+                ), 10, 20
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathDurationTest(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
-        최단_경로_조회_문서화_학습(source, target, spec, getParameterDescriptors(), getFieldDescriptors());
+        경로_조회(source, target, spec, getParameterDescriptors(), getFieldDescriptors(), "DURATION");
     }
 
     private ParameterDescriptor[] getParameterDescriptors() {
         return new ParameterDescriptor[]{parameterWithName("source").description("출발역"),
-                parameterWithName("target").description("도착역")};
+                parameterWithName("target").description("도착역"),
+                parameterWithName("type").description("조회 기준")
+        };
     }
 
     private FieldDescriptor[] getFieldDescriptors() {
         return new FieldDescriptor[]{fieldWithPath("stations[]").type(JsonFieldType.ARRAY).description("최단 경로 역 리스트"),
                 fieldWithPath("stations[].id").description("(최단 경로 역) ID"),
                 fieldWithPath("stations[].name").description("(최단 경로 역) 이름"),
-                fieldWithPath("distance").description("최단 경로 거리")};
+                fieldWithPath("distance").description("최단 거리"),
+                fieldWithPath("duration").description("최단 시간")
+        };
     }
 }
 

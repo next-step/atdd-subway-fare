@@ -23,4 +23,12 @@ public class PathController {
         PathResponse response = pathService.findPath(source, target);
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping(value = "/durationTest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PathResponse> getPath(@RequestParam Long source,
+                                                @RequestParam Long target,
+                                                @RequestParam String type) {
+        PathResponse response = pathService.findPathDurationTest(source, target, type);
+        return ResponseEntity.ok().body(response);
+    }
 }

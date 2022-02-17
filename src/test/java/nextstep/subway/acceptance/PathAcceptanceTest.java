@@ -14,6 +14,7 @@ import java.util.Map;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.최단_경로_조회;
+import static nextstep.subway.acceptance.PathSteps.최소_시간_경로_조회;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -134,6 +135,23 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    /**
+     * When 출발역과 도착역을 지정하여 조회한다.
+     * Then 최단 경로에 포함된 역 정보와 거리를 반환한다.
+     */
+    @DisplayName("최소 시간 기준 경로 조회")
+    @Test
+    void getDurationPath() {
+//        // when
+//        ExtractableResponse<Response> response = 최소_시간_경로_조회(교대역, 양재역);
+//
+//        // then
+//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+//
+//        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
+//        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
     }
 
     private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance) {
