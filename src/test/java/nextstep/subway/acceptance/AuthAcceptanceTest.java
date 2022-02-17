@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static nextstep.subway.acceptance.MemberSteps.*;
 
 
-class AuthAcceptanceTest extends AcceptanceTest {
+public class AuthAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
     public static final Integer AGE_ADULT = 20;
