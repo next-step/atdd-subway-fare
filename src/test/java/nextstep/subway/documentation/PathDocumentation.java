@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.ParameterDescriptor;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -32,9 +34,9 @@ class PathDocumentation extends Documentation {
                 ), 10, 20
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        경로_조회(given("path", getParameterDescriptors(), getFieldDescriptors()), source, target, "DURATION");
+        경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, "DURATION");
     }
 
     private ParameterDescriptor[] getParameterDescriptors() {

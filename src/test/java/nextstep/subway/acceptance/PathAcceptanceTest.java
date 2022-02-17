@@ -64,7 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getPath() {
         // when
-        ExtractableResponse<Response> response = 경로_조회(given(), 교대역, 양재역, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, "DISTANCE");
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -89,7 +89,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         Long target = 1L;
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(given(), source, target, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -113,7 +113,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선_생성_요청(createLineCreateParams("9호선", "brown", 가양역, 증미역, 10));
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(given(), source, target, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -132,7 +132,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         Long target = 20L;
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(given(), source, target, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -146,7 +146,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getDurationPath() {
         // when
-        ExtractableResponse<Response> response = 경로_조회(given(), 교대역, 양재역, "DURATION");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, "DURATION");
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

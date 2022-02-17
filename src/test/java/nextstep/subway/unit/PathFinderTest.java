@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathFinder;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,7 @@ class PathFinderTest {
         PathFinder pathFinder = new PathFinder(lines);
 
         // when
-        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역);
+        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역, PathType.DISTANCE);
         int distance = pathFinder.shortsPathDistance(교대역, 양재역);
 
         // then

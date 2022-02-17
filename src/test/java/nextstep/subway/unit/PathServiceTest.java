@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,7 @@ class PathServiceTest {
         when(stationService.findById(3L)).thenReturn(양재역);
 
         // when
-        PathResponse response = pathService.findPath(1L, 3L);
+        PathResponse response = pathService.findPath(1L, 3L, PathType.DISTANCE);
 
         // then
         assertThat(response.getStations()).containsExactly(

@@ -2,6 +2,7 @@ package nextstep.subway.ui;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +20,10 @@ public class PathController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PathResponse> getPath(@RequestParam Long source, @RequestParam Long target) {
-        PathResponse response = pathService.findPath(source, target);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping(value = "/durationTest", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PathResponse> getPath(@RequestParam Long source,
                                                 @RequestParam Long target,
-                                                @RequestParam String type) {
-        PathResponse response = pathService.findPathDurationTest(source, target, type);
+                                                @RequestParam PathType type) {
+        PathResponse response = pathService.findPath(source, target, type);
         return ResponseEntity.ok().body(response);
     }
 }
