@@ -1,35 +1,28 @@
 package nextstep.subway.unit;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
-
+import nextstep.subway.domain.SubwayDispatchTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import nextstep.subway.domain.SubwayDispatchTime;
-
 @DisplayName("SubwayDispatchTime 테스트")
 public class SubwayDispatchTimeTest {
-    private LocalDateTime today(LocalTime localTime) {
-        return LocalDateTime.of(
-            LocalDate.now(), localTime
-        );
-    }
     @DisplayName("운행시간 내에서 계산할경우")
     @Test
     void takeCase1() {
         // Given
         SubwayDispatchTime subwayDispatchTime = new SubwayDispatchTime(
-            LocalTime.of(6, 0), LocalTime.of(23, 0), LocalTime.MIN
+            LocalTime.of(6, 0), LocalTime.of(23, 0), LocalTime.of(0, 10)
         );
 
         // When
         LocalDateTime answer = subwayDispatchTime.arrivalDateTime(
-            today(LocalTime.of(7, 0)), Arrays.asList(10, 5)
+            LocalTime.of(7, 0), Arrays.asList(10, 5)
         );
 
         // Then
@@ -44,12 +37,12 @@ public class SubwayDispatchTimeTest {
     void takeCase2() {
         // Given
         SubwayDispatchTime subwayDispatchTime = new SubwayDispatchTime(
-            LocalTime.of(6, 0), LocalTime.of(23, 0), LocalTime.MIN
+            LocalTime.of(6, 0), LocalTime.of(23, 0), LocalTime.of(0, 10)
         );
 
         // When
         LocalDateTime answer = subwayDispatchTime.arrivalDateTime(
-            today(LocalTime.of(6, 0)), Arrays.asList(10, 5)
+            LocalTime.of(6, 0), Arrays.asList(10, 5)
         );
 
         // Then
@@ -64,12 +57,12 @@ public class SubwayDispatchTimeTest {
     void takeCase3() {
         // Given
         SubwayDispatchTime subwayDispatchTime = new SubwayDispatchTime(
-            LocalTime.of(6, 0), LocalTime.of(6, 12), LocalTime.MIN
+            LocalTime.of(6, 0), LocalTime.of(6, 12), LocalTime.of(0, 10)
         );
 
         // When
         LocalDateTime answer = subwayDispatchTime.arrivalDateTime(
-            today(LocalTime.of(6, 0)), Arrays.asList(10, 5)
+            LocalTime.of(6, 0), Arrays.asList(10, 5)
         );
 
         // Then

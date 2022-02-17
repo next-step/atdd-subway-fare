@@ -20,25 +20,20 @@ public class SubwayDispatchTime {
         this.intervalTime = intervalTime;
     }
 
-    public LocalDateTime takableDateTime(LocalTime takeTime) {
+    public LocalDateTime arrivalDateTime(LocalTime takeTime, List<Integer> durations) {
+        LocalDateTime ongoingDateTime = takableDateTime(takeTime);
+        for (int eachDuration : durations) {
+            ongoingDateTime = takeTrain(ongoingDateTime, eachDuration);
+        }
+        return ongoingDateTime;
+    }
+
+
+    private LocalDateTime takableDateTime(LocalTime takeTime) {
         long takableTimestamp = takableTimestamp(firstTakableDateTime(takeTime));
         return LocalDateTime.ofInstant(
             Instant.ofEpochMilli(takableTimestamp), TimeZone.getDefault().toZoneId()
         );
-    }
-
-    private LocalDateTime firstTakableDateTime(LocalTime takeTime) {
-        if (takeTime.isBefore(startTime)) {
-            return today(startTime);
-        }
-        if (takeTime.isAfter(endTime)) {
-            return nextDay(startTime);
-        }
-        return today(takeTime);
-    }
-
-    private LocalDateTime today(LocalTime localTime) {
-        return LocalDateTime.of(LocalDate.now(), localTime);
     }
 
     private long takableTimestamp(LocalDateTime firstTakeDateTime) {
@@ -62,12 +57,22 @@ public class SubwayDispatchTime {
         return takeTimestamp % intervalTimeStamp > 0;
     }
 
-    public LocalDateTime arrivalDateTime(LocalDateTime takeTime, List<Integer> durations) {
-        LocalDateTime ongoingDateTime = takeTime;
-        for (int eachDuration : durations) {
-            ongoingDateTime = takeTrain(ongoingDateTime, eachDuration);
+    private LocalDateTime firstTakableDateTime(LocalTime takeTime) {
+        if (takeTime.isBefore(startTime)) {
+            return today(startTime);
         }
-        return ongoingDateTime;
+        if (takeTime.isAfter(endTime)) {
+            return nextDay(startTime);
+        }
+        return today(takeTime);
+    }
+
+    private LocalDateTime today(LocalTime localTime) {
+        return LocalDateTime.of(LocalDate.now(), localTime);
+    }
+
+    private LocalDateTime nextDay(LocalTime localTime) {
+        return today(localTime).plusDays(1);
     }
 
     private LocalDateTime takeTrain(LocalDateTime ongoingDateTime, int duration) {
@@ -76,9 +81,5 @@ public class SubwayDispatchTime {
             return nextDay(startTime).plusMinutes(duration);
         }
         return arrivalDateTime;
-    }
-
-    private LocalDateTime nextDay(LocalTime localTime) {
-        return today(localTime).plusDays(1);
     }
 }

@@ -1,9 +1,5 @@
 package nextstep.subway.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -11,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 
 @Embeddable
 public class Sections {
@@ -174,8 +173,7 @@ public class Sections {
 
     public LocalDateTime arrivalTime(LocalTime takeTime) {
         SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        LocalDateTime takableDateTime = dispatchTime.takableDateTime(takeTime);
-        return dispatchTime.arrivalDateTime(takableDateTime, durations());
+        return dispatchTime.arrivalDateTime(takeTime, durations());
     }
 
     private List<Integer> durations() {
