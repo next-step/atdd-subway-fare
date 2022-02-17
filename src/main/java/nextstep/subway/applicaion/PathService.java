@@ -21,14 +21,14 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(int age, Long source, Long target, final PathType type) {
+    public PathResponse findPath(int age, boolean isLoggedIn, Long source, Long target, final PathType type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
         Path shortestPath = new SubwayMap(lines).findPath(upStation, downStation, PathType.DISTANCE);
-        Fare fare = new Fare(shortestPath.extractDistance(), age, shortestPath.extractLineNames());
+        Fare fare = new Fare(shortestPath.extractDistance(), age, isLoggedIn, shortestPath.extractLineNames());
 
         return PathResponse.of(path, fare);
     }

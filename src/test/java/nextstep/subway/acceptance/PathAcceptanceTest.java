@@ -27,7 +27,6 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     public static final String PASSWORD = "password";
 
-
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -72,6 +71,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         어린이사용자 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
         청소년사용자 = 로그인_되어_있음(YOUTH_EMAIL, PASSWORD);
         어른사용자 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+    }
+
+    @DisplayName("로그인하지 않은 사용자의 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findNonLoggedInUserPathByDistance() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        경로_확인(response, 50, 6, 교대역, 남부터미널역, 양재역);
+        요금_확인(response, 2_150);
     }
 
     @DisplayName("어른 사용자의 두 역의 최단 거리 경로를 조회한다.")

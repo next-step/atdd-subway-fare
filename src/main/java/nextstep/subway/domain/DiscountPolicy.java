@@ -9,6 +9,7 @@ public enum DiscountPolicy {
     YOUTH(13, 19, fare -> calculateDiscountFare(fare, 20)),
     ADULT(19, 1000, fare -> fare),
     ;
+    private static final int DEDUCTIBLE_AMOUNT = 350;
 
     private final int minAge;
     private final int maxAge;
@@ -20,8 +21,11 @@ public enum DiscountPolicy {
         this.fareToDiscountFare = fareToDiscountFare;
     }
 
-    public static int discount(int age, int fare) {
-        return getPolicyFromAge(age).fareToDiscountFare.apply(fare);
+    public static int discount(boolean isLoggedIn, int age, int fare) {
+        if (isLoggedIn) {
+            return getPolicyFromAge(age).fareToDiscountFare.apply(fare);
+        }
+        return fare;
     }
 
     public static DiscountPolicy getPolicyFromAge(int age) {
@@ -32,8 +36,8 @@ public enum DiscountPolicy {
     }
 
     private static int calculateDiscountFare(final int fare, final int discountRate) {
-        if (fare > 350) {
-            return (fare - 350) * (100 - discountRate) / 100 + 350;
+        if (fare > DEDUCTIBLE_AMOUNT) {
+            return (fare - DEDUCTIBLE_AMOUNT) * (100 - discountRate) / 100 + DEDUCTIBLE_AMOUNT;
         }
 
         return fare;

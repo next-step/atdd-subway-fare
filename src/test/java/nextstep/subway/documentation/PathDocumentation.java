@@ -4,6 +4,7 @@ import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성됨;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -50,7 +51,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.findPath(anyInt(), anyLong(), anyLong(), any(PathType.class))).thenReturn(createPathResponse());
+        when(pathService.findPath(anyInt(), anyBoolean(), anyLong(), anyLong(), any(PathType.class))).thenReturn(createPathResponse());
 
         RequestSpecification spec = RestAssured
                 .given(this.spec)

@@ -17,7 +17,7 @@ class FareTest {
         List<String> lineNames = Arrays.asList("일호선", "이호선", "삼호선");
 
         //when
-        int result = new Fare(distance, age, lineNames).calculateFare();
+        int result = new Fare(distance, age, true , lineNames).calculateFare();
 
         //then
         assertThat(result).isEqualTo(3_250);
