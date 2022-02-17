@@ -1,9 +1,7 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +13,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.최단_경로_조회;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -154,15 +153,5 @@ class PathAcceptanceTest extends AcceptanceTest {
         params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", String.valueOf(distance));
         return params;
-    }
-
-    private ExtractableResponse<Response> 최단_경로_조회(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(String.valueOf(ContentType.APPLICATION_JSON))
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .when().get("/paths")
-                .then().log().all().extract();
     }
 }
