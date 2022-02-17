@@ -1,6 +1,5 @@
 package nextstep.subway.domain;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,8 +9,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("거리별 요금 정책")
 class FareDistanceStrategyTest {
+
+    private static final Fare BASIC_FARE = Fare.of(BigDecimal.valueOf(1_250));
 
     static Stream<Arguments> under50Fare() {
         return Stream.of(
@@ -47,7 +50,18 @@ class FareDistanceStrategyTest {
         BigDecimal fare = strategy.calculate(distance);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(BigDecimal.valueOf(1250));
+        assertThat(fare).isEqualTo(BigDecimal.valueOf(1250));
+    }
+
+    @DisplayName("10km 이하의 경로는 기본요금을 반환 한다")
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    @ParameterizedTest
+    void basic2(int distance) {
+        // when
+        Fare fare = strategy.calculate2(distance);
+
+        // then
+        assertThat(fare).isEqualTo(BASIC_FARE);
     }
 
     @DisplayName("10~50km 범위는 기본 요금에 5Km 마다 100원을 추가한다")
@@ -58,7 +72,18 @@ class FareDistanceStrategyTest {
         BigDecimal fare = strategy.calculate(distance);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(BigDecimal.valueOf(addFare));
+        assertThat(fare).isEqualTo(BigDecimal.valueOf(addFare));
+    }
+
+    @DisplayName("10~50km 범위는 기본 요금에 5Km 마다 100원을 추가한다")
+    @MethodSource("under50Fare")
+    @ParameterizedTest
+    void under_50Km2(int distance, int addFare) {
+        // when
+        Fare fare = strategy.calculate2(distance);
+
+        // then
+        assertThat(fare).isEqualTo(Fare.of(BigDecimal.valueOf(addFare)));
     }
 
 
@@ -70,7 +95,18 @@ class FareDistanceStrategyTest {
         BigDecimal fare = strategy.calculate(distance);
 
         // then
-        Assertions.assertThat(fare).isEqualTo(BigDecimal.valueOf(addFare));
+        assertThat(fare).isEqualTo(BigDecimal.valueOf(addFare));
+    }
+
+    @DisplayName("50km 이상의 범위는 이전 정책을 적용 후, 8km 마다 100원을 추가한다")
+    @MethodSource("over50Fare")
+    @ParameterizedTest
+    void over_50Km2(int distance, int addFare) {
+        // when
+        Fare fare = strategy.calculate2(distance);
+
+        // then
+        assertThat(fare).isEqualTo(Fare.of(BigDecimal.valueOf(addFare)));
     }
 
 }
