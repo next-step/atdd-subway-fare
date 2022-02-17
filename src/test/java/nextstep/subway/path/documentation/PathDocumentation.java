@@ -9,7 +9,6 @@ import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.common.DocumentationUtils.given;
@@ -36,15 +34,7 @@ public class PathDocumentation extends Documentation {
     @EnumSource(PathType.class)
     void path(PathType type) {
         // given
-        PathResponse pathResponse = new PathResponse(
-                Arrays.asList(
-                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
-                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ),
-                10, 10, 2250
-        );
-
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(getPathResponse());
 
         RequestSpecification requestSpecification =
                 given(spec, "path", getRequestParameterSnippet(), getResponseFieldsSnippet());
