@@ -3,9 +3,8 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
-
     private static final int DEFAULT_FARE = 1250;
+    private Sections sections;
 
     private int fareDistance;
 

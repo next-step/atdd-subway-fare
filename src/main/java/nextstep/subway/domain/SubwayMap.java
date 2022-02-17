@@ -10,18 +10,13 @@ import java.util.stream.Collectors;
 public class SubwayMap {
     private List<Line> lines;
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
-    private DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath;
-    private GraphPath<Station, SectionEdge> result;
-    private int fareDistance;
-
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
     }
 
     public Path findPath(Station source, Station target, PathType pathType) {
-        result = getMinDistancePath(source, target);
-        fareDistance = result.getEdgeList().stream()
+        GraphPath<Station, SectionEdge> result = getMinDistancePath(source, target);
+        int fareDistance = result.getEdgeList().stream()
             .mapToInt(value -> value.getSection().getDistance())
             .sum();
 
@@ -35,14 +30,14 @@ public class SubwayMap {
     }
 
     private GraphPath<Station, SectionEdge> getMinDistancePath(Station source, Station target) {
-        graph = createGraph(PathType.DISTANCE);
-        dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
+            = new DijkstraShortestPath<>(createGraph(PathType.DISTANCE));
         return dijkstraShortestPath.getPath(source, target);
     }
 
     private GraphPath<Station, SectionEdge> getMinDurationPath(Station source, Station target) {
-        graph = createGraph(PathType.DURATION);
-        dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
+            = new DijkstraShortestPath<>(createGraph(PathType.DURATION));
         return dijkstraShortestPath.getPath(source, target);
     }
 
