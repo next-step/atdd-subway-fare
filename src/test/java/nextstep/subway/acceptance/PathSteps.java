@@ -34,8 +34,8 @@ public class PathSteps {
         return RestAssured
                 .given(spec).log().all()
                 .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        requestParameters(parameterDescriptors)
-//                        relaxedResponseFields(fieldDescriptors)
+                        requestParameters(parameterDescriptors),
+                        relaxedResponseFields(fieldDescriptors)
                         )
                 )
                 .accept(MediaType.APPLICATION_JSON_VALUE)

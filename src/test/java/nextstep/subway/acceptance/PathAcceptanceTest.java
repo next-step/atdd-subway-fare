@@ -144,14 +144,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("최소 시간 기준 경로 조회")
     @Test
     void getDurationPath() {
-//        // when
-//        ExtractableResponse<Response> response = 최소_시간_경로_조회(교대역, 양재역);
-//
-//        // then
-//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-//
-//        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-//        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
+        // when
+        ExtractableResponse<Response> response = 최소_시간_경로_조회(교대역, 양재역);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
+        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
     }
 
     private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance) {

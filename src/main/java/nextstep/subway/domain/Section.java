@@ -31,6 +31,7 @@ public class Section {
 
     @Embedded
     private Distance distance;
+    private int duration;
 
     public Section() {
 
@@ -88,5 +89,9 @@ public class Section {
 
     public int getDistance() {
         return distance.getDistance();
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

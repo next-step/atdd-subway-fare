@@ -38,6 +38,18 @@ public class PathService {
     }
 
     public PathResponse findPathDurationTest(Long source, Long target, String type) {
-        return null;
+        if (source.equals(target)) {
+            throw new PathException("출발역과 도착역을 다르게 설정해주세요.");
+        }
+        List<Line> lines = lineRepository.findAll();
+        Station sourceStation = stationService.findById(source);
+        Station targetStation = stationService.findById(target);
+
+        PathFinder pathFinder = new PathFinder(lines);
+        List<Station> stations = pathFinder.shortsPathStationsDurationTest(sourceStation, targetStation);
+        int distance = pathFinder.shortsPathDistance(sourceStation, targetStation);
+        int duration = pathFinder.shortsPathDistanceDurationTest(sourceStation, targetStation);
+
+        return new PathResponse(stations, distance, duration);
     }
 }
