@@ -19,26 +19,6 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
-
-        return PathResponse.of(path);
-    }
-
-    public PathResponse findPathDuration(Long source, Long target) {
-        Station sourceStation = stationService.findById(source);
-        Station targetStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPathDuration(sourceStation, targetStation);
-
-        return PathResponse.of(path);
-    }
-
     public PathResponse findPath(Long source, Long target, String type) {
         Station sourceStation = stationService.findById(source);
         Station targetStation = stationService.findById(target);
