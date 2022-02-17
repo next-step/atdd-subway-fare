@@ -179,7 +179,7 @@ class PathServiceTest {
                 .containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 판교역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(50),
             () -> assertThat(response.getDuration()).isEqualTo(30),
-            () -> assertThat(response.getFare()).isEqualTo(1450)
+            () -> assertThat(response.getFare()).isEqualTo(2050)
         );
     }
 
@@ -194,7 +194,7 @@ class PathServiceTest {
                 .containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 판교역.getId(), 광교역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(58),
             () -> assertThat(response.getDuration()).isEqualTo(35),
-            () -> assertThat(response.getFare()).isEqualTo(1450)
+            () -> assertThat(response.getFare()).isEqualTo(2150)
         );
     }
 
@@ -210,7 +210,7 @@ class PathServiceTest {
                     교판역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(59),
             () -> assertThat(response.getDuration()).isEqualTo(36),
-            () -> assertThat(response.getFare()).isEqualTo(1450)
+            () -> assertThat(response.getFare()).isEqualTo(2250)
         );
     }
 }
