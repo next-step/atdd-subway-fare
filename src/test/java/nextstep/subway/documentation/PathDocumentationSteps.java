@@ -28,7 +28,7 @@ public class PathDocumentationSteps {
         return requestParameters(
                 parameterWithName("source").description("출발역 ID"),
                 parameterWithName("target").description("도착역 ID"),
-                parameterWithName("type").description("DISTANCE: 최단 거리, DURATION: 최소 소요 시간")
+                parameterWithName("pathType").description("DISTANCE: 최단 거리, DURATION: 최소 소요 시간")
         );
     }
 

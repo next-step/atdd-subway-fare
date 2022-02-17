@@ -27,13 +27,13 @@ public class PathSteps {
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathType type, RequestSpecification spec) {
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathType pathType, RequestSpecification spec) {
         return RestAssured
                 .given(spec).log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", type)
+                .queryParam("pathType", pathType)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
