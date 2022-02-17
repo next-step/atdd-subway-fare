@@ -5,9 +5,14 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
@@ -27,7 +32,9 @@ public class PathSteps {
                 .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        preprocessResponse(prettyPrint()),
+                        getRequestFieldsSnippets(),
+                        getResponseFieldsSnippet()))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
@@ -35,4 +42,20 @@ public class PathSteps {
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+
+    private static ResponseFieldsSnippet getResponseFieldsSnippet() {
+        return responseFields(fieldWithPath("stations[].id").description("지하철 역 번호"),
+                fieldWithPath("stations[].name").description("지하철 역 이름"),
+                fieldWithPath("stations[].createdDate").description("생성 시각"),
+                fieldWithPath("stations[].modifiedDate").description("수정 시각"),
+                fieldWithPath("distance").description("총 거리"),
+                fieldWithPath("duration").description("총 소요시간"));
+    }
+
+    private static RequestParametersSnippet getRequestFieldsSnippets() {
+        return requestParameters(parameterWithName("source").description("출발 지점"),
+                parameterWithName("target").description("도착 지점"),
+                parameterWithName("type").description("검색 유형"));
+    }
+
 }
