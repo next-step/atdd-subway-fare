@@ -41,7 +41,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ),
-                10, 10
+                10, 10, 2250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);

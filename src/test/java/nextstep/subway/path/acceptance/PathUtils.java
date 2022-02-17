@@ -45,8 +45,9 @@ public class PathUtils {
     public static void 경로_조회_성공(ExtractableResponse<Response> response, Iterable<Long> stations) {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stations);
-            assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-            assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+            assertThat(response.jsonPath().getInt("distance")).isEqualTo(66);
+            assertThat(response.jsonPath().getInt("duration")).isEqualTo(66);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
         });
          /*
             어느 리뷰어님의 리뷰를 보니 하나의 테스트에는 하나의 검증이 있는 것을 추천한다면서
