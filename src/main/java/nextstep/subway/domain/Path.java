@@ -1,9 +1,12 @@
 package nextstep.subway.domain;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
+    private final Sections sections;
+    private LocalDateTime arrivalTime;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -21,7 +24,15 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public void applyArrivalTime(LocalTime takeTime) {
+        this.arrivalTime = sections.arrivalTime(takeTime);
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
     }
 }

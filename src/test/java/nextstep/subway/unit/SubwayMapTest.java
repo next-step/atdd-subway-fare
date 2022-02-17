@@ -1,23 +1,21 @@
 package nextstep.subway.unit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.google.common.collect.Lists;
+import java.time.LocalTime;
+import java.util.List;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.map.OneFieldWeightSubwayMapGraphFactory;
-import nextstep.subway.domain.map.OppositeOneFieldWeightSubwayMapGraphFactory;
 import nextstep.subway.domain.map.SubwayMap;
-import nextstep.subway.domain.map.SubwayMapGraphFactory;
-
+import nextstep.subway.domain.map.graphfactory.OneFieldWeightGraphFactory;
+import nextstep.subway.domain.map.graphfactory.OppositeOneFieldWeightSubwayMapGraphFactory;
+import nextstep.subway.domain.map.graphfactory.SubwayMapGraphFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
     private SubwayMap subwayMap = new SubwayMap();
@@ -56,7 +54,7 @@ class SubwayMapTest {
     @Test
     void findPathByDistance() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDistance());
+        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDistance());
 
         // when
         Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
@@ -82,7 +80,7 @@ class SubwayMapTest {
     @Test
     void findPathByDuration() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDuration());
+        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDuration());
 
         // when
         Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
@@ -95,7 +93,7 @@ class SubwayMapTest {
     @Test
     void findPathResultIsLineNull() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDistance());
+        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDistance());
 
         // when
         Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
@@ -109,7 +107,7 @@ class SubwayMapTest {
     @Test
     void findPathsByDuration() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightSubwayMapGraphFactory(section -> (double) section.getDuration());
+        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDuration());
 
         // when
         List<Path> paths = subwayMap.findPaths(factory.createGraph(lines), 교대역, 양재역);

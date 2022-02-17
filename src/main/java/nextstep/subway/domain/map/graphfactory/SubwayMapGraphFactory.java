@@ -1,13 +1,11 @@
-package nextstep.subway.domain.map;
+package nextstep.subway.domain.map.graphfactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.SectionEdge;
 import nextstep.subway.domain.Station;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 public abstract class SubwayMapGraphFactory {
     public SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(List<Line> lines) {

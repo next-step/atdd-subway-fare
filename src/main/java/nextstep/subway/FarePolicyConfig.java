@@ -1,15 +1,13 @@
 package nextstep.subway;
 
 import java.util.Arrays;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import nextstep.subway.domain.farepolicy.BasicFarePolicy;
 import nextstep.subway.domain.farepolicy.FareCalculator;
 import nextstep.subway.domain.farepolicy.LineAdditionalFarePolicy;
 import nextstep.subway.domain.farepolicy.MoreThan50FarePolicy;
 import nextstep.subway.domain.farepolicy.UpTo50FarePolicy;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class FarePolicyConfig {

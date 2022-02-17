@@ -1,9 +1,6 @@
 package nextstep.subway.applicaion;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -11,7 +8,8 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.farepolicy.FareCalculator;
 import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
 import nextstep.subway.domain.map.SubwayMap;
-import nextstep.subway.domain.map.SubwayMapGraphFactory;
+import nextstep.subway.domain.map.pathsearch.PathSearchStrategy;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PathService {
@@ -28,17 +26,15 @@ public class PathService {
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target,
-                                 SubwayMapGraphFactory subwayMapGraphFactory,
-                                 FareDiscountCondition fareDiscountPolicy) {
+    public PathResponse findPath(Long source, Long target, FareDiscountCondition fareDiscountPolicy, PathSearchStrategy pathSearchStrategy) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
-        Path path = subwayMap.findPath(subwayMapGraphFactory.createGraph(lines), upStation, downStation);
+        Path foundPath = pathSearchStrategy.find(subwayMap, lines, upStation, downStation);
         int totalCost = fareDiscountPolicy.discount(
-            fareCalculator.calculate(path)
+            fareCalculator.calculate(foundPath)
         );
-        return PathResponse.of(path, totalCost);
+        return PathResponse.of(foundPath, totalCost);
     }
 }
