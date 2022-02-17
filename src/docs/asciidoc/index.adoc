@@ -11,4 +11,8 @@
 
 === 경로 조회
 
+<<<<<<< HEAD
 operation::path[snippets='http-request,request-parameters,http-response,response-fields']
+=======
+operation::path[snippets='http-request,http-response']
+>>>>>>> d685ac6 (fix(adoc): template document)
