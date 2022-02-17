@@ -3,6 +3,7 @@ package nextstep.subway.applicaion.dto;
 import nextstep.subway.domain.Line;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,9 @@ public class LineResponse {
     private String name;
     private String color;
     private int additionalFare;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private LocalTime intervalTime;
     private List<StationResponse> stations;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -24,6 +28,9 @@ public class LineResponse {
             .name(line.getName())
             .color(line.getColor())
             .additionalFare(line.getAdditionalFare())
+            .startTime(line.getStartTime())
+            .endTime(line.getEndTime())
+            .intervalTime(line.getIntervalTime())
             .stations(stations)
             .createdDate(line.getCreatedDate())
             .modifiedDate(line.getModifiedDate())
@@ -60,6 +67,18 @@ public class LineResponse {
         return additionalFare;
     }
 
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalTime getIntervalTime() {
+        return intervalTime;
+    }
+
     public List<StationResponse> getStations() {
         return stations;
     }
@@ -77,6 +96,9 @@ public class LineResponse {
         private String name;
         private String color;
         private int additionalFare;
+        private LocalTime startTime;
+        private LocalTime endTime;
+        private LocalTime intervalTime;
         private List<StationResponse> stations;
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
@@ -113,6 +135,21 @@ public class LineResponse {
 
         public Builder additionalFare(int additionalFare) {
             this.additionalFare = additionalFare;
+            return this;
+        }
+
+        public Builder startTime(LocalTime startTime) {
+            this.startTime = startTime;
+            return this;
+        }
+
+        public Builder endTime(LocalTime endTime) {
+            this.endTime = endTime;
+            return this;
+        }
+
+        public Builder intervalTime(LocalTime intervalTime) {
+            this.intervalTime = intervalTime;
             return this;
         }
 

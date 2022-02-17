@@ -1,16 +1,18 @@
 package nextstep.subway.documentation;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
-
 import nextstep.subway.acceptance.PathStep;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.documentation.snippet.PathSnippet;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,15 +22,19 @@ public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
 
-    private PathResponse createPathResponse(int distance, int duration, int totalCost) {
+    private PathResponse createPathResponse(int distance, int duration, int totalCost, LocalDateTime arrivalTime) {
         LocalDateTime DUMMY_DATE = LocalDateTime.now();
         return new PathResponse(
             Arrays.asList(
                 new StationResponse(1L, "구리역", DUMMY_DATE, DUMMY_DATE),
                 new StationResponse(2L, "수원역", DUMMY_DATE, DUMMY_DATE)
             ),
-            distance, duration, totalCost
+            distance, duration, totalCost, arrivalTime
         );
+    }
+
+    private PathResponse createPathResponse(int distance, int duration, int totalCost) {
+        return createPathResponse(distance, duration, totalCost, null);
     }
 
     @Test
@@ -50,6 +56,18 @@ public class PathDocumentation extends Documentation {
         PathStep.두_역의_최소_시간_경로_조회를_요청(
             PathSnippet.PATH.toGiven(spec, DocumentationName.PATH_BY_DURATION.name()),
             1L, 2L
+        );
+    }
+
+    @Test
+    void pathByArrivalTime() {
+        LocalDateTime arrivalTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 10));
+        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
+            .thenReturn(createPathResponse(200, 100, 20000, arrivalTime));
+
+        PathStep.가장_빠른_도착_경로_조회를_요청(
+            PathSnippet.PATH_BY_ARRIVAL_TIME.toGiven(spec, DocumentationName.PATH_BY_ARRIVAL_TIME.name()),
+            1L, 2L, LocalTime.of(10, 0)
         );
     }
 }

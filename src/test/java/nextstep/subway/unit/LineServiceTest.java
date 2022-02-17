@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalTime;
+
 @SpringBootTest
 @Transactional
 class LineServiceTest {
@@ -39,7 +41,12 @@ class LineServiceTest {
     }
 
     private Line createLine(Station 강남역, Station 역삼역) {
-        Line line = new Line("2호선", "green", 0);
+        Line line = new Line(
+            "2호선", "green", 0,
+            LocalTime.of(5, 0),
+            LocalTime.of(23, 0),
+            LocalTime.of(0, 10)
+        );
         line.addSection(강남역, 역삼역, 10, 10);
         return line;
     }

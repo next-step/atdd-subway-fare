@@ -1,14 +1,15 @@
 package nextstep.subway.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 
 @Embeddable
 public class Sections {
@@ -168,5 +169,21 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public LocalDateTime arrivalTime(LocalTime takeTime) {
+        SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
+        return dispatchTime.findArrivalDateTime(takeTime, durations());
+    }
+
+    private List<Integer> durations() {
+        return sections.stream()
+                       .map(Section::getDuration)
+                       .collect(Collectors.toList());
+    }
+
+    private SubwayDispatchTime dispatchTime(Section section) {
+        return section.getLine()
+                      .getDispatchTime();
     }
 }
