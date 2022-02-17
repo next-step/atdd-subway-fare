@@ -32,9 +32,9 @@ class PathDocumentation extends Documentation {
                 ), 10, 20
         );
 
-        when(pathService.findPathDurationTest(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
-        경로_조회(source, target, spec, getParameterDescriptors(), getFieldDescriptors(), "DURATION");
+        경로_조회(given("path", getParameterDescriptors(), getFieldDescriptors()), source, target, "DURATION");
     }
 
     private ParameterDescriptor[] getParameterDescriptors() {
