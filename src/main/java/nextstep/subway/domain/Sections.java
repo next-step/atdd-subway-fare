@@ -129,19 +129,19 @@ public class Sections {
      * @param stations : getFirstSection()에서 가져온 상행 종점 구간의 상행 종점역과 하행역
      */
     private void addEndDownStation(List<Station> stations) {
-        Station endDownStation = stations.get(stations.size() - 1);
         for (int i = 0; i < stations.size(); i++) {
-            addDownStations(stations, endDownStation);
+            addDownStations(stations);
         }
     }
 
-    private void addDownStations(List<Station> stations, Station endDownStation) {
+    private void addDownStations(List<Station> stations) {
         for (Section section : sections) {
-            addDownStation(stations, endDownStation, section);
+            addDownStation(stations, section);
         }
     }
 
-    private void addDownStation(List<Station> stations, Station endDownStation, Section section) {
+    private void addDownStation(List<Station> stations, Section section) {
+        Station endDownStation = stations.get(stations.size() - 1);
         if (endDownStation.equals(section.getUpStation())) {
             stations.add(section.getDownStation());
         }
