@@ -15,21 +15,39 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target, PathType pathType) {
-        // 그래프 만들기
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraphDistanceWeight(pathType);
+        GraphPath<Station, SectionEdge> result = getMinDistancePath(source, target);
+        int fareDistance = result.getEdgeList().stream()
+            .mapToInt(value -> value.getSection().getDistance())
+            .sum();
 
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+        if (pathType.equals(PathType.DURATION)) {
+            result = getMinDurationPath(source, target);
+        }
 
-        List<Section> sections = result.getEdgeList().stream()
-            .map(SectionEdge::getSection)
-            .collect(Collectors.toList());
+        List<Section> sections = getSectionListFromGraphPath(result);
 
-        return new Path(new Sections(sections));
+        return Path.of(new Sections(sections), fareDistance);
     }
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraphDistanceWeight(PathType pathType) {
+    private GraphPath<Station, SectionEdge> getMinDistancePath(Station source, Station target) {
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
+            = new DijkstraShortestPath<>(createGraph(PathType.DISTANCE));
+        return dijkstraShortestPath.getPath(source, target);
+    }
+
+    private GraphPath<Station, SectionEdge> getMinDurationPath(Station source, Station target) {
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
+            = new DijkstraShortestPath<>(createGraph(PathType.DURATION));
+        return dijkstraShortestPath.getPath(source, target);
+    }
+
+    private List<Section> getSectionListFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
+        return graphPath.getEdgeList().stream()
+            .map(SectionEdge::getSection)
+            .collect(Collectors.toList());
+    }
+
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(PathType pathType) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph
             = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 

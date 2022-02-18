@@ -1,24 +1,23 @@
 package nextstep.subway.documentation;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회하기_문서화_스펙_정의;
+import static nextstep.subway.acceptance.PathSteps.경로조회의_결과_경로가_예상과_같다;
+import static nextstep.subway.acceptance.PathSteps.경로조회의_결과_정보가_예상과_같다;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.PathType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 public class PathDocumentation extends Documentation {
 
-    private final int distance = 20;
+    private final int distance = 9;
     private final int duration = 10;
 
     @Test
@@ -40,17 +39,7 @@ public class PathDocumentation extends Documentation {
             .then().assertThat().statusCode(is(200))
             .log().all().extract();
 
-        PathResponse pathResponse = response.as(PathResponse.class);
-
-        경로조회의_결과가_예상대로_조회된다(pathResponse, 2, distance, duration);
+        경로조회의_결과_경로가_예상과_같다(response, 교대역.getId(), 양재역.getId());
+        경로조회의_결과_정보가_예상과_같다(response, distance, duration, 1250);
     }
-
-    private void 경로조회의_결과가_예상대로_조회된다(PathResponse pathResponse, int size, int distance, int duration) {
-        Assertions.assertAll(
-            () -> assertThat(pathResponse.getStations()).hasSize(size),
-            () -> assertThat(pathResponse.getDistance()).isEqualTo(distance),
-            () -> assertThat(pathResponse.getDuration()).isEqualTo(duration)
-        );
-    }
-
 }

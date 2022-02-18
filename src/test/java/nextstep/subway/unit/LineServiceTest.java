@@ -26,9 +26,9 @@ class LineServiceTest {
 
     @Test
     void addSection() {
-        Station 강남역 = stationRepository.save(new Station("강남역"));
-        Station 역삼역 = stationRepository.save(new Station("역삼역"));
-        Station 삼성역 = stationRepository.save(new Station("삼성역"));
+        Station 강남역 = stationRepository.save(Station.of("강남역"));
+        Station 역삼역 = stationRepository.save(Station.of("역삼역"));
+        Station 삼성역 = stationRepository.save(Station.of("삼성역"));
         Line 이호선 = lineRepository.save(createLine(강남역, 역삼역));
 
         lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 삼성역.getId(), 10, 5));
@@ -39,7 +39,7 @@ class LineServiceTest {
     }
 
     private Line createLine(Station 강남역, Station 역삼역) {
-        Line line = new Line("2호선", "green");
+        Line line = Line.of("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 10);
         return line;
     }
