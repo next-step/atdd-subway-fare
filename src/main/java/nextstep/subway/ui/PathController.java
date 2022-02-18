@@ -1,10 +1,12 @@
 package nextstep.subway.ui;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import nextstep.auth.authorization.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathFacade;
+import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
 import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
@@ -26,29 +28,25 @@ public class PathController {
     }
 
     @GetMapping("distance")
-    public ResponseEntity<PathResponse> findPathByDistance(
-        @AuthenticationPrincipal Optional<LoginMember> loginMember, @RequestParam long source, @RequestParam long target) {
+    public ResponseEntity<PathResponse> findPathByDistance(@AuthenticationPrincipal Optional<LoginMember> loginMember, PathRequest request) {
         PathResponse pathResponse = pathFacade.findPathByDistance(
-            source, target, fareDiscountPolicy(loginMember)
+            request.getSource(), request.getTarget(), fareDiscountPolicy(loginMember)
         );
         return ResponseEntity.ok(pathResponse);
     }
 
     @GetMapping("duration")
-    public ResponseEntity<PathResponse> findPathByDuration(
-        @AuthenticationPrincipal Optional<LoginMember> loginMember, @RequestParam long source, @RequestParam long target) {
+    public ResponseEntity<PathResponse> findPathByDuration(@AuthenticationPrincipal Optional<LoginMember> loginMember, PathRequest request) {
         PathResponse pathResponse = pathFacade.findPathByDuration(
-            source, target, fareDiscountPolicy(loginMember)
+            request.getSource(), request.getTarget(), fareDiscountPolicy(loginMember)
         );
         return ResponseEntity.ok(pathResponse);
     }
 
     @GetMapping("arrival-time")
-    public ResponseEntity<PathResponse> findPathByArrivalTime(
-        @AuthenticationPrincipal Optional<LoginMember> loginMember, @RequestParam long source, @RequestParam long target,
-        @DateTimeFormat(iso = ISO.TIME) @RequestParam LocalTime time) {
+    public ResponseEntity<PathResponse> findPathByArrivalTime(@AuthenticationPrincipal Optional<LoginMember> loginMember, PathRequest request) {
         PathResponse pathResponse = pathFacade.findPathByArrivalTime(
-            source, target, fareDiscountPolicy(loginMember), time
+            request.getSource(), request.getTarget(), fareDiscountPolicy(loginMember), request.getTime()
         );
         return ResponseEntity.ok(pathResponse);
     }

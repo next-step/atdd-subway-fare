@@ -26,7 +26,7 @@ public class SectionsTest {
     @ParameterizedTest
     void arrivalTimeCase1(LocalTime startTime, LocalTime expectedTime) {
         Sections sections = createSingleLineSections();
-        assertThat(sections.arrivalTime(startTime))
+        assertThat(sections.arrivalTime(today(startTime)))
             .isEqualTo(today(expectedTime));
     }
 
@@ -37,7 +37,7 @@ public class SectionsTest {
     @ParameterizedTest
     void arrivalTimeCase2(LocalTime startTime, LocalTime expectedTime) {
         Sections sections = createSingleLineSections();
-        assertThat(sections.arrivalTime(startTime))
+        assertThat(sections.arrivalTime(today(startTime)))
             .isEqualTo(today(expectedTime));
     }
 
@@ -52,7 +52,7 @@ public class SectionsTest {
         LocalDateTime expectedDateTime = LocalDateTime.of(
             LocalDate.now().plusDays(1), expectedTime
         );
-        assertThat(sections.arrivalTime(startTime))
+        assertThat(sections.arrivalTime(today(startTime)))
             .isEqualTo(expectedDateTime);
     }
 

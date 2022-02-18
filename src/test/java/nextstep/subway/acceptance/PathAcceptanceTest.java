@@ -94,7 +94,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
 
         // When
-        LocalTime 출발_시각 = LocalTime.of(10, 0);
+        LocalDateTime 출발_시각 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
         ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
             RestAssured.given().log().all(), 교대역, 강남역_다음_역, 출발_시각
         );

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import jdk.vm.ci.meta.Local;
 import nextstep.subway.domain.map.SubwayDispatchTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,8 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.findArrivalDateTime(
-            LocalTime.of(7, 0), Arrays.asList(10, 5)
+        LocalDateTime answer = subwayDispatchTime.findArrivalTime(
+            today(LocalTime.of(7, 0)), Arrays.asList(10, 5)
         );
 
         // Then
@@ -41,8 +42,8 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.findArrivalDateTime(
-            LocalTime.of(6, 0), Arrays.asList(10, 5)
+        LocalDateTime answer = subwayDispatchTime.findArrivalTime(
+            today(LocalTime.of(6, 0)), Arrays.asList(10, 5)
         );
 
         // Then
@@ -61,8 +62,8 @@ public class SubwayDispatchTimeTest {
         );
 
         // When
-        LocalDateTime answer = subwayDispatchTime.findArrivalDateTime(
-            LocalTime.of(6, 0), Arrays.asList(10, 5)
+        LocalDateTime answer = subwayDispatchTime.findArrivalTime(
+            today(LocalTime.of(6, 0)), Arrays.asList(10, 5)
         );
 
         // Then
@@ -70,5 +71,9 @@ public class SubwayDispatchTimeTest {
             LocalDate.now().plusDays(1), LocalTime.of(6, 5)
         );
         assertThat(answer).isEqualTo(expect);
+    }
+
+    private LocalDateTime today(LocalTime time) {
+        return LocalDateTime.of(LocalDate.now(), time);
     }
 }

@@ -67,7 +67,7 @@ public class PathDocumentation extends Documentation {
 
         PathStep.가장_빠른_도착_경로_조회를_요청(
             PathSnippet.PATH_BY_ARRIVAL_TIME.toGiven(spec, DocumentationName.PATH_BY_ARRIVAL_TIME.name()),
-            1L, 2L, LocalTime.of(10, 0)
+            1L, 2L,  LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0))
         );
     }
 }

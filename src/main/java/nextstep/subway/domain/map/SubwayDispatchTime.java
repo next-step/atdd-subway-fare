@@ -20,17 +20,16 @@ public class SubwayDispatchTime {
         this.intervalTime = intervalTime;
     }
 
-    public LocalDateTime findArrivalDateTime(LocalTime takeTime, List<Integer> durations) {
-        LocalDateTime ongoingDateTime = takableDateTime(takeTime);
+    public LocalDateTime findArrivalTime(LocalDateTime takeTime, List<Integer> durations) {
+        LocalDateTime ongoingDateTime = takableTime(takeTime);
         for (int eachDuration : durations) {
             ongoingDateTime = takeTrain(ongoingDateTime, eachDuration);
         }
         return ongoingDateTime;
     }
 
-
-    private LocalDateTime takableDateTime(LocalTime takeTime) {
-        long takableTimestamp = takableTimestamp(firstTakableDateTime(takeTime));
+    private LocalDateTime takableTime(LocalDateTime takeTime) {
+        long takableTimestamp = takableTimestamp(firstTakableTime(takeTime));
         return LocalDateTime.ofInstant(
             Instant.ofEpochMilli(takableTimestamp), TimeZone.getDefault().toZoneId()
         );
@@ -49,14 +48,16 @@ public class SubwayDispatchTime {
         return takableTimestamp + intervalTimeStamp;
     }
 
-    private LocalDateTime firstTakableDateTime(LocalTime takeTime) {
-        if (takeTime.isBefore(startTime)) {
-            return today(startTime);
+    private LocalDateTime firstTakableTime(LocalDateTime takeTime) {
+        LocalDateTime todayStartTime = today(startTime);
+        if (takeTime.isBefore(todayStartTime)) {
+            return todayStartTime;
         }
-        if (takeTime.isAfter(endTime)) {
+        LocalDateTime todayEndTime = today(endTime);
+        if (takeTime.isAfter(todayEndTime)) {
             return nextDay(startTime);
         }
-        return today(takeTime);
+        return takeTime;
     }
 
     private LocalDateTime today(LocalTime localTime) {

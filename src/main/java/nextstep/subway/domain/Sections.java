@@ -172,9 +172,9 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public LocalDateTime arrivalTime(LocalTime takeTime) {
+    public LocalDateTime arrivalTime(LocalDateTime takeTime) {
         SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        return dispatchTime.findArrivalDateTime(takeTime, durations());
+        return dispatchTime.findArrivalTime(takeTime, durations());
     }
 
     private List<Integer> durations() {

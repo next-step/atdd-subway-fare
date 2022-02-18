@@ -24,7 +24,7 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public void applyArrivalTime(LocalTime takeTime) {
+    public void applyArrivalTime(LocalDateTime takeTime) {
         this.arrivalTime = sections.arrivalTime(takeTime);
     }
 

@@ -1,13 +1,14 @@
 package nextstep.subway.applicaion;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.function.Function;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.map.SectionEdge;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.farepolicy.FareCalculator;
 import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
+import nextstep.subway.domain.map.SectionEdge;
 import nextstep.subway.domain.map.SubwayMap;
 import nextstep.subway.domain.map.SubwayMapGraphFactory;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -47,7 +48,7 @@ public class PathFacade {
     }
 
     public PathResponse findPathByArrivalTime(
-        long source, long target, FareDiscountCondition fareDiscountPolicy, LocalTime time) {
+        long source, long target, FareDiscountCondition fareDiscountPolicy, LocalDateTime time) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(edge -> (double) edge.getSection().getDuration());
 
         SourceTarget sourceTarget = findSourceTarget(source, target);

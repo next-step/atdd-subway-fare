@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -11,7 +12,7 @@ public class Paths {
         this.paths = paths;
     }
 
-    public Path fastestPath(LocalTime time) {
+    public Path fastestPath(LocalDateTime time) {
         for (Path eachPath : paths) {
             eachPath.applyArrivalTime(time);
         }
