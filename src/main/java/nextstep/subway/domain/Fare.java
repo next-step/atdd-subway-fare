@@ -23,6 +23,10 @@ public class Fare {
         return this.fare;
     }
 
+    public Fare add(Fare fare) {
+        return Fare.of(this.fare.add(fare.getFare()));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
