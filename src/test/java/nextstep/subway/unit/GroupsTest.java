@@ -17,7 +17,7 @@ public class GroupsTest {
      * 바로 전 push 메서드 호출 Key 값과 일치 -> 바로 전 push 메서드 호출때의 element 가 들어간 그룹에 추가 된다.
      * 바로 전 push 메서드 호출 Key 값과 불일치 -> 새로운 그룹이 생성 된다.
      * */
-    @DisplayName("임시 키값을 사용해 push한다.")
+    @DisplayName("같은 Key 값이라도 이전 Key와 일치 하지 않으면 다른 그룹으로 추가 한다.")
     @Test
     void pushTest() {
         Groups<Integer, String> groups = new Groups<>();

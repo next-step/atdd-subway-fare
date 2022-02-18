@@ -2,19 +2,34 @@ package nextstep.subway.domain.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Groups<K, E> {
-    private final List<List<E>> elements;
+    private final List<List<E>> groups;
+    private K previousKey;
 
     public Groups() {
-        this.elements = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
 
-    public void put(K tempIdentifier, E element) {
-        assert tempIdentifier != null;
+    public void put(K key, E element) {
+        if (notEqualsPreviousKey(key)) {
+            groups.add(new ArrayList<>());
+        }
+        putAtLastGroup(element);
+        previousKey = key;
+    }
+
+    private boolean notEqualsPreviousKey(K key) {
+        return Objects.isNull(key) || Objects.isNull(previousKey) || !key.equals(previousKey);
+    }
+
+    private void putAtLastGroup(E element) {
+        List<E> lastGroup = groups.get(groups.size() - 1);
+        lastGroup.add(element);
     }
 
     public int size() {
-        return elements.size();
+        return groups.size();
     }
 }
