@@ -14,7 +14,6 @@ public class Path {
     public Path(Sections sections, int fareDistance) {
         this.sections = sections;
         this.fareDistance = fareDistance;
-//        this.fareCalculator = fareCalculator;
     }
 
     public static Path of(Sections sections, int fareDistance) {

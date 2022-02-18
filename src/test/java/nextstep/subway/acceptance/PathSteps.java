@@ -16,6 +16,8 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import nextstep.subway.domain.PathType;
@@ -35,7 +37,8 @@ public class PathSteps {
                 requestParameters(
                     parameterWithName("source").description("경로조회의 시작역 아이디"),
                     parameterWithName("target").description("경로조회의 도착역 아이디"),
-                    parameterWithName("pathType").description("경로조회의 기준 (DISTANCE(최단거리) or DURATION(최소시간))")),
+                    parameterWithName("pathType").description("경로조회의 기준 (DISTANCE(최단거리) or DURATION(최소시간))"),
+                    parameterWithName("time").description("경로조회 출발시간")),
                 responseFields(
                     fieldWithPath("stations[].id").type(Long.class).description("역 아이디"),
                     fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
@@ -43,7 +46,8 @@ public class PathSteps {
                     fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정날짜"),
                     fieldWithPath("distance").type(Integer.class).description("경로조회 총 거리"),
                     fieldWithPath("duration").type(Integer.class).description("경로조회 총 소요시간"),
-                    fieldWithPath("fare").type(Integer.class).description("경로조회 총 비용")
+                    fieldWithPath("fare").type(Integer.class).description("경로조회 총 비용"),
+                    fieldWithPath("time").type(JsonFieldType.STRING).description("조회된 경로 도착시간")
                 )))
             .build();
     }
@@ -57,12 +61,13 @@ public class PathSteps {
             .queryParam("source", source)
             .queryParam("target", target)
             .queryParam("pathType", PathType.DISTANCE)
+            .queryParam("time", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")))
             .when().get("/paths")
             .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 유저가_두_역의_최소_시간_경로_조회를_요청(String accessToken
-        , Long source, Long target) {
+        , Long source, Long target, String time) {
         return RestAssured
             .given().log().all()
             .auth().oauth2(accessToken)
@@ -70,6 +75,7 @@ public class PathSteps {
             .queryParam("source", source)
             .queryParam("target", target)
             .queryParam("pathType", PathType.DURATION)
+            .queryParam("time", time)
             .when().get("/paths")
             .then().log().all().extract();
     }

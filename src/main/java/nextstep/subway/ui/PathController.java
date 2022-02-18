@@ -21,8 +21,8 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPathByDistance(@AuthenticationPrincipal LoginMember loginMember
-        , @RequestParam Long source
-        , @RequestParam Long target, @RequestParam PathType pathType) {
-        return ResponseEntity.ok(pathService.findPath(loginMember, source, target, pathType));
+        , @RequestParam Long source, @RequestParam Long target
+        , @RequestParam PathType pathType, @RequestParam String time) {
+        return ResponseEntity.ok(pathService.findPath(loginMember, source, target, pathType, time));
     }
 }

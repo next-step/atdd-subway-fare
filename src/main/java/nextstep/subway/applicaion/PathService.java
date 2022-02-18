@@ -29,7 +29,7 @@ public class PathService {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType pathType) {
+    public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType pathType, String time) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
