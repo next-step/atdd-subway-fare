@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-public interface FareCalculator {
+public interface FareCalculateStrategy {
 
     Fare calculate(Path path);
 
