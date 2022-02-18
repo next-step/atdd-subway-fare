@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
 
-import jdk.vm.ci.meta.Local;
+import nextstep.subway.domain.map.SubwayDispatchTime;
 
 @Entity
 public class Line extends BaseEntity {

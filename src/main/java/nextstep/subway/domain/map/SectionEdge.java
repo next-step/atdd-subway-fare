@@ -1,5 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.map;
 
+import nextstep.subway.domain.Section;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class SectionEdge extends DefaultWeightedEdge {

@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.unit.map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
-import nextstep.subway.domain.SubwayDispatchTime;
+import nextstep.subway.domain.map.SubwayDispatchTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

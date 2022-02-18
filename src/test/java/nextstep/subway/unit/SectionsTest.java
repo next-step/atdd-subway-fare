@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
-import nextstep.subway.domain.SubwayDispatchTime;
+import nextstep.subway.domain.map.SubwayDispatchTime;
 
 @DisplayName("Sections 테스트")
 public class SectionsTest {

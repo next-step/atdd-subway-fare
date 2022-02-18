@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.map;
 
 import java.sql.Timestamp;
 import java.time.Instant;

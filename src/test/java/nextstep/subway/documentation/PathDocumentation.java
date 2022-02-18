@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import nextstep.subway.acceptance.PathStep;
-import nextstep.subway.applicaion.PathService;
+import nextstep.subway.applicaion.PathFacade;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.documentation.snippet.PathSnippet;
@@ -20,7 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @DisplayName("Path 문서화")
 public class PathDocumentation extends Documentation {
     @MockBean
-    private PathService pathService;
+    private PathFacade pathFacade;
 
     private PathResponse createPathResponse(int distance, int duration, int totalCost, LocalDateTime arrivalTime) {
         LocalDateTime DUMMY_DATE = LocalDateTime.now();
@@ -39,7 +39,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDistance() {
-        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
+        when(pathFacade.findPathByDistance(anyLong(), anyLong(), any()))
             .thenReturn(createPathResponse(100, 200, 10000));
 
         PathStep.두_역의_최단_거리_경로_조회를_요청(
@@ -50,7 +50,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDuration() {
-        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
+        when(pathFacade.findPathByDuration(anyLong(), anyLong(), any()))
             .thenReturn(createPathResponse(200, 100, 20000));
 
         PathStep.두_역의_최소_시간_경로_조회를_요청(
@@ -62,7 +62,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void pathByArrivalTime() {
         LocalDateTime arrivalTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 10));
-        when(pathService.findPath(anyLong(), anyLong(), any(), any()))
+        when(pathFacade.findPathByArrivalTime(anyLong(), anyLong(), any(), any()))
             .thenReturn(createPathResponse(200, 100, 20000, arrivalTime));
 
         PathStep.가장_빠른_도착_경로_조회를_요청(
