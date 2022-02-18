@@ -10,6 +10,7 @@ import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -67,6 +68,7 @@ class PathServiceTest {
         pathService = new PathService(lineRepository, stationService);
     }
 
+    @DisplayName("최단 경로 조회")
     @Test
     void findPath() {
         // given
