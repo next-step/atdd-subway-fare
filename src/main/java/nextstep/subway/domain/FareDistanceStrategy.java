@@ -2,7 +2,7 @@ package nextstep.subway.domain;
 
 import java.math.BigDecimal;
 
-public class FareDistanceStrategy implements FareCalculator {
+public class FareDistanceStrategy implements FareCalculateStrategy {
 
     private static BigDecimal BASIC_FARE = BigDecimal.valueOf(1_250);
 
