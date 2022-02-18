@@ -1,10 +1,7 @@
 package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -23,6 +20,19 @@ class SubwayMapTest {
     private Line 이호선;
     private Line 삼호선;
 
+    /**
+     * 노선(거리, 시간)
+     *
+     * 교대역 > 양재역
+     * 최단 거리: 5(교대역 - 남부터미널역 - 양재역)
+     * 최소 시간: 6(교대역 - 강남역 - 양재역)
+     *
+     * 교대역      ---- *2호선(10, 3)*    ---- 강남역
+     * |                                |
+     * *3호선(2, 10)*                    *신분당선(10, 3)*
+     * |                                |
+     * 남부터미널역  ---- *3호선(3, 10)* ----  양재
+     */
     @BeforeEach
     void setUp() {
         교대역 = createStation(1L, "교대역");
@@ -34,17 +44,43 @@ class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3);
-        이호선.addSection(교대역, 강남역, 3);
-        삼호선.addSection(교대역, 남부터미널역, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5);
+        신분당선.addSection(강남역, 양재역, 10, 3);
+        이호선.addSection(교대역, 강남역, 10, 3);
+        삼호선.addSection(교대역, 남부터미널역, 2, 10);
+        삼호선.addSection(남부터미널역, 양재역, 3, 10);
     }
 
     @Test
-    void findPath() {
+    void findPathMinDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+    }
+
+    @Test
+    void findPathMinDistanceOppositely() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+    }
+
+    @Test
+    void findPathMinDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DURATION);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -54,10 +90,10 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPathOppositely() {
+    void findPathMinDurationOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DURATION);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
