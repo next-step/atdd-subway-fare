@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.documentation.step.PathDocumentSteps;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -35,6 +36,7 @@ public class PathDocumentation extends Documentation {
 
     }
 
+    @DisplayName("경로 조회 문서화")
     @Test
     void path() {
         PathResponse 응답 = PathDocumentSteps.경로_조회_응답_생성(Arrays.asList(강남역, 판교역));

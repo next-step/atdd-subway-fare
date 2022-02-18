@@ -35,7 +35,8 @@ public class LineDocumentSteps {
                 fieldWithPath("upStationId").description("상행역 ID"),
                 fieldWithPath("downStationId").description("하행역 ID"),
                 fieldWithPath("distance").description("시간"),
-                fieldWithPath("duration").description("시간")
+                fieldWithPath("duration").description("시간"),
+                fieldWithPath("fare").description("노선 추가 요금")
         );
     }
 
@@ -50,6 +51,9 @@ public class LineDocumentSteps {
                 fieldWithPath("color")
                         .type(STRING)
                         .description("노선 색"),
+                fieldWithPath("fare")
+                        .type(NUMBER)
+                        .description("노선 추가 요금"),
                 fieldWithPath("createdDate")
                         .type(STRING)
                         .description("노선 생성일"),
