@@ -31,4 +31,11 @@ public class LineRequest {
     public int getDuration() {
         return duration;
     }
+
+    public boolean validate() {
+        return getUpStationId() != null &&
+                getDownStationId() != null &&
+                getDistance() != 0 &&
+                getDuration() != 0;
+    }
 }
