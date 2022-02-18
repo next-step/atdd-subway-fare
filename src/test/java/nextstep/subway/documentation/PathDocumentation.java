@@ -8,6 +8,8 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
+
 import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -22,8 +24,8 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "연신내역", null, null),
-                        new StationResponse(2L, "서울역", null, null)
+                        new StationResponse(1L, "연신내역", LocalDateTime.now(), LocalDateTime.now()),
+                        new StationResponse(2L, "서울역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10
         );
 
