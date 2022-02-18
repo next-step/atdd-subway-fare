@@ -1,7 +1,6 @@
 package nextstep.subway.domain;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Path {
     private final int DEFAULT_FARE = 1250;
@@ -23,7 +22,7 @@ public class Path {
 
     public Path(Sections sections, int fareDistance) {
         this.sections = sections;
-        this.fare = DEFAULT_FARE + getOverFare(fareDistance) + maxLineFare();
+        this.fare = DEFAULT_FARE + overFare(fareDistance) + maxLineFare();
     }
 
     public static Path of(Sections sections, int fareDistance) {
@@ -56,7 +55,7 @@ public class Path {
         return fare;
     }
 
-    protected int getOverFare(int distance) {
+    protected int overFare(int distance) {
         if (distance <= EXTRA_CHARGE_START_DISTANCE) {
             return caculateDefaultOverFare(distance);
         }
