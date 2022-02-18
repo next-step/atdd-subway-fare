@@ -49,6 +49,8 @@ class SectionTest {
         assertThat(section1.getDownStation()).isEqualTo(등촌역);
         assertThat(section1.getDistance()).isEqualTo(6);
         assertThat(newSection.getDistance()).isEqualTo(4);
+        assertThat(section1.getDuration()).isEqualTo(2);
+        assertThat(newSection.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("구간 사이의 역 삭제 시 다음 구간의 상행역에 삭제된 하행역으로 변경한다.")
@@ -64,5 +66,6 @@ class SectionTest {
         // then
         assertThat(targetSection.getUpStation()).isEqualTo(증미역);
         assertThat(targetSection.getDistance()).isEqualTo(8);
+        assertThat(targetSection.getDuration()).isEqualTo(8);
     }
 }

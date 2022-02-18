@@ -50,6 +50,7 @@ public class Section {
             validateDuplicationSection(newSection);
             this.upStation = newSection.getDownStation();
             this.distance = this.distance.subtract(newSection.getDistance());
+            this.duration = this.duration - newSection.duration;
         }
     }
 
@@ -57,6 +58,7 @@ public class Section {
         if (upStation.equals(removeSection.getDownStation())) {
             this.upStation = removeSection.getUpStation();
             this.distance = this.distance.sum(removeSection.getDistance());
+            this.duration = this.duration + removeSection.duration;
         }
     }
 
