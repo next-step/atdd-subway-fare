@@ -56,6 +56,17 @@ public class SectionsTest {
             .isEqualTo(expectedDateTime);
     }
 
+    @CsvSource(value = {
+        "10:00 -> 10:24"
+    }, delimiterString = " -> ")
+    @DisplayName("서로 다른 노선을 가지고 있는 지하철역으로만 이루어진 Sections의 도착 시간 찾기 - 운행 시간 이내")
+    @ParameterizedTest
+    void arrivalTimeCase4(LocalTime startTime, LocalTime expectedTime) {
+        Sections sections = createTwoLineSections();
+        assertThat(sections.arrivalTime(today(startTime)))
+            .isEqualTo(today(expectedTime));
+    }
+
     private LocalDateTime today(LocalTime localTime) {
         return LocalDateTime.of(LocalDate.now(), localTime);
     }
@@ -70,6 +81,24 @@ public class SectionsTest {
             createSectionStub(lineStub, 3),
             createSectionStub(lineStub, 4),
             createSectionStub(lineStub, 3)
+        ));
+    }
+
+    private Sections createTwoLineSections() {
+        Line line1Stub = createLineStub(
+            LocalTime.of(5, 0),
+            LocalTime.of(23, 0),
+            LocalTime.of(0, 10)
+        );
+        Line line2Stub = createLineStub(
+            LocalTime.of(5, 0),
+            LocalTime.of(23, 0),
+            LocalTime.of(0, 20)
+        );
+        return new Sections(Arrays.asList(
+            createSectionStub(line1Stub, 3),
+            createSectionStub(line1Stub, 4),
+            createSectionStub(line2Stub, 3)
         ));
     }
 
