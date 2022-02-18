@@ -1,5 +1,7 @@
 package nextstep.subway.documentation;
 
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 
+import static nextstep.subway.documentation.DocumentationHelper.경로_조회_성공;
 import static nextstep.subway.documentation.DocumentationHelper.경로_조회_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -37,6 +40,7 @@ class PathDocumentation extends Documentation {
     @ParameterizedTest
     void 경로_조회(PathType pathType) {
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
-        경로_조회_요청(spec, pathType);
+        ExtractableResponse<Response> response = 경로_조회_요청(spec, pathType);
+        경로_조회_성공(response);
     }
 }
