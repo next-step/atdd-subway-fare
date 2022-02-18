@@ -71,4 +71,8 @@ public class Line extends BaseEntity {
     public List<Section> getSections() {
         return sections.getSections();
     }
+
+    public int ddd(List<Station> stations, PathType type) {
+        return sections.ddd(stations, type);
+    }
 }

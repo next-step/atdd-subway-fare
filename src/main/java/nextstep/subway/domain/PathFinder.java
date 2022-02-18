@@ -41,22 +41,7 @@ public class PathFinder {
         int sum = 0;
         List<Station> stations = shortsPathStations(source, target, type);
         for (Line line : lines) {
-            List<Section> sections = line.getSections();
-            for (Section section : sections) {
-                for (int i = 0; i < stations.size() - 1; i++) {
-                    if (section.getUpStation().equals(stations.get(i))) {
-                        if (section.getDownStation().equals(stations.get(i + 1))) {
-                            if (type == PathType.DISTANCE) {
-                                sum += section.getDuration();
-                            }
-                            if (type == PathType.DURATION) {
-                                sum += section.getDistance();
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
+            sum += line.ddd(stations, type);
         }
         if (type == PathType.DISTANCE) {
             return new Path(type.getPathWeight(dijkstraShortestPath, source, target), sum);
