@@ -8,20 +8,24 @@ import org.springframework.http.MediaType;
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(final RequestSpecification spec, Long source, Long target) {
-        return getResponseExtractableResponse(spec, source, target, "DISTANCE");
-    }
-
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return getResponseExtractableResponse(RestAssured.given(), source, target, "DISTANCE");
+        return getResponseExtractableResponse(source, target, "DISTANCE", RestAssured.given());
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return getResponseExtractableResponse(source, target, "DURATION");
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(final RequestSpecification spec, Long source, Long target) {
+        return getResponseExtractableResponse(source, target, "DISTANCE", spec);
     }
 
-    private static ExtractableResponse<Response> getResponseExtractableResponse(final Long source, final Long target, final String type) {
-        return getResponseExtractableResponse(RestAssured.given(), source, target, type);
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String user, Long source, Long target) {
+        return getResponseExtractableResponse(source, target, "DISTANCE", RestAssured.given().auth().oauth2(user));
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(String user, Long source, Long target) {
+        return getResponseExtractableResponse(source, target, "DURATION", RestAssured.given().auth().oauth2(user));
+    }
+
+    private static ExtractableResponse<Response> getResponseExtractableResponse(final Long source, final Long target, final String type, RequestSpecification given) {
+        return getResponseExtractableResponse(given, source, target, type);
     }
 
     private static ExtractableResponse<Response> getResponseExtractableResponse(RequestSpecification requestSpecification, final Long source, final Long target, final String type) {

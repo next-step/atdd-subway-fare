@@ -1,6 +1,11 @@
 package nextstep.subway.documentation;
 
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성됨;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -19,6 +24,7 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.PathType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -29,16 +35,27 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class PathDocumentation extends Documentation {
+    private static final String EMAIL = "email1@email.com";
+    private static final String PASSWORD = "password";
+    private String 사용자;
 
     @MockBean
     private PathService pathService;
 
+    @BeforeEach
+    void setUp() {
+        회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, 20));
+
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
+    }
+
     @Test
     void path() {
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(createPathResponse());
+        when(pathService.findPath(anyInt(), anyBoolean(), anyLong(), anyLong(), any(PathType.class))).thenReturn(createPathResponse());
 
         RequestSpecification spec = RestAssured
                 .given(this.spec)
+                .auth().oauth2(사용자)
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
