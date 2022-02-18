@@ -166,4 +166,8 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int totalFare() {
+        return new Fare(totalDistance()).impose();
+    }
 }
