@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -47,7 +49,7 @@ class LineServiceTest {
         String color = "red";
         LineRequest 요청 = LineServiceSteps.노선_추가_요청_생성(name, color,
                 강남역.getId(), 역삼역.getId(),
-                100, 10);
+                100, 10, BigDecimal.ZERO);
 
         // when
         LineResponse response = lineService.saveLine(요청);
@@ -65,7 +67,7 @@ class LineServiceTest {
         String color = "red";
         LineRequest 요청 = LineServiceSteps.노선_추가_요청_생성(name, color,
                 1000L, 1000L,
-                100, 10);
+                100, 10, BigDecimal.ZERO);
 
         // then
         assertThatThrownBy(() -> lineService.saveLine(요청))
