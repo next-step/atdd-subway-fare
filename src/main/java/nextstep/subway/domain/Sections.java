@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Embeddable
 public class Sections {
 
+    private static final int MIN_COUNT_CONDITION_SECTION_REMOVE = 2;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -76,7 +77,7 @@ public class Sections {
     }
 
     private void validateOneSection() {
-        if (sections.size() <= 1) {
+        if (sections.size() > MIN_COUNT_CONDITION_SECTION_REMOVE) {
             throw new SectionException("구간이 1개 이하인 경우 삭제할 수 없습니다.");
         }
     }
