@@ -77,7 +77,7 @@ public class Sections {
     }
 
     private void validateOneSection() {
-        if (sections.size() > MIN_COUNT_CONDITION_SECTION_REMOVE) {
+        if (sections.size() < MIN_COUNT_CONDITION_SECTION_REMOVE) {
             throw new SectionException("구간이 1개 이하인 경우 삭제할 수 없습니다.");
         }
     }
