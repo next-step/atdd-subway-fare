@@ -61,7 +61,7 @@ public class LineService {
         Line line = lineRepository.findById(lineId)
                 .orElseThrow(() -> new LineException(String.format(NOT_EXISTS_LINE_EXCEPTION, lineId)));
 
-        line.addSection(new Section(line, upStation, downStation, sectionRequest.getDistance()));
+        line.addSection(new Section(line, upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration()));
     }
 
     public void deleteSection(Long lineId, Long stationId) {
@@ -76,7 +76,7 @@ public class LineService {
         if (request.hasStation()) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(new Section(line, upStation, downStation, request.getDistance()));
+            line.addSection(new Section(line, upStation, downStation, request.getDistance(), request.getDuration()));
         }
     }
 }

@@ -3,6 +3,7 @@ package nextstep.subway.applicaion;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
@@ -33,9 +34,8 @@ public class PathService {
 
         PathFinder pathFinder = new PathFinder(lines);
         List<Station> stations = pathFinder.shortsPathStations(sourceStation, targetStation, type);
-        int distance = pathFinder.shortsPathDistance(sourceStation, targetStation);
-        int duration = pathFinder.shortsPathDistanceDurationTest(sourceStation, targetStation);
+        Path path = pathFinder.shortsPath(sourceStation, targetStation, type);
 
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, path.getDistance(), path.getDuration());
     }
 }

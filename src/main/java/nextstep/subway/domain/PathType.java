@@ -17,7 +17,7 @@ public enum PathType {
 
     public GraphPath<Station, DefaultWeightedEdge> getPath(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
                                                            DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration,
-                                                           Station source, Station target) {
+                                                           Station source, Station target) throws IllegalArgumentException {
         if (this.name().equals("DISTANCE")) {
             return dijkstraShortestPath.getPath(source, target);
         }
@@ -35,5 +35,9 @@ public enum PathType {
                 graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDuration());
             }
         }
+    }
+
+    public int getPathWeight(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath, Station source, Station target) {
+        return (int)dijkstraShortestPath.getPathWeight(source, target);
     }
 }

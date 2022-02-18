@@ -22,6 +22,8 @@ class LineTest {
     Line line;
     int tenDistance;
     int fourDistance;
+    int fiveDuration;
+    int threeDuration;
 
     @BeforeEach
     void setUp() {
@@ -32,14 +34,16 @@ class LineTest {
         line = new Line("9호선", "금색");
         tenDistance = 10;
         fourDistance = 4;
+        fiveDuration = 5;
+        threeDuration = 3;
     }
 
     @DisplayName("지하철역 사이에 새로운 구간 추가(기존 구간 상행역과 신규 구간 상행역이 겹친다.")
     @Test
     void addLineBetweenSection() {
         // given
-        Section section1 = new Section(line, 가양역, 등촌역, tenDistance);
-        Section section2 = new Section(line, 가양역, 증미역, fourDistance);
+        Section section1 = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
+        Section section2 = new Section(line, 가양역, 증미역, fourDistance, threeDuration);
 
         // when
         line.addSection(section1);
@@ -57,7 +61,7 @@ class LineTest {
     @Test
     void addLineDownEndStationSection() {
         // given
-        Section section = new Section(line, 가양역, 증미역, tenDistance);
+        Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
 
         // when
         line.addSection(section);
@@ -72,9 +76,9 @@ class LineTest {
     @DisplayName("노선에 속해있는 역 목록 조회")
     @Test
     void getStations() {
-        line.addSection(new Section(line, 등촌역, 신목동역, tenDistance));
-        line.addSection(new Section(line, 증미역, 등촌역, fourDistance));
-        line.addSection(new Section(line, 가양역, 증미역, fourDistance));
+        line.addSection(new Section(line, 등촌역, 신목동역, tenDistance, fiveDuration));
+        line.addSection(new Section(line, 증미역, 등촌역, fourDistance, threeDuration));
+        line.addSection(new Section(line, 가양역, 증미역, fourDistance, threeDuration));
 
         // when
         List<Station> stations = line.getStations();
@@ -87,10 +91,10 @@ class LineTest {
     @Test
     void removeBetweenSection() {
         // given
-        line.addSection(new Section(line, 가양역, 증미역, tenDistance));
-        line.addSection(new Section(line, 증미역, 등촌역, fourDistance));
+        line.addSection(new Section(line, 가양역, 증미역, tenDistance, fiveDuration));
+        line.addSection(new Section(line, 증미역, 등촌역, fourDistance, threeDuration));
 
-        Section section = new Section(line, 등촌역, 신목동역, fourDistance);
+        Section section = new Section(line, 등촌역, 신목동역, fourDistance, threeDuration);
         line.addSection(section);
 
         // when
@@ -105,8 +109,8 @@ class LineTest {
     @Test
     void removeSection() {
         // given
-        line.addSection(new Section(line, 가양역, 증미역, tenDistance));
-        line.addSection(new Section(line, 증미역, 등촌역, fourDistance));
+        line.addSection(new Section(line, 가양역, 증미역, tenDistance, fiveDuration));
+        line.addSection(new Section(line, 증미역, 등촌역, fourDistance, threeDuration));
 
         // when
         line.removeSection(등촌역);
@@ -119,8 +123,8 @@ class LineTest {
     @Test
     void exceptionAddLineBetweenSection() {
         // given
-        Section section1 = new Section(line, 가양역, 등촌역, tenDistance);
-        Section section2 = new Section(line, 가양역, 증미역, tenDistance);
+        Section section1 = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
+        Section section2 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
         line.addSection(section1);
 
 
@@ -135,8 +139,8 @@ class LineTest {
     @Test
     void exceptionAddSectionDuplicate() {
         // given
-        Section section1 = new Section(line, 가양역, 증미역, tenDistance);
-        Section section2 = new Section(line, 가양역, 증미역, tenDistance);
+        Section section1 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        Section section2 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
         line.addSection(section1);
 
         // when
@@ -150,8 +154,8 @@ class LineTest {
     @Test
     void exceptionAddSectionNotFoundStation() {
         // given
-        Section section1 = new Section(line, 가양역, 증미역, tenDistance);
-        Section section2 = new Section(line, 등촌역, 신목동역, tenDistance);
+        Section section1 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        Section section2 = new Section(line, 등촌역, 신목동역, tenDistance, fiveDuration);
         line.addSection(section1);
 
         // when
@@ -165,7 +169,7 @@ class LineTest {
     @Test
     void updateLine() {
         // given
-        Section section = new Section(line, 가양역, 증미역, tenDistance);
+        Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
         line.addSection(section);
 
         // when

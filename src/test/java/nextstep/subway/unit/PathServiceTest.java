@@ -55,10 +55,10 @@ class PathServiceTest {
         삼호선 = new Line("3호선", "orange");
         신분당선 = new Line("신분당선", "red");
 
-        교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10);
-        교대역_남부터미널_구간 = new Section(삼호선, 교대역, 남부터미널역, 2);
-        남부터미널_양재역_구간 = new Section(삼호선, 남부터미널역, 양재역, 3);
-        강남역_양재역_구간 = new Section(신분당선, 강남역, 양재역, 10);
+        교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10, 3);
+        교대역_남부터미널_구간 = new Section(삼호선, 교대역, 남부터미널역, 2, 10);
+        남부터미널_양재역_구간 = new Section(삼호선, 남부터미널역, 양재역, 3, 11);
+        강남역_양재역_구간 = new Section(신분당선, 강남역, 양재역, 10,  11);
 
         이호선.addSection(교대역_강남역_구간);
         삼호선.addSection(교대역_남부터미널_구간);
@@ -75,13 +75,14 @@ class PathServiceTest {
         when(stationService.findById(3L)).thenReturn(양재역);
 
         // when
-        PathResponse response = pathService.findPath(1L, 3L, PathType.DISTANCE);
+        PathResponse path = pathService.findPath(1L, 3L, PathType.DISTANCE);
 
         // then
-        assertThat(response.getStations()).containsExactly(
+        assertThat(path.getStations()).containsExactly(
                 StationResponse.createStationResponse(교대역),
                 StationResponse.createStationResponse(남부터미널역),
                 StationResponse.createStationResponse(양재역));
-        assertThat(response.getDistance()).isEqualTo(5);
+        assertThat(path.getDistance()).isEqualTo(5);
+        assertThat(path.getDuration()).isEqualTo(21);
     }
 }

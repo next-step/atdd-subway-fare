@@ -51,7 +51,7 @@ class LineServiceTest {
         Station downStation = stationRepository.save(증미역);
         Line line = lineRepository.save(구호선);
 
-        SectionRequest sectionRequest = new SectionRequest(upStation.getId(), downStation.getId(), 10);
+        SectionRequest sectionRequest = new SectionRequest(upStation.getId(), downStation.getId(), 10, 3);
 
         // when
         lineService.addSection(line.getId(), sectionRequest);

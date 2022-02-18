@@ -2,7 +2,6 @@ package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;

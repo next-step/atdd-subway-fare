@@ -31,11 +31,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
-     * 교대역    --- *2호선(10m)* ---   강남역
-     * |                               |
-     * *3호선(2m)*                   *신분당선(10m)*
-     * |                               |
-     * 남부터미널역  --- *3호선(3m)* ---   양재
+     * 교대역    --- *2호선(10m, 3분)* ---     강남역
+     * |                                    |
+     * 3호선(2m, 10분)                       신분당선(10m, 2분)
+     * |                                    |
+     * 남부터미널역  --- *3호선(3m, 11분)* ---   양재
      */
     @BeforeEach
     public void setUp() {
@@ -46,14 +46,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청(createLineCreateParams("2호선", "green", 교대역, 강남역, 10))
+        이호선 = 지하철_노선_생성_요청(createLineCreateParams("2호선", "green", 교대역, 강남역, 10, 3))
                 .jsonPath().getLong("id");
-        신분당선 = 지하철_노선_생성_요청(createLineCreateParams("신분당선", "red", 강남역, 양재역, 10))
+        신분당선 = 지하철_노선_생성_요청(createLineCreateParams("신분당선", "red", 강남역, 양재역, 10, 2))
                 .jsonPath().getLong("id");
-        삼호선 = 지하철_노선_생성_요청(createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2))
+        삼호선 = 지하철_노선_생성_요청(createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 10))
                 .jsonPath().getLong("id");
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 11));
     }
 
     /**
@@ -73,7 +73,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
 
         int distance = response.jsonPath().getInt("distance");
+        int duration = response.jsonPath().getInt("duration");
         assertThat(distance).isEqualTo(5);
+        assertThat(duration).isEqualTo(21);
     }
 
     /**
@@ -110,7 +112,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         Long 가양역 = 지하철역_생성_요청("가양역").jsonPath().getLong("id");
         Long 증미역 = 지하철역_생성_요청("증미역").jsonPath().getLong("id");
 
-        지하철_노선_생성_요청(createLineCreateParams("9호선", "brown", 가양역, 증미역, 10));
+        지하철_노선_생성_요청(createLineCreateParams("9호선", "brown", 가양역, 증미역, 10, 3));
 
         // when
         ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
@@ -153,9 +155,13 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
         assertThat(stations).containsExactly(교대역, 강남역, 양재역);
+        int distance = response.jsonPath().getInt("distance");
+        int duration = response.jsonPath().getInt("duration");
+        assertThat(distance).isEqualTo(20);
+        assertThat(duration).isEqualTo(5);
     }
 
-    private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance) {
+    private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -163,14 +169,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("upStationId", String.valueOf(upStationId));
         lineCreateParams.put("downStationId", String.valueOf(downStationId));
         lineCreateParams.put("distance", String.valueOf(distance));
+        lineCreateParams.put("duration", String.valueOf(duration));
         return lineCreateParams;
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
+    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", String.valueOf(upStationId));
         params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
         return params;
     }
 

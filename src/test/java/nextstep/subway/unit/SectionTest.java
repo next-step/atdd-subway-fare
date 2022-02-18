@@ -18,6 +18,8 @@ class SectionTest {
     Line line;
     int tenDistance;
     int fourDistance;
+    int fiveDuration;
+    int threeDuration;
 
     @BeforeEach
     void setUp() {
@@ -28,14 +30,16 @@ class SectionTest {
         line = new Line("9호선", "금색");
         tenDistance = 10;
         fourDistance = 4;
+        fiveDuration = 5;
+        threeDuration = 3;
     }
 
     @DisplayName("구간 사이에 역 추가")
     @Test
     void updateAddLineBetweenSection() {
         // given
-        Section section1 = new Section(line, 가양역, 등촌역, tenDistance);
-        Section newSection = new Section(line, 가양역, 증미역, fourDistance);
+        Section section1 = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
+        Section newSection = new Section(line, 가양역, 증미역, fourDistance, threeDuration);
 
         // when
         section1.updateAddLineBetweenSection(newSection);
@@ -51,8 +55,8 @@ class SectionTest {
     @Test
     void updateRemoveLineBetweenSection() {
         // given
-        Section removeSection = new Section(line, 증미역, 등촌역, fourDistance);
-        Section targetSection = new Section(line, 등촌역, 신목동역, fourDistance);
+        Section removeSection = new Section(line, 증미역, 등촌역, fourDistance, fiveDuration);
+        Section targetSection = new Section(line, 등촌역, 신목동역, fourDistance, threeDuration);
 
         // when
         targetSection.updateRemoveLineBetweenSection(removeSection);
