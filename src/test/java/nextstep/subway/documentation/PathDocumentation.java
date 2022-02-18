@@ -25,6 +25,7 @@ public class PathDocumentation extends Documentation {
     private final int distance = 9;
     private final int duration = 10;
     private final int lineFare = 0;
+    private final String time = "202202200600";
 
     @Test
     void pathTypeDistance() {
@@ -44,6 +45,7 @@ public class PathDocumentation extends Documentation {
             .queryParam("source", 교대역.getId())
             .queryParam("target", 양재역.getId())
             .queryParam("pathType", PathType.DISTANCE)
+            .queryParam("time", time)
             .when().get("/paths")
             .then().assertThat().statusCode(is(200))
             .log().all().extract();
