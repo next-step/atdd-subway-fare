@@ -12,12 +12,15 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
-
 	static final String TYPE_DURATION = "DURATION";
 	static final String TYPE_DISTANCE = "DISTANCE";
 
 	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
 		return 두_역의_경로_조회를_요청(source, target, TYPE_DURATION, RestAssured.given().log().all());
+	}
+
+	public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
+		return 두_역의_경로_조회를_요청(source, target, TYPE_DURATION, RestAssured.given().log().all().auth().oauth2(accessToken));
 	}
 
 	public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
@@ -38,7 +41,7 @@ public class PathSteps {
 				.then().log().all().extract();
 	}
 
-	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
 		Map<String, String> lineCreateParams;
 		lineCreateParams = new HashMap<>();
 		lineCreateParams.put("name", name);
@@ -47,8 +50,14 @@ public class PathSteps {
 		lineCreateParams.put("downStationId", downStation + "");
 		lineCreateParams.put("distance", distance + "");
 		lineCreateParams.put("duration", duration + "");
+		lineCreateParams.put("extraFare", extraFare + "");
 
 		return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+	}
+
+
+	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+		return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
 	}
 
 	public static Map<String, String> 구간_파라미터_생성(Long upStationId, Long downStationId, int distance, int duration) {

@@ -169,4 +169,14 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int getMaxExtraFareOnLine() {
+        return sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .map(Line::getExtraFare)
+                .mapToInt(Integer::intValue)
+                .max()
+                .orElse(0);
+    }
 }
