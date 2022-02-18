@@ -7,7 +7,11 @@ public class FareDistanceStrategy implements FareCalculator {
     private static BigDecimal BASIC_FARE = BigDecimal.valueOf(1_250);
 
     @Override
-    public Fare calculate(int distance) {
+    public Fare calculate(Path path) {
+        return calculate(path.extractDistance());
+    }
+
+    private Fare calculate(int distance) {
         BigDecimal fare = BASIC_FARE;
         if (distance <= AdditionalFare.OVER_10KM.startChargingDistance) {
             return Fare.of(fare);

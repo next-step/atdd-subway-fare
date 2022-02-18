@@ -1,10 +1,14 @@
 package nextstep.subway.domain;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.stream.Stream;
@@ -12,9 +16,13 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("거리별 요금 정책")
+@ExtendWith(MockitoExtension.class)
 class FareDistanceStrategyTest {
 
     private static final Fare BASIC_FARE = Fare.of(BigDecimal.valueOf(1_250));
+
+    @Mock
+    private Path path;
 
     static Stream<Arguments> under50Fare() {
         return Stream.of(
@@ -46,8 +54,12 @@ class FareDistanceStrategyTest {
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
     @ParameterizedTest
     void basic(int distance) {
+        // given
+        Mockito.when(path.extractDistance())
+                .thenReturn(distance);
+
         // when
-        Fare fare = strategy.calculate(distance);
+        Fare fare = strategy.calculate(path);
 
         // then
         assertThat(fare).isEqualTo(BASIC_FARE);
@@ -57,8 +69,12 @@ class FareDistanceStrategyTest {
     @MethodSource("under50Fare")
     @ParameterizedTest
     void under_50Km(int distance, int addFare) {
+        // given
+        Mockito.when(path.extractDistance())
+                .thenReturn(distance);
+
         // when
-        Fare fare = strategy.calculate(distance);
+        Fare fare = strategy.calculate(path);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(BigDecimal.valueOf(addFare)));
@@ -68,8 +84,12 @@ class FareDistanceStrategyTest {
     @MethodSource("over50Fare")
     @ParameterizedTest
     void over_50Km(int distance, int addFare) {
+        // given
+        Mockito.when(path.extractDistance())
+                .thenReturn(distance);
+
         // when
-        Fare fare = strategy.calculate(distance);
+        Fare fare = strategy.calculate(path);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(BigDecimal.valueOf(addFare)));
