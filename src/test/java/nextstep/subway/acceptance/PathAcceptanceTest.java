@@ -29,6 +29,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     public void setUp() {
         super.setUp();
+        회원_생성_요청(EMAIL, PASSWORD, TEENAGER);
+        회원_생성_요청(NEW_EMAIL, PASSWORD, CHILD);
         교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
@@ -72,7 +74,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathWithTeenagerRate() {
         // given
-        회원_생성_요청(EMAIL, PASSWORD, TEENAGER);
         요청_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
@@ -89,8 +90,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathWithChildRate() {
         // given
-        회원_생성_요청(EMAIL, PASSWORD, CHILD);
-        요청_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
+        요청_토큰 = 로그인_되어_있음(NEW_EMAIL, PASSWORD);
 
         // when
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, 요청_토큰);
