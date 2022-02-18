@@ -47,6 +47,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 7));
     }
 
+    /**
+     * @see nextstep.subway.ui.PathController.findPath
+     */
     @DisplayName("두_역의_최단_거리_경로_조회")
     @Test
     void findPathByDistance() {

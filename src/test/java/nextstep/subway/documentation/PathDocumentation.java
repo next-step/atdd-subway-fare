@@ -26,7 +26,9 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "연신내역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "서울역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10
+                ),
+                10,
+                10
         );
 
         when(pathService.findPath(1L, 2L)).thenReturn(pathResponse);
