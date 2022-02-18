@@ -4,9 +4,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.acceptance.step.LineSteps;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.LineResponse;
-import nextstep.subway.domain.Fare;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -90,8 +88,11 @@ public class LineDocumentation extends Documentation {
 
     private Line 노선_생성(long id, String name, String color, Station upStation, Station downStation, int distance, int duration, Fare fare) {
         LocalDateTime now = LocalDateTime.now();
-        Line line = Line.of(name, color, upStation, downStation, distance, duration, fare);
+        Line line = Line.of(name, color, fare);
+        Sections sections = new Sections();
+        sections.add(Section.of(line, upStation, downStation, distance, duration));
         ReflectionTestUtils.setField(line, "id", id);
+        ReflectionTestUtils.setField(line, "sections", sections);
         ReflectionTestUtils.setField(line, "createdDate", now);
         ReflectionTestUtils.setField(line, "modifiedDate", now);
 
