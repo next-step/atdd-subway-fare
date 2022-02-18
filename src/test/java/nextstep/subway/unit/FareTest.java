@@ -10,7 +10,7 @@ public class FareTest {
 
     @ParameterizedTest
     @CsvSource({"10, 1250", "20, 1450", "66, 1950"})
-    void allocateFare(int totalDistance, int expectedFare) {
+    void impose(int totalDistance, int expectedFare) {
         // given
         Fare fare = new Fare(totalDistance);
 
