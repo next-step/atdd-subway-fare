@@ -68,7 +68,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getInt("duration")).isNotNull();
-        assertThat(response.jsonPath().getInt("fare")).isNotNull();
+        assertThat(response.jsonPath().getDouble("fare")).isNotNull();
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
