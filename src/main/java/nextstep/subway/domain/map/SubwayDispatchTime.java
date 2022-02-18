@@ -40,7 +40,7 @@ public class SubwayDispatchTime {
         if (waitingTimestamp == 0) {
             return takeTime;
         }
-        return takeTime.plusSeconds(waitingTimestamp / 1000);
+        return takeTime.plusSeconds((intervalTimsStamp - waitingTimestamp) / 1000);
     }
 
     private long localTimeToTimestamp(LocalTime time) {

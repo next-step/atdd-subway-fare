@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
+
+import nextstep.subway.domain.map.Groups;
 import nextstep.subway.domain.map.SubwayDispatchTime;
 
 @Embeddable
@@ -172,16 +174,18 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    @Deprecated
     public LocalDateTime arrivalTime(LocalDateTime takeTime) {
-        SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        return dispatchTime.findArrivalTime(takeTime, durations());
-    }
+        Groups<Line, Section> groups = new Groups<>();
+        for (Section groupSection : sections) {
+            groups.put(groupSection.getLine(), groupSection);
+        }
 
-    public LocalDateTime arrivalTimeRefactor(LocalDateTime takeTime) {
-        // 1. 라인별로 Path를 쪼갠다.
-        SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        return dispatchTime.findArrivalTime(takeTime, durations());
+        LocalDateTime ongoingTime = takeTime;
+        for (List<Section> eachGroup : groups) {
+            SubwayDispatchTime dispatchTime = dispatchTime(eachGroup.get(0));
+            ongoingTime = dispatchTime.findArrivalTime(ongoingTime, durations(eachGroup));
+        }
+        return ongoingTime;
     }
 
     private SubwayDispatchTime dispatchTime(Section section) {
@@ -189,7 +193,7 @@ public class Sections {
                       .getDispatchTime();
     }
 
-    private List<Integer> durations() {
+    private List<Integer> durations(List<Section> sections) {
         return sections.stream()
                        .map(Section::getDuration)
                        .collect(Collectors.toList());

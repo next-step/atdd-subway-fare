@@ -112,13 +112,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다.")
+    @DisplayName("여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역으로 환승 할 때")
     @Test
     void findPathByArrivalTimeWithManyLine() {
         // Given
-        Long 강남역_다음_역 = 지하철역_생성_요청("강남역_다음_역").jsonPath().getLong("id");
+        Long 양재역_다음_역 = 지하철역_생성_요청("양재역_다음_역").jsonPath().getLong("id");
         지하철_노선에_지하철_구간_생성_요청(
-            이호선, createSectionCreateParams(강남역, 강남역_다음_역, 1, 1)
+            신분당선, createSectionCreateParams(양재역, 양재역_다음_역, 1, 1)
         );
 
         // When
@@ -126,17 +126,17 @@ class PathAcceptanceTest extends AcceptanceTest {
             LocalDate.now(), LocalTime.of(10, 0)
         );
         ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
-            RestAssured.given().log().all(), 남부터미널역, 강남역_다음_역, 출발_시각
+            RestAssured.given().log().all(), 교대역, 양재역_다음_역, 출발_시각
         );
 
         // Then
         LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 15)
+            LocalDate.now(), LocalTime.of(10, 14)
         );
         가장_빠른_도착_경로_조회_성공(
             response,
-            9, 5, 1250, 가장_빠른_도착_일시,
-            남부터미널역, 교대역, 강남역, 강남역_다음_역
+            17, 6, 1450, 가장_빠른_도착_일시,
+            교대역, 강남역, 양재역, 양재역_다음_역
         );
     }
 }

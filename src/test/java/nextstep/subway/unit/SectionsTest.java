@@ -57,13 +57,13 @@ public class SectionsTest {
     }
 
     @CsvSource(value = {
-        "10:00 -> 10:24"
+        "10:00 -> 10:23"
     }, delimiterString = " -> ")
     @DisplayName("서로 다른 노선을 가지고 있는 지하철역으로만 이루어진 Sections의 도착 시간 찾기 - 운행 시간 이내")
     @ParameterizedTest
     void arrivalTimeCase4(LocalTime startTime, LocalTime expectedTime) {
         Sections sections = createTwoLineSections();
-        assertThat(sections.arrivalTimeRefactor(today(startTime)))
+        assertThat(sections.arrivalTime(today(startTime)))
             .isEqualTo(today(expectedTime));
     }
 

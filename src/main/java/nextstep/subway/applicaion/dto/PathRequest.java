@@ -1,16 +1,21 @@
 package nextstep.subway.applicaion.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class PathRequest {
     private long source;
     private long target;
-    @DateTimeFormat(iso = ISO.DATE_TIME)
     private LocalDateTime time;
 
-    public PathRequest(long source, long target, LocalDateTime time) {
+    @JsonCreator
+    public PathRequest(long source, long target, @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime time) {
         this.source = source;
         this.target = target;
         this.time = time;

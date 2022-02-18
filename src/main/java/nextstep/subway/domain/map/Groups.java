@@ -1,10 +1,12 @@
 package nextstep.subway.domain.map;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
-public class Groups<K, E> {
+public class Groups<K, E> implements Iterable<List<E>>{
     private final List<List<E>> groups;
     private K previousKey;
 
@@ -31,5 +33,11 @@ public class Groups<K, E> {
 
     public int size() {
         return groups.size();
+    }
+
+
+    @Override
+    public Iterator<List<E>> iterator() {
+        return groups.iterator();
     }
 }
