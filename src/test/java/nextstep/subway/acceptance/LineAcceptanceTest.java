@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,8 @@ class LineAcceptanceTest extends AcceptanceTest {
         미금역 = 지하철역_생성_조회_요청(미금역_이름);
         params = 노선_생성_Param_생성(신분당선_이름, 신분당선_색,
                 강남역.getId(), 정자역.getId(),
-                DISTANCE, DURATION);
+                DISTANCE, DURATION,
+                BigDecimal.ZERO);
     }
 
     /**

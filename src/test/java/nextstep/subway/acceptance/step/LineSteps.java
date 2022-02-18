@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,14 @@ public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color,
                                                              long upStationId, long downStationId,
                                                              int distance, int duration) {
-        Map<String, String> params = 노선_생성_Param_생성(name, color, upStationId, downStationId, distance, duration);
+        return 지하철_노선_생성_요청(name, color, upStationId, downStationId, distance, duration, BigDecimal.ZERO);
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color,
+                                                             long upStationId, long downStationId,
+                                                             int distance, int duration,
+                                                             BigDecimal fare) {
+        Map<String, String> params = 노선_생성_Param_생성(name, color, upStationId, downStationId, distance, duration, fare);
 
         return RestAssured
                 .given().log().all()
@@ -76,7 +84,8 @@ public class LineSteps {
 
     public static Map<String, String> 노선_생성_Param_생성(String name, String color,
                                                      long upStationId, long downStationId,
-                                                     int distance, int duration) {
+                                                     int distance, int duration,
+                                                     BigDecimal fare) {
         Map<String, String> params = new HashMap();
         params.put("name", name);
         params.put("color", color);
@@ -84,6 +93,7 @@ public class LineSteps {
         params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", String.valueOf(distance));
         params.put("duration", String.valueOf(duration));
+        params.put("fare", fare.toString());
 
         return params;
     }

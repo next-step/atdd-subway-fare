@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.FavoriteSteps.*;
@@ -77,7 +78,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams = LineSteps.노선_생성_Param_생성(name, color, upStation, downStation, distance, duration);
+        Map<String, String> lineCreateParams = LineSteps.노선_생성_Param_생성(name, color, upStation, downStation, distance, duration, BigDecimal.ZERO);
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
