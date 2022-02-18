@@ -63,7 +63,7 @@ public class SectionsTest {
     @ParameterizedTest
     void arrivalTimeCase4(LocalTime startTime, LocalTime expectedTime) {
         Sections sections = createTwoLineSections();
-        assertThat(sections.arrivalTime(today(startTime)))
+        assertThat(sections.arrivalTimeRefactor(today(startTime)))
             .isEqualTo(today(expectedTime));
     }
 

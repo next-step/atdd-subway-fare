@@ -172,19 +172,26 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
+    @Deprecated
     public LocalDateTime arrivalTime(LocalDateTime takeTime) {
         SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
         return dispatchTime.findArrivalTime(takeTime, durations());
+    }
+
+    public LocalDateTime arrivalTimeRefactor(LocalDateTime takeTime) {
+        // 1. 라인별로 Path를 쪼갠다.
+        SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
+        return dispatchTime.findArrivalTime(takeTime, durations());
+    }
+
+    private SubwayDispatchTime dispatchTime(Section section) {
+        return section.getLine()
+                      .getDispatchTime();
     }
 
     private List<Integer> durations() {
         return sections.stream()
                        .map(Section::getDuration)
                        .collect(Collectors.toList());
-    }
-
-    private SubwayDispatchTime dispatchTime(Section section) {
-        return section.getLine()
-                      .getDispatchTime();
     }
 }
