@@ -9,19 +9,14 @@ public class Path {
         this.sections = sections;
     }
 
-    public Sections getSections() {
-        return sections;
-    }
-
-    public int extractDistance() {
-        return sections.totalDistance();
-    }
-
     public List<Station> getStations() {
         return sections.getStations();
     }
 
-    public int extractDuration() {
-        return sections.totalDuration();
-    }
+    public int extractDistance() { return sections.totalDistance(); }
+
+    public int extractDuration() { return sections.totalDuration(); }
+
+    public int extractFee() { return sections.totalFee(); }
+
 }
