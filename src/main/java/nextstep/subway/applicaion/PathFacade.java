@@ -3,6 +3,7 @@ package nextstep.subway.applicaion;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.function.Function;
+import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
@@ -28,16 +29,14 @@ public class PathFacade {
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPathByDuration(
-        long source, long target, FareDiscountCondition fareDiscountPolicy) {
+    public PathResponse findPathByDuration(PathRequest request, FareDiscountCondition fareDiscountPolicy) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(edge -> (double) edge.getSection().getDuration());
-        return findPathByOneField(source, target, fareDiscountPolicy, graph);
+        return findPathByOneField(request.getSource(), request.getTarget(), fareDiscountPolicy, graph);
     }
 
-    public PathResponse findPathByDistance(
-        long source, long target, FareDiscountCondition fareDiscountPolicy) {
+    public PathResponse findPathByDistance(PathRequest request, FareDiscountCondition fareDiscountPolicy) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(edge -> (double) edge.getSection().getDistance());
-        return findPathByOneField(source, target, fareDiscountPolicy, graph);
+        return findPathByOneField(request.getSource(), request.getTarget(), fareDiscountPolicy, graph);
     }
 
     private PathResponse findPathByOneField(
@@ -47,13 +46,12 @@ public class PathFacade {
         return PathResponse.of(path, calculateFare(path, fareDiscountPolicy));
     }
 
-    public PathResponse findPathByArrivalTime(
-        long source, long target, FareDiscountCondition fareDiscountPolicy, LocalDateTime time) {
+    public PathResponse findPathByArrivalTime(PathRequest request, FareDiscountCondition fareDiscountPolicy) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(edge -> (double) edge.getSection().getDuration());
 
-        SourceTarget sourceTarget = findSourceTarget(source, target);
+        SourceTarget sourceTarget = findSourceTarget(request.getSource(), request.getTarget());
         Path fastestPath = subwayMap.findPaths(graph, sourceTarget.source, sourceTarget.target)
-                                    .fastestPath(time);
+                                    .fastestPath(request.getTime());
         return PathResponse.of(fastestPath, calculateFare(fastestPath, fareDiscountPolicy));
     }
 

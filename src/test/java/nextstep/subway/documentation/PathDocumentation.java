@@ -39,7 +39,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDistance() {
-        when(pathFacade.findPathByDistance(anyLong(), anyLong(), any()))
+        when(pathFacade.findPathByDistance(any(), any()))
             .thenReturn(createPathResponse(100, 200, 10000));
 
         PathStep.두_역의_최단_거리_경로_조회를_요청(
@@ -50,7 +50,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void pathByDuration() {
-        when(pathFacade.findPathByDuration(anyLong(), anyLong(), any()))
+        when(pathFacade.findPathByDuration(any(), any()))
             .thenReturn(createPathResponse(200, 100, 20000));
 
         PathStep.두_역의_최소_시간_경로_조회를_요청(
@@ -62,7 +62,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void pathByArrivalTime() {
         LocalDateTime arrivalTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 10));
-        when(pathFacade.findPathByArrivalTime(anyLong(), anyLong(), any(), any()))
+        when(pathFacade.findPathByArrivalTime(any(), any()))
             .thenReturn(createPathResponse(200, 100, 20000, arrivalTime));
 
         PathStep.가장_빠른_도착_경로_조회를_요청(

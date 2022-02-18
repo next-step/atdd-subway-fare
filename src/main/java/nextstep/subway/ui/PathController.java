@@ -29,25 +29,19 @@ public class PathController {
 
     @GetMapping("distance")
     public ResponseEntity<PathResponse> findPathByDistance(@AuthenticationPrincipal Optional<LoginMember> loginMember, PathRequest request) {
-        PathResponse pathResponse = pathFacade.findPathByDistance(
-            request.getSource(), request.getTarget(), fareDiscountPolicy(loginMember)
-        );
+        PathResponse pathResponse = pathFacade.findPathByDistance(request, fareDiscountPolicy(loginMember));
         return ResponseEntity.ok(pathResponse);
     }
 
     @GetMapping("duration")
     public ResponseEntity<PathResponse> findPathByDuration(@AuthenticationPrincipal Optional<LoginMember> loginMember, PathRequest request) {
-        PathResponse pathResponse = pathFacade.findPathByDuration(
-            request.getSource(), request.getTarget(), fareDiscountPolicy(loginMember)
-        );
+        PathResponse pathResponse = pathFacade.findPathByDuration(request, fareDiscountPolicy(loginMember));
         return ResponseEntity.ok(pathResponse);
     }
 
     @GetMapping("arrival-time")
     public ResponseEntity<PathResponse> findPathByArrivalTime(@AuthenticationPrincipal Optional<LoginMember> loginMember, PathRequest request) {
-        PathResponse pathResponse = pathFacade.findPathByArrivalTime(
-            request.getSource(), request.getTarget(), fareDiscountPolicy(loginMember), request.getTime()
-        );
+        PathResponse pathResponse = pathFacade.findPathByArrivalTime(request, fareDiscountPolicy(loginMember));
         return ResponseEntity.ok(pathResponse);
     }
 
