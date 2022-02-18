@@ -1,6 +1,6 @@
-package nextstep.subway.path.dto;
+package nextstep.subway.path.domain;
 
-import nextstep.subway.path.domain.FarePolicy;
+import nextstep.subway.path.dto.FarePolicyRequest;
 
 import java.util.Arrays;
 
