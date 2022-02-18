@@ -47,10 +47,6 @@ public class Sections {
         return sections.isEmpty();
     }
 
-    Station getDownStation(int sectionIndex) {
-        return sections.get(sectionIndex).getDownStation();
-    }
-
     int size() {
         return sections.size();
     }
@@ -64,15 +60,19 @@ public class Sections {
     }
 
     private void validateAddSectionStationNotExistInSection(Section section) {
-        if (!getUpStations().contains(section.getUpStation()) &&
-                !getUpStations().contains(section.getDownStation()) &&
-                !getDownStations().contains(section.getUpStation()) &&
-                !getDownStations().contains(section.getDownStation()) &&
-                !sections.isEmpty()) {
+        if (isNotExistsStationInSection(section)) {
             throw new SectionException(
                     String.format("상행역과 하행역 모두 구간에 존재하지 않는 역입니다. 상행역 = %s, 하행역 = %s",
                             section.getUpStation().getName(), section.getDownStation().getName()));
         }
+    }
+
+    private boolean isNotExistsStationInSection(Section section) {
+        return !getUpStations().contains(section.getUpStation()) &&
+                !getUpStations().contains(section.getDownStation()) &&
+                !getDownStations().contains(section.getUpStation()) &&
+                !getDownStations().contains(section.getDownStation()) &&
+                !sections.isEmpty();
     }
 
     private void validateOneSection() {
