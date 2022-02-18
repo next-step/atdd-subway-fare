@@ -1,10 +1,15 @@
 package nextstep.subway.domain;
 
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
+@Embeddable
 public class Fare {
 
     private BigDecimal fare;
+
+    protected Fare() {
+    }
 
     private Fare(BigDecimal fare) {
         this.fare = fare;
