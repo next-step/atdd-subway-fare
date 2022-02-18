@@ -14,7 +14,7 @@ public class Member extends BaseEntity {
     private Long id;
     private String email;
     private String password;
-    private Integer age;
+    private Integer age = 20;
 
     public Member() {
     }
