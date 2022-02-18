@@ -124,17 +124,25 @@ public class Sections {
     }
 
     /**
-     * 상행 종점 구간의 하행 종점역 부터 시작하여 추가되는 하행 종점역과 각 구간의 상행역이 같으면 각 구간의 하행역을 추가한다.
-     * @param stations : getFirstSection()에서 가져온 상행 종점 구간의 상행 종점역과 하행 종점역
+     * 상행 종점 구간의 하행역 부터 시작하여 추가되는 하행 종점역과 각 구간의 상행역이 같으면 각 구간의 하행역을 추가한다.
+     * @param stations : getFirstSection()에서 가져온 상행 종점 구간의 상행 종점역과 하행역
      */
     private void addEndDownStation(List<Station> stations) {
+        Station endDownStation = stations.get(stations.size() - 1);
         for (int i = 0; i < stations.size(); i++) {
-            for (Section section : sections) {
-                Station endDownStation = stations.get(stations.size() - 1);
-                if (endDownStation.equals(section.getUpStation())) {
-                    stations.add(section.getDownStation());
-                }
-            }
+            addDownStations(stations, endDownStation);
+        }
+    }
+
+    private void addDownStations(List<Station> stations, Station endDownStation) {
+        for (Section section : sections) {
+            addDownStation(stations, endDownStation, section);
+        }
+    }
+
+    private void addDownStation(List<Station> stations, Station endDownStation, Section section) {
+        if (endDownStation.equals(section.getUpStation())) {
+            stations.add(section.getDownStation());
         }
     }
 
