@@ -58,7 +58,7 @@ class FavoritesServiceTest {
     @Test
     void getFavorites() {
         // given
-        LoginMember loginMember = new LoginMember(MEMBER_ID, "email", "password", 31);
+        LoginMember loginMember = new LoginMember(MEMBER_ID, EMAIL, PASSWORD, AGE);
 
         Favorites favorites1 = new Favorites(1L, member, 교대역, 강남역);
         Favorites favorites2 = new Favorites(2L, member, 교대역, 역삼역);

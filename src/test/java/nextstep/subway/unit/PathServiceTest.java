@@ -44,6 +44,8 @@ class PathServiceTest {
     Section 교대역_남부터미널_구간;
     Section 남부터미널_양재역_구간;
     Section 강남역_양재역_구간;
+    Long 교대역_ID;
+    Long 양재역_ID;
 
     @BeforeEach
     void setUp() {
@@ -66,6 +68,9 @@ class PathServiceTest {
         삼호선.addSection(남부터미널_양재역_구간);
         신분당선.addSection(강남역_양재역_구간);
         pathService = new PathService(lineRepository, stationService);
+
+        교대역_ID = 1L;
+        양재역_ID = 3L;
     }
 
     @DisplayName("최단 경로 조회")
@@ -73,11 +78,11 @@ class PathServiceTest {
     void findPath() {
         // given
         when(lineRepository.findAll()).thenReturn(Arrays.asList(이호선, 삼호선, 신분당선));
-        when(stationService.findById(1L)).thenReturn(교대역);
-        when(stationService.findById(3L)).thenReturn(양재역);
+        when(stationService.findById(교대역_ID)).thenReturn(교대역);
+        when(stationService.findById(양재역_ID)).thenReturn(양재역);
 
         // when
-        PathResponse path = pathService.findPath(1L, 3L, PathType.DISTANCE);
+        PathResponse path = pathService.findPath(교대역_ID, 양재역_ID, PathType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactly(

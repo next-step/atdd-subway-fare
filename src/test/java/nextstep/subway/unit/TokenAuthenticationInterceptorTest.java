@@ -29,6 +29,7 @@ class TokenAuthenticationInterceptorTest {
     private static final String EMAIL = "email@email.com";
     private static final String PASSWORD = "password";
     private static final int AGE = 20;
+    public static final Long MEMBER_ID = 1L;
     public static final String JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.ih1aovtQShabQ7l0cINw4k1fagApg3qLWiB8Kt59Lno";
 
     @Test
@@ -52,7 +53,7 @@ class TokenAuthenticationInterceptorTest {
         JwtTokenProvider jwtTokenProvider = mock(JwtTokenProvider.class);
         AuthenticationInterceptor interceptor = new TokenAuthenticationInterceptor(userDetailsService, jwtTokenProvider, new ObjectMapper());
 
-        when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(new LoginMember(1L, EMAIL, PASSWORD, AGE));
+        when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(new LoginMember(MEMBER_ID, EMAIL, PASSWORD, AGE));
         when(jwtTokenProvider.createToken(anyString())).thenReturn(JWT_TOKEN);
 
         AuthenticationToken authenticationToken = new AuthenticationToken(EMAIL, PASSWORD);
