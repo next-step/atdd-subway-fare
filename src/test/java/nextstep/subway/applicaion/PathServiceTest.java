@@ -1,12 +1,15 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.NoLoginMember;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +106,48 @@ class PathServiceTest {
     void findPath_distance() {
         // when
         PathResponse response = pathService.findPath(교대역.getId(), 양재역.getId());
+
+        // then
+        assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(2_250));
+    }
+
+    @DisplayName("최단거리 경로의 어린이 요금 조회")
+    @ValueSource(ints = {6, 7, 8, 10, 11, 12})
+    @ParameterizedTest
+    void findPath_distance_kids(int age) {
+        // given
+        LoginMember member = new LoginMember(1L, "mail", "pwd", age);
+
+        // when
+        PathResponse response = pathService.findPath2(member, 교대역.getId(), 양재역.getId());
+
+        // then
+        assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(1_300));
+    }
+
+    @DisplayName("최단거리 경로의 청소년 요금 조회")
+    @ValueSource(ints = {13, 14, 15, 17, 18})
+    @ParameterizedTest
+    void findPath_distance_teen(int age) {
+        // given
+        LoginMember member = new LoginMember(1L, "mail", "pwd", age);
+
+        // when
+        PathResponse response = pathService.findPath2(member, 교대역.getId(), 양재역.getId());
+
+        // then
+        assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(1_870));
+    }
+
+    @DisplayName("최단거리 경로의 기본 요금 조회 - 로그인 안 한 경우")
+    @ValueSource(ints = {13, 14, 15, 17, 18})
+    @ParameterizedTest
+    void findPath_distance_noLogin(int age) {
+        // given
+        LoginMember member = NoLoginMember.MEMBER;
+
+        // when
+        PathResponse response = pathService.findPath2(member, 교대역.getId(), 양재역.getId());
 
         // then
         assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(2_250));
