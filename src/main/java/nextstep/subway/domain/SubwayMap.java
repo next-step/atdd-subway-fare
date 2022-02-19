@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private PathType type;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(List<Line> lines, PathType type) {
         this.lines = lines;
+        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
@@ -55,7 +57,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, it.getWeightValue(type));
                 });
     }
 
@@ -67,7 +69,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, it.getWeightValue(type));
                 });
     }
 }

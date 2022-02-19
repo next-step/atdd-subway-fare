@@ -74,4 +74,14 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
+    public int getWeightValue(PathType type) {
+        int result;
+        if (type == PathType.DISTANCE) {
+            result = this.distance;
+        } else {
+            result = this.duration;
+        }
+        return result;
+    }
 }
