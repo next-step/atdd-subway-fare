@@ -53,8 +53,8 @@ public class PathSteps {
     }
 
     private static RequestParametersSnippet getRequestFieldsSnippets() {
-        return requestParameters(parameterWithName("source").description("출발 지점"),
-                parameterWithName("target").description("도착 지점"),
+        return requestParameters(parameterWithName("source").description("출발역 ID"),
+                parameterWithName("target").description("도착역 ID"),
                 parameterWithName("type").description("검색 유형"));
     }
 
