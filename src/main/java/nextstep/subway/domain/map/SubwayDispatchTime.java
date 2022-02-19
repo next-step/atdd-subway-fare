@@ -6,6 +6,11 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * SubwayDispatchTime 객체는 입력한 출발 시간으로 부터 도착 시간을 구해주는 객체 입니다.
+ *
+ * 최대한 작은 문제만을 다뤄 단순화 하기 위해 시간 이외의 객체는 알지 못하도록 설계 했습니다.
+ * */
 public class SubwayDispatchTime {
     private final LocalTime startTime;
     private final LocalTime endTime;

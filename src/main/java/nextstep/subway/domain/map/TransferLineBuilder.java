@@ -8,6 +8,13 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 
+/**
+ * TransferLineBuilder 객체는 TransferLine 생성 과정을 추상화한 객체 입니다.
+ * 환승 타이밍을 기준으로 같은 노선을 가진 Section 들을 TransferLine 로 묶어 반환합니다.
+ *
+ * Path.findArrivalTime 메서드 내에서 TransferLine 를 생성 한다면 SCP 위반이라고 생각해
+ * TransferLine 생성 과정을 추상화 하기 위해 작성 했습니다.
+ * */
 public class TransferLineBuilder {
     private final List<TransferLine> values;
     private Line previousLine;
