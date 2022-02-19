@@ -12,14 +12,13 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회_요청;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -49,24 +48,16 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        // when
         ExtractableResponse<Response> response = 두_역의_경로_조회_요청(
                 pathDocumentationConfig(RestAssured.given(spec), "path"),
                 1L, 2L, "DISTANCE");
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
     void pathDuration() {
-        // when
         ExtractableResponse<Response> response = 두_역의_경로_조회_요청(
                 pathDocumentationConfig(RestAssured.given(spec), "pathDuration"),
                 1L, 2L, "DURATION");
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     private RequestSpecification pathDocumentationConfig(RequestSpecification given, String documentPath) {
