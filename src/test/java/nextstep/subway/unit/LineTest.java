@@ -30,8 +30,8 @@ class LineTest {
 
     @Test
     void addSection() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         assertThat(line.getStations()).containsExactly(강남역, 역삼역, 삼성역);
     }
@@ -69,8 +69,8 @@ class LineTest {
     @DisplayName("목록 앞에 추가할 경우")
     @Test
     void addSectionInFront() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 강남역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(삼성역, 강남역, 5, 2);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -83,8 +83,8 @@ class LineTest {
     @DisplayName("목록 뒤에 추가할 경우")
     @Test
     void addSectionBehind() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -96,8 +96,8 @@ class LineTest {
 
     @Test
     void getStations() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(강남역, 삼성역, 5, 2);
 
         List<Station> result = line.getStations();
 
@@ -107,16 +107,16 @@ class LineTest {
     @DisplayName("이미 존재하는 구간 추가 시 에러 발생")
     @Test
     void addSectionAlreadyIncluded() {
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 6);
 
-        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5))
+        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void removeSection() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         line.deleteSection(삼성역);
 
@@ -125,8 +125,8 @@ class LineTest {
 
     @Test
     void removeSectionInFront() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         line.deleteSection(강남역);
 
@@ -135,8 +135,8 @@ class LineTest {
 
     @Test
     void removeSectionInMiddle() {
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 6);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         line.deleteSection(역삼역);
 
@@ -146,7 +146,7 @@ class LineTest {
     @DisplayName("구간이 하나인 노선에서 역 삭제 시 에러 발생")
     @Test
     void removeSectionNotEndOfList() {
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 6);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
