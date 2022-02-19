@@ -18,29 +18,18 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
+    public PathResponse findPath(LoginMember loginMember, Long source, Long target) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayDistanceMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
-        Fare fare = pathFare(path);
+        Fare fare = pathFare(path, loginMember);
 
         return PathResponse.of(path, fare);
     }
 
-    public PathResponse findPath2(LoginMember loginMember, Long source, Long target) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayDistanceMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
-        Fare fare = pathFare2(path, loginMember);
-
-        return PathResponse.of(path, fare);
-    }
-
-    private Fare pathFare2(Path path, LoginMember loginMember) {
+    private Fare pathFare(Path path, LoginMember loginMember) {
         FarePolicyChain fareDistancePolicy = new FareDistancePolicy();
         FarePolicyChain fareLinePolicy = new FareLinePolicy();
         fareDistancePolicy.nextChain(fareLinePolicy);
@@ -48,14 +37,6 @@ public class PathService {
 
         FareAgeStrategy fareAgeStrategy = new FareAgeStrategy();
         return fareAgeStrategy.calculate(loginMember.getAge(), fare);
-    }
-
-    private Fare pathFare(Path path) {
-        FarePolicyChain fareDistancePolicy = new FareDistancePolicy();
-        FarePolicyChain fareLinePolicy = new FareLinePolicy();
-        fareDistancePolicy.nextChain(fareLinePolicy);
-
-        return fareDistancePolicy.calculate(path);
     }
 
 }

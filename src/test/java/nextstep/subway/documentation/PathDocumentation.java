@@ -41,7 +41,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         PathResponse 응답 = PathDocumentSteps.경로_조회_응답_생성(Arrays.asList(강남역, 판교역));
-        when(pathService.findPath2(any(), anyLong(), anyLong()))
+        when(pathService.findPath(any(), anyLong(), anyLong()))
                 .thenReturn(응답);
 
         RestAssured

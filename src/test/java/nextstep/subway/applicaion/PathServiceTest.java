@@ -46,6 +46,7 @@ class PathServiceTest {
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+    LoginMember 어른멤버;
 
 
     /**
@@ -58,6 +59,7 @@ class PathServiceTest {
     @BeforeEach
     void setUp() {
         pathService = new PathService(lineService, stationService);
+        어른멤버 = new LoginMember(1L, "mail", "pwd", 20);
 
         강남역 = new Station("강남역");
         양재역 = new Station("양재역");
@@ -89,7 +91,7 @@ class PathServiceTest {
     @Test
     void findPath_short() {
         // when
-        PathResponse response = pathService.findPath(교대역.getId(), 양재역.getId());
+        PathResponse response = pathService.findPath(어른멤버, 교대역.getId(), 양재역.getId());
 
         // then
         List<String> 역이름 = response.getStations()
@@ -105,7 +107,7 @@ class PathServiceTest {
     @Test
     void findPath_distance() {
         // when
-        PathResponse response = pathService.findPath(교대역.getId(), 양재역.getId());
+        PathResponse response = pathService.findPath(어른멤버, 교대역.getId(), 양재역.getId());
 
         // then
         assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(2_250));
@@ -119,7 +121,7 @@ class PathServiceTest {
         LoginMember member = new LoginMember(1L, "mail", "pwd", age);
 
         // when
-        PathResponse response = pathService.findPath2(member, 교대역.getId(), 양재역.getId());
+        PathResponse response = pathService.findPath(member, 교대역.getId(), 양재역.getId());
 
         // then
         assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(1_300));
@@ -133,7 +135,7 @@ class PathServiceTest {
         LoginMember member = new LoginMember(1L, "mail", "pwd", age);
 
         // when
-        PathResponse response = pathService.findPath2(member, 교대역.getId(), 양재역.getId());
+        PathResponse response = pathService.findPath(member, 교대역.getId(), 양재역.getId());
 
         // then
         assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(1_870));
@@ -147,7 +149,7 @@ class PathServiceTest {
         LoginMember member = NoLoginMember.MEMBER;
 
         // when
-        PathResponse response = pathService.findPath2(member, 교대역.getId(), 양재역.getId());
+        PathResponse response = pathService.findPath(member, 교대역.getId(), 양재역.getId());
 
         // then
         assertThat(response.getFare()).isEqualTo(BigDecimal.valueOf(2_250));

@@ -21,7 +21,6 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember,
                                                  @RequestParam Long source,
                                                  @RequestParam Long target) {
-//        return ResponseEntity.ok(pathService.findPath(source, target));
-        return ResponseEntity.ok(pathService.findPath2(loginMember, source, target));
+        return ResponseEntity.ok(pathService.findPath(loginMember, source, target));
     }
 }
