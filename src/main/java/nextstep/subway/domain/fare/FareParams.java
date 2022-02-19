@@ -14,6 +14,10 @@ public class FareParams {
         this.age = age;
     }
 
+    public static FareParams of(int distance, int extraCharge, int age) {
+        return new FareParams(distance, extraCharge, age);
+    }
+
     public static FareParams of(Path path, int age) {
         return new FareParams(path.extractDistance(), path.extraCharge(), age);
     }

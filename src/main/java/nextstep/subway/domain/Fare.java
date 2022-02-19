@@ -16,8 +16,7 @@ public class Fare {
         return new Fare(FREE_OF_FARE);
     }
 
-    public static Fare distance(int distance) {
-        int distanceFare = FareType.fare(distance);
+    public static Fare distance(int distanceFare) {
         return new Fare(distanceFare);
     }
 
@@ -26,9 +25,8 @@ public class Fare {
         return this;
     }
 
-    public Fare discount(int age) {
-        DiscountPolicy discountPolicy = DiscountPolicy.from(age);
-        this.discountFare = discountPolicy.discountFare(this.distanceFare);
+    public Fare discount(int discountFare) {
+        this.discountFare = discountFare;
         return this;
     }
 

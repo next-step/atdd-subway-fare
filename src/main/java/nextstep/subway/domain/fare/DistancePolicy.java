@@ -1,6 +1,7 @@
 package nextstep.subway.domain.fare;
 
 import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.FareType;
 
 public class DistancePolicy implements FarePolicy {
 
@@ -17,7 +18,8 @@ public class DistancePolicy implements FarePolicy {
 
     @Override
     public Fare apply(Fare fare, FareParams fareParams) {
-        return Fare.distance(fareParams.getDistance());
+        int distanceFare = FareType.fare(fareParams.getDistance());
+        return Fare.distance(distanceFare);
     }
 
 }

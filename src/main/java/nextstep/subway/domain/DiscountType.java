@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-public enum DiscountPolicy {
+public enum DiscountType {
     CHILD(age -> age >= 6 && age < 13, 0.5),
     YOUTH(age -> age >= 13 && age < 20, 0.2),
     ADULT(age -> age >= 20, 0);
@@ -13,24 +13,24 @@ public enum DiscountPolicy {
     private final Predicate<Integer> predicate;
     private final double discountRate;
 
-    DiscountPolicy(Predicate<Integer> predicate, double discountRate) {
+    DiscountType(Predicate<Integer> predicate, double discountRate) {
         this.predicate = predicate;
         this.discountRate = discountRate;
     }
 
-    public static DiscountPolicy from(int age) {
+    public static DiscountType from(int age) {
         return Arrays.stream(values())
-                .filter(discountPolicy -> discountPolicy.predicate.test(age))
+                .filter(discountType -> discountType.predicate.test(age))
                 .findFirst()
                 .orElse(ADULT);
     }
 
-    public int discountFare(int fare) {
+    public int discountFare(int distanceFare) {
         if (this == ADULT) {
             return (int) discountRate;
         }
 
-        return (int) ((fare - DEDUCTION) * discountRate);
+        return (int) ((distanceFare - DEDUCTION) * discountRate);
     }
 
 

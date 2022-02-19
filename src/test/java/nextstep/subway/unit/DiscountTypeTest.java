@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.DiscountPolicy;
+import nextstep.subway.domain.DiscountType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -10,23 +10,23 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DiscountPolicyTest {
+class DiscountTypeTest {
 
     @ParameterizedTest(name = "할인 정책 조회 [{arguments}]")
     @MethodSource
-    void constructor(int age, DiscountPolicy expected) {
+    void constructor(int age, DiscountType expected) {
         //when
-        DiscountPolicy discountPolicy = DiscountPolicy.from(age);
+        DiscountType discountType = DiscountType.from(age);
 
         //then
-        assertThat(discountPolicy).isEqualTo(expected);
+        assertThat(discountType).isEqualTo(expected);
     }
 
     private static Stream<Arguments> constructor() {
         return Stream.of(
-                Arguments.of(10, DiscountPolicy.CHILD),
-                Arguments.of(15, DiscountPolicy.YOUTH),
-                Arguments.of(20, DiscountPolicy.ADULT)
+                Arguments.of(10, DiscountType.CHILD),
+                Arguments.of(15, DiscountType.YOUTH),
+                Arguments.of(20, DiscountType.ADULT)
         );
     }
 
@@ -38,10 +38,10 @@ class DiscountPolicyTest {
     })
     void discount(int age, int expected) {
         //given
-        DiscountPolicy discountPolicy = DiscountPolicy.from(age);
+        DiscountType discountType = DiscountType.from(age);
 
         //when
-        int fare = discountPolicy.discountFare(2_000);
+        int fare = discountType.discountFare(2_000);
 
         //then
         assertThat(fare).isEqualTo(expected);

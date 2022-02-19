@@ -1,5 +1,6 @@
 package nextstep.subway.domain.fare;
 
+import nextstep.subway.domain.DiscountType;
 import nextstep.subway.domain.Fare;
 
 public class DiscountPolicy implements FarePolicy {
@@ -17,7 +18,9 @@ public class DiscountPolicy implements FarePolicy {
 
     @Override
     public Fare apply(Fare fare, FareParams fareParams) {
-        return fare.discount(fareParams.getAge());
+        DiscountType discountType = DiscountType.from(fareParams.getAge());
+        int discountFare = discountType.discountFare(fare.getDistanceFare());
+        return fare.discount(discountFare);
     }
 
 }
