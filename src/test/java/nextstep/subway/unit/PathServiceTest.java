@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathServiceTest extends ServiceTestFixture {
+public class PathServiceTest extends PathServiceTestData {
     @Autowired
     private PathService pathService;
 

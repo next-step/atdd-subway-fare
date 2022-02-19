@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-public class ServiceTestFixture {
+public class PathServiceTestData {
     @Autowired
     protected StationRepository stationRepository;
     @Autowired
