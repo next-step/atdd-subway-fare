@@ -37,6 +37,7 @@ dependencies {
 	// rest docs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured:2.0.5.RELEASE'
+	testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'

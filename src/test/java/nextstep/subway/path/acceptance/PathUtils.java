@@ -21,10 +21,7 @@ public class PathUtils {
 
     public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathType type) {
         RequestSpecification requestSpecification = RestAssured.given().log().all();
-        Map<String, Object> params = new HashMap<>();
-        params.put("source", source);
-        params.put("target", target);
-        params.put("type", type.name());
+        Map<String, Object> params = 경로_조회_요청_파라미터(source, target, type);
 
         return 두_역의_경로_조회를_요청(requestSpecification, params);
     }
@@ -36,11 +33,21 @@ public class PathUtils {
                 .then().log().all().extract();
     }
 
+    public static Map<String, Object> 경로_조회_요청_파라미터(Long source, Long target, PathType type) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("source", source);
+        params.put("target", target);
+        params.put("type", type.name());
+
+        return params;
+    }
+
     public static void 경로_조회_성공(ExtractableResponse<Response> response, Iterable<Long> stations) {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stations);
-            assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-            assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+            assertThat(response.jsonPath().getInt("distance")).isEqualTo(66);
+            assertThat(response.jsonPath().getInt("duration")).isEqualTo(66);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
         });
          /*
             어느 리뷰어님의 리뷰를 보니 하나의 테스트에는 하나의 검증이 있는 것을 추천한다면서
