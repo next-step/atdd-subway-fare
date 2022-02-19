@@ -61,12 +61,12 @@ public class Section extends DefaultWeightedEdge {
         return duration;
     }
 
-    public int getWeightOf(String type) {
-        if ("DISTANCE".equalsIgnoreCase(type)) {
+    public int getWeightOf(FindType type) {
+        if (type.isDistance()) {
             return distance;
         }
 
-        if ("DURATION".equalsIgnoreCase(type)) {
+        if (type.isDuration()) {
             return duration;
         }
 
