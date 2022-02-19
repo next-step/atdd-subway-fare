@@ -5,9 +5,9 @@ public enum PathType {
     DURATION(Section::getDuration),
     ;
 
-    private PathCostFunction pathCostFunction;
+    private final PathCostFunction pathCostFunction;
 
-    PathType(PathCostFunction pathCostFunction) {
+    PathType(final PathCostFunction pathCostFunction) {
         this.pathCostFunction = pathCostFunction;
     }
 
