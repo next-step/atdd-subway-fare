@@ -23,12 +23,7 @@ public class PathFinder {
     }
 
     public List<Station> shortsPathStations(Station source, Station target, PathType type) {
-        GraphPath<Station, DefaultWeightedEdge> path;
-        try {
-            path = type.getPath(dijkstraShortestPath, dijkstraShortestPathDuration, source, target);
-        } catch (IllegalArgumentException e) {
-            throw new PathException("노선에 등록되지 않은 역입니다.");
-        }
+        GraphPath<Station, DefaultWeightedEdge> path = type.getPath(dijkstraShortestPath, dijkstraShortestPathDuration, source, target);
         if (path == null) {
             throw new PathException("출발역과 도착역이 연결되어 있지 않습니다.");
         }

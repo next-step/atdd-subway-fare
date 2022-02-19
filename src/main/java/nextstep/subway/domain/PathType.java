@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.ui.exception.PathException;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -17,7 +18,17 @@ public enum PathType {
 
     public GraphPath<Station, DefaultWeightedEdge> getPath(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
                                                            DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration,
-                                                           Station source, Station target) throws IllegalArgumentException {
+                                                           Station source, Station target) {
+        try {
+            return getPathDistanceOrDuration(dijkstraShortestPath, dijkstraShortestPathDuration, source, target);
+        } catch (IllegalArgumentException e) {
+            throw new PathException("노선에 등록되지 않은 역입니다.");
+        }
+    }
+
+    private GraphPath<Station, DefaultWeightedEdge> getPathDistanceOrDuration(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
+                                                           DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration,
+                                                           Station source, Station target) {
         if (this.name().equals("DISTANCE")) {
             return dijkstraShortestPath.getPath(source, target);
         }
