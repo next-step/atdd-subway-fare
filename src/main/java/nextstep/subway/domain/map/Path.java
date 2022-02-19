@@ -32,8 +32,8 @@ public class Path {
 
     private LocalDateTime findArrivalTime(LocalDateTime takeTime) {
         LocalDateTime ongoingTime = takeTime;
-        List<TransferLine> lineTransferMediators = TransferLineBuilder.create(sections);
-        for (TransferLine eachTransferLine : lineTransferMediators) {
+        List<TransferLine> lineTransfers = TransferLineBuilder.create(sections);
+        for (TransferLine eachTransferLine : lineTransfers) {
             SubwayDispatchTime dispatchTime = eachTransferLine.firstDispatchTime();
             ongoingTime = dispatchTime.findArrivalTime(
                 ongoingTime, eachTransferLine.durations()
