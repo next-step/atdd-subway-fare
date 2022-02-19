@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private PathType type;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(List<Line> lines, PathType type) {
         this.lines = lines;
+        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
@@ -55,7 +57,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, valueByType(it));
                 });
     }
 
@@ -63,11 +65,15 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, valueByType(it));
                 });
+    }
+
+    private int valueByType(Section it) {
+        return type.value(it);
     }
 }
