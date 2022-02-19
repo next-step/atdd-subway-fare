@@ -24,7 +24,7 @@ class FareHandlerTest {
         int 거리_비례_요금 = fare.getDistanceFare();
         int 추가_요금 = fare.getExtraCharge();
         int 할인_금액 = fare.getDiscountFare();
-        int 합계_요금 = fare.totalFare();
+        int 합계_요금 = fare.getTotalFare();
 
         //then
         assertAll(

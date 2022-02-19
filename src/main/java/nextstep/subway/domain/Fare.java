@@ -7,9 +7,11 @@ public class Fare {
     private final int distanceFare;
     private int extraCharge;
     private int discountFare;
+    private int totalFare;
 
     private Fare(int distanceFare) {
         this.distanceFare = distanceFare;
+        this.totalFare = distanceFare;
     }
 
     public static Fare free() {
@@ -22,16 +24,14 @@ public class Fare {
 
     public Fare extraCharge(int extraCharge) {
         this.extraCharge = extraCharge;
+        this.totalFare = this.totalFare + extraCharge;
         return this;
     }
 
     public Fare discount(int discountFare) {
         this.discountFare = discountFare;
+        this.totalFare = this.totalFare - discountFare;
         return this;
-    }
-
-    public int totalFare() {
-        return distanceFare + extraCharge - discountFare;
     }
 
     public int getDistanceFare() {
@@ -44,5 +44,9 @@ public class Fare {
 
     public int getDiscountFare() {
         return discountFare;
+    }
+
+    public int getTotalFare() {
+        return totalFare;
     }
 }

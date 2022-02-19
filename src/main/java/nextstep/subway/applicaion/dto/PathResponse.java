@@ -34,7 +34,7 @@ public class PathResponse {
         int distanceFare = fare.getDistanceFare();
         int extraCharge = fare.getExtraCharge();
         int discount = fare.getDiscountFare();
-        int totalFare = fare.totalFare();
+        int totalFare = fare.getTotalFare();
 
         return new PathResponse(stations, distance, duration, distanceFare, extraCharge, discount, totalFare);
     }
