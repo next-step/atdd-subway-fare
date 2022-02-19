@@ -61,4 +61,16 @@ public class SubwayDispatchTime {
         }
         return arrivalDateTime;
     }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalTime getIntervalTime() {
+        return intervalTime;
+    }
 }

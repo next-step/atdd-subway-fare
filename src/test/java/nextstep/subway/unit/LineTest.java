@@ -185,4 +185,24 @@ class LineTest {
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("노선 내의 지하철 역을 기준으로 배차 시간을 반환")
+    @Test
+    void getDispatchTime() {
+        // Given
+        int 두번째_역으로_가는_시간 = 3;
+        Station 첫번째_역 = new Station("역1");
+        Station 두번째_역 = new Station("역2");
+        Station 세번째_역 = new Station("역3");
+        Line line = new Line("노선", "red", 0, START_TIME, END_TIME, INTERVAL_TIME);
+        line.addSection(첫번째_역, 두번째_역, 1, 두번째_역으로_가는_시간);
+        line.addSection(두번째_역, 세번째_역, 1, 5);
+
+        // When
+        LocalTime startTime = line.getDispatchTime(두번째_역)
+                                  .getStartTime();
+        // When, Then
+        LocalTime expectTime = START_TIME.plusMinutes(두번째_역으로_가는_시간);
+        assertThat(startTime).isEqualTo(expectTime);
+    }
 }

@@ -101,7 +101,6 @@ public class Line extends BaseEntity {
         sections.delete(station);
     }
 
-    // TODO :: 테스트 만들기
     public SubwayDispatchTime getDispatchTime(Station station) {
         LocalTime startTimeByStartStation = startTime;
 
