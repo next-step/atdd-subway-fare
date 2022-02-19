@@ -38,19 +38,19 @@ class SectionTest {
     @Test
     void updateAddLineBetweenSection() {
         // given
-        Section section1 = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
-        Section newSection = new Section(line, 가양역, 증미역, fourDistance, threeDuration);
+        Section section = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
+        Section betweenSection = new Section(line, 가양역, 증미역, fourDistance, threeDuration);
 
         // when
-        section1.updateAddLineBetweenSection(newSection);
+        section.updateAddLineBetweenSection(betweenSection);
 
         // then
-        assertThat(section1.getUpStation()).isEqualTo(증미역);
-        assertThat(section1.getDownStation()).isEqualTo(등촌역);
-        assertThat(section1.getDistance()).isEqualTo(6);
-        assertThat(newSection.getDistance()).isEqualTo(4);
-        assertThat(section1.getDuration()).isEqualTo(2);
-        assertThat(newSection.getDuration()).isEqualTo(3);
+        assertThat(section.getUpStation()).isEqualTo(증미역);
+        assertThat(section.getDownStation()).isEqualTo(등촌역);
+        assertThat(section.getDistance()).isEqualTo(6);
+        assertThat(betweenSection.getDistance()).isEqualTo(4);
+        assertThat(section.getDuration()).isEqualTo(2);
+        assertThat(betweenSection.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("구간 사이의 역 삭제 시 다음 구간의 상행역에 삭제된 하행역으로 변경한다.")

@@ -42,19 +42,19 @@ class LineTest {
     @Test
     void addLineBetweenSection() {
         // given
-        Section section1 = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
-        Section section2 = new Section(line, 가양역, 증미역, fourDistance, threeDuration);
+        Section section = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
+        Section betweenSection = new Section(line, 가양역, 증미역, fourDistance, threeDuration);
 
         // when
-        line.addSection(section1);
-        line.addSection(section2);
+        line.addSection(section);
+        line.addSection(betweenSection);
 
         // then
         assertThat(line.sectionsSize()).isEqualTo(2);
-        assertThat(section1.getUpStation()).isEqualTo(증미역);
-        assertThat(section1.getDownStation()).isEqualTo(등촌역);
-        assertThat(section1.getDistance()).isEqualTo(6);
-        assertThat(section2.getDistance()).isEqualTo(4);
+        assertThat(section.getUpStation()).isEqualTo(증미역);
+        assertThat(section.getDownStation()).isEqualTo(등촌역);
+        assertThat(section.getDistance()).isEqualTo(6);
+        assertThat(betweenSection.getDistance()).isEqualTo(4);
     }
 
     @DisplayName("지하철 노선의 하행 종점역에 구간을 추가")
@@ -123,13 +123,13 @@ class LineTest {
     @Test
     void exceptionAddLineBetweenSection() {
         // given
-        Section section1 = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
-        Section section2 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
-        line.addSection(section1);
+        Section section = new Section(line, 가양역, 등촌역, tenDistance, fiveDuration);
+        Section betweenSection = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        line.addSection(section);
 
 
         // when
-        assertThatThrownBy(() -> line.addSection(section2))
+        assertThatThrownBy(() -> line.addSection(betweenSection))
                 // then
                 .isInstanceOf(SectionException.class)
                 .hasMessage("새로 추가되는 구간 거리는 기존 구간의 거리 이상일 수 없습니다. 기존 구간 거리 = 10, 신규 구간 거리 = 10");
@@ -139,12 +139,12 @@ class LineTest {
     @Test
     void exceptionAddSectionDuplicate() {
         // given
-        Section section1 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
-        Section section2 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
-        line.addSection(section1);
+        Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        Section newSection = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        line.addSection(section);
 
         // when
-        assertThatThrownBy(() -> line.addSection(section2))
+        assertThatThrownBy(() -> line.addSection(newSection))
                 // then
                 .isInstanceOf(SectionException.class)
                 .hasMessage("상행역과 하행역 모두 등록된 역입니다. 상행역 = 가양역, 하행역 = 증미역");
@@ -154,12 +154,12 @@ class LineTest {
     @Test
     void exceptionAddSectionNotFoundStation() {
         // given
-        Section section1 = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
-        Section section2 = new Section(line, 등촌역, 신목동역, tenDistance, fiveDuration);
-        line.addSection(section1);
+        Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        Section newSection = new Section(line, 등촌역, 신목동역, tenDistance, fiveDuration);
+        line.addSection(section);
 
         // when
-        assertThatThrownBy(() -> line.addSection(section2))
+        assertThatThrownBy(() -> line.addSection(newSection))
                 // then
                 .isInstanceOf(SectionException.class)
                 .hasMessage("상행역과 하행역 모두 구간에 존재하지 않는 역입니다. 상행역 = 등촌역, 하행역 = 신목동역");
