@@ -15,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Arrays;
 
 import static nextstep.subway.documentation.step.PathDocumentSteps.경로_조회_문서화;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +41,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         PathResponse 응답 = PathDocumentSteps.경로_조회_응답_생성(Arrays.asList(강남역, 판교역));
-        when(pathService.findPath(anyLong(), anyLong()))
+        when(pathService.findPath2(any(), anyLong(), anyLong()))
                 .thenReturn(응답);
 
         RestAssured
