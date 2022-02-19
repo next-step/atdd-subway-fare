@@ -43,14 +43,14 @@ public class LineService {
     }
 
     @Transactional(readOnly = true)
-    public List<Line> findLines() {
-        return lineRepository.findAll();
+    public List<Line> findLinesWithSections() {
+        return lineRepository.findAllWithSections();
     }
 
     public List<LineResponse> findLineResponses() {
-        return findLines().stream()
-                .map(LineResponse::of)
-                .collect(Collectors.toList());
+        return findLinesWithSections().stream()
+                                      .map(LineResponse::of)
+                                      .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

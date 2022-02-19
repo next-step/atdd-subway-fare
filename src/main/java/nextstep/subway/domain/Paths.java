@@ -13,9 +13,7 @@ public class Paths {
     }
 
     public Path fastestPath(LocalDateTime time) {
-        for (Path eachPath : paths) {
-            eachPath.applyArrivalTime(time);
-        }
+        paths.forEach(eachPath -> eachPath.applyArrivalTime(time));
         return paths.stream()
                     .max(Comparator.comparing(Path::getArrivalTime))
                     .orElseThrow(IllegalArgumentException::new);

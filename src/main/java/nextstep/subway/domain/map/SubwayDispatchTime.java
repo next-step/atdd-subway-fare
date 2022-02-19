@@ -1,13 +1,9 @@
 package nextstep.subway.domain.map;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 public class SubwayDispatchTime {
     private final LocalTime startTime;
@@ -29,24 +25,17 @@ public class SubwayDispatchTime {
     }
 
     private LocalDateTime takableTime(LocalDateTime takeTime) {
-        final LocalDateTime takableTime = takableTimestampByInterval(takeTime);
-        return takableTimeByStartEnd(takableTime);
+        final LocalDateTime takableTime = takableTimeByStartEnd(takeTime);
+        return takableTimestampByInterval(takableTime);
     }
 
     private LocalDateTime takableTimestampByInterval(LocalDateTime takeTime) {
-        long takeTimestamp = localTimeToTimestamp(takeTime.toLocalTime());
-        long intervalTimsStamp = localTimeToTimestamp(intervalTime);
-        long waitingTimestamp = takeTimestamp % intervalTimsStamp;
-        if (waitingTimestamp == 0) {
-            return takeTime;
+        LocalTime ongoingTime = startTime;
+        while(ongoingTime.isBefore(takeTime.toLocalTime())) {
+            ongoingTime = ongoingTime.plusHours(intervalTime.getHour())
+                                     .plusMinutes(intervalTime.getMinute());
         }
-        return takeTime.plusSeconds((intervalTimsStamp - waitingTimestamp) / 1000);
-    }
-
-    private long localTimeToTimestamp(LocalTime time) {
-        return TimeUnit.MILLISECONDS.convert(
-            time.getHour() * 60 + time.getMinute(), TimeUnit.MINUTES
-        );
+        return LocalDateTime.of(takeTime.toLocalDate(), ongoingTime);
     }
 
     private LocalDateTime takableTimeByStartEnd(LocalDateTime takableTime) {

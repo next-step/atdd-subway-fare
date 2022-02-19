@@ -37,6 +37,12 @@ class PathAcceptanceTest extends AcceptanceTest {
      * *3호선*                   *신분당선*
      * |                        |
      * 남부터미널역  --- *3호선* ---   양재
+     *
+     * 교대역 -> 강남역 = 거리 6, 소요 시간 2, 배차 시간 10분
+     * 강남역 -> 양재역 = 거리 10, 소요 시간 3, 배차 시간 20분
+     *
+     * 교대역 -> 남부터미널역 = 거리 2, 소요 시간 2, 배차 시간 30분
+     * 남부터미널역 -> 양재역 = 거리 10, 소요 시간 4, 배치 시간 30분
      */
     @BeforeEach
     public void setUp() {
@@ -58,11 +64,15 @@ class PathAcceptanceTest extends AcceptanceTest {
             createLineCreateParams("신분당선", "red", 강남역, 양재역, 10, 3, 0,
                                    LocalTime.of(5, 0),
                                    LocalTime.of(23, 0),
-                                   LocalTime.of(0, 10)
+                                   LocalTime.of(0, 20)
             )
         );
         삼호선 = 지하철_노선_생성_요청_하고_ID_반환(
-            createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 2, 0)
+            createLineCreateParams("3호선", "orange", 교대역, 남부터미널역, 2, 2, 0,
+                                   LocalTime.of(5, 0),
+                                   LocalTime.of(23, 0),
+                                   LocalTime.of(0, 30)
+            )
         );
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 10, 4));
@@ -119,45 +129,34 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역으로 환승 할 때")
     @Test
     void findPathByArrivalTimeWithManyLineCase1() {
-        // Given
-        Long 양재역_다음_역 = 지하철역_생성_요청("양재역_다음_역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(
-            신분당선, createSectionCreateParams(양재역, 양재역_다음_역, 1, 1)
-        );
-
         // When
         LocalDateTime 출발_시각 = LocalDateTime.of(
             LocalDate.now(), LocalTime.of(10, 0)
         );
         ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
-            RestAssured.given().log().all(), 교대역, 양재역_다음_역, 출발_시각
+            RestAssured.given().log().all(), 교대역, 양재역, 출발_시각
         );
 
         // Then
         LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 14)
+            LocalDate.now(), LocalTime.of(10, 23)
         );
         가장_빠른_도착_경로_조회_성공(
             response,
-            17, 6, 1450, 가장_빠른_도착_일시,
-            교대역, 강남역, 양재역, 양재역_다음_역
+            16, 5, 1450, 가장_빠른_도착_일시,
+            교대역, 강남역, 양재역
         );
     }
 
     /**
-     *
-     * 10시 2분에 강남역에 도착 한다. -- 강남역에 탑승 할 수 있는 열차가 11분에 도착한다.
-     * 10시 14분에 양재역에 도착한다.
-     * 10시 15분에 양재역 다음역에 도착한다.
+     * 교대역 -> 강남역 10시 2분에 도착 한다.
+     * - 강남역에 탑승 할 수 있는 열차가 21분에 도착한다. (강남역 이전역 -> 강남역 = 1분)
+     * 강남역 -> 양재역 10시 24분 도착한다.
      * */
     @DisplayName("여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역이 아닌 역으로 환승 할 때")
     @Test
     void findPathByArrivalTimeWithManyLineCase2() {
         // Given
-        Long 양재역_다음_역 = 지하철역_생성_요청("양재역_다음_역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(
-            신분당선, createSectionCreateParams(양재역, 양재역_다음_역, 1, 1)
-        );
         Long 강남역_이전_역 = 지하철역_생성_요청("강남역_이전_역").jsonPath().getLong("id");
         지하철_노선에_지하철_구간_생성_요청(
             신분당선, createSectionCreateParams(강남역_이전_역, 강남역, 1, 1)
@@ -165,20 +164,20 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // When
         LocalDateTime 출발_시각 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 0)
+            LocalDate.now(), LocalTime.of(5, 0)
         );
         ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
-            RestAssured.given().log().all(), 교대역, 양재역_다음_역, 출발_시각
+            RestAssured.given().log().all(), 교대역, 양재역, 출발_시각
         );
 
         // Then
         LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 15)
+            LocalDate.now(), LocalTime.of(5, 24)
         );
         가장_빠른_도착_경로_조회_성공(
             response,
-            17, 6, 1450, 가장_빠른_도착_일시,
-            교대역, 강남역, 양재역, 양재역_다음_역
+            16, 5, 1450, 가장_빠른_도착_일시,
+            교대역, 강남역, 양재역
         );
     }
 }

@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -100,7 +101,16 @@ public class Line extends BaseEntity {
         sections.delete(station);
     }
 
-    public SubwayDispatchTime getDispatchTime() {
-        return new SubwayDispatchTime(startTime, endTime, intervalTime);
+    // TODO :: 테스트 만들기
+    public SubwayDispatchTime getDispatchTime(Station station) {
+        LocalTime startTimeByStartStation = startTime;
+
+        List<Integer> durations = sections.durations();
+        int startStationIndex = sections.indexOfUpStation(station);
+        for (int i = 0; i < startStationIndex; i++) {
+            int duration = durations.get(i);
+            startTimeByStartStation = startTimeByStartStation.plusMinutes(duration);
+        }
+        return new SubwayDispatchTime(startTimeByStartStation, endTime, intervalTime);
     }
 }

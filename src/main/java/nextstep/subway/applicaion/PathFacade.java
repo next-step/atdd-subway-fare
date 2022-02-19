@@ -1,7 +1,5 @@
 package nextstep.subway.applicaion;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.function.Function;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -56,7 +54,7 @@ public class PathFacade {
     }
 
     private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Function<SectionEdge, Double> getWeightStrategy) {
-        return SubwayMapGraphFactory.newOneFieldWeightGraph(lineService.findLines(), getWeightStrategy);
+        return SubwayMapGraphFactory.newOneFieldWeightGraph(lineService.findLinesWithSections(), getWeightStrategy);
     }
 
     private SourceTarget findSourceTarget(long source, long target) {

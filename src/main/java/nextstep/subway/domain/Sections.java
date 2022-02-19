@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -15,7 +17,7 @@ import nextstep.subway.domain.map.Groups;
 import nextstep.subway.domain.map.SubwayDispatchTime;
 
 @Embeddable
-public class Sections {
+public class Sections implements Iterable<Section> {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -174,28 +176,24 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public LocalDateTime arrivalTime(LocalDateTime takeTime) {
-        Groups<Line, Section> groups = new Groups<>();
-        for (Section groupSection : sections) {
-            groups.put(groupSection.getLine(), groupSection);
-        }
+    public List<Integer> durations() {
+        List<Integer> durations = new ArrayList<>();
 
-        LocalDateTime ongoingTime = takeTime;
-        for (List<Section> eachGroup : groups) {
-            SubwayDispatchTime dispatchTime = dispatchTime(eachGroup.get(0));
-            ongoingTime = dispatchTime.findArrivalTime(ongoingTime, durations(eachGroup));
+        Optional<Section> ongoingSection = findSectionAsUpStation(findFirstUpStation());
+        while(ongoingSection.isPresent()) {
+            Section eachSection = ongoingSection.get();
+            durations.add(eachSection.getDuration());
+            ongoingSection = findSectionAsUpStation(eachSection.getDownStation());
         }
-        return ongoingTime;
+        return durations;
     }
 
-    private SubwayDispatchTime dispatchTime(Section section) {
-        return section.getLine()
-                      .getDispatchTime();
+    public int indexOfUpStation(Station station) {
+        return getStations().indexOf(station);
     }
 
-    private List<Integer> durations(List<Section> sections) {
-        return sections.stream()
-                       .map(Section::getDuration)
-                       .collect(Collectors.toList());
+    @Override
+    public Iterator<Section> iterator() {
+        return sections.iterator();
     }
 }
