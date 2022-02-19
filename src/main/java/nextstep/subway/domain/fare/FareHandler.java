@@ -10,9 +10,9 @@ public class FareHandler {
     private final List<FarePolicy> policies = new ArrayList<>();
 
     public FareHandler() {
-        this.policies.add(new DistancePolicy());
-        this.policies.add(new ExtraChargePolicy());
-        this.policies.add(new DiscountPolicy());
+        this.policies.add(DistancePolicy.getInstance());
+        this.policies.add(ExtraChargePolicy.getInstance());
+        this.policies.add(DiscountPolicy.getInstance());
     }
 
     public Fare calculate(FareParams fareParams) {
