@@ -11,25 +11,12 @@ import java.util.Map;
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Map<String, Object> params) {
         return RestAssured
                 .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("pathType", PathType.DISTANCE)
-                .when().get("/paths")
-                .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("pathType", PathType.DURATION)
-                .when().get("/paths")
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/paths")
                 .then().log().all().extract();
     }
 
@@ -52,6 +39,14 @@ public class PathSteps {
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
         params.put("duration", duration + "");
+        return params;
+    }
+
+    public static Map<String, Object> createPathParams(Long source, Long target, PathType pathType) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("source", source);
+        params.put("target", target);
+        params.put("pathType", pathType);
         return params;
     }
 
