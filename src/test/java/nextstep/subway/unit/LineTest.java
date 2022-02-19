@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LineTest {
     @Test
@@ -34,14 +36,19 @@ class LineTest {
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 5);
-        line.addSection(강남역, 삼성역, 5, 5);
+        line.addSection(강남역, 삼성역, 5, 3);
 
-        assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+
+        assertAll(
+                () -> assertThat(line.getSections().size()).isEqualTo(2),
+                () -> assertThat(section.getDownStation()).isEqualTo(삼성역),
+                () -> assertThat(section.getDistance()).isEqualTo(5),
+                () -> assertThat(section.getDuration()).isEqualTo(3)
+        );
+
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
@@ -53,14 +60,18 @@ class LineTest {
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 5);
-        line.addSection(삼성역, 역삼역, 5, 5);
+        line.addSection(삼성역, 역삼역, 5, 3);
 
-        assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
-        assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+
+        assertAll(
+                () -> assertThat(line.getSections().size()).isEqualTo(2),
+                () -> assertThat(section.getDownStation()).isEqualTo(삼성역),
+                () -> assertThat(section.getDistance()).isEqualTo(5),
+                () -> assertThat(section.getDuration()).isEqualTo(2)
+        );
     }
 
     @DisplayName("목록 앞에 추가할 경우")
