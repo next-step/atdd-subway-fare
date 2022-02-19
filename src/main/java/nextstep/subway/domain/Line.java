@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Entity
 public class Line extends BaseEntity {
@@ -53,8 +54,8 @@ public class Line extends BaseEntity {
         }
     }
 
-    public void addSection(Station upStation, Station downStation, int distance, int duration) {
-        sections.add(new Section(this, upStation, downStation, distance, duration));
+    public void addSection(Supplier<Section> supplier) {
+        sections.add(supplier.get());
     }
 
     public List<Station> getStations() {
