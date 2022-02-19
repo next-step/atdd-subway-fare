@@ -41,7 +41,7 @@ class DiscountPolicyTest {
         DiscountPolicy discountPolicy = DiscountPolicy.from(age);
 
         //when
-        int fare = discountPolicy.applyDiscount(2_000);
+        int fare = discountPolicy.discountFare(2_000);
 
         //then
         assertThat(fare).isEqualTo(expected);

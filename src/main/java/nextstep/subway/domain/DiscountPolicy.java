@@ -25,7 +25,7 @@ public enum DiscountPolicy {
                 .orElse(ADULT);
     }
 
-    public int applyDiscount(int fare) {
+    public int discountFare(int fare) {
         if (this == ADULT) {
             return (int) discountRate;
         }
