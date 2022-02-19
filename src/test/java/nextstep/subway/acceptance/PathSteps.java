@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
@@ -33,12 +34,13 @@ public class PathSteps {
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_경로_조회(Long source, Long target, PathType pathType) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
+                .queryParam("type", pathType)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
