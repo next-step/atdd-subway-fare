@@ -198,11 +198,9 @@ class LineTest {
         line.addSection(첫번째_역, 두번째_역, 1, 두번째_역으로_가는_시간);
         line.addSection(두번째_역, 세번째_역, 1, 5);
 
-        // When
-        LocalTime startTime = line.getDispatchTime(두번째_역)
-                                  .getStartTime();
         // When, Then
         LocalTime expectTime = START_TIME.plusMinutes(두번째_역으로_가는_시간);
-        assertThat(startTime).isEqualTo(expectTime);
+        assertThat(line.dispatchTime(두번째_역)
+                       .matchStartTime(expectTime)).isTrue();
     }
 }

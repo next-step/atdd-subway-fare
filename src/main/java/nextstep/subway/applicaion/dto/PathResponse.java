@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 
 @JsonInclude(Include.NON_NULL)
 public class PathResponse {

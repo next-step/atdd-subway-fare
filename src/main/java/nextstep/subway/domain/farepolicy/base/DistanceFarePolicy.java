@@ -1,6 +1,6 @@
 package nextstep.subway.domain.farepolicy.base;
 
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 import nextstep.subway.domain.farepolicy.DistanceFareRange;
 
 public abstract class DistanceFarePolicy implements FarePolicy {

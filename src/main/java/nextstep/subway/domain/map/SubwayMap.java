@@ -2,8 +2,7 @@ package nextstep.subway.domain.map;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Paths;
+
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;

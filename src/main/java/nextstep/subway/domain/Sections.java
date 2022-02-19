@@ -1,20 +1,14 @@
 package nextstep.subway.domain;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-
-import nextstep.subway.domain.map.Groups;
-import nextstep.subway.domain.map.SubwayDispatchTime;
 
 @Embeddable
 public class Sections implements Iterable<Section> {

@@ -2,9 +2,8 @@ package nextstep.subway.domain.farepolicy;
 
 import java.util.List;
 
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 import nextstep.subway.domain.farepolicy.base.FarePolicy;
-import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
 
 public class FareCalculator implements FarePolicy {
     private final List<FarePolicy> farePolicies;

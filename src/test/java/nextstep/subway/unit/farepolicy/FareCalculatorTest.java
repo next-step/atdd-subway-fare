@@ -15,12 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import nextstep.subway.FarePolicyConfig;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.farepolicy.FareCalculator;
-import nextstep.subway.domain.farepolicy.discountcondition.FareDiscountCondition;
-import nextstep.subway.domain.farepolicy.discountcondition.KidsFareDiscountCondition;
 
 @DisplayName("경로 요금 계산 결과 테스트")
 @ExtendWith(MockitoExtension.class)

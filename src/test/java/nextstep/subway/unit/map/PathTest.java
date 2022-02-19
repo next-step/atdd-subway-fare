@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.unit.map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
@@ -129,7 +129,7 @@ public class PathTest {
 
     private Line createLine(LocalTime startTime, LocalTime endTime, LocalTime intervalTime) {
         Line lineStub = mock(Line.class);
-        when(lineStub.getDispatchTime(any()))
+        when(lineStub.dispatchTime(any()))
             .thenReturn(new SubwayDispatchTime(startTime, endTime, intervalTime));
         return lineStub;
     }

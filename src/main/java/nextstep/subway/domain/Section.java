@@ -4,6 +4,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
+import nextstep.subway.domain.map.SubwayDispatchTime;
+
 @Entity
 public class Section extends DefaultWeightedEdge {
     @Id
@@ -80,5 +82,9 @@ public class Section extends DefaultWeightedEdge {
 
     public int getAdditionalFare() {
         return line.getAdditionalFare();
+    }
+
+    public SubwayDispatchTime dispatchTime() {
+        return line.dispatchTime(upStation);
     }
 }

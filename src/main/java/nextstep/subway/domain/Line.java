@@ -2,7 +2,6 @@ package nextstep.subway.domain;
 
 import javax.persistence.*;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -101,7 +100,7 @@ public class Line extends BaseEntity {
         sections.delete(station);
     }
 
-    public SubwayDispatchTime getDispatchTime(Station station) {
+    public SubwayDispatchTime dispatchTime(Station station) {
         LocalTime startTimeByStartStation = startTime;
 
         List<Integer> durations = sections.durations();

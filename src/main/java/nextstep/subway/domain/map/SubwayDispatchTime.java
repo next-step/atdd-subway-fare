@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 public class SubwayDispatchTime {
     private final LocalTime startTime;
@@ -17,19 +18,19 @@ public class SubwayDispatchTime {
     }
 
     public LocalDateTime findArrivalTime(LocalDateTime takeTime, List<Integer> durations) {
-        LocalDateTime ongoingDateTime = takableTime(takeTime);
+        LocalDateTime ongoingDateTime = nextTakeTime(takeTime);
         for (int eachDuration : durations) {
             ongoingDateTime = takeTrain(ongoingDateTime, eachDuration);
         }
         return ongoingDateTime;
     }
 
-    private LocalDateTime takableTime(LocalDateTime takeTime) {
-        final LocalDateTime takableTime = takableTimeByStartEnd(takeTime);
-        return takableTimestampByInterval(takableTime);
+    private LocalDateTime nextTakeTime(LocalDateTime takeTime) {
+        final LocalDateTime takableTime = calculateIfWaiting(takeTime);
+        return calculateIfOutOfServiceTime(takableTime);
     }
 
-    private LocalDateTime takableTimestampByInterval(LocalDateTime takeTime) {
+    private LocalDateTime calculateIfWaiting(LocalDateTime takeTime) {
         LocalTime ongoingTime = startTime;
         while(ongoingTime.isBefore(takeTime.toLocalTime())) {
             ongoingTime = ongoingTime.plusHours(intervalTime.getHour())
@@ -38,7 +39,7 @@ public class SubwayDispatchTime {
         return LocalDateTime.of(takeTime.toLocalDate(), ongoingTime);
     }
 
-    private LocalDateTime takableTimeByStartEnd(LocalDateTime takableTime) {
+    private LocalDateTime calculateIfOutOfServiceTime(LocalDateTime takableTime) {
         LocalDate takeDay = takableTime.toLocalDate();
         LocalDateTime todayStartTime = LocalDateTime.of(takeDay, startTime);
         if (takableTime.isBefore(todayStartTime)) {
@@ -62,15 +63,25 @@ public class SubwayDispatchTime {
         return arrivalDateTime;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
+    public boolean matchStartTime(LocalTime startTime) {
+        return this.startTime.equals(startTime);
     }
 
-    public LocalTime getEndTime() {
-        return endTime;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SubwayDispatchTime that = (SubwayDispatchTime)o;
+        return Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime) && Objects.equals(
+            intervalTime, that.intervalTime);
     }
 
-    public LocalTime getIntervalTime() {
-        return intervalTime;
+    @Override
+    public int hashCode() {
+        return Objects.hash(startTime, endTime, intervalTime);
     }
 }

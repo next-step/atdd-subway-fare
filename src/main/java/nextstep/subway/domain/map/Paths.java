@@ -1,9 +1,10 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.map;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+
+import nextstep.subway.domain.map.Path;
 
 public class Paths {
     private final List<Path> paths;
@@ -12,7 +13,7 @@ public class Paths {
         this.paths = paths;
     }
 
-    public Path fastestPath(LocalDateTime time) {
+    public Path fastestPathForArrivalTime(LocalDateTime time) {
         paths.forEach(eachPath -> eachPath.applyArrivalTime(time));
         return paths.stream()
                     .max(Comparator.comparing(Path::getArrivalTime))
