@@ -129,7 +129,7 @@ public class Sections {
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
                     upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration()
+                    upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);
