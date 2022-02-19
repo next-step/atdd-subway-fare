@@ -19,8 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    private static final String DISTANCE_TYPE = "distance";
-    private static final String DURATION_TYPE = "duration";
+    private static final String DISTANCE_TYPE = "DISTANCE";
+    private static final String DURATION_TYPE = "DURATION";
 
     private Long 교대역;
     private Long 강남역;

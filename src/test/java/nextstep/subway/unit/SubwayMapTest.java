@@ -1,10 +1,7 @@
 package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +12,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
-    private static final String DISTANCE_TYPE = "distance";
-    private static final String DURATION_TYPE = "duration";
-
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -47,7 +41,7 @@ class SubwayMapTest {
     void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, DISTANCE_TYPE);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -61,7 +55,7 @@ class SubwayMapTest {
     void findPathByDuration() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, DURATION_TYPE);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DURATION);
 
         // when
         Path path = subwayMap.findPath(강남역, 남부터미널역);
@@ -75,7 +69,7 @@ class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, DISTANCE_TYPE);
+        SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);

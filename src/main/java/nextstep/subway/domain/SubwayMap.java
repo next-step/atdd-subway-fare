@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private static final String DISTANCE_TYPE = "distance";
-
     private List<Line> lines;
-    private String type;
+    private PathType type;
 
-    public SubwayMap(List<Line> lines, String type) {
+    public SubwayMap(List<Line> lines, PathType type) {
         this.lines = lines;
         this.type = type;
     }
@@ -76,6 +74,6 @@ public class SubwayMap {
     }
 
     private int valueByType(Section it) {
-        return DISTANCE_TYPE.equals(type) ? it.getDistance() : it.getDuration();
+        return type.value(it);
     }
 }
