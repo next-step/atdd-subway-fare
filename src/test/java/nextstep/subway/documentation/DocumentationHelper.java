@@ -7,7 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 
-import static nextstep.subway.documentation.DocumentationFilterTemplate.*;
+import static nextstep.subway.documentation.DocumentationFilterTemplate.경로_조회_템플릿;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.http.HttpStatus.OK;
