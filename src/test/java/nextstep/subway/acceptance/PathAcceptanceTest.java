@@ -23,13 +23,8 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    private Long 교대역;
-    private Long 강남역;
-    private Long 양재역;
-    private Long 남부터미널역;
-    private Long 이호선;
-    private Long 신분당선;
-    private Long 삼호선;
+    private Long 교대역, 강남역, 강남역_다음_역, 양재역, 남부터미널역;
+    private Long 이호선, 신분당선, 삼호선;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -50,6 +45,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
+        강남역_다음_역 = 지하철역_생성_요청("강남역_다음_역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
@@ -75,107 +71,88 @@ class PathAcceptanceTest extends AcceptanceTest {
             )
         );
 
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 강남역_다음_역, 1, 8));
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 10, 4));
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+
+    /**
+     *
+     * Feature: 지하철 경로 탐색
+     *
+     *  Scenario: 기준을 변경해가며 경로를 탐색 한다.
+     *  Given   지하철 노선이 등록 되어 있고
+     *  And     지하철 노선에 지하철 역이 등록 되어있다.
+     *
+     *  When    두 역의 최단 거리 경로를 조회한다.
+     *  Then    두 역의 최단 거리 검색 결과가 조회된다.
+     *          [교대역-양재역 =
+     *          거리 : 12 / 소요 시간 : 6 / 요금 : 1,350원 / 경로 : 교대역, 남부터미널역, 양재역]
+     *
+     *  When    두 역의 최소 시간 경로를 조회한다.
+     *  Then    두 역의 최소 시간 검색 결과가 조회된다.
+     *          [교대역-양재역 =
+     *          거리 : 16 / 소요 시간 : 5 / 요금 : 1,450원 / 경로 : 교대역, 강남역, 양재역]
+     *
+     *  When    한 종류의 노선에서 도착 시간을 기준으로 가장 빠른 도착 경로를 조회한다.
+     *          [교대역-강남역 다음 역, 10시 0분 출발 =
+     *          도착 : 10시 10분 / 거리 : 7 / 소요 시간 : 10 / 요금 : 1,250원 / 경로 : 교대역, 강남역, 강남역 다음 역]
+     *
+     *  When    여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역으로 환승 할 때
+     *  Then    [교대역-양재역, 10시 0분 출발 =
+     *          도착 : 10시 23분 / 거리 : 16 / 소요 시간 : 5 / 요금 : 1,450원 / 경로 : 교대역, 강남역, 양재역]
+     *
+     *  Given   신분당선에 강남역 이전 역이 등록 되어있다.
+     *  When    여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역이 아닌 역으로 환승 할 때
+     *  Then    [교대역-양재역, 10시 0분 출발 =
+     *          도착 : 10시 24분 / 거리 : 16 / 소요 시간 : 5 / 요금 : 1,450원 / 경로 : 교대역, 강남역, 양재역]
+     *
+     * */
+
+    @DisplayName("지하철 경로 탐색 인수 테스트 통합")
     @Test
-    void findPathByDistance() {
+    void findPath() {
+        // 두 역의 최단 거리 경로를 조회한다.
         경로_조회_성공(
             두_역의_최단_거리_경로_조회를_요청(교대역, 양재역),
             12, 6, 1350,
             교대역, 남부터미널역, 양재역
         );
-    }
 
-    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
-    @Test
-    void findPathByDuration() {
+        // 두 역의 최소 시간 경로를 조회한다.
         경로_조회_성공(
             두_역의_최소_시간_경로_조회를_요청(교대역, 양재역),
             16, 5,1450,
             교대역, 강남역, 양재역
         );
-    }
 
-    @DisplayName("한 종류의 노선에서 가장 빠른 도착 경로를 조회한다.")
-    @Test
-    void findPathByArrivalTimeWithOneLine() {
-        // Given
-        Long 강남역_다음_역 = 지하철역_생성_요청("강남역_다음_역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(
-            이호선, createSectionCreateParams(강남역, 강남역_다음_역, 1, 8)
-        );
-
-        // When
-        LocalDateTime 출발_시각 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 0)
-        );
-        ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
-            RestAssured.given().log().all(), 교대역, 강남역_다음_역, 출발_시각
-        );
-
-        // Then
-        LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 10)
-        );
+        // 한 종류의 노선에서 도착 시간을 기준으로 가장 빠른 도착 경로를 조회한다.
+        LocalDateTime 출발_시각 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
+        LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 10));
         가장_빠른_도착_경로_조회_성공(
-            response,
+            가장_빠른_도착_경로_조회를_요청(RestAssured.given().log().all(), 교대역, 강남역_다음_역, 출발_시각),
             7, 10, 1250, 가장_빠른_도착_일시,
             교대역, 강남역, 강남역_다음_역
         );
-    }
 
-    @DisplayName("여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역으로 환승 할 때")
-    @Test
-    void findPathByArrivalTimeWithManyLineCase1() {
-        // When
-        LocalDateTime 출발_시각 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 0)
-        );
-        ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
-            RestAssured.given().log().all(), 교대역, 양재역, 출발_시각
-        );
-
-        // Then
-        LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(10, 23)
-        );
+        // 여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역으로 환승 할 때
+        출발_시각 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
+        가장_빠른_도착_일시 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 23));
         가장_빠른_도착_경로_조회_성공(
-            response,
+            가장_빠른_도착_경로_조회를_요청(RestAssured.given().log().all(), 교대역, 양재역, 출발_시각),
             16, 5, 1450, 가장_빠른_도착_일시,
             교대역, 강남역, 양재역
         );
-    }
 
-    /**
-     * 교대역 -> 강남역 10시 2분에 도착 한다.
-     * - 강남역에 탑승 할 수 있는 열차가 21분에 도착한다. (강남역 이전역 -> 강남역 = 1분)
-     * 강남역 -> 양재역 10시 24분 도착한다.
-     * */
-    @DisplayName("여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역이 아닌 역으로 환승 할 때")
-    @Test
-    void findPathByArrivalTimeWithManyLineCase2() {
-        // Given
+        // Given 신분당선에 강남역 이전 역이 등록 되어있다.
         Long 강남역_이전_역 = 지하철역_생성_요청("강남역_이전_역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(
-            신분당선, createSectionCreateParams(강남역_이전_역, 강남역, 1, 1)
-        );
+        지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(강남역_이전_역, 강남역, 1, 1));
 
-        // When
-        LocalDateTime 출발_시각 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(5, 0)
-        );
-        ExtractableResponse<Response> response = 가장_빠른_도착_경로_조회를_요청(
-            RestAssured.given().log().all(), 교대역, 양재역, 출발_시각
-        );
-
-        // Then
-        LocalDateTime 가장_빠른_도착_일시 = LocalDateTime.of(
-            LocalDate.now(), LocalTime.of(5, 24)
-        );
+        // 여러 노선에 걸쳐 가장 빠른 도착 경로를 조회한다. - 다른 노선의 첫 역이 아닌 역으로 환승 할 때
+        출발_시각 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0));
+        가장_빠른_도착_일시 = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 24));
         가장_빠른_도착_경로_조회_성공(
-            response,
+            가장_빠른_도착_경로_조회를_요청(RestAssured.given().log().all(), 교대역, 양재역, 출발_시각),
             16, 5, 1450, 가장_빠른_도착_일시,
             교대역, 강남역, 양재역
         );
