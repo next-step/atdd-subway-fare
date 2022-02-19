@@ -25,13 +25,12 @@ public class PathResponse {
         this.totalFare = totalFare;
     }
 
-    public static PathResponse of(Path path, int age) {
+    public static PathResponse of(Path path, Fare fare) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        Fare fare = path.fare(age);
         int distanceFare = fare.getDistanceFare();
         int extraCharge = fare.getExtraCharge();
         int discount = fare.getDiscountFare();
