@@ -2,9 +2,6 @@ package nextstep.subway.documentation;
 
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -17,8 +14,6 @@ public final class DocumentationFilterTemplate {
 
     public static RestDocumentationFilter 경로_조회_템플릿() {
         return document(PATH_IDENTIFIER,
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
                 requestParameters(
                         parameterWithName("source").description("출발역"),
                         parameterWithName("target").description("도착역"),
