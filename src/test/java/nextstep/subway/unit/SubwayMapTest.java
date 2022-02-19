@@ -1,10 +1,7 @@
 package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -49,7 +46,7 @@ class SubwayMapTest {
     @Test
     void findPathByDistance() {
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, "DISTANCE");
+        Path path = subwayMap.findPath(교대역, 양재역, FindType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -58,7 +55,7 @@ class SubwayMapTest {
     @Test
     void findPathByDistanceOppositely() {
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, "DISTANCE");
+        Path path = subwayMap.findPath(양재역, 교대역, FindType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
@@ -67,7 +64,7 @@ class SubwayMapTest {
     @Test
     void findPathByDuration() {
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, "DURATION");
+        Path path = subwayMap.findPath(교대역, 양재역, FindType.DURATION);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -76,7 +73,7 @@ class SubwayMapTest {
     @Test
     void findPathByDurationOppositely() {
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, "DURATION");
+        Path path = subwayMap.findPath(양재역, 교대역, FindType.DURATION);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));

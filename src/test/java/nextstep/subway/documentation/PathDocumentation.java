@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.FindType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,7 @@ import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -44,7 +44,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "양재역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10, 6
         );
-        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(FindType.class))).thenReturn(pathResponse);
     }
 
     @Test

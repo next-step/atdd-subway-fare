@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.FindType;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class PathServiceTest extends ServiceTestFixture {
     @Test
     void findPathDistance() {
         // when
-        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), "DISTANCE");
+        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), FindType.DISTANCE);
 
         // then
         경로_조회됨(path, new Station[]{교대역, 남부터미널역, 양재역}, 8, 12);
@@ -27,7 +28,7 @@ public class PathServiceTest extends ServiceTestFixture {
     @Test
     void findPathDuration() {
         // when
-        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), "DURATION");
+        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), FindType.DURATION);
 
         // then
         경로_조회됨(path, new Station[]{교대역, 강남역, 양재역}, 15, 10);
