@@ -5,6 +5,7 @@ import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,13 @@ class LineServiceMockTest {
         삼성역 = new Station("삼성역");
         ReflectionTestUtils.setField(삼성역, "id", 3L);
         이호선 = new Line("2호선", "green");
-        이호선.addSection(강남역, 역삼역, 10, 1);
+        이호선.addSection(new Section.Builder()
+                                    .line(이호선)
+                                    .upStation(강남역)
+                                    .downStation(역삼역)
+                                    .distance(10)
+                                    .duration(1)
+                                    .build());
         ReflectionTestUtils.setField(이호선, "id", 1L);
     }
 

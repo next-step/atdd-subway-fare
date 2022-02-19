@@ -65,7 +65,12 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .map(it -> new Section.Builder()
+                                        .line(it.getLine())
+                                        .upStation(it.getUpStation())
+                                        .downStation(it.getDownStation())
+                                        .distance(it.getDistance())
+                                        .duration(it.getDuration()).build())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
