@@ -14,32 +14,32 @@ public class PathFinder {
     private final Lines lines;
 
     private final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath;
-    private final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration;
+    private final PathType type1;
 
-    public PathFinder(List<Line> lines) {
+    public PathFinder(List<Line> lines, PathType type1) {
         this.lines = new Lines(lines);
-        dijkstraShortestPath = createDijkstraShortestPath(PathType.DISTANCE);
-        dijkstraShortestPathDuration = createDijkstraShortestPath(PathType.DURATION);
+        this.type1 = type1;
+        dijkstraShortestPath = createDijkstraShortestPath();
     }
 
-    public List<Station> shortsPathStations(Station source, Station target, PathType type) {
-        GraphPath<Station, DefaultWeightedEdge> path = type.getPath(dijkstraShortestPath, dijkstraShortestPathDuration, source, target);
+    public List<Station> shortsPathStations(Station source, Station target) {
+        GraphPath<Station, DefaultWeightedEdge> path = type1.getPath(dijkstraShortestPath, source, target);
         if (path == null) {
             throw new PathException("출발역과 도착역이 연결되어 있지 않습니다.");
         }
         return path.getVertexList();
     }
 
-    public Path shortsPath(Station source, Station target, PathType type) {
-        List<Station> stations = shortsPathStations(source, target, type);
+    public Path shortsPath(Station source, Station target) {
+        List<Station> stations = shortsPathStations(source, target);
 
-        if (type == PathType.DISTANCE) {
-            return new Path(type.getPathWeight(dijkstraShortestPath, source, target), lines.pathTotalDuration(stations));
+        if (type1 == PathType.DISTANCE) {
+            return new Path(type1.getPathWeight(dijkstraShortestPath, source, target), lines.pathTotalDuration(stations));
         }
-        return new Path(lines.pathTotalDistance(stations), type.getPathWeight(dijkstraShortestPathDuration, source, target));
+        return new Path(lines.pathTotalDistance(stations), type1.getPathWeight(dijkstraShortestPath, source, target));
     }
 
-    private DijkstraShortestPath<Station, DefaultWeightedEdge> createDijkstraShortestPath(PathType type) {
+    private DijkstraShortestPath<Station, DefaultWeightedEdge> createDijkstraShortestPath() {
         Set<Station> stations = lines.getStations();
         List<Section> sections = lines.getSections();
 
@@ -48,24 +48,20 @@ public class PathFinder {
             graph.addVertex(station);
         }
 
-        type.setEdgeWeight(sections, graph);
+        type1.setEdgeWeight(sections, graph);
         return new DijkstraShortestPath<>(graph);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         PathFinder that = (PathFinder) o;
-        return Objects.equals(lines, that.lines) && Objects.equals(dijkstraShortestPath, that.dijkstraShortestPath) && Objects.equals(dijkstraShortestPathDuration, that.dijkstraShortestPathDuration);
+        return Objects.equals(lines, that.lines) && Objects.equals(dijkstraShortestPath, that.dijkstraShortestPath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lines, dijkstraShortestPath, dijkstraShortestPathDuration);
+        return Objects.hash(lines, dijkstraShortestPath);
     }
 }

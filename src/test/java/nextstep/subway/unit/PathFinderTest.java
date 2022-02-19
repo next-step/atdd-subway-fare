@@ -68,11 +68,11 @@ class PathFinderTest {
     void getShortsPathDistance() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder(lines);
+        PathFinder pathFinder = new PathFinder(lines, PathType.DISTANCE);
 
         // when
-        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역, PathType.DISTANCE);
-        Path path = pathFinder.shortsPath(교대역, 양재역, PathType.DISTANCE);
+        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역);
+        Path path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
         assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
@@ -85,11 +85,11 @@ class PathFinderTest {
     void getShortsPathDuration() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder(lines);
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역, PathType.DURATION);
-        Path path = pathFinder.shortsPath(교대역, 양재역, PathType.DURATION);
+        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역);
+        Path path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
         assertThat(stations).containsExactly(교대역, 강남역, 양재역);
@@ -102,11 +102,11 @@ class PathFinderTest {
     void notExistsStationInLine() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder(lines);
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
         Station 노선에_없는_역 = new Station("역삼역");
 
         // when
-        assertThatThrownBy(() -> pathFinder.shortsPathStations(교대역, 노선에_없는_역, PathType.DURATION))
+        assertThatThrownBy(() -> pathFinder.shortsPathStations(교대역, 노선에_없는_역))
                 // then
                 .isInstanceOf(PathException.class)
                 .hasMessage("노선에 등록되지 않은 역입니다.");

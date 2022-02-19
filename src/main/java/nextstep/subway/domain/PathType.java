@@ -7,44 +7,32 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
+import java.util.function.Function;
 
 public enum PathType {
-    DISTANCE("최단 거리"),
-    DURATION("최단 시간");
+    DISTANCE("최단 거리", Section::getDistance),
+    DURATION("최단 시간", Section::getDuration);
 
-    PathType(String description) {
+    private String description;
+    private Function<Section, Integer> expression;
 
+    PathType(String description, Function<Section, Integer> expression) {
+        this.description = description;
+        this.expression = expression;
     }
 
     public GraphPath<Station, DefaultWeightedEdge> getPath(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
-                                                           DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration,
                                                            Station source, Station target) {
         try {
-            return getPathDistanceOrDuration(dijkstraShortestPath, dijkstraShortestPathDuration, source, target);
+            return dijkstraShortestPath.getPath(source, target);
         } catch (IllegalArgumentException e) {
             throw new PathException("노선에 등록되지 않은 역입니다.");
         }
     }
 
-    private GraphPath<Station, DefaultWeightedEdge> getPathDistanceOrDuration(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
-                                                           DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration,
-                                                           Station source, Station target) {
-        if (this.name().equals("DISTANCE")) {
-            return dijkstraShortestPath.getPath(source, target);
-        }
-        return dijkstraShortestPathDuration.getPath(source, target);
-    }
-
     public void setEdgeWeight(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        if (this.name().equals("DISTANCE")) {
-            for (Section section : sections) {
-                graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance());
-            }
-        }
-        if (this.name().equals("DURATION")) {
-            for (Section section : sections) {
-                graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDuration());
-            }
+        for (Section section : sections) {
+            graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), expression.apply(section));
         }
     }
 
