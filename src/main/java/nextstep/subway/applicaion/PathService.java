@@ -23,9 +23,8 @@ public class PathService {
 
         SubwayMap subwayMap = new SubwayMap(lines, pathType);
         Path path = subwayMap.findPath(upStation, downStation);
-        path.addDiscountPolicy(DiscountPolicy.from(memberAge));
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, memberAge);
     }
 
 }

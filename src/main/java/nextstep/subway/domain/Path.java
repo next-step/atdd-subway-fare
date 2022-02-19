@@ -1,10 +1,12 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.FareHandler;
+import nextstep.subway.domain.fare.FareParams;
+
 import java.util.List;
 
 public class Path {
     private Sections sections;
-    private DiscountPolicy discountPolicy;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -22,8 +24,8 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int fare() {
-        return FareType.fare(extractDistance());
+    public Fare fare(int age) {
+        return new FareHandler().calculate(FareParams.of(this, age));
     }
 
     public int extraCharge() {
@@ -32,18 +34,6 @@ public class Path {
                 .mapToInt(Line::getExtraCharge)
                 .max()
                 .orElse(0);
-    }
-
-    public void addDiscountPolicy(DiscountPolicy discountPolicy) {
-        this.discountPolicy = discountPolicy;
-    }
-
-    public int discount() {
-        return discountPolicy.applyDiscount(fare());
-    }
-
-    public int totalFare() {
-        return fare() + extraCharge() - discount();
     }
 
     public List<Station> getStations() {
