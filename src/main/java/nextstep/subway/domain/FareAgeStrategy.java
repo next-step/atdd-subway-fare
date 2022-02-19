@@ -41,7 +41,7 @@ public class FareAgeStrategy {
         }
 
         public static int getDiscountPercent(Integer age) {
-            if (Objects.isNull(age)) {
+            if (Objects.isNull(age) || isAdult(age)) {
                 return DEFAULT_DISCOUNT_PERCENT;
             }
 
@@ -53,7 +53,7 @@ public class FareAgeStrategy {
         }
 
         public static BigDecimal getDeduct(Integer age) {
-            if (Objects.isNull(age)) {
+            if (Objects.isNull(age) || isAdult(age)) {
                 return DEFAULT_DEDUCT;
             }
 
@@ -66,6 +66,14 @@ public class FareAgeStrategy {
 
         private static boolean isKids(int age) {
             return age >= KIDS.startAge && age < KIDS.endAge;
+        }
+
+        private static boolean isTeen(int age) {
+            return age >= TEEN.startAge && age < TEEN.endAge;
+        }
+
+        private static boolean isAdult(int age) {
+            return !isKids(age) && !isTeen(age);
         }
 
     }

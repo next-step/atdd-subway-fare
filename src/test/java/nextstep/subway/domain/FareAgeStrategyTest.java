@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -40,6 +41,18 @@ class FareAgeStrategyTest {
                 Arguments.of(1000, 18, 870),
                 Arguments.of(1500, 18, 1270)
         );
+    }
+
+    @DisplayName("할인 대상이 아닌 요금 계산")
+    @Test
+    void default_fare() {
+        Fare 기본요금 = Fare.of(BigDecimal.valueOf(1_000));
+
+        // when
+        Fare fare = strategy.calculate(20, 기본요금);
+
+        // then
+        Assertions.assertThat(fare).isEqualTo(기본요금);
     }
 
     @DisplayName("어린이 요금 할인 계산")
