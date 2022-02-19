@@ -33,9 +33,8 @@ public class PathService {
         Station targetStation = stationService.findById(target);
 
         PathFinder pathFinder = new PathFinder(lines, type);
-        List<Station> stations = pathFinder.shortsPathStations(sourceStation, targetStation);
-        Path path = pathFinder.shortsPath(sourceStation, targetStation);
+//        List<Station> stations = pathFinder.shortsPathStations(sourceStation, targetStation);
 
-        return new PathResponse(stations, path.getDistance(), path.getDuration());
+        return pathFinder.shortsPath(sourceStation, targetStation);
     }
 }

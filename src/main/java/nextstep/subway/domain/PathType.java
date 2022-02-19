@@ -1,12 +1,5 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.ui.exception.PathException;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
-
-import java.util.List;
 import java.util.function.Function;
 
 public enum PathType {
@@ -21,22 +14,7 @@ public enum PathType {
         this.expression = expression;
     }
 
-    public GraphPath<Station, DefaultWeightedEdge> getPath(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
-                                                           Station source, Station target) {
-        try {
-            return dijkstraShortestPath.getPath(source, target);
-        } catch (IllegalArgumentException e) {
-            throw new PathException("노선에 등록되지 않은 역입니다.");
-        }
-    }
-
-    public void setEdgeWeight(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        for (Section section : sections) {
-            graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), expression.apply(section));
-        }
-    }
-
-    public int getPathWeight(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath, Station source, Station target) {
-        return (int)dijkstraShortestPath.getPathWeight(source, target);
+    public int weight(Section section) {
+        return expression.apply(section);
     }
 }

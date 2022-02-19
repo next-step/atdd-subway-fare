@@ -1,6 +1,8 @@
 package nextstep.subway.unit;
 
 
+import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathFinder;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,10 +74,10 @@ class PathFinderTest {
         PathFinder pathFinder = new PathFinder(lines, PathType.DISTANCE);
 
         // when
-        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역);
-        Path path = pathFinder.shortsPath(교대역, 양재역);
+        PathResponse path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
+        List<Station> stations = toStations(path.getStations());
         assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(path.getDistance()).isEqualTo(5);
         assertThat(path.getDuration()).isEqualTo(21);
@@ -88,10 +91,10 @@ class PathFinderTest {
         PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        List<Station> stations = pathFinder.shortsPathStations(교대역, 양재역);
-        Path path = pathFinder.shortsPath(교대역, 양재역);
+        PathResponse path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
+        List<Station> stations = toStations(path.getStations());
         assertThat(stations).containsExactly(교대역, 강남역, 양재역);
         assertThat(path.getDistance()).isEqualTo(20);
         assertThat(path.getDuration()).isEqualTo(5);
@@ -106,9 +109,17 @@ class PathFinderTest {
         Station 노선에_없는_역 = new Station("역삼역");
 
         // when
-        assertThatThrownBy(() -> pathFinder.shortsPathStations(교대역, 노선에_없는_역))
+        assertThatThrownBy(() -> pathFinder.shortsPath(교대역, 노선에_없는_역))
                 // then
                 .isInstanceOf(PathException.class)
                 .hasMessage("노선에 등록되지 않은 역입니다.");
+    }
+
+    private List<Station> toStations(List<StationResponse> stationsResponse) {
+        List<Station> stations = new ArrayList<>();
+        for (StationResponse station : stationsResponse) {
+            stations.add(new Station(station.getName()));
+        }
+        return stations;
     }
 }

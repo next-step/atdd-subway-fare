@@ -11,13 +11,6 @@ public class PathResponse {
     private final int distance;
     private int duration;
 
-    public PathResponse(List<Station> stations, int distance) {
-        for (Station station : stations) {
-            this.stations.add(StationResponse.createStationResponse(station));
-        }
-        this.distance = distance;
-    }
-
     public PathResponse(List<Station> stations, int distance, int duration) {
         for (Station station : stations) {
             this.stations.add(StationResponse.createStationResponse(station));

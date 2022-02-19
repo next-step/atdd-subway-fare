@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.ui.exception.PathException;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -12,31 +13,30 @@ import java.util.Set;
 
 public class PathFinder {
     private final Lines lines;
-
+    private final PathType type;
     private final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath;
-    private final PathType type1;
 
-    public PathFinder(List<Line> lines, PathType type1) {
+    public PathFinder(List<Line> lines, PathType type) {
         this.lines = new Lines(lines);
-        this.type1 = type1;
+        this.type = type;
         dijkstraShortestPath = createDijkstraShortestPath();
     }
 
-    public List<Station> shortsPathStations(Station source, Station target) {
-        GraphPath<Station, DefaultWeightedEdge> path = type1.getPath(dijkstraShortestPath, source, target);
+    private List<Station> shortsPathStations(Station source, Station target) {
+        GraphPath<Station, DefaultWeightedEdge> path = getPath(source, target);
         if (path == null) {
             throw new PathException("출발역과 도착역이 연결되어 있지 않습니다.");
         }
         return path.getVertexList();
     }
 
-    public Path shortsPath(Station source, Station target) {
+    public PathResponse shortsPath(Station source, Station target) {
         List<Station> stations = shortsPathStations(source, target);
 
-        if (type1 == PathType.DISTANCE) {
-            return new Path(type1.getPathWeight(dijkstraShortestPath, source, target), lines.pathTotalDuration(stations));
+        if (type == PathType.DISTANCE) {
+            return new PathResponse(stations, (int)dijkstraShortestPath.getPathWeight(source, target), lines.pathTotalDuration(stations));
         }
-        return new Path(lines.pathTotalDistance(stations), type1.getPathWeight(dijkstraShortestPath, source, target));
+        return new PathResponse(stations, lines.pathTotalDistance(stations), (int)dijkstraShortestPath.getPathWeight(source, target));
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> createDijkstraShortestPath() {
@@ -44,18 +44,40 @@ public class PathFinder {
         List<Section> sections = lines.getSections();
 
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        addVertex(stations, graph);
+        setEdgeWeight(sections, graph);
+
+        return new DijkstraShortestPath<>(graph);
+    }
+
+    private void addVertex(Set<Station> stations, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
         for (Station station : stations) {
             graph.addVertex(station);
         }
+    }
 
-        type1.setEdgeWeight(sections, graph);
-        return new DijkstraShortestPath<>(graph);
+    private void setEdgeWeight(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+        for (Section section : sections) {
+            graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), type.weight(section));
+        }
+    }
+
+    private GraphPath<Station, DefaultWeightedEdge> getPath(Station source, Station target) {
+        try {
+            return dijkstraShortestPath.getPath(source, target);
+        } catch (IllegalArgumentException e) {
+            throw new PathException("노선에 등록되지 않은 역입니다.");
+        }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PathFinder that = (PathFinder) o;
         return Objects.equals(lines, that.lines) && Objects.equals(dijkstraShortestPath, that.dijkstraShortestPath);
     }
