@@ -11,4 +11,12 @@ public enum FindType {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException());
     }
+
+    public boolean isDistance() {
+        return this == DISTANCE;
+    }
+
+    public boolean isDuration() {
+        return this == DURATION;
+    }
 }

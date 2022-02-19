@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.FindType;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -27,5 +28,21 @@ public class FindTypeTest {
                 Arguments.of("DISTANCE", FindType.DISTANCE),
                 Arguments.of("DURATION", FindType.DURATION)
         );
+    }
+
+    @DisplayName("isDistance메서드 테스트")
+    @Test
+    void isDistance() {
+        // when & then
+        assertThat(FindType.DISTANCE.isDistance()).isTrue();
+        assertThat(FindType.DISTANCE.isDuration()).isFalse();
+    }
+
+    @DisplayName("isDuration메서드 테스트")
+    @Test
+    void isDuration() {
+        // when & then
+        assertThat(FindType.DURATION.isDuration()).isTrue();
+        assertThat(FindType.DURATION.isDistance()).isFalse();
     }
 }
