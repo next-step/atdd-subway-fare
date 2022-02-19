@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
+                .queryParam("pathType", PathType.DISTANCE)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -26,6 +28,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
+                .queryParam("pathType", PathType.DURATION)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
