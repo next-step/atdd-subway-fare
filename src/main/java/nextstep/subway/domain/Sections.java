@@ -147,33 +147,28 @@ public class Sections {
         }
     }
 
-    /**
-     * 최단 거리 검색 시
-     * -> 구간 시간의 합을 반환
-     * 최소 시간 검색 시
-     * -> 구간 거리의 합을 반환
-     *
-     * 검색 기준이 아닌 시간 or 거리는 단순히 구간의 합을 반환한다.
-     *
-     * 메서드 명을 어떻게 해야할까? 음.. 생각이 나지 않는다.
-     */
-    int ddd(List<Station> stations, PathType type) {
+    int pathTotalDistance(List<Station> pathStations) {
         int sum = 0;
         for (Section section : sections) {
-            for (int i = 0; i < stations.size() - 1; i++) {
-                if (section.getUpStation().equals(stations.get(i))) {
-                    if (section.getDownStation().equals(stations.get(i + 1))) {
-                        if (type == PathType.DISTANCE) {
-                            sum += section.getDuration();
-                        }
-                        if (type == PathType.DURATION) {
-                            sum += section.getDistance();
-                        }
-                        break;
-                    }
-                }
-            }
+            sum += getPathDistanceOrDuration(pathStations, section, section.getDistance());
+        }
+        return sum;        
+    }
+
+    int pathTotalDuration(List<Station> pathStations) {
+        int sum = 0;
+        for (Section section : sections) {
+            sum += getPathDistanceOrDuration(pathStations, section, section.getDuration());
         }
         return sum;
+    }
+
+    private int getPathDistanceOrDuration(List<Station> pathStations, Section section, int distanceOrDuration) {
+        for (int i = 0; i < pathStations.size() - 1; i++) {
+            if (section.getUpStation().equals(pathStations.get(i)) && section.getDownStation().equals(pathStations.get(i + 1))) {
+                return distanceOrDuration;
+            }
+        }
+        return 0;
     }
 }

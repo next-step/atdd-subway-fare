@@ -6,20 +6,18 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class PathFinder {
-    private final List<Line> lines;
+    private final Lines lines;
 
     private final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath;
     private final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPathDuration;
 
     public PathFinder(List<Line> lines) {
-        this.lines = lines;
+        this.lines = new Lines(lines);
         dijkstraShortestPath = createDijkstraShortestPath(PathType.DISTANCE);
         dijkstraShortestPathDuration = createDijkstraShortestPath(PathType.DURATION);
     }
@@ -38,24 +36,17 @@ public class PathFinder {
     }
 
     public Path shortsPath(Station source, Station target, PathType type) {
-        int sum = 0;
         List<Station> stations = shortsPathStations(source, target, type);
-        for (Line line : lines) {
-            sum += line.ddd(stations, type);
-        }
+
         if (type == PathType.DISTANCE) {
-            return new Path(type.getPathWeight(dijkstraShortestPath, source, target), sum);
+            return new Path(type.getPathWeight(dijkstraShortestPath, source, target), lines.pathTotalDuration(stations));
         }
-        return new Path(sum, type.getPathWeight(dijkstraShortestPathDuration, source, target));
+        return new Path(lines.pathTotalDistance(stations), type.getPathWeight(dijkstraShortestPathDuration, source, target));
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> createDijkstraShortestPath(PathType type) {
-        Set<Station> stations = new HashSet<>();
-        List<Section> sections = new ArrayList<>();
-        for (Line line : lines) {
-            stations.addAll(line.getStations());
-            sections.addAll(line.getSections());
-        }
+        Set<Station> stations = lines.getStations();
+        List<Section> sections = lines.getSections();
 
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         for (Station station : stations) {
@@ -75,11 +66,11 @@ public class PathFinder {
             return false;
         }
         PathFinder that = (PathFinder) o;
-        return Objects.equals(lines, that.lines);
+        return Objects.equals(lines, that.lines) && Objects.equals(dijkstraShortestPath, that.dijkstraShortestPath) && Objects.equals(dijkstraShortestPathDuration, that.dijkstraShortestPathDuration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lines);
+        return Objects.hash(lines, dijkstraShortestPath, dijkstraShortestPathDuration);
     }
 }
