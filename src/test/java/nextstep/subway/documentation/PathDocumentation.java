@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, "DURATION");
+        경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, PathType.DURATION);
     }
 
     private ParameterDescriptor[] getParameterDescriptors() {

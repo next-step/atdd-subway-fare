@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getPath() {
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -91,7 +92,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         Long target = 1L;
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -115,7 +116,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선_생성_요청(createLineCreateParams("9호선", "brown", 가양역, 증미역, 10, 3));
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -134,7 +135,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         Long target = 20L;
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, "DISTANCE");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -148,7 +149,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getDurationPath() {
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, "DURATION");
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DURATION);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
