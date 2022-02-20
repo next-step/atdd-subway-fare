@@ -1,6 +1,6 @@
 package nextstep.subway.domain.farepolicy;
 
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 import nextstep.subway.domain.farepolicy.base.FarePolicy;
 
 public class BasicFarePolicy implements FarePolicy {

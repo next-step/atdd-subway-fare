@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.unit.map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,12 +6,13 @@ import com.google.common.collect.Lists;
 import java.time.LocalTime;
 import java.util.List;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
+import nextstep.subway.domain.map.Paths;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.map.SectionEdge;
 import nextstep.subway.domain.map.SubwayMap;
-import nextstep.subway.domain.map.graphfactory.OneFieldWeightGraphFactory;
-import nextstep.subway.domain.map.graphfactory.OppositeOneFieldWeightGraphFactory;
-import nextstep.subway.domain.map.graphfactory.SubwayMapGraphFactory;
+import nextstep.subway.domain.map.SubwayMapGraphFactory;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,37 +54,29 @@ class SubwayMapTest {
     @DisplayName("거리를 기준으로 경로 탐색")
     @Test
     void findPathByDistance() {
-        // given
-        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDistance());
+        // Given
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = SubwayMapGraphFactory.newOneFieldWeightGraph(
+            lines,
+            eachEdge -> (double) eachEdge.getSection().getDistance()
+        );
 
         // when
-        Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
+        Path path = subwayMap.findPath(graph, 교대역, 양재역);
 
         // then
         assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
-    }
-
-    @DisplayName("거리를 기준으로 반대로 경로 탐색")
-    @Test
-    void findPathByOppositeDistance() {
-        // given
-        SubwayMapGraphFactory factory = new OppositeOneFieldWeightGraphFactory(section -> (double) section.getDistance());
-
-        // when
-        Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
-
-        // then
-        assertThat(path.getStations()).containsExactly(양재역, 강남역, 교대역);
     }
 
     @DisplayName("소요 시간을 기준으로 경로 탐색")
     @Test
     void findPathByDuration() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDuration());
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = SubwayMapGraphFactory.newOneFieldWeightGraph(
+            lines, eachEdge -> (double) eachEdge.getSection().getDuration()
+        );
 
         // when
-        Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
+        Path path = subwayMap.findPath(graph, 교대역, 양재역);
 
         // then
         assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
@@ -93,24 +86,28 @@ class SubwayMapTest {
     @Test
     void findPathResultIsLineNull() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDistance());
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = SubwayMapGraphFactory.newOneFieldWeightGraph(
+            lines, eachEdge -> (double) eachEdge.getSection().getDistance()
+        );
 
         // when
-        Path path = subwayMap.findPath(factory.createGraph(lines), 교대역, 양재역);
+        Path path = subwayMap.findPath(graph, 교대역, 양재역);
 
         // then
         assertThat(path.getSections().getSections())
             .doesNotContainNull();
     }
 
-    @DisplayName("소요 시간을 기준으로 모든 경로 탐색")
+    @DisplayName("도착 시간을 기준으로 모든 경로 탐색")
     @Test
     void findPathsByDuration() {
         // given
-        SubwayMapGraphFactory factory = new OneFieldWeightGraphFactory(section -> (double) section.getDuration());
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = SubwayMapGraphFactory.newOneFieldWeightGraph(
+            lines, eachEdge -> (double) eachEdge.getSection().getDuration()
+        );
 
         // when
-        List<Path> paths = subwayMap.findPaths(factory.createGraph(lines), 교대역, 양재역);
+        Paths paths = subwayMap.findPaths(graph, 교대역, 양재역);
 
         // then
         assertThat(paths.size()).isEqualTo(2);

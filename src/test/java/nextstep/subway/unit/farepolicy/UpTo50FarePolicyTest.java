@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 import nextstep.subway.domain.farepolicy.UpTo50FarePolicy;
 import nextstep.subway.domain.farepolicy.base.FarePolicy;
 

@@ -4,12 +4,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-
-import org.springframework.http.MediaType;
-
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.MediaType;
 
 public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(RequestSpecification given, Map<String, String> params) {

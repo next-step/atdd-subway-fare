@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.map.Path;
 
 @JsonInclude(Include.NON_NULL)
 public class PathResponse {
@@ -23,7 +23,7 @@ public class PathResponse {
         this.arrivalTime = arrivalTime;
     }
 
-    public static PathResponse of(Path path, int totalCost) {
+    public static PathResponse of(Path path, int fare) {
         List<StationResponse> stations = path.getStations().stream()
                                              .map(StationResponse::of)
                                              .collect(Collectors.toList());
@@ -31,7 +31,7 @@ public class PathResponse {
         int duration = path.extractDuration();
         LocalDateTime arrivalTime = path.getArrivalTime();
 
-        return new PathResponse(stations, distance, duration, totalCost, arrivalTime);
+        return new PathResponse(stations, distance, duration, fare, arrivalTime);
     }
 
     public List<StationResponse> getStations() {

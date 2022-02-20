@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
 
-import jdk.vm.ci.meta.Local;
+import nextstep.subway.domain.map.SubwayDispatchTime;
 
 @Entity
 public class Line extends BaseEntity {
@@ -100,7 +100,15 @@ public class Line extends BaseEntity {
         sections.delete(station);
     }
 
-    public SubwayDispatchTime getDispatchTime() {
-        return new SubwayDispatchTime(startTime, endTime, intervalTime);
+    public SubwayDispatchTime dispatchTime(Station station) {
+        LocalTime startTimeByStartStation = startTime;
+
+        List<Integer> durations = sections.durations();
+        int startStationIndex = sections.indexOfUpStation(station);
+        for (int i = 0; i < startStationIndex; i++) {
+            int duration = durations.get(i);
+            startTimeByStartStation = startTimeByStartStation.plusMinutes(duration);
+        }
+        return new SubwayDispatchTime(startTimeByStartStation, endTime, intervalTime);
     }
 }

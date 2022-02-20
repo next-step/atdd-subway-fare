@@ -1,9 +1,8 @@
 package nextstep.subway.domain;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +11,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 
 @Embeddable
-public class Sections {
+public class Sections implements Iterable<Section> {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -171,19 +170,24 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public LocalDateTime arrivalTime(LocalTime takeTime) {
-        SubwayDispatchTime dispatchTime = dispatchTime(sections.get(0));
-        return dispatchTime.findArrivalDateTime(takeTime, durations());
+    public List<Integer> durations() {
+        List<Integer> durations = new ArrayList<>();
+
+        Optional<Section> ongoingSection = findSectionAsUpStation(findFirstUpStation());
+        while(ongoingSection.isPresent()) {
+            Section eachSection = ongoingSection.get();
+            durations.add(eachSection.getDuration());
+            ongoingSection = findSectionAsUpStation(eachSection.getDownStation());
+        }
+        return durations;
     }
 
-    private List<Integer> durations() {
-        return sections.stream()
-                       .map(Section::getDuration)
-                       .collect(Collectors.toList());
+    public int indexOfUpStation(Station station) {
+        return getStations().indexOf(station);
     }
 
-    private SubwayDispatchTime dispatchTime(Section section) {
-        return section.getLine()
-                      .getDispatchTime();
+    @Override
+    public Iterator<Section> iterator() {
+        return sections.iterator();
     }
 }

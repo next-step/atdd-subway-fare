@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import org.springframework.http.MediaType;
@@ -40,7 +41,7 @@ public class PathStep {
         return 두_역의_최소_시간_경로_조회를_요청(RestAssured.given(), source, target);
     }
 
-    public static ExtractableResponse<Response> 가장_빠른_도착_경로_조회를_요청(RequestSpecification given, long source, long target, LocalTime takeTime) {
+    public static ExtractableResponse<Response> 가장_빠른_도착_경로_조회를_요청(RequestSpecification given, long source, long target, LocalDateTime takeTime) {
         return given.log().all()
                     .accept(MediaType.APPLICATION_JSON_VALUE)
                     .queryParam("source", source)

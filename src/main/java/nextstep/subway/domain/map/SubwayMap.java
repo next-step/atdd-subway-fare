@@ -1,21 +1,16 @@
 package nextstep.subway.domain.map;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.alg.shortestpath.KShortestPaths;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.jgrapht.graph.WeightedMultigraph;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
-import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
-import nextstep.subway.domain.SectionEdge;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SubwayMap {
@@ -27,11 +22,13 @@ public class SubwayMap {
         );
     }
 
-    public List<Path> findPaths(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Station source, Station target) {
+    public Paths findPaths(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Station source, Station target) {
         KShortestPaths<Station, SectionEdge> kShortestPaths = new KShortestPaths<>(graph, 1000);
         return kShortestPaths.getPaths(source, target).stream()
                              .map(this::newPath)
-                             .collect(Collectors.toList());
+                             .collect(Collectors.collectingAndThen(
+                                 Collectors.toList(), Paths::new
+                             ));
     }
 
     private Path newPath(GraphPath<Station, SectionEdge> graphPath) {

@@ -29,7 +29,7 @@ public class LineDocumentation extends Documentation {
         Long 하행_ID = 2L;
 
         Map<String, String> lineRequest = LineSteps.createLineCreateParams(
-            "신분단선", "RED",
+            "신분당선", "RED",
             상행_ID, 하행_ID, 10, 10, 0
         );
         LineResponse lineResponse = LineResponse.builder()
