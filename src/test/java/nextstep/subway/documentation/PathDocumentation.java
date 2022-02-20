@@ -15,9 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
 
@@ -42,7 +43,17 @@ public class PathDocumentation extends Documentation {
                 .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        preprocessResponse(prettyPrint()),
+                        requestFields(fieldWithPath("source").optional().description("출발역"),
+                                        fieldWithPath("target").optional().description("도착역"),
+                                        fieldWithPath("pathType").optional().description("경로 조회 타입")),
+                        responseFields(
+                                fieldWithPath("stations[].id").description("지하철역 아이디"),
+                                fieldWithPath("stations[].name").description("지하철역 이름"),
+                                fieldWithPath("stations[].createdDate").description("생성일"),
+                                fieldWithPath("stations[].modifiedDate").description("수정일"),
+                                fieldWithPath("distance").description("거리"),
+                                fieldWithPath("duration").description("소요시간"))))
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/paths")
