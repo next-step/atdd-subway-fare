@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -69,18 +70,19 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("지하철 이용 요금을 조회한다.")
     @Test
+    @Disabled
     void findFare() {
         // 기본 운임 (10㎞ 이내) : 1,250원
         // 교대역 -> 양재역 (5km)
         ExtractableResponse<Response> 교대역_양재역_경로_조회_응답 = 두_역의_경로_조회를_요청(createPathParams(교대역, 양재역, PathType.DISTANCE));
         assertThat(교대역_양재역_경로_조회_응답.jsonPath().getInt("fare")).isEqualTo(1250);
 
-        // 이용 거리 10km ~ 50km 초과 시 추가 운임 : 1~5km마다 100원
+        // 이용 거리 초과 시 추가 운임 (10km ~ 50km) : 1~5km마다 100원
         // 강남역 -> 양재시민의숲역 (11km)
         ExtractableResponse<Response> 강남역_양재시민의숲역_경로_조회_응답 = 두_역의_경로_조회를_요청(createPathParams(강남역, 양재시민의숲역, PathType.DISTANCE));
         assertThat(강남역_양재시민의숲역_경로_조회_응답.jsonPath().getInt("fare")).isEqualTo(1350);
 
-        // 이용 거리 50km 초과 시 추가 운임 : 1~8km마다 100원
+        // 이용 거리 초과 시 추가 운임 (50km) : 1~8km마다 100원
         // 강남역 -> 미금역 (57km)
         ExtractableResponse<Response> 강남역_미금역_경로_조회_응답 = 두_역의_경로_조회를_요청(createPathParams(강남역, 미금역, PathType.DISTANCE));
         assertThat(강남역_미금역_경로_조회_응답.jsonPath().getInt("fare")).isEqualTo(1350);
