@@ -4,15 +4,16 @@ import io.restassured.RestAssured;
 import nextstep.subway.acceptance.step.LineSteps;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.LineResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -40,9 +41,10 @@ public class LineDocumentation extends Documentation {
         판교역 = 역_생성(2L, "판교역");
         정자역 = 역_생성(3L, "정자역");
 
-        신분당선 = 노선_생성(1L, "신분당선", "red", 강남역, 판교역, 100, 10);
+        신분당선 = 노선_생성(1L, "신분당선", "red", 강남역, 판교역, 100, 10, Fare.of(BigDecimal.valueOf(1000)));
     }
 
+    @DisplayName("구간 추가 문서화")
     @Test
     void addSection() {
         Map<String, String> 요청 = 구간_추가_요청_생성(강남역.getId(), 판교역.getId(), DISTANCE, DURATION);
@@ -57,9 +59,10 @@ public class LineDocumentation extends Documentation {
                 .then().log().all().extract();
     }
 
+    @DisplayName("노선 생성 문서화")
     @Test
     void createLine() {
-        Map<String, String> 요청 = LineSteps.노선_생성_Param_생성(신분당선.getName(), 신분당선.getColor(), 강남역.getId(), 판교역.getId(), 100, 10);
+        Map<String, String> 요청 = LineSteps.노선_생성_Param_생성(신분당선.getName(), 신분당선.getColor(), 강남역.getId(), 판교역.getId(), 100, 10, BigDecimal.ZERO);
         LineResponse 응답 = LineResponse.of(신분당선);
         Mockito.when(lineService.saveLine(any()))
                 .thenReturn(응답);
@@ -83,10 +86,13 @@ public class LineDocumentation extends Documentation {
         return station;
     }
 
-    private Line 노선_생성(long id, String name, String color, Station upStation, Station downStation, int distance, int duration) {
+    private Line 노선_생성(long id, String name, String color, Station upStation, Station downStation, int distance, int duration, Fare fare) {
         LocalDateTime now = LocalDateTime.now();
-        Line line = Line.of(name, color, upStation, downStation, distance, duration);
+        Line line = Line.of(name, color, fare);
+        Sections sections = new Sections();
+        sections.add(Section.of(line, upStation, downStation, distance, duration));
         ReflectionTestUtils.setField(line, "id", id);
+        ReflectionTestUtils.setField(line, "sections", sections);
         ReflectionTestUtils.setField(line, "createdDate", now);
         ReflectionTestUtils.setField(line, "modifiedDate", now);
 

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -41,13 +43,13 @@ class LineServiceTest {
 
     @DisplayName("노선을 추가")
     @Test
-    void saveLine2() {
+    void saveLine() {
         // given
         String name = "노선이름";
         String color = "red";
         LineRequest 요청 = LineServiceSteps.노선_추가_요청_생성(name, color,
                 강남역.getId(), 역삼역.getId(),
-                100, 10);
+                100, 10, BigDecimal.ONE);
 
         // when
         LineResponse response = lineService.saveLine(요청);
@@ -55,17 +57,18 @@ class LineServiceTest {
         // then
         assertThat(response.getName()).isEqualTo(name);
         assertThat(response.getColor()).isEqualTo(color);
+        assertThat(response.getFare()).isEqualTo(BigDecimal.ONE);
     }
 
     @DisplayName("노선에 없는 역윽 구간으로 추가 하면 실패")
     @Test
-    void saveLine2_notFoundStation() {
+    void saveLine_notFoundStation() {
         // given
         String name = "노선이름";
         String color = "red";
         LineRequest 요청 = LineServiceSteps.노선_추가_요청_생성(name, color,
                 1000L, 1000L,
-                100, 10);
+                100, 10, BigDecimal.ZERO);
 
         // then
         assertThatThrownBy(() -> lineService.saveLine(요청))
@@ -78,7 +81,7 @@ class LineServiceTest {
         // given
         int distance = 10;
         int duration = 20;
-        Line 이호선 = lineRepository.save(createLine2(강남역, 역삼역, distance, duration));
+        Line 이호선 = lineRepository.save(createLine(강남역, 역삼역, distance, duration));
         lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 삼성역.getId(), distance, duration));
 
         // when
@@ -91,15 +94,9 @@ class LineServiceTest {
         assertThat(section.getDuration()).isEqualTo(duration);
     }
 
-    private Line createLine2(Station 강남역, Station 역삼역, int distance, int duration) {
+    private Line createLine(Station 강남역, Station 역삼역, int distance, int duration) {
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, distance, duration);
-        return line;
-    }
-
-    private Line createLine(Station 강남역, Station 역삼역) {
-        Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10, 10);
         return line;
     }
 

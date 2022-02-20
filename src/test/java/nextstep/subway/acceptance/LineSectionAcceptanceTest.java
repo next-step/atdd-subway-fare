@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -32,7 +33,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
 
-        Map<String, String> lineCreateParams = 노선_생성_Param_생성("신분당선", "red", 강남역, 양재역, DISTANCE, DURATION);
+        Map<String, String> lineCreateParams = 노선_생성_Param_생성("신분당선", "red", 강남역, 양재역, DISTANCE, DURATION, BigDecimal.ZERO);
         신분당선 = 지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
