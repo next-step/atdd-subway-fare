@@ -1,5 +1,8 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.applicaion.dto.PathResponse;
+
+import java.util.List;
 import java.util.function.Function;
 
 public enum PathType {
@@ -16,5 +19,13 @@ public enum PathType {
 
     public int weight(Section section) {
         return expression.apply(section);
+    }
+
+    public PathResponse createPathResponse(List<Station> pathStations, int weight, Lines lines, int fare) {
+        PathType pathType = valueOf(name());
+        if (pathType == DISTANCE) {
+            return new PathResponse(pathStations, weight, lines.pathTotalDuration(pathStations), fare);
+        }
+        return new PathResponse(pathStations,lines.pathTotalDistance(pathStations), weight, fare);
     }
 }

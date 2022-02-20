@@ -23,12 +23,8 @@ public class PathFinder {
     }
 
     public PathResponse shortsPath(Station source, Station target) {
-        List<Station> stations = shortsPathStations(source, target);
-
-        if (type == PathType.DISTANCE) {
-            return new PathResponse(stations, (int)dijkstraShortestPath.getPathWeight(source, target), lines.pathTotalDuration(stations));
-        }
-        return new PathResponse(stations, lines.pathTotalDistance(stations), (int)dijkstraShortestPath.getPathWeight(source, target));
+        List<Station> pathStations = shortsPathStations(source, target);
+        return type.createPathResponse(pathStations, (int) dijkstraShortestPath.getPathWeight(source, target), lines, 0);
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> createDijkstraShortestPath() {
