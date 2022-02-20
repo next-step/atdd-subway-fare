@@ -45,7 +45,7 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint())))
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths")
+                .when().post("/paths")
                 .then().log().all().extract();
     }
 

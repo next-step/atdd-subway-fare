@@ -67,8 +67,8 @@ public class SubwayMap {
                 .flatMap(it -> it.getSections().stream())
                 .map(it -> new Section.Builder()
                                         .line(it.getLine())
-                                        .upStation(it.getUpStation())
-                                        .downStation(it.getDownStation())
+                                        .upStation(it.getDownStation())
+                                        .downStation(it.getUpStation())
                                         .distance(it.getDistance())
                                         .duration(it.getDuration()).build())
                 .forEach(it -> {
