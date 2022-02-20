@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.Fare;
+
 import java.util.List;
 
 public class Path {
@@ -22,10 +24,12 @@ public class Path {
     }
 
     public int extractFare() {
-        return 1250;
+        int distance = sections.totalDistance();
+        return Fare.getFare(distance);
     }
 
     public List<Station> getStations() {
         return sections.getStations();
     }
+
 }

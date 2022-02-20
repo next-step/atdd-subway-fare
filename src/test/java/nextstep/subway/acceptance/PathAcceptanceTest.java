@@ -4,7 +4,6 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -41,12 +40,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         양재시민의숲역 = 지하철역_생성_요청("양재시민의숲역").jsonPath().getLong("id");
+        미금역 = 지하철역_생성_요청("미금역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 3);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 1);
 
         지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 양재시민의숲역, 1, 1));
+        지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재시민의숲역, 미금역, 46, 15));
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 2));
     }
 
@@ -70,7 +71,6 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("지하철 이용 요금을 조회한다.")
     @Test
-    @Disabled
     void findFare() {
         // 기본 운임 (10㎞ 이내) : 1,250원
         // 교대역 -> 양재역 (5km)
