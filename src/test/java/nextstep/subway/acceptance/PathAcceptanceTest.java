@@ -49,7 +49,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * @see nextstep.subway.ui.PathController.findPath
+     * @see nextstep.subway.ui.PathController#findPath
      */
     @DisplayName("두_역의_최단_거리_경로_조회")
     @Test
@@ -64,7 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * @see nextstep.subway.ui.PathController.findPath
+     * @see nextstep.subway.ui.PathController#findPath
      */
     @DisplayName("두_역의_최단_시간_경로_조회")
     @Test
