@@ -79,6 +79,17 @@ public class PathSteps {
         return response;
     }
 
+    public static ExtractableResponse<Response> 최단금액_거리_경로조회_시간_요금_포함(String accessToken, Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .auth().oauth2(accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .when().get("/paths/minimum-fee")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()
