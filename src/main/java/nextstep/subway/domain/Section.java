@@ -76,12 +76,6 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getWeightValue(PathType type) {
-        int result;
-        if (type == PathType.DISTANCE) {
-            result = this.distance;
-        } else {
-            result = this.duration;
-        }
-        return result;
+        return type == PathType.DISTANCE ? this.distance : this.duration;
     }
 }
