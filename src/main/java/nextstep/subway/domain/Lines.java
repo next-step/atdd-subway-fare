@@ -13,19 +13,15 @@ public class Lines {
     }
 
     public int pathTotalDistance(List<Station> stations) {
-        int sum = 0;
-        for (Line line : lines) {
-            sum += line.pathTotalDistance(stations);
-        }
-        return sum;
+        return lines.stream()
+                .mapToInt(line -> line.pathTotalDistance(stations))
+                .sum();
     }
 
     public int pathTotalDuration(List<Station> stations) {
-        int sum = 0;
-        for (Line line : lines) {
-            sum += line.pathTotalDuration(stations);
-        }
-        return sum;
+        return lines.stream()
+                .mapToInt(line -> line.pathTotalDuration(stations))
+                .sum();
     }
 
     public Set<Station> getStations() {

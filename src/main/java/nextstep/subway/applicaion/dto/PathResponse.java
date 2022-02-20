@@ -4,18 +4,19 @@ import nextstep.subway.domain.Station;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PathResponse {
 
-    private final List<StationResponse> stations = new ArrayList<>();
+    private final List<StationResponse> stations;
     private final int distance;
-    private int duration;
-    private int fare;
+    private final int duration;
+    private final int fare;
 
     public PathResponse(List<Station> stations, int distance, int duration, int fare) {
-        for (Station station : stations) {
-            this.stations.add(StationResponse.createStationResponse(station));
-        }
+        this.stations = stations.stream()
+                .map(StationResponse::createStationResponse)
+                .collect(Collectors.toList());
         this.distance = distance;
         this.duration = duration;
         this.fare = fare;
