@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +35,7 @@ class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10, 10
         );
+        ReflectionTestUtils.setField(pathResponse, "fare", 1250);
     }
 
     @EnumSource(PathType.class)

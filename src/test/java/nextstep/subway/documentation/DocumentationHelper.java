@@ -32,7 +32,7 @@ public final class DocumentationHelper {
             assertThat(response.jsonPath().getList("stations")).hasSize(2);
             assertThat(response.jsonPath().getInt("distance")).isEqualTo(10);
             assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
         });
     }
 }
