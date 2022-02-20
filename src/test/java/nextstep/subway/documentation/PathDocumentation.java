@@ -36,7 +36,7 @@ public class PathDocumentation extends Documentation {
                 ),
                 10,
                 7,
-                1350
+                1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -56,7 +56,7 @@ public class PathDocumentation extends Documentation {
                 ),
                 10,
                 7,
-                1350
+                1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -68,7 +68,7 @@ public class PathDocumentation extends Documentation {
 
 
     @DisplayName("경로 찾기 요청 - 요금")
-    @CsvSource(value = {"1,1250","9:1250","10:1350","20:1550"}, delimiter = ':')
+    @CsvSource(value = {"1,1250","10:1250","11:1350","20:1550"}, delimiter = ':')
     @ParameterizedTest
     void pathByFare(int distance, int fare) {
         PathResponse pathResponse = new PathResponse(
