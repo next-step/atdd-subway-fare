@@ -55,6 +55,9 @@ class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.extractDistance()).isEqualTo(6);
+        assertThat(path.extractDuration()).isEqualTo(6);
+        assertThat(path.extractFare()).isEqualTo(1250);
     }
 
     @EnumSource(PathType.class)
@@ -69,6 +72,9 @@ class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+        assertThat(path.extractDistance()).isEqualTo(6);
+        assertThat(path.extractDuration()).isEqualTo(6);
+        assertThat(path.extractFare()).isEqualTo(1250);
     }
 
     private Station createStation(long id, String name) {
