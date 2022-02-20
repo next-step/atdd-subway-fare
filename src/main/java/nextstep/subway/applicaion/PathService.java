@@ -17,15 +17,12 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final MemberRepository memberRepository;
     private final FareCalculator fareCalculator;
 
     public PathService(LineService lineService,
-        StationService stationService, MemberRepository memberRepository,
-        FareCalculator fareCalculator) {
+        StationService stationService, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.memberRepository = memberRepository;
         this.fareCalculator = fareCalculator;
     }
 
@@ -33,13 +30,11 @@ public class PathService {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        Member member = memberRepository.findById(loginMember.getId())
-            .orElse(new Member());
 
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType);
         path.setFareCalculator(fareCalculator);
-        path.calculateFare(member.getAge());
+        path.calculateFare(loginMember.getAge());
 
         return PathResponse.of(path);
     }

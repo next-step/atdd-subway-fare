@@ -99,7 +99,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인한 성인 유저가 두 역의 최소시간 경로를 조회한다.")
     @Test
-    void findPath_1() {
+    void 로그인한_성인_유저가_두_역의_최소시간_경로를_조회한다() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE_ADULT);
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
@@ -116,7 +116,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인한 성인 유저가 두 역의 최단거리 경로를 조회한다.")
     @Test
-    void findPath_2() {
+    void 로그인한_성인_유저가_두_역의_최단거리_경로를_조회한다() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE_ADULT);
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
@@ -133,7 +133,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인 하지 않은 유저가 두 역의 최소시간 경로를 조회한다.")
     @Test
-    void findPath_3() {
+    void 로그인_하지_않은_유저가_두_역의_최소시간_경로를_조회한다() {
         // when
         ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(invalidToken, 교대역, 양재역);
 
@@ -146,7 +146,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인 하지 않은 유저가 두 역의 최단거리 경로를 조회한다.")
     @Test
-    void findPath_4() {
+    void 로그인_하지_않은_유저가_두_역의_최단거리_경로를_조회한다() {
         // when
         ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(invalidToken, 교대역, 양재역);
 
@@ -159,7 +159,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인한 청소년 유저가 두 역의 최소시간 경로를 조회한다.")
     @Test
-    void findPath_5() {
+    void 로그인한_청소년_유저가_두_역의_최소시간_경로를_조회한다() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE_YOUTH);
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
@@ -176,7 +176,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인한 청소년 유저가 두 역의 최단거리 경로를 조회한다.")
     @Test
-    void findPath_6() {
+    void 로그인한_청소년_유저가_두_역의_최단거리_경로를_조회한다() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE_YOUTH);
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
@@ -193,7 +193,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인한 어린이 유저가 두 역의 최소시간 경로를 조회한다.")
     @Test
-    void findPath_7() {
+    void 로그인한_어린이_유저가_두_역의_최소시간_경로를_조회한다() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE_CHILD);
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
@@ -210,7 +210,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("로그인한 어린이 유저가 두 역의 최단거리 경로를 조회한다.")
     @Test
-    void findPath_8() {
+    void 로그인한_어린이_유저가_두_역의_최단거리_경로를_조회한다() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE_CHILD);
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);

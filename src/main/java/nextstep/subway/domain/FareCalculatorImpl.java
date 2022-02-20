@@ -32,7 +32,7 @@ public class FareCalculatorImpl implements FareCalculator {
 
     private int maxLineFare(Sections sections) {
         return sections.getSections().stream()
-            .mapToInt(value -> value.getLine().getFare())
+            .mapToInt(value -> value.getLine().getAdditionalFare())
             .max().getAsInt();
     }
 

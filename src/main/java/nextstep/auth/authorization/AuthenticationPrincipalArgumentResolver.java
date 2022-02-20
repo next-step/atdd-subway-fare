@@ -3,7 +3,7 @@ package nextstep.auth.authorization;
 import java.util.Objects;
 import nextstep.auth.context.Authentication;
 import nextstep.auth.context.SecurityContextHolder;
-import nextstep.member.domain.FakeUserDetails;
+import nextstep.member.domain.NonLoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -24,7 +24,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.isNull(authentication)) {
-            return new FakeUserDetails();
+            return new NonLoginMember();
         }
 
         if (authentication.getPrincipal() instanceof Map) {
