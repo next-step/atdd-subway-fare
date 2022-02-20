@@ -14,9 +14,10 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target) {
+    public Path findPath(Station source, Station target, PathSearchType pathSearchType) {
         // 그래프 만들기
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
+        PathWeight pathWeight = PathSearchType.DISTANCE.equals(pathSearchType) ? Section::getDistance : Section::getDuration;
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(pathWeight);
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -29,12 +30,11 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph() {
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(PathWeight pathWeight) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
-
         addVertex(graph);
-        addEdge(graph);
-        addOppositeEdge(graph);
+        addEdge(graph, pathWeight);
+        addOppositeEdge(graph, pathWeight);
 
         return graph;
     }
@@ -48,26 +48,26 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathWeight pathWeight) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, pathWeight.getWeight(it));
                 });
     }
 
-    private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathWeight pathWeight) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, pathWeight.getWeight(it));
                 });
     }
 }
