@@ -17,8 +17,7 @@ import static nextstep.subway.acceptance.LineSteps.경로_조회됨;
 import static nextstep.subway.acceptance.PathAcceptanceSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.documentation.PathDocumentationFixture.PATH_RESPONSE_FIXTURE;
 import static nextstep.subway.documentation.PathDocumentationSteps.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
@@ -30,7 +29,7 @@ public class PathDocumentation extends Documentation {
     @EnumSource(PathType.class)
     void path(PathType pathType) {
         //given
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(PATH_RESPONSE_FIXTURE);
+        when(pathService.findPath(anyInt(), anyLong(), anyLong(), any(PathType.class))).thenReturn(PATH_RESPONSE_FIXTURE);
 
         RequestParametersSnippet requestParameters = createRequestParametersSnippet();
         ResponseFieldsSnippet responseFields = createResponseFieldsSnippet();

@@ -162,4 +162,12 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public List<Line> containsLines() {
+        List<Line> lines = sections.stream()
+                .map(Section::getLine)
+                .collect(Collectors.toList());
+
+        return Collections.unmodifiableList(lines);
+    }
 }

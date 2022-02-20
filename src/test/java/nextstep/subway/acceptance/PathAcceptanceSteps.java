@@ -1,6 +1,5 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -15,12 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PathAcceptanceSteps {
 
     public static final String PATH_URI = "/paths";
-
-    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathType pathType) {
-        RequestSpecification requestSpecification = RestAssured.given().log().all();
-
-        return 두_역의_경로_조회를_요청(requestSpecification, source, target, pathType);
-    }
 
     public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(RequestSpecification requestSpecification, Long source, Long target, PathType pathType) {
         Map<String, Object> parameters = new HashMap<>();
@@ -56,6 +49,10 @@ public class PathAcceptanceSteps {
 
     public static void 경로_전체_요금_조회됨(ExtractableResponse<Response> response, int fare) {
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+    }
+
+    public static void 경로_할인_적용_요금_조회됨(ExtractableResponse<Response> response, int fare) {
+        assertThat(response.jsonPath().getInt("totalFare")).isEqualTo(fare);
     }
 
 }

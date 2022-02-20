@@ -21,8 +21,12 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int fare() {
-        return FareType.fare(extractDistance());
+    public int extraCharge() {
+        List<Line> lines = sections.containsLines();
+        return lines.stream()
+                .mapToInt(Line::getExtraCharge)
+                .max()
+                .orElse(0);
     }
 
     public List<Station> getStations() {

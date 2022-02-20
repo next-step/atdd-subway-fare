@@ -13,9 +13,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
+        return 지하철_노선_생성_요청(name, color, 0);
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int extraCharge) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("extraCharge", extraCharge + "");
         return RestAssured
                 .given().log().all()
                 .body(params)
