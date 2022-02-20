@@ -6,11 +6,8 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 
 import static nextstep.subway.documentation.PathSteps.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -54,40 +52,18 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ),
-                10,
+                11,
                 7,
-                1250
+                1350
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         ExtractableResponse<Response> 최단_경로_요청 = 최단_시간_경로_요청(spec, 1L, 2L);
 
-        assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
-    }
-
-
-    @DisplayName("경로 찾기 요청 - 요금")
-    @CsvSource(value = {"1,1250","10:1250","11:1350","20:1550"}, delimiter = ':')
-    @ParameterizedTest
-    void pathByFare(int distance, int fare) {
-        PathResponse pathResponse = new PathResponse(
-                Lists.newArrayList(
-                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
-                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ),
-                distance,
-                7,
-                fare
-        );
-
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
-
-        ExtractableResponse<Response> 최단_경로_요청 = 최단_시간_경로_요청(spec, 1L, 2L);
-
-        Assertions.assertAll(
+        assertAll(
                 () -> assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(최단_경로_요청.jsonPath().getInt("fare")).isEqualTo(fare)
+                () -> assertThat(최단_경로_요청.jsonPath().getInt("fare")).isEqualTo(1350)
         );
     }
 }
