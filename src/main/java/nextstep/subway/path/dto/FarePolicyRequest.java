@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class FarePolicyRequest {
-    int distance;
+    private int distance;
 
     @Builder
     private FarePolicyRequest(int distance) {

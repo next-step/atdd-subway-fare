@@ -32,7 +32,7 @@ public class DistancePolicyTest {
         assertThat(fare).isEqualTo(expectedFare);
     }
 
-    @DisplayName("10km ~ 50km까지 5km당 100원 추가")
+    @DisplayName("50km 초과 시 8km당 100원 추가")
     @ParameterizedTest
     @CsvSource({"51,2150", "58,2150", "59,2250", "66,2250", "67,2350", "74,2350"})
     void calculateOver50km(int distance, int expectedFare) {
