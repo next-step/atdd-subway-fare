@@ -26,7 +26,8 @@ public final class DocumentationFilterTemplate {
                         fieldWithPath("stations[].createdDate").description("생성 시간"),
                         fieldWithPath("stations[].modifiedDate").description("최근 수정 시간"),
                         fieldWithPath("distance").description("이동 거리"),
-                        fieldWithPath("duration").description("소요 시간")
+                        fieldWithPath("duration").description("소요 시간"),
+                        fieldWithPath("fare").description("운임")
                 )
         );
     }
