@@ -46,7 +46,7 @@ public class Section {
     }
 
     public void updateAddLineBetweenSection(Section newSection) {
-        if (isBetweenSection(newSection)) {
+        if (isBetweenSection(newSection.getUpStation())) {
             validateDuplicationSection(newSection);
             this.upStation = newSection.getDownStation();
             this.distance = this.distance.subtract(newSection.getDistance());
@@ -55,15 +55,15 @@ public class Section {
     }
 
     public void updateRemoveLineBetweenSection(Section removeSection) {
-        if (upStation.equals(removeSection.getDownStation())) {
+        if (isBetweenSection(removeSection.getDownStation())) {
             this.upStation = removeSection.getUpStation();
             this.distance = this.distance.sum(removeSection.getDistance());
             this.duration = this.duration + removeSection.duration;
         }
     }
 
-    private boolean isBetweenSection(Section newSection) {
-        return this.upStation.equals(newSection.getUpStation());
+    private boolean isBetweenSection(Station station) {
+        return this.upStation.equals(station);
     }
 
     private void validateDuplicationSection(Section newSection) {
