@@ -4,17 +4,17 @@ import nextstep.subway.applicaion.dto.StationRequest;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
+import nextstep.subway.ui.exception.StationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class StationService {
-    private StationRepository stationRepository;
+    private final StationRepository stationRepository;
 
     public StationService(StationRepository stationRepository) {
         this.stationRepository = stationRepository;
@@ -22,7 +22,7 @@ public class StationService {
 
     public StationResponse saveStation(StationRequest stationRequest) {
         Station station = stationRepository.save(new Station(stationRequest.getName()));
-        return StationResponse.of(station);
+        return StationResponse.createStationResponse(station);
     }
 
     @Transactional(readOnly = true)
@@ -30,7 +30,7 @@ public class StationService {
         List<Station> stations = stationRepository.findAll();
 
         return stations.stream()
-                .map(StationResponse::of)
+                .map(StationResponse::createStationResponse)
                 .collect(Collectors.toList());
     }
 
@@ -38,13 +38,8 @@ public class StationService {
         stationRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
     public Station findById(Long id) {
-        return stationRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Station> findAllStationsById(Set<Long> stationIds) {
-        return stationRepository.findAllById(stationIds);
+        return stationRepository.findById(id)
+                .orElseThrow(() -> new StationException(String.format("존재하지 않는 역입니다. id = %d", id)));
     }
 }

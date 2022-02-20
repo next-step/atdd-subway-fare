@@ -1,0 +1,13 @@
+[[path]]
+== 지하철 경로
+
+=== 경로 조회
+==== HTTP request
+include::{snippets}/path/http-request.adoc[]
+
+==== RequestParameter
+include::{snippets}/path/request-parameters.adoc[]
+
+==== HTTP response
+
+include::{snippets}/path/http-response.adoc[]

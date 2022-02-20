@@ -1,9 +1,10 @@
 package nextstep.member.domain;
 
+import nextstep.auth.context.DetailMember;
 
-import nextstep.auth.userdetails.UserDetails;
+import java.util.Objects;
 
-public class LoginMember implements UserDetails {
+public class LoginMember implements DetailMember {
     private Long id;
     private String email;
     private String password;
@@ -20,10 +21,12 @@ public class LoginMember implements UserDetails {
         this.age = age;
     }
 
+    @Override
     public boolean checkPassword(String password) {
         return this.password.equals(password);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -36,22 +39,25 @@ public class LoginMember implements UserDetails {
         return age;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     @Override
-    public Object getPrincipal() {
-        return email;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LoginMember that = (LoginMember) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword()) && Objects.equals(getAge(), that.getAge());
     }
 
     @Override
-    public Object getCredentials() {
-        return password;
-    }
-
-    @Override
-    public boolean checkCredentials(Object credentials) {
-        return this.password.equals(credentials.toString());
+    public int hashCode() {
+        return Objects.hash(getId(), getEmail(), getPassword(), getAge());
     }
 }
