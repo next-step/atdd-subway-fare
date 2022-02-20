@@ -11,6 +11,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private int additionalFee;
 
     @Embedded
     private Sections sections = new Sections();
