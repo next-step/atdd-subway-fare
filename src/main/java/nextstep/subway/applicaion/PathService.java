@@ -2,10 +2,7 @@ package nextstep.subway.applicaion;
 
 import java.util.List;
 import nextstep.member.domain.LoginMember;
-import nextstep.member.domain.Member;
-import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.FareCalculator;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
@@ -17,13 +14,10 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final FareCalculator fareCalculator;
 
-    public PathService(LineService lineService,
-        StationService stationService, FareCalculator fareCalculator) {
+    public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.fareCalculator = fareCalculator;
     }
 
     public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType pathType) {
@@ -33,8 +27,8 @@ public class PathService {
 
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType);
-        path.setFareCalculator(fareCalculator);
-        path.calculateFare(loginMember.getAge());
+
+        path.farePolicySetting(loginMember.getAge());
 
         return PathResponse.of(path);
     }
