@@ -4,7 +4,7 @@ public class FavoritesRequest {
     private Long source;
     private Long target;
 
-    public FavoritesRequest() {
+    FavoritesRequest() {
     }
 
     public FavoritesRequest(Long source, Long target) {
