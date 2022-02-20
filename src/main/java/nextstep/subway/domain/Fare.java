@@ -21,6 +21,7 @@ public class Fare {
     private void calculate(final int distance) {
         if(isStandard(distance)) {
             this.cost = STANDARD_FARE;
+            return;
         }
         this.cost = STANDARD_FARE + calculateOverFare(distance, findCriteria(distance));
     }
