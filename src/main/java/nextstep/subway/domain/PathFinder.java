@@ -22,14 +22,6 @@ public class PathFinder {
         dijkstraShortestPath = createDijkstraShortestPath();
     }
 
-    private List<Station> shortsPathStations(Station source, Station target) {
-        GraphPath<Station, DefaultWeightedEdge> path = getPath(source, target);
-        if (path == null) {
-            throw new PathException("출발역과 도착역이 연결되어 있지 않습니다.");
-        }
-        return path.getVertexList();
-    }
-
     public PathResponse shortsPath(Station source, Station target) {
         List<Station> stations = shortsPathStations(source, target);
 
@@ -60,6 +52,14 @@ public class PathFinder {
         for (Section section : sections) {
             graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), type.weight(section));
         }
+    }
+
+    private List<Station> shortsPathStations(Station source, Station target) {
+        GraphPath<Station, DefaultWeightedEdge> path = getPath(source, target);
+        if (path == null) {
+            throw new PathException("출발역과 도착역이 연결되어 있지 않습니다.");
+        }
+        return path.getVertexList();
     }
 
     private GraphPath<Station, DefaultWeightedEdge> getPath(Station source, Station target) {
