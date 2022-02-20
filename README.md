@@ -49,3 +49,7 @@ npm run dev
 ### step1
 - Steps클래스는 단계를 나타내는 역할로 알고 있는데, parameter를 만드는 메서드를 둬도 되는지? ex) LineSteps.createSectionCreateParams()메서드.
 - 문서화실습 맨 마지막에 중복 제거가 있는데 PathSteps처럼 하는 게 맞는지 잘 모르겠음.
+
+### step2 생각해보기
+- 경로 조회 결과에 요금 정보도 추가된다.
+- 경로 조회 결과를 Sections로 가지고 있고, 요금 정보를 계산하기 위한 정보(거리)를 ~~Sections가 가지고 있으므로 책임을 위임한다?~~ 요금을 계산하는 역할을 줄 객체를 만든다.
