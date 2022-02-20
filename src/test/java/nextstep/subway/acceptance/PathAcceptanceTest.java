@@ -195,49 +195,49 @@ class PathAcceptanceTest extends AcceptanceTest {
      * AND 총 거리와 소요 시간 응답
      * AND 지하철 이용 요금도 포함하여 응답
      */
-//    @DisplayName("최단 경로 조회 -> 10km 이내")
-//    @Test
-//    void getPath1() {
-//        // when
-//        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DISTANCE);
-//
-//        // then
-//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-//
-//        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-//        assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
-//
-//        int distance = response.jsonPath().getInt("distance");
-//        int duration = response.jsonPath().getInt("duration");
-//        int fare = response.jsonPath().getInt("fare");
-//        assertThat(distance).isEqualTo(5);
-//        assertThat(duration).isEqualTo(21);
-//        assertThat(fare).isEqualTo(1250);
-//    }
-//
-//    /**
-//     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
-//     * Then 최단 거리 경로 응답
-//     * AND 총 거리와 소요 시간 응답
-//     * AND 지하철 이용 요금도 포함하여 응답
-//     */
-//    @DisplayName("최단 경로 조회 -> 10km 초과")
-//    @Test
-//    void getPath2() {
-//        // when
-//        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DURATION);
-//
-//        // then
-//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-//
-//        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-//        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
-//
-//        int distance = response.jsonPath().getInt("distance");
-//        int duration = response.jsonPath().getInt("duration");
-//        int fare = response.jsonPath().getInt("fare");
-//        assertThat(distance).isEqualTo(20);
-//        assertThat(duration).isEqualTo(5);
-//        assertThat(fare).isEqualTo(1450);
-//    }
+    @DisplayName("최단 경로 조회 -> 10km 이내")
+    @Test
+    void getPath1() {
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DISTANCE);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
+        assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
+
+        int distance = response.jsonPath().getInt("distance");
+        int duration = response.jsonPath().getInt("duration");
+        int fare = response.jsonPath().getInt("fare");
+        assertThat(distance).isEqualTo(5);
+        assertThat(duration).isEqualTo(21);
+        assertThat(fare).isEqualTo(1250);
+    }
+
+    /**
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답
+     */
+    @DisplayName("최단 경로 조회 -> 10km 초과")
+    @Test
+    void getPath2() {
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
+        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
+
+        int distance = response.jsonPath().getInt("distance");
+        int duration = response.jsonPath().getInt("duration");
+        int fare = response.jsonPath().getInt("fare");
+        assertThat(distance).isEqualTo(20);
+        assertThat(duration).isEqualTo(5);
+        assertThat(fare).isEqualTo(1450);
+    }
 }

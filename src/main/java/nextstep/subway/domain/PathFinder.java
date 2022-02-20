@@ -24,7 +24,7 @@ public class PathFinder {
 
     public PathResponse shortsPath(Station source, Station target) {
         List<Station> pathStations = shortsPathStations(source, target);
-        return type.createPathResponse(pathStations, (int) dijkstraShortestPath.getPathWeight(source, target), lines, 0);
+        return type.createPathResponse(pathStations, (int) dijkstraShortestPath.getPathWeight(source, target), lines);
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> createDijkstraShortestPath() {

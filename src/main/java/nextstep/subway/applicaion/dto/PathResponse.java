@@ -2,7 +2,6 @@ package nextstep.subway.applicaion.dto;
 
 import nextstep.subway.domain.Station;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

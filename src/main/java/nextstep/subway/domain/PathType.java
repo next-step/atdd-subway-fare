@@ -21,11 +21,14 @@ public enum PathType {
         return expression.apply(section);
     }
 
-    public PathResponse createPathResponse(List<Station> pathStations, int weight, Lines lines, int fare) {
+    public PathResponse createPathResponse(List<Station> pathStations, int weight, Lines lines) {
         PathType pathType = valueOf(name());
         if (pathType == DISTANCE) {
-            return new PathResponse(pathStations, weight, lines.pathTotalDuration(pathStations), fare);
+            Fare fare = new Fare(weight);
+            return new PathResponse(pathStations, weight, lines.pathTotalDuration(pathStations), fare.calculateOverFare());
         }
-        return new PathResponse(pathStations,lines.pathTotalDistance(pathStations), weight, fare);
+        int distance = lines.pathTotalDistance(pathStations);
+        Fare fare = new Fare(distance);
+        return new PathResponse(pathStations,lines.pathTotalDistance(pathStations), weight, fare.calculateOverFare());
     }
 }
