@@ -46,13 +46,21 @@ public class PathSteps {
         return 두_역의_경로_조회를_요청(source, target, PathType.DURATION, RestAssured.given());
     }
 
-    public static void 두_역의_최단_거리_경로_조회_완료(ExtractableResponse<Response> response, int distance, Long ...stations) {
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+    public static void 두_역의_최단_거리_경로_조회_완료(ExtractableResponse<Response> response,
+                                           int distance, int duration, int fare, Long... stations) {
+        두_역의_경로_조회_완료(response, distance, duration, fare, stations);
     }
 
-    public static void 두_역의_최소_시간_경로_조회_완료(ExtractableResponse<Response> response, int duration, Long ...stations) {
+    public static void 두_역의_최소_시간_경로_조회_완료(ExtractableResponse<Response> response,
+                                           int distance, int duration, int fare, Long... stations) {
+        두_역의_경로_조회_완료(response, distance, duration, fare, stations);
+    }
+
+    private static void 두_역의_경로_조회_완료(ExtractableResponse<Response> response,
+                                      int distance, int duration, int fare, Long[] stations) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 }

@@ -40,7 +40,8 @@ public class PathDocumentationSteps {
                 fieldWithPath("stations[].createdDate").description("역 정보 생성 일자"),
                 fieldWithPath("stations[].modifiedDate").description("역 정보 최종 수정 일자"),
                 fieldWithPath("distance").description("전체 거리"),
-                fieldWithPath("duration").description("소요 시간")
+                fieldWithPath("duration").description("소요 시간"),
+                fieldWithPath("fare").description("요금")
         );
     }
 
