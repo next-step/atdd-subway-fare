@@ -9,5 +9,7 @@ include::{snippets}/path/http-request.adoc[]
 include::{snippets}/path/request-parameters.adoc[]
 
 ==== HTTP response
-
 include::{snippets}/path/http-response.adoc[]
+
+==== ResponseFields
+include::{snippets}/path/response-fields.adoc[]
