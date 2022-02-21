@@ -79,4 +79,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
     }
+
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathByDuration2() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+    }
 }
