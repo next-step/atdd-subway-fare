@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 import static nextstep.subway.documentation.PathSteps.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +33,8 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ),
                 10,
-                7
+                7,
+                1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -50,14 +52,18 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ),
-                10,
-                7
+                11,
+                7,
+                1350
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         ExtractableResponse<Response> 최단_경로_요청 = 최단_시간_경로_요청(spec, 1L, 2L);
 
-        assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertAll(
+                () -> assertThat(최단_경로_요청.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(최단_경로_요청.jsonPath().getInt("fare")).isEqualTo(1350)
+        );
     }
 }

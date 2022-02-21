@@ -2,8 +2,8 @@ package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.domain.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -47,8 +47,10 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.extractDistance()).isEqualTo(6);
+        Assertions.assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(6)
+        );
     }
 
     @Test
@@ -61,8 +63,10 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(강남역, 남부터미널역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역));
-        assertThat(path.extractDuration()).isEqualTo(3);
+        Assertions.assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역)),
+                () -> assertThat(path.extractDuration()).isEqualTo(3)
+        );
     }
 
     @Test

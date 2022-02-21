@@ -49,7 +49,8 @@ public class PathSteps {
                 fieldWithPath("stations[].createdDate").description("생성 시각"),
                 fieldWithPath("stations[].modifiedDate").description("수정 시각"),
                 fieldWithPath("distance").description("총 거리"),
-                fieldWithPath("duration").description("총 소요시간"));
+                fieldWithPath("duration").description("총 소요시간"),
+                fieldWithPath("fare").description("이용 금액"));
     }
 
     private static RequestParametersSnippet getRequestFieldsSnippets() {
