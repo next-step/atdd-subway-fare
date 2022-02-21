@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion.dto;
 
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Path;
 
 import java.math.BigDecimal;
@@ -25,7 +26,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        BigDecimal fare = BigDecimal.ZERO;
+        BigDecimal fare = new Fare(path.extractDistance()).getFare();
 
         return new PathResponse(stations, distance, duration, fare);
     }
@@ -40,5 +41,9 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public BigDecimal getFare() {
+        return fare;
     }
 }
