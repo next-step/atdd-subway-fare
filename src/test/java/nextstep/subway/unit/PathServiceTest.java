@@ -3,7 +3,7 @@ package nextstep.subway.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import nextstep.member.domain.FakeUserDetails;
+import nextstep.member.domain.NonLoginMember;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -42,8 +42,8 @@ class PathServiceTest {
     private Line 이호선;
     private Line 신분당선;
     private Line 삼호선;
-    private LoginMember 비로그인유저 = new FakeUserDetails();
     private final String time = "202202200600";
+    private LoginMember 비로그인유저 = new NonLoginMember();
 
     /**
      * 교대역    --- *2호선*  ---    강남역  ---  *2호선*  --- 삼성역

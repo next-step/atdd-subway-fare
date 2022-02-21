@@ -1,12 +1,14 @@
 package nextstep.member.domain;
 
-public class FakeUserDetails extends LoginMember {
+public class NonLoginMember extends LoginMember {
 
-    public FakeUserDetails() {
+    private final int nonLoginMemberAge = 20;
+
+    public NonLoginMember() {
         super();
     }
 
-    private FakeUserDetails(Long id, String email, String password, Integer age) {
+    private NonLoginMember(Long id, String email, String password, Integer age) {
         super(id, email, password, age);
     }
 
@@ -17,17 +19,17 @@ public class FakeUserDetails extends LoginMember {
 
     @Override
     public String getEmail() {
-        return "fake@email.com";
+        return "nonLogin@email.com";
     }
 
     @Override
     public String getPassword() {
-        return "fakePassword";
+        return "nonLoginPassword";
     }
 
     @Override
     public Integer getAge() {
-        return 20;
+        return nonLoginMemberAge;
     }
 
     @Override
