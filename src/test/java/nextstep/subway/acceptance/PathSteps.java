@@ -48,9 +48,10 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 경로조회_문서생성_최소금액_거리_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+    public static ExtractableResponse<Response> 경로조회_문서생성_최소금액_거리_기준(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
         return RestAssured
                 .given(spec).log().all()
+                .auth().oauth2(accessToken)
                 .filter(filter)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .params(params)

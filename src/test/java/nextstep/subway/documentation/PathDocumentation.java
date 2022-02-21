@@ -10,12 +10,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.Map;
+
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
+    public static final String EMAIL = "email@email";
+    public static final String PASSWORD = "password";
+    public static final int AGE = 20;
     @MockBean
     private PathService pathService;
 
@@ -54,13 +60,15 @@ public class PathDocumentation extends Documentation {
     @Test
     void pathByFee() {
         //given
+        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
         PathResponse pathResponse = getPathResponse();
         when(pathService.findPathByMinimumFee(anyInt(), anyLong(), anyLong())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성();
         RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("pathByFee");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_문서생성_최소금액_거리_기준(spec, filter, params);
+        ExtractableResponse<Response> response = 경로조회_문서생성_최소금액_거리_기준(accessToken, spec, filter, params);
 
         //then
         경로조회_검증됨(response);
