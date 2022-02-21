@@ -26,6 +26,8 @@ class SubwayMapTest {
     private Station 강남역;
     private Station 양재역;
     private Station 남부터미널역;
+    private Station 삼성역;
+    private Station 대치역;
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
@@ -73,6 +75,8 @@ class SubwayMapTest {
         강남역 = createStation(2L, "강남역");
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
+        삼성역 = createStation(5L, "삼성역");
+        대치역 = createStation(6L, "대치역");
 
         신분당선 = Line.of("신분당선", "red");
         이호선 = Line.of("2호선", "red");
@@ -80,8 +84,24 @@ class SubwayMapTest {
 
         신분당선.addSection(강남역, 양재역, 9, 2);
         이호선.addSection(교대역, 강남역, 8, 3);
+        이호선.addSection(강남역, 삼성역, 8, 3);
         삼호선.addSection(교대역, 남부터미널역, 6, 5);
         삼호선.addSection(남부터미널역, 양재역, 6, 5);
+        삼호선.addSection(양재역, 대치역, 2, 5);
+    }
+
+    @Test
+    void findEarliestTrainTime_Test() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        String earliestTrainTime = subwayMap.findEarliestUpStationTrainTime(
+            new Section(이호선, 강남역, 교대역, 8, 3), START_TIME);
+
+        // then
+        assertThat(earliestTrainTime).isEqualTo("202202200606");
     }
 
     @Test
