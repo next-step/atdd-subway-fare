@@ -35,19 +35,20 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPathByDuration(upStation, downStation);
+        int fee = feePolicy.totalFee(path.extractDistance(), subwayMap.totalAdditionalFee());
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fee);
     }
 
-    public PathResponse findPathByMinimumFee(Long source, Long target) {
+    public PathResponse findPathByMinimumFee(int age, Long source, Long target) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
-        feePolicy.totalFee(path.extractDistance(), lines)
+        int fee = feePolicy.totalFee(path.extractDistance(), subwayMap.totalAdditionalFee(), age);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fee);
     }
 
 }

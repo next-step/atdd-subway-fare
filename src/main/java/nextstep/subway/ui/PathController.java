@@ -1,5 +1,7 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class PathController {
     }
 
     @GetMapping("/paths/minimum-fee")
-    public ResponseEntity<PathResponse> findPathByFee(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPathByMinimumFee(source, target));
+    public ResponseEntity<PathResponse> findPathByFee(@AuthenticationPrincipal LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findPathByMinimumFee(loginMember.getAge(), source, target));
     }
 }
