@@ -41,9 +41,10 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "양재역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10, 6
+                ), 10, 6, 1250
         );
         when(pathService.findPath(anyLong(), anyLong(), any(FindType.class))).thenReturn(pathResponse);
+        when(pathService.findPath2(anyLong(), anyLong(), any(FindType.class))).thenReturn(pathResponse);
     }
 
     @Test
@@ -75,6 +76,7 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").description("역 생성일"),
                                 fieldWithPath("stations[].modifiedDate").description("역 최근 수정일"),
                                 fieldWithPath("distance").description("시작역과 도착역 사이 거리"),
-                                fieldWithPath("duration").description("총 소요시간"))));
+                                fieldWithPath("duration").description("총 소요시간"),
+                                fieldWithPath("fare").description("지하철 요금"))));
     }
 }
