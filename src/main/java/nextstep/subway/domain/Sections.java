@@ -161,6 +161,7 @@ public class Sections {
     }
 
     public int fare() {
-        return 0;
+        SubwayFare subwayFare = new SubwayFare(totalDistance());
+        return subwayFare.calculate();
     }
 }

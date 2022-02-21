@@ -22,7 +22,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return 0;
+        return sections.fare();
     }
 
     public List<Station> getStations() {
