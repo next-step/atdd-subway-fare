@@ -41,4 +41,33 @@ public class PathServiceTest extends PathServiceTestData {
         assertThat(path.getDistance()).isEqualTo(distance);
         assertThat(path.getDuration()).isEqualTo(duration);
     }
+
+    @DisplayName("DISTANCE 타입으로 경로 조회")
+    @Test
+    void findPathDistance2() {
+        // when
+        PathResponse path = pathService.findPath2(교대역.getId(), 양재역.getId(), FindType.DISTANCE);
+
+        // then
+        경로_조회됨2(path, new Station[]{교대역, 남부터미널역, 양재역}, 8, 12, 1250);
+    }
+
+    @DisplayName("DURATION 타입으로 경로 조회")
+    @Test
+    void findPathDuration2() {
+        // when
+        PathResponse path = pathService.findPath2(교대역.getId(), 양재역.getId(), FindType.DURATION);
+
+        // then
+        경로_조회됨2(path, new Station[]{교대역, 강남역, 양재역}, 15, 10, 1350);
+    }
+
+    private void 경로_조회됨2(PathResponse path, Station[] stations, int distance, int duration, int fare) {
+        assertThat(path.getStations().get(0).getName()).isEqualTo(stations[0].getName());
+        assertThat(path.getStations().get(1).getName()).isEqualTo(stations[1].getName());
+        assertThat(path.getStations().get(2).getName()).isEqualTo(stations[2].getName());
+        assertThat(path.getDistance()).isEqualTo(distance);
+        assertThat(path.getDuration()).isEqualTo(duration);
+        assertThat(path.getFare()).isEqualTo(fare);
+    }
 }
