@@ -1,6 +1,5 @@
 package nextstep.subway.domain.farepolicy;
 
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -18,9 +17,7 @@ public class FarePolicy {
     public int calculateFare() {
         int fare = DEFAULT_FARE;
 
-        Iterator<Policy> policyIterator = policySet.iterator();
-        while (policyIterator.hasNext()) {
-            Policy policy = policyIterator.next();
+        for (Policy policy : policySet) {
             fare = policy.calculate(fare);
         }
 
