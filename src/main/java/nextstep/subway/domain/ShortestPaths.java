@@ -1,28 +1,31 @@
 package nextstep.subway.domain;
 
 import java.util.List;
-import org.jgrapht.GraphPath;
 
 public class ShortestPaths {
 
     Path shortestDistancePath;
 
-    Path shortestTimePath;
+    Path shortestDurationPath;
+
+    int shortestDistance;
+
+    public ShortestPaths(Path shortestDurationPath, Path shortestDistancePath, int shortestDistance) {
+        this.shortestDurationPath = shortestDurationPath;
+        this.shortestDistancePath = shortestDistancePath;
+        this.shortestDistance = shortestDistance;
+    }
 
     public Path getShortestDistancePath() {
-        return null;
+        return shortestDistancePath;
     }
 
     public Path getShortestDurationPath() {
-        return null;
+        return shortestDurationPath;
     }
 
     public int getShortestDistance() {
-        GraphPath<Station, SectionEdge> result = null;
-
-        return result.getEdgeList().stream()
-            .mapToInt(value -> value.getSection().getDistance())
-            .sum();
+        return shortestDistance;
     }
 
     public String getShortestArrivalTime() {

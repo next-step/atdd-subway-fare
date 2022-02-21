@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import com.google.common.collect.Lists;
+import java.time.LocalDateTime;
 import nextstep.subway.domain.SubwayMap.PathDirection;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,9 +76,12 @@ class SubwayMapTest {
         삼성역 = createStation(5L, "삼성역");
         대치역 = createStation(6L, "대치역");
 
-        신분당선 = Line.of("신분당선", "red");
-        이호선 = Line.of("2호선", "red");
-        삼호선 = Line.of("3호선", "red");
+        신분당선 = Line.of("신분당선", "red", 2000
+            , "0520", "2340", 20);
+        이호선 = Line.of("2호선", "red", 900
+            , "0500", "2330", 10);
+        삼호선 = Line.of("3호선", "red", 1100
+            , "0530", "2300", 5);
 
         신분당선.addSection(강남역, 양재역, 9, 2);
         이호선.addSection(교대역, 강남역, 8, 3);
@@ -85,20 +89,6 @@ class SubwayMapTest {
         삼호선.addSection(교대역, 남부터미널역, 6, 5);
         삼호선.addSection(남부터미널역, 양재역, 6, 5);
         삼호선.addSection(양재역, 대치역, 2, 5);
-    }
-
-    @Test
-    void findEarliestTrainTime_Test() {
-        // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
-
-        // when
-        String earliestTrainTime = subwayMap.findEarliestUpStationTrainTime(
-            new Section(이호선, 강남역, 교대역, 8, 3), START_TIME);
-
-        // then
-        assertThat(earliestTrainTime).isEqualTo("202202200606");
     }
 
     @Test
@@ -124,15 +114,64 @@ class SubwayMapTest {
     }
 
     @Test
-    void findTrainTimeTest() {
+    void findTrainTime_UpDirection_Test() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
-        String trainTime = subwayMap.findTrainTime(
-            new Section(이호선, 강남역, 교대역, 8, 3), PathDirection.UP, START_TIME);
+        LocalDateTime trainTime = subwayMap.findTrainTime(
+            new Section(이호선, 강남역, 교대역, 8, 3), START_TIME);
 
-        assertThat(trainTime).isEqualTo("202202200603");
+        assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 03));
+    }
+
+    @Test
+    void findTrainTime_DownDirection_Test() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        LocalDateTime trainTime = subwayMap.findTrainTime(
+            new Section(이호선, 교대역, 강남역, 8, 3), START_TIME);
+
+        assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 00));
+    }
+
+    @Test
+    void convertStringToDateTimeTest() {
+        LocalDateTime dateTime = SubwayMap.convertStringToDateTime("202202201603");
+
+        assertThat(dateTime.getYear()).isEqualTo(2022);
+        assertThat(dateTime.getMonthValue()).isEqualTo(02);
+        assertThat(dateTime.getHour()).isEqualTo(16);
+        assertThat(dateTime.getMinute()).isEqualTo(03);
+    }
+
+    @Test
+    void convertDateTimeToStringTest() {
+        LocalDateTime time = LocalDateTime.of(2022, 02, 20, 06, 00);
+        String timeString = SubwayMap.convertDateTimeToString(time);
+
+        assertThat(timeString).isEqualTo("202202200600");
+    }
+
+    @Test
+    void dateTimeComparisonTest() {
+        LocalDateTime bigTime = SubwayMap.convertStringToDateTime("202202201604");
+        LocalDateTime smallTime = SubwayMap.convertStringToDateTime("202202201603");
+
+        assertThat(bigTime.isAfter(smallTime)).isTrue();
+    }
+
+    @Test
+    void convertLineTimeToDateTimeTest() {
+        LocalDateTime findPathTime = SubwayMap.convertStringToDateTime(START_TIME);
+        LocalDateTime dateTime = SubwayMap.convertLineTimeToDateTime(findPathTime, "1630");
+
+        assertThat(dateTime.getYear()).isEqualTo(2022);
+        assertThat(dateTime.getMonthValue()).isEqualTo(02);
+        assertThat(dateTime.getHour()).isEqualTo(16);
+        assertThat(dateTime.getMinute()).isEqualTo(30);
     }
 
     @DisplayName("경로의 구간이 어느 방향행인지 확인해보니 상행이다.")

@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
@@ -18,20 +20,15 @@ public class SubwayMap {
     public Path findPath(Station source, Station target, PathType pathType, String time) {
         List<GraphPath<Station, SectionEdge>> paths = findAllKShortestPaths(source, target, pathType);
 
-//        FindShortest findShortest = new FindShortest();
         ShortestPaths shortestPaths = findShortest(paths, time);
 
         int fareDistance = shortestPaths.getShortestDistance();
 
-        List<Section> sections;
-
         if (pathType.equals(PathType.DISTANCE)) {
-            sections = shortestPaths.getShortestDistanceSections();
-            return Path.of(new Sections(sections), fareDistance);
+            return Path.of(new Sections(shortestPaths.getShortestDistanceSections()), fareDistance);
         }
 
-        sections = shortestPaths.getShortestDurationSections();
-        return Path.of(new Sections(sections), fareDistance);
+        return Path.of(new Sections(shortestPaths.getShortestDurationSections()), fareDistance);
     }
 
     protected List<GraphPath<Station, SectionEdge>> findAllKShortestPaths(Station source, Station target, PathType pathType) {
@@ -40,12 +37,131 @@ public class SubwayMap {
     }
 
     public ShortestPaths findShortest(List<GraphPath<Station, SectionEdge>> paths, String time) {
+        Path shortestDistancePath = null;
+        Path shortestDurationPath = null;
+
+        // 1. 전체 경로가 나왔다.
+        // 2. 경로들 중 최단거리 경로를 찾는다.
+        //  2.1. weight 가 가장 작은 값인 경로,
+        //  2.1. weight 의 합은 fareDistance
+        int shortestFareDistance = Integer.MAX_VALUE;
         for (GraphPath<Station, SectionEdge> path : paths) {
             List<Section> sectionList = makeSectionListFromGraphPath(path);
+            int distance = sectionList.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
 
+            if (distance <= shortestFareDistance) {
+                shortestFareDistance = distance;
+
+                List<Section> sections = makeSectionListFromGraphPath(path);
+                shortestDistancePath = Path.of(new Sections(sections), shortestFareDistance);
+            }
         }
 
-        return new ShortestPaths();
+        // 3. 경로들 중 가장빠른도착시간 경로를 찾는다.
+        //  3.*. 방향을 찾는다.
+        //  3.0. 최초 구간 시작의 출발가능 시간을 구한다.
+
+        //  3.1. 구간의 시작과 끝의 노선이 바뀌지 않았으면
+        //   3.1.1. 기존 시간에 그냥 더한다.
+        //  3.2. 구간의 시작과 끝의 노선이 다르면
+        //   3.2.1. 구간의 시작에서 끝으로 가는 가장 빠른 정차시간을 찾는다.
+        //    3.2.1.1. 해당 노선의 구간 시작~끝 인 방향으로, 노선의 시작시간과 시간간격으로 찾는다.
+        //    3.2.1.2. 차가 없으면 그 다음날로 넘어간다.
+        //   3.2.2.
+        for (GraphPath<Station, SectionEdge> path : paths) {
+            List<Section> sectionList = makeSectionListFromGraphPath(path);
+            int totalTime = 0;
+
+            for (Section section : sectionList) {
+                PathDirection pathDirection = findPathDirection(section);
+                LocalDateTime trainTime = findTrainTime(section, time);
+            }
+        }
+
+        return new ShortestPaths(shortestDurationPath, shortestDistancePath, shortestFareDistance);
+    }
+
+    protected LocalDateTime findTrainTime(Section section, String time) {
+        PathDirection pathDirection = findPathDirection(section);
+
+        LocalDateTime findPathTime = convertStringToDateTime(time);
+        Station targetStation = section.getUpStation();
+        Line line = section.getLine();
+
+        List<Section> sectionList = line.getSections();
+        int durationMinuteSum = 0;
+        if (pathDirection.equals(PathDirection.UP)) {
+            for (int i = sectionList.size()-1; i >= 0; --i) {
+                if (sectionList.get(i).getDownStation().equals(targetStation)) {
+                    break;
+                }
+                durationMinuteSum += sectionList.get(i).getDuration();
+            }
+        } else {
+            for (Section sect : sectionList) {
+                if (sect.getUpStation().equals(targetStation)) {
+                    break;
+                }
+                durationMinuteSum += sect.getDuration();
+            }
+        }
+
+        LocalDateTime startTime = convertLineTimeToDateTime(findPathTime, line.getStartTime());
+        LocalDateTime endTime = convertLineTimeToDateTime(findPathTime, line.getEndTime());
+        int intervalTime = line.getIntervalTime();
+
+        // 첫차 시간 + (간격 X n) + 종점에서 정차역까지의 소요시간  이 조회 기준 시간보다 커질 때 까지 n을 증가
+        LocalDateTime trainTime = startTime;
+        while (!findPathTime.isBefore(trainTime.plusMinutes(durationMinuteSum))
+            && !findPathTime.isEqual(trainTime.plusMinutes(durationMinuteSum))) {
+            trainTime = trainTime.plusMinutes(intervalTime);
+        }
+
+        return trainTime.plusMinutes(durationMinuteSum);
+    }
+
+    protected static LocalDateTime convertLineTimeToDateTime(LocalDateTime findTime, String time) {
+        return LocalDateTime.of(findTime.getYear(), findTime.getMonth(), findTime.getDayOfMonth()
+            , Integer.parseInt(time.substring(0,2)), Integer.parseInt(time.substring(2)));
+    }
+
+    protected static LocalDateTime convertStringToDateTime(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        return LocalDateTime.parse(dateString, formatter);
+    }
+
+    protected static String convertDateTimeToString(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+    }
+
+    enum PathDirection {
+        UP, DOWN
+    }
+
+    protected PathDirection findPathDirection(Section section) {
+        Line line = section.getLine();
+        List<Station> stations = line.getStations();
+
+        Station currentStation = section.getUpStation();
+        Station nextStation = section.getDownStation();
+
+        int i = 0;
+        if (stations.get(i).equals(currentStation)) {
+            return PathDirection.DOWN;
+        }
+
+        while (++i < stations.size()-1) {
+            if (currentStation.equals(stations.get(i))) {
+                if (nextStation.equals(stations.get(i-1))) {
+                    return PathDirection.UP;
+                }
+                break;
+            }
+        }
+
+        return PathDirection.DOWN;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
