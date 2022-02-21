@@ -165,7 +165,8 @@ public class Sections {
 
     private int getPathDistanceOrDuration(List<Station> pathStations, Section section, int distanceOrDuration) {
         for (int i = 0; i < pathStations.size() - 1; i++) {
-            if (section.getUpStation().equals(pathStations.get(i)) && section.getDownStation().equals(pathStations.get(i + 1))) {
+            if (section.getUpStation().equals(pathStations.get(i)) && section.getDownStation().equals(pathStations.get(i + 1)) ||
+                section.getDownStation().equals(pathStations.get(i)) && section.getUpStation().equals(pathStations.get(i + 1))) {
                 return distanceOrDuration;
             }
         }
