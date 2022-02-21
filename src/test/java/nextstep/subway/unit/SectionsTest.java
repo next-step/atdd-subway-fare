@@ -87,4 +87,14 @@ public class SectionsTest {
         assertThat(sections.totalDistance()).isEqualTo(5);
         assertThat(sections.totalDuration()).isEqualTo(10);
     }
+
+    @DisplayName("extractFare메서드를 테스트")
+    @Test
+    void extractFare() {
+        // when
+        sections.add(new Section(line, 역삼역, 삼성역, 4, 8));
+
+        // then
+        assertThat(sections.fare()).isEqualTo(1250);
+    }
 }
