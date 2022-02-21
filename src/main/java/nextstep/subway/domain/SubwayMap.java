@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
@@ -14,34 +15,69 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathType pathType) {
-        GraphPath<Station, SectionEdge> result = getMinDistancePath(source, target);
-        int fareDistance = result.getEdgeList().stream()
-            .mapToInt(value -> value.getSection().getDistance())
-            .sum();
+    public Path findPath(Station source, Station target, PathType pathType, String time) {
+        List<GraphPath<Station, SectionEdge>> paths = findAllKShortestPaths(source, target, pathType);
 
-        if (pathType.equals(PathType.DURATION)) {
-            result = getMinDurationPath(source, target);
+//        FindShortest findShortest = new FindShortest();
+        ShortestPaths shortestPaths = findShortest(paths, time);
+
+        int fareDistance = shortestPaths.getShortestDistance();
+
+        List<Section> sections;
+
+        if (pathType.equals(PathType.DISTANCE)) {
+            sections = shortestPaths.getShortestDistanceSections();
+            return Path.of(new Sections(sections), fareDistance);
         }
 
-        List<Section> sections = getSectionListFromGraphPath(result);
-
+        sections = shortestPaths.getShortestDurationSections();
         return Path.of(new Sections(sections), fareDistance);
     }
 
-    private GraphPath<Station, SectionEdge> getMinDistancePath(Station source, Station target) {
+    protected List<GraphPath<Station, SectionEdge>> findAllKShortestPaths(Station source, Station target, PathType pathType) {
+        return new KShortestPaths(createGraph(pathType), 100)
+            .getPaths(source, target);
+    }
+
+    public ShortestPaths findShortest(List<GraphPath<Station, SectionEdge>> paths, String time) {
+        for (GraphPath<Station, SectionEdge> path : paths) {
+            List<Section> sectionList = makeSectionListFromGraphPath(path);
+
+        }
+
+        return new ShortestPaths();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
+//    public Path findPath(Station source, Station target, PathType pathType, String time) {
+//        GraphPath<Station, SectionEdge> result = findMinDistancePath(source, target);
+//        int fareDistance = result.getEdgeList().stream()
+//            .mapToInt(value -> value.getSection().getDistance())
+//            .sum();
+//
+//        if (pathType.equals(PathType.DURATION)) {
+//            result = findMinDurationPath(source, target);
+//        }
+//
+//        List<Section> sections = makeSectionListFromGraphPath(result);
+//
+//        return Path.of(new Sections(sections), fareDistance);
+//    }
+
+    private GraphPath<Station, SectionEdge> findMinDistancePath(Station source, Station target) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
             = new DijkstraShortestPath<>(createGraph(PathType.DISTANCE));
         return dijkstraShortestPath.getPath(source, target);
     }
 
-    private GraphPath<Station, SectionEdge> getMinDurationPath(Station source, Station target) {
+    private GraphPath<Station, SectionEdge> findMinDurationPath(Station source, Station target) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
             = new DijkstraShortestPath<>(createGraph(PathType.DURATION));
         return dijkstraShortestPath.getPath(source, target);
     }
 
-    private List<Section> getSectionListFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
+    private List<Section> makeSectionListFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
         return graphPath.getEdgeList().stream()
             .map(SectionEdge::getSection)
             .collect(Collectors.toList());

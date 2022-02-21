@@ -55,6 +55,6 @@ public class PathDocumentation extends Documentation {
             .log().all().extract();
 
         경로조회의_결과_경로가_예상과_같다(response, 교대역.getId(), 양재역.getId());
-        경로조회의_결과_정보가_예상과_같다(response, distance, duration, 1250);
+        경로조회의_결과_정보가_예상과_같다(response, distance, duration, 1250, "");
     }
 }

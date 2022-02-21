@@ -26,7 +26,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
 
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation, pathType);
+        Path path = subwayMap.findPath(upStation, downStation, pathType, time);
 
         path.farePolicySetting(loginMember.getAge());
 
