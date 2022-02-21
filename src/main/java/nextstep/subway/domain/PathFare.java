@@ -3,20 +3,20 @@ package nextstep.subway.domain;
 import java.util.Arrays;
 
 public enum PathFare {
-    BASIC(0, 10, 0, 1250),
-    SHORT(11, 50, 5, 100),
-    LONG(51, Integer.MAX_VALUE,8,  100);
+    BASIC_DISTANCE_FARE(0, 10, 0, 1250),
+    SHORT_DISTANCE_FARE(11, 50, 5, 100),
+    LONG_DISTANCE_FARE(51, Integer.MAX_VALUE, 8,  100);
 
     private int standardDistance;
     private int maxDistance;
-    private int fareByDistance;
-    private int distanceExceeded;
+    private int distanceUnit;
+    private int fare;
 
-    PathFare(int standardDistance, int maxDistance, int fareByDistance, int distanceExceeded) {
+    PathFare(int standardDistance, int maxDistance, int distanceUnit, int fare) {
         this.standardDistance = standardDistance;
         this.maxDistance = maxDistance;
-        this.fareByDistance = fareByDistance;
-        this.distanceExceeded = distanceExceeded;
+        this.distanceUnit = distanceUnit;
+        this.fare = fare;
     }
 
     public static int extractFare(int distance) {
@@ -26,8 +26,8 @@ public enum PathFare {
     }
 
     private int calculateOverFare(int distance) {
-        if (this == PathFare.BASIC) {
-            return distanceExceeded;
+        if (this == PathFare.BASIC_DISTANCE_FARE) {
+            return fare;
         }
 
         if (distance < standardDistance) {
@@ -35,6 +35,6 @@ public enum PathFare {
         }
 
         int overDistance = Integer.min(distance, maxDistance);
-        return (int) ((Math.ceil((overDistance - standardDistance) / fareByDistance) + 1) * distanceExceeded);
+        return (int) ((Math.ceil((overDistance - standardDistance) / distanceUnit) + 1) * fare);
     }
 }
