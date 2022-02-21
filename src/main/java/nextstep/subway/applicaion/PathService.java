@@ -1,10 +1,7 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +9,14 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final FeePolicy feePolicy;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, FeePolicy feePolicy) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.feePolicy = feePolicy;
     }
 
     public PathResponse findPath(Long source, Long target) {
@@ -46,6 +45,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
+        feePolicy.totalFee(path.extractDistance(), lines)
 
         return PathResponse.of(path);
     }

@@ -30,8 +30,8 @@ class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
+        신분당선 = new Line("신분당선", "red", 900);
+        이호선 = new Line("2호선", "red", 300);
         삼호선 = new Line("3호선", "red");
 
         신분당선.addSection(강남역, 양재역, 3, 2);
@@ -92,6 +92,20 @@ class SubwayMapTest {
 
         //then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+    }
+
+    @DisplayName("총 추가 요금 구하기")
+    @Test
+    void totalAdditionalFee() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        //when
+        int additionalFee = subwayMap.totalAdditionalFee();
+
+        //then
+        assertThat(additionalFee).isEqualTo(1200);
     }
 
     private Station createStation(long id, String name) {

@@ -20,8 +20,13 @@ public class Line extends BaseEntity {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, int additionalFee) {
         this.name = name;
         this.color = color;
+        this.additionalFee = additionalFee;
     }
 
     public Long getId() {
