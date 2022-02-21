@@ -6,12 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.BIG_DECIMAL;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -23,14 +26,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
 
-    /** (거리, 시간)
-     *                     (10, 2)
-     *          교대역    --- *2호선* ---    강남역
-     *           |                           |
-     * (2, 9)  *3호선*                     *신분당선* (10, 3)
-     *           |                           |
-     *         남부터미널역 --- *3호선* ---    양재
-     *                      (3, 8)
+    /**
+     *                         (10km, 2분)
+     *              교대역    --- *2호선* ---    강남역
+     *               |                           |
+     * (2km, 9분)  *3호선*                     *신분당선* (10km, 3분)
+     *               |                           |
+     *             남부터미널역 --- *3호선* ---    양재
+     *                          (3km, 8분)
      */
     @BeforeEach
     public void setUp() {
@@ -61,6 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(17);
+        assertThat(response.jsonPath().getObject("fare", BigDecimal.class)).isEqualTo(BigDecimal.valueOf(1250));
     }
 
     /**
@@ -76,5 +80,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        assertThat(response.jsonPath().getObject("fare", BigDecimal.class)).isEqualTo(BigDecimal.valueOf(1450));
     }
 }
