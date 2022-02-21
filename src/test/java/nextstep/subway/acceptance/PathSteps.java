@@ -47,13 +47,13 @@ public class PathSteps {
                     fieldWithPath("distance").type(Integer.class).description("경로조회 총 거리"),
                     fieldWithPath("duration").type(Integer.class).description("경로조회 총 소요시간"),
                     fieldWithPath("fare").type(Integer.class).description("경로조회 총 비용"),
-                    fieldWithPath("time").type(JsonFieldType.STRING).description("조회된 경로 도착시간")
+                    fieldWithPath("arrivalTime").type(JsonFieldType.STRING).description("조회된 경로 도착시간")
                 )))
             .build();
     }
 
     public static ExtractableResponse<Response> 유저가_두_역의_최단_거리_경로_조회를_요청(String accessToken
-        , Long source, Long target) {
+        , Long source, Long target, String time) {
         return RestAssured
             .given().log().all()
             .auth().oauth2(accessToken)
@@ -61,7 +61,7 @@ public class PathSteps {
             .queryParam("source", source)
             .queryParam("target", target)
             .queryParam("pathType", PathType.DISTANCE)
-            .queryParam("time", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")))
+            .queryParam("time", time)
             .when().get("/paths")
             .then().log().all().extract();
     }
@@ -81,7 +81,7 @@ public class PathSteps {
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation
-        , int distance, int duration, int fare) {
+        , int distance, int duration, int fare, String startTime, String endTime, int intervalTime) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -91,6 +91,9 @@ public class PathSteps {
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
         lineCreateParams.put("fare", fare + "");
+        lineCreateParams.put("startTime", startTime + "");
+        lineCreateParams.put("endTime", endTime + "");
+        lineCreateParams.put("intervalTime", intervalTime + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
@@ -112,11 +115,12 @@ public class PathSteps {
     }
 
     public static void 경로조회의_결과_정보가_예상과_같다(ExtractableResponse<Response> response
-        , int distance, int duration, int fare) {
+        , int distance, int duration, int fare, String arrivalTime) {
         Assertions.assertAll(
             () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration),
             () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare)
+            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare),
+            () -> assertThat(response.jsonPath().getString("arrivalTime")).isEqualTo(arrivalTime)
         );
     }
 }

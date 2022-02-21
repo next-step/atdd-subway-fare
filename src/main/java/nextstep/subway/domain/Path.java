@@ -10,6 +10,7 @@ public class Path {
     private Sections sections;
     private int fareDistance;
     private FarePolicy farePolicy = new FarePolicy();
+    private String arrivalTime;
 
     protected Path() {
     }
@@ -52,5 +53,9 @@ public class Path {
             .appendPolicy(new OverFarePolicy(fareDistance))
             .appendPolicy(new MaxLineFarePolicy(sections))
             .appendPolicy(new DiscountFarePolicy(age));
+    }
+
+    public String extractArrivalTime() {
+        return "";
     }
 }

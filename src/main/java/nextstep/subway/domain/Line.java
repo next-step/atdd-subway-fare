@@ -12,6 +12,9 @@ public class Line extends BaseEntity {
     private String name;
     private String color;
     private Integer additionalFare;
+    private String startTime;
+    private String endTime;
+    private int intervalTime;
 
     @Embedded
     private Sections sections = new Sections();
@@ -20,9 +23,20 @@ public class Line extends BaseEntity {
     }
 
     private Line(String name, String color, int additionalFare) {
+        this(name, color, additionalFare, "", "", 0);
+    }
+
+    private Line(String name, String color, int additionalFare, String startTime, String endTime, int intervalTime) {
         this.name = name;
         this.color = color;
         this.additionalFare = additionalFare;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
+    }
+
+    public static Line of(String name, String color, int additionalFare, String startTime, String endTime, int intervalTime) {
+        return new Line(name, color, additionalFare, startTime, endTime, intervalTime);
     }
 
     public static Line of(String name, String color, int additionalFare) {
@@ -72,5 +86,17 @@ public class Line extends BaseEntity {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public int getIntervalTime() {
+        return intervalTime;
     }
 }

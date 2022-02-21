@@ -8,6 +8,9 @@ public class LineRequest {
     private int distance;
     private int duration;
     private int fare;
+    private String startTime;
+    private String endTime;
+    private int intervalTime;
 
     public String getName() {
         return name;
@@ -35,5 +38,17 @@ public class LineRequest {
 
     public int getFare() {
         return fare;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public int getIntervalTime() {
+        return intervalTime;
     }
 }
