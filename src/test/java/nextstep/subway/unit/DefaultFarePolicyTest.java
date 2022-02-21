@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.DefaultFarePolicy;
+import nextstep.subway.domain.SubwayFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ public class DefaultFarePolicyTest {
     void apply() {
         // given
         int defaultFare = 1250;
-        DefaultFarePolicy policy = new DefaultFarePolicy(defaultFare);
+        SubwayFarePolicy policy = new DefaultFarePolicy(defaultFare);
 
         // when & then
         assertThat(policy.apply(0, 1)).isEqualTo(defaultFare);

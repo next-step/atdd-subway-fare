@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.From10To50Policy;
+import nextstep.subway.domain.SubwayFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,7 +18,7 @@ public class From10To50PolicyTest {
     void apply(int distance, int fare) {
         // given
         int defaultFare = 1250;
-        From10To50Policy policy = new From10To50Policy();
+        SubwayFarePolicy policy = new From10To50Policy();
 
         // when & then
         assertThat(policy.apply(defaultFare, distance)).isEqualTo(fare);
