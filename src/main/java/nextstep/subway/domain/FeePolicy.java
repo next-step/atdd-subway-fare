@@ -8,6 +8,14 @@ public class FeePolicy {
     public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST = 10;
     public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND = 50;
 
+    public int totalFee(int distance) {
+        return totalFee(distance, 0, 19);
+    }
+
+    public int totalFee(int distance, int additionalFee) {
+        return totalFee(distance, additionalFee, 19);
+    }
+
     public int totalFee(int distance, int additionalFee ,int age) {
         if (distance > ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND) {
             return BASIC_FEE + 800 + getAdditionalFeePerEight(distance - ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND);
@@ -16,10 +24,6 @@ public class FeePolicy {
             return BASIC_FEE + getAdditionalFeePerFive(distance - ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST);
         }
         return BASIC_FEE;
-    }
-
-    public int totalFee(int distance) {
-        return totalFee(distance, 0, 19);
     }
 
     private int getAdditionalFeePerEight(int distance) {

@@ -61,14 +61,65 @@ class FeePolicyTest {
         assertThat(fee).isEqualTo(1250 + 1000);
     }
 
+    @DisplayName("총 금액 및 노선 추가 요금(900원) : 8km")
+    @Test
+    void totalFee_line_additional_fee_case01() {
+        //when
+        int fee = feePolicy.totalFee(8, 900);
+        //then
+        assertThat(fee).isEqualTo(2150);
+    }
+
+    @DisplayName("총 금액 및 노선 추가 요금(900원) : 12km")
+    @Test
+    void totalFee_line_additional_fee_case02() {
+        //when
+        int fee = feePolicy.totalFee(12, 900);
+        //then
+        assertThat(fee).isEqualTo(2250);
+    }
+
+    @DisplayName("총 금액 테스트, 나이 추가(6세)")
+    @Test
+    void totalFee_with_age_case01() {
+        //when
+        int fee = feePolicy.totalFee(8, 900, 6);
+        //then
+        assertThat(fee).isEqualTo(900);
+    }
+
+    @DisplayName("총 금액 테스트, 나이 추가(12세)")
+    @Test
+    void totalFee_with_age_case02() {
+        //when
+        int fee = feePolicy.totalFee(8, 900, 12);
+        //then
+        assertThat(fee).isEqualTo(900);
+    }
+
+    @DisplayName("총 금액 테스트, 나이 추가(13세)")
+    @Test
+    void totalFee_with_age_case03() {
+        //when
+        int fee = feePolicy.totalFee(8, 900, 13);
+        //then
+        assertThat(fee).isEqualTo(1440);
+    }
+
+    @DisplayName("총 금액 테스트, 나이 추가(18세)")
+    @Test
+    void totalFee_with_age_case04() {
+        //when
+        int fee = feePolicy.totalFee(8, 900, 18);
+        //then
+        assertThat(fee).isEqualTo(1440);
+    }
+
     private Sections getSections(int distance1, int distance2, int distance3) {
         return new Sections(Arrays.asList(
                 new Section(null,null,null, distance1, 3),
                 new Section(null, null, null, distance2, 2),
                 new Section(null, null, null, distance3, 2)));
     }
-
-
-
 
 }
