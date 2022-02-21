@@ -48,9 +48,11 @@ public class PathSteps {
             .build();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 유저가_두_역의_최단_거리_경로_조회를_요청(String accessToken
+        , Long source, Long target) {
         return RestAssured
             .given().log().all()
+            .auth().oauth2(accessToken)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
             .queryParam("target", target)
@@ -59,9 +61,11 @@ public class PathSteps {
             .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 유저가_두_역의_최소_시간_경로_조회를_요청(String accessToken
+        , Long source, Long target) {
         return RestAssured
             .given().log().all()
+            .auth().oauth2(accessToken)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
             .queryParam("target", target)
@@ -71,7 +75,7 @@ public class PathSteps {
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation
-        , int distance, int duration) {
+        , int distance, int duration, int fare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -80,6 +84,7 @@ public class PathSteps {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("fare", fare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }

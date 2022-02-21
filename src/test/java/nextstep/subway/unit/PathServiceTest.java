@@ -3,6 +3,8 @@ package nextstep.subway.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import nextstep.member.domain.NonLoginMember;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
@@ -40,6 +42,7 @@ class PathServiceTest {
     private Line 이호선;
     private Line 신분당선;
     private Line 삼호선;
+    private LoginMember 비로그인유저 = new NonLoginMember();
 
     /**
      * 교대역    --- *2호선*  ---    강남역  ---  *2호선*  --- 삼성역
@@ -71,6 +74,13 @@ class PathServiceTest {
      *                             |
      *                           교판역
      *
+     * 2호선: 추가요금 900원
+     * 3호선: 추가요금 1100원
+     * 신분당선: 추가요금 2000원
+     *
+     * 청소년(13세 이상~19세 미만): 운임에서 350원 공제 후 20% 할인
+     * 어린이(6세 이상~ 13세 미만): 운임에서 350원 공제 후 50% 할인
+     *
      * 거리10: 교대역~ 양재역
      * 거리11: 강남역~ 남부터미널역
      * 거리15: 교대역~ 대치역
@@ -92,17 +102,17 @@ class PathServiceTest {
         광교역 = stationRepository.save(Station.of("광교역"));
         교판역 = stationRepository.save(Station.of("교판역"));
 
-        이호선 = Line.of("이호선", "green");
+        이호선 = Line.of("이호선", "green", 900);
         이호선.addSection(교대역, 강남역, 8, 4);
         이호선.addSection(강남역, 삼성역, 8, 3);
 
-        신분당선 = Line.of("신분당선", "red");
+        신분당선 = Line.of("신분당선", "red", 2000);
         신분당선.addSection(강남역, 양재역, 6, 3);
         신분당선.addSection(양재역, 판교역, 40, 20);
         신분당선.addSection(판교역, 광교역, 8, 5);
         신분당선.addSection(광교역, 교판역, 1, 1);
 
-        삼호선 = Line.of("삼호선", "orange");
+        삼호선 = Line.of("삼호선", "orange", 1100);
         삼호선.addSection(교대역, 남부터미널역, 5, 5);
         삼호선.addSection(남부터미널역, 양재역, 5, 5);
         삼호선.addSection(양재역, 대치역, 5, 5);
@@ -115,63 +125,63 @@ class PathServiceTest {
     @DisplayName("10km 거리의 경로조회를 한다.")
     @Test
     void findPathTest_1() {
-        PathResponse response = pathService.findPath(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+        PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
                 .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(10),
             () -> assertThat(response.getDuration()).isEqualTo(10),
-            () -> assertThat(response.getFare()).isEqualTo(1250)
+            () -> assertThat(response.getFare()).isEqualTo(2350)
         );
     }
 
     @DisplayName("11km 거리의 경로조회 (최소시간 경로와 다른 경로) 를 한다.")
     @Test
     void findPathTest_2() {
-        PathResponse response = pathService.findPath(강남역.getId(), 남부터미널역.getId(), PathType.DURATION);
+        PathResponse response = pathService.findPath(비로그인유저, 강남역.getId(), 남부터미널역.getId(), PathType.DURATION);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
                 .mapToLong(value -> value.getId())).containsExactly(강남역.getId(), 양재역.getId(), 남부터미널역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(11),
             () -> assertThat(response.getDuration()).isEqualTo(8),
-            () -> assertThat(response.getFare()).isEqualTo(1350)
+            () -> assertThat(response.getFare()).isEqualTo(3350)
         );
     }
 
     @DisplayName("15km 거리의 경로조회 (최소시간 경로와 다른 경로) 를 한다.")
     @Test
     void findPathTest_3() {
-        PathResponse response = pathService.findPath(교대역.getId(), 대치역.getId(), PathType.DURATION);
+        PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 대치역.getId(), PathType.DURATION);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
                 .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 강남역.getId(), 양재역.getId(), 대치역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(19),
             () -> assertThat(response.getDuration()).isEqualTo(12),
-            () -> assertThat(response.getFare()).isEqualTo(1350)    // 최단거리는 15
+            () -> assertThat(response.getFare()).isEqualTo(3350)    // 최단거리는 15
         );
     }
 
     @DisplayName("16km 거리의 경로조회를 한다.")
     @Test
     void findPathTest_4() {
-        PathResponse response = pathService.findPath(교대역.getId(), 삼성역.getId(), PathType.DISTANCE);
+        PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 삼성역.getId(), PathType.DISTANCE);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
                 .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 강남역.getId(), 삼성역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(16),
             () -> assertThat(response.getDuration()).isEqualTo(7),
-            () -> assertThat(response.getFare()).isEqualTo(1450)
+            () -> assertThat(response.getFare()).isEqualTo(2350)
         );
     }
 
     @DisplayName("50km 거리의 경로조회를 한다.")
     @Test
     void findPathTest_5() {
-        PathResponse response = pathService.findPath(교대역.getId(), 판교역.getId(), PathType.DISTANCE);
+        PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 판교역.getId(), PathType.DISTANCE);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
@@ -179,14 +189,14 @@ class PathServiceTest {
                 .containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 판교역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(50),
             () -> assertThat(response.getDuration()).isEqualTo(30),
-            () -> assertThat(response.getFare()).isEqualTo(2050)
+            () -> assertThat(response.getFare()).isEqualTo(4050)
         );
     }
 
     @DisplayName("58km 거리의 경로조회를 한다.")
     @Test
     void findPathTest_6() {
-        PathResponse response = pathService.findPath(교대역.getId(), 광교역.getId(), PathType.DISTANCE);
+        PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 광교역.getId(), PathType.DISTANCE);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
@@ -194,14 +204,14 @@ class PathServiceTest {
                 .containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 판교역.getId(), 광교역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(58),
             () -> assertThat(response.getDuration()).isEqualTo(35),
-            () -> assertThat(response.getFare()).isEqualTo(2150)
+            () -> assertThat(response.getFare()).isEqualTo(4150)
         );
     }
 
     @DisplayName("59km 거리의 경로조회를 한다.")
     @Test
     void findPathTest_7() {
-        PathResponse response = pathService.findPath(교대역.getId(), 교판역.getId(), PathType.DISTANCE);
+        PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 교판역.getId(), PathType.DISTANCE);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
@@ -210,7 +220,7 @@ class PathServiceTest {
                     교판역.getId()),
             () -> assertThat(response.getDistance()).isEqualTo(59),
             () -> assertThat(response.getDuration()).isEqualTo(36),
-            () -> assertThat(response.getFare()).isEqualTo(2250)
+            () -> assertThat(response.getFare()).isEqualTo(4250)
         );
     }
 }
