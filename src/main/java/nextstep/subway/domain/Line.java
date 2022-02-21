@@ -41,6 +41,8 @@ public class Line extends BaseEntity {
         return color;
     }
 
+    public int getAdditionalFee() { return additionalFee; }
+
     public List<Section> getSections() {
         return sections.getSections();
     }

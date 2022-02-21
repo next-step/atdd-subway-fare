@@ -110,4 +110,9 @@ public class SubwayMap {
                 });
     }
 
+    public int totalAdditionalFee() {
+        return lines.stream()
+                .mapToInt(Line::getAdditionalFee)
+                .sum();
+    }
 }
