@@ -1,36 +1,36 @@
 package nextstep.subway.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Line 의 구간 모음에 대한 테스트")
-class SectionsTest {
+class FeePolicyTest {
+    FeePolicy feePolicy;
+
+    @BeforeEach
+    void setUp() {
+        feePolicy = new FeePolicy();
+    }
 
     @DisplayName("총 금액 기본운임 요금")
     @Test
     void totalFee_basic() {
-        //given
-        Sections sections = getSections(2, 3, 2);
-
         //when
-        int fee = sections.totalFee();
+        int fee = feePolicy.totalFee(7);
         //then
         assertThat(fee).isEqualTo(1250);
     }
 
-
-
     @DisplayName("총 금액 기본운임 요금 15KM 기준")
     @Test
     void totalFee_additional_case01() {
-        //given
-        Sections sections = getSections(5, 5, 5);
         //when
-        int fee = sections.totalFee();
+        int fee = feePolicy.totalFee(15);
         //then
         assertThat(fee).isEqualTo(1250 + 100);
 
@@ -38,10 +38,8 @@ class SectionsTest {
     @DisplayName("총 금액 기본운임 요금 16KM 기준")
     @Test
     void totalFee_additional_case02() {
-        //given
-        Sections sections = getSections(5, 6, 5);
         //when
-        int fee = sections.totalFee();
+        int fee = feePolicy.totalFee(16);
         //then
         assertThat(fee).isEqualTo(1250 + 200);
 
@@ -49,21 +47,16 @@ class SectionsTest {
     @DisplayName("총 금액 기본운임 요금 58KM 기준")
     @Test
     void totalFee_additional_case03() {
-        //given
-        Sections sections = getSections(20, 23, 15);
-
         //when
-        int fee = sections.totalFee();
+        int fee = feePolicy.totalFee(58);
         //then
         assertThat(fee).isEqualTo(1250 + 900);
     }
     @DisplayName("총 금액 기본운임 요금 59KM 기준")
     @Test
     void totalFee_additional_case04() {
-        //given
-        Sections sections = getSections(20, 20, 19);
         //when
-        int fee = sections.totalFee();
+        int fee = feePolicy.totalFee(59);
         //then
         assertThat(fee).isEqualTo(1250 + 1000);
     }
@@ -74,4 +67,8 @@ class SectionsTest {
                 new Section(null, null, null, distance2, 2),
                 new Section(null, null, null, distance3, 2)));
     }
+
+
+
+
 }
