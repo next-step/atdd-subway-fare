@@ -44,7 +44,6 @@ public class PathDocumentation extends Documentation {
                 ), 10, 6, 1250
         );
         when(pathService.findPath(anyLong(), anyLong(), any(FindType.class))).thenReturn(pathResponse);
-        when(pathService.findPath2(anyLong(), anyLong(), any(FindType.class))).thenReturn(pathResponse);
     }
 
     @Test

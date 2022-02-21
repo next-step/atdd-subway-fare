@@ -26,15 +26,4 @@ public class PathService {
 
         return PathResponse.of(path);
     }
-
-    public PathResponse findPath2(Long source, Long target, FindType type) {
-        Station sourceStation = stationService.findById(source);
-        Station targetStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-
-        Path path = subwayMap.findPath(sourceStation, targetStation, type);
-
-        return PathResponse.of2(path);
-    }
 }
