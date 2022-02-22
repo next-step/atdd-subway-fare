@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 public enum PathFare {
@@ -19,10 +20,12 @@ public enum PathFare {
         this.fare = fare;
     }
 
-    public static int extractFare(int distance) {
-        return Arrays.stream(PathFare.values())
+    public static BigDecimal extractFare(int distance) {
+        int sumFare = Arrays.stream(PathFare.values())
                 .mapToInt(pathFare -> pathFare.calculateOverFare(distance))
                 .sum();
+
+        return BigDecimal.valueOf(sumFare);
     }
 
     private int calculateOverFare(int distance) {

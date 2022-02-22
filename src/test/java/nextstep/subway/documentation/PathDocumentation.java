@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.documentation.PathSteps.*;
@@ -34,7 +35,7 @@ public class PathDocumentation extends Documentation {
                 ),
                 10,
                 7,
-                1250
+                BigDecimal.valueOf(1250)
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -54,7 +55,7 @@ public class PathDocumentation extends Documentation {
                 ),
                 11,
                 7,
-                1350
+                BigDecimal.valueOf(1350)
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
