@@ -20,6 +20,15 @@ class SubwayMapTest extends LineFixture{
     private Line 이호선;
     private Line 삼호선;
 
+
+    /**        (10Km, 5분)
+     * 교대역    --- *2호선* ---   강남역
+     * |                         |
+     * (2km, 1분)            (10km, 3분)
+     * *3호선*                 *신분당선*
+     * |                         |
+     * 남부터미널역  --- *3호선* --- 양재
+     */
     @BeforeEach
     void setUp() {
         교대역 = createStation(1L, "교대역");
