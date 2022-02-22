@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PathSearchRequest {
     Long source;
     Long target;
-    PathSearchType pathSearchType;
+    PathSearchType method;
 
     public PathSearchRequest() {
     }
@@ -19,7 +19,7 @@ public class PathSearchRequest {
         return target;
     }
 
-    public PathSearchType getPathSearchType() {
-        return pathSearchType;
+    public PathSearchType getMethod() {
+        return method;
     }
 }

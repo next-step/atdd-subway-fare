@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
@@ -27,7 +27,7 @@ public class PathDocumentation extends Documentation {
     void path() {
         //given
         PathResponse pathResponse = getPathResponseForAnonymous();
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성(1L, 2L, "SHORTEST_DISTANCE");
         RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path-anonymous");
 
@@ -46,7 +46,7 @@ public class PathDocumentation extends Documentation {
         회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, AGE));
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
         PathResponse pathResponse = getPathResponseForUser();
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성(1L, 2L, "MINIMUM_TIME");
         RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path-user");
 
