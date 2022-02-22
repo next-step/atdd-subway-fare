@@ -3,7 +3,6 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PathAcceptanceTest extends AcceptanceTest {
     private static final String DISTANCE_TYPE = "DISTANCE";
     private static final String DURATION_TYPE = "DURATION";
+    private static final String EMAIL = "email@email.com";
+    private static final String PASSWORD = "password";
+    public static final String USERNAME_FIELD = "username";
+    public static final String PASSWORD_FIELD = "password";
 
     private Long 교대역;
     private Long 강남역;
@@ -77,7 +81,6 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(3),
                 () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
         );
-
     }
 
     /**
@@ -122,17 +125,53 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * Given 어린이 회원 생성을 요청
+     * Given 생성된 어린이 로그인
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 기본 지하철 이용 요금(1250)은 어린이 할인(공제액 350원을 제외한 900원의 50퍼 -> 800원)을 받은 상태로 응답함
+     */
+    @DisplayName("최단 거리 경로의 어린이 요금제를 확인한다.")
+    @Test
+    void childFare() {
+        // Given
+        회원_생성_요청(EMAIL, PASSWORD, 10);
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        ExtractableResponse<Response> response = 로그인_두_역의_최단_거리_경로_요청(교대역, 양재역, accessToken);
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(3),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(800)
+        );
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_요청(Long source, Long target) {
-        return 두_역의_최단_경로를_요청(source, target, DISTANCE_TYPE);
+        return 두_역의_최단_경로를_요청(source, target, DISTANCE_TYPE, null);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_시간_경로_요청(Long source, Long target) {
-        return 두_역의_최단_경로를_요청(source, target, DURATION_TYPE);
+        return 두_역의_최단_경로를_요청(source, target, DURATION_TYPE, null);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_경로를_요청(Long source, Long target, String type) {
+    private ExtractableResponse<Response> 로그인_두_역의_최단_거리_경로_요청(Long source, Long target, String accessToken) {
+        return 두_역의_최단_경로를_요청(source, target, DISTANCE_TYPE, accessToken);
+    }
+
+    private ExtractableResponse<Response> 로그인_두_역의_최단_시간_경로_요청(Long source, Long target, String accessToken) {
+        return 두_역의_최단_경로를_요청(source, target, DURATION_TYPE, accessToken);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_경로를_요청(Long source, Long target, String type, String accessToken) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
