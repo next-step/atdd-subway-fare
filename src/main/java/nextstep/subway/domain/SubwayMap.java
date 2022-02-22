@@ -14,17 +14,16 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target) {
+    public Path findPath(Station source, Station target, PathSearchType method) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
+        if (method == PathSearchType.SHORTEST_DISTANCE) {
+            return getPath(source, target, graph);
+        }
 
+        if (method == PathSearchType.MINIMUM_TIME) {
+            graph = createGraphByDuration();
+        }
         return getPath(source, target, graph);
-    }
-
-    public Path findPathByDuration(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraphByDuration();
-
-        return getPath(source, target, graph);
-
     }
 
     private Path getPath(Station source, Station target, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
