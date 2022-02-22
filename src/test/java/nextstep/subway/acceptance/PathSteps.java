@@ -3,7 +3,6 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.springframework.http.HttpStatus;
@@ -28,26 +27,44 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 경로조회_회원(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+    public static ExtractableResponse<Response> 경로조회_회원(String accessToken , Map<String, String> params) {
         return RestAssured
-                .given(spec).log().all()
+                .given().log().all()
                 .auth().oauth2(accessToken)
-                .filter(filter)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .params(params)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 경로조회_비회원(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+    public static ExtractableResponse<Response> 경로조회_비회원(Map<String, String> params) {
         return RestAssured
-                .given(spec).log().all()
-                .filter(filter)
+                .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .params(params)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+//    public static ExtractableResponse<Response> 경로조회_회원(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+//        return RestAssured
+//                .given(spec).log().all()
+//                .auth().oauth2(accessToken)
+//                .filter(filter)
+//                .accept(MediaType.APPLICATION_JSON_VALUE)
+//                .params(params)
+//                .when().get("/paths")
+//                .then().log().all().extract();
+//    }
+//
+//    public static ExtractableResponse<Response> 경로조회_비회원(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+//        return RestAssured
+//                .given(spec).log().all()
+//                .filter(filter)
+//                .accept(MediaType.APPLICATION_JSON_VALUE)
+//                .params(params)
+//                .when().get("/paths")
+//                .then().log().all().extract();
+//    }
 
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
@@ -131,10 +148,11 @@ public class PathSteps {
     }
 
 
-    public static Map<String, String> 경로_조회_파라미터_생성() {
+    public static Map<String, String> 경로_조회_파라미터_생성(Long source, Long target, String method) {
         Map<String, String> params = new HashMap<>();
-        params.put("source", "1");
-        params.put("target", "2");
+        params.put("source", source + "");
+        params.put("target", target + "");
+        params.put("method", method)
         return params;
     }
 
