@@ -2,13 +2,12 @@ package nextstep.subway.domain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
@@ -22,13 +21,13 @@ public class SubwayMap {
 
         ShortestPaths shortestPaths = findShortest(paths, time);
 
-        int fareDistance = shortestPaths.getShortestDistance();
-
         if (pathType.equals(PathType.DISTANCE)) {
-            return Path.of(new Sections(shortestPaths.getShortestDistanceSections()), fareDistance);
+            return Path.of(new Sections(shortestPaths.getShortestDistanceSections())
+                , shortestPaths.getShortestDistance(), shortestPaths.getShortestDistanceArrivalTime());
         }
 
-        return Path.of(new Sections(shortestPaths.getShortestDurationSections()), fareDistance);
+        return Path.of(new Sections(shortestPaths.getShortestDurationSections())
+                , shortestPaths.getShortestDistance(), shortestPaths.getShortestDurationArrivalTime());
     }
 
     protected List<GraphPath<Station, SectionEdge>> findAllKShortestPaths(Station source, Station target, PathType pathType) {
@@ -36,7 +35,9 @@ public class SubwayMap {
             .getPaths(source, target);
     }
 
-    public ShortestPaths findShortest(List<GraphPath<Station, SectionEdge>> paths, String time) {
+    public ShortestPaths findShortest(List<GraphPath<Station, SectionEdge>> paths, String startTimeString) {
+        LocalDateTime startTime = convertStringToDateTime(startTimeString);
+
         Path shortestDistancePath = null;
         Path shortestDurationPath = null;
 
@@ -55,14 +56,17 @@ public class SubwayMap {
                 shortestFareDistance = distance;
 
                 List<Section> sections = makeSectionListFromGraphPath(path);
-                shortestDistancePath = Path.of(new Sections(sections), shortestFareDistance);
+
+                LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
+
+                shortestDistancePath = Path.of(
+                    new Sections(sections), shortestFareDistance, convertDateTimeToString(currentTime));
             }
         }
 
         // 3. 경로들 중 가장빠른도착시간 경로를 찾는다.
         //  3.*. 방향을 찾는다.
         //  3.0. 최초 구간 시작의 출발가능 시간을 구한다.
-
         //  3.1. 구간의 시작과 끝의 노선이 바뀌지 않았으면
         //   3.1.1. 기존 시간에 그냥 더한다.
         //  3.2. 구간의 시작과 끝의 노선이 다르면
@@ -70,23 +74,60 @@ public class SubwayMap {
         //    3.2.1.1. 해당 노선의 구간 시작~끝 인 방향으로, 노선의 시작시간과 시간간격으로 찾는다.
         //    3.2.1.2. 차가 없으면 그 다음날로 넘어간다.
         //   3.2.2.
+        LocalDateTime fastestArrivalTime = LocalDateTime.MAX;
+        List<Section> shortestSections = null;
+
         for (GraphPath<Station, SectionEdge> path : paths) {
             List<Section> sectionList = makeSectionListFromGraphPath(path);
-            int totalTime = 0;
 
-            for (Section section : sectionList) {
-                PathDirection pathDirection = findPathDirection(section);
-                LocalDateTime trainTime = findTrainTime(section, time);
+//            LocalDateTime currentTime = startTime;
+            LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
+
+//            Section prevSection = null;
+//            for (Section section : sectionList) {
+//                if (prevSection == null || !prevSection.getLine().equals(section.getLine())) {
+//                    LocalDateTime trainTime = findTrainTime(section, currentTime);
+//                    currentTime = trainTime;
+//                }
+//
+//                currentTime = currentTime.plusMinutes(section.getDuration());
+//
+//                prevSection = section;
+//            }
+
+            if (currentTime.isBefore(fastestArrivalTime)) {
+                shortestSections = sectionList;
+                fastestArrivalTime = currentTime;
             }
         }
+
+        shortestDurationPath = Path.of(
+            new Sections(shortestSections), shortestFareDistance, convertDateTimeToString(fastestArrivalTime));
 
         return new ShortestPaths(shortestDurationPath, shortestDistancePath, shortestFareDistance);
     }
 
-    protected LocalDateTime findTrainTime(Section section, String time) {
+    protected LocalDateTime findArrivalTime(List<Section> sectionList, LocalDateTime startTime) {
+        LocalDateTime currentTime = startTime;
+
+        Section prevSection = null;
+        for (Section section : sectionList) {
+            if (prevSection == null || !prevSection.getLine().equals(section.getLine())) {
+                LocalDateTime trainTime = findTrainTime(section, currentTime);
+                currentTime = trainTime;
+            }
+
+            currentTime = currentTime.plusMinutes(section.getDuration());
+
+            prevSection = section;
+        }
+
+        return currentTime;
+    }
+
+    protected LocalDateTime findTrainTime(Section section, LocalDateTime currentTime) {
         PathDirection pathDirection = findPathDirection(section);
 
-        LocalDateTime findPathTime = convertStringToDateTime(time);
         Station targetStation = section.getUpStation();
         Line line = section.getLine();
 
@@ -108,14 +149,14 @@ public class SubwayMap {
             }
         }
 
-        LocalDateTime startTime = convertLineTimeToDateTime(findPathTime, line.getStartTime());
-        LocalDateTime endTime = convertLineTimeToDateTime(findPathTime, line.getEndTime());
+        LocalDateTime startTime = convertLineTimeToDateTime(currentTime, line.getStartTime());
+        LocalDateTime endTime = convertLineTimeToDateTime(currentTime, line.getEndTime());
         int intervalTime = line.getIntervalTime();
 
         // 첫차 시간 + (간격 X n) + 종점에서 정차역까지의 소요시간  이 조회 기준 시간보다 커질 때 까지 n을 증가
         LocalDateTime trainTime = startTime;
-        while (!findPathTime.isBefore(trainTime.plusMinutes(durationMinuteSum))
-            && !findPathTime.isEqual(trainTime.plusMinutes(durationMinuteSum))) {
+        while (!currentTime.isBefore(trainTime.plusMinutes(durationMinuteSum))
+            && !currentTime.isEqual(trainTime.plusMinutes(durationMinuteSum))) {
             trainTime = trainTime.plusMinutes(intervalTime);
         }
 
@@ -152,7 +193,7 @@ public class SubwayMap {
             return PathDirection.DOWN;
         }
 
-        while (++i < stations.size()-1) {
+        while (++i < stations.size()) {
             if (currentStation.equals(stations.get(i))) {
                 if (nextStation.equals(stations.get(i-1))) {
                     return PathDirection.UP;
@@ -210,14 +251,15 @@ public class SubwayMap {
     }
 
     private void addWeights(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathType pathType) {
-        if (pathType.equals(PathType.DISTANCE)) {
+//        if (pathType.equals(PathType.DISTANCE))
+        {
             addEdgeDistanceWeight(graph);
             addOppositeEdgeDistanceWeight(graph);
-            return;
+//            return;
         }
 
-        addEdgeDurationWeight(graph);
-        addOppositeEdgeDurationWeight(graph);
+//        addEdgeDurationWeight(graph);
+//        addOppositeEdgeDurationWeight(graph);
     }
 
 

@@ -4,16 +4,24 @@ import java.util.List;
 
 public class ShortestPaths {
 
-    Path shortestDistancePath;
+    private Path shortestDistancePath;
 
-    Path shortestDurationPath;
+    private Path shortestDurationPath;
 
-    int shortestDistance;
+    private int shortestDistance;
 
     public ShortestPaths(Path shortestDurationPath, Path shortestDistancePath, int shortestDistance) {
         this.shortestDurationPath = shortestDurationPath;
         this.shortestDistancePath = shortestDistancePath;
         this.shortestDistance = shortestDistance;
+    }
+
+    public List<Section> getShortestDistanceSections() {
+        return shortestDistancePath.getSections().getSections();
+    }
+
+    public List<Section> getShortestDurationSections() {
+        return shortestDurationPath.getSections().getSections();
     }
 
     public Path getShortestDistancePath() {
@@ -28,15 +36,11 @@ public class ShortestPaths {
         return shortestDistance;
     }
 
-    public String getShortestArrivalTime() {
-        return null;
+    public String getShortestDistanceArrivalTime() {
+        return shortestDistancePath.extractArrivalTime();
     }
 
-    public List<Section> getShortestDistanceSections() {
-        return null;
-    }
-
-    public List<Section> getShortestDurationSections() {
-        return null;
+    public String getShortestDurationArrivalTime() {
+        return shortestDurationPath.extractArrivalTime();
     }
 }

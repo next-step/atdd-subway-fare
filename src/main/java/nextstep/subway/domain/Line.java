@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import java.util.Objects;
 import javax.persistence.*;
 import java.util.List;
 
@@ -98,5 +99,27 @@ public class Line extends BaseEntity {
 
     public int getIntervalTime() {
         return intervalTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Line line = (Line) o;
+        return intervalTime == line.intervalTime && Objects.equals(id, line.id)
+            && Objects.equals(name, line.name) && Objects.equals(color, line.color)
+            && Objects.equals(additionalFare, line.additionalFare)
+            && Objects.equals(startTime, line.startTime) && Objects.equals(endTime,
+            line.endTime) && Objects.equals(sections, line.sections);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, color, additionalFare, startTime, endTime, intervalTime,
+            sections);
     }
 }

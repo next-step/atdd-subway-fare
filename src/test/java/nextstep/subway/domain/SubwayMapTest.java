@@ -141,6 +141,20 @@ class SubwayMapTest {
     }
 
     @Test
+    void findTrainTime_singleSection_downDirection_Test() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        LocalDateTime trainTime = subwayMap.findTrainTime(
+            new Section(신분당선, 강남역, 양재역, 9, 2), convertStringToDateTime("202202200600"));
+
+        // then
+        assertThat(trainTime).isEqualTo(convertStringToDateTime("202202200600"));
+    }
+
+    @Test
     void findTrainTime_UpDirection_Test() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);

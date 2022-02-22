@@ -1,7 +1,6 @@
 package nextstep.subway.ui;
 
 import nextstep.auth.authorization.AuthenticationPrincipal;
-import nextstep.auth.userdetails.UserDetails;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
