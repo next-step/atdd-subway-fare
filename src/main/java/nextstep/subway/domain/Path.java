@@ -23,7 +23,7 @@ public class Path {
     }
 
     public BigDecimal extractFare() {
-        return PathFare.extractFare(extractDistance());
+        return DistanceFare.extractFare(extractDistance());
     }
 
     public List<Station> getStations() {

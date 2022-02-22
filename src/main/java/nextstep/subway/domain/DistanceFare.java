@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-public enum PathFare {
+public enum DistanceFare {
     BASIC_DISTANCE_FARE(0, 10, 0, 1250),
     SHORT_DISTANCE_FARE(11, 50, 5, 100),
     LONG_DISTANCE_FARE(51, Integer.MAX_VALUE, 8,  100);
@@ -13,7 +13,7 @@ public enum PathFare {
     private int distanceUnit;
     private int fare;
 
-    PathFare(int standardDistance, int maxDistance, int distanceUnit, int fare) {
+    DistanceFare(int standardDistance, int maxDistance, int distanceUnit, int fare) {
         this.standardDistance = standardDistance;
         this.maxDistance = maxDistance;
         this.distanceUnit = distanceUnit;
@@ -21,7 +21,7 @@ public enum PathFare {
     }
 
     public static BigDecimal extractFare(int distance) {
-        int sumFare = Arrays.stream(PathFare.values())
+        int sumFare = Arrays.stream(DistanceFare.values())
                 .mapToInt(pathFare -> pathFare.calculateOverFare(distance))
                 .sum();
 
@@ -29,7 +29,7 @@ public enum PathFare {
     }
 
     private int calculateOverFare(int distance) {
-        if (this == PathFare.BASIC_DISTANCE_FARE) {
+        if (this == DistanceFare.BASIC_DISTANCE_FARE) {
             return fare;
         }
 
