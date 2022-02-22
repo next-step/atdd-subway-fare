@@ -1,35 +1,48 @@
 package nextstep.subway.domain;
 
-public enum FareStandard {
-    FARE50(50, 8, 2_050),
-    FARE10(10, 5, 1_250);
+import nextstep.subway.ui.exception.PathException;
 
-    private final int boundary;
+import java.util.Arrays;
+
+import static java.util.Arrays.*;
+
+public enum FareStandard {
+//    FARE50(51, 9999, 8, overDistance ->
+//            ((overDistance - 1) / 8 + 1) * 100 + 2_050
+//    ),
+    FARE50(51, 9999, 8, 2_050, 100),
+    FARE10(11, 50, 5, 1_250, 100),
+    FARE_DEFAULT(0, 10, 5, 1_250, 0);
+
+    private final int beginBoundary;
+    private final int endBoundary;
     private final int distance;
     private final int basicFare;
+    private final int percentage;
 
-    FareStandard(int boundary, int distance, int basicFare) {
-        this.boundary = boundary;
+    FareStandard(int beginBoundary, int endBoundary, int distance, int basicFare, int percentage) {
+        this.beginBoundary = beginBoundary;
+        this.endBoundary = endBoundary;
         this.distance = distance;
         this.basicFare = basicFare;
+        this.percentage = percentage;
     }
 
     public static int calculateOverFare(int distance) {
-        FareStandard fareStandard = of(distance);
-        if (distance <= fareStandard.boundary) {
-            return fareStandard.basicFare;
-        }
+        FareStandard fareStandard = valueOf(distance);
 
-        int overDistance = distance - fareStandard.boundary;
-        return ((overDistance - 1) / fareStandard.distance + 1) * 100 + fareStandard.basicFare;
-        // 이런 힌트를 주셨는데 뭐지?
-//        return (int) ((ceil((overDistance - 1) / 5) + 1) * 100) + BASIC_FARE;
+        int overDistance = distance - (fareStandard.beginBoundary - 1);
+        return ((overDistance - 1) / fareStandard.distance + 1) * fareStandard.percentage + fareStandard.basicFare;
     }
 
-    private static FareStandard of(int distance) {
-        if (distance > FARE50.boundary) {
-            return FARE50;
-        }
-        return FARE10;
+    private static FareStandard valueOf(int distance) {
+        return stream(values())
+                .filter(value -> isBoundary(distance, value))
+                .findFirst()
+                .orElse(FARE_DEFAULT);
+    }
+
+    private static boolean isBoundary(int distance, FareStandard value) {
+        return distance >= value.beginBoundary && distance <= value.endBoundary;
     }
 }
