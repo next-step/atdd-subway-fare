@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class LineServiceMockTest {
+class LineServiceMockTest extends LineFixture{
     @Mock
     private LineRepository lineRepository;
     @Mock
@@ -43,7 +43,7 @@ class LineServiceMockTest {
         ReflectionTestUtils.setField(역삼역, "id", 2L);
         삼성역 = new Station("삼성역");
         ReflectionTestUtils.setField(삼성역, "id", 3L);
-        이호선 = new Line("2호선", "green");
+        이호선 = createLine("2호선", "green");
         이호선.addSection(강남역, 역삼역, 10, 5);
         ReflectionTestUtils.setField(이호선, "id", 1L);
     }

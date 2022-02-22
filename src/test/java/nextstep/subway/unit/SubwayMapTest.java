@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SubwayMapTest {
+class SubwayMapTest extends LineFixture{
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -27,9 +27,9 @@ class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = createLine("신분당선", "red");
+        이호선 = createLine("2호선", "red");
+        삼호선 = createLine("3호선", "red");
 
         신분당선.addSection(강남역, 양재역, 3, 1);
         이호선.addSection(교대역, 강남역, 3, 1);
