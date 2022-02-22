@@ -23,8 +23,7 @@ public class Path {
 
     public int extractFare() {
         int distance = sections.totalDistance();
-        Fare fare = new Fare(distance);
-        return fare.findCost();
+        return Fare.calculate(distance);
     }
 
     public List<Station> getStations() {
