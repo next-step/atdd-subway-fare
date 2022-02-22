@@ -2,7 +2,12 @@ package nextstep.subway.documentation;
 
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -11,6 +16,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 public final class DocumentationFilterTemplate {
 
     private static final String PATH_IDENTIFIER = "path";
+    private static final String STATION_IDENTIFIER = "stations";
 
     public static RestDocumentationFilter 경로_조회_템플릿() {
         return document(PATH_IDENTIFIER,
@@ -29,6 +35,22 @@ public final class DocumentationFilterTemplate {
                         fieldWithPath("duration").description("소요 시간"),
                         fieldWithPath("fare").description("운임")
                 )
+        );
+    }
+
+    public static RestDocumentationFilter 역_등록_템플릿() {
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("name", "역 이름");
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("id", "역 고유번호");
+        responseBody.put("name", "역 이름");
+        responseBody.put("createdDate", "생성 시간");
+        responseBody.put("modifiedDate", "최근 수정 시간");
+
+        return document(STATION_IDENTIFIER,
+                requestBody(requestBody),
+                responseBody(responseBody)
         );
     }
 }
