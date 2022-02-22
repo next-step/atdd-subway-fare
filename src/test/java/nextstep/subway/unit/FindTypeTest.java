@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.FindType;
+import nextstep.subway.domain.Section;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.DURATION;
 
 public class FindTypeTest {
     @DisplayName("DISTANCE, DURATION 타입의 객체 생성")
@@ -44,5 +46,16 @@ public class FindTypeTest {
         // when & then
         assertThat(FindType.DURATION.isDuration()).isTrue();
         assertThat(FindType.DURATION.isDistance()).isFalse();
+    }
+
+    @DisplayName("type에 따른 가중치 반환 테스트")
+    @Test
+    void weightFrom() {
+        // given
+        Section section = new Section(null, null, null, 10, 5);
+
+        // when
+        assertThat(FindType.DURATION.weightFrom(section)).isEqualTo(5);
+        assertThat(FindType.DISTANCE.weightFrom(section)).isEqualTo(10);
     }
 }
