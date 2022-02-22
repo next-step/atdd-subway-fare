@@ -1,11 +1,6 @@
 package nextstep.subway.domain;
 
-import lombok.val;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public enum Fare {
     STANDARD(null, 1250, 1, 10, 10),
