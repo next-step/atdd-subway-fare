@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 public enum AgeFare {
-    CHILD_FARE(6, 12, BigDecimal.valueOf(350), BigDecimal.valueOf(50)),
-    YOUTH_FARE(13, 18, BigDecimal.valueOf(350), BigDecimal.valueOf(20)),
+    CHILD_FARE(6, 12, BigDecimal.valueOf(350), BigDecimal.valueOf(0.5)),
+    YOUTH_FARE(13, 18, BigDecimal.valueOf(350), BigDecimal.valueOf(0.2)),
     GENERAL_FARE(19, 200, BigDecimal.ZERO, BigDecimal.ZERO);
 
     private int minAge;
@@ -25,6 +25,16 @@ public enum AgeFare {
                 .filter(ageFare -> ageFare.isAge(age))
                 .findAny()
                 .orElse(AgeFare.GENERAL_FARE);
+    }
+
+    public BigDecimal extractDiscountFare(BigDecimal fare) {
+        if (this == AgeFare.GENERAL_FARE) {
+            return fare;
+        }
+
+        BigDecimal subtract = fare.subtract(deductibleFare);
+        BigDecimal discountFare = subtract.multiply(discountRate);
+        return fare.subtract(discountFare);
     }
 
     private boolean isAge(int age) {
