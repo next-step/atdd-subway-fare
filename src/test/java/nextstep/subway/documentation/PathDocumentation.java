@@ -31,7 +31,7 @@ public class PathDocumentation extends Documentation {
                 ),
                 10,
                 10,
-                BigDecimal.valueOf(1250)
+                1250
         );
 
         when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);

@@ -74,7 +74,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(17);
-        assertThat(response.jsonPath().getObject("fare", BigDecimal.class)).isEqualTo(BigDecimal.valueOf(1250.0));
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     /**
@@ -90,7 +90,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
-        assertThat(response.jsonPath().getObject("fare", BigDecimal.class)).isEqualTo(BigDecimal.valueOf(1450.0));
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
     }
 
     /**
@@ -107,6 +107,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(연신내역, 서울역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(58);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(30);
-        assertThat(response.jsonPath().getObject("fare", BigDecimal.class)).isEqualTo(BigDecimal.valueOf(2250.0));
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2150);
     }
 }
