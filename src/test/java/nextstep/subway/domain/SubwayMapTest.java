@@ -1,20 +1,18 @@
 package nextstep.subway.domain;
 
+import static nextstep.subway.utils.StringDateTimeConverter.convertStringToDateTime;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.google.common.collect.Lists;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import nextstep.subway.domain.SubwayMap.PathDirection;
+import java.util.List;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.List;
-
-import static nextstep.subway.domain.SubwayMap.convertStringToDateTime;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SubwayMapTest {
 
@@ -188,33 +186,6 @@ class SubwayMapTest {
             () -> assertThat(dateTime.getHour()).isEqualTo(16),
             () -> assertThat(dateTime.getMinute()).isEqualTo(03)
         );
-    }
-
-    @Test
-    void convertDateTimeToStringTest() {
-        LocalDateTime time = LocalDateTime.of(2022, 02, 20, 06, 00);
-        String timeString = SubwayMap.convertDateTimeToString(time);
-
-        assertThat(timeString).isEqualTo("202202200600");
-    }
-
-    @Test
-    void dateTimeComparisonTest() {
-        LocalDateTime bigTime = convertStringToDateTime("202202201604");
-        LocalDateTime smallTime = convertStringToDateTime("202202201603");
-
-        assertThat(bigTime.isAfter(smallTime)).isTrue();
-    }
-
-    @Test
-    void convertLineTimeToDateTimeTest() {
-        LocalDateTime findPathTime = convertStringToDateTime(START_TIME);
-        LocalDateTime dateTime = SubwayMap.convertLineTimeToDateTime(findPathTime, "1630");
-
-        assertThat(dateTime.getYear()).isEqualTo(2022);
-        assertThat(dateTime.getMonthValue()).isEqualTo(02);
-        assertThat(dateTime.getHour()).isEqualTo(16);
-        assertThat(dateTime.getMinute()).isEqualTo(30);
     }
 
     @DisplayName("경로의 구간이 어느 방향행인지 확인해보니 상행이다.")

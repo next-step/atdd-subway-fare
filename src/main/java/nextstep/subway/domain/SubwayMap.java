@@ -1,11 +1,13 @@
 package nextstep.subway.domain;
 
+import static nextstep.subway.utils.StringDateTimeConverter.convertDateTimeToString;
+import static nextstep.subway.utils.StringDateTimeConverter.convertLineTimeToDateTime;
+import static nextstep.subway.utils.StringDateTimeConverter.convertStringToDateTime;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
@@ -38,14 +40,36 @@ public class SubwayMap {
     public ShortestPaths findShortest(List<GraphPath<Station, SectionEdge>> paths, String startTimeString) {
         LocalDateTime startTime = convertStringToDateTime(startTimeString);
 
-        Path shortestDistancePath = null;
-        Path shortestDurationPath = null;
+        Path shortestDistancePath;
+        Path shortestDurationPath;
 
-        // 1. 전체 경로가 나왔다.
-        // 2. 경로들 중 최단거리 경로를 찾는다.
-        //  2.1. weight 가 가장 작은 값인 경로,
-        //  2.1. weight 의 합은 fareDistance
+        shortestDistancePath = findShortestDistancePath(paths, startTime);
+        int shortestFareDistance = shortestDistancePath.extractDistance();
+
+        LocalDateTime fastestArrivalTime = LocalDateTime.MAX;
+        List<Section> shortestSections = null;
+
+        for (GraphPath<Station, SectionEdge> path : paths) {
+            List<Section> sectionList = makeSectionListFromGraphPath(path);
+
+            LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
+
+            if (currentTime.isBefore(fastestArrivalTime)) {
+                shortestSections = sectionList;
+                fastestArrivalTime = currentTime;
+            }
+        }
+
+        shortestDurationPath = Path.of(
+            new Sections(shortestSections), shortestFareDistance, convertDateTimeToString(fastestArrivalTime));
+
+        return new ShortestPaths(shortestDurationPath, shortestDistancePath, shortestFareDistance);
+    }
+
+    private Path findShortestDistancePath(List<GraphPath<Station, SectionEdge>> paths, LocalDateTime startTime) {
         int shortestFareDistance = Integer.MAX_VALUE;
+        Path shortest = null;
+
         for (GraphPath<Station, SectionEdge> path : paths) {
             List<Section> sectionList = makeSectionListFromGraphPath(path);
             int distance = sectionList.stream()
@@ -59,52 +83,12 @@ public class SubwayMap {
 
                 LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
 
-                shortestDistancePath = Path.of(
+                shortest = Path.of(
                     new Sections(sections), shortestFareDistance, convertDateTimeToString(currentTime));
             }
         }
 
-        // 3. 경로들 중 가장빠른도착시간 경로를 찾는다.
-        //  3.*. 방향을 찾는다.
-        //  3.0. 최초 구간 시작의 출발가능 시간을 구한다.
-        //  3.1. 구간의 시작과 끝의 노선이 바뀌지 않았으면
-        //   3.1.1. 기존 시간에 그냥 더한다.
-        //  3.2. 구간의 시작과 끝의 노선이 다르면
-        //   3.2.1. 구간의 시작에서 끝으로 가는 가장 빠른 정차시간을 찾는다.
-        //    3.2.1.1. 해당 노선의 구간 시작~끝 인 방향으로, 노선의 시작시간과 시간간격으로 찾는다.
-        //    3.2.1.2. 차가 없으면 그 다음날로 넘어간다.
-        //   3.2.2.
-        LocalDateTime fastestArrivalTime = LocalDateTime.MAX;
-        List<Section> shortestSections = null;
-
-        for (GraphPath<Station, SectionEdge> path : paths) {
-            List<Section> sectionList = makeSectionListFromGraphPath(path);
-
-//            LocalDateTime currentTime = startTime;
-            LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
-
-//            Section prevSection = null;
-//            for (Section section : sectionList) {
-//                if (prevSection == null || !prevSection.getLine().equals(section.getLine())) {
-//                    LocalDateTime trainTime = findTrainTime(section, currentTime);
-//                    currentTime = trainTime;
-//                }
-//
-//                currentTime = currentTime.plusMinutes(section.getDuration());
-//
-//                prevSection = section;
-//            }
-
-            if (currentTime.isBefore(fastestArrivalTime)) {
-                shortestSections = sectionList;
-                fastestArrivalTime = currentTime;
-            }
-        }
-
-        shortestDurationPath = Path.of(
-            new Sections(shortestSections), shortestFareDistance, convertDateTimeToString(fastestArrivalTime));
-
-        return new ShortestPaths(shortestDurationPath, shortestDistancePath, shortestFareDistance);
+        return shortest;
     }
 
     protected LocalDateTime findArrivalTime(List<Section> sectionList, LocalDateTime startTime) {
@@ -150,7 +134,6 @@ public class SubwayMap {
         }
 
         LocalDateTime startTime = convertLineTimeToDateTime(currentTime, line.getStartTime());
-        LocalDateTime endTime = convertLineTimeToDateTime(currentTime, line.getEndTime());
         int intervalTime = line.getIntervalTime();
 
         // 첫차 시간 + (간격 X n) + 종점에서 정차역까지의 소요시간  이 조회 기준 시간보다 커질 때 까지 n을 증가
@@ -161,24 +144,6 @@ public class SubwayMap {
         }
 
         return trainTime.plusMinutes(durationMinuteSum);
-    }
-
-    protected static LocalDateTime convertLineTimeToDateTime(LocalDateTime findTime, String time) {
-        return LocalDateTime.of(findTime.getYear(), findTime.getMonth(), findTime.getDayOfMonth()
-            , Integer.parseInt(time.substring(0,2)), Integer.parseInt(time.substring(2)));
-    }
-
-    protected static LocalDateTime convertStringToDateTime(String dateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
-        return LocalDateTime.parse(dateString, formatter);
-    }
-
-    protected static String convertDateTimeToString(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-    }
-
-    enum PathDirection {
-        UP, DOWN
     }
 
     protected PathDirection findPathDirection(Section section) {
@@ -205,35 +170,6 @@ public class SubwayMap {
         return PathDirection.DOWN;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-//    public Path findPath(Station source, Station target, PathType pathType, String time) {
-//        GraphPath<Station, SectionEdge> result = findMinDistancePath(source, target);
-//        int fareDistance = result.getEdgeList().stream()
-//            .mapToInt(value -> value.getSection().getDistance())
-//            .sum();
-//
-//        if (pathType.equals(PathType.DURATION)) {
-//            result = findMinDurationPath(source, target);
-//        }
-//
-//        List<Section> sections = makeSectionListFromGraphPath(result);
-//
-//        return Path.of(new Sections(sections), fareDistance);
-//    }
-
-    private GraphPath<Station, SectionEdge> findMinDistancePath(Station source, Station target) {
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
-            = new DijkstraShortestPath<>(createGraph(PathType.DISTANCE));
-        return dijkstraShortestPath.getPath(source, target);
-    }
-
-    private GraphPath<Station, SectionEdge> findMinDurationPath(Station source, Station target) {
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
-            = new DijkstraShortestPath<>(createGraph(PathType.DURATION));
-        return dijkstraShortestPath.getPath(source, target);
-    }
-
     private List<Section> makeSectionListFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
         return graphPath.getEdgeList().stream()
             .map(SectionEdge::getSection)
@@ -251,15 +187,8 @@ public class SubwayMap {
     }
 
     private void addWeights(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathType pathType) {
-//        if (pathType.equals(PathType.DISTANCE))
-        {
-            addEdgeDistanceWeight(graph);
-            addOppositeEdgeDistanceWeight(graph);
-//            return;
-        }
-
-//        addEdgeDurationWeight(graph);
-//        addOppositeEdgeDurationWeight(graph);
+        addEdgeDistanceWeight(graph);
+        addOppositeEdgeDistanceWeight(graph);
     }
 
 
