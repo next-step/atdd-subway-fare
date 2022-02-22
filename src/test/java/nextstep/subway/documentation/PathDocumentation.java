@@ -13,14 +13,13 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
     public static final String EMAIL = "email@email";
     public static final String PASSWORD = "password";
-    public static final int AGE = 20;
+    public static final int AGE = 14;
     @MockBean
     private PathService pathService;
 
@@ -44,7 +43,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void pathForUser() {
         //given
-        회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, 14));
+        회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, AGE));
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
         PathResponse pathResponse = getPathResponseForUser();
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
