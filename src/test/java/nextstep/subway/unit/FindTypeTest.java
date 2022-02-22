@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.DURATION;
 
 public class FindTypeTest {
     @DisplayName("DISTANCE, DURATION 타입의 객체 생성")
@@ -30,22 +29,6 @@ public class FindTypeTest {
                 Arguments.of("DISTANCE", FindType.DISTANCE),
                 Arguments.of("DURATION", FindType.DURATION)
         );
-    }
-
-    @DisplayName("isDistance메서드 테스트")
-    @Test
-    void isDistance() {
-        // when & then
-        assertThat(FindType.DISTANCE.isDistance()).isTrue();
-        assertThat(FindType.DISTANCE.isDuration()).isFalse();
-    }
-
-    @DisplayName("isDuration메서드 테스트")
-    @Test
-    void isDuration() {
-        // when & then
-        assertThat(FindType.DURATION.isDuration()).isTrue();
-        assertThat(FindType.DURATION.isDistance()).isFalse();
     }
 
     @DisplayName("type에 따른 가중치 반환 테스트")

@@ -20,14 +20,6 @@ public enum FindType {
                 .orElseThrow(() -> new IllegalArgumentException());
     }
 
-    public boolean isDistance() {
-        return this == DISTANCE;
-    }
-
-    public boolean isDuration() {
-        return this == DURATION;
-    }
-
     public int weightFrom(Section section) {
         return weightFunction.apply(section);
     }
