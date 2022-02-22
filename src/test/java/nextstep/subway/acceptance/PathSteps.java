@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.springframework.http.HttpStatus;
@@ -45,26 +46,27 @@ public class PathSteps {
                 .when().get("/paths")
                 .then().log().all().extract();
     }
-//    public static ExtractableResponse<Response> 경로조회_회원(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
-//        return RestAssured
-//                .given(spec).log().all()
-//                .auth().oauth2(accessToken)
-//                .filter(filter)
-//                .accept(MediaType.APPLICATION_JSON_VALUE)
-//                .params(params)
-//                .when().get("/paths")
-//                .then().log().all().extract();
-//    }
-//
-//    public static ExtractableResponse<Response> 경로조회_비회원(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
-//        return RestAssured
-//                .given(spec).log().all()
-//                .filter(filter)
-//                .accept(MediaType.APPLICATION_JSON_VALUE)
-//                .params(params)
-//                .when().get("/paths")
-//                .then().log().all().extract();
-//    }
+
+    public static ExtractableResponse<Response> 경로조회_회원_문서화(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+        return RestAssured
+                .given(spec).log().all()
+                .auth().oauth2(accessToken)
+                .filter(filter)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .params(params)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 경로조회_비회원_문서화(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(filter)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .params(params)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
 
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
@@ -116,12 +118,22 @@ public class PathSteps {
         return requestParametersSnippet;
     }
 
-    public static PathResponse getPathResponse() {
+    public static PathResponse getPathResponseForAnonymous() {
         PathResponse pathResponse = new PathResponse(
                 Arrays.asList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10, 3, 1250
+                ), 10, 3, 1350
+        );
+        return pathResponse;
+    }
+
+    public static PathResponse getPathResponseForUser() {
+        PathResponse pathResponse = new PathResponse(
+                Arrays.asList(
+                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
+                ), 10, 3, 800
         );
         return pathResponse;
     }
@@ -152,7 +164,7 @@ public class PathSteps {
         Map<String, String> params = new HashMap<>();
         params.put("source", source + "");
         params.put("target", target + "");
-        params.put("method", method)
+        params.put("method", method);
         return params;
     }
 
