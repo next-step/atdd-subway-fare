@@ -28,7 +28,18 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 경로조회_문서생성_최단거리_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+    public static ExtractableResponse<Response> 경로조회_회원(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
+        return RestAssured
+                .given(spec).log().all()
+                .auth().oauth2(accessToken)
+                .filter(filter)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .params(params)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 경로조회_비회원(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
         return RestAssured
                 .given(spec).log().all()
                 .filter(filter)
@@ -38,68 +49,6 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 경로조회_문서생성_최소시간_기준(RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
-        return RestAssured
-                .given(spec).log().all()
-                .filter(filter)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .params(params)
-                .when().get("/paths/minimum-time")
-                .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 경로조회_문서생성_최소금액_거리_기준(String accessToken ,RequestSpecification spec, RestDocumentationFilter filter, Map<String, String> params) {
-        return RestAssured
-                .given(spec).log().all()
-                .auth().oauth2(accessToken)
-                .filter(filter)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .params(params)
-                .when().get("/paths/minimum-fee")
-                .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .when().get("/paths")
-                .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 최단금액_거리_경로조회_시간_요금_포함(Long source, Long target) {
-        ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .when().get("/paths/minimum-fee")
-                .then().log().all().extract();
-        return response;
-    }
-
-    public static ExtractableResponse<Response> 최단금액_거리_경로조회_시간_요금_포함(String accessToken, Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .auth().oauth2(accessToken)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .when().get("/paths/minimum-fee")
-                .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .when().get("/paths/minimum-time")
-                .then().log().all().extract();
-    }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
@@ -115,7 +64,6 @@ public class PathSteps {
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
         lineCreateParams.put("additionalFee", additionalFee + "");
-
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
