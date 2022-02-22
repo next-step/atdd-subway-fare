@@ -10,8 +10,7 @@ import java.util.List;
 public enum Fare {
     STANDARD(null, 1250, 1, 10, 10),
     EXTRA_LESS_THAN_50KM(STANDARD, 100, 11, 50, 5),
-    EXTRA_OVER_50KM(EXTRA_LESS_THAN_50KM, 100, 51, Integer.MAX_VALUE, 8),
-    ;
+    EXTRA_OVER_50KM(EXTRA_LESS_THAN_50KM, 100, 51, Integer.MAX_VALUE, 8);
 
     private Fare parentFare;
     private int amount;
@@ -32,7 +31,7 @@ public enum Fare {
         return fare.calculate(distance);
     }
 
-    public static Fare valueOfDistance(int distance) {
+    private static Fare valueOfDistance(int distance) {
         return Arrays.stream(Fare.values())
                 .filter(fare -> fare.minDistance <= distance && distance <= fare.maxDistance)
                 .findFirst()
