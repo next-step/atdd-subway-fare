@@ -10,11 +10,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    public static final String EMAIL = "email@email.com";
+    public static final String PASSWORD = "password";
+    public static final int AGE = 20;
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -38,15 +43,15 @@ class PathAcceptanceTest extends AcceptanceTest {
      *                                     |
      *                                   ----  판교역
      *
-     * * (거리, 시간, 요금) [경로]
+     * * (거리, 시간, 어른 요금, 청소년 요금, 어린이 요금) [경로]
      *
      * 교대역 > 양재역
-     * 최단 거리: (5, 20, 1550) [교대역, 남부터미널역, 양재역]
-     * 최소 시간: (20, 6, 1350) [교대역, 강남역, 양재역]
+     * 최단 거리: (5, 20, 1550, 960, 600) [교대역, 남부터미널역, 양재역]
+     * 최소 시간: (20, 6, 1350, 900, 500) [교대역, 강남역, 양재역]
      *
      * 교대역 > 판교역
-     * 최단 거리: (45, 40, 2250) [교대역, 남부터미널역, 양재역, 판교역]
-     * 최소 시간: (60, 26, 2050) [교대역, 강남역, 양재역, 판교역]
+     * 최단 거리: (45, 40, 2250, 1520, 950) [교대역, 남부터미널역, 양재역, 판교역]
+     * 최소 시간: (60, 26, 2050, 1360, 850) [교대역, 강남역, 양재역, 판교역]
      */
     @BeforeEach
     public void setUp() {
@@ -64,6 +69,11 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 10));
         지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 판교역, 40, 20));
+
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성됨(createResponse);
+
+        로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     /**
@@ -73,6 +83,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      *     Given 지하철역이 등록되어있음
      *     And 지하철 노선이 등록되어있음
      *     And 지하철 노선에 지하철역이 등록되어있음
+     *     And 로그인 되어있음
      *     When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
      *     Then 최단 거리 경로를 응답
      *     And 총 거리와 소요 시간을 함께 응답함
@@ -95,6 +106,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      *     Given 지하철역이 등록되어있음
      *     And 지하철 노선이 등록되어있음
      *     And 지하철 노선에 지하철역이 등록되어있음
+     *     And 로그인 되어있음
      *     When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      *     Then 최소 시간 기준 경로를 응답
      *     And 총 거리와 소요 시간을 함께 응답함
