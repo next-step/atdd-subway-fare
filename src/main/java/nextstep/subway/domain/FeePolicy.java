@@ -8,13 +8,22 @@ public class FeePolicy {
     public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST = 10;
     public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND = 50;
     public static final int DEDUCTION_FEE = 350;
+    public static final int DEFAULT_AGE = 19;
+    public static final double CHILD_DISCOUNT_RATE = 0.5;
+    public static final double TEENAGER_DISCOUNT_RATE = 0.8;
+    public static final int TEENAGER_MIN_AGE = 13;
+    public static final int TEENAGER_LIMIT_AGE = 19;
+    public static final int CHILD_LIMIT_AGE = 13;
+    public static final int CHILD_MIN_AGE = 6;
+    public static final int EIGHT = 8;
+    public static final int FIVE = 5;
 
     public int totalFee(int distance) {
         return totalFee(distance, 0, 19);
     }
 
     public int totalFee(int distance, int additionalFee) {
-        return totalFee(distance, additionalFee, 19);
+        return totalFee(distance, additionalFee, DEFAULT_AGE);
     }
 
     public int totalFee(int distance, int additionalFee ,int age) {
@@ -26,10 +35,10 @@ public class FeePolicy {
 
     private int distanceFeePolicy(int fee, int distance) {
         if (distance > ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND) {
-            return fee + 800 + getAdditionalFeePerEight(distance - ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND);
+            return fee + 800 + getAdditionalFeePer(EIGHT, distance - ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND);
         }
         if (distance > ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST) {
-            return fee + getAdditionalFeePerFive(distance - ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST);
+            return fee + getAdditionalFeePer(FIVE, distance - ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST);
         }
         return fee;
     }
@@ -39,19 +48,24 @@ public class FeePolicy {
     }
 
     private int ageAdditionalFeePolicy(int fee, int age) {
-        if (age >= 6 && age < 13) {
-            return (int) ((fee - DEDUCTION_FEE) * 0.5);
+        if (isChild(age)) {
+            return (int) ((fee - DEDUCTION_FEE) * CHILD_DISCOUNT_RATE);
         }
 
-        if (age >= 13 && age < 19) {
-            return (int) ((fee - DEDUCTION_FEE) * 0.8);
+        if (isTeenager(age)) {
+            return (int) ((fee - DEDUCTION_FEE) * TEENAGER_DISCOUNT_RATE);
         }
         return fee;
     }
-
-    private int getAdditionalFeePerEight(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+    
+    private boolean isTeenager(int age) {
+        return age >= TEENAGER_MIN_AGE && age < TEENAGER_LIMIT_AGE;
     }
 
-    private int getAdditionalFeePerFive(int distance) { return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100); }
+    private boolean isChild(int age) {
+        return age >= CHILD_MIN_AGE && age < CHILD_LIMIT_AGE;
+    }
+
+    private int getAdditionalFeePer(int number ,int distance) {return (int) ((Math.ceil((distance - 1) / number) + 1) * 100);}
+    
 }
