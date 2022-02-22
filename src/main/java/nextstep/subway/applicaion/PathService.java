@@ -25,8 +25,8 @@ public class PathService {
 
         if (PathType.DURATION == type) {
             // 최단 시간의 거리가 아닌 최단 경로의 거리 구하기
-            Path shortestDistancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
-            path = path.changeShortestDistancePath(shortestDistancePath);
+            Path shortestPath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
+            return PathResponse.of(path, shortestPath);
         }
 
         return PathResponse.of(path);
