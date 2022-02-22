@@ -76,7 +76,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 
 
-    @DisplayName("로그인된 최단거리 경로조회 ( 요금정책 포함 )")
+    @DisplayName("로그인된 최단거리 가격정책 을 포함한(나이, 거리, 노선별 추가요금) 경로조회")
     @Test
     void findPathByDistanceWithLogin() {
         //given
