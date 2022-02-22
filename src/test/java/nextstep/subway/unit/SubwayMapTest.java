@@ -1,10 +1,7 @@
 package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.domain.PathSearchType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
@@ -47,7 +45,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, SHORTEST_DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -60,7 +58,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMap.findPath(양재역, 교대역, SHORTEST_DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
@@ -74,7 +72,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         //when
-        Path path = subwayMap.findPathByDuration(양재역, 교대역);
+        Path path = subwayMap.findPath(양재역, 교대역,  MINIMUM_TIME);
 
         //then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
@@ -88,7 +86,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         //when
-        Path path = subwayMap.findPathByDuration(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, MINIMUM_TIME);
 
         //then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
