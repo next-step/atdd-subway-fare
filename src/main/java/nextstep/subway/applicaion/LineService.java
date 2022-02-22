@@ -30,7 +30,13 @@ public class LineService {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
             line.addSection(() ->
-                    createSection(line, upStation, downStation, request.getDistance(), request.getDuration())
+                    new Section.Builder()
+                            .line(line)
+                            .upStation(upStation)
+                            .downStation(downStation)
+                            .distance(request.getDistance())
+                            .duration(request.getDuration())
+                            .build()
             );
         }
         return LineResponse.of(line);
@@ -70,8 +76,13 @@ public class LineService {
         Station upStation = stationService.findById(sectionRequest.getUpStationId());
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
         Line line = findById(lineId);
-        line.addSection(() ->
-                createSection(line, upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration())
+        line.addSection(() -> new Section.Builder()
+                .line(line)
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(sectionRequest.getDistance())
+                .duration(sectionRequest.getDuration())
+                .build()
         );
     }
 
@@ -80,15 +91,5 @@ public class LineService {
         Station station = stationService.findById(stationId);
 
         line.deleteSection(station);
-    }
-
-    private Section createSection(Line line, Station upStation, Station downStation, int distance, int duration) {
-        return new Section.Builder()
-                .line(line)
-                .upStation(upStation)
-                .downStation(downStation)
-                .distance(distance)
-                .duration(duration)
-                .build();
     }
 }
