@@ -24,7 +24,7 @@ public enum Fare {
         if(isStandard(distance)) {
             return STANDARD_FARE;
         }
-        return STANDARD_FARE + calculateOverFare(distance, findCriteria(distance));
+        return STANDARD_FARE + calculateOverFare(distance, findType(distance).criteria);
     }
 
     private static boolean isStandard(int distance) {
@@ -33,10 +33,6 @@ public enum Fare {
 
     private static int calculateOverFare(final int distance, final int criteria) {
         return (int) ((Math.ceil(((double) distance - 11) / criteria) + 1) * 100);
-    }
-
-    public static int findCriteria(int distance) {
-        return findType(distance).criteria;
     }
 
     private static Fare findType(int distance) {
