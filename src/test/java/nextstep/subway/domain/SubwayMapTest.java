@@ -176,18 +176,6 @@ class SubwayMapTest {
         assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 00));
     }
 
-    @Test
-    void convertStringToDateTimeTest() {
-        LocalDateTime dateTime = convertStringToDateTime("202202201603");
-
-        assertAll(
-            () -> assertThat(dateTime.getYear()).isEqualTo(2022),
-            () -> assertThat(dateTime.getMonthValue()).isEqualTo(02),
-            () -> assertThat(dateTime.getHour()).isEqualTo(16),
-            () -> assertThat(dateTime.getMinute()).isEqualTo(03)
-        );
-    }
-
     @DisplayName("경로의 구간이 어느 방향행인지 확인해보니 상행이다.")
     @Test
     void findPathUpDirectionTest() {

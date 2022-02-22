@@ -8,12 +8,9 @@ public class ShortestPaths {
 
     private Path shortestDurationPath;
 
-    private int shortestDistance;
-
-    public ShortestPaths(Path shortestDurationPath, Path shortestDistancePath, int shortestDistance) {
+    public ShortestPaths(Path shortestDurationPath, Path shortestDistancePath) {
         this.shortestDurationPath = shortestDurationPath;
         this.shortestDistancePath = shortestDistancePath;
-        this.shortestDistance = shortestDistance;
     }
 
     public List<Section> getShortestDistanceSections() {
@@ -33,7 +30,7 @@ public class ShortestPaths {
     }
 
     public int getShortestDistance() {
-        return shortestDistance;
+        return shortestDistancePath.extractDistance();
     }
 
     public String getShortestDistanceArrivalTime() {

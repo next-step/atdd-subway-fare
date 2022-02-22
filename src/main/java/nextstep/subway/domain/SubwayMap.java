@@ -18,18 +18,22 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathType pathType, String time) {
+    public Path findPath(Station source, Station target, PathType pathType, String startTimeString) {
         List<GraphPath<Station, SectionEdge>> paths = findAllKShortestPaths(source, target, pathType);
 
-        ShortestPaths shortestPaths = findShortest(paths, time);
+        ShortestPaths shortestPaths = findShortest(paths, startTimeString);
 
-        if (pathType.equals(PathType.DISTANCE)) {
+        if (isSearchingShortestDistancePath(pathType)) {
             return Path.of(new Sections(shortestPaths.getShortestDistanceSections())
                 , shortestPaths.getShortestDistance(), shortestPaths.getShortestDistanceArrivalTime());
         }
 
         return Path.of(new Sections(shortestPaths.getShortestDurationSections())
-                , shortestPaths.getShortestDistance(), shortestPaths.getShortestDurationArrivalTime());
+            , shortestPaths.getShortestDistance(), shortestPaths.getShortestDurationArrivalTime());
+    }
+
+    private boolean isSearchingShortestDistancePath(PathType pathType) {
+        return pathType.equals(PathType.DISTANCE);
     }
 
     protected List<GraphPath<Station, SectionEdge>> findAllKShortestPaths(Station source, Station target, PathType pathType) {
@@ -40,55 +44,61 @@ public class SubwayMap {
     public ShortestPaths findShortest(List<GraphPath<Station, SectionEdge>> paths, String startTimeString) {
         LocalDateTime startTime = convertStringToDateTime(startTimeString);
 
-        Path shortestDistancePath;
-        Path shortestDurationPath;
+        Path shortestDistancePath = findShortestDistancePath(paths, startTime);
+        Path shortestDurationPath = findShortestDurationPath(paths, startTime);
 
-        shortestDistancePath = findShortestDistancePath(paths, startTime);
-        int shortestFareDistance = shortestDistancePath.extractDistance();
+        return new ShortestPaths(shortestDurationPath, shortestDistancePath);
+    }
 
+    private Path findShortestDurationPath(List<GraphPath<Station, SectionEdge>> paths, LocalDateTime startTime) {
         LocalDateTime fastestArrivalTime = LocalDateTime.MAX;
-        List<Section> shortestSections = null;
-
+        List<Section> shortestSectionList = null;
         for (GraphPath<Station, SectionEdge> path : paths) {
-            List<Section> sectionList = makeSectionListFromGraphPath(path);
+            List<Section> sectionList = sectionsFromGraphPath(path);
 
             LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
 
             if (currentTime.isBefore(fastestArrivalTime)) {
-                shortestSections = sectionList;
+                shortestSectionList = sectionList;
                 fastestArrivalTime = currentTime;
             }
         }
 
-        shortestDurationPath = Path.of(
-            new Sections(shortestSections), shortestFareDistance, convertDateTimeToString(fastestArrivalTime));
-
-        return new ShortestPaths(shortestDurationPath, shortestDistancePath, shortestFareDistance);
+        return Path.of(
+            new Sections(shortestSectionList)
+            , totalDistanceOf(shortestSectionList)
+            , convertDateTimeToString(fastestArrivalTime)
+        );
     }
 
     private Path findShortestDistancePath(List<GraphPath<Station, SectionEdge>> paths, LocalDateTime startTime) {
         int shortestFareDistance = Integer.MAX_VALUE;
-        Path shortest = null;
+        List<Section> sectionList;
+        LocalDateTime currentTime;
+        GraphPath<Station, SectionEdge> shortestPath = null;
 
+        int distance;
         for (GraphPath<Station, SectionEdge> path : paths) {
-            List<Section> sectionList = makeSectionListFromGraphPath(path);
-            int distance = sectionList.stream()
-                .mapToInt(Section::getDistance)
-                .sum();
+            distance = totalDistanceOf(sectionsFromGraphPath(path));
 
             if (distance <= shortestFareDistance) {
                 shortestFareDistance = distance;
 
-                List<Section> sections = makeSectionListFromGraphPath(path);
-
-                LocalDateTime currentTime = findArrivalTime(sectionList, startTime);
-
-                shortest = Path.of(
-                    new Sections(sections), shortestFareDistance, convertDateTimeToString(currentTime));
+                shortestPath = path;
             }
         }
 
-        return shortest;
+        sectionList = sectionsFromGraphPath(shortestPath);
+        currentTime = findArrivalTime(sectionList, startTime);
+
+        return Path.of(
+            new Sections(sectionList), shortestFareDistance, convertDateTimeToString(currentTime));
+    }
+
+    private int totalDistanceOf(List<Section> sectionList) {
+        return sectionList.stream()
+            .mapToInt(Section::getDistance)
+            .sum();
     }
 
     protected LocalDateTime findArrivalTime(List<Section> sectionList, LocalDateTime startTime) {
@@ -110,40 +120,63 @@ public class SubwayMap {
     }
 
     protected LocalDateTime findTrainTime(Section section, LocalDateTime currentTime) {
-        PathDirection pathDirection = findPathDirection(section);
-
         Station targetStation = section.getUpStation();
         Line line = section.getLine();
 
-        List<Section> sectionList = line.getSections();
-        int durationMinuteSum = 0;
-        if (pathDirection.equals(PathDirection.UP)) {
-            for (int i = sectionList.size()-1; i >= 0; --i) {
-                if (sectionList.get(i).getDownStation().equals(targetStation)) {
-                    break;
-                }
-                durationMinuteSum += sectionList.get(i).getDuration();
-            }
-        } else {
-            for (Section sect : sectionList) {
-                if (sect.getUpStation().equals(targetStation)) {
-                    break;
-                }
-                durationMinuteSum += sect.getDuration();
-            }
-        }
+        PathDirection pathDirection = findPathDirection(section);
+        int durationTimeToStation = findDurationTimeToStation(line, targetStation, pathDirection);
+        LocalDateTime trainTime = findFirstArrivedTrainTime(currentTime, line, durationTimeToStation);
 
+        return trainTime.plusMinutes(durationTimeToStation);
+    }
+
+    private LocalDateTime findFirstArrivedTrainTime(LocalDateTime currentTime, Line line, int durationTimeToStation) {
         LocalDateTime startTime = convertLineTimeToDateTime(currentTime, line.getStartTime());
         int intervalTime = line.getIntervalTime();
 
-        // 첫차 시간 + (간격 X n) + 종점에서 정차역까지의 소요시간  이 조회 기준 시간보다 커질 때 까지 n을 증가
         LocalDateTime trainTime = startTime;
-        while (!currentTime.isBefore(trainTime.plusMinutes(durationMinuteSum))
-            && !currentTime.isEqual(trainTime.plusMinutes(durationMinuteSum))) {
+        while (!currentTime.isBefore(trainTime.plusMinutes(durationTimeToStation))
+            && !currentTime.isEqual(trainTime.plusMinutes(durationTimeToStation))) {
             trainTime = trainTime.plusMinutes(intervalTime);
         }
 
-        return trainTime.plusMinutes(durationMinuteSum);
+        return trainTime;
+    }
+
+    private int findDurationTimeToStation(Line line, Station targetStation, PathDirection pathDirection) {
+        List<Section> sectionList = line.getSections();
+
+        if (pathDirection.equals(PathDirection.UP)) {
+            return calculateFromTimeDownToUp(sectionList, targetStation);
+        }
+
+        return calculateTimeFromTopToDown(sectionList, targetStation);
+    }
+
+    private int calculateFromTimeDownToUp(List<Section> sectionList, Station targetStation) {
+        int durationMinuteSum = 0;
+
+        for (int i = sectionList.size()-1; i >= 0; --i) {
+            if (sectionList.get(i).getDownStation().equals(targetStation)) {
+                break;
+            }
+            durationMinuteSum += sectionList.get(i).getDuration();
+        }
+
+        return durationMinuteSum;
+    }
+
+    private int calculateTimeFromTopToDown(List<Section> sectionList, Station targetStation) {
+        int durationMinuteSum = 0;
+
+        for (Section sect : sectionList) {
+            if (sect.getUpStation().equals(targetStation)) {
+                break;
+            }
+            durationMinuteSum += sect.getDuration();
+        }
+
+        return durationMinuteSum;
     }
 
     protected PathDirection findPathDirection(Section section) {
@@ -170,7 +203,7 @@ public class SubwayMap {
         return PathDirection.DOWN;
     }
 
-    private List<Section> makeSectionListFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
+    private List<Section> sectionsFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
         return graphPath.getEdgeList().stream()
             .map(SectionEdge::getSection)
             .collect(Collectors.toList());

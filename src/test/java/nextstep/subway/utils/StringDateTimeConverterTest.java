@@ -4,6 +4,7 @@ import static nextstep.subway.utils.StringDateTimeConverter.convertDateTimeToStr
 import static nextstep.subway.utils.StringDateTimeConverter.convertLineTimeToDateTime;
 import static nextstep.subway.utils.StringDateTimeConverter.convertStringToDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
@@ -37,4 +38,15 @@ class StringDateTimeConverterTest {
         assertThat(dateTime.getMinute()).isEqualTo(30);
     }
 
+    @Test
+    void convertStringToDateTimeTest() {
+        LocalDateTime dateTime = convertStringToDateTime("202202201603");
+
+        assertAll(
+            () -> assertThat(dateTime.getYear()).isEqualTo(2022),
+            () -> assertThat(dateTime.getMonthValue()).isEqualTo(02),
+            () -> assertThat(dateTime.getHour()).isEqualTo(16),
+            () -> assertThat(dateTime.getMinute()).isEqualTo(03)
+        );
+    }
 }
