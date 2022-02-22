@@ -1,10 +1,6 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.ui.exception.PathException;
-
-import java.util.Arrays;
-
-import static java.util.Arrays.*;
+import static java.util.Arrays.stream;
 
 public enum FareStandard {
 //    FARE50(51, 9999, 8, overDistance ->
