@@ -28,7 +28,8 @@ public class PathDocumentation extends Documentation {
     private final String startTime = "0530";
     private final String endTime = "2330";
     private final int intervalTime = 10;
-    private final String time = "202202200600";
+    private final String START_TIME_STRING = "202202200600";
+    private final String ARRIVAL_TIME_STRING = "202202200610";
 
     @Test
     void pathTypeDistance() {
@@ -49,12 +50,12 @@ public class PathDocumentation extends Documentation {
             .queryParam("source", 교대역.getId())
             .queryParam("target", 양재역.getId())
             .queryParam("pathType", PathType.DISTANCE)
-            .queryParam("time", time)
+            .queryParam("time", START_TIME_STRING)
             .when().get("/paths")
             .then().assertThat().statusCode(is(200))
             .log().all().extract();
 
         경로조회의_결과_경로가_예상과_같다(response, 교대역.getId(), 양재역.getId());
-        경로조회의_결과_정보가_예상과_같다(response, distance, duration, 1250, "");
+        경로조회의_결과_정보가_예상과_같다(response, distance, duration, 1250, ARRIVAL_TIME_STRING);
     }
 }

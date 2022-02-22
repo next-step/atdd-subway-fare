@@ -76,8 +76,17 @@ class PathServiceTest {
      *                           교판역
      *
      * 2호선: 추가요금 900원
+     *      첫차시간 05:00
+     *      막차시간 23:30
+     *      운행간격 10분
      * 3호선: 추가요금 1100원
+     *      첫차시간 05:30
+     *      막차시간 23:00
+     *      운행간격 5분
      * 신분당선: 추가요금 2000원
+     *      첫차시간 05:20
+     *      막차시간 23:40
+     *      운행간격 20분
      *
      * 청소년(13세 이상~19세 미만): 운임에서 350원 공제 후 20% 할인
      * 어린이(6세 이상~ 13세 미만): 운임에서 350원 공제 후 50% 할인
@@ -103,17 +112,17 @@ class PathServiceTest {
         광교역 = stationRepository.save(Station.of("광교역"));
         교판역 = stationRepository.save(Station.of("교판역"));
 
-        이호선 = Line.of("이호선", "green", 900);
+        이호선 = Line.of("이호선", "green", 900, "0500", "2330", 10);
         이호선.addSection(교대역, 강남역, 8, 4);
         이호선.addSection(강남역, 삼성역, 8, 3);
 
-        신분당선 = Line.of("신분당선", "red", 2000);
+        신분당선 = Line.of("신분당선", "red", 2000, "0520", "2340", 20);
         신분당선.addSection(강남역, 양재역, 6, 3);
         신분당선.addSection(양재역, 판교역, 40, 20);
         신분당선.addSection(판교역, 광교역, 8, 5);
         신분당선.addSection(광교역, 교판역, 1, 1);
 
-        삼호선 = Line.of("삼호선", "orange", 1100);
+        삼호선 = Line.of("삼호선", "orange", 1100, "0530", "2300", 5);
         삼호선.addSection(교대역, 남부터미널역, 5, 5);
         삼호선.addSection(남부터미널역, 양재역, 5, 5);
         삼호선.addSection(양재역, 대치역, 5, 5);
@@ -137,7 +146,7 @@ class PathServiceTest {
         );
     }
 
-    @DisplayName("11km 거리의 경로조회 (최소시간 경로와 다른 경로) 를 한다.")
+    @DisplayName("11km 거리의 경로조회 (최단시간 도착) 를 한다.")
     @Test
     void findPathTest_2() {
         PathResponse response = pathService.findPath(비로그인유저, 강남역.getId(), 남부터미널역.getId(), PathType.DURATION, time);
@@ -151,17 +160,17 @@ class PathServiceTest {
         );
     }
 
-    @DisplayName("15km 거리의 경로조회 (최소시간 경로와 다른 경로) 를 한다.")
+    @DisplayName("15km 거리의 경로조회 (최단시간 도착) 를 한다.")
     @Test
     void findPathTest_3() {
         PathResponse response = pathService.findPath(비로그인유저, 교대역.getId(), 대치역.getId(), PathType.DURATION, time);
 
         assertAll(
             () -> assertThat(response.getStations().stream()
-                .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 강남역.getId(), 양재역.getId(), 대치역.getId()),
-            () -> assertThat(response.getDistance()).isEqualTo(19),
-            () -> assertThat(response.getDuration()).isEqualTo(12),
-            () -> assertThat(response.getFare()).isEqualTo(3350)    // 최단거리는 15
+                .mapToLong(value -> value.getId())).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId(), 대치역.getId()),
+            () -> assertThat(response.getDistance()).isEqualTo(15),
+            () -> assertThat(response.getDuration()).isEqualTo(15),
+            () -> assertThat(response.getFare()).isEqualTo(2450)    // 최단거리는 15
         );
     }
 

@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import com.google.common.collect.Lists;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import nextstep.subway.domain.SubwayMap.PathDirection;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.domain.SubwayMap.convertStringToDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -36,7 +38,7 @@ class SubwayMapTest {
      *  |                          |
      * *3호선*                   *신분당선*
      거리:6, 시간:5             거리:9, 시간:2
-     |                          |
+     *  |                          |
      *  |                          |
      * 남부터미널역  --- *3호선* ---  양재역 ---  *3호선*  ---  대치역
      *           거리:6, 시간:5             거리: 2, 시간 5
@@ -54,7 +56,7 @@ class SubwayMapTest {
      *      막차시간 23:40
      *      운행간격 20분
      *
-     * 1. 강남역-양재역-남부터미널역  **(운행시간고려 최단시간 도착) 거리 15**
+     * 1. 강남역-양재역-남부터미널역  **최단시간 (운행시간고려 최단시간 도착) 거리 15**
      *      강남역에서 06:00 탑승
      *      양재역에서 06:02 하차
      *      양재역에서 06:05 탑승
@@ -66,6 +68,17 @@ class SubwayMapTest {
      *      교대역에서 06:10 탑승
      *      남부터미널역에서 06:15 하차 (도착) 202202200615
      *
+     * 3. 남부터미널역-양재역-강남역
+     *      남부터미널역에서 06:00 탑승
+     *      양재역에서 06:05 하차
+     *      양재역에서 06:20 탑승
+     *      강남역에서 06:22 하차  (도착) 202202200622
+     *
+     * 4. 남부터미널역-교대역-강남역    **최단시간** **최단거리 14**
+     *      남부터미널역에서 06:00 탑승
+     *      교대역에서 06:05 하차
+     *      교대역에서 06:10 탑승
+     *      강남역에서 06:13 하차  (도착) 202202200613
      */
     @BeforeEach
     void setUp() {
@@ -106,11 +119,25 @@ class SubwayMapTest {
         assertAll(
             () -> assertThat(shortest.getShortestDistancePath()
                 .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 교대역, 남부터미널역)),
-//            () -> assertThat(shortest.getShortestDurationPath()
-//                .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역)),
-            () -> assertThat(shortest.getShortestDistance()).isEqualTo(14)
-//            () -> assertThat(shortest.getShortestArrivalTime()).isEqualTo(SHORTEST_DISTANCE_ARRIVAL_TIME)
+            () -> assertThat(shortest.getShortestDurationPath()
+                .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역)),
+            () -> assertThat(shortest.getShortestDistance()).isEqualTo(14),
+            () -> assertThat(shortest.getShortestDurationArrivalTime()).isEqualTo(SHORTEST_DURATION_ARRIVAL_TIME)
         );
+    }
+
+    @Test
+    void findTrainTime_singleSection_upDirection_Test() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        LocalDateTime trainTime = subwayMap.findTrainTime(
+            new Section(신분당선, 양재역, 강남역, 9, 2), convertStringToDateTime("202202200605"));
+
+        // then
+        assertThat(trainTime).isEqualTo(convertStringToDateTime("202202200620"));
     }
 
     @Test
@@ -120,7 +147,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         LocalDateTime trainTime = subwayMap.findTrainTime(
-            new Section(이호선, 강남역, 교대역, 8, 3), START_TIME);
+            new Section(이호선, 강남역, 교대역, 8, 3), convertStringToDateTime(START_TIME));
 
         assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 03));
     }
@@ -132,19 +159,21 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         LocalDateTime trainTime = subwayMap.findTrainTime(
-            new Section(이호선, 교대역, 강남역, 8, 3), START_TIME);
+            new Section(이호선, 교대역, 강남역, 8, 3), convertStringToDateTime(START_TIME));
 
         assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 00));
     }
 
     @Test
     void convertStringToDateTimeTest() {
-        LocalDateTime dateTime = SubwayMap.convertStringToDateTime("202202201603");
+        LocalDateTime dateTime = convertStringToDateTime("202202201603");
 
-        assertThat(dateTime.getYear()).isEqualTo(2022);
-        assertThat(dateTime.getMonthValue()).isEqualTo(02);
-        assertThat(dateTime.getHour()).isEqualTo(16);
-        assertThat(dateTime.getMinute()).isEqualTo(03);
+        assertAll(
+            () -> assertThat(dateTime.getYear()).isEqualTo(2022),
+            () -> assertThat(dateTime.getMonthValue()).isEqualTo(02),
+            () -> assertThat(dateTime.getHour()).isEqualTo(16),
+            () -> assertThat(dateTime.getMinute()).isEqualTo(03)
+        );
     }
 
     @Test
@@ -157,15 +186,15 @@ class SubwayMapTest {
 
     @Test
     void dateTimeComparisonTest() {
-        LocalDateTime bigTime = SubwayMap.convertStringToDateTime("202202201604");
-        LocalDateTime smallTime = SubwayMap.convertStringToDateTime("202202201603");
+        LocalDateTime bigTime = convertStringToDateTime("202202201604");
+        LocalDateTime smallTime = convertStringToDateTime("202202201603");
 
         assertThat(bigTime.isAfter(smallTime)).isTrue();
     }
 
     @Test
     void convertLineTimeToDateTimeTest() {
-        LocalDateTime findPathTime = SubwayMap.convertStringToDateTime(START_TIME);
+        LocalDateTime findPathTime = convertStringToDateTime(START_TIME);
         LocalDateTime dateTime = SubwayMap.convertLineTimeToDateTime(findPathTime, "1630");
 
         assertThat(dateTime.getYear()).isEqualTo(2022);
@@ -209,7 +238,7 @@ class SubwayMapTest {
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
         List<GraphPath<Station, SectionEdge>> allPaths = subwayMap.findAllKShortestPaths(
-            교대역, 양재역, PathType.DURATION);
+            강남역, 남부터미널역, PathType.DURATION);
 
         // when
         ShortestPaths shortest = subwayMap.findShortest(allPaths, START_TIME);
@@ -221,8 +250,28 @@ class SubwayMapTest {
             () -> assertThat(shortest.getShortestDurationPath()
                 .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역)),
             () -> assertThat(shortest.getShortestDistance()).isEqualTo(14),
-            () -> assertThat(shortest.getShortestArrivalTime()).isEqualTo(SHORTEST_DURATION_ARRIVAL_TIME)
+            () -> assertThat(shortest.getShortestDurationArrivalTime()).isEqualTo(SHORTEST_DURATION_ARRIVAL_TIME)
         );
+    }
+
+    @Test
+    void minutesBetween_positive_test() {
+        LocalDateTime sourceTime = convertStringToDateTime("202202221930");
+        LocalDateTime targetTime = convertStringToDateTime("202202221948");
+
+        int between = (int) ChronoUnit.MINUTES.between(sourceTime, targetTime);
+
+        assertThat(between).isEqualTo(18);
+    }
+
+    @Test
+    void minutesBetween_negative_test() {
+        LocalDateTime sourceTime = convertStringToDateTime("202202221948");
+        LocalDateTime targetTime = convertStringToDateTime("202202221930");
+
+        int between = (int) ChronoUnit.MINUTES.between(sourceTime, targetTime);
+
+        assertThat(between).isEqualTo(-18);
     }
 
     @Test
@@ -274,7 +323,11 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(남부터미널역, 강남역, PathType.DURATION, START_TIME);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(남부터미널역, 양재역, 강남역));
+        assertAll(
+            () -> assertThat(path.extractArrivalTime()).isEqualTo("202202200613"),
+            () -> assertThat(path.getStations())
+                .containsExactlyElementsOf(Lists.newArrayList(남부터미널역, 교대역, 강남역))
+        );
     }
 
     private Station createStation(long id, String name) {

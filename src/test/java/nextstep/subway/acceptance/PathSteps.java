@@ -45,9 +45,9 @@ public class PathSteps {
                     fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("역 생성날짜"),
                     fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정날짜"),
                     fieldWithPath("distance").type(Integer.class).description("경로조회 총 거리"),
-                    fieldWithPath("duration").type(Integer.class).description("경로조회 총 소요시간"),
+                    fieldWithPath("duration").type(Integer.class).description("경로조회 순수 지하철 이동시간"),
                     fieldWithPath("fare").type(Integer.class).description("경로조회 총 비용"),
-                    fieldWithPath("arrivalTime").type(JsonFieldType.STRING).description("조회된 경로 도착시간")
+                    fieldWithPath("arrivalTime").type(JsonFieldType.STRING).description("조회된 경로의 환승 고려한 도착시간")
                 )))
             .build();
     }
