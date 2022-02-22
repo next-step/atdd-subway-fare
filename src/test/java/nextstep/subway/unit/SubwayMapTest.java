@@ -11,6 +11,7 @@ import java.util.List;
 
 import static nextstep.subway.domain.Fare.BASIC_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SubwayMapTest {
 
@@ -142,9 +143,11 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 판교역);
 
         // then
-        assertThat(path.extractDistance()).isEqualTo(45);
-        assertThat(path.extractFare()).isEqualTo(1950);
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 판교역));
+        assertAll(
+                () -> assertThat(path.extractDistance()).isEqualTo(45),
+                () -> assertThat(path.extractFare()).isEqualTo(1950),
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 판교역))
+        );
     }
 
     @DisplayName("경로가 50km를 초과하는 경우 초과 요금이 부과된다.")
@@ -157,9 +160,11 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 판교역);
 
         // then
-        assertThat(path.extractDistance()).isEqualTo(60);
-        assertThat(path.extractFare()).isEqualTo(1950);
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역, 판교역));
+        assertAll(
+                () -> assertThat(path.extractDistance()).isEqualTo(60),
+                () -> assertThat(path.extractFare()).isEqualTo(1950),
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역, 판교역))
+        );
     }
 
     private Station createStation(long id, String name) {

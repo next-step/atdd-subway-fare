@@ -12,7 +12,7 @@ public class Fare {
 
     public int impose() {
         FareStandard standard = FareStandard.decide(totalDistance);
-        int overDistance = totalDistance - standard.getBasicBoundary();
+        int overDistance = standard.calculateOverDistance(totalDistance);
         return BASIC_FARE + calculateOverFare(overDistance, standard);
     }
 
