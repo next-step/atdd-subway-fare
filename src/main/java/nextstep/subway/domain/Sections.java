@@ -3,10 +3,7 @@ package nextstep.subway.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -164,10 +161,15 @@ public class Sections {
     }
 
     public int totalDuration() {
+        sections.stream().mapToInt(Section::getDuration).sum();
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
     public int totalFare() {
-        return new Fare(totalDistance()).impose();
+        return new Fare(totalDistance()).impose() + calculateMaxLineFare();
+    }
+
+    private int calculateMaxLineFare() {
+        return sections.stream().mapToInt(Section::getLineFare).max().orElseThrow(NoSuchElementException::new);
     }
 }

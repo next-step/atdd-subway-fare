@@ -45,6 +45,10 @@ public class Line extends BaseEntity {
         return sections.getSections();
     }
 
+    public int getFare() {
+        return fare;
+    }
+
     public void update(String name, String color) {
         if (name != null) {
             this.name = name;
