@@ -4,73 +4,49 @@ import lombok.val;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Fare {
+public enum Fare {
+    STANDARD(null, 1250, 1, 10, 10),
+    EXTRA_LESS_THAN_50KM(STANDARD, 100, 11, 50, 5),
+    EXTRA_OVER_50KM(EXTRA_LESS_THAN_50KM, 100, 51, Integer.MAX_VALUE, 8),
+    ;
 
-    private static final BigDecimal DEFAULT_FARE = BigDecimal.valueOf(1250);
+    private Fare parentFare;
+    private int amount;
+    private int minDistance;
+    private int maxDistance;
+    private int dividend;
 
-    private final int maximumPolicyIndex;
-    private final int distance;
-    private static final List<DistancePolicy> distancePolicies = new ArrayList<DistancePolicy>() {
-        {
-            add(new DistancePolicy(5, 0, 0));
-            add(new DistancePolicy(5, 100, 11));
-            add(new DistancePolicy(8, 100, 51));
+    Fare(Fare parentFare, int amount, int minDistance, int maxDistance, int dividend) {
+        this.parentFare = parentFare;
+        this.amount = amount;
+        this.minDistance = minDistance;
+        this.maxDistance = maxDistance;
+        this.dividend = dividend;
+    }
+
+    public static int calculateAmount(int distance) {
+        Fare fare = valueOfDistance(distance);
+        return fare.calculate(distance);
+    }
+
+    public static Fare valueOfDistance(int distance) {
+        return Arrays.stream(Fare.values())
+                .filter(fare -> fare.minDistance <= distance && distance <= fare.maxDistance)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private int calculate(int distance) {
+        if (distance <= 0) {
+            return 0;
         }
-    };
-
-    private static class DistancePolicy {
-        private final int perDistance;
-        private final int minDistance;
-        private final BigDecimal extraFare;
-
-        DistancePolicy(int perDistance, int extraFare, int minDistance) {
-            this.perDistance = perDistance;
-            this.extraFare = BigDecimal.valueOf(extraFare);
-            this.minDistance = minDistance;
+        if (parentFare == null) {
+            return amount;
         }
-    }
-
-    public Fare(int distance) {
-        this.distance = distance;
-        this.maximumPolicyIndex = getMaximumPolicyIndex(distancePolicies.size() - 1);
-    }
-
-    private int getMaximumPolicyIndex(int depth) {
-        val distancePolicy = distancePolicies.get(depth);
-        val extraDistance = distance - distancePolicy.minDistance + 1;
-        if (extraDistance > 0) {
-            return depth;
-        }
-
-        return getMaximumPolicyIndex(depth - 1);
-    }
-
-    public BigDecimal getFare() {
-        BigDecimal extraFare = getExtraFare(
-                BigDecimal.ZERO,
-                maximumPolicyIndex,
-                0
-        );
-
-        return DEFAULT_FARE.add(extraFare);
-    }
-
-    private BigDecimal getExtraFare(BigDecimal extraFare, int depth, int beforePolicyMinDistance) {
-        val policy = distancePolicies.get(depth);
-        int defaultOrBeforeDistance = beforePolicyMinDistance != 0 ? beforePolicyMinDistance : distance;
-        val extraDistance = defaultOrBeforeDistance - policy.minDistance + 1;
-        BigDecimal addedExtraFare = extraFare.add(calculateOverFare(extraDistance, policy));
-
-        if (depth == 0) {
-            return addedExtraFare;
-        }
-
-        return getExtraFare(addedExtraFare, depth - 1, policy.minDistance);
-    }
-
-    private BigDecimal calculateOverFare(int distance, DistancePolicy policy) {
-        return BigDecimal.valueOf(Math.ceil((distance - 1) / policy.perDistance) + 1).multiply(policy.extraFare);
+        return parentFare.calculate(parentFare.maxDistance)
+                + ((int) (Math.ceil(distance - (minDistance - 1) - 1) / dividend) + 1) * amount;
     }
 }
