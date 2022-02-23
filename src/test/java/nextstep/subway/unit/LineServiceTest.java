@@ -38,9 +38,26 @@ class LineServiceTest {
         assertThat(line.getSections().size()).isEqualTo(2);
     }
 
+    @Test
+    void addSectionWithDuration() {
+        Station 강남역 = stationRepository.save(new Station("강남역"));
+        Station 역삼역 = stationRepository.save(new Station("역삼역"));
+
+        Line 이호선 = lineRepository.save(createLineWithDuration(강남역, 역삼역, 10));
+
+        Line line = lineService.findById(이호선.getId());
+        assertThat(line.getSections().size()).isEqualTo(1);
+        assertThat(line.getSections().get(0).getDuration()).isEqualTo(10);
+    }
     private Line createLine(Station 강남역, Station 역삼역) {
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, 10);
+        return line;
+    }
+
+    private Line createLineWithDuration(Station 강남역, Station 역삼역, int duration) {
+        Line line = new Line("2호선", "green");
+        line.addSectionWithDuration(강남역, 역삼역, 10, duration);
         return line;
     }
 }
