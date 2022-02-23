@@ -14,12 +14,6 @@
 ==== 최단 거리 경로조회
 operation::path[snippets='http-request,http-response,request-parameters,response-fields']
 
-==== 최소 시간 경로조회
-operation::pathByDuration[snippets='http-request,http-response,request-parameters,response-fields']
-
-==== 최단 거리 경로조회 ( With 요금 정보 )
-operation::pathByFee[snippets='http-request,http-response,request-parameters,response-fields']
-
 
 ==== 요금 정책 설명
 
@@ -27,4 +21,4 @@ operation::pathByFee[snippets='http-request,http-response,request-parameters,res
 - 청소년(13세 이상 19세 미만) : 350원 공제 후 20% 할인
 - 어린이(6세 이상 13세 미만) : 350원 공제 후 50% 할인
 - 10 ~ 50 : 5Km당 100원의 추가 요금
-- 50 ~ : 8km당 100원으 추가 요금
+- 50 ~ : 8km당 100원의 추가 요금

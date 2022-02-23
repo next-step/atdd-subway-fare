@@ -27,7 +27,7 @@ public class PathDocumentation extends Documentation {
     void path() {
         //given
         PathResponse pathResponse = getPathResponseForAnonymous();
-        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
+        when(pathService.findPath(any())).thenReturn(pathResponse);
         Map<String, String> params = 경로_조회_파라미터_생성(1L, 2L, "SHORTEST_DISTANCE");
         RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path-anonymous");
 
