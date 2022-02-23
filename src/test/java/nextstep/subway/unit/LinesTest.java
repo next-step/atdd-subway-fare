@@ -2,23 +2,14 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Lines;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.subway.ui.exception.SectionException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LinesTest {
 
@@ -48,7 +39,6 @@ class LinesTest {
         삼호선.addSection(교대역_남부터미널역_구간);
     }
 
-    @DisplayName("경로 찾기 시 시간 or 거리 중 기준이 아닌 시간 or 거리의 총합 반환")
     @Test
     void pathTotal() {
         // given
