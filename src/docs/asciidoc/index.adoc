@@ -64,7 +64,11 @@
 
 === 역 등록
 
-operation::stations[snippets='http-request,http-response,request-body,response-body']
+operation::stationsSave[snippets='http-request,http-response,response-fields']
+
+=== 역 목록 조회
+
+operation::stationsList[snippets='http-request,http-response,response-fields']
 
 [[path]]
 == 지하철 경로

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestBody;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -15,11 +13,12 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public final class DocumentationFilterTemplate {
 
-    private static final String PATH_IDENTIFIER = "path";
-    private static final String STATION_IDENTIFIER = "stations";
+    private static final String PATH_ID = "path";
+    private static final String STATION_SAVE_ID = "stationsSave";
+    private static final String STATION_LIST_ID = "stationsList";
 
     public static RestDocumentationFilter 경로_조회_템플릿() {
-        return document(PATH_IDENTIFIER,
+        return document(PATH_ID,
                 requestParameters(
                         parameterWithName("source").description("출발역"),
                         parameterWithName("target").description("도착역"),
@@ -39,18 +38,24 @@ public final class DocumentationFilterTemplate {
     }
 
     public static RestDocumentationFilter 역_등록_템플릿() {
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("name", "역 이름");
+        return document(STATION_SAVE_ID,
+                responseFields(
+                        fieldWithPath("id").description("역 고유번호"),
+                        fieldWithPath("name").description("역 이름"),
+                        fieldWithPath("createdDate").description("생성 시간"),
+                        fieldWithPath("modifiedDate").description("최근 수정 시간")
+                )
+        );
+    }
 
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("id", "역 고유번호");
-        responseBody.put("name", "역 이름");
-        responseBody.put("createdDate", "생성 시간");
-        responseBody.put("modifiedDate", "최근 수정 시간");
-
-        return document(STATION_IDENTIFIER,
-                requestBody(requestBody),
-                responseBody(responseBody)
+    public static RestDocumentationFilter 역_목록_템플릿() {
+        return document(STATION_LIST_ID,
+                responseFields(
+                        fieldWithPath("[].id").description("역 고유번호"),
+                        fieldWithPath("[].name").description("역 이름"),
+                        fieldWithPath("[].createdDate").description("생성 시간"),
+                        fieldWithPath("[].modifiedDate").description("최근 수정 시간")
+                )
         );
     }
 }
