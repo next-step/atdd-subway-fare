@@ -26,10 +26,10 @@ public enum DistancePolicy {
     }
 
     public static DistancePolicy decide(int totalDistance) {
-        List<DistancePolicy> standards = Arrays.asList(values());
-        Collections.reverse(standards);
+        List<DistancePolicy> policies = Arrays.asList(values());
+        Collections.reverse(policies);
 
-        return standards.stream()
+        return policies.stream()
                 .filter(s -> s.isWithinBoundary(totalDistance))
                 .findFirst().orElseThrow(IllegalArgumentException::new);
     }
