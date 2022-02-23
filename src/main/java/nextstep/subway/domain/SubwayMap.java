@@ -5,22 +5,26 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
+    public static final String SHORTEST_DISTANCE = "SHORTEST_DISTANCE";
+    public static final String MINIMUM_TIME = "MINIMUM_TIME";
     private List<Line> lines;
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathSearchType method) {
+
+    public Path findPath(Station source, Station target, String method) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
-        if (method == PathSearchType.SHORTEST_DISTANCE) {
+        if (method.equals(SHORTEST_DISTANCE)) {
             return getPath(source, target, graph);
         }
 
-        if (method == PathSearchType.MINIMUM_TIME) {
+        if (method.equals(MINIMUM_TIME)) {
             graph = createGraphByDuration();
         }
         return getPath(source, target, graph);
@@ -64,7 +68,7 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
     }
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
@@ -109,9 +113,4 @@ public class SubwayMap {
                 });
     }
 
-    public int totalAdditionalFee() {
-        return lines.stream()
-                .mapToInt(Line::getAdditionalFee)
-                .sum();
-    }
 }
