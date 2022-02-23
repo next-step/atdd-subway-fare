@@ -21,7 +21,7 @@ class FeePolicyTest {
     @Test
     void totalFee_basic() {
         //when
-        int fee = feePolicy.totalFee(7);
+        int fee = feePolicy.totalFee(7, 0);
         //then
         assertThat(fee).isEqualTo(1250);
     }
@@ -30,7 +30,7 @@ class FeePolicyTest {
     @Test
     void totalFee_additional_case01() {
         //when
-        int fee = feePolicy.totalFee(15);
+        int fee = feePolicy.totalFee(15, 0);
         //then
         assertThat(fee).isEqualTo(1250 + 100);
 
@@ -39,7 +39,7 @@ class FeePolicyTest {
     @Test
     void totalFee_additional_case02() {
         //when
-        int fee = feePolicy.totalFee(16);
+        int fee = feePolicy.totalFee(16, 0);
         //then
         assertThat(fee).isEqualTo(1250 + 200);
 
@@ -48,7 +48,7 @@ class FeePolicyTest {
     @Test
     void totalFee_additional_case03() {
         //when
-        int fee = feePolicy.totalFee(58);
+        int fee = feePolicy.totalFee(58, 0);
         //then
         assertThat(fee).isEqualTo(1250 + 900);
     }
@@ -56,7 +56,7 @@ class FeePolicyTest {
     @Test
     void totalFee_additional_case04() {
         //when
-        int fee = feePolicy.totalFee(59);
+        int fee = feePolicy.totalFee(59, 0);
         //then
         assertThat(fee).isEqualTo(1250 + 1000);
     }

@@ -18,9 +18,6 @@ public class FeePolicy {
     public static final int EIGHT = 8;
     public static final int FIVE = 5;
 
-    public int totalFee(int distance) {
-        return totalFee(distance, 0, 19);
-    }
 
     public int totalFee(int distance, int additionalFee) {
         return totalFee(distance, additionalFee, DEFAULT_AGE);
