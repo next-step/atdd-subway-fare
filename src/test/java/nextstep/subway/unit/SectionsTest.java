@@ -4,11 +4,14 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.MemberDiscountPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SectionsTest {
     Station 교대역;
@@ -33,9 +36,13 @@ class SectionsTest {
      *                                     *신분당선(40, 20, 100)*
      *                                     |
      *                                   ----  판교역
+     *
+     * * 요금(총 요금, 기본 요금, 노선 추가 금액, 거리 추가 금액, 사용자 할인 금액)
      * 교대역 > 판교역
      * 거리: 45
-     * 요금: 1250 + 700 + 300 = 2250
+     * 요    금: 어 른(2250, 1250, 300, 700, 0)
+     *        : 청소년(1520, 1250, 300, 700, 730)
+     *        : 어린이(950, 1250, 300, 700, 1300)
      */
     @BeforeEach
     void setUp() {
@@ -53,13 +60,19 @@ class SectionsTest {
         sections.add(new Section(삼호선, 남부터미널역, 양재역, 3, 10));
     }
 
-    @DisplayName("경로의 거리와 노선 요금 최댓값으로 총 요금을 계산한다.")
+    @DisplayName("경로의 거리, 사용자의 나이, 노선 요금 최댓값으로 총 요금을 계산한다.")
     @Test
-    void calculateLineFare() {
+    void totalFare() {
         // when
-        int lineFare = sections.totalFare();
+        Fare fare = sections.totalFare(MemberDiscountPolicy.ADULT.getAge());
 
         // then
-        assertThat(lineFare).isEqualTo(2250);
+        assertAll(
+                () -> assertThat(fare.getTotalFare()).isEqualTo(2250),
+                () -> assertThat(fare.getLineOverFare()).isEqualTo(300),
+                () -> assertThat(fare.getDistanceOverFare()).isEqualTo(700),
+                () -> assertThat(fare.getMemberDiscountFare()).isEqualTo(0)
+        );
+
     }
 }
