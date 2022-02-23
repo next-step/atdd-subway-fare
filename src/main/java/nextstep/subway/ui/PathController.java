@@ -6,9 +6,7 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.PathSearchRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PathController {
@@ -20,12 +18,13 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember,
-                                                 @RequestBody PathSearchRequest pathSearchRequest) {
+                                                 @RequestParam Long source,
+                                                 @RequestParam Long target,
+                                                 @RequestParam String method) {
+        PathSearchRequest pathSearchRequest = new PathSearchRequest(source, target, method);
+        if (loginMember == null) {
+            return ResponseEntity.ok(pathService.findPath(pathSearchRequest));
+        }
         return ResponseEntity.ok(pathService.findPath(pathSearchRequest, loginMember.getAge()));
     }
-
-//    @GetMapping("/paths")
-//    public ResponseEntity<PathResponse> findPath(@RequestBody PathSearchRequest pathSearchRequest) {
-//        return ResponseEntity.ok(pathService.findPath(pathSearchRequest));
-//    }
 }
