@@ -112,6 +112,7 @@ public class PathSteps {
 
     public static RequestParametersSnippet getRequestParameters() {
         RequestParametersSnippet requestParametersSnippet = requestParameters(
+                parameterWithName("method").description("조회하는 방식 (최단 거리 or 최소 시간)"),
                 parameterWithName("source").description("조회하는 경로에 상행역"),
                 parameterWithName("target").description("조회하는 경로에 하행역")
         );

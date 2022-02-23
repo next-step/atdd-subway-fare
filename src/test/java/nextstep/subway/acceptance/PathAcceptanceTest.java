@@ -104,7 +104,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1550)
+                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1450)
         );
     }
 
@@ -117,14 +117,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         Map<String, String> 경로_조회_파라미터 = 경로_조회_파라미터_생성(교대역, 양재역, "MINIMUM_TIME");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_비회원(경로_조회_파라미터);
+        ExtractableResponse<Response> response = 경로조회_회원(accessToken, 경로_조회_파라미터);
 
         //then
         assertAll(
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(600)
+                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(550)
         );
     }
 
