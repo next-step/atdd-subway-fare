@@ -102,6 +102,7 @@ class SubwayMapTest {
         삼호선.addSection(양재역, 대치역, 2, 5);
     }
 
+    @DisplayName("KShortest 알고리즘을 사용하여 가장 최단거리 경로를 조회한다.")
     @Test
     void findShortestDistanceUsingKShortest_Test() {
         // given
@@ -117,6 +118,25 @@ class SubwayMapTest {
         assertAll(
             () -> assertThat(shortest.getShortestDistancePath()
                 .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 교대역, 남부터미널역)),
+            () -> assertThat(shortest.getShortestDistance()).isEqualTo(14),
+            () -> assertThat(shortest.getShortestDistanceArrivalTime()).isEqualTo(SHORTEST_DISTANCE_ARRIVAL_TIME)
+        );
+    }
+
+    @DisplayName("KShortest 알고리즘을 사용하여 가장 빠른 도착시간 경로를 조회한다.")
+    @Test
+    void findShortestDurationUsingKShortest_Test() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+        List<GraphPath<Station, SectionEdge>> allPaths = subwayMap.findAllKShortestPaths(
+            강남역, 남부터미널역, PathType.DISTANCE);
+
+        // when
+        ShortestPaths shortest = subwayMap.findShortest(allPaths, START_TIME);
+
+        // then
+        assertAll(
             () -> assertThat(shortest.getShortestDurationPath()
                 .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역)),
             () -> assertThat(shortest.getShortestDistance()).isEqualTo(14),
@@ -124,6 +144,7 @@ class SubwayMapTest {
         );
     }
 
+    @DisplayName("단일 구간에서 상행선 방향의 열차 탑승 시간을 확인한다.")
     @Test
     void findTrainTime_singleSection_upDirection_Test() {
         // given
@@ -138,6 +159,7 @@ class SubwayMapTest {
         assertThat(trainTime).isEqualTo(convertStringToDateTime("202202200620"));
     }
 
+    @DisplayName("단일 구간에서 하행선 방향의 열차 탑승 시간을 확인한다.")
     @Test
     void findTrainTime_singleSection_downDirection_Test() {
         // given
@@ -152,6 +174,7 @@ class SubwayMapTest {
         assertThat(trainTime).isEqualTo(convertStringToDateTime("202202200600"));
     }
 
+    @DisplayName("전체 노선에서 특정 구간의 상행선 열차 탑승 시간을 확인한다.")
     @Test
     void findTrainTime_UpDirection_Test() {
         // given
@@ -164,6 +187,7 @@ class SubwayMapTest {
         assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 03));
     }
 
+    @DisplayName("전체 노선에서 특정 구간의 하행선 열차 탑승 시간을 확인한다.")
     @Test
     void findTrainTime_DownDirection_Test() {
         // given
@@ -205,28 +229,7 @@ class SubwayMapTest {
         assertThat(direction).isEqualTo(PathDirection.DOWN);
     }
 
-    @Test
-    void findShortestDurationUsingKShortest_Test() {
-        // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
-        List<GraphPath<Station, SectionEdge>> allPaths = subwayMap.findAllKShortestPaths(
-            강남역, 남부터미널역, PathType.DURATION);
-
-        // when
-        ShortestPaths shortest = subwayMap.findShortest(allPaths, START_TIME);
-
-        // then
-        assertAll(
-            () -> assertThat(shortest.getShortestDistancePath()
-                .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 교대역, 남부터미널역)),
-            () -> assertThat(shortest.getShortestDurationPath()
-                .getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역)),
-            () -> assertThat(shortest.getShortestDistance()).isEqualTo(14),
-            () -> assertThat(shortest.getShortestDurationArrivalTime()).isEqualTo(SHORTEST_DURATION_ARRIVAL_TIME)
-        );
-    }
-
+    @DisplayName("LocalDateTime 몇 분 차이가 나는지 확인한다 (양수)")
     @Test
     void minutesBetween_positive_test() {
         LocalDateTime sourceTime = convertStringToDateTime("202202221930");
@@ -237,6 +240,7 @@ class SubwayMapTest {
         assertThat(between).isEqualTo(18);
     }
 
+    @DisplayName("LocalDateTime 몇 분 차이가 나는지 확인한다 (음수)")
     @Test
     void minutesBetween_negative_test() {
         LocalDateTime sourceTime = convertStringToDateTime("202202221948");
@@ -247,6 +251,7 @@ class SubwayMapTest {
         assertThat(between).isEqualTo(-18);
     }
 
+    @DisplayName("출발시간을 고려하여 최단거리의 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // given
@@ -260,6 +265,7 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 교대역, 남부터미널역));
     }
 
+    @DisplayName("출발시간을 고려하여 최단거리의 경로를 조회한다. (반대방향)")
     @Test
     void findPathByDistanceOppositely() {
         // given
@@ -273,6 +279,7 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(남부터미널역, 교대역, 강남역));
     }
 
+    @DisplayName("출발시간을 고려하여 가장 빠른 도착시간의 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         // given
@@ -286,6 +293,7 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 양재역, 남부터미널역));
     }
 
+    @DisplayName("출발시간을 고려하여 가장 빠른 도착시간의 경로를 조회한다 (반대방향).")
     @Test
     void findPathByDurationOppositely() {
         // given
