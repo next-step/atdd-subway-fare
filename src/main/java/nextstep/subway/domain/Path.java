@@ -20,4 +20,12 @@ public class Path {
     }
 
     public int extractDuration() { return sections.totalDuration();}
+
+    public int extractAdditionalFee(List<Line> lines) {
+        List<Section> sections = this.sections.getSections();
+        return lines.stream()
+                .filter(line -> line.getSections().stream().anyMatch(sections::contains))
+                .mapToInt(Line::getAdditionalFee)
+                .sum();
+    }
 }
