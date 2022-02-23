@@ -18,6 +18,12 @@ public class Sections {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
+    public Sections() {}
+
+    public Sections(List<Section> sections) {
+        this.sections = sections;
+    }
+
     void addSection(Section newSection) {
         validateAddSectionStationNotExistInSection(newSection);
         for (Section existingSection : sections) {
@@ -147,26 +153,31 @@ public class Sections {
         }
     }
 
-    int pathTotalDistance(List<Station> pathStations) {
+    int pathTotalDistance() {
         int sum = 0;
         for (Section section : sections) {
-            sum += getPathDistanceOrDuration(pathStations, section, section.getDistance());
-        }
-        return sum;        
-    }
-
-    int pathTotalDuration(List<Station> pathStations) {
-        int sum = 0;
-        for (Section section : sections) {
-            sum += getPathDistanceOrDuration(pathStations, section, section.getDuration());
+            sum += getPathDistanceOrDuration(section, section.getDistance());
         }
         return sum;
     }
 
-    private int getPathDistanceOrDuration(List<Station> pathStations, Section section, int distanceOrDuration) {
+    int pathTotalDuration() {
+        int sum = 0;
+        for (Section section : sections) {
+            sum += getPathDistanceOrDuration(section, section.getDuration());
+        }
+        return sum;
+    }
+
+    public int fare() {
+        return FareStandard.calculateOverFare(pathTotalDistance());
+    }
+
+    private int getPathDistanceOrDuration(Section section, int distanceOrDuration) {
+        List<Station> pathStations = getStations();
         for (int i = 0; i < pathStations.size() - 1; i++) {
             if (section.getUpStation().equals(pathStations.get(i)) && section.getDownStation().equals(pathStations.get(i + 1)) ||
-                section.getDownStation().equals(pathStations.get(i)) && section.getUpStation().equals(pathStations.get(i + 1))) {
+                    section.getDownStation().equals(pathStations.get(i)) && section.getUpStation().equals(pathStations.get(i + 1))) {
                 return distanceOrDuration;
             }
         }

@@ -1,19 +1,31 @@
 package nextstep.subway.domain;
 
+import java.util.List;
+
 public class Path {
-    private final int distance;
-    private final int duration;
+    private final Sections sections;
 
-    public Path(int distance, int duration) {
-        this.distance = distance;
-        this.duration = duration;
+    public Path(List<Section> sections) {
+        this.sections = new Sections(sections);
     }
 
-    public int getDistance() {
-        return distance;
+    public List<Station> getStations() {
+        return sections.getStations();
     }
 
-    public int getDuration() {
-        return duration;
+    public int pathTotalDistance() {
+        return sections.pathTotalDistance();
+    }
+
+    public int pathTotalDuration() {
+        return sections.pathTotalDuration();
+    }
+
+    public int fare() {
+        return sections.fare();
+    }
+
+    public Sections getSections() {
+        return sections;
     }
 }

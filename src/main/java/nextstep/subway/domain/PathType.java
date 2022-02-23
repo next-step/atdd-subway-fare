@@ -1,32 +1,20 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.applicaion.dto.PathResponse;
-
-import java.util.List;
 import java.util.function.Function;
 
 public enum PathType {
-    DISTANCE("최단 거리", Section::getDistance),
-    DURATION("최단 시간", Section::getDuration);
+    DISTANCE("최단 거리", SectionEdge::getDistance),
+    DURATION("최단 시간", SectionEdge::getDuration);
 
     private String description;
-    private Function<Section, Integer> expression;
+    private Function<SectionEdge, Integer> expression;
 
-    PathType(String description, Function<Section, Integer> expression) {
+    PathType(String description, Function<SectionEdge, Integer> expression) {
         this.description = description;
         this.expression = expression;
     }
 
-    public int weight(Section section) {
+    public int weight(SectionEdge section) {
         return expression.apply(section);
-    }
-
-    public PathResponse createPathResponse(List<Station> pathStations, int weight, Lines lines) {
-        PathType pathType = valueOf(name());
-        if (pathType == DISTANCE) {
-            return new PathResponse(pathStations, weight, lines.pathTotalDuration(pathStations), FareStandard.calculateOverFare(weight));
-        }
-        int distance = lines.pathTotalDistance(pathStations);
-        return new PathResponse(pathStations,lines.pathTotalDistance(pathStations), weight, FareStandard.calculateOverFare(distance));
     }
 }
