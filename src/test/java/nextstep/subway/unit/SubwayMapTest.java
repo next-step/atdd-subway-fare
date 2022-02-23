@@ -123,11 +123,4 @@ class SubwayMapTest extends LineFixture{
                 () -> assertThat(path.extractMaxAdditionalFare().compareTo(BigDecimal.valueOf(1000))).isEqualTo(0)
         );
     }
-
-    private Station createStation(long id, String name) {
-        Station station = new Station(name);
-        ReflectionTestUtils.setField(station, "id", id);
-
-        return station;
-    }
 }
