@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public enum FareStandard {
+public enum DistancePolicy {
     STEP0(1, 0),
     STEP1(11, 5),
     STEP2(51, 8);
@@ -12,7 +12,7 @@ public enum FareStandard {
     private final int boundary;
     private final int distance;
 
-    FareStandard(int boundary, int distance) {
+    DistancePolicy(int boundary, int distance) {
         this.boundary = boundary;
         this.distance = distance;
     }
@@ -25,8 +25,8 @@ public enum FareStandard {
         return distance;
     }
 
-    public static FareStandard decide(int totalDistance) {
-        List<FareStandard> standards = Arrays.asList(values());
+    public static DistancePolicy decide(int totalDistance) {
+        List<DistancePolicy> standards = Arrays.asList(values());
         Collections.reverse(standards);
 
         return standards.stream()
