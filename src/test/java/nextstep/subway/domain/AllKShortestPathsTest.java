@@ -31,10 +31,10 @@ class AllKShortestPathsTest {
     @Test
     void findTrainTime_singleSection_upDirection_Test() {
         // given
-        AllKShortestPaths allPaths = new AllKShortestPaths();
+        PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
         // when
-        LocalDateTime trainTime = allPaths.findTrainTime(
+        LocalDateTime trainTime = pathsFinder.findTrainTime(
             new Section(신분당선, 양재역, 강남역, 9, 2), convertStringToDateTime("202202200605"));
 
         // then
@@ -45,10 +45,10 @@ class AllKShortestPathsTest {
     @Test
     void findTrainTime_singleSection_downDirection_Test() {
         // given
-        AllKShortestPaths allPaths = new AllKShortestPaths();
+        PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
         // when
-        LocalDateTime trainTime = allPaths.findTrainTime(
+        LocalDateTime trainTime = pathsFinder.findTrainTime(
             new Section(신분당선, 강남역, 양재역, 9, 2), convertStringToDateTime("202202200600"));
 
         // then
@@ -59,9 +59,10 @@ class AllKShortestPathsTest {
     @Test
     void findTrainTime_UpDirection_Test() {
         // given
-        AllKShortestPaths allPaths = new AllKShortestPaths();
+        PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
-        LocalDateTime trainTime = allPaths.findTrainTime(
+        // when
+        LocalDateTime trainTime = pathsFinder.findTrainTime(
             new Section(이호선, 강남역, 교대역, 8, 3), convertStringToDateTime(START_TIME));
 
         assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 03));
@@ -71,9 +72,10 @@ class AllKShortestPathsTest {
     @Test
     void findTrainTime_DownDirection_Test() {
         // given
-        AllKShortestPaths allPaths = new AllKShortestPaths();
+        PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
-        LocalDateTime trainTime = allPaths.findTrainTime(
+        // when
+        LocalDateTime trainTime = pathsFinder.findTrainTime(
             new Section(이호선, 교대역, 강남역, 8, 3), convertStringToDateTime(START_TIME));
 
         assertThat(trainTime).isEqualTo(LocalDateTime.of(2022, 02, 20, 06, 00));
@@ -83,10 +85,10 @@ class AllKShortestPathsTest {
     @Test
     void findPathUpDirectionTest() {
         // given
-        AllKShortestPaths allPaths = new AllKShortestPaths();
+        PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
         // when
-        PathDirection direction = allPaths.findPathDirection(
+        PathDirection direction = pathsFinder.findPathDirection(
             new Section(이호선, 강남역, 교대역, 8, 3));
 
         // then
@@ -97,10 +99,10 @@ class AllKShortestPathsTest {
     @Test
     void findPathDownDirectionTest() {
         // given
-        AllKShortestPaths allPaths = new AllKShortestPaths();
+        PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
         // when
-        PathDirection direction = allPaths.findPathDirection(new Section(삼호선, 남부터미널역, 양재역, 8, 3));
+        PathDirection direction = pathsFinder.findPathDirection(new Section(삼호선, 남부터미널역, 양재역, 8, 3));
 
         // then
         assertThat(direction).isEqualTo(PathDirection.DOWN);
