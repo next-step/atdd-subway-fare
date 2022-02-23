@@ -15,9 +15,13 @@ import java.util.List;
 
 import static nextstep.subway.documentation.DocumentationHelper.역_목록_조회_성공;
 import static nextstep.subway.documentation.DocumentationHelper.역_목록_조회_요청;
+import static nextstep.subway.documentation.DocumentationHelper.역_삭제_성공;
+import static nextstep.subway.documentation.DocumentationHelper.역_삭제_요청;
 import static nextstep.subway.documentation.DocumentationHelper.역_생성_성공;
 import static nextstep.subway.documentation.DocumentationHelper.역_생성_요청;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 class StationDocumentation extends Documentation {
@@ -50,5 +54,12 @@ class StationDocumentation extends Documentation {
         when(stationService.findAllStations()).thenReturn(responses);
         ExtractableResponse<Response> response = 역_목록_조회_요청(spec);
         역_목록_조회_성공(response);
+    }
+
+    @Test
+    void 역_삭제() {
+        doNothing().when(stationService).deleteStationById(anyLong());
+        ExtractableResponse<Response> response = 역_삭제_요청(spec);
+        역_삭제_성공(response);
     }
 }

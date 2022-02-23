@@ -70,6 +70,10 @@ operation::stationsSave[snippets='http-request,http-response,response-fields']
 
 operation::stationsList[snippets='http-request,http-response,response-fields']
 
+=== 역 삭제
+
+operation::stationsDelete[snippets='http-request,http-response']
+
 [[path]]
 == 지하철 경로
 

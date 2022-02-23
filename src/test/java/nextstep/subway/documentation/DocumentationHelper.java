@@ -11,9 +11,11 @@ import org.springframework.http.MediaType;
 import static nextstep.subway.documentation.DocumentationFilterTemplate.경로_조회_템플릿;
 import static nextstep.subway.documentation.DocumentationFilterTemplate.역_등록_템플릿;
 import static nextstep.subway.documentation.DocumentationFilterTemplate.역_목록_템플릿;
+import static nextstep.subway.documentation.DocumentationFilterTemplate.역_삭제_템플릿;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 public final class DocumentationHelper {
@@ -73,5 +75,17 @@ public final class DocumentationHelper {
             assertThat(response.statusCode()).isEqualTo(OK.value());
             assertThat(response.jsonPath().getList("name", String.class)).containsExactly("강남역", "역삼역");
         });
+    }
+
+    public static ExtractableResponse<Response> 역_삭제_요청(RequestSpecification spec) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(역_삭제_템플릿())
+                .when().delete("/stations/1")
+                .then().log().all().extract();
+    }
+
+    public static void 역_삭제_성공(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
     }
 }

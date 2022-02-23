@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -16,6 +17,7 @@ public final class DocumentationFilterTemplate {
     private static final String PATH_ID = "path";
     private static final String STATION_SAVE_ID = "stationsSave";
     private static final String STATION_LIST_ID = "stationsList";
+    private static final String STATION_DELETE_ID = "stationsDelete";
 
     public static RestDocumentationFilter 경로_조회_템플릿() {
         return document(PATH_ID,
@@ -57,5 +59,9 @@ public final class DocumentationFilterTemplate {
                         fieldWithPath("[].modifiedDate").description("최근 수정 시간")
                 )
         );
+    }
+
+    public static RestDocumentationFilter 역_삭제_템플릿() {
+        return document(STATION_DELETE_ID);
     }
 }
