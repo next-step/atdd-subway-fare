@@ -9,10 +9,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static nextstep.subway.domain.PathSearchType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
+    public static final String SHORTEST_DISTANCE = "SHORTEST_DISTANCE";
+    public static final String MINIMUM_TIME = "MINIMUM_TIME";
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -72,7 +73,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         //when
-        Path path = subwayMap.findPath(양재역, 교대역,  MINIMUM_TIME);
+        Path path = subwayMap.findPath(양재역, 교대역, MINIMUM_TIME);
 
         //then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
@@ -92,19 +93,6 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
-    @DisplayName("총 추가 요금 구하기")
-    @Test
-    void totalAdditionalFee() {
-        // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
-
-        //when
-        int additionalFee = subwayMap.totalAdditionalFee();
-
-        //then
-        assertThat(additionalFee).isEqualTo(1200);
-    }
 
     private Station createStation(long id, String name) {
         Station station = new Station(name);
