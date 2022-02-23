@@ -22,13 +22,14 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
+        AgeFare ageFare = AgeFare.findAgeFareType(age);
 
         if (PathType.DURATION == type) {
             // 최단 시간의 거리가 아닌 최단 경로의 거리 구하기
             Path shortestPath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
-            return PathResponse.of(path, shortestPath);
+            return PathResponse.of(path, new PathFare(shortestPath, ageFare));
         }
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, new PathFare(path, ageFare));
     }
 }

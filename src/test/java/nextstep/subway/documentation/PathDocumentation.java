@@ -38,7 +38,7 @@ public class PathDocumentation extends Documentation {
                 BigDecimal.valueOf(1250)
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
 
         ExtractableResponse<Response> 최단_경로_요청 = 최단_거리_경로_요청(spec, 1L, 2L);
 
@@ -58,7 +58,7 @@ public class PathDocumentation extends Documentation {
                 BigDecimal.valueOf(1350)
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
 
         ExtractableResponse<Response> 최단_경로_요청 = 최단_시간_경로_요청(spec, 1L, 2L);
 

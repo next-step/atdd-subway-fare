@@ -22,8 +22,8 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public BigDecimal extractFare() {
-        return DistanceFare.extractFare(extractDistance());
+    public BigDecimal extractMaxAdditionalFare() {
+        return sections.getMaxAdditionalFare();
     }
 
     public List<Station> getStations() {
