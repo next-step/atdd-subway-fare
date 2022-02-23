@@ -2,10 +2,10 @@ package nextstep.subway.domain.farepolicy;
 
 public class DiscountFarePolicy implements Policy {
 
-    int AGE_CHILD_MIN = 6;
-    int AGE_YOUTH_MIN = 13;
-    int AGE_ADULT_MIN = 19;
-    int DEDUCTION_FARE = 350;
+    private static final int AGE_CHILD_MIN = 6;
+    private static final int AGE_YOUTH_MIN = 13;
+    private static final int AGE_ADULT_MIN = 19;
+    private static final int DEDUCTION_FARE = 350;
 
     private final int age;
 
