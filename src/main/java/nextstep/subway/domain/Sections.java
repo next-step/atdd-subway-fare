@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.Fare;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -165,8 +167,10 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public int totalFare() {
-        return new Fare(totalDistance()).impose() + calculateMaxLineFare();
+    public Fare totalFare(int memberAge) {
+        Fare fare = new Fare();
+        fare.impose(totalDistance(), memberAge, calculateMaxLineFare());
+        return fare;
     }
 
     private int calculateMaxLineFare() {
