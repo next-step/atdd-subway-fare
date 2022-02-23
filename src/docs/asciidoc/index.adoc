@@ -74,6 +74,13 @@ operation::stationsList[snippets='http-request,http-response,response-fields']
 
 operation::stationsDelete[snippets='http-request,http-response']
 
+[[line]]
+== 노선
+
+=== 노선 등록
+
+operation::lineSave[snippets='http-request,http-response,request-fields,response-fields']
+
 [[path]]
 == 지하철 경로
 
