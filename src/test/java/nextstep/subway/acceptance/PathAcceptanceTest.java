@@ -13,12 +13,12 @@ import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철
 import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static nextstep.subway.domain.fare.MemberDiscountPolicy.CHILD;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
-    public static final int AGE = 20;
 
     private Long 교대역;
     private Long 강남역;
@@ -48,13 +48,13 @@ class PathAcceptanceTest extends AcceptanceTest {
      * * 교대역 > 판교역
      * 최단 거리: (45, 40) [교대역, 남부터미널역, 양재역, 판교역]
      * 요    금: 어 른(2250, 1250, 300, 700, 0)
-     *        : 청소년(1520, 1250, 300, 700, 730)
-     *        : 어린이(950, 1250, 300, 700, 1300)
+     *        : 청소년(1870, 1250, 300, 700, 380)
+     *        : 어린이(1300, 1250, 300, 700, 950)
      *
      * 최소 시간: (60, 26) [교대역, 강남역, 양재역, 판교역]
      * 요    금: 어 른(2050, 1250, 100, 700, 0)
-     *        : 청소년(1360, 1250, 100, 700, 690)
-     *        : 어린이(850, 1250, 100, 700, 1200)
+     *        : 청소년(1710, 1250, 100, 700, 340)
+     *        : 어린이(1200, 1250, 100, 700, 850)
      */
     @BeforeEach
     public void setUp() {
@@ -72,11 +72,6 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 10));
         지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 판교역, 40, 20));
-
-        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
-        회원_생성됨(createResponse);
-
-        로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     /**
@@ -95,13 +90,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
+        // given
+        ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, CHILD.getAge());
+        회원_생성됨(createResponse);
+        String 사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
+
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 판교역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 판교역, 사용자);
 
         // then
         두_역의_최단_거리_경로_조회_완료(
-                response, 45, 40, 2250,
-                1250, 300, 700, 0,
+                response, 45, 40,
+                1300, 1250, 300, 700, 950,
                 교대역, 남부터미널역, 양재역, 판교역);
     }
 
@@ -112,7 +112,6 @@ class PathAcceptanceTest extends AcceptanceTest {
      *     Given 지하철역이 등록되어있음
      *     And 지하철 노선이 등록되어있음
      *     And 지하철 노선에 지하철역이 등록되어있음
-     *     And 로그인 되어있음
      *     When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      *     Then 최소 시간 기준 경로를 응답
      *     And 총 거리와 소요 시간을 함께 응답함
@@ -126,8 +125,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         두_역의_최소_시간_경로_조회_완료(
-                response, 60, 26, 2050,
-                1250, 100, 700, 0,
+                response, 60, 26,
+                2050, 1250, 100, 700, 0,
                 교대역, 강남역, 양재역, 판교역);
     }
 
