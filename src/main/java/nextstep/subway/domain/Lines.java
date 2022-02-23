@@ -12,21 +12,6 @@ public class Lines {
         this.lines = lines;
     }
 
-    public int pathTotalDistance() {
-        return lines.stream()
-                .mapToInt(Line::pathTotalDistance)
-                .sum();
-    }
-
-    public int pathTotalDuration() {
-        int sum = 0;
-        for (Line line : lines) {
-            int pathTotalDuration = line.pathTotalDuration();
-            sum += pathTotalDuration;
-        }
-        return sum;
-    }
-
     public Set<Station> getStations() {
         Set<Station> stations = new HashSet<>();
         for (Line line : lines) {

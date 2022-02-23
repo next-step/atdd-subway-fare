@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Embeddable
 public class Sections {
@@ -138,12 +139,13 @@ public class Sections {
         for (int i = 0; i < stations.size(); i++) {
             addDownStations(stations);
         }
+        IntStream.range(0, stations.size())
+                .mapToObj(i -> stations)
+                .forEach(this::addDownStations);
     }
 
     private void addDownStations(List<Station> stations) {
-        for (Section section : sections) {
-            addDownStation(stations, section);
-        }
+        sections.forEach(section -> addDownStation(stations, section));
     }
 
     private void addDownStation(List<Station> stations, Section section) {
@@ -154,33 +156,18 @@ public class Sections {
     }
 
     int pathTotalDistance() {
-        int sum = 0;
-        for (Section section : sections) {
-            sum += getPathDistanceOrDuration(section, section.getDistance());
-        }
-        return sum;
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
     }
 
     int pathTotalDuration() {
-        int sum = 0;
-        for (Section section : sections) {
-            sum += getPathDistanceOrDuration(section, section.getDuration());
-        }
-        return sum;
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 
-    public int fare() {
+    int fare() {
         return FareStandard.calculateOverFare(pathTotalDistance());
-    }
-
-    private int getPathDistanceOrDuration(Section section, int distanceOrDuration) {
-        List<Station> pathStations = getStations();
-        for (int i = 0; i < pathStations.size() - 1; i++) {
-            if (section.getUpStation().equals(pathStations.get(i)) && section.getDownStation().equals(pathStations.get(i + 1)) ||
-                    section.getDownStation().equals(pathStations.get(i)) && section.getUpStation().equals(pathStations.get(i + 1))) {
-                return distanceOrDuration;
-            }
-        }
-        return 0;
     }
 }
