@@ -31,4 +31,8 @@ public class LineRequest {
     public int getDuration() {
         return duration;
     }
+
+    public boolean hasSection() {
+        return upStationId != null && downStationId != null && distance != 0 && duration != 0;
+    }
 }
