@@ -72,11 +72,11 @@ public class Line extends BaseEntity {
         return sections.getSections();
     }
 
-    public int pathTotalDistance(List<Station> stations) {
-        return sections.pathTotalDistance(stations);
+    public int pathTotalDistance() {
+        return sections.pathTotalDistance();
     }
 
-    public int pathTotalDuration(List<Station> stations) {
-        return sections.pathTotalDuration(stations);
+    public int pathTotalDuration() {
+        return sections.pathTotalDuration();
     }
 }

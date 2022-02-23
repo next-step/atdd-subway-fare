@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Embeddable
 public class Sections {
@@ -17,6 +18,12 @@ public class Sections {
     private static final int MIN_COUNT_CONDITION_SECTION_REMOVE = 2;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
+
+    public Sections() {}
+
+    public Sections(List<Section> sections) {
+        this.sections = sections;
+    }
 
     void addSection(Section newSection) {
         validateAddSectionStationNotExistInSection(newSection);
@@ -132,12 +139,13 @@ public class Sections {
         for (int i = 0; i < stations.size(); i++) {
             addDownStations(stations);
         }
+        IntStream.range(0, stations.size())
+                .mapToObj(i -> stations)
+                .forEach(this::addDownStations);
     }
 
     private void addDownStations(List<Station> stations) {
-        for (Section section : sections) {
-            addDownStation(stations, section);
-        }
+        sections.forEach(section -> addDownStation(stations, section));
     }
 
     private void addDownStation(List<Station> stations, Section section) {
@@ -147,28 +155,19 @@ public class Sections {
         }
     }
 
-    int pathTotalDistance(List<Station> pathStations) {
-        int sum = 0;
-        for (Section section : sections) {
-            sum += getPathDistanceOrDuration(pathStations, section, section.getDistance());
-        }
-        return sum;        
+    int pathTotalDistance() {
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
     }
 
-    int pathTotalDuration(List<Station> pathStations) {
-        int sum = 0;
-        for (Section section : sections) {
-            sum += getPathDistanceOrDuration(pathStations, section, section.getDuration());
-        }
-        return sum;
+    int pathTotalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 
-    private int getPathDistanceOrDuration(List<Station> pathStations, Section section, int distanceOrDuration) {
-        for (int i = 0; i < pathStations.size() - 1; i++) {
-            if (section.getUpStation().equals(pathStations.get(i)) && section.getDownStation().equals(pathStations.get(i + 1))) {
-                return distanceOrDuration;
-            }
-        }
-        return 0;
+    int fare() {
+        return FareStandard.calculateOverFare(pathTotalDistance());
     }
 }

@@ -7,7 +7,7 @@ public class SectionRequest {
     private int distance;
     private int duration;
 
-    public SectionRequest() {
+    SectionRequest() {
     }
 
     public SectionRequest(Long upStationId, Long downStationId, int distance, int duration) {

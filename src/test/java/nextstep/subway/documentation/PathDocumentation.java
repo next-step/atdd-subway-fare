@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -29,12 +30,12 @@ class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new Station(source, "가양역"),
                         new Station(target, "역삼역")
-                ), 10, 20
+                ), 10, 20, 1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, "DURATION");
+        경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, PathType.DURATION);
     }
 
     private ParameterDescriptor[] getParameterDescriptors() {
@@ -49,7 +50,8 @@ class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").description("(최단 경로 역) ID"),
                 fieldWithPath("stations[].name").description("(최단 경로 역) 이름"),
                 fieldWithPath("distance").description("최단 거리"),
-                fieldWithPath("duration").description("최단 시간")
+                fieldWithPath("duration").description("최단 시간"),
+                fieldWithPath("fare").description("요금")
         };
     }
 }
