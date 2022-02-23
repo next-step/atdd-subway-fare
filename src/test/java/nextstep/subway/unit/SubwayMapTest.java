@@ -9,7 +9,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static nextstep.subway.domain.Fare.BASIC_FARE;
+import static nextstep.subway.domain.fare.Fare.BASIC_FARE;
+import static nextstep.subway.domain.fare.MemberDiscountPolicy.ADULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -126,10 +127,11 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
+        path.calculateFare(ADULT.getAge());
 
         // then
         assertThat(path.extractDistance()).isEqualTo(5);
-        assertThat(path.extractFare()).isEqualTo(BASIC_FARE);
+        assertThat(path.getFare().getTotalFare()).isEqualTo(BASIC_FARE);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
@@ -141,11 +143,12 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 판교역);
+        path.calculateFare(ADULT.getAge());
 
         // then
         assertAll(
                 () -> assertThat(path.extractDistance()).isEqualTo(45),
-                () -> assertThat(path.extractFare()).isEqualTo(1950),
+                () -> assertThat(path.getFare().getTotalFare()).isEqualTo(1950),
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 판교역))
         );
     }
@@ -158,11 +161,12 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 판교역);
+        path.calculateFare(ADULT.getAge());
 
         // then
         assertAll(
                 () -> assertThat(path.extractDistance()).isEqualTo(60),
-                () -> assertThat(path.extractFare()).isEqualTo(1950),
+                () -> assertThat(path.getFare().getTotalFare()).isEqualTo(1950),
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역, 판교역))
         );
     }

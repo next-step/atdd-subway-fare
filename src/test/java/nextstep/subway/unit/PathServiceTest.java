@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static nextstep.subway.domain.fare.MemberDiscountPolicy.ADULT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
 class PathServiceTest {
+    public static int NON_LOGIN_AGE = 20;
+
     @Autowired
     LineService lineService;
 
@@ -68,7 +71,7 @@ class PathServiceTest {
     @Test
     void findPathMinDistance() {
         // when
-        PathResponse response = pathService.findPath(교대역, 양재역, PathType.DISTANCE);
+        PathResponse response = pathService.findPath(교대역, 양재역, PathType.DISTANCE, ADULT.getAge());
 
         // then
         List<Long> ids = response.getStations().stream().map(StationResponse::getId).collect(Collectors.toList());
@@ -79,7 +82,7 @@ class PathServiceTest {
     @Test
     void findPathMinDuration() {
         // when
-        PathResponse response = pathService.findPath(교대역, 양재역, PathType.DURATION);
+        PathResponse response = pathService.findPath(교대역, 양재역, PathType.DURATION, ADULT.getAge());
 
         // then
         List<Long> ids = response.getStations().stream().map(StationResponse::getId).collect(Collectors.toList());
