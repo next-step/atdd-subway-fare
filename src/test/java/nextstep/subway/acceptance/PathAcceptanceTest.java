@@ -13,6 +13,8 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_거리_경로_조회_응답됨;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,7 +65,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
+        ExtractableResponse<Response> response = 두_역의_최소_거리_경로_조회를_요청(교대역, 양재역);
 
+        두_역의_최소_거리_경로_조회_응답됨(response);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
