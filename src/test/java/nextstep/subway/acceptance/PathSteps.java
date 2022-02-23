@@ -52,20 +52,30 @@ public class PathSteps {
     }
 
     public static void 두_역의_최단_거리_경로_조회_완료(ExtractableResponse<Response> response,
-                                           int distance, int duration, int fare, Long... stations) {
-        두_역의_경로_조회_완료(response, distance, duration, fare, stations);
+                                           int distance, int duration, int fare,
+                                           int basicFare, int lineOverFare, int distanceOverFare, int memberDiscountFare,
+                                           Long... stations) {
+        두_역의_경로_조회_완료(response, distance, duration, fare, basicFare, lineOverFare, distanceOverFare, memberDiscountFare,stations);
     }
 
     public static void 두_역의_최소_시간_경로_조회_완료(ExtractableResponse<Response> response,
-                                           int distance, int duration, int fare, Long... stations) {
-        두_역의_경로_조회_완료(response, distance, duration, fare, stations);
+                                           int distance, int duration, int fare,
+                                           int basicFare, int lineOverFare, int distanceOverFare, int memberDiscountFare,
+                                           Long... stations) {
+        두_역의_경로_조회_완료(response, distance, duration, fare, basicFare, lineOverFare, distanceOverFare, memberDiscountFare,stations);
     }
 
     private static void 두_역의_경로_조회_완료(ExtractableResponse<Response> response,
-                                      int distance, int duration, int fare, Long[] stations) {
+                                      int distance, int duration, int fare,
+                                      int basicFare, int lineOverFare, int distanceOverFare, int memberDiscountFare,
+                                      Long[] stations) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+        assertThat(response.jsonPath().getInt("basicFare")).isEqualTo(basicFare);
+        assertThat(response.jsonPath().getInt("lineOverFare")).isEqualTo(lineOverFare);
+        assertThat(response.jsonPath().getInt("distanceOverFare")).isEqualTo(distanceOverFare);
+        assertThat(response.jsonPath().getInt("memberDiscountFare")).isEqualTo(memberDiscountFare);
     }
 }
