@@ -99,7 +99,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 판교역);
 
         // then
-        두_역의_최단_거리_경로_조회_완료(response, 45, 40, 2250, 1250, 300, 700, 0, 교대역, 남부터미널역, 양재역, 판교역);
+        두_역의_최단_거리_경로_조회_완료(
+                response, 45, 40, 2250,
+                1250, 300, 700, 0,
+                교대역, 남부터미널역, 양재역, 판교역);
     }
 
     /**
@@ -122,7 +125,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 판교역);
 
         // then
-        두_역의_최소_시간_경로_조회_완료(response, 60, 26, 2050, 1250, 100, 700, 0, 교대역, 강남역, 양재역, 판교역);
+        두_역의_최소_시간_경로_조회_완료(
+                response, 60, 26, 2050,
+                1250, 100, 700, 0,
+                교대역, 강남역, 양재역, 판교역);
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {

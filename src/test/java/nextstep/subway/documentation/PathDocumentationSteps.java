@@ -41,7 +41,11 @@ public class PathDocumentationSteps {
                 fieldWithPath("stations[].modifiedDate").description("역 정보 최종 수정 일자"),
                 fieldWithPath("distance").description("전체 거리"),
                 fieldWithPath("duration").description("소요 시간"),
-                fieldWithPath("fare").description("요금")
+                fieldWithPath("fare").description("총 요금"),
+                fieldWithPath("basicFare").description("기본 요금"),
+                fieldWithPath("lineOverFare").description("노선 추가 금액"),
+                fieldWithPath("distanceOverFare").description("거리 추가 금액"),
+                fieldWithPath("memberDiscountFare").description("사용자 할인 금액")
         );
     }
 
