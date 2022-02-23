@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,15 +34,23 @@ public enum DistancePolicy {
                 .findFirst().orElseThrow(IllegalArgumentException::new);
     }
 
+    public int calculateOverFare(int totalDistance, int basicOverDistance) {
+        if (isBasicStandard()) {
+            return 0;
+        }
+        int overDistance = calculateOverDistance(totalDistance);
+        return (int) ((Math.ceil((overDistance - 1) / distance) + 1) * basicOverDistance);
+    }
+
     private boolean isWithinBoundary(int totalDistance) {
         return totalDistance >= boundary;
     }
 
-    public boolean isBasicStandard() {
+    private boolean isBasicStandard() {
         return this.equals(STEP0);
     }
 
-    public int calculateOverDistance(int totalDistance) {
+    private int calculateOverDistance(int totalDistance) {
         return totalDistance - getBasicBoundary();
     }
 
