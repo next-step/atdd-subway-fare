@@ -13,11 +13,11 @@ public class Path {
         return sections.getStations();
     }
 
+    public Sections getSections() { return sections; }
+
     public int extractDistance() {
         return sections.totalDistance();
     }
 
-    public int extractDuration() {
-        return sections.totalDuration();
-    }
+    public int extractDuration() { return sections.totalDuration();}
 }

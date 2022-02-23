@@ -8,7 +8,7 @@ public class FeePolicy {
     public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST = 10;
     public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_SECOND = 50;
     public static final int DEDUCTION_FEE = 350;
-    public static final int DEFAULT_AGE = 19;
+    public static final int DEFAULT_AGE = 20;
     public static final double CHILD_DISCOUNT_RATE = 0.5;
     public static final double TEENAGER_DISCOUNT_RATE = 0.8;
     public static final int TEENAGER_MIN_AGE = 13;

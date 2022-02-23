@@ -115,11 +115,5 @@ class FeePolicyTest {
         assertThat(fee).isEqualTo(1440);
     }
 
-    private Sections getSections(int distance1, int distance2, int distance3) {
-        return new Sections(Arrays.asList(
-                new Section(null,null,null, distance1, 3),
-                new Section(null, null, null, distance2, 2),
-                new Section(null, null, null, distance3, 2)));
-    }
 
 }
