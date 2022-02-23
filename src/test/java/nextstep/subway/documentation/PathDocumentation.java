@@ -9,6 +9,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
@@ -29,7 +30,8 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "서울역", LocalDateTime.now(), LocalDateTime.now())
                 ),
                 10,
-                10
+                10,
+                1250
         );
 
         when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
