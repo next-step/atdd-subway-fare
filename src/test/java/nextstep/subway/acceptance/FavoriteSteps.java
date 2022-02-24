@@ -3,6 +3,8 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.common.Steps;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -11,7 +13,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FavoriteSteps {
+public class FavoriteSteps extends Steps {
     public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(String accessToken, Long source, Long target) {
         Map<String, String> params = new HashMap<>();
         params.put("source", source + "");

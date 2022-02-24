@@ -1,9 +1,11 @@
-package nextstep.subway.acceptance;
+package nextstep.member;
 
 import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.common.Steps;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -12,7 +14,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MemberSteps {
+public class MemberSteps extends Steps {
     public static final String USERNAME_FIELD = "username";
     public static final String PASSWORD_FIELD = "password";
 
