@@ -6,4 +6,13 @@
 :toclevels: 2
 :sectlinks:
 
-include::path.adoc[]
+[[resources]]
+= Resources
+
+[[resources-path]]
+== Path
+
+[[resources-path-findList]]
+=== 경로 조회
+
+operation::path[snippets='http-request,http-response']

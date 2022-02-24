@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id "org.asciidoctor.convert" version "1.5.9.2"
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 	id 'java'
 }
 
@@ -13,6 +13,9 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	asciidoctorExt
+}
 dependencies {
 	// spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -31,7 +34,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	// rest docs
-	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured:2.0.5.RELEASE'
 
 	// test
@@ -61,6 +64,7 @@ task testDocument(type: Test) {
 
 asciidoctor {
 	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
 	dependsOn test
 }
 
@@ -74,6 +78,6 @@ bootJar {
 task copyDocument(type: Copy) {
 	dependsOn testDocument
 
-	from file("build/asciidoc/html5/index.html")
+	from file("build/docs/asciidoc")
 	into file("src/main/resources/static/docs")
 }
