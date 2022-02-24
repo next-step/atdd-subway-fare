@@ -11,6 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private final UserDetailsService userDetailsService;
@@ -28,7 +29,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+
+        boolean required = Objects.requireNonNull(
+                parameter.getParameterAnnotation(AuthenticationPrincipal.class)).required();
+
+        if (!required && Objects.isNull(authentication)) {
             return userDetailsService.getNonLoginMember();
         }
         if (authentication.getPrincipal() instanceof Map) {
