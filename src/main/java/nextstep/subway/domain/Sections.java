@@ -136,9 +136,6 @@ public class Sections {
      * @param stations : getFirstSection()에서 가져온 상행 종점 구간의 상행 종점역과 하행역
      */
     private void addEndDownStation(List<Station> stations) {
-        for (int i = 0; i < stations.size(); i++) {
-            addDownStations(stations);
-        }
         IntStream.range(0, stations.size())
                 .mapToObj(i -> stations)
                 .forEach(this::addDownStations);
