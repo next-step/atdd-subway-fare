@@ -14,7 +14,7 @@ public class PathSteps {
         return 두_역의_최단_거리_경로_조회를_요청(source, target, specification);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최소_거리_경로_조회를_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured.given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
@@ -35,10 +35,10 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 두_역의_최소_거리_경로_조회_응답됨(ExtractableResponse<Response> response) {
+    public static void 두_역의_최소_시간_경로_조회_응답됨(ExtractableResponse<Response> response, Long... stationIds) {
         // then
-//        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(2);
     }
 }

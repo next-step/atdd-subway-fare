@@ -26,11 +26,7 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
-
-        if (type.equals(PathFinderType.DURATION)) {
-            return new PathResponse(new ArrayList<>(), 5, 2);
-        }
+        Path path = subwayMap.findPath(upStation, downStation, type);
 
         return PathResponse.of(path);
     }
