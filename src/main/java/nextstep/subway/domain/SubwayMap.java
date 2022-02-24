@@ -14,21 +14,6 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target) {
-        // 그래프 만들기
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(null);
-
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
-
-        List<Section> sections = result.getEdgeList().stream()
-            .map(it -> it.getSection())
-            .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
-    }
-
     public Path findPath(Station source, Station target, WeightType weightType) {
         Weight weight = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 
