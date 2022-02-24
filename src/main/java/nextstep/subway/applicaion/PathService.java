@@ -5,6 +5,8 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.WeightType;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,17 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
+        Path path = subwayMap.findPath(upStation, downStation, WeightType.DISTANCE);
+
+        return PathResponse.of(path);
+    }
+
+    public PathResponse findPath(Long source, Long target, WeightType weightType) {
+        Station upStation = stationService.findById(source);
+        Station downStation = stationService.findById(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPath(upStation, downStation, weightType);
 
         return PathResponse.of(path);
     }
