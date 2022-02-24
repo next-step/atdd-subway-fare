@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import nextstep.subway.ui.exception.LineException;
 import nextstep.subway.ui.exception.SectionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,10 +21,14 @@ class LineTest {
     Station 등촌역;
     Station 신목동역;
     Line line;
+
     int tenDistance;
     int fourDistance;
     int fiveDuration;
     int threeDuration;
+
+    String 라인이름_5호선;
+    String 라인색_5호선_보라색;
 
     @BeforeEach
     void setUp() {
@@ -32,10 +37,14 @@ class LineTest {
         등촌역 = new Station("등촌역");
         신목동역 = new Station("신목동역");
         line = new Line("9호선", "금색");
+
         tenDistance = 10;
         fourDistance = 4;
         fiveDuration = 5;
         threeDuration = 3;
+
+        라인이름_5호선 = "5호선";
+        라인색_5호선_보라색 = "보라색";
     }
 
     @DisplayName("지하철역 사이에 새로운 구간 추가(기존 구간 상행역과 신규 구간 상행역이 겹친다.")
@@ -171,12 +180,44 @@ class LineTest {
         // given
         Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
         line.addSection(section);
+        int additionFare = 10;
 
         // when
-        line.updateLine("5호선", "보라색");
+        line.updateLine(라인이름_5호선, 라인색_5호선_보라색, additionFare);
 
         // then
         assertThat(line.getName()).isEqualTo("5호선");
         assertThat(line.getColor()).isEqualTo("보라색");
+        assertThat(line.getAdditionFare()).isEqualTo(10);
+    }
+
+    @DisplayName("노선 정보 변경 - 노선 수정 시 추가 요금 최소값 예외")
+    @Test
+    void exceptionUpdateAddFareMin() {
+        // given
+        Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        line.addSection(section);
+        int additionFare = -1;
+
+        // when
+        assertThatThrownBy(() -> line.updateLine(라인이름_5호선, 라인색_5호선_보라색, additionFare))
+                // then
+                .isInstanceOf(LineException.class)
+                .hasMessage("추가 요금은 최소 0원 이상이어야 합니다.");
+    }
+
+    @DisplayName("노선 정보 변경 - 노선 생성 시 추가 요금 최소값 예외")
+    @Test
+    void exceptionSaveAddFareMin() {
+        // given
+        Section section = new Section(line, 가양역, 증미역, tenDistance, fiveDuration);
+        line.addSection(section);
+        int additionFare = -1;
+
+        // when
+        assertThatThrownBy(() -> new Line(라인이름_5호선, 라인색_5호선_보라색, additionFare))
+                // then
+                .isInstanceOf(LineException.class)
+                .hasMessage("추가 요금은 최소 0원 이상이어야 합니다.");
     }
 }

@@ -27,7 +27,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getAdditionFare()));
         addSection(request, line);
         return LineResponse.createLineResponse(line);
     }
@@ -48,7 +48,7 @@ public class LineService {
     public void updateLine(Long id, LineRequest lineRequest) {
         Line line = lineRepository.findById(id)
                 .orElseThrow(() -> new LineException(String.format(NOT_EXISTS_LINE_EXCEPTION, id)));
-        line.updateLine(lineRequest.getName(), lineRequest.getColor());
+        line.updateLine(lineRequest.getName(), lineRequest.getColor(), lineRequest.getAdditionFare());
     }
 
     public void deleteLine(Long id) {
