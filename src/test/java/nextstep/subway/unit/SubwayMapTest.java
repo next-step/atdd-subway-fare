@@ -13,6 +13,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.unit.model.SectionBuilder.createSection;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SubwayMapTest {
@@ -36,10 +37,10 @@ class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3, 3);
-        이호선.addSection(교대역, 강남역, 3, 3);
-        삼호선.addSection(교대역, 남부터미널역, 5, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5, 5);
+        신분당선.addSection(() -> createSection(신분당선, 강남역, 양재역, 11111, 11111));
+        이호선.addSection(() -> createSection(이호선, 교대역, 강남역, 3, 3));
+        삼호선.addSection(() -> createSection(삼호선, 교대역, 남부터미널역, 54, 54));
+        삼호선.addSection(() -> createSection(삼호선, 남부터미널역, 양재역, 5, 5));
     }
 
     @EnumSource(PathType.class)
@@ -53,7 +54,10 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertThat(path.extractDistance()).isEqualTo(59);
+        assertThat(path.extractDuration()).isEqualTo(59);
+        assertThat(path.extractFare()).isEqualTo(1950);
     }
 
     @EnumSource(PathType.class)
@@ -67,7 +71,10 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(양재역, 교대역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+        assertThat(path.extractDistance()).isEqualTo(59);
+        assertThat(path.extractDuration()).isEqualTo(59);
+        assertThat(path.extractFare()).isEqualTo(1950);
     }
 
     private Station createStation(long id, String name) {
