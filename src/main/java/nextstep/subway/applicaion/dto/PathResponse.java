@@ -28,13 +28,12 @@ public class PathResponse {
         this.memberDiscountFare = memberDiscountFare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, Fare fare) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        Fare fare = path.getFare();
 
         return new PathResponse(stations, distance, duration,
                 fare.getTotalFare(), Fare.BASIC_FARE, fare.getLineOverFare(),

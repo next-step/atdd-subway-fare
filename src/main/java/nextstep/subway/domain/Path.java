@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
-    private Fare fare;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -24,15 +23,11 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public void calculateFare(int memberAge) {
-        fare = sections.totalFare(memberAge);
+    public Fare calculateFare(int memberAge) {
+        return sections.totalFare(memberAge);
     }
 
     public List<Station> getStations() {
         return sections.getStations();
-    }
-
-    public Fare getFare() {
-        return fare;
     }
 }

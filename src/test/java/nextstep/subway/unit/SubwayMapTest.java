@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.fare.Fare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -127,11 +128,11 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
-        path.calculateFare(ADULT.getAge());
+        Fare fare = path.calculateFare(ADULT.getAge());
 
         // then
         assertThat(path.extractDistance()).isEqualTo(5);
-        assertThat(path.getFare().getTotalFare()).isEqualTo(BASIC_FARE);
+        assertThat(fare.getTotalFare()).isEqualTo(BASIC_FARE);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
@@ -143,12 +144,12 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 판교역);
-        path.calculateFare(ADULT.getAge());
+        Fare fare = path.calculateFare(ADULT.getAge());
 
         // then
         assertAll(
                 () -> assertThat(path.extractDistance()).isEqualTo(45),
-                () -> assertThat(path.getFare().getTotalFare()).isEqualTo(1950),
+                () -> assertThat(fare.getTotalFare()).isEqualTo(1950),
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 판교역))
         );
     }
@@ -161,12 +162,12 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 판교역);
-        path.calculateFare(ADULT.getAge());
+        Fare fare = path.calculateFare(ADULT.getAge());
 
         // then
         assertAll(
                 () -> assertThat(path.extractDistance()).isEqualTo(60),
-                () -> assertThat(path.getFare().getTotalFare()).isEqualTo(1950),
+                () -> assertThat(fare.getTotalFare()).isEqualTo(1950),
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역, 판교역))
         );
     }

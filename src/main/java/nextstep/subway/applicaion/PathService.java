@@ -2,6 +2,7 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.fare.Fare;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines, pathType);
         Path path = subwayMap.findPath(upStation, downStation);
-        path.calculateFare(memberAge);
+        Fare fare = path.calculateFare(memberAge);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fare);
     }
 }
