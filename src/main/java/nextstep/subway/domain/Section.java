@@ -61,18 +61,6 @@ public class Section extends DefaultWeightedEdge {
         return duration;
     }
 
-    public int getWeightOf(FindType type) {
-        if (type.isDistance()) {
-            return distance;
-        }
-
-        if (type.isDuration()) {
-            return duration;
-        }
-
-        throw new IllegalArgumentException();
-    }
-
     public boolean isSameUpStation(Station station) {
         return this.upStation == station;
     }

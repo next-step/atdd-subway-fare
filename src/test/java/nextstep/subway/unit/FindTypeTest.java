@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.FindType;
+import nextstep.subway.domain.Section;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,19 +31,14 @@ public class FindTypeTest {
         );
     }
 
-    @DisplayName("isDistance메서드 테스트")
+    @DisplayName("type에 따른 가중치 반환 테스트")
     @Test
-    void isDistance() {
-        // when & then
-        assertThat(FindType.DISTANCE.isDistance()).isTrue();
-        assertThat(FindType.DISTANCE.isDuration()).isFalse();
-    }
+    void weightFrom() {
+        // given
+        Section section = new Section(null, null, null, 10, 5);
 
-    @DisplayName("isDuration메서드 테스트")
-    @Test
-    void isDuration() {
-        // when & then
-        assertThat(FindType.DURATION.isDuration()).isTrue();
-        assertThat(FindType.DURATION.isDistance()).isFalse();
+        // when
+        assertThat(FindType.DURATION.weightFrom(section)).isEqualTo(5);
+        assertThat(FindType.DISTANCE.weightFrom(section)).isEqualTo(10);
     }
 }

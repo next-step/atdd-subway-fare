@@ -159,4 +159,9 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int fare() {
+        SubwayFare subwayFare = new SubwayFare(totalDistance());
+        return subwayFare.calculate();
+    }
 }

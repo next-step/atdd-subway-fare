@@ -55,7 +55,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getWeightOf(type));
+                    graph.setEdgeWeight(sectionEdge, type.weightFrom(it));
                 });
     }
 
@@ -67,7 +67,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getWeightOf(type));
+                    graph.setEdgeWeight(sectionEdge, type.weightFrom(it));
                 });
     }
 }
