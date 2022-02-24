@@ -87,12 +87,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역과 도착역이 같은 경우 조회할 수 없다.")
     @Test
     void exceptionStartAndEndStationDuplication() {
-        // given
-        Long source = 1L;
-        Long target = 1L;
-
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 교대역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -107,16 +103,15 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void exceptionStartAndEndStationNoneConnection() {
         // given
-        Long source = 1L;
-        Long target = 5L;
-
         Long 가양역 = 지하철역_생성_요청("가양역").jsonPath().getLong("id");
         Long 증미역 = 지하철역_생성_요청("증미역").jsonPath().getLong("id");
+
+        Long 연결_되어있지_않은_역 = 교대역;
 
         지하철_노선_생성_요청(createLineCreateParams("9호선", "brown", 가양역, 증미역, 10, 3));
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 가양역, 연결_되어있지_않은_역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -131,11 +126,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void exceptionStartAndEndNotExistsStation() {
         // given
-        Long source = 10L;
-        Long target = 20L;
+        Long 존재하지_않는_출발역 = -1L;
+        Long 존재하지_않는_도착역 = -9_999L;
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 존재하지_않는_출발역, 존재하지_않는_도착역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
