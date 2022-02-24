@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.fare.Fare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static nextstep.subway.domain.Fare.BASIC_FARE;
+import static nextstep.subway.domain.fare.Fare.BASIC_FARE;
+import static nextstep.subway.domain.fare.MemberDiscountPolicy.ADULT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SubwayMapTest {
 
@@ -125,10 +128,11 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
+        Fare fare = path.calculateFare(ADULT.getAge());
 
         // then
         assertThat(path.extractDistance()).isEqualTo(5);
-        assertThat(path.extractFare()).isEqualTo(BASIC_FARE);
+        assertThat(fare.getTotalFare()).isEqualTo(BASIC_FARE);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
@@ -140,11 +144,14 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 판교역);
+        Fare fare = path.calculateFare(ADULT.getAge());
 
         // then
-        assertThat(path.extractDistance()).isEqualTo(45);
-        assertThat(path.extractFare()).isEqualTo(1950);
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 판교역));
+        assertAll(
+                () -> assertThat(path.extractDistance()).isEqualTo(45),
+                () -> assertThat(fare.getTotalFare()).isEqualTo(1950),
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 판교역))
+        );
     }
 
     @DisplayName("경로가 50km를 초과하는 경우 초과 요금이 부과된다.")
@@ -155,11 +162,14 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 판교역);
+        Fare fare = path.calculateFare(ADULT.getAge());
 
         // then
-        assertThat(path.extractDistance()).isEqualTo(60);
-        assertThat(path.extractFare()).isEqualTo(1950);
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역, 판교역));
+        assertAll(
+                () -> assertThat(path.extractDistance()).isEqualTo(60),
+                () -> assertThat(fare.getTotalFare()).isEqualTo(1950),
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역, 판교역))
+        );
     }
 
     private Station createStation(long id, String name) {

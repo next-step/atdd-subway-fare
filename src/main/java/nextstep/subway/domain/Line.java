@@ -11,6 +11,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private int fare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -19,8 +20,13 @@ public class Line extends BaseEntity {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, int fare) {
         this.name = name;
         this.color = color;
+        this.fare = fare;
     }
 
     public Long getId() {
@@ -37,6 +43,10 @@ public class Line extends BaseEntity {
 
     public List<Section> getSections() {
         return sections.getSections();
+    }
+
+    public int getFare() {
+        return fare;
     }
 
     public void update(String name, String color) {

@@ -13,8 +13,7 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_�
 import static nextstep.subway.documentation.PathDocumentationFixture.*;
 import static nextstep.subway.documentation.PathDocumentationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
@@ -25,7 +24,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         // given
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(PATH_RESPONSE);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class), anyInt())).thenReturn(PATH_RESPONSE);
 
         // when
         RestDocumentationFilter documentFilter = getDocumentFilter(getRequestParameters(), getResponseFields());
