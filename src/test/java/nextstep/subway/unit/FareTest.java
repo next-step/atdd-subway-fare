@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import lombok.val;
 import nextstep.subway.domain.Fare;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -9,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareTest {
 
+    @DisplayName("10KM이하 요금테스트")
     @Test
     void 최소범위테스트() {
         // when
@@ -19,6 +21,7 @@ public class FareTest {
         assertThat(fare2).isEqualTo(1250);
     }
 
+    @DisplayName("10KM초과 50KM 이하 요금테스트")
     @Test
     void 중간범위테스트() {
         // when
@@ -31,6 +34,7 @@ public class FareTest {
         assertThat(fare3).isEqualTo(2050);
     }
 
+    @DisplayName("50KM초과 요금테스트")
     @Test
     void 최대범위테스트() {
         // when
