@@ -10,7 +10,8 @@ public enum ExceptionMessage {
     SECTION_LESS_THAN_ONE("구간이 1개 이하인 경우 삭제할 수 없습니다."),
     NOT_EXISTS_STATION_IN_SECTION("구간에 존재하지 않는 역입니다."),
     ADD_SECTION_DISTANCE("새로 추가되는 구간 거리는 기존 구간의 거리 이상일 수 없습니다. 기존 구간 거리 = %d, 신규 구간 거리 = %d"),
-    EXISTS_STATION_IN_SECTION("이미 구간에 등록된 역입니다.");
+    EXISTS_STATION_IN_SECTION("이미 구간에 등록된 역입니다."),
+    ADDITION_FARE_MIN("추가 요금은 최소 0원 이상이어야 합니다.");
 
     private final String msg;
     ExceptionMessage(String msg) {

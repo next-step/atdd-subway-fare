@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.List;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.ADDITION_FARE_MIN;
+
 @Entity
 public class Line extends BaseEntity {
     @Id
@@ -60,7 +62,7 @@ public class Line extends BaseEntity {
 
     private void validateAddFare(int additionFare) {
         if (additionFare < 0) {
-            throw new LineException("추가 요금은 최소 0원 이상이어야 합니다.");
+            throw new LineException(ADDITION_FARE_MIN.getMsg());
         }
     }
 
