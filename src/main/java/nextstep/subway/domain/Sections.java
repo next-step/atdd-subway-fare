@@ -12,6 +12,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.NOT_EXISTS_STATION_IN_SECTION;
+import static nextstep.subway.ui.exception.ExceptionMessage.SECTION_LESS_THAN_ONE;
+
 @Embeddable
 public class Sections {
 
@@ -38,8 +41,7 @@ public class Sections {
         Section removeSection = sections.stream()
                 .filter(equalsDownStation(downStation))
                 .findFirst()
-                .orElseThrow(() ->
-                        new SectionException(String.format("상행역과 하행역 모두 구간에 존재하지 않는 역입니다. 하행역 = %s", downStation)));
+                .orElseThrow(() -> new SectionException(NOT_EXISTS_STATION_IN_SECTION.getMsg()));
         sections.remove(removeSection);
 
         for (Section section : sections) {
@@ -69,9 +71,7 @@ public class Sections {
 
     private void validateAddSectionStationNotExistInSection(Section section) {
         if (isNotExistsStationInSection(section)) {
-            throw new SectionException(
-                    String.format("상행역과 하행역 모두 구간에 존재하지 않는 역입니다. 상행역 = %s, 하행역 = %s",
-                            section.getUpStation().getName(), section.getDownStation().getName()));
+            throw new SectionException(NOT_EXISTS_STATION_IN_SECTION.getMsg());
         }
     }
 
@@ -85,7 +85,7 @@ public class Sections {
 
     private void validateOneSection() {
         if (sections.size() < MIN_COUNT_CONDITION_SECTION_REMOVE) {
-            throw new SectionException("구간이 1개 이하인 경우 삭제할 수 없습니다.");
+            throw new SectionException(SECTION_LESS_THAN_ONE.getMsg());
         }
     }
 

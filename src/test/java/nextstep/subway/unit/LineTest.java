@@ -147,7 +147,7 @@ class LineTest {
         assertThatThrownBy(() -> line.addSection(newSection))
                 // then
                 .isInstanceOf(SectionException.class)
-                .hasMessage("상행역과 하행역 모두 등록된 역입니다. 상행역 = 가양역, 하행역 = 증미역");
+                .hasMessage("이미 구간에 등록된 역입니다.");
     }
 
     @DisplayName("구간 추가 시 상행역과 하행역 중 하나도 구간에 등록되어 있지 않으면 등록 불가.(구간이 1개 이상일 경우)")
@@ -162,7 +162,7 @@ class LineTest {
         assertThatThrownBy(() -> line.addSection(newSection))
                 // then
                 .isInstanceOf(SectionException.class)
-                .hasMessage("상행역과 하행역 모두 구간에 존재하지 않는 역입니다. 상행역 = 등촌역, 하행역 = 신목동역");
+                .hasMessage("구간에 존재하지 않는 역입니다.");
     }
 
     @DisplayName("노선 정보 변경")

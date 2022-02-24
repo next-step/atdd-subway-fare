@@ -107,7 +107,7 @@ class AuthenticationInterceptorTest {
         assertThatThrownBy(() -> interceptor.authenticate(authenticationToken))
                 // then
                 .isInstanceOf(AuthenticationException.class)
-                .hasMessage("비밀번호가 틀렸습니다.");
+                .hasMessage("잘못된 비밀번호입니다.");
     }
 
     private MockHttpServletRequest createMockRequest() throws IOException {

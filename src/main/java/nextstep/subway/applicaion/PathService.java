@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.SAME_STATION;
+
 @Transactional
 @Service
 public class PathService {
@@ -26,7 +28,7 @@ public class PathService {
 
     public PathResponse findPath(Long source, Long target, PathType type) {
         if (source.equals(target)) {
-            throw new PathException("출발역과 도착역을 다르게 설정해주세요.");
+            throw new PathException(SAME_STATION.getMsg());
         }
         List<Line> lines = lineRepository.findAll();
         Station sourceStation = stationService.findById(source);

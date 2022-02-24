@@ -12,6 +12,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.Arrays;
 import java.util.Map;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.REQUIRE_SIGN_IN;
+
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -31,7 +33,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     private Authentication getSecurityContextHolderInAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new AuthenticationException("로그인이 필요하거나 재로그인을 해주세요.");
+            throw new AuthenticationException(REQUIRE_SIGN_IN.getMsg());
         }
         return authentication;
     }

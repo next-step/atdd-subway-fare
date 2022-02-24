@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.NOT_EXISTS_STATIONS_IN_LINE;
+import static nextstep.subway.ui.exception.ExceptionMessage.NO_CONNECTION_START_AND_END_STATION;
+
 public class PathFinder {
     public Path shortsPath(List<Line> lines, Station source, Station target, PathType type) {
         return new Path(shortsPathSections(lines, source, target, type));
@@ -17,7 +20,7 @@ public class PathFinder {
     private List<Section> shortsPathSections(List<Line> lines, Station source, Station target, PathType type) {
         GraphPath<Station, SectionEdge> path = getPath(lines, source, target, type);
         if (path == null) {
-            throw new PathException("출발역과 도착역이 연결되어 있지 않습니다.");
+            throw new PathException(NO_CONNECTION_START_AND_END_STATION.getMsg());
         }
         return path.getEdgeList().stream()
                 .map(SectionEdge::getSection)
@@ -28,7 +31,7 @@ public class PathFinder {
         try {
             return createDijkstraShortestPath(lines, type).getPath(source, target);
         } catch (IllegalArgumentException e) {
-            throw new PathException("노선에 등록되지 않은 역입니다.");
+            throw new PathException(NOT_EXISTS_STATIONS_IN_LINE.getMsg());
         }
     }
 
