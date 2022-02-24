@@ -437,72 +437,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book toc2 toc-left">
+<body class="book">
 <div id="header">
 <h1>Subway Application API Document</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_경로_조회">경로 조회</a>
-<ul class="sectlevel2">
-<li><a href="#_http_request">HTTP request</a></li>
-<li><a href="#_http_response">HTTP response</a></li>
-<li><a href="#_requestparameter">RequestParameter</a></li>
-<li><a href="#_responsefields">ResponseFields</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_경로_조회"><a class="link" href="#_경로_조회">경로 조회</a></h2>
+<div id="preamble">
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_http_request"><a class="link" href="#_http_request">HTTP request</a></h3>
+<div class="sect1">
+<h2 id="_http_request"><a class="link" href="#_http_request">HTTP request</a></h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2&amp;type=DURATION HTTP/1.1
 Accept: application/json
-Host: localhost:55919</code></pre>
+Host: localhost:62133</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_http_response"><a class="link" href="#_http_response">HTTP response</a></h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Set-Cookie: JSESSIONID=34FCAACF2970B56AE85D0040F2B506AF; Path=/; HttpOnly
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Thu, 17 Feb 2022 00:16:18 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
-Content-Length: 238
-
-{
-  "stations" : [ {
-    "id" : 1,
-    "name" : "가양역",
-    "createdDate" : null,
-    "modifiedDate" : null
-  }, {
-    "id" : 2,
-    "name" : "역삼역",
-    "createdDate" : null,
-    "modifiedDate" : null
-  } ],
-  "distance" : 10
-}</code></pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_requestparameter"><a class="link" href="#_requestparameter">RequestParameter</a></h3>
+<div class="sect1">
+<h2 id="_request_parameters"><a class="link" href="#_request_parameters">Request parameters</a></h2>
+<div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -523,11 +482,52 @@ Content-Length: 238
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>target</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">도착역</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회 기준</p></td>
+</tr>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_responsefields"><a class="link" href="#_responsefields">ResponseFields</a></h3>
+</div>
+<div class="sect1">
+<h2 id="_http_response"><a class="link" href="#_http_response">HTTP response</a></h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Set-Cookie: JSESSIONID=67FB068DA896AFACFD88FEBD8452C5B6; Path=/; HttpOnly
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Thu, 24 Feb 2022 03:52:31 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+Content-Length: 298
+
+{
+  "stations" : [ {
+    "id" : 1,
+    "name" : "가양역",
+    "createdDate" : null,
+    "modifiedDate" : null
+  }, {
+    "id" : 2,
+    "name" : "역삼역",
+    "createdDate" : null,
+    "modifiedDate" : null
+  } ],
+  "distance" : 10,
+  "duration" : 20,
+  "fare" : 1250,
+  "additionFare" : 900
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_response_fields"><a class="link" href="#_response_fields">Response fields</a></h2>
+<div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -560,7 +560,22 @@ Content-Length: 238
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최단 경로 거리</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 거리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요금</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>additionFare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">추가요금</p></td>
 </tr>
 </tbody>
 </table>
@@ -568,10 +583,11 @@ Content-Length: 238
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-02-17 09:12:18 +0900
+Last updated 2022-02-24 12:24:29 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
