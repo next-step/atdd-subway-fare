@@ -22,6 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public NonLoginMember getNonLoginMember() {
-        return new NonLoginMember();
+        return NonLoginMember.getInstance();
     }
 }
