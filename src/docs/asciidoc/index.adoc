@@ -3,7 +3,7 @@
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 2
+:toclevels: 4
 :sectlinks:
 
 [[resources]]
@@ -15,4 +15,12 @@
 [[resources-path-findList]]
 === 경로 조회
 
-operation::path[snippets='http-request,http-response']
+***
+
+==== Request
+include::{snippets}/path/http-request.adoc[]
+include::{snippets}/path/request-parameters.adoc[]
+
+==== Response
+include::{snippets}/path/http-response.adoc[]
+include::{snippets}/path/response-fields.adoc[]
