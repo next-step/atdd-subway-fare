@@ -128,7 +128,7 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                    upSection.get().getDistance() + downSection.get().getDistance(), upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);

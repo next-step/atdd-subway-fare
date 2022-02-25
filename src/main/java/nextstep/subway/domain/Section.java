@@ -29,9 +29,6 @@ public class Section extends DefaultWeightedEdge {
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
-        this(line, upStation, downStation, distance, 2);
-    }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
