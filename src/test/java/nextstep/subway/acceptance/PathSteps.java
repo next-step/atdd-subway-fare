@@ -112,7 +112,7 @@ public class PathSteps {
 
     public static RequestParametersSnippet getRequestParameters() {
         RequestParametersSnippet requestParametersSnippet = requestParameters(
-                parameterWithName("method").description("조회하는 방식 (최단 거리 or 최소 시간)"),
+                parameterWithName("type").description("조회하는 방식 (최단 거리 or 최소 시간)"),
                 parameterWithName("source").description("조회하는 경로에 상행역"),
                 parameterWithName("target").description("조회하는 경로에 하행역")
         );
@@ -161,11 +161,11 @@ public class PathSteps {
     }
 
 
-    public static Map<String, String> 경로_조회_파라미터_생성(Long source, Long target, String method) {
+    public static Map<String, String> 경로_조회_파라미터_생성(Long source, Long target, String type) {
         Map<String, String> params = new HashMap<>();
         params.put("source", source + "");
         params.put("target", target + "");
-        params.put("method", method);
+        params.put("type", type);
         return params;
     }
 

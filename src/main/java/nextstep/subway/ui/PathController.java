@@ -20,8 +20,8 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember,
                                                  @RequestParam Long source,
                                                  @RequestParam Long target,
-                                                 @RequestParam String method) {
-        PathSearchRequest pathSearchRequest = new PathSearchRequest(source, target, method);
+                                                 @RequestParam String type) {
+        PathSearchRequest pathSearchRequest = new PathSearchRequest(source, target, type);
         if (loginMember == null) {
             return ResponseEntity.ok(pathService.findPath(pathSearchRequest));
         }

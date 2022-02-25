@@ -1,20 +1,17 @@
 package nextstep.subway.applicaion.dto;
 
-import nextstep.subway.domain.PathSearchType;
-import org.springframework.web.bind.annotation.RequestParam;
-
 public class PathSearchRequest {
     Long source;
     Long target;
-    String method;
+    String type;
 
     public PathSearchRequest() {
     }
 
-    public PathSearchRequest(Long source, Long target, String method) {
+    public PathSearchRequest(Long source, Long target, String type) {
         this.source = source;
         this.target = target;
-        this.method = method;
+        this.type = type;
     }
 
     public Long getSource() {
@@ -25,7 +22,7 @@ public class PathSearchRequest {
         return target;
     }
 
-    public String getMethod() {
-        return method;
+    public String getType() {
+        return type;
     }
 }
