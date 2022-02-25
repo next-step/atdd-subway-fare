@@ -26,7 +26,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        BigDecimal fare = pathFare.extractFare();
+        BigDecimal fare = pathFare.getFare();
 
         return new PathResponse(stations, distance, duration, fare);
     }

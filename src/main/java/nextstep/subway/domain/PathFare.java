@@ -3,17 +3,20 @@ package nextstep.subway.domain;
 import java.math.BigDecimal;
 
 public class PathFare {
-    private final Path shortestPath;
-    private final AgeFare ageFare;
+    private final BigDecimal fare;
 
-    public PathFare(Path shortestPath, AgeFare ageFare) {
-        this.shortestPath = shortestPath;
-        this.ageFare = ageFare;
+    public PathFare(BigDecimal fare) {
+        this.fare = fare;
     }
 
-    public BigDecimal extractFare() {
+    public static PathFare of(Path shortestPath, AgeFare ageFare) {
         BigDecimal distanceFare = DistanceFare.extractFare(shortestPath.extractDistance())
                                               .add(shortestPath.extractMaxAdditionalFare());
-        return ageFare.extractDiscountFare(distanceFare);
+        BigDecimal extractFare = ageFare.extractDiscountFare(distanceFare);
+        return new PathFare(extractFare);
+    }
+
+    public BigDecimal getFare() {
+        return fare;
     }
 }
