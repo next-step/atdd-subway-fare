@@ -24,7 +24,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         boolean required = parameter.getParameterAnnotation(AuthenticationPrincipal.class)
                                     .required();
         if (!required && authentication == null) {
-            return new NullLoginMember();
+            return NullLoginMember.getInstance();
         }
 
         if (authentication.getPrincipal() instanceof Map) {
