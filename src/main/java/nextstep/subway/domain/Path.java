@@ -13,10 +13,19 @@ public class Path {
         return sections.getStations();
     }
 
-    public int extractDistance() { return sections.totalDistance(); }
+    public Sections getSections() { return sections; }
 
-    public int extractDuration() { return sections.totalDuration(); }
+    public int extractDistance() {
+        return sections.totalDistance();
+    }
 
-    public int extractFee() { return sections.totalFee(); }
+    public int extractDuration() { return sections.totalDuration();}
 
+    public int extractAdditionalFee(List<Line> lines) {
+        List<Section> sections = this.sections.getSections();
+        return lines.stream()
+                .filter(line -> line.getSections().stream().anyMatch(sections::contains))
+                .mapToInt(Line::getAdditionalFee)
+                .sum();
+    }
 }

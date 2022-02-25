@@ -10,24 +10,29 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.Map;
+
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
+    public static final String EMAIL = "email@email";
+    public static final String PASSWORD = "password";
+    public static final int AGE = 14;
     @MockBean
     private PathService pathService;
 
     @Test
     void path() {
         //given
-        PathResponse pathResponse = getPathResponse();
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
-        Map<String, String> params = 경로_조회_파라미터_생성();
-        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path");
+        PathResponse pathResponse = getPathResponseForAnonymous();
+        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
+        Map<String, String> params = 경로_조회_파라미터_생성(1L, 2L, "SHORTEST_DISTANCE");
+        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path-anonymous");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_문서생성_최단거리_기준(spec, filter, params);
+        ExtractableResponse<Response> response = 경로조회_비회원_문서화(spec, filter, params);
 
         //then
         경로조회_검증됨(response);
@@ -36,33 +41,21 @@ public class PathDocumentation extends Documentation {
 
 
     @Test
-    void pathByDuration() {
+    void pathForUser() {
         //given
-        PathResponse pathResponse = getPathResponse();
-        when(pathService.findPathByMinimumTime(anyLong(), anyLong())).thenReturn(pathResponse);
-        Map<String, String> params = 경로_조회_파라미터_생성();
-        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("pathByDuration");
+        회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, AGE));
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+        PathResponse pathResponse = getPathResponseForUser();
+        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
+        Map<String, String> params = 경로_조회_파라미터_생성(1L, 2L, "MINIMUM_TIME");
+        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("path-user");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_문서생성_최소시간_기준(spec, filter, params);
+        ExtractableResponse<Response> response = 경로조회_회원_문서화(accessToken, spec, filter, params);
 
         //then
         경로조회_검증됨(response);
     }
 
-    @Test
-    void pathByFee() {
-        //given
-        PathResponse pathResponse = getPathResponse();
-        when(pathService.findPathByMinimumFee(anyLong(), anyLong())).thenReturn(pathResponse);
-        Map<String, String> params = 경로_조회_파라미터_생성();
-        RestDocumentationFilter filter = PathSteps.경로관련_문서_필터생성("pathByFee");
-
-        //when
-        ExtractableResponse<Response> response = 경로조회_문서생성_최소금액_거리_기준(spec, filter, params);
-
-        //then
-        경로조회_검증됨(response);
-    }
 
 }

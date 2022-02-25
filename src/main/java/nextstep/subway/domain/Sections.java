@@ -11,9 +11,6 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
-    public static final int BASIC_FEE = 1250;
-    public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST = 10;
-    public static final int ADDITIONAL_FEE_STANDARD_DISTANCE_SECCOND = 50;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -131,7 +128,7 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                    upSection.get().getDistance() + downSection.get().getDistance(), upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);
@@ -158,21 +155,4 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public int totalFee() {
-        int distance = totalDistance();
-
-        if (distance > ADDITIONAL_FEE_STANDARD_DISTANCE_SECCOND) {
-            return BASIC_FEE + 800 + getAdditionalFeePerEight(distance - ADDITIONAL_FEE_STANDARD_DISTANCE_SECCOND);
-        }
-        if (distance > ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST) {
-            return BASIC_FEE + getAdditionalFeePerFive(distance - ADDITIONAL_FEE_STANDARD_DISTANCE_FIRST);
-        }
-        return BASIC_FEE;
-    }
-
-    private int getAdditionalFeePerEight(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
-    }
-
-    private int getAdditionalFeePerFive(int distance) { return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100); }
 }

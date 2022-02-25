@@ -5,5 +5,7 @@ public interface UserDetails {
 
     Object getCredentials();
 
+    Integer getAge();
+
     boolean checkCredentials(Object credentials);
 }

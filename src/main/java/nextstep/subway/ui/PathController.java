@@ -1,11 +1,13 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.auth.userdetails.UserDetails;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.applicaion.dto.PathSearchRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PathController {
@@ -16,17 +18,11 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPath(source, target));
-    }
-
-    @GetMapping("/paths/minimum-time")
-    public ResponseEntity<PathResponse> findPathByDuration(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPathByMinimumTime(source, target));
-    }
-
-    @GetMapping("/paths/minimum-fee")
-    public ResponseEntity<PathResponse> findPathByFee(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPathByMinimumFee(source, target));
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember user,
+                                                 @RequestParam Long source,
+                                                 @RequestParam Long target,
+                                                 @RequestParam String type) {
+        PathSearchRequest pathSearchRequest = new PathSearchRequest(source, target, type);
+        return ResponseEntity.ok(pathService.findPath(pathSearchRequest, user.getAge()));
     }
 }
