@@ -1,7 +1,6 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Sections;
-import nextstep.subway.path.dto.FarePolicyRequest;
 
 public class LinePolicy implements FarePolicy{
 
@@ -16,7 +15,8 @@ public class LinePolicy implements FarePolicy{
     }
 
     @Override
-    public int calculate(FarePolicyRequest request) {
-        return sections.getLineExtraChargeMax();
+    public Fare getFare(Fare fare) {
+        fare.add(sections.getLineExtraChargeMax());
+        return fare;
     }
 }

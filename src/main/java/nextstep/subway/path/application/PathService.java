@@ -1,12 +1,10 @@
 package nextstep.subway.path.application;
 
-import nextstep.subway.line.domain.Sections;
-import nextstep.subway.path.domain.*;
-import nextstep.subway.path.dto.FarePolicyRequest;
-import nextstep.subway.path.dto.PathResponse;
-import nextstep.subway.station.application.StationService;
 import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.path.domain.*;
+import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;
 
@@ -39,15 +37,12 @@ public class PathService {
         int distance = path.extractDistance();
 
         List<FarePolicy> farePolicies = Arrays.asList(
-                DistancePolicy.choicePolicyByDistance(distance),
+                DistancePolicy.from(distance),
                 LinePolicy.from(path.getSections())
         );
         FareCalculator fareCalculator = FareCalculator.from(farePolicies);
 
-        FarePolicyRequest farePolicyRequest = FarePolicyRequest.builder()
-                .distance(distance)
-                .build();
-
-        return fareCalculator.calculate(farePolicyRequest);
+        return fareCalculator.calculate()
+                .getValue();
     }
 }
