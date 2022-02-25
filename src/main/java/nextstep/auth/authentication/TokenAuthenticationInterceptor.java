@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 public class TokenAuthenticationInterceptor extends AbstractAuthenticationInterceptor {
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public TokenAuthenticationInterceptor(UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
         super(new IssueTokenSuccessHandler(jwtTokenProvider), new SimpleUrlAuthenticationFailureHandler());

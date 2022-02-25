@@ -4,7 +4,7 @@ public enum PathType {
     DISTANCE(Section::getDistance),
     DURATION(Section::getDuration);
 
-    private PathFunction pathFunction;
+    private final PathFunction pathFunction;
 
     PathType(PathFunction pathFunction) {
         this.pathFunction = pathFunction;

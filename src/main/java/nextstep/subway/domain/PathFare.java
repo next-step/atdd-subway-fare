@@ -3,8 +3,8 @@ package nextstep.subway.domain;
 import java.math.BigDecimal;
 
 public class PathFare {
-    private Path shortestPath;
-    private AgeFare ageFare;
+    private final Path shortestPath;
+    private final AgeFare ageFare;
 
     public PathFare(Path shortestPath, AgeFare ageFare) {
         this.shortestPath = shortestPath;

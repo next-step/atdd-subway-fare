@@ -14,7 +14,7 @@ import java.util.Map;
 public class SessionAuthenticationInterceptor extends AbstractAuthenticationInterceptor {
     public static final String USERNAME_FIELD = "username";
     public static final String PASSWORD_FIELD = "password";
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public SessionAuthenticationInterceptor(UserDetailsService userDetailsService) {
         super(new SaveSessionSuccessHandler(), new SimpleUrlAuthenticationFailureHandler());

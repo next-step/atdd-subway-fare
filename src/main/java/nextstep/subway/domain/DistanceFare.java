@@ -8,10 +8,10 @@ public enum DistanceFare {
     SHORT_DISTANCE_FARE(11, 50, 5, 100),
     LONG_DISTANCE_FARE(51, Integer.MAX_VALUE, 8,  100);
 
-    private int standardDistance;
-    private int maxDistance;
-    private int distanceUnit;
-    private int fare;
+    private final int standardDistance;
+    private final int maxDistance;
+    private final int distanceUnit;
+    private final int fare;
 
     DistanceFare(int standardDistance, int maxDistance, int distanceUnit, int fare) {
         this.standardDistance = standardDistance;

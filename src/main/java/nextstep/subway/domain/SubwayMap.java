@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
-    private PathType type;
+    private final List<Line> lines;
+    private final PathType type;
 
     public SubwayMap(List<Line> lines, PathType type) {
         this.lines = lines;

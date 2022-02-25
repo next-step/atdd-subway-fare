@@ -8,10 +8,10 @@ public enum AgeFare {
     YOUTH_FARE(13, 18, BigDecimal.valueOf(350), BigDecimal.valueOf(0.2)),
     GENERAL_FARE(19, 200, BigDecimal.ZERO, BigDecimal.ZERO);
 
-    private int minAge;
-    private int maxAge;
-    private BigDecimal deductibleFare;
-    private BigDecimal discountRate;
+    private final int minAge;
+    private final int maxAge;
+    private final BigDecimal deductibleFare;
+    private final BigDecimal discountRate;
 
     AgeFare(int minAge, int maxAge, BigDecimal deductibleFare, BigDecimal discountRate) {
         this.minAge = minAge;

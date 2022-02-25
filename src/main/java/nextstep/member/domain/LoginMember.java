@@ -4,10 +4,10 @@ package nextstep.member.domain;
 import nextstep.auth.userdetails.UserDetails;
 
 public class LoginMember implements UserDetails {
-    private Long id;
-    private String email;
-    private String password;
-    private Integer age;
+    private final Long id;
+    private final String email;
+    private final String password;
+    private final Integer age;
 
     public static LoginMember of(Member member) {
         return new LoginMember(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
@@ -53,5 +53,10 @@ public class LoginMember implements UserDetails {
     @Override
     public boolean checkCredentials(Object credentials) {
         return this.password.equals(credentials.toString());
+    }
+
+    @Override
+    public boolean isLogin() {
+        return email != null && password != null && age > 0;
     }
 }
