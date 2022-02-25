@@ -27,7 +27,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             }
             return authentication.getPrincipal();
         }
-        return new AnonymousMember();
+        return new AnonymousMember(-1L, "anonymous", "", 20);
     }
 
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
