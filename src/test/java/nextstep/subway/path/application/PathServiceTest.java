@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,6 +107,16 @@ public class PathServiceTest {
             assertThat(response.getDuration()).isEqualTo(66);
             assertThat(response.getFare()).isEqualTo(3950);
         });
+    }
+
+    @ParameterizedTest
+    @CsvSource({"6,1500", "13,2400", "19,3350"})
+    void findPathByDistanceWithLogin(int age, int expectedFare) {
+        // when
+        PathResponse response = pathService.findPath(age, 교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+
+        // then
+        assertThat(response.getFare()).isEqualTo(expectedFare);
     }
 
 }

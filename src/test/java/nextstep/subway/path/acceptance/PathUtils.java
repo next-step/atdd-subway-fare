@@ -54,7 +54,7 @@ public class PathUtils {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stations);
             assertThat(response.jsonPath().getInt("distance")).isEqualTo(66);
             assertThat(response.jsonPath().getInt("duration")).isEqualTo(66);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(3350);
         });
     }
 
