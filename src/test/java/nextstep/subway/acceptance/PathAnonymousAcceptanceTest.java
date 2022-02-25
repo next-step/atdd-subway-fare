@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.acceptance.PathSteps.경로조회_비회원;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("지하철 경로 검색")
-class PathAcceptanceTest extends AcceptanceTest {
+@DisplayName("비회원 경로 조회")
+public class PathAnonymousAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
 
@@ -52,47 +52,43 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
 
-    @DisplayName("(회원) 두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("(비회원) 두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathByDistanceForUser() {
+    void findPathByDistanceForAnonymous() {
         //given
-        회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, 13));
-        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
         Map<String, String> 경로_조회_파라미터 = 경로_조회_파라미터_생성(교대역, 양재역, "SHORTEST_DISTANCE");
 
         // when
-        ExtractableResponse<Response> response = 경로조회_회원(accessToken, 경로_조회_파라미터);
+        ExtractableResponse<Response> response = 경로조회_비회원(경로_조회_파라미터);
 
         // then
         assertAll(
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(6),
-                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1440)
+                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(2150)
         );
     }
 
-    @DisplayName("(회원) 두 역의 최소 시간 경로를 조회")
+
+    /**
+     * 저도 해당 내용이 이상한게 해당 테스트 '만' 실행하면 성공하고 같이 실행 하면 실패하는 모습이 보이는데 테스트 간에 영향을 주고 있는 것 같은데... 이유가 확인이 안되는 것 같습니다.
+     */
+    @DisplayName("(비회원) 두 역의 최소 시간 경로를 조회")
     @Test
-    void findPathByDurationForUser() {
+    void findPathByDurationForAnonymous() {
         //given
-        회원_생성됨(회원_생성_요청(EMAIL, PASSWORD, 12));
-        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
         Map<String, String> 경로_조회_파라미터 = 경로_조회_파라미터_생성(교대역, 양재역, "MINIMUM_TIME");
 
         //when
-        ExtractableResponse<Response> response = 경로조회_회원(accessToken, 경로_조회_파라미터);
+        ExtractableResponse<Response> response = 경로조회_비회원(경로_조회_파라미터);
 
         //then
         assertAll(
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(550)
+                () -> assertThat(response.jsonPath().getInt("fee")).isEqualTo(1450)
         );
     }
-
-
-
-
 }
