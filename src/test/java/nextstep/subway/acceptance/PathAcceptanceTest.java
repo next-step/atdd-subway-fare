@@ -90,6 +90,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
 
+    /**
+     * 저도 해당 내용이 이상한게 해당 테스트 '만' 실행하면 성공하고 같이 실행 하면 실패하는 모습이 보이는데 테스트 간에 영향을 주고 있는 것 같은데... 이유가 확인이 안되는 것 같습니다.
+     */
     @DisplayName("(비회원) 두 역의 최소 시간 경로를 조회")
     @Test
     void findPathByDurationForAnonymous() {
