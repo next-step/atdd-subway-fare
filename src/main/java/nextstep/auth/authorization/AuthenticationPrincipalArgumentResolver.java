@@ -2,6 +2,7 @@ package nextstep.auth.authorization;
 
 import nextstep.auth.context.Authentication;
 import nextstep.auth.context.SecurityContextHolder;
+import nextstep.member.domain.AnonymousMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -26,7 +27,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             }
             return authentication.getPrincipal();
         }
-        return null;
+        return new AnonymousMember();
     }
 
     private Object extractPrincipal(MethodParameter parameter, Authentication authentication) {
