@@ -3,7 +3,7 @@ package nextstep.subway.path.domain;
 import java.util.Arrays;
 import java.util.function.Function;
 
-public class DistancePolicy implements FarePolicy{
+public class DistancePolicy implements FarePolicy {
 
     private final int distance;
     private final Policy policy;
