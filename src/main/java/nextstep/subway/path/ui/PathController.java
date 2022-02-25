@@ -1,5 +1,7 @@
 package nextstep.subway.path.ui;
 
+import nextstep.subway.auth.authorization.AuthenticationPrincipal;
+import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.dto.PathResponse;
@@ -17,9 +19,10 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source,
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember member,
+                                                 @RequestParam Long source,
                                                  @RequestParam Long target,
                                                  @RequestParam PathType type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+        return ResponseEntity.ok(pathService.findPath(member.getAge(), source, target, type));
     }
 }

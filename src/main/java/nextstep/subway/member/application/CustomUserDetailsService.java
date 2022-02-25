@@ -1,5 +1,6 @@
 package nextstep.subway.member.application;
 
+import nextstep.subway.auth.userdetails.UserDetails;
 import nextstep.subway.auth.userdetails.UserDetailsService;
 import nextstep.subway.member.domain.LoginMember;
 import nextstep.subway.member.domain.Member;
@@ -17,5 +18,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public LoginMember loadUserByUsername(String email) {
         Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
         return LoginMember.of(member);
+    }
+
+    @Override
+    public UserDetails getEmptyUser() {
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package nextstep.subway.path.application;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.repository.LineRepository;
+import nextstep.subway.member.domain.EmptyMember;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.domain.Station;
@@ -39,6 +40,8 @@ public class PathServiceTest {
     Station 양재역;
     Station 남부터미널역;
 
+    EmptyMember emptyMember;
+
     /**          (40km, 33min)
      * 교대역    --- *2호선* ---   강남역
      *   |                          |
@@ -66,13 +69,15 @@ public class PathServiceTest {
         Line 신분당선 = new Line("신분당선", "red", 1500);
         신분당선.addSection(강남역, 양재역, 40, 33);
         lineRepository.saveAll(Arrays.asList(이호선, 삼호선, 신분당선));
+
+        emptyMember = new EmptyMember();
     }
 
     @DisplayName("거리기준으로 최소 경로를 구한다")
     @Test
     void findPathByDistance() {
         // when
-        PathResponse response = pathService.findPath(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+        PathResponse response = pathService.findPath(emptyMember.getAge(), 교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
         assertAll(() -> {
@@ -87,7 +92,7 @@ public class PathServiceTest {
     @Test
     void findPathByDuration() {
         // when
-        PathResponse response = pathService.findPath(교대역.getId(), 양재역.getId(), PathType.DURATION);
+        PathResponse response = pathService.findPath(emptyMember.getAge(), 교대역.getId(), 양재역.getId(), PathType.DURATION);
 
         // then
         List<Long> stationIds = response.getStations()

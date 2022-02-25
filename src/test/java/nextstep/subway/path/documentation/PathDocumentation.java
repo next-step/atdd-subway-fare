@@ -22,8 +22,7 @@ import static nextstep.subway.common.DocumentationUtils.given;
 import static nextstep.subway.path.acceptance.PathUtils.두_역의_경로_조회를_요청;
 import static nextstep.subway.path.documentation.PathDocumentationUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
@@ -34,7 +33,7 @@ public class PathDocumentation extends Documentation {
     @EnumSource(PathType.class)
     void path(PathType type) {
         // given
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(getPathResponse());
+        when(pathService.findPath(anyInt(), anyLong(), anyLong(), any())).thenReturn(getPathResponse());
 
         RequestSpecification requestSpecification =
                 given(spec, "path", getRequestParameterSnippet(), getResponseFieldsSnippet());
