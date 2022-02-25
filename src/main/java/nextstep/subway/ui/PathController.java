@@ -23,6 +23,6 @@ public class PathController {
                                                  @RequestParam Long target,
                                                  @RequestParam PathType type,
                                                  @AuthenticationPrincipal(required = false) LoginMember loginMember) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type, loginMember.getAge()));
+        return ResponseEntity.ok(pathService.findPath(source, target, type, loginMember));
     }
 }
