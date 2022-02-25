@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
+
+    public static final int DEFAULT_LINE_EXTRA_CHARGE = 0;
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -172,5 +175,12 @@ public class Sections {
         return sections.stream()
                 .mapToInt(Section::getDuration)
                 .sum();
+    }
+
+    public int getLineExtraChargeMax() {
+        return this.sections.stream()
+                .mapToInt(it -> it.getLine().getExtraCharge())
+                .max()
+                .orElse(DEFAULT_LINE_EXTRA_CHARGE);
     }
 }
