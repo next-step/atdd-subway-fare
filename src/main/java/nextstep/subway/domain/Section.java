@@ -78,8 +78,8 @@ public class Section {
         return id;
     }
 
-    public Line getLine() {
-        return line;
+    public int getLineAdditionFare() {
+        return line.getAdditionFare();
     }
 
     public Station getUpStation() {
@@ -96,5 +96,9 @@ public class Section {
 
     public int getDuration() {
         return duration;
+    }
+
+    public Line getLine() {
+        return line;
     }
 }
