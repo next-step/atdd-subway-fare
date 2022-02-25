@@ -31,16 +31,16 @@ public class PathService {
 
         return PathResponse.createResponse(path, fee);
     }
- 
-    public PathResponse findPath(PathSearchRequest pathSearchRequest) {
-        Station upStation = stationService.findById(pathSearchRequest.getSource());
-        Station downStation = stationService.findById(pathSearchRequest.getTarget());
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation, pathSearchRequest.getType());
-        int additionalFee = path.extractAdditionalFee(lines);
-        int fee = feePolicy.totalFee(path.extractDistance(), additionalFee);
 
-        return PathResponse.createResponse(path, fee);
-    }
+//    public PathResponse findPath(PathSearchRequest pathSearchRequest) {
+//        Station upStation = stationService.findById(pathSearchRequest.getSource());
+//        Station downStation = stationService.findById(pathSearchRequest.getTarget());
+//        List<Line> lines = lineService.findLines();
+//        SubwayMap subwayMap = new SubwayMap(lines);
+//        Path path = subwayMap.findPath(upStation, downStation, pathSearchRequest.getType());
+//        int additionalFee = path.extractAdditionalFee(lines);
+//        int fee = feePolicy.totalFee(path.extractDistance(), additionalFee);
+//
+//        return PathResponse.createResponse(path, fee);
+//    }
 }
