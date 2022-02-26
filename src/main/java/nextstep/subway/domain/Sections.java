@@ -155,4 +155,24 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int getFare() {
+        int distance = sections.stream().mapToInt(Section::getDistance).sum();
+
+        if(distance <= 10) {
+            return 1250;
+        }
+
+        if(distance > 10 && distance <= 50) {
+            return 1250 + calculateOverFare(distance - 10);
+        }
+
+        int fare = (int) ((Math.floor((distance - 50 - 1) / 8) + 1) * 100);
+
+        return 1250 + calculateOverFare(40) + fare;
+    }
+
+    private int calculateOverFare(int distance) {
+        return (int) ((Math.floor((distance - 1) / 5) + 1) * 100);
+    }
 }

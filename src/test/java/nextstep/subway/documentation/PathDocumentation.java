@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", 1L)
             .queryParam("target", 2L)
-            .queryParams("weightType", WeightType.DURATION)
+            .queryParams("weightType", WeightType.DISTANCE)
             .when().get("/paths")
             .then().log().all().extract();
     }

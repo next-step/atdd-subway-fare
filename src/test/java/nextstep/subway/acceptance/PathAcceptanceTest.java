@@ -58,7 +58,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DURATION);
 
         // then
-        지하철_경로_역_확인(response, 교대역, 남부터미널역, 양재역);
+        지하철_경로_역_확인(response, 교대역, 강남역, 양재역);
         소요_시간_확인(response, 4);
     }
 
