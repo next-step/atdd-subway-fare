@@ -1,6 +1,5 @@
 package nextstep.subway.domain;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class Path {
@@ -23,7 +22,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return Fare.calculateAmount(extractDistance());
+        return Fare.calculateAmount(extractDistance(), sections.calculateMaxLineFare());
     }
 
     public List<Station> getStations() {

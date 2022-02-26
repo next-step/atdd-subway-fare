@@ -21,9 +21,9 @@ public enum Fare {
         this.dividend = dividend;
     }
 
-    public static int calculateAmount(int distance) {
+    public static int calculateAmount(int distance, int extraFare) {
         Fare fare = valueOfDistance(distance);
-        return fare.calculate(distance);
+        return fare.calculate(distance) + extraFare;
     }
 
     private static Fare valueOfDistance(int distance) {

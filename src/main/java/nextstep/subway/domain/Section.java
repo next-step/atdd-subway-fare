@@ -78,4 +78,8 @@ public class Section extends DefaultWeightedEdge {
     public int getWeightValue(PathType type) {
         return type == PathType.DISTANCE ? this.distance : this.duration;
     }
+
+    public int getLineFare() {
+        return line.getFare();
+    }
 }
