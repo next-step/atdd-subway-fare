@@ -49,7 +49,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         지하철_경로_역_확인(response, 교대역, 남부터미널역, 양재역);
         경로_거리_확인(response, 9);
-        // 요금_확인(response, 1250);
+        요금_확인(response, 1250);
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")

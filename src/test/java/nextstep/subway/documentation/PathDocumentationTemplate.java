@@ -24,7 +24,8 @@ public class PathDocumentationTemplate {
 				fieldWithPath("stations[].createdDate").description("역 생성 일자"),
 				fieldWithPath("stations[].modifiedDate").description("역 수정 일자"),
 				fieldWithPath("distance").description("거리(km)"),
-				fieldWithPath("duration").description("소요 시간(min)")
+				fieldWithPath("duration").description("소요 시간(min)"),
+				fieldWithPath("fare").description("요금")
 			)
 		);
 	}
