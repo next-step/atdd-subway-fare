@@ -6,6 +6,7 @@ public class LineRequest {
     private Long upStationId;
     private Long downStationId;
     private int distance;
+    private int duration;
 
     public String getName() {
         return name;
@@ -25,5 +26,13 @@ public class LineRequest {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public boolean hasSection() {
+        return upStationId != null && downStationId != null && distance != 0 && duration != 0;
     }
 }
