@@ -36,6 +36,6 @@ public class PathService {
 
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-        return new PathResponse(path.getStations(), path.pathTotalDistance(), path.pathTotalDuration(), path.fare(), 0);
+        return new PathResponse(path.getStations(), path.pathTotalDistance(), path.pathTotalDuration(), path.fare());
     }
 }

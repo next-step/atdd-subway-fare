@@ -166,7 +166,7 @@ public class Sections {
 
     int fare() {
         int maxLineAdditionFare = sections.stream()
-                .mapToInt(section -> section.getLineAdditionFare())
+                .mapToInt(Section::getLineAdditionFare)
                 .max()
                 .getAsInt();
         return maxLineAdditionFare + FareStandard.calculateOverFare(pathTotalDistance());

@@ -451,7 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /paths?source=1&amp;target=2&amp;type=DURATION HTTP/1.1
 Accept: application/json
-Host: localhost:62133</code></pre>
+Host: localhost:52309</code></pre>
 </div>
 </div>
 </div>
@@ -489,13 +489,13 @@ Host: localhost:62133</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Set-Cookie: JSESSIONID=67FB068DA896AFACFD88FEBD8452C5B6; Path=/; HttpOnly
+Set-Cookie: JSESSIONID=ECA5FF6A5507891B2241A19CFC6A46B4; Path=/; HttpOnly
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Thu, 24 Feb 2022 03:52:31 GMT
+Date: Sat, 26 Feb 2022 02:30:58 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 298
+Content-Length: 274
 
 {
   "stations" : [ {
@@ -511,8 +511,7 @@ Content-Length: 298
   } ],
   "distance" : 10,
   "duration" : 20,
-  "fare" : 1250,
-  "additionFare" : 900
+  "fare" : 1250
 }</code></pre>
 </div>
 </div>
@@ -551,22 +550,17 @@ Content-Length: 298
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최단 거리</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 거리(km)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최단 시간</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 시간(H)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">요금</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>additionFare</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">추가요금</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요금(km)</p></td>
 </tr>
 </tbody>
 </table>

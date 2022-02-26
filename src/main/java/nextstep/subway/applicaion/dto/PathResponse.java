@@ -10,16 +10,14 @@ public class PathResponse {
     private final int distance;
     private final int duration;
     private final int fare;
-    private final int additionFare;
 
-    public PathResponse(List<Station> stations, int distance, int duration, int fare, int additionFare) {
+    public PathResponse(List<Station> stations, int distance, int duration, int fare) {
         this.stations = stations.stream()
                 .map(StationResponse::createStationResponse)
                 .collect(Collectors.toList());
         this.distance = distance;
         this.duration = duration;
         this.fare = fare;
-        this.additionFare = additionFare;
     }
 
     public List<StationResponse> getStations() {
@@ -38,10 +36,6 @@ public class PathResponse {
         return fare;
     }
 
-    public int getAdditionFare() {
-        return additionFare;
-    }
-
     @Override
     public String toString() {
         return "PathResponse{" +
@@ -49,7 +43,6 @@ public class PathResponse {
                 ", distance=" + distance +
                 ", duration=" + duration +
                 ", fare=" + fare +
-                ", additionFare=" + additionFare +
                 '}';
     }
 }
