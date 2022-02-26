@@ -1,5 +1,8 @@
 package nextstep.subway.domain;
 
+import lombok.val;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Arrays;
 
 public enum Fare {
@@ -21,9 +24,9 @@ public enum Fare {
         this.dividend = dividend;
     }
 
-    public static int calculateAmount(int distance, int extraFare) {
-        Fare fare = valueOfDistance(distance);
-        return fare.calculate(distance) + extraFare;
+    public static int calculateAmount(int distance, int extraFare, Integer memberAge) {
+        val fare = valueOfDistance(distance).calculate(distance) + extraFare;
+        return DiscountPolicy.discount(memberAge, fare);
     }
 
     private static Fare valueOfDistance(int distance) {

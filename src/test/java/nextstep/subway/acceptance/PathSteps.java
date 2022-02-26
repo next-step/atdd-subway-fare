@@ -51,6 +51,17 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 두_역의_경로_조회(String user, Long source, Long target, PathType pathType) {
+        return RestAssured
+                .given().auth().oauth2(user).log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", pathType)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
     public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
