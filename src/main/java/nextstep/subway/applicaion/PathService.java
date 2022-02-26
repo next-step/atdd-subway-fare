@@ -21,16 +21,6 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation, WeightType.DISTANCE);
-
-        return PathResponse.of(path);
-    }
-
     public PathResponse findPath(Long source, Long target, WeightType weightType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);

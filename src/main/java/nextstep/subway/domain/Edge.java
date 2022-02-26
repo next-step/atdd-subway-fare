@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
 @FunctionalInterface
-public interface Weight {
+public interface Edge {
 	int getWeight(Section section);
 }

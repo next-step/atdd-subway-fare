@@ -15,7 +15,7 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target, WeightType weightType) {
-        Weight weight = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
+        Edge weight = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 
         // 그래프 만들기
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(weight);
@@ -31,7 +31,7 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Weight weight) {
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Edge weight) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         addVertex(graph);
@@ -50,7 +50,7 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Weight weight) {
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Edge weight) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())

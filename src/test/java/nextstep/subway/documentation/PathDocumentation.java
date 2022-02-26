@@ -1,17 +1,16 @@
 package nextstep.subway.documentation;
 
+import static nextstep.subway.documentation.PathDocumentationTemplate.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -32,27 +31,16 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
+        RestDocumentationFilter 경로_조회_문서 = 경로_조회_템플릿();
+
+        경로_조회(spec, 경로_조회_문서);
+    }
+
+    public static void 경로_조회(RequestSpecification spec, RestDocumentationFilter filter) {
         RestAssured
             .given(spec).log().all()
-            .filter(document("path",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestParameters(
-                    parameterWithName("source").description("출발역 아이디"),
-                    parameterWithName("target").description("도착역 아이디"),
-                    parameterWithName("weightType").description("조회 조건")
-                ),
-                responseFields(
-                    fieldWithPath("stations").description("경로 지하철역 목록"),
-                    fieldWithPath("stations[].id").description("지하철역 아이디"),
-                    fieldWithPath("stations[].name").description("지하철역 이름"),
-                    fieldWithPath("stations[].createdDate").description("역 생성 일자"),
-                    fieldWithPath("stations[].modifiedDate").description("역 수정 일자"),
-                    fieldWithPath("distance").description("거리(km)"),
-                    fieldWithPath("duration").description("소요 시간(min)")
-                )
-            ))
-            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .filter(filter)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", 1L)
             .queryParam("target", 2L)
             .queryParams("weightType", WeightType.DURATION)
