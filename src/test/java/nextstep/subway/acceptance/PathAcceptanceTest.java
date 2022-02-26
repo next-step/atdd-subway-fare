@@ -65,7 +65,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void findPathByDuration() {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
-        두_역의_최소_시간_경로_조회_응답됨(response, 교대역, 강남역, 양재역);
+        두_역의_최소_시간_경로_조회_응답됨(response, 20, 2, 교대역, 강남역, 양재역);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

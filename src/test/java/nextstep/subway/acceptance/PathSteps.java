@@ -35,10 +35,10 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 두_역의_최소_시간_경로_조회_응답됨(ExtractableResponse<Response> response, Long... stationIds) {
+    public static void 두_역의_최소_시간_경로_조회_응답됨(ExtractableResponse<Response> response, int distance, int duration, Long... stationIds) {
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(2);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
     }
 }
