@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회;
@@ -29,18 +27,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
     private Long GTX;
 
-    /**
-     *                         (10km, 2분)
+    /** (거리, 시간, 추가요금)
+     *                         (10km, 2분, 100원)
      *              교대역    --- *2호선* ---    강남역
      *               |                           |
-     * (2km, 9분)  *3호선*                     *신분당선* (10km, 3분)
+     * (2km, 9분)  *3호선*                     *신분당선* (10km, 3분, 900원)
      *               |                           |
      *             남부터미널역 --- *3호선* ---    양재
      *                         (3km, 8분)
      *
      *
      *             연신내역 --- *GTX* ---    서울역
-     *                         (50km, 39분)
+ *                             (50km, 39분)
      */
     @BeforeEach
     public void setUp() {
@@ -53,8 +51,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         연신내역 = 지하철역_생성_요청("연신내역").jsonPath().getLong("id");
         서울역 = 지하철역_생성_요청("서울역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2, 100);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3, 900);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 9);
         GTX = 지하철_노선_생성_요청("GTX", "pupple", 연신내역, 서울역, 58, 30);
 
