@@ -3,12 +3,12 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
+    private static final BigDecimal DEFAULT_ADDITIONAL_FARE = BigDecimal.ZERO;
     /**
      * When 지하철 노선 생성을 요청 하면
      * Then 지하철 노선 생성이 성공한다.
@@ -26,7 +27,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green");
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -42,8 +43,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        지하철_노선_생성_요청("2호선", "green");
-        지하철_노선_생성_요청("3호선", "orange");
+        지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
+        지하철_노선_생성_요청("3호선", "orange", DEFAULT_ADDITIONAL_FARE);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
@@ -64,7 +65,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
@@ -85,7 +86,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
 
         // when
         Map<String, String> params = new HashMap<>();
@@ -110,7 +111,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
 
         // when
         ExtractableResponse<Response> response = RestAssured
@@ -131,10 +132,10 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void duplicateName() {
         // given
-        지하철_노선_생성_요청("2호선", "green");
+        지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
 
         // when
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DEFAULT_ADDITIONAL_FARE);
 
         // then
         assertThat(createResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -73,5 +74,9 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    public BigDecimal getAdditionalFare() {
+        return line.getAdditionalFare();
     }
 }

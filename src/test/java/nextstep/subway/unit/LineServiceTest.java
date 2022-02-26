@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class LineServiceTest {
+class LineServiceTest extends LineFixture{
     @Autowired
     private StationRepository stationRepository;
     @Autowired
@@ -39,7 +39,7 @@ class LineServiceTest {
     }
 
     private Line createLine(Station 강남역, Station 역삼역) {
-        Line line = new Line("2호선", "green");
+        Line line = super.createLine("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 5);
         return line;
     }

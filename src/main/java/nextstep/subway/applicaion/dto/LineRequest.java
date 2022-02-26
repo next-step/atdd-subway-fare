@@ -1,5 +1,7 @@
 package nextstep.subway.applicaion.dto;
 
+import java.math.BigDecimal;
+
 public class LineRequest {
     private String name;
     private String color;
@@ -7,6 +9,7 @@ public class LineRequest {
     private Long downStationId;
     private int distance;
     private int duration;
+    private BigDecimal additionalFare;
 
     public String getName() {
         return name;
@@ -30,5 +33,9 @@ public class LineRequest {
 
     public int getDuration() {
         return duration;
+    }
+
+    public BigDecimal getAdditionalFare() {
+        return additionalFare;
     }
 }

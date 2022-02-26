@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -11,6 +12,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private BigDecimal additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -18,9 +20,10 @@ public class Line extends BaseEntity {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, BigDecimal additionalFare) {
         this.name = name;
         this.color = color;
+        this.additionalFare = additionalFare;
     }
 
     public Long getId() {
@@ -37,6 +40,10 @@ public class Line extends BaseEntity {
 
     public List<Section> getSections() {
         return sections.getSections();
+    }
+
+    public BigDecimal getAdditionalFare() {
+        return additionalFare;
     }
 
     public void update(String name, String color) {

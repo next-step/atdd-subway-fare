@@ -2,6 +2,7 @@ package nextstep.subway.applicaion.dto;
 
 import nextstep.subway.domain.Line;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
+    private BigDecimal additionalFare;
     private List<StationResponse> stations;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

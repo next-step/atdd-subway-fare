@@ -7,7 +7,7 @@ import nextstep.auth.userdetails.UserDetails;
 import nextstep.auth.userdetails.UserDetailsService;
 
 public class AuthenticationProvider implements AuthenticationManager {
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public AuthenticationProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;

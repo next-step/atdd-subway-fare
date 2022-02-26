@@ -3,10 +3,8 @@ package nextstep.subway.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -162,5 +160,12 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public BigDecimal getMaxAdditionalFare() {
+        return this.sections.stream()
+                .map(Section::getAdditionalFare)
+                .max(Comparator.naturalOrder())
+                .orElse(BigDecimal.ZERO);
     }
 }

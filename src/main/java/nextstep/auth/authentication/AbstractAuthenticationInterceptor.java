@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public abstract class AbstractAuthenticationInterceptor implements HandlerInterceptor {
-    private AuthenticationSuccessHandler successHandler;
-    private AuthenticationFailureHandler failureHandler;
+    private final AuthenticationSuccessHandler successHandler;
+    private final AuthenticationFailureHandler failureHandler;
 
     protected AbstractAuthenticationInterceptor(AuthenticationSuccessHandler successHandler, AuthenticationFailureHandler failureHandler) {
         this.successHandler = successHandler;
