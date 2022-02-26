@@ -34,11 +34,15 @@ public class PathDocumentation extends Documentation {
                 1250
         );
 
-        when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
+        when(pathService.findPath(1L, 2L, PathType.DISTANCE, 0)).thenReturn(pathResponse);
 
-        RequestSpecification path = spec.filter(document("path",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint())));
+        RequestSpecification path = spec.filter(
+                document(
+                        "path",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                )
+        );
         경로_조회_요청(path);
     }
 }

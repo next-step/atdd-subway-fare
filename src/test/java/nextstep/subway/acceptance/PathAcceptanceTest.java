@@ -7,6 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성됨;
 import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
@@ -26,6 +29,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
     private Long GTX;
+
+    public static final String CHILD_EMAIL = "email1@email.com";
+    public static final String YOUTH_EMAIL = "email2@email.com";
+
+    public static final String PASSWORD = "password";
+
+    private String 어린이사용자;
+    private String 청소년사용자;
 
     /** (거리, 시간, 추가요금)
      *                         (10km, 2분, 100원)
@@ -57,6 +68,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         GTX = 지하철_노선_생성_요청("GTX", "pupple", 연신내역, 서울역, 58, 30);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 8));
+
+        회원_생성됨(회원_생성_요청(CHILD_EMAIL, PASSWORD, 6));
+        회원_생성됨(회원_생성_요청(YOUTH_EMAIL, PASSWORD, 13));
+
+        어린이사용자 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+        청소년사용자 = 로그인_되어_있음(YOUTH_EMAIL, PASSWORD);
     }
 
     /**
@@ -73,6 +90,38 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(17);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+    }
+
+    /**
+     * @see nextstep.subway.ui.PathController#findPath
+     */
+    @DisplayName("두_역의_최단_거리_경로_조회_어린이")
+    @Test
+    void findPathByDistanceWithChild() {
+        // when
+        val response = 두_역의_경로_조회(어린이사용자, 교대역, 양재역, PathType.DISTANCE);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(17);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
+    }
+
+    /**
+     * @see nextstep.subway.ui.PathController#findPath
+     */
+    @DisplayName("두_역의_최단_거리_경로_조회_청소년")
+    @Test
+    void findPathByDistanceWithYouth() {
+        // when
+        val response = 두_역의_경로_조회(청소년사용자, 교대역, 양재역, PathType.DISTANCE);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(17);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1070);
     }
 
     /**
