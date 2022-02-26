@@ -6,4 +6,10 @@
 :toclevels: 2
 :sectlinks:
 
-include::path.adoc[]
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+:baseDir: {docdir}/src/docs/asciidoc
+
+include::{baseDir}/path.adoc[]
