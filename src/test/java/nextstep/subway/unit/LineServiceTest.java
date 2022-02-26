@@ -29,7 +29,7 @@ class LineServiceTest {
         Station 강남역 = stationRepository.save(new Station("강남역"));
         Station 역삼역 = stationRepository.save(new Station("역삼역"));
         Station 삼성역 = stationRepository.save(new Station("삼성역"));
-        Line 이호선 = lineRepository.save(createLine(강남역, 역삼역));
+        Line 이호선 = lineRepository.save(createLine(강남역, 역삼역, 0));
 
         lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 삼성역.getId(), 10));
 
@@ -38,8 +38,8 @@ class LineServiceTest {
         assertThat(line.getSections().size()).isEqualTo(2);
     }
 
-    private Line createLine(Station 강남역, Station 역삼역) {
-        Line line = new Line("2호선", "green");
+    private Line createLine(Station 강남역, Station 역삼역, int fare) {
+        Line line = new Line("2호선", "green", fare);
         line.addSection(강남역, 역삼역, 10, 6);
         return line;
     }
