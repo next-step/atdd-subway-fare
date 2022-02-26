@@ -1,6 +1,9 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.FareAge;
+import nextstep.subway.domain.FareAgeEnum;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Path;
@@ -26,7 +29,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
         if (source.equals(target)) {
             throw new PathException(SAME_STATION.getMsg());
         }
@@ -34,8 +37,12 @@ public class PathService {
         Station sourceStation = stationService.findById(source);
         Station targetStation = stationService.findById(target);
 
+        // 두 개 중 고민...
+//        FareAge fareAge = FareAge.valueOf(loginMember.getAge());
+        FareAgeEnum fareAge = FareAgeEnum.valueOf(loginMember.getAge());
+
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-        return new PathResponse(path.getStations(), path.pathTotalDistance(), path.pathTotalDuration(), path.fare());
+        return new PathResponse(path.getStations(), path.pathTotalDistance(), path.pathTotalDuration(), fareAge.getFareAge(path.fare()));
     }
 }

@@ -1,5 +1,7 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.PathType;
@@ -20,10 +22,11 @@ public class PathController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PathResponse> getPath(@RequestParam Long source,
+    public ResponseEntity<PathResponse> getPath(@AuthenticationPrincipal(required = false) LoginMember loginMember,
+                                                @RequestParam Long source,
                                                 @RequestParam Long target,
                                                 @RequestParam PathType type) {
-        PathResponse response = pathService.findPath(source, target, type);
+        PathResponse response = pathService.findPath(source, target, type, loginMember);
         return ResponseEntity.ok().body(response);
     }
 }

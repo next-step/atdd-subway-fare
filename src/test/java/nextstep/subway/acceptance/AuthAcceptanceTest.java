@@ -5,6 +5,9 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.subway.acceptance.MemberSteps.AGE;
+import static nextstep.subway.acceptance.MemberSteps.EMAIL;
+import static nextstep.subway.acceptance.MemberSteps.PASSWORD;
 import static nextstep.subway.acceptance.MemberSteps.내_회원_정보_조회_요청;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
@@ -12,10 +15,6 @@ import static nextstep.subway.acceptance.MemberSteps.회원_정보_조회됨;
 
 
 class AuthAcceptanceTest extends AcceptanceTest {
-    private static final String EMAIL = "email@email.com";
-    private static final String PASSWORD = "password";
-    private static final Integer AGE = 20;
-
     @DisplayName("Session 로그인 후 내 정보 조회")
     @Test
     void myInfoWithSession() {

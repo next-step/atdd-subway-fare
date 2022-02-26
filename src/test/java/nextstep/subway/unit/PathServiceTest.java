@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.NullLoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -82,7 +83,7 @@ class PathServiceTest {
         when(stationService.findById(양재역_ID)).thenReturn(양재역);
 
         // when
-        PathResponse path = pathService.findPath(교대역_ID, 양재역_ID, PathType.DISTANCE);
+        PathResponse path = pathService.findPath(교대역_ID, 양재역_ID, PathType.DISTANCE, NullLoginMember.getInstance());
 
         // then
         assertThat(path.getStations()).containsExactly(

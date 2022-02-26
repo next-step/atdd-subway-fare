@@ -33,7 +33,7 @@ class PathDocumentation extends Documentation {
                 ), 10, 20, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, PathType.DURATION);
     }

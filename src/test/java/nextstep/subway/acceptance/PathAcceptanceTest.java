@@ -16,6 +16,10 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.EMAIL;
+import static nextstep.subway.acceptance.MemberSteps.PASSWORD;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -157,33 +161,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(duration).isEqualTo(5);
     }
 
-    private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", name);
-        lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", String.valueOf(upStationId));
-        lineCreateParams.put("downStationId", String.valueOf(downStationId));
-        lineCreateParams.put("distance", String.valueOf(distance));
-        lineCreateParams.put("duration", String.valueOf(duration));
-        return lineCreateParams;
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", String.valueOf(upStationId));
-        params.put("downStationId", String.valueOf(downStationId));
-        params.put("distance", String.valueOf(distance));
-        params.put("duration", String.valueOf(duration));
-        return params;
-    }
-
-    private RequestSpecification given() {
-        return RestAssured.given().log().all();
-    }
-
-    /******* 개발 진행 중 *******/
-
     /**
      * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
      * Then 최단 거리 경로 응답
@@ -234,5 +211,68 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(distance).isEqualTo(20);
         assertThat(duration).isEqualTo(5);
         assertThat(fare).isEqualTo(1450);
+    }
+
+    /**
+     * Given 청소년 로그인되어 있음.
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답(청소년 할인된 요금)
+     */
+    @DisplayName("로그인한 사용자 경로 조회 - 청소년은 350원 공제 후 20% 할인")
+    @Test
+    void getPathLoginTeenager() {
+        // given
+        int teenagerAge = 18;
+        회원_생성_요청(EMAIL, PASSWORD, teenagerAge);
+
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.givenLogin(accessToken), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
+        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
+
+        int distance = response.jsonPath().getInt("distance");
+        int duration = response.jsonPath().getInt("duration");
+        int fare = response.jsonPath().getInt("fare");
+        assertThat(distance).isEqualTo(20);
+        assertThat(duration).isEqualTo(5);
+        assertThat(fare).isEqualTo(880);
+    }
+
+    private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, String> lineCreateParams;
+        lineCreateParams = new HashMap<>();
+        lineCreateParams.put("name", name);
+        lineCreateParams.put("color", color);
+        lineCreateParams.put("upStationId", String.valueOf(upStationId));
+        lineCreateParams.put("downStationId", String.valueOf(downStationId));
+        lineCreateParams.put("distance", String.valueOf(distance));
+        lineCreateParams.put("duration", String.valueOf(duration));
+        return lineCreateParams;
+    }
+
+    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", String.valueOf(upStationId));
+        params.put("downStationId", String.valueOf(downStationId));
+        params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
+        return params;
+    }
+
+    private RequestSpecification given() {
+        return RestAssured.given().log().all();
+    }
+
+    private RequestSpecification givenLogin(String accessToken) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken);
     }
 }
