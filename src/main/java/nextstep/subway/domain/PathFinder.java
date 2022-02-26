@@ -13,12 +13,20 @@ import static nextstep.subway.ui.exception.ExceptionMessage.NOT_EXISTS_STATIONS_
 import static nextstep.subway.ui.exception.ExceptionMessage.NO_CONNECTION_START_AND_END_STATION;
 
 public class PathFinder {
-    public Path shortsPath(List<Line> lines, Station source, Station target, PathType type) {
-        return new Path(shortsPathSections(lines, source, target, type));
+    private final Lines lines;
+    private final PathType type;
+
+    public PathFinder(List<Line> lines, PathType type) {
+        this.lines = new Lines(lines);
+        this.type = type;
     }
 
-    private List<Section> shortsPathSections(List<Line> lines, Station source, Station target, PathType type) {
-        GraphPath<Station, SectionEdge> path = getPath(lines, source, target, type);
+    public Path shortsPath(Station source, Station target) {
+        return new Path(shortsPathSections(source, target), shortsPathStations(source, target));
+    }
+
+    private List<Section> shortsPathSections(Station source, Station target) {
+        GraphPath<Station, SectionEdge> path = getPath(source, target);
         if (path == null) {
             throw new PathException(NO_CONNECTION_START_AND_END_STATION.getMsg());
         }
@@ -27,23 +35,29 @@ public class PathFinder {
                 .collect(Collectors.toList());
     }
 
-    private GraphPath<Station, SectionEdge> getPath(List<Line> lines, Station source, Station target, PathType type) {
+    private List<Station> shortsPathStations(Station source, Station target) {
+        GraphPath<Station, SectionEdge> path = getPath(source, target);
+        if (path == null) {
+            throw new PathException(NO_CONNECTION_START_AND_END_STATION.getMsg());
+        }
+        return path.getVertexList();
+    }
+
+    private GraphPath<Station, SectionEdge> getPath(Station source, Station target) {
         try {
-            return createDijkstraShortestPath(lines, type).getPath(source, target);
+            return createDijkstraShortestPath().getPath(source, target);
         } catch (IllegalArgumentException e) {
             throw new PathException(NOT_EXISTS_STATIONS_IN_LINE.getMsg());
         }
     }
 
-    private DijkstraShortestPath<Station, SectionEdge> createDijkstraShortestPath(List<Line> lines, PathType type) {
-        Lines lineGroup = new Lines(lines);
-        Set<Station> stations = lineGroup.getStations();
-        List<Section> sections = lineGroup.getSections();
+    private DijkstraShortestPath<Station, SectionEdge> createDijkstraShortestPath() {
+        Set<Station> stations = lines.getStations();
+        List<Section> sections = lines.getSections();
 
         WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
         addVertex(stations, graph);
-//        setEdgeWeight(sections, graph, type);
-        setEdgeWeight11(sections, graph, type);
+        setEdgeWeight(sections, graph);
 
         return new DijkstraShortestPath<>(graph);
     }
@@ -54,19 +68,9 @@ public class PathFinder {
         }
     }
 
-    private void setEdgeWeight(List<Section> sections, WeightedMultigraph<Station, SectionEdge> graph, PathType type) {
+    private void setEdgeWeight(List<Section> sections, WeightedMultigraph<Station, SectionEdge> graph) {
         for (Section section : sections) {
             SectionEdge sectionEdge = SectionEdge.valueOf(section);
-            graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-            graph.setEdgeWeight(sectionEdge, type.weight(sectionEdge));
-        }
-    }
-
-    private void setEdgeWeight11(List<Section> sections, WeightedMultigraph<Station, SectionEdge> graph, PathType type) {
-        for (Section section : sections) {
-            SectionEdge sectionEdge = SectionEdge.valueOf(
-                    new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration())
-            );
             graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
             graph.setEdgeWeight(sectionEdge, type.weight(sectionEdge));
         }

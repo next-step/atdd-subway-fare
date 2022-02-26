@@ -9,6 +9,7 @@ import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.ui.exception.PathException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -77,10 +78,10 @@ class PathFinderTest {
     @Test
     void getShortsPathDistance() {
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DISTANCE);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 강남역, PathType.DISTANCE);
+        Path path = pathFinder.shortsPath(교대역, 강남역);
 
         // then
         List<Station> stations = path.getStations();
@@ -95,10 +96,10 @@ class PathFinderTest {
     void getShortsPathDuration() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 양재역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
         List<Station> stations = path.getStations();
@@ -112,11 +113,11 @@ class PathFinderTest {
     void notExistsStationInLine() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
         Station 노선에_없는_역 = new Station("가양역");
 
         // when
-        assertThatThrownBy(() -> pathFinder.shortsPath(lines, 교대역, 노선에_없는_역, PathType.DURATION))
+        assertThatThrownBy(() -> pathFinder.shortsPath(교대역, 노선에_없는_역))
                 // then
                 .isInstanceOf(PathException.class)
                 .hasMessage("노선에 등록되지 않은 역입니다.");
@@ -127,10 +128,10 @@ class PathFinderTest {
     void getShortsPathDurationDugi() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 양재역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
         List<Station> stations = path.getStations();
@@ -145,10 +146,10 @@ class PathFinderTest {
     void getShortsPathDurationDugi22() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 강남역, 역삼역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(강남역, 역삼역);
 
         // then
         List<Station> stations = path.getStations();
@@ -163,10 +164,10 @@ class PathFinderTest {
     void getShortsPathDurationDugi222() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 양재역, 매봉역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(양재역, 매봉역);
 
         // then
         List<Station> stations = path.getStations();
@@ -184,10 +185,10 @@ class PathFinderTest {
     void getShortsPathAdditionFare() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 양재역, 매봉역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(양재역, 매봉역);
 
         // then
         List<Station> stations = path.getStations();
@@ -202,16 +203,16 @@ class PathFinderTest {
     void getShortsPathAdditionFareTransfer() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DISTANCE);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 강남역, 남부터미널역, PathType.DISTANCE);
+        Path path = pathFinder.shortsPath(강남역, 남부터미널역);
 
         // then
         List<Station> stations = path.getStations();
         assertThat(stations).containsExactly(강남역, 교대역, 남부터미널역);
         assertThat(path.pathTotalDistance()).isEqualTo(12);
         assertThat(path.pathTotalDuration()).isEqualTo(13);
-        assertThat(path.fare()).isEqualTo(3250);
+        assertThat(path.fare()).isEqualTo(2_350);
     }
 }
