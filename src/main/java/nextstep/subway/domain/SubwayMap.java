@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@Scope("prototype")
 public class SubwayMap {
     private List<Line> lines;
 
