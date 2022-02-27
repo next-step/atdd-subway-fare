@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,9 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target, WeightType weightType) {
-        Optional.ofNullable(lines).orElseThrow(RuntimeException::new);
+        if(Objects.isNull(lines)) {
+            throw new NullPointerException();
+        }
 
         Edge edge = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 
