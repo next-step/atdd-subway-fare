@@ -22,22 +22,18 @@ public class LoginMember implements UserDetails {
         this.age = age;
     }
 
-    @Override
     public Long getId() {
         return id;
     }
 
-    @Override
     public Integer getAge() {
         return age;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }

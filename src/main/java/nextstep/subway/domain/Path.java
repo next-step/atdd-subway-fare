@@ -10,17 +10,23 @@ public class Path {
     private Sections sections;
     private int fareDistance;
     private FarePolicy farePolicy = new FarePolicy();
+    private String arrivalTime;
 
     protected Path() {
     }
 
-    private Path(Sections sections, int fareDistance) {
+    private Path(Sections sections, int fareDistance, String arrivalTime) {
         this.sections = sections;
         this.fareDistance = fareDistance;
+        this.arrivalTime = arrivalTime;
     }
 
     public static Path of(Sections sections, int fareDistance) {
-        return new Path(sections, fareDistance);
+        return new Path(sections, fareDistance, "");
+    }
+
+    public static Path of(Sections sections, int fareDistance, String arrivalTime) {
+        return new Path(sections, fareDistance, arrivalTime);
     }
 
     public Sections getSections() {
@@ -52,5 +58,9 @@ public class Path {
             .appendPolicy(new OverFarePolicy(fareDistance))
             .appendPolicy(new MaxLineFarePolicy(sections))
             .appendPolicy(new DiscountFarePolicy(age));
+    }
+
+    public String extractArrivalTime() {
+        return arrivalTime;
     }
 }

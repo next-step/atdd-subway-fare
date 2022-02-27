@@ -35,25 +35,61 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
     private String invalidToken = "invalidToken";
+    private final String time = "202202200600";
+    private final int 이호선노선요금 = 900;
+    private final int 신분당선노선요금 = 2000;
+    private final int 삼호선노선요금 = 1100;
 
     /**
      * 교대역    --- *2호선*  ---    강남역  ---  *2호선*  --- 삼성역
      *  |      거리:8, 시간:3        |       거리:8, 시간 3
      *  |                          |
      * *3호선*                   *신분당선*
-      거리:6, 시간:5             거리:8, 시간:3
+      거리:6, 시간:5             거리:9, 시간:2
         |                          |
      *  |                          |
      * 남부터미널역  --- *3호선* ---  양재역 ---  *3호선*  ---  대치역
      *           거리:6, 시간:5             거리: 2, 시간 5
      *
      * 2호선: 추가요금 900원
+     *      첫차시간 05:00
+     *      막차시간 23:30
+     *      운행간격 10분
      * 3호선: 추가요금 1100원
+     *      첫차시간 05:30
+     *      막차시간 23:00
+     *      운행간격 5분
      * 신분당선: 추가요금 2000원
-     *
+     *      첫차시간 05:20
+     *      막차시간 23:40
+     *      운행간격 20분
      * 청소년(13세 이상~19세 미만): 운임에서 350원 공제 후 20% 할인
      * 어린이(6세 이상~ 13세 미만): 운임에서 350원 공제 후 50% 할인
      *
+     * *********************************************************************
+     * **강남역에서~ 남부터미널역으로 06:00(202202200600) 출발해서 갈 경우**
+     * 최단시간(운행시간고려):
+     * 1. 강남역-양재역-남부터미널역  **(운행시간고려 최단시간 도착)**
+     *      강남역에서 06:00 탑승
+     *      양재역에서 06:02 하차
+     *      양재역에서 06:05 탑승
+     *      남부터미널역에서 06:10 하차 (도착) 202202200610
+     * 2. 강남역-교대역-남부터미널역
+     *      강남역에서 06:03 탑승
+     *      교대역에서 06:06 하차
+     *      교대역에서 06:10 탑승
+     *      남부터미널역에서 06:15 하차 (도착) 202202200615
+     * 요금(1. 기준): 1250(기본요금) + 100(추가요금) + 2000(신분당선, 경유노선최대요금)
+     *      일반: 3350원
+     *      청소년: 2400원
+     *      어린이: 1500원
+     *
+     * 최단거리: 강남역-교대역-남부터미널역 (14km)
+     * 요금: 1250(기본요금) + 100(추가요금) + 1100(3호선, 경유노선최대요금)
+     *      일반: 2450원
+     *      청소년: 1680원
+     *      어린이: 1050원
+     ***********************************************************************
      * **교대역에서~ 양재역으로 갈 경우**
      * 최단거리: 교대역-남부터미널역-양재역     (거리 합: 12, 소요시간: 10, 요금: 1350+1100 = 2450원)
      *      일반: 2450원
@@ -88,16 +124,19 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         대치역 = 지하철역_생성_요청("대치역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 8, 3, 900);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 8, 3, 2000);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 6, 5, 1100);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 8, 3
+            , 이호선노선요금, "0530", "2330", 10);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 9, 2
+            , 신분당선노선요금, "0520", "2300", 20);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 6, 5
+            , 삼호선노선요금, "0530", "2340", 5);
 
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 삼성역, 8, 3));
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 6, 5));
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(양재역, 대치역, 2, 5));
     }
 
-    @DisplayName("로그인한 성인 유저가 두 역의 최소시간 경로를 조회한다.")
+    @DisplayName("로그인한 성인 유저가 두 역의 최소시간 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인한_성인_유저가_두_역의_최소시간_경로를_조회한다() {
         // given
@@ -105,16 +144,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 강남역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 16, 6, 3350)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 양재역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 15, 7, 3350, "202202200610")
         );
     }
 
-    @DisplayName("로그인한 성인 유저가 두 역의 최단거리 경로를 조회한다.")
+    @DisplayName("로그인한 성인 유저가 두 역의 최단거리 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인한_성인_유저가_두_역의_최단거리_경로를_조회한다() {
         // given
@@ -122,42 +161,42 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 12, 10, 2450)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 교대역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 14, 8, 2450, "202202200615")
         );
     }
 
-    @DisplayName("로그인 하지 않은 유저가 두 역의 최소시간 경로를 조회한다.")
+    @DisplayName("로그인 하지 않은 유저가 두 역의 최소시간 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인_하지_않은_유저가_두_역의_최소시간_경로를_조회한다() {
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(invalidToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(invalidToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 강남역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 16, 6, 3350)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 양재역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 15, 7, 3350, "202202200610")
         );
     }
 
-    @DisplayName("로그인 하지 않은 유저가 두 역의 최단거리 경로를 조회한다.")
+    @DisplayName("로그인 하지 않은 유저가 두 역의 최단거리 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인_하지_않은_유저가_두_역의_최단거리_경로를_조회한다() {
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(invalidToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(invalidToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 12, 10, 2450)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 교대역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 14, 8, 2450, "202202200615")
         );
     }
 
-    @DisplayName("로그인한 청소년 유저가 두 역의 최소시간 경로를 조회한다.")
+    @DisplayName("로그인한 청소년 유저가 두 역의 최소시간 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인한_청소년_유저가_두_역의_최소시간_경로를_조회한다() {
         // given
@@ -165,16 +204,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 강남역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 16, 6, 2400)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 양재역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 15, 7, 2400, "202202200610")
         );
     }
 
-    @DisplayName("로그인한 청소년 유저가 두 역의 최단거리 경로를 조회한다.")
+    @DisplayName("로그인한 청소년 유저가 두 역의 최단거리 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인한_청소년_유저가_두_역의_최단거리_경로를_조회한다() {
         // given
@@ -182,16 +221,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 12, 10, 1680)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 교대역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 14, 8, 1680, "202202200615")
         );
     }
 
-    @DisplayName("로그인한 어린이 유저가 두 역의 최소시간 경로를 조회한다.")
+    @DisplayName("로그인한 어린이 유저가 두 역의 최소시간 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인한_어린이_유저가_두_역의_최소시간_경로를_조회한다() {
         // given
@@ -199,16 +238,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최소_시간_경로_조회를_요청(accessToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 강남역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 16, 6, 1500)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 양재역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 15, 7, 1500, "202202200610")
         );
     }
 
-    @DisplayName("로그인한 어린이 유저가 두 역의 최단거리 경로를 조회한다.")
+    @DisplayName("로그인한 어린이 유저가 두 역의 최단거리 경로를 조회한다. (강남역에서~ 남부터미널역으로 06:00(202202200600) 출발)")
     @Test
     void 로그인한_어린이_유저가_두_역의_최단거리_경로를_조회한다() {
         // given
@@ -216,12 +255,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+        ExtractableResponse<Response> response = 유저가_두_역의_최단_거리_경로_조회를_요청(accessToken, 강남역, 남부터미널역, time);
 
         // then
         assertAll(
-            () -> 경로조회의_결과_경로가_예상과_같다(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로조회의_결과_정보가_예상과_같다(response, 12, 10, 1050)
+            () -> 경로조회의_결과_경로가_예상과_같다(response, 강남역, 교대역, 남부터미널역),
+            () -> 경로조회의_결과_정보가_예상과_같다(response, 14, 8, 1050, "202202200615")
         );
     }
 }

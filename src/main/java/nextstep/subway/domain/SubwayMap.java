@@ -1,75 +1,63 @@
 package nextstep.subway.domain;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SubwayMap {
-    private List<Line> lines;
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
 
-    public SubwayMap(List<Line> lines) {
-        this.lines = lines;
+    public SubwayMap() {
     }
 
-    public Path findPath(Station source, Station target, PathType pathType) {
-        GraphPath<Station, SectionEdge> result = getMinDistancePath(source, target);
-        int fareDistance = result.getEdgeList().stream()
-            .mapToInt(value -> value.getSection().getDistance())
-            .sum();
+    public void createSubwayMapGraph(List<Line> lines) {
+        if (graph == null) {
+            this.graph = createGraph(lines);
+        }
+    }
 
-        if (pathType.equals(PathType.DURATION)) {
-            result = getMinDurationPath(source, target);
+    public Path findPath(Station source, Station target, PathType pathType, String startTimeString) {
+        AllKShortestPaths paths = findAllKShortestPaths(source, target);
+
+        ShortestPaths shortestPaths = paths.getShortestPathsFrom(startTimeString);
+
+        if (isSearchingShortestDistancePath(pathType)) {
+            return Path.of(new Sections(shortestPaths.getShortestDistanceSections())
+                , shortestPaths.getShortestDistance(), shortestPaths.getShortestDistanceArrivalTime());
         }
 
-        List<Section> sections = getSectionListFromGraphPath(result);
-
-        return Path.of(new Sections(sections), fareDistance);
+        return Path.of(new Sections(shortestPaths.getShortestDurationSections())
+            , shortestPaths.getShortestDistance(), shortestPaths.getShortestDurationArrivalTime());
     }
 
-    private GraphPath<Station, SectionEdge> getMinDistancePath(Station source, Station target) {
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
-            = new DijkstraShortestPath<>(createGraph(PathType.DISTANCE));
-        return dijkstraShortestPath.getPath(source, target);
+    private boolean isSearchingShortestDistancePath(PathType pathType) {
+        return pathType.equals(PathType.DISTANCE);
     }
 
-    private GraphPath<Station, SectionEdge> getMinDurationPath(Station source, Station target) {
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
-            = new DijkstraShortestPath<>(createGraph(PathType.DURATION));
-        return dijkstraShortestPath.getPath(source, target);
+    protected AllKShortestPaths findAllKShortestPaths(Station source, Station target) {
+        return new AllKShortestPaths(new KShortestPaths(graph, 100), source, target);
     }
 
-    private List<Section> getSectionListFromGraphPath(GraphPath<Station, SectionEdge> graphPath) {
-        return graphPath.getEdgeList().stream()
-            .map(SectionEdge::getSection)
-            .collect(Collectors.toList());
-    }
-
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(PathType pathType) {
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(List<Line> lines) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph
             = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        addVertex(graph);
-        addWeights(graph, pathType);
+        addVertex(graph, lines);
+        addWeights(graph, lines);
 
         return graph;
     }
 
-    private void addWeights(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathType pathType) {
-        if (pathType.equals(PathType.DISTANCE)) {
-            addEdgeDistanceWeight(graph);
-            addOppositeEdgeDistanceWeight(graph);
-            return;
-        }
-
-        addEdgeDurationWeight(graph);
-        addOppositeEdgeDurationWeight(graph);
+    private void addWeights(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, List<Line> lines) {
+        addEdgeDistanceWeight(graph, lines);
+        addOppositeEdgeDistanceWeight(graph, lines);
     }
 
 
-    private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, List<Line> lines) {
         // 지하철 역(정점)을 등록
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
@@ -78,7 +66,7 @@ public class SubwayMap {
                 .forEach(graph::addVertex);
     }
 
-    private void addEdgeDistanceWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addEdgeDistanceWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, List<Line> lines) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -89,7 +77,7 @@ public class SubwayMap {
                 });
     }
 
-    private void addOppositeEdgeDistanceWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addOppositeEdgeDistanceWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, List<Line> lines) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -104,35 +92,6 @@ public class SubwayMap {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
-    }
-
-    private void addEdgeDurationWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDuration());
-                });
-    }
-
-    private void addOppositeEdgeDurationWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(
-                    it.getLine(),
-                    it.getDownStation(),
-                    it.getUpStation(),
-                    it.getDistance(),
-                    it.getDuration()
-                ))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDuration());
                 });
     }
 }

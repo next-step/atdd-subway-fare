@@ -14,19 +14,22 @@ import org.springframework.stereotype.Service;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
+    private final SubwayMap subwayMap;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService,
+        StationService stationService, SubwayMap subwayMap) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType pathType) {
+    public PathResponse findPath(LoginMember loginMember, Long source, Long target, PathType pathType, String time) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation, pathType);
+        subwayMap.createSubwayMapGraph(lines);
+        Path path = subwayMap.findPath(upStation, downStation, pathType, time);
 
         path.farePolicySetting(loginMember.getAge());
 

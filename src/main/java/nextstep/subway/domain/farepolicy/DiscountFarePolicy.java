@@ -1,8 +1,11 @@
 package nextstep.subway.domain.farepolicy;
 
-import java.util.function.Supplier;
-
 public class DiscountFarePolicy implements Policy {
+
+    private static final int AGE_CHILD_MIN = 6;
+    private static final int AGE_YOUTH_MIN = 13;
+    private static final int AGE_ADULT_MIN = 19;
+    private static final int DEDUCTION_FARE = 350;
 
     private final int age;
 
@@ -10,13 +13,9 @@ public class DiscountFarePolicy implements Policy {
         this.age = age;
     }
 
-    Supplier<Integer> expression;
-
     @Override
     public int calculate(int fare) {
-        expression = () -> (discountFareByAge(fare, this.age));
-
-        return expression.get();
+        return discountFareByAge(fare, this.age);
     }
 
     private int discountFareByAge(int fare, int age) {

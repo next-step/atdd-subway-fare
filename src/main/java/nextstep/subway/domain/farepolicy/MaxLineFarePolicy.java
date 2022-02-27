@@ -1,6 +1,5 @@
 package nextstep.subway.domain.farepolicy;
 
-import java.util.function.Supplier;
 import nextstep.subway.domain.Sections;
 
 public class MaxLineFarePolicy implements Policy{
@@ -11,13 +10,9 @@ public class MaxLineFarePolicy implements Policy{
         this.sections = sections;
     }
 
-    Supplier<Integer> expression;
-
     @Override
     public int calculate(int fare) {
-        expression = () -> (maxLineFare(sections));
-
-        return fare + expression.get();
+        return fare + maxLineFare(sections);
     }
 
     private int maxLineFare(Sections sections) {

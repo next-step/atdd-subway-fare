@@ -1,8 +1,10 @@
 package nextstep.subway.domain.farepolicy;
 
-import java.util.function.Supplier;
-
 public class OverFarePolicy implements Policy{
+    int DEFAULT_OVER_CHARGE_DISTANCE = 5;
+    int EXTRA_CHARGE_START_DISTANCE = 50;
+    int EXTRA_CHARGE = 100;
+    int EXTRA_CHARGE_DISTANCE = 8;
 
     private final int fareDistance;
 
@@ -10,13 +12,9 @@ public class OverFarePolicy implements Policy{
         this.fareDistance = fareDistance;
     }
 
-    Supplier<Integer> expression;
-
     @Override
     public int calculate(int fare) {
-        expression = () -> (overFare(fareDistance));
-
-        return fare + expression.get();
+        return fare + overFare(fareDistance);
     }
 
     private int overFare(int distance) {
