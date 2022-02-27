@@ -20,10 +20,10 @@ public class SubwayMap {
     public Path findPath(Station source, Station target, WeightType weightType) {
         Optional.ofNullable(lines).orElseThrow(RuntimeException::new);
 
-        Edge weight = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
+        Edge edge = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 
         // 그래프 만들기
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(weight);
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(edge);
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -36,11 +36,11 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Edge weight) {
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Edge edge) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         addVertex(graph);
-        addEdge(graph, weight);
+        addEdge(graph, edge);
         addOppositeEdge(graph);
 
         return graph;
@@ -55,14 +55,14 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Edge weight) {
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Edge edge) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, weight.getWeight(it));
+                    graph.setEdgeWeight(sectionEdge, edge.getWeight(it));
                 });
     }
 

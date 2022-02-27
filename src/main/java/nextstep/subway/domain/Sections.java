@@ -109,6 +109,7 @@ public class Sections {
                     sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation()
                         , it.getDistance() - section.getDistance()
                         , it.getDuration() - section.getDuration()));
+
                     sections.remove(it);
                 });
     }

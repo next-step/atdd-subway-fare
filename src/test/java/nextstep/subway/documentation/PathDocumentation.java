@@ -16,6 +16,12 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.WeightType;
 
+import io.restassured.RestAssured;
+import nextstep.subway.applicaion.PathService;
+import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.WeightType;
+
 public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
@@ -30,6 +36,7 @@ public class PathDocumentation extends Documentation {
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+
 
         RestDocumentationFilter 경로_조회_문서 = 경로_조회_템플릿();
 

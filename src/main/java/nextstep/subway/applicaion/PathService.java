@@ -29,7 +29,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
 
         subwayMap.setUp(lines);
-        Path path = subwayMap.findPath(upStation, downStation, weightType);
+        Path path = subwayMap.findPath(upStation, downStation, WeightType.DISTANCE);
 
         return PathResponse.of(path);
     }
