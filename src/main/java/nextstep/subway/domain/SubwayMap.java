@@ -3,18 +3,23 @@ package nextstep.subway.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Component
 public class SubwayMap {
     private List<Line> lines;
 
-    public SubwayMap(List<Line> lines) {
+    public void setUp(List<Line> lines) {
         this.lines = lines;
     }
 
     public Path findPath(Station source, Station target, WeightType weightType) {
+        Optional.ofNullable(lines).orElseThrow(RuntimeException::new);
+
         Edge weight = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 
         // 그래프 만들기

@@ -1,9 +1,9 @@
 package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.*;
-import static nextstep.subway.acceptance.StationSteps.*;
+import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
-import static org.assertj.core.api.Assertions.*;
+import static nextstep.subway.acceptance.StationSteps.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
