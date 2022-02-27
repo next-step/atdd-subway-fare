@@ -1,22 +1,18 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import nextstep.common.AcceptanceTest;
-import nextstep.subway.domain.WeightType;
+import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.acceptance.StationSteps.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import nextstep.common.AcceptanceTest;
+import nextstep.subway.domain.WeightType;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -28,13 +24,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
 
-    /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
-     */
     @BeforeEach
     public void setUp() {
         super.setUp();
@@ -45,10 +34,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 15, 2);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 7, 5);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 4));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_파라메터(남부터미널역, 양재역, 5, 4));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -58,8 +47,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DISTANCE);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        지하철_경로_역_확인(response, 교대역, 남부터미널역, 양재역);
+        경로_거리_확인(response, 12);
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
@@ -69,39 +58,47 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DURATION);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(4);
+        지하철_경로_역_확인(response, 교대역, 강남역, 양재역);
+        소요_시간_확인(response, 4);
     }
 
-    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, WeightType weightType) {
-        return RestAssured
-            .given().log().all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("source", source)
-            .queryParam("target", target)
-            .queryParams("weightType", weightType)
-            .when().get("/paths")
-            .then().log().all().extract();
+    @DisplayName("거리 <= 10km 운임비용")
+    @Test
+    void 십키로_이하_거리_요금() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 남부터미널역, WeightType.DISTANCE);
+
+        // then
+        지하철_경로_역_확인(response, 교대역, 남부터미널역);
+        경로_거리_확인(response, 7);
+        요금_확인(response, 1250);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", name);
-        params.put("color", color);
-        params.put("upStationId", upStation + "");
-        params.put("downStationId", downStation + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
+    @DisplayName("10km < 거리 <= 50km 운임비용")
+    @Test
+    void 십키로_초과_오십키로_이하_거리_요금() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DISTANCE);
 
-        return LineSteps.지하철_노선_생성_요청(params).jsonPath().getLong("id");
+        // then
+        지하철_경로_역_확인(response, 교대역, 남부터미널역, 양재역);
+        경로_거리_확인(response, 12);
+        요금_확인(response, 1350);
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
-        return params;
+    @DisplayName("50km < 거리 운임비용")
+    @Test
+    void 오십키로_초과_거리_요금() {
+        // given
+        Long 양재시민의숲역 = 지하철역_생성_요청("양재시민의숲역").jsonPath().getLong("id");
+        지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_파라메터(양재역, 양재시민의숲역, 59, 8));
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, WeightType.DISTANCE);
+
+        // then
+        지하철_경로_역_확인(response, 양재역, 양재시민의숲역);
+        경로_거리_확인(response, 59);
+        요금_확인(response, 2250);
     }
 }

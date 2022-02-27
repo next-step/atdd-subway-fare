@@ -18,8 +18,9 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam
-        WeightType weightType) {
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source
+                                                , @RequestParam Long target
+                                                , @RequestParam WeightType weightType) {
         return ResponseEntity.ok(pathService.findPath(source, target, weightType));
     }
 }

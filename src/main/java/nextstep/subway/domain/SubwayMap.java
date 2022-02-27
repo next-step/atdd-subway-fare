@@ -3,22 +3,27 @@ package nextstep.subway.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Component
 public class SubwayMap {
     private List<Line> lines;
 
-    public SubwayMap(List<Line> lines) {
+    public void setUp(List<Line> lines) {
         this.lines = lines;
     }
 
     public Path findPath(Station source, Station target, WeightType weightType) {
-        Weight weight = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
+        Optional.ofNullable(lines).orElseThrow(RuntimeException::new);
+
+        Edge edge = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 
         // 그래프 만들기
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(weight);
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(edge);
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -31,11 +36,11 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Weight weight) {
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(Edge edge) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         addVertex(graph);
-        addEdge(graph, weight);
+        addEdge(graph, edge);
         addOppositeEdge(graph);
 
         return graph;
@@ -50,14 +55,14 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Weight weight) {
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Edge edge) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, weight.getWeight(it));
+                    graph.setEdgeWeight(sectionEdge, edge.getWeight(it));
                 });
     }
 
