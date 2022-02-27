@@ -12,11 +12,13 @@ import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.SubwayMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -130,6 +132,8 @@ class PathServiceTest {
         lineRepository.save(이호선);
         lineRepository.save(신분당선);
         lineRepository.save(삼호선);
+
+        ReflectionTestUtils.setField(pathService, "subwayMap", new SubwayMap());
     }
 
     @DisplayName("10km 거리의 경로조회를 한다.")

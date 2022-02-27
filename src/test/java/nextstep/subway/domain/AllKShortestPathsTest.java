@@ -88,8 +88,7 @@ class AllKShortestPathsTest {
         PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
         // when
-        PathDirection direction = pathsFinder.findPathDirection(
-            new Section(이호선, 강남역, 교대역, 8, 3));
+        PathDirection direction = new Section(이호선, 강남역, 교대역, 8, 3).findPathDirection();
 
         // then
         assertThat(direction).isEqualTo(PathDirection.UP);
@@ -102,7 +101,7 @@ class AllKShortestPathsTest {
         PathsFinder pathsFinder = new PathsFinder(convertStringToDateTime(START_TIME));
 
         // when
-        PathDirection direction = pathsFinder.findPathDirection(new Section(삼호선, 남부터미널역, 양재역, 8, 3));
+        PathDirection direction = new Section(삼호선, 남부터미널역, 양재역, 8, 3).findPathDirection();
 
         // then
         assertThat(direction).isEqualTo(PathDirection.DOWN);

@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class SubwayMapTest {
@@ -77,9 +78,13 @@ class SubwayMapTest {
      *      교대역에서 06:10 탑승
      *      강남역에서 06:13 하차  (도착) 202202200613
      */
+
+    private SubwayMap subwayMap = new SubwayMap();
+
     @BeforeEach
     void setUp() {
         createSubwayMap();
+
     }
 
     @DisplayName("KShortest 알고리즘을 사용하여 가장 최단거리 경로를 조회한다.")
@@ -87,9 +92,10 @@ class SubwayMapTest {
     void findShortestDistanceUsingKShortest_Test() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+//        SubwayMap subwayMap = new SubwayMap();
+        subwayMap.createSubwayMapGraph(lines);
         AllKShortestPaths allPaths = subwayMap.findAllKShortestPaths(
-            강남역, 남부터미널역, PathType.DISTANCE);
+            강남역, 남부터미널역);
 
         // when
         ShortestPaths shortest = allPaths.getShortestPathsFrom(START_TIME);
@@ -108,9 +114,10 @@ class SubwayMapTest {
     void findShortestDurationUsingKShortest_Test() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+//        SubwayMap subwayMap = new SubwayMap(lines);
+        subwayMap.createSubwayMapGraph(lines);
         AllKShortestPaths allPaths = subwayMap.findAllKShortestPaths(
-            강남역, 남부터미널역, PathType.DISTANCE);
+            강남역, 남부터미널역);
 
         // when
         ShortestPaths shortest = allPaths.getShortestPathsFrom(START_TIME);
@@ -151,7 +158,8 @@ class SubwayMapTest {
     void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+//        SubwayMap subwayMap = new SubwayMap(lines);
+        subwayMap.createSubwayMapGraph(lines);
 
         // when
         Path path = subwayMap.findPath(강남역, 남부터미널역, PathType.DISTANCE, START_TIME);
@@ -165,7 +173,8 @@ class SubwayMapTest {
     void findPathByDistanceOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+//        SubwayMap subwayMap = new SubwayMap(lines);
+        subwayMap.createSubwayMapGraph(lines);
 
         // when
         Path path = subwayMap.findPath(남부터미널역, 강남역, PathType.DISTANCE, START_TIME);
@@ -179,7 +188,8 @@ class SubwayMapTest {
     void findPathByDuration() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+//        SubwayMap subwayMap = new SubwayMap(lines);
+        subwayMap.createSubwayMapGraph(lines);
 
         // when
         Path path = subwayMap.findPath(강남역, 남부터미널역, PathType.DURATION, START_TIME);
@@ -193,7 +203,8 @@ class SubwayMapTest {
     void findPathByDurationOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+//        SubwayMap subwayMap = new SubwayMap(lines);
+        subwayMap.createSubwayMapGraph(lines);
 
         // when
         Path path = subwayMap.findPath(남부터미널역, 강남역, PathType.DURATION, START_TIME);

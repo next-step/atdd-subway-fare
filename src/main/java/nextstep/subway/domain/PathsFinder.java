@@ -72,7 +72,7 @@ public class PathsFinder {
         Station targetStation = section.getUpStation();
         Line line = section.getLine();
 
-        PathDirection pathDirection = findPathDirection(section);
+        PathDirection pathDirection = section.findPathDirection();
         int durationTimeToStation = findDurationTimeToStation(line, targetStation, pathDirection);
         LocalDateTime trainTime = findFirstArrivedTrainTime(currentTime, line, durationTimeToStation);
 
@@ -124,30 +124,6 @@ public class PathsFinder {
         }
 
         return durationMinutes.getSum();
-    }
-
-    protected PathDirection findPathDirection(Section section) {
-        Line line = section.getLine();
-        List<Station> stations = line.getStations();
-
-        Station currentStation = section.getUpStation();
-        Station nextStation = section.getDownStation();
-
-        int i = 0;
-        if (stations.get(i).equals(currentStation)) {
-            return PathDirection.DOWN;
-        }
-
-        while (++i < stations.size()) {
-            if (currentStation.equals(stations.get(i))) {
-                if (nextStation.equals(stations.get(i-1))) {
-                    return PathDirection.UP;
-                }
-                break;
-            }
-        }
-
-        return PathDirection.DOWN;
     }
 
     private int totalDistanceOf(List<Section> sectionList) {
