@@ -37,7 +37,7 @@ class SubwayMapTest {
 
         신분당선 = new Line("신분당선", "red", 900);
         이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        삼호선 = new Line("3호선", "red", 500);
 
         신분당선.addSection(() -> createSection(신분당선, 강남역, 양재역, 11111, 11111));
         신분당선.addSection(() -> createSection(신분당선, 양재역, 정자역, 12, 12));
@@ -60,7 +60,7 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 정자역));
         assertThat(path.extractDistance()).isEqualTo(71);
         assertThat(path.extractDuration()).isEqualTo(71);
-        assertThat(path.extractFare()).isEqualTo(3050);
+        추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(path.extractFare());
     }
 
     @EnumSource(PathType.class)
@@ -85,5 +85,9 @@ class SubwayMapTest {
         ReflectionTestUtils.setField(station, "id", id);
 
         return station;
+    }
+
+    private void 추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(int fare) {
+        assertThat(fare).isEqualTo(3050);
     }
 }
