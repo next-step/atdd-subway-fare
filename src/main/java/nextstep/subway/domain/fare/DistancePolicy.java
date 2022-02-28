@@ -1,9 +1,9 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-public enum Fare {
+public enum DistancePolicy {
 
     STANDARD(distance -> distance <= 10, 0),
     NORMAL(distance -> distance > 10 && distance <= 50, 5),
@@ -15,7 +15,7 @@ public enum Fare {
     private final Predicate<Integer> predicate;
     private final int criteria;
 
-    Fare(Predicate<Integer> predicate, int criteria) {
+    DistancePolicy(Predicate<Integer> predicate, int criteria) {
         this.predicate = predicate;
         this.criteria = criteria;
     }
@@ -35,8 +35,8 @@ public enum Fare {
         return (int) ((Math.ceil(((double) distance - 11) / criteria) + 1) * 100);
     }
 
-    private static Fare findType(int distance) {
-        return Arrays.stream(Fare.values())
+    private static DistancePolicy findType(int distance) {
+        return Arrays.stream(DistancePolicy.values())
                 .filter(fare -> fare.match(distance))
                 .findFirst()
                 .orElse(STANDARD);
