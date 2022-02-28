@@ -8,7 +8,6 @@ import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.station.repository.StationRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,7 +71,7 @@ public class PathServiceTest {
         신분당선.addSection(강남역, 양재역, 40, 33);
         lineRepository.saveAll(Arrays.asList(이호선, 삼호선, 신분당선));
 
-        emptyMember = new EmptyMember();
+        emptyMember = EmptyMember.getInstance();
     }
 
     @DisplayName("거리기준으로 최소 경로를 구한다")
@@ -109,7 +108,7 @@ public class PathServiceTest {
         });
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "로그인을 한 경우 나이에 따라 요금을 할인 받는다")
     @CsvSource({"6,1500", "13,2400", "19,3350"})
     void findPathByDistanceWithLogin(int age, int expectedFare) {
         // when

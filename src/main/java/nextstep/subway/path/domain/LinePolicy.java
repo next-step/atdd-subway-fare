@@ -4,7 +4,7 @@ import nextstep.subway.line.domain.Sections;
 
 public class LinePolicy implements FarePolicy{
 
-    private Sections sections;
+    private final Sections sections;
 
     private LinePolicy(Sections sections) {
         this.sections = sections;

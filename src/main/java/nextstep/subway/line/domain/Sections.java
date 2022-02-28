@@ -178,9 +178,13 @@ public class Sections {
     }
 
     public int getLineExtraChargeMax() {
-        return this.sections.stream()
-                .mapToInt(it -> it.getLine().getExtraCharge())
+        List<Line> lines = sections.stream()
+                .map(Section::getLine)
+                .collect(Collectors.toList());
+
+        return lines.stream()
+                .mapToInt(Line::getExtraCharge)
                 .max()
-                .orElse(DEFAULT_LINE_EXTRA_CHARGE);
+                .orElse(0);
     }
 }

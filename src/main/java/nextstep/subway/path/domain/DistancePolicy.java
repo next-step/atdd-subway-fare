@@ -23,8 +23,6 @@ public class DistancePolicy implements FarePolicy {
         OVER_50KM(50, 100, 8, distance -> 51 <= distance && distance < Integer.MAX_VALUE)
         ;
 
-        private static final int BASE_MAX_FARE = 1250;
-
         private final int parentMaxDistance;
         private final int extraCharge;
         private final int perDistance;
@@ -51,7 +49,7 @@ public class DistancePolicy implements FarePolicy {
 
         public int calculate(int distance) {
             if(parentMaxDistance == 0) {
-                return BASE_MAX_FARE;
+                return Fare.BASE_FARE;
             }
 
             return getParentPolicyMaxFare() +

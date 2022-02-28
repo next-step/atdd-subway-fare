@@ -1,7 +1,7 @@
 package nextstep.subway.path.domain;
 
 public class Fare {
-
+    public static final int BASE_FARE = 1250;
     private int fare;
 
     private Fare(int fare) {
