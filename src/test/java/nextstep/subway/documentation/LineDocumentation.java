@@ -33,12 +33,12 @@ class LineDocumentation extends Documentation {
         List<StationResponse> stationResponses = new ArrayList<>();
         Station 강남역 = new Station("강남역");
         ReflectionTestUtils.setField(강남역, "id", 1L);
-        Station 역삼역 = new Station("역삼역");
-        ReflectionTestUtils.setField(역삼역, "id", 2L);
+        Station 정자역 = new Station("정자역");
+        ReflectionTestUtils.setField(정자역, "id", 2L);
 
         stationResponses.add(StationResponse.of(강남역));
-        stationResponses.add(StationResponse.of(역삼역));
-        lineResponse = new LineResponse(1L, "2호선", "green", stationResponses, LocalDateTime.now(), LocalDateTime.now());
+        stationResponses.add(StationResponse.of(정자역));
+        lineResponse = new LineResponse(1L, "신분당선", "red", 900, stationResponses, LocalDateTime.now(), LocalDateTime.now());
     }
 
     @Test

@@ -7,6 +7,7 @@ public class LineRequest {
     private Long downStationId;
     private int distance;
     private int duration;
+    private int extraCharge;
 
     public String getName() {
         return name;
@@ -32,4 +33,7 @@ public class LineRequest {
         return duration;
     }
 
+    public int getExtraCharge() {
+        return extraCharge;
+    }
 }
