@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion.dto;
 
+import nextstep.subway.domain.FareCalculator;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.getFare();
+        int fare = FareCalculator.calculate(distance);
 
         return new PathResponse(stations, distance, duration, fare);
     }
