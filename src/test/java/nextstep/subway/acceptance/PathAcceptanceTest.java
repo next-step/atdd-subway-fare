@@ -61,44 +61,4 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_경로_역_확인(response, 교대역, 강남역, 양재역);
         소요_시간_확인(response, 4);
     }
-
-    @DisplayName("거리 <= 10km 운임비용")
-    @Test
-    void 십키로_이하_거리_요금() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 남부터미널역, WeightType.DISTANCE);
-
-        // then
-        지하철_경로_역_확인(response, 교대역, 남부터미널역);
-        경로_거리_확인(response, 7);
-        요금_확인(response, 1250);
-    }
-
-    @DisplayName("10km < 거리 <= 50km 운임비용")
-    @Test
-    void 십키로_초과_오십키로_이하_거리_요금() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DISTANCE);
-
-        // then
-        지하철_경로_역_확인(response, 교대역, 남부터미널역, 양재역);
-        경로_거리_확인(response, 12);
-        요금_확인(response, 1350);
-    }
-
-    @DisplayName("50km < 거리 운임비용")
-    @Test
-    void 오십키로_초과_거리_요금() {
-        // given
-        Long 양재시민의숲역 = 지하철역_생성_요청("양재시민의숲역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_파라메터(양재역, 양재시민의숲역, 59, 8));
-
-        // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, WeightType.DISTANCE);
-
-        // then
-        지하철_경로_역_확인(response, 양재역, 양재시민의숲역);
-        경로_거리_확인(response, 59);
-        요금_확인(response, 2250);
-    }
 }
