@@ -17,6 +17,21 @@ public class FareCalculator {
 		return totalFee;
 	}
 
+	public static int calculate(Path path) {
+		int totalFee = path.getSurcharge();
+		int distance = path.extractDistance();
+
+		FarePolicy[] polices = FarePolicy.values();
+		for(FarePolicy policy: polices) {
+			if(distance > policy.excessDistance) {
+				totalFee += policy.getFare(distance - policy.excessDistance);
+				distance = policy.excessDistance;
+			}
+		}
+
+		return totalFee;
+	}
+
 	private enum FarePolicy {
 		FEE50(50, distance -> calculate(distance, 8, 100)),
 		FEE10(10, distance -> calculate(distance, 5, 100)),

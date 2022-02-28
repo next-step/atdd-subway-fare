@@ -24,4 +24,8 @@ public class Path {
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    public int getSurcharge() {
+        return sections.getTopSurcharge();
+    }
 }
