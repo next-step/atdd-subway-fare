@@ -25,6 +25,18 @@ public class PathSteps extends Steps {
 			.then().log().all().extract();
 	}
 
+	public static ExtractableResponse<Response> 로그인_후_두_역의_경로_조회를_요청(String accessToken, Long source, Long target, WeightType weightType) {
+		return RestAssured
+			.given().log().all()
+			.auth().oauth2(accessToken)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+			.queryParam("source", source)
+			.queryParam("target", target)
+			.queryParams("weightType", weightType)
+			.when().get("/paths")
+			.then().log().all().extract();
+	}
+
 	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
 		Map<String, String> params = new HashMap<>();
 		params.put("name", name);

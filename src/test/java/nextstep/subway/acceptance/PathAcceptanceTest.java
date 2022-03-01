@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import static nextstep.member.MemberSteps.*;
 import static nextstep.subway.acceptance.LineSteps.*;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
@@ -16,6 +17,19 @@ import nextstep.subway.domain.WeightType;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    private final String 어린이_이메일 = "email@email.com";
+    private final String 청소년_이메일 = "email15@email.com";
+    private final String 어른_이메일 = "email25@email.com";
+    private final String 비밀번호 = "password";
+
+    private final int 어린이 = 4;
+    private final int 청소년 = 15;
+    private final int 어른 = 25;
+
+    private String 어린이_사용자;
+    private String 청소년_사용자;
+    private String 어른_사용자;
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -42,6 +56,14 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_파라메터(남부터미널역, 양재역, 5, 4));
         지하철_노선에_지하철_구간_생성_요청(삼호선, 구간_파라메터(양재역, 양재시민의숲역, 59, 8));
+
+        회원_생성_요청(어린이_이메일, 비밀번호, 어린이);
+        회원_생성_요청(청소년_이메일, 비밀번호, 청소년);
+        회원_생성_요청(어른_이메일, 비밀번호, 어른);
+
+        어린이_사용자 = 로그인_되어_있음(어린이_이메일, 비밀번호);
+        청소년_사용자 = 로그인_되어_있음(청소년_이메일, 비밀번호);
+        어른_사용자 = 로그인_되어_있음(어른_이메일, 비밀번호);
     }
 
     @DisplayName("두 역의 거리 경로를 조회한다.")
@@ -87,5 +109,28 @@ class PathAcceptanceTest extends AcceptanceTest {
         요금_확인(거리_50km_이상_요금, 2250);
     }
 
+    @DisplayName("연령별 운임비용 할인-어린이")
+    @Test
+    void 어린이_요금_할인() {
+        // when
+        ExtractableResponse<Response> 거리_10km_이내_요금 = 로그인_후_두_역의_경로_조회를_요청(어린이_사용자, 교대역, 남부터미널역, WeightType.DISTANCE);
+        요금_확인(거리_10km_이내_요금, 450);
+    }
+
+    @DisplayName("연령별 운임비용 할인-청소년")
+    @Test
+    void 청소년_요금_할인() {
+        // when
+        ExtractableResponse<Response> 거리_10km_이내_요금 = 로그인_후_두_역의_경로_조회를_요청(청소년_사용자, 교대역, 남부터미널역, WeightType.DISTANCE);
+        요금_확인(거리_10km_이내_요금, 720);
+    }
+
+    @DisplayName("연령별 운임비용 할인-어른")
+    @Test
+    void 어른_요금_할인() {
+        // when
+        ExtractableResponse<Response> 거리_10km_이내_요금 = 로그인_후_두_역의_경로_조회를_요청(어른_사용자, 교대역, 남부터미널역, WeightType.DISTANCE);
+        요금_확인(거리_10km_이내_요금, 1250);
+    }
 
 }
