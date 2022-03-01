@@ -9,9 +9,9 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PathSteps {
+class PathSteps {
 
-    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Map<String, Object> params) {
+    ExtractableResponse<Response> 두_역의_경로_조회를_요청(Map<String, Object> params) {
         return RestAssured
                 .given().log().all()
                 .body(params)
@@ -20,7 +20,7 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -33,7 +33,7 @@ public class PathSteps {
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
+    Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
@@ -42,7 +42,7 @@ public class PathSteps {
         return params;
     }
 
-    public static Map<String, Object> createPathParams(Long source, Long target, PathType pathType) {
+    Map<String, Object> createPathParams(Long source, Long target, PathType pathType) {
         Map<String, Object> params = new HashMap<>();
         params.put("source", source);
         params.put("target", target);
