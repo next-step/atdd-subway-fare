@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.fare.DistancePolicy;
+import nextstep.subway.domain.fare.Fare;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -11,6 +12,9 @@ class FareTest {
     @CsvSource({"10, 1250", "16, 1450", "59, 1950"})
     @ParameterizedTest
     void 거리별_요금_계산(int distance, int expectedFare) {
-        assertThat(DistancePolicy.calculate(distance)).isEqualTo(expectedFare);
+        Fare fare = Fare.standard();
+        DistancePolicy policy = DistancePolicy.from(distance);
+        policy.calculate(fare);
+        assertThat(fare.getFare()).isEqualTo(expectedFare);
     }
 }

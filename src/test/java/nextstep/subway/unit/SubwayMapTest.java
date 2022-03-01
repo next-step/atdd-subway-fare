@@ -6,11 +6,16 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.fare.DistancePolicy;
+import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FarePolicy;
+import nextstep.subway.domain.fare.LinePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static nextstep.subway.unit.model.SectionBuilder.createSection;
@@ -55,12 +60,13 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 정자역);
+        Fare fare = findFare(path);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 정자역));
         assertThat(path.extractDistance()).isEqualTo(71);
         assertThat(path.extractDuration()).isEqualTo(71);
-        추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(path.extractFare());
+        추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(fare.getFare());
     }
 
     @EnumSource(PathType.class)
@@ -72,12 +78,13 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
+        Fare fare = findFare(path);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
         assertThat(path.extractDistance()).isEqualTo(59);
         assertThat(path.extractDuration()).isEqualTo(59);
-        assertThat(path.extractFare()).isEqualTo(1950);
+        assertThat(fare.getFare()).isEqualTo(2450);
     }
 
     private Station createStation(long id, String name) {
@@ -89,5 +96,18 @@ class SubwayMapTest {
 
     private void 추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(int fare) {
         assertThat(fare).isEqualTo(3050);
+    }
+
+    private Fare findFare(Path path) {
+        List<FarePolicy> farePolicies = Arrays.asList(
+                DistancePolicy.from(path.extractDistance()),
+                LinePolicy.from(path.extractExpensiveExtraCharge())
+        );
+
+        Fare fare = Fare.standard();
+        for(FarePolicy policy : farePolicies) {
+            policy.calculate(fare);
+        }
+        return fare;
     }
 }

@@ -23,9 +23,8 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare() {
-        int distance = sections.totalDistance();
-        return DistancePolicy.calculate(distance);
+    public int extractExpensiveExtraCharge() {
+        return sections.expensiveExtraCharge();
     }
 
     public List<Station> getStations() {
