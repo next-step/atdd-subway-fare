@@ -46,7 +46,6 @@ public class PathSteps extends Steps {
 		params.put("distance", distance + "");
 		params.put("duration", duration + "");
 		params.put("surcharge", surcharge + "");
-
 		return LineSteps.지하철_노선_생성_요청(params).jsonPath().getLong("id");
 	}
 
