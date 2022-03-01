@@ -2,7 +2,6 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
-import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Section;
@@ -24,18 +23,10 @@ public class LineService {
         this.stationService = stationService;
     }
 
-    public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
-            Station upStation = stationService.findById(request.getUpStationId());
-            Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(new Section.Builder()
-                                        .line(line)
-                                        .upStation(upStation)
-                                        .downStation(downStation)
-                                        .distance(request.getDistance())
-                                        .duration(request.getDuration())
-                                        .build());
+    public LineResponse saveLine(LineRequest lineRequest) {
+        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor()));
+        if (lineRequest.getUpStationId() != null && lineRequest.getDownStationId() != null && lineRequest.getDistance() != 0) {
+            addSectionOnLine(lineRequest, line);
         }
         return LineResponse.of(line);
     }
@@ -70,17 +61,9 @@ public class LineService {
         lineRepository.deleteById(id);
     }
 
-    public void addSection(Long lineId, SectionRequest sectionRequest) {
-        Station upStation = stationService.findById(sectionRequest.getUpStationId());
-        Station downStation = stationService.findById(sectionRequest.getDownStationId());
+    public void addSection(Long lineId, LineRequest lineRequest) {
         Line line = findById(lineId);
-        line.addSection(new Section.Builder()
-                                    .line(line)
-                                    .upStation(upStation)
-                                    .downStation(downStation)
-                                    .distance(sectionRequest.getDistance())
-                                    .duration(sectionRequest.getDuration())
-                                    .build());
+        addSectionOnLine(lineRequest, line);
     }
 
     public void deleteSection(Long lineId, Long stationId) {
@@ -89,4 +72,17 @@ public class LineService {
 
         line.deleteSection(station);
     }
+
+    private void addSectionOnLine(LineRequest lineRequest, Line line) {
+        Station upStation = stationService.findById(lineRequest.getUpStationId());
+        Station downStation = stationService.findById(lineRequest.getDownStationId());
+        line.addSection(new Section.Builder()
+                .line(line)
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(lineRequest.getDistance())
+                .duration(lineRequest.getDuration())
+                .build());
+    }
+
 }

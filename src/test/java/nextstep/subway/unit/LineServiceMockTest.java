@@ -2,7 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.StationService;
-import nextstep.subway.applicaion.dto.SectionRequest;
+import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Section;
@@ -61,8 +61,12 @@ class LineServiceMockTest {
         when(stationService.findById(역삼역.getId())).thenReturn(역삼역);
         when(stationService.findById(삼성역.getId())).thenReturn(삼성역);
 
-        lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 삼성역.getId(), 10, 3));
-
+        lineService.addSection(이호선.getId(), new LineRequest.Builder()
+                                                            .upStationId(역삼역.getId())
+                                                            .downStationId(삼성역.getId())
+                                                            .distance(10)
+                                                            .duration(3)
+                                                            .build());
         Line line = lineService.findById(1L);
 
         assertThat(line.getSections().size()).isEqualTo(2);
