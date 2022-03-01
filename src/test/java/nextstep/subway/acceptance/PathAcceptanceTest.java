@@ -22,7 +22,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private final String 어른_이메일 = "email25@email.com";
     private final String 비밀번호 = "password";
 
-    private final int 어린이 = 4;
+    private final int 어린이 = 8;
     private final int 청소년 = 15;
     private final int 어른 = 25;
 
