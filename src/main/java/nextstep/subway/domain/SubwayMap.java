@@ -9,16 +9,18 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private SectionPathType sectionPathType;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(List<Line> lines, SectionPathType sectionPathType) {
         this.lines = lines;
+        this.sectionPathType = sectionPathType;
     }
 
     public Path findPath(Station source, Station target) {
         // 그래프 만들기
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
 
-        // 다익스트라 최단 경로 찾기
+        // 다익스트라 최단/최소 시간 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
@@ -55,7 +57,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    sectionPathType.setEdgeWeight(graph, it, sectionEdge);
                 });
     }
 
@@ -67,7 +69,23 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    sectionPathType.setEdgeWeight(graph, it, sectionEdge);
                 });
     }
+
+    public enum SectionPathType {
+        DISTANCE, DURATION;
+
+        public void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it, SectionEdge sectionEdge) {
+            switch (this) {
+                case DISTANCE:
+                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    break;
+                case DURATION:
+                    graph.setEdgeWeight(sectionEdge, it.getDuration());
+                    break;
+            }
+        }
+    }
+
 }

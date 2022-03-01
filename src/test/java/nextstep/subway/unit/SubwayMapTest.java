@@ -44,7 +44,7 @@ class SubwayMapTest {
     void findPath() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, SubwayMap.SectionPathType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -57,7 +57,7 @@ class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, SubwayMap.SectionPathType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
