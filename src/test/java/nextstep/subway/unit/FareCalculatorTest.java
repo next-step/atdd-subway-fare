@@ -91,6 +91,13 @@ public class FareCalculatorTest {
 		assertThat(운임비용).isEqualTo(기본_운임_비용 + 추가요금_900);
 	}
 
+	@DisplayName("연령별 요금 할인")
+	@Test
+	void 로그인_사용자_연령_요금_할인() {
+		// given
+		int 운임요금 = 1250;
+	}
+
 	private Station createStation(long id, String name) {
 		Station station = new Station(name);
 		ReflectionTestUtils.setField(station, "id", id);
