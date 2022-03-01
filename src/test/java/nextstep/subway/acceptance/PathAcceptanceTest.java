@@ -71,14 +71,12 @@ class PathAcceptanceTest extends AcceptanceTest {
     void 경로_조회() {
         // when
         ExtractableResponse<Response> 최단_거리_경로_조회 = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DISTANCE);
-
         // then
         지하철_경로_역_확인(최단_거리_경로_조회, 교대역, 남부터미널역, 양재역);
         경로_거리_확인(최단_거리_경로_조회, 12);
 
         // when
         ExtractableResponse<Response> 최단_시간_경로_조회 = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DURATION);
-
         // then
         지하철_경로_역_확인(최단_시간_경로_조회, 교대역, 강남역, 양재역);
         소요_시간_확인(최단_시간_경로_조회, 4);
@@ -89,21 +87,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     void 거리에_따른_요금() {
         // when
         ExtractableResponse<Response> 거리_10km_이내_요금 = 두_역의_경로_조회를_요청(교대역, 남부터미널역, WeightType.DISTANCE);
-
         // then
         지하철_경로_역_확인(거리_10km_이내_요금, 교대역, 남부터미널역);
         요금_확인(거리_10km_이내_요금, 1250);
 
         // when
         ExtractableResponse<Response> 거리_10km_50km_이내_요금 = 두_역의_경로_조회를_요청(교대역, 양재역, WeightType.DISTANCE);
-
         // then
         지하철_경로_역_확인(거리_10km_50km_이내_요금, 교대역, 남부터미널역, 양재역);
         요금_확인(거리_10km_50km_이내_요금, 1350);
 
         // when
         ExtractableResponse<Response> 거리_50km_이상_요금 = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, WeightType.DISTANCE);
-
         // then
         지하철_경로_역_확인(거리_50km_이상_요금, 양재역, 양재시민의숲역);
         요금_확인(거리_50km_이상_요금, 2250);
@@ -114,6 +109,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void 어린이_요금_할인() {
         // when
         ExtractableResponse<Response> 거리_10km_이내_요금 = 로그인_후_두_역의_경로_조회를_요청(어린이_사용자, 교대역, 남부터미널역, WeightType.DISTANCE);
+        // then
         요금_확인(거리_10km_이내_요금, 450);
     }
 
@@ -122,6 +118,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void 청소년_요금_할인() {
         // when
         ExtractableResponse<Response> 거리_10km_이내_요금 = 로그인_후_두_역의_경로_조회를_요청(청소년_사용자, 교대역, 남부터미널역, WeightType.DISTANCE);
+        // then
         요금_확인(거리_10km_이내_요금, 720);
     }
 
@@ -130,7 +127,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void 어른_요금_할인() {
         // when
         ExtractableResponse<Response> 거리_10km_이내_요금 = 로그인_후_두_역의_경로_조회를_요청(어른_사용자, 교대역, 남부터미널역, WeightType.DISTANCE);
+        // then
         요금_확인(거리_10km_이내_요금, 1250);
     }
-
 }

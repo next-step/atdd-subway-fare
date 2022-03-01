@@ -43,4 +43,14 @@ public class AgeDiscountCalculatorTest {
 		// then
 		assertThat(요금).isEqualTo(기본요금);
 	}
+
+	@DisplayName("할인 해택이 없는 나이 요금")
+	@Test
+	void 해당사항없음_할인() {
+		// when
+		int 요금 = AgeDiscountCalculator.calculate(기본요금, 해당사항없음);
+
+		// then
+		assertThat(요금).isEqualTo(기본요금);
+	}
 }
