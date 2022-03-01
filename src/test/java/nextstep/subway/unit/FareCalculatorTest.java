@@ -2,9 +2,6 @@ package nextstep.subway.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,13 +86,6 @@ public class FareCalculatorTest {
 
 		// then
 		assertThat(운임비용).isEqualTo(기본_운임_비용 + 추가요금_900);
-	}
-
-	@DisplayName("연령별 요금 할인")
-	@Test
-	void 로그인_사용자_연령_요금_할인() {
-		// given
-		int 운임요금 = 1250;
 	}
 
 	private Station createStation(long id, String name) {
