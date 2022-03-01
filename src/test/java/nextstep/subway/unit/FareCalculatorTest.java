@@ -73,21 +73,6 @@ public class FareCalculatorTest {
 		assertThat(운임비용).isEqualTo(기본_운임_비용 + 1000);
 	}
 
-	@DisplayName("노선별 추가 요금")
-	@Test
-	void 노선_추가_요금() {
-		// given
-		Sections sections = new Sections();
-		sections.add(new Section(신분당선, 강남역, 양재역, 3, 3));
-		sections.add(new Section(이호선, 교대역, 강남역, 3, 3));
-
-		// when
-		int 운임비용 = FareCalculator.calculate(new Path(sections));
-
-		// then
-		assertThat(운임비용).isEqualTo(기본_운임_비용 + 추가요금_900);
-	}
-
 	private Station createStation(long id, String name) {
 		Station station = new Station(name);
 		ReflectionTestUtils.setField(station, "id", id);

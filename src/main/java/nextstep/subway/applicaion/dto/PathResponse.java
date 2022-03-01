@@ -26,10 +26,10 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = FareCalculator.calculate(path);
-        fare = AgeDiscountCalculator.calculate(fare, age);
+        int fare = FareCalculator.calculate(distance) + path.getSurcharge();
+        int discountFare = AgeDiscountCalculator.calculate(fare, age);
 
-        return new PathResponse(stations, distance, duration, fare);
+        return new PathResponse(stations, distance, duration, discountFare);
     }
 
     public List<StationResponse> getStations() {

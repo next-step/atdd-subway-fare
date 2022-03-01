@@ -37,7 +37,7 @@ public class PathSteps extends Steps {
 			.then().log().all().extract();
 	}
 
-	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
 		Map<String, String> params = new HashMap<>();
 		params.put("name", name);
 		params.put("color", color);
@@ -45,6 +45,7 @@ public class PathSteps extends Steps {
 		params.put("downStationId", downStation + "");
 		params.put("distance", distance + "");
 		params.put("duration", duration + "");
+		params.put("surcharge", surcharge + "");
 
 		return LineSteps.지하철_노선_생성_요청(params).jsonPath().getLong("id");
 	}
