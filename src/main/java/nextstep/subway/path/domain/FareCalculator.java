@@ -1,23 +1,22 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.dto.FarePolicyRequest;
-
-import java.util.Arrays;
 import java.util.List;
 
 public class FareCalculator {
+    private final List<FarePolicy> farePolicies;
 
-    private FareCalculator() {
+    private FareCalculator(List<FarePolicy> farePolicies) {
+        this.farePolicies = farePolicies;
     }
 
-    public static int calculate(FarePolicyRequest request) {
-        List<FarePolicy> farePolicies = Arrays.asList(
-          DistancePolicy.choicePolicyByDistance(request.getDistance())
-        );
+    public static FareCalculator from(List<FarePolicy> farePolicies) {
+        return new FareCalculator(farePolicies);
+    }
 
-        int fare = 0;
+    public Fare calculate() {
+        Fare fare = Fare.from(0);
         for (FarePolicy farePolicy : farePolicies) {
-            fare += farePolicy.calculate(request);
+            fare = farePolicy.getFare(fare);
         }
         return fare;
     }

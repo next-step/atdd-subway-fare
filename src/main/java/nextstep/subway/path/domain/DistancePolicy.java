@@ -1,54 +1,66 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.path.dto.FarePolicyRequest;
-
 import java.util.Arrays;
+import java.util.function.Function;
 
-public enum DistancePolicy implements FarePolicy {
-    BASE(null, 0, 0, 1, 11),
-    BY50km(BASE, 100, 5, 11, 51),
-    OVER50km(BY50km, 100, 8, 51, Integer.MAX_VALUE)
-    ;
+public class DistancePolicy implements FarePolicy {
 
-    private final DistancePolicy parentPolicy;
-    private final int extraCharge;
-    private final int perDistance;
-    private final int minDistance;
-    private final int maxDistance;
+    private final int distance;
+    private final Policy policy;
 
-    DistancePolicy(DistancePolicy parentPolicy, int extraCharge, int perDistance, int minDistance, int maxDistance) {
-        this.parentPolicy = parentPolicy;
-        this.extraCharge = extraCharge;
-        this.perDistance = perDistance;
-        this.minDistance = minDistance;
-        this.maxDistance = maxDistance;
+    private DistancePolicy(int distance) {
+        this.distance = distance;
+        this.policy = Policy.choicePolicyByDistance(distance);
     }
 
-    public static DistancePolicy choicePolicyByDistance(int distance) {
-        return Arrays.stream(DistancePolicy.values())
-                .filter(it -> it.isInDistanceRange(distance))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+    public static DistancePolicy from(int distance) {
+        return new DistancePolicy(distance);
     }
 
-    private boolean isInDistanceRange(int distance) {
-        return minDistance <= distance  && distance < maxDistance;
+    enum Policy {
+        BASE(0, 0, 0, distance -> 0 <= distance && distance <= 10),
+        BY_50KM(10, 100, 5, distance -> 11 <= distance && distance <= 50),
+        OVER_50KM(50, 100, 8, distance -> 51 <= distance && distance < Integer.MAX_VALUE)
+        ;
+
+        private final int parentMaxDistance;
+        private final int extraCharge;
+        private final int perDistance;
+        private final Function<Integer, Boolean> expression;
+
+        Policy(int parentMaxDistance, int extraCharge, int perDistance, Function<Integer, Boolean> expression) {
+            this.parentMaxDistance = parentMaxDistance;
+            this.extraCharge = extraCharge;
+            this.perDistance = perDistance;
+            this.expression = expression;
+        }
+
+        public static Policy choicePolicyByDistance(int distance) {
+            return Arrays.stream(Policy.values())
+                    .filter(it -> it.expression.apply(distance))
+                    .findFirst()
+                    .orElseThrow(IllegalArgumentException::new);
+        }
+
+        private int getParentPolicyMaxFare() {
+            Policy parentPolicy = Policy.choicePolicyByDistance(parentMaxDistance);
+            return parentPolicy.calculate(parentMaxDistance);
+        }
+
+        public int calculate(int distance) {
+            if(parentMaxDistance == 0) {
+                return Fare.BASE_FARE;
+            }
+
+            return getParentPolicyMaxFare() +
+                    (int) ((Math.ceil((distance - parentMaxDistance - 1) / perDistance) + 1) * extraCharge);
+        }
     }
 
     @Override
-    public int calculate(FarePolicyRequest request) {
-        if(parentPolicy == null) {
-            return 1250;
-        }
-
-        int parentMaxDistance = parentPolicy.maxDistance - 1;
-        int distance = request.getDistance() - parentMaxDistance;
-
-        FarePolicyRequest parentFarePolicyRequest = FarePolicyRequest.builder()
-                .distance(parentMaxDistance)
-                .build();
-
-        return parentPolicy.calculate(parentFarePolicyRequest) +
-                (int) ((Math.ceil((distance - 1) / perDistance) + 1) * extraCharge);
+    public Fare getFare(Fare fare) {
+        fare.add(this.policy.calculate(this.distance));
+        return fare;
     }
+
 }

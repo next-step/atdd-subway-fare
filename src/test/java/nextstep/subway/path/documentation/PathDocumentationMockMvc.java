@@ -37,8 +37,7 @@ import java.util.Map;
 import static nextstep.subway.common.MockMvcDocumentationUtils.getDocumentRequest;
 import static nextstep.subway.common.MockMvcDocumentationUtils.getDocumentResponse;
 import static nextstep.subway.path.documentation.PathDocumentationUtils.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -67,7 +66,7 @@ public class PathDocumentationMockMvc {
     @Test
     void findPath() throws Exception{
         // given
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(getPathResponse());
+        when(pathService.findPath(anyInt(), anyLong(), anyLong(), any())).thenReturn(getPathResponse());
 
         // when
         ResultActions result = mockMvc.perform(get("/paths")

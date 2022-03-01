@@ -1,11 +1,15 @@
 package nextstep.subway.line.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nextstep.subway.common.BaseEntity;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
 import java.util.List;
 
+@Getter
+@NoArgsConstructor
 @Entity
 public class Line extends BaseEntity {
     @Id
@@ -14,28 +18,20 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
     private String color;
+    private int extraCharge;
 
     @Embedded
     private Sections sections = new Sections();
-
-    public Line() {
-    }
 
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
+    public Line(String name, String color, int extraCharge) {
+        this.name = name;
+        this.color = color;
+        this.extraCharge = extraCharge;
     }
 
     public List<Section> getSections() {

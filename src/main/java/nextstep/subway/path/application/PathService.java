@@ -1,17 +1,14 @@
 package nextstep.subway.path.application;
 
-import nextstep.subway.path.domain.FareCalculator;
-import nextstep.subway.path.domain.PathType;
-import nextstep.subway.path.domain.SubwayMap;
-import nextstep.subway.path.domain.Path;
-import nextstep.subway.path.dto.FarePolicyRequest;
-import nextstep.subway.path.dto.PathResponse;
-import nextstep.subway.station.application.StationService;
 import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.path.domain.*;
+import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.domain.Station;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,7 +21,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(int age, long source, long target, PathType type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -32,11 +29,21 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
 
-        FarePolicyRequest farePolicyRequest = FarePolicyRequest.builder()
-                .distance(path.extractDistance())
-                .build();
-        int fare = FareCalculator.calculate(farePolicyRequest);
-
+        int fare = getFare(path, age);
         return PathResponse.of(path, fare);
+    }
+
+    private int getFare(Path path, int age) {
+        int distance = path.extractDistance();
+
+        List<FarePolicy> farePolicies = Arrays.asList(
+                DistancePolicy.from(distance),
+                LinePolicy.from(path.getSections()),
+                AgePolicy.from(age)
+        );
+        FareCalculator fareCalculator = FareCalculator.from(farePolicies);
+
+        return fareCalculator.calculate()
+                .getValue();
     }
 }
