@@ -2,6 +2,7 @@ package nextstep.subway.domain.fare;
 
 public abstract class FareChain {
 
+    private static final int OVER_FARE = 100;
     private FareChain nextChain;
 
     public FareChain setNextChain(FareChain nextChain) {
@@ -23,8 +24,8 @@ public abstract class FareChain {
         return 0;
     }
 
-    public final int calculateOverFare(int distance, int distancePer, int overFare) {
-        return (int) ((Math.ceil((distance - 1) / distancePer) + 1) * overFare);
+    public final int calculateOverFare(int distance, int distancePer) {
+        return (int) ((Math.ceil((distance - 1) / distancePer) + 1) * OVER_FARE);
     }
 
 }

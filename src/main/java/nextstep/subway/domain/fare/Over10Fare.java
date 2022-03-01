@@ -4,7 +4,6 @@ public class Over10Fare extends FareChain {
 
     private static final int OVER_DISTANCE = 10;
     private static final int DISTANCE_PER = 5;
-    private static final int OVER_FARE = 100;
 
     @Override
     public FareChain setNextChain(FareChain nextChain) {
@@ -18,7 +17,7 @@ public class Over10Fare extends FareChain {
 
     @Override
     public int calculateFare(int distance) {
-        return calculateOverFare((distance - OVER_DISTANCE), DISTANCE_PER, OVER_FARE);
+        return calculateOverFare((distance - OVER_DISTANCE), DISTANCE_PER);
     }
 
 }
