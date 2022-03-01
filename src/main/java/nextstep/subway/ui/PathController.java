@@ -1,5 +1,10 @@
 package nextstep.subway.ui;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.WeightType;
@@ -18,9 +23,15 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember
+                                                , @RequestParam Long source
                                                 , @RequestParam Long target
                                                 , @RequestParam WeightType weightType) {
-        return ResponseEntity.ok(pathService.findPath(source, target, weightType));
+
+        return ResponseEntity.ok(pathService.findPath(
+                    Objects.isNull(loginMember) ? -1 : loginMember.getAge()
+                    , source
+                    , target
+                    , weightType));
     }
 }

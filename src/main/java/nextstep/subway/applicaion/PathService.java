@@ -23,7 +23,7 @@ public class PathService {
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target, WeightType weightType) {
+    public PathResponse findPath(int age, Long source, Long target, WeightType weightType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -31,6 +31,6 @@ public class PathService {
         subwayMap.setUp(lines);
         Path path = subwayMap.findPath(upStation, downStation, weightType);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, age);
     }
 }
