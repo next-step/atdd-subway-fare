@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class SubwayMap {
     private List<Line> lines;
     private SectionPathType sectionPathType;
-    private SectionPathTypes sectionPathTypes;
+    private SectionPathTypes sectionPathTypes = new SectionPathTypes();
 
     public SubwayMap(List<Line> lines, SectionPathType sectionPathType) {
         this.lines = lines;
