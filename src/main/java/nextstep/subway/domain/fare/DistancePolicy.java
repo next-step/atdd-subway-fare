@@ -50,7 +50,7 @@ public class DistancePolicy implements FarePolicy {
 
         private static Policy findType(int distance) {
             return Arrays.stream(Policy.values())
-                    .filter(fare -> fare.match(distance))
+                    .filter(policy -> policy.match(distance))
                     .findFirst()
                     .orElse(STANDARD);
         }

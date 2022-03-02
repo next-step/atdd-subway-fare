@@ -17,6 +17,10 @@ public class Fare {
         fare += value;
     }
 
+    public void change(int value) {
+        fare = value;
+    }
+
     public int getFare() {
         return fare;
     }

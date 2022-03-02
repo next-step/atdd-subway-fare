@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.fare.AgePolicy;
 import nextstep.subway.domain.fare.DistancePolicy;
 import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.fare.LinePolicy;
@@ -28,6 +29,19 @@ class FareTest {
 
         LinePolicy linePolicy = LinePolicy.from(extraCharge);
         linePolicy.calculate(fare);
+
+        assertThat(fare.getFare()).isEqualTo(expectedFare);
+    }
+
+    @CsvSource({"10, 5, 1250", "16, 8, 1230", "59, 17, 1150"})
+    @ParameterizedTest
+    void 연령별_요금_계산(int distance, int age, int expectedFare) {
+        Fare fare = Fare.standard();
+        DistancePolicy distancePolicy = DistancePolicy.from(distance);
+        distancePolicy.calculate(fare);
+
+        AgePolicy agePolicy = AgePolicy.from(age);
+        agePolicy.calculate(fare);
 
         assertThat(fare.getFare()).isEqualTo(expectedFare);
     }

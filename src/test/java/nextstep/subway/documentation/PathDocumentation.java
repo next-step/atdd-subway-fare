@@ -41,7 +41,7 @@ class PathDocumentation extends Documentation {
     @EnumSource(PathType.class)
     @ParameterizedTest
     void 경로_조회(PathType pathType) {
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
         ExtractableResponse<Response> response = 경로_조회_요청(spec, pathType);
         경로_조회_성공(response);
     }
