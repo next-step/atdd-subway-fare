@@ -2,7 +2,7 @@ package nextstep.subway.ui;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.SectionPathType;
+import nextstep.subway.domain.sectiontype.SectionPathType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

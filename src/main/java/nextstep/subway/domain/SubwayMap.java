@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.sectiontype.SectionPathType;
+import nextstep.subway.domain.sectiontype.SectionPathTypes;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -10,6 +12,7 @@ import java.util.stream.Collectors;
 public class SubwayMap {
     private List<Line> lines;
     private SectionPathType sectionPathType;
+    private SectionPathTypes sectionPathTypes;
 
     public SubwayMap(List<Line> lines, SectionPathType sectionPathType) {
         this.lines = lines;
@@ -57,7 +60,8 @@ public class SubwayMap {
             for (Section section : line.getSections()) {
                 SectionEdge sectionEdge = SectionEdge.of(section);
                 graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-                sectionPathType.setEdgeWeight(graph, section, sectionEdge);
+
+                sectionPathTypes.setEdgeWeight(sectionPathType, graph, section, sectionEdge);
             }
         }
     }
@@ -73,7 +77,8 @@ public class SubwayMap {
             for (Section section : sectionList) {
                 SectionEdge sectionEdge = SectionEdge.of(section);
                 graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-                sectionPathType.setEdgeWeight(graph, section, sectionEdge);
+
+                sectionPathTypes.setEdgeWeight(sectionPathType, graph, section, sectionEdge);
             }
         }
     }
