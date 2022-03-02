@@ -36,7 +36,8 @@ public class DistancePolicy implements FarePolicy {
         }
 
         private static int getOverFare(final int distance) {
-            return isStandard(distance) ? NOT_EXISTS_OVER_FARE : calculateOverFare(distance, findType(distance).criteria);
+            Policy policy = findType(distance);
+            return isStandard(distance) ? NOT_EXISTS_OVER_FARE : calculateOverFare(distance, policy.criteria);
         }
 
         private static boolean isStandard(int distance) {
@@ -44,7 +45,7 @@ public class DistancePolicy implements FarePolicy {
         }
 
         private static int calculateOverFare(final int distance, final int criteria) {
-            return (int) ((Math.ceil(((double) distance - 11) / criteria) + 1) * 100);
+            return (int) ((Math.ceil((distance - 11) / criteria) + 1) * 100);
         }
 
         private static Policy findType(int distance) {

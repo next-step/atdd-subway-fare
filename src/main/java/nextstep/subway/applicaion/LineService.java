@@ -25,7 +25,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getExtraCharge()));
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
@@ -65,7 +65,7 @@ public class LineService {
 
     public void updateLine(Long id, LineRequest lineRequest) {
         Line line = findById(id);
-        line.update(lineRequest.getName(), lineRequest.getColor());
+        line.update(lineRequest.getName(), lineRequest.getColor(), lineRequest.getExtraCharge());
     }
 
     public void deleteLine(Long id) {

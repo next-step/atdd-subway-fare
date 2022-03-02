@@ -55,12 +55,15 @@ public class Line extends BaseEntity {
         return sections.getSections();
     }
 
-    public void update(String name, String color) {
+    public void update(String name, String color, int extraCharge) {
         if (name != null) {
             this.name = name;
         }
         if (color != null) {
             this.color = color;
+        }
+        if (extraCharge > 0) {
+            this.extraCharge = extraCharge;
         }
     }
 

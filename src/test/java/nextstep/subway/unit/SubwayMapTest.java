@@ -95,7 +95,7 @@ class SubwayMapTest {
     }
 
     private void 추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(int fare) {
-        assertThat(fare).isEqualTo(3050);
+        assertThat(fare).isEqualTo(2950);
     }
 
     private Fare findFare(Path path) {
