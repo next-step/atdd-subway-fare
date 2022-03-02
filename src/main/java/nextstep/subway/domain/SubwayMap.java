@@ -52,25 +52,30 @@ public class SubwayMap {
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    sectionPathType.setEdgeWeight(graph, it, sectionEdge);
-                });
+
+        for (Line line : lines) {
+            for (Section section : line.getSections()) {
+                SectionEdge sectionEdge = SectionEdge.of(section);
+                graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
+                sectionPathType.setEdgeWeight(graph, section, sectionEdge);
+            }
+        }
     }
 
     private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    sectionPathType.setEdgeWeight(graph, it, sectionEdge);
-                });
+
+        for (Line line : lines) {
+            List<Section> sectionList = line.getSections().stream()
+                    .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                    .collect(Collectors.toList());
+
+            for (Section section : sectionList) {
+                SectionEdge sectionEdge = SectionEdge.of(section);
+                graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
+                sectionPathType.setEdgeWeight(graph, section, sectionEdge);
+            }
+        }
     }
 
 
