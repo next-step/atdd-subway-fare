@@ -3,7 +3,7 @@ package nextstep.subway.domain.fare;
 public class Fare {
 
     private int fare;
-    public static final int STANDARD_FARE = 1_250;
+    private static final int STANDARD_FARE = 1_250;
 
     public static Fare standard() {
         return new Fare(STANDARD_FARE);
