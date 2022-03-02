@@ -14,4 +14,9 @@ public enum PathType {
         return function.getValue(section);
     }
 
+    @Override
+    public String toString() {
+        return this.name();
+    }
+
 }

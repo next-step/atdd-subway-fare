@@ -27,15 +27,14 @@ public class Section extends DefaultWeightedEdge {
     private int duration;
 
     public Section() {
-
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-        this.duration = duration;
+    public Section(Builder builder) {
+        this.line = builder.line;
+        this.upStation = builder.upStation;
+        this.downStation = builder.downStation;
+        this.distance = builder.distance;
+        this.duration = builder.duration;
     }
 
     public Long getId() {
@@ -74,4 +73,43 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
+    public static class Builder {
+        private Line line;
+        private Station upStation;
+        private Station downStation;
+        private int distance;
+        private int duration;
+
+        public Builder line(Line line) {
+            this.line = line;
+            return this;
+        }
+
+        public Builder upStation(Station upStation) {
+            this.upStation = upStation;
+            return this;
+        }
+
+        public Builder downStation(Station downStation) {
+            this.downStation = downStation;
+            return this;
+        }
+
+        public Builder distance(int distance) {
+            this.distance = distance;
+            return this;
+        }
+
+        public Builder duration(int duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Section build() {
+            return new Section(this);
+        }
+
+    }
+
 }

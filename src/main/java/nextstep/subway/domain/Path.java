@@ -1,5 +1,9 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.FareUtil;
+import nextstep.subway.domain.fare.Over10Fare;
+import nextstep.subway.domain.fare.Over50Fare;
+
 import java.util.List;
 
 public class Path {
@@ -21,7 +25,15 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public int extractFare() {
+        Over50Fare over50Fare = new Over50Fare();
+        Over10Fare over10Fare = new Over10Fare();
+        over50Fare.setNextChain(over10Fare);
+        return FareUtil.getFare(over50Fare, sections.totalDistance());
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }
+
 }
