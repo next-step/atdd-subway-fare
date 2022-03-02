@@ -1,15 +1,17 @@
 package nextstep.subway.domain;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Component
+@Scope("prototype")
 public class SubwayMap {
     private List<Line> lines;
 
@@ -18,7 +20,9 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target, WeightType weightType) {
-        Optional.ofNullable(lines).orElseThrow(RuntimeException::new);
+        if(Objects.isNull(lines)) {
+            throw new NullPointerException();
+        }
 
         Edge edge = WeightType.DISTANCE.equals(weightType) ? Section::getDistance : Section::getDuration;
 

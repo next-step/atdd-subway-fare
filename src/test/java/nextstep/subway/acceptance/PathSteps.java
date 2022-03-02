@@ -25,7 +25,19 @@ public class PathSteps extends Steps {
 			.then().log().all().extract();
 	}
 
-	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+	public static ExtractableResponse<Response> 로그인_후_두_역의_경로_조회를_요청(String accessToken, Long source, Long target, WeightType weightType) {
+		return RestAssured
+			.given().log().all()
+			.auth().oauth2(accessToken)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+			.queryParam("source", source)
+			.queryParam("target", target)
+			.queryParams("weightType", weightType)
+			.when().get("/paths")
+			.then().log().all().extract();
+	}
+
+	public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
 		Map<String, String> params = new HashMap<>();
 		params.put("name", name);
 		params.put("color", color);
@@ -33,7 +45,7 @@ public class PathSteps extends Steps {
 		params.put("downStationId", downStation + "");
 		params.put("distance", distance + "");
 		params.put("duration", duration + "");
-
+		params.put("surcharge", surcharge + "");
 		return LineSteps.지하철_노선_생성_요청(params).jsonPath().getLong("id");
 	}
 

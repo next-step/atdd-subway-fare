@@ -1,15 +1,15 @@
 package nextstep.subway.applicaion;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.domain.WeightType;
-
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PathService {
@@ -23,14 +23,14 @@ public class PathService {
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target, WeightType weightType) {
+    public PathResponse findPath(int age, Long source, Long target, WeightType weightType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
         subwayMap.setUp(lines);
-        Path path = subwayMap.findPath(upStation, downStation, WeightType.DISTANCE);
+        Path path = subwayMap.findPath(upStation, downStation, weightType);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, age);
     }
 }

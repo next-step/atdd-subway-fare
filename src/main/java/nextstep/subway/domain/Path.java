@@ -25,7 +25,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public int getFare() {
-        return sections.getFare();
+    public int getSurcharge() {
+        return sections.getTopSurcharge();
     }
 }
