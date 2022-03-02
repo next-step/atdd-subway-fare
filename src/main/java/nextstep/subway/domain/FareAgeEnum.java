@@ -1,5 +1,9 @@
 package nextstep.subway.domain;
 
+import java.util.Arrays;
+
+import static java.util.Arrays.*;
+
 public enum FareAgeEnum {
     CHILD(350, 50, 6, 13),
     TEENAGER(350, 20, 13, 19),
@@ -23,14 +27,9 @@ public enum FareAgeEnum {
     }
 
     public static FareAgeEnum valueOf(int age) {
-        FareAgeEnum[] values = values();
-        for (FareAgeEnum value : values) {
-            if (age >= value.beginAge && age < value.endAge) {
-                return value;
-            }
-        }
-        return GENERAL;
+        return stream(values())
+                .filter(value -> age >= value.beginAge && age < value.endAge)
+                .findFirst()
+                .orElse(GENERAL);
     }
-
-
 }
