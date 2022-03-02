@@ -63,6 +63,10 @@ public class Section extends DefaultWeightedEdge {
         return sectionInfo.getDistance();
     }
 
+    public int getBetweenDistance(int distance) {
+        return sectionInfo.getBetweenDistance(distance);
+    }
+
     public int getDuration() {
         return sectionInfo.getDuration();
     }
@@ -99,6 +103,10 @@ public class Section extends DefaultWeightedEdge {
 
         public int getDuration() {
             return duration;
+        }
+
+        public int getBetweenDistance(int distance) {
+            return this.distance - distance;
         }
     }
 
