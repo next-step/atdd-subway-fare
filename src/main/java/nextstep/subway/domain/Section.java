@@ -23,10 +23,7 @@ public class Section extends DefaultWeightedEdge {
     private Station downStation;
 
     @Embedded
-    private Distance distance;
-
-    @Embedded
-    private Duration duration;
+    private SectionInfo sectionInfo;
 
     public Section() {
 
@@ -36,8 +33,14 @@ public class Section extends DefaultWeightedEdge {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = new Distance(distance);
-        this.duration = new Duration(duration);
+        this.sectionInfo = new SectionInfo(distance, duration);
+    }
+
+    public Section(Line line, Station upStation, Station downStation, SectionInfo sectionInfo) {
+        this.line = line;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.sectionInfo = sectionInfo;
     }
 
     public Long getId() {
@@ -57,11 +60,11 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return distance.getDistance();
+        return sectionInfo.getDistance();
     }
 
     public int getDuration() {
-        return duration.getDuration();
+        return sectionInfo.getDuration();
     }
 
     public boolean isSameUpStation(Station station) {
@@ -75,6 +78,28 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    @Embeddable
+    public static class SectionInfo {
+        private int distance;
+        private int duration;
+
+        public SectionInfo() {
+        }
+
+        public SectionInfo(int distance, int duration) {
+            this.distance = distance;
+            this.duration = duration;
+        }
+
+        public int getDistance() {
+            return distance;
+        }
+
+        public int getDuration() {
+            return duration;
+        }
     }
 
 }
