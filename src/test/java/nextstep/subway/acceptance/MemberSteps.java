@@ -129,25 +129,25 @@ public class MemberSteps {
                 .then().log().all().extract();
     }
 
-    public static void 회원_정보_조회됨(ExtractableResponse<Response> response, String email, int age) {
+    static void 회원_정보_조회됨(ExtractableResponse<Response> response, String email, int age) {
         assertThat(response.jsonPath().getString("id")).isNotNull();
         assertThat(response.jsonPath().getString("email")).isEqualTo(email);
         assertThat(response.jsonPath().getInt("age")).isEqualTo(age);
     }
 
-    public static void 내_회원_정보_조회됨(ExtractableResponse<Response> response, String email, int age) {
+    static void 내_회원_정보_조회됨(ExtractableResponse<Response> response, String email, int age) {
         assertThat(response.jsonPath().getString("id")).isNotNull();
         assertThat(response.jsonPath().getString("email")).isEqualTo(email);
         assertThat(response.jsonPath().getInt("age")).isEqualTo(age);
     }
 
-    public static void 내_회원_정보_수정됨(ExtractableResponse<Response> response, String email) {
+    static void 내_회원_정보_수정됨(ExtractableResponse<Response> response, String email) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("id")).isNotNull();
         assertThat(response.jsonPath().getString("email")).isEqualTo(email);
     }
 
-    public static void 내_회원_정보_삭제됨(ExtractableResponse<Response> response) {
+    static void 내_회원_정보_삭제됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }
