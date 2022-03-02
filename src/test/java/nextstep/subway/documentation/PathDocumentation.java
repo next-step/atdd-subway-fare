@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
 
-import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 )      ,10,10
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), anyBoolean())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()

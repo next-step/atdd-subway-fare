@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.SectionPathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,6 +84,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
+                .queryParam("type", SectionPathType.DISTANCE)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -92,11 +94,11 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .given(spec).log().all()
                 .filter(document("path_min_time",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())) )
+                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("minimumTime",true)
+                .queryParam("type", SectionPathType.DURATION)
                 .when().get("/paths")
                 .then().log().all().extract();
     }

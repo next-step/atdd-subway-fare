@@ -1,10 +1,7 @@
 package nextstep.subway.unit;
 
 import com.google.common.collect.Lists;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -44,7 +41,7 @@ class SubwayMapTest {
     void findPath() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, SubwayMap.SectionPathType.DISTANCE);
+        SubwayMap subwayMap = new SubwayMap(lines, SectionPathType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -57,7 +54,7 @@ class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, SubwayMap.SectionPathType.DISTANCE);
+        SubwayMap subwayMap = new SubwayMap(lines, SectionPathType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
