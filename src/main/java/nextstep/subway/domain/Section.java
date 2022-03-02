@@ -22,9 +22,11 @@ public class Section extends DefaultWeightedEdge {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    private int distance;
+    @Embedded
+    private Distance distance;
 
-    private int duration;
+    @Embedded
+    private Duration duration;
 
     public Section() {
 
@@ -34,8 +36,8 @@ public class Section extends DefaultWeightedEdge {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = distance;
-        this.duration = duration;
+        this.distance = new Distance(distance);
+        this.duration = new Duration(duration);
     }
 
     public Long getId() {
@@ -55,11 +57,11 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return distance;
+        return distance.getDistance();
     }
 
     public int getDuration() {
-        return duration;
+        return duration.getDuration();
     }
 
     public boolean isSameUpStation(Station station) {
