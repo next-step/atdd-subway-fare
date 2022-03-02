@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.sectiontype.SectionPathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,11 +36,14 @@ public class PathDocumentation extends Documentation {
                 .given(spec).log().all()
                 .filter(document("path",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())) )
+                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("type", SectionPathType.DURATION)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+
+
 }

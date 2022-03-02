@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +15,6 @@ import java.util.Map;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -39,8 +36,8 @@ class PathAcceptanceTest extends AcceptanceTest {
      * 남부터미널역  --- *3호선*(length 3,time 20) ---   양재
      */
     @BeforeEach
-    public void setUp(RestDocumentationContextProvider restDocumentation) {
-        super.setUp(restDocumentation);
+    public void setUp() {
+        super.setUp();
 
         교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
@@ -91,10 +88,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
-                .given(spec).log().all()
-                .filter(document("path_min_time",
-                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())))
+                .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)

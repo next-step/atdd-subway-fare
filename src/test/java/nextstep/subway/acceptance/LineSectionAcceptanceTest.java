@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,8 +25,8 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
      * Given 지하철역과 노선 생성을 요청 하고
      */
     @BeforeEach
-    public void setUp(RestDocumentationContextProvider restDocumentation) {
-        super.setUp(restDocumentation);
+    public void setUp() {
+        super.setUp();
 
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");

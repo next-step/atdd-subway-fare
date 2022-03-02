@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +36,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
      * 남부터미널역  --- *3호선* ---   양재
      */
     @BeforeEach
-    public void setUp(RestDocumentationContextProvider restDocumentation) {
-        super.setUp(restDocumentation);
+    public void setUp() {
+        super.setUp();
 
         교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
