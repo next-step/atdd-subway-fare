@@ -464,9 +464,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_경로_조회_http_request"><a class="link" href="#_경로_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2&amp;type=DISTANCE HTTP/1.1
 Accept: application/json
-Host: localhost:64522</code></pre>
+Host: localhost:61511</code></pre>
 </div>
 </div>
 </div>
@@ -475,27 +475,28 @@ Host: localhost:64522</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Set-Cookie: JSESSIONID=F3A2D349996EE74EB181CFC94D7BCA36; Path=/; HttpOnly
+Set-Cookie: JSESSIONID=E87F107699017F4B6A48E68DE5BFA568; Path=/; HttpOnly
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 26 Feb 2022 21:21:41 GMT
+Date: Thu, 03 Mar 2022 18:22:12 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 334
+Content-Length: 352
 
 {
   "stations" : [ {
     "id" : 1,
     "name" : "강남역",
-    "createdDate" : "2022-02-27T06:21:41.301335",
-    "modifiedDate" : "2022-02-27T06:21:41.301374"
+    "createdDate" : "2022-03-04T03:22:12.123959",
+    "modifiedDate" : "2022-03-04T03:22:12.12399"
   }, {
     "id" : 2,
     "name" : "역삼역",
-    "createdDate" : "2022-02-27T06:21:41.301387",
-    "modifiedDate" : "2022-02-27T06:21:41.301392"
+    "createdDate" : "2022-03-04T03:22:12.124003",
+    "modifiedDate" : "2022-03-04T03:22:12.124007"
   } ],
-  "distance" : 10
+  "distance" : 10,
+  "duration" : 15
 }</code></pre>
 </div>
 </div>
@@ -521,6 +522,10 @@ Content-Length: 334
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>target</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The target station id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The criteria to find path { DISTANCE | DURATION }</p></td>
 </tr>
 </tbody>
 </table>
@@ -570,6 +575,11 @@ Content-Length: 334
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Total distance from source to target</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total duration from source to target</p></td>
 </tr>
 </tbody>
 </table>
