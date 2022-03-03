@@ -3,13 +3,17 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.FareAge;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FareAgeTest {
-    private static final int TEENAGER_AGE = 18;
-    private static final int CHILD_AGE = 12;
-    private static final int GENERAL_AGE = 30;
+    private static final int TEENAGER_AGE_BEGIN = 13;
+    private static final int TEENAGER_AGE_END = 18;
+    private static final int CHILD_AGE_BEGIN = 6;
+    private static final int CHILD_AGE_END = 12;
+    private static final int GENERAL_AGE = 19;
     private static final int GENERAL_FARE = 1_250;
 
     @DisplayName("연령별 할인에 포함되지 않는 나이")
@@ -26,10 +30,11 @@ class FareAgeTest {
     }
 
     @DisplayName("청소년 할인")
-    @Test
-    void teenager() {
+    @ParameterizedTest
+    @ValueSource(ints = {TEENAGER_AGE_BEGIN, TEENAGER_AGE_END})
+    void teenager(int age) {
         // given
-        FareAge fareAge = FareAge.valueOf(TEENAGER_AGE);
+        FareAge fareAge = FareAge.valueOf(age);
 
         // when
         int discountFare = fareAge.getFareAge(GENERAL_FARE);
@@ -39,10 +44,11 @@ class FareAgeTest {
     }
 
     @DisplayName("어린이 할인")
-    @Test
-    void child() {
+    @ParameterizedTest
+    @ValueSource(ints = {CHILD_AGE_BEGIN, CHILD_AGE_END})
+    void child(int age) {
         // given
-        FareAge fareAge = FareAge.valueOf(CHILD_AGE);
+        FareAge fareAge = FareAge.valueOf(age);
 
         // when
         int discountFare = fareAge.getFareAge(GENERAL_FARE);
