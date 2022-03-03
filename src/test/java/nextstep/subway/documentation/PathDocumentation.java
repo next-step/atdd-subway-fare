@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -32,10 +33,11 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ),
-                10
+                10,
+                15
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -45,7 +47,8 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("The source station id"),
-                                parameterWithName("target").description("The target station id")
+                                parameterWithName("target").description("The target station id"),
+                                parameterWithName("type").description("The criteria to find path { DISTANCE | DURATION }")
                         ),
                         responseFields(
                                 fieldWithPath("stations").description("The stations list"),
@@ -53,12 +56,14 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].name").description("The station name"),
                                 fieldWithPath("stations[].createdDate").description("The station created date"),
                                 fieldWithPath("stations[].modifiedDate").description("The station modified date"),
-                                fieldWithPath("distance").description("Total distance from source to target")
+                                fieldWithPath("distance").description("Total distance from source to target"),
+                                fieldWithPath("duration").description("Total duration from source to target")
                         )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("type", "DISTANCE")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
