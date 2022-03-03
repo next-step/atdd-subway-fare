@@ -22,17 +22,25 @@ public class Section extends DefaultWeightedEdge {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    private int distance;
+    @Embedded
+    private SectionInfo sectionInfo;
 
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = distance;
+        this.sectionInfo = new SectionInfo(distance, duration);
+    }
+
+    public Section(Line line, Station upStation, Station downStation, SectionInfo sectionInfo) {
+        this.line = line;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.sectionInfo = sectionInfo;
     }
 
     public Long getId() {
@@ -52,7 +60,15 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return distance;
+        return sectionInfo.getDistance();
+    }
+
+    public int getBetweenDistance(int distance) {
+        return sectionInfo.getBetweenDistance(distance);
+    }
+
+    public int getDuration() {
+        return sectionInfo.getDuration();
     }
 
     public boolean isSameUpStation(Station station) {
@@ -67,4 +83,31 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
+    @Embeddable
+    public static class SectionInfo {
+        private int distance;
+        private int duration;
+
+        public SectionInfo() {
+        }
+
+        public SectionInfo(int distance, int duration) {
+            this.distance = distance;
+            this.duration = duration;
+        }
+
+        public int getDistance() {
+            return distance;
+        }
+
+        public int getDuration() {
+            return duration;
+        }
+
+        public int getBetweenDistance(int distance) {
+            return this.distance - distance;
+        }
+    }
+
 }
