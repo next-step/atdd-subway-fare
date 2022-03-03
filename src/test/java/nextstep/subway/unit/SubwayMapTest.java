@@ -8,6 +8,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.domain.fare.DistancePolicy;
 import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FareCalculator;
 import nextstep.subway.domain.fare.FarePolicy;
 import nextstep.subway.domain.fare.LinePolicy;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ class SubwayMapTest {
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+    private static final int ADULT_AGE = 20;
 
     @BeforeEach
     void setUp() {
@@ -60,7 +62,8 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 정자역);
-        Fare fare = findFare(path);
+        FareCalculator fareCalculator = new FareCalculator(path, ADULT_AGE);
+        Fare fare = fareCalculator.getFare();
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역, 정자역));
@@ -78,7 +81,8 @@ class SubwayMapTest {
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
-        Fare fare = findFare(path);
+        FareCalculator fareCalculator = new FareCalculator(path, ADULT_AGE);
+        Fare fare = fareCalculator.getFare();
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
@@ -96,18 +100,5 @@ class SubwayMapTest {
 
     private void 추가_요금이_가장_비싼_노선에_대해서만_운임에_추가된다(int fare) {
         assertThat(fare).isEqualTo(2950);
-    }
-
-    private Fare findFare(Path path) {
-        List<FarePolicy> farePolicies = Arrays.asList(
-                DistancePolicy.from(path.extractDistance()),
-                LinePolicy.from(path.extractExpensiveExtraCharge())
-        );
-
-        Fare fare = Fare.standard();
-        for(FarePolicy policy : farePolicies) {
-            policy.calculate(fare);
-        }
-        return fare;
     }
 }
