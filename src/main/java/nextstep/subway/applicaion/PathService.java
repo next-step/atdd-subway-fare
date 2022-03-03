@@ -4,7 +4,6 @@ import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.domain.fare.AgePolicy;

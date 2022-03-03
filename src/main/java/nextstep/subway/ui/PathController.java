@@ -5,7 +5,6 @@ import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.PathType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
