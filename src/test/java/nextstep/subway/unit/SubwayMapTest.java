@@ -6,17 +6,13 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.domain.fare.DistancePolicy;
 import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.fare.FareCalculator;
-import nextstep.subway.domain.fare.FarePolicy;
-import nextstep.subway.domain.fare.LinePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static nextstep.subway.unit.model.SectionBuilder.createSection;

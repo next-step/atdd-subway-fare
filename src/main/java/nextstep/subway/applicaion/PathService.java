@@ -6,15 +6,9 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.domain.fare.AgePolicy;
-import nextstep.subway.domain.fare.DistancePolicy;
-import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.fare.FareCalculator;
-import nextstep.subway.domain.fare.FarePolicy;
-import nextstep.subway.domain.fare.LinePolicy;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
