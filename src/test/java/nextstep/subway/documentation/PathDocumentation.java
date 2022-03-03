@@ -19,7 +19,6 @@ import static nextstep.subway.documentation.DocumentationHelper.경로_조회_�
 import static nextstep.subway.documentation.DocumentationHelper.경로_조회_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 class PathDocumentation extends Documentation {
@@ -42,7 +41,7 @@ class PathDocumentation extends Documentation {
     @EnumSource(PathType.class)
     @ParameterizedTest
     void 경로_조회(PathType pathType) {
-        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
         ExtractableResponse<Response> response = 경로_조회_요청(spec, pathType);
         경로_조회_성공(response);
     }
