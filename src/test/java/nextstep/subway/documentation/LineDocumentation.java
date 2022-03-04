@@ -3,9 +3,9 @@ package nextstep.subway.documentation;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.LineService;
-import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,9 @@ class LineDocumentation extends Documentation {
 
         stationResponses.add(StationResponse.of(강남역));
         stationResponses.add(StationResponse.of(정자역));
-        lineResponse = new LineResponse(1L, "신분당선", "red", 900, stationResponses, LocalDateTime.now(), LocalDateTime.now());
+
+        Line line = createLine();
+        lineResponse = new LineResponse(line, stationResponses);
     }
 
     @Test
@@ -46,5 +48,16 @@ class LineDocumentation extends Documentation {
         when(lineService.saveLine(any())).thenReturn(lineResponse);
         ExtractableResponse<Response> response = 노선_생성_요청(spec);
         노선_생성_성공(response);
+    }
+
+    private Line createLine() {
+        Line line = new Line();
+        ReflectionTestUtils.setField(line, "id", 1L);
+        ReflectionTestUtils.setField(line, "name", "신분당선");
+        ReflectionTestUtils.setField(line, "color", "red");
+        ReflectionTestUtils.setField(line, "extraCharge", 900);
+        ReflectionTestUtils.setField(line, "createdDate", LocalDateTime.now());
+        ReflectionTestUtils.setField(line, "modifiedDate", LocalDateTime.now());
+        return line;
     }
 }
