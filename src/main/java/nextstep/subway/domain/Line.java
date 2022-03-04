@@ -62,9 +62,7 @@ public class Line extends BaseEntity {
         if (color != null) {
             this.color = color;
         }
-        if (extraCharge > 0) {
-            this.extraCharge = extraCharge;
-        }
+        this.extraCharge = extraCharge;
     }
 
     public void addSection(Supplier<Section> supplier) {
