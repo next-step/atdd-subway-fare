@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FareTest {
 
-    @CsvSource({"10, 1250", "16, 1450", "59, 1950"})
+    @CsvSource({"1, 1250", "10, 1250", "11, 1350", "50, 2050", "51, 1850", "59, 1950"})
     @ParameterizedTest
     void 거리별_요금_계산(int distance, int expectedFare) {
         Fare fare = Fare.standard();
