@@ -158,7 +158,7 @@ public class Sections {
 
     public int expensiveExtraCharge() {
         return sections.stream()
-                .mapToInt(it -> it.getLine().getExtraCharge())
+                .mapToInt(Section::getExtraCharge)
                 .max().orElse(0);
     }
 }
