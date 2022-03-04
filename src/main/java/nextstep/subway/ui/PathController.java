@@ -25,7 +25,6 @@ public class PathController {
             @RequestParam PathType type,
             @AuthenticationPrincipal LoginMember loginMember
     ) {
-        Integer age = loginMember == null ? null : loginMember.getAge();
-        return ResponseEntity.ok(pathService.findPath(source, target, type, age));
+        return ResponseEntity.ok(pathService.findPath(source, target, type, loginMember.getAge()));
     }
 }

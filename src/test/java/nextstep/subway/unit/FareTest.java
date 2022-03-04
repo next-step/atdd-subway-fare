@@ -14,8 +14,8 @@ public class FareTest {
     @Test
     void 최소범위테스트() {
         // when
-        val fare1 = Fare.calculateAmount(9, 0, null);
-        val fare2 = Fare.calculateAmount(10, 0, null);
+        val fare1 = Fare.calculateAmount(9, 0, 0);
+        val fare2 = Fare.calculateAmount(10, 0, 0);
 
         assertThat(fare1).isEqualTo(1250);
         assertThat(fare2).isEqualTo(1250);
@@ -25,10 +25,10 @@ public class FareTest {
     @Test
     void 중간범위테스트() {
         // when
-        val fare1 = Fare.calculateAmount(11, 0, null);
-        val fare2 = Fare.calculateAmount(16, 0, null);
-        val fare3 = Fare.calculateAmount(50, 0, null);
-        val extraFare = Fare.calculateAmount(50, 100, null);
+        val fare1 = Fare.calculateAmount(11, 0, 0);
+        val fare2 = Fare.calculateAmount(16, 0, 0);
+        val fare3 = Fare.calculateAmount(50, 0, 0);
+        val extraFare = Fare.calculateAmount(50, 100, 0);
 
         assertThat(fare1).isEqualTo(1350);
         assertThat(fare2).isEqualTo(1450);
@@ -40,9 +40,9 @@ public class FareTest {
     @Test
     void 최대범위테스트() {
         // when
-        val fare1 = Fare.calculateAmount(51, 0, null);
-        val fare2 = Fare.calculateAmount(57, 0, null);
-        val fare3 = Fare.calculateAmount(60, 0, null);
+        val fare1 = Fare.calculateAmount(51, 0, 0);
+        val fare2 = Fare.calculateAmount(57, 0, 0);
+        val fare3 = Fare.calculateAmount(60, 0, 0);
 
         assertThat(fare1).isEqualTo(2150);
         assertThat(fare2).isEqualTo(2150);

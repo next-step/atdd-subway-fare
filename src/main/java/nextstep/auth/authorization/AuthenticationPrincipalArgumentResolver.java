@@ -14,6 +14,12 @@ import java.util.Map;
 import java.util.Objects;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+    private final UserDetailsService userDetailsService;
+
+    public AuthenticationPrincipalArgumentResolver(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -24,7 +30,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.isNull(authentication)) {
-            return null;
+            return userDetailsService.getNotLoginMember();
         }
 
         if (authentication.getPrincipal() instanceof Map) {

@@ -19,8 +19,8 @@ public enum DiscountPolicy {
         this.fareToDiscountFare = fareToDiscountFare;
     }
 
-    public static int discount(Integer age, int fare) {
-        if (age != null) {
+    public static int discount(int age, int fare) {
+        if (age != 0) {
             return getPolicyFromAge(age).fareToDiscountFare.apply(fare);
         }
         return fare;

@@ -24,7 +24,7 @@ public enum Fare {
         this.dividend = dividend;
     }
 
-    public static int calculateAmount(int distance, int extraFare, Integer memberAge) {
+    public static int calculateAmount(int distance, int extraFare, int memberAge) {
         val fare = valueOfDistance(distance).calculate(distance) + extraFare;
         return DiscountPolicy.discount(memberAge, fare);
     }
