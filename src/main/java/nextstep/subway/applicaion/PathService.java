@@ -2,7 +2,6 @@ package nextstep.subway.applicaion;
 
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.FareAge;
 import nextstep.subway.domain.FareAgeEnum;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;

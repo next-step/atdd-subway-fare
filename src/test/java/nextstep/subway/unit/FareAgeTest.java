@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.FareAge;
+import nextstep.subway.domain.FareAgeEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +20,7 @@ class FareAgeTest {
     @Test
     void nonTargeted() {
         // given
-        FareAge fareAge = FareAge.valueOf(GENERAL_AGE);
+        FareAgeEnum fareAge = FareAgeEnum.valueOf(GENERAL_AGE);
 
         // when
         int discountFare = fareAge.getFareAge(GENERAL_FARE);
@@ -34,7 +34,7 @@ class FareAgeTest {
     @ValueSource(ints = {TEENAGER_AGE_BEGIN, TEENAGER_AGE_END})
     void teenager(int age) {
         // given
-        FareAge fareAge = FareAge.valueOf(age);
+        FareAgeEnum fareAge = FareAgeEnum.valueOf(age);
 
         // when
         int discountFare = fareAge.getFareAge(GENERAL_FARE);
@@ -48,7 +48,7 @@ class FareAgeTest {
     @ValueSource(ints = {CHILD_AGE_BEGIN, CHILD_AGE_END})
     void child(int age) {
         // given
-        FareAge fareAge = FareAge.valueOf(age);
+        FareAgeEnum fareAge = FareAgeEnum.valueOf(age);
 
         // when
         int discountFare = fareAge.getFareAge(GENERAL_FARE);
