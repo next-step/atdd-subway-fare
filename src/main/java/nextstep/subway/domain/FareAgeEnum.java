@@ -1,8 +1,6 @@
 package nextstep.subway.domain;
 
-import java.util.Arrays;
-
-import static java.util.Arrays.*;
+import static java.util.Arrays.stream;
 
 public enum FareAgeEnum {
     CHILD(350, 50, 6, 13),

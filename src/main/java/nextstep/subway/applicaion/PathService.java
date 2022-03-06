@@ -36,8 +36,6 @@ public class PathService {
         Station sourceStation = stationService.findById(source);
         Station targetStation = stationService.findById(target);
 
-        // 두 개 중 고민...
-//        FareAge fareAge = FareAge.valueOf(loginMember.getAge());
         FareAgeEnum fareAge = FareAgeEnum.valueOf(loginMember.getAge());
 
         PathFinder pathFinder = new PathFinder(lines, type);
