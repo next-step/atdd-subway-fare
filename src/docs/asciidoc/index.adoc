@@ -9,6 +9,22 @@
 [[path]]
 == 지하철 경로
 
-=== 경로 조회
+== 경로 조회 - 최단 거리 조회
 
-operation::path[snippets='http-request,http-response']
+==== http request
+include::{snippets}/path/distance/http-request.adoc[]
+
+==== http response
+include::{snippets}/path/distance/http-response.adoc[]
+
+==== response body
+include::{snippets}/path/distance/response-body.adoc[]
+
+== 경로 조회 - 최단 시간 조회
+
+==== http request
+include::{snippets}/path/duration/http-request.adoc[]
+==== http response
+include::{snippets}/path/duration/http-response.adoc[]
+==== response body
+include::{snippets}/path/duration/response-body.adoc[]
