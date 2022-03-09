@@ -22,10 +22,12 @@ import static nextstep.subway.ui.exception.ExceptionMessage.SAME_STATION;
 public class PathService {
     private final LineRepository lineRepository;
     private final StationService stationService;
+    private final FarePolicyHandler farePolicyHandler;
 
-    public PathService(LineRepository lineRepository, StationService stationService) {
+    public PathService(LineRepository lineRepository, StationService stationService, FarePolicyHandler farePolicyHandler) {
         this.lineRepository = lineRepository;
         this.stationService = stationService;
+        this.farePolicyHandler = farePolicyHandler;
     }
 
     public PathResponse findPath(Long source, Long target, PathType type, LoginMember loginMember) {
@@ -36,10 +38,11 @@ public class PathService {
         Station sourceStation = stationService.findById(source);
         Station targetStation = stationService.findById(target);
 
-        FareAgeEnum fareAge = FareAgeEnum.valueOf(loginMember.getAge());
+//        FareAgeEnum fareAge = FareAgeEnum.valueOf(loginMember.getAge());
 
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-        return new PathResponse(path.getStations(), path.pathTotalDistance(), path.pathTotalDuration(), fareAge.getFareAge(path.fare()));
+//        return new PathResponse(path, fareAge.getFareAge(path.fare()));
+        return new PathResponse(path, farePolicyHandler.execute(loginMember.getAge(), 0, path));
     }
 }

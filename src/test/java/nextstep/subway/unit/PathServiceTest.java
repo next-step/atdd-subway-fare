@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.member.domain.NullLoginMember;
+import nextstep.subway.applicaion.FarePolicyHandler;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -29,6 +30,8 @@ class PathServiceTest {
     private LineRepository lineRepository;
     @Mock
     private StationService stationService;
+    @Mock
+    private FarePolicyHandler farePolicyHandler;
 
     private PathService pathService;
 
@@ -68,7 +71,7 @@ class PathServiceTest {
         삼호선.addSection(교대역_남부터미널_구간);
         삼호선.addSection(남부터미널_양재역_구간);
         신분당선.addSection(강남역_양재역_구간);
-        pathService = new PathService(lineRepository, stationService);
+        pathService = new PathService(lineRepository, stationService, farePolicyHandler);
 
         교대역_ID = 1L;
         양재역_ID = 3L;

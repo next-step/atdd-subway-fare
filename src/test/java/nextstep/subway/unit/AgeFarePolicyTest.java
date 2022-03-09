@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.FareAgeEnum;
+import nextstep.subway.domain.AgeFarePolicy;
+import nextstep.subway.domain.FarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FareAgeTest {
+class AgeFarePolicyTest {
     private static final int TEENAGER_AGE_BEGIN = 13;
     private static final int TEENAGER_AGE_END = 18;
     private static final int CHILD_AGE_BEGIN = 6;
@@ -20,10 +21,10 @@ class FareAgeTest {
     @Test
     void nonTargeted() {
         // given
-        FareAgeEnum fareAge = FareAgeEnum.valueOf(GENERAL_AGE);
+        FarePolicy policy = new AgeFarePolicy();
 
         // when
-        int discountFare = fareAge.getFareAge(GENERAL_FARE);
+        int discountFare = policy.fare(GENERAL_AGE, GENERAL_FARE, null);
 
         // then
         assertThat(discountFare).isEqualTo(GENERAL_FARE);
@@ -34,10 +35,10 @@ class FareAgeTest {
     @ValueSource(ints = {TEENAGER_AGE_BEGIN, TEENAGER_AGE_END})
     void teenager(int age) {
         // given
-        FareAgeEnum fareAge = FareAgeEnum.valueOf(age);
+        FarePolicy policy = new AgeFarePolicy();
 
         // when
-        int discountFare = fareAge.getFareAge(GENERAL_FARE);
+        int discountFare = policy.fare(age, GENERAL_FARE, null);
 
         // then
         assertThat(discountFare).isEqualTo(720);
@@ -48,10 +49,10 @@ class FareAgeTest {
     @ValueSource(ints = {CHILD_AGE_BEGIN, CHILD_AGE_END})
     void child(int age) {
         // given
-        FareAgeEnum fareAge = FareAgeEnum.valueOf(age);
+        FarePolicy policy = new AgeFarePolicy();
 
         // when
-        int discountFare = fareAge.getFareAge(GENERAL_FARE);
+        int discountFare = policy.fare(age, GENERAL_FARE, null);
 
         // then
         assertThat(discountFare).isEqualTo(450);

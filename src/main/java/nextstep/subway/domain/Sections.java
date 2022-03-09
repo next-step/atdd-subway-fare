@@ -171,4 +171,15 @@ public class Sections {
                 .orElse(0);
         return maxLineAdditionFare + FareStandard.calculateOverFare(pathTotalDistance());
     }
+
+    int fare1() {
+        return FareStandard.calculateOverFare(pathTotalDistance());
+    }
+
+    int maxLineAdditionFare() {
+        return sections.stream()
+                .mapToInt(Section::getLineAdditionFare)
+                .max()
+                .orElse(0);
+    }
 }

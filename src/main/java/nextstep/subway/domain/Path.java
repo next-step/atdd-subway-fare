@@ -28,6 +28,14 @@ public class Path {
         return sections.fare();
     }
 
+    public int fare1() {
+        return sections.fare1();
+    }
+
+    public int maxLineAdditionFare() {
+        return sections.maxLineAdditionFare();
+    }
+
     public Sections getSections() {
         return sections;
     }
