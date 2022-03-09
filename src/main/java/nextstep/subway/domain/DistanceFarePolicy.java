@@ -4,6 +4,6 @@ public class DistanceFarePolicy implements FarePolicy {
 
     @Override
     public int fare(int age, int requestFare, Path path) {
-        return path.fare1();
+        return path.distanceFare();
     }
 }

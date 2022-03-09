@@ -24,12 +24,9 @@ public class Path {
         return sections.pathTotalDuration();
     }
 
-    public int fare() {
-        return sections.fare();
-    }
 
-    public int fare1() {
-        return sections.fare1();
+    public int distanceFare() {
+        return sections.distanceFare();
     }
 
     public int maxLineAdditionFare() {

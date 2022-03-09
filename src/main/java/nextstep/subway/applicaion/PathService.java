@@ -38,11 +38,8 @@ public class PathService {
         Station sourceStation = stationService.findById(source);
         Station targetStation = stationService.findById(target);
 
-//        FareAgeEnum fareAge = FareAgeEnum.valueOf(loginMember.getAge());
-
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-//        return new PathResponse(path, fareAge.getFareAge(path.fare()));
         return new PathResponse(path, farePolicyHandler.execute(loginMember.getAge(), 0, path));
     }
 }
