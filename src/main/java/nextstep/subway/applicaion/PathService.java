@@ -3,11 +3,13 @@ package nextstep.subway.applicaion;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.FareAgeEnum;
+import nextstep.subway.domain.FareAgePolicy;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Policy;
 import nextstep.subway.domain.Station;
 import nextstep.subway.ui.exception.PathException;
 import org.springframework.stereotype.Service;
@@ -36,10 +38,10 @@ public class PathService {
         Station sourceStation = stationService.findById(source);
         Station targetStation = stationService.findById(target);
 
-        FareAgeEnum fareAge = FareAgeEnum.valueOf(loginMember.getAge());
+        Policy policy = new FareAgePolicy();
 
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-        return new PathResponse(path.getStations(), path.pathTotalDistance(), path.pathTotalDuration(), fareAge.getFareAge(path.fare()));
+        return new PathResponse(path, policy.getPolicyFare(path.fare(), loginMember.getAge()));
     }
 }

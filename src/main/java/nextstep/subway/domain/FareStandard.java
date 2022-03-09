@@ -3,9 +3,6 @@ package nextstep.subway.domain;
 import static java.util.Arrays.stream;
 
 public enum FareStandard {
-//    FARE50(51, 9999, 8, overDistance ->
-//            ((overDistance - 1) / 8 + 1) * 100 + 2_050
-//    ),
     FARE50(51, 9999, 8, 2_050, 100),
     FARE10(11, 50, 5, 1_250, 100),
     FARE_DEFAULT(0, 10, 5, 1_250, 0);

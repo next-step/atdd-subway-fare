@@ -1,6 +1,8 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.FareAgeEnum;
+import nextstep.subway.domain.FareAgePolicy;
+import nextstep.subway.domain.Policy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -55,5 +57,12 @@ class FareAgeTest {
 
         // then
         assertThat(discountFare).isEqualTo(450);
+    }
+
+    @Test
+    void getPolicyFare() {
+        Policy policy1 = new FareAgePolicy();
+        int policyFare = policy1.getPolicyFare(GENERAL_FARE, CHILD_AGE_BEGIN);
+        assertThat(policyFare).isEqualTo(450);
     }
 }
