@@ -9,8 +9,7 @@ public class AgeFarePolicy implements FarePolicy {
 
     @Override
     public FareRequest fare(FareRequest fareRequest, Path path) {
-        FareAgeEnum fareAgeEnum = FareAgeEnum.valueOf(fareRequest.getAge());
-        return new FareRequest(fareRequest.getAge(),
-                fareAgeEnum.getFareAge(fareRequest.getFare()));
+        FareAgeEnum fareAge = FareAgeEnum.valueOf(fareRequest.getAge());
+        return new FareRequest(fareRequest.getAge(), fareAge.getFareAge(fareRequest.getFare()));
     }
 }
