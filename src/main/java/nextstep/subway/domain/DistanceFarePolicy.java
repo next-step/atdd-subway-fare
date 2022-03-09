@@ -1,9 +1,11 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.applicaion.dto.FareRequest;
+
 public class DistanceFarePolicy implements FarePolicy {
 
     @Override
-    public int fare(int age, int requestFare, Path path) {
-        return path.distanceFare();
+    public FareRequest fare(FareRequest fareRequest, Path path) {
+        return new FareRequest(fareRequest.getAge(), path.distanceFare());
     }
 }

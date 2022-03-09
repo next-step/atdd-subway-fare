@@ -1,6 +1,8 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.applicaion.dto.FareRequest;
+
 public interface FarePolicy {
 
-    int fare(int age, int requestFare, Path path);
+    FareRequest fare(FareRequest fareRequest, Path path);
 }

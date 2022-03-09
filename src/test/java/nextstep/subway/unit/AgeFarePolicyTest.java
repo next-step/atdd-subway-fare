@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.applicaion.dto.FareRequest;
 import nextstep.subway.domain.AgeFarePolicy;
 import nextstep.subway.domain.FarePolicy;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,8 @@ class AgeFarePolicyTest {
         FarePolicy policy = new AgeFarePolicy();
 
         // when
-        int discountFare = policy.fare(GENERAL_AGE, GENERAL_FARE, null);
+        int discountFare = policy.fare(new FareRequest(GENERAL_AGE, GENERAL_FARE), null)
+                .getFare();
 
         // then
         assertThat(discountFare).isEqualTo(GENERAL_FARE);
@@ -38,7 +40,8 @@ class AgeFarePolicyTest {
         FarePolicy policy = new AgeFarePolicy();
 
         // when
-        int discountFare = policy.fare(age, GENERAL_FARE, null);
+        int discountFare = policy.fare(new FareRequest(age, GENERAL_FARE), null)
+                .getFare();
 
         // then
         assertThat(discountFare).isEqualTo(720);
@@ -52,7 +55,8 @@ class AgeFarePolicyTest {
         FarePolicy policy = new AgeFarePolicy();
 
         // when
-        int discountFare = policy.fare(age, GENERAL_FARE, null);
+        int discountFare = policy.fare(new FareRequest(age, GENERAL_FARE), null)
+                .getFare();
 
         // then
         assertThat(discountFare).isEqualTo(450);

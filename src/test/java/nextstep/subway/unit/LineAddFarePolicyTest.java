@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 
+import nextstep.subway.applicaion.dto.FareRequest;
 import nextstep.subway.domain.FarePolicy;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineAddFarePolicy;
@@ -89,6 +90,6 @@ class LineAddFarePolicyTest {
         List<Station> stations = path.getStations();
         assertThat(stations).containsExactly(강남역, 교대역, 남부터미널역);
         FarePolicy policy = new LineAddFarePolicy();
-        assertThat(policy.fare(0, 0, path)).isEqualTo(1_000);
+        assertThat(policy.fare(FareRequest.valueOf(0), path).getFare()).isEqualTo(1_000);
     }
 }

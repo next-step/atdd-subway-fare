@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
 import nextstep.member.domain.LoginMember;
+import nextstep.subway.applicaion.dto.FareRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.FareAgeEnum;
 import nextstep.subway.domain.Line;
@@ -40,6 +41,6 @@ public class PathService {
 
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-        return new PathResponse(path, farePolicyHandler.execute(loginMember.getAge(), 0, path));
+        return new PathResponse(path, farePolicyHandler.execute(FareRequest.valueOf(loginMember.getAge()), path));
     }
 }
