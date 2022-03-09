@@ -41,6 +41,6 @@ public class PathService {
 
         PathFinder pathFinder = new PathFinder(lines, type);
         Path path = pathFinder.shortsPath(sourceStation, targetStation);
-        return new PathResponse(path, farePolicyHandler.execute(FareRequest.valueOf(loginMember.getAge()), path));
+        return new PathResponse(path, farePolicyHandler.execute(new FareRequest(loginMember.getAge()), path));
     }
 }

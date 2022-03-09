@@ -92,6 +92,6 @@ class DistanceFarePolicyTest {
         List<Station> stations = path.getStations();
         assertThat(stations).containsExactly(강남역, 교대역, 남부터미널역);
         FarePolicy policy = new DistanceFarePolicy();
-        assertThat(policy.fare(FareRequest.valueOf(0), path).getFare()).isEqualTo(1_350);
+        assertThat(policy.fare(new FareRequest(0), path).getFare()).isEqualTo(1_350);
     }
 }

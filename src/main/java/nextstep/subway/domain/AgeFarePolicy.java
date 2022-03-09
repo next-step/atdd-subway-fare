@@ -2,6 +2,9 @@ package nextstep.subway.domain;
 
 import nextstep.subway.applicaion.dto.FareRequest;
 
+/**
+ * 나이별 추가 요금
+ */
 public class AgeFarePolicy implements FarePolicy {
 
     @Override

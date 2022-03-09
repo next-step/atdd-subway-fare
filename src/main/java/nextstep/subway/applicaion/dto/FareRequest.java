@@ -10,8 +10,9 @@ public class FareRequest {
         this.fare = fare;
     }
 
-    public static FareRequest valueOf(int age) {
-        return new FareRequest(age, 0);
+    public FareRequest(int age) {
+        this.age = age;
+        this.fare = 0;
     }
 
     public int getAge() {

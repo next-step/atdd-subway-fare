@@ -2,6 +2,9 @@ package nextstep.subway.domain;
 
 import nextstep.subway.applicaion.dto.FareRequest;
 
+/**
+ * 호선 추가 요금
+ */
 public class LineAddFarePolicy implements FarePolicy {
 
     @Override

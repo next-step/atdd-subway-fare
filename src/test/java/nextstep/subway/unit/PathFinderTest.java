@@ -102,7 +102,7 @@ class PathFinderTest {
         assertThat(stations).containsExactly(교대역, 강남역);
         assertThat(path.pathTotalDistance()).isEqualTo(10);
         assertThat(path.pathTotalDuration()).isEqualTo(3);
-        assertThat(farePolicyHandler.execute(FareRequest.valueOf(0), path)).isEqualTo(1250);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(1250);
     }
 
     @DisplayName("최소 시간 경로 조회 - 10km 이하 기본 요금")
@@ -152,7 +152,7 @@ class PathFinderTest {
         assertThat(stations).containsExactly(교대역, 강남역, 양재역);
         assertThat(path.pathTotalDistance()).isEqualTo(20);
         assertThat(path.pathTotalDuration()).isEqualTo(5);
-        assertThat(farePolicyHandler.execute(FareRequest.valueOf(0), path)).isEqualTo(3_450);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(3_450);
     }
 
     @DisplayName("최단 경로 조회 시 요금 조회 -> 50km 초과, 8km마다 100원 추가")
@@ -170,7 +170,7 @@ class PathFinderTest {
         assertThat(stations).containsExactly(강남역, 역삼역);
         assertThat(path.pathTotalDistance()).isEqualTo(58);
         assertThat(path.pathTotalDuration()).isEqualTo(10);
-        assertThat(farePolicyHandler.execute(FareRequest.valueOf(0), path)).isEqualTo(2150);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(2150);
     }
 
     @DisplayName("최단 경로 조회 시 요금 조회 -> 50km 초과, 8km마다 100원 추가, 9km 초과")
@@ -188,7 +188,7 @@ class PathFinderTest {
         assertThat(stations).containsExactly(양재역, 매봉역);
         assertThat(path.pathTotalDistance()).isEqualTo(59);
         assertThat(path.pathTotalDuration()).isEqualTo(20);
-        assertThat(farePolicyHandler.execute(FareRequest.valueOf(0), path)).isEqualTo(4_250);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(4_250);
     }
 
 
@@ -209,7 +209,7 @@ class PathFinderTest {
         assertThat(stations).containsExactly(양재역, 매봉역);
         assertThat(path.pathTotalDistance()).isEqualTo(59);
         assertThat(path.pathTotalDuration()).isEqualTo(20);
-        assertThat(farePolicyHandler.execute(FareRequest.valueOf(0), path)).isEqualTo(4250);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(4250);
     }
 
     @DisplayName("경로 조회 시 추가 요금 - 환승 시 가장 비싼 노선의 추가 요금 적용")
@@ -227,6 +227,6 @@ class PathFinderTest {
         assertThat(stations).containsExactly(강남역, 교대역, 남부터미널역);
         assertThat(path.pathTotalDistance()).isEqualTo(12);
         assertThat(path.pathTotalDuration()).isEqualTo(13);
-        assertThat(farePolicyHandler.execute(FareRequest.valueOf(0), path)).isEqualTo(2_350);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(2_350);
     }
 }
