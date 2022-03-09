@@ -23,6 +23,10 @@ public class PathSteps {
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
+    }
+
+    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int fare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -31,6 +35,7 @@ public class PathSteps {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("fare", fare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
@@ -38,6 +43,17 @@ public class PathSteps {
     public static ExtractableResponse<Response> 두_역의_경로_조회(Long source, Long target, PathType pathType) {
         return RestAssured
                 .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", pathType)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_경로_조회(String user, Long source, Long target, PathType pathType) {
+        return RestAssured
+                .given().auth().oauth2(user).log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)

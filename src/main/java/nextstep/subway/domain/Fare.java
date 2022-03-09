@@ -1,5 +1,8 @@
 package nextstep.subway.domain;
 
+import lombok.val;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Arrays;
 
 public enum Fare {
@@ -7,11 +10,11 @@ public enum Fare {
     EXTRA_LESS_THAN_50KM(STANDARD, 100, 11, 50, 5),
     EXTRA_OVER_50KM(EXTRA_LESS_THAN_50KM, 100, 51, Integer.MAX_VALUE, 8);
 
-    private Fare parentFare;
-    private int amount;
-    private int minDistance;
-    private int maxDistance;
-    private int dividend;
+    private final Fare parentFare;
+    private final int amount;
+    private final int minDistance;
+    private final int maxDistance;
+    private final int dividend;
 
     Fare(Fare parentFare, int amount, int minDistance, int maxDistance, int dividend) {
         this.parentFare = parentFare;
@@ -21,9 +24,9 @@ public enum Fare {
         this.dividend = dividend;
     }
 
-    public static int calculateAmount(int distance) {
-        Fare fare = valueOfDistance(distance);
-        return fare.calculate(distance);
+    public static int calculateAmount(int distance, int extraFare, int memberAge) {
+        val fare = valueOfDistance(distance).calculate(distance) + extraFare;
+        return DiscountPolicy.discount(memberAge, fare);
     }
 
     private static Fare valueOfDistance(int distance) {

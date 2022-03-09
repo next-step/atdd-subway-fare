@@ -6,6 +6,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -164,10 +165,21 @@ public class Sections {
     }
 
     public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
     }
 
     public int totalDuration() {
-        return sections.stream().mapToInt(Section::getDuration).sum();
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
+
+    public int calculateMaxLineFare() {
+        return sections.stream()
+                .mapToInt(Section::getLineFare)
+                .max()
+                .orElseThrow(NoSuchElementException::new);
     }
 }

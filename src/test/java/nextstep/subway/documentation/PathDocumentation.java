@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -34,11 +36,15 @@ public class PathDocumentation extends Documentation {
                 1250
         );
 
-        when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), PathType.DISTANCE, anyInt())).thenReturn(pathResponse);
 
-        RequestSpecification path = spec.filter(document("path",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint())));
+        RequestSpecification path = spec.filter(
+                document(
+                        "path",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                )
+        );
         경로_조회_요청(path);
     }
 }
