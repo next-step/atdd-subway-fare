@@ -7,6 +7,7 @@ public class LineRequest {
     private Long downStationId;
     private int distance;
     private int duration;
+    private int additionFare;
 
     public boolean hasStation() {
         return upStationId != null && downStationId != null && distance != 0 && duration != 0;
@@ -34,5 +35,9 @@ public class LineRequest {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getAdditionFare() {
+        return additionFare;
     }
 }

@@ -8,17 +8,28 @@ import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.EMAIL;
+import static nextstep.subway.acceptance.MemberSteps.PASSWORD;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
+import static nextstep.subway.acceptance.PathSteps.경로_조회_실패;
+import static nextstep.subway.acceptance.PathSteps.청소년_할인_요금_검증_됨;
+import static nextstep.subway.acceptance.PathSteps.최단_거리_검증_됨;
+import static nextstep.subway.acceptance.PathSteps.최단_거리_조회_됨;
+import static nextstep.subway.acceptance.PathSteps.최단_거리의_시간_검증_됨;
+import static nextstep.subway.acceptance.PathSteps.최단_시간_검증_됨;
+import static nextstep.subway.acceptance.PathSteps.최단_시간_조회_됨;
+import static nextstep.subway.acceptance.PathSteps.최단_시간의_거리_검증_됨;
+import static nextstep.subway.acceptance.PathSteps.혜택_없는_요금_검증_됨_10km_이내;
+import static nextstep.subway.acceptance.PathSteps.혜택_없는_요금_검증_됨_10km_초과;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 조회")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -68,15 +79,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DISTANCE);
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-
-        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-        assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
-
-        int distance = response.jsonPath().getInt("distance");
-        int duration = response.jsonPath().getInt("duration");
-        assertThat(distance).isEqualTo(5);
-        assertThat(duration).isEqualTo(21);
+        최단_거리_조회_됨(response, 교대역, 남부터미널역, 양재역);
+        최단_거리_검증_됨(response, 5);
+        최단_거리의_시간_검증_됨(response, 21);
     }
 
     /**
@@ -87,15 +92,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역과 도착역이 같은 경우 조회할 수 없다.")
     @Test
     void exceptionStartAndEndStationDuplication() {
-        // given
-        Long source = 1L;
-        Long target = 1L;
-
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 교대역, PathType.DISTANCE);
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        경로_조회_실패(response);
     }
 
     /**
@@ -107,19 +108,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void exceptionStartAndEndStationNoneConnection() {
         // given
-        Long source = 1L;
-        Long target = 5L;
-
         Long 가양역 = 지하철역_생성_요청("가양역").jsonPath().getLong("id");
         Long 증미역 = 지하철역_생성_요청("증미역").jsonPath().getLong("id");
+
+        Long 연결_되어있지_않은_역 = 교대역;
 
         지하철_노선_생성_요청(createLineCreateParams("9호선", "brown", 가양역, 증미역, 10, 3));
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 가양역, 연결_되어있지_않은_역, PathType.DISTANCE);
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        경로_조회_실패(response);
     }
 
     /**
@@ -131,14 +131,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void exceptionStartAndEndNotExistsStation() {
         // given
-        Long source = 10L;
-        Long target = 20L;
+        Long 존재하지_않는_출발역 = -1L;
+        Long 존재하지_않는_도착역 = -9_999L;
 
         // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), source, target, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 존재하지_않는_출발역, 존재하지_않는_도착역, PathType.DISTANCE);
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        경로_조회_실패(response);
     }
 
     /**
@@ -152,14 +152,151 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DURATION);
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        최단_시간_조회_됨(response, 교대역, 강남역, 양재역);
+        최단_시간_검증_됨(response, 5);
+        최단_시간의_거리_검증_됨(response, 20);
+    }
 
-        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
-        int distance = response.jsonPath().getInt("distance");
-        int duration = response.jsonPath().getInt("duration");
-        assertThat(distance).isEqualTo(20);
-        assertThat(duration).isEqualTo(5);
+    /**
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답
+     */
+    @DisplayName("최단 경로 조회 -> 10km 이내")
+    @Test
+    void getPath1() {
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DISTANCE);
+
+        // then
+        최단_거리_조회_됨(response, 교대역, 남부터미널역, 양재역);
+        최단_거리_검증_됨(response, 5);
+        최단_거리의_시간_검증_됨(response, 21);
+        혜택_없는_요금_검증_됨_10km_이내(response, 1_250);
+    }
+
+    /**
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답
+     */
+    @DisplayName("최단 경로 조회 -> 10km 초과")
+    @Test
+    void getPath2() {
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        최단_시간_조회_됨(response, 교대역, 강남역, 양재역);
+        최단_시간_검증_됨(response, 5);
+        최단_시간의_거리_검증_됨(response, 20);
+        혜택_없는_요금_검증_됨_10km_초과(response, 1_450);
+    }
+
+    /**
+     * Given 청소년 로그인되어 있음.
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답(청소년 할인된 요금, 최대 경계값)
+     */
+    @DisplayName("로그인한 사용자 경로 조회 - 청소년은 350원 공제 후 20% 할인, 18세 최대 경계값")
+    @Test
+    void getPathLoginTeenagerMaxAge() {
+        // given
+        int teenagerMaxAge = 18;
+        회원_생성_요청(EMAIL, PASSWORD, teenagerMaxAge);
+
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.givenLogin(accessToken), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        최단_시간_조회_됨(response, 교대역, 강남역, 양재역);
+        최단_시간_검증_됨(response, 5);
+        최단_시간의_거리_검증_됨(response, 20);
+        청소년_할인_요금_검증_됨(response, 880);
+    }
+
+    /**
+     * Given 청소년 로그인되어 있음.
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답(청소년 할인된 요금, 최소 경계값)
+     */
+    @DisplayName("로그인한 사용자 경로 조회 - 청소년은 350원 공제 후 20% 할인, 13세 최소 경계값")
+    @Test
+    void getPathLoginTeenagerMinAge() {
+        // given
+        int teenagerMinAge = 13;
+        회원_생성_요청(EMAIL, PASSWORD, teenagerMinAge);
+
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.givenLogin(accessToken), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        최단_시간_조회_됨(response, 교대역, 강남역, 양재역);
+        최단_시간_검증_됨(response, 5);
+        최단_시간의_거리_검증_됨(response, 20);
+        청소년_할인_요금_검증_됨(response, 880);
+    }
+
+    /**
+     * Given 어린이 로그인되어 있음.
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답(어린이 할인된 요금, 최대 경계값)
+     */
+    @DisplayName("로그인한 사용자 경로 조회 - 어린이는 350원 공제 후 50% 할인, 12세 최대 경계값")
+    @Test
+    void getPathLoginChildMaxAge() {
+        // given
+        int teenagerMaxAge = 12;
+        회원_생성_요청(EMAIL, PASSWORD, teenagerMaxAge);
+
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.givenLogin(accessToken), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        최단_시간_조회_됨(response, 교대역, 강남역, 양재역);
+        최단_시간_검증_됨(response, 5);
+        최단_시간의_거리_검증_됨(response, 20);
+        청소년_할인_요금_검증_됨(response, 550);
+    }
+
+    /**
+     * Given 어린이 로그인되어 있음.
+     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로 응답
+     * AND 총 거리와 소요 시간 응답
+     * AND 지하철 이용 요금도 포함하여 응답(어린이 할인된 요금, 최소 경계값)
+     */
+    @DisplayName("로그인한 사용자 경로 조회 - 어린이는 350원 공제 후 50% 할인, 6세 최소 경계값")
+    @Test
+    void getPathLoginChildMinAge() {
+        // given
+        int teenagerMinAge = 13;
+        회원_생성_요청(EMAIL, PASSWORD, teenagerMinAge);
+
+        String accessToken = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        ExtractableResponse<Response> response = 경로_조회(this.givenLogin(accessToken), 교대역, 양재역, PathType.DURATION);
+
+        // then
+        최단_시간_조회_됨(response, 교대역, 강남역, 양재역);
+        최단_시간_검증_됨(response, 5);
+        최단_시간의_거리_검증_됨(response, 20);
+        청소년_할인_요금_검증_됨(response, 880);
     }
 
     private Map<String, String> createLineCreateParams(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
@@ -187,57 +324,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         return RestAssured.given().log().all();
     }
 
-    /******* 개발 진행 중 *******/
-
-    /**
-     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
-     * Then 최단 거리 경로 응답
-     * AND 총 거리와 소요 시간 응답
-     * AND 지하철 이용 요금도 포함하여 응답
-     */
-    @DisplayName("최단 경로 조회 -> 10km 이내")
-    @Test
-    void getPath1() {
-        // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DISTANCE);
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-
-        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-        assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
-
-        int distance = response.jsonPath().getInt("distance");
-        int duration = response.jsonPath().getInt("duration");
-        int fare = response.jsonPath().getInt("fare");
-        assertThat(distance).isEqualTo(5);
-        assertThat(duration).isEqualTo(21);
-        assertThat(fare).isEqualTo(1250);
-    }
-
-    /**
-     * When 출발역과 도착역까지의 최단 거리 경로 조회 요청
-     * Then 최단 거리 경로 응답
-     * AND 총 거리와 소요 시간 응답
-     * AND 지하철 이용 요금도 포함하여 응답
-     */
-    @DisplayName("최단 경로 조회 -> 10km 초과")
-    @Test
-    void getPath2() {
-        // when
-        ExtractableResponse<Response> response = 경로_조회(this.given(), 교대역, 양재역, PathType.DURATION);
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-
-        List<Long> stations = response.jsonPath().getList("stations.id", Long.class);
-        assertThat(stations).containsExactly(교대역, 강남역, 양재역);
-
-        int distance = response.jsonPath().getInt("distance");
-        int duration = response.jsonPath().getInt("duration");
-        int fare = response.jsonPath().getInt("fare");
-        assertThat(distance).isEqualTo(20);
-        assertThat(duration).isEqualTo(5);
-        assertThat(fare).isEqualTo(1450);
+    private RequestSpecification givenLogin(String accessToken) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken);
     }
 }

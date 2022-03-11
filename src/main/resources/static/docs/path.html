@@ -449,9 +449,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /paths?source=1&amp;target=2 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /paths?source=1&amp;target=2&amp;type=DURATION HTTP/1.1
 Accept: application/json
-Host: localhost:55919</code></pre>
+Host: localhost:52309</code></pre>
 </div>
 </div>
 </div>
@@ -477,6 +477,10 @@ Host: localhost:55919</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>target</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">도착역</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회 기준</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -485,13 +489,13 @@ Host: localhost:55919</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Set-Cookie: JSESSIONID=34FCAACF2970B56AE85D0040F2B506AF; Path=/; HttpOnly
+Set-Cookie: JSESSIONID=ECA5FF6A5507891B2241A19CFC6A46B4; Path=/; HttpOnly
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Thu, 17 Feb 2022 00:16:18 GMT
+Date: Sat, 26 Feb 2022 02:30:58 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 238
+Content-Length: 274
 
 {
   "stations" : [ {
@@ -505,10 +509,61 @@ Content-Length: 238
     "createdDate" : null,
     "modifiedDate" : null
   } ],
-  "distance" : 10
+  "distance" : 10,
+  "duration" : 20,
+  "fare" : 1250
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_responsefields">ResponseFields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 경로 역 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(최단 경로 역) ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(최단 경로 역) 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 거리(km)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최단 시간(H)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요금(km)</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -517,7 +572,7 @@ Content-Length: 238
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-02-17 00:56:06 +0900
+Last updated 2022-02-24 10:25:12 +0900
 </div>
 </div>
 </body>

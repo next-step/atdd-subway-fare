@@ -3,6 +3,7 @@ package nextstep.auth.authorization;
 import nextstep.auth.authentication.AuthenticationException;
 import nextstep.auth.context.Authentication;
 import nextstep.auth.context.SecurityContextHolder;
+import nextstep.member.domain.NullLoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -12,6 +13,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.Arrays;
 import java.util.Map;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.REQUIRE_SIGN_IN;
+
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -20,7 +23,8 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        Authentication authentication = getSecurityContextHolderInAuthentication();
+        boolean required = parameter.getParameterAnnotation(AuthenticationPrincipal.class).required();
+        Authentication authentication = getSecurityContextHolderInAuthentication(required);
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
         }
@@ -28,10 +32,13 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return authentication.getPrincipal();
     }
 
-    private Authentication getSecurityContextHolderInAuthentication() {
+    private Authentication getSecurityContextHolderInAuthentication(boolean required) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null && required) {
+            throw new AuthenticationException(REQUIRE_SIGN_IN.getMsg());
+        }
         if (authentication == null) {
-            throw new AuthenticationException("로그인이 필요하거나 재로그인을 해주세요.");
+            return new Authentication(NullLoginMember.getInstance());
         }
         return authentication;
     }

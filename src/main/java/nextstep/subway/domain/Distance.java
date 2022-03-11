@@ -4,6 +4,8 @@ import nextstep.subway.ui.exception.SectionException;
 
 import javax.persistence.Embeddable;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.ADD_SECTION_DISTANCE;
+
 @Embeddable
 public class Distance {
     private int distance;
@@ -25,9 +27,7 @@ public class Distance {
 
     private void validateBetWeenAddDistance(int newDistance) {
         if (this.distance <= newDistance) {
-            throw new SectionException(
-                    String.format("새로 추가되는 구간 거리는 기존 구간의 거리 이상일 수 없습니다. 기존 구간 거리 = %d, 신규 구간 거리 = %d",
-                            this.distance, newDistance));
+            throw new SectionException(String.format(ADD_SECTION_DISTANCE.getMsg(), this.distance, newDistance));
         }
     }
 

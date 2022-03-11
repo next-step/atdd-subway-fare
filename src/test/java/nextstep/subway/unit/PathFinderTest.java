@@ -1,7 +1,13 @@
 package nextstep.subway.unit;
 
 
+import nextstep.subway.applicaion.FarePolicyHandler;
+import nextstep.subway.applicaion.FarePolicyHandlerV1;
+import nextstep.subway.applicaion.dto.FareRequest;
+import nextstep.subway.domain.AgeFarePolicy;
+import nextstep.subway.domain.DistanceFarePolicy;
 import nextstep.subway.domain.Line;
+import nextstep.subway.domain.LineAddFarePolicy;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.PathType;
@@ -18,7 +24,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.DURATION;
 
 class PathFinderTest {
 
@@ -40,6 +45,8 @@ class PathFinderTest {
     Section 강남역_양재역_구간;
     Section 양재역_매봉역_구간;
 
+    FarePolicyHandler farePolicyHandler;
+
     @BeforeEach
     void setUp() {
         교대역 = new Station("교대역");
@@ -50,8 +57,8 @@ class PathFinderTest {
         남부터미널역 = new Station("남부터미널역");
 
         이호선 = new Line("2호선", "green");
-        삼호선 = new Line("3호선", "orange");
-        신분당선 = new Line("신분당선", "red");
+        삼호선 = new Line("3호선", "orange", 1_000);
+        신분당선 = new Line("신분당선", "red", 2_000);
 
         교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10, 3);
         강남역_역삼역_구간 = new Section(이호선, 강남역, 역삼역, 58, 10);
@@ -73,34 +80,40 @@ class PathFinderTest {
          * |                                    |
          * 남부터미널역  --- *3호선(3m, 11분)* ---   양재역 --- 신분당선(59m, 20분) --- 매봉역
          */
+
+        farePolicyHandler = new FarePolicyHandlerV1();
+        farePolicyHandler.chain(new DistanceFarePolicy())
+                .chain(new LineAddFarePolicy())
+                .chain(new AgeFarePolicy());
+
     }
 
-    @DisplayName("최단 경로 조회")
+    @DisplayName("최단 경로 조회 - 10km 이하 기본 요금")
     @Test
     void getShortsPathDistance() {
-        // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DISTANCE);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 양재역, PathType.DISTANCE);
+        Path path = pathFinder.shortsPath(교대역, 강남역);
 
         // then
         List<Station> stations = path.getStations();
-        assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(path.pathTotalDistance()).isEqualTo(5);
-        assertThat(path.pathTotalDuration()).isEqualTo(21);
+        assertThat(stations).containsExactly(교대역, 강남역);
+        assertThat(path.pathTotalDistance()).isEqualTo(10);
+        assertThat(path.pathTotalDuration()).isEqualTo(3);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(1250);
     }
 
-    @DisplayName("최소 시간 경로 조회")
+    @DisplayName("최소 시간 경로 조회 - 10km 이하 기본 요금")
     @Test
     void getShortsPathDuration() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 양재역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
         List<Station> stations = path.getStations();
@@ -114,89 +127,106 @@ class PathFinderTest {
     void notExistsStationInLine() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
         Station 노선에_없는_역 = new Station("가양역");
 
         // when
-        assertThatThrownBy(() -> pathFinder.shortsPath(lines, 교대역, 노선에_없는_역, PathType.DURATION))
+        assertThatThrownBy(() -> pathFinder.shortsPath(교대역, 노선에_없는_역))
                 // then
                 .isInstanceOf(PathException.class)
                 .hasMessage("노선에 등록되지 않은 역입니다.");
     }
 
-    @Disabled("3단계 개발 중")
-    @DisplayName("최단 경로 조회 시 요금 조회 -> 10km 이내(기본 요금)")
-    @Test
-    void getShortsPathDistanceDugi() {
-        // given
-        List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
-
-        // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 강남역, PathType.DISTANCE);
-
-        // then
-        List<Station> stations = path.getStations();
-        assertThat(stations).containsExactly(교대역, 강남역);
-        assertThat(path.pathTotalDistance()).isEqualTo(10);
-        assertThat(path.pathTotalDuration()).isEqualTo(3);
-        assertThat(path.fare()).isEqualTo(1250);
-    }
-
-    @Disabled("3단계 개발 중")
     @DisplayName("최단 경로 조회 시 요금 조회 -> 10km 초과, 5km마다 100원 추가")
     @Test
     void getShortsPathDurationDugi() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 교대역, 양재역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(교대역, 양재역);
 
         // then
         List<Station> stations = path.getStations();
         assertThat(stations).containsExactly(교대역, 강남역, 양재역);
         assertThat(path.pathTotalDistance()).isEqualTo(20);
         assertThat(path.pathTotalDuration()).isEqualTo(5);
-        assertThat(path.fare()).isEqualTo(1450);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(3_450);
     }
 
-    @Disabled("3단계 개발 중")
     @DisplayName("최단 경로 조회 시 요금 조회 -> 50km 초과, 8km마다 100원 추가")
     @Test
     void getShortsPathDurationDugi22() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 강남역, 역삼역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(강남역, 역삼역);
 
         // then
         List<Station> stations = path.getStations();
         assertThat(stations).containsExactly(강남역, 역삼역);
         assertThat(path.pathTotalDistance()).isEqualTo(58);
         assertThat(path.pathTotalDuration()).isEqualTo(10);
-        assertThat(path.fare()).isEqualTo(2150);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(2150);
     }
 
-    @Disabled("3단계 개발 중")
     @DisplayName("최단 경로 조회 시 요금 조회 -> 50km 초과, 8km마다 100원 추가, 9km 초과")
     @Test
     void getShortsPathDurationDugi222() {
         // given
         List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
 
         // when
-        Path path = pathFinder.shortsPath(lines, 양재역, 매봉역, PathType.DURATION);
+        Path path = pathFinder.shortsPath(양재역, 매봉역);
 
         // then
         List<Station> stations = path.getStations();
         assertThat(stations).containsExactly(양재역, 매봉역);
         assertThat(path.pathTotalDistance()).isEqualTo(59);
         assertThat(path.pathTotalDuration()).isEqualTo(20);
-        assertThat(path.fare()).isEqualTo(2250);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(4_250);
+    }
+
+
+
+
+    @DisplayName("경로 조회 시 노선 추가 요금")
+    @Test
+    void getShortsPathAdditionFare() {
+        // given
+        List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
+        PathFinder pathFinder = new PathFinder(lines, PathType.DURATION);
+
+        // when
+        Path path = pathFinder.shortsPath(양재역, 매봉역);
+
+        // then
+        List<Station> stations = path.getStations();
+        assertThat(stations).containsExactly(양재역, 매봉역);
+        assertThat(path.pathTotalDistance()).isEqualTo(59);
+        assertThat(path.pathTotalDuration()).isEqualTo(20);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(4250);
+    }
+
+    @DisplayName("경로 조회 시 추가 요금 - 환승 시 가장 비싼 노선의 추가 요금 적용")
+    @Test
+    void getShortsPathAdditionFareTransfer() {
+        // given
+        List<Line> lines = Arrays.asList(이호선, 삼호선, 신분당선);
+        PathFinder pathFinder = new PathFinder(lines, PathType.DISTANCE);
+
+        // when
+        Path path = pathFinder.shortsPath(강남역, 남부터미널역);
+
+        // then
+        List<Station> stations = path.getStations();
+        assertThat(stations).containsExactly(강남역, 교대역, 남부터미널역);
+        assertThat(path.pathTotalDistance()).isEqualTo(12);
+        assertThat(path.pathTotalDuration()).isEqualTo(13);
+        assertThat(farePolicyHandler.execute(new FareRequest(0), path)).isEqualTo(2_350);
     }
 }

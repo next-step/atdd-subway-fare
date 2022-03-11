@@ -33,7 +33,7 @@ class PathDocumentation extends Documentation {
                 ), 10, 20, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         경로_조회(given("path", this.getParameterDescriptors(), this.getFieldDescriptors()), source, target, PathType.DURATION);
     }
@@ -49,9 +49,9 @@ class PathDocumentation extends Documentation {
         return new FieldDescriptor[]{fieldWithPath("stations[]").type(JsonFieldType.ARRAY).description("최단 경로 역 리스트"),
                 fieldWithPath("stations[].id").description("(최단 경로 역) ID"),
                 fieldWithPath("stations[].name").description("(최단 경로 역) 이름"),
-                fieldWithPath("distance").description("최단 거리"),
-                fieldWithPath("duration").description("최단 시간"),
-                fieldWithPath("fare").description("요금")
+                fieldWithPath("distance").description("최단 거리(km)"),
+                fieldWithPath("duration").description("최단 시간(H)"),
+                fieldWithPath("fare").description("요금(km)"),
         };
     }
 }

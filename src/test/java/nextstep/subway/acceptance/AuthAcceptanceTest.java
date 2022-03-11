@@ -5,6 +5,9 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.subway.acceptance.MemberSteps.AGE;
+import static nextstep.subway.acceptance.MemberSteps.EMAIL;
+import static nextstep.subway.acceptance.MemberSteps.PASSWORD;
 import static nextstep.subway.acceptance.MemberSteps.내_회원_정보_조회_요청;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
@@ -12,10 +15,6 @@ import static nextstep.subway.acceptance.MemberSteps.회원_정보_조회됨;
 
 
 class AuthAcceptanceTest extends AcceptanceTest {
-    private static final String EMAIL = "email@email.com";
-    private static final String PASSWORD = "password";
-    private static final Integer AGE = 20;
-
     @DisplayName("Session 로그인 후 내 정보 조회")
     @Test
     void myInfoWithSession() {
@@ -37,14 +36,4 @@ class AuthAcceptanceTest extends AcceptanceTest {
 
         회원_정보_조회됨(response, EMAIL, AGE);
     }
-
-    // 리뷰 코멘트 질문 : AuthenticationPrincipalArgumentResolver 테스트 방법
-    // AuthenticationPrincipalArgumentResolver 테스트 방법을 몰라 주석해 두었습니다.
-//    @DisplayName("Bearer Auth 비로그인 예외")
-//    @Test
-//    void exception_BearerAuth() {
-//        ExtractableResponse<Response> response = 내_회원_정보_조회_요청(null);
-//
-//        회원_정보_조회됨(response, EMAIL, AGE);
-//    }
 }

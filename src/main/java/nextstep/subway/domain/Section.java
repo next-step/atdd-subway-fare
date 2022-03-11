@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import static nextstep.subway.ui.exception.ExceptionMessage.EXISTS_STATION_IN_SECTION;
+
 @Entity
 public class Section {
     @Id
@@ -68,9 +70,7 @@ public class Section {
 
     private void validateDuplicationSection(Section newSection) {
         if (this.upStation.equals(newSection.upStation) && this.downStation.equals(newSection.getDownStation())) {
-            throw new SectionException(
-                    String.format("상행역과 하행역 모두 등록된 역입니다. 상행역 = %s, 하행역 = %s",
-                            this.upStation.getName(), this.downStation.getName()));
+            throw new SectionException(EXISTS_STATION_IN_SECTION.getMsg());
         }
     }
 
@@ -78,8 +78,8 @@ public class Section {
         return id;
     }
 
-    public Line getLine() {
-        return line;
+    public int getLineAdditionFare() {
+        return line.getAdditionFare();
     }
 
     public Station getUpStation() {
@@ -96,5 +96,9 @@ public class Section {
 
     public int getDuration() {
         return duration;
+    }
+
+    public Line getLine() {
+        return line;
     }
 }
