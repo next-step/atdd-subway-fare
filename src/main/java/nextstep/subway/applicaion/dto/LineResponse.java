@@ -10,6 +10,7 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
+    private int extraCharge;
     private List<StationResponse> stations;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -18,16 +19,17 @@ public class LineResponse {
         List<StationResponse> stations = line.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-        return new LineResponse(line.getId(), line.getName(), line.getColor(), stations, line.getCreatedDate(), line.getModifiedDate());
+        return new LineResponse(line, stations);
     }
 
-    public LineResponse(Long id, String name, String color, List<StationResponse> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
+    public LineResponse(Line line, List<StationResponse> stations) {
+        this.id = line.getId();
+        this.name = line.getName();
+        this.color = line.getColor();
+        this.extraCharge = line.getExtraCharge();
         this.stations = stations;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+        this.createdDate = line.getCreatedDate();
+        this.modifiedDate = line.getModifiedDate();
     }
 
     public Long getId() {
@@ -40,6 +42,10 @@ public class LineResponse {
 
     public String getColor() {
         return color;
+    }
+
+    public int getExtraCharge() {
+        return extraCharge;
     }
 
     public List<StationResponse> getStations() {

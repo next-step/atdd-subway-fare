@@ -71,12 +71,14 @@ public final class DocumentationFilterTemplate {
                         fieldWithPath("upStationId").description("상행역 고유 번호"),
                         fieldWithPath("downStationId").description("하행역 고유 번호"),
                         fieldWithPath("distance").description("이동 거리"),
-                        fieldWithPath("duration").description("소요 시간")
+                        fieldWithPath("duration").description("소요 시간"),
+                        fieldWithPath("extraCharge").description("추가 요금")
                 ),
                 responseFields(
                         fieldWithPath("id").description("노선 고유번호"),
                         fieldWithPath("name").description("노선 이름"),
                         fieldWithPath("color").description("노선 색상"),
+                        fieldWithPath("extraCharge").description("추가 요금"),
                         fieldWithPath("stations[].id").description("역 고유번호"),
                         fieldWithPath("stations[].name").description("역 이름"),
                         fieldWithPath("stations[].createdDate").description("생성 시간"),

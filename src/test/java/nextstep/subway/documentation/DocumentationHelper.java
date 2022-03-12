@@ -96,12 +96,13 @@ public final class DocumentationHelper {
 
     public static ExtractableResponse<Response> 노선_생성_요청(RequestSpecification spec) {
         Map<String, Object> request = new HashMap<>();
-        request.put("name", "2호선");
-        request.put("color", "green");
+        request.put("name", "신분당선");
+        request.put("color", "red");
         request.put("upStationId", 1L);
         request.put("downStationId", 2L);
         request.put("distance", 5);
         request.put("duration", 5);
+        request.put("extraCharge", 900);
 
         return RestAssured
                 .given(spec).log().all()
@@ -116,7 +117,7 @@ public final class DocumentationHelper {
         assertAll(() -> {
             assertThat(response.statusCode()).isEqualTo(CREATED.value());
             assertThat(response.jsonPath().getInt("id")).isEqualTo(1);
-            assertThat(response.jsonPath().getString("name")).isEqualTo("2호선");
+            assertThat(response.jsonPath().getString("name")).isEqualTo("신분당선");
         });
     }
 }

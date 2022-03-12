@@ -1,12 +1,17 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
+import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.PathType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 @RestController
 public class PathController {
@@ -18,10 +23,13 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(
-            @RequestParam Long source,
-            @RequestParam Long target,
-            @RequestParam PathType pathType
+            @AuthenticationPrincipal LoginMember loginMember,
+            @Valid PathRequest pathRequest,
+            BindingResult bindingResult
     ) {
-        return ResponseEntity.ok(pathService.findPath(source, target, pathType));
+        if(bindingResult.hasErrors()) {
+            throw new ValidationException();
+        }
+        return ResponseEntity.ok(pathService.findPath(pathRequest, loginMember.getAge()));
     }
 }
