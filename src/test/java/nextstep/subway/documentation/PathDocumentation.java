@@ -26,9 +26,9 @@ class PathDocumentation extends Documentation {
     @Test
     void 최단_경로_조회() {
         PathResponse pathResponse = new PathResponse(Lists.newArrayList(
-                new StationResponse(1L, "강남역", null, null),
-                new StationResponse(2L, "역삼역", null, null)
-        ), 10, 5);
+                new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
+        ), 10, 5, 1350);
 
         when(pathService.findPath(anyLong(), anyLong(), eq(PathInquiryType.DISTANCE)))
                 .thenReturn(pathResponse);
@@ -51,7 +51,7 @@ class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(Lists.newArrayList(
                 new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-        ), 10, 5);
+        ), 10, 5, 1350);
 
         when(pathService.findPath(anyLong(), anyLong(), eq(PathInquiryType.DURATION)))
                 .thenReturn(pathResponse);
