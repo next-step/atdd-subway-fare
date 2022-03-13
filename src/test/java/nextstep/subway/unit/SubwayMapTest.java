@@ -34,17 +34,17 @@ class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3);
-        이호선.addSection(교대역, 강남역, 3);
-        삼호선.addSection(교대역, 남부터미널역, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5);
+        신분당선.addSection(강남역, 양재역, 3, 3);
+        이호선.addSection(교대역, 강남역, 3, 3);
+        삼호선.addSection(교대역, 남부터미널역, 5, 2);
+        삼호선.addSection(남부터미널역, 양재역, 5, 1);
     }
 
     @Test
-    void findPath() {
+    void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, "distance");
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -54,16 +54,42 @@ class SubwayMapTest {
     }
 
     @Test
-    void findPathOppositely() {
+    void findPathOppositelyByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, "distance");
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+    }
+
+    @Test
+    void findPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, "duration");
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+    }
+
+    @Test
+    void findPathOppositelyByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, "duration");
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
     }
 
     private Station createStation(long id, String name) {
