@@ -22,8 +22,8 @@ public class Section extends DefaultWeightedEdge {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    @Embedded
-    private SectionInfo sectionInfo;
+    private int distance;
+    private int duration;
 
     public Section() {
 
@@ -33,14 +33,8 @@ public class Section extends DefaultWeightedEdge {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.sectionInfo = new SectionInfo(distance, duration);
-    }
-
-    public Section(Line line, Station upStation, Station downStation, SectionInfo sectionInfo) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.sectionInfo = sectionInfo;
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -60,15 +54,15 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return sectionInfo.getDistance();
+        return distance;
     }
 
     public int getBetweenDistance(int distance) {
-        return sectionInfo.getBetweenDistance(distance);
+        return this.distance - distance;
     }
 
     public int getDuration() {
-        return sectionInfo.getDuration();
+        return duration;
     }
 
     public boolean isSameUpStation(Station station) {
@@ -84,30 +78,54 @@ public class Section extends DefaultWeightedEdge {
                 || (this.upStation == downStation && this.downStation == upStation);
     }
 
-    @Embeddable
-    public static class SectionInfo {
+    public static class SectionBuilder {
+        private Long id;
+        private Line line;
+        private Station upStation;
+        private Station downStation;
         private int distance;
         private int duration;
 
-        public SectionInfo() {
+        public SectionBuilder id(Long id) {
+            this.id = id;
+            return this;
         }
 
-        public SectionInfo(int distance, int duration) {
+        public SectionBuilder line(Line line) {
+            this.line = line;
+            return this;
+        }
+
+        public SectionBuilder upStation(Station upStation) {
+            this.upStation = upStation;
+            return this;
+        }
+
+        public SectionBuilder downStation(Station downStation) {
+            this.downStation = downStation;
+            return this;
+        }
+
+        public SectionBuilder distance(int distance) {
             this.distance = distance;
+            return this;
+        }
+
+        public SectionBuilder duration(int duration) {
             this.duration = duration;
+            return this;
         }
 
-        public int getDistance() {
-            return distance;
-        }
-
-        public int getDuration() {
-            return duration;
-        }
-
-        public int getBetweenDistance(int distance) {
-            return this.distance - distance;
+        public Section build() {
+            return new Section(
+                    this.line,
+                    this.upStation,
+                    this.downStation,
+                    this.distance,
+                    this.duration
+            );
         }
     }
+
 
 }

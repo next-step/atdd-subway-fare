@@ -69,7 +69,15 @@ public class LineService {
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
         Line line = findById(lineId);
 
-        line.addSection(upStation, downStation, new Section.SectionInfo(sectionRequest.getDistance(), sectionRequest.getDuration()));
+        line.addSection(
+                new Section
+                        .SectionBuilder()
+                        .line(line)
+                        .upStation(upStation)
+                        .downStation(downStation)
+                        .distance(sectionRequest.getDistance())
+                        .duration(sectionRequest.getDuration())
+                        .build());
     }
 
     public void deleteSection(Long lineId, Long stationId) {

@@ -92,7 +92,15 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), new Section.SectionInfo(it.getBetweenDistance(section.getDistance()), section.getDuration())));
+                    sections.add(
+                            new Section
+                                    .SectionBuilder()
+                                    .line(section.getLine())
+                                    .upStation(it.getUpStation())
+                                    .downStation(section.getUpStation())
+                                    .distance(it.getDistance() - section.getDistance())
+                                    .duration(section.getDuration())
+                                    .build());
                     sections.remove(it);
                 });
     }
@@ -103,7 +111,15 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), new Section.SectionInfo(it.getBetweenDistance(section.getDistance()), section.getDuration())));
+                    sections.add(
+                            new Section
+                                    .SectionBuilder()
+                                    .line(section.getLine())
+                                    .upStation(section.getDownStation())
+                                    .downStation(it.getDownStation())
+                                    .distance(it.getDistance() - section.getDistance())
+                                    .duration(section.getDuration())
+                                    .build());
                     sections.remove(it);
                 });
     }
@@ -124,14 +140,15 @@ public class Sections {
 
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
-            Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    new Section.SectionInfo(
-                            upSection.get().getDistance() + downSection.get().getDistance()
-                            , upSection.get().getDuration())
-            );
+            Section newSection =
+                    new Section
+                            .SectionBuilder()
+                            .line(upSection.get().getLine())
+                            .upStation(upSection.get().getDownStation())
+                            .downStation(downSection.get().getUpStation())
+                            .distance(upSection.get().getDistance() + downSection.get().getDistance())
+                            .duration(upSection.get().getDuration())
+                            .build();
 
             this.sections.add(newSection);
         }

@@ -166,7 +166,7 @@ class LineTest {
 
         line.deleteSection(역삼역);
 
-        assertThat(line.getStations()).containsExactly(강남역, 삼성역);
+        assertThat(line.getStations()).contains(강남역, 삼성역);
     }
 
     @DisplayName("구간이 하나인 노선에서 역 삭제 시 에러 발생")
