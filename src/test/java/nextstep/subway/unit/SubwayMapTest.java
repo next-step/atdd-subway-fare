@@ -5,11 +5,15 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.sectiontype.DistanceSectionPathType;
+import nextstep.subway.domain.sectiontype.DurationSectionPathType;
 import nextstep.subway.domain.sectiontype.SectionPathType;
+import nextstep.subway.domain.sectiontype.SectionPathTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,10 +49,10 @@ class SubwayMapTest {
     void findPath() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, SectionPathType.DISTANCE);
+        SubwayMap subwayMap = getSubwayMap();
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(lines, SectionPathType.DISTANCE, 교대역, 양재역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -58,13 +62,21 @@ class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, SectionPathType.DISTANCE);
+        SubwayMap subwayMap = getSubwayMap();
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMap.findPath(lines, SectionPathType.DISTANCE, 양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+    }
+
+    private SubwayMap getSubwayMap() {
+        return new SubwayMap(new SectionPathTypes(
+                Arrays.asList(
+                        new DistanceSectionPathType()
+                        , new DurationSectionPathType())
+        ));
     }
 
     private Station createStation(long id, String name) {

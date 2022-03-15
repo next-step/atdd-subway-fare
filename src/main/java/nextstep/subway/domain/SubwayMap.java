@@ -5,23 +5,22 @@ import nextstep.subway.domain.sectiontype.SectionPathTypes;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class SubwayMap {
-    private List<Line> lines;
-    private SectionPathType sectionPathType;
-    private SectionPathTypes sectionPathTypes = new SectionPathTypes();
+    private SectionPathTypes sectionPathTypes;
 
-    public SubwayMap(List<Line> lines, SectionPathType sectionPathType) {
-        this.lines = lines;
-        this.sectionPathType = sectionPathType;
+    public SubwayMap(SectionPathTypes sectionPathTypes) {
+        this.sectionPathTypes = sectionPathTypes;
     }
 
-    public Path findPath(Station source, Station target) {
+    public Path findPath(List<Line> lines, SectionPathType sectionPathType, Station source, Station target) {
         // 그래프 만들기
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph(lines, sectionPathType);
 
         // 다익스트라 최단/최소 시간 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -34,17 +33,17 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph() {
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> createGraph(List<Line> lines, SectionPathType sectionPathType) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        addVertex(graph);
-        addEdge(graph);
-        addOppositeEdge(graph);
+        addVertex(lines, graph);
+        addEdge(lines, sectionPathType, graph);
+        addOppositeEdge(lines, sectionPathType, graph);
 
         return graph;
     }
 
-    private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addVertex(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역(정점)을 등록
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
@@ -53,15 +52,15 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addEdge(List<Line> lines, SectionPathType sectionPathType, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
 
         for (Line line : lines) {
-            addEdge(graph, line.getSections());
+            addEdgeForStation(line.getSections(), sectionPathType, graph);
         }
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, List<Section> sections) {
+    private void addEdgeForStation(List<Section> sections, SectionPathType sectionPathType, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         for (Section section : sections) {
             SectionEdge sectionEdge = SectionEdge.of(section);
             graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
@@ -70,15 +69,15 @@ public class SubwayMap {
         }
     }
 
-    private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addOppositeEdge(List<Line> lines, SectionPathType sectionPathType, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
 
         for (Line line : lines) {
-            addOppositeEdge(graph, line);
+            addOppositeEdgeForStation(graph, line, sectionPathType);
         }
     }
 
-    private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Line line) {
+    private void addOppositeEdgeForStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Line line, SectionPathType sectionPathType) {
         List<Section> sectionList = line.getSections().stream()
                 .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .collect(Collectors.toList());
