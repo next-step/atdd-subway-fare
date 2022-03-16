@@ -22,7 +22,8 @@ public class PathService {
         this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target, SectionPathType type) {
+    public PathResponse
+    findPath(Long source, Long target, SectionPathType type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
