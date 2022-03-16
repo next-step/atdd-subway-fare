@@ -29,9 +29,9 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L,"강남역",null,null),
-                        new StationResponse(2L,"역삼역",null,null)
-                )      ,10,10
+                        new StationResponse(1L, "강남역", null, null),
+                        new StationResponse(2L, "역삼역", null, null)
+                ), 10, 10, 1350
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -53,7 +53,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").description("생성일"),
                                 fieldWithPath("stations[].modifiedDate").description("변경일"),
                                 fieldWithPath("distance").description("거리"),
-                                fieldWithPath("duration").description("시간")
+                                fieldWithPath("duration").description("시간"),
+                                fieldWithPath("fee").description("요금")
                         )))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)

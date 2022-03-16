@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    private int 기본요금 = 1250;
+    private int 오십킬로_미만_추가요금 = 100;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -51,6 +53,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 20));
     }
 
+    /**
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
@@ -61,6 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(620);
+        assertThat(response.jsonPath().getInt("fee")).isEqualTo(기본요금 + 오십킬로_미만_추가요금);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
