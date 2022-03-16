@@ -14,18 +14,21 @@ import java.util.List;
 public class PathService {
     private LineService lineService;
     private StationService stationService;
+    private SubwayMap subwayMap;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, SubwayMap subwayMap) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.subwayMap = subwayMap;
     }
 
-    public PathResponse findPath(Long source, Long target, SectionPathType type) {
+    public PathResponse
+    findPath(Long source, Long target, SectionPathType type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines, type);
-        Path path = subwayMap.findPath(upStation, downStation);
+
+        Path path = subwayMap.findPath(lines, type, upStation, downStation);
         return PathResponse.of(path);
     }
 }

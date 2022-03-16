@@ -49,11 +49,20 @@ public class Line extends BaseEntity {
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
-        sections.add(new Section(this, upStation, downStation, new Section.SectionInfo(distance, duration)));
+        sections.add(
+                new Section
+                        .SectionBuilder()
+                        .line(this)
+                        .upStation(upStation)
+                        .downStation(downStation)
+                        .distance(distance)
+                        .duration(duration)
+                        .build()
+        );
     }
 
-    public void addSection(Station upStation, Station downStation, Section.SectionInfo sectionInfo) {
-        sections.add(new Section(this, upStation, downStation, sectionInfo));
+    public void addSection(Section section) {
+        sections.add(section);
     }
 
     public List<Station> getStations() {
@@ -63,4 +72,6 @@ public class Line extends BaseEntity {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
+
 }
