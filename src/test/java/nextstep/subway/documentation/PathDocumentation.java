@@ -32,7 +32,7 @@ public class PathDocumentation extends Documentation {
                 createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathByShortestDistance(anyLong(), anyLong())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -55,7 +55,7 @@ public class PathDocumentation extends Documentation {
                 createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathByShortestDistance(anyLong(), anyLong())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -65,12 +65,12 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
-                .when().get("/paths/minimum-time")
+                .when().get("/paths/shortest-duration")
                 .then().log().all().extract();
     }
 
     private PathResponse createPathResponse(int distance, StationResponse... stationResponseArgs) {
-        return new PathResponse(arrayToList(stationResponseArgs), 10);
+        return new PathResponse(arrayToList(stationResponseArgs), 10, 10);
     }
 
     private StationResponse createStationResponse(Long id, String name, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
