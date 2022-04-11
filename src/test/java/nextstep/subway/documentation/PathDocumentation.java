@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+@DisplayName("경로 테스트(문서)")
 public class PathDocumentation extends Documentation {
 
     @MockBean
@@ -42,6 +43,29 @@ public class PathDocumentation extends Documentation {
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
                 .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    @DisplayName("두 역의 최소 시간 경로를 조회")
+    @Test
+    void shortestTimePath() {
+        PathResponse pathResponse = createPathResponse(
+                10,
+                createStationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
+        );
+
+        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+
+        RestAssured
+                .given(spec).log().all()
+                .filter(document("path-minimum-time",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())))
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 1L)
+                .queryParam("target", 2L)
+                .when().get("/paths/minimum-time")
                 .then().log().all().extract();
     }
 
