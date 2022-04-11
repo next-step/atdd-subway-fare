@@ -16,7 +16,8 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source,
+                                                 @RequestParam Long target) {
         return ResponseEntity.ok(pathService.findPath(source, target));
     }
 }
