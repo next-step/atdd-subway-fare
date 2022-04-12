@@ -8,12 +8,12 @@ import nextstep.subway.domain.SubwayMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 맵(SubwayMapTest)")
 class SubwayMapTest {
@@ -40,7 +40,7 @@ class SubwayMapTest {
         이호선.addSection(교대역, 강남역, 3, 5);
         신분당선.addSection(강남역, 양재역, 3, 5);
         삼호선.addSection(교대역, 남부터미널역, 5, 3);
-        삼호선.addSection(남부터미널역, 양재역, 5,3);
+        삼호선.addSection(남부터미널역, 양재역, 5, 3);
     }
 
     @Test
@@ -53,7 +53,11 @@ class SubwayMapTest {
         Path path = subwayMap.findPathByShortestDistance(교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(6),
+                () -> assertThat(path.extractDuration()).isEqualTo(10)
+        );
     }
 
     @DisplayName("최소 시간 경로를 구한다.")
@@ -67,7 +71,11 @@ class SubwayMapTest {
         Path path = subwayMap.findPathByShortestDuration(교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(10),
+                () -> assertThat(path.extractDuration()).isEqualTo(6)
+        );
     }
 
     @Test
