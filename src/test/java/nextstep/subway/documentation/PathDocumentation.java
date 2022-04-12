@@ -4,7 +4,6 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.desginpattern.DirectWeightGraphFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,8 +21,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @DisplayName("경로 테스트(문서)")
 public class PathDocumentation extends Documentation {
 
-    public static final String SOURCE = "source";
-    public static final String TARGET = "target";
+    private static final String SOURCE = "source";
+    private static final String TARGET = "target";
+
     @MockBean
     private PathService pathService;
 
@@ -31,7 +31,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void shortestPath() {
         PathResponse pathResponse = createPathResponse(
-                10,
+                10, 15,
                 createStationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
@@ -40,12 +40,12 @@ public class PathDocumentation extends Documentation {
 
         RestAssured
                 .given(spec).log().all()
-                .filter(document("path",
+                .filter(document("path-shortest-distance",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
+                .queryParam(SOURCE, 1L)
+                .queryParam(TARGET, 2L)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
@@ -54,7 +54,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void shortestTimePath() {
         PathResponse pathResponse = createPathResponse(
-                10,
+                10, 15,
                 createStationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                 createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
@@ -73,8 +73,8 @@ public class PathDocumentation extends Documentation {
                 .then().log().all().extract();
     }
 
-    private PathResponse createPathResponse(int distance, StationResponse... stationResponseArgs) {
-        return new PathResponse(arrayToList(stationResponseArgs), distance, distance);
+    private PathResponse createPathResponse(int distance, int duration, StationResponse... stationResponseArgs) {
+        return new PathResponse(arrayToList(stationResponseArgs), distance, duration);
     }
 
     private StationResponse createStationResponse(Long id, String name, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
