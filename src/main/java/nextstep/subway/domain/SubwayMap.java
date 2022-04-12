@@ -14,7 +14,7 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target) {
+    public Path findPathByShortestDistance(Station source, Station target) {
         // 그래프 만들기
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = createGraph();
 

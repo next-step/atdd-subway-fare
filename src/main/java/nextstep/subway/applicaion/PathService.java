@@ -24,7 +24,17 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
+        Path path = subwayMap.findPathByShortestDistance(upStation, downStation);
+
+        return PathResponse.of(path);
+    }
+
+    public PathResponse findPathByShortestDuration(Long source, Long target) {
+        Station upStation = stationService.findById(source);
+        Station downStation = stationService.findById(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPathByShortestDuration(upStation, downStation);
 
         return PathResponse.of(path);
     }
