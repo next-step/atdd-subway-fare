@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.desginpattern.DirectWeightGraphFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 
 import static nextstep.subway.utils.GenericExtensionUtils.arrayToList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -34,7 +36,7 @@ public class PathDocumentation extends Documentation {
                 createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        when(pathService.findPathByShortestDistance(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathByShortestCondition(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -57,7 +59,7 @@ public class PathDocumentation extends Documentation {
                 createStationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
         );
 
-        when(pathService.findPathByShortestDistance(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathByShortestCondition(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -67,7 +69,7 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam(SOURCE, 1L)
                 .queryParam(TARGET, 2L)
-                .when().get("/paths/shortest-duration")
+                .when().get("/paths?condition=duration")
                 .then().log().all().extract();
     }
 

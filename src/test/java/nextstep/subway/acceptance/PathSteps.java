@@ -26,7 +26,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .when().get("/paths/shortest-duration")
+                .when().get("/paths?condition=duration")
                 .then().log().all().extract();
     }
 

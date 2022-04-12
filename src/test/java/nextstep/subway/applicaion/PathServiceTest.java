@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.desginpattern.DirectWeightGraphFactory;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,7 @@ class PathServiceTest {
     @DisplayName("최단 거리를 반환한다.")
     @Test
     void findPathByShortestDistance() {
-        final PathResponse pathResponse = pathService.findPathByShortestDistance(교대역.getId(), 양재역.getId());
+        final PathResponse pathResponse = pathService.findPathByShortestCondition(교대역.getId(), 양재역.getId(), DirectWeightGraphFactory.distance());
         final int actual = pathResponse.getDistance();
 
         assertThat(actual).isEqualTo(5);
@@ -76,8 +77,8 @@ class PathServiceTest {
     @DisplayName("최소 소요 시간을 반환한다.")
     @Test
     void findPathByShortestDuration() {
-        final PathResponse pathResponse = pathService.findPathByShortestDuration(강남역.getId(), 양재역.getId());
-        final int actual = pathResponse.getDistance();
+        final PathResponse pathResponse = pathService.findPathByShortestCondition(교대역.getId(), 양재역.getId(), DirectWeightGraphFactory.duration());
+        final int actual = pathResponse.getDuration();
 
         assertThat(actual).isEqualTo(180);
     }

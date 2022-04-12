@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.desginpattern.DirectWeightGraphTemplate;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
@@ -19,23 +20,12 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPathByShortestDistance(Long source, Long target) {
+    public PathResponse findPathByShortestCondition(Long source, Long target, final DirectWeightGraphTemplate directWeightGraphTemplate) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPathByShortestDistance(upStation, downStation);
-
-        return PathResponse.of(path);
-    }
-
-    public PathResponse findPathByShortestDuration(Long source, Long target) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPathByShortestDuration(upStation, downStation);
-
+        Path path = subwayMap.findPathByShortestCondition(upStation, downStation, directWeightGraphTemplate);
         return PathResponse.of(path);
     }
 }
