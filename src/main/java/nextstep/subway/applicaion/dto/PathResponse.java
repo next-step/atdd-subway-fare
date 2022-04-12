@@ -21,8 +21,8 @@ public class PathResponse {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
-
-        return new PathResponse(stations, distance, distance);
+        int duration = path.extractDuration();
+        return new PathResponse(stations, distance, duration);
     }
 
     public List<StationResponse> getStations() {
