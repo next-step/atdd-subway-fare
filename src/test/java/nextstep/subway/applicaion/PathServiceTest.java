@@ -73,12 +73,12 @@ class PathServiceTest {
         assertThat(actual).isEqualTo(5);
     }
 
-//    @DisplayName("최소 소요 시간을 반환한다.")
-//    @Test
-//    void findPathByShortestDuration() {
-//        final PathResponse pathResponse = pathService.findPathByShortestDuration(강남역.getId(), 양재역.getId());
-//        final int actual = pathResponse.getDistance();
-//
-//        assertThat(actual).isEqualTo(15);
-//    }
+    @DisplayName("최소 소요 시간을 반환한다.")
+    @Test
+    void findPathByShortestDuration() {
+        final PathResponse pathResponse = pathService.findPathByShortestDuration(강남역.getId(), 양재역.getId());
+        final int actual = pathResponse.getDistance();
+
+        assertThat(actual).isEqualTo(180);
+    }
 }
