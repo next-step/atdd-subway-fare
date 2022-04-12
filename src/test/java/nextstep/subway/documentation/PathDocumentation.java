@@ -20,6 +20,8 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @DisplayName("경로 테스트(문서)")
 public class PathDocumentation extends Documentation {
 
+    public static final String SOURCE = "source";
+    public static final String TARGET = "target";
     @MockBean
     private PathService pathService;
 
@@ -59,18 +61,18 @@ public class PathDocumentation extends Documentation {
 
         RestAssured
                 .given(spec).log().all()
-                .filter(document("path-minimum-time",
+                .filter(document("path-shortest-duration",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
+                .queryParam(SOURCE, 1L)
+                .queryParam(TARGET, 2L)
                 .when().get("/paths/shortest-duration")
                 .then().log().all().extract();
     }
 
     private PathResponse createPathResponse(int distance, StationResponse... stationResponseArgs) {
-        return new PathResponse(arrayToList(stationResponseArgs), 10, 10);
+        return new PathResponse(arrayToList(stationResponseArgs), distance, distance);
     }
 
     private StationResponse createStationResponse(Long id, String name, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {

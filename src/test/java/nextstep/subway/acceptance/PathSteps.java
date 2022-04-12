@@ -20,6 +20,16 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_소요_시간_조회를_요청(Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .when().get("/paths/shortest-duration")
+                .then().log().all().extract();
+    }
+
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
