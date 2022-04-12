@@ -49,4 +49,25 @@ class SectionsTest {
         // then
         assertThat(actual).isEqualTo(10);
     }
+
+    @DisplayName("구간의 모든 소요시간의 합을 구한다.(앞에 추가된)")
+    @Test
+    void totalDurationByAfterSection() {
+        // given
+        final Station 강남역 = new Station("강남역");
+        final Station 역삼역 = new Station("역삼역");
+        final Station 삼성역 = new Station("삼성역");
+
+        final Line line = new Line("2호선", "green");
+        line.addSection(역삼역, 삼성역, 5, 5);
+        line.addSection(강남역, 역삼역, 10, 10);
+
+        final Sections sections = new Sections(line.getSections());
+
+        // when
+        final int actual = sections.totalDuration();
+
+        // then
+        assertThat(actual).isEqualTo(15);
+    }
 }
