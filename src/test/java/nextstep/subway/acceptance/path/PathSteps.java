@@ -1,12 +1,15 @@
-package nextstep.subway.acceptance;
+package nextstep.subway.acceptance.path;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps {
 
@@ -32,5 +35,12 @@ public class PathSteps {
                 ))
                 .when().get("/paths")
                 .then().log().all().extract();
+    }
+
+    public static void 경로_조회_응답_검증(ExtractableResponse<Response> response, int distance, int duration, Long... stations) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
     }
 }
