@@ -1,6 +1,7 @@
 package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
+import nextstep.subway.applicaion.constants.PathType;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -29,7 +31,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 4
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         두_역의_최단_거리_경로_조회를_요청(given(spec, "path"), 1L, 2L);
     }
