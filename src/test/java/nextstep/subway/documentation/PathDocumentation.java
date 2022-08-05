@@ -22,8 +22,8 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "강남역"),
-                        new StationResponse(2L, "역삼역")
+                        new StationResponse(1L, "강남역", null, null),
+                        new StationResponse(2L, "역삼역", null, null)
                 ), 10
         );
 
