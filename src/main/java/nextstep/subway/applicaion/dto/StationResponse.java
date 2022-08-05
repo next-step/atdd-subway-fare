@@ -4,8 +4,11 @@ import nextstep.subway.domain.Station;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 public class StationResponse {
     private Long id;
@@ -41,11 +44,11 @@ public class StationResponse {
         return name;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public String getCreatedDate() {
+        return createdDate.format(ISO_DATE_TIME);
     }
 
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
+    public String getModifiedDate() {
+        return modifiedDate.format(ISO_DATE_TIME);
     }
 }
