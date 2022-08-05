@@ -1,9 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +8,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.domain.PathType.DISTANCE;
+import static nextstep.subway.domain.PathType.DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
@@ -34,17 +33,17 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3,10);
-        이호선.addSection(교대역, 강남역, 3, 10);
-        삼호선.addSection(교대역, 남부터미널역, 5, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5, 5);
+        신분당선.addSection(강남역, 양재역, 3, 4);
+        이호선.addSection(교대역, 강남역, 3, 5);
+        삼호선.addSection(교대역, 남부터미널역, 5, 3);
+        삼호선.addSection(남부터미널역, 양재역, 5, 2);
     }
 
     @Test
     void findPath() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, DISTANCE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -54,16 +53,29 @@ public class SubwayMapTest {
     }
 
     @Test
-    void findPathOppositely() {
+    void findDistancePathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, DISTANCE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+    }
+
+    @Test
+    void findDurationPathOppositely() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, DURATION);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
     }
 
     private Station createStation(long id, String name) {
