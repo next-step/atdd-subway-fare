@@ -43,6 +43,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
@@ -53,7 +54,7 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10,3);
+        line.addSection(강남역, 역삼역, 10,5);
         line.addSection(삼성역, 역삼역, 5,3);
 
         assertThat(line.getSections().size()).isEqualTo(2);
@@ -62,6 +63,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(2);
     }
 
     @DisplayName("목록 앞에 추가할 경우")
@@ -81,6 +83,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(역삼역);
         assertThat(section.getDistance()).isEqualTo(10);
+        assertThat(section.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("목록 뒤에 추가할 경우")
@@ -100,6 +103,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(3);
     }
 
     @Test

@@ -28,7 +28,7 @@ public class PathDocumentation extends Documentation {
         // given
         var 강남역 = new StationResponse(1L, "강남역");
         var 역삼역 = new StationResponse(2L, "역삼역");
-        var pathResponse = new PathResponse(List.of(강남역, 역삼역), 10);
+        var pathResponse = new PathResponse(List.of(강남역, 역삼역), 10, 5);
 
         // when
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
