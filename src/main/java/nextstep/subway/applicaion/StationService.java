@@ -41,8 +41,8 @@ public class StationService {
         return new StationResponse(
                 station.getId(),
                 station.getName(),
-                station.getCreatedDateTime(),
-                station.getModifiedDateTime()
+                station.getCreatedDate(),
+                station.getModifiedDate()
         );
     }
 

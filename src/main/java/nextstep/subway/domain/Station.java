@@ -16,9 +16,9 @@ public class Station {
     private Long id;
     private String name;
     @CreatedDate
-    private LocalDateTime createdDateTime;
+    private LocalDateTime createdDate;
     @LastModifiedDate
-    private LocalDateTime modifiedDateTime;
+    private LocalDateTime modifiedDate;
 
     protected Station() {
     }
@@ -35,11 +35,11 @@ public class Station {
         return name;
     }
 
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public LocalDateTime getModifiedDateTime() {
-        return modifiedDateTime;
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
     }
 }
