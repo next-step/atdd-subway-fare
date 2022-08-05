@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.applicaion.constants.PathType;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;

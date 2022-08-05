@@ -1,7 +1,7 @@
 package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.constants.PathType;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
