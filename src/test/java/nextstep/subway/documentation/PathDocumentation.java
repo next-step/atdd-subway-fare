@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -22,8 +24,8 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "강남역", null, null),
-                        new StationResponse(2L, "역삼역", null, null)
+                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10, 20
         );
 
