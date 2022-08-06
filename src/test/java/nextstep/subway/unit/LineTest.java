@@ -19,8 +19,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         assertThat(line.getStations()).containsExactly(강남역, 역삼역, 삼성역);
     }
@@ -33,8 +33,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(강남역, 삼성역, 5, 2);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -52,8 +52,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 역삼역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(삼성역, 역삼역, 5, 2);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -71,8 +71,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 강남역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(삼성역, 강남역, 5, 2);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -90,8 +90,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -107,12 +107,48 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(강남역, 삼성역, 5, 2);
 
         List<Station> result = line.getStations();
 
         assertThat(result).containsExactly(강남역, 삼성역, 역삼역);
+    }
+
+    @DisplayName("마지막에 구간 추가시 총 소요시간을 구한다")
+    @Test
+    public void get_duration_when_add_last() {
+        // given
+        Station 강남역 = new Station("강남역");
+        Station 역삼역 = new Station("역삼역");
+        Station 삼성역 = new Station("삼성역");
+        Line line = new Line("2호선", "green");
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(역삼역, 삼성역, 5, 2);
+
+        // when
+        int duration = line.getTotalDuration();
+
+        // then
+        assertThat(duration).isEqualTo(5);
+    }
+
+    @DisplayName("중간에 구간 삽입시 총 소요시간을 구한다")
+    @Test
+    public void get_duration_when_add_middle() {
+        // given
+        Station 강남역 = new Station("강남역");
+        Station 역삼역 = new Station("역삼역");
+        Station 삼성역 = new Station("삼성역");
+        Line line = new Line("2호선", "green");
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(강남역, 삼성역, 5, 2);
+
+        // when
+        int duration = line.getTotalDuration();
+
+        // then
+        assertThat(duration).isEqualTo(3);
     }
 
     @DisplayName("이미 존재하는 구간 추가 시 에러 발생")
@@ -121,9 +157,9 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 3);
 
-        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5))
+        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -133,8 +169,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         line.deleteSection(삼성역);
 
@@ -147,8 +183,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         line.deleteSection(강남역);
 
@@ -161,8 +197,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 3);
+        line.addSection(역삼역, 삼성역, 5, 2);
 
         line.deleteSection(역삼역);
 
@@ -175,7 +211,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 3);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
