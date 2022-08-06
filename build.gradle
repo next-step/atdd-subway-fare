@@ -30,8 +30,9 @@ dependencies {
 
 	// jwt
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.projectlombok:lombok:1.18.22'
 
-	// rest docs
+    // rest docs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured:2.0.5.RELEASE'
 
