@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,6 +13,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -35,7 +37,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -48,7 +50,8 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역 id"),
-                                parameterWithName("target").description("도착역 id")
+                                parameterWithName("target").description("도착역 id"),
+                                parameterWithName("type").description("경로조회 기준(DISTANCE, DURATION)")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로역"),
@@ -63,6 +66,7 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("type", PathType.DURATION)
                 .when().get("/paths")
                 .then().log().all().extract();
     }
