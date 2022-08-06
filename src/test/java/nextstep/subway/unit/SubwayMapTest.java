@@ -6,6 +6,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -23,6 +24,13 @@ public class SubwayMapTest {
     private Line 이호선;
     private Line 삼호선;
 
+    /**
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
     @BeforeEach
     void setUp() {
         교대역 = createStation(1L, "교대역");
@@ -34,10 +42,10 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3);
-        이호선.addSection(교대역, 강남역, 3);
-        삼호선.addSection(교대역, 남부터미널역, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5);
+        신분당선.addSection(강남역, 양재역, 3, 3);
+        이호선.addSection(교대역, 강남역, 3, 3);
+        삼호선.addSection(교대역, 남부터미널역, 5, 5);
+        삼호선.addSection(남부터미널역, 양재역, 5, 5);
     }
 
     @Test
