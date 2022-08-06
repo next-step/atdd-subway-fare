@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Getter
 @Embeddable
 public class Sections {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
@@ -19,10 +22,6 @@ public class Sections {
 
     public Sections(List<Section> sections) {
         this.sections = sections;
-    }
-
-    public List<Section> getSections() {
-        return sections;
     }
 
     public void add(Section section) {
@@ -75,6 +74,14 @@ public class Sections {
         }
 
         return result;
+    }
+
+    public int totalDistance() {
+        return sections.stream().mapToInt(Section::getDistance).sum();
+    }
+
+    public int totalDuration() {
+        return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
     private void checkDuplicateSection(Section section) {
@@ -148,7 +155,4 @@ public class Sections {
                 .findFirst();
     }
 
-    public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
-    }
 }
