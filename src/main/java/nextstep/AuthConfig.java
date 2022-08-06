@@ -4,6 +4,7 @@ import nextstep.member.application.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import support.auth.authentication.filter.BasicAuthenticationFilter;
@@ -22,6 +23,7 @@ import support.auth.token.TokenAuthenticationInterceptor;
 import java.util.List;
 
 @Configuration
+@EnableJpaAuditing
 public class AuthConfig implements WebMvcConfigurer {
     @Value("${security.jwt.token.secret-key}")
     private String secretKey;
