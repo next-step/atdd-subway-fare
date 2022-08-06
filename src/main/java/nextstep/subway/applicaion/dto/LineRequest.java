@@ -6,7 +6,7 @@ public class LineRequest {
     private Long upStationId;
     private Long downStationId;
     private int distance;
-    private int requiredTime;
+    private int duration;
 
     public String getName() {
         return name;
@@ -28,7 +28,7 @@ public class LineRequest {
         return distance;
     }
 
-    public int getRequiredTime() {
-        return requiredTime;
+    public int getDuration() {
+        return duration;
     }
 }

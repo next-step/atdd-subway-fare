@@ -97,7 +97,7 @@ public class Sections {
                             it.getUpStation(),
                             section.getUpStation(),
                             it.getDistance() - section.getDistance(),
-                            it.getRequiredTime() - section.getRequiredTime()
+                            it.getDuration() - section.getDuration()
                     ));
                     sections.remove(it);
                 });
@@ -114,7 +114,7 @@ public class Sections {
                             section.getDownStation(),
                             it.getDownStation(),
                             it.getDistance() - section.getDistance(),
-                            it.getRequiredTime() - section.getRequiredTime()
+                            it.getDuration() - section.getDuration()
                     ));
                     sections.remove(it);
                 });
@@ -141,7 +141,7 @@ public class Sections {
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
                     upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getRequiredTime() + downSection.get().getRequiredTime()
+                    upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);
@@ -164,7 +164,7 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDistance).sum();
     }
 
-    public int totalRequiredTime() {
-        return sections.stream().mapToInt(Section::getRequiredTime).sum();
+    public int totalDuration() {
+        return sections.stream().mapToInt(Section::getDuration).sum();
     }
 }
