@@ -1,28 +1,28 @@
 package nextstep.subway.applicaion.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Positive;
+
+import static nextstep.utils.NumberUtils.requirePositiveNumber;
+
+@Getter
+@NoArgsConstructor
 public class SectionRequest {
     private Long upStationId;
     private Long downStationId;
+    @Positive
     private int distance;
+    @Positive
+    private int duration;
 
-    public SectionRequest() {
-    }
-
-    public SectionRequest(Long upStationId, Long downStationId, int distance) {
+    public SectionRequest(Long upStationId, Long downStationId, int distance, int duration) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;
-        this.distance = distance;
+        this.distance = requirePositiveNumber(distance);
+        this.duration = requirePositiveNumber(duration);
     }
 
-    public Long getUpStationId() {
-        return upStationId;
-    }
 
-    public Long getDownStationId() {
-        return downStationId;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
 }
