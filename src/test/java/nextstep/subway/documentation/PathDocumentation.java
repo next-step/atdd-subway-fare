@@ -1,18 +1,14 @@
 package nextstep.subway.documentation;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
-import static nextstep.subway.documentation.PathSteps.Path_경로조회_요청_Source_to_Target;
+import static nextstep.subway.documentation.PathSteps.Path_경로조회_요청_최단거리;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -33,7 +29,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        var response = Path_경로조회_요청_Source_to_Target(1L, 2L);
+        var response = Path_경로조회_요청_최단거리(1L, 2L);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(10);
