@@ -22,7 +22,7 @@ public class Documentation {
     @LocalServerPort
     int port;
 
-    protected static RequestSpecification spec;
+    protected RequestSpecification spec;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -33,9 +33,11 @@ public class Documentation {
                 .build();
     }
 
-    public static RequestSpecification PATH_GIVEN_SPEC설정_filter설정(){
+    public RequestSpecification PATH_GIVEN_SPEC설정_filter설정() {
         return RestAssured
-                .given(spec).log().all()
+                .given(spec)
+                .log()
+                .all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
