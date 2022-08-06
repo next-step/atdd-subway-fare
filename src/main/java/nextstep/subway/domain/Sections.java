@@ -97,8 +97,8 @@ public class Sections {
                                     section.getLine(),
                                     it.getUpStation(),
                                     section.getUpStation(),
-                                    it.getDistance() - section.getDistance(),
-                                    it.getDuration() - section.getDuration()
+                                    it.minusDistance(section),
+                                    it.minusDuration(section)
                             )
                     );
                     sections.remove(it);
@@ -116,8 +116,8 @@ public class Sections {
                                     section.getLine(),
                                     section.getDownStation(),
                                     it.getDownStation(),
-                                    it.getDistance() - section.getDistance(),
-                                    it.getDuration() - section.getDuration()
+                                    it.minusDistance(section),
+                                    it.minusDuration(section)
                             )
                     );
                     sections.remove(it);
@@ -138,14 +138,16 @@ public class Sections {
                 .orElseThrow(RuntimeException::new);
     }
 
-    private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
-        if (upSection.isPresent() && downSection.isPresent()) {
+    private void addNewSectionForDelete(Optional<Section> optUpSection, Optional<Section> optDownSection) {
+        if (optUpSection.isPresent() && optDownSection.isPresent()) {
+            Section upSection = optUpSection.get();
+            Section downSection = optDownSection.get();
             Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration() + downSection.get().getDuration()
+                    upSection.getLine(),
+                    downSection.getUpStation(),
+                    upSection.getDownStation(),
+                    upSection.plusDistance(downSection),
+                    upSection.plusDuration(downSection)
             );
 
             this.sections.add(newSection);
