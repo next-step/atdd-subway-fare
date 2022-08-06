@@ -37,15 +37,6 @@ public class StationService {
         stationRepository.deleteById(id);
     }
 
-    public StationResponse createStationResponse(Station station) {
-        return new StationResponse(
-                station.getId(),
-                station.getName(),
-                station.getCreatedDate(),
-                station.getModifiedDate()
-        );
-    }
-
     public Station findById(Long id) {
         return stationRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }

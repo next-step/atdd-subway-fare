@@ -22,7 +22,7 @@ public class SubwayMap {
         validateConnectSection(result);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));

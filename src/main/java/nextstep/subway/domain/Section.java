@@ -2,7 +2,13 @@ package nextstep.subway.domain;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -34,6 +40,14 @@ public class Section extends DefaultWeightedEdge {
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    public Section(Station upStation, Station downStation, int distance, int duration) {
+        this(null, upStation, downStation, distance, duration);
+    }
+
+    public Section(Line line, Section section) {
+        this(line, section.upStation, section.downStation, section.distance, section.duration);
     }
 
     public Long getId() {
@@ -71,5 +85,21 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    public int minusDistance(Section section) {
+        return Math.abs(this.distance - section.distance);
+    }
+
+    public int plusDistance(Section section) {
+        return Math.abs(this.distance + section.distance);
+    }
+
+    public int minusDuration(Section section) {
+        return Math.abs(this.duration - section.duration);
+    }
+
+    public int plusDuration(Section section) {
+        return Math.abs(this.duration + section.duration);
     }
 }
