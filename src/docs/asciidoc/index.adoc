@@ -10,5 +10,5 @@
 == 지하철 경로
 
 === 경로 조회
-
 operation::path[snippets='http-request,http-response']
+operation::path[snippets='request-parameters,request-body,response-fields']
