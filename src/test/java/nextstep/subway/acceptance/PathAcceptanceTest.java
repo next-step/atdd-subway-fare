@@ -70,8 +70,11 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .log()
                 .all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", "DISTANCE")
                 .when()
-                .get("/paths?source={sourceId}&target={targetId}", source, target)
+                .get("/paths")
                 .then()
                 .log()
                 .all()
@@ -109,9 +112,9 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("두 역의 최소 시간 기준 경로를 조회한다")
     @Test
-    void findPathByTime() {
+    void findPathByDuration() {
         // When
-        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, true);
+        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -123,7 +126,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
     }
 
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, boolean byTime) {
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given()
                 .log()
@@ -131,7 +134,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("byTime", byTime)
+                .queryParam("type", "DURATION")
                 .when()
                 .get("/paths")
                 .then()

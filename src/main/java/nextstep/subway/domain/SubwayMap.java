@@ -58,7 +58,7 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    public Path findPathByTime(Station source, Station target) {
+    public Path findPathByDuration(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록

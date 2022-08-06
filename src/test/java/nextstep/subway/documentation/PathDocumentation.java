@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), anyBoolean())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         var response = Path_경로조회_요청_최소시간(1L, 2L);
 
@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", sourceStationId)
                 .queryParam("target", targetStationId)
-                .queryParam("byTime", true)
+                .queryParam("type", "DURATION")
                 .when()
                 .get("/paths")
                 .then()
