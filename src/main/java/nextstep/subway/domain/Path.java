@@ -16,6 +16,10 @@ public class Path {
     public int extractDistance() {
         return sections.totalDistance();
     }
+    public int extractDuration() {
+        return sections.totalDuration();
+    }
+
 
     public List<Station> getStations() {
         return sections.getStations();

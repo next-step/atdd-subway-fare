@@ -1,7 +1,8 @@
-package nextstep.subway.acceptance;
+package nextstep.subway.acceptance.line;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.acceptance.AcceptanceTestSteps;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
