@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,14 +29,15 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 양재시민의숲역;
     private Long 역삼역;
 
-    /** |                                  (2, 1)
+    /**
+     * |                                    (2, 1)
      * 교대역    --- *2호선* ---   강남역 --- *2호선* --- 역삼역
      * |                           |                     |
      * *3호선*                 *신분당선*                10호선
-     *                         (10, 10)                (10, 10)
+     * (10, 10)                (10, 10)
      * |                           |                     |
      * 남부터미널역  --- *3호선* --- 양재역 --- *3호선* --- 양재시민의숲역
-     * |                                  (1, 2)
+     * |                                    (1, 2)
      */
     @BeforeEach
     public void setUp() {
@@ -58,9 +60,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(양재역, 양재시민의숲역, 1, 2));
     }
 
-    /**
-     * TODO: 기능 구현 후 제거 예정
-     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
@@ -75,7 +74,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역, 역삼역);
+        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(양재역, 역삼역);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 역삼역);
@@ -84,10 +83,21 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+        return getShortestPathByType(source, target, PathType.DISTANCE);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target) {
+        return getShortestPathByType(source, target, PathType.DURATION);
+    }
+
+    private ExtractableResponse<Response> getShortestPathByType(Long source, Long target, PathType type) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", type)
+                .when().get("/paths")
                 .then().log().all().extract();
     }
 
