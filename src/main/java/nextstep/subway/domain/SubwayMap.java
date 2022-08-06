@@ -7,9 +7,6 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static nextstep.subway.domain.PathType.DISTANCE;
-import static nextstep.subway.domain.PathType.DURATION;
-
 public class SubwayMap {
     private List<Line> lines;
     private PathType pathType;
@@ -54,6 +51,6 @@ public class SubwayMap {
     private void settingGraph(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section) {
         SectionEdge sectionEdge = SectionEdge.of(section);
         graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-        graph.setEdgeWeight(sectionEdge, pathType.getValue(section));
+        graph.setEdgeWeight(sectionEdge, pathType.getWeight(section));
     }
 }

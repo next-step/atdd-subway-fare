@@ -78,6 +78,27 @@ class PathAcceptanceTest extends AcceptanceTest {
         총_거리와_소요_시간_응답_확인(최소_시간_경로_조회_응답);
     }
 
+    /**
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @Test
+    void 두_역의_최단_거리_경로와_요금을_조회한다() {
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()
@@ -98,9 +119,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(최소_시간_경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
+    private void 최단_거리_경로_조회_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
     private void 총_거리와_소요_시간_응답_확인(ExtractableResponse<Response> 최소_시간_경로_조회_응답) {
         assertThat(최소_시간_경로_조회_응답.jsonPath().getLong("distance")).isEqualTo(5);
         assertThat(최소_시간_경로_조회_응답.jsonPath().getLong("duration")).isEqualTo(2);
+    }
+
+    private void 지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_250);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
