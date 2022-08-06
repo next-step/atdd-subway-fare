@@ -78,6 +78,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         총_거리와_소요_시간_응답_확인(최소_시간_경로_조회_응답);
     }
 
+    /**
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @Test
+    void 두_역의_최단_거리_경로와_요금을_조회한다() {
+
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()
