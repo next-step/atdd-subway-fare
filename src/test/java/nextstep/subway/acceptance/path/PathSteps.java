@@ -37,10 +37,11 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로_조회_응답_검증(ExtractableResponse<Response> response, int distance, int duration, Long... stations) {
+    public static void 경로_조회_응답_검증(ExtractableResponse<Response> response, int distance, int duration, int fare, Long... stations) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
     }
 }
