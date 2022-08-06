@@ -10,7 +10,7 @@ public enum PathType {
         this.function = function;
     }
 
-    public int getValue(Section section) {
+    public int getWeight(Section section) {
         return function.getValue(section);
     }
 }
