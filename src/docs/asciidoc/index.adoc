@@ -33,6 +33,10 @@
 [[path]]
 == 지하철 경로
 
-=== 경로 조회
+=== 최단 거리 경로 조회
 
-operation::path[snippets='http-request,request-parameters,http-response,response-fields']
+operation::distance-path[snippets='http-request,request-parameters,http-response,response-fields']
+
+=== 최단 시간 경로 조회
+
+operation::duration-path[snippets='http-request,request-parameters,http-response,response-fields']
