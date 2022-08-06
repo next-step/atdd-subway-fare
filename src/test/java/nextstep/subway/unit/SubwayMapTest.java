@@ -14,6 +14,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SubwayMapTest {
 
@@ -59,7 +60,11 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, new DistanceEdgeInitiator());
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(5)
+        );
+
     }
 
     @Test
@@ -72,7 +77,11 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, new DurationEdgeInitiator());
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
+                () -> assertThat(path.extractDuration()).isEqualTo(5)
+        );
+
     }
 
     @Test
