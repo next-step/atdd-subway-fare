@@ -1,7 +1,10 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class Path {
     private Sections sections;
 
@@ -9,12 +12,12 @@ public class Path {
         this.sections = sections;
     }
 
-    public Sections getSections() {
-        return sections;
-    }
-
     public int extractDistance() {
         return sections.totalDistance();
+    }
+
+    public int extractDuration() {
+        return sections.totalDuration();
     }
 
     public List<Station> getStations() {
