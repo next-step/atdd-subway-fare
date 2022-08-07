@@ -17,8 +17,10 @@ public class Path {
         return sections.totalDistance();
     }
 
-    public int extractFare() {
-        return Fare.calculate(extractDistance());
+    public int extractFare(int userAge) {
+        int fare = Fare.calculate(extractDistance());
+        int discountedFare = DiscountPolicy.calculate(userAge, fare);
+        return discountedFare;
     }
 
     public int extractDuration() {

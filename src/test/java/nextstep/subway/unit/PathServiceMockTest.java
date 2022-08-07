@@ -11,6 +11,8 @@ import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -102,6 +104,27 @@ class PathServiceMockTest {
                 () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
                 () -> assertThat(pathResponse.getFare()).isEqualTo(1_250)
         );
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 1250",
+            "6, 450",
+            "13, 720",
+            "20, 1250"
+    })
+    void 나이에_따른_요금을_계산한다(int age, int result) {
+        // given
+        given(stationService.findById(1L)).willReturn(교대역);
+        given(stationService.findById(4L)).willReturn(양재역);
+        given(lineService.findLines()).willReturn(List.of(이호선, 삼호선, 신분당선));
+        PathRequest pathRequest = new PathRequest(1L, 4L, PathType.DURATION);
+
+        // when
+        PathResponse pathResponse = pathService.findPath(pathRequest, age);
+
+        // then
+        assertThat(pathResponse.getFare()).isEqualTo(result);
     }
 
     @Test
