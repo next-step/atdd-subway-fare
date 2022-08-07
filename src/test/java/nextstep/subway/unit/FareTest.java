@@ -1,36 +1,25 @@
 package nextstep.subway.unit;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static nextstep.subway.domain.Fare.calculate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareTest {
 
-    @Test
-    void 거리가_10인_경우_요금을_계산한다() {
+    @ParameterizedTest
+    @CsvSource({
+            "10, 1_250",
+            "50, 2_250",
+            "51, 1_950"
+    })
+    void 거리에_따라_요금을_계산한다(int distance, int totalFare) {
         // given
-        int fare = calculate(10);
+        int fare = calculate(distance);
 
         // then
-        assertThat(fare).isEqualTo(1_250);
-    }
-
-    @Test
-    void 거리가_50인_경우_요금을_계산한다() {
-        // given
-        int fare = calculate(50);
-
-        // then
-        assertThat(fare).isEqualTo(2_250);
-    }
-
-    @Test
-    void 거리가_51인_경우_요금을_계산한다() {
-        // given
-        int fare = calculate(51);
-
-        // then
-        assertThat(fare).isEqualTo(1_950);
+        assertThat(fare).isEqualTo(totalFare);
     }
 }
