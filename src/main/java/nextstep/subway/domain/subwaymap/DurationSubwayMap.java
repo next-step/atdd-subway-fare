@@ -1,30 +1,21 @@
 package nextstep.subway.domain.subwaymap;
 
-import nextstep.subway.domain.*;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.SectionEdge;
+import nextstep.subway.domain.Station;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class DurationSubwayMap {
-    private List<Line> lines;
+public class DurationSubwayMap extends AbstractSubwayMap {
 
     public DurationSubwayMap(List<Line> lines) {
-        this.lines = lines;
+        super(lines);
     }
 
-    public Path findPath(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
-
-        // 지하철 역(정점)을 등록
-        lines.stream()
-                .flatMap(it -> it.getStations().stream())
-                .distinct()
-                .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
-
+    @Override
+    void addEdge(final SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -43,15 +34,5 @@ public class DurationSubwayMap {
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, it.getDuration());
                 });
-
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
-
-        List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
-                .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
     }
 }

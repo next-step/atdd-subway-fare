@@ -4,6 +4,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.subwaymap.DurationSubwayMap;
+import nextstep.subway.domain.subwaymap.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DurationSubwayMapTest {
 
+    private SubwayMap subwayMap;
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -38,13 +40,13 @@ public class DurationSubwayMapTest {
         이호선.addSection(교대역, 강남역, 3, 2);
         삼호선.addSection(교대역, 남부터미널역, 5, 3);
         삼호선.addSection(남부터미널역, 양재역, 5, 3);
+
+        subwayMap = new DurationSubwayMap(Lists.newArrayList(신분당선, 이호선, 삼호선));
     }
 
     @Test
     void findPath() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        DurationSubwayMap subwayMap = new DurationSubwayMap(lines);
 
         // when
         Path path = subwayMap.findPath(남부터미널역, 강남역);
@@ -56,8 +58,6 @@ public class DurationSubwayMapTest {
     @Test
     void findPathOppositely() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        DurationSubwayMap subwayMap = new DurationSubwayMap(lines);
 
         // when
         Path path = subwayMap.findPath(강남역, 남부터미널역);
