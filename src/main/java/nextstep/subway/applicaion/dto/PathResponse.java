@@ -2,7 +2,6 @@ package nextstep.subway.applicaion.dto;
 
 import lombok.Getter;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.fare.FareRule;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,9 +26,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-
-        FareRule fareRule = FareRule.of(distance);
-        int fare = fareRule.getFare(distance);
+        int fare = path.extractFare();
 
         return new PathResponse(stations, distance, duration, fare);
     }
