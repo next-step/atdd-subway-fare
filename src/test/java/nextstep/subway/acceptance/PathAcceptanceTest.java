@@ -105,6 +105,22 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
     }
 
+    /**
+     * Given 청소년 사용자를 생성한다
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 청소년 이용 요금도 함께 응답함
+     */
+
+    /**
+     * Given 어린이 사용자를 생성한다
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 어린이 이용 요금도 함께 응답함
+     */
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
                 .given().log().all()
