@@ -10,8 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.ParameterDescriptor;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -41,8 +48,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5
         );
 
-//        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
-        given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
         RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
@@ -74,4 +80,5 @@ public class PathDocumentation extends Documentation {
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+
 }
