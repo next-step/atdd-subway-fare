@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
-    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
+    private final List<Line> lines;
+    private final SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
 
     public SubwayMap(List<Line> lines) {
         if(lines.isEmpty()) {
