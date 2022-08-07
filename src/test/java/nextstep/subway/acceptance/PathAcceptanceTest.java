@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static nextstep.subway.domain.PathType.DISTANCE;
 import static nextstep.subway.domain.PathType.DURATION;
@@ -20,6 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    public static final String EMAIL = "member@email.com";
+    public static final String PASSWORD = "password";
+    private String 사용자;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -49,13 +53,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
@@ -69,7 +75,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 두_역의_최소_시간_경로를_조회한다() {
         // when
-        var 최소_시간_경로_조회_응답 = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+        var 최소_시간_경로_조회_응답 = 두_역의_최소_시간_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
         최소_시간_경로_조회_응답_확인(최소_시간_경로_조회_응답);
@@ -87,7 +93,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 두_역의_최단_거리_경로와_요금을_조회한다() {
         // when
-        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
         최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
@@ -99,17 +105,19 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, DISTANCE)
                 .then().log().all().extract();
     }
 
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, DURATION)
                 .then().log().all().extract();

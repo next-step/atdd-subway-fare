@@ -11,8 +11,7 @@ import java.util.List;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
 import static nextstep.subway.domain.PathType.DISTANCE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
@@ -29,7 +28,7 @@ public class PathDocumentation extends Documentation {
         var pathResponse = new PathResponse(List.of(강남역, 역삼역), 10, 5, 1250);
 
         // when
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyInt())).thenReturn(pathResponse);
 
         // then
         경로_조회(spec, 강남역.getId(), 역삼역.getId(), DISTANCE);
