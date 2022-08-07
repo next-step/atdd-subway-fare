@@ -11,12 +11,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DurationPathFinder {
+public class DurationPathFinder implements PathFinder {
 
-    public boolean supports(final PathType pathType) {
-        return pathType == PathType.DURATION;
+    @Override
+    public PathFinder findPathFinder(final PathType pathType) {
+        if (pathType == PathType.DURATION) {
+            return this;
+        }
+
+        return null;
     }
 
+    @Override
     public Path findPath(final List<Line> lines, final Station source, final Station target) {
         return new DurationSubwayMap(lines).findPath(source, target);
     }
