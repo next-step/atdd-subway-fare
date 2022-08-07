@@ -2,7 +2,7 @@
 [ATDD 강의](https://edu.nextstep.camp/c/R89PYi5H) 실습을 위한 지하철 노선도 애플리케이션
 
 #Step1 PR 수정 TODO List
-- [ ] PathAcceptanceTest 에서 환승, 반대 방향의 경우도 테스트 작성
+- [x] PathAcceptanceTest 에서 환승, 반대 방향의 경우도 테스트 작성
 - [ ] document(), requestParameters(), responseFields() 메서드로 분리하기
 - [x] LineTest의 given절, duration 인자 중복 제거
 
