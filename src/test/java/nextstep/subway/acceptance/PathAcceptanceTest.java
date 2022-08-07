@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.domain.PathType;
@@ -16,10 +17,10 @@ import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static nextstep.utils.NumberUtils.requirePositiveNumber;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    private static final int BASIC_FARE = 1250;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -70,11 +71,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        int expectedDistance = 5;
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(expectedDistance);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(7);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(BASIC_FARE + calculateOverFare(expectedDistance));
+        final JsonPath jsonPath = response.jsonPath();
+        assertAll(
+                () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(jsonPath.getInt("distance")).isEqualTo(5),
+                () -> assertThat(jsonPath.getInt("duration")).isEqualTo(7),
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(1250)
+        );
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
@@ -84,11 +87,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(양재역, 역삼역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 역삼역);
-        int expectedDistance = 12;
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(expectedDistance);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(BASIC_FARE + calculateOverFare(expectedDistance));
+        final JsonPath jsonPath = response.jsonPath();
+        assertAll(
+                () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 역삼역),
+                () -> assertThat(jsonPath.getInt("distance")).isEqualTo(12),
+                () -> assertThat(jsonPath.getInt("duration")).isEqualTo(11),
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(1350)
+        );
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
@@ -132,22 +137,4 @@ class PathAcceptanceTest extends AcceptanceTest {
         return params;
     }
 
-    private int calculateOverFare(int distance) {
-        requirePositiveNumber(distance);
-
-        if (distance <= 10) {
-            return 0;
-        } else if (distance <= 50) {
-            return overFareByRule(distance, 5);
-        }
-
-        return overFareByRule(distance, 8);
-    }
-
-
-    private int overFareByRule(int distance, int everyDistance) {
-        requirePositiveNumber(everyDistance);
-
-        return (int) ((Math.ceil((distance - 1) / everyDistance) + 1) * 100);
-    }
 }
