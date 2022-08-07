@@ -1,6 +1,11 @@
 # 지하철 노선도 미션
 [ATDD 강의](https://edu.nextstep.camp/c/R89PYi5H) 실습을 위한 지하철 노선도 애플리케이션
 
+#Step1 PR 수정 TODO List
+- [ ] PathAcceptanceTest 에서 환승, 반대 방향의 경우도 테스트 작성
+- [ ] document(), requestParameters(), responseFields() 메서드로 분리하기
+- [ ] LineTest의 given절 중복 제거
+
 #Step1 TODO List
 - [x] 경로 조회 시 최소 시간 기준으로 조회되도록 구현
 - [x] 노선추가 & 구간 추가 시 거리와 함께 소요시간 정보 추가하기.
