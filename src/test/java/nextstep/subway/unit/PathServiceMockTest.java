@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Lines;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +74,8 @@ class PathServiceMockTest {
         // given
         given(stationService.findById(1L)).willReturn(교대역);
         given(stationService.findById(4L)).willReturn(양재역);
-        given(lineService.findLines()).willReturn(List.of(이호선, 삼호선, 신분당선));
+        given(lineService.findLines()).willReturn(
+                new Lines(List.of(이호선, 삼호선, 신분당선)));
         PathRequest pathRequest = new PathRequest(1L, 4L, PathType.DISTANCE);
 
         // when
@@ -92,7 +94,8 @@ class PathServiceMockTest {
         // given
         given(stationService.findById(1L)).willReturn(교대역);
         given(stationService.findById(4L)).willReturn(양재역);
-        given(lineService.findLines()).willReturn(List.of(이호선, 삼호선, 신분당선));
+        given(lineService.findLines()).willReturn(
+                new Lines(List.of(이호선, 삼호선, 신분당선)));
         PathRequest pathRequest = new PathRequest(1L, 4L, PathType.DURATION);
 
         // when
@@ -117,7 +120,8 @@ class PathServiceMockTest {
         // given
         given(stationService.findById(1L)).willReturn(교대역);
         given(stationService.findById(4L)).willReturn(양재역);
-        given(lineService.findLines()).willReturn(List.of(이호선, 삼호선, 신분당선));
+        given(lineService.findLines()).willReturn(
+                new Lines(List.of(이호선, 삼호선, 신분당선)));
         PathRequest pathRequest = new PathRequest(1L, 4L, PathType.DURATION);
 
         // when
@@ -131,7 +135,8 @@ class PathServiceMockTest {
     void 출발역과_도착역이_같은_경우_예외를_반환한다() {
         // given
         PathRequest pathRequest = new PathRequest(1L, 1L, PathType.DISTANCE);
-
+        given(lineService.findLines()).willReturn(
+                new Lines(List.of(이호선, 삼호선, 신분당선)));
         // then
         assertThatIllegalArgumentException().isThrownBy(() ->
                 pathService.findPath(pathRequest, 10)
@@ -144,7 +149,8 @@ class PathServiceMockTest {
         final Station 신논현역 = new Station("신논현역");
         given(stationService.findById(5L)).willReturn(신논현역);
         given(stationService.findById(3L)).willReturn(강남역);
-        given(lineService.findLines()).willReturn(List.of(이호선, 삼호선, 신분당선));
+        given(lineService.findLines()).willReturn(
+                new Lines(List.of(이호선, 삼호선, 신분당선)));
         PathRequest pathRequest = new PathRequest(5L, 3L, PathType.DISTANCE);
 
 

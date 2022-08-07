@@ -21,8 +21,8 @@ public class PathService {
     public PathResponse findPath(PathRequest pathRequest, int userAge) {
         Station upStation = stationService.findById(pathRequest.getSource());
         Station downStation = stationService.findById(pathRequest.getTarget());
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines, pathRequest.getPathType());
+        Lines lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines.getLines(), pathRequest.getPathType());
         Path path = subwayMap.findPath(upStation, downStation);
 
         return PathResponse.of(path, userAge);

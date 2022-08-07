@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Lines;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +36,8 @@ public class LineService {
         return LineResponse.of(line);
     }
 
-    public List<Line> findLines() {
-        return lineRepository.findAll();
+    public Lines findLines() {
+        return new Lines(lineRepository.findAll());
     }
 
     public List<LineResponse> findLineResponses() {
