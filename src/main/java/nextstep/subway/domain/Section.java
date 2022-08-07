@@ -1,10 +1,12 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class Section extends DefaultWeightedEdge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,36 +26,19 @@ public class Section extends DefaultWeightedEdge {
 
     private int distance;
 
-    public Section() {
+    private int duration;
 
+    public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Line getLine() {
-        return line;
-    }
-
-    public Station getUpStation() {
-        return upStation;
-    }
-
-    public Station getDownStation() {
-        return downStation;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
 
     public boolean isSameUpStation(Station station) {
         return this.upStation == station;
@@ -67,4 +52,5 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
 }
