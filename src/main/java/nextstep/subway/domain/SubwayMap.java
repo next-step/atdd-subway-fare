@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.graph.EdgeInitiator;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -9,49 +10,38 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
 
     public SubwayMap(List<Line> lines) {
+        if(lines.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         this.lines = lines;
+        this.graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        initVertexes(graph);
     }
 
-    public Path findPath(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+    public Path findPath(Station source, Station target, EdgeInitiator edgeInitiator) {
+        edgeInitiator.initEdges(lines, graph);
+        edgeInitiator.initOppositeEdges(lines, graph);
+        List<Section> sections = findShortestPath(source, target);
+        return new Path(new Sections(sections));
+    }
 
-        // 지하철 역(정점)을 등록
+    private List<Section> findShortestPath(Station source, Station target) {
+        GraphPath<Station, SectionEdge> result = new DijkstraShortestPath<>(graph).getPath(source, target);
+
+        return result.getEdgeList().stream()
+                .map(SectionEdge::getSection)
+                .collect(Collectors.toList());
+    }
+
+    private void initVertexes(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation()
-                        , it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
-
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
-
-        List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
-                .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
+                .forEach(graph::addVertex);
     }
 }

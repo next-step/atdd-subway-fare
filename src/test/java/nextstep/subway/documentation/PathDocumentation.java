@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,7 +13,9 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -35,11 +38,11 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10
+                ), 10, 5
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
-
+//        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
         RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
@@ -51,7 +54,8 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역 ID"),
-                                parameterWithName("target").description("도착역 ID")
+                                parameterWithName("target").description("도착역 ID"),
+                                parameterWithName("pathType").description("조회 타입")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로역"),
@@ -59,12 +63,14 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역명"),
                                 fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("역 생성일자"),
                                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정일자"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리")
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간")
                         )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("pathType", PathType.DISTANCE.name())
                 .when().get("/paths")
                 .then().log().all().extract();
     }

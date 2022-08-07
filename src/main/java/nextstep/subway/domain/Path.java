@@ -20,4 +20,6 @@ public class Path {
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    public int extractDuration() { return sections.totalDuration(); }
 }
