@@ -1,5 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.subwaymap;
 
+import nextstep.subway.domain.*;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -7,10 +8,10 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubwayMap {
+public class DistanceSubwayMap {
     private List<Line> lines;
 
-    public SubwayMap(List<Line> lines) {
+    public DistanceSubwayMap(List<Line> lines) {
         this.lines = lines;
     }
 
