@@ -4,16 +4,22 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 public enum DiscountPolicy {
-    STANDARD(age -> false, 0, 0),
-    CHILD(age -> age >= DiscountPolicy.CHILD_MIN_AGE && age < DiscountPolicy.CHILD_MAX_AGE, 50, 350),
-    TEENAGER(age -> age >= DiscountPolicy.TEENAGER_MIN_AGE && age < DiscountPolicy.TEENAGER_MAX_AGE, 20, 350);
+    STANDARD(age -> false, DiscountPolicy.STANDARD_DISCOUNT_RATE, DiscountPolicy.STANDARD_DEDUCT),
+    CHILD(age -> age >= DiscountPolicy.CHILD_MIN_AGE && age < DiscountPolicy.CHILD_MAX_AGE, DiscountPolicy.CHILD_DISCOUNT_RATE, DiscountPolicy.CHILD_DEDUCT),
+    TEENAGER(age -> age >= DiscountPolicy.TEENAGER_MIN_AGE && age < DiscountPolicy.TEENAGER_MAX_AGE, DiscountPolicy.TEENAGER_DISCOUNT_RATE, DiscountPolicy.TEENAGER_DEDUCT);
     private final Predicate<Integer> predicate;
     private final int discountRate;
     private final int deduct;
+    private final static int STANDARD_DISCOUNT_RATE = 0;
+    private final static int STANDARD_DEDUCT = 6;
     private final static int CHILD_MIN_AGE = 6;
+    private final static int CHILD_DEDUCT = 350;
     private final static int CHILD_MAX_AGE = 13;
+    private final static int CHILD_DISCOUNT_RATE = 50;
     private final static int TEENAGER_MIN_AGE = 13;
     private final static int TEENAGER_MAX_AGE = 19;
+    private final static int TEENAGER_DEDUCT = 350;
+    private final static int TEENAGER_DISCOUNT_RATE = 50;
 
     DiscountPolicy(Predicate<Integer> predicate, int discountRate, int deduct) {
         this.predicate = predicate;
