@@ -52,9 +52,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 1);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5, 0);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 1, 500);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2, 1000);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
 
@@ -191,18 +191,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private void 지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
-        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_250);
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(2_250);
     }
 
     private void 어린이_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
-        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(450);
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(950);
     }
 
     private void 청소년_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
-        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(720);
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_520);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -211,6 +211,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("surcharge", surcharge + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }

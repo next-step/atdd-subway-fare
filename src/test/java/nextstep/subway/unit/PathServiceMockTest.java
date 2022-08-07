@@ -85,7 +85,7 @@ class PathServiceMockTest {
         assertAll(
                 () -> assertThat(pathResponse.getStations()).hasSize(3),
                 () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
-                () -> assertThat(pathResponse.getFare()).isEqualTo(1_250)
+                () -> assertThat(pathResponse.getFare()).isEqualTo(2_250)
         );
     }
 
@@ -105,16 +105,16 @@ class PathServiceMockTest {
         assertAll(
                 () -> assertThat(pathResponse.getStations()).hasSize(3),
                 () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
-                () -> assertThat(pathResponse.getFare()).isEqualTo(1_250)
+                () -> assertThat(pathResponse.getFare()).isEqualTo(2_250)
         );
     }
 
     @ParameterizedTest
     @CsvSource({
-            "1, 1250",
-            "6, 450",
-            "13, 720",
-            "20, 1250"
+            "1, 2250",
+            "6, 950",
+            "13, 1520",
+            "20, 2250"
     })
     void 나이에_따른_요금을_계산한다(int age, int result) {
         // given
