@@ -1,9 +1,8 @@
 package nextstep.utils;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class NumberUtils {
 
     public static int requirePositiveNumber(int number) {
