@@ -1,17 +1,15 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,14 +51,12 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE);
+        ExtractableResponse<Response> response = PathSteps.두_역의_최단_거리_경로_조회를_요청(given(), 교대역, 양재역);
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
     /*
-        Feature: 지하철 경로 검색
-
         Scenario: 두 역의 최소 시간 경로를 조회
         Given 지하철역이 등록되어있음
         And 지하철 노선이 등록되어있음
@@ -73,27 +69,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
 
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, PathType.DURATION);
+        ExtractableResponse<Response> response = PathSteps.두_역의_최소_시간_경로_조회를_요청(given(), 교대역, 양재역);
 
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-    }
-
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, PathType pathType) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, pathType)
-                .then().log().all().extract();
-    }
-
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, PathType pathType) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, pathType)
-                .then().log().all().extract();
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
