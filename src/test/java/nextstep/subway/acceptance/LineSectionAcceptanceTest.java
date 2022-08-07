@@ -28,11 +28,14 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     public void setUp() {
         super.setUp();
 
-        강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
-        양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
+        강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath()
+                .getLong("id");
+        양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath()
+                .getLong("id");
 
         Map<String, String> lineCreateParams = createLineCreateParams(강남역, 양재역);
-        신분당선 = 지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath()
+                .getLong("id");
     }
 
     /**
@@ -43,13 +46,15 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addLineSection() {
         // when
-        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
+        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath()
+                .getLong("id");
         지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
 
         // then
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 양재역, 정자역);
+        assertThat(response.jsonPath()
+                .getList("stations.id", Long.class)).containsExactly(강남역, 양재역, 정자역);
     }
 
     /**
@@ -60,13 +65,15 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addLineSectionMiddle() {
         // when
-        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
+        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath()
+                .getLong("id");
         지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 정자역));
 
         // then
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 정자역, 양재역);
+        assertThat(response.jsonPath()
+                .getList("stations.id", Long.class)).containsExactly(강남역, 정자역, 양재역);
     }
 
     /**
@@ -92,7 +99,8 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void removeLineSection() {
         // given
-        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
+        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath()
+                .getLong("id");
         지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
 
         // when
@@ -101,7 +109,8 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         // then
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 양재역);
+        assertThat(response.jsonPath()
+                .getList("stations.id", Long.class)).containsExactly(강남역, 양재역);
     }
 
     /**
@@ -113,7 +122,8 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void removeLineSectionInMiddle() {
         // given
-        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
+        Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath()
+                .getLong("id");
         지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
 
         // when
@@ -122,7 +132,8 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         // then
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 정자역);
+        assertThat(response.jsonPath()
+                .getList("stations.id", Long.class)).containsExactly(강남역, 정자역);
     }
 
     private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
@@ -133,6 +144,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
         lineCreateParams.put("distance", 10 + "");
+        lineCreateParams.put("duration", 10 + "");
         return lineCreateParams;
     }
 
@@ -141,6 +153,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", 6 + "");
+        params.put("duration", 6 + "");
         return params;
     }
 }
