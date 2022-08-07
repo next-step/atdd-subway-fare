@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static nextstep.subway.domain.PathType.DISTANCE;
 import static nextstep.subway.domain.PathType.DURATION;
@@ -23,6 +24,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PathAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "member@email.com";
     public static final String PASSWORD = "password";
+    public static final String TEENAGER_EMAIL = "teenager@email.com";
+    public static final String CHILD_EMAIL = "child@email.com";
+
     private String 사용자;
     private Long 교대역;
     private Long 강남역;
@@ -106,20 +110,54 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 청소년 사용자를 생성한다
+     * Given 청소년 사용자 로그인
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
      * Then 최단 거리 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
      * And 청소년 이용 요금도 함께 응답함
      */
+    @Test
+    void 청소년_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+        // given
+        var 청소년_사용자 = 로그인_되어_있음(TEENAGER_EMAIL, PASSWORD);
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(청소년_사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        청소년_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
 
     /**
-     * Given 어린이 사용자를 생성한다
+     * Given 어린이 사용자 로그인
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
      * Then 최단 거리 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
      * And 어린이 이용 요금도 함께 응답함
      */
+    @Test
+    void 어린이_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+        // given
+        var 어린이_사용자 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(어린이_사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        어린이_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
@@ -154,6 +192,14 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private void 지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
         assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_250);
+    }
+
+    private void 어린이_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(450);
+    }
+
+    private void 청소년_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(720);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

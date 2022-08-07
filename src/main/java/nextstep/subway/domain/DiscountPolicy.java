@@ -19,7 +19,7 @@ public enum DiscountPolicy {
     private final static int TEENAGER_MIN_AGE = 13;
     private final static int TEENAGER_MAX_AGE = 19;
     private final static int TEENAGER_DEDUCT = 350;
-    private final static int TEENAGER_DISCOUNT_RATE = 50;
+    private final static int TEENAGER_DISCOUNT_RATE = 20;
 
     DiscountPolicy(Predicate<Integer> predicate, int discountRate, int deduct) {
         this.predicate = predicate;
