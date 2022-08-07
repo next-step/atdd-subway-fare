@@ -3,6 +3,8 @@ package nextstep.subway.applicaion;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
 import nextstep.subway.domain.subwaymap.DistanceSubwayMap;
+import nextstep.subway.domain.subwaymap.DurationSubwayMap;
+import nextstep.subway.domain.subwaymap.SubwayMap;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +24,12 @@ public class PathService {
         Station downStation = stationService.findById(target);
 
         List<Line> lines = lineService.findLines();
-        DistanceSubwayMap subwayMap = new DistanceSubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
 
+        SubwayMap subwayMap = type == PathType.DISTANCE
+                ? new DistanceSubwayMap(lines)
+                : new DurationSubwayMap(lines);
+
+        Path path = subwayMap.findPath(upStation, downStation);
         return PathResponse.of(path);
     }
 }
