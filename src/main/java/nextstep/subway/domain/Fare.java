@@ -4,13 +4,18 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 public enum Fare {
-    STANDARD(distance -> distance <= 10, 0),
-    TEN_OVER(distance -> distance > 10 && distance <= 50, 5),
-    FIFTY_OVER(distance -> distance > 50, 8);
+    STANDARD(distance -> distance <= Fare.STANDARD_DISTANCE, Fare.STANDARD_CRITERIA),
+    TEN_OVER(distance -> distance > Fare.STANDARD_DISTANCE && distance <= Fare.FIFTY_DISTANCE, Fare.TEN_OVER_CRITERIA),
+    FIFTY_OVER(distance -> distance > Fare.FIFTY_DISTANCE, Fare.FIFTY_OVER_CRITERIA);
 
     private final Predicate<Integer> predicate;
     private final int criteria;
     private final static int STANDARD_FARE = 1_250;
+    private final static int STANDARD_DISTANCE = 10;
+    private final static int STANDARD_CRITERIA = 0;
+    private final static int FIFTY_DISTANCE = 50;
+    private final static int TEN_OVER_CRITERIA = 5;
+    private final static int FIFTY_OVER_CRITERIA = 8;
 
     Fare(Predicate<Integer> predicate, int criteria) {
         this.predicate = predicate;
