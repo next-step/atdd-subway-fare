@@ -20,8 +20,8 @@ class DurationPathFinderTest {
 
     @Test
     void 타입검사() {
-        final boolean result = target.supports(PathType.DURATION);
-        assertThat(result).isTrue();
+        final PathFinder result = target.findPathFinder(PathType.DURATION);
+        assertThat(result).isInstanceOf(DurationPathFinder.class);
     }
 
     @Test

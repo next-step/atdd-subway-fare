@@ -20,8 +20,8 @@ class DistancePathFinderTest {
 
     @Test
     void 타입검사() {
-        final boolean result = target.supports(PathType.DISTANCE);
-        assertThat(result).isTrue();
+        final PathFinder result = target.findPathFinder(PathType.DISTANCE);
+        assertThat(result).isInstanceOf(DistancePathFinder.class);
     }
 
     @Test

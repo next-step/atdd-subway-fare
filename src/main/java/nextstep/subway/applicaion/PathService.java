@@ -1,35 +1,38 @@
 package nextstep.subway.applicaion;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.*;
-import nextstep.subway.domain.subwaymap.DistanceSubwayMap;
-import nextstep.subway.domain.subwaymap.DurationSubwayMap;
-import nextstep.subway.domain.subwaymap.SubwayMap;
+import nextstep.subway.applicaion.pathfinder.PathFinder;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
-
-    public PathService(LineService lineService, StationService stationService) {
-        this.lineService = lineService;
-        this.stationService = stationService;
-    }
+    private final LineService lineService;
+    private final StationService stationService;
+    private final List<PathFinder> pathFinders;
 
     public PathResponse findPath(Long source, Long target, PathType type) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
+        final PathFinder pathFinder = findPathFinder(type);
 
-        List<Line> lines = lineService.findLines();
+        Path path = pathFinder.findPath(
+                lineService.findLines(),
+                stationService.findById(source),
+                stationService.findById(target));
 
-        SubwayMap subwayMap = type == PathType.DISTANCE
-                ? new DistanceSubwayMap(lines)
-                : new DurationSubwayMap(lines);
-
-        Path path = subwayMap.findPath(upStation, downStation);
         return PathResponse.of(path);
+    }
+
+    private PathFinder findPathFinder(final PathType type) {
+        return pathFinders.stream()
+                .filter(v -> v.findPathFinder(type) != null)
+                .findAny()
+                .orElseThrow();
     }
 }

@@ -11,12 +11,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DistancePathFinder {
+public class DistancePathFinder implements PathFinder {
 
-    public boolean supports(final PathType pathType) {
-        return pathType == PathType.DISTANCE;
+    @Override
+    public PathFinder findPathFinder(final PathType pathType) {
+        if (pathType == PathType.DISTANCE) {
+            return this;
+        }
+
+        return null;
     }
 
+    @Override
     public Path findPath(final List<Line> lines, final Station source, final Station target) {
         return new DistanceSubwayMap(lines).findPath(source, target);
     }
