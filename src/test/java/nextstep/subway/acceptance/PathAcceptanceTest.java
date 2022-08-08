@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     public static final String CHILD_EMAIL = "child@email.com";
 
     private String 사용자;
+    private String 비로그인_사용자;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -59,6 +61,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
 
         사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
+        비로그인_사용자 = Strings.EMPTY;
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -159,6 +162,28 @@ class PathAcceptanceTest extends AcceptanceTest {
         어린이_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
     }
 
+    /**
+     * When 비 사용자가 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 비 사용자 요금도 함께 응답함
+     */
+    @Test
+    void 비_로그인_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(비로그인_사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        비_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
                 .given().log().all()
@@ -200,6 +225,10 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private void 청소년_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
         assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_520);
+    }
+
+    private void 비_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(2_250);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
