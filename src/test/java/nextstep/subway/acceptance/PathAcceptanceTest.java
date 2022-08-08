@@ -14,6 +14,7 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경�
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -41,34 +42,44 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
-        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(15),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
+        );
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
     void findPathByTime() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
+        var response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450)
+        );
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -76,15 +87,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
+    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
+        params.put("duration", duration + "");
         return params;
     }
 }
