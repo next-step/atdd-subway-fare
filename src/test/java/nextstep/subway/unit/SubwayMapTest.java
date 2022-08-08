@@ -8,12 +8,14 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SubwayMapTest {
 
@@ -45,8 +47,8 @@ public class SubwayMapTest {
 
         신분당선.addSection(강남역, 양재역, Distance.from(3), Duration.from(3));
         이호선.addSection(교대역, 강남역, Distance.from(3), Duration.from(3));
-        삼호선.addSection(교대역, 남부터미널역, Distance.from(5), Duration.from(5));
-        삼호선.addSection(남부터미널역, 양재역, Distance.from(5), Duration.from(5));
+        삼호선.addSection(교대역, 남부터미널역, Distance.from(10), Duration.from(5));
+        삼호선.addSection(남부터미널역, 양재역, Distance.from(10), Duration.from(5));
     }
 
     @Test
@@ -73,6 +75,53 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+    }
+
+    @DisplayName("지하철 경로 조회 시 운임 조회")
+    @Test
+    void findPathTotalFare() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역);
+
+        // then
+        int distance = path.extractDistance();
+        int duration = path.extractDuration();
+        int fare = path.extractFare();
+
+        assertAll(
+                () -> assertThat(distance).isEqualTo(6),
+                () -> assertThat(duration).isEqualTo(6),
+                () -> assertThat(fare).isEqualTo(1_250)
+        );
+    }
+
+    @DisplayName("지하철 경로 조회 시 기본 운임 초과 조회")
+    @Test
+    void findPathOverTotalFare() {
+        // given
+        Station 모란역 = createStation(5L, "모란역");
+        신분당선.addSection(양재역, 모란역, Distance.from(10), Duration.from(10));
+
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 모란역);
+
+        // then
+        int distance = path.extractDistance();
+        int duration = path.extractDuration();
+        int fare = path.extractFare();
+
+        assertAll(
+                () -> assertThat(distance).isEqualTo(16),
+                () -> assertThat(duration).isEqualTo(16),
+                () -> assertThat(fare).isEqualTo(1_450)
+        );
     }
 
     private Station createStation(long id, String name) {
