@@ -10,18 +10,18 @@ public enum SearchType {
     ;
 
     private final String criteria;
-    private final Function<Section, Integer> getEdgeWeight;
+    private final Function<Section, Integer> edgeWeight;
 
-    SearchType(String criteria, Function<Section, Integer> getEdgeWeight) {
+    SearchType(String criteria, Function<Section, Integer> edgeWeight) {
         this.criteria = criteria;
-        this.getEdgeWeight = getEdgeWeight;
+        this.edgeWeight = edgeWeight;
     }
 
     public String getCriteria() {
         return criteria;
     }
 
-    public Function<Section, Integer> getGetEdgeWeight() {
-        return this.getEdgeWeight;
+    public Function<Section, Integer> getEdgeWeight() {
+        return this.edgeWeight;
     }
 }
