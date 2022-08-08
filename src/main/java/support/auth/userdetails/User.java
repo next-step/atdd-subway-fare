@@ -8,7 +8,7 @@ public class User implements UserDetails {
     private Integer age;
     private List<String> authorities;
 
-    public User(String username, String password,Integer age, List<String> authorities) {
+    public User(String username, String password, Integer age, List<String> authorities) {
         this.username = username;
         this.password = password;
         this.age = age;
