@@ -124,6 +124,31 @@ public class SubwayMapTest {
         );
     }
 
+    @DisplayName("거리가 50km 초과 시 운임 조회")
+    @Test
+    void findPathDistanceOver50KMFare() {
+        // given
+        Station 모란역 = createStation(5L, "모란역");
+        신분당선.addSection(양재역, 모란역, Distance.from(65), Duration.from(10));
+
+        List<Line> lines = Lists.newArrayList(신분당선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(강남역, 모란역);
+
+        // then
+        int distance = path.extractDistance();
+        int duration = path.extractDuration();
+        int fare = path.extractFare();
+
+        assertAll(
+                () -> assertThat(distance).isEqualTo(68),
+                () -> assertThat(duration).isEqualTo(13),
+                () -> assertThat(fare).isEqualTo(2350)
+        );
+    }
+
     private Station createStation(long id, String name) {
         Station station = new Station(name);
         ReflectionTestUtils.setField(station, "id", id);
