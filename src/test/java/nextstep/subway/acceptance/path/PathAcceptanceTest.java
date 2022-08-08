@@ -150,30 +150,30 @@ class PathAcceptanceTest extends AcceptanceTest {
                 지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철I역, 지하철D역, 4, 2));
             }
 
-            @DisplayName("최소시간 단위로 조회하면, 거리는 65m가 되고, 20분이 걸리고, 2250원의 요금이 계산되며, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("최소시간 단위로 조회하면, 거리는 65km가 되고, 20분이 걸리고, 2250원의 요금이 계산되며, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWithTwoConditionByDuration(){
                 // when
                 ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_65미터 = 65;
+                final int 거리_65km = 65;
                 final int 시간_20분 = 20;
                 final int 요금_2250원 = 2250;
-                경로_조회_응답_검증(response, 거리_65미터, 시간_20분, 요금_2250원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_65km, 시간_20분, 요금_2250원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
             }
 
-            @DisplayName("최단거리 단위로 조회하면, 거리는 46m가 되고, 25분이 걸리며, 1750원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("최단거리 단위로 조회하면, 거리는 46km가 되고, 25분이 걸리며, 1750원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWithTwoConditionByDistance(){
                 // when
                 ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_46미터 = 46;
+                final int 거리_46km = 46;
                 final int 시간_25분 = 25;
                 final int 요금_2050원 = 2050;
-                경로_조회_응답_검증(response, 거리_46미터, 시간_25분, 요금_2050원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_2050원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
             }
         }
 
@@ -191,30 +191,30 @@ class PathAcceptanceTest extends AcceptanceTest {
                 지하철_노선에_지하철_구간_생성_요청(관리자, 노선B, createSectionCreateParams(지하철E역, 지하철D역, 12, 10));
             }
 
-            @DisplayName("최소시간 단위로 조회하면, 거리는 30m가 되고, 15분이 걸리고, 1650원의 요금이 계산되며, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("최소시간 단위로 조회하면, 거리는 30km가 되고, 15분이 걸리고, 1650원의 요금이 계산되며, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWithTwoConditionByDuration(){
                 // when
                 ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_30미터 = 30;
+                final int 거리_30km = 30;
                 final int 시간_15분 = 15;
                 final int 요금_1650원 = 1650;
-                경로_조회_응답_검증(response, 거리_30미터, 시간_15분, 요금_1650원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_30km, 시간_15분, 요금_1650원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
             }
 
-            @DisplayName("최단거리 단위로 조회하면, 거리는 24m가 되고, 20분이 걸리며, 1550원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("최단거리 단위로 조회하면, 거리는 24km가 되고, 20분이 걸리며, 1550원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWithTwoConditionByDistance(){
                 // when
                 ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_24미터 = 24;
+                final int 거리_24km = 24;
                 final int 시간_20분 = 20;
                 final int 요금_1550원 = 1550;
-                경로_조회_응답_검증(response, 거리_24미터, 시간_20분, 요금_1550원, 지하철A역, 지하철E역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_24km, 시간_20분, 요금_1550원, 지하철A역, 지하철E역, 지하철D역);
             }
         }
 
@@ -233,30 +233,30 @@ class PathAcceptanceTest extends AcceptanceTest {
                 지하철_노선에_지하철_구간_생성_요청(관리자, 노선B, createSectionCreateParams(지하철F역, 지하철D역, 3, 4));
             }
 
-            @DisplayName("최소시간 단위로 조회하면, 거리는 8m가 되고, 10분이 걸리고, 1250원의 요금이 계산되며, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("최소시간 단위로 조회하면, 거리는 8km가 되고, 10분이 걸리고, 1250원의 요금이 계산되며, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWithTwoConditionByDuration(){
                 // when
                 ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_8미터 = 8;
+                final int 거리_8km = 8;
                 final int 시간_10분 = 10;
                 final int 요금_1250원 = 1250;
-                경로_조회_응답_검증(response, 거리_8미터, 시간_10분, 요금_1250원, 지하철A역, 지하철E역, 지하철F역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_8km, 시간_10분, 요금_1250원, 지하철A역, 지하철E역, 지하철F역, 지하철D역);
             }
 
-            @DisplayName("최단거리 단위로 조회하면, 거리는 7m가 되고, 15분이 걸리며, 1250원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("최단거리 단위로 조회하면, 거리는 7km가 되고, 15분이 걸리며, 1250원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWithTwoConditionByDistance(){
                 // when
                 ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_7미터 = 7;
+                final int 거리_7km = 7;
                 final int 시간_15분 = 15;
                 final int 요금_1250원 = 1250;
-                경로_조회_응답_검증(response, 거리_7미터, 시간_15분, 요금_1250원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_7km, 시간_15분, 요금_1250원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
             }
         }
 
@@ -280,10 +280,10 @@ class PathAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_8미터 = 8;
+                final int 거리_8km = 8;
                 final int 시간_20분 = 20;
                 final int 요금_2150원 = 2150;
-                경로_조회_응답_검증(response, 거리_8미터, 시간_20분, 요금_2150원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_8km, 시간_20분, 요금_2150원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
             }
 
             @DisplayName("12Km 이용하는 경로를 최단거리 단위로 조회하면 2,250원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
@@ -293,10 +293,10 @@ class PathAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철E역, 지하철F역);
 
                 // then
-                final int 거리_12미터 = 12;
+                final int 거리_12km = 12;
                 final int 시간_21분 = 21;
                 final int 요금_2250원 = 2250;
-                경로_조회_응답_검증(response, 거리_12미터, 시간_21분, 요금_2250원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_12km, 시간_21분, 요금_2250원, 지하철E역, 지하철B역, 지하철C역, 지하철F역);
             }
         }
 
@@ -318,10 +318,10 @@ class PathAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
 
                 // then
-                final int 거리_8미터 = 8;
+                final int 거리_8km = 8;
                 final int 시간_20분 = 20;
                 final int 요금_2150원 = 2150;
-                경로_조회_응답_검증(response, 거리_8미터, 시간_20분, 요금_2150원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+                경로_조회_응답_검증(response, 거리_8km, 시간_20분, 요금_2150원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
             }
         }
 
