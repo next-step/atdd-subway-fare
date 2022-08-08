@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LineTest {
@@ -44,6 +45,34 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+    }
+
+    @DisplayName("상행 기준으로 목록 중간에 추가할 때 중간 구간의 소요시간이 초과할 경우 예외")
+    @Test
+    void addSectionInMiddleOverDuration() {
+        Station 강남역 = new Station("강남역");
+        Station 역삼역 = new Station("역삼역");
+        Station 삼성역 = new Station("삼성역");
+        Line line = new Line("2호선", "green");
+
+        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(강남역, 삼성역, Distance.from(5), Duration.from(15)))
+                .withMessage("소요 시간은 0 이하일 수 없습니다.");
+    }
+
+    @DisplayName("상행 기준으로 목록 중간에 추가할 때 중간 구간의 길이가 더 길 경우 예외")
+    @Test
+    void addSectionInMiddleOverDistance() {
+        Station 강남역 = new Station("강남역");
+        Station 역삼역 = new Station("역삼역");
+        Station 삼성역 = new Station("삼성역");
+        Line line = new Line("2호선", "green");
+
+        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(강남역, 삼성역, Distance.from(15), Duration.from(4)))
+                .withMessage("거리는 0 이하가 될 수 없습니다.");
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
