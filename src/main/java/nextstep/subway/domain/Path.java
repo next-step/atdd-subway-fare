@@ -25,8 +25,7 @@ public class Path {
 
     public int extractDuration() { return sections.getTotalDuration(); }
 
-    public int calculateFare() {
-        int distance = extractDistance();
+    public int calculateFare(int distance) {
         FareStrategy fareStrategy = FareType.findStrategy(distance);
         return fareStrategy.calculate(distance);
     }

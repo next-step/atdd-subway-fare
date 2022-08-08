@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5, 1250
         );
 
-        given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        given(pathService.findShortestPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         var 최단_경로_조회_결과 = 최단_경로_조회("distance-path", 1L, 2L, PathCondition.DISTANCE);
 
@@ -59,7 +59,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 3, 1450
         );
 
-        given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        given(pathService.findShortestPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         var 최단_경로_조회_결과 = 최단_경로_조회("duration-path", 1L, 2L, PathCondition.DURATION);
 

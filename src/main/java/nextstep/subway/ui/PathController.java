@@ -18,6 +18,6 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathCondition pathCondition) {
-        return ResponseEntity.ok(pathService.findPath(source, target, pathCondition));
+        return ResponseEntity.ok(pathService.findShortestPath(source, target, pathCondition));
     }
 }
