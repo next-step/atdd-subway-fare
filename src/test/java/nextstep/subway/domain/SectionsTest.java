@@ -4,9 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SectionsTest {
 
@@ -19,10 +20,10 @@ class SectionsTest {
         Station 방배역 = new Station("방배역");
         Station 논현역 = new Station("논현역");
 
-        sections = new Sections(List.of(
-                new Section(line, 사당역, 방배역, 5, 10),
-                new Section(line, 사당역, 논현역, 5, 10)
-        ));
+        List<Section> sections = new ArrayList<>();
+        sections.add(new Section(line, 사당역, 방배역, 5, 10));
+        sections.add(new Section(line, 사당역, 논현역, 5, 10));
+        this.sections = new Sections(sections);
     }
 
     @Test
@@ -35,6 +36,30 @@ class SectionsTest {
     @DisplayName("총 거리의 합이 반환된다.")
     void totalDistanceTest() {
         assertThat(sections.totalDistance()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("구간 추가요금이 없으면 0원이 반환된다.")
+    void getSurchargeTest() {
+        assertThat(sections.getSurcharge()).isZero();
+    }
+
+    @Test
+    @DisplayName("구간 요금이 2건 이상이면 가장 큰 추가 요금이 반환된다.")
+    void getSurchargeMultiTest() {
+        // given
+        Line 신분당선 = new Line("신분당선", "red", 1200);
+        Station 강남역 = new Station("강남역");
+        Station 양재역 = new Station("양재역");
+
+        Line 삼호선 = new Line("3호선", "orange", 900);
+        Station 매봉역 = new Station("매봉역");
+
+        sections.add(new Section(신분당선, 강남역, 양재역, 5, 10));
+        sections.add(new Section(삼호선, 양재역, 매봉역, 5, 10));
+
+        // when, then
+        assertThat(sections.getSurcharge()).isEqualTo(1200);
     }
 
 }

@@ -24,7 +24,7 @@ public class Path {
     public int extractFare() {
         int distance = extractDistance();
         FareRule fareRule = FareRule.of(distance);
-        return fareRule.getFare(distance);
+        return fareRule.getFare(distance) + sections.getSurcharge();
     }
 
     public List<Station> getStations() {
