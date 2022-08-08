@@ -1,5 +1,10 @@
 package nextstep.subway.unit;
 
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import java.util.HashMap;
+import java.util.Map;
+import nextstep.subway.acceptance.AcceptanceTestSteps;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -7,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import org.springframework.http.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -19,8 +25,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(역삼역, 삼성역, 5, 5);
 
         assertThat(line.getStations()).containsExactly(강남역, 역삼역, 삼성역);
     }
@@ -33,13 +39,13 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(강남역, 삼성역, 5, 5);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
-                .filter(it -> it.getUpStation() == 강남역)
-                .findFirst().orElseThrow(RuntimeException::new);
+            .filter(it -> it.getUpStation() == 강남역)
+            .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
     }
@@ -52,13 +58,13 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 역삼역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(삼성역, 역삼역, 5, 5);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
-                .filter(it -> it.getUpStation() == 강남역)
-                .findFirst().orElseThrow(RuntimeException::new);
+            .filter(it -> it.getUpStation() == 강남역)
+            .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
     }
@@ -71,13 +77,13 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 강남역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(삼성역, 강남역, 5, 5);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
-                .filter(it -> it.getUpStation() == 강남역)
-                .findFirst().orElseThrow(RuntimeException::new);
+            .filter(it -> it.getUpStation() == 강남역)
+            .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(역삼역);
         assertThat(section.getDistance()).isEqualTo(10);
     }
@@ -90,13 +96,13 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(역삼역, 삼성역, 5, 5);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
-                .filter(it -> it.getUpStation() == 역삼역)
-                .findFirst().orElseThrow(RuntimeException::new);
+            .filter(it -> it.getUpStation() == 역삼역)
+            .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
     }
@@ -107,8 +113,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(강남역, 삼성역, 5, 5);
 
         List<Station> result = line.getStations();
 
@@ -121,10 +127,10 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 5);
 
-        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 5))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -133,8 +139,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(역삼역, 삼성역, 5, 5);
 
         line.deleteSection(삼성역);
 
@@ -147,8 +153,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(역삼역, 삼성역, 5, 5);
 
         line.deleteSection(강남역);
 
@@ -161,8 +167,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 5);
+        line.addSection(역삼역, 삼성역, 5, 5);
 
         line.deleteSection(역삼역);
 
@@ -175,9 +181,9 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 5);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
-                .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }
