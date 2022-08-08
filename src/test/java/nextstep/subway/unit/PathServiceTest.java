@@ -79,7 +79,9 @@ public class PathServiceTest {
         // then
         assertAll(
                 () -> assertThat(pathResponse.getStations()).extracting("name").containsExactly("교대역", "남부터미널역", "양재역"),
-                () -> assertThat(pathResponse.getDistance()).isEqualTo(5)
+                () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(15),
+                () -> assertThat(pathResponse.getFare()).isEqualTo(1250)
         );
     }
 
@@ -92,7 +94,9 @@ public class PathServiceTest {
         // then
         assertAll(
                 () -> assertThat(pathResponse.getStations()).extracting("name").containsExactly("교대역", "강남역", "양재역"),
-                () -> assertThat(pathResponse.getDuration()).isEqualTo(5)
+                () -> assertThat(pathResponse.getDistance()).isEqualTo(20),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(5),
+                () -> assertThat(pathResponse.getFare()).isEqualTo(1450)
         );
     }
 }

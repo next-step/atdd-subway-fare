@@ -1,6 +1,10 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.FareType;
+import nextstep.subway.domain.fare.BasicStrategy;
+import nextstep.subway.domain.fare.FareStrategy;
+import nextstep.subway.domain.fare.LongStrategy;
+import nextstep.subway.domain.fare.MiddleStrategy;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,15 +19,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class FareTypeTest {
 
-    @DisplayName("각 요금에 따른 Fare 타입을 찾는다")
+    @DisplayName("각 요금에 따른 Fare 전략을 찾는다")
     @ParameterizedTest
     @MethodSource("findFare")
-    public void find_fare(int distance, FareType type) {
+    public void find_fare(int distance, Class strategy) {
         // when
-        FareType fareType = FareType.calculateType(distance);
+        FareStrategy fareStrategy = FareType.findStrategy(distance);
 
         // then
-        assertThat(fareType).isEqualTo(type);
+        assertThat(fareStrategy).isInstanceOf(strategy);
     }
 
     @DisplayName("0이하의 거리를 전달받는 경우 예외를 던진다")
@@ -31,7 +35,7 @@ public class FareTypeTest {
     @ValueSource(ints = {-1, 0})
     public void invalid_fare(int distance) {
         // when
-        ThrowableAssert.ThrowingCallable actual = () -> FareType.calculateType(distance);
+        ThrowableAssert.ThrowingCallable actual = () -> FareType.findStrategy(distance);
 
         // then
         assertThatThrownBy(actual)
@@ -41,10 +45,10 @@ public class FareTypeTest {
 
     private static Stream<Arguments> findFare() {
         return Stream.of(
-                Arguments.of(10, FareType.BASIC_DISTANCE),
-                Arguments.of(11, FareType.MIDDLE_DISTANCE),
-                Arguments.of(50, FareType.MIDDLE_DISTANCE),
-                Arguments.of(51, FareType.LONG_DISTANCE)
+                Arguments.of(10, BasicStrategy.class),
+                Arguments.of(11, MiddleStrategy.class),
+                Arguments.of(50, MiddleStrategy.class),
+                Arguments.of(51, LongStrategy.class)
         );
     }
 }
