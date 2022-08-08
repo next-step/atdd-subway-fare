@@ -4,6 +4,8 @@ import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.Distance;
+import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
@@ -30,7 +32,7 @@ public class LineService {
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
+            line.addSection(upStation, downStation, Distance.from(request.getDistance()), Duration.from(request.getDuration()));
         }
         return LineResponse.of(line);
     }
@@ -70,7 +72,7 @@ public class LineService {
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
         Line line = findById(lineId);
 
-        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
+        line.addSection(upStation, downStation, Distance.from(sectionRequest.getDistance()), Duration.from(sectionRequest.getDuration()));
     }
 
     private List<StationResponse> createStationResponses(Line line) {
