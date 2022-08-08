@@ -1,11 +1,13 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.FareType;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathCondition;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.fare.FareStrategy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,23 +29,14 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path path = subwayMap.findPath(upStation, downStation, pathCondition.getEdgeInitiator());
-        int shortestDistance = shortestDistance(pathCondition, upStation, downStation, lines, path);
-        System.out.println("shortestDistance = " + shortestDistance);
-        int fare = path.calculateFare(shortestDistance);
+        int shortestDistance = subwayMap.findShortestPathDistance(upStation, downStation);
+        int fare = calculateFare(shortestDistance);
 
         return PathResponse.of(path, fare);
     }
 
-    private int shortestDistance(PathCondition pathType, Station upStation, Station downStation, List<Line> lines, Path path) {
-        if (pathType == PathCondition.DURATION) {
-            Path shortestPath = findShortestPath(lines, upStation, downStation);
-            return shortestPath.extractDistance();
-        }
-        return path.extractDistance();
-    }
-
-    private Path findShortestPath(List<Line> lines, Station upStation, Station downStation) {
-        SubwayMap subwayMap = new SubwayMap(lines);
-        return subwayMap.findPath(upStation, downStation, PathCondition.DISTANCE.getEdgeInitiator());
+    private int calculateFare(int distance) {
+        FareStrategy fareStrategy = FareType.findStrategy(distance);
+        return fareStrategy.calculate(distance);
     }
 }
