@@ -1,18 +1,22 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static nextstep.subway.acceptance.FavoriteSteps.*;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_목록_조회_요청;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_목록_조회됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_삭제_요청;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_삭제됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_생성됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_생성을_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("즐겨찾기 관련 기능")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
