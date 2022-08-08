@@ -2,7 +2,11 @@ package nextstep.subway.domain;
 
 import nextstep.common.BaseTimeEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 
 @Entity
 public class Station extends BaseTimeEntity {
