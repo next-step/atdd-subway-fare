@@ -2,6 +2,8 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.SectionRequest;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
@@ -37,9 +39,9 @@ public class LineSteps extends AcceptanceTestSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, Map<String, String> params) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, LineRequest lineRequest) {
         return given(token)
-                .body(params)
+                .body(lineRequest)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all().extract();
@@ -63,10 +65,10 @@ public class LineSteps extends AcceptanceTestSteps {
         return response;
     }
 
-    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(String token, Long lineId, Map<String, String> params) {
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(String token, Long lineId, SectionRequest sectionRequest) {
         return given(token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
+                .body(sectionRequest)
                 .when().post("/lines/{lineId}/sections", lineId)
                 .then().log().all().extract();
     }

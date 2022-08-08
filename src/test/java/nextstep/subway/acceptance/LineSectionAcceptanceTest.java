@@ -2,13 +2,12 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.SectionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_조회_요청;
@@ -34,8 +33,8 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
 
-        Map<String, String> lineCreateParams = createLineCreateParams(강남역, 양재역);
-        신분당선 = 지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
+        LineRequest lineRequest = LineRequest.of("신분당선", "bg-red-600", 강남역, 양재역, 10, 10);
+        신분당선 = 지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
     }
 
     /**
@@ -47,7 +46,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     void addLineSection() {
         // when
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(양재역, 정자역, 6, 6));
 
         // then
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
@@ -64,7 +63,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     void addLineSectionMiddle() {
         // when
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(강남역, 정자역, 6, 6));
 
         // then
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
@@ -80,7 +79,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addSectionAlreadyIncluded() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 양재역));
+        ExtractableResponse<Response> response = 지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(강남역, 양재역, 6, 6));
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -96,7 +95,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     void removeLineSection() {
         // given
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(양재역, 정자역, 6, 6));
 
         // when
         지하철_노선에_지하철_구간_제거_요청(관리자, 신분당선, 정자역);
@@ -117,7 +116,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     void removeLineSectionInMiddle() {
         // given
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(양재역, 정자역, 6, 6));
 
         // when
         지하철_노선에_지하철_구간_제거_요청(관리자, 신분당선, 양재역);
@@ -126,26 +125,5 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 정자역);
-    }
-
-    private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", "신분당선");
-        lineCreateParams.put("color", "bg-red-600");
-        lineCreateParams.put("upStationId", upStationId + "");
-        lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", 10 + "");
-        lineCreateParams.put("duration", 10 + "");
-        return lineCreateParams;
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", 6 + "");
-        params.put("duration", 6 + "");
-        return params;
     }
 }
