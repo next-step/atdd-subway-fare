@@ -17,7 +17,6 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -48,13 +47,8 @@ public class PathDocumentation extends Documentation {
 
         var 최단_경로_조회_결과 = 최단_경로_조회("distance-path", 1L, 2L, PathCondition.DISTANCE);
 
-        assertAll(
-                () -> assertThat(최단_경로_조회_결과.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(최단_경로_조회_결과.jsonPath().getInt("distance")).isEqualTo(10),
-                () -> assertThat(최단_경로_조회_결과.jsonPath().getInt("duration")).isEqualTo(5)
-        );
+        경로_조회_완료(최단_경로_조회_결과);
     }
-
 
     @Test
     public void find_path_by_time() {
@@ -69,11 +63,7 @@ public class PathDocumentation extends Documentation {
 
         var 최단_경로_조회_결과 = 최단_경로_조회("duration-path", 1L, 2L, PathCondition.DURATION);
 
-        assertAll(
-                () -> assertThat(최단_경로_조회_결과.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(최단_경로_조회_결과.jsonPath().getInt("distance")).isEqualTo(10),
-                () -> assertThat(최단_경로_조회_결과.jsonPath().getInt("duration")).isEqualTo(3)
-        );
+        경로_조회_완료(최단_경로_조회_결과);
     }
 
     private ExtractableResponse<Response> 최단_경로_조회(String identifier, Long source, Long target, PathCondition distance) {
@@ -103,7 +93,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").description("Id of station"),
                 fieldWithPath("stations[].name").description("Name of station"),
                 fieldWithPath("distance").description("Distance of path"),
-                fieldWithPath("duration").description("Cost time of path")
+                fieldWithPath("duration").description("Cost time of path"),
+                fieldWithPath("fare").description("Fare of path")
         );
     }
 
@@ -113,5 +104,9 @@ public class PathDocumentation extends Documentation {
                 parameterWithName("target").description("Arrival station id"),
                 parameterWithName("pathCondition").description("Search conditions for shortest path")
         );
+    }
+
+    private void 경로_조회_완료(ExtractableResponse<Response> 최단_경로_조회_결과) {
+        assertThat(최단_경로_조회_결과.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }
