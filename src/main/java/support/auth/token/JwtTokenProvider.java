@@ -30,20 +30,25 @@ public class JwtTokenProvider {
     }
 
     public String getPrincipal(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return parseClaims(token).getBody().getSubject();
     }
 
+
     public List<String> getRoles(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("roles", List.class);
+        return (List<String>) getSpecificParameter(token, "roles", List.class);
     }
 
     public Integer getAge(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age", Integer.class);
+        return (Integer) getSpecificParameter(token, "age", Integer.class);
+    }
+
+    private Object getSpecificParameter(String token, String parameter, Class<?> clz) {
+        return parseClaims(token).getBody().get(parameter, clz);
     }
 
     public boolean validateToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jws<Claims> claims = parseClaims(token);
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
@@ -51,6 +56,8 @@ public class JwtTokenProvider {
         }
     }
 
-
+    private Jws<Claims> parseClaims(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+    }
 }
 
