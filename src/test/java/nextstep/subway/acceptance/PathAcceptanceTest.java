@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -117,13 +118,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // Then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath()
-                .getInt("distance")).isEqualTo(20);
-        assertThat(response.jsonPath()
-                .getInt("duration")).isEqualTo(12);
-        assertThat(response.jsonPath()
-                .getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        Assertions.assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath()
+                        .getInt("distance")).isEqualTo(20),
+                () -> assertThat(response.jsonPath()
+                        .getInt("duration")).isEqualTo(12),
+                () -> assertThat(response.jsonPath()
+                        .getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역)
+        );
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
