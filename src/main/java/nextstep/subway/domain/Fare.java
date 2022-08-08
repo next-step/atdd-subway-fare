@@ -22,7 +22,12 @@ public enum Fare {
         this.criteria = criteria;
     }
 
-    public static int calculate(final int distance) {
+    public static int calculate(int distance, int higherSurCharge, int userAge) {
+        int fare = calculateByDistance(distance) + higherSurCharge;
+        return DiscountPolicy.calculate(userAge, fare);
+    }
+
+    private static int calculateByDistance(final int distance) {
         if (isStandard(distance)) {
             return STANDARD_FARE;
         }
