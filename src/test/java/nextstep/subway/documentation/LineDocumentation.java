@@ -49,6 +49,8 @@ public class LineDocumentation extends Documentation {
         params.put("upStationId", "1");
         params.put("downStationId", "2");
         params.put("distance", "10");
+        params.put("duration", "10");
+
         givenOauth().
             filter(document("line/create",
                 preprocessRequest(prettyPrint()),
@@ -94,6 +96,7 @@ public class LineDocumentation extends Documentation {
         params.put("downStationId", "2");
         params.put("distance", "3");
         params.put("requiredTime", "5");
+        params.put("duration", "10");
 
         givenOauth()
             .filter(document("line/addSection",
