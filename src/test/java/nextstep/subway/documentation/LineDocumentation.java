@@ -1,6 +1,5 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -22,14 +22,14 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class LineDocumentation extends Documentation {
 
-    public static final LineResponse 신분당선 = new LineResponse(
+    private static final LineResponse 신분당선 = new LineResponse(
         1L,
         "신분당선",
         "red",
         Arrays.asList(new StationResponse(1L, "강남역"), new StationResponse(2L, "분당역"))
     );
 
-    public static final LineResponse 분당선 = new LineResponse(
+    private static final LineResponse 분당선 = new LineResponse(
         2L,
         "분당선",
         "green",
@@ -81,6 +81,41 @@ public class LineDocumentation extends Documentation {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())))
             .when().get("/lines/{id}", 1)
+            .then().statusCode(HttpStatus.OK.value()).log().all().extract();
+    }
+
+
+    @Test
+    void updateSection() {
+        doNothing().when(lineService).addSection(1L, null);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", "1");
+        params.put("downStationId", "2");
+        params.put("distance", "3");
+        params.put("requiredTime", "5");
+
+        givenOauth()
+            .filter(document("line/addSection",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())))
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(params)
+            .when().post("/lines/{lineId}/sections", 1)
+            .then().statusCode(HttpStatus.OK.value()).log().all().extract();
+    }
+
+
+    @Test
+    void deleteSection() {
+        doNothing().when(lineService).deleteSection(1L, 1L);
+
+        givenOauth()
+            .filter(document("line/deleteSection",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())))
+            .queryParam("stationId", 1)
+            .when().delete("/lines/{lineId}/sections", 1)
             .then().statusCode(HttpStatus.OK.value()).log().all().extract();
     }
 }
