@@ -3,7 +3,7 @@
 
 #Step1 PR 수정 TODO List
 - [x] PathAcceptanceTest 에서 환승, 반대 방향의 경우도 테스트 작성
-- [ ] document(), requestParameters(), responseFields() 메서드로 분리하기
+- [x] document(), requestParameters(), responseFields() 메서드로 분리하기
 - [x] LineTest의 given절, duration 인자 중복 제거
 - [x] Sections 기간에 대한 단위 테스트 추가
 
