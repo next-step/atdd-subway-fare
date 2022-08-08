@@ -24,8 +24,8 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
-                        new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
+                        StationResponse.of(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
+                        StationResponse.of(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
                 ), 10, 20
         );
 
