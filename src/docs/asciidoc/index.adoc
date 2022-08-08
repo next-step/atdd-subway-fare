@@ -12,3 +12,41 @@
 === 경로 조회
 
 operation::path[snippets='http-request,http-response']
+
+== 지하철 역
+
+=== 역 생성
+
+operation::station/create[snippets='http-request,http-response']
+
+=== 역 조회
+
+operation::station/findStations[snippets='http-request,http-response']
+
+=== 역 삭제
+
+operation::station/deleteStation[snippets='http-request,http-response']
+
+== 지하철 노선
+
+=== 노선 생성
+
+operation::line/create[snippets='http-request,http-response']
+
+=== 노선 조회
+
+operation::line/getLine[snippets='http-request,http-response']
+
+=== 노선 목록 조회
+
+operation::line/showLines[snippets='http-request,http-response']
+
+== 지하철 구간
+
+=== 구간 생성
+
+operation::line/addSection[snippets='http-request,http-response']
+
+=== 구간 조회
+
+operation::line/deleteSection[snippets='http-request,http-response']
