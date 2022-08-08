@@ -129,6 +129,22 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * Given 지하철 역, 노선이 등록되어있고, 지하철 노선에 지하철역이 등록되어있을때,
+     * When 없는 출발역과 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
+     * Then 에러가 발생한다.
+     */
+    @DisplayName("없는 출발 역과 도착역의 최소 시간 기준 경로를 조회한다")
+    @Test
+    void findPathByDuration_fail_no_exists_station() {
+        // When
+        Long 없는역ID = 999L;
+        var response = 두_역의_최소_시간_경로_조회를_요청(없는역ID, 양재역);
+
+        // Then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given()
