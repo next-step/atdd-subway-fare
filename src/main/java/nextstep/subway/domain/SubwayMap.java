@@ -5,8 +5,10 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SubwayMap {
     private List<Line> lines;
@@ -21,11 +23,20 @@ public class SubwayMap {
 
         validateConnectSection(result);
 
-        List<Section> sections = result.getEdgeList().stream()
-                .map(SectionEdge::getSection)
+        List<Section> sections = streamSections(result)
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        int maxOverFare = streamSections(result)
+                .mapToInt(section -> section.getLine().getOverFare())
+                .max()
+                .orElse(0);
+
+        return new Path(new Sections(sections), maxOverFare);
+    }
+
+    private Stream<Section> streamSections(GraphPath<Station, SectionEdge> result) {
+        return result.getEdgeList().stream()
+                .map(SectionEdge::getSection);
     }
 
     private void validateConnectSection(GraphPath<Station, SectionEdge> result) {
