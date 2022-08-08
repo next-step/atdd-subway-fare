@@ -36,6 +36,9 @@ public class Section extends DefaultWeightedEdge {
         this.distance = distance;
         this.duration = duration;
     }
+    public int getLineSurcharge() {
+        return line.getSurcharge();
+    }
 
     public Long getId() {
         return id;

@@ -9,5 +9,7 @@ public interface UserDetails {
 
     List<String> getAuthorities();
 
+    Integer getAge();
+
     boolean checkCredentials(Object credentials);
 }

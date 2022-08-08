@@ -43,19 +43,19 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal User user) {
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal(permitNonLoginUser = false) User user) {
         MemberResponse member = memberService.findMember(user.getUsername());
         return ResponseEntity.ok().body(member);
     }
 
     @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal User user, @RequestBody MemberRequest param) {
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal(permitNonLoginUser = false) User user, @RequestBody MemberRequest param) {
         memberService.updateMember(user.getUsername(), param);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/me")
-    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal User user) {
+    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal(permitNonLoginUser = false) User user) {
         memberService.deleteMember(user.getUsername());
         return ResponseEntity.noContent().build();
     }

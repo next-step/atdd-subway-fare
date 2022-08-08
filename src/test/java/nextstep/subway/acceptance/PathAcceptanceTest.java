@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static nextstep.subway.domain.PathType.DISTANCE;
 import static nextstep.subway.domain.PathType.DURATION;
@@ -20,6 +23,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    public static final String EMAIL = "member@email.com";
+    public static final String PASSWORD = "password";
+    public static final String TEENAGER_EMAIL = "teenager@email.com";
+    public static final String CHILD_EMAIL = "child@email.com";
+
+    private String 사용자;
+    private String 비로그인_사용자;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -44,18 +54,21 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 1);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5, 0);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 1, 500);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2, 1000);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+
+        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
+        비로그인_사용자 = Strings.EMPTY;
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
@@ -69,7 +82,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 두_역의_최소_시간_경로를_조회한다() {
         // when
-        var 최소_시간_경로_조회_응답 = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+        var 최소_시간_경로_조회_응답 = 두_역의_최소_시간_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
         최소_시간_경로_조회_응답_확인(최소_시간_경로_조회_응답);
@@ -87,7 +100,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 두_역의_최단_거리_경로와_요금을_조회한다() {
         // when
-        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
         최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
@@ -99,17 +112,113 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    /**
+     * Given 청소년 사용자 로그인
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 청소년 이용 요금도 함께 응답함
+     */
+    @Test
+    void 청소년_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+        // given
+        var 청소년_사용자 = 로그인_되어_있음(TEENAGER_EMAIL, PASSWORD);
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(청소년_사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        청소년_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
+
+    /**
+     * Given 어린이 사용자 로그인
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 어린이 이용 요금도 함께 응답함
+     */
+    @Test
+    void 어린이_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+        // given
+        var 어린이_사용자 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(어린이_사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        어린이_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
+
+    /**
+     * When 비 사용자가 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 비 사용자 요금도 함께 응답함
+     */
+    @Test
+    void 비_로그인_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(비로그인_사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        비_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
+
+    /**
+     * When 일반 사용자가 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 일반 사용자 요금도 함께 응답함
+     */
+    @Test
+    void 일반_사용자의_두_역의_최단_거리_경로와_요금을_조회한다() {
+
+        // when
+        var 최단_거리_경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
+
+        // then
+        최단_거리_경로_조회_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        총_거리와_소요_시간_응답_확인(최단_거리_경로_조회_응답);
+
+        // and
+        일반_사용자_지하철_이용_요금_응답_확인(최단_거리_경로_조회_응답);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, DISTANCE)
                 .then().log().all().extract();
     }
 
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(String accessToken, Long source, Long target) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, DURATION)
                 .then().log().all().extract();
@@ -129,10 +238,26 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private void 지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
-        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_250);
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(2_250);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private void 어린이_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(950);
+    }
+
+    private void 청소년_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(1_520);
+    }
+
+    private void 비_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(2_250);
+    }
+
+    private void 일반_사용자_지하철_이용_요금_응답_확인(ExtractableResponse<Response> 최단_거리_경로_조회_응답) {
+        assertThat(최단_거리_경로_조회_응답.jsonPath().getLong("fare")).isEqualTo(2_250);
+    }
+
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -141,6 +266,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("surcharge", surcharge + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
