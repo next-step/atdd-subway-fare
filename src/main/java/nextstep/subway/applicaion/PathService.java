@@ -4,9 +4,6 @@ import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
 import org.springframework.stereotype.Service;
-import support.auth.userdetails.User;
-
-import java.util.List;
 
 @Service
 public class PathService {
@@ -25,6 +22,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines.getLines(), pathRequest.getPathType());
         Path path = subwayMap.findPath(upStation, downStation);
 
-        return PathResponse.of(path, userAge, lines.getHigherSurCharge());
+        return PathResponse.of(path, userAge);
     }
 }

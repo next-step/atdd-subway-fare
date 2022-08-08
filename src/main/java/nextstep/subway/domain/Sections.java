@@ -15,6 +15,7 @@ public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     private static int MIN_DISTANCE = 1;
+    private static final int MIN_SURCHARGE = 0;
 
     public Sections() {
     }
@@ -79,6 +80,10 @@ public class Sections {
         }
 
         return result;
+    }
+
+    public int getHigherSurCharge() {
+        return sections.stream().map(Section::getLineSurcharge).max(Integer::compareTo).orElse(MIN_SURCHARGE);
     }
 
     private void checkDuplicateSection(Section section) {
