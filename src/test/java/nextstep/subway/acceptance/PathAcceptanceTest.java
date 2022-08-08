@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.domain.PathType;
@@ -14,7 +15,9 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static nextstep.utils.NumberUtils.requirePositiveNumber;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -30,14 +33,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 역삼역;
 
     /**
-     * |                                    (2, 1)
+     * |            (10, 10)                (2, 1)
      * 교대역    --- *2호선* ---   강남역 --- *2호선* --- 역삼역
      * |                           |                     |
      * *3호선*                 *신분당선*                10호선
-     * (10, 10)                (10, 10)
+     * (2, 2)                  (10, 10)               (10, 10)
      * |                           |                     |
      * 남부터미널역  --- *3호선* --- 양재역 --- *3호선* --- 양재시민의숲역
-     * |                                    (1, 2)
+     * |              (3,5)                  (1, 2)
      */
     @BeforeEach
     public void setUp() {
@@ -55,10 +58,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
         십호선 = 지하철_노선_생성_요청("10호선", "yellow", 역삼역, 양재시민의숲역, 10, 10);
 
-        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
         지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 역삼역, 2, 1));
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(양재역, 양재시민의숲역, 1, 2));
     }
+
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
@@ -67,7 +71,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        final JsonPath jsonPath = response.jsonPath();
+        assertAll(
+                () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(jsonPath.getInt("distance")).isEqualTo(5),
+                () -> assertThat(jsonPath.getInt("duration")).isEqualTo(7),
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(1250)
+        );
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
@@ -77,9 +87,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(양재역, 역삼역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 역삼역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(12);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
+        final JsonPath jsonPath = response.jsonPath();
+        assertAll(
+                () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 역삼역),
+                () -> assertThat(jsonPath.getInt("distance")).isEqualTo(12),
+                () -> assertThat(jsonPath.getInt("duration")).isEqualTo(11),
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(1350)
+        );
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
@@ -122,4 +136,5 @@ class PathAcceptanceTest extends AcceptanceTest {
         params.put("duration", duration + "");
         return params;
     }
+
 }
