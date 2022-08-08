@@ -12,7 +12,7 @@ public class SearchTypeConverter implements Converter<String, SearchType> {
     @Override
     public SearchType convert(String source) {
         return Arrays.stream(SearchType.values())
-                .filter(s -> s.name().equalsIgnoreCase(source))
+                .filter(s -> s.getCriteria().equalsIgnoreCase(source))
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
     }

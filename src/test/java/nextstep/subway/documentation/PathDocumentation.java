@@ -1,6 +1,8 @@
 package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -32,17 +34,7 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
 
-        RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("searchType", "distance")
-                .when().get("/paths")
-                .then().log().all().extract();
+        searchType에_따른_두_역의_최단_경로_조회를_요청("distance");
     }
 
     @Test
@@ -55,7 +47,11 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
 
-        RestAssured
+        searchType에_따른_두_역의_최단_경로_조회를_요청("duration");
+    }
+
+    private ExtractableResponse<Response> searchType에_따른_두_역의_최단_경로_조회를_요청(String searchType) {
+        return RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
@@ -63,7 +59,7 @@ class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
-                .queryParam("searchType", "duration")
+                .queryParam("searchType", searchType)
                 .when().get("/paths")
                 .then().log().all().extract();
     }

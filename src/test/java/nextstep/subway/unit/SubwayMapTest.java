@@ -7,6 +7,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -41,6 +42,7 @@ public class SubwayMapTest {
         삼호선.addSection(남부터미널역, 양재역, 5, 2);
     }
 
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // given
@@ -56,6 +58,7 @@ public class SubwayMapTest {
         assertThat(path.extractDuration()).isEqualTo(11);
     }
 
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         // given
