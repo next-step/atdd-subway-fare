@@ -1,10 +1,17 @@
 package nextstep.subway.applicaion.dto;
 
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nextstep.subway.domain.Station;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StationResponse {
     private Long id;
     private String name;
@@ -17,21 +24,5 @@ public class StationResponse {
         return stations.stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-    }
-
-    public StationResponse() {
-    }
-
-    public StationResponse(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 }
