@@ -60,11 +60,11 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return distance.distance();
+        return this.distance.getDistance();
     }
 
     public int getDuration() {
-        return duration.duration();
+        return this.duration.getDuration();
     }
 
     public boolean isSameUpStation(Station station) {
