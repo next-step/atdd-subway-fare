@@ -1,0 +1,12 @@
+=== Request
+==== URL
+include::{snippets}/path/http-request.adoc[]
+
+==== Query Parameter
+include::{snippets}/path/request-parameters.adoc[]
+
+==== Response
+include::{snippets}/path/response-fields.adoc[]
+
+==== Response: 성공
+include::{snippets}/path/http-response.adoc[]
