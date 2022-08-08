@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.fixture.MockMember.MEMBER;
 import static nextstep.subway.acceptance.FavoriteSteps.*;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
@@ -16,8 +17,6 @@ import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청
 
 @DisplayName("즐겨찾기 관련 기능")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
-    public static final String EMAIL = "member@email.com";
-    public static final String PASSWORD = "password";
 
     private Long 신분당선;
     private Long 이호선;
@@ -50,7 +49,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
 
-        사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
+        사용자 = 로그인_되어_있음(MEMBER);
     }
 
     @DisplayName("즐겨찾기를 관리한다.")

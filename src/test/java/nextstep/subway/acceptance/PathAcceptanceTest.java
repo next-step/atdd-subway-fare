@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.fixture.MockMember;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,15 +14,18 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.fixture.MockMember.CHILD;
+import static nextstep.fixture.MockMember.TEENAGER;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static nextstep.utils.NumberUtils.requirePositiveNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
     private static final int STANDARD_FARE = 1250;
+    public static final int FIX_DEDUCTION = 350;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -136,6 +140,38 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    @DisplayName("어린이 요금이 적용 된다.")
+    @Test
+    void findPathByChild() {
+        // when
+        ExtractableResponse<Response> response = 로그인후_최단_시간_경로_조회를_요청(CHILD, 교대역, 남부터미널역);
+
+        // then
+        final JsonPath jsonPath = response.jsonPath();
+        assertAll(
+                () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역),
+                () -> assertThat(jsonPath.getInt("distance")).isEqualTo(2),
+                () -> assertThat(jsonPath.getInt("duration")).isEqualTo(2),
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((STANDARD_FARE - FIX_DEDUCTION) * 0.8)
+        );
+    }
+
+    @DisplayName("청소년 요금이 적용 된다.")
+    @Test
+    void findPathByTeenager() {
+        // when
+        ExtractableResponse<Response> response = 로그인후_최단_시간_경로_조회를_요청(TEENAGER, 교대역, 남부터미널역);
+
+        // then
+        final JsonPath jsonPath = response.jsonPath();
+        assertAll(
+                () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역),
+                () -> assertThat(jsonPath.getInt("distance")).isEqualTo(2),
+                () -> assertThat(jsonPath.getInt("duration")).isEqualTo(2),
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((STANDARD_FARE - FIX_DEDUCTION) * 0.5)
+        );
+    }
+
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return getShortestPathByType(source, target, PathType.DISTANCE);
@@ -144,6 +180,20 @@ class PathAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target) {
         return getShortestPathByType(source, target, PathType.DURATION);
     }
+
+    private ExtractableResponse<Response> 로그인후_최단_시간_경로_조회를_요청(MockMember member, Long source, Long target) {
+        String accessToken = 로그인_되어_있음(member);
+        return RestAssured
+                .given().log().all()
+                .auth().oauth2(accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", PathType.DURATION)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
 
     private ExtractableResponse<Response> getShortestPathByType(Long source, Long target, PathType type) {
         return RestAssured
