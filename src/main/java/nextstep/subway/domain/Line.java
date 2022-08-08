@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,6 +13,10 @@ public class Line {
     private String name;
     private String color;
 
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private int surcharge;
+
     @Embedded
     private Sections sections = new Sections();
 
@@ -18,8 +24,12 @@ public class Line {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+    public Line(String name, String color, int surcharge) {
         this.name = name;
         this.color = color;
+        this.surcharge = surcharge;
     }
 
     public Long getId() {
@@ -53,6 +63,10 @@ public class Line {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int getSurcharge() {
+        return surcharge;
     }
 
     public void deleteSection(Station station) {
