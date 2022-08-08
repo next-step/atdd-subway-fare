@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import lombok.Getter;
 import nextstep.subway.domain.fare.FareRule;
+import support.ticket.TicketType;
 
 import java.util.List;
 
@@ -21,10 +22,11 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare() {
+    public int extractFare(TicketType ticketType) {
         int distance = extractDistance();
         FareRule fareRule = FareRule.of(distance);
-        return fareRule.getFare(distance) + sections.getSurcharge();
+
+        return ticketType.extractTotalFare(fareRule.getFare(distance) + sections.getSurcharge());
     }
 
     public List<Station> getStations() {

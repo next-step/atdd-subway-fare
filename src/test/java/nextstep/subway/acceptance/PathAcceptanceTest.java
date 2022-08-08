@@ -152,7 +152,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(2),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(2),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((STANDARD_FARE - FIX_DEDUCTION) * 0.8)
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((int) ((STANDARD_FARE - FIX_DEDUCTION) * 0.5))
         );
     }
 
@@ -168,7 +168,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(2),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(2),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((STANDARD_FARE - FIX_DEDUCTION) * 0.5)
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((int) ((STANDARD_FARE - FIX_DEDUCTION) * 0.8))
         );
     }
 
@@ -209,6 +209,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
     }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
