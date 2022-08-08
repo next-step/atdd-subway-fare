@@ -38,7 +38,7 @@ public class PathDocumentation extends Documentation {
 
         RestAssured
             .given(spec).log().all()
-            .filter(document("path",
+            .filter(document("path/distance",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())))
             .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -47,4 +47,32 @@ public class PathDocumentation extends Documentation {
             .when().get("/paths")
             .then().log().all().extract();
     }
+
+
+    @Test
+    void findMinimum() {
+        PathResponse pathResponse = new PathResponse(
+            Arrays.asList(
+                new StationResponse(1L, "강남역"),
+                new StationResponse(2L, "역삼역")
+            ),
+            10,
+            10
+        );
+
+        when(pathService.findMinDuration(anyLong(), anyLong())).thenReturn(pathResponse);
+
+        RestAssured
+            .given(spec).log().all()
+            .filter(document("path/duration",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())))
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("source", 1L)
+            .queryParam("target", 2L)
+            .when().get("/paths/duration")
+            .then().log().all().extract();
+    }
+
+
 }
