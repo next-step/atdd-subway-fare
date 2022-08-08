@@ -1,6 +1,14 @@
 # 지하철 노선도 미션
 [ATDD 강의](https://edu.nextstep.camp/c/R89PYi5H) 실습을 위한 지하철 노선도 애플리케이션
 
+#Step2 TODO List
+- [ ] 요금 정보 조회
+    - [ ] 인수 조건 도출
+    - [ ] 인수 테스트 작성
+    - [ ] 경로 조회시 요금 정보 반환 기능 구현
+- [ ] 인수 테스트 (수정) -> 문서화 -> 기능 구현 순으로 진행하세요
+- [ ] 커밋 단위를 작게 하기
+
 #Step1 PR 수정 TODO List
 - [x] PathAcceptanceTest 에서 환승, 반대 방향의 경우도 테스트 작성
 - [x] document(), requestParameters(), responseFields() 메서드로 분리하기
