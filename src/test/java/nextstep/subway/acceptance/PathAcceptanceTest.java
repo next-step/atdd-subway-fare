@@ -1,6 +1,5 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -8,12 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,23 +65,6 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given()
-                .log()
-                .all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DISTANCE")
-                .when()
-                .get("/paths")
-                .then()
-                .log()
-                .all()
-                .extract();
-    }
-
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
@@ -109,7 +92,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      * Given 지하철 역, 노선이 등록되어있고, 지하철 노선에 지하철역이 등록되어있을때,
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
-     * Then 최소 시간 기준 경로를 응답하며, 총 거리와 소요 시간을 함께 응답한다.
+     * Then 최소 시간 기준 경로를 응답하며, 총 거리와 소요 시간, 요금을 함께 응답한다.
      */
     @DisplayName("두 역의 최소 시간 기준 경로를 조회한다")
     @Test
@@ -125,7 +108,9 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath()
                         .getInt("duration")).isEqualTo(12),
                 () -> assertThat(response.jsonPath()
-                        .getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역)
+                        .getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
+                () -> assertThat(response.jsonPath()
+                        .getInt("fare")).isEqualTo(1450)
         );
     }
 
@@ -143,22 +128,5 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }
-
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given()
-                .log()
-                .all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", "DURATION")
-                .when()
-                .get("/paths")
-                .then()
-                .log()
-                .all()
-                .extract();
     }
 }
