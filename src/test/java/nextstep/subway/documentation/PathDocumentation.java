@@ -53,7 +53,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").description("지하철역 생성 시간").type(JsonFieldType.STRING),
                                 fieldWithPath("stations[].modifiedDate").description("마지막 지하철역 수정 시간").type(JsonFieldType.STRING),
                                 fieldWithPath("distance").description("총 거리").type(JsonFieldType.NUMBER),
-                                fieldWithPath("duration").description("총 소요 시간").type(JsonFieldType.NUMBER))
+                                fieldWithPath("duration").description("총 소요 시간").type(JsonFieldType.NUMBER),
+                                fieldWithPath("fare").description("총 운임 비용").type(JsonFieldType.NUMBER))
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
