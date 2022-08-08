@@ -66,17 +66,27 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
+    /**
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     */
     @Test
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     void findPathByMinimumDuration() {
-        //    When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+        //when
         final ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회(교대역, 양재역);
-        //    Then 최소 시간 기준 경로를 응답
-        // 역정보 + 총거리 + 총 소요시간
-        //    And 총 거리와 소요 시간을 함께 응답함
         final List<Long> 역_정보 = response.jsonPath().getList("stations.id", Long.class);
         final int totalDistance = response.jsonPath().getInt("distance");
         final int totalDuration = response.jsonPath().getInt("duration");
+
+        //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(역_정보).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(totalDistance).isEqualTo(5);
