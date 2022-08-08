@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Section.SectionBuilder;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,12 @@ public class LineService {
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(new Section(upStation, downStation, request.getDistance(), request.getDuration()));
+            SectionBuilder sectionBuilder = Section.builder()
+                    .upStation(upStation)
+                    .downStation(downStation)
+                    .distance(request.getDistance())
+                    .duration(request.getDuration());
+            line.addSection(sectionBuilder);
         }
         return LineResponse.of(line);
     }

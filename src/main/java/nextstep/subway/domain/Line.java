@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.Section.SectionBuilder;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -51,8 +53,11 @@ public class Line {
         sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
-    public void addSection(Section section) {
-        sections.add(new Section(this, section));
+    public void addSection(SectionBuilder sectionBuilder) {
+        Section build = sectionBuilder
+                .line(this)
+                .build();
+        sections.add(build);
     }
 
     public List<Station> getStations() {
@@ -62,4 +67,5 @@ public class Line {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
 }

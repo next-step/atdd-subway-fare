@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static nextstep.subway.domain.FarePolicy.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 조회 테스트")
@@ -26,7 +27,7 @@ class PathTest {
 
         int fare = path.getFare();
 
-        assertThat(fare).isEqualTo(Path.DEFAULT_FARE);
+        assertThat(fare).isEqualTo(DEFAULT_FARE);
     }
 
     @DisplayName("10km 초과 요금 조회")
@@ -38,7 +39,7 @@ class PathTest {
 
         int fare = path.getFare();
 
-        assertThat(fare).isEqualTo(Path.DEFAULT_FARE + 100);
+        assertThat(fare).isEqualTo(DEFAULT_FARE + 100);
     }
 
     @DisplayName("49km 요금 조회")
@@ -50,7 +51,7 @@ class PathTest {
 
         int fare = path.getFare();
 
-        assertThat(fare).isEqualTo(Path.DEFAULT_FARE + 800);
+        assertThat(fare).isEqualTo(DEFAULT_FARE + 800);
     }
 
     @DisplayName("50km 초과 요금 조회")
@@ -62,6 +63,6 @@ class PathTest {
 
         int fare = path.getFare();
 
-        assertThat(fare).isEqualTo(Path.DEFAULT_FARE + 800 + 100);
+        assertThat(fare).isEqualTo(DEFAULT_FARE + 800 + 100);
     }
 }
