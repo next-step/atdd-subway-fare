@@ -1,8 +1,14 @@
 package nextstep.subway.domain;
 
-import org.jgrapht.graph.DefaultWeightedEdge;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import javax.persistence.*;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -24,15 +30,18 @@ public class Section extends DefaultWeightedEdge {
 
     private int distance;
 
+    private int duration;
+
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -55,6 +64,10 @@ public class Section extends DefaultWeightedEdge {
         return distance;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public boolean isSameUpStation(Station station) {
         return this.upStation == station;
     }
@@ -65,6 +78,6 @@ public class Section extends DefaultWeightedEdge {
 
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
+            || (this.upStation == downStation && this.downStation == upStation);
     }
 }
