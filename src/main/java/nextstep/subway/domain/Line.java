@@ -51,8 +51,8 @@ public class Line {
         }
     }
 
-    public void addSection(Station upStation, Station downStation, Distance distance, Duration duration) {
-        sections.add(Section.of(this, upStation, downStation, distance, duration));
+    public void addSection(SectionBuilder sectionBuilder) {
+        sections.add(Section.of(this, sectionBuilder.upStation, sectionBuilder.downStation, sectionBuilder.distance, sectionBuilder.duration));
     }
 
     public List<Station> getStations() {
@@ -61,5 +61,45 @@ public class Line {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    public static class SectionBuilder {
+        private Station upStation;
+        private Station downStation;
+        private Distance distance;
+        private Duration duration;
+
+        public SectionBuilder() { }
+
+        public SectionBuilder(SectionBuilder sectionBuilder) {
+            this.upStation = sectionBuilder.upStation;
+            this.downStation = sectionBuilder.downStation;
+            this.distance = sectionBuilder.distance;
+            this.duration = sectionBuilder.duration;
+        }
+
+        public SectionBuilder upStation(Station upStation) {
+            this.upStation = upStation;
+            return this;
+        }
+
+        public SectionBuilder downStation(Station downStation) {
+            this.downStation = downStation;
+            return this;
+        }
+
+        public SectionBuilder distance(Distance distance) {
+            this.distance = distance;
+            return this;
+        }
+
+        public SectionBuilder duration(Duration duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public SectionBuilder build() {
+            return new SectionBuilder(this);
+        }
     }
 }

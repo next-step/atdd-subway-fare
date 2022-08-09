@@ -8,6 +8,7 @@ import nextstep.subway.domain.Distance;
 import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,12 @@ public class LineService {
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(upStation, downStation, Distance.from(request.getDistance()), Duration.from(request.getDuration()));
+            line.addSection(new Line.SectionBuilder()
+                    .upStation(upStation)
+                    .downStation(downStation)
+                    .distance(Distance.from(request.getDistance()))
+                    .duration(Duration.from(request.getDuration()))
+                    .build());
         }
         return LineResponse.of(line);
     }
@@ -72,7 +78,12 @@ public class LineService {
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
         Line line = findById(lineId);
 
-        line.addSection(upStation, downStation, Distance.from(sectionRequest.getDistance()), Duration.from(sectionRequest.getDuration()));
+        line.addSection(new Line.SectionBuilder()
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(Distance.from(sectionRequest.getDistance()))
+                .duration(Duration.from(sectionRequest.getDuration()))
+                .build());
     }
 
     private List<StationResponse> createStationResponses(Line line) {
