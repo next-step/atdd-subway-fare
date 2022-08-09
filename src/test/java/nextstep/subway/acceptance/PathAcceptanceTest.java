@@ -53,7 +53,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 	@Test
 	void findPathByDistance() {
 		// when
-		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, "DISTANCE");
 
 		// then
 		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
@@ -65,27 +65,38 @@ class PathAcceptanceTest extends AcceptanceTest {
 	@Test
 	void findPathByDuration() {
 		// when
-		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, "DURATION");
 
 		// then
 		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+		assertThat(response.jsonPath().getLong("distance")).isEqualTo(20);
 		assertThat(response.jsonPath().getLong("duration")).isEqualTo(4);
+
 	}
 
-	private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+	private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String pathCode) {
 		return RestAssured
 			.given().log().all()
 			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.when().get("/paths?source={sourceId}&target={targetId}", source, target)
+			.when()
+			.get("/paths?source={sourceId}&target={targetId}&pathBaseCode={pathBaseCode}", source, target,
+				pathCode)
 			.then().log().all().extract();
 	}
 
-	private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+	private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String pathCode) {
 		return RestAssured
-			.given().log().all()
+			.given()
+			.log()
+			.all()
 			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.when().get("/paths/duration?source={sourceId}&target={targetId}", source, target)
-			.then().log().all().extract();
+			.when()
+			.get("/paths?source={sourceId}&target={targetId}&pathBaseCode={pathBaseCode}", source, target,
+				pathCode)
+			.then()
+			.log()
+			.all()
+			.extract();
 	}
 
 	private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

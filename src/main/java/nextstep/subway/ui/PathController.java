@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sun.istack.NotNull;
+
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.path.PathBaseCode;
 
 @RestController
 public class PathController {
@@ -17,12 +20,10 @@ public class PathController {
 	}
 
 	@GetMapping("/paths")
-	public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
-		return ResponseEntity.ok(pathService.findPath(source, target));
+	public ResponseEntity<PathResponse> findPath(@RequestParam Long source
+		, @RequestParam Long target
+		, @RequestParam @NotNull PathBaseCode pathBaseCode) {
+		return ResponseEntity.ok(pathService.findPath(source, target, pathBaseCode));
 	}
 
-	@GetMapping("/paths/duration")
-	public ResponseEntity<PathResponse> findPathBaseOnDuration(@RequestParam Long source, @RequestParam Long target) {
-		return null;
-	}
 }

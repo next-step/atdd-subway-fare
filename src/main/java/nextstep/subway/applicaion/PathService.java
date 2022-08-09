@@ -8,7 +8,8 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.path.PathBaseCode;
+import nextstep.subway.domain.path.PathFinder;
 
 @Service
 public class PathService {
@@ -20,12 +21,12 @@ public class PathService {
 		this.stationService = stationService;
 	}
 
-	public PathResponse findPath(Long source, Long target) {
+	public PathResponse findPath(Long source, Long target, PathBaseCode pathBaseCode) {
 		Station upStation = stationService.findById(source);
 		Station downStation = stationService.findById(target);
 		List<Line> lines = lineService.findLines();
-		SubwayMap subwayMap = new SubwayMap(lines);
-		Path path = subwayMap.findPath(upStation, downStation);
+		PathFinder pathFinder = pathBaseCode.getPathFinderClass(lines);
+		Path path = pathFinder.findPath(upStation, downStation);
 
 		return PathResponse.of(path);
 	}

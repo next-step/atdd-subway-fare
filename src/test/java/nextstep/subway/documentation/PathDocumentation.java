@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
 			), 10, 6
 		);
 
-		when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+		when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
 		RestAssured
 			.given(spec).log().all()
@@ -39,6 +39,7 @@ public class PathDocumentation extends Documentation {
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.queryParam("source", 1L)
 			.queryParam("target", 2L)
+			.queryParam("pathBaseCode", "DURATION")
 			.when().get("/paths")
 			.then().log().all().extract();
 	}
