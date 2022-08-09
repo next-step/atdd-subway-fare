@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Distance {
 
+    private static final int BASE_DISTANCE = 0;
     @Column
     private int distance;
 
@@ -17,13 +18,17 @@ public class Distance {
     }
 
     private void validateLessThanZero(int distance) {
-        if (distance <= 0) {
-            throw new IllegalArgumentException("거리는 0 이하가 될 수 없습니다.");
+        if (distance <= BASE_DISTANCE) {
+            throw new IllegalArgumentException("거리는 0 이하가 될 수 없습니다. 입력된 거리 : " + distance);
         }
     }
 
     public static Distance from(int distance) {
         return new Distance(distance);
+    }
+
+    public Distance decrease(Distance distance) {
+        return Distance.from(this.distance - distance.distance);
     }
 
     public int getDistance() {

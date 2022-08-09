@@ -19,6 +19,7 @@ class DistanceTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1})
     void negativeDistance(int distance) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Distance.from(distance));
+        assertThatIllegalArgumentException().isThrownBy(() -> Distance.from(distance))
+                .withMessage("거리는 0 이하가 될 수 없습니다. 입력된 거리 : " + distance);
     }
 }
