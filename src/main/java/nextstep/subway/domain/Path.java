@@ -26,6 +26,24 @@ public class Path {
     }
 
     public int extractFare() {
-        return 0;
+        // distance가 10 이내면 1250
+        // distance가 10초과∼50미만 시에 5마다 100 추가
+        // distance가 50초과 시 8km마다 100 추가
+
+        int distance = sections.totalDistance();
+        int fare = 1250;
+
+
+        if (distance > 50) {
+            fare += ((Math.ceil((distance - 50 - 1) / 8) + 1) * 100);
+            distance = 50;
+        }
+
+        if (distance > 10) {
+            fare += ((Math.ceil((distance - 10 - 1) / 5) + 1) * 100);
+            distance = 10;
+        }
+
+        return fare;
     }
 }
