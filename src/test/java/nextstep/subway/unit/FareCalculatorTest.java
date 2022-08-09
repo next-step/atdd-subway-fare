@@ -14,6 +14,13 @@ public class FareCalculatorTest {
                 .isEqualTo(1250);
     }
 
+    @DisplayName("10km 거리 요금 계산")
+    @Test
+    void calculate_10km_fare() {
+        Assertions.assertThat(FareCalculator.calculateFare(10))
+                .isEqualTo(1250);
+    }
+
     @DisplayName("12km 거리 요금 계산")
     @Test
     void calculate_12km_fare() {
@@ -26,6 +33,13 @@ public class FareCalculatorTest {
     void calculate_16km_fare() {
         Assertions.assertThat(FareCalculator.calculateFare(16))
                 .isEqualTo(1450);
+    }
+
+    @DisplayName("50km 거리 요금 계산")
+    @Test
+    void calculate_50km_fare() {
+        Assertions.assertThat(FareCalculator.calculateFare(50))
+                .isEqualTo(2050);
     }
 
     @DisplayName("55km 거리 요금 계산")
