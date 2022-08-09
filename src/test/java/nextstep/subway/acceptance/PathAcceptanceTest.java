@@ -24,6 +24,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private Long 부산역;
+    private Long 기차;
 
     /**
      * 교대역    ---   4   ---   강남역
@@ -31,6 +33,10 @@ class PathAcceptanceTest extends AcceptanceTest {
      * 5                        2
      * |                        |
      * 남부터미널역  --- 10 ---   양재
+     * |
+     * 46
+     * |
+     * 부산역
      */
     @BeforeEach
     public void setUp() {
@@ -39,13 +45,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         교대역 = 지하철역_생성_요청(관리자, "교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
+        부산역 = 지하철역_생성_요청(관리자, "부산역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 5, 5);
+        기차 = 지하철_노선_생성_요청("기차", "orange", 교대역, 남부터미널역, 5, 5);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 10));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 기차, createSectionCreateParams(남부터미널역, 부산역, 46, 10));
     }
 
     /**
@@ -68,12 +77,22 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getString("fare")).isEqualTo("1450");
     }
 
+    @Test
+    @DisplayName("교대역에서 부산역까지 거리는 51이고 요금은 2150이다.")
+    void findPathByDuration_getFare() {
+        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_조회를_요청(교대역, 부산역);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 부산역);
+        assertThat(response.jsonPath().getString("duration")).isEqualTo("15");
+        assertThat(response.jsonPath().getString("distance")).isEqualTo("51");
+        assertThat(response.jsonPath().getString("fare")).isEqualTo("2150");
+    }
+
     private ExtractableResponse<Response> 두_역의_최소_소요_시간_조회를_요청(Long source, Long target) {
         return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
-                .then().log().all().extract();
+            .given().log().all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+            .then().log().all().extract();
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
