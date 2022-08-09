@@ -6,14 +6,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PathResponse {
+
+    private static final int MINIMUM_FARE = 1250;
+
     private List<StationResponse> stations;
     private int distance;
     private int duration;
+    private int fare;
 
     public PathResponse(List<StationResponse> stations, int distance, int duration) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = MINIMUM_FARE;
     }
 
     public static PathResponse of(Path path) {
@@ -36,5 +41,9 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getFare() {
+        return fare;
     }
 }
