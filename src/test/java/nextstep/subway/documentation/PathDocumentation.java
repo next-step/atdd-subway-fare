@@ -1,5 +1,7 @@
 package nextstep.subway.documentation;
 
+import static nextstep.subway.documentation.step.PathDocumentationStep.경로_조회_문서화;
+import static nextstep.subway.documentation.step.PathDocumentationStep.경로_조회_응답_생성;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -32,36 +34,11 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        PathResponse pathResponse = new PathResponse(
-            Lists.newArrayList(
-                new StationResponse(1L, "강남역"),
-                new StationResponse(2L, "역삼역")
-            ), 10, 5
-        );
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(경로_조회_응답_생성());
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
         RestAssured
             .given(spec).log().all()
-            .filter(document("path",
-                preprocessRequest(modifyUris()
-                        .scheme("https")
-                        .host("atdd-subway-fare")
-                        .removePort(),
-                    prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestParameters(
-                    parameterWithName("source").description("출발역 ID"),
-                    parameterWithName("target").description("도착역 ID"),
-                    parameterWithName("pathType").description("조회 타입")
-                ),
-                responseFields(
-                    fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로역"),
-                    fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
-                    fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역명"),
-                    fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                    fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간")
-                )
-            ))
+            .filter(경로_조회_문서화())
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", 1L)
             .queryParam("target", 2L)
