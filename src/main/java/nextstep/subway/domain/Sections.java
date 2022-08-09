@@ -67,7 +67,7 @@ public class Sections {
 			Station finalUpStation = upStation;
 			Optional<Section> section = findSectionAsUpStation(finalUpStation);
 
-			if (!section.isPresent()) {
+			if (section.isEmpty()) {
 				break;
 			}
 
