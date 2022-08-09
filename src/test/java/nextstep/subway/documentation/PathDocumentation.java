@@ -1,13 +1,8 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -17,32 +12,20 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import nextstep.DataLoader;
 import nextstep.subway.acceptance.LineSteps;
 import nextstep.subway.acceptance.MemberSteps;
 import nextstep.subway.applicaion.LineService;
-import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.StationService;
-import nextstep.subway.applicaion.dto.LineRequest;
-import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
-import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
-import org.springframework.transaction.annotation.Transactional;
 
 class PathDocumentation extends Documentation {
 
@@ -54,9 +37,6 @@ class PathDocumentation extends Documentation {
 
     @Autowired
     private StationRepository stationRepository;
-
-    @Autowired
-    private PathService pathService;
 
     Station 교대역;
     Station 강남역;
@@ -105,7 +85,8 @@ class PathDocumentation extends Documentation {
                     fieldWithPath("stations[].id").description("역 id"),
                     fieldWithPath("stations[].name").description("역 이름"),
                     fieldWithPath("distance").description("총 거리"),
-                    fieldWithPath("duration").description("총 시간")
+                    fieldWithPath("duration").description("총 시간"),
+                    fieldWithPath("fare").description("총 요금")
                 )
             ))
             .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -135,7 +116,8 @@ class PathDocumentation extends Documentation {
                     fieldWithPath("stations[].id").description("역 id"),
                     fieldWithPath("stations[].name").description("역 이름"),
                     fieldWithPath("distance").description("총 거리"),
-                    fieldWithPath("duration").description("총 시간")
+                    fieldWithPath("duration").description("총 시간"),
+                    fieldWithPath("fare").description("총 요금")
                 )
             ))
             .accept(MediaType.APPLICATION_JSON_VALUE)
