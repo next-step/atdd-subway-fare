@@ -38,7 +38,6 @@ public class PathService {
             .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        Fare fare = new Fare(distance);
-        return new PathResponse(stations, distance, duration, fare.getFare());
+        return new PathResponse(stations, distance, duration, Fare.of(distance).getFare());
     }
 }

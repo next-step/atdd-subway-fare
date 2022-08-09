@@ -11,7 +11,7 @@ class FareTest {
     @Test
     @DisplayName("기본 요금은 1250원이다.")
     void createFare() {
-        Fare fare = new Fare(5);
+        Fare fare = Fare.of(5);
         assertThat(fare.getFare()).isEqualTo(1250);
     }
 
@@ -22,7 +22,7 @@ class FareTest {
         int 거리 = 11;
 
         // when
-        Fare fare = new Fare(거리);
+        Fare fare = Fare.of(거리);
 
         // then
         assertThat(fare.getFare()).isEqualTo(1350);
@@ -35,7 +35,7 @@ class FareTest {
         int 거리 = 51;
 
         // when
-        Fare fare = new Fare(거리);
+        Fare fare = Fare.of(거리);
 
         // then
         assertThat(fare.getFare()).isEqualTo(2150);
@@ -48,7 +48,7 @@ class FareTest {
         int 거리 = 59;
 
         // when
-        Fare fare = new Fare(거리);
+        Fare fare = Fare.of(거리);
 
         // then
         assertThat(fare.getFare()).isEqualTo(2250);

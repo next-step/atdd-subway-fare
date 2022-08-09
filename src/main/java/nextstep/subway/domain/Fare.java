@@ -15,12 +15,16 @@ public class Fare {
     private static final int SECOND_REFERENCE = 8;
     public final int fare;
 
-    public Fare(int distance) {
+    public Fare(int fare) {
+        this.fare = fare;
+    }
+
+    public static Fare of(int distance) {
         int fare = DEFAULT_FARE;
         if (FIRST_REFERENCE_DISTANCE < distance) {
             fare += calculateOverFare(distance);
         }
-        this.fare = fare;
+        return new Fare(fare);
     }
 
     public int getFare() {
