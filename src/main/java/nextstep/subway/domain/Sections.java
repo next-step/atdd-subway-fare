@@ -96,8 +96,8 @@ public class Sections {
                             section.getLine(),
                             it.getUpStation(),
                             section.getUpStation(),
-                            Distance.from(it.getDistance() - section.getDistance()),
-                            Duration.from(it.getDuration() - section.getDuration())));
+                            it.decreasedDistance(section),
+                            it.decreasedDuration(section)));
                     sections.remove(it);
                 });
     }
@@ -112,8 +112,8 @@ public class Sections {
                             section.getLine(),
                             section.getDownStation(),
                             it.getDownStation(),
-                            Distance.from(it.getDistance() - section.getDistance()),
-                            Duration.from(it.getDuration() - section.getDuration())
+                            it.decreasedDistance(section),
+                            it.decreasedDuration(section)
                     ));
                     sections.remove(it);
                 });
@@ -139,9 +139,8 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    Distance.from(upSection.get().getDistance() + downSection.get().getDistance()),
-                    Duration.from(upSection.get().getDuration() + downSection.get().getDuration())
-            );
+                    upSection.get().increasedDistance(downSection.get()),
+                    upSection.get().increasedDuration(downSection.get()));
 
             this.sections.add(newSection);
         }

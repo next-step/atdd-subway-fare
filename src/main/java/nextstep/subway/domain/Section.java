@@ -66,6 +66,22 @@ public class Section extends DefaultWeightedEdge {
         return downStation;
     }
 
+    public Distance decreasedDistance(Section section) {
+        return distance.decrease(section.distance);
+    }
+
+    public Duration decreasedDuration(Section section) {
+        return this.duration.decrease(section.duration);
+    }
+
+    public Distance increasedDistance(Section section) {
+        return this.distance.increase(section.distance);
+    }
+
+    public Duration increasedDuration(Section section) {
+        return this.duration.increase(section.duration);
+    }
+
     public int getDistance() {
         return this.distance.getDistance();
     }

@@ -28,7 +28,11 @@ public class Duration {
     }
 
     public Duration decrease(Duration duration) {
-        return Duration.from(this.duration - duration.duration);
+        return new Duration(this.duration - duration.duration);
+    }
+
+    public Duration increase(Duration duration) {
+        return new Duration(this.duration + duration.duration);
     }
 
     public int getDuration() {

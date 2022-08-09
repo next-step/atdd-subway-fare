@@ -28,7 +28,11 @@ public class Distance {
     }
 
     public Distance decrease(Distance distance) {
-        return Distance.from(this.distance - distance.distance);
+        return new Distance(this.distance - distance.distance);
+    }
+
+    public Distance increase(Distance distance) {
+        return new Distance(this.distance + distance.distance);
     }
 
     public int getDistance() {
