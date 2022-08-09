@@ -37,7 +37,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", LocalDateTime.now(), LocalDateTime.now()),
                         new StationResponse(2L, "역삼역", LocalDateTime.now(), LocalDateTime.now())
-                ), 10, 5
+                ), 10, 5, 1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -62,7 +62,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("역 생성일자"),
                                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정일자"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간")
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
                         )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
