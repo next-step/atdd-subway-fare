@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.util.FarePolicy;
 import nextstep.subway.util.NormalFarePolicy;
 
 import java.util.List;
@@ -7,9 +8,11 @@ import java.util.List;
 public class Path {
 
     private Sections sections;
+    private FarePolicy farePolicy;
 
     public Path(Sections sections) {
         this.sections = sections;
+        this.farePolicy = new NormalFarePolicy();
     }
 
     public Sections getSections() {
@@ -25,7 +28,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return NormalFarePolicy.calculateFare(extractDistance());
+        return farePolicy.calculateFare(extractDistance());
     }
 
     public List<Station> getStations() {

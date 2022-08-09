@@ -1,12 +1,13 @@
 package nextstep.subway.util;
 
-public class NormalFarePolicy {
+public class NormalFarePolicy implements FarePolicy {
 
     private static final int BASE_FARE = 1_250;
     private static final int BASE_DISTANCE = 10;
     private static final int FURTHER_DISTANCE = 50;
 
-    public static int calculateFare(int distance) {
+    @Override
+    public int calculateFare(int distance) {
         if (distance <= BASE_DISTANCE) {
             return BASE_FARE;
         }
