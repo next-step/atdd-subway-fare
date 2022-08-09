@@ -24,7 +24,7 @@ public class NormalFarePolicy implements FarePolicy {
             return 0;
         }
 
-        if (distance > 50) {
+        if (distance >= FURTHER_DISTANCE) {
             return 800;
         }
 
@@ -32,7 +32,7 @@ public class NormalFarePolicy implements FarePolicy {
     }
 
     private static int calculate50KMOverFare(int distance) {
-        if (distance <= FURTHER_DISTANCE) {
+        if (distance < FURTHER_DISTANCE) {
             return 0;
         }
         return (int) ((Math.ceil((distance - FURTHER_DISTANCE) / 8) + 1) * 100);
