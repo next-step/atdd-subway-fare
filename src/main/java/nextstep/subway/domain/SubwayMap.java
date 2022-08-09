@@ -28,7 +28,7 @@ public class SubwayMap {
         addEdge(graph, type);
 
         // 다익스트라 최단 경로 찾기
-        List<Section> sections = findShortesPathSections(source, target, graph);
+        List<Section> sections = findShortestPathSections(source, target, graph);
         return new Path(new Sections(sections));
     }
 
@@ -72,7 +72,7 @@ public class SubwayMap {
         throw new IllegalArgumentException("경로 조회의 타입이 잘못되었습니다.");
     }
 
-    private List<Section> findShortesPathSections(Station source, Station target, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private List<Section> findShortestPathSections(Station source, Station target, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
