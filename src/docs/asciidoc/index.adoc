@@ -9,13 +9,9 @@
 [[path]]
 == 지하철 경로
 
-=== 최단 거리 경로 조회
+=== 경로 조회
 
-operation::path/distance[snippets='http-request,http-response']
-
-=== 최소 시간 경로 조회
-
-operation::path/duration[snippets='http-request,http-response']
+operation::path[snippets='http-request,http-response']
 
 == 지하철 역
 

@@ -28,8 +28,4 @@ public class PathService {
 
         return PathResponse.of(path);
     }
-
-    public PathResponse findMinDuration(Long source, Long target) {
-        return null;
-    }
 }
