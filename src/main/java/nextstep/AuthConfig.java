@@ -1,6 +1,8 @@
 package nextstep;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.application.CustomUserDetailsService;
+import nextstep.member.domain.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,21 +21,21 @@ import support.auth.authorization.secured.SecuredAnnotationChecker;
 import support.auth.context.SecurityContextPersistenceFilter;
 import support.auth.token.JwtTokenProvider;
 import support.auth.token.TokenAuthenticationInterceptor;
+import support.ticket.TicketArgumentResolver;
 
 import java.util.List;
 
 @Configuration
 @EnableJpaAuditing
+@RequiredArgsConstructor
 public class AuthConfig implements WebMvcConfigurer {
     @Value("${security.jwt.token.secret-key}")
     private String secretKey;
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final MemberRepository memberRepository;
 
-    public AuthConfig(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
-    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -47,6 +49,7 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
         argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
+        argumentResolvers.add(new TicketArgumentResolver(memberRepository));
     }
 
     @Bean

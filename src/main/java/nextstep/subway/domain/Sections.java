@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @Embeddable
 public class Sections {
+    private static final int DEFAULT_SURCHARGE = 0;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -82,6 +83,12 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int getSurcharge() {
+        return sections.stream()
+                .mapToInt(Section::getLineSurcharge)
+                .max().orElse(DEFAULT_SURCHARGE);
     }
 
     private void checkDuplicateSection(Section section) {
