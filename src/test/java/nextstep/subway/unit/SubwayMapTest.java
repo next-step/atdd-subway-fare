@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.AgeDiscountPolicy;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -15,6 +16,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
+    private static final int 신분당선_경유_요금 = 2150;
+    private static final int 일반_요금 = 1350;
 
     private Station 교대역;
     private Station 강남역;
@@ -31,7 +34,7 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
+        신분당선 = new Line("신분당선", "red", 900);
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
@@ -48,10 +51,11 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE, AgeDiscountPolicy.ADULT);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.getFare()).isEqualTo(신분당선_경유_요금);
     }
 
     @Test
@@ -61,10 +65,11 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION, AgeDiscountPolicy.ADULT);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertThat(path.getFare()).isEqualTo(일반_요금);
     }
 
     @Test
@@ -74,10 +79,11 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE, AgeDiscountPolicy.ADULT);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+        assertThat(path.getFare()).isEqualTo(신분당선_경유_요금);
     }
 
     private Station createStation(long id, String name) {

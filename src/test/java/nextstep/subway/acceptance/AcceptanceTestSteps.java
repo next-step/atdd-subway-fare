@@ -48,4 +48,20 @@ public class AcceptanceTestSteps {
                         responseFieldsSnippet
                 ));
     }
+
+    public static RequestSpecification given(String token,
+                                             RequestSpecification spec,
+                                             String identifier,
+                                             RequestParametersSnippet requestParametersSnippet,
+                                             ResponseFieldsSnippet responseFieldsSnippet) {
+        return RestAssured
+                .given(spec).log().all()
+                .auth().oauth2(token)
+                .filter(document(identifier,
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParametersSnippet,
+                        responseFieldsSnippet
+                ));
+    }
 }

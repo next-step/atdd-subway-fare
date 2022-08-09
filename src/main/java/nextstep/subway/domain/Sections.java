@@ -92,15 +92,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(
-                            new Section(
-                                    section.getLine(),
-                                    it.getUpStation(),
-                                    section.getUpStation(),
-                                    it.minusDistance(section),
-                                    it.minusDuration(section)
-                            )
-                    );
+                    sections.add(it.changeUpStation(section));
                     sections.remove(it);
                 });
     }
@@ -111,15 +103,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(
-                            new Section(
-                                    section.getLine(),
-                                    section.getDownStation(),
-                                    it.getDownStation(),
-                                    it.minusDistance(section),
-                                    it.minusDuration(section)
-                            )
-                    );
+                    sections.add(it.changeDownStation(section));
                     sections.remove(it);
                 });
     }
@@ -142,14 +126,7 @@ public class Sections {
         if (optUpSection.isPresent() && optDownSection.isPresent()) {
             Section upSection = optUpSection.get();
             Section downSection = optDownSection.get();
-            Section newSection = new Section(
-                    upSection.getLine(),
-                    downSection.getUpStation(),
-                    upSection.getDownStation(),
-                    upSection.plusDistance(downSection),
-                    upSection.plusDuration(downSection)
-            );
-
+            Section newSection = upSection.mergeSection(downSection);
             this.sections.add(newSection);
         }
     }
