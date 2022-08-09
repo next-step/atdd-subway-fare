@@ -1,23 +1,28 @@
 package nextstep;
 
-import nextstep.member.application.CustomUserDetailsService;
+import nextstep.member.infra.CustomUserDetailsService;
+import nextstep.auth.authentication.handler.AuthenticationFailureHandler;
+import nextstep.auth.authentication.handler.AuthenticationSuccessHandler;
+import nextstep.auth.authentication.handler.DefaultAuthenticationFailureHandler;
+import nextstep.auth.authentication.handler.DefaultAuthenticationSuccessHandler;
+import nextstep.auth.authentication.handler.LoginAuthenticationFailureHandler;
+import nextstep.auth.authentication.handler.TokenAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import support.auth.authentication.filter.BasicAuthenticationFilter;
-import support.auth.authentication.filter.BearerTokenAuthenticationFilter;
-import support.auth.authentication.filter.UsernamePasswordAuthenticationFilter;
-import support.auth.authentication.handler.*;
-import support.auth.authentication.provider.AuthenticationManager;
-import support.auth.authentication.provider.TokenAuthenticationProvider;
-import support.auth.authentication.provider.UserDetailsAuthenticationProvider;
-import support.auth.authorization.AuthenticationPrincipalArgumentResolver;
-import support.auth.authorization.secured.SecuredAnnotationChecker;
-import support.auth.context.SecurityContextPersistenceFilter;
-import support.auth.token.JwtTokenProvider;
-import support.auth.token.TokenAuthenticationInterceptor;
+import nextstep.auth.authentication.filter.BasicAuthenticationFilter;
+import nextstep.auth.authentication.filter.BearerTokenAuthenticationFilter;
+import nextstep.auth.authentication.filter.UsernamePasswordAuthenticationFilter;
+import nextstep.auth.authentication.provider.AuthenticationManager;
+import nextstep.auth.authentication.provider.TokenAuthenticationProvider;
+import nextstep.auth.authentication.provider.UserDetailsAuthenticationProvider;
+import nextstep.auth.authorization.AuthenticationPrincipalArgumentResolver;
+import nextstep.auth.authorization.secured.SecuredAnnotationChecker;
+import nextstep.auth.context.SecurityContextPersistenceFilter;
+import nextstep.auth.token.JwtTokenProvider;
+import nextstep.auth.token.TokenAuthenticationInterceptor;
 
 import java.util.List;
 

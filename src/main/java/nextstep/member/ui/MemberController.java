@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import support.auth.authorization.AuthenticationPrincipal;
-import support.auth.userdetails.User;
+import nextstep.auth.authorization.AuthenticationPrincipal;
+import nextstep.auth.userdetails.User;
 
 import javax.validation.Valid;
 import java.net.URI;

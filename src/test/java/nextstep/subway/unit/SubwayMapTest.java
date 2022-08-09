@@ -2,7 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
+import nextstep.station.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;

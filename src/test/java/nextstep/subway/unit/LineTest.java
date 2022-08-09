@@ -2,7 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
-import nextstep.subway.domain.Station;
+import nextstep.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

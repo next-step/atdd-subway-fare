@@ -4,9 +4,9 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import support.auth.userdetails.User;
-import support.auth.userdetails.UserDetails;
-import support.auth.userdetails.UserDetailsService;
+import nextstep.auth.userdetails.User;
+import nextstep.auth.userdetails.UserDetails;
+import nextstep.auth.userdetails.UserDetailsService;
 
 @Service
 @Transactional(readOnly = true)
