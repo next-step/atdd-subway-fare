@@ -15,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SubwayMapTest {
@@ -147,6 +148,28 @@ public class SubwayMapTest {
                 () -> assertThat(duration).isEqualTo(13),
                 () -> assertThat(fare).isEqualTo(2350)
         );
+    }
+
+    @DisplayName("거리가 0인 구간을 추가할 때 예외 발생")
+    @Test
+    void addSectionExceptionWhenDistanceIsZero() {
+        // given
+        Station 모란역 = createStation(5L, "모란역");
+
+        // when & then
+        assertThatIllegalArgumentException().isThrownBy(() -> 신분당선.addSection(양재역, 모란역, Distance.from(0), Duration.from(5)))
+                .withMessage("거리는 0 이하가 될 수 없습니다. 입력된 거리 : %d", 0);
+    }
+
+    @DisplayName("소요 시간이 0인 구간을 추가할 때 예외 발생")
+    @Test
+    void addSectionExceptionWhenDurationIsZero() {
+        // given
+        Station 모란역 = createStation(5L, "모란역");
+
+        // when & then
+        assertThatIllegalArgumentException().isThrownBy(() -> 신분당선.addSection(양재역, 모란역, Distance.from(5), Duration.from(0)))
+                .withMessage("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : %d", 0);
     }
 
     private Station createStation(long id, String name) {
