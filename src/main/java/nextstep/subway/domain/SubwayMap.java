@@ -14,10 +14,6 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target) {
-        return findPath(source, target, ShortestPathType.DISTANCE);
-    }
-
     public Path findPath(Station source, Station target, ShortestPathType type) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
