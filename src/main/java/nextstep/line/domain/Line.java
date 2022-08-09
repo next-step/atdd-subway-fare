@@ -1,4 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.line.domain;
+
+import nextstep.station.domain.Station;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,12 +16,25 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
-    public Line() {
+    protected Line() {
     }
 
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public void update(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    public void addSection(Station upStation, Station downStation, int distance) {
+        sections.add(new Section(upStation.getId(), downStation.getId(), distance));
+    }
+
+    public void deleteSection(Station station) {
+        sections.delete(station.getId());
     }
 
     public Long getId() {
@@ -38,24 +53,7 @@ public class Line {
         return sections.getSections();
     }
 
-    public void update(String name, String color) {
-        if (name != null) {
-            this.name = name;
-        }
-        if (color != null) {
-            this.color = color;
-        }
-    }
-
-    public void addSection(Station upStation, Station downStation, int distance) {
-        sections.add(new Section(this, upStation, downStation, distance));
-    }
-
-    public List<Station> getStations() {
+    public List<Long> getStations() {
         return sections.getStations();
-    }
-
-    public void deleteSection(Station station) {
-        sections.delete(station);
     }
 }
