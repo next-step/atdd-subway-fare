@@ -15,10 +15,10 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target) {
-        return findPath(source, target, "distance");
+        return findPath(source, target, ShortestPathType.DISTANCE);
     }
 
-    public Path findPath(Station source, Station target, String type) {
+    public Path findPath(Station source, Station target, ShortestPathType type) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -40,7 +40,7 @@ public class SubwayMap {
                 .forEach(graph::addVertex);
     }
 
-    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, String type) {
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, ShortestPathType type) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> setEdge(graph, type, it));
@@ -51,20 +51,20 @@ public class SubwayMap {
                 .forEach(it -> setEdge(graph, type, it));
     }
 
-    private void setEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, String type, Section section) {
+    private void setEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, ShortestPathType type, Section section) {
         SectionEdge sectionEdge = SectionEdge.of(section);
         graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
         setEdgeWeight(graph, type, section, sectionEdge);
     }
 
     private void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph,
-                               String type, Section section, SectionEdge sectionEdge) {
-        if (type.equals("distance")) {
+                               ShortestPathType type, Section section, SectionEdge sectionEdge) {
+        if (type == ShortestPathType.DISTANCE) {
             graph.setEdgeWeight(sectionEdge, section.getDistance());
             return;
         }
 
-        if (type.equals("duration")) {
+        if (type == ShortestPathType.DURATION) {
             graph.setEdgeWeight(sectionEdge, section.getDuration());
             return;
         }

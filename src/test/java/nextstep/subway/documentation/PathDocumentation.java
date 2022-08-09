@@ -11,8 +11,8 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
@@ -34,7 +34,7 @@ class PathDocumentation extends Documentation {
                 3
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
