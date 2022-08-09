@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class MemberRequest implements EntitySupplier<Member> {
+public class MemberUpdateRequest implements EntitySupplier<Member> {
     @NotNull
     @Email
     private String email;
