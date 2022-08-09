@@ -2,26 +2,28 @@ package nextstep.subway.constant;
 
 import nextstep.subway.domain.Section;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 public enum SearchType {
-    DISTANCE("distance", Section::getDistance),
-    DURATION("duration", Section::getDuration)
+    DISTANCE(Section::getDistance),
+    DURATION(Section::getDuration)
     ;
 
-    private final String criteria;
-    private final Function<Section, Integer> edgeWeight;
+    private final Function<Section, Integer> criteria;
 
-    SearchType(String criteria, Function<Section, Integer> edgeWeight) {
+    SearchType(Function<Section, Integer> criteria) {
         this.criteria = criteria;
-        this.edgeWeight = edgeWeight;
     }
 
-    public String getCriteria() {
-        return criteria;
+    public Function<Section, Integer> getCriteria() {
+        return this.criteria;
     }
 
-    public Function<Section, Integer> getEdgeWeight() {
-        return this.edgeWeight;
+    public static SearchType findByName(String name) {
+        return Arrays.stream(SearchType.values())
+                .filter(s -> s.name().equalsIgnoreCase(name))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

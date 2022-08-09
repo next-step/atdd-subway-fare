@@ -76,6 +76,7 @@ public class SubwayMapTest {
         assertThat(path.extractDuration()).isEqualTo(4);
     }
 
+    @DisplayName("두 역의 최단 거리 경로를 반대로 조회한다.")
     @Test
     void findPathOppositely() {
         // given
