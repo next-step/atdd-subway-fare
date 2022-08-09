@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,9 +25,10 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
                 ), 10
+                , 5
         );
 
-        when(pathService.findPath(1L, 2L)).thenReturn(pathResponse);
+        when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
 
         given(spec, "path")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
