@@ -22,4 +22,8 @@ public class Path {
     }
 
     public int extractDuration() { return sections.totalDuration(); }
+
+    public int extractFare(){
+        return Fare.calculator(extractDistance());
+    }
 }
