@@ -32,7 +32,8 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "역삼역")
             ),
             10,
-            10
+            10,
+            1250
         );
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
@@ -52,7 +53,9 @@ public class PathDocumentation extends Documentation {
                         fieldWithPath("distance")
                             .description("경유하는 거리"),
                         fieldWithPath("duration")
-                            .description("최소 소요 시간")
+                            .description("최소 소요 시간"),
+                        fieldWithPath("fare")
+                            .description("요금")
                     )
                 )
             )
