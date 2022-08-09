@@ -15,6 +15,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
@@ -38,14 +40,25 @@ public class PathDocumentation extends Documentation {
 
         RestAssured
             .given(spec).log().all()
-            .filter(document("path",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint())))
             .accept(MediaType.APPLICATION_JSON_VALUE)
+            .filter(document("path",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    responseFields(
+                        fieldWithPath("stations.[].id")
+                            .description("역 식별자"),
+                        fieldWithPath("stations.[].name")
+                            .description("역 이름"),
+                        fieldWithPath("distance")
+                            .description("경유하는 거리"),
+                        fieldWithPath("duration")
+                            .description("최소 소요 시간")
+                    )
+                )
+            )
             .queryParam("source", 1L)
             .queryParam("target", 2L)
             .when().get("/paths")
             .then().log().all().extract();
     }
-
 }
