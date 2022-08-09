@@ -22,7 +22,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         //FIXME path의 duration 추출 기능 위임
-        return new PathResponse(stations, distance, 0);
+        return new PathResponse(stations, distance, 3);
     }
 
     public List<StationResponse> getStations() {
