@@ -13,6 +13,18 @@
 
 operation::path[snippets='http-request,http-response']
 
+|===
+| 파라미터 | 이름 | 설명
+|source|출발역| 출발역의 식별자
+|target|도착역| 도착역의 식별자
+| stations | 역 목록 | 시작역부터 도착역까지 경유하는 역들의 정보
+| stations.id | 식별자 | 역의 식별자
+| stations.name | 식별자 | 역 이름
+| distance | 거리 | 경유하는 거리
+| duration | 소요 시간 | 소요되는 최소 소요 시간
+|===
+
+
 == 지하철 역
 
 === 역 생성
