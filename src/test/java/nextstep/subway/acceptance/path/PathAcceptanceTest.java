@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.line.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.member.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.path.PathSteps.경로_조회_응답_검증;
 import static nextstep.subway.acceptance.path.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.path.PathSteps.두_역의_최소_시간_경로_조회를_요청;
@@ -66,7 +67,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 교대역, 양재역);
 
         // then
         경로_조회_응답_검증(response, 12, 6, 1350, 교대역, 남부터미널역, 양재역);
@@ -76,7 +77,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(관리자), 교대역, 양재역);
 
         // then
         경로_조회_응답_검증(response, 30, 4, 1650, 교대역, 강남역, 양재역);
@@ -89,7 +90,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         Long 등록되지_않은_지하철역 = 1234L;
 
         // when
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 등록되지_않은_지하철역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(관리자), 등록되지_않은_지하철역, 양재역);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -99,7 +100,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistanceWithoutConnection() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 서울역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 서울역, 양재역);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -154,7 +155,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithTwoConditionByDuration(){
                 // when
-                ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_65km = 65;
@@ -167,7 +168,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithTwoConditionByDistance(){
                 // when
-                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_46km = 46;
@@ -195,7 +196,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithTwoConditionByDuration(){
                 // when
-                ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_30km = 30;
@@ -208,7 +209,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithTwoConditionByDistance(){
                 // when
-                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_24km = 24;
@@ -237,7 +238,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithTwoConditionByDuration(){
                 // when
-                ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_8km = 8;
@@ -250,7 +251,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithTwoConditionByDistance(){
                 // when
-                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_7km = 7;
@@ -277,7 +278,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithOverPayByDistance8Km() {
                 // when
-                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_8km = 8;
@@ -290,7 +291,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithOverPayByDistance12Km() {
                 // when
-                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철E역, 지하철F역);
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 지하철E역, 지하철F역);
 
                 // then
                 final int 거리_12km = 12;
@@ -315,13 +316,108 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void findPathWithOverPaysByDistance8Km() {
                 // when
-                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(), 지하철A역, 지하철D역);
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(관리자), 지하철A역, 지하철D역);
 
                 // then
                 final int 거리_8km = 8;
                 final int 시간_20분 = 20;
                 final int 요금_2150원 = 2150;
                 경로_조회_응답_검증(response, 거리_8km, 시간_20분, 요금_2150원, 지하철A역, 지하철B역, 지하철C역, 지하철D역);
+            }
+        }
+
+        @DisplayName("환승없는 7개 역을 가는데 로그인한 사용자의 연령이")
+        @Nested
+        class Context_with_Age_of_Login_User {
+
+            @BeforeEach
+            void setUp() {
+                Long 노선D = 지하철_노선_생성_요청("노선B", "black", 지하철A역, 지하철E역, 10, 6);
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철E역, 지하철F역, 10, 6));
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철F역, 지하철G역, 8, 4));
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철G역, 지하철H역, 8, 4));
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철H역, 지하철I역, 6, 3));
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철I역, 지하철D역, 4, 2));
+            }
+
+            @DisplayName("6세인 사용자가 최단 거리 경로를 조회하면 850원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @Test
+            void findPathWith6AgeByDistance() {
+                // given
+                String accessToken = 로그인_되어_있음("age6@email.com", "password");
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(accessToken), 지하철A역, 지하철D역);
+
+                // then
+                final int 거리_46km = 46;
+                final int 시간_25분 = 25;
+                final int 요금_850원 = 850;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_850원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+            }
+
+            @DisplayName("12세인 사용자가 최단 거리 경로를 조회하면 850원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @Test
+            void findPathWith12AgeByDistance() {
+                // given
+                String accessToken = 로그인_되어_있음("age12@email.com", "password");
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(accessToken), 지하철A역, 지하철D역);
+
+                // then
+                final int 거리_46km = 46;
+                final int 시간_25분 = 25;
+                final int 요금_850원 = 850;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_850원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+            }
+
+            @DisplayName("13세인 사용자가 최단 거리 경로를 조회하면 1460원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @Test
+            void findPathWith13AgeByDistance() {
+                // given
+                String accessToken = 로그인_되어_있음("age13@email.com", "password");
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(accessToken), 지하철A역, 지하철D역);
+
+                // then
+                final int 거리_46km = 46;
+                final int 시간_25분 = 25;
+                final int 요금_1460원 = 1460;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_1460원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+            }
+
+            @DisplayName("18세인 사용자가 최단 거리 경로를 조회하면 1460원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @Test
+            void findPathWith18AgeByDistance() {
+                // given
+                String accessToken = 로그인_되어_있음("age18@email.com", "password");
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(accessToken), 지하철A역, 지하철D역);
+
+                // then
+                final int 거리_46km = 46;
+                final int 시간_25분 = 25;
+                final int 요금_1460원 = 1460;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_1460원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+            }
+
+            @DisplayName("19세인 사용자가 최단 거리 경로를 조회하면 2050원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @Test
+            void findPathWith19AgeByDistance() {
+                // given
+                String accessToken = 로그인_되어_있음("age19@email.com", "password");
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(accessToken), 지하철A역, 지하철D역);
+
+                // then
+                final int 거리_46km = 46;
+                final int 시간_25분 = 25;
+                final int 요금_2050원 = 2050;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_2050원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
             }
         }
 

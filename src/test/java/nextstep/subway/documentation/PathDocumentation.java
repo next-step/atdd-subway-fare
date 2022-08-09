@@ -1,19 +1,21 @@
 package nextstep.subway.documentation;
 
 import nextstep.subway.applicaion.PathService;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import support.auth.userdetails.User;
 
 import java.time.LocalDateTime;
 
 import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
+import static nextstep.subway.acceptance.member.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.path.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -37,10 +39,10 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역", now, now)
                 ), 10, 4, 1250
         );
+        String accessToken = 로그인_되어_있음("member@email.com", "password");
+        when(pathService.findPath(any(User.class), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
-
-        두_역의_최단_거리_경로_조회를_요청(given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
+        두_역의_최단_거리_경로_조회를_요청(given(accessToken, spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
     }
 
     private ResponseFieldsSnippet getResponseFieldsSnippet() {
