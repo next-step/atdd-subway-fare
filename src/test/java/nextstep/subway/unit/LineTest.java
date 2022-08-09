@@ -22,8 +22,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(역삼역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(역삼역, 삼성역, Distance.from(5), Duration.from(5)));
 
         assertThat(line.getStations()).containsExactly(강남역, 역삼역, 삼성역);
     }
@@ -36,8 +36,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(강남역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(강남역, 삼성역, Distance.from(5), Duration.from(5)));
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -55,9 +55,9 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
 
-        assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(강남역, 삼성역, Distance.from(5), Duration.from(15)))
+        assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(createSectionBuilder(강남역, 삼성역, Distance.from(5), Duration.from(15))))
                 .withMessage("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : " + -5);
     }
 
@@ -69,9 +69,9 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
 
-        assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(강남역, 삼성역, Distance.from(15), Duration.from(4)))
+        assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(createSectionBuilder(강남역, 삼성역, Distance.from(15), Duration.from(4))))
                 .withMessage("거리는 0 이하가 될 수 없습니다. 입력된 거리 : "+ -5);
     }
 
@@ -83,8 +83,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(삼성역, 역삼역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(삼성역, 역삼역, Distance.from(5), Duration.from(5)));
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -102,8 +102,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(삼성역, 강남역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(삼성역, 강남역, Distance.from(5), Duration.from(5)));
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -121,8 +121,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(역삼역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(역삼역, 삼성역, Distance.from(5), Duration.from(5)));
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -138,8 +138,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(강남역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(강남역, 삼성역, Distance.from(5), Duration.from(5)));
 
         List<Station> result = line.getStations();
 
@@ -152,9 +152,9 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
 
-        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, Distance.from(5), Duration.from(5)))
+        assertThatThrownBy(() -> line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(5), Duration.from(5))))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -164,8 +164,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(역삼역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(역삼역, 삼성역, Distance.from(5), Duration.from(5)));
 
         line.deleteSection(삼성역);
 
@@ -178,8 +178,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(역삼역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(역삼역, 삼성역, Distance.from(5), Duration.from(5)));
 
         line.deleteSection(강남역);
 
@@ -192,8 +192,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
-        line.addSection(역삼역, 삼성역, Distance.from(5), Duration.from(5));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
+        line.addSection(createSectionBuilder(역삼역, 삼성역, Distance.from(5), Duration.from(5)));
 
         line.deleteSection(역삼역);
 
@@ -206,9 +206,18 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, Distance.from(10), Duration.from(10));
+        line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private Line.SectionBuilder createSectionBuilder(Station upStation, Station downStation, Distance distance, Duration duration) {
+        return new Line.SectionBuilder()
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(distance)
+                .duration(duration)
+                .build();
     }
 }
