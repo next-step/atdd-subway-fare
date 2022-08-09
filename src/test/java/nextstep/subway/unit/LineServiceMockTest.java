@@ -18,6 +18,7 @@ import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,5 +61,13 @@ class LineServiceMockTest {
 		Line line = lineService.findById(1L);
 
 		assertThat(line.getSections().size()).isEqualTo(2);
+		assertThat(line.getSections()
+			.stream()
+			.mapToInt(Section::getDistance)
+			.sum()).isEqualTo(20);
+		assertThat(line.getSections()
+			.stream()
+			.mapToInt(Section::getDuration)
+			.sum()).isEqualTo(5);
 	}
 }

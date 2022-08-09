@@ -11,6 +11,7 @@ import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 
@@ -37,11 +38,19 @@ class LineServiceTest {
 		Line line = lineService.findById(이호선.getId());
 
 		assertThat(line.getSections().size()).isEqualTo(2);
+		assertThat(line.getSections()
+			.stream()
+			.mapToInt(Section::getDistance)
+			.sum()).isEqualTo(20);
+		assertThat(line.getSections()
+			.stream()
+			.mapToInt(Section::getDuration)
+			.sum()).isEqualTo(8);
 	}
 
 	private Line createLine(Station 강남역, Station 역삼역) {
 		Line line = new Line("2호선", "green");
-		line.addSection(강남역, 역삼역, 10, 3);
+		line.addSection(강남역, 역삼역, 10, 5);
 		return line;
 	}
 }
