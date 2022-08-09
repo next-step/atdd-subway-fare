@@ -19,6 +19,7 @@ class DurationTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1})
     void zeroOrNegativeDuration(int duration) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Duration.from(duration));
+        assertThatIllegalArgumentException().isThrownBy(() -> Duration.from(duration))
+                .withMessage("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : " + duration);
     }
 }

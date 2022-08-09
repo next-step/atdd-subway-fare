@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Duration {
 
+    private static final int BASE_DURATION = 0;
     @Column
     private int duration;
 
@@ -17,13 +18,17 @@ public class Duration {
     }
 
     private void validateLessThanZero(int duration) {
-        if (duration <= 0) {
-            throw new IllegalArgumentException("소요 시간은 0 이하일 수 없습니다.");
+        if (duration <= BASE_DURATION) {
+            throw new IllegalArgumentException("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : " + duration);
         }
     }
 
     public static Duration from(int duration) {
         return new Duration(duration);
+    }
+
+    public Duration decrease(Duration duration) {
+        return Duration.from(this.duration - duration.duration);
     }
 
     public int getDuration() {
