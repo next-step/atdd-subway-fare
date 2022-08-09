@@ -15,7 +15,7 @@ public enum TicketType {
     STANDARD(age -> Ages.A6 > age || age > Ages.A19, Rates.ZERO);
 
     private final IntPredicate predicate;
-    private final int deductionRate;
+    private final int discountRate;
 
     public static TicketType of(int age) {
         requirePositiveNumber(age);
@@ -26,13 +26,13 @@ public enum TicketType {
                 .orElse(TicketType.STANDARD);
     }
 
-    public int extractTotalFare(int originalFare) {
+    public int applyFareDiscount(int originalFare) {
         if (this == STANDARD) {
             return originalFare;
         }
 
         int fixDeductionFare = discountFixDeduction(originalFare);
-        return (int) (fixDeductionFare - ((fixDeductionFare) * deductionRate * 0.01));
+        return (int) (fixDeductionFare - ((fixDeductionFare) * discountRate * 0.01));
 
     }
 

@@ -18,6 +18,6 @@ class TicketTypeTest {
     void extractTotalFareTest(TicketType type, int deductionFare) {
         int fare = 1000;
 
-        assertThat(type.extractTotalFare(fare)).isEqualTo(deductionFare);
+        assertThat(type.applyFareDiscount(fare)).isEqualTo(deductionFare);
     }
 }

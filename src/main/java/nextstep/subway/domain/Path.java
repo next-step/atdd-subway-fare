@@ -26,7 +26,7 @@ public class Path {
         int distance = extractDistance();
         FareRule fareRule = FareRule.of(distance);
 
-        return ticketType.extractTotalFare(fareRule.getFare(distance) + sections.getSurcharge());
+        return ticketType.applyFareDiscount(fareRule.getFare(distance) + sections.getSurcharge());
     }
 
     public List<Station> getStations() {
