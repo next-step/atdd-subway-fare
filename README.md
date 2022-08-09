@@ -2,9 +2,8 @@
 [ATDD 강의](https://edu.nextstep.camp/c/R89PYi5H) 실습을 위한 지하철 노선도 애플리케이션
 
 #Step2 PR 수정 TODO List
-- [ ] 요금 구하는 과정 리팩터링 해보가
-- [ ] FareType 좀더 리팩터링 하기
-- [ ] document 만들때 실제 객체 사용에 대한 고민
+- [x] 요금 구하는 과정 리팩터링 해보가
+- [x] document 만들때 실제 객체 사용에 대한 고민
 
 #Step2 TODO List
 - [x] 요금 정보 조회

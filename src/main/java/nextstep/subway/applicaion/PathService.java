@@ -1,13 +1,11 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.FareType;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathCondition;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.domain.fare.FareStrategy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,14 +27,11 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path path = subwayMap.findPath(upStation, downStation, pathCondition.getEdgeInitiator());
-        int shortestDistance = subwayMap.findShortestPathDistance(upStation, downStation);
-        int fare = calculateFare(shortestDistance);
+        if (pathCondition == PathCondition.DURATION) {
+            int shortestDistance = subwayMap.findShortestPathDistance(upStation, downStation);
+            path.setShortestDistance(shortestDistance);
+        }
 
-        return PathResponse.of(path, fare);
-    }
-
-    private int calculateFare(int distance) {
-        FareStrategy fareStrategy = FareType.findStrategy(distance);
-        return fareStrategy.calculate(distance);
+        return PathResponse.of(path);
     }
 }
