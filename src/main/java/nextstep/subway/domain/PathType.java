@@ -1,8 +1,8 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.applicaion.edge.DistanceEdgeInitiator;
-import nextstep.subway.applicaion.edge.DurationEdgeInitiator;
-import nextstep.subway.applicaion.edge.EdgeInitiator;
+import nextstep.subway.edge.DistanceEdgeInitiator;
+import nextstep.subway.edge.DurationEdgeInitiator;
+import nextstep.subway.edge.EdgeInitiator;
 
 public enum PathType {
     DISTANCE(new DistanceEdgeInitiator()),

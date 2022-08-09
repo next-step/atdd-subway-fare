@@ -6,7 +6,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
-import nextstep.subway.applicaion.path.SubwayMap;
+import nextstep.subway.path.SubwayMap;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
