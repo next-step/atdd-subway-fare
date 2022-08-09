@@ -1,5 +1,7 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.AgeDiscountPolicy;
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
@@ -74,9 +76,9 @@ class PathTest {
     void defaultFareWith_신분당선() {
         Section AB구간 = new Section(신분당선, 지하철A역, 지하철B역, 9, 3);
         Sections sections = new Sections(List.of(AB구간));
-        Path path = new Path(sections, 신분당선.getOverFare());
+        Path path = new Path(sections, new Fare(sections.totalDistance(), 신분당선.getAdditionalFare(), AgeDiscountPolicy.ADULT));
 
-        final int 요금_2150원 = DEFAULT_FARE + 신분당선.getOverFare();
+        final int 요금_2150원 = DEFAULT_FARE + 신분당선.getAdditionalFare();
         final int 거리_9km = 9;
         경로_검증(path, 요금_2150원, 거리_9km);
     }
@@ -86,9 +88,9 @@ class PathTest {
     void over10KmFareWith_신분당선() {
         Section AB구간 = new Section(신분당선, 지하철A역, 지하철B역, 10, 3);
         Sections sections = new Sections(List.of(AB구간));
-        Path path = new Path(sections, 신분당선.getOverFare());
+        Path path = new Path(sections, new Fare(sections.totalDistance(), 신분당선.getAdditionalFare(), AgeDiscountPolicy.ADULT));
 
-        final int 요금_2250원 = DEFAULT_FARE + 신분당선.getOverFare() + 100;
+        final int 요금_2250원 = DEFAULT_FARE + 신분당선.getAdditionalFare() + 100;
         final int 거리_10km = 10;
         경로_검증(path, 요금_2250원, 거리_10km);
     }
@@ -98,9 +100,9 @@ class PathTest {
     void over49KmFareWith_신분당선() {
         Section AB구간 = new Section(신분당선, 지하철A역, 지하철B역, 49, 3);
         Sections sections = new Sections(List.of(AB구간));
-        Path path = new Path(sections, 신분당선.getOverFare());
+        Path path = new Path(sections, new Fare(sections.totalDistance(), 신분당선.getAdditionalFare(), AgeDiscountPolicy.ADULT));
 
-        final int 요금_2950원 = DEFAULT_FARE + 신분당선.getOverFare() + 800;
+        final int 요금_2950원 = DEFAULT_FARE + 신분당선.getAdditionalFare() + 800;
         final int 거리_49km = 49;
         경로_검증(path, 요금_2950원, 거리_49km);
     }
@@ -110,9 +112,9 @@ class PathTest {
     void over50KmFareWith_신분당선() {
         Section AB구간 = new Section(신분당선, 지하철A역, 지하철B역, 50, 3);
         Sections sections = new Sections(List.of(AB구간));
-        Path path = new Path(sections, 신분당선.getOverFare());
+        Path path = new Path(sections, new Fare(sections.totalDistance(), 신분당선.getAdditionalFare(), AgeDiscountPolicy.ADULT));
 
-        final int 요금_3050원 = DEFAULT_FARE + 신분당선.getOverFare() + 800 + 100;
+        final int 요금_3050원 = DEFAULT_FARE + 신분당선.getAdditionalFare() + 800 + 100;
         final int 거리_50km = 50;
         경로_검증(path, 요금_3050원, 거리_50km);
     }

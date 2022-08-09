@@ -4,15 +4,15 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
-    private int overFare;
+    private Fare fare;
 
-    public Path(Sections sections, int overFare) {
+    public Path(Sections sections, Fare fare) {
         this.sections = sections;
-        this.overFare = overFare;
+        this.fare = fare;
     }
 
     public Path(Sections sections) {
-        this(sections, 0);
+        this(sections, new Fare(sections.totalDistance()));
     }
 
     public Sections getSections() {
@@ -28,7 +28,7 @@ public class Path {
     }
 
     public int getFare() {
-        return overFare + FarePolicy.calculateFare(sections.totalDistance());
+        return fare.value();
     }
 
     public List<Station> getStations() {

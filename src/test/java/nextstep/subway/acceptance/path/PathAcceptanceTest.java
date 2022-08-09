@@ -372,7 +372,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_850원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
             }
 
-            @DisplayName("13세인 사용자가 최단 거리 경로를 조회하면 1460원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("13세인 사용자가 최단 거리 경로를 조회하면 1360원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWith13AgeByDistance() {
                 // given
@@ -384,11 +384,11 @@ class PathAcceptanceTest extends AcceptanceTest {
                 // then
                 final int 거리_46km = 46;
                 final int 시간_25분 = 25;
-                final int 요금_1460원 = 1460;
-                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_1460원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+                final int 요금_1360원 = 1360;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_1360원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
             }
 
-            @DisplayName("18세인 사용자가 최단 거리 경로를 조회하면 1460원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @DisplayName("18세인 사용자가 최단 거리 경로를 조회하면 1360원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWith18AgeByDistance() {
                 // given
@@ -400,8 +400,8 @@ class PathAcceptanceTest extends AcceptanceTest {
                 // then
                 final int 거리_46km = 46;
                 final int 시간_25분 = 25;
-                final int 요금_1460원 = 1460;
-                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_1460원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+                final int 요금_1360원 = 1360;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_1360원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
             }
 
             @DisplayName("19세인 사용자가 최단 거리 경로를 조회하면 2050원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
@@ -443,7 +443,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
-        lineCreateParams.put("overFare", overFare + "");
+        lineCreateParams.put("additionalFare", overFare + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }

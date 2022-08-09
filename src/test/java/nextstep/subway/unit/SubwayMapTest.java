@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.AgeDiscountPolicy;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -50,7 +51,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE, AgeDiscountPolicy.ADULT);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -64,7 +65,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION, AgeDiscountPolicy.ADULT);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -78,7 +79,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE, AgeDiscountPolicy.ADULT);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

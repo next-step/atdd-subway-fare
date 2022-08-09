@@ -35,7 +35,7 @@ class LineServiceTest {
 
         Line line = lineService.findById(이호선.getId());
 
-        assertThat(line.getOverFare()).isEqualTo(100);
+        assertThat(line.getAdditionalFare()).isEqualTo(100);
         assertThat(line.getSections().size()).isEqualTo(2);
     }
 

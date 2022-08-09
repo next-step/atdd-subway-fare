@@ -5,7 +5,6 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,21 +16,20 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathType type) {
+    public Path findPath(Station source, Station target, PathType type, AgeDiscountPolicy ageDiscountPolicy) {
         // 다익스트라 최단 경로 찾기
         GraphPath<Station, SectionEdge> result = getGraphPath(source, target, type);
 
         validateConnectSection(result);
 
-        List<Section> sections = streamSections(result)
-                .collect(Collectors.toList());
+        Sections sections = new Sections(streamSections(result).collect(Collectors.toList()));
 
-        int maxOverFare = streamSections(result)
-                .mapToInt(section -> section.getLine().getOverFare())
+        int maxAdditionalFare = streamSections(result)
+                .mapToInt(section -> section.getLine().getAdditionalFare())
                 .max()
                 .orElse(0);
 
-        return new Path(new Sections(sections), maxOverFare);
+        return new Path(sections, new Fare(sections.totalDistance(), maxAdditionalFare, ageDiscountPolicy));
     }
 
     private Stream<Section> streamSections(GraphPath<Station, SectionEdge> result) {
