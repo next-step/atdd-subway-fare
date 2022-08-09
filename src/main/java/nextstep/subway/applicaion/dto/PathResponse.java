@@ -3,11 +3,16 @@ package nextstep.subway.applicaion.dto;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 
 public class PathResponse {
 
+    private static final int MINIMUM_DISTANCE = 10;
     private static final int MINIMUM_FARE = 1250;
+
+    private static final IntUnaryOperator BETWEEN_10_AND_50 = d -> (int) Math.ceil(d / (double) 5) * 100;
+    private static final IntUnaryOperator OVER_50 = d -> (int) Math.ceil(d / (double) 8) * 100;
 
     private List<StationResponse> stations;
     private int distance;
@@ -18,7 +23,7 @@ public class PathResponse {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
-        this.fare = MINIMUM_FARE;
+        this.fare = distance == 0 ? 0 : MINIMUM_FARE + calculateOverFare();
     }
 
     public static PathResponse of(Path path) {
@@ -45,5 +50,12 @@ public class PathResponse {
 
     public int getFare() {
         return fare;
+    }
+
+    private int calculateOverFare() {
+        int over50 = Math.max(distance - 50, 0);
+        int between10and50 = Math.max(distance - over50 - MINIMUM_DISTANCE, 0);
+
+        return BETWEEN_10_AND_50.applyAsInt(between10and50) + OVER_50.applyAsInt(over50);
     }
 }
