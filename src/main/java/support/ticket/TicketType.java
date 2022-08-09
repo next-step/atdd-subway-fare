@@ -10,9 +10,9 @@ import static nextstep.utils.NumberUtils.requirePositiveNumber;
 @RequiredArgsConstructor
 public enum TicketType {
 
-    CHILD(age -> Ages.A6 <= age && age < Ages.A13, Rates.R50),
-    TEENAGER(age -> Ages.A13 <= age && age < Ages.A19, Rates.R20),
-    STANDARD(age -> Ages.A6 > age || age > Ages.A19, Rates.ZERO);
+    CHILD(age -> Ages.START_OF_CHILD <= age && age < Ages.START_OF_TEENAGER, Rates.HALF),
+    TEENAGER(age -> Ages.START_OF_TEENAGER <= age && age < Ages.START_OF_ADULT, Rates.TWENTY),
+    STANDARD(age -> Ages.START_OF_CHILD > age || age > Ages.START_OF_ADULT, Rates.ZERO);
 
     private final IntPredicate predicate;
     private final int discountRate;
@@ -41,9 +41,9 @@ public enum TicketType {
     }
 
     private static class Ages {
-        private static final int A6 = 6;
-        private static final int A13 = 13;
-        private static final int A19 = 19;
+        private static final int START_OF_CHILD = 6;
+        private static final int START_OF_TEENAGER = 13;
+        private static final int START_OF_ADULT = 19;
     }
 
     private static class Fares {
@@ -53,7 +53,7 @@ public enum TicketType {
     private static class Rates {
 
         private static final int ZERO = 0;
-        private static final int R20 = 20;
-        private static final int R50 = 50;
+        private static final int TWENTY = 20;
+        private static final int HALF = 50;
     }
 }
