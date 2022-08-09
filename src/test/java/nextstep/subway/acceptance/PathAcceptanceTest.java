@@ -24,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    private static final int STANDARD_FARE = 1250;
-    public static final int FIX_DEDUCTION = 350;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -104,7 +102,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(5),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(7),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(STANDARD_FARE)
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(1250)
         );
     }
 
@@ -120,7 +118,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 역삼역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(12),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(11),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(STANDARD_FARE + 100)
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(1350)
         );
     }
 
@@ -136,7 +134,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(계양역, 연신내역, 김포공항역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(3),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(4),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(STANDARD_FARE + 1200)
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(2450)
         );
     }
 
@@ -152,7 +150,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(2),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(2),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((int) ((STANDARD_FARE - FIX_DEDUCTION) * 0.5))
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(450)
         );
     }
 
@@ -168,7 +166,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(jsonPath.getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역),
                 () -> assertThat(jsonPath.getInt("distance")).isEqualTo(2),
                 () -> assertThat(jsonPath.getInt("duration")).isEqualTo(2),
-                () -> assertThat(jsonPath.getInt("fare")).isEqualTo((int) ((STANDARD_FARE - FIX_DEDUCTION) * 0.8))
+                () -> assertThat(jsonPath.getInt("fare")).isEqualTo(720)
         );
     }
 
