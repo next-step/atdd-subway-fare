@@ -340,6 +340,22 @@ class PathAcceptanceTest extends AcceptanceTest {
                 지하철_노선에_지하철_구간_생성_요청(관리자, 노선D, createSectionCreateParams(지하철I역, 지하철D역, 4, 2));
             }
 
+            @DisplayName("5세인 사용자가 최단 거리 경로를 조회하면 0원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
+            @Test
+            void findPathWith5AgeByDistance() {
+                // given
+                String accessToken = 로그인_되어_있음("age5@email.com", "password");
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(given(accessToken), 지하철A역, 지하철D역);
+
+                // then
+                final int 거리_46km = 46;
+                final int 시간_25분 = 25;
+                final int 요금_0원 = 0;
+                경로_조회_응답_검증(response, 거리_46km, 시간_25분, 요금_0원, 지하철A역, 지하철E역, 지하철F역, 지하철G역, 지하철H역, 지하철I역, 지하철D역);
+            }
+
             @DisplayName("6세인 사용자가 최단 거리 경로를 조회하면 850원의 요금이 계산되고, 유효한 지하철역 목록을 반환한다.")
             @Test
             void findPathWith6AgeByDistance() {
