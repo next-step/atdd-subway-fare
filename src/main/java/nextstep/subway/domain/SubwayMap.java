@@ -15,76 +15,73 @@ public class SubwayMap {
     }
 
     public Path findPathByDuration(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = getWeightedGraphByDuration();
 
-        // 지하철 역(정점)을 등록
-        lines.stream()
-            .flatMap(it -> it.getStations().stream())
-            .distinct()
-            .collect(Collectors.toList())
-            .forEach(graph::addVertex);
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-            .flatMap(it -> it.getSections().stream())
-            .forEach(it -> {
-                SectionEdge sectionEdge = SectionEdge.of(it);
-                graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                graph.setEdgeWeight(sectionEdge, it.getDuration());
-            });
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-            .flatMap(it -> it.getSections().stream())
-            .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-            .forEach(it -> {
-                SectionEdge sectionEdge = SectionEdge.of(it);
-                graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                graph.setEdgeWeight(sectionEdge, it.getDuration());
-            });
-
-        // 다익스트라 최단 경로 찾기
-        List<Section> sections = getSections(source, target, graph);
+        List<Section> sections = getResultSections(source, target, graph);
 
         return new Path(new Sections(sections));
     }
 
     public Path findPathByDistance(Station source, Station target) {
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = getWeightedGraphByDistance();
+
+        List<Section> sections = getResultSections(source, target, graph);
+
+        return new Path(new Sections(sections));
+    }
+
+
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> getWeightedGraphByDuration() {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        // 지하철 역(정점)을 등록
+        addVertex(graph);
+
+        lines.stream()
+            .flatMap(it -> it.getSections().stream())
+            .forEach(it -> setEdgeAndWeight(it, graph, it.getDuration()));
+
+        lines.stream()
+            .flatMap(it -> it.getSections().stream())
+            .map(this::getSection)
+            .forEach(it -> setEdgeAndWeight(it, graph, it.getDuration()));
+        return graph;
+    }
+
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> getWeightedGraphByDistance() {
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+
+        addVertex(graph);
+
+        lines.stream()
+            .flatMap(it -> it.getSections().stream())
+            .forEach(it -> setEdgeAndWeight(it, graph, it.getDistance()));
+
+        lines.stream()
+            .flatMap(it -> it.getSections().stream())
+            .map(this::getSection)
+            .forEach(it -> setEdgeAndWeight(it, graph, it.getDistance()));
+        return graph;
+    }
+
+    private Section getSection(Section section) {
+        return new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration());
+    }
+
+    private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
             .flatMap(it -> it.getStations().stream())
             .distinct()
             .collect(Collectors.toList())
             .forEach(graph::addVertex);
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-            .flatMap(it -> it.getSections().stream())
-            .forEach(it -> {
-                SectionEdge sectionEdge = SectionEdge.of(it);
-                graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                graph.setEdgeWeight(sectionEdge, it.getDistance());
-            });
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-            .flatMap(it -> it.getSections().stream())
-            .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-            .forEach(it -> {
-                SectionEdge sectionEdge = SectionEdge.of(it);
-                graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                graph.setEdgeWeight(sectionEdge, it.getDistance());
-            });
-
-        // 다익스트라 최단 경로 찾기
-        List<Section> sections = getSections(source, target, graph);
-
-        return new Path(new Sections(sections));
     }
 
-    private List<Section> getSections(Station source, Station target, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void setEdgeAndWeight(Section section, SimpleDirectedWeightedGraph<Station, SectionEdge> graph, int weight) {
+        SectionEdge sectionEdge = SectionEdge.of(section);
+        graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
+        graph.setEdgeWeight(sectionEdge, weight);
+    }
+
+    private List<Section> getResultSections(Station source, Station target, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
