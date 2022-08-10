@@ -36,7 +36,7 @@ public class PathDocumentation extends Documentation {
             1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathByDuration(anyLong(), anyLong())).thenReturn(pathResponse);
 
 
         RestAssured
