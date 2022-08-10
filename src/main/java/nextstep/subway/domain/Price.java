@@ -25,4 +25,8 @@ public class Price {
         return new Price(value);
     }
 
+    public int getValue() {
+        return value;
+    }
+
 }
