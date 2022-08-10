@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
+    private int shortestDistance;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -12,6 +13,12 @@ public class Path {
     public Sections getSections() {
         return sections;
     }
+
+    public int getShortestDistance() {
+        return shortestDistance;
+    }
+
+
 
     public int extractDistance() {
         return sections.totalDistance();
@@ -23,7 +30,4 @@ public class Path {
 
     public int extractDuration() { return sections.totalDuration(); }
 
-    public int extractFare(){
-        return Fare.calculator(extractDistance());
-    }
 }
