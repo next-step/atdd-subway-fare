@@ -46,7 +46,7 @@ public enum Fare {
         return defaultFare + (int) ((Math.ceil((overDistance - 1) / referenceDistance) + 1) * 100);
     }
 
-    public static Fare getType(Integer distance){
+    private static Fare getType(Integer distance){
         return Arrays.stream(Fare.values())
                 .filter(fare -> fare.minDistance <= distance && fare.maxDistance >= distance)
                 .findFirst()
