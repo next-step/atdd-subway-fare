@@ -250,7 +250,7 @@ public class SubwayMapTest {
     @Test
     void noSectionResourceException() {
         Sections sections = new Sections();
-        assertThatIllegalStateException().isThrownBy(sections::mostExpensiveLine)
+        assertThatIllegalStateException().isThrownBy(sections::mostExpensiveLinePrice)
                 .withMessage("구간 리스트가 비어있습니다.");
     }
 
