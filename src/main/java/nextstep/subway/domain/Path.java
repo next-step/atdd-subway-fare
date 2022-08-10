@@ -28,7 +28,11 @@ public class Path {
     }
 
     public int extractFare() {
-        return farePolicy.calculateFare(extractDistance());
+        return farePolicy.calculateFare(extractDistance()) + calculateMostExpensiveLine();
+    }
+
+    public int calculateMostExpensiveLine() {
+        return sections.mostExpensiveLinePrice();
     }
 
     public List<Station> getStations() {
