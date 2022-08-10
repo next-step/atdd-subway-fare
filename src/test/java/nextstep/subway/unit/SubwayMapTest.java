@@ -8,6 +8,9 @@ import nextstep.subway.domain.Price;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.util.Adult;
+import nextstep.subway.util.Children;
+import nextstep.subway.util.Teenager;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,7 +65,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -75,7 +78,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMap.findPath(양재역, 교대역, new Adult());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
@@ -89,7 +92,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMap.findPath(양재역, 교대역, new Adult());
 
         // then
         int distance = path.extractDistance();
@@ -121,7 +124,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 모란역);
+        Path path = subwayMap.findPath(교대역, 모란역, new Adult());
 
         // then
         int distance = path.extractDistance();
@@ -154,7 +157,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(강남역, 모란역);
+        Path path = subwayMap.findPath(강남역, 모란역, new Adult());
 
         // then
         int distance = path.extractDistance();
@@ -198,7 +201,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
 
         // then
         int linePrice = path.calculateMostExpensiveLine();
@@ -228,7 +231,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 남부터미널역);
+        Path path = subwayMap.findPath(교대역, 남부터미널역, new Adult());
 
         // then
         assertAll(
@@ -252,6 +255,63 @@ public class SubwayMapTest {
         Sections sections = new Sections();
         assertThatIllegalStateException().isThrownBy(sections::mostExpensiveLinePrice)
                 .withMessage("구간 리스트가 비어있습니다.");
+    }
+
+    @DisplayName("어린이 사용자가 로그인했을 때 경로 조회 시 요금이 할인된다")
+    @Test
+    void findPathDiscountWhenLoginChildren() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, new Children());
+
+        // then
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(6),
+                () -> assertThat(path.extractDuration()).isEqualTo(6),
+                () -> assertThat(path.extractFare()).isEqualTo(1_300)
+        );
+    }
+
+    @DisplayName("청소년 사용자가 로그인했을 때 경로 조회 시 요금이 할인된다")
+    @Test
+    void findPathDiscountWhenLoginTeenager() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, new Teenager());
+
+        // then
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(6),
+                () -> assertThat(path.extractDuration()).isEqualTo(6),
+                () -> assertThat(path.extractFare()).isEqualTo(1_870)
+        );
+    }
+
+    @DisplayName("성인 사용자가 로그인했을 때 경로 조회 시 요금은 할인되지 않는다")
+    @Test
+    void findPathNotDiscountWhenLoginAdult() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+
+        // then
+        assertAll(
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
+                () -> assertThat(path.extractDistance()).isEqualTo(6),
+                () -> assertThat(path.extractDuration()).isEqualTo(6),
+                () -> assertThat(path.extractFare()).isEqualTo(2_250)
+        );
     }
 
     private Station createStation(long id, String name) {
