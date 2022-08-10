@@ -29,7 +29,7 @@ public class Path {
         return Fare.calculateOverFare(extractDistance());
     }
 
-    public int addMaximumPrice() {
+    public int maximumPrice() {
         return sections.maximumPrice();
     }
 
