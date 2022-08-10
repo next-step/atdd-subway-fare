@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -170,8 +171,19 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findTransferFare() {
         // Given(add)
+        Long 선릉역 = 지하철역_생성_요청(관리자, "선릉역").jsonPath().getLong("id");
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(선릉역, 강남역, 6, 10));
+
         // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 선릉역);
+
         // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 선릉역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(11),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_350)
+        );
     }
 
     /**
@@ -194,8 +206,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathChildrenUserFare() {
         // given
+        String accessToken = MemberSteps.로그인_되어_있음("children@email.com", "password");
+
         // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, accessToken);
+
         // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_100)
+        );
     }
 
     /**
@@ -212,8 +234,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathTeenagerUserFare() {
         // given
+        String accessToken = MemberSteps.로그인_되어_있음("teenager@email.com", "password");
+
         // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, accessToken);
+
         // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_550)
+        );
     }
 
     /**
@@ -230,13 +262,30 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathAdultUserFare() {
         // given
+        String accessToken = MemberSteps.로그인_되어_있음("member@email.com", "password");
+
         // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, accessToken);
+
         // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_850)
+        );
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
+        return given(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}", source, target)
                 .then().log().all().extract();

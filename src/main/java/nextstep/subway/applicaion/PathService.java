@@ -46,9 +46,8 @@ public class PathService {
             return new Adult();
         }
 
-        User session = (User) authentication.getPrincipal();
-
-        MemberResponse loginMember = memberService.findMember(session.getUsername());
+        String loginEmail = (String) authentication.getPrincipal();
+        MemberResponse loginMember = memberService.findMember(loginEmail);
 
         return AgeFactory.findUsersAge(loginMember.getAge());
     }
