@@ -12,8 +12,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemberSteps extends AcceptanceTestSteps {
-    public static final String USERNAME_FIELD = "username";
-    public static final String PASSWORD_FIELD = "password";
 
     public static String 로그인_되어_있음(String email, String password) {
         ExtractableResponse<Response> response = 로그인_요청(email, password);
@@ -67,16 +65,6 @@ public class MemberSteps extends AcceptanceTestSteps {
                 .auth().oauth2(accessToken)
                 .when().delete("/members/me")
                 .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 베이직_인증으로_내_회원_정보_조회_요청(String username, String password) {
-        return RestAssured.given().log().all()
-                .auth().preemptive().basic(username, password)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/members/me")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value())
-                .extract();
     }
 
     public static void 회원_정보_조회됨(ExtractableResponse<Response> response, String email, int age) {

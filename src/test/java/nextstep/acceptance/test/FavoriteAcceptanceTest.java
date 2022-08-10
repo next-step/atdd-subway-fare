@@ -16,8 +16,6 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     public static final String PASSWORD = "password";
 
     private Long 강남역;
-    private Long 양재역;
-    private Long 교대역;
     private Long 남부터미널역;
     private String 사용자;
 
@@ -25,9 +23,7 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     public void setUp() {
         super.setUp();
 
-        교대역 = 지하철역_생성_요청(관리자, "교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
-        양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
         사용자 = 로그인_되어_있음(EMAIL, PASSWORD);
