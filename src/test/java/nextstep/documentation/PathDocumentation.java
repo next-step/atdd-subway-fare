@@ -1,4 +1,4 @@
-package nextstep.subway.documentation;
+package nextstep.documentation;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
