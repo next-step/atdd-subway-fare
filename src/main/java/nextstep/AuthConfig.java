@@ -10,6 +10,7 @@ import nextstep.auth.authentication.handler.TokenAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import nextstep.auth.authentication.filter.BasicAuthenticationFilter;
@@ -32,7 +33,8 @@ public class AuthConfig implements WebMvcConfigurer {
     private String secretKey;
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
-    private CustomUserDetailsService customUserDetailsService;
+
+    private final CustomUserDetailsService customUserDetailsService;
 
     public AuthConfig(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
@@ -48,7 +50,7 @@ public class AuthConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addArgumentResolvers(List argumentResolvers) {
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
     }
 
