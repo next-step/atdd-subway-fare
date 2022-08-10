@@ -15,7 +15,8 @@ public class Line {
     private String name;
     private String color;
 
-    private int price;
+    @Embedded
+    private Price price = new Price();
 
     @Embedded
     private Sections sections = new Sections();
@@ -24,10 +25,10 @@ public class Line {
     }
 
     public Line(String name, String color) {
-        this(name, color, 0);
+        this(name, color, Price.from(0));
     }
 
-    public Line(String name, String color, int price) {
+    public Line(String name, String color, Price price) {
         this.name = name;
         this.color = color;
         this.price = price;
@@ -46,7 +47,7 @@ public class Line {
     }
 
     public int getPrice() {
-        return price;
+        return price.price();
     }
 
     public List<Section> getSections() {
