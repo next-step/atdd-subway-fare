@@ -11,6 +11,8 @@ public class Member {
     private String email;
     private String password;
     private Integer age;
+    @Embedded
+    private Favorites favorites = new Favorites();
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "MEMBER_ROLE", joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
     @Column(name = "role")
@@ -39,6 +41,14 @@ public class Member {
         this.age = member.age;
     }
 
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+    }
+
+    public void deleteFavorite(Long id) {
+        favorites.delete(id);
+    }
+
     public Long getId() {
         return id;
     }
@@ -57,5 +67,9 @@ public class Member {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites.getFavorites();
     }
 }

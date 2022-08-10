@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.member.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,25 +10,28 @@ public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long memberId;
     private Long sourceStationId;
     private Long targetStationId;
 
     public Favorite() {
     }
 
-    public Favorite(Long memberId, Long sourceStationId, Long targetStationId) {
-        this.memberId = memberId;
+    public Favorite(Long sourceStationId, Long targetStationId) {
         this.sourceStationId = sourceStationId;
         this.targetStationId = targetStationId;
     }
 
-    public Long getId() {
-        return id;
+    public boolean isSame(Favorite favorite) {
+        return this.sourceStationId.equals(favorite.sourceStationId)
+                && this.targetStationId.equals(favorite.targetStationId);
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public boolean matchId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getSourceStationId() {
@@ -37,9 +40,5 @@ public class Favorite {
 
     public Long getTargetStationId() {
         return targetStationId;
-    }
-
-    public boolean isCreatedBy(Long memberId) {
-        return this.memberId == memberId;
     }
 }
