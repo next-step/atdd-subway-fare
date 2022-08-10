@@ -102,14 +102,14 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getLong("distance")).isEqualTo(62L);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
 
         // 9km = 1250
         // 12km = 10km + 2km = 1250 + 100
         // 16km = 10km + 6km = 1250 + 200
         // 52km = 10km + 40km + 2km = 1250 + 800 + 100
+        // 62km = 10km + 40km + 12km = 1250 + 800 + 200
         // 70km = 10km + 40km + 18km = 1250 + 800 + 300
-
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(62L);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, final String type) {
