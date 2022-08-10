@@ -1,7 +1,7 @@
 package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
-import nextstep.subway.acceptance.LineSteps;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.acceptance.MemberSteps;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.PathService;
@@ -16,10 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -76,24 +72,7 @@ public class PathDocumentation extends Documentation {
     @Test
     @DisplayName("최단 거리 조회")
     void pathDistance() {
-        RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발역"),
-                                parameterWithName("target").description("도착역"),
-                                parameterWithName("edgeWeightStrategy")
-                                        .description("엣지 가중치 전략 (distanceWeightStrategy, durationWeightStrategy)")
-                        ),
-                        responseFields(
-                                fieldWithPath("stations[].id").description("역 id"),
-                                fieldWithPath("stations[].name").description("역 이름"),
-                                fieldWithPath("distance").description("총 거리"),
-                                fieldWithPath("duration").description("총 시간")
-                        )
-                ))
+        requestSpecificationGiven()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 교대역.getId())
                 .queryParam("target", 양재역.getId())
@@ -106,9 +85,7 @@ public class PathDocumentation extends Documentation {
     @Test
     @DisplayName("최소 시간 조회")
     void pathDuration() {
-        RestAssured
-                .given(spec)
-                .filter(document("path-time",
+        requestSpecificationGiven()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 교대역.getId())
                 .queryParam("target", 양재역.getId())
@@ -116,6 +93,12 @@ public class PathDocumentation extends Documentation {
                 .when().get(PATHS_PATH, 교대역.getId(), 양재역.getId(), DURATION)
                 .then().log().all()
                 .extract();
+    }
+
+    private RequestSpecification requestSpecificationGiven() {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
@@ -130,13 +113,7 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("distance").description("총 거리"),
                                 fieldWithPath("duration").description("총 시간")
                         )
-                ))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 교대역.getId())
-                .queryParam("target", 양재역.getId())
-                .when().get("/paths?source={source}&target={target}&edgeWeightStrategy=durationWeightStrategy", 교대역.getId(), 양재역.getId())
-                .then().log().all()
-                .extract();
+                ));
     }
 
 }
