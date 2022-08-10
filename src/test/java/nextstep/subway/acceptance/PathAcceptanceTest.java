@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,21 +49,46 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
     }
 
+    /**
+     * Given 지하철역이 등록되어있음
+     * And  지하철 노선이 등록되어있음
+     * And  지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * Then 최단 거리 기준 경로를 응답
+     * And  총 거리와 소요 시간을 함께 응답함
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE.name());
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    /**
+     * Given 지하철역이 등록되어있음
+     * And  지하철 노선이 등록되어있음
+     * And  지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And  총 거리와 소요 시간을 함께 응답함
+     */
+    @Test
+    void 두_역_최소_시간_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, PathType.DURATION.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+    }
+
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String pathType) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, pathType)
                 .then().log().all().extract();
     }
 
