@@ -4,7 +4,6 @@ import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  * @author a1101466 on 2022/08/09
@@ -14,41 +13,48 @@ import java.util.function.Function;
 @ToString
 public enum Fare {
 
-    STANDARD(0, 10, 0),
-    OVER_TYPE_1(11, 50, 5),
-    OVER_TYPE_2(51, 9999, 8)
+    STANDARD(0, 10, 0, 1250),
+    OVER_TYPE_1(10, 50, 5, 1250),
+    OVER_TYPE_2(50, 9999, 8, 2050)
     ;
 
     Integer minDistance;
     Integer maxDistance;
     Integer referenceDistance;
+    Integer defaultFare;
 
     private static final Integer STANDARD_DISTANCE = 10;
-    private static final Integer DEFAULT_FARE = 1250;
     private static final Integer OVER_FARE = 100;
 
-    Fare(Integer minDistance, Integer maxDistance, Integer referenceDistance) {
+    Fare(Integer minDistance, Integer maxDistance, Integer referenceDistance, Integer defaultFare) {
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
         this.referenceDistance = referenceDistance;
+        this.defaultFare = defaultFare;
     }
 
     public static Integer calculator(int distance){
-        if(STANDARD.maxDistance >= distance)
-            return DEFAULT_FARE;
+        Fare distanceType = getType(distance);
 
-        int overDistance = distance -STANDARD_DISTANCE;
-        int referenceDistance = getReferenceDistance(distance);
+        if(isStandard(distanceType))
+            return STANDARD.defaultFare;
 
-        return DEFAULT_FARE + (int) ((Math.ceil((overDistance - 1) / referenceDistance) + 1) * 100);
+        int defaultFare = distanceType.defaultFare;
+        int overDistance = distance - distanceType.minDistance;
+        int referenceDistance = distanceType.referenceDistance;
+
+        return defaultFare + (int) ((Math.ceil((overDistance - 1) / referenceDistance) + 1) * 100);
     }
 
-    public static Integer getReferenceDistance(Integer distance){
+    public static Fare getType(Integer distance){
         return Arrays.stream(Fare.values())
                 .filter(fare -> fare.minDistance <= distance && fare.maxDistance >= distance)
                 .findFirst()
-                .map(fare -> fare.referenceDistance)
-                .orElse(STANDARD.referenceDistance);
+                .orElse(STANDARD);
+    }
+
+    private static Boolean isStandard(Fare distanceType){
+        return Objects.equals(STANDARD, distanceType);
     }
 
 }
