@@ -8,7 +8,7 @@ import nextstep.auth.token.JwtTokenProvider;
 import java.util.List;
 
 public class TokenAuthenticationProvider implements AuthenticationManager {
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public TokenAuthenticationProvider(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -22,7 +22,6 @@ public class TokenAuthenticationProvider implements AuthenticationManager {
         String principal = jwtTokenProvider.getPrincipal(authenticationToken.getPrincipal());
         List<String> roles = jwtTokenProvider.getRoles(authenticationToken.getPrincipal());
 
-        Authentication authentication = new Authentication(principal, roles);
-        return authentication;
+        return new Authentication(principal, roles);
     }
 }

@@ -1,5 +1,6 @@
 package nextstep.auth.authentication.handler;
 
+import nextstep.auth.authentication.AuthenticationException;
 import nextstep.auth.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,5 +11,6 @@ public class LoginAuthenticationFailureHandler implements AuthenticationFailureH
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, Exception failed) throws IOException {
         SecurityContextHolder.clearContext();
+        throw new AuthenticationException();
     }
 }

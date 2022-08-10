@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class TokenAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-    private JwtTokenProvider jwtTokenProvider;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     public TokenAuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -22,7 +24,7 @@ public class TokenAuthenticationSuccessHandler implements AuthenticationSuccessH
         String token = jwtTokenProvider.createToken(authentication.getPrincipal().toString(), authentication.getAuthorities());
         TokenResponse tokenResponse = new TokenResponse(token);
 
-        String responseToClient = new ObjectMapper().writeValueAsString(tokenResponse);
+        String responseToClient = OBJECT_MAPPER.writeValueAsString(tokenResponse);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getOutputStream().print(responseToClient);

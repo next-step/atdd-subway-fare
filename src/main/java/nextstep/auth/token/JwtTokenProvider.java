@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 public class JwtTokenProvider {
-    private String secretKey;
-    private long validityInMilliseconds;
+    private final String secretKey;
+    private final long validityInMilliseconds;
 
     public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
         this.secretKey = secretKey;
@@ -39,8 +39,8 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
-            return !claims.getBody().getExpiration().before(new Date());
+            Date now = new Date();
+            return claims.getBody().getExpiration().after(now);
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
