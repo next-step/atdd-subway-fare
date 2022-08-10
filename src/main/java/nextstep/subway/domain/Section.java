@@ -2,7 +2,14 @@ package nextstep.subway.domain;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -22,19 +29,25 @@ public class Section extends DefaultWeightedEdge {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    private int distance;
-    private int duration;
+    @Embedded
+    private Distance distance = new Distance();
+    @Embedded
+    private Duration duration = new Duration();
 
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+    private Section(Line line, Station upStation, Station downStation, Distance distance, Duration duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    public static Section of(Line line, Station upStation, Station downStation, Distance distance, Duration duration) {
+        return new Section(line, upStation, downStation, distance, duration);
     }
 
     public Long getId() {
@@ -53,12 +66,28 @@ public class Section extends DefaultWeightedEdge {
         return downStation;
     }
 
+    public Distance decreasedDistance(Section section) {
+        return distance.decrease(section.distance);
+    }
+
+    public Duration decreasedDuration(Section section) {
+        return this.duration.decrease(section.duration);
+    }
+
+    public Distance increasedDistance(Section section) {
+        return this.distance.increase(section.distance);
+    }
+
+    public Duration increasedDuration(Section section) {
+        return this.duration.increase(section.duration);
+    }
+
     public int getDistance() {
-        return distance;
+        return this.distance.getDistance();
     }
 
     public int getDuration() {
-        return duration;
+        return this.duration.getDuration();
     }
 
     public boolean isSameUpStation(Station station) {

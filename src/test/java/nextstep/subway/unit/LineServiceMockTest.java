@@ -3,6 +3,8 @@ package nextstep.subway.unit;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.SectionRequest;
+import nextstep.subway.domain.Duration;
+import nextstep.subway.domain.Distance;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
@@ -44,7 +46,7 @@ class LineServiceMockTest {
         삼성역 = new Station("삼성역");
         ReflectionTestUtils.setField(삼성역, "id", 3L);
         이호선 = new Line("2호선", "green");
-        이호선.addSection(강남역, 역삼역, 10, 20);
+        이호선.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(20)));
         ReflectionTestUtils.setField(이호선, "id", 1L);
     }
 
@@ -54,10 +56,19 @@ class LineServiceMockTest {
         when(stationService.findById(역삼역.getId())).thenReturn(역삼역);
         when(stationService.findById(삼성역.getId())).thenReturn(삼성역);
 
-        lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 삼성역.getId(), 10, 20));
+        lineService.addSection(이호선.getId(), SectionRequest.of(역삼역.getId(), 삼성역.getId(), 10, 20));
 
         Line line = lineService.findById(1L);
 
         assertThat(line.getSections().size()).isEqualTo(2);
+    }
+
+    private Line.SectionBuilder createSectionBuilder(Station upStation, Station downStation, Distance distance, Duration duration) {
+        return new Line.SectionBuilder()
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(distance)
+                .duration(duration)
+                .build();
     }
 }

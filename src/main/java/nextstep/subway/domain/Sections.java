@@ -92,12 +92,12 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(
+                    sections.add(Section.of(
                             section.getLine(),
                             it.getUpStation(),
                             section.getUpStation(),
-                            it.getDistance() - section.getDistance(),
-                            it.getDuration() - section.getDuration()));
+                            it.decreasedDistance(section),
+                            it.decreasedDuration(section)));
                     sections.remove(it);
                 });
     }
@@ -108,12 +108,12 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(
+                    sections.add(Section.of(
                             section.getLine(),
                             section.getDownStation(),
                             it.getDownStation(),
-                            it.getDistance() - section.getDistance(),
-                            it.getDuration() - section.getDuration()
+                            it.decreasedDistance(section),
+                            it.decreasedDuration(section)
                     ));
                     sections.remove(it);
                 });
@@ -135,13 +135,12 @@ public class Sections {
 
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
-            Section newSection = new Section(
+            Section newSection = Section.of(
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration() + downSection.get().getDuration()
-            );
+                    upSection.get().increasedDistance(downSection.get()),
+                    upSection.get().increasedDuration(downSection.get()));
 
             this.sections.add(newSection);
         }

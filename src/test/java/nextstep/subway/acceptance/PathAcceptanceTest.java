@@ -3,13 +3,12 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.SectionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -22,6 +21,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 정자역;
+    private Long 모란역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
@@ -41,12 +42,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
+        정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
+        모란역 = 지하철역_생성_요청(관리자, "모란역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 5, 10);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 6, 12);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 6, 8);
 
-        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 7, 12));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, SectionRequest.of(남부터미널역, 양재역, 7, 12));
     }
 
     /**
@@ -56,6 +59,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답합
+     * And 지하철 이용 요금도 함께 응답함
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
@@ -67,7 +71,80 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20)
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_350)
+        );
+    }
+
+    /**
+     * 교대역    --- *2호선*(10)  --------  강남역
+     * |                                     |
+     * *3호선* (8)                       *신분당선*(12) --  양재역  -- *신분당선*(20) --  정자역
+     * |
+     * 남부터미널역  --- *3호선*(12) ---   양재역  -- *3호선*(5) --  모란역  --  *3호선*(8)  -- 정자역
+     *
+     * Given 지하철역이 등록되어있다.
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * And(add) 지하철 노선에 추가적으로 구간을 등록한다.
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("역의 개수와 상관 없이 소요 시간이 적은 경로를 조회하기")
+    @Test
+    void findPathByShortestDuration() {
+        // and(add)
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, SectionRequest.of(양재역, 정자역, 20, 20));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, SectionRequest.of(양재역, 모란역, 5, 5));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, SectionRequest.of(모란역, 정자역, 8, 8));
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 정자역);
+
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역, 모란역, 정자역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(26),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(33),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_650)
+        );
+    }
+
+    /**
+     *  *팔호선* (5) --- 양재역
+     * |
+     * 교대역    --- *2호선*(10)  --------  강남역
+     * |                                     |
+     * *3호선* (8)                       *신분당선*(12) --  양재역
+     * |
+     * 남부터미널역  --- *3호선*(12) --- 양재역
+     *
+     * Given 지하철역이 등록되어있다.
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * And(add) 새로운 지하철 노선을 추가하고
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("역이 1개지만 시간이 너무 오래걸릴 경우 다른 경로로 조회함")
+    @Test
+    void findMinimumDurationPath() {
+        // and(add)
+        Long 팔호선 = 지하철_노선_생성_요청("팔호선", "purple", 교대역, 양재역, 100, 100);
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_350)
         );
     }
 
@@ -80,24 +157,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", name);
-        lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", duration + "");
-
-        return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
-        return params;
+        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, distance, duration);
+        return LineSteps.지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
     }
 }

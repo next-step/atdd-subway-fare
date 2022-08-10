@@ -43,8 +43,8 @@ public class FavoriteService {
         return favorites.stream()
                 .map(it -> FavoriteResponse.of(
                         it,
-                        StationResponse.of(stations.get(it.getSourceStationId())),
-                        StationResponse.of(stations.get(it.getTargetStationId()))))
+                        StationResponse.from(stations.get(it.getSourceStationId())),
+                        StationResponse.from(stations.get(it.getTargetStationId()))))
                 .collect(Collectors.toList());
     }
 
