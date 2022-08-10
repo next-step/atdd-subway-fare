@@ -74,12 +74,14 @@ public class PathServiceTest {
     @Test
     public void find_shortest_path_by_distance() {
         // when
-        PathResponse pathResponse = pathService.findPath(교대역.getId(), 양재역.getId(), PathCondition.DISTANCE);
+        PathResponse pathResponse = pathService.findShortestPath(교대역.getId(), 양재역.getId(), PathCondition.DISTANCE);
 
         // then
         assertAll(
                 () -> assertThat(pathResponse.getStations()).extracting("name").containsExactly("교대역", "남부터미널역", "양재역"),
-                () -> assertThat(pathResponse.getDistance()).isEqualTo(5)
+                () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(15),
+                () -> assertThat(pathResponse.getFare()).isEqualTo(1250)
         );
     }
 
@@ -87,12 +89,14 @@ public class PathServiceTest {
     @Test
     public void find_shortest_path_by_duration() {
         // when
-        PathResponse pathResponse = pathService.findPath(교대역.getId(), 양재역.getId(), PathCondition.DURATION);
+        PathResponse pathResponse = pathService.findShortestPath(교대역.getId(), 양재역.getId(), PathCondition.DURATION);
 
         // then
         assertAll(
                 () -> assertThat(pathResponse.getStations()).extracting("name").containsExactly("교대역", "강남역", "양재역"),
-                () -> assertThat(pathResponse.getDuration()).isEqualTo(5)
+                () -> assertThat(pathResponse.getDistance()).isEqualTo(20),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(5),
+                () -> assertThat(pathResponse.getFare()).isEqualTo(1250)
         );
     }
 }

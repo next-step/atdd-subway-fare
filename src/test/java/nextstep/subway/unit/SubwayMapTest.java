@@ -85,7 +85,7 @@ public class SubwayMapTest {
     }
 
     @Test
-    void findPathOppositely() {
+    void findPathByDistanceOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
@@ -95,6 +95,19 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+    }
+
+    @Test
+    void findPathByDurationOppositely() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역, new DurationEdgeInitiator());
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
     }
 
     private Station createStation(long id, String name) {

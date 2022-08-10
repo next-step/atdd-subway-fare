@@ -1,16 +1,22 @@
 package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.PathCondition;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -34,38 +40,14 @@ public class PathDocumentation extends Documentation {
                 List.of(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10, 5
+                ), 10, 5, 1250
         );
 
-        given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        given(pathService.findShortestPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        RestAssured
-                .given(spec).log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .filter(
-                        document("distance-path",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("source").description("Start station id"),
-                                        parameterWithName("target").description("Arrival station id"),
-                                        parameterWithName("pathCondition").description("Search conditions for shortest path")
-                                ),
-                                responseFields(
-                                        fieldWithPath("stations[].id").description("Id of station"),
-                                        fieldWithPath("stations[].name").description("Name of station"),
-                                        fieldWithPath("distance").description("Distance of path"),
-                                        fieldWithPath("duration").description("Cost time of path")
-                                )
-                        )
-                )
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("pathCondition", PathCondition.DISTANCE.name())
-                .when().get("/paths")
-                .then().log().all().extract();
+        var 최단_경로_조회_결과 = 최단_경로_조회("distance-path", 1L, 2L, PathCondition.DISTANCE);
+
+        경로_조회_완료(최단_경로_조회_결과);
     }
 
     @Test
@@ -74,37 +56,57 @@ public class PathDocumentation extends Documentation {
                 List.of(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10, 3
+                ), 10, 3, 1450
         );
 
-        given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        given(pathService.findShortestPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        RestAssured
+        var 최단_경로_조회_결과 = 최단_경로_조회("duration-path", 1L, 2L, PathCondition.DURATION);
+
+        경로_조회_완료(최단_경로_조회_결과);
+    }
+
+    private ExtractableResponse<Response> 최단_경로_조회(String identifier, Long source, Long target, PathCondition distance) {
+        return RestAssured
                 .given(spec).log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
-                        document("duration-path",
+                        document(identifier,
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("source").description("Start station id"),
-                                        parameterWithName("target").description("Arrival station id"),
-                                        parameterWithName("pathCondition").description("Search conditions for shortest path")
-                                ),
-                                responseFields(
-                                        fieldWithPath("stations[].id").description("Id of station"),
-                                        fieldWithPath("stations[].name").description("Name of station"),
-                                        fieldWithPath("distance").description("Distance of path"),
-                                        fieldWithPath("duration").description("Cost time of path")
-                                )
+                                findPathRequestParameters(),
+                                findPathResponseParameters()
                         )
                 )
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("pathCondition", PathCondition.DURATION.name())
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("pathCondition", distance.name())
                 .when().get("/paths")
-                .then().log().all().extract();
+                .then().log().all()
+                .extract();
+    }
+
+    private ResponseFieldsSnippet findPathResponseParameters() {
+        return responseFields(
+                fieldWithPath("stations[].id").description("Id of station"),
+                fieldWithPath("stations[].name").description("Name of station"),
+                fieldWithPath("distance").description("Distance of path"),
+                fieldWithPath("duration").description("Cost time of path"),
+                fieldWithPath("fare").description("Fare of path")
+        );
+    }
+
+    private RequestParametersSnippet findPathRequestParameters() {
+        return requestParameters(
+                parameterWithName("source").description("Start station id"),
+                parameterWithName("target").description("Arrival station id"),
+                parameterWithName("pathCondition").description("Search conditions for shortest path")
+        );
+    }
+
+    private void 경로_조회_완료(ExtractableResponse<Response> 최단_경로_조회_결과) {
+        assertThat(최단_경로_조회_결과.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }

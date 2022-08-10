@@ -29,6 +29,13 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
+    public int findShortestPathDistance(Station source, Station target) {
+        this.graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        initVertexes(graph);
+        Path path = findPath(source, target, PathCondition.DISTANCE.getEdgeInitiator());
+        return path.extractDistance();
+    }
+
     private List<Section> findShortestPath(Station source, Station target) {
         GraphPath<Station, SectionEdge> result = new DijkstraShortestPath<>(graph).getPath(source, target);
 
