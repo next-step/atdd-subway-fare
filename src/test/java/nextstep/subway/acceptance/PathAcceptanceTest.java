@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
@@ -28,13 +29,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 기차;
 
     /**
-     * 교대역    ---   4   ---   강남역
+     * 교대역   ---  10/4  ---  강남역
      * |                        |
-     * 5                        2
+     * 5/5                     10/2
      * |                        |
-     * 남부터미널역  --- 10 ---   양재
+     * 남부터미널역  --- 3/10 ---  양재
      * |
-     * 46
+     * 46/10
      * |
      * 부산역
      */
@@ -96,6 +97,22 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getString("duration")).isEqualTo("15");
         assertThat(response.jsonPath().getString("distance")).isEqualTo("51");
         assertThat(response.jsonPath().getString("fare")).isEqualTo("2150");
+    }
+
+    /**
+     * When 교대역에서 양재로 갈 때
+     * Then 최단 거리로 가는 방법은 교대역-남부역-양재역으로 가는 방법이고
+     * Then 최소 소요 시간으로 가는 방법은 교대역-강남역-양재역으로 가는 방법이다.
+     */
+    @Test
+    void findPath() {
+        ExtractableResponse<Response> 최소_소요_시간 = 두_역의_최소_소요_시간_조회를_요청(교대역, 양재역);
+        assertThat(최소_소요_시간.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(최소_소요_시간.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+
+        ExtractableResponse<Response> 최단_거리 = 두_역의_최단_거리_조회를_요청(교대역, 양재역);
+        assertThat(최단_거리.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(최단_거리.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_조회를_요청(Long source, Long target) {
