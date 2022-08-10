@@ -4,6 +4,8 @@ import nextstep.subway.domain.Distance;
 import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.Price;
+import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SubwayMapTest {
@@ -42,9 +45,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red", 1_000);
-        이호선 = new Line("2호선", "red", 0);
-        삼호선 = new Line("3호선", "red", 500);
+        신분당선 = new Line("신분당선", "red", Price.from(1_000));
+        이호선 = new Line("2호선", "red", Price.from(0));
+        삼호선 = new Line("3호선", "red", Price.from(500));
 
         신분당선.addSection(createSectionBuilder(강남역, 양재역, Distance.from(3), Duration.from(3)));
         이호선.addSection(createSectionBuilder(교대역, 강남역, Distance.from(3), Duration.from(3)));
@@ -185,6 +188,70 @@ public class SubwayMapTest {
         // when & then
         assertThatIllegalArgumentException().isThrownBy(() -> 신분당선.addSection(createSectionBuilder(양재역, 모란역, Distance.from(5), Duration.from(0))))
                 .withMessage("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : %d", 0);
+    }
+
+    @DisplayName("경로에서 가장 값이 비싼 노선의 가격을 채택함")
+    @Test
+    void findMostExpensivePriceLine() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        // then
+        int linePrice = path.calculateMostExpensiveLine();
+        assertThat(linePrice).isEqualTo(1_000);
+    }
+
+    /**
+     * 교대역                                      남부터미널역
+     * |                                            |
+     * *a노선*(0원, 10km, 10분)                *c노선*(0원, 10km, 10분)
+     * |                                           |
+     * 강남역  --- *b노선*(0원, 10km, 10분) ---   양재
+     */
+    @DisplayName("경로의 추가 요금이 모두 0원 일 경우")
+    @Test
+    void allLinePriceIsZero() {
+        // given
+        Line a노선 = new Line("A노선", "bg-red-600");
+        Line b노선 = new Line("B노선", "bg-yellow-600");
+        Line c노선 = new Line("C노선", "bg-blue-600");
+
+        a노선.addSection(createSectionBuilder(교대역, 강남역, Distance.from(10), Duration.from(10)));
+        b노선.addSection(createSectionBuilder(강남역, 양재역, Distance.from(10), Duration.from(10)));
+        c노선.addSection(createSectionBuilder(양재역, 남부터미널역, Distance.from(10), Duration.from(10)));
+
+        List<Line> lines = Lists.newArrayList(a노선, b노선, c노선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 남부터미널역);
+
+        // then
+        assertAll(
+                () -> assertThat(path.extractDistance()).isEqualTo(30),
+                () -> assertThat(path.extractDuration()).isEqualTo(30),
+                () -> assertThat(path.extractFare()).isEqualTo(1_750),
+                () -> assertThat(path.calculateMostExpensiveLine()).isZero()
+        );
+    }
+
+    @DisplayName("노선 생성 시 금액이 음수 값으로 들어올 경우 에러")
+    @Test
+    void negativePriceInLine() {
+        assertThatIllegalArgumentException().isThrownBy(() -> new Line("A노선", "bg-red-600", Price.from(-1)))
+                .withMessage("노선의 추가 요금은 0 미만의 금액이 들어올 수 없습니다. 입력된 금액 : %d", -1);
+    }
+
+    @DisplayName("빈 구간 리스트에서 값을 추출할 때 예외")
+    @Test
+    void noSectionResourceException() {
+        Sections sections = new Sections();
+        assertThatIllegalStateException().isThrownBy(sections::mostExpensiveLine)
+                .withMessage("구간 리스트가 비어있습니다.");
     }
 
     private Station createStation(long id, String name) {
