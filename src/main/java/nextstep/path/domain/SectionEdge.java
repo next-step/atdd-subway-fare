@@ -1,15 +1,16 @@
-package nextstep.subway.domain;
+package nextstep.path.domain;
 
+import nextstep.line.domain.Section;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class SectionEdge extends DefaultWeightedEdge {
-    private Section section;
+    private final Section section;
 
     public static SectionEdge of(Section section) {
         return new SectionEdge(section);
     }
 
-    public SectionEdge(Section section) {
+    private SectionEdge(Section section) {
         this.section = section;
     }
 
