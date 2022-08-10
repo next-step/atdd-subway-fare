@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private final List<Line> lines;
-    private final SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
 
     public SubwayMap(List<Line> lines) {
         if(lines.isEmpty()) {
@@ -43,5 +43,11 @@ public class SubwayMap {
                 .distinct()
                 .collect(Collectors.toList())
                 .forEach(graph::addVertex);
+    }
+    public int findShortestDistance(Station source, Station target) {
+        this.graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        initVertexes(graph);
+        Path path = findPath(source, target, PathType.DISTANCE.getEdgeInitiator());
+        return path.extractDistance();
     }
 }
