@@ -60,7 +60,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
-    @DisplayName("두 역의 최단 시간 경로를 조회한다.(거리 40 , 예상요금 1850원)")
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.(거리 40 , 최단거리 5, 예상요금 1250원)")
     @Test
     void findPathByDuration() {
         // when
@@ -70,7 +70,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         assertAll(
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1850)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
         );
     }
 
