@@ -33,7 +33,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
 
-        LineRequest lineRequest = LineRequest.of("신분당선", "bg-red-600", 강남역, 양재역, 10, 10);
+        LineRequest lineRequest = LineRequest.of("신분당선", "bg-red-600", 강남역, 양재역, 1_000,10, 10);
         신분당선 = 지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
     }
 

@@ -45,9 +45,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
         모란역 = 지하철역_생성_요청(관리자, "모란역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 5, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 6, 12);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 6, 8);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 0, 5, 10);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 1_000, 6, 12);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 500, 6, 8);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, SectionRequest.of(남부터미널역, 양재역, 7, 12));
     }
@@ -135,7 +135,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findMinimumDurationPath() {
         // and(add)
-        Long 팔호선 = 지하철_노선_생성_요청("팔호선", "purple", 교대역, 양재역, 100, 100);
+        Long 팔호선 = 지하철_노선_생성_요청("팔호선", "purple", 교대역, 양재역, 0,100, 100);
 
         // when
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
@@ -242,8 +242,8 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, distance, duration);
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int price, int distance, int duration) {
+        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, price, distance, duration);
         return LineSteps.지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
     }
 }
