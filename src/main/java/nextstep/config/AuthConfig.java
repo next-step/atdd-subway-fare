@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.config;
 
 import nextstep.member.application.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
