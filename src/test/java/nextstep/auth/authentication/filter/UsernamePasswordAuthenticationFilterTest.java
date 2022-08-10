@@ -1,21 +1,21 @@
-package nextstep.auth.token;
+package nextstep.auth.authentication.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nextstep.auth.authentication.AuthenticationToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TokenAuthenticationInterceptorTest {
+class UsernamePasswordAuthenticationFilterTest {
+
+    private static final String USERNAME_FIELD = "username";
+    private static final String PASSWORD_FIELD = "password";
     private static final String EMAIL = "email@email.com";
     private static final String PASSWORD = "password";
 
     @Test
-    void convert() throws IOException {
-        TokenAuthenticationInterceptor filter = new TokenAuthenticationInterceptor(null, null, null);
+    void convert() {
+        UsernamePasswordAuthenticationFilter filter = new UsernamePasswordAuthenticationFilter(null, null, null);
 
         AuthenticationToken token = filter.convert(createMockRequest());
 
@@ -23,11 +23,10 @@ class TokenAuthenticationInterceptorTest {
         assertThat(token.getCredentials()).isEqualTo(PASSWORD);
     }
 
-    private MockHttpServletRequest createMockRequest() throws IOException {
+    private MockHttpServletRequest createMockRequest() {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        TokenRequest tokenRequest = new TokenRequest(EMAIL, PASSWORD);
-        request.setContent(new ObjectMapper().writeValueAsString(tokenRequest).getBytes());
+        request.addParameter(USERNAME_FIELD, EMAIL);
+        request.addParameter(PASSWORD_FIELD, PASSWORD);
         return request;
     }
-
 }

@@ -1,21 +1,21 @@
-package nextstep.auth.token;
+package nextstep.auth.authentication.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nextstep.auth.authentication.AuthenticationToken;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.io.IOException;
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TokenAuthenticationInterceptorTest {
+class BasicAuthenticationFilterTest {
+
     private static final String EMAIL = "email@email.com";
     private static final String PASSWORD = "password";
 
     @Test
-    void convert() throws IOException {
-        TokenAuthenticationInterceptor filter = new TokenAuthenticationInterceptor(null, null, null);
+    void convert() {
+        BasicAuthenticationFilter filter = new BasicAuthenticationFilter(null, null, null);
 
         AuthenticationToken token = filter.convert(createMockRequest());
 
@@ -23,11 +23,11 @@ class TokenAuthenticationInterceptorTest {
         assertThat(token.getCredentials()).isEqualTo(PASSWORD);
     }
 
-    private MockHttpServletRequest createMockRequest() throws IOException {
+    private MockHttpServletRequest createMockRequest() {
+        String encodedBasicAuth = Base64.getEncoder()
+                .encodeToString(String.format("%s:%s", EMAIL, PASSWORD).getBytes());
         MockHttpServletRequest request = new MockHttpServletRequest();
-        TokenRequest tokenRequest = new TokenRequest(EMAIL, PASSWORD);
-        request.setContent(new ObjectMapper().writeValueAsString(tokenRequest).getBytes());
+        request.addHeader("Authorization", "Basic " + encodedBasicAuth);
         return request;
     }
-
 }
