@@ -13,7 +13,7 @@ public class Fare {
     private static final int SECOND_REFERENCE_DISTANCE = 50;
     private static final int FIRST_REFERENCE = 5;
     private static final int SECOND_REFERENCE = 8;
-    public final int fare;
+    private final int fare;
 
     public Fare(int fare) {
         this.fare = fare;
