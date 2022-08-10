@@ -58,7 +58,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * - Scenario: 두 역의 최소 시간 경로를 조회
+     * - Scenario: 두 역의 최소 시간 경로 조회
      * - When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * - Then 최소 시간 기준 경로를 응답
      * - And 총 거리와 소요 시간을 함께 응답함
@@ -77,21 +77,40 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getString("fare")).isEqualTo("1450");
     }
 
+
+    /**
+     * - Scenario: 두 역의 최단 거리 경로 조회
+     * - When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * - Then 최단 거리 기준 경로를 응답
+     * - And 총 거리와 소요 시간을 함께 응답함
+     * - And 지하철 이용 요금도 함께 응답함
+     */
     @Test
     @DisplayName("교대역에서 부산역까지 거리는 51이고 요금은 2150이다.")
-    void findPathByDuration_getFare() {
-        ExtractableResponse<Response> response = 두_역의_최소_소요_시간_조회를_요청(교대역, 부산역);
+    void findPathByDistance() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_조회를_요청(교대역, 부산역);
+
+        // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 부산역);
         assertThat(response.jsonPath().getString("duration")).isEqualTo("15");
         assertThat(response.jsonPath().getString("distance")).isEqualTo("51");
         assertThat(response.jsonPath().getString("fare")).isEqualTo("2150");
     }
 
+    private ExtractableResponse<Response> 두_역의_최단_거리_조회를_요청(Long source, Long target) {
+        return RestAssured
+            .given().log().all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths/distance?source={sourceId}&target={targetId}", source, target)
+            .then().log().all().extract();
+    }
+
     private ExtractableResponse<Response> 두_역의_최소_소요_시간_조회를_요청(Long source, Long target) {
         return RestAssured
             .given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+            .when().get("/paths/duration?source={sourceId}&target={targetId}", source, target)
             .then().log().all().extract();
     }
 

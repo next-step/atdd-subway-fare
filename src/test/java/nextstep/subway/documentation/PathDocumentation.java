@@ -42,7 +42,7 @@ public class PathDocumentation extends Documentation {
         RestAssured
             .given(spec).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .filter(document("path",
+            .filter(document("path/duration",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
@@ -61,7 +61,7 @@ public class PathDocumentation extends Documentation {
             )
             .queryParam("source", 1L)
             .queryParam("target", 2L)
-            .when().get("/paths")
+            .when().get("/paths/duration")
             .then().log().all().extract();
     }
 }
