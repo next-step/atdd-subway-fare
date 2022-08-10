@@ -29,11 +29,11 @@ public class SubwayMapTest {
     private Line 삼호선;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 교대역    --- *2호선*(0원, 3km, 3분)   ---     강남역
+     * |                                                |
+     * *3호선*(500원, 10km, 5분)                     *신분당선* (1000원, 3km, 3분)
+     * |                                                 |
+     * 남부터미널역  --- *3호선*(500원, 10km, 5분) ---   양재
      */
     @BeforeEach
     void setUp() {
@@ -42,9 +42,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", 1_000);
+        이호선 = new Line("2호선", "red", 0);
+        삼호선 = new Line("3호선", "red", 500);
 
         신분당선.addSection(createSectionBuilder(강남역, 양재역, Distance.from(3), Duration.from(3)));
         이호선.addSection(createSectionBuilder(교대역, 강남역, Distance.from(3), Duration.from(3)));
@@ -96,10 +96,17 @@ public class SubwayMapTest {
         assertAll(
                 () -> assertThat(distance).isEqualTo(6),
                 () -> assertThat(duration).isEqualTo(6),
-                () -> assertThat(fare).isEqualTo(1_250)
+                () -> assertThat(fare).isEqualTo(2_250)
         );
     }
 
+    /**
+     * 교대역    --- *2호선*(0원, 3km, 3분)   ---     강남역
+     * |                                                |
+     * *3호선*(500원, 10km, 5분)                     *신분당선* (1000원, 3km, 3분)
+     * |                                                 |
+     * 남부터미널역  --- *3호선*(500원, 10km, 5분) ---   양재    ---   *신분당선* (1000원, 10km, 10분)   ---   모란역
+     */
     @DisplayName("지하철 경로 조회 시 기본 운임 초과 조회")
     @Test
     void findPathOverTotalFare() {
@@ -121,10 +128,18 @@ public class SubwayMapTest {
         assertAll(
                 () -> assertThat(distance).isEqualTo(16),
                 () -> assertThat(duration).isEqualTo(16),
-                () -> assertThat(fare).isEqualTo(1_450)
+                () -> assertThat(fare).isEqualTo(2_450)
         );
     }
 
+
+    /**
+     * 교대역    --- *2호선*(0원, 3km, 3분)   ---     강남역
+     * |                                                |
+     * *3호선*(500원, 10km, 5분)                     *신분당선* (1000원, 3km, 3분)
+     * |                                                 |
+     * 남부터미널역  --- *3호선*(500원, 10km, 5분) ---   양재    ---   *신분당선* (1000원, 65km, 10분)   ---   모란역
+     */
     @DisplayName("거리가 50km 초과 시 운임 조회")
     @Test
     void findPathDistanceOver50KMFare() {
@@ -146,7 +161,7 @@ public class SubwayMapTest {
         assertAll(
                 () -> assertThat(distance).isEqualTo(68),
                 () -> assertThat(duration).isEqualTo(13),
-                () -> assertThat(fare).isEqualTo(2350)
+                () -> assertThat(fare).isEqualTo(3350)
         );
     }
 
