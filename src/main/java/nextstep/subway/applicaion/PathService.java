@@ -22,12 +22,22 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
+    public PathResponse findPathByDuration(Long source, Long target) {
+        Station upStation = getStation(source);
+        Station downStation = getStation(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
+        Path path = subwayMap.findPathByDuration(upStation, downStation);
+
+        return getPathResponse(path);
+    }
+
+    public PathResponse findPathByDistance(Long source, Long target) {
+        Station upStation = getStation(source);
+        Station downStation = getStation(target);
+        List<Line> lines = lineService.findLines();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPathByDistance(upStation, downStation);
 
         return getPathResponse(path);
     }
@@ -39,5 +49,9 @@ public class PathService {
         int distance = path.extractDistance();
         int duration = path.extractDuration();
         return new PathResponse(stations, distance, duration, Fare.of(distance).getFare());
+    }
+
+    private Station getStation(Long source) {
+        return stationService.findById(source);
     }
 }
