@@ -18,28 +18,28 @@ public class FavoriteSteps {
         params.put("target", target + "");
 
         return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/favorites")
-                .then().log().all().extract();
+            .auth().oauth2(accessToken)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(params)
+            .when().post("/favorites")
+            .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 즐겨찾기_목록_조회_요청(String accessToken) {
         return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/favorites")
-                .then().log().all().extract();
+            .auth().oauth2(accessToken)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/favorites")
+            .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 즐겨찾기_삭제_요청(String accessToken, ExtractableResponse<Response> response) {
         String uri = response.header("Location");
 
         return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .when().delete(uri)
-                .then().log().all().extract();
+            .auth().oauth2(accessToken)
+            .when().delete(uri)
+            .then().log().all().extract();
     }
 
     public static void 즐겨찾기_생성됨(ExtractableResponse<Response> response) {

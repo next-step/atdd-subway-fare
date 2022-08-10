@@ -12,18 +12,18 @@ public class StationSteps extends AcceptanceTestSteps {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         return given(token)
-                .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .post("/stations")
-                .then().log().all()
-                .extract();
+            .body(params)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .post("/stations")
+            .then().log().all()
+            .extract();
     }
 
     public static ExtractableResponse<Response> 지하철역_삭제_요청(String token, String location) {
         return given(token)
-                .delete(location)
-                .then().log().all()
-                .extract();
+            .delete(location)
+            .then().log().all()
+            .extract();
     }
 }

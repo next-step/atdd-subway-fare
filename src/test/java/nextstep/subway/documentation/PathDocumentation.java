@@ -32,16 +32,17 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(2L, "역삼역")
             ),
             10,
-            10
+            10,
+            1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPathByDuration(anyLong(), anyLong())).thenReturn(pathResponse);
 
 
         RestAssured
             .given(spec).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .filter(document("path",
+            .filter(document("path/duration",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
@@ -52,13 +53,15 @@ public class PathDocumentation extends Documentation {
                         fieldWithPath("distance")
                             .description("경유하는 거리"),
                         fieldWithPath("duration")
-                            .description("최소 소요 시간")
+                            .description("최소 소요 시간"),
+                        fieldWithPath("fare")
+                            .description("요금")
                     )
                 )
             )
             .queryParam("source", 1L)
             .queryParam("target", 2L)
-            .when().get("/paths")
+            .when().get("/paths/duration")
             .then().log().all().extract();
     }
 }

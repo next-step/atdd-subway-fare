@@ -7,12 +7,12 @@ public class AcceptanceTestSteps {
 
     static RequestSpecification given() {
         return RestAssured
-                .given().log().all();
+            .given().log().all();
     }
 
     static RequestSpecification given(String token) {
         return RestAssured
-                .given().log().all()
-                .auth().oauth2(token);
+            .given().log().all()
+            .auth().oauth2(token);
     }
 }
