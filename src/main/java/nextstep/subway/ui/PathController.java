@@ -20,8 +20,8 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(
             @RequestParam Long source,
             @RequestParam Long target,
-            @RequestParam EdgeWeightStrategy edgeWeightStrategy) {
-        return ResponseEntity.ok(pathService.findPath(source, target, edgeWeightStrategy));
+            @RequestParam EdgeWeightStrategy type) {
+        return ResponseEntity.ok(pathService.findPath(source, target, type));
     }
 
 }

@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DistanceWeightStrategy implements EdgeWeightStrategy {
+public class Distance implements EdgeWeightStrategy {
 
     @Override
     public int getEdgeWeight(Section section) {

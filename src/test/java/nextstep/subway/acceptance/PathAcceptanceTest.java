@@ -19,6 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+
+    private static final String PATHS_PATH = "/paths?source={source}&target={target}&type={type}";
+    private static final String DISTANCE = "distance";
+    private static final String DURATION = "duration";
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -90,13 +95,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&edgeWeightStrategy=distanceWeightStrategy", source, target)
+                .when().get(PATHS_PATH, source, target, DISTANCE)
                 .then().log().all().extract();
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회_요청(final long source, final long target) {
         return RestAssured.given().log().all()
-                .when().get("/paths?source={sourceId}&target={targetId}&edgeWeightStrategy=durationWeightStrategy", source, target)
+                .when().get(PATHS_PATH, source, target, DURATION)
                 .then().log().all()
                 .extract();
     }

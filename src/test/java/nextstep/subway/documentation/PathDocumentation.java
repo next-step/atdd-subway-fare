@@ -31,6 +31,10 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class PathDocumentation extends Documentation {
 
+    private static final String PATHS_PATH = "/paths?source={source}&target={target}&type={type}";
+    private static final String DISTANCE = "distance";
+    private static final String DURATION = "duration";
+
     @Autowired
     private LineRepository lineRepository;
 
@@ -91,7 +95,10 @@ public class PathDocumentation extends Documentation {
                         )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={source}&target={target}&edgeWeightStrategy=distanceWeightStrategy", 교대역.getId(), 양재역.getId())
+                .queryParam("source", 교대역.getId())
+                .queryParam("target", 양재역.getId())
+                .queryParam("type", DISTANCE)
+                .when().get(PATHS_PATH, 교대역.getId(), 양재역.getId(), DISTANCE)
                 .then().log().all()
                 .extract();
     }
@@ -102,13 +109,20 @@ public class PathDocumentation extends Documentation {
         RestAssured
                 .given(spec)
                 .filter(document("path-time",
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 교대역.getId())
+                .queryParam("target", 양재역.getId())
+                .queryParam("type", DURATION)
+                .when().get(PATHS_PATH, 교대역.getId(), 양재역.getId(), DURATION)
+                .then().log().all()
+                .extract();
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역"),
-                                parameterWithName("edgeWeightStrategy")
-                                        .description("엣지 가중치 전략 (distanceWeightStrategy, durationWeightStrategy)")
+                                parameterWithName("type")
+                                        .description("엣지 가중치 전략 (distance, duration)")
                         ),
                         responseFields(
                                 fieldWithPath("stations[].id").description("역 id"),
