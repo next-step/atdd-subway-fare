@@ -1,5 +1,8 @@
 package nextstep.subway.applicaion.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nextstep.subway.domain.Favorite;
 
 public class FavoriteResponse {
@@ -10,7 +13,8 @@ public class FavoriteResponse {
     public FavoriteResponse() {
     }
 
-    public FavoriteResponse(Long id, StationResponse source, StationResponse target) {
+    public FavoriteResponse(Long id, StationResponse source,
+        StationResponse target) {
         this.id = id;
         this.source = source;
         this.target = target;
@@ -18,17 +22,5 @@ public class FavoriteResponse {
 
     public static FavoriteResponse of(Favorite favorite, StationResponse source, StationResponse target) {
         return new FavoriteResponse(favorite.getId(), source, target);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public StationResponse getSource() {
-        return source;
-    }
-
-    public StationResponse getTarget() {
-        return target;
     }
 }
