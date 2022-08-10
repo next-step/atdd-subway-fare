@@ -134,7 +134,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
 		// then
-        응답을_검증한다(response, 강남역, 120, 60, 2950);
+        응답을_검증한다(response, 남부터미널역, 120, 60, 2950);
     }
 
     /**
@@ -156,9 +156,9 @@ class PathAcceptanceTest extends AcceptanceTest {
          * 남부터미널역  --- *3호선(3km, 2분)* ---   양재역
          */
         //given
-        Long 이호선 = 이호선에_교대역_강남역_구간을_생성한다(10, 5);
-        Long 신분당선 = 신분당선에_강남역_양재역_구간을_생성한다(10, 5);
-        Long 삼호선 = 삼호선에_교대역_남부터미널역_구간을_생성한다(2, 1);
+        이호선 = 이호선에_교대역_강남역_구간을_생성한다(10, 5);
+        신분당선 = 신분당선에_강남역_양재역_구간을_생성한다(10, 5);
+        삼호선 = 삼호선에_교대역_남부터미널역_구간을_생성한다(2, 1);
 
         삼호선에_남부터미널역_양재역_구간을_추가한다(3, 2);
 
@@ -166,10 +166,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> 응답 = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
 		//then
-		assertAll(
-				() -> assertThat(응답.jsonPath().getLong("distance")).isEqualTo(5),
-				() -> assertThat(응답.jsonPath().getLong("duration")).isEqualTo(3)
-		);
+		응답을_검증한다(응답, 남부터미널역, 5, 3, 1250);
 	}
 
 	private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
