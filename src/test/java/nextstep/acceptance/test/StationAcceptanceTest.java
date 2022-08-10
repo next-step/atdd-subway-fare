@@ -1,10 +1,13 @@
 package nextstep.acceptance.test;
 
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static nextstep.acceptance.steps.LineSteps.*;
+import java.util.List;
+
+import static nextstep.acceptance.steps.LineSectionSteps.*;
 import static nextstep.acceptance.steps.StationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,7 +51,7 @@ class StationAcceptanceTest extends AcceptanceTest {
         // then
         지하철역들이_존재한다();
     }
-    
+
     @DisplayName("노선에 포함된 지하철역은 제거할 수 없다.")
     @Test
     void deleteStation_Exception() {
@@ -65,5 +68,14 @@ class StationAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(deleteResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         지하철역들이_존재한다(역삼역, 강남역);
+    }
+
+    private void 지하철역들이_존재한다(String... names) {
+        List<String> stationNames = RestAssured.given().log().all()
+                .when().get("/stations")
+                .then().log().all()
+                .extract().jsonPath().getList("name", String.class);
+
+        assertThat(stationNames).containsExactlyInAnyOrder(names);
     }
 }

@@ -1,7 +1,6 @@
 package nextstep.line.domain;
 
 import nextstep.line.domain.exception.IllegalSectionOperationException;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,7 @@ import javax.persistence.Id;
 import static nextstep.line.domain.exception.IllegalSectionOperationException.*;
 
 @Entity
-public class Section extends DefaultWeightedEdge {
+public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

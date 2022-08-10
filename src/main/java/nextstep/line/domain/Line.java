@@ -33,6 +33,10 @@ public class Line {
         sections.add(new Section(upStation.getId(), downStation.getId(), distance));
     }
 
+    public void addSection(Section section) {
+        sections.add(section);
+    }
+
     public void deleteSection(Station station) {
         sections.delete(station.getId());
     }

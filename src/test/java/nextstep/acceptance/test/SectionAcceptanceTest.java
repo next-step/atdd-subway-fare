@@ -7,9 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static nextstep.acceptance.steps.LineSectionSteps.*;
 import static nextstep.acceptance.steps.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,9 +30,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
-
-        Map<String, String> lineCreateParams = createLineCreateParams(강남역, 양재역, 100);
-        신분당선 = 지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성_요청(관리자, createLineCreateParams("신분당선", "red", 강남역, 양재역, 100))
+                .jsonPath().getLong("id");
     }
 
     @DisplayName("지하철 노선에 구간을 등록")
@@ -96,17 +92,6 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
         // then
         노선에_역들이_순서대로_존재한다(신분당선, 강남역, 정자역);
-    }
-
-    private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId, int distance) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", "신분당선");
-        lineCreateParams.put("color", "bg-red-600");
-        lineCreateParams.put("upStationId", upStationId + "");
-        lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", distance + "");
-        return lineCreateParams;
     }
 
     private void 노선에_역들이_순서대로_존재한다(Long lineId, Long... stationIds) {

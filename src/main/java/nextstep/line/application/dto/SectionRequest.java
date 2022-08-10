@@ -1,9 +1,12 @@
 package nextstep.line.application.dto;
 
+import nextstep.common.EntitySupplier;
+import nextstep.line.domain.Section;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class SectionRequest {
+public class SectionRequest implements EntitySupplier<Section> {
     @NotNull
     @Min(1)
     private Long upStationId;
@@ -13,17 +16,13 @@ public class SectionRequest {
     @Min(1)
     private int distance;
 
-    public SectionRequest() {
-    }
-
-    public SectionRequest(Long upStationId, Long downStationId, int distance) {
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
-        this.distance = distance;
-    }
-
     public Long getUpStationId() {
         return upStationId;
+    }
+
+    @Override
+    public Section toEntity() {
+        return new Section(upStationId, downStationId, distance);
     }
 
     public Long getDownStationId() {

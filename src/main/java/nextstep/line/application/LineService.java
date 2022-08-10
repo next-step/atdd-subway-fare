@@ -11,9 +11,7 @@ import nextstep.station.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,8 +58,7 @@ public class LineService {
     }
 
     public LineResponse createLineResponse(Line line) {
-        Set<Long> stationIds = new HashSet<>(line.getStations());
-        List<Station> stations = stationService.findAllStationsById(stationIds);
+        List<Station> stations = stationService.findAllStationsById(line.getStations());
         return LineResponse.of(line, stations);
     }
 
@@ -82,7 +79,7 @@ public class LineService {
         Station downStation = stationService.findById(request.getDownStationId());
         Line line = findById(lineId);
 
-        line.addSection(upStation, downStation, request.getDistance());
+        line.addSection(request.toEntity());
     }
 
     @Transactional

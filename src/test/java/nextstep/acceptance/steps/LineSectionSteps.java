@@ -75,6 +75,17 @@ public class LineSectionSteps extends AcceptanceTestSteps {
                 .then().log().all().extract();
     }
 
+    public static Map<String, String> createLineCreateParams(String name, String color, Long upStation, Long downStation, int distance) {
+        Map<String, String> params;
+        params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("upStationId", upStation + "");
+        params.put("downStationId", downStation + "");
+        params.put("distance", distance + "");
+        return params;
+    }
+
     public static Map<String, String> createLineUpdateParams(String name, String color) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -87,6 +98,14 @@ public class LineSectionSteps extends AcceptanceTestSteps {
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", 6 + "");
+        return params;
+    }
+
+    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", upStationId + "");
+        params.put("downStationId", downStationId + "");
+        params.put("distance", distance + "");
         return params;
     }
 }

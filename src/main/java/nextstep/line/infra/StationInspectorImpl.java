@@ -1,9 +1,8 @@
 package nextstep.line.infra;
 
+import nextstep.line.domain.LineRepository;
 import nextstep.station.domain.Station;
 import nextstep.station.domain.StationInspector;
-import nextstep.line.domain.Line;
-import nextstep.line.domain.LineRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,8 +20,7 @@ public class StationInspectorImpl implements StationInspector {
     public boolean belongsToLine(Station station) {
         List<Long> stationIds = lineRepository.findAll()
                 .stream()
-                .map(Line::getStations)
-                .flatMap(List::stream)
+                .flatMap(it -> it.getStations().stream())
                 .collect(Collectors.toList());
 
         return stationIds.contains(station.getId());
