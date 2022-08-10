@@ -26,6 +26,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역")
                 ), 10
                 , 5
+                , 1250
         );
 
         when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
