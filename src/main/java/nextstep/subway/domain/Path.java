@@ -18,7 +18,9 @@ public class Path {
         return shortestDistance;
     }
 
-
+    public void setShortestDistance(int shortestDistance) {
+        this.shortestDistance = shortestDistance;
+    }
 
     public int extractDistance() {
         return sections.totalDistance();
