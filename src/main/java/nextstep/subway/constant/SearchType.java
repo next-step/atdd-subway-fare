@@ -16,8 +16,8 @@ public enum SearchType {
         this.criteria = criteria;
     }
 
-    public Function<Section, Integer> getCriteria() {
-        return this.criteria;
+    public int getCriteria(Section section) {
+        return this.criteria.apply(section);
     }
 
     public static SearchType findByName(String name) {

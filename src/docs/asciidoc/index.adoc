@@ -6,9 +6,16 @@
 :toclevels: 2
 :sectlinks:
 
-[[path]]
-== 지하철 경로
+[[pathWithDistance]]
+== 최소 거리 지하철 경로
 
 === 경로 조회
 
-operation::path[snippets='http-request,http-response']
+operation::pathWithDistance[snippets='http-request,http-response,response-fields']
+
+[[pathWithDuration]]
+== 최소 시간 지하철 경로
+
+=== 경로 조회
+
+operation::pathWithDuration[snippets='http-request,http-response,response-fields']
