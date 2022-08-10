@@ -5,7 +5,6 @@ import nextstep.auth.authentication.handler.AuthenticationFailureHandler;
 import nextstep.auth.authentication.handler.AuthenticationSuccessHandler;
 import nextstep.auth.authentication.provider.AuthenticationManager;
 import nextstep.auth.context.Authentication;
-import nextstep.auth.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,40 +23,25 @@ public abstract class AbstractAuthenticationFilter implements HandlerInterceptor
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
-            Authentication authentication = attemptAuthentication(request, response);
-            successfulAuthentication(request, response, authentication);
-            return getContinueChainBeforeSuccessfulAuthentication();
+            Authentication authentication = attemptAuthentication(request);
+            successHandler.onAuthenticationSuccess(request, response, authentication);
+            return shouldContinueChainAfterSuccessfulAuthentication();
         } catch (Exception e) {
-            unsuccessfulAuthentication(request, response, e);
-            return getContinueChainBeforeUnsuccessfulAuthentication();
+            failureHandler.onAuthenticationFailure(request, response, e);
+            return shouldContinueChainAfterUnSuccessfulAuthentication();
         }
     }
 
-    private void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        successHandler.onAuthenticationSuccess(request, response, authentication);
-    }
-
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, Exception failed) throws IOException {
-        failureHandler.onAuthenticationFailure(request, response, failed);
-    }
-
-    protected Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected Authentication attemptAuthentication(HttpServletRequest request) throws IOException {
         AuthenticationToken token = convert(request);
-
         return authenticationManager.authenticate(token);
     }
 
     protected abstract AuthenticationToken convert(HttpServletRequest request) throws IOException;
 
-    protected boolean getContinueChainBeforeSuccessfulAuthentication() {
-        return true;
-    }
+    protected abstract boolean shouldContinueChainAfterSuccessfulAuthentication();
 
-    protected boolean getContinueChainBeforeUnsuccessfulAuthentication() {
-        return true;
-    }
+    protected abstract boolean shouldContinueChainAfterUnSuccessfulAuthentication();
 }

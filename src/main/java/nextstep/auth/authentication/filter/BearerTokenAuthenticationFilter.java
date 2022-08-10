@@ -20,4 +20,14 @@ public class BearerTokenAuthenticationFilter extends AbstractAuthenticationFilte
         String authCredentials = AuthorizationExtractor.extract(request, AuthorizationType.BEARER);
         return new AuthenticationToken(authCredentials, authCredentials);
     }
+
+    @Override
+    protected boolean shouldContinueChainAfterSuccessfulAuthentication() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldContinueChainAfterUnSuccessfulAuthentication() {
+        return true;
+    }
 }

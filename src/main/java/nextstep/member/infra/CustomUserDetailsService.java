@@ -1,5 +1,6 @@
 package nextstep.member.infra;
 
+import nextstep.auth.authentication.AuthenticationException;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         Member member = memberRepository
                 .findByEmail(email)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(AuthenticationException::new);
 
         return new User(member.getEmail(), member.getPassword(), member.getRoles());
     }

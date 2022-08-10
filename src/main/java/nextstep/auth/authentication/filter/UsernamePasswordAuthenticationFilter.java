@@ -26,12 +26,12 @@ public class UsernamePasswordAuthenticationFilter extends AbstractAuthentication
     }
 
     @Override
-    protected boolean getContinueChainBeforeSuccessfulAuthentication() {
+    protected boolean shouldContinueChainAfterSuccessfulAuthentication() {
         return false;
     }
 
     @Override
-    protected boolean getContinueChainBeforeUnsuccessfulAuthentication() {
+    protected boolean shouldContinueChainAfterUnSuccessfulAuthentication() {
         return false;
     }
 }

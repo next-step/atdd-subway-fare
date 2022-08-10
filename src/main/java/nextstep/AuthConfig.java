@@ -43,10 +43,30 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SecurityContextPersistenceFilter());
-        registry.addInterceptor(new UsernamePasswordAuthenticationFilter(successHandler(), loginFailureHandler(), userDetailsAuthenticationProvider())).addPathPatterns("/login/form");
-        registry.addInterceptor(new TokenAuthenticationInterceptor(tokenAuthenticationSuccessHandler(), loginFailureHandler(), userDetailsAuthenticationProvider())).addPathPatterns("/login/token");
-        registry.addInterceptor(new BasicAuthenticationFilter(successHandler(), failureHandler(), userDetailsAuthenticationProvider()));
-        registry.addInterceptor(new BearerTokenAuthenticationFilter(successHandler(), failureHandler(), tokenAuthenticationProvider()));
+
+        registry.addInterceptor(new UsernamePasswordAuthenticationFilter(
+                successHandler(),
+                loginFailureHandler(),
+                userDetailsAuthenticationProvider())
+        ).addPathPatterns("/login/form");
+
+        registry.addInterceptor(new TokenAuthenticationInterceptor(
+                tokenAuthenticationSuccessHandler(),
+                loginFailureHandler(),
+                userDetailsAuthenticationProvider())
+        ).addPathPatterns("/login/token");
+
+        registry.addInterceptor(new BasicAuthenticationFilter(
+                successHandler(),
+                failureHandler(),
+                userDetailsAuthenticationProvider())
+        );
+
+        registry.addInterceptor(new BearerTokenAuthenticationFilter(
+                successHandler(),
+                failureHandler(),
+                tokenAuthenticationProvider())
+        );
     }
 
     @Override

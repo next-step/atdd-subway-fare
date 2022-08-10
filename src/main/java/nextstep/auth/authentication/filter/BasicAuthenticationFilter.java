@@ -29,4 +29,14 @@ public class BasicAuthenticationFilter extends AbstractAuthenticationFilter {
 
         return new AuthenticationToken(principal, credentials);
     }
+
+    @Override
+    protected boolean shouldContinueChainAfterSuccessfulAuthentication() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldContinueChainAfterUnSuccessfulAuthentication() {
+        return true;
+    }
 }

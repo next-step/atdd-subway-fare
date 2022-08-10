@@ -30,12 +30,12 @@ public class TokenAuthenticationInterceptor extends AbstractAuthenticationFilter
     }
 
     @Override
-    protected boolean getContinueChainBeforeSuccessfulAuthentication() {
+    protected boolean shouldContinueChainAfterSuccessfulAuthentication() {
         return false;
     }
 
     @Override
-    protected boolean getContinueChainBeforeUnsuccessfulAuthentication() {
+    protected boolean shouldContinueChainAfterUnSuccessfulAuthentication() {
         return false;
     }
 }
