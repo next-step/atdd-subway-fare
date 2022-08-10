@@ -1,5 +1,7 @@
 package nextstep.common;
 
+import nextstep.auth.authentication.AuthenticationException;
+import nextstep.auth.authorization.secured.RoleAuthenticationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +21,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Void> handleIllegalArgsException(IllegalArgumentException e) {
         return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
+        ErrorCode errorCode = GlobalErrorCode.UNAUTHORIZED;
+        return ExceptionHandlerUtils.createErrorResponse(errorCode, e);
+    }
+
+    @ExceptionHandler(RoleAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleRoleAuthenticationException(RoleAuthenticationException e) {
+        ErrorCode errorCode = GlobalErrorCode.FORBIDDEN;
+        return ExceptionHandlerUtils.createErrorResponse(errorCode, e);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
