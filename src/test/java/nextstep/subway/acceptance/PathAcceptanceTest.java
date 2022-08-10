@@ -28,11 +28,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 교대역    --- *2호선(0원, 5km, 10분)* ---     강남역
+     * |                                               |
+     * *3호선(500원, 6km, 8분)*                    *신분당선(1000원, 6km, 12분)*
+     * |                                               |
+     * 남부터미널역  --- *3호선(500원, 7km, 12분)* ---  양재
      */
     @BeforeEach
     public void setUp() {
@@ -54,7 +54,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Given 지하철역이 등록되어있음
-     * And 지하철 노선이 등록되어있음
+     * And 로그인하지 않음
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
@@ -72,19 +73,19 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_350)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_850)
         );
     }
 
     /**
-     * 교대역    --- *2호선*(10)  --------  강남역
-     * |                                     |
-     * *3호선* (8)                       *신분당선*(12) --  양재역  -- *신분당선*(20) --  정자역
+     * 교대역    --- *2호선*(0원, 5km, 10분)  --------   강남역
+     * |                                                  |
+     * *3호선* (500원, 6km, 8분)                     *신분당선*(1000원, 6km, 12분) --  양재역  -- *신분당선*(1000원, 20km, 20분) --  정자역
      * |
-     * 남부터미널역  --- *3호선*(12) ---   양재역  -- *3호선*(5) --  모란역  --  *3호선*(8)  -- 정자역
+     * 남부터미널역  --- *3호선*(500원, 7km, 12분) ---   양재역  -- *3호선*(500원, 5km, 5분) --  모란역  --  *3호선*(500원, 8km, 8분)  -- 정자역
      *
      * Given 지하철역이 등록되어있다.
-     * And 지하철 노선이 등록되어있음
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
      * And(add) 지하철 노선에 추가적으로 구간을 등록한다.
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
@@ -108,21 +109,21 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역, 모란역, 정자역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(26),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(33),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_650)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_150)
         );
     }
 
     /**
-     *  *팔호선* (5) --- 양재역
+     *  *팔호선* (2000원, 100km, 100분) --- 양재역
      * |
-     * 교대역    --- *2호선*(10)  --------  강남역
-     * |                                     |
-     * *3호선* (8)                       *신분당선*(12) --  양재역
+     * 교대역    --- *2호선*(0원, 5km, 10분)  --------  강남역
+     * |                                                 |
+     * *3호선* (500원, 6km, 8분)                         *신분당선*(1000원, 6km, 12분) --  양재역
      * |
-     * 남부터미널역  --- *3호선*(12) --- 양재역
+     * 남부터미널역  --- *3호선*(500원, 7km, 12분) --- 양재역
      *
      * Given 지하철역이 등록되어있다.
-     * And 지하철 노선이 등록되어있음
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
      * And(add) 새로운 지하철 노선을 추가하고
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
@@ -144,8 +145,93 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(13),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(20),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_350)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_850)
         );
+    }
+
+
+    /**
+     * 교대역    --- *2호선(0원, 5km, 10분)*    ---   강남역    ---    *신분당선(1000원, 6km, 10분)*   ---   선릉역
+     * |                                               |
+     * *3호선(500원, 6km, 8분)*                    *신분당선(1000원, 6km, 12분)*
+     * |                                               |
+     * 남부터미널역  --- *3호선(500원, 7km, 12분)* ---  양재
+     *
+     * Given 지하철역이 등록되어있다.
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어 있음
+     * And(add) 새로운 지하철 노선을 추가하고
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답합
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("최소 시간 경로 조회 시 환승했을 때 추가 요금이 가장 비싼 것으로 채택 됨")
+    @Test
+    void findTransferFare() {
+        // Given(add)
+        // when
+        // then
+    }
+
+    /**
+     * 교대역    --- *2호선(0원, 5km, 10분)* ---     강남역
+     * |                                               |
+     * *3호선(500원, 6km, 8분)*                    *신분당선(1000원, 6km, 12분)*
+     * |                                               |
+     * 남부터미널역  --- *3호선(500원, 7km, 12분)* ---  양재
+     *
+     * Given 어린이 유저로 로그인한다.
+     * And 지하철역이 등록되어있다.
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어 있음
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답합
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("로그인 한 어린이 유저는 요금 할인 혜택을 제공받는다")
+    @Test
+    void findPathChildrenUserFare() {
+        // given
+        // when
+        // then
+    }
+
+    /**
+     * Given 청소년 유저로 로그인한다.
+     * And 지하철역이 등록되어있다.
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어 있음
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("로그인 한 청소년 유저는 요금 할인 헤택을 제공받는다")
+    @Test
+    void findPathTeenagerUserFare() {
+        // given
+        // when
+        // then
+    }
+
+    /**
+     * Given 성인 유저로 로그인한다.
+     * And 지하철역이 등록되어있다.
+     * And 추가 요금이 붙은 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어 있음
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("로그인 한 성인 유저는 요금 할인 헤택을 제공 받지 못한다")
+    @Test
+    void findPathAdultUserFare() {
+        // given
+        // when
+        // then
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
