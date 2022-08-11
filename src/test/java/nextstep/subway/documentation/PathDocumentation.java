@@ -54,7 +54,8 @@ class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].createdDate").type(JsonFieldType.STRING).description("역 생성일자"),
                                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("역 수정일자"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리"),
-                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요시간")
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요시간"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
                         )))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
