@@ -15,14 +15,16 @@ public class SectionRequest implements EntitySupplier<Section> {
     private Long downStationId;
     @Min(1)
     private int distance;
-
-    public Long getUpStationId() {
-        return upStationId;
-    }
+    @Min(1)
+    private int duration;
 
     @Override
     public Section toEntity() {
-        return new Section(upStationId, downStationId, distance);
+        return new Section(upStationId, downStationId, distance, duration);
+    }
+
+    public Long getUpStationId() {
+        return upStationId;
     }
 
     public Long getDownStationId() {
@@ -31,5 +33,9 @@ public class SectionRequest implements EntitySupplier<Section> {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

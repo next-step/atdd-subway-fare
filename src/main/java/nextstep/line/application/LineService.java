@@ -28,13 +28,20 @@ public class LineService {
     @Transactional
     public LineResponse saveLine(LineRequest request) {
         Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
+        if (containsInitialSection(request)) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(upStation, downStation, request.getDistance());
+            line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
         }
 
         return createLineResponse(line);
+    }
+
+    private boolean containsInitialSection(LineRequest request) {
+        return request.getUpStationId() != null
+                && request.getDownStationId() != null
+                && request.getDistance() != null
+                && request.getDuration() != null;
     }
 
     public Line findById(Long id) {
@@ -77,8 +84,9 @@ public class LineService {
     public void addSection(Long lineId, SectionRequest request) {
         Station upStation = stationService.findById(request.getUpStationId());
         Station downStation = stationService.findById(request.getDownStationId());
-        Line line = findById(lineId);
+        assert upStation != null && downStation != null;
 
+        Line line = findById(lineId);
         line.addSection(request.toEntity());
     }
 

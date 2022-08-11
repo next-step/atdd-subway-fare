@@ -29,8 +29,8 @@ public class Line {
         this.color = color;
     }
 
-    public void addSection(Station upStation, Station downStation, int distance) {
-        sections.add(new Section(upStation.getId(), downStation.getId(), distance));
+    public void addSection(Station upStation, Station downStation, int distance, int duration) {
+        sections.add(new Section(upStation.getId(), downStation.getId(), distance, duration));
     }
 
     public void addSection(Section section) {

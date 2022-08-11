@@ -17,6 +17,8 @@ public class LineRequest implements EntitySupplier<Line> {
     private Long downStationId;
     @Min(1)
     private Integer distance;
+    @Min(1)
+    private Integer duration;
 
     @Override
     public Line toEntity() {
@@ -39,7 +41,11 @@ public class LineRequest implements EntitySupplier<Line> {
         return downStationId;
     }
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

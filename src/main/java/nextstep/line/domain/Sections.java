@@ -144,6 +144,12 @@ public class Sections {
                 .sum();
     }
 
+    public int totalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
+
     public List<Section> getSections() {
         return sections;
     }

@@ -40,7 +40,7 @@ public class SubwayMap {
     private void addOppositeEdges(List<Line> lines) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getDownStationId(), it.getUpStationId(), it.getDistance()))
+                .map(it -> new Section(it.getDownStationId(), it.getUpStationId(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStationId(), it.getDownStationId(), sectionEdge);
