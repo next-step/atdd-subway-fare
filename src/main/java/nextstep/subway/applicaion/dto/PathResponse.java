@@ -2,6 +2,7 @@ package nextstep.subway.applicaion.dto;
 
 import nextstep.subway.domain.FareCalculator;
 import nextstep.subway.domain.Path;
+import support.ticket.TicketType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, TicketType ticketType) {
         List<StationResponse> stations = path.getStations()
                 .stream()
                 .map(StationResponse::of)
@@ -27,8 +28,9 @@ public class PathResponse {
         int distance = path.extractDistance();
         int duration = path.extractDuration();
         int fare = FareCalculator.calculateFare(distance) + path.extractAdditionalFare();
+        int finalFare = ticketType.calculateDiscountedFare(fare);
 
-        return new PathResponse(stations, distance, duration, fare);
+        return new PathResponse(stations, distance, duration, finalFare);
     }
 
     public List<StationResponse> getStations() {

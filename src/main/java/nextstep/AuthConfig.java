@@ -1,6 +1,7 @@
 package nextstep;
 
 import nextstep.member.application.CustomUserDetailsService;
+import nextstep.member.domain.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import support.auth.authentication.filter.BasicAuthenticationFilter;
 import support.auth.authentication.filter.BearerTokenAuthenticationFilter;
 import support.auth.authentication.filter.UsernamePasswordAuthenticationFilter;
-import support.auth.authentication.handler.*;
+import support.auth.authentication.handler.AuthenticationFailureHandler;
+import support.auth.authentication.handler.AuthenticationSuccessHandler;
+import support.auth.authentication.handler.DefaultAuthenticationFailureHandler;
+import support.auth.authentication.handler.DefaultAuthenticationSuccessHandler;
+import support.auth.authentication.handler.LoginAuthenticationFailureHandler;
+import support.auth.authentication.handler.TokenAuthenticationSuccessHandler;
 import support.auth.authentication.provider.AuthenticationManager;
 import support.auth.authentication.provider.TokenAuthenticationProvider;
 import support.auth.authentication.provider.UserDetailsAuthenticationProvider;
@@ -18,6 +24,7 @@ import support.auth.authorization.secured.SecuredAnnotationChecker;
 import support.auth.context.SecurityContextPersistenceFilter;
 import support.auth.token.JwtTokenProvider;
 import support.auth.token.TokenAuthenticationInterceptor;
+import support.ticket.TicketArgumentResolver;
 
 import java.util.List;
 
@@ -28,16 +35,20 @@ public class AuthConfig implements WebMvcConfigurer {
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
     private CustomUserDetailsService customUserDetailsService;
+    private final MemberRepository memberRepository;
 
-    public AuthConfig(CustomUserDetailsService customUserDetailsService) {
+    public AuthConfig(CustomUserDetailsService customUserDetailsService, MemberRepository memberRepository) {
         this.customUserDetailsService = customUserDetailsService;
+        this.memberRepository = memberRepository;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SecurityContextPersistenceFilter());
-        registry.addInterceptor(new UsernamePasswordAuthenticationFilter(successHandler(), loginFailureHandler(), userDetailsAuthenticationProvider())).addPathPatterns("/login/form");
-        registry.addInterceptor(new TokenAuthenticationInterceptor(tokenAuthenticationSuccessHandler(), loginFailureHandler(), userDetailsAuthenticationProvider())).addPathPatterns("/login/token");
+        registry.addInterceptor(new UsernamePasswordAuthenticationFilter(successHandler(), loginFailureHandler(), userDetailsAuthenticationProvider()))
+                .addPathPatterns("/login/form");
+        registry.addInterceptor(new TokenAuthenticationInterceptor(tokenAuthenticationSuccessHandler(), loginFailureHandler(), userDetailsAuthenticationProvider()))
+                .addPathPatterns("/login/token");
         registry.addInterceptor(new BasicAuthenticationFilter(successHandler(), failureHandler(), userDetailsAuthenticationProvider()));
         registry.addInterceptor(new BearerTokenAuthenticationFilter(successHandler(), failureHandler(), tokenAuthenticationProvider()));
     }
@@ -45,6 +56,7 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
         argumentResolvers.add(new AuthenticationPrincipalArgumentResolver());
+        argumentResolvers.add(new TicketArgumentResolver(memberRepository));
     }
 
     @Bean
