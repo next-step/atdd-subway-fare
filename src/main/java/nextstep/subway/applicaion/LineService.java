@@ -58,7 +58,7 @@ public class LineService {
     @Transactional
     public void updateLine(Long id, LineRequest lineRequest) {
         Line line = findById(id);
-        line.update(lineRequest.getName(), lineRequest.getColor());
+        line.update(lineRequest.getName(), lineRequest.getColor(), lineRequest.getAdditionalFare());
     }
 
     @Transactional
