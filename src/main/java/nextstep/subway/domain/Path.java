@@ -1,5 +1,8 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.DiscountPolicy;
+import nextstep.subway.domain.fare.Fare;
+
 import java.util.List;
 
 public class Path {
@@ -27,15 +30,6 @@ public class Path {
 
     public int calculateFare(int age) {
         int fare = Fare.calculate(extractDistance()) + sections.findSurCharge();
-
-        if (age < 13) {
-            return (int) ((fare - 350) * 0.5);
-        }
-
-        if (age < 19) {
-            return (int) ((fare - 350) * 0.8);
-        }
-
-        return fare;
+        return DiscountPolicy.calculate(age, fare);
     }
 }

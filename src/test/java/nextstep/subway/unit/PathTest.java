@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.SubwayMap;
