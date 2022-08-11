@@ -12,11 +12,6 @@ public class SubwayMap {
     private List<Line> lines;
     private WeightStrategy weightStrategy;
 
-    // TODO: 서비스계층 수정 후 삭제하기
-    public SubwayMap(List<Line> lines) {
-        this.lines = lines;
-    }
-
     public SubwayMap(List<Line> lines, WeightStrategy weightStrategy) {
         this.lines = lines;
         this.weightStrategy = weightStrategy;
