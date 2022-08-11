@@ -7,6 +7,9 @@ public class Path {
     private static final int BASIC_FARE = 1_250;
 
     private static final int BASIC_FARE_KM = 10;
+
+    private static final int _100WON_PER_5KM_BASED_KM = 50;
+
     private Sections sections;
 
     public Path(Sections sections) {
@@ -38,6 +41,12 @@ public class Path {
             return 0;
         }
 
-        return (int) ((Math.ceil((distance - BASIC_FARE_KM - 1) / 5) + 1) * 100);
+        if (distance <= _100WON_PER_5KM_BASED_KM) {
+            return (int) ((Math.ceil((distance - BASIC_FARE_KM - 1) / 5) + 1) * 100);
+        }
+
+        return (int) ((Math.ceil((_100WON_PER_5KM_BASED_KM - BASIC_FARE_KM - 1) / 5) + 1) * 100)
+                + (int) ((Math.ceil((distance - _100WON_PER_5KM_BASED_KM - 1) / 8) + 1) * 100);
+
     }
 }
