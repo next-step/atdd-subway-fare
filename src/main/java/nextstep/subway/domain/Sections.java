@@ -161,13 +161,9 @@ public class Sections {
     }
 
     public int getMaxExtraFare() {
-        int maxFare = 0;
-        for (Section section : sections) {
-            int extraFare = section.getLine().getExtraFare();
-            if(maxFare < extraFare) {
-                maxFare = extraFare;
-            }
-        }
-        return maxFare;
+        return sections.stream()
+                .mapToInt(sections -> sections.getLine().getExtraFare())
+                .max()
+                .orElse(0);
     }
 }
