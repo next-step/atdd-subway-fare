@@ -54,10 +54,10 @@ class SubwayMapTest {
     @Test
     void findPathByDistance() {
         // given
-        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선));
+        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선), PathSearchType.DISTANCE);
 
         // when
-        Path path = map.findPath2(강남역.getId(), 남부터미널역.getId(), PathSearchType.DISTANCE);
+        Path path = map.findPath(강남역.getId(), 남부터미널역.getId());
 
         // then
         assertThat(path.getStations()).containsExactly(강남역.getId(), 양재역.getId(), 남부터미널역.getId());
@@ -68,10 +68,10 @@ class SubwayMapTest {
     @Test
     void findPathByDuration() {
         // given
-        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선));
+        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선), PathSearchType.DURATION);
 
         // when
-        Path path = map.findPath2(강남역.getId(), 남부터미널역.getId(), PathSearchType.DURATION);
+        Path path = map.findPath(강남역.getId(), 남부터미널역.getId());
 
         // then
         assertThat(path.getStations()).containsExactly(강남역.getId(), 교대역.getId(), 남부터미널역.getId());
