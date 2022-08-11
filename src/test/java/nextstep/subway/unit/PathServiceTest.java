@@ -42,6 +42,9 @@ public class PathServiceTest {
     private Line 신분당선;
     private Line 삼호선;
 
+    private int 신분당선_추가요금 = 1000;
+    private int 삼호선_추가요금 = 600;
+
     /**
      * 교대역    --- *2호선(10d, 2s)* ---   강남역
      * |                               |
@@ -57,8 +60,8 @@ public class PathServiceTest {
         남부터미널역 = stationRepository.save(new Station("남부터미널역"));
 
         이호선 = new Line("2호선", "green");
-        신분당선 = new Line("신분당선", "red");
-        삼호선 = new Line("3호선", "yellow");
+        신분당선 = new Line("신분당선", "red", 신분당선_추가요금);
+        삼호선 = new Line("3호선", "yellow", 삼호선_추가요금);
 
         이호선.addSection(교대역, 강남역, 10, 2);
         삼호선.addSection(교대역, 남부터미널역, 2, 10);
@@ -81,7 +84,7 @@ public class PathServiceTest {
                 () -> assertThat(pathResponse.getStations()).extracting("name").containsExactly("교대역", "남부터미널역", "양재역"),
                 () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
                 () -> assertThat(pathResponse.getDuration()).isEqualTo(15),
-                () -> assertThat(pathResponse.getFare()).isEqualTo(1250)
+                () -> assertThat(pathResponse.getFare()).isEqualTo(1250 + 삼호선_추가요금)
         );
     }
 
@@ -96,7 +99,7 @@ public class PathServiceTest {
                 () -> assertThat(pathResponse.getStations()).extracting("name").containsExactly("교대역", "강남역", "양재역"),
                 () -> assertThat(pathResponse.getDistance()).isEqualTo(20),
                 () -> assertThat(pathResponse.getDuration()).isEqualTo(5),
-                () -> assertThat(pathResponse.getFare()).isEqualTo(1250)
+                () -> assertThat(pathResponse.getFare()).isEqualTo(1250 + 신분당선_추가요금)
         );
     }
 }
