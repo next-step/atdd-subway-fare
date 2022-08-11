@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.strategy.WeightStrategy;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -9,9 +10,16 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private WeightStrategy weightStrategy;
 
+    // TODO: 서비스계층 수정 후 삭제하기
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
+    }
+
+    public SubwayMap(List<Line> lines, WeightStrategy weightStrategy) {
+        this.lines = lines;
+        this.weightStrategy = weightStrategy;
     }
 
     public Path findPath(Station source, Station target) {
@@ -30,7 +38,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, weightStrategy.weight(it));
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -40,7 +48,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, weightStrategy.weight(it));
                 });
 
         // 다익스트라 최단 경로 찾기
