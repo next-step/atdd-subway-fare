@@ -21,8 +21,8 @@ public class PathResponse {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
-        //FIXME path의 duration 추출 기능 위임
-        return new PathResponse(stations, distance, 3);
+        int duration = path.extractDuration();
+        return new PathResponse(stations, distance, duration);
     }
 
     public List<StationResponse> getStations() {
