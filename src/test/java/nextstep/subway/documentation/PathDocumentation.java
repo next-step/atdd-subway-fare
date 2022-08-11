@@ -34,7 +34,8 @@ class PathDocumentation extends Documentation {
                         new StationResponse(3L, "양재역")
                 ),
                 22,
-                3
+                3,
+                1550
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
