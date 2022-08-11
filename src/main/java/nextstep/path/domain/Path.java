@@ -18,4 +18,8 @@ public class Path {
     public int extractDistance() {
         return sections.totalDistance();
     }
+
+    public int extractDuration() {
+        return sections.totalDuration();
+    }
 }

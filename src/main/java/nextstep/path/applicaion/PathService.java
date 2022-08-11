@@ -4,6 +4,7 @@ import nextstep.line.application.LineService;
 import nextstep.line.domain.Line;
 import nextstep.path.applicaion.dto.PathResponse;
 import nextstep.path.domain.Path;
+import nextstep.path.domain.PathSearchType;
 import nextstep.path.domain.SubwayMap;
 import nextstep.station.application.StationService;
 import nextstep.station.application.dto.StationResponse;
@@ -23,7 +24,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
+    public PathResponse findPath(Long source, Long target, PathSearchType searchType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -35,6 +36,6 @@ public class PathService {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stations, path.extractDistance());
+        return new PathResponse(stations, path.extractDistance(), path.extractDuration());
     }
 }
