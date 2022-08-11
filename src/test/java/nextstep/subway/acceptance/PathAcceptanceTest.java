@@ -3,11 +3,18 @@ package nextstep.subway.acceptance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberAcceptanceTest.PASSWORD;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -78,6 +85,42 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
+     * When 로그인을 한후
+     * And 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("로그인 한 후 두 역의 최단 거리 경로를 조회한다.")
+    @ParameterizedTest
+    @MethodSource("user_info_distance")
+    void findPathByDistanceWithLogin(String email, int age, int expected) {
+        // given
+        회원_생성_요청(email, PASSWORD, age);
+        String 로그인_토큰 = 로그인_되어_있음(email, PASSWORD);
+        int extraFare = 600;
+
+        // when
+        var response = 두_역의_최단_거리_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
+
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(15),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(expected)
+        );
+    }
+
+    private static Stream<Arguments> user_info_distance() {
+        return Stream.of(
+                Arguments.of("test1@email.com", 10, 1100),
+                Arguments.of("test2@email.com", 13, 1550),
+                Arguments.of("test3@email.com", 19, 1850)
+        );
+    }
+
+    /**
      * When 출발역에서 도착역까지의 최단 시간 기준으로 경로 조회를 요청
      * Then 최단 시간 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
@@ -98,6 +141,42 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
                 () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250 + extraFare)
+        );
+    }
+
+    /**
+     * When 로그인을 한후
+     * And 출발역에서 도착역까지의 최단 시간 기준으로 경로 조회를 요청
+     * Then 최단 시간 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("로그인 한 후 두 역의 최단 시간 경로를 조회한다.")
+    @ParameterizedTest
+    @MethodSource("user_info_duration")
+    void findPathByTimeWithLogin(String email, int age, int expected) {
+        // given
+        회원_생성_요청(email, PASSWORD, age);
+        String 로그인_토큰 = 로그인_되어_있음(email, PASSWORD);
+        int extraFare = 1000;
+
+        // when
+        var response = 두_역의_최단_시간_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
+
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(expected)
+        );
+    }
+
+    private static Stream<Arguments> user_info_duration() {
+        return Stream.of(
+                Arguments.of("test1@email.com", 10, 1800),
+                Arguments.of("test2@email.com", 13, 2070),
+                Arguments.of("test3@email.com", 19, 2250)
         );
     }
 
