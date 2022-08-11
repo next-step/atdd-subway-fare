@@ -17,7 +17,7 @@ public class Path {
         return sections.totalDistance();
     }
 
-    public int extractDurtaion() {
+    public int extractDuration() {
         return sections.totalDuration();
     }
 
