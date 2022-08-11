@@ -159,4 +159,15 @@ public class Sections {
                 .mapToInt(Section::getDuration)
                 .sum();
     }
+
+    public int getMaxExtraFare() {
+        int maxFare = 0;
+        for (Section section : sections) {
+            int extraFare = section.getLine().getExtraFare();
+            if(maxFare < extraFare) {
+                maxFare = extraFare;
+            }
+        }
+        return maxFare;
+    }
 }

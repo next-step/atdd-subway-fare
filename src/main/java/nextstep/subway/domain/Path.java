@@ -41,4 +41,8 @@ public class Path {
         FareStrategy fareStrategy = FareType.findStrategy(distance);
         return fareStrategy.calculate(distance);
     }
+
+    public int getMaxExtraFare() {
+        return sections.getMaxExtraFare();
+    }
 }
