@@ -39,7 +39,7 @@ public class Path {
     }
 
     public int calculateMostExpensiveLine() {
-        return sections.mostExpensiveLinePrice();
+        return sections.mostExpensiveLineFare();
     }
 
     private int discountFare(int totalFare) {

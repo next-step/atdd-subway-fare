@@ -291,8 +291,8 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int price, int distance, int duration) {
-        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, price, distance, duration);
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int fare, int distance, int duration) {
+        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, fare, distance, duration);
         return LineSteps.지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
     }
 }

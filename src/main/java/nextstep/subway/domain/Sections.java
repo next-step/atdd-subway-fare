@@ -169,8 +169,8 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public int mostExpensiveLinePrice() {
-        return sections.stream().mapToInt(section -> section.getLine().getPrice()).max()
+    public int mostExpensiveLineFare() {
+        return sections.stream().mapToInt(section -> section.getLine().getFare()).max()
                 .orElseThrow(() -> new IllegalStateException("구간 리스트가 비어있습니다."));
     }
 }

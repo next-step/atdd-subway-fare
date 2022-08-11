@@ -8,8 +8,7 @@ import nextstep.subway.domain.Distance;
 import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
-import nextstep.subway.domain.Price;
-import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,7 @@ public class LineService {
 
     @Transactional
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), Price.from(request.getPrice())));
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), Fare.from(request.getFare())));
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());

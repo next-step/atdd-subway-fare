@@ -6,6 +6,6 @@ public class Teenager extends Age {
 
     @Override
     int discount(int fare) {
-        return (int) (fare - ((fare - DEDUCTION_PRICE) * DISCOUNT_RATE));
+        return (int) (fare - ((fare - DEDUCTION_FARE) * DISCOUNT_RATE));
     }
 }

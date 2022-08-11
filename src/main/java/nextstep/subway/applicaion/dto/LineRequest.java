@@ -5,24 +5,24 @@ public class LineRequest {
     private String color;
     private Long upStationId;
     private Long downStationId;
-    private int price;
+    private int fare;
     private int distance;
     private int duration;
 
     private LineRequest() { }
 
-    private LineRequest(String name, String color, Long upStationId, Long downStationId, int price, int distance, int duration) {
+    private LineRequest(String name, String color, Long upStationId, Long downStationId, int fare, int distance, int duration) {
         this.name = name;
         this.color = color;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
-        this.price = price;
+        this.fare = fare;
         this.distance = distance;
         this.duration = duration;
     }
 
-    public static LineRequest of(String name, String color, Long upStationId, Long downStationId, int price, int distance, int duration) {
-        return new LineRequest(name, color, upStationId, downStationId, price, distance, duration);
+    public static LineRequest of(String name, String color, Long upStationId, Long downStationId, int fare, int distance, int duration) {
+        return new LineRequest(name, color, upStationId, downStationId, fare, distance, duration);
     }
 
     public String getName() {
@@ -49,7 +49,7 @@ public class LineRequest {
         return duration;
     }
 
-    public int getPrice() {
-        return price;
+    public int getFare() {
+        return fare;
     }
 }

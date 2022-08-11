@@ -4,7 +4,7 @@ import nextstep.subway.domain.Distance;
 import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Price;
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
@@ -48,9 +48,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red", Price.from(1_000));
-        이호선 = new Line("2호선", "red", Price.from(0));
-        삼호선 = new Line("3호선", "red", Price.from(500));
+        신분당선 = new Line("신분당선", "red", Fare.from(1_000));
+        이호선 = new Line("2호선", "red", Fare.from(0));
+        삼호선 = new Line("3호선", "red", Fare.from(500));
 
         신분당선.addSection(createSectionBuilder(강남역, 양재역, Distance.from(3), Duration.from(3)));
         이호선.addSection(createSectionBuilder(교대역, 강남역, Distance.from(3), Duration.from(3)));
@@ -195,7 +195,7 @@ public class SubwayMapTest {
 
     @DisplayName("경로에서 가장 값이 비싼 노선의 가격을 채택함")
     @Test
-    void findMostExpensivePriceLine() {
+    void findMostExpensiveFareLine() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
@@ -204,8 +204,8 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, new Adult());
 
         // then
-        int linePrice = path.calculateMostExpensiveLine();
-        assertThat(linePrice).isEqualTo(1_000);
+        int lineFare = path.calculateMostExpensiveLine();
+        assertThat(lineFare).isEqualTo(1_000);
     }
 
     /**
@@ -217,7 +217,7 @@ public class SubwayMapTest {
      */
     @DisplayName("경로의 추가 요금이 모두 0원 일 경우")
     @Test
-    void allLinePriceIsZero() {
+    void allLineFareIsZero() {
         // given
         Line a노선 = new Line("A노선", "bg-red-600");
         Line b노선 = new Line("B노선", "bg-yellow-600");
@@ -244,8 +244,8 @@ public class SubwayMapTest {
 
     @DisplayName("노선 생성 시 금액이 음수 값으로 들어올 경우 에러")
     @Test
-    void negativePriceInLine() {
-        assertThatIllegalArgumentException().isThrownBy(() -> new Line("A노선", "bg-red-600", Price.from(-1)))
+    void negativeFareInLine() {
+        assertThatIllegalArgumentException().isThrownBy(() -> new Line("A노선", "bg-red-600", Fare.from(-1)))
                 .withMessage("노선의 추가 요금은 0 미만의 금액이 들어올 수 없습니다. 입력된 금액 : %d", -1);
     }
 
@@ -253,7 +253,7 @@ public class SubwayMapTest {
     @Test
     void noSectionResourceException() {
         Sections sections = new Sections();
-        assertThatIllegalStateException().isThrownBy(sections::mostExpensiveLinePrice)
+        assertThatIllegalStateException().isThrownBy(sections::mostExpensiveLineFare)
                 .withMessage("구간 리스트가 비어있습니다.");
     }
 
