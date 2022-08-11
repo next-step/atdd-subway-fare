@@ -32,7 +32,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 팔호선;
 
     /**
-     * 교대역    --- *2호선* ---   강남역  --- *7호선* ---   상도역   --- *8호선* --- 천호역
+     * 교대역    --- *2호선* ---   강남역  --- *7호선 (1110_000) * ---   상도역   --- *8호선 (110_000)* --- 천호역
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
@@ -161,7 +161,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 추가요금이 있는 지하철 노선을 지나는 경로를 요청하면
      * Then 기본요금에 추가요금이 포함되어 요금이 조회된다.
      */
-    @DisplayName("추가요금 있는 노선을 지나는 두 역의 최소 시간 기준 경로를 조회한다")
+    @DisplayName("추가요금 있는 노선을 지나는 최소 시간 기준 경로를 조회한다")
     @Test
     void findPathByDuration_with_additionalFare() {
         // When
@@ -186,7 +186,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 추가요금이 있는 지하철 노선을 지나며 환승하는 경로를 요청하면
      * Then 기본요금에 추가요금이 포함되어 요금이 조회된다.
      */
-    @DisplayName("추가요금 있는 노선 끼리 환승을 해야하는 두 역의 최소 시간 기준 경로를 조회한다")
+    @DisplayName("추가요금 있는 노선끼리 환승을 해야하는 최소 시간 기준 경로를 조회한다")
     @Test
     void findPathByDuration_with_additionalFare_transfer() {
         // When

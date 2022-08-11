@@ -53,7 +53,7 @@ public class Line {
         return additionalFare;
     }
 
-    public void update(String name, String colo, int additionalFare) {
+    public void update(String name, String color, int additionalFare) {
         if (name != null) {
             this.name = name;
         }
