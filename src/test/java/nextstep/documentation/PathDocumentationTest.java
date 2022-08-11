@@ -1,21 +1,25 @@
 package nextstep.documentation;
 
-import io.restassured.RestAssured;
-import nextstep.path.domain.PathSearchType;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
+import static nextstep.acceptance.steps.AcceptanceTestSteps.given;
+import static nextstep.acceptance.steps.AcceptanceTestSteps.givenDocs;
 import static nextstep.acceptance.steps.LineSectionSteps.*;
 import static nextstep.acceptance.steps.StationSteps.지하철역_생성_요청;
+import static nextstep.documentation.PathSteps.최소_거리_경로를_조회한다;
+import static nextstep.documentation.PathSteps.최소_시간_경로를_조회한다;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 @DisplayName("지하철 경로 검색 with 문서화")
 class PathDocumentationTest extends DocumentationTest {
@@ -65,57 +69,44 @@ class PathDocumentationTest extends DocumentationTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void pathByDistance() {
-        var response = RestAssured
-                .given(spec).log().all()
-                .filter(document(
-                        "path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발역 id"),
-                                parameterWithName("target").description("도착역 id"),
-                                parameterWithName("type").description("경로 조회 타입 (DURATION/DISTANCE)"))
-                ))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 남부터미널역)
-                .queryParam("target", 강남역)
-                .queryParam("type", PathSearchType.DISTANCE.name())
-                .when().get("/paths")
-                .then().log().all().extract();
+        RequestSpecification 문서_정보 = givenDocs(
+                spec,
+                "path",
+                requestParameters(
+                        parameterWithName("source").description("출발역 id"),
+                        parameterWithName("target").description("도착역 id"),
+                        parameterWithName("type").description("경로 조회 타입 (DURATION/DISTANCE)")
+                ),
+                responseFields(
+                        fieldWithPath("stations[].id").description("경로 조회 결과 역id"),
+                        fieldWithPath("stations[].name").description("경로 조회 결과 역이름"),
+                        fieldWithPath("distance").description("총 거리"),
+                        fieldWithPath("duration").description("총 소요시간")
+                )
+        );
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(13);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(12);
-        assertThat(response.jsonPath().getList("stations.id", Long.class))
-                .containsExactly(남부터미널역, 양재역, 강남역);
+        // when
+        var response = 최소_거리_경로를_조회한다(문서_정보, 남부터미널역, 강남역);
+
+        // then
+        경로_조회_정보가_일치한다(response, 13, 12, 남부터미널역, 양재역, 강남역);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void pathByDuration() {
-        var response = RestAssured
-                .given(spec).log().all()
-                .filter(document(
-                        "path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발역 id"),
-                                parameterWithName("target").description("도착역 id"),
-                                parameterWithName("type").description("경로 조회 타입 (DURATION/DISTANCE)"))
-                ))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 남부터미널역)
-                .queryParam("target", 강남역)
-                .queryParam("type", PathSearchType.DURATION.name())
-                .when().get("/paths")
-                .then().log().all().extract();
+        // when
+        var response = 최소_시간_경로를_조회한다(given(), 남부터미널역, 강남역);
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(14);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
-        assertThat(response.jsonPath().getList("stations.id", Long.class))
-                .containsExactly(남부터미널역, 교대역, 강남역);
+        // then
+        경로_조회_정보가_일치한다(response, 14, 11, 남부터미널역, 교대역, 강남역);
     }
 
+    private void 경로_조회_정보가_일치한다(ExtractableResponse<Response> response, int distance, int duration, Long... stationIds) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
+    }
 }
