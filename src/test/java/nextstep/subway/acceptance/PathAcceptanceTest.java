@@ -1,32 +1,25 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static nextstep.subway.domain.PathType.DISTANCE;
-import static nextstep.subway.domain.PathType.DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    private Long 교대역;
-    private Long 강남역;
-    private Long 양재역;
-    private Long 남부터미널역;
-    private Long 이호선;
-    private Long 신분당선;
-    private Long 삼호선;
 
     /**
      * 교대역    --- *2호선(10km, 5분)* ---   강남역
@@ -79,22 +72,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, DISTANCE)
-                .then().log().all().extract();
-    }
-
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, DURATION)
-                .then().log().all().extract();
-    }
-
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
@@ -106,14 +83,5 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("duration", duration + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
-        return params;
     }
 }
