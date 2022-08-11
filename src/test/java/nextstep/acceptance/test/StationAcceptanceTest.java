@@ -60,7 +60,7 @@ class StationAcceptanceTest extends AcceptanceTest {
         Long 강남 = 지하철역_생성_요청(관리자, 강남역).jsonPath().getLong("id");
         Long 신분당선 = 지하철_노선_생성_요청(관리자, "신분당선", "green").jsonPath().getLong("id");
 
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(역삼, 강남));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(역삼, 강남, 6, 6));
 
         // when
         var deleteResponse = 지하철역_삭제_요청(관리자, 강남);

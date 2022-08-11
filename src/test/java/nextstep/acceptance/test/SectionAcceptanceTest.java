@@ -21,7 +21,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
     /**
      * SETUP
      *
-     * 신분당선에 노선을 등록한다
+     * 신분당선에 구간(길이 100, 소요시간 100) 등록한다.
+     *
      * 강남역 >>> 양재역
      */
     @BeforeEach
@@ -30,7 +31,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
-        신분당선 = 지하철_노선_생성_요청(관리자, createLineCreateParams("신분당선", "red", 강남역, 양재역, 100))
+        신분당선 = 지하철_노선_생성_요청(관리자, createLineCreateParams("신분당선", "red", 강남역, 양재역, 100, 100))
                 .jsonPath().getLong("id");
     }
 
@@ -39,7 +40,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void addLineSection() {
         // when
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역, 6, 6));
 
         // then
         노선에_역들이_순서대로_존재한다(신분당선, 강남역, 양재역, 정자역);
@@ -50,7 +51,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void addLineSectionMiddle() {
         // when
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 정자역, 6, 6));
 
         // then
         노선에_역들이_순서대로_존재한다(신분당선, 강남역, 정자역, 양재역);
@@ -60,7 +61,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addSectionAlreadyIncluded() {
         // when
-        var response = 지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 양재역));
+        var response = 지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(강남역, 양재역, 6, 6));
 
         // then
         요청이_실패한다(response);
@@ -71,7 +72,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void removeLineSection() {
         // given
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역, 6, 6));
 
         // when
         지하철_노선에_지하철_구간_제거_요청(관리자, 신분당선, 정자역);
@@ -85,7 +86,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void removeLineSectionInMiddle() {
         // given
         Long 정자역 = 지하철역_생성_요청(관리자, "정자역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 정자역, 6, 6));
 
         // when
         지하철_노선에_지하철_구간_제거_요청(관리자, 신분당선, 양재역);

@@ -75,7 +75,7 @@ public class LineSectionSteps extends AcceptanceTestSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> createLineCreateParams(String name, String color, Long upStation, Long downStation, int distance) {
+    public static Map<String, String> createLineCreateParams(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> params;
         params = new HashMap<>();
         params.put("name", name);
@@ -83,6 +83,7 @@ public class LineSectionSteps extends AcceptanceTestSteps {
         params.put("upStationId", upStation + "");
         params.put("downStationId", downStation + "");
         params.put("distance", distance + "");
+        params.put("duration", duration + "");
         return params;
     }
 
@@ -93,19 +94,12 @@ public class LineSectionSteps extends AcceptanceTestSteps {
         return params;
     }
 
-    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", 6 + "");
-        return params;
-    }
-
-    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
+    public static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
+        params.put("duration", duration + "");
         return params;
     }
 }
