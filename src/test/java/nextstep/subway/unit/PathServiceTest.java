@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.RoleType;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -14,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import support.auth.userdetails.User;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -45,6 +49,8 @@ public class PathServiceTest {
     private int 신분당선_추가요금 = 1000;
     private int 삼호선_추가요금 = 600;
 
+    private User user;
+
     /**
      * 교대역    --- *2호선(10d, 2s)* ---   강남역
      * |                               |
@@ -71,13 +77,15 @@ public class PathServiceTest {
         lineRepository.save(이호선);
         lineRepository.save(신분당선);
         lineRepository.save(삼호선);
+
+        user = new User("test", "test1234", List.of(RoleType.ROLE_MEMBER.name()));
     }
 
     @DisplayName("최단경로를 거리 기준으로 찾는다")
     @Test
     public void find_shortest_path_by_distance() {
         // when
-        PathResponse pathResponse = pathService.findShortestPath(교대역.getId(), 양재역.getId(), PathCondition.DISTANCE);
+        PathResponse pathResponse = pathService.findShortestPath(user, 교대역.getId(), 양재역.getId(), PathCondition.DISTANCE);
 
         // then
         assertAll(
@@ -92,7 +100,7 @@ public class PathServiceTest {
     @Test
     public void find_shortest_path_by_duration() {
         // when
-        PathResponse pathResponse = pathService.findShortestPath(교대역.getId(), 양재역.getId(), PathCondition.DURATION);
+        PathResponse pathResponse = pathService.findShortestPath(user, 교대역.getId(), 양재역.getId(), PathCondition.DURATION);
 
         // then
         assertAll(

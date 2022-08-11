@@ -7,6 +7,7 @@ import java.util.List;
 public class Path {
     private Sections sections;
     private int shortestDistance;
+    private int age;
 
     public Path(Sections sections) {
         this.sections = sections;
