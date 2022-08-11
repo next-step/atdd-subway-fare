@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.config;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

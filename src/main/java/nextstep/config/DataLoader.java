@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.config;
 
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
