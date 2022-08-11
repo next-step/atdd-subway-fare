@@ -1,6 +1,5 @@
 package nextstep.acceptance.steps;
 
-import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -10,7 +9,7 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AuthSteps {
+public class AuthSteps extends AcceptanceTestSteps {
     private static final String USERNAME_FIELD = "username";
     private static final String PASSWORD_FIELD = "password";
 
@@ -19,7 +18,7 @@ public class AuthSteps {
         params.put("email", email);
         params.put("password", password);
 
-        return RestAssured.given().log().all()
+        return given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
                 .when().post("/login/token")
@@ -28,7 +27,7 @@ public class AuthSteps {
     }
 
     public static ExtractableResponse<Response> 베이직_인증으로_내_회원_정보_조회_요청(String username, String password) {
-        return RestAssured.given().log().all()
+        return given()
                 .auth().preemptive().basic(username, password)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/members/me")
@@ -38,8 +37,7 @@ public class AuthSteps {
     }
 
     public static ExtractableResponse<Response> 폼_로그인_후_내_회원_정보_조회_요청(String email, String password) {
-        return RestAssured
-                .given().log().all()
+        return given()
                 .auth().form(email, password, new FormAuthConfig("/login/form", USERNAME_FIELD, PASSWORD_FIELD))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/members/me")
@@ -48,8 +46,7 @@ public class AuthSteps {
     }
 
     public static ExtractableResponse<Response> 베어러_인증으로_내_회원_정보_조회_요청(String accessToken) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
+        return given(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/members/me")
                 .then().log().all()

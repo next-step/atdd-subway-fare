@@ -1,6 +1,5 @@
 package nextstep.acceptance.steps;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class MemberSteps extends AcceptanceTestSteps {
         params.put("email", email);
         params.put("password", password);
 
-        return RestAssured.given().log().all()
+        return given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
                 .when().post("/login/token")
@@ -32,8 +31,7 @@ public class MemberSteps extends AcceptanceTestSteps {
     }
 
     public static ExtractableResponse<Response> 회원_생성_요청(Map<String, String> params) {
-        return RestAssured
-                .given().log().all()
+        return given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
                 .when().post("/members")
@@ -41,8 +39,7 @@ public class MemberSteps extends AcceptanceTestSteps {
     }
 
     public static ExtractableResponse<Response> 회원_정보_조회_요청(String accessToken) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
+        return given(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/members/me")
                 .then().log().all()
@@ -50,9 +47,7 @@ public class MemberSteps extends AcceptanceTestSteps {
     }
 
     public static ExtractableResponse<Response> 회원_정보_수정_요청(String accessToken, Map<String, String> params) {
-        return RestAssured
-                .given().log().all()
-                .auth().oauth2(accessToken)
+        return given(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
                 .when().put("/members/me")
@@ -60,9 +55,7 @@ public class MemberSteps extends AcceptanceTestSteps {
     }
 
     public static ExtractableResponse<Response> 회원_삭제_요청(String accessToken) {
-        return RestAssured
-                .given().log().all()
-                .auth().oauth2(accessToken)
+        return given(accessToken)
                 .when().delete("/members/me")
                 .then().log().all().extract();
     }
