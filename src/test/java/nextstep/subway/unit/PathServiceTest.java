@@ -6,7 +6,7 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;

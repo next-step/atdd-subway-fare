@@ -1,6 +1,8 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.path;
 
 import java.util.List;
+import nextstep.subway.domain.Sections;
+import nextstep.subway.domain.Station;
 
 public class Path {
     private Sections sections;

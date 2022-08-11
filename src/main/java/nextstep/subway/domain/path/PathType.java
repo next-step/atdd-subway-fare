@@ -1,6 +1,10 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.path;
 
 import java.util.List;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.path.finder.PathDistanceFinder;
+import nextstep.subway.domain.path.finder.PathDurationFinder;
+import nextstep.subway.domain.path.finder.PathFinder;
 
 public enum PathType {
 

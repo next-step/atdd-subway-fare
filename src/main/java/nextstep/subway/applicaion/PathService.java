@@ -3,16 +3,16 @@ package nextstep.subway.applicaion;
 import java.util.List;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.finder.PathFinder;
+import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;

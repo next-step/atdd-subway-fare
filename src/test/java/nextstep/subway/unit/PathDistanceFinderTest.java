@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.PathDistanceFinder;
-import nextstep.subway.domain.PathFinder;
+import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.finder.PathDistanceFinder;
+import nextstep.subway.domain.path.finder.PathFinder;
 import nextstep.subway.domain.Station;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;

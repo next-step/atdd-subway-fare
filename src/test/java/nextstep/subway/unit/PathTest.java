@@ -3,7 +3,7 @@ package nextstep.subway.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.Test;
