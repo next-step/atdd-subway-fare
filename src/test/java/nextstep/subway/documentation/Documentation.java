@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -21,7 +23,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @ExtendWith(RestDocumentationExtension.class)
 public class Documentation {
 
-    private static final String IDENTIFIER = "path";
     @LocalServerPort
     int port;
 
@@ -36,9 +37,13 @@ public class Documentation {
                 .build();
     }
 
-    protected RestDocumentationFilter restDocumentationFilter() {
-        return document(IDENTIFIER,
+    protected RestDocumentationFilter restDocumentationFilter(String identifier,
+                                                              RequestParametersSnippet requestParameters,
+                                                              ResponseFieldsSnippet responseFields) {
+        return document(identifier,
                 Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                Preprocessors.preprocessResponse(Preprocessors.prettyPrint()));
+                Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                requestParameters
+                , responseFields);
     }
 }
