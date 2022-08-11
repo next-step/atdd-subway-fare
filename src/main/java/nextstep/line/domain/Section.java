@@ -87,6 +87,10 @@ public class Section {
                 || (this.downStationId.equals(upStationId) && this.upStationId.equals(downStationId));
     }
 
+    public Section flip() {
+        return new Section(downStationId, upStationId, distance, duration);
+    }
+
     public Long getId() {
         return id;
     }
