@@ -7,14 +7,12 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 class PathDocumentation extends Documentation {
 
@@ -38,9 +36,7 @@ class PathDocumentation extends Documentation {
 
         RestAssured
                 .given(spec).log().all()
-                .filter(document("path",
-                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint())))
+                .filter(restDocumentationFilter())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 3L)
