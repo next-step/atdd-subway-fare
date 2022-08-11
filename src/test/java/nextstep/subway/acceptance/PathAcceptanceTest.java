@@ -1,16 +1,19 @@
 package nextstep.subway.acceptance;
 
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -204,5 +207,77 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath()
                         .getInt("fare")).isEqualTo(1111_250)
         );
+    }
+
+    /**
+     * Given 어린이 연령의 로그인 사용자가 로그인 되어있고,
+     * When 경로를 조회하면
+     * Then 할인된 요금이 조회된다.
+     */
+    @DisplayName("어린이 연령의 로그인 사용자가 경로를 조회한다.")
+    @Test
+    void findPathByDistance_loginUser_children() {
+        // Given
+        String email = "children@email.com";
+        String password = "password";
+        String 어린이 = 로그인_되어_있음(email, password);
+
+        // When
+        var response = RestAssured
+                .given()
+                .log()
+                .all()
+                .auth()
+                .oauth2(어린이)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 교대역)
+                .queryParam("target", 강남역)
+                .queryParam("type", "DISTANCE")
+                .when()
+                .get("/paths")
+                .then()
+                .log()
+                .all()
+                .extract();
+
+        // Then
+        assertThat(response.jsonPath()
+                .getInt("fare")).isEqualTo(450);
+    }
+
+    /**
+     * Given 청소년 연령의 로그인 사용자가 로그인되어있고,
+     * When 경로를 조회하면
+     * Then 할인된 요금이 조회된다.
+     */
+    @DisplayName("청소년 연령의 로그인 사용자가 경로를 조회한다.")
+    @Test
+    void findPathByDistance_loginUser_teenager() {
+        // Given
+        String email = "teenager@email.com";
+        String password = "password";
+        String 청소년 = 로그인_되어_있음(email, password);
+
+        // When
+        var response = RestAssured
+                .given()
+                .log()
+                .all()
+                .auth()
+                .oauth2(청소년)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", 교대역)
+                .queryParam("target", 강남역)
+                .queryParam("type", "DISTANCE")
+                .when()
+                .get("/paths")
+                .then()
+                .log()
+                .all()
+                .extract();
+
+        // Then
+        assertThat(response.jsonPath()
+                .getInt("fare")).isEqualTo(720);
     }
 }
