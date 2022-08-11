@@ -23,6 +23,7 @@ public class SubwayMapTest {
     private Station 양재역;
     private Station 남부터미널역;
     private Station 수원역;
+    private Station 당산역;
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
@@ -34,6 +35,7 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
         수원역 = createStation(5L, "수원역");
+        당산역 = createStation(6L, "당산역");
 
         신분당선 = new Line("신분당선", "red");
         이호선 = new Line("2호선", "red");
@@ -41,10 +43,15 @@ public class SubwayMapTest {
 
         신분당선.addSection(강남역, 양재역, 10, 1);
         이호선.addSection(교대역, 강남역, 10, 1);
+        이호선.addSection(당산역, 교대역, 50, 100);
         삼호선.addSection(교대역, 남부터미널역, 2, 10);
         삼호선.addSection(남부터미널역, 양재역, 3, 5);
 
         /**
+         * 당산역
+         * |
+         * *2호선(50, 100)
+         * |
          * 교대역    --- *2호선(10   , 1)* ---   강남역
          * |                                |
          * *3호선(2, 10)*                     *신분당선* (10, 1)
@@ -58,11 +65,11 @@ public class SubwayMapTest {
      *
      *   Scenario: 환승하지 않고 최단거리 구하기
      *     Given 지하철 역이 등록되어있다.
-     *     Given subwayMap에 지하철노선들을 등록합니다.
+     *     And subwayMap에 지하철노선들을 등록합니다.
      *     When 교대역, 양재역 최단 거리를 구합니다.
      *     Then 최단경로를 비교 합니다.
      */
-    @DisplayName("환승하지 않고 최단 거리 구하는 케이스")
+    @DisplayName("환승하지 않고 기본요금나오는 최단 거리 구하는 케이스")
     @Test
     void findPathByDistance() {
         // given
@@ -73,7 +80,7 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE.getEdgeInitiator());
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        경로_및_요금_확인(path, Lists.newArrayList(교대역, 남부터미널역, 양재역), 1250);
     }
 
     /**
@@ -81,11 +88,11 @@ public class SubwayMapTest {
      *
      *   Scenario: 환승하고 최단거리 구하기
      *     Given 지하철 역이 등록되어있다.
-     *     Given subwayMap에 지하철노선들을 등록합니다.
+     *     And subwayMap에 지하철노선들을 등록합니다.
      *     When 교대역, 양재역 최단 거리를 구합니다.
      *     Then 최단경로를 비교 합니다.
      */
-    @DisplayName("환승하고 최단 거리 구하는 케이스")
+    @DisplayName("환승하고 10km이상인 최단 거리 구하는 케이스")
     @Test
     void TransferFindPathByDistance() {
         // given
@@ -96,7 +103,30 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(강남역, 남부터미널역, PathType.DISTANCE.getEdgeInitiator());
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(강남역, 교대역, 남부터미널역));
+        경로_및_요금_확인(path, Lists.newArrayList(강남역, 교대역, 남부터미널역), 1350);
+    }
+
+
+    /**
+     *   Feature: 환승하고 최단 거리 구하는 케이스
+     *
+     *   Scenario: 환승하고 최단거리 구하기
+     *     Given 지하철 역이 등록되어있다.
+     *     And subwayMap에 지하철노선들을 등록합니다.
+     *     When 남부터미널역, 당산역 최단 거리를 구합니다.
+     *     Then 최단경로를 비교 합니다.
+     */
+    @Test
+    @DisplayName("50km이상 최단 거리 구하는 케이스")
+    void over50DistanceFindPath() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(남부터미널역, 당산역, PathType.DISTANCE.getEdgeInitiator());
+        // then
+        경로_및_요금_확인(path, Lists.newArrayList(남부터미널역, 교대역, 당산역), 2150);
     }
 
     /**
@@ -178,7 +208,7 @@ public class SubwayMapTest {
      *     When 최소 시간이 걸리는 경로를 찾습니다.
      *     Then 경로를 비교합니다.
      */
-    @DisplayName("환승하여 최소 시간 구간 구하는 케이스")
+    @DisplayName("환승하여 10km 이상인 최소 시간 구간 구하는 케이스")
     @Test
     void TransferFindPathByDuration() {
         // given
@@ -189,7 +219,7 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION.getEdgeInitiator());
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        경로_및_요금_확인(path, Lists.newArrayList(교대역, 강남역, 양재역), 1450);
     }
 
     /**
@@ -201,7 +231,7 @@ public class SubwayMapTest {
      *     When 최소 시간이 걸리는 경로를 찾습니다.
      *     Then 경로를 비교합니다.
      */
-    @DisplayName("환승없이 최소 시간 구간 구하는 케이스")
+    @DisplayName("환승없이 기본요금 나오는 최소 시간 구간 구하는 케이스")
     @Test
     void findPathByDuration() {
         // given
@@ -212,8 +242,32 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 강남역, PathType.DURATION.getEdgeInitiator());
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역));
+        경로_및_요금_확인(path, Lists.newArrayList(교대역, 강남역), 1250);
     }
+
+    /**
+     *   Feature: 50km 이상 거리 요금 나오는 최소 시간 경로 탐색
+     *
+     *   Scenario: 환승없이 최소 시간 구간 구합니다.
+     *     Given 지하철 역이 등록되어있다.
+     *     Given subwayMap에 지하철노선들을 등록합니다.
+     *     When 최소 시간이 걸리는 경로를 찾습니다.
+     *     Then 경로를 비교합니다.
+     */
+    @DisplayName("환승없이 기본요금 나오는 최소 시간 구간 구하는 케이스")
+    @Test
+    void over50DistanctFindPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(당산역, 교대역, PathType.DURATION.getEdgeInitiator());
+
+        // then
+        경로_및_요금_확인(path, Lists.newArrayList(당산역, 교대역), 2050);
+    }
+
 
     /**
      *   Feature: 출발역과 도착역이 같은 최소 시간 구하는 케이스
@@ -257,6 +311,11 @@ public class SubwayMapTest {
         assertThatIllegalArgumentException().isThrownBy(() -> {
             subwayMap.findPath(교대역, 수원역, PathType.DURATION.getEdgeInitiator());
         });
+    }
+
+    private void 경로_및_요금_확인(Path path, List<Station> stations, int price) {
+        assertThat(path.getStations()).containsExactlyElementsOf(stations);
+        assertThat(path.calculatePrice()).isEqualTo(price);
     }
 
 
