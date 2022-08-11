@@ -60,7 +60,7 @@ class PathDocumentation extends Documentation {
     private void 경로_조회(Long source, Long target, String type) {
         RestAssured
                 .given(spec).log().all()
-                .filter(document("path",
+                .filter(document("path-" + type,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .accept(MediaType.APPLICATION_JSON_VALUE)

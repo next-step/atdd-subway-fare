@@ -9,6 +9,10 @@
 [[path]]
 == 지하철 경로
 
-=== 경로 조회
+=== 경로 조회 (최단거리)
 
-operation::path[snippets='http-request,http-response']
+operation::path-DISTANCE[snippets='http-request,http-response']
+
+=== 경로 조회 (최소시간)
+
+operation::path-DURATION[snippets='http-request,http-response']
