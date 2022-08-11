@@ -30,13 +30,14 @@ public class Path {
     }
 
     public int extractFare() {
-        return BASIC_FARE + calculateOverFare(extractDistance() - BASIC_FARE_KM);
+        return BASIC_FARE + calculateOverFare(extractDistance());
     }
 
     private int calculateOverFare(int distance) {
-        if (distance <= 0) {
+        if (distance <= BASIC_FARE_KM) {
             return 0;
         }
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+
+        return (int) ((Math.ceil((distance - BASIC_FARE_KM - 1) / 5) + 1) * 100);
     }
 }
