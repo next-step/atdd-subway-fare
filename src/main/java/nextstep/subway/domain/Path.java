@@ -34,6 +34,9 @@ public class Path {
     }
 
     private int calculateOverFare(int distance) {
+        if (distance <= 0) {
+            return 0;
+        }
         return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
     }
 }
