@@ -1,26 +1,18 @@
-package nextstep.subway.applicaion.builder;
+package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.Path;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-class PathResponseBuilderTest {
+class FareCalculatorTest {
 
     private static final int 기본_요금 = 1250;
 
-    @Spy
-    PathResponseBuilder builder;
-
-    @Mock
-    Path path;
+    FareCalculator fareCalculator = new FareCalculator();
 
     @Test
     void 이용_거리가_0이면_요금도_0원이다() {
@@ -56,9 +48,8 @@ class PathResponseBuilderTest {
     }
 
     private void 거리에_따른_가격_비교(int distance, int price) {
-        when(path.extractDistance()).thenReturn(distance);
-        PathResponse response = builder.build(path);
+        int calculatedFare = fareCalculator.calculateOverFare(distance);
 
-        assertThat(response.getFare()).isEqualTo(price);
+        assertThat(calculatedFare).isEqualTo(price);
     }
 }

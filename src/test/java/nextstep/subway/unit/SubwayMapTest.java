@@ -69,8 +69,6 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, SearchType.DURATION);
 
         // then
-        path.getStations().forEach(s -> System.out.println(s.getName()));
-
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
         assertThat(path.extractDistance()).isEqualTo(10);
         assertThat(path.extractDuration()).isEqualTo(4);

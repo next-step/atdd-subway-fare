@@ -1,6 +1,6 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.builder.PathResponseBuilder;
+import nextstep.subway.builder.PathResponseBuilder;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.constant.SearchType;
 import nextstep.subway.domain.Line;
