@@ -1,6 +1,6 @@
 package nextstep.subway.domain.fare;
 
-public class LongStrategy implements FareStrategy {
+public class LongStrategy extends FareStrategy {
 
     private static final int BASIC_FARE = 2050;
     private static final int MIDDLE_DISTANCE = 50;
