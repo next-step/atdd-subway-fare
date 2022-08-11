@@ -85,10 +85,11 @@ class PathDocumentationTest extends DocumentationTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(13);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(12);
         assertThat(response.jsonPath().getList("stations.id", Long.class))
                 .containsExactly(남부터미널역, 양재역, 강남역);
     }
-    
+
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void pathByDuration() {
@@ -111,7 +112,8 @@ class PathDocumentationTest extends DocumentationTest {
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(12);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(14);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
         assertThat(response.jsonPath().getList("stations.id", Long.class))
                 .containsExactly(남부터미널역, 교대역, 강남역);
     }
