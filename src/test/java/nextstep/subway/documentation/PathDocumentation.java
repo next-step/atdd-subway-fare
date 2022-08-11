@@ -1,5 +1,6 @@
 package nextstep.subway.documentation;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -15,7 +16,7 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,7 +37,7 @@ public class PathDocumentation extends Documentation {
             ), 10, 20
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
