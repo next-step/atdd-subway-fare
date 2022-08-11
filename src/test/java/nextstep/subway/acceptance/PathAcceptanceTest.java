@@ -15,11 +15,13 @@ import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철
 import static nextstep.subway.acceptance.MemberAcceptanceTest.PASSWORD;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.경로의_역_목록_확인;
+import static nextstep.subway.acceptance.PathSteps.경로의_전체_거리_확인;
+import static nextstep.subway.acceptance.PathSteps.경로의_전체_시간_확인;
+import static nextstep.subway.acceptance.PathSteps.경로의_전체_요금_확인;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -76,12 +78,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(15),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250 + extraFare)
-        );
+        경로의_역_목록_확인(response, 교대역, 남부터미널역, 양재역);
+        경로의_전체_거리_확인(response, 5);
+        경로의_전체_시간_확인(response, 15);
+        경로의_전체_요금_확인(response, 1250 + extraFare);
     }
 
     /**
@@ -104,12 +104,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_거리_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
 
         // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(15),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(expected)
-        );
+        경로의_역_목록_확인(response, 교대역, 남부터미널역, 양재역);
+        경로의_전체_거리_확인(response, 5);
+        경로의_전체_시간_확인(response, 15);
+        경로의_전체_요금_확인(response, expected);
     }
 
     private static Stream<Arguments> user_info_distance() {
@@ -136,12 +134,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250 + extraFare)
-        );
+        경로의_역_목록_확인(response, 교대역, 강남역, 양재역);
+        경로의_전체_거리_확인(response, 20);
+        경로의_전체_시간_확인(response, 5);
+        경로의_전체_요금_확인(response, 1250 + extraFare);
     }
 
     /**
@@ -164,12 +160,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_시간_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
 
         // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(expected)
-        );
+        경로의_역_목록_확인(response, 교대역, 강남역, 양재역);
+        경로의_전체_거리_확인(response, 20);
+        경로의_전체_시간_확인(response, 5);
+        경로의_전체_요금_확인(response, expected);
     }
 
     private static Stream<Arguments> user_info_duration() {
