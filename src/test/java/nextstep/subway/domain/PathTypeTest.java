@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.subway.domain.fixture.StationFixture.GANGNAM;
+import static nextstep.subway.domain.fixture.StationFixture.YEOKSAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PathTypeTest {
@@ -12,7 +14,7 @@ class PathTypeTest {
 
     @BeforeEach
     void setUp() {
-        section = new Section(null, new Station("강남역"), new Station("역삼역"), 10, 3);
+        section = new Section(null, GANGNAM, YEOKSAM, 10, 3);
     }
 
     @Test
