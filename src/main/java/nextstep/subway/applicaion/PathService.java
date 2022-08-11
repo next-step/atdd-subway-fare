@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import nextstep.subway.builder.PathResponseBuilder;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.constant.SearchType;
 import nextstep.subway.domain.Line;
@@ -14,10 +15,12 @@ import java.util.List;
 public class PathService {
     private LineService lineService;
     private StationService stationService;
+    private PathResponseBuilder pathResponseBuilder;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, PathResponseBuilder pathResponseBuilder) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.pathResponseBuilder = pathResponseBuilder;
     }
 
     public PathResponse findPath(Long source, Long target, SearchType searchType) {
@@ -27,6 +30,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, searchType);
 
-        return PathResponse.of(path);
+        return pathResponseBuilder.build(path);
     }
 }
