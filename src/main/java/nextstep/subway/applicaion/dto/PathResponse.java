@@ -25,8 +25,9 @@ public class PathResponse {
         int distance = path.extractDistance();
         int duration = path.extractDuration();
         int fare = path.extractFare();
+        int extraFare = path.getMaxExtraFare();
 
-        return new PathResponse(stations, distance, duration, fare);
+        return new PathResponse(stations, distance, duration, fare + extraFare);
     }
 
     public List<StationResponse> getStations() {
