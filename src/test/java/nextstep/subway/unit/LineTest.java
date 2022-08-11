@@ -192,4 +192,11 @@ class LineTest {
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("추가요금을 입력하지 않으면 0원이다.")
+    void createLineDefaultSurchargeTest() {
+        Line line = new Line("2호선", "green");
+        assertThat(line.getAdditionalFare()).isZero();
+    }
 }
