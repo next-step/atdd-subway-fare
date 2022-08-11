@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.PathSteps.강남역;
 import static nextstep.subway.acceptance.PathSteps.교대역;
@@ -25,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("요금 관련 테스트를 진행한다.")
 public class FareAcceptanceTest extends AcceptanceTest{
+
+	public static final int BASIC_DEDUCTION = 350;
 
 	/**
 	 * 교대역    --- *2호선(3km, 3분, 450원)* ---   강남역
@@ -61,6 +64,42 @@ public class FareAcceptanceTest extends AcceptanceTest{
 
 		//then
 		assertThat(응답.jsonPath().getLong("fare")).isEqualTo(Fare.BASIC_FARE + 900);
+	}
+
+	/**
+	 * Given 청소년이 로그인되어 있다.
+	 * When 최단 경로로 경로를 찾으면
+	 * Then 할인된 요금이 반환된다.
+	 */
+	@DisplayName("청소년이 지하철을 이용하면, 할인된 요금이 적용된다")
+	@Test
+	void 청소년이_지하철을_이용하면_할인된_요금이_적용된다() {
+	    //given
+		String 청소년 = 로그인_되어_있음(TEENAGER_EMAIL, PASSWORD);
+
+		//when
+		ExtractableResponse<Response> 응답 = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 양재역);
+
+		//then
+		assertThat(응답.jsonPath().getLong("fare")).isEqualTo((Fare.BASIC_FARE + 900 - BASIC_DEDUCTION) * 0.8);
+	}
+
+	/**
+	 * Given 어린이기 로그인되어 있다.
+	 * When 최단 경로로 경로를 찾으면
+	 * Then 할인된 요금이 반환된다.
+	 */
+	@DisplayName("어린이가 지하철을 이용하면, 할인된 요금이 적용된다")
+	@Test
+	void 어린이가_지하철을_이용하면_할인된_요금이_적용된다() {
+	    //given
+		String 어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+
+		//when
+		ExtractableResponse<Response> 응답 = 두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 양재역);
+
+		//then
+		assertThat(응답.jsonPath().getLong("fare")).isEqualTo((Fare.BASIC_FARE + 900 - BASIC_DEDUCTION) * 0.5);
 	}
 
 	private long 지하철역을_생성한다(String name) {
