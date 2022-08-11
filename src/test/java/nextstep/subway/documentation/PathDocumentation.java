@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 , 0
         );
 
-        when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
+        when(pathService.findPath(1L, 2L, PathType.DISTANCE, 20)).thenReturn(pathResponse);
 
         given(spec, "path")
                 .accept(MediaType.APPLICATION_JSON_VALUE)

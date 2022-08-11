@@ -9,6 +9,10 @@ import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
 import support.auth.userdetails.User;
 
+import java.util.Objects;
+
+import static support.auth.userdetails.User.MockUser;
+
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -19,6 +23,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        Boolean noLoginUser = Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class).noLoginUser());
+
+        if (noLoginUser && authentication == null) {
+            return MockUser();
+        }
+
+        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities(), authentication.getAge());
     }
 }

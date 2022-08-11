@@ -81,7 +81,7 @@ public class FareAcceptanceTest extends AcceptanceTest{
 		ExtractableResponse<Response> 응답 = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 양재역);
 
 		//then
-		assertThat(응답.jsonPath().getLong("fare")).isEqualTo((Fare.BASIC_FARE + 900 - BASIC_DEDUCTION) * 0.8);
+		assertThat(응답.jsonPath().getLong("fare")).isEqualTo((int) ((Fare.BASIC_FARE + 900 - BASIC_DEDUCTION) * 0.8));
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class FareAcceptanceTest extends AcceptanceTest{
 		ExtractableResponse<Response> 응답 = 두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 양재역);
 
 		//then
-		assertThat(응답.jsonPath().getLong("fare")).isEqualTo((Fare.BASIC_FARE + 900 - BASIC_DEDUCTION) * 0.5);
+		assertThat(응답.jsonPath().getLong("fare")).isEqualTo((int) ((Fare.BASIC_FARE + 900 - BASIC_DEDUCTION) * 0.5));
 	}
 
 	private long 지하철역을_생성한다(String name) {

@@ -25,7 +25,17 @@ public class Path {
         return sections.getStations();
     }
 
-    public int calculateFare() {
-        return Fare.calculate(extractDistance()) + sections.findSurCharge();
+    public int calculateFare(int age) {
+        int fare = Fare.calculate(extractDistance()) + sections.findSurCharge();
+
+        if (age < 13) {
+            return (int) ((fare - 350) * 0.5);
+        }
+
+        if (age < 19) {
+            return (int) ((fare - 350) * 0.8);
+        }
+
+        return fare;
     }
 }

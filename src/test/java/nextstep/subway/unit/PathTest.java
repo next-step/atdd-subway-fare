@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Path 관련 테스트를 진행한다.")
 class PathTest extends StationData {
 
+	public static final int DEFALUT_AGE = 20;
 	private static final int 신분당선_추가요금 = 900;
 	private static final int 이호선_추가요금 = 450;
 	public static final int 삼호선_추가요금 = 500;
@@ -44,7 +45,7 @@ class PathTest extends StationData {
 		Path path = subwayMap.findPath(교대역, 강남역, DISTANCE);
 
 		//then
-		assertThat(path.calculateFare()).isEqualTo(Fare.BASIC_FARE + 이호선_추가요금);
+		assertThat(path.calculateFare(DEFALUT_AGE)).isEqualTo(Fare.BASIC_FARE + 이호선_추가요금);
 	}
 
 	@Test
@@ -56,6 +57,6 @@ class PathTest extends StationData {
 		Path path = subwayMap.findPath(교대역, 양재역, DISTANCE);
 
 		//then
-		assertThat(path.calculateFare()).isEqualTo(Fare.BASIC_FARE + 신분당선_추가요금);
+		assertThat(path.calculateFare(DEFALUT_AGE)).isEqualTo(Fare.BASIC_FARE + 신분당선_추가요금);
 	}
 }
