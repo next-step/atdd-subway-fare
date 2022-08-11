@@ -25,7 +25,7 @@ public class Section extends DefaultWeightedEdge {
     private int distance;
     private int duration;
 
-    public Section() {
+    protected Section() {
 
     }
 

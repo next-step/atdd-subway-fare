@@ -9,6 +9,7 @@ import nextstep.subway.domain.Favorite;
 import nextstep.subway.domain.FavoriteRepository;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +19,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class FavoriteService {
-    private FavoriteRepository favoriteRepository;
-    private MemberService memberService;
-    private StationService stationService;
+    private final FavoriteRepository favoriteRepository;
+    private final MemberService memberService;
+    private final StationService stationService;
 
     public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService) {
         this.favoriteRepository = favoriteRepository;
@@ -29,6 +31,7 @@ public class FavoriteService {
         this.stationService = stationService;
     }
 
+    @Transactional
     public void createFavorite(String email, FavoriteRequest request) {
         MemberResponse member = memberService.findMember(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
@@ -48,6 +51,7 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteFavorite(String email, Long id) {
         MemberResponse member = memberService.findMember(email);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
