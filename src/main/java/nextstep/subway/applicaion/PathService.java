@@ -11,9 +11,8 @@ import nextstep.subway.util.Adult;
 import nextstep.subway.util.Age;
 import nextstep.subway.util.AgeFactory;
 import org.springframework.stereotype.Service;
-import support.auth.context.Authentication;
-import support.auth.context.SecurityContextHolder;
-import support.auth.userdetails.User;
+import support.auth.userdetails.AnonymousUser;
+import support.auth.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -29,30 +28,25 @@ public class PathService {
         this.memberService = memberService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
+    public PathResponse findPath(Long source, Long target, UserDetails user) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
 
-        Path path = subwayMap.findPath(upStation, downStation, findLoginMemberAge());
+        Path path = subwayMap.findPath(upStation, downStation, findLoginMemberAge(user));
 
         return PathResponse.of(path);
     }
 
-    private Age findLoginMemberAge() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (isAnonymousUser(authentication)) {
+    private Age findLoginMemberAge(UserDetails user) {
+        if (user instanceof AnonymousUser) {
             return new Adult();
         }
 
-        String loginEmail = (String) authentication.getPrincipal();
+        String loginEmail = (String) user.getUsername();
         MemberResponse loginMember = memberService.findMember(loginEmail);
 
         return AgeFactory.findUsersAge(loginMember.getAge());
-    }
-
-    private boolean isAnonymousUser(Authentication authentication) {
-        return authentication == null;
     }
 }
