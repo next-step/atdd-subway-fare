@@ -10,7 +10,7 @@ public enum Fare {
 	OVER_50KM(Fare::isOver50, Fare::calculateExcessFareOver50);
 
 	private static final String FARE_NOT_FOUND = "요금을 찾을 수 없습니다.";
-	private static final int BASIC_FARE = 1250;
+	public static final int BASIC_FARE = 1250;
 	private static final int STANDARD = 10;
 	private static final int FIFTY = 50;
 

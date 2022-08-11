@@ -25,7 +25,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public int calculatePrice() {
-        return Fare.calculate(extractDistance());
+    public int calculateFare() {
+        return Fare.calculate(extractDistance()) + sections.findSurCharge();
     }
 }

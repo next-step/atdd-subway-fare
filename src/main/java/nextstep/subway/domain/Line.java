@@ -5,11 +5,13 @@ import java.util.List;
 
 @Entity
 public class Line {
+    public static final int DEFALUT_SURCHARGE = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String color;
+    private int surCharge;
 
     @Embedded
     private Sections sections = new Sections();
@@ -20,6 +22,13 @@ public class Line {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+        this.surCharge = DEFALUT_SURCHARGE;
+    }
+
+    public Line(String name, String color, int surCharge) {
+        this.name = name;
+        this.color = color;
+        this.surCharge = surCharge;
     }
 
     public Long getId() {
@@ -32,6 +41,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getSurCharge() {
+        return surCharge;
     }
 
     public List<Section> getSections() {
