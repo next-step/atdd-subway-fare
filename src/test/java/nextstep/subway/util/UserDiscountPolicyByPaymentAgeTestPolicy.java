@@ -1,5 +1,9 @@
 package nextstep.subway.util;
 
+import nextstep.subway.util.discount.Adult;
+import nextstep.subway.util.discount.DiscountAgePolicy;
+import nextstep.subway.util.discount.Children;
+import nextstep.subway.util.discount.Teenager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,9 +29,9 @@ class UserDiscountPolicyByPaymentAgeTestPolicy {
 
     private static Stream<Arguments> variousAgeMember() {
         return Stream.of(
-                Arguments.of(new DiscountChildren(), 1_250, 800),
-                Arguments.of(new DiscountTeenager(), 1_250, 1_070),
-                Arguments.of(new DiscountAdult(), 1_250, 1_250)
+                Arguments.of(new Children(), 1_250, 800),
+                Arguments.of(new Teenager(), 1_250, 1_070),
+                Arguments.of(new Adult(), 1_250, 1_250)
         );
     }
 }

@@ -1,6 +1,6 @@
-package nextstep.subway.util;
+package nextstep.subway.util.discount;
 
-public class DiscountChildren implements DiscountAgePolicy {
+public class Children implements DiscountAgePolicy {
 
     private static final double DISCOUNT_RATE = 0.5;
 

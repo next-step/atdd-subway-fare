@@ -1,4 +1,6 @@
-package nextstep.subway.util;
+package nextstep.subway.util.fare;
+
+import nextstep.subway.util.fare.FarePolicy;
 
 public class NormalFarePolicy implements FarePolicy {
 

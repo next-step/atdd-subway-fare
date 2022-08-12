@@ -1,5 +1,7 @@
 package nextstep.subway.util;
 
+import nextstep.subway.util.discount.DiscountAgePolicy;
+
 public class UserDiscountPolicyByAge implements DiscountPolicy {
 
     private DiscountAgePolicy discountAgePolicy;

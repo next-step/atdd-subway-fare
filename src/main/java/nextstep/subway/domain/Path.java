@@ -1,9 +1,9 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.util.DiscountAgePolicy;
+import nextstep.subway.util.discount.DiscountAgePolicy;
 import nextstep.subway.util.DiscountPolicy;
-import nextstep.subway.util.FarePolicy;
-import nextstep.subway.util.NormalFarePolicy;
+import nextstep.subway.util.fare.FarePolicy;
+import nextstep.subway.util.fare.NormalFarePolicy;
 import nextstep.subway.util.UserDiscountPolicyByAge;
 
 import java.util.List;
