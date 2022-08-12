@@ -2,7 +2,7 @@ package nextstep.acceptance.test;
 
 import io.restassured.RestAssured;
 import nextstep.DataLoader;
-import nextstep.acceptance.utils.DatabaseCleanup;
+import nextstep.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

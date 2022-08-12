@@ -1,10 +1,10 @@
-package nextstep.documentation;
+package nextstep.acceptance.documentation;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import nextstep.DataLoader;
-import nextstep.acceptance.utils.DatabaseCleanup;
+import nextstep.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

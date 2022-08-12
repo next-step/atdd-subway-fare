@@ -1,4 +1,4 @@
-package nextstep.acceptance.utils;
+package nextstep.utils;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
