@@ -30,7 +30,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10
+                ), 10, 15
         );
 
         when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
@@ -56,7 +56,8 @@ public class PathDocumentation extends Documentation {
                 subsectionWithPath("stations").description("경로에 거쳐가는 역 목록"),
                 fieldWithPath("stations[].id").description("역 Id"),
                 fieldWithPath("stations[].name").description("역 이름"),
-                fieldWithPath("distance").description("경로 총 거리")
+                fieldWithPath("distance").description("경로 총 거리"),
+                fieldWithPath("duration").description("경로 총 소요 시간")
         );
     }
 }
