@@ -4,6 +4,6 @@ public class Adult implements DiscountAgePolicy {
 
     @Override
     public int discount(int fare) {
-        return 0;
+        return fare;
     }
 }
