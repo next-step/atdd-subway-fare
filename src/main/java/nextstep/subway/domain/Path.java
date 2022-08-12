@@ -35,13 +35,9 @@ public class Path {
     }
 
     public int extractFare() {
-        return calculateFare(shortestDistance);
-    }
-
-    private int calculateFare(int distance) {
-        FareStrategy fareStrategy = FareType.findStrategy(distance);
+        FareStrategy fareStrategy = FareType.findStrategy(shortestDistance);
         int extraFare = extractMaxExtraFare();
-        return fareStrategy.calculateWithAge(distance, age, extraFare);
+        return fareStrategy.calculateWithAge(shortestDistance, age, extraFare);
     }
 
     public int extractMaxExtraFare() {

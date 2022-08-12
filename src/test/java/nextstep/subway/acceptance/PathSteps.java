@@ -5,6 +5,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathCondition;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,6 +42,10 @@ public class PathSteps {
 
     public static void 경로의_역_목록_확인(ExtractableResponse<Response> response, Long... ids) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(ids);
+    }
+
+    public static void 경로_조회_응답_확인(ExtractableResponse<Response> response, HttpStatus status) {
+        assertThat(response.statusCode()).isEqualTo(status.value());
     }
 
     private static ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, PathCondition pathCondition) {

@@ -1,20 +1,24 @@
 package nextstep.subway.acceptance;
 
+import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberAcceptanceTest.EMAIL;
 import static nextstep.subway.acceptance.MemberAcceptanceTest.PASSWORD;
 import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.경로_조회_응답_확인;
 import static nextstep.subway.acceptance.PathSteps.경로의_역_목록_확인;
 import static nextstep.subway.acceptance.PathSteps.경로의_전체_거리_확인;
 import static nextstep.subway.acceptance.PathSteps.경로의_전체_시간_확인;
@@ -34,6 +38,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
+     * 인천역
+     *
      * 교대역    --- *2호선(10d, 2s)* ---   강남역
      * |                               |
      * *3호선(2d, 10s)*                  *신분당선(10d, 3s)*
@@ -75,13 +81,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         int extraFare = 600;
 
         // when
-        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        var 경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로의_역_목록_확인(response, 교대역, 남부터미널역, 양재역);
-        경로의_전체_거리_확인(response, 5);
-        경로의_전체_시간_확인(response, 15);
-        경로의_전체_요금_확인(response, 1250 + extraFare);
+        경로의_역_목록_확인(경로_조회_응답, 교대역, 남부터미널역, 양재역);
+        경로의_전체_거리_확인(경로_조회_응답, 5);
+        경로의_전체_시간_확인(경로_조회_응답, 15);
+        경로의_전체_요금_확인(경로_조회_응답, 1250 + extraFare);
     }
 
     /**
@@ -100,13 +106,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         String 로그인_토큰 = 로그인_되어_있음(email, PASSWORD);
 
         // when
-        var response = 두_역의_최단_거리_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
+        var 경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
 
         // then
-        경로의_역_목록_확인(response, 교대역, 남부터미널역, 양재역);
-        경로의_전체_거리_확인(response, 5);
-        경로의_전체_시간_확인(response, 15);
-        경로의_전체_요금_확인(response, expected);
+        경로의_역_목록_확인(경로_조회_응답, 교대역, 남부터미널역, 양재역);
+        경로의_전체_거리_확인(경로_조회_응답, 5);
+        경로의_전체_시간_확인(경로_조회_응답, 15);
+        경로의_전체_요금_확인(경로_조회_응답, expected);
     }
 
     private static Stream<Arguments> user_info_distance() {
@@ -130,13 +136,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         int extraFare = 1000;
 
         // when
-        var response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
+        var 경로_조회_응답 = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로의_역_목록_확인(response, 교대역, 강남역, 양재역);
-        경로의_전체_거리_확인(response, 20);
-        경로의_전체_시간_확인(response, 5);
-        경로의_전체_요금_확인(response, 1250 + extraFare);
+        경로의_역_목록_확인(경로_조회_응답, 교대역, 강남역, 양재역);
+        경로의_전체_거리_확인(경로_조회_응답, 20);
+        경로의_전체_시간_확인(경로_조회_응답, 5);
+        경로의_전체_요금_확인(경로_조회_응답, 1250 + extraFare);
     }
 
     /**
@@ -153,16 +159,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given
         회원_생성_요청(email, PASSWORD, age);
         String 로그인_토큰 = 로그인_되어_있음(email, PASSWORD);
-        int extraFare = 1000;
 
         // when
-        var response = 두_역의_최단_시간_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
+        var 경로_조회_응답 = 두_역의_최단_시간_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
 
         // then
-        경로의_역_목록_확인(response, 교대역, 강남역, 양재역);
-        경로의_전체_거리_확인(response, 20);
-        경로의_전체_시간_확인(response, 5);
-        경로의_전체_요금_확인(response, expected);
+        경로의_역_목록_확인(경로_조회_응답, 교대역, 강남역, 양재역);
+        경로의_전체_거리_확인(경로_조회_응답, 20);
+        경로의_전체_시간_확인(경로_조회_응답, 5);
+        경로의_전체_요금_확인(경로_조회_응답, expected);
     }
 
     private static Stream<Arguments> user_info_duration() {
@@ -171,6 +176,36 @@ class PathAcceptanceTest extends AcceptanceTest {
                 Arguments.of("test2@email.com", 13, 1870),
                 Arguments.of("test3@email.com", 19, 2250)
         );
+    }
+
+    @DisplayName("등록되지 않은 지하철역을 경로 조회 요청하면 예외 발생")
+    @Test
+    void find_path_with_unknown_station() {
+        // given
+        Long 없는역 = 1234L;
+        회원_생성_요청(EMAIL, PASSWORD, 10);
+        String 로그인_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        var 경로_조회_응답 = 두_역의_최단_시간_경로_조회를_요청(로그인_토큰, 없는역, 양재역);
+
+        // then
+        경로_조회_응답_확인(경로_조회_응답, HttpStatus.BAD_REQUEST);
+    }
+
+    @DisplayName("이어지지 않은 두 역의 경로를 조회하면 예외 발생")
+    @Test
+    void findPathByDistanceWithoutConnection() {
+        // given
+        Station 인천역 = new Station("인천역");
+        회원_생성_요청(EMAIL, PASSWORD, 10);
+        String 로그인_토큰 = 로그인_되어_있음(EMAIL, PASSWORD);
+
+        // when
+        var 경로_조회_응답 = 두_역의_최단_거리_경로_조회를_요청(로그인_토큰, 인천역.getId(), 양재역);
+
+        // then
+        경로_조회_응답_확인(경로_조회_응답, HttpStatus.BAD_REQUEST);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
