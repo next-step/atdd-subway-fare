@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.LineSectionRequest;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -292,7 +293,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int fare, int distance, int duration) {
-        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, fare, distance, duration);
-        return LineSteps.지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
+        LineRequest lineRequest = LineRequest.of(name, color, fare);
+        SectionRequest sectionRequest = SectionRequest.of(upStation, downStation, distance, duration);
+        LineSectionRequest lineSectionRequest = LineSectionRequest.of(lineRequest, sectionRequest);
+        return LineSteps.지하철_노선_생성_요청(관리자, lineSectionRequest).jsonPath().getLong("id");
     }
 }

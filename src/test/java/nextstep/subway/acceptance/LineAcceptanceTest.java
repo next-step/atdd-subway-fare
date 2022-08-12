@@ -2,6 +2,8 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.LineSectionRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -23,7 +25,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청(관리자, 구간이_포함되지않은_노선_생성("2호선", "green", 0));
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -41,8 +43,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        지하철_노선_생성_요청(관리자, "2호선", "green");
-        지하철_노선_생성_요청(관리자, "3호선", "orange");
+        지하철_노선_생성_요청(관리자, 구간이_포함되지않은_노선_생성("2호선", "green", 0));
+        지하철_노선_생성_요청(관리자, 구간이_포함되지않은_노선_생성("3호선", "orange", 500));
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
@@ -61,7 +63,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, 구간이_포함되지않은_노선_생성("2호선", "green", 0));
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
@@ -80,7 +82,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, 구간이_포함되지않은_노선_생성("2호선", "green", 0));
 
         // when
         지하철_노선_수정_요청(관리자, createResponse.header("location"));
@@ -100,7 +102,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, 구간이_포함되지않은_노선_생성("2호선", "green", 0));
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_삭제_요청(관리자, createResponse.header("location"));
@@ -108,4 +110,9 @@ class LineAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
+
+    private LineSectionRequest 구간이_포함되지않은_노선_생성(String name, String color, int fare) {
+        return LineSectionRequest.from(LineRequest.of(name, color, fare));
+    }
+
 }

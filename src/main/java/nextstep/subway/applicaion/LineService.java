@@ -2,6 +2,7 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
+import nextstep.subway.applicaion.dto.LineSectionRequest;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Distance;
@@ -28,19 +29,26 @@ public class LineService {
     }
 
     @Transactional
-    public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), Fare.from(request.getFare())));
-        if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
-            Station upStation = stationService.findById(request.getUpStationId());
-            Station downStation = stationService.findById(request.getDownStationId());
+    public LineResponse saveLine(LineSectionRequest lineSectionRequest) {
+        LineRequest lineRequest = lineSectionRequest.getLineRequest();
+        SectionRequest sectionRequest = lineSectionRequest.getSectionRequest();
+
+        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor(), Fare.from(lineRequest.getFare())));
+        if (validateSectionRequest(sectionRequest)) {
+            Station upStation = stationService.findById(sectionRequest.getUpStationId());
+            Station downStation = stationService.findById(sectionRequest.getDownStationId());
             line.addSection(new Line.SectionBuilder()
                     .upStation(upStation)
                     .downStation(downStation)
-                    .distance(Distance.from(request.getDistance()))
-                    .duration(Duration.from(request.getDuration()))
+                    .distance(Distance.from(sectionRequest.getDistance()))
+                    .duration(Duration.from(sectionRequest.getDuration()))
                     .build());
         }
         return LineResponse.of(line);
+    }
+
+    private boolean validateSectionRequest(SectionRequest sectionRequest) {
+        return sectionRequest != null && sectionRequest.getUpStationId() != null && sectionRequest.getDownStationId() != null && sectionRequest.getDistance() != 0;
     }
 
     public List<Line> findLines() {

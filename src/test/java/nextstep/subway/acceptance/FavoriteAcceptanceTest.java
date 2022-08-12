@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.LineSectionRequest;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,9 +49,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 0, 10, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 1_000, 10, 10);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 500, 2, 2);
+        이호선 = 구간이_포함된_지하철_노선_생성_요청("2호선", "green", 0, 교대역, 강남역, 10, 10);
+        신분당선 = 구간이_포함된_지하철_노선_생성_요청("신분당선", "red", 1_000, 강남역, 양재역, 10, 10);
+        삼호선 = 구간이_포함된_지하철_노선_생성_요청("3호선", "orange", 500, 교대역, 남부터미널역, 2, 2);
 
         SectionRequest sectionRequest = SectionRequest.of(남부터미널역, 양재역, 3, 3);
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, sectionRequest);
@@ -77,9 +78,13 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         즐겨찾기_삭제됨(deleteResponse);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int fare, int distance, int duration) {
-        LineRequest lineRequest = LineRequest.of(name, color, upStation, downStation, fare, distance, duration);
-        return LineSteps.지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
+    private Long 구간이_포함된_지하철_노선_생성_요청(String name, String color, int fare, Long upStation, Long downStation, int distance, int duration) {
+        LineRequest lineRequest = LineRequest.of(name, color, fare);
+        SectionRequest sectionRequest = SectionRequest.of(upStation, downStation, distance, duration);
+
+        LineSectionRequest lineSectionRequest = LineSectionRequest.of(lineRequest, sectionRequest);
+
+        return LineSteps.지하철_노선_생성_요청(관리자, lineSectionRequest).jsonPath().getLong("id");
     }
 
 }
