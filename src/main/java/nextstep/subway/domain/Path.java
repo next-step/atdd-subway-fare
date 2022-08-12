@@ -1,10 +1,8 @@
 package nextstep.subway.domain;
 
 import nextstep.subway.util.discount.DiscountAgePolicy;
-import nextstep.subway.util.DiscountPolicy;
 import nextstep.subway.util.fare.FarePolicy;
 import nextstep.subway.util.fare.NormalFarePolicy;
-import nextstep.subway.util.UserDiscountPolicyByAge;
 
 import java.util.List;
 
@@ -12,12 +10,12 @@ public class Path {
 
     private Sections sections;
     private FarePolicy farePolicy;
-    private DiscountPolicy discountPolicy;
+    private DiscountAgePolicy discountAgePolicy;
 
     public Path(Sections sections, DiscountAgePolicy discountAgePolicy) {
         this.sections = sections;
         this.farePolicy = new NormalFarePolicy();
-        this.discountPolicy = new UserDiscountPolicyByAge(discountAgePolicy);
+        this.discountAgePolicy = discountAgePolicy;
     }
 
     public Sections getSections() {
@@ -43,7 +41,7 @@ public class Path {
     }
 
     private int discountFare(int totalFare) {
-        return discountPolicy.discount(totalFare);
+        return discountAgePolicy.discount(totalFare);
     }
 
     public List<Station> getStations() {

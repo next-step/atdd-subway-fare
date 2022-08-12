@@ -25,6 +25,15 @@ class DiscountAgePolicyTest {
         assertThat(findUserDiscountAgePolicy).isExactlyInstanceOf(discountAgePolicy.getClass());
     }
 
+    @DisplayName("나이대별로 할인 되는 금액이 다르다.")
+    @ParameterizedTest
+    @MethodSource("variousAgeMember")
+    void discountPolicyByAge(DiscountAgePolicy discountAgePolicy, int fare, int expectedFare) {
+        int discountedFare = discountAgePolicy.discount(fare);
+
+        assertThat(discountedFare).isEqualTo(expectedFare);
+    }
+
     private static Stream<Arguments> ageBoundary() {
         return Stream.of(
                 Arguments.of(6, new Children()),
@@ -32,6 +41,14 @@ class DiscountAgePolicyTest {
                 Arguments.of(13, new Teenager()),
                 Arguments.of(18, new Teenager()),
                 Arguments.of(19, new Adult())
+        );
+    }
+
+    private static Stream<Arguments> variousAgeMember() {
+        return Stream.of(
+                Arguments.of(new Children(), 1_250, 800),
+                Arguments.of(new Teenager(), 1_250, 1_070),
+                Arguments.of(new Adult(), 1_250, 1_250)
         );
     }
 }
