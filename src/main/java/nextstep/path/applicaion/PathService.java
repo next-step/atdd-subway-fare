@@ -36,6 +36,6 @@ public class PathService {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stations, path.extractDistance(), path.extractDuration());
+        return new PathResponse(stations, path, 1250);
     }
 }

@@ -77,7 +77,8 @@ class PathDocumentationTest extends DocumentationTest {
                         fieldWithPath("stations[].id").description("경로 조회 결과 역 id"),
                         fieldWithPath("stations[].name").description("경로 조회 결과 역 이름"),
                         fieldWithPath("distance").description("총 거리"),
-                        fieldWithPath("duration").description("총 소요시간")
+                        fieldWithPath("duration").description("총 시간"),
+                        fieldWithPath("fare").description("총 요금")
                 )
         );
 
@@ -85,6 +86,6 @@ class PathDocumentationTest extends DocumentationTest {
         var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DISTANCE, 문서_정보);
 
         // then
-        경로_조회_정보가_일치한다(response, 13, 12, 남부터미널역, 양재역, 강남역);
+        경로_조회_정보가_일치한다(response, 13, 12, 1350, 남부터미널역, 양재역, 강남역);
     }
 }
