@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
+    public static final int DEFAULT_SURCHARGE = 0;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -156,5 +157,14 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int findSurCharge() {
+        return sections.stream()
+                .map(section -> section.getLine())
+                .distinct()
+                .mapToInt(Line::getSurCharge)
+                .max()
+                .orElseGet(() -> DEFAULT_SURCHARGE);
     }
 }

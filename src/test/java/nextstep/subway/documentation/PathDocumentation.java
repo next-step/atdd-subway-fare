@@ -26,10 +26,10 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역")
                 ), 10
                 , 5
-                , 1250
+                , 0
         );
 
-        when(pathService.findPath(1L, 2L, PathType.DISTANCE)).thenReturn(pathResponse);
+        when(pathService.findPath(1L, 2L, PathType.DISTANCE, 20)).thenReturn(pathResponse);
 
         given(spec, "path")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
