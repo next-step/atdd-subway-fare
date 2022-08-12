@@ -1,15 +1,19 @@
 package nextstep.path.domain;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class FareCalculator {
     private static final int BASE_FARE_DISTANCE = 10;
     private static final int LONG_DISTANCE = 50;
+
     private static final int BASE_FARE = 1250;
     private static final int BONUS_FARE = 100;
 
     private static final int SHORT_DISTANCE_BONUS_INTERVAL = 5;
     private static final int LONG_DISTANCE_BONUS_INTERVAL = 8;
 
-    public int fare(int distance) {
+    public int calculateFare(int distance) {
         return BASE_FARE + calculateOverFare(distance);
     }
 

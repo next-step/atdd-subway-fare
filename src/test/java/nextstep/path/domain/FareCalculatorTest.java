@@ -25,7 +25,7 @@ class FareCalculatorTest {
             "50,2150", "57,2150", // 50km 부터 8km 마다 100원 추가
             "58,2250", "65,2250"
     })
-    void fare(int distance, int expectedFare) {
-        assertThat(calculator.fare(distance)).isEqualTo(expectedFare);
+    void calculateFare(int distance, int expectedFare) {
+        assertThat(calculator.calculateFare(distance)).isEqualTo(expectedFare);
     }
 }

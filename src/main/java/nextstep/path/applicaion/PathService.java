@@ -19,10 +19,12 @@ import java.util.stream.Collectors;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
+    private final FareCalculator fareCalculator;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.fareCalculator = fareCalculator;
     }
 
     public PathResponse findPath(Long source, Long target, PathSearchType searchType) {
@@ -34,7 +36,7 @@ public class PathService {
         Path path = subwayMap.findPath(upStation.getId(), downStation.getId());
         List<StationResponse> stations = createStationResponses(path);
 
-        int fare = calculateFare(source, target, lines);
+        int fare = calculateFare(lines, source, target);
 
         return new PathResponse(stations, path, fare);
     }
@@ -46,11 +48,11 @@ public class PathService {
                 .collect(Collectors.toList());
     }
 
-    private int calculateFare(Long source, Long target, List<Line> lines) {
+    private int calculateFare(List<Line> lines, Long source, Long target) {
         int shortestDistance = new SubwayMap(lines, PathSearchType.DISTANCE)
                 .findPath(source, target)
                 .extractDistance();
 
-        return new FareCalculator().fare(shortestDistance);
+        return fareCalculator.calculateFare(shortestDistance);
     }
 }
