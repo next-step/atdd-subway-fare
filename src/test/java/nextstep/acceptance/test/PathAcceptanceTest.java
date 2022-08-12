@@ -69,6 +69,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DURATION, given());
 
         // then
-        경로_조회_정보가_일치한다(response, 16, 11, 1450, 남부터미널역, 교대역, 강남역);
+        경로_조회_정보가_일치한다(response, 16, 11, 1350, 남부터미널역, 교대역, 강남역);
     }
 }
