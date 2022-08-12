@@ -8,6 +8,8 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.fee.DistanceFeePolicy;
+import nextstep.subway.domain.fee.FeePolicy;
 import nextstep.subway.domain.path.PathBaseCode;
 import nextstep.subway.domain.path.PathFinder;
 
@@ -27,8 +29,8 @@ public class PathService {
 		List<Line> lines = lineService.findLines();
 		PathFinder pathFinder = pathBaseCode.getPathFinderClass(lines);
 		Path path = pathFinder.findPath(upStation, downStation);
-
-		return PathResponse.of(path);
+		FeePolicy feePolicy = new DistanceFeePolicy(path.extractDistance());
+		return PathResponse.of(path, feePolicy.calculateFee());
 	}
 
 }
