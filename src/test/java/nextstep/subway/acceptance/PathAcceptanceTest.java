@@ -117,7 +117,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             ExtractableResponse<Response> responseByDuration = 두_역의_경로_조회를_요청(출발역, 도착역, "DURATION");
 
             // then
-            assertThat(responseByDiㅈstance.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+            assertThat(responseByDistance.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             assertThat(responseByDuration.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         }
     }
