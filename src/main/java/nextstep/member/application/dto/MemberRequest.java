@@ -1,20 +1,21 @@
 package nextstep.member.application.dto;
 
+import nextstep.common.EntitySupplier;
 import nextstep.member.domain.Member;
 
-public class MemberRequest {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+public class MemberRequest implements EntitySupplier<Member> {
+    @NotNull
+    @Email
     private String email;
+    @NotNull
     private String password;
+    @NotNull
+    @Min(1)
     private Integer age;
-
-    public MemberRequest() {
-    }
-
-    public MemberRequest(String email, String password, Integer age) {
-        this.email = email;
-        this.password = password;
-        this.age = age;
-    }
 
     public String getEmail() {
         return email;
@@ -28,7 +29,8 @@ public class MemberRequest {
         return age;
     }
 
-    public Member toMember() {
+    @Override
+    public Member toEntity() {
         return new Member(email, password, age);
     }
 }

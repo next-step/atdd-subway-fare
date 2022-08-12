@@ -11,15 +11,14 @@ public class Member {
     private String email;
     private String password;
     private Integer age;
+    @Embedded
+    private Favorites favorites = new Favorites();
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "MEMBER_ROLE",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id")
-    )
+    @CollectionTable(name = "MEMBER_ROLE", joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
     @Column(name = "role")
     private List<String> roles;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password, Integer age) {
@@ -34,6 +33,20 @@ public class Member {
         this.password = password;
         this.age = age;
         this.roles = roles;
+    }
+
+    public void update(Member member) {
+        this.email = member.email;
+        this.password = member.password;
+        this.age = member.age;
+    }
+
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+    }
+
+    public void deleteFavorite(Long id) {
+        favorites.delete(id);
     }
 
     public Long getId() {
@@ -56,9 +69,7 @@ public class Member {
         return roles;
     }
 
-    public void update(Member member) {
-        this.email = member.email;
-        this.password = member.password;
-        this.age = member.age;
+    public List<Favorite> getFavorites() {
+        return favorites.getFavorites();
     }
 }
