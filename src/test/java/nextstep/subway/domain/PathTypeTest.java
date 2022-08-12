@@ -14,7 +14,7 @@ class PathTypeTest {
 
     @BeforeEach
     void setUp() {
-        section = new Section(null, GANGNAM, YEOKSAM, 10, 3);
+        section = Section.create(null, GANGNAM, YEOKSAM, 10, 3);
     }
 
     @Test
