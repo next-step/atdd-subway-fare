@@ -40,10 +40,15 @@ public class Path {
 
     private int calculateFare(int distance) {
         FareStrategy fareStrategy = FareType.findStrategy(distance);
-        return fareStrategy.calculate(distance);
+        int extraFare = extractMaxExtraFare();
+        return fareStrategy.calculateWithAge(distance, age, extraFare);
     }
 
-    public int getMaxExtraFare() {
+    public int extractMaxExtraFare() {
         return sections.getMaxExtraFare();
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

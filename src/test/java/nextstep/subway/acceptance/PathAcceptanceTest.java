@@ -98,7 +98,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given
         회원_생성_요청(email, PASSWORD, age);
         String 로그인_토큰 = 로그인_되어_있음(email, PASSWORD);
-        int extraFare = 600;
 
         // when
         var response = 두_역의_최단_거리_경로_조회를_요청(로그인_토큰, 교대역, 양재역);
@@ -168,8 +167,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private static Stream<Arguments> user_info_duration() {
         return Stream.of(
-                Arguments.of("test1@email.com", 10, 1800),
-                Arguments.of("test2@email.com", 13, 2070),
+                Arguments.of("test1@email.com", 10, 1300),
+                Arguments.of("test2@email.com", 13, 1870),
                 Arguments.of("test3@email.com", 19, 2250)
         );
     }

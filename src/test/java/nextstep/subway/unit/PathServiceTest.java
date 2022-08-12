@@ -78,7 +78,7 @@ public class PathServiceTest {
         lineRepository.save(신분당선);
         lineRepository.save(삼호선);
 
-        user = new User("test", "test1234", List.of(RoleType.ROLE_MEMBER.name()));
+        user = new User("test", "test1234", 20, List.of(RoleType.ROLE_MEMBER.name()));
     }
 
     @DisplayName("최단경로를 거리 기준으로 찾는다")

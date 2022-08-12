@@ -35,7 +35,7 @@ public class PathTest {
         Path path = new Path(sections);
 
         // when
-        int extraFare = path.getMaxExtraFare();
+        int extraFare = path.extractMaxExtraFare();
 
         // then
         assertThat(extraFare).isEqualTo(1000);

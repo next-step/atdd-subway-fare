@@ -40,7 +40,7 @@ public class FareStrategyTest {
         BasicStrategy strategy = new BasicStrategy();
 
         // when
-        int resultFare = strategy.calculateWithAge(distance, age);
+        int resultFare = strategy.calculateWithAge(distance, age, 0);
 
         // then
         assertThat(resultFare).isEqualTo(fare);
@@ -81,7 +81,7 @@ public class FareStrategyTest {
         MiddleStrategy strategy = new MiddleStrategy();
 
         // when
-        int resultFare = strategy.calculateWithAge(distance, age);
+        int resultFare = strategy.calculateWithAge(distance, age, 0);
 
         // then
         assertThat(resultFare).isEqualTo(fare);
@@ -122,7 +122,7 @@ public class FareStrategyTest {
         LongStrategy strategy = new LongStrategy();
 
         // when
-        int resultFare = strategy.calculateWithAge(distance, age);
+        int resultFare = strategy.calculateWithAge(distance, age, 0);
 
         // then
         assertThat(resultFare).isEqualTo(fare);

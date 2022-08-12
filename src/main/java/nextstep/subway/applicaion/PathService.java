@@ -28,6 +28,7 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path path = subwayMap.findPath(upStation, downStation, pathCondition.getEdgeInitiator());
+        path.setAge(user.getAge());
         if (pathCondition == PathCondition.DURATION) {
             int shortestDistance = subwayMap.findShortestPathDistance(upStation, downStation);
             path.setShortestDistance(shortestDistance);
