@@ -1,8 +1,11 @@
 package nextstep.subway.util.discount;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AgeFactory {
 
-    public static DiscountAgePolicy findUsersAge(Integer age) {
+    public DiscountAgePolicy findUsersAge(Integer age) {
         if (Children.support(age)) {
             return new Children();
         }

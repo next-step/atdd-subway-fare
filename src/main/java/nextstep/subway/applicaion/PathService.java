@@ -21,11 +21,13 @@ public class PathService {
     private LineService lineService;
     private StationService stationService;
     private MemberService memberService;
+    private AgeFactory ageFactory;
 
-    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
+    public PathService(LineService lineService, StationService stationService, MemberService memberService, AgeFactory ageFactory) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.memberService = memberService;
+        this.ageFactory = ageFactory;
     }
 
     public PathResponse findPath(Long source, Long target, UserDetails user) {
@@ -47,6 +49,6 @@ public class PathService {
         String loginEmail = (String) user.getUsername();
         MemberResponse loginMember = memberService.findMember(loginEmail);
 
-        return AgeFactory.findUsersAge(loginMember.getAge());
+        return ageFactory.findUsersAge(loginMember.getAge());
     }
 }

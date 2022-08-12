@@ -9,18 +9,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class DiscountAgePolicyTest {
+
+    @Autowired
+    private AgeFactory ageFactory;
 
     @DisplayName("나이의 경계 값 테스트")
     @ParameterizedTest
     @MethodSource("ageBoundary")
     void ageBoundaryTest(int userAge, DiscountAgePolicy discountAgePolicy) {
-        DiscountAgePolicy findUserDiscountAgePolicy = AgeFactory.findUsersAge(userAge);
+        DiscountAgePolicy findUserDiscountAgePolicy = ageFactory.findUsersAge(userAge);
 
         assertThat(findUserDiscountAgePolicy).isExactlyInstanceOf(discountAgePolicy.getClass());
     }
