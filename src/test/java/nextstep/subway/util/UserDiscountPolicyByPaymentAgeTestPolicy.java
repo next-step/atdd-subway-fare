@@ -9,14 +9,14 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDiscountPolicyByAgeTest {
+class UserDiscountPolicyByPaymentAgeTestPolicy {
 
 
     @DisplayName("나이대별로 할인 되는 금액이 다르다.")
     @ParameterizedTest
     @MethodSource("variousAgeMember")
-    void discountPolicyByAge(Age age, int fare, int expectedFare) {
-        DiscountPolicy discountPolicy = new UserDiscountPolicyByAge(age);
+    void discountPolicyByAge(DiscountAgePolicy discountAgePolicy, int fare, int expectedFare) {
+        DiscountPolicy discountPolicy = new UserDiscountPolicyByAge(discountAgePolicy);
 
         int discountedFare = discountPolicy.discount(fare);
 
@@ -25,9 +25,9 @@ class UserDiscountPolicyByAgeTest {
 
     private static Stream<Arguments> variousAgeMember() {
         return Stream.of(
-                Arguments.of(new Children(), 1_250, 800),
-                Arguments.of(new Teenager(), 1_250, 1_070),
-                Arguments.of(new Adult(), 1_250, 1_250)
+                Arguments.of(new DiscountChildren(), 1_250, 800),
+                Arguments.of(new DiscountTeenager(), 1_250, 1_070),
+                Arguments.of(new DiscountAdult(), 1_250, 1_250)
         );
     }
 }

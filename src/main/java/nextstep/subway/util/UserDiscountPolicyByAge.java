@@ -2,14 +2,14 @@ package nextstep.subway.util;
 
 public class UserDiscountPolicyByAge implements DiscountPolicy {
 
-    private Age age;
+    private DiscountAgePolicy discountAgePolicy;
 
-    public UserDiscountPolicyByAge(Age age) {
-        this.age = age;
+    public UserDiscountPolicyByAge(DiscountAgePolicy discountAgePolicy) {
+        this.discountAgePolicy = discountAgePolicy;
     }
 
     @Override
     public int discount(int fare) {
-        return age.discount(fare);
+        return discountAgePolicy.discount(fare);
     }
 }

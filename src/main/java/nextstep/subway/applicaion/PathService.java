@@ -7,9 +7,9 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.util.Adult;
-import nextstep.subway.util.Age;
-import nextstep.subway.util.AgeFactory;
+import nextstep.subway.util.DiscountAdult;
+import nextstep.subway.util.DiscountAgePolicy;
+import nextstep.subway.util.DiscountAgeFactory;
 import org.springframework.stereotype.Service;
 import support.auth.userdetails.AnonymousUser;
 import support.auth.userdetails.UserDetails;
@@ -39,14 +39,14 @@ public class PathService {
         return PathResponse.of(path);
     }
 
-    private Age findLoginMemberAge(UserDetails user) {
+    private DiscountAgePolicy findLoginMemberAge(UserDetails user) {
         if (user instanceof AnonymousUser) {
-            return new Adult();
+            return new DiscountAdult();
         }
 
         String loginEmail = (String) user.getUsername();
         MemberResponse loginMember = memberService.findMember(loginEmail);
 
-        return AgeFactory.findUsersAge(loginMember.getAge());
+        return DiscountAgeFactory.findUsersAge(loginMember.getAge());
     }
 }

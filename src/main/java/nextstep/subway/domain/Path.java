@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.util.Age;
+import nextstep.subway.util.DiscountAgePolicy;
 import nextstep.subway.util.DiscountPolicy;
 import nextstep.subway.util.FarePolicy;
 import nextstep.subway.util.NormalFarePolicy;
@@ -14,10 +14,10 @@ public class Path {
     private FarePolicy farePolicy;
     private DiscountPolicy discountPolicy;
 
-    public Path(Sections sections, Age age) {
+    public Path(Sections sections, DiscountAgePolicy discountAgePolicy) {
         this.sections = sections;
         this.farePolicy = new NormalFarePolicy();
-        this.discountPolicy = new UserDiscountPolicyByAge(age);
+        this.discountPolicy = new UserDiscountPolicyByAge(discountAgePolicy);
     }
 
     public Sections getSections() {

@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.util.Age;
+import nextstep.subway.util.DiscountAgePolicy;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -15,7 +15,7 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, Age age) {
+    public Path findPath(Station source, Station target, DiscountAgePolicy discountAgePolicy) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -52,6 +52,6 @@ public class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections), age);
+        return new Path(new Sections(sections), discountAgePolicy);
     }
 }

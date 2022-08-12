@@ -1,17 +1,17 @@
 package nextstep.subway.util;
 
-public class AgeFactory {
+public class DiscountAgeFactory {
 
-    public static Age findUsersAge(Integer age) {
+    public static DiscountAgePolicy findUsersAge(Integer age) {
         if (isChildren(age)) {
-            return new Children();
+            return new DiscountChildren();
         }
 
         if (isTeenager(age)) {
-            return new Teenager();
+            return new DiscountTeenager();
         }
 
-        return new Adult();
+        return new DiscountAdult();
     }
 
     private static boolean isChildren(Integer age) {

@@ -8,9 +8,9 @@ import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.util.Adult;
-import nextstep.subway.util.Children;
-import nextstep.subway.util.Teenager;
+import nextstep.subway.util.DiscountAdult;
+import nextstep.subway.util.DiscountChildren;
+import nextstep.subway.util.DiscountTeenager;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,7 +65,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+        Path path = subwayMap.findPath(교대역, 양재역, new DiscountAdult());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -78,7 +78,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, new Adult());
+        Path path = subwayMap.findPath(양재역, 교대역, new DiscountAdult());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
@@ -92,7 +92,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, new Adult());
+        Path path = subwayMap.findPath(양재역, 교대역, new DiscountAdult());
 
         // then
         int distance = path.extractDistance();
@@ -124,7 +124,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 모란역, new Adult());
+        Path path = subwayMap.findPath(교대역, 모란역, new DiscountAdult());
 
         // then
         int distance = path.extractDistance();
@@ -157,7 +157,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(강남역, 모란역, new Adult());
+        Path path = subwayMap.findPath(강남역, 모란역, new DiscountAdult());
 
         // then
         int distance = path.extractDistance();
@@ -201,7 +201,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+        Path path = subwayMap.findPath(교대역, 양재역, new DiscountAdult());
 
         // then
         int lineFare = path.calculateMostExpensiveLine();
@@ -231,7 +231,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 남부터미널역, new Adult());
+        Path path = subwayMap.findPath(교대역, 남부터미널역, new DiscountAdult());
 
         // then
         assertAll(
@@ -265,7 +265,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Children());
+        Path path = subwayMap.findPath(교대역, 양재역, new DiscountChildren());
 
         // then
         assertAll(
@@ -284,7 +284,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Teenager());
+        Path path = subwayMap.findPath(교대역, 양재역, new DiscountTeenager());
 
         // then
         assertAll(
@@ -303,7 +303,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+        Path path = subwayMap.findPath(교대역, 양재역, new DiscountAdult());
 
         // then
         assertAll(
