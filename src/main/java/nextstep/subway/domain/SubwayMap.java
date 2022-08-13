@@ -18,6 +18,10 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target, PathType type) {
+        if (Objects.equals(source, target)) {
+            throw new DomainException(DomainExceptionType.EQUAL_SOURCE_TARGET_STATION);
+        }
+
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
