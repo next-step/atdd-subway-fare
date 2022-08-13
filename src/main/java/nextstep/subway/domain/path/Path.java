@@ -1,4 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.path;
+
+import nextstep.subway.domain.Sections;
+import nextstep.subway.domain.Station;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.domain.path.DistancePathStrategy;
