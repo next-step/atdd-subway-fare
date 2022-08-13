@@ -23,4 +23,10 @@ class FareManagerTest {
         assertThat(FareManager.fare(distance)).isEqualTo(expected);
     }
 
+    @DisplayName("50km 초과시 기본운임과 50km 이하의 초과운임과 8km 마다 100원이 추가된다.")
+    @ParameterizedTest(name = "#{index} - 거리={0}km, 추가요금={1}")
+    @CsvSource(value = {"51:2150", "59:2250", "67:2350"}, delimiter = ':')
+    void fare_extra_over_fifty(int distance, int expected) {
+        assertThat(FareManager.fare(distance)).isEqualTo(expected);
+    }
 }
