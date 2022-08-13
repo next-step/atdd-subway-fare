@@ -2,6 +2,8 @@ package nextstep.subway.domain.path.finder;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import nextstep.common.exception.CustomException;
+import nextstep.common.exception.PathErrorMessage;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.SectionEdge;
@@ -25,6 +27,8 @@ public abstract class PathFinderImpl implements PathFinder {
 
   @Override
   public Path findPath(Station source, Station target) {
+    validateStationEquals(source, target);
+
     SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
     addStationGraph(graph);
@@ -34,6 +38,12 @@ public abstract class PathFinderImpl implements PathFinder {
     List<Section> sections = getShortestPath(source, target, graph);
 
     return new Path(new Sections(sections));
+  }
+
+  private void validateStationEquals(Station source, Station target) {
+    if (source.equals(target)) {
+      throw new CustomException(PathErrorMessage.PATH_DUPLICATION);
+    }
   }
 
   // 지하철 역(정점)을 등록

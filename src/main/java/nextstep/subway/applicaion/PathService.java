@@ -26,20 +26,11 @@ public class PathService {
     public PathResponse findPath(Long source, Long target, PathType pathType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
-
-        validateStationEquals(upStation, downStation);
-
         List<Line> lines = lineService.findLines();
 
         PathFinder pathFinder = pathType.getPathFinder(lines);
         Path path = pathFinder.findPath(upStation, downStation);
 
         return PathResponse.of(path);
-    }
-
-    private void validateStationEquals(Station source, Station target) {
-        if (source.equals(target)) {
-            throw new CustomException(PathErrorMessage.PATH_DUPLICATION);
-        }
     }
 }
