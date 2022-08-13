@@ -26,6 +26,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 양재시민의숲역;
+    private Long 청계산입구역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
@@ -35,7 +37,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 남부터미널역  --- *3호선* --- 양재 --- *신분당선* --- 양재시민의숲 --- *신분당선* --- 청계산입구
      */
     @BeforeEach
     public void setUp() {
@@ -44,6 +46,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         교대역 = 지하철역_생성_요청(관리자, "교대역").jsonPath().getLong("id");
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
+        양재시민의숲역 = 지하철역_생성_요청(관리자, "양재시민의숲역").jsonPath().getLong("id");
+        청계산입구역 = 지하철역_생성_요청(관리자, "청계산입구역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2);
@@ -51,6 +55,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 3);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 양재시민의숲역, 7, 3));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재시민의숲역, 청계산입구역, 50, 15));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -100,10 +106,48 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
+    @DisplayName("두 역의 경로 조회시 요금 반환 (10km 이하)")
+    @Test
+    void findFaresForPathWithDistanceLess10km() {
+        // when
+        var response = 두_역의_경로_조회를_요청(교대역, 양재역, "DISTANCE");
+
+        // then
+        // 기본요금 1,250원
+        거리와_요금_확인(response, 5, 1250);
+    }
+
+    @DisplayName("두 역의 경로 조회시 요금 반환 (10km 초과 50km 이하)")
+    @Test
+    void findFaresForPathWithDistanceLess50km() {
+        // when
+        var response = 두_역의_경로_조회를_요청(강남역, 양재시민의숲역, "DISTANCE");
+
+        // then
+        // 기본요금 + 10km 초과시 5km 마다 100원
+        거리와_요금_확인(response, 17, 1250 + 200);
+    }
+
+    @DisplayName("두 역의 경로 조회시 요금 반환 (50km 초과)")
+    @Test
+    void findFaresForPathWithDistanceExcess50km() {
+        // when
+        var response = 두_역의_경로_조회를_요청(교대역, 청계산입구역, "DISTANCE");
+
+        // then
+        // 기본요금 + 10km 초과시 5km 마다 100원 + 50km 초과시 8km 마다 100원
+        거리와_요금_확인(response, 62, 1250 + 800 + 100);
+    }
+
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stations);
+    }
+
+    private void 거리와_요금_확인(ExtractableResponse<Response> response, int distance, int fare) {
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String type) {
