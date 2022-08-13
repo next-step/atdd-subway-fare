@@ -35,6 +35,6 @@ public class PathResponse {
     }
 
     public long getDuration() {
-        return 0L;
+        return duration;
     }
 }
