@@ -19,7 +19,7 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @Test
-    @DisplayName("최단거리 기준 경로 조회 API")
+    @DisplayName("경로 조회 API")
     void pathDistance() {
         PathResponse pathResponse = new PathResponse(
                 List.of(
@@ -30,21 +30,6 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(any())).thenReturn(pathResponse);
 
-        두_역의_경로를_조회요청(givenRequestSpecification("pathDuration"), 1L, 2L, "DISTANCE");
-    }
-
-    @Test
-    @DisplayName("최소시간 기준 경로 조회 API")
-    void pathDuration() {
-        PathResponse pathResponse = new PathResponse(
-                List.of(
-                        new StationResponse(1L, "강남역"),
-                        new StationResponse(2L, "역삼역")
-                ), 10, 8
-        );
-
-        when(pathService.findPath(any())).thenReturn(pathResponse);
-
-        두_역의_경로를_조회요청(givenRequestSpecification("pathDuration"), 1L, 2L, "DURATION");
+        두_역의_경로를_조회요청(givenRequestSpecification("paths-get"), 1L, 2L, "DISTANCE");
     }
 }
