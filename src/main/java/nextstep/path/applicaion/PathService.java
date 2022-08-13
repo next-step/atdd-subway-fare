@@ -3,7 +3,6 @@ package nextstep.path.applicaion;
 import nextstep.line.application.LineService;
 import nextstep.line.domain.Line;
 import nextstep.path.applicaion.dto.PathResponse;
-import nextstep.path.domain.FareCalculator;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.PathSearchType;
 import nextstep.path.domain.SubwayMap;
@@ -19,12 +18,10 @@ import java.util.stream.Collectors;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final FareCalculator fareCalculator;
 
-    public PathService(LineService lineService, StationService stationService, FareCalculator fareCalculator) {
+    public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.fareCalculator = fareCalculator;
     }
 
     public PathResponse findPath(Long source, Long target, PathSearchType searchType) {
@@ -32,27 +29,17 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
-        SubwayMap subwayMap = new SubwayMap(lines, searchType);
-        Path path = subwayMap.findPath(upStation.getId(), downStation.getId());
-        List<StationResponse> stations = createStationResponses(path);
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPath(upStation.getId(), downStation.getId(), searchType);
+        List<StationResponse> stations = createStationResponses(path.getStations());
 
-        int fare = calculateFare(lines, source, target);
-
-        return new PathResponse(stations, path, fare);
+        return new PathResponse(stations, path);
     }
 
-    private List<StationResponse> createStationResponses(Path path) {
-        return stationService.findAllStationsById(path.getStations())
+    private List<StationResponse> createStationResponses(List<Long> stationIds) {
+        return stationService.findAllStationsById(stationIds)
                 .stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-    }
-
-    private int calculateFare(List<Line> lines, Long source, Long target) {
-        int shortestDistance = new SubwayMap(lines, PathSearchType.DISTANCE)
-                .findPath(source, target)
-                .extractDistance();
-
-        return fareCalculator.calculateFare(shortestDistance);
     }
 }
