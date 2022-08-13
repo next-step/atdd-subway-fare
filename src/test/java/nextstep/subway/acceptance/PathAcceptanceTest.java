@@ -79,10 +79,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_거리_경로_조회를_요청(강남역 , 역삼역);
 
         // then
-        최단_경로_및_요금_계산(경로_조회, new Long[] { 교대역, 남부터미널역, 양재역 }, 1250);
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 강남역, 역삼역 }, 1250);
     }
 
     /**
