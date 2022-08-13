@@ -51,6 +51,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
     }
 
+    /**
+     * Feature: 지하철 경로 검색
+     *
+     *   Scenario: 두 역의 최소 시간 경로를 조회
+     *     Given 지하철역이 등록되어있음
+     *     And 지하철 노선이 등록되어있음
+     *     And 지하철 노선에 지하철역이 등록되어있음
+     *     When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     *     Then 최소 시간 기준 경로를 응답
+     *     And 총 거리와 소요 시간을 함께 응답함
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
@@ -63,6 +74,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
     }
 
+    /**
+     * Feature: 지하철 경로 검색
+     *
+     *   Scenario: 두 역의 최소 시간 경로를 조회
+     *     Given 지하철역이 등록되어있음
+     *     And 지하철 노선이 등록되어있음
+     *     And 지하철 노선에 지하철역이 등록되어있음
+     *     When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     *     Then 최소 시간 기준 경로를 응답
+     *     And 총 거리와 소요 시간을 함께 응답함
+     */
     @DisplayName("두 역의 최단 소요시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
