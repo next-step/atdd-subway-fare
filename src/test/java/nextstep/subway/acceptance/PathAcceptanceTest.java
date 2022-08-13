@@ -86,7 +86,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_경로_조회를_요청(교대역, 수유역, type.name());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @DisplayName("동일한 역에 대하여 경로조회 실패")
