@@ -7,7 +7,8 @@ public class FareManager {
     private static final List<FarePolicy> policies;
 
     static {
-        policies = List.of(new DefaultFare());
+        policies = List.of(new DefaultFare(),
+                new ElevenToFiftyExtraFare());
     }
 
     private FareManager() {
