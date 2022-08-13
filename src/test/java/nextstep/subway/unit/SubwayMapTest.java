@@ -5,6 +5,8 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.path.SubwayMap;
+import nextstep.subway.price.DistancePricePolicy;
+import nextstep.subway.price.PricePolicy;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -315,7 +317,9 @@ public class SubwayMapTest {
 
     private void 경로_및_요금_확인(Path path, List<Station> stations, int price) {
         assertThat(path.getStations()).containsExactlyElementsOf(stations);
-        assertThat(path.calculatePrice()).isEqualTo(price);
+
+        PricePolicy pricePolicy = new DistancePricePolicy(path.extractDistance());
+        assertThat(pricePolicy.calculatePrice()).isEqualTo(price);
     }
 
 
