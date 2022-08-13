@@ -19,6 +19,18 @@ public class LineSteps extends AcceptanceTestSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 지하철_추가요금있는_노선_생성_요청(String token, String name, String color, int surCharge) {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("surCharge", String.valueOf(surCharge));
+        return given(token)
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/lines")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
         return given()
                 .when().get("/lines")
