@@ -159,4 +159,13 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int getMaxSurChage() {
+        return sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .mapToInt(Line::getSurCharge)
+                .max()
+                .orElse(0);
+    }
 }
