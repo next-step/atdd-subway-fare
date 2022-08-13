@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import support.auth.authorization.AuthenticationPrincipal;
+import nextstep.subway.domain.LoginUser;
 
 @RestController
 public class PathController {
@@ -18,6 +20,7 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(
+            @AuthenticationPrincipal LoginUser user,
             @RequestParam Long source,
             @RequestParam Long target,
             @RequestParam PathType type) {

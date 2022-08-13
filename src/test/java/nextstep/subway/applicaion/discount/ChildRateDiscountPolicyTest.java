@@ -1,4 +1,4 @@
-package nextstep.subway.domain.discount;
+package nextstep.subway.applicaion.discount;
 
 import nextstep.subway.domain.LoginUser;
 import org.junit.jupiter.api.BeforeEach;
