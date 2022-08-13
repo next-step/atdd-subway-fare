@@ -8,6 +8,8 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.collectingAndThen;
+
 public class SubwayMap {
     private List<Line> lines;
     private WeightStrategy weightStrategy;
@@ -20,14 +22,31 @@ public class SubwayMap {
     public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        // 지하철 역(정점)을 등록
+        initializeStation(graph);
+        initializeSectionEdge(graph);
+
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+
+        return result.getEdgeList().stream()
+                .map(SectionEdge::getSection)
+                .collect(collectingAndThen(Collectors.toList(), Path::new));
+    }
+
+    private void initializeStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
                 .forEach(graph::addVertex);
+    }
 
-        // 지하철 역의 연결 정보(간선)을 등록
+    private void initializeSectionEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+        registerSection(graph);
+        registerReverseSection(graph);
+    }
+
+    private void registerSection(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
@@ -35,8 +54,9 @@ public class SubwayMap {
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, weightStrategy.weight(it));
                 });
+    }
 
-        // 지하철 역의 연결 정보(간선)을 등록
+    private void registerReverseSection(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .map(Section::reverseOf)
@@ -45,15 +65,5 @@ public class SubwayMap {
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, weightStrategy.weight(it));
                 });
-
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
-
-        List<Section> sections = result.getEdgeList().stream()
-                .map(SectionEdge::getSection)
-                .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
     }
 }
