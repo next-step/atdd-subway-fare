@@ -6,4 +6,9 @@ public class Adult implements DiscountAgePolicy {
     public int discount(int fare) {
         return fare;
     }
+
+    @Override
+    public boolean support(int age) {
+        return age >= 19;
+    }
 }

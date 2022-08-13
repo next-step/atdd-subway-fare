@@ -4,7 +4,8 @@ public class Children implements DiscountAgePolicy {
 
     private static final double DISCOUNT_RATE = 0.5;
 
-    public static boolean support(int age) {
+    @Override
+    public boolean support(int age) {
         return age >= 6 && age < 13;
     }
 

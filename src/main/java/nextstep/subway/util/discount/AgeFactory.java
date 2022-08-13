@@ -1,19 +1,20 @@
 package nextstep.subway.util.discount;
 
-import org.springframework.stereotype.Component;
+import java.util.ArrayList;
+import java.util.List;
 
-@Component
 public class AgeFactory {
 
+    private final List<DiscountAgePolicy> agePolicies = new ArrayList<>();
+
+    public void addDiscountAgePolicy(DiscountAgePolicy discountAgePolicy) {
+        agePolicies.add(discountAgePolicy);
+    }
+
     public DiscountAgePolicy findUsersAge(Integer age) {
-        if (Children.support(age)) {
-            return new Children();
-        }
-
-        if (Teenager.support(age)) {
-            return new Teenager();
-        }
-
-        return new Adult();
+        return agePolicies.stream()
+                .filter(discountAgePolicy -> discountAgePolicy.support(age))
+                .findFirst()
+                .orElse(new Adult());
     }
 }
