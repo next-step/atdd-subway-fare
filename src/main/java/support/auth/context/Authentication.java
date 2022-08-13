@@ -6,9 +6,9 @@ import java.util.List;
 public class Authentication implements Serializable {
     private Object principal;
     private List<String> authorities;
-    private int age;
+    private Object age;
 
-    public Authentication(Object principal, List<String> authorities, int age) {
+    public Authentication(Object principal, List<String> authorities, Object age) {
         this.principal = principal;
         this.authorities = authorities;
         this.age = age;
@@ -22,8 +22,8 @@ public class Authentication implements Serializable {
         return authorities;
     }
 
-    public int getAge() {
-        return age;
+    public Integer getAge() {
+        return (int) age;
     }
 
 }
