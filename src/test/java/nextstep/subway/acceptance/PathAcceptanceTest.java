@@ -3,9 +3,13 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
@@ -67,6 +71,22 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_검증(response, List.of(교대역, 강남역, 양재역), 20, 4);
+    }
+
+    @DisplayName("연결되어 있지 않은 역에 대하여 경로 조회 실패")
+    @ParameterizedTest
+    @EnumSource(value = PathType.class)
+    void findPathFailsForStationsNotConnected(PathType type) {
+        // given
+        var 수유역 = 지하철역_생성_요청(관리자, "수유역").jsonPath().getLong("id");
+        var 쌍문역 = 지하철역_생성_요청(관리자, "쌍문역").jsonPath().getLong("id");
+        var 사호선 = 지하철_노선_생성_요청("4호선", "skyblue", 수유역, 쌍문역, 10, 2);
+
+        // when
+        var response = 두_역의_경로_조회를_요청(교대역, 수유역, type.name());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
