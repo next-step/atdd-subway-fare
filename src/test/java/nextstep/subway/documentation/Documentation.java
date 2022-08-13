@@ -52,7 +52,8 @@ public class Documentation {
                                 fieldWithPath("stations[].id").description("지하철역 Id"),
                                 fieldWithPath("stations[].name").description("지하철역 이름"),
                                 fieldWithPath("distance").description("총 이동 거리"),
-                                fieldWithPath("duration").description("총 소요시간")
+                                fieldWithPath("duration").description("총 소요시간"),
+                                fieldWithPath("fare").description("이용 요금")
                         )));
     }
 }

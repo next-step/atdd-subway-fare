@@ -25,7 +25,7 @@ public class PathDocumentation extends Documentation {
                 List.of(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10, 8
+                ), 10, 8, 1250
         );
 
         when(pathService.findPath(any())).thenReturn(pathResponse);
