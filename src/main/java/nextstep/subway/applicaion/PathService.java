@@ -30,6 +30,6 @@ public class PathService {
         int shortestDistance = subwayMap.findShortestDistance(upStation, downStation);
         path.setShortestDistance(shortestDistance);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, age);
     }
 }
