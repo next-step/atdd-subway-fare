@@ -1,6 +1,8 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.path;
 
 import java.util.List;
+import nextstep.subway.domain.Sections;
+import nextstep.subway.domain.Station;
 
 public class Path {
     private Sections sections;
@@ -15,6 +17,10 @@ public class Path {
 
     public int extractDistance() {
         return sections.totalDistance();
+    }
+
+    public int extractDuration() {
+        return sections.totalDuration();
     }
 
     public List<Station> getStations() {
