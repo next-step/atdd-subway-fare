@@ -37,6 +37,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines, PathType.DISTANCE);
         Path path = subwayMap.findPath(upStation, downStation);
         int distance = path.extractDistance();
-        return FarePolicy.createFarePolicy(distance).getFare(distance);
+        return new DistanceFare(distance).calculate();
     }
 }

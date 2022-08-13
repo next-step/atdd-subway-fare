@@ -1,6 +1,5 @@
 package nextstep.subway.applicaion.dto;
 
-import nextstep.subway.domain.FarePolicy;
 import nextstep.subway.domain.Path;
 
 import java.util.List;

@@ -1,9 +1,8 @@
 package nextstep.subway.unit;
 
-import static nextstep.subway.domain.FarePolicy.createFarePolicy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nextstep.subway.domain.FarePolicy;
+import nextstep.subway.domain.DistanceFare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -47,8 +46,8 @@ public class FareTest {
     @DisplayName("요금 계산")
     void calculateFare(int 경로_거리, int 요금 ) {
         // when
-        FarePolicy farePolicy = createFarePolicy(경로_거리);
-        int fare = farePolicy.getFare(경로_거리);
+        DistanceFare distanceFare = new DistanceFare(경로_거리);
+        int fare = distanceFare.calculate();
 
         // then
         assertThat(fare).isEqualTo(요금);
