@@ -21,13 +21,12 @@ public class PathResponse {
         this.price = price;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, int price) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int price = path.calculatePrice();
 
         return new PathResponse(stations, distance, duration, price);
     }
