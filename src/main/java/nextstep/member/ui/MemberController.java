@@ -6,7 +6,7 @@ import nextstep.member.application.dto.MemberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import support.auth.authorization.AuthenticationPrincipal;
-import support.auth.userdetails.User;
+import nextstep.subway.domain.LoginUser;
 
 import java.net.URI;
 
@@ -43,19 +43,19 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal User user) {
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginUser user) {
         MemberResponse member = memberService.findMember(user.getUsername());
         return ResponseEntity.ok().body(member);
     }
 
     @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal User user, @RequestBody MemberRequest param) {
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginUser user, @RequestBody MemberRequest param) {
         memberService.updateMember(user.getUsername(), param);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/me")
-    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal User user) {
+    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal LoginUser user) {
         memberService.deleteMember(user.getUsername());
         return ResponseEntity.noContent().build();
     }

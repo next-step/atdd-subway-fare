@@ -7,7 +7,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
-import support.auth.userdetails.User;
+import nextstep.subway.domain.LoginUser;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -19,6 +19,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        return new LoginUser(authentication.getPrincipal().toString(), null, 0, authentication.getAuthorities());
     }
 }
