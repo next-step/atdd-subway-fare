@@ -26,8 +26,12 @@ public class Path {
     }
 
     public int extractFare() {
-        return FareType.calculateFare(sections.totalDistance());
+        final int lineAdditionalFare = sections.getSections().stream()
+                .mapToInt(Section::getAdditionalFare)
+                .max()
+                .orElse(0);
 
+        return FareType.calculateFare(sections.totalDistance()) + lineAdditionalFare;
     }
 
 }

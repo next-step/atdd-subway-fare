@@ -1,8 +1,11 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Getter
 @Entity
 public class Line {
     @Id
@@ -10,6 +13,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private Integer additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -17,21 +21,10 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int additionalFare) {
         this.name = name;
         this.color = color;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
+        this.additionalFare = additionalFare;
     }
 
     public List<Section> getSections() {
