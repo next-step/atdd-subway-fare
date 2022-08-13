@@ -9,6 +9,11 @@ public class StationResponse {
     private Long id;
     private String name;
 
+    public StationResponse(long id, String name, Object o, Object o1) {
+        this.id = id;
+        this.name = name;
+    }
+
     public static StationResponse of(Station station) {
         return new StationResponse(station.getId(), station.getName());
     }
