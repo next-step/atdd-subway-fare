@@ -1,6 +1,6 @@
 package nextstep.subway.applicaion.discount;
 
-import nextstep.subway.domain.LoginUser;
+import nextstep.member.domain.Member;
 
 public class TeenageRateDiscountPolicy implements DiscountPolicy {
 
@@ -10,9 +10,9 @@ public class TeenageRateDiscountPolicy implements DiscountPolicy {
     private static final double DISCOUNT_RATE = 0.8;
 
     @Override
-    public boolean isTarget(final LoginUser user) {
-        return MIN_AGE <= user.getAge()
-                && user.getAge() < MAX_AGE;
+    public boolean isTarget(final Member member) {
+        return MIN_AGE <= member.getAge()
+                && member.getAge() < MAX_AGE;
     }
 
     @Override

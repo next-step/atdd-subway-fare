@@ -1,6 +1,6 @@
 package nextstep.subway.applicaion.discount;
 
-import nextstep.subway.domain.LoginUser;
+import nextstep.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -20,7 +20,7 @@ class TeenageRateDiscountPolicyTest {
     @ParameterizedTest
     @ValueSource(ints = {13, 14, 15, 16, 17, 18})
     void 할인대상임(final int age) {
-        final boolean result = target.isTarget(loginUser(age));
+        final boolean result = target.isTarget(member(age));
 
         assertThat(result).isTrue();
     }
@@ -28,7 +28,7 @@ class TeenageRateDiscountPolicyTest {
     @ParameterizedTest
     @ValueSource(ints = {9, 10, 11, 12, 19, 20, 21})
     void 할인대상이아님(final int age) {
-        final boolean result = target.isTarget(loginUser(age));
+        final boolean result = target.isTarget(member(age));
 
         assertThat(result).isFalse();
     }
@@ -41,8 +41,7 @@ class TeenageRateDiscountPolicyTest {
         assertThat(result).isEqualTo(after);
     }
 
-    private LoginUser loginUser(final int age) {
-        return new LoginUser(null, null, age, null);
+    private Member member(final int age) {
+        return new Member(null, null, age);
     }
-
 }

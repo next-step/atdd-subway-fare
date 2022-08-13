@@ -1,11 +1,11 @@
 package nextstep.subway.applicaion.discount;
 
-import nextstep.subway.domain.LoginUser;
+import nextstep.member.domain.Member;
 
 public class NotDiscountPolicy implements DiscountPolicy {
 
     @Override
-    public boolean isTarget(final LoginUser user) {
+    public boolean isTarget(final Member member) {
         return true;
     }
 
