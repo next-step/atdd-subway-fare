@@ -72,6 +72,39 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * given
+     * when 추가 요금이 있는 두 노선을 포함한 경로를 조회했을때
+     * then 추가 요금을 확인 할 수 있다.
+     */
+    @DisplayName("두 역의 최간경로를 조회 후 추가요금을 확인한다.")
+    @Test
+    void findPathAndSurcharge(){
+
+    }
+
+    /**
+     * given
+     * when 로그인 후 경로를 조회하면
+     * then 청소년 요금할인이 적용된 요금을 확인 할 수 있다.
+     */
+    @DisplayName("청소년으로 로그인 후 경로를 조회하면 할인 금액을 확인 할 수 있다.")
+    @Test
+    void findPathAndSurchargeWithLogin(){
+
+    }
+
+    /**
+     * given
+     * when 로그인 후 경로를 조회하면
+     * then 청소년 요금할인이 적용된 요금을 확인 할 수 있다.
+     */
+    @DisplayName("어린이로 로그인 후 경로를 조회하면 할인 금액을 확인 할 수 있다.")
+    @Test
+    void findPathAndSurchargeWithLogin2(){
+
+    }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
