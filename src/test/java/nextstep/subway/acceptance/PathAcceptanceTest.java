@@ -5,11 +5,14 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,35 +81,48 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * given
-     * when 추가 요금이 있는 두 노선을 포함한 경로를 조회했을때
-     * then 추가 요금을 확인 할 수 있다.
-     */
-    @DisplayName("두 역의 최간경로를 조회 후 추가요금을 확인한다.")
-    @Test
-    void findPathAndSurcharge(){
-
-    }
-
-    /**
-     * given
      * when 로그인 후 경로를 조회하면
      * then 청소년 요금할인이 적용된 요금을 확인 할 수 있다.
+     * (1450 - 350) * 0.8 : 880
      */
     @DisplayName("청소년으로 로그인 후 경로를 조회하면 할인 금액을 확인 할 수 있다.")
     @Test
     void findPathAndSurchargeWithLogin(){
+        String email = "teenager@gmail.com";
+        String password = "123";
+        회원_생성_요청(email, password, 15);
+        String 청소년 = 로그인_되어_있음(email, password);
+        // when
+        ExtractableResponse<Response> response = 로그인_두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, 청소년);
 
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(880)
+        );
     }
 
     /**
      * given
      * when 로그인 후 경로를 조회하면
      * then 청소년 요금할인이 적용된 요금을 확인 할 수 있다.
+     * (1450 - 350) * 0.5 : 550
      */
     @DisplayName("어린이로 로그인 후 경로를 조회하면 할인 금액을 확인 할 수 있다.")
     @Test
     void findPathAndSurchargeWithLogin2(){
+        String email = "child@gmail.com";
+        String password = "123";
+        회원_생성_요청(email, password, 7);
+        String 어린이 = 로그인_되어_있음(email, password);
+        // when
+        ExtractableResponse<Response> response = 로그인_두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, 어린이);
 
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(550)
+        );
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance
