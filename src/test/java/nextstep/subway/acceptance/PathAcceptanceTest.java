@@ -67,7 +67,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로가_순서에_따라_조회됨(최소_시간_경로, 교대역, 강남역, 양재역);
-        경로의_이용요금이_조회됨(최소_시간_경로, 1_450);
+        경로의_이용요금이_조회됨(최소_시간_경로, 1_250);
     }
 
     private void 경로가_순서에_따라_조회됨(ExtractableResponse<Response> response, Long... stations) {
