@@ -25,8 +25,9 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType.getEdgeInitiator());
+        int shortestDistance = subwayMap.findPath(upStation, downStation, PathType.DISTANCE.getEdgeInitiator()).extractDistance();
 
-        PricePolicy price = new DistancePricePolicy(path.extractDistance());
+        PricePolicy price = new DistancePricePolicy(shortestDistance);
         return PathResponse.of(path, price.calculatePrice());
     }
 }
