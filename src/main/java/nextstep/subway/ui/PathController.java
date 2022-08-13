@@ -17,10 +17,6 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(PathRequest pathRequest) {
-        // TODO: 기능 구현 뒤 하드코딩 삭제
-        PathResponse path = pathService.findPath(pathRequest);
-        PathResponse result = new PathResponse(path.getStations(), path.getDistance(), path.getDuration(), 1250);
-        return ResponseEntity.ok(result);
-//        return ResponseEntity.ok(pathService.findPath(pathRequest));
+        return ResponseEntity.ok(pathService.findPath(pathRequest));
     }
 }
