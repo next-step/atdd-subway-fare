@@ -32,4 +32,8 @@ public class Path {
 
     public int extractDuration() { return sections.totalDuration(); }
 
+    public int getLineSurChage(){
+        return sections.getMaxSurChage();
+    }
+
 }

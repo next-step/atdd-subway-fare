@@ -20,7 +20,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, int age) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -30,6 +30,6 @@ public class PathService {
         int shortestDistance = subwayMap.findShortestDistance(upStation, downStation);
         path.setShortestDistance(shortestDistance);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, age);
     }
 }

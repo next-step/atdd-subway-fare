@@ -14,6 +14,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
@@ -40,7 +41,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(),any(),anyInt())).thenReturn(pathResponse);
         RestAssured
                 .given(spec).log().all()
                 .filter(document("path",

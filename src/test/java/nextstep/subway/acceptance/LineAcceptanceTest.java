@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.acceptance.LineSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
@@ -26,6 +27,23 @@ class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> listResponse = 지하철_노선_목록_조회_요청();
 
         assertThat(listResponse.jsonPath().getList("name")).contains("2호선");
+    }
+
+    /**
+     * When 지하철 노선에 추가요금을 포함하여 생성하면
+     * Then 추가요금이 포함 된 노선을 화인 할 수 있다.
+     */
+    @DisplayName("추가요금이 있는 지하철 노선 생성")
+    @Test
+    void createLineIncludeSurCharge() {
+        // when
+        ExtractableResponse<Response> response = 지하철_추가요금있는_노선_생성_요청(관리자, "2호선", "green", 100);
+
+        // then
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value()),
+                () -> assertThat(response.jsonPath().getInt("surCharge")).isEqualTo(100)
+        );
     }
 
     /**
