@@ -15,7 +15,7 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, DiscountAgePolicy discountAgePolicy) {
+    public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -52,6 +52,6 @@ public class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections), discountAgePolicy);
+        return new Path(new Sections(sections));
     }
 }

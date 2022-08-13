@@ -3,10 +3,12 @@ package nextstep.subway.applicaion;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.payment.PaymentHandler;
 import nextstep.subway.util.discount.Adult;
 import nextstep.subway.util.discount.DiscountAgePolicy;
 import nextstep.subway.util.discount.AgeFactory;
@@ -36,9 +38,18 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
 
-        Path path = subwayMap.findPath(upStation, downStation, findLoginMemberAge(user));
+        Path path = subwayMap.findPath(upStation, downStation);
 
-        return PathResponse.of(path);
+        Fare fare = calculateFare(path, user);
+
+        return PathResponse.of(path, fare.fare());
+    }
+
+    private Fare calculateFare(Path path, UserDetails user) {
+        PaymentHandler paymentHandler = new PaymentHandler(path, findLoginMemberAge(user));
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
+        return fare;
     }
 
     private DiscountAgePolicy findLoginMemberAge(UserDetails user) {

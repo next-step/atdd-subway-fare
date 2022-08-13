@@ -28,6 +28,14 @@ public class Fare {
         }
     }
 
+    public void increase(int fare) {
+        this.fare += fare;
+    }
+
+    public void decrease(int fare) {
+        this.fare -= fare;
+    }
+
     public int fare() {
         return fare;
     }
