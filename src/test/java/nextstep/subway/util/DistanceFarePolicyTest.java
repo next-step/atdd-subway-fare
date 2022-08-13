@@ -1,6 +1,6 @@
 package nextstep.subway.util;
 
-import nextstep.subway.util.fare.NormalFarePolicy;
+import nextstep.subway.payment.DistanceFarePolicy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NormalFarePolicyTest {
+class DistanceFarePolicyTest {
 
     @ParameterizedTest
     @MethodSource("distanceAndFare")
     void calculateNormalFareTest(int distance, int fare) {
-        NormalFarePolicy normalFarePolicy = new NormalFarePolicy();
-        int calculatedFare = normalFarePolicy.calculateFare(distance);
+        DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy();
+        int calculatedFare = distanceFarePolicy.calculateFare(distance);
         assertThat(calculatedFare).isEqualTo(fare);
     }
 
