@@ -30,7 +30,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, sectionWeight(it, type));
+                    graph.setEdgeWeight(sectionEdge, type.sectionWeight(it));
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -40,7 +40,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, sectionWeight(it, type));
+                    graph.setEdgeWeight(sectionEdge, type.sectionWeight(it));
                 });
 
         // 다익스트라 최단 경로 찾기
@@ -52,15 +52,5 @@ public class SubwayMap {
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
-    }
-
-    private int sectionWeight(Section section, PathType type) {
-        if (PathType.DISTANCE.equals(type)) {
-            return section.getDistance();
-        }
-        else if (PathType.DURATION.equals(type)) {
-            return section.getDuration();
-        }
-        throw new IllegalArgumentException("지원하지 않는 경로 타입입니다.");
     }
 }
