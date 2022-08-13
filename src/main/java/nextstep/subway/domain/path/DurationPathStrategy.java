@@ -1,7 +1,9 @@
 package nextstep.subway.domain.path;
 
 import nextstep.subway.domain.Section;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DurationPathStrategy implements PathStrategy {
 
     @Override

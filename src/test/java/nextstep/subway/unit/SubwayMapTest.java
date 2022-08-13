@@ -36,10 +36,10 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3);
-        이호선.addSection(교대역, 강남역, 3);
-        삼호선.addSection(교대역, 남부터미널역, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5);
+        신분당선.addSection(강남역, 양재역, 3, 3);
+        이호선.addSection(교대역, 강남역, 3, 3);
+        삼호선.addSection(교대역, 남부터미널역, 5, 1);
+        삼호선.addSection(남부터미널역, 양재역, 5, 2);
     }
 
     @Test
@@ -65,7 +65,8 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+
     }
 
     @Test
