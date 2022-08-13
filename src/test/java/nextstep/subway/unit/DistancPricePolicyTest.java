@@ -57,6 +57,6 @@ public class DistancPricePolicyTest {
             return 0;
         }
         return (int) ((Math.ceil((distance - 1) / baseOfDistance) + 1) * 100);
-    }
+    } 
 
 }
