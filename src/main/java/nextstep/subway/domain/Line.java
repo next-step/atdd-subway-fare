@@ -13,6 +13,9 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int surCharge;
+
+    private static final int DEFAULT_SURCHARGE = 0;
 
     @Embedded
     private Sections sections = new Sections();
@@ -23,8 +26,14 @@ public class Line {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+        this.surCharge = DEFAULT_SURCHARGE;
     }
 
+    public Line(String name, String color, int surCharge) {
+        this.name = name;
+        this.color = color;
+        this.surCharge = surCharge;
+    }
 
     public List<Section> getSections() {
         return sections.getSections();

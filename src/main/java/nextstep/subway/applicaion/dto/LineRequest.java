@@ -10,5 +10,6 @@ public class LineRequest {
     private Long downStationId;
     private int distance;
     private int duration;
+    private int surCharge;
 
 }
