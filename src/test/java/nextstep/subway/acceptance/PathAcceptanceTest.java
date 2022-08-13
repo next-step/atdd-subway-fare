@@ -89,6 +89,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
+    @DisplayName("동일한 역에 대하여 경로조회 실패")
+    @ParameterizedTest
+    @EnumSource(value = PathType.class)
+    void findPathFailsForEqualStations(PathType type) {
+        // when
+        var response = 두_역의_경로_조회를_요청(교대역, 교대역, type.name());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
