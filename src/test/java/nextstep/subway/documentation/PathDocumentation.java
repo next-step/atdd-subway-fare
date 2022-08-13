@@ -9,17 +9,22 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.PathCondition;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import support.auth.userdetails.User;
 
 import java.util.List;
 
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -43,9 +48,10 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5, 1250
         );
 
-        given(pathService.findShortestPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        String accessToken = 로그인_되어_있음("member@email.com", "password");
+        given(pathService.findShortestPath(any(User.class), anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        var 최단_경로_조회_결과 = 최단_경로_조회("distance-path", 1L, 2L, PathCondition.DISTANCE);
+        var 최단_경로_조회_결과 = 최단_경로_조회(accessToken, "distance-path", 1L, 2L, PathCondition.DISTANCE);
 
         경로_조회_완료(최단_경로_조회_결과);
     }
@@ -59,16 +65,18 @@ public class PathDocumentation extends Documentation {
                 ), 10, 3, 1450
         );
 
-        given(pathService.findShortestPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        String accessToken = 로그인_되어_있음("member@email.com", "password");
+        given(pathService.findShortestPath(any(User.class), anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        var 최단_경로_조회_결과 = 최단_경로_조회("duration-path", 1L, 2L, PathCondition.DURATION);
+        var 최단_경로_조회_결과 = 최단_경로_조회(accessToken, "duration-path", 1L, 2L, PathCondition.DURATION);
 
         경로_조회_완료(최단_경로_조회_결과);
     }
 
-    private ExtractableResponse<Response> 최단_경로_조회(String identifier, Long source, Long target, PathCondition distance) {
+    private ExtractableResponse<Response> 최단_경로_조회(String accessToken, String identifier, Long source, Long target, PathCondition distance) {
         return RestAssured
                 .given(spec).log().all()
+                .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .filter(

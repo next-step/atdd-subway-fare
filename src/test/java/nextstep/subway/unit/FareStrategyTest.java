@@ -34,6 +34,27 @@ public class FareStrategyTest {
     }
 
     @ParameterizedTest
+    @MethodSource("basicFareWithAge")
+    public void basic_fare_with_age_test(int distance, int age, int fare) {
+        // given
+        BasicStrategy strategy = new BasicStrategy();
+
+        // when
+        int resultFare = strategy.calculateWithAge(distance, age, 0);
+
+        // then
+        assertThat(resultFare).isEqualTo(fare);
+    }
+
+    private static Stream<Arguments> basicFareWithAge() {
+        return Stream.of(
+                Arguments.of(1, 10, 800),
+                Arguments.of(1, 13, 1070),
+                Arguments.of(1, 19, 1250)
+        );
+    }
+
+    @ParameterizedTest
     @MethodSource("middleFare")
     public void middle_fare_test(int distance, int fare) {
         // given
@@ -54,6 +75,27 @@ public class FareStrategyTest {
     }
 
     @ParameterizedTest
+    @MethodSource("middleFareWithAge")
+    public void middle_fare_with_age_test(int distance, int age, int fare) {
+        // given
+        MiddleStrategy strategy = new MiddleStrategy();
+
+        // when
+        int resultFare = strategy.calculateWithAge(distance, age, 0);
+
+        // then
+        assertThat(resultFare).isEqualTo(fare);
+    }
+
+    private static Stream<Arguments> middleFareWithAge() {
+        return Stream.of(
+                Arguments.of(11, 10, 850),
+                Arguments.of(11, 13, 1150),
+                Arguments.of(11, 19, 1350)
+        );
+    }
+
+    @ParameterizedTest
     @MethodSource("longFare")
     public void long_fare_test(int distance, int fare) {
         // given
@@ -70,6 +112,27 @@ public class FareStrategyTest {
         return Stream.of(
                 Arguments.of(51, 2150),
                 Arguments.of(60, 2250)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("longFareWithAge")
+    public void long_fare_with_age_test(int distance, int age, int fare) {
+        // given
+        LongStrategy strategy = new LongStrategy();
+
+        // when
+        int resultFare = strategy.calculateWithAge(distance, age, 0);
+
+        // then
+        assertThat(resultFare).isEqualTo(fare);
+    }
+
+    private static Stream<Arguments> longFareWithAge() {
+        return Stream.of(
+                Arguments.of(51, 10, 1250),
+                Arguments.of(51, 13, 1790),
+                Arguments.of(51, 19, 2150)
         );
     }
 }
