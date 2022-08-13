@@ -30,4 +30,8 @@ public class PathResponse {
     public int getDistance() {
         return distance;
     }
+
+    public long getDuration() {
+        return 0L;
+    }
 }

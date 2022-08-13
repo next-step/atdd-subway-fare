@@ -4,6 +4,8 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.path.DistancePathStrategy;
+import nextstep.subway.domain.path.DurationPathStrategy;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,10 +43,23 @@ public class SubwayMapTest {
     }
 
     @Test
-    void findPath() {
+    void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, new DistancePathStrategy());
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+    }
+
+    @Test
+    void findPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, new DurationPathStrategy());
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -57,7 +72,7 @@ public class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = new SubwayMap(lines, new DistancePathStrategy());
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);

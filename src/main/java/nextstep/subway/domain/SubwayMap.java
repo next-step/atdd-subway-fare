@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.path.PathStrategy;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -9,29 +10,33 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-    public SubwayMap(List<Line> lines) {
+
+    public SubwayMap(List<Line> lines, PathStrategy pathStrategy) {
         this.lines = lines;
+        initGraphVertex(graph);
+        initGraphEdge(graph, pathStrategy);
     }
 
-    public Path findPath(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
-
-        // 지하철 역(정점)을 등록
+    private void initGraphVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
                 .forEach(it -> graph.addVertex(it));
+    }
 
+    private void initGraphEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathStrategy pathStrategy) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, pathStrategy.getType(it));
                 });
+
 
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
@@ -40,9 +45,11 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, pathStrategy.getType(it));
                 });
+    }
 
+    public Path findPath(Station source, Station target) {
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
