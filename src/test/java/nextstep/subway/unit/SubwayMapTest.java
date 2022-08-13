@@ -8,6 +8,9 @@ import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.payment.LinePaymentPolicy;
+import nextstep.subway.payment.PaymentHandler;
+import nextstep.subway.payment.PaymentPolicy;
 import nextstep.subway.util.discount.Adult;
 import nextstep.subway.util.discount.Children;
 import nextstep.subway.util.discount.Teenager;
@@ -65,7 +68,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+        Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -78,7 +81,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, new Adult());
+        Path path = subwayMap.findPath(양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
@@ -92,17 +95,19 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, new Adult());
+        Path path = subwayMap.findPath(양재역, 교대역);
 
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.extractFare();
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
 
         assertAll(
                 () -> assertThat(distance).isEqualTo(6),
                 () -> assertThat(duration).isEqualTo(6),
-                () -> assertThat(fare).isEqualTo(2_250)
+                () -> assertThat(fare.fare()).isEqualTo(2_250)
         );
     }
 
@@ -124,17 +129,19 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 모란역, new Adult());
+        Path path = subwayMap.findPath(교대역, 모란역);
 
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.extractFare();
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
 
         assertAll(
                 () -> assertThat(distance).isEqualTo(16),
                 () -> assertThat(duration).isEqualTo(16),
-                () -> assertThat(fare).isEqualTo(2_450)
+                () -> assertThat(fare.fare()).isEqualTo(2_450)
         );
     }
 
@@ -157,17 +164,19 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(강남역, 모란역, new Adult());
+        Path path = subwayMap.findPath(강남역, 모란역);
 
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.extractFare();
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
 
         assertAll(
                 () -> assertThat(distance).isEqualTo(68),
                 () -> assertThat(duration).isEqualTo(13),
-                () -> assertThat(fare).isEqualTo(3350)
+                () -> assertThat(fare.fare()).isEqualTo(3350)
         );
     }
 
@@ -201,11 +210,14 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+        Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        int lineFare = path.calculateMostExpensiveLine();
-        assertThat(lineFare).isEqualTo(1_000);
+        PaymentPolicy linePaymentPolicy = new LinePaymentPolicy(path.getSections().getSections());
+        Fare lineFare = Fare.from(0);
+        linePaymentPolicy.calculate(lineFare);
+
+        assertThat(lineFare.fare()).isEqualTo(1_000);
     }
 
     /**
@@ -231,14 +243,21 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 남부터미널역, new Adult());
+        Path path = subwayMap.findPath(교대역, 남부터미널역);
+
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
+
+        Fare lineFare = Fare.from(0);
+        new LinePaymentPolicy(path.getSections().getSections()).calculate(lineFare);
 
         // then
         assertAll(
                 () -> assertThat(path.extractDistance()).isEqualTo(30),
                 () -> assertThat(path.extractDuration()).isEqualTo(30),
-                () -> assertThat(path.extractFare()).isEqualTo(1_750),
-                () -> assertThat(path.calculateMostExpensiveLine()).isZero()
+                () -> assertThat(fare.fare()).isEqualTo(1_750),
+                () -> assertThat(lineFare.fare()).isZero()
         );
     }
 
@@ -265,14 +284,18 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Children());
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Children());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
 
         // then
         assertAll(
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
                 () -> assertThat(path.extractDistance()).isEqualTo(6),
                 () -> assertThat(path.extractDuration()).isEqualTo(6),
-                () -> assertThat(path.extractFare()).isEqualTo(1_300)
+                () -> assertThat(fare.fare()).isEqualTo(1_300)
         );
     }
 
@@ -284,14 +307,18 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Teenager());
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Teenager());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
 
         // then
         assertAll(
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
                 () -> assertThat(path.extractDistance()).isEqualTo(6),
                 () -> assertThat(path.extractDuration()).isEqualTo(6),
-                () -> assertThat(path.extractFare()).isEqualTo(1_870)
+                () -> assertThat(fare.fare()).isEqualTo(1_870)
         );
     }
 
@@ -303,14 +330,18 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, new Adult());
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        Fare fare = Fare.from(0);
+        paymentHandler.calculate(fare);
 
         // then
         assertAll(
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
                 () -> assertThat(path.extractDistance()).isEqualTo(6),
                 () -> assertThat(path.extractDuration()).isEqualTo(6),
-                () -> assertThat(path.extractFare()).isEqualTo(2_250)
+                () -> assertThat(fare.fare()).isEqualTo(2_250)
         );
     }
 

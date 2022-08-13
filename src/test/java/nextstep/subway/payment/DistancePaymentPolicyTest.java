@@ -1,6 +1,6 @@
-package nextstep.subway.util;
+package nextstep.subway.payment;
 
-import nextstep.subway.payment.DistanceFarePolicy;
+import nextstep.subway.domain.Fare;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,14 +9,15 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DistanceFarePolicyTest {
+class DistancePaymentPolicyTest {
 
     @ParameterizedTest
     @MethodSource("distanceAndFare")
-    void calculateNormalFareTest(int distance, int fare) {
-        DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy();
-        int calculatedFare = distanceFarePolicy.calculateFare(distance);
-        assertThat(calculatedFare).isEqualTo(fare);
+    void calculateNormalFareTest(int distance, int expectedFare) {
+        PaymentPolicy distanceFarePolicy = new DistancePaymentPolicy(distance);
+        Fare fare = Fare.from(0);
+        distanceFarePolicy.calculate(fare);
+        assertThat(fare.fare()).isEqualTo(expectedFare);
     }
 
     private static Stream<Arguments> distanceAndFare() {
@@ -28,5 +29,6 @@ class DistanceFarePolicyTest {
                 Arguments.of(59, 2250)
         );
     }
+
 
 }

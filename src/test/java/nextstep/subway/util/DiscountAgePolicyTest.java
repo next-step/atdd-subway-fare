@@ -1,5 +1,6 @@
 package nextstep.subway.util;
 
+import nextstep.subway.domain.Fare;
 import nextstep.subway.util.discount.Adult;
 import nextstep.subway.util.discount.AgeFactory;
 import nextstep.subway.util.discount.DiscountAgePolicy;
@@ -35,9 +36,10 @@ class DiscountAgePolicyTest {
     @ParameterizedTest
     @MethodSource("variousAgeMember")
     void discountPolicyByAge(DiscountAgePolicy discountAgePolicy, int fare, int expectedFare) {
-        int discountedFare = discountAgePolicy.discount(fare);
+        Fare resultFare = Fare.from(fare);
+        discountAgePolicy.discount(resultFare);
 
-        assertThat(discountedFare).isEqualTo(expectedFare);
+        assertThat(resultFare.fare()).isEqualTo(expectedFare);
     }
 
     private static Stream<Arguments> ageBoundary() {

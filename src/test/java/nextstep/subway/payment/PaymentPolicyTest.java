@@ -7,7 +7,6 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.util.discount.Adult;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,29 +51,18 @@ class PaymentPolicyTest {
         삼호선.addSection(createSectionBuilder(남부터미널역, 양재역, Distance.from(10), Duration.from(5)));
 
         SubwayMap subwayMap = new SubwayMap(Lists.newArrayList(신분당선, 이호선, 삼호선));
-        교대역_양재역 = subwayMap.findPath(교대역, 양재역, new Adult());
+        교대역_양재역 = subwayMap.findPath(교대역, 양재역);
     }
 
     @Test
     @DisplayName("거리기반 요금정책")
     void distanceFarePolicy() {
-        DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy();
-        int distanceFare = distanceFarePolicy.calculate(교대역_양재역.extractDistance());
+        PaymentPolicy distanceFarePolicy = new DistancePaymentPolicy(교대역_양재역.extractDistance());
 
-        assertThat(distanceFare).isEqualTo(1_250);
-    }
+        Fare fare = Fare.from(0);
+        distanceFarePolicy.calculate(fare);
 
-    @Test
-    @DisplayName("노선중 최대금액 부가정책")
-    void lineFarePolicy() {
-        // when
-        DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy();
-        int distanceFare = distanceFarePolicy.calculate(교대역_양재역.extractDistance());
-
-        LineFarePolicy lineFarePolicy = new LineFarePolicy(교대역_양재역.getSections().getSections());
-        int distanceLineFare = lineFarePolicy.calculate(distanceFare);
-
-        assertThat(distanceLineFare).isEqualTo(2_250);
+        assertThat(fare.fare()).isEqualTo(1_250);
     }
 
     private Station createStation(long id, String name) {
