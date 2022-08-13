@@ -8,6 +8,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps extends AcceptanceTestSteps {
+    public static Long 지하철_노선_생성_요청(String token, String name, String color, Long upStation,
+                                    Long downStation, int distance, int duration) {
+        Map<String, String> lineCreateParams;
+        lineCreateParams = new HashMap<>();
+        lineCreateParams.put("name", name);
+        lineCreateParams.put("color", color);
+        lineCreateParams.put("upStationId", upStation + "");
+        lineCreateParams.put("downStationId", downStation + "");
+        lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
+
+        return LineSteps.지하철_노선_생성_요청(token, lineCreateParams).jsonPath().getLong("id");
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, String name, String color) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -69,6 +83,23 @@ public class LineSteps extends AcceptanceTestSteps {
                 .body(params)
                 .when().post("/lines/{lineId}/sections", lineId)
                 .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(String token, Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+        return given(token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(createSectionCreateParams(upStationId, downStationId, distance, duration))
+                .when().post("/lines/{lineId}/sections", lineId)
+                .then().log().all().extract();
+    }
+
+    private static Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", upStationId + "");
+        params.put("downStationId", downStationId + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
+        return params;
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_제거_요청(String token, Long lineId, Long stationId) {
