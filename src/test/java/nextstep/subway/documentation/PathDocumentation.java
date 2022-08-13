@@ -39,6 +39,7 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint())))
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
+                .queryParam("type", "DURATION")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
