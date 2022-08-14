@@ -18,7 +18,7 @@ public class FareCalculator {
     private static final IntUnaryOperator BETWEEN_10_AND_50 = d -> (int) Math.ceil(d / BETWEEN_10_AND_50_DENOMINATOR) * 100;
     private static final IntUnaryOperator OVER_50 = d -> (int) Math.ceil(d / OVER_50_DENOMINATOR) * 100;
 
-    public int calculateOverFare(int distance) {
+    public int calculateOverFare(int distance, int age) {
         if (distance == 0) {
             return 0;
         }
