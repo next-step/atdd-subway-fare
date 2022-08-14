@@ -3,13 +3,8 @@ package nextstep.subway.domain.path;
 import nextstep.subway.domain.Section;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("DURATION")
 public class DurationPathStrategy implements PathStrategy {
-
-    @Override
-    public String getName() {
-        return "DURATION";
-    }
 
     @Override
     public int getType(Section section) {

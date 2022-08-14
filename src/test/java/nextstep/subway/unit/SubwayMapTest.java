@@ -53,6 +53,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.extractDistance()).isEqualTo(6);
     }
 
     @Test
@@ -66,6 +67,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertThat(path.extractDuration()).isEqualTo(3);
 
     }
 
