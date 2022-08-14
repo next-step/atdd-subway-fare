@@ -19,6 +19,7 @@ import java.util.Map;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -137,6 +138,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         // 기본요금 + 10km 초과시 5km 마다 100원 + 50km 초과시 8km 마다 100원
         거리와_요금_확인(response, 62, 1250 + 800 + 200);
+    }
+
+    @DisplayName("운임을 실제 경로와 관계없이 최단경로 기준으로 책정")
+    @Test
+    void fareCalculatedByMinimumDistance() {
+        // when
+        var fareA = 두_역의_경로_조회를_요청(교대역, 양재역, "DISTANCE").jsonPath().getInt("fare");
+        var fareB = 두_역의_경로_조회를_요청(교대역, 양재역, "DURATION").jsonPath().getInt("fare");
+
+        // then
+        assertEquals(fareA, fareB);
     }
 
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
