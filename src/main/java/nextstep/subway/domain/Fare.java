@@ -2,22 +2,41 @@ package nextstep.subway.domain;
 
 import nextstep.subway.domain.policy.FareManager;
 
-import java.util.List;
-
 public class Fare {
 
-    private Sections sections;
+    private int value;
+    private boolean done;
 
-    public Fare(List<Section> sections) {
-        this(new Sections(sections));
+    private Fare(int value, boolean done) {
+        this.value = value;
+        this.done = done;
     }
 
-    public Fare(Sections sections) {
-        this.sections = sections;
+    public static Fare chaining() {
+        return new Fare(0, false);
     }
 
-    public int extractFare() {
-        int totalDistance = sections.totalDistance();
-        return FareManager.fare(totalDistance);
+    public Fare calculate(int distance) {
+        if (done) {
+            throw new IllegalStateException();
+        }
+        value += FareManager.fare(distance);
+        done();
+        return this;
+    }
+
+    private void done() {
+        done = true;
+    }
+
+    public int toInt() {
+        if (isNotFinishCalculate()) {
+            throw new IllegalStateException();
+        }
+        return value;
+    }
+
+    private boolean isNotFinishCalculate() {
+        return !done;
     }
 }

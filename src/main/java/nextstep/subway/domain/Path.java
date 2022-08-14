@@ -4,13 +4,11 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
+    private Sections shortestDistanceSections;
 
-    public Path(List<Section> sections) {
-        this(new Sections(sections));
-    }
-
-    public Path(Sections sections) {
+    public Path(Sections sections, Sections shortestDistanceSections) {
         this.sections = sections;
+        this.shortestDistanceSections = shortestDistanceSections;
     }
 
     public Sections getSections() {
@@ -23,6 +21,10 @@ public class Path {
 
     public int extractDuration() {
         return sections.totalDuration();
+    }
+
+    public Fare extractFare() {
+        return Fare.chaining().calculate(shortestDistanceSections.totalDistance());
     }
 
     public List<Station> getStations() {

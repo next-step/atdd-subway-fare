@@ -2,7 +2,6 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
@@ -32,8 +31,7 @@ public class PathService {
         
         SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
-        Fare fare = subwayMap.findFare(upStation, downStation);
 
-        return PathResponse.of(path, fare);
+        return PathResponse.of(path);
     }
 }

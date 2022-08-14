@@ -105,12 +105,11 @@ public class SubwayMapTest extends FareManagerLoaderTest {
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
-        Fare fare = subwayMap.findFare(교대역, 양재역);
 
         // then
         assertAll(() -> {
             assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
-            assertThat(fare.extractFare()).isEqualTo(1_250);
+            assertThat(path.extractFare().toInt()).isEqualTo(1_250);
         });
     }
 
