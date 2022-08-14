@@ -5,6 +5,8 @@ import nextstep.subway.domain.Fare;
 public class TeenagerPaymentPolicy implements DiscountAgePolicy {
 
     private static final double DISCOUNT_RATE = 0.2;
+    private static final int BASE_TEENAGER_AGE = 13;
+    private static final int UPPER_TEENAGER_AGE = 19;
 
     @Override
     public void discount(Fare fare) {
@@ -13,6 +15,6 @@ public class TeenagerPaymentPolicy implements DiscountAgePolicy {
 
     @Override
     public boolean support(int age) {
-        return age >= 13 && age < 19;
+        return age >= BASE_TEENAGER_AGE && age < UPPER_TEENAGER_AGE;
     }
 }
