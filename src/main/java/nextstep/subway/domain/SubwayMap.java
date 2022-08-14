@@ -6,28 +6,67 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
-    private WeightStrategy weightStrategy;
+    private List<Section> foundPathResult;
+    private PathType type;
 
-    public SubwayMap(List<Line> lines, WeightStrategy weightStrategy) {
+    public SubwayMap(List<Line> lines, PathType type) {
         this.lines = lines;
-        this.weightStrategy = weightStrategy;
+        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        // 지하철 역(정점)을 등록
+        initializeStation(graph);
+        initializeSectionEdge(graph, type.weightStrategy());
+
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+
+        foundPathResult = extractSections(result);
+        return new Path(foundPathResult);
+    }
+
+    public Fare findFare(Station source, Station target) {
+        if (type.isDistanceType() && hasFoundPathResult()) {
+            return new Fare(foundPathResult);
+        }
+
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+
+        initializeStation(graph);
+        initializeSectionEdge(graph, PathType.DISTANCE.weightStrategy());
+
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+
+        foundPathResult = extractSections(result);
+        return new Fare(foundPathResult);
+    }
+
+    private boolean hasFoundPathResult() {
+        return !Objects.isNull(foundPathResult);
+    }
+
+    private void initializeStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
+    }
 
-        // 지하철 역의 연결 정보(간선)을 등록
+    private void initializeSectionEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, WeightStrategy weightStrategy) {
+        registerSection(graph, weightStrategy);
+        registerReverseSection(graph, weightStrategy);
+    }
+
+    private void registerSection(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, WeightStrategy weightStrategy) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
@@ -35,25 +74,22 @@ public class SubwayMap {
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, weightStrategy.weight(it));
                 });
+    }
 
-        // 지하철 역의 연결 정보(간선)을 등록
+    private void registerReverseSection(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, WeightStrategy weightStrategy) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .map(Section::reverseOf)
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, weightStrategy.weight(it));
                 });
+    }
 
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
-
-        List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
-                .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
+    private List<Section> extractSections(GraphPath<Station, SectionEdge> result) {
+        return result.getEdgeList().stream()
+                .map(SectionEdge::getSection)
+                .collect(Collectors.toUnmodifiableList());
     }
 }

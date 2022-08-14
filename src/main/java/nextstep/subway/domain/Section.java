@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -29,12 +30,28 @@ public class Section extends DefaultWeightedEdge {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+    private Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    public static Section create(Line line, Station upStation, Station downStation, int distance, int duration) {
+        return new Section(line, upStation, downStation, distance, duration);
+    }
+
+    public static Section reverseOf(Section section) {
+        return new Section(section.line, section.downStation, section.upStation, section.distance, section.duration);
+    }
+
+    public static Section combineSection(Section upSection, Section downSection) {
+        return new Section(upSection.line,
+                upSection.upStation,
+                downSection.downStation,
+                upSection.distance + downSection.distance,
+                upSection.duration + downSection.duration);
     }
 
     public Long getId() {
@@ -72,5 +89,18 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return distance == section.distance && duration == section.duration && Objects.equals(id, section.id) && Objects.equals(upStation, section.upStation) && Objects.equals(downStation, section.downStation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, upStation, downStation, distance, duration);
     }
 }

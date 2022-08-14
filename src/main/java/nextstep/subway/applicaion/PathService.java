@@ -2,7 +2,12 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Station;
+import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +28,12 @@ public class PathService {
         Station upStation = stationService.findById(pathRequest.getSource());
         Station downStation = stationService.findById(pathRequest.getTarget());
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines, PathType.of(pathRequest.getType()).weightStrategy());
+        PathType type = PathType.of(pathRequest.getType());
+        
+        SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
+        Fare fare = subwayMap.findFare(upStation, downStation);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fare);
     }
 }

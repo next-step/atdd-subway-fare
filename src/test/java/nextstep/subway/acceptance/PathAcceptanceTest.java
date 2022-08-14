@@ -1,12 +1,10 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +56,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로가_순서에_따라_조회됨(최단_거리_경로, 교대역, 남부터미널역, 양재역);
+        경로의_이용요금이_조회됨(최단_거리_경로, 1_250);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -68,10 +67,15 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로가_순서에_따라_조회됨(최소_시간_경로, 교대역, 강남역, 양재역);
+        경로의_이용요금이_조회됨(최소_시간_경로, 1_250);
     }
 
     private void 경로가_순서에_따라_조회됨(ExtractableResponse<Response> response, Long... stations) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
+    }
+
+    private void 경로의_이용요금이_조회됨(ExtractableResponse<Response> response, int fare) {
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {

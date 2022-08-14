@@ -44,8 +44,8 @@ public class Sections {
             throw new IllegalArgumentException();
         }
 
-        Optional<Section> upSection = findSectionAsUpStation(station);
-        Optional<Section> downSection = findSectionAsDownStation(station);
+        Optional<Section> upSection = findSectionAsDownStation(station);
+        Optional<Section> downSection = findSectionAsUpStation(station);
 
         addNewSectionForDelete(upSection, downSection);
 
@@ -92,7 +92,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), section.getDuration()));
+                    sections.add(Section.create(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), section.getDuration()));
                     sections.remove(it);
                 });
     }
@@ -103,7 +103,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), section.getDuration()));
+                    sections.add(Section.create(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), section.getDuration()));
                     sections.remove(it);
                 });
     }
@@ -124,14 +124,7 @@ public class Sections {
 
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
-            Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration() + downSection.get().getDuration()
-            );
-
+            Section newSection = Section.combineSection(upSection.get(), downSection.get());
             this.sections.add(newSection);
         }
     }

@@ -3,16 +3,16 @@
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 2
+:toclevels: 4
 :sectlinks:
 
 [[path]]
 == 지하철 경로
 
-=== 최단 거리 경로 조회
-
-operation::pathDistance[snippets='http-request,http-response']
-
-=== 최소 시간 경로 조회
-
-operation::pathDuration[snippets='http-request,http-response']
+=== 최소 경로 조회
+==== Request
+operation::paths-get[snippets='http-request,request-parameters']
+==== Response
+operation::paths-get[snippets='response-fields']
+==== Sample
+operation::paths-get[snippets='curl-request,http-response']
