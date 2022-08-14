@@ -3,7 +3,6 @@ package nextstep.subway.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,11 +12,11 @@ class AgeTest {
     @ParameterizedTest
     @MethodSource
     @DisplayName("주어진 연령대로 해당 타입 찾기")
-    void findAge(final Age actual, final Age expected) {
+    void findAgeTypeByAgeParameter(final Age actual, final Age expected) {
         assertThat(actual).isEqualTo(expected);
     }
 
-    private static Stream<Arguments> findAge() {
+    private static Stream<Arguments> findAgeTypeByAgeParameter() {
         return Stream.of(
             Arguments.of(Age.findAge(5), Age.BABY),
             Arguments.of(Age.findAge(12), Age.CHILD),

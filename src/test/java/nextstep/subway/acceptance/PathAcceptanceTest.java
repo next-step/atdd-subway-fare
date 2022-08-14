@@ -50,26 +50,35 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Scenario: 두 역의 최단 거리 경로를 조회
+     * Scenario: 비 로그인의 두 역의 최단 거리 경로를 조회
      * Given 지하철역이 등록되어있음
      * And 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
      * Then 최단 거리 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
-     * And 지하철 이용 요금도 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함 (로그인을 하지 않아서 따로 혜택 적용이 안됨)
      */
     @Test
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("비로그인 시, 두 역의 최단 거리 경로를 조회한다.")
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 비회원_최단_경로_조회(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertPathStationFare(response, 1250, 교대역, 남부터미널역, 양재역);
     }
 
+    /**
+     * Scenario: 청소년 로그인일 시 두 역의 최단 거리 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금 (청소년이라 할인혜택 30% 적용) 도 함께 응답함
+     */
     @Test
     @DisplayName("청소년의 거리 경로 조회")
     void findPathByDistanceForTeenager() {
@@ -77,10 +86,19 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 연령별_최단_거리_경로_조회(청소년, 교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1070);
+        assertPathStationFare(response, 1070, 교대역, 남부터미널역, 양재역);
     }
 
+    /**
+     * Scenario: 어린이 로그인일 시 두 역의 최단 거리 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금 (어린이 할인혜택 50% 적용) 도 함께 응답함
+     */
     @Test
     @DisplayName("어린이의 거리 경로 조회")
     void findPathByDistanceForChild() {
@@ -88,11 +106,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 연령별_최단_거리_경로_조회(어린이, 교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
+        assertPathStationFare(response, 800, 교대역, 남부터미널역, 양재역);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+    private void assertPathStationFare(final ExtractableResponse<Response> response, final int fare, Long... 역경로) {
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(역경로);
+    }
+
+    private ExtractableResponse<Response> 비회원_최단_경로_조회(Long source, Long target) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -145,8 +167,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int price, int distance, int duration) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
+        Map<String, String> lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
         lineCreateParams.put("upStationId", upStation + "");
