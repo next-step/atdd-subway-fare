@@ -2,7 +2,7 @@ package nextstep.subway.util;
 
 import nextstep.subway.domain.Fare;
 import nextstep.subway.util.discount.AdultPaymentPolicy;
-import nextstep.subway.util.discount.AgeFactory;
+import nextstep.subway.util.discount.DiscountAgePolicyFactory;
 import nextstep.subway.util.discount.DiscountAgePolicy;
 import nextstep.subway.util.discount.ChildrenPaymentPolicy;
 import nextstep.subway.util.discount.TeenagerPaymentPolicy;
@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DiscountAgePolicyTest {
 
     @Autowired
-    private AgeFactory ageFactory;
+    private DiscountAgePolicyFactory discountAgePolicyFactory;
 
     @DisplayName("나이의 경계 값 테스트")
     @ParameterizedTest
     @MethodSource("ageBoundary")
     void ageBoundaryTest(int userAge, DiscountAgePolicy discountAgePolicy) {
-        DiscountAgePolicy findUserDiscountAgePolicy = ageFactory.findUsersAge(userAge);
+        DiscountAgePolicy findUserDiscountAgePolicy = discountAgePolicyFactory.findUsersAge(userAge);
 
         assertThat(findUserDiscountAgePolicy).isExactlyInstanceOf(discountAgePolicy.getClass());
     }

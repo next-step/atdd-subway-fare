@@ -1,19 +1,19 @@
 package nextstep.subway.payment;
 
-import nextstep.subway.util.discount.AgeFactory;
+import nextstep.subway.util.discount.DiscountAgePolicyFactory;
 import nextstep.subway.util.discount.DiscountAgePolicy;
 
 public class AgeDiscountPaymentPolicy implements PaymentPolicy {
 
-    private final AgeFactory ageFactory;
+    private final DiscountAgePolicyFactory discountAgePolicyFactory;
 
-    public AgeDiscountPaymentPolicy(AgeFactory ageFactory) {
-        this.ageFactory = ageFactory;
+    public AgeDiscountPaymentPolicy(DiscountAgePolicyFactory discountAgePolicyFactory) {
+        this.discountAgePolicyFactory = discountAgePolicyFactory;
     }
 
     @Override
     public void pay(PaymentRequest paymentRequest) {
-        DiscountAgePolicy discountAgePolicy = ageFactory.findUsersAge(paymentRequest.getLoginMemberAge());
+        DiscountAgePolicy discountAgePolicy = discountAgePolicyFactory.findUsersAge(paymentRequest.getLoginMemberAge());
         discountAgePolicy.discount(paymentRequest.getFare());
     }
 }

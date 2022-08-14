@@ -3,7 +3,7 @@ package nextstep.subway.util.discount;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AgeFactory {
+public class DiscountAgePolicyFactory {
 
     private final List<DiscountAgePolicy> agePolicies = new ArrayList<>();
 
