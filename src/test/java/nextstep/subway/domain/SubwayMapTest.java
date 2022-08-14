@@ -11,7 +11,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class SubwayMapTest {
+public class SubwayMapTest extends FareManagerLoaderTest {
 
     private Station 교대역;
     private Station 강남역;
@@ -23,6 +23,8 @@ public class SubwayMapTest {
 
     @BeforeEach
     void setUp() {
+        super.setUp();
+
         교대역 = createStation(1L, "교대역");
         강남역 = createStation(2L, "강남역");
         양재역 = createStation(3L, "양재역");

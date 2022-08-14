@@ -1,5 +1,8 @@
 package nextstep.subway.domain.policy;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class OverFiftyExtraFare implements FarePolicy {
 
     private static final int MINIMUM_DISTANCE = 50;
