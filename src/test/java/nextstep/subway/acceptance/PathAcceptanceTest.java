@@ -22,6 +22,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 도곡역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
@@ -41,21 +42,22 @@ class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
+        도곡역 = 지하철역_생성_요청(관리자, "도곡역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 10);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 12, 4);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 50, 5);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(양재역, 도곡역, 52, 7));
     }
 
     /**
      * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
      * Then 총 거리와 소요 시간을 함께 응답함
      */
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathByDistance() {
+    void 두_역_최단_거리_경로_조회() {
         // when
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE.name());
 
@@ -78,6 +80,102 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 두_역_10KM_이내_최단_거리_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(남부터미널역, 강남역, PathType.DISTANCE.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(14);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(6);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 두_역_경로_50KM_초과_최단_거리_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(남부터미널역, 도곡역, PathType.DISTANCE.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 양재역, 도곡역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(55);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 10KM 이내 최소 시간 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 두_역_10KM_이내_최소_시간_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, PathType.DURATION.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최소 시간 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 두_역_10KM_초과_50KM_이하_최소_시간_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(남부터미널역, 강남역, PathType.DURATION.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(14);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(6);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 50KM 초과 최소 시간 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 두_역_경로_50KM_초과_최소_시간_경로_조회() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(남부터미널역, 도곡역, PathType.DURATION.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 양재역, 도곡역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(55);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
     }
 
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String pathType) {
