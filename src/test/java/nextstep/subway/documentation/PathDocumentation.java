@@ -111,7 +111,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].id").description("역 id"),
                                 fieldWithPath("stations[].name").description("역 이름"),
                                 fieldWithPath("distance").description("총 거리"),
-                                fieldWithPath("duration").description("총 시간")
+                                fieldWithPath("duration").description("총 시간"),
+                                fieldWithPath("fare").description("총 요금")
                         )
                 ));
     }

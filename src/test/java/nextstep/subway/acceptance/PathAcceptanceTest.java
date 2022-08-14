@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PathAcceptanceTest extends AcceptanceTest {
 
     private static final String PATHS_PATH = "/paths?source={source}&target={target}&type={type}";
+    private static final int BASIC_FARE = 1250;
     private static final String DISTANCE = "distance";
     private static final String DURATION = "duration";
 
@@ -55,14 +56,23 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 2));
     }
 
+    /**
+     * Given 지하철역, 노선, 구간이 등록됨
+     * When 출발역에서 도착역까지 최단 거리 경로 조회 요청
+     * Then 최단 거리 경로, 거리, 소요시간, 요금까지 함께 응답
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
+        // given
+
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getList("stations.id", Long.class))
+                .containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(BASIC_FARE);
     }
 
     /**
@@ -72,6 +82,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
+     * And 이용 요금도 함께 응답
      */
     @DisplayName("최단 시간 경로 조회")
     @Test
@@ -79,16 +90,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given
 
         // when
-        final ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회_요청(교대역, 양재역);
-        final List<Long> 역_정보 = response.jsonPath().getList("stations.id", Long.class);
-        final int totalDistance = response.jsonPath().getInt("distance");
-        final int totalDuration = response.jsonPath().getInt("duration");
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회_요청(교대역, 양재역);
+        List<Long> 역_정보 = response.jsonPath().getList("stations.id", Long.class);
+        int totalDistance = response.jsonPath().getInt("distance");
+        int totalDuration = response.jsonPath().getInt("duration");
+        int fare = response.jsonPath().getInt("fare");
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(역_정보).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(totalDistance).isEqualTo(5);
         assertThat(totalDuration).isEqualTo(6);
+        assertThat(fare).isEqualTo(BASIC_FARE);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
