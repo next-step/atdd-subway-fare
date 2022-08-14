@@ -7,6 +7,7 @@ import java.util.List;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.path.finder.PathDurationFinder;
 import nextstep.subway.domain.path.finder.PathFinder;
 import org.assertj.core.util.Lists;
@@ -47,7 +48,7 @@ public class PathDurationFinderTest {
     PathFinder pathFinder = new PathDurationFinder(lines);
 
     // when
-    Path path = pathFinder.findPath(교대역, 양재역);
+    Path path = pathFinder.findPath(교대역, 양재역, PathType.DURATION);
 
     // then
     assertAll(
@@ -64,7 +65,7 @@ public class PathDurationFinderTest {
     PathFinder pathFinder = new PathDurationFinder(lines);
 
     // when
-    Path path = pathFinder.findPath(양재역, 교대역);
+    Path path = pathFinder.findPath(양재역, 교대역, PathType.DURATION);
 
     // then
     assertAll(
