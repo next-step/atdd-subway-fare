@@ -23,9 +23,20 @@ public class FareCalculator {
             return 0;
         }
 
-        int over50 = Math.max(distance - FIFTY, 0);
-        int between10and50 = Math.max(distance - over50 - MINIMUM_DISTANCE, 0);
+        final int over50 = Math.max(distance - FIFTY, 0);
+        final int between10and50 = Math.max(distance - over50 - MINIMUM_DISTANCE, 0);
 
-        return MINIMUM_FARE + BETWEEN_10_AND_50.applyAsInt(between10and50) + OVER_50.applyAsInt(over50);
+        final int price = MINIMUM_FARE + BETWEEN_10_AND_50.applyAsInt(between10and50) + OVER_50.applyAsInt(over50);
+
+        return calculateByAge(age, price);
+    }
+
+    private int calculateByAge(int age, int price) {
+        if (age < 13 && age >= 6) {
+            return (price - 350) / 10 * 5;
+        } else if (age < 19 && age >= 13) {
+            return (price - 350) / 10 * 8;
+        }
+        return price;
     }
 }

@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
 @Component
 public class PathResponseBuilder {
 
-    private FareCalculator fareCalculator;
+    private final FareCalculator fareCalculator;
 
     public PathResponseBuilder(FareCalculator fareCalculator) {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathResponse build(Path path) {
+    public PathResponse build(Path path, int age) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = fareCalculator.calculateOverFare(distance);
+        int fare = fareCalculator.calculateOverFare(distance, age);
 
         return new PathResponse(stations, distance, duration, fare);
     }
