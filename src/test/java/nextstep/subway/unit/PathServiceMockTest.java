@@ -12,7 +12,6 @@ import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.path.PathType;
