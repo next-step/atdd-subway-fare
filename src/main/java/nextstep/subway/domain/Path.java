@@ -25,8 +25,13 @@ public class Path {
         return sections.getStations();
     }
 
-    public int extractFare() {
-        return Fare.calculateOverFare(extractDistance());
+    public int extractFare(int userAge) {
+        final Age age = Age.findAge(userAge);
+        return age.ageFare(Fare.calculateOverFare(extractDistance()));
+    }
+
+    public int maximumPrice() {
+        return sections.maximumPrice();
     }
 
 }

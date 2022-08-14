@@ -158,4 +158,11 @@ public class Sections {
             .sum();
     }
 
+    public int maximumPrice() {
+        return sections.stream()
+            .mapToInt(section -> section.getLine().getPrice())
+            .max()
+            .orElseThrow(() -> new IllegalStateException("노선이 존재하지 않습니다."));
+    }
+
 }
