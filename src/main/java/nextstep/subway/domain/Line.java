@@ -12,14 +12,18 @@ public class Line {
     private String color;
 
     @Embedded
+    private Price price;
+
+    @Embedded
     private Sections sections = new Sections();
 
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int price) {
         this.name = name;
         this.color = color;
+        this.price = new Price(price);
     }
 
     public Long getId() {
@@ -32,6 +36,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public Price getPrice() {
+        return price;
     }
 
     public List<Section> getSections() {
