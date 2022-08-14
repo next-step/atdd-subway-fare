@@ -1,32 +1,28 @@
 package nextstep.subway.payment;
 
-import nextstep.subway.domain.Fare;
-
 public class DistancePaymentPolicy implements PaymentPolicy {
 
     private static final int BASE_FARE = 1_250;
     private static final int BASE_DISTANCE = 10;
     private static final int FURTHER_DISTANCE = 50;
 
-    private final int distance;
-
-    public DistancePaymentPolicy(int distance) {
-        this.distance = distance;
-    }
+    public DistancePaymentPolicy() { }
 
     @Override
-    public void calculate(Fare fare) {
+    public void pay(PaymentRequest paymentRequest) {
+        int distance = paymentRequest.getPathResult().extractDistance();
+
         if (distance <= BASE_DISTANCE) {
-            fare.increase(BASE_FARE);
+            paymentRequest.addFare(BASE_FARE);
             return;
         }
 
         if (distance <= FURTHER_DISTANCE) {
-            fare.increase(BASE_FARE + calculate10KMOverFare(distance));
+            paymentRequest.addFare(BASE_FARE + calculate10KMOverFare(distance));
             return;
         }
 
-        fare.increase(BASE_FARE + calculate10KMOverFare(distance) + calculate50KMOverFare(distance));
+        paymentRequest.addFare(BASE_FARE + calculate10KMOverFare(distance) + calculate50KMOverFare(distance));
     }
 
     private static int calculate10KMOverFare(int distance) {

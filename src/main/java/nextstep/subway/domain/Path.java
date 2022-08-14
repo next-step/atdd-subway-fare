@@ -22,6 +22,10 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public int mostExpensiveLineFare() {
+        return sections.mostExpensiveLineFare();
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }
