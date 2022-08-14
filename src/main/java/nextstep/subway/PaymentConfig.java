@@ -11,11 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class PaymentConfig {
 
     @Bean
-    public void addDiscountAgePolicy() {
+    public AgeFactory addDiscountAgePolicy() {
         AgeFactory ageFactory = ageFactory();
         ageFactory.addDiscountAgePolicy(new Children());
         ageFactory.addDiscountAgePolicy(new Teenager());
         ageFactory.addDiscountAgePolicy(new Adult());
+        return ageFactory;
     }
 
     @Bean
