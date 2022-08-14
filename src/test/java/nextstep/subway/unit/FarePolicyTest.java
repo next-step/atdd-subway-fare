@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.discount.DiscountCalculator;
 import nextstep.subway.domain.fare.BasicFarePolicy;
 import nextstep.subway.domain.fare.FarePolicy;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +43,6 @@ public class FarePolicyTest {
     @DisplayName("요금 계산 - 50km 이상")
     @Test
     void calculateOverFareFrom50KM() {
-        // 51 -> 1250 + 800 + 100 = 2150
-
         // given
         final int distance = 59;
 
@@ -53,5 +52,37 @@ public class FarePolicyTest {
 
         // then
         assertThat(fare).isEqualTo(2250);
+    }
+
+    @DisplayName("요금 계산 - 어린이 할인 정책 적용")
+    @Test
+    void calculateOverFareApplyDiscountChildren() {
+        // given
+        final int distance = 10;
+        FarePolicy farePolicy = new BasicFarePolicy();
+        long fare = farePolicy.calculateOverFare(distance);
+
+        // when
+        long discountFare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.CHILDREN, fare);
+
+        // then
+        assertThat(discountFare).isEqualTo(800);
+
+    }
+
+    @DisplayName("요금 계산 - 청소년 할인 정책 적용")
+    @Test
+    void calculateOverFareApplyDiscountTeenager() {
+
+        // given
+        final int distance = 10;
+        FarePolicy farePolicy = new BasicFarePolicy();
+        long fare = farePolicy.calculateOverFare(distance);
+
+        // when
+        long discountFare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.TEENAGER, fare);
+
+        // then
+        assertThat(discountFare).isEqualTo(1070);
     }
 }

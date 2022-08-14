@@ -83,6 +83,40 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getLong("fare")).isEqualTo(1450);
     }
 
+    @DisplayName("두 역의 최단 거리 경로(길이)에 따른 요금을 계산한다. - 청소년 할인 정책 적용")
+    @Test
+    void calculateFareApplyDiscountTeenager() {
+
+        // given
+        final String distance = "DISTANCE";
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(관리자, 교대역, 양재역, distance);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1070);
+    }
+
+    @DisplayName("두 역의 최단 거리 경로(길이)에 따른 요금을 계산한다. - 어린이 할인 정책 적용")
+    @Test
+    void calculateFareApplyDiscountFromChildren() {
+
+        // given
+        final String distance = "DISTANCE";
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(일반멤버, 교대역, 양재역, distance);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(800);
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String type) {
         return RestAssured
                 .given().log().all()
@@ -90,6 +124,14 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();
     }
+
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String 관리자, Long source, Long target, String type) {
+        return AcceptanceTestSteps.given(관리자)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .then().log().all().extract();
+    }
+
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
