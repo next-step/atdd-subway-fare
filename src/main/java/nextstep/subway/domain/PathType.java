@@ -34,8 +34,4 @@ public enum PathType {
     public WeightStrategy weightStrategy() {
         return this.weightStrategy;
     }
-
-    public boolean isDistanceType() {
-        return this == DISTANCE;
-    }
 }

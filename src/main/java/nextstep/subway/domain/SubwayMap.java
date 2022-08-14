@@ -33,7 +33,7 @@ public class SubwayMap {
     }
 
     public Fare findFare(Station source, Station target) {
-        if (type.isDistanceType() && hasFoundPathResult()) {
+        if (type.equals(PathType.DISTANCE) && hasFoundPathResult()) {
             return new Fare(foundPathResult);
         }
 
