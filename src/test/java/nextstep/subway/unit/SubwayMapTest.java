@@ -11,22 +11,27 @@ import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.payment.LinePaymentPolicy;
 import nextstep.subway.payment.PaymentHandler;
 import nextstep.subway.payment.PaymentPolicy;
-import nextstep.subway.util.discount.AdultPaymentPolicy;
-import nextstep.subway.util.discount.ChildrenPaymentPolicy;
-import nextstep.subway.util.discount.TeenagerPaymentPolicy;
+import nextstep.subway.payment.PaymentRequestImpl;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.fixture.LoginMemberAge.ADULT_AGE;
+import static nextstep.subway.fixture.LoginMemberAge.ANONYMOUS_AGE;
+import static nextstep.subway.fixture.LoginMemberAge.CHILDREN_AGE;
+import static nextstep.subway.fixture.LoginMemberAge.TEENAGER_AGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@SpringBootTest
 public class SubwayMapTest {
 
     private Station 교대역;
@@ -36,6 +41,9 @@ public class SubwayMapTest {
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+
+    @Autowired
+    private PaymentHandler paymentHandler;
 
     /**
      * 교대역    --- *2호선*(0원, 3km, 3분)   ---     강남역
@@ -100,14 +108,14 @@ public class SubwayMapTest {
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, ANONYMOUS_AGE);
+        paymentHandler.calculate(paymentRequest);
 
         assertAll(
                 () -> assertThat(distance).isEqualTo(6),
                 () -> assertThat(duration).isEqualTo(6),
-                () -> assertThat(fare.fare()).isEqualTo(2_250)
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(2_250)
         );
     }
 
@@ -134,14 +142,13 @@ public class SubwayMapTest {
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, ANONYMOUS_AGE);
+        paymentHandler.calculate(paymentRequest);
 
         assertAll(
                 () -> assertThat(distance).isEqualTo(16),
                 () -> assertThat(duration).isEqualTo(16),
-                () -> assertThat(fare.fare()).isEqualTo(2_450)
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(2_450)
         );
     }
 
@@ -169,14 +176,13 @@ public class SubwayMapTest {
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, ANONYMOUS_AGE);
+        paymentHandler.calculate(paymentRequest);
 
         assertAll(
                 () -> assertThat(distance).isEqualTo(68),
                 () -> assertThat(duration).isEqualTo(13),
-                () -> assertThat(fare.fare()).isEqualTo(3350)
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(3350)
         );
     }
 
@@ -213,11 +219,11 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        PaymentPolicy linePaymentPolicy = new LinePaymentPolicy(path.getSections().getSections());
-        Fare lineFare = Fare.from(0);
-        linePaymentPolicy.calculate(lineFare);
+        PaymentPolicy linePaymentPolicy = new LinePaymentPolicy();
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, ANONYMOUS_AGE);
+        linePaymentPolicy.pay(paymentRequest);
 
-        assertThat(lineFare.fare()).isEqualTo(1_000);
+        assertThat(paymentRequest.getFare().fare()).isEqualTo(1_000);
     }
 
     /**
@@ -245,19 +251,18 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 남부터미널역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, ANONYMOUS_AGE);
+        paymentHandler.calculate(paymentRequest);
 
-        Fare lineFare = Fare.from(0);
-        new LinePaymentPolicy(path.getSections().getSections()).calculate(lineFare);
+        PaymentRequestImpl linePaymentRequest = PaymentRequestImpl.of(path, ANONYMOUS_AGE);
+        new LinePaymentPolicy().pay(linePaymentRequest);
 
         // then
         assertAll(
                 () -> assertThat(path.extractDistance()).isEqualTo(30),
                 () -> assertThat(path.extractDuration()).isEqualTo(30),
-                () -> assertThat(fare.fare()).isEqualTo(1_750),
-                () -> assertThat(lineFare.fare()).isZero()
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(1_750),
+                () -> assertThat(linePaymentRequest.getFare().fare()).isZero()
         );
     }
 
@@ -286,16 +291,15 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new ChildrenPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, CHILDREN_AGE);
+        paymentHandler.calculate(paymentRequest);
 
         // then
         assertAll(
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
                 () -> assertThat(path.extractDistance()).isEqualTo(6),
                 () -> assertThat(path.extractDuration()).isEqualTo(6),
-                () -> assertThat(fare.fare()).isEqualTo(1_300)
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(1_300)
         );
     }
 
@@ -309,16 +313,15 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new TeenagerPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, TEENAGER_AGE);
+        paymentHandler.calculate(paymentRequest);
 
         // then
         assertAll(
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
                 () -> assertThat(path.extractDistance()).isEqualTo(6),
                 () -> assertThat(path.extractDuration()).isEqualTo(6),
-                () -> assertThat(fare.fare()).isEqualTo(1_870)
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(1_870)
         );
     }
 
@@ -332,16 +335,15 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
-        Fare fare = Fare.from(0);
-        paymentHandler.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(path, ADULT_AGE);
+        paymentHandler.calculate(paymentRequest);
 
         // then
         assertAll(
                 () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역)),
                 () -> assertThat(path.extractDistance()).isEqualTo(6),
                 () -> assertThat(path.extractDuration()).isEqualTo(6),
-                () -> assertThat(fare.fare()).isEqualTo(2_250)
+                () -> assertThat(paymentRequest.getFare().fare()).isEqualTo(2_250)
         );
     }
 

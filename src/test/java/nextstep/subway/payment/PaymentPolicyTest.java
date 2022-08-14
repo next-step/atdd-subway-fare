@@ -5,14 +5,24 @@ import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import static nextstep.subway.fixture.LoginMemberAge.ADULT_AGE;
+import static nextstep.subway.fixture.LoginMemberAge.ANONYMOUS_AGE;
 import static org.assertj.core.api.Assertions.*;
 
 class PaymentPolicyTest {
@@ -57,12 +67,25 @@ class PaymentPolicyTest {
     @Test
     @DisplayName("거리기반 요금정책")
     void distanceFarePolicy() {
-        PaymentPolicy distanceFarePolicy = new DistancePaymentPolicy(교대역_양재역.extractDistance());
+        PaymentPolicy distanceFarePolicy = new DistancePaymentPolicy();
 
-        Fare fare = Fare.from(0);
-        distanceFarePolicy.calculate(fare);
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(교대역_양재역, ANONYMOUS_AGE);
 
-        assertThat(fare.fare()).isEqualTo(1_250);
+        distanceFarePolicy.pay(paymentRequest);
+
+        assertThat(paymentRequest.getFare().fare()).isEqualTo(1_250);
+    }
+
+    @Test
+    @DisplayName("노선 중 최대 금액 정책")
+    void mostExpensiveLineFarePolicy() {
+        LinePaymentPolicy linePaymentPolicy = new LinePaymentPolicy();
+
+        PaymentRequestImpl paymentRequest = PaymentRequestImpl.of(교대역_양재역, ANONYMOUS_AGE);
+
+        linePaymentPolicy.pay(paymentRequest);
+
+        assertThat(paymentRequest.getFare().fare()).isEqualTo(1_000);
     }
 
     private Station createStation(long id, String name) {
