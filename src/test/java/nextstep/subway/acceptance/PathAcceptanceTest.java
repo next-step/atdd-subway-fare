@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 당산역;
     private Long 수원역;
     private Long 역삼역;
     private Long 이호선;
@@ -30,6 +32,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
+     * 당산역
+     * |
+     * *2호선(50, 100)*
+     * |
      * 교대역    --- *2호선(10   , 1)* ---   강남역    --- 2호선 (5, 2 ) --- 역삼역
      * |                                |
      * *3호선(2, 10)*                     *신분당선* (10, 1)
@@ -46,9 +52,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
         수원역 = 지하철역_생성_요청(관리자, "수원역").jsonPath().getLong("id");
         역삼역 = 지하철역_생성_요청(관리자, "역삼역").jsonPath().getLong("id");
+        당산역 = 지하철역_생성_요청(관리자, "당산역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1);
         이호선 = 지하철_노선_생성_요청("2호선", "green", 강남역, 역삼역, 5, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 당산역, 50, 100);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 1);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
@@ -56,39 +64,77 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 환승하지 않고 최단거리를 가는 테스트를 합니다.
      *
-     * 교대역 -> 남부터미널역 -> 양재역 (3호선, 거리:5, 시간: 15)
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     *
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답(총 거리 10km 이하)
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답함
+     *
      */
-    @DisplayName("환승하지 않고 두 역 최단 거리를 조회한 경우")
+    @DisplayName("환승하지 않고 10km이하 최단 거리를 조회한 경우")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_거리_경로_조회를_요청(강남역 , 역삼역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 강남역, 역삼역 }, 1250);
     }
 
     /**
-     * 환승을 하여 최단 거리를 가는 경우를 테스트합니다.
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
      *
-     * 강남역 -> 교대역 -> (3호선환승) -> 남부터미널역
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답(총 거리 10km 초과)
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답함
      */
     @DisplayName("환승하여 두 역 최단 거리를 조회한 경우")
     @Test
     void transforFindPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역, 남부터미널역);
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_거리_경로_조회를_요청(강남역, 남부터미널역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 교대역, 남부터미널역);
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 강남역, 교대역, 남부터미널역 }, 1350);
     }
+
+    /**
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     *
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답(총 거리 50km 초과)
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답함
+     */
+    @DisplayName("50km 거리 이상 환승하여 두 역 최단 거리를 조회한 경우")
+    @Test
+    void overDistance50FindPathByDistance() {
+        // when
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_거리_경로_조회를_요청(남부터미널역, 당산역);
+
+        // then
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 남부터미널역, 교대역, 당산역 }, 2150);
+    }
+
 
     /**
      * 연결 되지 않은 지하철일 경우 반환합니다.
      *
-     * BAD_REQUEST - 400
+    *  Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     *
+     * When 연결되어 있지 않는 지하철역 최단거리를 조회
+     * Then 400(Bad-Request) 응답
      * 
      */
     @DisplayName("연결 되지 않은 지하철역을 최단 거리를 조회할 경우 에러를 반환합니다.")
@@ -102,7 +148,15 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 환승하여 최단 시간걸리는 지하철 경로를 조회합니다.
+     *
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     *
+     * When 출발역에서 도착역까지의 최단 시간 경로 조회를 요청
+     * Then 최단 거리 경로를 응답(총 거리 10km 초과)
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답함
      *
      * (2호선) -> 교대역 -> 강남역 -> (신분당선 환승) -> 양재역
      */
@@ -110,41 +164,58 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void TransferFindPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 교대역, 강남역, 양재역 }, 1450);
     }
 
     /**
      * 환승하지 않고 최단 시간 걸리는 지하철 경로를 조회
      *
-     * (2호선) -> 강남역 ->
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     *
+     * When 출발역에서 도착역까지의 최단 시간 경로 조회를 요청
+     * Then 최단 거리 경로를 응답(총 거리 10km 초과)
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답함
      *
      */
     @DisplayName("환승하지 않고 최단 시간걸리는 지하철 경로를 조회합니다")
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(역삼역, 교대역);
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_시간_경로_조회를_요청(역삼역, 교대역);
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(역삼역, 강남역, 교대역);
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 역삼역, 강남역, 교대역 }, 1350);
     }
 
     /**
-     * 환승하지 않고 최단 시간 걸리는 지하철 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
      *
-     * (2호선) -> 강남역 ->
-     *
+     * When 출발역에서 도착역까지의 최단 시간 경로 조회를 요청
+     * Then 최단 거리 경로를 응답(총 거리 50km 이상)
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답함
      */
-    @DisplayName("연결되어 있지 않은 지하철역 조회시 최단 시간걸리는 지하철 경로를 조회합니다")
     @Test
-    void notConnectionFindPathByDurationException() {
+    @DisplayName("50km 거리 이상 지하철 최단 시간 경로 테스트 합니다.")
+    void overDistance50() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(역삼역, 교대역);
+        ExtractableResponse<Response> 경로_조회 = 두_역의_최단_시간_경로_조회를_요청(남부터미널역, 당산역);
+
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        최단_경로_및_요금_계산(경로_조회, new Long[] { 남부터미널역, 양재역, 강남역, 교대역, 당산역 }, 2350);
     }
 
+
+    private void 최단_경로_및_요금_계산(ExtractableResponse<Response> response, Long[] stations, int price) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
+        assertThat(response.jsonPath().getInt("price")).isEqualTo(price);
+    }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return 두_역의_최단_경로_요청(source, target, PathType.DISTANCE);

@@ -1,10 +1,9 @@
 package nextstep.subway.applicaion.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import nextstep.subway.domain.Favorite;
 
+@Getter
 public class FavoriteResponse {
     private Long id;
     private StationResponse source;

@@ -38,7 +38,7 @@ public class PathDocumentationStep {
             Lists.newArrayList(
                 new StationResponse(1L, "강남역"),
                 new StationResponse(2L, "역삼역")
-            ), 10, 5
+            ), 10, 5, 1250
         );
     }
 
@@ -56,7 +56,8 @@ public class PathDocumentationStep {
             fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
             fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역명"),
             fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-            fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간")
+            fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간"),
+            fieldWithPath("price").type(JsonFieldType.NUMBER).description("요금")
         );
     }
 

@@ -7,6 +7,8 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.path.SubwayMap;
+import nextstep.subway.price.DistancePricePolicy;
+import nextstep.subway.price.PricePolicy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,9 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType.getEdgeInitiator());
+        int shortestDistance = subwayMap.findPath(upStation, downStation, PathType.DISTANCE.getEdgeInitiator()).extractDistance();
 
-        return PathResponse.of(path);
+        PricePolicy price = new DistancePricePolicy(shortestDistance);
+        return PathResponse.of(path, price.calculatePrice());
     }
 }
