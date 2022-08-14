@@ -188,7 +188,7 @@ public class SubwayMapTest {
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(() -> 신분당선.addSection(createSectionBuilder(양재역, 모란역, Distance.from(0), Duration.from(5))))
-                .withMessage("거리는 0 이하가 될 수 없습니다. 입력된 거리 : %d", 0);
+                .withMessage(Distance.NEGATIVE_DISTANCE_MESSAGE + "%d", 0);
     }
 
     @DisplayName("소요 시간이 0인 구간을 추가할 때 예외 발생")
@@ -199,7 +199,7 @@ public class SubwayMapTest {
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(() -> 신분당선.addSection(createSectionBuilder(양재역, 모란역, Distance.from(5), Duration.from(0))))
-                .withMessage("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : %d", 0);
+                .withMessage(Duration.NEGATIVE_DURATION_MESSAGE + "%d", 0);
     }
 
     @DisplayName("경로에서 가장 값이 비싼 노선의 가격을 채택함")
@@ -265,7 +265,7 @@ public class SubwayMapTest {
     @Test
     void negativeFareInLine() {
         assertThatIllegalArgumentException().isThrownBy(() -> new Line("A노선", "bg-red-600", Fare.from(-1)))
-                .withMessage("노선의 추가 요금은 0 미만의 금액이 들어올 수 없습니다. 입력된 금액 : %d", -1);
+                .withMessage(Fare.NEGATIVE_FARE_MESSAGE + "%d", -1);
     }
 
     @DisplayName("빈 구간 리스트에서 값을 추출할 때 예외")

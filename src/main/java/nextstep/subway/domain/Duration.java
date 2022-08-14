@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Duration {
 
+    public static final String NEGATIVE_DURATION_MESSAGE = "소요 시간은 0 이하일 수 없습니다. 입력된 시간 : ";
     private static final int BASE_DURATION = 0;
     @Column
     private int duration;
@@ -19,7 +20,7 @@ public class Duration {
 
     private void validateLessThanZero(int duration) {
         if (duration <= BASE_DURATION) {
-            throw new IllegalArgumentException("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : " + duration);
+            throw new IllegalArgumentException(NEGATIVE_DURATION_MESSAGE + duration);
         }
     }
 
