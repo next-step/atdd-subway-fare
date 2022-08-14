@@ -40,7 +40,8 @@ class PathDocumentation extends Documentation {
                                 subsectionWithPath("stations.[].id").description("지하철역 ID"),
                                 subsectionWithPath("stations.[].name").description("지하철역 이름"),
                                 subsectionWithPath("distance").description("거리"),
-                                subsectionWithPath("duration").description("소요시간"))
+                                subsectionWithPath("duration").description("소요시간"),
+                                subsectionWithPath("fare").description("요금"))
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
@@ -56,6 +57,6 @@ class PathDocumentation extends Documentation {
                 StationResponse.of(new Station(3L, "강남역")),
                 StationResponse.of(new Station(2L, "잠실역")));
 
-        return new PathResponse(지하철역_목록, 20, 10);
+        return new PathResponse(지하철역_목록, 20, 10, 1450);
     }
 }
