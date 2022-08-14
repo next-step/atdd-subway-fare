@@ -54,29 +54,29 @@ class SubwayMapTest {
     @Test
     void findPathByDistance() {
         // given
-        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선), PathSearchType.DISTANCE);
+        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선));
 
         // when
-        Path path = map.findPath(강남역.getId(), 남부터미널역.getId());
+        Path path = map.findPath(강남역.getId(), 남부터미널역.getId(), PathSearchType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactly(강남역.getId(), 양재역.getId(), 남부터미널역.getId());
-        assertThat(path.extractDistance()).isEqualTo(7);
-        assertThat(path.extractDuration()).isEqualTo(8);
+        assertThat(path.getDistance()).isEqualTo(7);
+        assertThat(path.getDuration()).isEqualTo(8);
     }
 
     @Test
     void findPathByDuration() {
         // given
-        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선), PathSearchType.DURATION);
+        SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선));
 
         // when
-        Path path = map.findPath(강남역.getId(), 남부터미널역.getId());
+        Path path = map.findPath(강남역.getId(), 남부터미널역.getId(), PathSearchType.DURATION);
 
         // then
         assertThat(path.getStations()).containsExactly(강남역.getId(), 교대역.getId(), 남부터미널역.getId());
-        assertThat(path.extractDuration()).isEqualTo(7);
-        assertThat(path.extractDistance()).isEqualTo(8);
+        assertThat(path.getDuration()).isEqualTo(7);
+        assertThat(path.getDistance()).isEqualTo(8);
     }
 
     private Station createStation(long id, String name) {

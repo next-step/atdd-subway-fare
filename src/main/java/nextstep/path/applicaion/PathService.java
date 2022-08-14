@@ -28,14 +28,18 @@ public class PathService {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines, searchType);
-        Path path = subwayMap.findPath(upStation.getId(), downStation.getId());
 
-        List<StationResponse> stations = stationService.findAllStationsById(path.getStations())
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPath(upStation.getId(), downStation.getId(), searchType);
+        List<StationResponse> stations = createStationResponses(path.getStations());
+
+        return new PathResponse(stations, path);
+    }
+
+    private List<StationResponse> createStationResponses(List<Long> stationIds) {
+        return stationService.findAllStationsById(stationIds)
                 .stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-
-        return new PathResponse(stations, path.extractDistance(), path.extractDuration());
     }
 }
