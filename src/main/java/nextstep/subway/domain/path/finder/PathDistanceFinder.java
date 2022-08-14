@@ -7,6 +7,6 @@ import nextstep.subway.domain.path.PathType;
 public class PathDistanceFinder extends PathFinderImpl {
 
   public PathDistanceFinder(List<Line> lines) {
-    super(lines, PathType.DISTANCE);
+    super(lines);
   }
 }

@@ -7,6 +7,6 @@ import nextstep.subway.domain.path.PathType;
 public class PathDurationFinder extends PathFinderImpl {
 
   public PathDurationFinder(List<Line> lines) {
-    super(lines, PathType.DURATION);
+    super(lines);
   }
 }

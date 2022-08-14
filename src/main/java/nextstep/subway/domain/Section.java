@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.path.PathType;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
@@ -60,6 +61,14 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getWeight(PathType pathType) {
+        if (pathType == PathType.DISTANCE) {
+            return getDistance();
+        }
+
+        return getDuration();
     }
 
     public boolean isSameUpStation(Station station) {

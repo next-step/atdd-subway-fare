@@ -6,6 +6,7 @@ import nextstep.common.exception.PathErrorMessage;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.FareCalculator;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.path.finder.PathFinder;
@@ -29,7 +30,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
 
         PathFinder pathFinder = pathType.getPathFinder(lines);
-        Path path = pathFinder.findPath(upStation, downStation);
+        Path path = pathFinder.findPath(upStation, downStation, pathType);
 
         return PathResponse.of(path);
     }

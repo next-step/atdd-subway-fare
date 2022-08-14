@@ -18,26 +18,24 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 public abstract class PathFinderImpl implements PathFinder {
 
   final List<Line> lines;
-  private final PathType pathType;
 
-  PathFinderImpl(List<Line> lines, PathType pathType) {
+  PathFinderImpl(List<Line> lines) {
     this.lines = lines;
-    this.pathType = pathType;
   }
 
   @Override
-  public Path findPath(Station source, Station target) {
+  public Path findPath(Station source, Station target, PathType pathType) {
     validateStationEquals(source, target);
 
     SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
     addStationGraph(graph);
-    addStationEdge(graph);
-    addStationEdgeOpposite(graph);
 
-    List<Section> sections = getShortestPath(source, target, graph);
+    Sections sections = getShortestPath(source, target, pathType, graph);
 
-    return new Path(new Sections(sections));
+    int shortDistance = pathType == PathType.DURATION ? getShortestPath(source, target, pathType, graph).totalDistance() : sections.totalDistance();
+
+    return new Path(sections, shortDistance);
   }
 
   private void validateStationEquals(Station source, Station target) {
@@ -55,41 +53,38 @@ public abstract class PathFinderImpl implements PathFinder {
         .forEach(graph::addVertex);
   }
 
-  private List<Section> getShortestPath(Station source, Station target, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+  private Sections getShortestPath(Station source, Station target, PathType pathType, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    addStationEdge(pathType, graph);
+    addStationEdgeOpposite(pathType, graph);
+
     DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
-    return result.getEdgeList().stream()
+    List<Section> sections = result.getEdgeList().stream()
         .map(SectionEdge::getSection)
         .collect(Collectors.toList());
+
+    return new Sections(sections);
   }
 
-  private void addStationEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+  private void addStationEdge(PathType pathType, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
     lines.stream()
         .flatMap(it -> it.getSections().stream())
         .forEach(it -> {
           SectionEdge sectionEdge = SectionEdge.of(it);
           graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-          graph.setEdgeWeight(sectionEdge, getWeight(it));
+          graph.setEdgeWeight(sectionEdge, it.getWeight(pathType));
         });
   }
 
-  private void addStationEdgeOpposite(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+  private void addStationEdgeOpposite(PathType pathType, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
     lines.stream()
         .flatMap(it -> it.getSections().stream())
         .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
         .forEach(it -> {
           SectionEdge sectionEdge = SectionEdge.of(it);
           graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-          graph.setEdgeWeight(sectionEdge, getWeight(it));
+          graph.setEdgeWeight(sectionEdge, it.getWeight(pathType));
         });
-  }
-
-  private int getWeight(Section section) {
-    if (pathType == PathType.DISTANCE) {
-      return section.getDistance();
-    }
-
-    return section.getDuration();
   }
 }
