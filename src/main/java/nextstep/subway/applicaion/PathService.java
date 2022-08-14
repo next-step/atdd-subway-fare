@@ -20,10 +20,10 @@ import java.util.List;
 public class PathService {
     private static final int ANONYMOUS_AGE = 0;
 
-    private LineService lineService;
-    private StationService stationService;
-    private MemberService memberService;
-    private PaymentHandler paymentHandler;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final MemberService memberService;
+    private final PaymentHandler paymentHandler;
 
     public PathService(LineService lineService, StationService stationService, MemberService memberService, PaymentHandler paymentHandler) {
         this.lineService = lineService;
