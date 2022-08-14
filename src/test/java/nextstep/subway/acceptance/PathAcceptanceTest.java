@@ -1,18 +1,21 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.constant.SearchType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.PathSteps.searchType에_따른_두_역의_최단_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,37 +53,49 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-    @Test
-    void findPathByDistance() {
+    @ParameterizedTest(name = "{index}: {2}")
+    @MethodSource("유저와_최단_거리_경로_요금")
+    void findPathByDistance(String email, int price, String message) {
         // when
-        ExtractableResponse<Response> response = searchType에_따른_두_역의_최단_경로_조회를_요청(교대역, 양재역, SearchType.DISTANCE);
+        String accessToken = 로그인_되어_있음(email, PASSWORD);
+        ExtractableResponse<Response> response = searchType에_따른_두_역의_최단_경로_조회를_요청(accessToken, 교대역, 양재역, SearchType.DISTANCE);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(price);
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
-    @Test
-    void findPathByDuration() {
+    @ParameterizedTest(name = "{index}: {2}")
+    @MethodSource("유저와_최단_시간_경로_요금")
+    void findPathByDuration(String email, int price, String message) {
         // when
-        ExtractableResponse<Response> response = searchType에_따른_두_역의_최단_경로_조회를_요청(교대역, 양재역, SearchType.DURATION);
+        String accessToken = 로그인_되어_있음(email, PASSWORD);
+        ExtractableResponse<Response> response = searchType에_따른_두_역의_최단_경로_조회를_요청(accessToken, 교대역, 양재역, SearchType.DURATION);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(8);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(price);
     }
 
-    private ExtractableResponse<Response> searchType에_따른_두_역의_최단_경로_조회를_요청(Long source, Long target, SearchType searchType) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&searchType={searchType}", source, target, searchType.name())
-                .then().log().all().extract();
+    private static Stream<Arguments> 유저와_최단_거리_경로_요금() {
+        return Stream.of(
+                Arguments.of("child@email.com", 450, "어린이 사용자는 350원을 공제한 금액의 50%를 할인받는다."),
+                Arguments.of("teenager@email.com", 720, "청소년 사용자는 350원을 공제한 금액의 20%를 할인받는다."),
+                Arguments.of("member@email.com", 1250, "성인 사용자는 할인 안받는다.")
+        );
+    }
+
+    private static Stream<Arguments> 유저와_최단_시간_경로_요금() {
+        return Stream.of(
+                Arguments.of("child@email.com", 550, "어린이 사용자는 350원을 공제한 금액의 50%를 할인받는다."),
+                Arguments.of("teenager@email.com", 880, "청소년 사용자는 350원을 공제한 금액의 20%를 할인받는다."),
+                Arguments.of("member@email.com", 1450, "성인 사용자는 할인 안받는다.")
+        );
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

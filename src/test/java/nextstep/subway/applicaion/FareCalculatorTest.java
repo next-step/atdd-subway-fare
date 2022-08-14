@@ -1,12 +1,8 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.dto.PathResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 class FareCalculatorTest {
 

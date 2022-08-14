@@ -15,7 +15,7 @@ import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
     private static final String EMAIL = "admin@email.com";
-    private static final String PASSWORD = "password";
+    public static final String PASSWORD = "password";
 
     @LocalServerPort
     int port;
