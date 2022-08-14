@@ -12,7 +12,7 @@ public class PathResponse {
     private final int duration;
     private final int fare;
 
-    public PathResponse(final List<StationResponse> stations, final int price, final int distance, final int duration, final int fare) {
+    private PathResponse(final List<StationResponse> stations, final int price, final int distance, final int duration, final int fare) {
         this.stations = stations;
         this.price = price;
         this.distance = distance;
