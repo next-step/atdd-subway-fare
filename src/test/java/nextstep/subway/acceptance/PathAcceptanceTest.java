@@ -136,7 +136,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         // 기본요금 + 10km 초과시 5km 마다 100원 + 50km 초과시 8km 마다 100원
-        거리와_요금_확인(response, 62, 1250 + 800 + 100);
+        거리와_요금_확인(response, 62, 1250 + 800 + 200);
     }
 
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
