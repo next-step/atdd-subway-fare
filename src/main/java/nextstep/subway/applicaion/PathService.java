@@ -20,10 +20,10 @@ public class PathService {
 
     private Map<String, PathStrategy> pathStrategyMap;
 
-    public PathService(LineService lineService, StationService stationService, List<PathStrategy> pathStrategies) {
+    public PathService(LineService lineService, StationService stationService, Map<String, PathStrategy> pathStrategyMap) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.pathStrategyMap = pathStrategies.stream().collect(toMap(p -> p.getName(), p -> p));
+        this.pathStrategyMap = pathStrategyMap;
     }
 
     public PathResponse findPath(Long source, Long target, String type) {
