@@ -4,6 +4,7 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
+import nextstep.subway.util.FareCalculator;
 import nextstep.subway.util.SubwayMap;
 import nextstep.subway.util.SubwayMapFactory;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,6 @@ public class PathService {
         SubwayMap subwayMap = subwayMapFactory.subwayMap(type);
         Path path = subwayMap.findPath(lines, upStation, downStation);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, FareCalculator.calculate(path.extractDistance()));
     }
 }
