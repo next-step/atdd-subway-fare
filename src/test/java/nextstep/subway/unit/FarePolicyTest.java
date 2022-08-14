@@ -1,10 +1,14 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.discount.DiscountCalculator;
 import nextstep.subway.domain.fare.BasicFarePolicy;
 import nextstep.subway.domain.fare.FarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import javax.naming.OperationNotSupportedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +22,8 @@ public class FarePolicyTest {
         final int distance = 10;
 
         // when
-        FarePolicy farePolicy = new BasicFarePolicy();
-        long fare = farePolicy.calculateOverFare(distance);
+        BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
+        long fare = basicFarePolicy.calculateOverFare(distance);
 
         // then
         assertThat(fare).isEqualTo(1250);
@@ -33,8 +37,8 @@ public class FarePolicyTest {
         final int distance = 16;
 
         // when
-        FarePolicy farePolicy = new BasicFarePolicy();
-        long fare = farePolicy.calculateOverFare(distance);
+        BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
+        long fare = basicFarePolicy.calculateOverFare(distance);
 
         // then
         assertThat(fare).isEqualTo(1450);
@@ -47,8 +51,8 @@ public class FarePolicyTest {
         final int distance = 59;
 
         // when
-        FarePolicy farePolicy = new BasicFarePolicy();
-        long fare = farePolicy.calculateOverFare(distance);
+        BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
+        long fare = basicFarePolicy.calculateOverFare(distance);
 
         // then
         assertThat(fare).isEqualTo(2250);
@@ -59,8 +63,8 @@ public class FarePolicyTest {
     void calculateOverFareApplyDiscountChildren() {
         // given
         final int distance = 10;
-        FarePolicy farePolicy = new BasicFarePolicy();
-        long fare = farePolicy.calculateOverFare(distance);
+        BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
+        long fare = basicFarePolicy.calculateOverFare(distance);
 
         // when
         long discountFare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.CHILDREN, fare);
@@ -76,8 +80,8 @@ public class FarePolicyTest {
 
         // given
         final int distance = 10;
-        FarePolicy farePolicy = new BasicFarePolicy();
-        long fare = farePolicy.calculateOverFare(distance);
+        BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
+        long fare = basicFarePolicy.calculateOverFare(distance);
 
         // when
         long discountFare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.TEENAGER, fare);

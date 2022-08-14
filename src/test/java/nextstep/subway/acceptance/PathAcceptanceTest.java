@@ -67,7 +67,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1250);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1650);
     }
 
     @DisplayName("두 역의 최소 시간의 거리 경로를 조회한다.")
@@ -84,7 +84,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(16);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(3);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1450);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(2350);
     }
 
     @DisplayName("두 역의 최단 거리 경로(길이)에 따라 추가적인 요금을 계산한다. - 노선별 추가 요금 적용(가장 높은 금액만)")
@@ -100,7 +100,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(2150);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1650);
     }
 
 
@@ -118,7 +118,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1070);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1390);
     }
 
     @DisplayName("두 역의 최단 거리 경로(길이)에 따른 요금을 계산한다. - 어린이 할인 정책 적용")
@@ -135,7 +135,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(800);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1000);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String type) {
