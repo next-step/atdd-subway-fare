@@ -9,7 +9,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.payment.PaymentHandler;
-import nextstep.subway.util.discount.Adult;
+import nextstep.subway.util.discount.AdultPaymentPolicy;
 import nextstep.subway.util.discount.DiscountAgePolicy;
 import nextstep.subway.util.discount.AgeFactory;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class PathService {
 
     private DiscountAgePolicy findLoginMemberAge(UserDetails user) {
         if (user instanceof AnonymousUser) {
-            return new Adult();
+            return new AdultPaymentPolicy();
         }
 
         String loginEmail = (String) user.getUsername();

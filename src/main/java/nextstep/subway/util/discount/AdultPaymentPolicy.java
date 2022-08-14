@@ -2,7 +2,7 @@ package nextstep.subway.util.discount;
 
 import nextstep.subway.domain.Fare;
 
-public class Adult implements DiscountAgePolicy {
+public class AdultPaymentPolicy implements DiscountAgePolicy {
 
     @Override
     public void discount(Fare fare) { }

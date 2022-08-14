@@ -2,7 +2,7 @@ package nextstep.subway.util.discount;
 
 import nextstep.subway.domain.Fare;
 
-public class Teenager implements DiscountAgePolicy {
+public class TeenagerPaymentPolicy implements DiscountAgePolicy {
 
     private static final double DISCOUNT_RATE = 0.2;
 

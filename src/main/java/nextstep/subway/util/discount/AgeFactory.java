@@ -15,6 +15,6 @@ public class AgeFactory {
         return agePolicies.stream()
                 .filter(discountAgePolicy -> discountAgePolicy.support(age))
                 .findFirst()
-                .orElse(new Adult());
+                .orElse(new AdultPaymentPolicy());
     }
 }

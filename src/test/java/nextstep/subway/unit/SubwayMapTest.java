@@ -11,9 +11,9 @@ import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.payment.LinePaymentPolicy;
 import nextstep.subway.payment.PaymentHandler;
 import nextstep.subway.payment.PaymentPolicy;
-import nextstep.subway.util.discount.Adult;
-import nextstep.subway.util.discount.Children;
-import nextstep.subway.util.discount.Teenager;
+import nextstep.subway.util.discount.AdultPaymentPolicy;
+import nextstep.subway.util.discount.ChildrenPaymentPolicy;
+import nextstep.subway.util.discount.TeenagerPaymentPolicy;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -100,7 +100,7 @@ public class SubwayMapTest {
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 
@@ -134,7 +134,7 @@ public class SubwayMapTest {
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 
@@ -169,7 +169,7 @@ public class SubwayMapTest {
         // then
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 
@@ -245,7 +245,7 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 남부터미널역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 
@@ -286,7 +286,7 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Children());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new ChildrenPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 
@@ -309,7 +309,7 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Teenager());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new TeenagerPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 
@@ -332,7 +332,7 @@ public class SubwayMapTest {
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
 
-        PaymentHandler paymentHandler = new PaymentHandler(path, new Adult());
+        PaymentHandler paymentHandler = new PaymentHandler(path, new AdultPaymentPolicy());
         Fare fare = Fare.from(0);
         paymentHandler.calculate(fare);
 

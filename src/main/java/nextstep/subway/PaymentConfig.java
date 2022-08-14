@@ -1,9 +1,9 @@
 package nextstep.subway;
 
-import nextstep.subway.util.discount.Adult;
+import nextstep.subway.util.discount.AdultPaymentPolicy;
 import nextstep.subway.util.discount.AgeFactory;
-import nextstep.subway.util.discount.Children;
-import nextstep.subway.util.discount.Teenager;
+import nextstep.subway.util.discount.ChildrenPaymentPolicy;
+import nextstep.subway.util.discount.TeenagerPaymentPolicy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +13,9 @@ public class PaymentConfig {
     @Bean
     public AgeFactory addDiscountAgePolicy() {
         AgeFactory ageFactory = ageFactory();
-        ageFactory.addDiscountAgePolicy(new Children());
-        ageFactory.addDiscountAgePolicy(new Teenager());
-        ageFactory.addDiscountAgePolicy(new Adult());
+        ageFactory.addDiscountAgePolicy(new ChildrenPaymentPolicy());
+        ageFactory.addDiscountAgePolicy(new TeenagerPaymentPolicy());
+        ageFactory.addDiscountAgePolicy(new AdultPaymentPolicy());
         return ageFactory;
     }
 
