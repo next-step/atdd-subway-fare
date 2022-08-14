@@ -1,12 +1,9 @@
 package nextstep.subway.applicaion;
 
 import java.util.List;
-import nextstep.common.exception.CustomException;
-import nextstep.common.exception.PathErrorMessage;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.path.FareCalculator;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.path.finder.PathFinder;

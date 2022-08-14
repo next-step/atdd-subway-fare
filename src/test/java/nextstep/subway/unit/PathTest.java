@@ -63,6 +63,6 @@ public class PathTest {
 
     Path path = new Path(new Sections(이호선.getSections()), 62);
 
-    assertThat(path.extractFare()).isEqualTo(2350);
+    assertThat(path.extractFare()).isEqualTo(2250);
   }
 }

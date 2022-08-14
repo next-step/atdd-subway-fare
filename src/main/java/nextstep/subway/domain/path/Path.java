@@ -3,6 +3,7 @@ package nextstep.subway.domain.path;
 import java.util.List;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.finder.FareCalculator;
 
 public class Path {
     private final Sections sections;

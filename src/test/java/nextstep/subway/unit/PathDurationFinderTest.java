@@ -54,7 +54,8 @@ public class PathDurationFinderTest {
     assertAll(
         () -> assertThat(path.getStations()).containsExactlyInAnyOrder(교대역, 강남역, 양재역),
         () -> assertThat(path.extractDistance()).isEqualTo(6),
-        () -> assertThat(path.extractDuration()).isEqualTo(6)
+        () -> assertThat(path.extractDuration()).isEqualTo(6),
+        () -> assertThat(path.extractFare()).isEqualTo(1250)
     );
   }
 
@@ -71,7 +72,8 @@ public class PathDurationFinderTest {
     assertAll(
         () -> assertThat(path.getStations()).containsExactlyInAnyOrder(양재역, 강남역, 교대역),
         () -> assertThat(path.extractDistance()).isEqualTo(6),
-        () -> assertThat(path.extractDuration()).isEqualTo(6)
+        () -> assertThat(path.extractDuration()).isEqualTo(6),
+        () -> assertThat(path.extractFare()).isEqualTo(1250)
     );
   }
 }

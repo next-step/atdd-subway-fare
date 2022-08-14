@@ -127,7 +127,7 @@ public class PathServiceTest {
         () -> assertThat(result.getStations().size()).isEqualTo(3),
         () -> assertThat(result.getDistance()).isEqualTo(56),
         () -> assertThat(result.getDuration()).isEqualTo(8),
-    () -> assertThat(result.getFare()).isEqualTo(2250)
+    () -> assertThat(result.getFare()).isEqualTo(2150)
     );
   }
 
@@ -163,7 +163,7 @@ public class PathServiceTest {
         () -> assertThat(result.getStations().size()).isEqualTo(2),
         () -> assertThat(result.getDistance()).isEqualTo(58),
         () -> assertThat(result.getDuration()).isEqualTo(4),
-        () -> assertThat(result.getFare()).isEqualTo(2250)
+        () -> assertThat(result.getFare()).isEqualTo(2150)
     );
   }
 
