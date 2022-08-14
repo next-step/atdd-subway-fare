@@ -166,7 +166,7 @@ public class PathServiceTest {
         () -> assertThat(result.getFare()).isEqualTo(2150)
     );
   }
-
+  
   @AfterEach
   void after() {
     lineRepository.deleteById(신분당선);
