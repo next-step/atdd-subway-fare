@@ -30,7 +30,8 @@ public class PathService {
 
         SubwayMap subwayMap = subwayMapFactory.subwayMap(type);
         Path path = subwayMap.findPath(lines, upStation, downStation);
+        Path shortestDistancePath = subwayMap.findShortestPath(lines, upStation, downStation);
 
-        return PathResponse.of(path, FareCalculator.calculate(path.extractDistance()));
+        return PathResponse.of(path, FareCalculator.calculate(shortestDistancePath.extractDistance()));
     }
 }
