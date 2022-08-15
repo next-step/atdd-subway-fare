@@ -1,5 +1,6 @@
 package nextstep.path.domain;
 
+import nextstep.line.domain.Section;
 import nextstep.line.domain.Sections;
 
 import java.util.List;
@@ -13,6 +14,10 @@ public class Path {
 
     public Path(Sections sections) {
         this.sections = sections;
+    }
+
+    public List<Section> getSections() {
+        return sections.getSections();
     }
 
     public List<Long> getStations() {

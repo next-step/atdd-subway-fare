@@ -48,6 +48,10 @@ public class Line {
         sections.delete(station.getId());
     }
 
+    public boolean containsAnyOf(List<Section> anotherSections) {
+        return sections.containsAnyOf(anotherSections);
+    }
+
     public Long getId() {
         return id;
     }

@@ -154,6 +154,19 @@ public class Sections {
                 .sum();
     }
 
+    public boolean containsAnyOf(List<Section> anotherSections) {
+        for (Section section : this.sections) {
+            for (Section anotherSection : anotherSections) {
+                if (section.hasDuplicateSection(anotherSection.getUpStationId(), anotherSection.getDownStationId())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
     public List<Section> getSections() {
         return sections;
     }
