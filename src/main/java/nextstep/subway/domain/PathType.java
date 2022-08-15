@@ -12,6 +12,12 @@ public enum PathType {
         public int getEdgeWeight(Section section) {
             return section.getDuration();
         }
+    },
+    ARRIVAL_TIME {
+        @Override
+        public int getEdgeWeight(Section section) {
+            return 0;
+        }
     };
 
     public abstract int getEdgeWeight(Section section);
