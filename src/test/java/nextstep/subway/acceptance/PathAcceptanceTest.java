@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로를_조회요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,6 +71,30 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로의_이용요금이_조회됨(최소_시간_경로, 2_350);
     }
 
+    @DisplayName("어린이가 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistance_어린이() {
+        // when
+        String 어린이 = 로그인_되어_있음("children@email.com", "password");
+        var 최단_거리_경로 = 두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 양재역);
+
+        // then
+        경로가_순서에_따라_조회됨(최단_거리_경로, 교대역, 남부터미널역, 양재역);
+        경로의_이용요금이_조회됨(최단_거리_경로, 720);
+    }
+
+    @DisplayName("청소년이 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistance_청소년() {
+        // when
+        String 청소년 = 로그인_되어_있음("teenager@email.com", "password");
+        var 최단_거리_경로 = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 양재역);
+
+        // then
+        경로가_순서에_따라_조회됨(최단_거리_경로, 교대역, 남부터미널역, 양재역);
+        경로의_이용요금이_조회됨(최단_거리_경로, 450);
+    }
+
     private void 경로가_순서에_따라_조회됨(ExtractableResponse<Response> response, Long... stations) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
     }
@@ -81,6 +106,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         final String type = "DISTANCE";
         return 두_역의_경로를_조회요청(given(), source, target, type);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String token, Long source, Long target) {
+        final String type = "DISTANCE";
+        return 두_역의_경로를_조회요청(given(token), source, target, type);
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
