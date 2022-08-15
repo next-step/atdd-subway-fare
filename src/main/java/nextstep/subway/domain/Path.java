@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import nextstep.subway.domain.policy.PathByFare;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Path {
     private Sections sections;
@@ -27,7 +28,16 @@ public class Path {
     private PathByFare generatePathByFare() {
         return PathByFare.builder()
                 .distance(sections.totalDistance())
+                .lines(extractLines())
                 .build();
+    }
+
+    private List<Line> extractLines() {
+        return sections.values()
+                .stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public List<Station> getStations() {

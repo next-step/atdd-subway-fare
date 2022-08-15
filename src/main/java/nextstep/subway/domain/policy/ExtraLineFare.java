@@ -1,7 +1,9 @@
 package nextstep.subway.domain.policy;
 
 import nextstep.subway.domain.Line;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExtraLineFare implements FarePolicy {
 
     @Override
