@@ -29,16 +29,19 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 남부터미널역;
     private Long 양재시민의숲역;
     private Long 청계산입구역;
+    private Long 서현역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private Long 분당선;
     private Integer 신분당선_추가요금 = 900;
+    private Integer 분당선_추가요금 = 300;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
+     * 교대역    --- *2호선* ---   강남역                                           서현역
+     * |                        |                                               |
+     * *3호선*                   *신분당선*                                       *분당선*
+     * |                        |                                               |
      * 남부터미널역  --- *3호선* --- 양재 --- *신분당선* --- 양재시민의숲 --- *신분당선* --- 청계산입구
      */
     @BeforeEach
@@ -51,10 +54,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재시민의숲역 = 지하철역_생성_요청(관리자, "양재시민의숲역").jsonPath().getLong("id");
         청계산입구역 = 지하철역_생성_요청(관리자, "청계산입구역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
+        서현역 = 지하철역_생성_요청(관리자, "서현역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2, 0);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2, 신분당선_추가요금);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 3, 0);
+        분당선 = 지하철_노선_생성_요청("분당선", "yellow", 청계산입구역, 서현역, 2, 3, 분당선_추가요금);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
         지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 양재시민의숲역, 7, 3));
@@ -158,6 +163,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         var fare = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, "DISTANCE").jsonPath().getInt("fare");
 
         assertThat(fare).isEqualTo(1250 + 신분당선_추가요금);
+    }
+
+    @DisplayName("추가 요금이 있는 노선을 환승할 경우 가장 높은 금액만 추가")
+    @Test
+    void fareCalculateWithMaximumAdditionalLineFare() {
+        var response = 두_역의_경로_조회를_요청(교대역, 서현역, "DISTANCE");
+
+        거리와_요금_확인(response, 64, 1250 + 800 + 200 + 신분당선_추가요금);
     }
 
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
