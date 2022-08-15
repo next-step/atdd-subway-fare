@@ -3,6 +3,10 @@ package nextstep.subway.domain;
 public class FareCalculator {
 
     private static final int MINIMUM_FARE = 1250;
+    private static final int FARE_PER_UNIT_DISTANCE = 100;
+    private static final float FIRST_UNIT_DISTANCE = 5f;
+    private static final float SECOND_UNIT_DISTANCE = 8f;
+
     private final int distance;
 
     public FareCalculator(int distance) {
@@ -19,10 +23,10 @@ public class FareCalculator {
     }
 
     private int getFirstRangeOverFare(int distance) {
-        return Math.max(0, (int) Math.ceil(distance / 5f) * 100);
+        return Math.max(0, (int) Math.ceil(distance / FIRST_UNIT_DISTANCE) * FARE_PER_UNIT_DISTANCE);
     }
 
     private int getSecondRangeOverFare(int distance) {
-        return Math.max(0, (int) Math.ceil(distance / 8f) * 100);
+        return Math.max(0, (int) Math.ceil(distance / SECOND_UNIT_DISTANCE) * FARE_PER_UNIT_DISTANCE);
     }
 }
