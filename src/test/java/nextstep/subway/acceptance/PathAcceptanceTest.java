@@ -24,6 +24,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private String 거리기반 = "DISTANCE";
+    private String 시간기반 = "DURATION";
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -48,21 +50,31 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 6));
     }
 
+    /**
+     * When : 두 역에 대해 거리를 기반으로 조회를 요청하면
+     * Then : 거리가 가까운 순으로 조회가 된다.
+     */
+
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, "DISTANCE");
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, 거리기반);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
+    /**
+     * When : 두 역에 대해 걸리는 시간을 기반으로 조회를 요청하면
+     * Then : 시간이 적게 걸리는 순으로 조회가 된다.
+     */
+
     @DisplayName("두 역의 최단 거리 시간을 조회한다.")
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, "DURATION");
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, 시간기반);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
