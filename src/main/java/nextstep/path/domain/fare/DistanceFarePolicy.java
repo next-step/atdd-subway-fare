@@ -1,6 +1,6 @@
-package nextstep.path.domain;
+package nextstep.path.domain.fare;
 
-public class FareCalculator {
+public class DistanceFarePolicy implements FarePolicy {
     private static final int BASE_FARE_DISTANCE = 10;
     private static final int LONG_DISTANCE = 50;
 
@@ -10,7 +10,18 @@ public class FareCalculator {
     private static final int SHORT_DISTANCE_INTERVAL_FOR_BONUS = 5;
     private static final int LONG_DISTANCE_INTERVAL_FOR_BONUS = 8;
 
-    public int calculateFare(int distance) {
+    private final int distance;
+
+    public DistanceFarePolicy(int distance) {
+        this.distance = distance;
+    }
+
+    @Override
+    public int apply(int beforeFare) {
+        return beforeFare + calculateFare(distance);
+    }
+
+    private int calculateFare(int distance) {
         return BASE_FARE + calculateOverFare(distance);
     }
 

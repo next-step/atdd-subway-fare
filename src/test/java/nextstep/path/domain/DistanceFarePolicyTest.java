@@ -1,14 +1,13 @@
 package nextstep.path.domain;
 
+import nextstep.path.domain.fare.DistanceFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FareCalculatorTest {
-
-    private final FareCalculator calculator = new FareCalculator();
+class DistanceFarePolicyTest {
 
     @DisplayName("요금 계산")
     @ParameterizedTest
@@ -21,6 +20,6 @@ class FareCalculatorTest {
             "58,2250",
     })
     void calculateFare(int distance, int expectedFare) {
-        assertThat(calculator.calculateFare(distance)).isEqualTo(expectedFare);
+        assertThat(new DistanceFarePolicy(distance).apply(0)).isEqualTo(expectedFare);
     }
 }
