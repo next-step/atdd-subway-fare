@@ -246,7 +246,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
-        lineCreateParams.put("surCharge", surCharge + "");
+        lineCreateParams.put("surcharge", surCharge + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
