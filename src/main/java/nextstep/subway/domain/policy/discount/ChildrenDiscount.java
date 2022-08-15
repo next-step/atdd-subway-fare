@@ -4,6 +4,8 @@ import nextstep.member.domain.Member;
 
 public class ChildrenDiscount implements DiscountPolicy {
 
+    private static final double DISCOUNT_RATE = 0.5;
+
     @Override
     public boolean supports(Member member) {
         return member.isChildren();
@@ -11,6 +13,6 @@ public class ChildrenDiscount implements DiscountPolicy {
 
     @Override
     public int discount(int fare) {
-        return 0;
+        return (int) ((fare - NOT_DISCOUNT_FARE) * DISCOUNT_RATE + NOT_DISCOUNT_FARE);
     }
 }

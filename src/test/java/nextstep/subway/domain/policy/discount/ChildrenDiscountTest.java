@@ -31,4 +31,13 @@ class ChildrenDiscountTest {
             assertThat(childrenDiscount.supports(guest)).isFalse();
         });
     }
+
+    @Test
+    @DisplayName("어린이 할인은 운임에서 350원을 공제한 금액의 50%를 할인한다.")
+    void discount() {
+        final int fare = 1250;
+        Member children = new Member("member@email.com", "password", 10);
+
+        assertThat(childrenDiscount.discount(fare)).isEqualTo(800);
+    }
 }
