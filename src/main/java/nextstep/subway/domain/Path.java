@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.policy.PathByFare;
+
 import java.util.List;
 
 public class Path {
@@ -18,7 +20,14 @@ public class Path {
     }
 
     public Fare extractFare() {
-        return Fare.chaining().calculate(sections.totalDistance());
+        PathByFare pathByFare = generatePathByFare();
+        return Fare.chaining().calculate(pathByFare);
+    }
+
+    private PathByFare generatePathByFare() {
+        return PathByFare.builder()
+                .distance(sections.totalDistance())
+                .build();
     }
 
     public List<Station> getStations() {

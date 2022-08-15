@@ -20,10 +20,10 @@ public class FareManager {
         }
     }
 
-    public static int fare(int distance) {
+    public static int fare(PathByFare pathByFare) {
         return policies.stream().parallel()
-                .filter(farePolicy -> farePolicy.supports(distance))
-                .mapToInt(farePolicy -> farePolicy.fare(distance))
+                .filter(farePolicy -> farePolicy.supports(pathByFare))
+                .mapToInt(farePolicy -> farePolicy.fare(pathByFare))
                 .sum();
     }
 }

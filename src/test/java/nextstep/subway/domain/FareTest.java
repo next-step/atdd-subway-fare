@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.policy.PathByFare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,15 +20,17 @@ class FareTest extends FareManagerLoaderTest {
     @Test
     @DisplayName("계산이 완료된 후 다시 계산을 할 수 없다.")
     void invalidCalculate_With_Done() {
-        Fare fare = Fare.chaining().calculate(10);
+        PathByFare pathByFare = PathByFare.builder().distance(10).build();
+        Fare fare = Fare.chaining().calculate(pathByFare);
 
-        assertThatThrownBy(() -> fare.calculate(10)).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> fare.calculate(pathByFare)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     @DisplayName("요금 계산을 하면 계산이 완료된다.")
     void calculate_done() {
-        Fare fare = Fare.chaining().calculate(10);
+        PathByFare pathByFare = PathByFare.builder().distance(10).build();
+        Fare fare = Fare.chaining().calculate(pathByFare);
 
         assertThat(fare.toInt()).isEqualTo(1_250);
     }

@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.subway.domain.policy.FareManager;
+import nextstep.subway.domain.policy.PathByFare;
 
 public class Fare {
 
@@ -16,11 +17,11 @@ public class Fare {
         return new Fare(0, false);
     }
 
-    public Fare calculate(int distance) {
+    public Fare calculate(PathByFare pathByFare) {
         if (done) {
             throw new IllegalStateException();
         }
-        value += FareManager.fare(distance);
+        value += FareManager.fare(pathByFare);
         done();
         return this;
     }

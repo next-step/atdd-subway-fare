@@ -2,7 +2,7 @@ package nextstep.subway.domain.policy;
 
 public interface FarePolicy {
 
-    boolean supports(int distance);
+    boolean supports(PathByFare pathByFare);
 
-    int fare(int distance);
+    int fare(PathByFare pathByFare);
 }

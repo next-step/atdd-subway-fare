@@ -10,12 +10,12 @@ public class OverFiftyExtraFare implements FarePolicy {
     private static final int EXTRA_UNIT = 8;
 
     @Override
-    public boolean supports(int distance) {
-        return distance > MINIMUM_DISTANCE;
+    public boolean supports(PathByFare pathByFare) {
+        return pathByFare.distance() > MINIMUM_DISTANCE;
     }
 
     @Override
-    public int fare(int distance) {
-        return (int) (Math.ceil((double) (distance - MINIMUM_DISTANCE) / EXTRA_UNIT) * EXTRA_FARE);
+    public int fare(PathByFare pathByFare) {
+        return (int) (Math.ceil((double) (pathByFare.distance() - MINIMUM_DISTANCE) / EXTRA_UNIT) * EXTRA_FARE);
     }
 }
