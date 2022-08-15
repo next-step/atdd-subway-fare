@@ -86,11 +86,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(교대역_id, 양재역_id, PathType.DISTANCE);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(6),
-        () -> assertThat(result.getDuration()).isEqualTo(5)
-    );
+    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
   }
 
   @Test
@@ -101,11 +97,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(교대역_id, 양재역_id, PathType.DURATION);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(6),
-        () -> assertThat(result.getDuration()).isEqualTo(5)
-    );
+    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
   }
 
   @Test
@@ -123,12 +115,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(교대역_id, 양재역_id, PathType.DISTANCE);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(6),
-        () -> assertThat(result.getDuration()).isEqualTo(5),
-        () -> assertThat(result.getFare()).isEqualTo(1_250)
-    );
+    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
   }
 
   @Test
@@ -139,12 +126,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(남부터미널역_id, 강남역_id, PathType.DISTANCE);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(18),
-        () -> assertThat(result.getDuration()).isEqualTo(6),
-        () -> assertThat(result.getFare()).isEqualTo(1_450)
-    );
+    경로_조회_정보_비교(result, 3, 18, 6, 1_450);
   }
 
   @Test
@@ -155,12 +137,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(양재역_id, 대치역_id, PathType.DISTANCE);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(56),
-        () -> assertThat(result.getDuration()).isEqualTo(8),
-        () -> assertThat(result.getFare()).isEqualTo(2_150)
-    );
+    경로_조회_정보_비교(result, 3, 56, 8, 2_150);
   }
 
   @Test
@@ -171,12 +148,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(교대역_id, 양재역_id, PathType.DURATION);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(6),
-        () -> assertThat(result.getDuration()).isEqualTo(5),
-        () -> assertThat(result.getFare()).isEqualTo(1_250)
-    );
+    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
   }
 
   @Test
@@ -187,12 +159,7 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(남부터미널역_id, 강남역_id, PathType.DURATION);
 
-    assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(3),
-        () -> assertThat(result.getDistance()).isEqualTo(18),
-        () -> assertThat(result.getDuration()).isEqualTo(6),
-        () -> assertThat(result.getFare()).isEqualTo(1_450)
-    );
+    경로_조회_정보_비교(result, 3, 18, 6, 1_450);
   }
 
   @Test
@@ -203,11 +170,15 @@ public class PathServiceMockTest {
 
     PathResponse result = pathService.findPath(남부터미널역_id, 양재역_id, PathType.DURATION);
 
+    경로_조회_정보_비교(result, 2, 58, 4, 2_150);
+  }
+
+  private void 경로_조회_정보_비교(PathResponse result, int 지하쳘역_갯수, int 거리, int 시간, int 요금) {
     assertAll(
-        () -> assertThat(result.getStations().size()).isEqualTo(2),
-        () -> assertThat(result.getDistance()).isEqualTo(58),
-        () -> assertThat(result.getDuration()).isEqualTo(4),
-        () -> assertThat(result.getFare()).isEqualTo(2_150)
+        () -> assertThat(result.getStations().size()).isEqualTo(지하쳘역_갯수),
+        () -> assertThat(result.getDistance()).isEqualTo(거리),
+        () -> assertThat(result.getDuration()).isEqualTo(시간),
+        () -> assertThat(result.getFare()).isEqualTo(요금)
     );
   }
 }
