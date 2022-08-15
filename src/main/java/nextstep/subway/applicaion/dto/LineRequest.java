@@ -4,6 +4,8 @@ import nextstep.subway.domain.Line;
 
 import java.time.LocalTime;
 
+import static java.time.format.DateTimeFormatter.ISO_TIME;
+
 public class LineRequest {
     private String name;
     private String color;
@@ -19,11 +21,15 @@ public class LineRequest {
     public LineRequest() {
     }
 
-    public LineRequest(String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime, int additionalFare, Long upStationId, Long downStationId, int distance, int duration) {
+    public LineRequest(String name, String color, String startTime, String endTime, int intervalTime, int additionalFare, Long upStationId, Long downStationId, int distance, int duration) {
         this.name = name;
         this.color = color;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        if (startTime != null) {
+            this.startTime = LocalTime.parse(startTime, ISO_TIME);
+        }
+        if (endTime != null) {
+            this.endTime = LocalTime.parse(endTime, ISO_TIME);
+        }
         this.intervalTime = intervalTime;
         this.additionalFare = additionalFare;
         this.upStationId = upStationId;

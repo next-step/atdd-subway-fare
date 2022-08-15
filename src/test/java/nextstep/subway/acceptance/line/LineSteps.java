@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.time.format.DateTimeFormatter.ISO_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LineSteps extends AcceptanceTestSteps {
@@ -24,12 +25,12 @@ public class LineSteps extends AcceptanceTestSteps {
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, String name, String color, LocalTime startTime, LocalTime endTime, int intervalTime) {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        params.put("startTime", startTime);
-        params.put("endTime", endTime);
-        params.put("intervalTime", intervalTime);
+        params.put("startTime", startTime.format(ISO_TIME));
+        params.put("endTime", endTime.format(ISO_TIME));
+        params.put("intervalTime", intervalTime + "");
         return given(token)
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

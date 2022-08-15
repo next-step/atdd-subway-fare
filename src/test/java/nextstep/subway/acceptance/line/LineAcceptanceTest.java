@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
+import static java.time.format.DateTimeFormatter.ISO_TIME;
 import static nextstep.subway.acceptance.line.LineSteps.지하철_노선_검증;
 import static nextstep.subway.acceptance.line.LineSteps.지하철_노선_목록_조회_요청;
 import static nextstep.subway.acceptance.line.LineSteps.지하철_노선_삭제_요청;
