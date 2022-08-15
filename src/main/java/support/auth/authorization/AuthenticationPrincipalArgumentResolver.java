@@ -9,7 +9,12 @@ import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
 import support.auth.userdetails.User;
 
+import java.util.Objects;
+
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private static final int DEFAULT_AGE = 20;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -18,7 +23,13 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean required = Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)).required();
 
-        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        if (!required) {
+            return new User(null, null, DEFAULT_AGE, null);
+        }
+
+        return new User(authentication.getPrincipal().toString(), null, authentication.getAge(), authentication.getAuthorities());
+
     }
 }
