@@ -135,7 +135,7 @@ public class PathServiceTest {
         () -> assertThat(result.getFare()).isEqualTo(요금)
     );
   }
-
+  
   @AfterEach
   void after() {
     lineRepository.deleteById(신분당선);
