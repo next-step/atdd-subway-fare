@@ -81,10 +81,22 @@ public class LineSectionSteps extends AcceptanceTestSteps {
     }
 
     public static Map<String, String> createLineCreateParams(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return createLineCreateParams(name, color, 0, upStation, downStation, distance, duration);
+    }
+
+    public static Map<String, String> createLineCreateParams(String name,
+                                                             String color,
+                                                             int extraFare,
+                                                             Long upStation,
+                                                             Long downStation,
+                                                             int distance,
+                                                             int duration) {
+
         Map<String, String> params;
         params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("extraFare", extraFare + "");
         params.put("upStationId", upStation + "");
         params.put("downStationId", downStation + "");
         params.put("distance", distance + "");
