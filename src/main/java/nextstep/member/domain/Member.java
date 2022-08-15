@@ -5,6 +5,10 @@ import java.util.List;
 
 @Entity
 public class Member {
+
+    private static final int CHILDREN_MIN_AGE = 6;
+    private static final int CHILDREN_MAX_AGE = 13;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +23,7 @@ public class Member {
     @Column(name = "role")
     private List<String> roles;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password, Integer age) {
@@ -60,5 +64,9 @@ public class Member {
         this.email = member.email;
         this.password = member.password;
         this.age = member.age;
+    }
+
+    public boolean isChildren() {
+        return age >= CHILDREN_MIN_AGE && age < CHILDREN_MAX_AGE;
     }
 }
