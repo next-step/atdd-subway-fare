@@ -3,10 +3,12 @@ package nextstep.path.applicaion;
 import nextstep.line.application.LineService;
 import nextstep.line.domain.Line;
 import nextstep.path.applicaion.dto.PathResponse;
-import nextstep.path.domain.FareCalculator;
+import nextstep.path.domain.fare.DistanceFarePolicy;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.PathSearchType;
 import nextstep.path.domain.SubwayMap;
+import nextstep.path.domain.fare.FareCalculator;
+import nextstep.path.domain.fare.LineExtraFarePolicy;
 import nextstep.station.application.StationService;
 import nextstep.station.application.dto.StationResponse;
 import nextstep.station.domain.Station;
@@ -32,10 +34,13 @@ public class PathService {
 
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation.getId(), downStation.getId(), searchType);
-        List<StationResponse> stations = createStationResponses(path.getStations());
+        List<Long> pathStationIds = path.getStations();
 
-        int fare = new FareCalculator().calculateFare(subwayMap.shortestDistance(source, target));
-        return new PathResponse(stations, path, fare);
+        FareCalculator fareCalculator = new FareCalculator(List.of(
+                new DistanceFarePolicy(subwayMap.shortestDistance(source, target)),
+                new LineExtraFarePolicy(lines, path.getSections())
+        ));
+        return new PathResponse(createStationResponses(pathStationIds), path, fareCalculator.calculate());
     }
 
     private List<StationResponse> createStationResponses(List<Long> stationIds) {
