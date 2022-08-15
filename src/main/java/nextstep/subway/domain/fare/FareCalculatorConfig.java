@@ -8,15 +8,15 @@ public class FareCalculatorConfig {
 
     @Bean
     public FareCalculatorChain fareCalculator() {
-        var defaultFareCalculator = new DefaultFareCalculator();
-        var firstFareCalculator = new FirstRangeFareCalculator();
-        var secondFareCalculator = new SecondRangeFareCalculator();
-        var lineSurchargeFareCalculator = new LineSurchargeFareCalculator();
+        FareCalculatorChain defaultFare = new DefaultFareCalculator();
+        FareCalculatorChain firstRangeFare = new FirstRangeFareCalculator();
+        FareCalculatorChain secondRangeFare = new SecondRangeFareCalculator();
+        FareCalculatorChain lineSurchargeFare = new LineSurchargeFareCalculator();
 
-        defaultFareCalculator.setNextChain(firstFareCalculator);
-        firstFareCalculator.setNextChain(secondFareCalculator);
-        secondFareCalculator.setNextChain(lineSurchargeFareCalculator);
+        defaultFare.setNextChain(firstRangeFare);
+        firstRangeFare.setNextChain(secondRangeFare);
+        secondRangeFare.setNextChain(lineSurchargeFare);
 
-        return defaultFareCalculator;
+        return defaultFare;
     }
 }

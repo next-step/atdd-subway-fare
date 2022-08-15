@@ -15,7 +15,8 @@ public class SecondRangeFareCalculator extends AbstractFareCalculatorChain {
 
     @Override
     protected int convert(Path path, int initialFare) {
-        return initialFare + getSecondRangeOverFare(getTargetDistance(path.extractDistance()));
+        int targetDistance = getTargetDistance(path.extractDistance());
+        return initialFare + getSecondRangeOverFare(targetDistance);
     }
 
     private int getTargetDistance(int distance) {

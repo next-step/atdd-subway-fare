@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.fare.FareCalculatorChain;
 import nextstep.subway.domain.fare.FirstRangeFareCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,8 +33,9 @@ class FirstRangeFareCalculatorTest {
     })
     void firstRangeFare(int distance, int expectedFare) {
         when(path.extractDistance()).thenReturn(distance);
-        var calculator = new FirstRangeFareCalculator();
-        var fare = calculator.calculate(path, 0);
+        FareCalculatorChain calculator = new FirstRangeFareCalculator();
+
+        int fare = calculator.calculate(path, 0);
 
         assertThat(fare).isEqualTo(expectedFare);
     }

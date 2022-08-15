@@ -16,7 +16,7 @@ public class FirstRangeFareCalculator extends AbstractFareCalculatorChain {
 
     @Override
     protected int convert(Path path, int initialFare) {
-        var targetDistance = getTargetDistance(path.extractDistance());
+        int targetDistance = getTargetDistance(path.extractDistance());
         return initialFare + getFirstRangeOverFare(targetDistance);
     }
 
