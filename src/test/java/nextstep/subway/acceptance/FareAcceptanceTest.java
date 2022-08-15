@@ -2,6 +2,7 @@ package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @DisplayName("지하철 요금 계산")
 public class FareAcceptanceTest extends AcceptanceTest {
@@ -135,7 +138,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         @Test
         void 어린이_사용자가_지하철을_이용하면_할인된_요금_적용() {
             // when
-            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, "DISTANCE");
+            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(어린이, 교대역, 양재역, "DISTANCE");
 
             // then
             assertThat(response.jsonPath().getLong("fare")).isEqualTo(운임예_어린이_요금_적용(1250));
@@ -150,7 +153,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         @Test
         void 어린이_사용자가_추가_요금_노선_1개_이용시_추가요금_적용() {
             // when
-            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 선릉역, "DISTANCE");
+            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(어린이, 교대역, 선릉역, "DISTANCE");
 
             // then
             assertThat(response.jsonPath().getLong("fare")).isEqualTo(운임예_어린이_요금_적용(1450 + 500));
@@ -165,7 +168,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         @Test
         void 어린이_사용자가_추가_요금_노선_2개_이용시_가장_높은_추가요금_적용() {
             // when
-            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 선정릉역, "DISTANCE");
+            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(어린이, 교대역, 선정릉역, "DISTANCE");
 
             // then
             assertThat(response.jsonPath().getLong("fare")).isEqualTo(운임예_어린이_요금_적용(1650 + 900));
@@ -181,10 +184,10 @@ public class FareAcceptanceTest extends AcceptanceTest {
          * then 할인된 요금이 적용된다.
          */
         @DisplayName("청소년은 운임에서 할인된 요금이 적용된다.")
-        @Test
+        @ParameterizedTest
         void 청소년_사용자가_지하철을_이용하면_할인된_요금_적용() {
             // when
-            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, "DISTANCE");
+            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(청소년, 교대역, 양재역, "DISTANCE");
 
             // then
             assertThat(response.jsonPath().getLong("fare")).isEqualTo(운임예_청소년_요금_적용(1250));
@@ -199,7 +202,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         @Test
         void 청소년_사용자가_추가_요금_노선_1개_이용시_추가요금_적용() {
             // when
-            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 선릉역, "DISTANCE");
+            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(청소년, 교대역, 선릉역, "DISTANCE");
 
             // then
             assertThat(response.jsonPath().getLong("fare")).isEqualTo(운임예_청소년_요금_적용(1450 + 500));
@@ -214,7 +217,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         @Test
         void 청소년_사용자가_추가_요금_노선_2개_이용시_가장_높은_추가요금_적용() {
             // when
-            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 선정릉역, "DISTANCE");
+            ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(청소년, 교대역, 선정릉역, "DISTANCE");
 
             // then
             assertThat(response.jsonPath().getLong("fare")).isEqualTo(운임예_청소년_요금_적용(1650 + 900));
