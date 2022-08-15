@@ -97,7 +97,7 @@ public class SubwayMapTest extends FareManagerLoaderTest {
     }
 
     @Test
-    @DisplayName("이용요금은 실제 거리가 아닌 최소 거리 기준으로 계산한다.")
+    @DisplayName("이용요금은 거리 기준으로 계산한다.")
     void findFare() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
@@ -109,7 +109,7 @@ public class SubwayMapTest extends FareManagerLoaderTest {
         // then
         assertAll(() -> {
             assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
-            assertThat(path.extractFare().toInt()).isEqualTo(1_250);
+            assertThat(path.extractFare().toInt()).isEqualTo(1_350);
         });
     }
 

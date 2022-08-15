@@ -21,11 +21,7 @@ public class SubwayMap {
 
     public Path findPath(Station source, Station target) {
         Sections foundPathResult = findPathResult(source, target, type.weightStrategy());
-        if (type.equals(PathType.DISTANCE)) {
-            return new Path(foundPathResult, foundPathResult);
-        }
-        Sections shortestDistanceSections = findPathResult(source, target, PathType.DISTANCE.weightStrategy());
-        return new Path(foundPathResult, shortestDistanceSections);
+        return new Path(foundPathResult);
     }
 
     private Sections findPathResult(Station source, Station target, WeightStrategy weightStrategy) {

@@ -3,27 +3,25 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
-    private Sections shortestSectionsByPathType;
-    private Sections shortestDistanceSections;
+    private Sections sections;
 
-    public Path(Sections shortestSectionsByPathType, Sections shortestDistanceSections) {
-        this.shortestSectionsByPathType = shortestSectionsByPathType;
-        this.shortestDistanceSections = shortestDistanceSections;
+    public Path(Sections sections) {
+        this.sections = sections;
     }
 
     public int extractDistance() {
-        return shortestSectionsByPathType.totalDistance();
+        return sections.totalDistance();
     }
 
     public int extractDuration() {
-        return shortestSectionsByPathType.totalDuration();
+        return sections.totalDuration();
     }
 
     public Fare extractFare() {
-        return Fare.chaining().calculate(shortestDistanceSections.totalDistance());
+        return Fare.chaining().calculate(sections.totalDistance());
     }
 
     public List<Station> getStations() {
-        return shortestSectionsByPathType.getStations();
+        return sections.getStations();
     }
 }
