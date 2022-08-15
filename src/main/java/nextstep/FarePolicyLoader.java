@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FareManagerLoader {
+public class FarePolicyLoader {
 
     private final List<FarePolicy> farePolicies;
     private final List<DiscountPolicy> discountPolicies;

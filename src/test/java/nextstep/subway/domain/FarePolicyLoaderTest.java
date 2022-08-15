@@ -10,7 +10,7 @@ import nextstep.subway.domain.policy.discount.DiscountManager;
 import nextstep.subway.domain.policy.discount.TeenagerDiscount;
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class FareManagerLoaderTest {
+public abstract class FarePolicyLoaderTest {
 
     @BeforeEach
     void setUp() {

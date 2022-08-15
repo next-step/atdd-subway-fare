@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubwayMapTest extends FareManagerLoaderTest {
+public class SubwayMapTest extends FarePolicyLoaderTest {
 
     private Station 교대역;
     private Station 강남역;

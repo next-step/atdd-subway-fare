@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class FareTest extends FareManagerLoaderTest {
+class FareTest extends FarePolicyLoaderTest {
 
     private Line 신분당선;
     private Line 이호선;
