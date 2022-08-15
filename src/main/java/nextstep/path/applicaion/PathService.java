@@ -3,6 +3,7 @@ package nextstep.path.applicaion;
 import nextstep.line.application.LineService;
 import nextstep.line.domain.Line;
 import nextstep.path.applicaion.dto.PathResponse;
+import nextstep.path.domain.FareCalculator;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.PathSearchType;
 import nextstep.path.domain.SubwayMap;
@@ -33,7 +34,8 @@ public class PathService {
         Path path = subwayMap.findPath(upStation.getId(), downStation.getId(), searchType);
         List<StationResponse> stations = createStationResponses(path.getStations());
 
-        return new PathResponse(stations, path);
+        int fare = new FareCalculator().calculateFare(subwayMap.shortestDistance(source, target));
+        return new PathResponse(stations, path, fare);
     }
 
     private List<StationResponse> createStationResponses(List<Long> stationIds) {

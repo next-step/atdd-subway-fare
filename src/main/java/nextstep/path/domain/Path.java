@@ -5,18 +5,14 @@ import nextstep.line.domain.Sections;
 import java.util.List;
 
 public class Path {
-    private static final FareCalculator FARE_CALCULATOR = new FareCalculator();
-
     private final Sections sections;
-    private final int shortestDistance;
 
     public static Path emptyPath() {
-        return new Path(Sections.emptySections(), 0);
+        return new Path(Sections.emptySections());
     }
 
-    public Path(Sections sections, int shortestDistance) {
+    public Path(Sections sections) {
         this.sections = sections;
-        this.shortestDistance = shortestDistance;
     }
 
     public List<Long> getStations() {
@@ -29,9 +25,5 @@ public class Path {
 
     public int getDuration() {
         return sections.totalDuration();
-    }
-
-    public int getFare() {
-        return FARE_CALCULATOR.calculateFare(shortestDistance);
     }
 }

@@ -49,17 +49,11 @@ public class SubwayMap {
             return Path.emptyPath();
         }
 
-        List<Section> pathSectionsList = result.getEdgeList().stream()
+        List<Section> pathSections = result.getEdgeList().stream()
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
-        Sections pathSections = new Sections(pathSectionsList);
-
-        int shortestDistance = type == PathSearchType.DISTANCE
-                ? pathSections.totalDistance()
-                : shortestDistance(source, target);
-
-        return new Path(pathSections, shortestDistance);
+        return new Path(new Sections(pathSections));
     }
 
     private DijkstraShortestPath<Long, SectionEdge> createGraphOfType(PathSearchType type) {
@@ -76,7 +70,7 @@ public class SubwayMap {
         return new DijkstraShortestPath<>(graph);
     }
 
-    private int shortestDistance(Long source, Long target) {
+    public int shortestDistance(Long source, Long target) {
         DijkstraShortestPath<Long, SectionEdge> shortestPathGraph = createGraphOfType(PathSearchType.DISTANCE);
         GraphPath<Long, SectionEdge> result = shortestPathGraph.getPath(source, target);
 
