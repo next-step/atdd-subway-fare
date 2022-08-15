@@ -21,6 +21,10 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public int getExtraFare() {
+        return sections.getExtraFare();
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }

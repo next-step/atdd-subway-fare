@@ -32,9 +32,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", 1000);
+        이호선 = new Line("2호선", "red", 200);
+        삼호선 = new Line("3호선", "red", 300);
 
         신분당선.addSection(강남역, 양재역, 3, 10);
         이호선.addSection(교대역, 강남역, 3, 1);
@@ -56,6 +56,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
         assertThat(path.extractDistance()).isEqualTo(6);
         assertThat(path.extractDuration()).isEqualTo(11);
+        assertThat(path.getExtraFare()).isEqualTo(1000);
     }
 
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
@@ -72,6 +73,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
         assertThat(path.extractDistance()).isEqualTo(10);
         assertThat(path.extractDuration()).isEqualTo(4);
+        assertThat(path.getExtraFare()).isEqualTo(300);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 반대로 조회한다.")
@@ -88,6 +90,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
         assertThat(path.extractDistance()).isEqualTo(6);
         assertThat(path.extractDuration()).isEqualTo(11);
+        assertThat(path.getExtraFare()).isEqualTo(1000);
     }
 
     private Station createStation(long id, String name) {
