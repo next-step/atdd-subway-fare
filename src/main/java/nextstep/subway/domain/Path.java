@@ -14,6 +14,10 @@ public class Path {
         return sections;
     }
 
+    public List<Line> allLinesPassingBy() {
+        return sections.allLinesPassingBy();
+    }
+
     public int extractDistance() {
         return sections.totalDistance();
     }

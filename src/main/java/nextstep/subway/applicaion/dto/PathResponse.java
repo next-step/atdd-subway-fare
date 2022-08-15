@@ -1,6 +1,8 @@
 package nextstep.subway.applicaion.dto;
 
 import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.LineFare;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
@@ -28,8 +30,18 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        Fare fare = new Fare(distance);
-        return new PathResponse(stations, distance, duration, fare.calculate());
+        return new PathResponse(stations, distance, duration, fare(path, distance));
+    }
+
+    private static int fare(Path path, int distance) {
+        Fare fare = new Fare(lineFare(path), distance);
+        return fare.calculate();
+    }
+
+    private static int lineFare(Path path) {
+        List<Line> lines = path.allLinesPassingBy();
+        LineFare lineFare = new LineFare(lines);
+        return lineFare.get();
     }
 
     public List<StationResponse> getStations() {
