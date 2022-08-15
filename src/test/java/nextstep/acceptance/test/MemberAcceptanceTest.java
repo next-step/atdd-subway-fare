@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.acceptance.steps.MemberSteps.*;
@@ -83,14 +82,6 @@ class MemberAcceptanceTest extends AcceptanceTest {
 
         // then
         내_정보가_삭제된다(accessToken);
-    }
-
-    private Map<String, String> createMemberParams(String email, String password, Integer age) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
-        params.put("age", age + "");
-        return params;
     }
 
     private void 회원가입에_성공한다(ExtractableResponse<Response> response) {

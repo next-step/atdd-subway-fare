@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.acceptance.steps.LineSectionSteps.*;
+import static nextstep.acceptance.steps.MemberSteps.*;
 import static nextstep.acceptance.steps.PathSteps.*;
 import static nextstep.acceptance.steps.StationSteps.지하철역_생성_요청;
 
@@ -77,5 +78,19 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로_조회_정보가_일치한다(response, 16, 11, 2250, 남부터미널역, 교대역, 강남역);
+    }
+
+    @DisplayName("로그인 사용자는 연령에 따라 할인을 받는다. (6세 ~ 12세: 50%, 13세 ~ 18세: 20%)")
+    @Test
+    void pathByDurationAndDiscount() {
+        // given
+        회원_생성_요청(createMemberParams("teenager@email.com", "password", 15));
+        String 청소년 = 로그인_되어_있음("teenager@email.com", "password");
+
+        // when
+        var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DURATION, given(청소년));
+
+        // then
+        경로_조회_정보가_일치한다(response, 16, 11, 1800, 남부터미널역, 교대역, 강남역);
     }
 }
