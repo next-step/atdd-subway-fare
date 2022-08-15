@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.*;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -19,6 +20,8 @@ public class SubwayMapTest {
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+    private PathType 거리로_조회 = PathType.valueOf("DISTANCE");
+    private PathType 시간으로_조회 = PathType.valueOf("DURATION");
 
     @BeforeEach
     void setUp() {
@@ -37,6 +40,7 @@ public class SubwayMapTest {
         삼호선.addSection(남부터미널역, 양재역, 5, 2);
     }
 
+    @DisplayName("거리가 가까운 방향으로 경로 조회")
     @Test
     void findPathByDistance() {
         // given
@@ -44,12 +48,13 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.valueOf("DISTANCE"));
+        Path path = subwayMap.findPath(교대역, 양재역, 거리로_조회);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
     }
 
+    @DisplayName("소요 시간이 적게 걸리는 방향으로 경로 조회")
     @Test
     void findPathByDuration() {
         // given
@@ -57,12 +62,13 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.valueOf("DURATION"));
+        Path path = subwayMap.findPath(교대역, 양재역, 시간으로_조회);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
+    @DisplayName("거리가 가까운 방향으로 역조회")
     @Test
     void findPathOppositelyByDistance() {
         // given
@@ -70,12 +76,13 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.valueOf("DISTANCE"));
+        Path path = subwayMap.findPath(양재역, 교대역, 거리로_조회);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
     }
 
+    @DisplayName("소요 시간이 적게 걸리는 방향으로 역조회")
     @Test
     void findPathOppositelyByDuration() {
         // given
@@ -83,7 +90,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.valueOf("DURATION"));
+        Path path = subwayMap.findPath(양재역, 교대역, 시간으로_조회);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
