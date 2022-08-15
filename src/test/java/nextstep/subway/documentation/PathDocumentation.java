@@ -14,8 +14,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -36,7 +35,7 @@ class PathDocumentation extends Documentation {
                 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyString(), anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
 
         searchType에_따른_두_역의_최단_경로_조회를_요청("pathWithDistance", SearchType.DISTANCE);
     }
@@ -50,7 +49,7 @@ class PathDocumentation extends Documentation {
                 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyString(), anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
 
         searchType에_따른_두_역의_최단_경로_조회를_요청("pathWithDuration", SearchType.DURATION);
     }
@@ -58,6 +57,7 @@ class PathDocumentation extends Documentation {
     private ExtractableResponse<Response> searchType에_따른_두_역의_최단_경로_조회를_요청(String identifier, SearchType searchType) {
         return RestAssured
                 .given(spec).log().all()
+                .auth().oauth2(accessToken)
                 .filter(document(identifier,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
