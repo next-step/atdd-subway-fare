@@ -22,6 +22,6 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal User user,
                                                  @RequestParam Long source, @RequestParam Long target,
                                                  @RequestParam(defaultValue = "distance") String type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, ShortestPathType.from(type)));
+        return ResponseEntity.ok(pathService.findPath(source, target, ShortestPathType.from(type), user.getAge()));
     }
 }

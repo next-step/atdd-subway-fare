@@ -24,17 +24,17 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, int age) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        return new PathResponse(stations, distance, duration, fare(path, distance));
+        return new PathResponse(stations, distance, duration, fare(path, distance, age));
     }
 
-    private static int fare(Path path, int distance) {
-        Fare fare = new Fare(lineFare(path), distance);
+    private static int fare(Path path, int distance, int age) {
+        Fare fare = new Fare(lineFare(path), distance, age);
         return fare.calculate();
     }
 

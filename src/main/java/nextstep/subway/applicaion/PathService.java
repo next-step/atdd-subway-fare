@@ -16,13 +16,12 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, ShortestPathType type) {
+    public PathResponse findPath(Long source, Long target, ShortestPathType type, int age) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
-
-        return PathResponse.of(path);
+        return PathResponse.of(path, age);
     }
 }
