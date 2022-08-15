@@ -7,6 +7,7 @@ import nextstep.subway.domain.policy.FareManager;
 import nextstep.subway.domain.policy.OverFiftyExtraFare;
 import nextstep.subway.domain.policy.discount.ChildrenDiscount;
 import nextstep.subway.domain.policy.discount.DiscountManager;
+import nextstep.subway.domain.policy.discount.TeenagerDiscount;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class FareManagerLoaderTest {
@@ -21,5 +22,6 @@ public abstract class FareManagerLoaderTest {
 
         DiscountManager.clearPolicy();
         DiscountManager.addPolicy(new ChildrenDiscount());
+        DiscountManager.addPolicy(new TeenagerDiscount());
     }
 }

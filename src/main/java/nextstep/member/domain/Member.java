@@ -8,6 +8,8 @@ public class Member {
 
     private static final int CHILDREN_MIN_AGE = 6;
     private static final int CHILDREN_MAX_AGE = 13;
+    private static final int TEENAGER_MIN_AGE = 13;
+    private static final int TEENAGER_MAX_AGE = 19;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,5 +70,9 @@ public class Member {
 
     public boolean isChildren() {
         return age >= CHILDREN_MIN_AGE && age < CHILDREN_MAX_AGE;
+    }
+
+    public boolean isTeenager() {
+        return age >= TEENAGER_MIN_AGE && age < TEENAGER_MAX_AGE;
     }
 }

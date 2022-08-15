@@ -6,4 +6,9 @@ public class Guest extends Member {
     public boolean isChildren() {
         return false;
     }
+
+    @Override
+    public boolean isTeenager() {
+        return false;
+    }
 }

@@ -9,26 +9,26 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ChildrenDiscountTest {
+class TeenagerDiscountTest {
 
-    private DiscountPolicy childrenDiscount;
+    private DiscountPolicy teenagerDiscount;
 
     @BeforeEach
     void setUp() {
-        childrenDiscount = new ChildrenDiscount();
+        teenagerDiscount = new TeenagerDiscount();
     }
 
     @Test
     @DisplayName("어린이 할인 정책은 어린이만 적용된다.")
     void supports() {
-        Member children = new Member("member@email.com", "password", 10);
+        Member teenager = new Member("member@email.com", "password", 15);
         Member adult = new Member("member@email.com", "password", 20);
         Member guest = new Guest();
 
         assertAll(() -> {
-            assertThat(childrenDiscount.supports(children)).isTrue();
-            assertThat(childrenDiscount.supports(adult)).isFalse();
-            assertThat(childrenDiscount.supports(guest)).isFalse();
+            assertThat(teenagerDiscount.supports(teenager)).isTrue();
+            assertThat(teenagerDiscount.supports(adult)).isFalse();
+            assertThat(teenagerDiscount.supports(guest)).isFalse();
         });
     }
 
@@ -37,6 +37,6 @@ class ChildrenDiscountTest {
     void discount() {
         final int fare = 1250;
 
-        assertThat(childrenDiscount.discount(fare)).isEqualTo(800);
+        assertThat(teenagerDiscount.discount(fare)).isEqualTo(1070);
     }
 }
