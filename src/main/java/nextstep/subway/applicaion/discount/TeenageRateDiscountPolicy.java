@@ -4,7 +4,7 @@ import nextstep.member.domain.Member;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TeenageRateDiscountPolicy implements DiscountPolicy {
+class TeenageRateDiscountPolicy implements DiscountPolicy {
 
     private static final int MIN_AGE = 13;
     private static final int MAX_AGE = 19;

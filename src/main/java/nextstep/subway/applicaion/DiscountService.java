@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.discount.DiscountPolicy;
 import nextstep.subway.applicaion.discount.NotDiscountPolicy;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
@@ -13,6 +14,11 @@ import java.util.List;
 public class DiscountService {
 
     private final List<DiscountPolicy> discountPolicyList;
+
+    @PostConstruct
+    void init() {
+        discountPolicyList.add(new NotDiscountPolicy());
+    }
 
     public DiscountPolicy findDiscountPolicy(final Member member) {
         return discountPolicyList.stream()
