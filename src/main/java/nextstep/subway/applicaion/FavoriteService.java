@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
@@ -20,16 +21,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final MemberService memberService;
     private final StationService stationService;
-
-    public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService) {
-        this.favoriteRepository = favoriteRepository;
-        this.memberService = memberService;
-        this.stationService = stationService;
-    }
 
     @Transactional
     public void createFavorite(String email, FavoriteRequest request) {

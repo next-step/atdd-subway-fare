@@ -1,5 +1,6 @@
 package nextstep;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.policy.FareManager;
 import nextstep.subway.domain.policy.FarePolicy;
 import org.springframework.stereotype.Component;
@@ -8,13 +9,10 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class FareManagerLoader {
 
     private final List<FarePolicy> farePolicies;
-
-    public FareManagerLoader(List<FarePolicy> farePolicies) {
-        this.farePolicies = farePolicies;
-    }
 
     @PostConstruct
     public void initialize() {
