@@ -6,6 +6,8 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class MemberService {
     private MemberRepository memberRepository;
@@ -27,6 +29,10 @@ public class MemberService {
     public MemberResponse findMember(String email) {
         Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
         return MemberResponse.of(member);
+    }
+
+    public Optional<Member> findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     public void updateMember(Long id, MemberRequest param) {

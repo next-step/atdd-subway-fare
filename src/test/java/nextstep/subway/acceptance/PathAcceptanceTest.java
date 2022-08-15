@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -90,31 +91,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 양재역, 강남역);
     }
 
-    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다.")
-    @Test
-    void getPriceOfPathByDistance() {
-        // given
-        Long 잠실역 = 지하철역_생성_요청(관리자, "고속터미널역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 잠실역, 50, 3));
-
-        // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(남부터미널역, 잠실역, "DISTANCE");
-
-        // then
-        assertThat(response.jsonPath().getLong("distance")).isEqualTo(62L);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
-
-        // 9km = 1250
-        // 12km = 10km + 2km = 1250 + 100
-        // 16km = 10km + 6km = 1250 + 200
-        // 52km = 10km + 40km + 2km = 1250 + 800 + 100
-        // 62km = 10km + 40km + 12km = 1250 + 800 + 200
-        // 70km = 10km + 40km + 18km = 1250 + 800 + 300
-    }
-
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, final String type) {
-        return RestAssured
-                .given().log().all()
+        return given(관리자)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();

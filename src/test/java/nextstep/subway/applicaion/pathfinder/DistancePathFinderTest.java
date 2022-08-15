@@ -31,9 +31,9 @@ class DistancePathFinderTest {
         Station 양재역 = createStation(3L, "양재역");
         Station 남부터미널역 = createStation(4L, "남부터미널역");
 
-        Line 신분당선 = new Line("신분당선", "red");
-        Line 이호선 = new Line("2호선", "red");
-        Line 삼호선 = new Line("3호선", "red");
+        Line 신분당선 = new Line("신분당선", "red", 0);
+        Line 이호선 = new Line("2호선", "red", 0);
+        Line 삼호선 = new Line("3호선", "red", 0);
 
         신분당선.addSection(강남역, 양재역, 3, 1);
         이호선.addSection(교대역, 강남역, 3, 2);

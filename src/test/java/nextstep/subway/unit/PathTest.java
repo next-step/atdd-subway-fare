@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
@@ -9,6 +10,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 class PathTest {
 
@@ -21,7 +24,12 @@ class PathTest {
     }
 
     private Section getSection(final int distance) {
-        return new Section(null, null, null, distance, 50);
+        Line line = mock(Line.class);
+        doReturn(0)
+                .when(line)
+                .getAdditionalFare();
+
+        return new Section(line, null, null, distance, 50);
     }
 
 }
