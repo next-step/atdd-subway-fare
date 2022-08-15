@@ -1,18 +1,13 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.util.FarePolicy;
-import nextstep.subway.util.NormalFarePolicy;
-
 import java.util.List;
 
 public class Path {
 
     private Sections sections;
-    private FarePolicy farePolicy;
 
     public Path(Sections sections) {
         this.sections = sections;
-        this.farePolicy = new NormalFarePolicy();
     }
 
     public Sections getSections() {
@@ -27,8 +22,8 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare() {
-        return farePolicy.calculateFare(extractDistance());
+    public int mostExpensiveLineFare() {
+        return sections.mostExpensiveLineFare();
     }
 
     public List<Station> getStations() {

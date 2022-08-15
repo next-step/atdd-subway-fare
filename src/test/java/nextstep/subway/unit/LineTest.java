@@ -58,7 +58,7 @@ class LineTest {
         line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
 
         assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(createSectionBuilder(강남역, 삼성역, Distance.from(5), Duration.from(15))))
-                .withMessage("소요 시간은 0 이하일 수 없습니다. 입력된 시간 : " + -5);
+                .withMessage(Duration.NEGATIVE_DURATION_MESSAGE + -5);
     }
 
     @DisplayName("상행 기준으로 목록 중간에 추가할 때 중간 구간의 길이가 더 길 경우 예외")
@@ -72,7 +72,7 @@ class LineTest {
         line.addSection(createSectionBuilder(강남역, 역삼역, Distance.from(10), Duration.from(10)));
 
         assertThatIllegalArgumentException().isThrownBy(() -> line.addSection(createSectionBuilder(강남역, 삼성역, Distance.from(15), Duration.from(4))))
-                .withMessage("거리는 0 이하가 될 수 없습니다. 입력된 거리 : "+ -5);
+                .withMessage(Distance.NEGATIVE_DISTANCE_MESSAGE + -5);
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")

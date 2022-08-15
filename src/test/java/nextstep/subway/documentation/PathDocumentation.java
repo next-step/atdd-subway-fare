@@ -9,9 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import support.auth.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -36,7 +39,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 20, 1_250
         );
 
-        when(pathService.findPath(1L, 2L)).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(UserDetails.class))).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()

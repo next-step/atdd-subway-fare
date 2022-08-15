@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Distance {
 
+    public static final String NEGATIVE_DISTANCE_MESSAGE = "거리는 0 이하가 될 수 없습니다. 입력된 거리 : ";
     private static final int BASE_DISTANCE = 0;
     @Column
     private int distance;
@@ -19,7 +20,7 @@ public class Distance {
 
     private void validateLessThanZero(int distance) {
         if (distance <= BASE_DISTANCE) {
-            throw new IllegalArgumentException("거리는 0 이하가 될 수 없습니다. 입력된 거리 : " + distance);
+            throw new IllegalArgumentException(NEGATIVE_DISTANCE_MESSAGE + distance);
         }
     }
 

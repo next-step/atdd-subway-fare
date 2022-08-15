@@ -16,14 +16,22 @@ public class Line {
     private String color;
 
     @Embedded
+    private Fare fare = new Fare();
+
+    @Embedded
     private Sections sections = new Sections();
 
     public Line() {
     }
 
     public Line(String name, String color) {
+        this(name, color, Fare.from(0));
+    }
+
+    public Line(String name, String color, Fare fare) {
         this.name = name;
         this.color = color;
+        this.fare = fare;
     }
 
     public Long getId() {
@@ -36,6 +44,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getFare() {
+        return fare.fare();
     }
 
     public List<Section> getSections() {

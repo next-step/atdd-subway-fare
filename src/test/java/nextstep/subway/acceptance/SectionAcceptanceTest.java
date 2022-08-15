@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.LineSectionRequest;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,8 +34,10 @@ class SectionAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
 
-        LineRequest lineRequest = LineRequest.of("신분당선", "bg-red-600", 강남역, 양재역, 10, 10);
-        신분당선 = 지하철_노선_생성_요청(관리자, lineRequest).jsonPath().getLong("id");
+        SectionRequest sectionRequest = SectionRequest.of(강남역, 양재역, 10, 10);
+        LineRequest lineRequest = LineRequest.of("신분당선", "bg-red-600", 1_000);
+        LineSectionRequest lineSectionRequest = LineSectionRequest.of(lineRequest, sectionRequest);
+        신분당선 = 지하철_노선_생성_요청(관리자, lineSectionRequest).jsonPath().getLong("id");
     }
 
     /**

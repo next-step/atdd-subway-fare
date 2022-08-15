@@ -135,12 +135,15 @@ public class Sections {
 
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
+            Section findUpSection = upSection.get();
+            Section findDownSection = downSection.get();
+
             Section newSection = Section.of(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().increasedDistance(downSection.get()),
-                    upSection.get().increasedDuration(downSection.get()));
+                    findUpSection.getLine(),
+                    findDownSection.getUpStation(),
+                    findUpSection.getDownStation(),
+                    findUpSection.increasedDistance(findDownSection),
+                    findUpSection.increasedDuration(findDownSection));
 
             this.sections.add(newSection);
         }
@@ -164,5 +167,10 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int mostExpensiveLineFare() {
+        return sections.stream().mapToInt(section -> section.getLine().getFare()).max()
+                .orElseThrow(() -> new IllegalStateException("구간 리스트가 비어있습니다."));
     }
 }
