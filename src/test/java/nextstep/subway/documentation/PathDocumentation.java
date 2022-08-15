@@ -41,15 +41,15 @@ public class PathDocumentation extends Documentation {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
-                                        parameterWithName("source").description("Source Station Id"),
-                                        parameterWithName("target").description("Target Station Id"),
-                                        parameterWithName("type").description("Search Condition")
+                                        parameterWithName("source").description("출발역 ID"),
+                                        parameterWithName("target").description("도착역 ID"),
+                                        parameterWithName("type").description("조회 방식(거리, 시간)")
                                 ),
                                 responseFields(
-                                        fieldWithPath("stations[].id").description("Station Id"),
-                                        fieldWithPath("stations[].name").description("Station Name"),
-                                        fieldWithPath("distance").description("Total Distance"),
-                                        fieldWithPath("duration").description("Total Duration")
+                                        fieldWithPath("stations[].id").description("지하철역 ID"),
+                                        fieldWithPath("stations[].name").description("지하철역 이름"),
+                                        fieldWithPath("distance").description("총 이동거리"),
+                                        fieldWithPath("duration").description("총 소요 시간")
                                 )
                         )
                 )
