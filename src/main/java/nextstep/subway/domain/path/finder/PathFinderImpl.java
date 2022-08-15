@@ -15,13 +15,13 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-public abstract class PathFinderImpl implements PathFinder {
+public class PathFinderImpl implements PathFinder {
 
   private SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
   final List<Line> lines;
 
-  PathFinderImpl(List<Line> lines) {
+  public PathFinderImpl(List<Line> lines) {
     this.lines = lines;
   }
 

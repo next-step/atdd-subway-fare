@@ -27,7 +27,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return FareCalculator.calculator(shortDistance);
+        return new FareCalculator().calculator(shortDistance);
     }
 
     public List<Station> getStations() {

@@ -127,7 +127,7 @@ public class PathServiceMockTest {
         () -> assertThat(result.getStations().size()).isEqualTo(3),
         () -> assertThat(result.getDistance()).isEqualTo(6),
         () -> assertThat(result.getDuration()).isEqualTo(5),
-        () -> assertThat(result.getFare()).isEqualTo(1250)
+        () -> assertThat(result.getFare()).isEqualTo(1_250)
     );
   }
 
@@ -143,7 +143,7 @@ public class PathServiceMockTest {
         () -> assertThat(result.getStations().size()).isEqualTo(3),
         () -> assertThat(result.getDistance()).isEqualTo(18),
         () -> assertThat(result.getDuration()).isEqualTo(6),
-        () -> assertThat(result.getFare()).isEqualTo(1450)
+        () -> assertThat(result.getFare()).isEqualTo(1_450)
     );
   }
 
@@ -159,7 +159,7 @@ public class PathServiceMockTest {
         () -> assertThat(result.getStations().size()).isEqualTo(3),
         () -> assertThat(result.getDistance()).isEqualTo(56),
         () -> assertThat(result.getDuration()).isEqualTo(8),
-        () -> assertThat(result.getFare()).isEqualTo(2150)
+        () -> assertThat(result.getFare()).isEqualTo(2_150)
     );
   }
 
@@ -175,7 +175,7 @@ public class PathServiceMockTest {
         () -> assertThat(result.getStations().size()).isEqualTo(3),
         () -> assertThat(result.getDistance()).isEqualTo(6),
         () -> assertThat(result.getDuration()).isEqualTo(5),
-        () -> assertThat(result.getFare()).isEqualTo(1250)
+        () -> assertThat(result.getFare()).isEqualTo(1_250)
     );
   }
 
@@ -191,7 +191,7 @@ public class PathServiceMockTest {
         () -> assertThat(result.getStations().size()).isEqualTo(3),
         () -> assertThat(result.getDistance()).isEqualTo(18),
         () -> assertThat(result.getDuration()).isEqualTo(6),
-        () -> assertThat(result.getFare()).isEqualTo(1450)
+        () -> assertThat(result.getFare()).isEqualTo(1_450)
     );
   }
 
@@ -207,7 +207,7 @@ public class PathServiceMockTest {
         () -> assertThat(result.getStations().size()).isEqualTo(2),
         () -> assertThat(result.getDistance()).isEqualTo(58),
         () -> assertThat(result.getDuration()).isEqualTo(4),
-        () -> assertThat(result.getFare()).isEqualTo(2150)
+        () -> assertThat(result.getFare()).isEqualTo(2_150)
     );
   }
 }

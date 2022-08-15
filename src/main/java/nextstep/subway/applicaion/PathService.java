@@ -7,6 +7,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.path.finder.PathFinder;
+import nextstep.subway.domain.path.finder.PathFinderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
-        PathFinder pathFinder = pathType.getPathFinder(lines);
+        PathFinder pathFinder = new PathFinderImpl(lines);
         Path path = pathFinder.findPath(upStation, downStation, pathType);
 
         return PathResponse.of(path);

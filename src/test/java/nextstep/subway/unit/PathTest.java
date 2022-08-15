@@ -43,7 +43,7 @@ public class PathTest {
 
     Path path = new Path(new Sections(이호선.getSections()), 9);
 
-    assertThat(path.extractFare()).isEqualTo(1250);
+    assertThat(path.extractFare()).isEqualTo(1_250);
   }
 
   @Test
@@ -53,7 +53,7 @@ public class PathTest {
 
     Path path = new Path(new Sections(이호선.getSections()), 25);
 
-    assertThat(path.extractFare()).isEqualTo(1550);
+    assertThat(path.extractFare()).isEqualTo(1_550);
   }
 
   @Test
@@ -63,6 +63,6 @@ public class PathTest {
 
     Path path = new Path(new Sections(이호선.getSections()), 62);
 
-    assertThat(path.extractFare()).isEqualTo(2250);
+    assertThat(path.extractFare()).isEqualTo(2_250);
   }
 }

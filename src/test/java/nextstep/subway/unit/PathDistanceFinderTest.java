@@ -8,8 +8,8 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
-import nextstep.subway.domain.path.finder.PathDistanceFinder;
 import nextstep.subway.domain.path.finder.PathFinder;
+import nextstep.subway.domain.path.finder.PathFinderImpl;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class PathDistanceFinderTest {
   void 최단_거리_경로_조회() {
     // given
     List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-    PathFinder pathFinder = new PathDistanceFinder(lines);
+    PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
     Path path = pathFinder.findPath(교대역, 양재역, PathType.DISTANCE);
@@ -55,7 +55,7 @@ public class PathDistanceFinderTest {
         () -> assertThat(path.getStations()).containsExactlyInAnyOrder(교대역, 강남역, 양재역),
         () -> assertThat(path.extractDistance()).isEqualTo(9),
         () -> assertThat(path.extractDuration()).isEqualTo(9),
-        () -> assertThat(path.extractFare()).isEqualTo(1250)
+        () -> assertThat(path.extractFare()).isEqualTo(1_250)
     );
   }
 
@@ -63,7 +63,7 @@ public class PathDistanceFinderTest {
   void 반대로_최단_거리_경로_조회() {
     // given
     List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-    PathFinder pathFinder = new PathDistanceFinder(lines);
+    PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
     Path path = pathFinder.findPath(양재역, 교대역, PathType.DISTANCE);
@@ -73,7 +73,7 @@ public class PathDistanceFinderTest {
         () -> assertThat(path.getStations()).containsExactlyInAnyOrder(양재역, 강남역, 교대역),
         () -> assertThat(path.extractDistance()).isEqualTo(9),
         () -> assertThat(path.extractDuration()).isEqualTo(9),
-        () -> assertThat(path.extractFare()).isEqualTo(1250)
+        () -> assertThat(path.extractFare()).isEqualTo(1_250)
     );
   }
 }

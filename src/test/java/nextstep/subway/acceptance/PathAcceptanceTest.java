@@ -64,10 +64,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 1_250)
         );
     }
 
@@ -82,10 +80,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 1_250)
         );
     }
 
@@ -100,10 +96,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 1_250)
         );
     }
 
@@ -118,10 +112,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(14),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(6),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350)
+            () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
+            () -> 경로_정보_비교(response, 14, 6, 1_350)
         );
     }
 
@@ -136,10 +128,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 양재역, 도곡역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(55),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(10),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2150)
+            () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
+            () -> 경로_정보_비교(response, 55, 10, 2_150)
         );
     }
 
@@ -154,10 +144,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250)
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 1_250)
         );
     }
 
@@ -172,10 +160,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(14),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(6),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350)
+            () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
+            () -> 경로_정보_비교(response, 14, 6, 1_350)
         );
     }
 
@@ -190,10 +176,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 양재역, 도곡역),
-            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(55),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(10),
-            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2150)
+            () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
+            () -> 경로_정보_비교(response, 55, 10, 2_150)
         );
     }
 
@@ -225,5 +209,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         params.put("distance", distance + "");
         params.put("duration", duration + "");
         return params;
+    }
+
+    private void 지하철역_경로_비교(ExtractableResponse<Response> response, Long 시작_지하철역, Long 중간_지하철역, Long 도착_지하철역) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(시작_지하철역, 중간_지하철역, 도착_지하철역);
+    }
+
+    private void 경로_정보_비교(ExtractableResponse<Response> response, int 거리, int 시간, int 요금) {
+        assertAll(
+            () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(거리),
+            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(시간),
+            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(요금)
+        );
     }
 }
