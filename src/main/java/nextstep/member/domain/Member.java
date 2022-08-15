@@ -49,6 +49,14 @@ public class Member {
         favorites.delete(id);
     }
 
+    public boolean isChild() {
+        return age >= 6 && age < 13;
+    }
+
+    public boolean isTeen() {
+        return age >= 13 && age < 19;
+    }
+
     public Long getId() {
         return id;
     }

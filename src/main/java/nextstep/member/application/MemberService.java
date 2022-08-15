@@ -1,8 +1,10 @@
 package nextstep.member.application;
 
+import nextstep.auth.userdetails.User;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.application.dto.MemberUpdateRequest;
+import nextstep.member.domain.GuestMember;
 import nextstep.member.domain.exception.DuplicateEmailException;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
@@ -38,6 +40,12 @@ public class MemberService {
     public Member findMember(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findMemberByUser(User user) {
+        return memberRepository.findByEmail(user.getUsername())
+                .orElse(new GuestMember());
     }
 
     public void updateMember(String email, MemberUpdateRequest param) {
