@@ -160,9 +160,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("추가 요금이 있는 노선을 이용할 경우 측정된 요금에 추가")
     @Test
     void fareCalculateWithAdditionalFareLine() {
-        var fare = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, "DISTANCE").jsonPath().getInt("fare");
+        var response = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, "DISTANCE");
 
-        assertThat(fare).isEqualTo(1250 + 신분당선_추가요금);
+        거리와_요금_확인(response, 7, 1250 + 신분당선_추가요금);
     }
 
     @DisplayName("추가 요금이 있는 노선을 환승할 경우 가장 높은 금액만 추가")
