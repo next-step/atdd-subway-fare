@@ -22,7 +22,7 @@ class LineTest {
     void setUp() {
         강남역 = new Station("강남역");
         역삼역 = new Station("역삼역");
-        line = new Line("2호선", "green");
+        line = new Line("2호선", "green", 200);
 
         line.addSection(강남역, 역삼역, 10, 4);
     }

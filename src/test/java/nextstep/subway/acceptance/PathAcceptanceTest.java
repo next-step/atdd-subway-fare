@@ -45,9 +45,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4, 200);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4, 1000);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10, 300);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 1));
     }
@@ -84,21 +84,21 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private static Stream<Arguments> 유저와_최단_거리_경로_요금() {
         return Stream.of(
-                Arguments.of("child@email.com", 450, "어린이 사용자는 350원을 공제한 금액의 50%를 할인받는다."),
-                Arguments.of("teenager@email.com", 720, "청소년 사용자는 350원을 공제한 금액의 20%를 할인받는다."),
-                Arguments.of("member@email.com", 1250, "성인 사용자는 할인 안받는다.")
+                Arguments.of("child@email.com", 600, "어린이 사용자는 350원을 공제한 금액의 50%를 할인받는다."),
+                Arguments.of("teenager@email.com", 960, "청소년 사용자는 350원을 공제한 금액의 20%를 할인받는다."),
+                Arguments.of("member@email.com", 1550, "성인 사용자는 할인 안받는다.")
         );
     }
 
     private static Stream<Arguments> 유저와_최단_시간_경로_요금() {
         return Stream.of(
-                Arguments.of("child@email.com", 550, "어린이 사용자는 350원을 공제한 금액의 50%를 할인받는다."),
-                Arguments.of("teenager@email.com", 880, "청소년 사용자는 350원을 공제한 금액의 20%를 할인받는다."),
-                Arguments.of("member@email.com", 1450, "성인 사용자는 할인 안받는다.")
+                Arguments.of("child@email.com", 1050, "어린이 사용자는 350원을 공제한 금액의 50%를 할인받는다."),
+                Arguments.of("teenager@email.com", 1680, "청소년 사용자는 350원을 공제한 금액의 20%를 할인받는다."),
+                Arguments.of("member@email.com", 2450, "성인 사용자는 할인 안받는다.")
         );
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int fare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -107,6 +107,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("fare", fare + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
