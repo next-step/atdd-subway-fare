@@ -1,6 +1,5 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +12,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,37 +72,76 @@ class FareAcceptanceTest extends AcceptanceTest {
         return params;
     }
 
-    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다. 3호선을 거쳐가므로 추가 요금이 300원 있어야 한다.")
+    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다. 비로그인 사용자는 할인 요금이 없다.")
     @Test
-    void getPriceOfPathByDistanceLine삼호선() {
+    void getPriceOfPathByDistanceNotLogin() {
         // given
         Long 잠실역 = 지하철역_생성_요청(관리자, "고속터미널역").jsonPath().getLong("id");
         지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 잠실역, 50, 3));
 
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(남부터미널역, 잠실역, "DISTANCE");
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청_로그인안됨(남부터미널역, 잠실역, "DISTANCE");
 
         // then
         assertThat(response.jsonPath().getLong("distance")).isEqualTo(62L);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2550);
     }
 
-    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다. 신분당선을 거쳐가므로 추가 요금이 1000원 있어야 한다.")
+    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다. 할인 대상이 아닌 사용자는 할인 요금이 없다.")
     @Test
-    void getPriceOfPathByDistanceLine신분당선() {
+    void getPriceOfPathByDistanceNotTarget() {
         // given
-        Long 고속터미널역 = 지하철역_생성_요청(관리자, "고속터미널역").jsonPath().getLong("id");
-        지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 고속터미널역, 50, 3));
+        Long 잠실역 = 지하철역_생성_요청(관리자, "고속터미널역").jsonPath().getLong("id");
+        지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 잠실역, 50, 3));
 
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(고속터미널역, 양재역, "DISTANCE");
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(관리자, 남부터미널역, 잠실역, "DISTANCE");
 
         // then
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(3250);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(62L);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2550);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, final String type) {
-        return given(관리자)
+    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다. 어린이는 50% 할인요금이 있다.")
+    @Test
+    void getPriceOfPathByDistanceByChild() {
+        // given
+        final String 어린이 = 로그인_되어_있음("child@email.com", "password");
+
+        Long 잠실역 = 지하철역_생성_요청(관리자, "고속터미널역").jsonPath().getLong("id");
+        지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 잠실역, 50, 3));
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(어린이, 남부터미널역, 잠실역, "DISTANCE");
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1100);
+    }
+
+    @DisplayName("두 역의 최단 거리 경로에 대한 요금을 조회한다. 청소년은 20% 할인요금이 있다.")
+    @Test
+    void getPriceOfPathByDistanceByTeenager() {
+        // given
+        final String 청소년 = 로그인_되어_있음("teenager@email.com", "password");
+        Long 잠실역 = 지하철역_생성_요청(관리자, "고속터미널역").jsonPath().getLong("id");
+        지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(강남역, 잠실역, 50, 3));
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(청소년, 남부터미널역, 잠실역, "DISTANCE");
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1760);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청_로그인안됨(Long source, Long target, final String type) {
+        return given()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String token, Long source, Long target, final String type) {
+        return given(token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();

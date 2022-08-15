@@ -1,7 +1,9 @@
 package nextstep.subway.applicaion.discount;
 
 import nextstep.member.domain.Member;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TeenageRateDiscountPolicy implements DiscountPolicy {
 
     private static final int MIN_AGE = 13;

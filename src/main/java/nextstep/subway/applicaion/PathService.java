@@ -28,7 +28,8 @@ public class PathService {
                 stationService.findById(source),
                 stationService.findById(target));
 
-        final Member member = memberService.findMemberByEmail(email);
+        final Member member = memberService.findMemberByEmail(email)
+                .orElse(new Member("", "", 0));
 
         return PathResponse.of(path, discountService.findDiscountPolicy(member));
     }
