@@ -11,9 +11,11 @@ public class FareCalculatorConfig {
         var defaultFareCalculator = new DefaultFareCalculator();
         var firstFareCalculator = new FirstRangeFareCalculator();
         var secondFareCalculator = new SecondRangeFareCalculator();
+        var lineSurchargeFareCalculator = new LineSurchargeFareCalculator();
 
         defaultFareCalculator.setNextChain(firstFareCalculator);
         firstFareCalculator.setNextChain(secondFareCalculator);
+        secondFareCalculator.setNextChain(lineSurchargeFareCalculator);
 
         return defaultFareCalculator;
     }
