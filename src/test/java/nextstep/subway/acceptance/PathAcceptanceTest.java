@@ -80,7 +80,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로가_순서에_따라_조회됨(최단_거리_경로, 교대역, 남부터미널역, 양재역);
-        경로의_이용요금이_조회됨(최단_거리_경로, 1070);
+        경로의_이용요금이_조회됨(최단_거리_경로, 800);
     }
 
     @DisplayName("청소년이 두 역의 최단 거리 경로를 조회한다.")
@@ -92,7 +92,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로가_순서에_따라_조회됨(최단_거리_경로, 교대역, 남부터미널역, 양재역);
-        경로의_이용요금이_조회됨(최단_거리_경로, 800);
+        경로의_이용요금이_조회됨(최단_거리_경로, 1070);
     }
 
     private void 경로가_순서에_따라_조회됨(ExtractableResponse<Response> response, Long... stations) {
