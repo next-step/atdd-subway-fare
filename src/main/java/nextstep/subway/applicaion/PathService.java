@@ -1,6 +1,5 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -13,8 +12,8 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
