@@ -1,14 +1,18 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.exception.DomainException;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SubwayMapTest {
 
@@ -16,9 +20,12 @@ class SubwayMapTest {
     private Station 강남역;
     private Station 양재역;
     private Station 남부터미널역;
+    private Station 수유역;
+    private Station 쌍문역;
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+    private Line 사호선;
 
     @BeforeEach
     void setUp() {
@@ -26,15 +33,19 @@ class SubwayMapTest {
         강남역 = createStation(2L, "강남역");
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
+        수유역 = createStation(5L, "수유역");
+        쌍문역 = createStation(6L, "쌍문역");
 
         신분당선 = new Line("신분당선", "red");
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
+        사호선 = new Line("4호선", "skyblue");
 
         신분당선.addSection(강남역, 양재역, 3, 4);
         이호선.addSection(교대역, 강남역, 3, 4);
         삼호선.addSection(교대역, 남부터미널역, 5, 3);
         삼호선.addSection(남부터미널역, 양재역, 5, 3);
+        사호선.addSection(수유역, 쌍문역, 5, 3);
     }
 
     @Test
@@ -87,6 +98,17 @@ class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = PathType.class)
+    void findPathFailsForStationNotConnected(PathType type) {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선, 사호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        assertThrows(DomainException.class, () -> subwayMap.findPath(양재역, 쌍문역, type));
     }
 
     private Station createStation(long id, String name) {
