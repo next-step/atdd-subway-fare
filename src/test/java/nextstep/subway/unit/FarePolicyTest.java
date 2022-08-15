@@ -1,6 +1,11 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Sections;
+import nextstep.subway.domain.Station;
 import nextstep.subway.domain.discount.DiscountCalculator;
+import nextstep.subway.domain.fare.AdditionalFarePolicy;
 import nextstep.subway.domain.fare.BasicFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,6 +74,29 @@ public class FarePolicyTest {
 
         // then
         assertThat(fare).isEqualTo(2250);
+    }
+
+    @DisplayName("요금계산 - 구간별 추가요금 적용")
+    @Test
+    void calculateOverFareAdditionalFarePerLine() {
+
+        // given
+        Sections sections = new Sections();
+        final Line 이호선 = new Line("2호선", "green", 900);
+        final Line 신분당선 = new Line("신분당선", "red", 500);
+
+        final Section 첫번째구간 = new Section(이호선, new Station("교대역"), new Station("강남역"), 10, 10);
+        final Section 두번째구간 = new Section(신분당선, new Station("강남역"), new Station("양재역"), 10, 5);
+
+        sections.add(첫번째구간);
+        sections.add(두번째구간);
+
+        // when
+        AdditionalFarePolicy additionalFarePolicy = new AdditionalFarePolicy();
+        long fare = additionalFarePolicy.calculateOverFare(sections);
+
+        // then
+        assertThat(fare).isEqualTo(900);
     }
 
     @DisplayName("요금 계산 - 어린이 할인 정책 적용")
