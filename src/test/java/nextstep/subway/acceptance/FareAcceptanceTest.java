@@ -184,7 +184,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
          * then 할인된 요금이 적용된다.
          */
         @DisplayName("청소년은 운임에서 할인된 요금이 적용된다.")
-        @ParameterizedTest
+        @Test
         void 청소년_사용자가_지하철을_이용하면_할인된_요금_적용() {
             // when
             ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(청소년, 교대역, 양재역, "DISTANCE");

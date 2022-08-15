@@ -11,7 +11,7 @@ import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import nextstep.subway.domain.policy.FarePolicyRegistry;
-import nextstep.subway.domain.policy.age.AgePolicyBasic;
+import nextstep.subway.domain.policy.age.AgeFarePolicy;
 import nextstep.subway.domain.policy.distance.DistanceFarePolicy;
 import nextstep.subway.domain.policy.surcharge.SurchargePolicy;
 import org.springframework.stereotype.Service;
@@ -60,7 +60,7 @@ public class PathService {
         FarePolicyRegistry handler = new FarePolicyRegistry();
         handler.addPolicy(new DistanceFarePolicy());
         handler.addPolicy(new SurchargePolicy());
-        handler.addPolicy(new AgePolicyBasic());
+        handler.addPolicy(new AgeFarePolicy());
 
         return handler.calculate(age, distance, 0, path);
     }
