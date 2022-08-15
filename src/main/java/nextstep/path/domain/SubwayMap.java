@@ -41,7 +41,7 @@ public class SubwayMap {
         return allEdges;
     }
 
-    public Path findPath(Long source, Long target, PathSearchType type) {
+    public Path findPath(Long source, Long target, PathType type) {
         DijkstraShortestPath<Long, SectionEdge> shortestPathGraph = createGraphOfType(type);
         GraphPath<Long, SectionEdge> result = shortestPathGraph.getPath(source, target);
 
@@ -56,7 +56,7 @@ public class SubwayMap {
         return new Path(new Sections(pathSections));
     }
 
-    private DijkstraShortestPath<Long, SectionEdge> createGraphOfType(PathSearchType type) {
+    private DijkstraShortestPath<Long, SectionEdge> createGraphOfType(PathType type) {
         SimpleDirectedWeightedGraph<Long, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         vertexes.forEach(graph::addVertex);
@@ -71,7 +71,7 @@ public class SubwayMap {
     }
 
     public int shortestDistance(Long source, Long target) {
-        DijkstraShortestPath<Long, SectionEdge> shortestPathGraph = createGraphOfType(PathSearchType.DISTANCE);
+        DijkstraShortestPath<Long, SectionEdge> shortestPathGraph = createGraphOfType(PathType.DISTANCE);
         GraphPath<Long, SectionEdge> result = shortestPathGraph.getPath(source, target);
 
         List<Section> sections = result.getEdgeList().stream()

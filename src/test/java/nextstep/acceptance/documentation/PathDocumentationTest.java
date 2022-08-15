@@ -1,17 +1,20 @@
 package nextstep.acceptance.documentation;
 
 import io.restassured.specification.RequestSpecification;
-import nextstep.path.domain.PathSearchType;
+import nextstep.path.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.payload.JsonFieldType;
 
+import static nextstep.acceptance.steps.DocumentationTestSteps.givenDocs;
 import static nextstep.acceptance.steps.LineSectionSteps.*;
 import static nextstep.acceptance.steps.PathSteps.경로_조회_정보가_일치한다;
 import static nextstep.acceptance.steps.PathSteps.경로를_조회한다;
 import static nextstep.acceptance.steps.StationSteps.지하철역_생성_요청;
-import static nextstep.acceptance.steps.DocumentationTestSteps.givenDocs;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -68,22 +71,25 @@ class PathDocumentationTest extends DocumentationTest {
         RequestSpecification 문서_정보 = givenDocs(
                 spec,
                 "path",
+                requestHeaders(
+                  headerWithName("Authorization").optional().description("인증 토큰 (선택)")
+                ),
                 requestParameters(
                         parameterWithName("source").description("출발역 id"),
                         parameterWithName("target").description("도착역 id"),
                         parameterWithName("type").description("경로 조회 타입: DURATION(최소 시간), DISTANCE(최소 거리)")
                 ),
                 responseFields(
-                        fieldWithPath("stations[].id").description("경로 조회 결과 역 id"),
-                        fieldWithPath("stations[].name").description("경로 조회 결과 역 이름"),
-                        fieldWithPath("distance").description("총 거리"),
-                        fieldWithPath("duration").description("총 시간"),
-                        fieldWithPath("fare").description("총 요금")
+                        fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("경로 조회 결과 역 id"),
+                        fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("경로 조회 결과 역 이름"),
+                        fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리"),
+                        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 시간"),
+                        fieldWithPath("fare").type(JsonFieldType.NUMBER).description("총 요금")
                 )
         );
 
         // when
-        var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DISTANCE, 문서_정보);
+        var response = 경로를_조회한다(남부터미널역, 강남역, PathType.DISTANCE, 문서_정보);
 
         // then
         경로_조회_정보가_일치한다(response, 13, 12, 1350, 남부터미널역, 양재역, 강남역);

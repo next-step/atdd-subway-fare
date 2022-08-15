@@ -1,13 +1,15 @@
 package nextstep.acceptance.test;
 
-import nextstep.path.domain.PathSearchType;
+import nextstep.path.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.acceptance.steps.LineSectionSteps.given;
 import static nextstep.acceptance.steps.LineSectionSteps.*;
 import static nextstep.acceptance.steps.MemberSteps.*;
-import static nextstep.acceptance.steps.PathSteps.*;
+import static nextstep.acceptance.steps.PathSteps.경로_조회_정보가_일치한다;
+import static nextstep.acceptance.steps.PathSteps.경로를_조회한다;
 import static nextstep.acceptance.steps.StationSteps.지하철역_생성_요청;
 
 class PathAcceptanceTest extends AcceptanceTest {
@@ -64,7 +66,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void pathByDistance() {
         // when
-        var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DISTANCE, given());
+        var response = 경로를_조회한다(남부터미널역, 강남역, PathType.DISTANCE, given());
 
         // then
         경로_조회_정보가_일치한다(response, 13, 12, 1350, 남부터미널역, 양재역, 강남역);
@@ -74,7 +76,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void pathByDuration() {
         // when
-        var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DURATION, given());
+        var response = 경로를_조회한다(남부터미널역, 강남역, PathType.DURATION, given());
 
         // then
         경로_조회_정보가_일치한다(response, 16, 11, 2250, 남부터미널역, 교대역, 강남역);
@@ -88,7 +90,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         String 청소년 = 로그인_되어_있음("teenager@email.com", "password");
 
         // when
-        var response = 경로를_조회한다(남부터미널역, 강남역, PathSearchType.DURATION, given(청소년));
+        var response = 경로를_조회한다(남부터미널역, 강남역, PathType.DURATION, given(청소년));
 
         // then
         경로_조회_정보가_일치한다(response, 16, 11, 1800, 남부터미널역, 교대역, 강남역);
