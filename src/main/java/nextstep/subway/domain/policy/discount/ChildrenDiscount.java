@@ -1,7 +1,9 @@
 package nextstep.subway.domain.policy.discount;
 
 import nextstep.member.domain.Member;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ChildrenDiscount implements DiscountPolicy {
 
     private static final double DISCOUNT_RATE = 0.5;

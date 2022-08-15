@@ -9,7 +9,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SubwayMapTest extends FareManagerLoaderTest {
 
@@ -94,23 +93,6 @@ public class SubwayMapTest extends FareManagerLoaderTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
-    }
-
-    @Test
-    @DisplayName("이용요금은 거리 기준으로 계산한다.")
-    void findFare() {
-        // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, PathType.DURATION);
-
-        // when
-        Path path = subwayMap.findPath(교대역, 양재역);
-
-        // then
-        assertAll(() -> {
-            assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
-            assertThat(path.extractFare().toInt()).isEqualTo(1_350);
-        });
     }
 
     private Station createStation(long id, String name) {

@@ -9,6 +9,8 @@ import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
 import support.auth.userdetails.User;
 
+import java.util.Objects;
+
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -18,7 +20,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        if (Objects.isNull(authentication)) {
+            return User.asGuest();
+        }
         return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
     }
 }

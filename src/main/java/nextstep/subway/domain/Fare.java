@@ -1,7 +1,9 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.policy.FareManager;
 import nextstep.subway.domain.policy.PathByFare;
+import nextstep.subway.domain.policy.discount.DiscountManager;
 
 public class Fare {
 
@@ -22,6 +24,14 @@ public class Fare {
             throw new IllegalStateException();
         }
         value += FareManager.fare(pathByFare);
+        return this;
+    }
+
+    public Fare discount(Member member) {
+        if (done) {
+            throw new IllegalStateException();
+        }
+        value = DiscountManager.discount(value, member);
         done();
         return this;
     }

@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.policy.PathByFare;
 
 import java.util.List;
@@ -20,9 +21,11 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public Fare extractFare() {
+    public Fare extractFare(Member member) {
         PathByFare pathByFare = generatePathByFare();
-        return Fare.chaining().calculate(pathByFare);
+        return Fare.chaining()
+                .calculate(pathByFare)
+                .discount(member);
     }
 
     private PathByFare generatePathByFare() {

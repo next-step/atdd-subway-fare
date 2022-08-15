@@ -29,13 +29,13 @@ public class FavoriteService {
 
     @Transactional
     public void createFavorite(String email, FavoriteRequest request) {
-        MemberResponse member = memberService.findMember(email);
+        MemberResponse member = memberService.findMemberResponse(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
     }
 
     public List<FavoriteResponse> findFavorites(String email) {
-        MemberResponse member = memberService.findMember(email);
+        MemberResponse member = memberService.findMemberResponse(email);
         List<Favorite> favorites = favoriteRepository.findByMemberId(member.getId());
         Map<Long, Station> stations = extractStations(favorites);
 
@@ -49,7 +49,7 @@ public class FavoriteService {
 
     @Transactional
     public void deleteFavorite(String email, Long id) {
-        MemberResponse member = memberService.findMember(email);
+        MemberResponse member = memberService.findMemberResponse(email);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
         if (!favorite.isCreatedBy(member.getId())) {
             throw new RuntimeException();
