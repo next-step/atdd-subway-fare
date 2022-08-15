@@ -112,7 +112,7 @@ class FareCalculatorTest {
     }
 
     private void 거리에_따른_가격_비교(int distance, int age, int price) {
-        int calculatedFare = fareCalculator.calculateOverFare(distance, age);
+        int calculatedFare = fareCalculator.calculateOverFare(distance, 0, age);
 
         assertThat(calculatedFare).isEqualTo(price);
     }

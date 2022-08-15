@@ -22,7 +22,7 @@ public class Path {
     }
 
     public int getExtraFare() {
-        return Integer.MIN_VALUE;
+        return sections.getExtraFare();
     }
 
     public List<Station> getStations() {

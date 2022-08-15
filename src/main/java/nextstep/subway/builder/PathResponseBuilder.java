@@ -24,7 +24,7 @@ public class PathResponseBuilder {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = fareCalculator.calculateOverFare(distance, age);
+        int fare = fareCalculator.calculateOverFare(distance, path.getExtraFare(), age);
 
         return new PathResponse(stations, distance, duration, fare);
     }
