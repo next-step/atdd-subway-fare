@@ -13,11 +13,16 @@ public class LineSectionSteps extends AcceptanceTestSteps {
         params.put("name", name);
         params.put("color", color);
 
-        return given(token)
-                .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines")
-                .then().log().all().extract();
+        return 지하철_노선_생성_요청(token, params);
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, String name, String color, int extraFare) {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("extraFare", extraFare + "");
+
+        return 지하철_노선_생성_요청(token, params);
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, Map<String, String> params) {
@@ -87,10 +92,11 @@ public class LineSectionSteps extends AcceptanceTestSteps {
         return params;
     }
 
-    public static Map<String, String> createLineUpdateParams(String name, String color) {
+    public static Map<String, String> createLineUpdateParams(String name, String color, int extraFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("extraFare", extraFare + "");
         return params;
     }
 
