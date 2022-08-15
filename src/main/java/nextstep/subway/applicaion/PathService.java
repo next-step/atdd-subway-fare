@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.Distance;
 import nextstep.subway.domain.EdgeWeightStrategy;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -14,10 +15,12 @@ import java.util.List;
 public class PathService {
     private LineService lineService;
     private StationService stationService;
+    private Distance distance;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, Distance distance) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.distance = distance;
     }
 
     public PathResponse findPath(Long source, Long target, EdgeWeightStrategy edgeWeightStrategy) {
@@ -27,8 +30,9 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, edgeWeightStrategy);
+        Path distancePath = subwayMap.findPath(upStation, downStation, distance);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, distancePath);
     }
 
 }
