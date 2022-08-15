@@ -1,5 +1,7 @@
 package support.auth.authorization;
 
+import java.util.Objects;
+import nextstep.member.domain.Guest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -19,6 +21,15 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        if (authentication != null) {
+            return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        }
+
+        AuthenticationPrincipal annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        if (Objects.requireNonNull(annotation).required()) {
+            throw new IllegalStateException("Authentication is required");
+        }
+
+        return Guest.guestUser;
     }
 }

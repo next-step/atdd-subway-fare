@@ -11,6 +11,7 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.domain.PathType.DISTANCE;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -33,7 +34,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 15, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyString(), any())).thenReturn(pathResponse);
         this.spec.filter(document("path",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
