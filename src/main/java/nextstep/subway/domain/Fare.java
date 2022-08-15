@@ -10,14 +10,21 @@ public class Fare {
 
     private static final int EXTRA_FARE_BASIC_UNIT = 100;
 
+    private int basicFare;
+
     private int distance;
 
     public Fare(int distance) {
+        this(0, distance);
+    }
+
+    public Fare(int lineFare, int distance) {
+        this.basicFare = BASIC_FARE + lineFare;
         this.distance = distance;
     }
 
     public int calculate() {
-        return BASIC_FARE + calculateOverFare(distance);
+        return basicFare + calculateOverFare(distance);
     }
 
     private int calculateOverFare(int distance) {
