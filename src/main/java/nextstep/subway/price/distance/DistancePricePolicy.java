@@ -1,6 +1,9 @@
-package nextstep.subway.price;
+package nextstep.subway.price.distance;
 
-public class DistancePricePolicy implements PricePolicy {
+import nextstep.subway.price.PricePolicy;
+import org.springframework.stereotype.Component;
+
+public class DistancePricePolicy {
     private static final int BASIC_PRICE = 1250;
     private static final int BASE_DISTANCE = 10;
     private static final int DIVISION_ONE_DISTANCE = 50;
@@ -16,14 +19,6 @@ public class DistancePricePolicy implements PricePolicy {
         this.totalDistance = totalDistance;
     }
 
-    /**
-     * 요금 계산 방법
-     * 기본운임(10㎞ 이내) : 기본운임 1,250원
-     * 이용 거리초과 시 추가운임 부과
-     * 10km초과∼50km까지(5km마다 100원)
-     * 50km초과 시 (8km마다 100원)
-     */
-    @Override
     public int calculatePrice() {
 
         if (this.totalDistance < BASE_DISTANCE) {
