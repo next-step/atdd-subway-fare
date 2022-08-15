@@ -11,8 +11,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -38,7 +37,7 @@ class PathDocumentation extends Documentation {
                 1550
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()

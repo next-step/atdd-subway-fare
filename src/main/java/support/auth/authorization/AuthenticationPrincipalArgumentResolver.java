@@ -26,7 +26,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         boolean required = Objects.requireNonNull(authenticationPrincipal).required();
 
-        if (!required) {
+        if (!required || authentication == null) {
             return new User(null, null, DEFAULT_AGE, null);
         }
 
