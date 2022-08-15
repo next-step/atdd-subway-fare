@@ -1,8 +1,8 @@
 package nextstep.subway.domain;
 
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.policy.FareManager;
-import nextstep.subway.domain.policy.PathByFare;
+import nextstep.subway.domain.policy.fare.FareManager;
+import nextstep.subway.domain.policy.fare.PathByFare;
 import nextstep.subway.domain.policy.discount.DiscountManager;
 
 public class Fare {

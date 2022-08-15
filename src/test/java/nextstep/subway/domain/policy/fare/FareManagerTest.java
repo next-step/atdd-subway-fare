@@ -1,7 +1,13 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.fare;
 
 import nextstep.subway.domain.FareManagerLoaderTest;
 import nextstep.subway.domain.Line;
+import nextstep.subway.domain.policy.fare.DefaultFare;
+import nextstep.subway.domain.policy.fare.ElevenToFiftyExtraFare;
+import nextstep.subway.domain.policy.fare.ExtraLineFare;
+import nextstep.subway.domain.policy.fare.FareManager;
+import nextstep.subway.domain.policy.fare.OverFiftyExtraFare;
+import nextstep.subway.domain.policy.fare.PathByFare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

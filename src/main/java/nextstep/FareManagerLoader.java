@@ -1,8 +1,8 @@
 package nextstep;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.domain.policy.FareManager;
-import nextstep.subway.domain.policy.FarePolicy;
+import nextstep.subway.domain.policy.fare.FareManager;
+import nextstep.subway.domain.policy.fare.FarePolicy;
 import nextstep.subway.domain.policy.discount.DiscountManager;
 import nextstep.subway.domain.policy.discount.DiscountPolicy;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,7 @@ package nextstep.subway.domain;
 
 import nextstep.member.domain.Guest;
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.policy.PathByFare;
+import nextstep.subway.domain.policy.fare.PathByFare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.fare;
 
 import java.util.ArrayList;
 import java.util.List;

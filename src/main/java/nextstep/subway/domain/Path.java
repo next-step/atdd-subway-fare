@@ -1,7 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.policy.PathByFare;
+import nextstep.subway.domain.policy.fare.PathByFare;
 
 import java.util.List;
 import java.util.stream.Collectors;

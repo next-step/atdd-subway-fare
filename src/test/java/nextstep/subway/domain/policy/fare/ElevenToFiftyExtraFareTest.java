@@ -1,5 +1,8 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.fare;
 
+import nextstep.subway.domain.policy.fare.ElevenToFiftyExtraFare;
+import nextstep.subway.domain.policy.fare.FarePolicy;
+import nextstep.subway.domain.policy.fare.PathByFare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

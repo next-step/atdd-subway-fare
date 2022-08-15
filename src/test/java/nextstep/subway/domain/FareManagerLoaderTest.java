@@ -1,10 +1,10 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.domain.policy.DefaultFare;
-import nextstep.subway.domain.policy.ElevenToFiftyExtraFare;
-import nextstep.subway.domain.policy.ExtraLineFare;
-import nextstep.subway.domain.policy.FareManager;
-import nextstep.subway.domain.policy.OverFiftyExtraFare;
+import nextstep.subway.domain.policy.fare.DefaultFare;
+import nextstep.subway.domain.policy.fare.ElevenToFiftyExtraFare;
+import nextstep.subway.domain.policy.fare.ExtraLineFare;
+import nextstep.subway.domain.policy.fare.FareManager;
+import nextstep.subway.domain.policy.fare.OverFiftyExtraFare;
 import nextstep.subway.domain.policy.discount.ChildrenDiscount;
 import nextstep.subway.domain.policy.discount.DiscountManager;
 import nextstep.subway.domain.policy.discount.TeenagerDiscount;

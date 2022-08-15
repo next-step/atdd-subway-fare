@@ -1,4 +1,4 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.fare;
 
 import lombok.Builder;
 import nextstep.subway.domain.Line;

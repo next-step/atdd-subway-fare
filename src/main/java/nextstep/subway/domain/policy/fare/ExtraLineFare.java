@@ -1,4 +1,4 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.fare;
 
 import nextstep.subway.domain.Line;
 import org.springframework.stereotype.Component;
