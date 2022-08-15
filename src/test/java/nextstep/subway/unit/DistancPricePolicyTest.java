@@ -2,7 +2,7 @@ package nextstep.subway.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nextstep.subway.price.DistancePricePolicy;
+import nextstep.subway.price.distance.DistancePricePolicy;
 import nextstep.subway.price.PricePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +21,7 @@ public class DistancPricePolicyTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
     void basicPriceTest(int distance) {
-        PricePolicy 요금정책 = new DistancePricePolicy(distance);
+        DistancePricePolicy 요금정책 = new DistancePricePolicy(distance);
 
         assertThat(요금정책.calculatePrice()).isEqualTo(BASIC_PRICE);
     }
@@ -33,7 +33,7 @@ public class DistancPricePolicyTest {
         int price =
             BASIC_PRICE + calculateOverFare(distance - BASE_DISTANCE, DIVISION_ONE_BASE_DISTANCE);
 
-        PricePolicy 요금정책 = new DistancePricePolicy(distance);
+        DistancePricePolicy 요금정책 = new DistancePricePolicy(distance);
 
         assertThat(요금정책.calculatePrice()).isEqualTo(price);
     }
@@ -47,7 +47,7 @@ public class DistancPricePolicyTest {
                 + calculateOverFare(distance - DIVISION_ONE_DISTANCE,
                     OVER_DIVISION_ONE_BASE_DISTANCE);
 
-        PricePolicy 요금정책 = new DistancePricePolicy(distance);
+        DistancePricePolicy 요금정책 = new DistancePricePolicy(distance);
 
         assertThat(요금정책.calculatePrice()).isEqualTo(price);
     }
@@ -57,6 +57,6 @@ public class DistancPricePolicyTest {
             return 0;
         }
         return (int) ((Math.ceil((distance - 1) / baseOfDistance) + 1) * 100);
-    } 
+    }
 
 }

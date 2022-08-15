@@ -34,7 +34,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(경로_조회_응답_생성());
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(경로_조회_응답_생성());
 
         RestAssured
             .given(spec).log().all()
