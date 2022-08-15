@@ -2,11 +2,8 @@ package nextstep.subway.domain.path;
 
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.fare.AdditionalFarePolicy;
-import nextstep.subway.domain.fare.BasicFarePolicy;
 import nextstep.subway.domain.fare.FarePolicy;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +13,11 @@ public class Path {
 
     public Path(Sections sections) {
         this.sections = sections;
-        this.farePolicyListener = List.of(new BasicFarePolicy(), new AdditionalFarePolicy());
+        this.farePolicyListener = new ArrayList<>();
+    }
+
+    public void addAllFarePolicy(List<FarePolicy> farePolicies) {
+        this.farePolicyListener.addAll(farePolicies);
     }
 
     public Sections getSections() {

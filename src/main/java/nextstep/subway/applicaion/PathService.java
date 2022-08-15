@@ -6,6 +6,8 @@ import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.discount.DiscountCalculator;
+import nextstep.subway.domain.fare.AdditionalFarePolicy;
+import nextstep.subway.domain.fare.BasicFarePolicy;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
@@ -47,6 +49,7 @@ public class PathService {
 
         SubwayMap subwayMap = new SubwayMap(lines, pathStrategyMap.get(type));
         Path path = subwayMap.findPath(upStation, downStation);
+        path.addAllFarePolicy(List.of(new BasicFarePolicy(), new AdditionalFarePolicy()));
         long fare = path.calculateFare();
 
         if(user.getUsername() != null) {

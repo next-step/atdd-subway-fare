@@ -1,9 +1,6 @@
 package nextstep.subway.domain.fare;
 
-import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
-
-import javax.naming.OperationNotSupportedException;
 
 public class BasicFarePolicy implements FarePolicy {
 
@@ -25,19 +22,19 @@ public class BasicFarePolicy implements FarePolicy {
         }
 
         if(distance > FIFTY) {
-            fare += calculateOverFareFrom50KM(distance - FIFTY);
+            fare += calculateOverFareFromSecond(distance - FIFTY);
             distance = FIFTY;
         }
 
-        fare += calculateOverFareFrom10KM(distance - TEN);
+        fare += calculateOverFareFromFirst(distance - TEN);
         return BASIC_FARE + fare;
     }
 
-    private long calculateOverFareFrom10KM(int distance) {
+    private long calculateOverFareFromFirst(int distance) {
         return (long) ((Math.ceil((distance - 1) / 5) + 1) * 100);
     }
 
-    private long calculateOverFareFrom50KM(int distance) {
+    private long calculateOverFareFromSecond(int distance) {
         return (long) ((Math.ceil((distance - 1) / 8) + 1) * 100);
     }
 }
