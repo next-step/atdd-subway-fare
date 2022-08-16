@@ -1,4 +1,4 @@
-package nextstep.subway.policy;
+package nextstep.subway.policy.payment;
 
 import nextstep.subway.domain.policy.discount.ChildrenDiscountPolicy;
 import nextstep.subway.domain.policy.discount.DiscountPolicy;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AgeFarePolicyTest {
+class DiscountPolicyTest {
     private static final int FARE = 1350;
     private static final DiscountPolicy ageFarePolicy = new ChildrenDiscountPolicy(new YouthDiscountPolicy(null));
 
