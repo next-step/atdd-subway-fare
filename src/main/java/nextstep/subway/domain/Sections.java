@@ -167,17 +167,18 @@ public class Sections {
         }
 
         if (totalDistance() <= 50) {
-            return 1250 + calculateOverFare(totalDistance() - 10);
+            return 1250 + calculateOverFareBetweenTenAndFifty(totalDistance());
         }
 
-        return 1250 + calculateOverFare(50 - 10) + calculateOverFare2(totalDistance());
+        return 1250 + calculateOverFareBetweenTenAndFifty(50) + calculateOverFareDistanceOverFifty(totalDistance());
 
     }
 
-    private int calculateOverFare(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+    private int calculateOverFareBetweenTenAndFifty(int distance) {
+        return (int) ((Math.ceil((distance - 11) / 5) + 1) * 100);
     }
-    private int calculateOverFare2(int distance) {
+
+    private int calculateOverFareDistanceOverFifty(int distance) {
         return (int) ((Math.ceil((distance - 51) / 8) + 1) * 100);
     }
 
