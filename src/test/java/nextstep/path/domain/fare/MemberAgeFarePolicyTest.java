@@ -13,6 +13,7 @@ class MemberAgeFarePolicyTest {
     @DisplayName("나이 기반 요금 할인")
     @ParameterizedTest
     @CsvSource({
+            "5,1800",
             "12,900",
             "13,1440",
             "19,1800",
