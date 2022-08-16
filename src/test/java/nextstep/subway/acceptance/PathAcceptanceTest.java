@@ -153,6 +153,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(given(), 남부터미널역, 강남역, DURATION);
 
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 양재역, 강남역);
+
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(15);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(13);
     }
