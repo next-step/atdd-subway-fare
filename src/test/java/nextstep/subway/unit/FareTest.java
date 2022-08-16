@@ -2,7 +2,9 @@ package nextstep.subway.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nextstep.subway.domain.DistanceFare;
+import nextstep.subway.domain.policy.BasicFarePolicy;
+import nextstep.subway.domain.policy.age.AgeFarePolicy;
+import nextstep.subway.domain.policy.distance.DistanceFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -43,11 +45,29 @@ public class FareTest {
             "66, 2250",
             "67, 2350",
     })
-    @DisplayName("요금 계산")
-    void calculateFare(int 경로_거리, int 요금 ) {
+    @DisplayName("거리 요금 계산")
+    void calculateFareByDistance(int 경로_거리, int 요금 ) {
         // when
-        DistanceFare distanceFare = new DistanceFare(경로_거리);
-        int fare = distanceFare.calculate();
+        BasicFarePolicy policy = new DistanceFarePolicy();
+        int fare = policy.calculate(30, 0, 경로_거리, null);
+
+        // then
+        assertThat(fare).isEqualTo(요금);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "6, 450",
+            "12, 450",
+            "13, 720",
+            "18, 720",
+            "19, 1250"
+    })
+    @DisplayName("나이에 따른 요금 계산")
+    void calculateFareByAge(int 나이, int 요금) {
+        // when
+        BasicFarePolicy policy = new AgeFarePolicy();
+        int fare = policy.calculate(나이, 1250, 5, null);
 
         // then
         assertThat(fare).isEqualTo(요금);

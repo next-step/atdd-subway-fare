@@ -10,6 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int surcharge;
 
     @Embedded
     private Sections sections = new Sections();
@@ -17,9 +18,10 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int surcharge) {
         this.name = name;
         this.color = color;
+        this.surcharge = surcharge;
     }
 
     public Long getId() {
@@ -34,17 +36,22 @@ public class Line {
         return color;
     }
 
+    public int getSurcharge() {
+        return surcharge;
+    }
+
     public List<Section> getSections() {
         return sections.getSections();
     }
 
-    public void update(String name, String color) {
+    public void update(String name, String color, int surcharge) {
         if (name != null) {
             this.name = name;
         }
         if (color != null) {
             this.color = color;
         }
+        this.surcharge = surcharge;
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {

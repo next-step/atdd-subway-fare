@@ -15,4 +15,9 @@ public class AcceptanceTestSteps {
                 .given().log().all()
                 .auth().oauth2(token);
     }
+
+    static RequestSpecification given(RequestSpecification spec) {
+        return RestAssured
+                .given(spec).log().all();
+    }
 }
