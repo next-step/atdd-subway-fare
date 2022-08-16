@@ -7,6 +7,8 @@ import java.util.List;
 
 @Entity
 public class Line {
+    private static final int DEFAULT_EXTRA_FARE = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +23,7 @@ public class Line {
     }
 
     public Line(String name, String color) {
-        this(name, color, 0);
+        this(name, color, DEFAULT_EXTRA_FARE);
     }
 
     public Line(String name, String color, int extraFare) {
