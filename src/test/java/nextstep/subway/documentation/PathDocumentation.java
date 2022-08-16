@@ -12,8 +12,9 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
-import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
+import static nextstep.subway.domain.PathType.DISTANCE;
+import static nextstep.subway.domain.PathType.DURATION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -37,7 +38,7 @@ public class PathDocumentation extends Documentation {
 
         AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet());
 
-        두_역의_최단_거리_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
+        두_역의_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L, DISTANCE);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(any(PathType.class), anyLong(), anyLong())).thenReturn(pathResponse);
 
-        두_역의_최소_시간_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
+        두_역의_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L, DURATION);
     }
 
     private ResponseFieldsSnippet getResponseFieldsSnippet() {
