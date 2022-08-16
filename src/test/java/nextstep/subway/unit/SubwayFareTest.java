@@ -4,6 +4,8 @@ import nextstep.subway.domain.SubwayFare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,6 +17,7 @@ public class SubwayFareTest {
     @BeforeEach
     void setUp() {
         fare = new SubwayFare();
+        totalFare = 0;
     }
 
     @DisplayName("기본 운임 거리")
@@ -40,5 +43,12 @@ public class SubwayFareTest {
         assertThat(totalFare).isEqualTo(baseFare + 900);
     }
 
+    @DisplayName("거리별 요금")
+    @ParameterizedTest
+    @CsvSource({"9,0", "46,800", "56, 900"})
+    public void calculateFarePerDistance(int distance, int overFare) {
+        totalFare = fare.calculateFare(distance);
+        assertThat(totalFare).isEqualTo(baseFare + overFare);
+    }
 }
 
