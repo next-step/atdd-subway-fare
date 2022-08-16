@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -212,18 +213,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("어린이 연령의 로그인 사용자가 경로를 조회한다.")
     @Test
     void findPathByDistance_loginUser_children() {
-        // Given
-        String email = "children@email.com";
-        String password = "password";
-        String 어린이 = 로그인_되어_있음(email, password);
-
-        // When
-        var response = RestAssured
-                .given()
-                .log()
-                .all()
-                .auth()
-                .oauth2(어린이)
+        // Given & When
+        var response = 어린이_사용자_요청()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 교대역)
                 .queryParam("target", 강남역)
@@ -248,18 +239,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("청소년 연령의 로그인 사용자가 경로를 조회한다.")
     @Test
     void findPathByDistance_loginUser_teenager() {
-        // Given
-        String email = "teenager@email.com";
-        String password = "password";
-        String 청소년 = 로그인_되어_있음(email, password);
-
-        // When
-        var response = RestAssured
-                .given()
-                .log()
-                .all()
-                .auth()
-                .oauth2(청소년)
+        // Given & When
+        var response = 청소년_사용자_요청()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 교대역)
                 .queryParam("target", 강남역)
@@ -274,5 +255,29 @@ class PathAcceptanceTest extends AcceptanceTest {
         // Then
         assertThat(response.jsonPath()
                 .getInt("fare")).isEqualTo(720);
+    }
+
+    private RequestSpecification 어린이_사용자_요청() {
+        String email = "children@email.com";
+        String password = "password";
+        String 어린이 = 로그인_되어_있음(email, password);
+        return RestAssured
+                .given()
+                .log()
+                .all()
+                .auth()
+                .oauth2(어린이);
+    }
+
+    private RequestSpecification 청소년_사용자_요청() {
+        String email = "teenager@email.com";
+        String password = "password";
+        String 청소년 = 로그인_되어_있음(email, password);
+        return RestAssured
+                .given()
+                .log()
+                .all()
+                .auth()
+                .oauth2(청소년);
     }
 }
