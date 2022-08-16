@@ -13,6 +13,7 @@ public class UserDetailsAuthenticationProvider implements AuthenticationManager 
         this.userDetailsService = userDetailsService;
     }
 
+    @Override
     public Authentication authenticate(AuthenticationToken authenticationToken) {
         String principal = authenticationToken.getPrincipal();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal);

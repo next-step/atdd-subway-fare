@@ -57,7 +57,7 @@ class SubwayMapTest {
         SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선));
 
         // when
-        Path path = map.findPath(강남역.getId(), 남부터미널역.getId(), PathSearchType.DISTANCE);
+        Path path = map.findPath(강남역.getId(), 남부터미널역.getId(), PathType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactly(강남역.getId(), 양재역.getId(), 남부터미널역.getId());
@@ -71,7 +71,7 @@ class SubwayMapTest {
         SubwayMap map = new SubwayMap(List.of(신분당선, 이호선, 삼호선));
 
         // when
-        Path path = map.findPath(강남역.getId(), 남부터미널역.getId(), PathSearchType.DURATION);
+        Path path = map.findPath(강남역.getId(), 남부터미널역.getId(), PathType.DURATION);
 
         // then
         assertThat(path.getStations()).containsExactly(강남역.getId(), 교대역.getId(), 남부터미널역.getId());

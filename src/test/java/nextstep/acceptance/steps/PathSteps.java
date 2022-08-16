@@ -3,7 +3,7 @@ package nextstep.acceptance.steps;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import nextstep.path.domain.PathSearchType;
+import nextstep.path.domain.PathType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathSteps extends AcceptanceTestSteps {
 
-    public static ExtractableResponse<Response> 경로를_조회한다(Long source, Long target, PathSearchType type, RequestSpecification spec) {
+    public static ExtractableResponse<Response> 경로를_조회한다(Long source, Long target, PathType type, RequestSpecification spec) {
         return spec
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)

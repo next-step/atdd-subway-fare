@@ -1,5 +1,6 @@
 package nextstep.line.application.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 public class LineUpdateRequest {
@@ -7,6 +8,8 @@ public class LineUpdateRequest {
     private String name;
     @NotBlank
     private String color;
+    @Min(0)
+    private int extraFare;
 
     public String getName() {
         return name;
@@ -14,5 +17,9 @@ public class LineUpdateRequest {
 
     public String getColor() {
         return color;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 }

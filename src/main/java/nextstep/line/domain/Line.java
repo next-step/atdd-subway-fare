@@ -7,11 +7,14 @@ import java.util.List;
 
 @Entity
 public class Line {
+    private static final int DEFAULT_EXTRA_FARE = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String color;
+    private int extraFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -20,13 +23,19 @@ public class Line {
     }
 
     public Line(String name, String color) {
-        this.name = name;
-        this.color = color;
+        this(name, color, DEFAULT_EXTRA_FARE);
     }
 
-    public void update(String name, String color) {
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
+    }
+
+    public void update(String name, String color, int extraFare) {
+        this.name = name;
+        this.color = color;
+        this.extraFare = extraFare;
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
@@ -41,6 +50,10 @@ public class Line {
         sections.delete(station.getId());
     }
 
+    public boolean containsAnyOf(List<Section> otherSections) {
+        return sections.containsAnyOf(otherSections);
+    }
+
     public Long getId() {
         return id;
     }
@@ -51,6 +64,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 
     public List<Section> getSections() {

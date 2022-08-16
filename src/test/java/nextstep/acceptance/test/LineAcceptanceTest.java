@@ -38,13 +38,13 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        var createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        var createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green", 900);
 
         // when
         var response = 지하철_노선_조회_요청(createResponse);
 
         // then
-        지하철_노선_정보가_일치한다(response, "2호선", "green");
+        지하철_노선_정보가_일치한다(response, "2호선", "green", 900);
     }
 
     @DisplayName("지하철 노선 수정")
@@ -54,11 +54,13 @@ class LineAcceptanceTest extends AcceptanceTest {
         var createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
 
         // when
-        지하철_노선_수정_요청(관리자, createResponse.header("location"), createLineUpdateParams("신2호선", "green"));
+        지하철_노선_수정_요청(관리자,
+                createResponse.header("location"),
+                createLineUpdateParams("신2호선", "green", 800));
 
         // then
-        ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
-        지하철_노선_정보가_일치한다(response, "신2호선", "green");
+        var response = 지하철_노선_조회_요청(createResponse);
+        지하철_노선_정보가_일치한다(response, "신2호선", "green", 800);
     }
 
     @DisplayName("지하철 노선 삭제")
@@ -75,10 +77,12 @@ class LineAcceptanceTest extends AcceptanceTest {
         지하철_노선들이_존재한다();
     }
 
-    private void 지하철_노선_정보가_일치한다(ExtractableResponse<Response> response, String name, String color) {
+    private void 지하철_노선_정보가_일치한다(ExtractableResponse<Response> response, String name, String color, int extraFare) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
         assertThat(response.jsonPath().getString("name")).isEqualTo(name);
         assertThat(response.jsonPath().getString("color")).isEqualTo(color);
+        assertThat(response.jsonPath().getInt("extraFare")).isEqualTo(extraFare);
     }
 
     private void 지하철_노선들이_존재한다(String... names) {

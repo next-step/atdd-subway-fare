@@ -60,6 +60,14 @@ public class MemberSteps extends AcceptanceTestSteps {
                 .then().log().all().extract();
     }
 
+    public static Map<String, String> createMemberParams(String email, String password, Integer age) {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+        params.put("age", age + "");
+        return params;
+    }
+
     public static void 회원_정보_조회됨(ExtractableResponse<Response> response, String email, int age) {
         assertThat(response.jsonPath().getString("id")).isNotNull();
         assertThat(response.jsonPath().getString("email")).isEqualTo(email);

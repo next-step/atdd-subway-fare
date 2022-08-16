@@ -1,5 +1,6 @@
 package nextstep.member.application;
 
+import nextstep.auth.userdetails.User;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.application.dto.MemberUpdateRequest;
@@ -8,6 +9,8 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -38,6 +41,11 @@ public class MemberService {
     public Member findMember(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> findMemberByUser(User user) {
+        return memberRepository.findByEmail(user.getUsername());
     }
 
     public void updateMember(String email, MemberUpdateRequest param) {

@@ -14,6 +14,7 @@ public class TokenAuthenticationProvider implements AuthenticationManager {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @Override
     public Authentication authenticate(AuthenticationToken authenticationToken) {
         if (!jwtTokenProvider.validateToken(authenticationToken.getPrincipal())) {
             throw new AuthenticationException();

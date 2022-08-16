@@ -1,6 +1,8 @@
 package nextstep.auth.authorization;
 
+import nextstep.auth.authentication.AuthenticationException;
 import nextstep.auth.context.Authentication;
+import nextstep.auth.userdetails.GuestUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -18,7 +20,21 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AuthenticationPrincipal principal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
 
-        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        if (authentication != null) {
+            return new User(
+                    authentication.getPrincipal().toString(),
+                    null,
+                    authentication.getAuthorities()
+            );
+        }
+
+        if (principal != null && !principal.required()) {
+            return GuestUser.getInstance();
+        }
+
+        throw new AuthenticationException();
     }
+
 }

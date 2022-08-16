@@ -11,6 +11,8 @@ public class LineRequest implements EntitySupplier<Line> {
     private String name;
     @NotBlank
     private String color;
+    @Min(0)
+    private int extraFare;
     @Min(1)
     private Long upStationId;
     @Min(1)
@@ -22,7 +24,7 @@ public class LineRequest implements EntitySupplier<Line> {
 
     @Override
     public Line toEntity() {
-        return new Line(name, color);
+        return new Line(name, color, extraFare);
     }
 
     public String getName() {
@@ -31,6 +33,10 @@ public class LineRequest implements EntitySupplier<Line> {
 
     public String getColor() {
         return color;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 
     public Long getUpStationId() {
