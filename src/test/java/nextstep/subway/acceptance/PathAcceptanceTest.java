@@ -173,6 +173,22 @@ class PathAcceptanceTest extends AcceptanceTest {
         거리와_요금_확인(response, 64, 1250 + 800 + 200 + 신분당선_추가요금);
     }
 
+    @DisplayName("청소년 로그인 사용자의 경우 350원을 공제한 금액의 20% 할인")
+    @Test
+    void teenagerDiscount() {
+        var response = 두_역의_경로_조회를_요청(청소년, 교대역, 양재역, "DISTANCE");
+
+        거리와_요금_확인(response, 5, (int) ((1250 - 350) * 0.8));
+    }
+
+    @DisplayName("어린이 로그인 사용자의 경우 350원을 공제한 금액의 50% 할인")
+    @Test
+    void childrenDiscount() {
+        var response = 두_역의_경로_조회를_요청(어린이, 교대역, 양재역, "DISTANCE");
+
+        거리와_요금_확인(response, 5, (int) ((1250 - 350) * 0.5));
+    }
+
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
@@ -187,6 +203,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String type) {
         return RestAssured
                 .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(String token, Long source, Long target, String type) {
+        return AcceptanceTestSteps
+                .given(token)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();
