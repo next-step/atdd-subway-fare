@@ -22,16 +22,16 @@ import java.util.stream.Collectors;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final MemberService memberService;
+    private final PathMemberService memberService;
 
-    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
+    public PathService(LineService lineService, StationService stationService, PathMemberService memberService) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.memberService = memberService;
     }
 
     public PathResponse findPath(User user, PathRequest request) {
-        Member member = memberService.findMemberByUser(user);
+        Member member = memberService.findMemberForDiscountByUser(user);
         Station upStation = stationService.findById(request.getSource());
         Station downStation = stationService.findById(request.getTarget());
         List<Line> lines = lineService.findLines();
