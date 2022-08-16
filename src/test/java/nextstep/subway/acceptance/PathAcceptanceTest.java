@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
@@ -171,17 +172,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(강남역, 상도역);
 
         // Then
-        assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(response.jsonPath()
-                        .getInt("distance")).isEqualTo(4),
-                () -> assertThat(response.jsonPath()
-                        .getInt("duration")).isEqualTo(10),
-                () -> assertThat(response.jsonPath()
-                        .getList("stations.id", Long.class)).containsExactly(강남역, 상도역),
-                () -> assertThat(response.jsonPath()
-                        .getInt("fare")).isEqualTo(1111_250)
-        );
+        경로조회로직_검증(response, 4, 10, List.of(강남역, 상도역), 1_111_250);
     }
 
     /**
@@ -196,16 +187,20 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(강남역, 천호역);
 
         // Then
+        경로조회로직_검증(response, 9, 20, List.of(강남역, 상도역, 천호역), 1_111_250);
+    }
+
+    private void 경로조회로직_검증(ExtractableResponse<Response> response, int distance, int duration, List<Long> stations, int fare) {
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(response.jsonPath()
-                        .getInt("distance")).isEqualTo(9),
+                        .getInt("distance")).isEqualTo(distance),
                 () -> assertThat(response.jsonPath()
-                        .getInt("duration")).isEqualTo(20),
+                        .getInt("duration")).isEqualTo(duration),
                 () -> assertThat(response.jsonPath()
-                        .getList("stations.id", Long.class)).containsExactly(강남역, 상도역, 천호역),
+                        .getList("stations.id", Long.class)).containsExactlyElementsOf(stations),
                 () -> assertThat(response.jsonPath()
-                        .getInt("fare")).isEqualTo(1111_250)
+                        .getInt("fare")).isEqualTo(fare)
         );
     }
 
