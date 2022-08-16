@@ -19,13 +19,6 @@ public enum TicketType {
         this.fixDiscountFare = fixDiscountFare;
     }
 
-    public static TicketType of(int age) {
-        return Arrays.stream(values())
-                .filter(ticketType -> ticketType.intPredicate.test(age))
-                .findFirst()
-                .orElse(TicketType.STANDARD);
-    }
-
     public int getDiscountRate() {
         return discountRate;
     }
@@ -34,7 +27,10 @@ public enum TicketType {
         return fixDiscountFare;
     }
 
-    public int calculateDiscountedFare(int fare) {
-        return (int) ((fare - this.getFixDiscountFare()) * (1 - (float) this.getDiscountRate() / 100));
+    public static TicketType of(int age) {
+        return Arrays.stream(values())
+                .filter(ticketType -> ticketType.intPredicate.test(age))
+                .findFirst()
+                .orElse(TicketType.STANDARD);
     }
 }
