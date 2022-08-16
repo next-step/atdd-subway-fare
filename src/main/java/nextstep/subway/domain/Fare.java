@@ -17,18 +17,18 @@ public enum Fare {
     private final int maxDistance;
     private final ToIntFunction<Integer> operate;
 
-    public int getFare(int distance) {
+    public static int getFare(int distance) {
         return calculate(distance);
     }
 
-    private int calculate(int distance) {
+    private static int calculate(int distance) {
       return Arrays.stream(values())
                    .filter(fare -> isMoreThanMinDistance(distance, fare))
                    .mapToInt(fare -> fare.operate.applyAsInt(distance))
                    .sum();
     }
 
-    private boolean isMoreThanMinDistance(int distance, Fare fare) {
+    private static boolean isMoreThanMinDistance(int distance, Fare fare) {
         return fare.minDistance <= distance;
     }
 
