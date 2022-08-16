@@ -23,18 +23,19 @@ public class PathService {
         this.distance = distance;
     }
 
-    public PathResponse findPath(Long source, Long target, EdgeWeightStrategy edgeWeightStrategy) {
+    public PathResponse findPath(Long source, Long target, EdgeWeightStrategy edgeWeightStrategy, int age) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
 
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, edgeWeightStrategy);
+
         if (edgeWeightStrategy instanceof Distance) {
-            return PathResponse.of(path, path);
+            return PathResponse.of(path, age);
         }
         Path distancePath = subwayMap.findPath(upStation, downStation, distance);
-        return PathResponse.of(path, distancePath);
+        return PathResponse.of(path, distancePath, age);
     }
 
 }
