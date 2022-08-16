@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,10 +50,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         부산역 = 지하철역_생성_요청(관리자, "부산역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 5, 5);
-        기차 = 지하철_노선_생성_요청("기차", "orange", 교대역, 남부터미널역, 5, 5);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 300, 10, 4);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 200, 10, 2);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 100, 5, 5);
+        기차 = 지하철_노선_생성_요청("기차", "orange", 교대역, 남부터미널역, 900, 5, 5);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 10));
         지하철_노선에_지하철_구간_생성_요청(관리자, 기차, createSectionCreateParams(남부터미널역, 부산역, 46, 10));
@@ -87,7 +88,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * - And 지하철 이용 요금도 함께 응답함
      */
     @Test
-    @DisplayName("교대역에서 부산역까지 거리는 51이고 요금은 2150이다.")
+    @DisplayName("교대역에서 부산역까지 거리는 51이고 요금은 기본 요금인 2150과 추가 운임 비용인 900원을 합친 3050원이다.")
     void findPathByDistance() {
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_조회를_요청(교대역, 부산역);
@@ -96,8 +97,30 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 부산역);
         assertThat(response.jsonPath().getString("duration")).isEqualTo("15");
         assertThat(response.jsonPath().getString("distance")).isEqualTo("51");
-        assertThat(response.jsonPath().getString("fare")).isEqualTo("2150");
+        assertThat(response.jsonPath().getString("fare")).isEqualTo("3050");
     }
+
+    /**
+     * - When 청소년이 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
+     * - Then 최단 거리 기준 경로를 응답하고
+     * - And 총 거리와 소요 시간을 함께 응답하게 된다.
+     * - And 지하철 이용 요금도 함께 응답하게 된다.
+     */
+    @Test
+    @DisplayName("교대역에서 부산역까지 거리는 51이고 청소년의 요금은 2510원이다..")
+    void findPathByDistance_Youth() {
+
+        // when
+        String accessToken = 로그인_되어_있음("youth@email.com", "password");
+        ExtractableResponse<Response> 청소년_최단_거리_조회 = 인증_사용자_두_역의_최단_거리_조회를_요청(accessToken, 교대역, 부산역);
+
+        // then
+        assertThat(청소년_최단_거리_조회.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 부산역);
+        assertThat(청소년_최단_거리_조회.jsonPath().getString("duration")).isEqualTo("15");
+        assertThat(청소년_최단_거리_조회.jsonPath().getString("distance")).isEqualTo("51");
+        assertThat(청소년_최단_거리_조회.jsonPath().getString("fare")).isEqualTo("3050");
+    }
+
 
     /**
      * When 교대역에서 양재로 갈 때
@@ -113,6 +136,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 최단_거리 = 두_역의_최단_거리_조회를_요청(교대역, 양재역);
         assertThat(최단_거리.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(최단_거리.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+    }
+
+
+    private ExtractableResponse<Response> 인증_사용자_두_역의_최단_거리_조회를_요청(String accessToken, Long source, Long target) {
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+            .auth().oauth2(accessToken)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths/distance?source={sourceId}&target={targetId}", source, target)
+            .then().log().all().extract();
+        return response;
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_조회를_요청(Long source, Long target) {
@@ -131,13 +164,14 @@ class PathAcceptanceTest extends AcceptanceTest {
             .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int additionalCharge, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
+        lineCreateParams.put("additionalCharge", additionalCharge + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
 
