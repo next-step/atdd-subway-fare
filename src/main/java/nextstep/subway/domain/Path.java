@@ -24,7 +24,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return PaymentUtil.getFare(sections.totalDistance());
+        return PaymentUtil.getFare(sections.totalDistance(), sections.MaxAdditionalCharge());
     }
 
     public List<Station> getStations() {

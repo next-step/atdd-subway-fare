@@ -76,7 +76,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getString("duration")).isEqualTo("6");
         assertThat(response.jsonPath().getString("distance")).isEqualTo("20");
-        assertThat(response.jsonPath().getString("fare")).isEqualTo("1450");
+        assertThat(response.jsonPath().getString("fare")).isEqualTo("1750");
     }
 
 
@@ -107,7 +107,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * - And 지하철 이용 요금도 함께 응답하게 된다.
      */
     @Test
-    @DisplayName("교대역에서 부산역까지 거리는 51이고 청소년의 요금은 2510원이다..")
+    @DisplayName("교대역에서 부산역까지 거리는 51이고 청소년의 요금은 2760원이다..")
     void findPathByDistance_Youth() {
 
         // when
@@ -118,7 +118,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(청소년_최단_거리_조회.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 부산역);
         assertThat(청소년_최단_거리_조회.jsonPath().getString("duration")).isEqualTo("15");
         assertThat(청소년_최단_거리_조회.jsonPath().getString("distance")).isEqualTo("51");
-        assertThat(청소년_최단_거리_조회.jsonPath().getString("fare")).isEqualTo("3050");
+        assertThat(청소년_최단_거리_조회.jsonPath().getString("fare")).isEqualTo("2510");
     }
 
 

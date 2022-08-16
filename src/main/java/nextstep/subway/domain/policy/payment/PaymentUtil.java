@@ -19,18 +19,15 @@ public class PaymentUtil {
     private static final OverFarePolicy overFarePolicy = new Over10FarePolicy(new Over50FarePolicy(null));
     private static final DiscountPolicy discountPolicy = new ChildrenDiscountPolicy(new YouthDiscountPolicy(null));
 
-    public static int getFare(int distance) {
-        return DEFAULT_FARE + overFarePolicy.calculate(distance);
-    }
-
     public static int getFare(int distance, int additionalCharge) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int overFare = DEFAULT_FARE + overFarePolicy.calculate(distance) + additionalCharge;
 
         if (authentication == null) {
-            return overFarePolicy.calculate(distance) + additionalCharge;
+            return overFare;
         }
 
-        return discountPolicy.calculate(authentication.getAge(), overFarePolicy.calculate(distance) + additionalCharge);
+        return discountPolicy.calculate(authentication.getAge(), overFare);
     }
 
 }
