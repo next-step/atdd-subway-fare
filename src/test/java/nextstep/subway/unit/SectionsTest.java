@@ -40,7 +40,7 @@ public class SectionsTest {
     @DisplayName("구간 요금이 2건 이상이면 가장 큰 추가 요금이 반환된다.")
     void getSurchargeMultiTest() {
         // given
-        Line 신분당선 = new Line("신분당선", "red", 1200);
+        Line 신분당선 = new Line("신분당선", "red", 1_200);
         Station 강남역 = new Station("강남역");
         Station 양재역 = new Station("양재역");
 
@@ -51,6 +51,6 @@ public class SectionsTest {
         sections.add(new Section(삼호선, 양재역, 매봉역, 5, 10));
 
         // when, then
-        assertThat(sections.extractAdditionalFare()).isEqualTo(1200);
+        assertThat(sections.extractAdditionalFare()).isEqualTo(1_200);
     }
 }
