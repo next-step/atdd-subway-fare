@@ -8,9 +8,8 @@ public abstract class SubwayMap {
     public static SubwayMap create(List<Line> lines, PathType pathType) {
         if (pathType == PathType.DISTANCE) {
             return new SubwayDistanceMap(lines);
-        } else {
-            return new SubwayDurationMap(lines);
         }
+        return new SubwayDurationMap(lines);
     }
 
     public SubwayMap(List<Line> lines) {
