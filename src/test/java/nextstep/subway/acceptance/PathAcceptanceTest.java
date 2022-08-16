@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,13 +92,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         //then
-        final Integer distance = 5;
-        최단_거리_경로_운임요금_조회_검증(response, BASE_FARE, distance, 교대역, 남부터미널역, 양재역);
+        최단_거리_경로_운임요금_조회_검증(response, BASE_FARE, 교대역, 남부터미널역, 양재역);
     }
 
-    private void 최단_거리_경로_운임요금_조회_검증(ExtractableResponse<Response> response, int fare, Integer distance, Long ... stationIds) {
+    private void 최단_거리_경로_운임요금_조회_검증(ExtractableResponse<Response> response, int fare, Long ... stationIds) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
