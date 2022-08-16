@@ -26,6 +26,7 @@ public class LineDocumentation extends Documentation {
         1L,
         "신분당선",
         "red",
+        2000,
         Arrays.asList(new StationResponse(1L, "강남역"), new StationResponse(2L, "분당역"))
     );
 
@@ -33,6 +34,7 @@ public class LineDocumentation extends Documentation {
         2L,
         "분당선",
         "green",
+        900,
         Arrays.asList(new StationResponse(1L, "강남역"), new StationResponse(3L, "혜화역"))
     );
     @MockBean
@@ -48,6 +50,7 @@ public class LineDocumentation extends Documentation {
         params.put("color", "red");
         params.put("upStationId", "1");
         params.put("downStationId", "2");
+        params.put("additionalCharge", "2000");
         params.put("distance", "10");
         params.put("duration", "10");
 
@@ -96,6 +99,7 @@ public class LineDocumentation extends Documentation {
         params.put("downStationId", "2");
         params.put("distance", "3");
         params.put("requiredTime", "5");
+        params.put("additionalCharge", "2000");
         params.put("duration", "10");
 
         givenOauth()
