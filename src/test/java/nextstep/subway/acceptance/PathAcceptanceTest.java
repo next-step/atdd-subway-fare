@@ -3,11 +3,13 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
     }
 
+    /* when 출발지가 교대역이고 목적지가 양재역일 때 최단 거리 경로를 조회한다.
+     * then 구간의 최단 경로 거리의 합을 검증한다.
+     * and  경로가 "교대역" "남부터미널역" "양재역" 과 일치하는지 검증한다.
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
@@ -55,11 +61,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        Integer distance = 5;
+        최단_거리_경로_조회_검증(response, distance, 교대역, 남부터미널역, 양재역);
     }
 
 
+    /* when 출발지가 교대역이고 목적지가 양재역일 때 최단 소요시간 경로를 조회한다.
+     * then 구간의 최단 소요시간의 합을 검증한다.
+     * and  경로가 "교대역" "강남역" "양재역" 과 일치하는지 검증한다.
+     */
     @DisplayName("두 역의 최단 소요시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
@@ -67,8 +77,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_소요시간_경로_조회를_요청(교대역, 양재역);
 
         //then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(4);
+        Integer duration = 4;
+        최단_소요시간_경로_조회_검증(response, duration, 교대역, 강남역, 양재역);
+    }
+
+    private void 최단_소요시간_경로_조회_검증(ExtractableResponse<Response> response, Integer duration, Long ... stationIds) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+    }
+
+    private void 최단_거리_경로_조회_검증(ExtractableResponse<Response> response, Integer distance, Long ... stationIds) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_소요시간_경로_조회를_요청(Long source, Long target) {

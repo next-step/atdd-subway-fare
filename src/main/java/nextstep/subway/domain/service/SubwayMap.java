@@ -1,7 +1,13 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.service;
 
 import lombok.AllArgsConstructor;
-import nextstep.subway.applicaion.SubwayPathFinder;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.SectionEdge;
+import nextstep.subway.domain.Sections;
+import nextstep.subway.domain.Station;
 
 import java.util.List;
 import java.util.stream.Collectors;

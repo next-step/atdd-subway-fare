@@ -1,4 +1,4 @@
-package nextstep.subway.applicaion;
+package nextstep.subway.domain.service;
 
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.SectionEdge;
