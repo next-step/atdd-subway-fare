@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DistanceFarePolicyTest {
+class DistanceExtraFarePolicyTest {
 
     @DisplayName("거리 기반 요금 계산")
     @ParameterizedTest
@@ -19,7 +19,7 @@ class DistanceFarePolicyTest {
             "58,1000",
     })
     void apply(int distance, int expectedFare) {
-        FarePolicy policy = new DistanceFarePolicy(distance, new NullFarePolicy());
+        FarePolicy policy = new DistanceExtraFarePolicy(distance, new NullFarePolicy());
 
         int result = policy.apply(0);
 

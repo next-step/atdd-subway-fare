@@ -1,6 +1,6 @@
 package nextstep.path.domain.fare;
 
-public class DistanceFarePolicy extends FarePolicy {
+public class DistanceExtraFarePolicy extends FarePolicy {
 
     private static final int BASE_FARE_DISTANCE = 10;
     private static final int LONG_DISTANCE = 50;
@@ -12,7 +12,7 @@ public class DistanceFarePolicy extends FarePolicy {
 
     private final int distance;
 
-    DistanceFarePolicy(int distance, FarePolicy nextPolicy) {
+    DistanceExtraFarePolicy(int distance, FarePolicy nextPolicy) {
         super(nextPolicy);
         this.distance = distance;
     }
