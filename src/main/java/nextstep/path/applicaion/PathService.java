@@ -3,7 +3,6 @@ package nextstep.path.applicaion;
 import nextstep.auth.userdetails.User;
 import nextstep.line.application.LineService;
 import nextstep.line.domain.Line;
-import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.path.applicaion.dto.PathRequest;
 import nextstep.path.applicaion.dto.PathResponse;
@@ -41,7 +40,7 @@ public class PathService {
         List<Long> pathStationIds = path.getStations();
 
         int distance = subwayMap.shortestDistance(request.getSource(), request.getTarget());
-        int fare = new FareCalculator(member, lines, path.getSections(), distance).calculate();
+        int fare = new FareCalculator(member.getAge(), lines, path.getSections(), distance).calculate();
 
         return new PathResponse(createStationResponses(pathStationIds), path, fare);
     }
