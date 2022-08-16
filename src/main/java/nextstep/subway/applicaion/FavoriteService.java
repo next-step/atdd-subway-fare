@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
@@ -20,26 +21,21 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final MemberService memberService;
     private final StationService stationService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService) {
-        this.favoriteRepository = favoriteRepository;
-        this.memberService = memberService;
-        this.stationService = stationService;
-    }
-
     @Transactional
     public void createFavorite(String email, FavoriteRequest request) {
-        MemberResponse member = memberService.findMember(email);
+        MemberResponse member = memberService.findMemberResponse(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
     }
 
     public List<FavoriteResponse> findFavorites(String email) {
-        MemberResponse member = memberService.findMember(email);
+        MemberResponse member = memberService.findMemberResponse(email);
         List<Favorite> favorites = favoriteRepository.findByMemberId(member.getId());
         Map<Long, Station> stations = extractStations(favorites);
 
@@ -53,7 +49,7 @@ public class FavoriteService {
 
     @Transactional
     public void deleteFavorite(String email, Long id) {
-        MemberResponse member = memberService.findMember(email);
+        MemberResponse member = memberService.findMemberResponse(email);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
         if (!favorite.isCreatedBy(member.getId())) {
             throw new RuntimeException();

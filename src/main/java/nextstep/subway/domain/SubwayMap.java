@@ -6,12 +6,12 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
 
 public class SubwayMap {
     private List<Line> lines;
-    private List<Section> foundPathResult;
     private PathType type;
 
     public SubwayMap(List<Line> lines, PathType type) {
@@ -20,37 +20,20 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
-
-        initializeStation(graph);
-        initializeSectionEdge(graph, type.weightStrategy());
-
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
-
-        foundPathResult = extractSections(result);
+        Sections foundPathResult = findPathResult(source, target, type.weightStrategy());
         return new Path(foundPathResult);
     }
 
-    public Fare findFare(Station source, Station target) {
-        if (type.isDistanceType() && hasFoundPathResult()) {
-            return new Fare(foundPathResult);
-        }
-
+    private Sections findPathResult(Station source, Station target, WeightStrategy weightStrategy) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         initializeStation(graph);
-        initializeSectionEdge(graph, PathType.DISTANCE.weightStrategy());
+        initializeSectionEdge(graph, weightStrategy);
 
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
-        foundPathResult = extractSections(result);
-        return new Fare(foundPathResult);
-    }
-
-    private boolean hasFoundPathResult() {
-        return !Objects.isNull(foundPathResult);
+        return extractSections(result);
     }
 
     private void initializeStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
@@ -87,9 +70,9 @@ public class SubwayMap {
                 });
     }
 
-    private List<Section> extractSections(GraphPath<Station, SectionEdge> result) {
+    private Sections extractSections(GraphPath<Station, SectionEdge> result) {
         return result.getEdgeList().stream()
                 .map(SectionEdge::getSection)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(collectingAndThen(Collectors.toUnmodifiableList(), Sections::new));
     }
 }

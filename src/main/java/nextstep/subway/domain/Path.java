@@ -1,20 +1,16 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
+import nextstep.subway.domain.policy.fare.PathByFare;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Path {
     private Sections sections;
 
-    public Path(List<Section> sections) {
-        this(new Sections(sections));
-    }
-
     public Path(Sections sections) {
         this.sections = sections;
-    }
-
-    public Sections getSections() {
-        return sections;
     }
 
     public int extractDistance() {
@@ -23,6 +19,28 @@ public class Path {
 
     public int extractDuration() {
         return sections.totalDuration();
+    }
+
+    public Fare extractFare(Member member) {
+        PathByFare pathByFare = generatePathByFare();
+        return Fare.chaining()
+                .calculate(pathByFare)
+                .discount(member);
+    }
+
+    private PathByFare generatePathByFare() {
+        return PathByFare.builder()
+                .distance(sections.totalDistance())
+                .lines(extractLines())
+                .build();
+    }
+
+    private List<Line> extractLines() {
+        return sections.values()
+                .stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public List<Station> getStations() {

@@ -1,5 +1,6 @@
 package nextstep;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.application.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,16 +23,13 @@ import support.auth.token.TokenAuthenticationInterceptor;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class AuthConfig implements WebMvcConfigurer {
     @Value("${security.jwt.token.secret-key}")
     private String secretKey;
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
-    private CustomUserDetailsService customUserDetailsService;
-
-    public AuthConfig(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
-    }
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

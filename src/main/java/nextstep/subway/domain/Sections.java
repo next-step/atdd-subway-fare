@@ -150,4 +150,8 @@ public class Sections {
                 .mapToInt(Section::getDuration)
                 .sum();
     }
+
+    public List<Section> values() {
+        return Collections.unmodifiableList(sections);
+    }
 }

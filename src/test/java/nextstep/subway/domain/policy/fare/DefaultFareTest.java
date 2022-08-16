@@ -1,4 +1,4 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.fare;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,16 +21,20 @@ class DefaultFareTest {
     @ParameterizedTest(name = "#{index} - 거리={0}km")
     @ValueSource(ints = {1, 10, 11, 50, 51})
     void support(int distance) {
-        assertThat(defaultFare.supports(distance)).isTrue();
+        PathByFare pathByFare = PathByFare.builder().distance(distance).build();
+
+        assertThat(defaultFare.supports(pathByFare)).isTrue();
     }
 
     @DisplayName("기본 요금정책은 거리 상관없이 기본요금을 반환한다.")
     @ParameterizedTest(name = "#{index} - 거리={0}km")
     @ValueSource(ints = {1, 10, 11, 50, 51})
     void fare(int distance) {
+        PathByFare pathByFare = PathByFare.builder().distance(distance).build();
+
         assertAll(() -> {
-            assertThat(defaultFare.supports(distance)).isTrue();
-            assertThat(defaultFare.fare(distance)).isEqualTo(1_250);
+            assertThat(defaultFare.supports(pathByFare)).isTrue();
+            assertThat(defaultFare.fare(pathByFare)).isEqualTo(1_250);
         });
     }
 }
