@@ -21,11 +21,18 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare() {
-        return Fare.getFare(extractDistance());
+    public int extractFare(int age) {
+        int fare = Fare.getFare(extractDistance());
+        return Age.getAge(age)
+                .applyDiscounts(fare);
     }
 
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    public int maxPrice() {
+        return sections.maxPrice();
+    }
+
 }
