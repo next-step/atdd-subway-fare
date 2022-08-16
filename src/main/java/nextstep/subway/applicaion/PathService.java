@@ -30,8 +30,10 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, edgeWeightStrategy);
+        if (edgeWeightStrategy instanceof Distance) {
+            return PathResponse.of(path, path);
+        }
         Path distancePath = subwayMap.findPath(upStation, downStation, distance);
-
         return PathResponse.of(path, distancePath);
     }
 
