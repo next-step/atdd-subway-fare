@@ -24,7 +24,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
-    private static BigDecimal BASE_FARE = new BigDecimal(1250);
+    private static int BASE_FARE =  1250;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -97,10 +97,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         최단_거리_경로_운임요금_조회_검증(response, BASE_FARE, distance, 교대역, 남부터미널역, 양재역);
     }
 
-    private void 최단_거리_경로_운임요금_조회_검증(ExtractableResponse<Response> response, BigDecimal fare, Integer distance, Long ... stationIds) {
+    private void 최단_거리_경로_운임요금_조회_검증(ExtractableResponse<Response> response, int fare, Integer distance, Long ... stationIds) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare.intValue());
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
     private void 최단_소요시간_경로_조회_검증(ExtractableResponse<Response> response, Integer duration, Long ... stationIds) {
