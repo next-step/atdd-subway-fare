@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import static nextstep.subway.domain.discount.DiscountCalculator.DiscountPolicy.*;
 
 public enum DiscountCalculator {
-    TODDLER_POLICY(TODDLER, fare -> fare),
+    TODDLER_POLICY(TODDLER, fare -> 0L),
     CHILDREN_POLICY(CHILDREN, fare -> (long) ((fare - 350) * 0.5 + 350)),
     TEENAGER_POLICY(TEENAGER, fare -> (long) ((fare - 350) * 0.8 + 350)),
     ADULT_POLICY(ADULT, fare -> fare);

@@ -14,7 +14,7 @@ public class AdditionalFarePolicy implements FarePolicy {
         return findSections.stream()
                 .map(s -> s.getLine())
                 .distinct()
-                .map(l -> l.getPrice().getValue())
+                .map(l -> l.getFare().getValue())
                 .max(Comparator.naturalOrder())
                 .orElse(0);
     }

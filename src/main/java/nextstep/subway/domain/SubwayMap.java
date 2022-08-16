@@ -1,7 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.subway.domain.path.Path;
-import nextstep.subway.domain.path.PathStrategy;
+import nextstep.subway.domain.path.PathStrategies;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -14,7 +14,7 @@ public class SubwayMap {
     private SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
 
-    public SubwayMap(List<Line> lines, PathStrategy pathStrategy) {
+    public SubwayMap(List<Line> lines, PathStrategies pathStrategy) {
         this.lines = lines;
         initGraphVertex(graph);
         initGraphEdge(graph, pathStrategy);
@@ -28,14 +28,14 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    private void initGraphEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathStrategy pathStrategy) {
+    private void initGraphEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, PathStrategies pathStrategy) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, pathStrategy.getType(it));
+                    graph.setEdgeWeight(sectionEdge, pathStrategy.apply(it));
                 });
 
 
@@ -46,7 +46,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, pathStrategy.getType(it));
+                    graph.setEdgeWeight(sectionEdge, pathStrategy.apply(it));
                 });
     }
 

@@ -4,16 +4,16 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Price {
+public class Fare {
 
-    @Column(name = "price")
+    @Column(name = "fare")
     private int value;
 
-    public Price() {
+    public Fare() {
 
     }
 
-    public Price(int value) {
+    public Fare(int value) {
         this.value = value;
     }
 

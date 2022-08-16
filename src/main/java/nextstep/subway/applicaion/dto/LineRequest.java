@@ -7,8 +7,7 @@ public class LineRequest {
     private Long downStationId;
     private int distance;
     private int duration;
-
-    private int price;
+    private int fare;
 
     public String getName() {
         return name;
@@ -34,7 +33,11 @@ public class LineRequest {
         return duration;
     }
 
-    public int getPrice() {
-        return price;
+    public int getFare() {
+        return fare;
+    }
+
+    public boolean canAddSection() {
+        return getUpStationId() != null && getDownStationId() != null && getDistance() != 0 && getDuration() != 0;
     }
 }

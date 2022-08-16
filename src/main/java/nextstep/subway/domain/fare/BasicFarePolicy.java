@@ -8,7 +8,6 @@ public class BasicFarePolicy implements FarePolicy {
     private static final int FIFTY = 50;
     private static final int TEN = 10;
 
-
     @Override
     public long calculateOverFare(Sections sections) {
         int distance = sections.totalDistance();
@@ -31,10 +30,16 @@ public class BasicFarePolicy implements FarePolicy {
     }
 
     private long calculateOverFareFromFirst(int distance) {
-        return (long) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+        final int standard = 5;
+        return calculateOverFare(distance, standard);
     }
 
     private long calculateOverFareFromSecond(int distance) {
-        return (long) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+        final int standard = 8;
+        return calculateOverFare(distance, standard);
+    }
+
+    private long calculateOverFare(int distance, int standard) {
+        return (long) ((Math.ceil((distance - 1) / standard) + 1) * 100);
     }
 }

@@ -3,7 +3,7 @@ package support.auth.context;
 import java.io.Serializable;
 
 public class SecurityContext implements Serializable {
-    private Authentication authentication;
+    private Authentication authentication = Authentication.NULL;
 
     public SecurityContext() {
     }

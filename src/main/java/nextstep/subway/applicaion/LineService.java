@@ -26,9 +26,8 @@ public class LineService {
 
     @Transactional
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getPrice()));
-        if (request.getUpStationId() != null && request.getDownStationId() != null
-                && request.getDistance() != 0 && request.getDuration() != 0) {
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getFare()));
+        if (request.canAddSection()) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
             line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
