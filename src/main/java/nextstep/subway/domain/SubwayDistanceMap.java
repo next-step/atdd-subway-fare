@@ -14,8 +14,7 @@ public class SubwayDistanceMap extends SubwayMap {
     }
 
     @Override
-    public Path
-    findPath(Station source, Station target) {
+    public Path findPath(Station source, Station target) {
 
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
