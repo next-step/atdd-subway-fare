@@ -1,6 +1,7 @@
 package nextstep.subway.domain.policy.discount;
 
 public abstract class DiscountPolicy {
+    private static final int EXCLUDED_FARE = 350;
     private final DiscountPolicy next;
 
     public DiscountPolicy(DiscountPolicy next) {
@@ -18,9 +19,12 @@ public abstract class DiscountPolicy {
     }
 
     public int calculateFare(int fare, double ratio) {
-        return (int) ((fare - 350) * ratio) + 350;
+        return (int) ((fare - EXCLUDED_FARE) * ratio) + EXCLUDED_FARE;
     }
 
+    public boolean isInAge(int age, AgePolicy agePolicy) {
+        return agePolicy.getMinAge() <= age && age < agePolicy.getMaxAge();
+    }
     protected abstract int calculateFare(int fare);
 
     protected abstract boolean isInAge(int age);

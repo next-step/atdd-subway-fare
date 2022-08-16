@@ -14,6 +14,6 @@ public class YouthDiscountPolicy extends DiscountPolicy {
 
     @Override
     protected boolean isInAge(int age) {
-        return 13 <= age && age < 19;
+        return isInAge(age, AgePolicy.YOUTH);
     }
 }
