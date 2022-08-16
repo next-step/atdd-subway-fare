@@ -8,10 +8,6 @@ public abstract class OverFarePolicy {
         this.next = next;
     }
 
-    public static Over10FarePolicy setOver50FarePolicy() {
-        return new Over10FarePolicy(new Over50FarePolicy(null));
-    }
-
     public final int calculate(int distance) {
         if (isOverFare(distance)) {
             return calculateFare(distance);
