@@ -1,6 +1,7 @@
 package nextstep.subway.domain.service;
 
 import lombok.AllArgsConstructor;
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
@@ -19,7 +20,8 @@ public class SubwayMap extends SubwayPathFinder {
     public Path findPath(Station source, Station target, PathType type) {
         setGraph(type);
         List<SectionEdge> edgeList = getEdgeList(source, target);
-        return new Path(new Sections(convertToSections(edgeList)));
+        Sections sections = new Sections(convertToSections(edgeList));
+        return new Path(sections);
     }
 
     private List<Section> convertToSections(List<SectionEdge> edgeList) {
