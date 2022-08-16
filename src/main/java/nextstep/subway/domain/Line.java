@@ -14,11 +14,16 @@ public class Line {
     private Long id;
     private String name;
     private String color;
-
+    private int additionalCharge;
     @Embedded
     private Sections sections = new Sections();
 
-    public Line() {
+    protected Line() {/*no-op*/}
+
+    public Line(String name, String color, int additionalCharge) {
+        this.name = name;
+        this.color = color;
+        this.additionalCharge = additionalCharge;
     }
 
     public Line(String name, String color) {
@@ -38,17 +43,22 @@ public class Line {
         return color;
     }
 
+    public int getAdditionalCharge() {
+        return additionalCharge;
+    }
+
     public List<Section> getSections() {
         return sections.getSections();
     }
 
-    public void update(String name, String color) {
+    public void update(String name, String color, int additionalCharge) {
         if (name != null) {
             this.name = name;
         }
         if (color != null) {
             this.color = color;
         }
+        this.additionalCharge = additionalCharge;
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
@@ -62,4 +72,5 @@ public class Line {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
 }

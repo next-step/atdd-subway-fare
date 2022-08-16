@@ -23,7 +23,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청(관리자, "2호선", "green", 900);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -41,8 +41,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        지하철_노선_생성_요청(관리자, "2호선", "green");
-        지하철_노선_생성_요청(관리자, "3호선", "orange");
+        지하철_노선_생성_요청(관리자, "2호선", "green", 900);
+        지하철_노선_생성_요청(관리자, "3호선", "orange", 900);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
@@ -61,7 +61,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green", 900);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
@@ -80,7 +80,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green", 900);
 
         // when
         지하철_노선_수정_요청(관리자, createResponse.header("location"));
@@ -100,7 +100,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green");
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청(관리자, "2호선", "green", 900);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_삭제_요청(관리자, createResponse.header("location"));
