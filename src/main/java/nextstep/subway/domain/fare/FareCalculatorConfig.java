@@ -20,11 +20,13 @@ public class FareCalculatorConfig {
         FareCalculatorChain secondRangeFare = new SecondRangeFareCalculator();
         FareCalculatorChain lineSurchargeFare = new LineSurchargeFareCalculator();
         FareCalculatorChain teenagerDiscountFare = new TeenagerDiscountFareCalculator(memberService);
+        FareCalculatorChain childrenDiscountFare = new ChildrenDiscountFareCalculator(memberService);
 
         defaultFare.setNextChain(firstRangeFare);
         firstRangeFare.setNextChain(secondRangeFare);
         secondRangeFare.setNextChain(lineSurchargeFare);
         lineSurchargeFare.setNextChain(teenagerDiscountFare);
+        teenagerDiscountFare.setNextChain(childrenDiscountFare);
 
         return defaultFare;
     }
