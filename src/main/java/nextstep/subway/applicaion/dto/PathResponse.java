@@ -13,8 +13,8 @@ public class PathResponse {
     private List<StationResponse> stations;
 
     private int distance;
-
     private int duration;
+    private int fare;
 
     public static PathResponse of(Path path) {
         List<StationResponse> stations = path.getStations().stream()
@@ -22,6 +22,6 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, distance, duration, 1250);
     }
 }
