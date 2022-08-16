@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.*;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -50,6 +51,7 @@ public class SubwayMapTest {
         삼호선.addSection(신사역, 고속터미널역, 46, 5);
     }
 
+    @DisplayName("최단 거리 구간 조회")
     @Test
     void findPathByDistance() {
         // given
@@ -63,6 +65,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
     }
 
+    @DisplayName("최단 거리 구간 조회 구간 거리 10km이하")
     @Test
     void findFare_10km이하() {
         // given
@@ -87,6 +90,7 @@ public class SubwayMapTest {
      * |                        |
      * 남부터미널역  --- *3호선* ---   양재
      */
+    @DisplayName("최단 거리 구간 조회 구간 거리 10 ~ 50")
     @Test
     void findFare_10km이상_50km이하() {
         // given
@@ -102,6 +106,7 @@ public class SubwayMapTest {
         assertThat(path.extractFare()).isEqualTo(1450);
     }
 
+    @DisplayName("최단 거리 구간 조회 구간 거리 50km이상")
     @Test
     void findFare_50km이상() {
         // given
@@ -115,6 +120,7 @@ public class SubwayMapTest {
         assertThat(path.extractFare()).isEqualTo(2250);
     }
 
+    @DisplayName("최단 시간 구간 조회")
     @Test
     void findPathByDuration() {
         // given
