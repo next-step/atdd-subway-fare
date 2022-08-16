@@ -23,6 +23,16 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, PathType.valueOf(type));
 
-        return PathResponse.of(path);
+        if (type.equals(PathType.DISTANCE.name())) {
+            return caculateFare(path);
+        }
+
+        return PathResponse.of(path, 0);
+    }
+
+    public PathResponse caculateFare(Path path) {
+        SubwayFare subwayFare = new SubwayFare();
+        int totalFare = subwayFare.calculateFare(path.extractDistance());
+        return PathResponse.of(path, totalFare);
     }
 }
