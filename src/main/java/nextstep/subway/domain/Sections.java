@@ -159,4 +159,26 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int totalFare() {
+
+        if (totalDistance() <= 10) {
+            return 1250;
+        }
+
+        if (totalDistance() <= 50) {
+            return 1250 + calculateOverFare(totalDistance() - 10);
+        }
+
+        return 1250 + calculateOverFare(50 - 10) + calculateOverFare2(totalDistance());
+
+    }
+
+    private int calculateOverFare(int distance) {
+        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+    }
+    private int calculateOverFare2(int distance) {
+        return (int) ((Math.ceil((distance - 51) / 8) + 1) * 100);
+    }
+
 }

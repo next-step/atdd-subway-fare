@@ -31,7 +31,7 @@ public class PathDocumentation extends Documentation {
     void pathByDistance() {
 
         PathResponse pathResponse = new PathResponse(
-                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5);
+                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
         when(pathService.findPath(any(), anyLong(), anyLong())).thenReturn(pathResponse);
 
@@ -44,7 +44,7 @@ public class PathDocumentation extends Documentation {
     void pathByDuration() {
 
         PathResponse pathResponse = new PathResponse(
-                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5);
+                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
         when(pathService.findPath(any(PathType.class), anyLong(), anyLong())).thenReturn(pathResponse);
 
@@ -56,7 +56,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 ID"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경과 시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경과 시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("운행ㄴ 요금")
         );
     }
 

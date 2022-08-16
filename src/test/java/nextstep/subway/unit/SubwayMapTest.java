@@ -15,17 +15,28 @@ public class SubwayMapTest {
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
+    private Station 고속터미널역;
+    private Station 신사역;
     private Station 남부터미널역;
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
 
+    /**
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
     @BeforeEach
     void setUp() {
         교대역 = createStation(1L, "교대역");
         강남역 = createStation(2L, "강남역");
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
+        고속터미널역 = createStation(5L, "고속터미널역");
+        신사역 = createStation(6L, "신사역");
 
         신분당선 = new Line("신분당선", "red");
         이호선 = new Line("2호선", "red");
@@ -35,10 +46,12 @@ public class SubwayMapTest {
         이호선.addSection(교대역, 강남역, 3, 5);
         삼호선.addSection(교대역, 남부터미널역, 5, 5);
         삼호선.addSection(남부터미널역, 양재역, 5, 5);
+        삼호선.addSection(고속터미널역, 교대역, 14, 5);
+        삼호선.addSection(신사역, 고속터미널역, 46, 5);
     }
 
     @Test
-    void findPath() {
+    void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
@@ -51,10 +64,62 @@ public class SubwayMapTest {
     }
 
     @Test
-    void 최단() {
+    void findFare_10km이하() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        // then
+        assertThat(path.extractDistance()).isEqualTo(6);
+        assertThat(path.extractFare()).isEqualTo(1250);
+    }
+
+
+    /**
+     * 고속터미널역
+     * |
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
+    @Test
+    void findFare_10km이상_50km이하() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 고속터미널역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역));
+        assertThat(path.extractDistance()).isEqualTo(20);
+        assertThat(path.extractFare()).isEqualTo(1450);
+    }
+
+    @Test
+    void findFare_50km이상() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 신사역);
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역, 신사역));
+        assertThat(path.extractDistance()).isEqualTo(66);
+        assertThat(path.extractFare()).isEqualTo(2250);
+    }
+
+    @Test
+    void findPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = SubwayMap.create(lines, PathType.DURATION);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
