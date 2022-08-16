@@ -1,5 +1,8 @@
-package nextstep.subway.fare;
+package nextstep.subway.policy;
 
+import nextstep.subway.domain.policy.discount.ChildrenDiscountPolicy;
+import nextstep.subway.domain.policy.discount.DiscountPolicy;
+import nextstep.subway.domain.policy.discount.YouthDiscountPolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AgeFarePolicyTest {
     private static final int FARE = 1350;
-    private static final AgeFarePolicy ageFarePolicy = new ChildrenFarePolicy(new YouthFarePolicy(null));
+    private static final DiscountPolicy ageFarePolicy = new ChildrenDiscountPolicy(new YouthDiscountPolicy(null));
 
     @Test
     @DisplayName("1350원의 요금이 발생했을 때, 어린이는 850원을 낸다.")

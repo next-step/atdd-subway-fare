@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.fare.FareUtil;
+import nextstep.subway.domain.policy.payment.PaymentUtil;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return FareUtil.getFare(sections.totalDistance());
+        return PaymentUtil.getFare(sections.totalDistance());
     }
 
     public List<Station> getStations() {

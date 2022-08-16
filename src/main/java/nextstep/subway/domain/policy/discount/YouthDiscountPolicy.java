@@ -1,9 +1,9 @@
-package nextstep.subway.fare;
+package nextstep.subway.domain.policy.discount;
 
-public class YouthFarePolicy extends AgeFarePolicy{
+public class YouthDiscountPolicy extends DiscountPolicy {
     private static final double RATIO = 0.8;
 
-    public YouthFarePolicy(AgeFarePolicy next) {
+    public YouthDiscountPolicy(DiscountPolicy next) {
         super(next);
     }
 

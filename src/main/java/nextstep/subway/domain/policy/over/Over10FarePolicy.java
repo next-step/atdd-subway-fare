@@ -1,10 +1,10 @@
-package nextstep.subway.fare;
+package nextstep.subway.domain.policy.over;
 
-public class Over50FarePolicy extends DistanceFarePolicy {
-    private static final int OVER_DISTANCE = 50;
-    private static final int DISTANCE_PER = 8;
+public class Over10FarePolicy extends OverFarePolicy {
+    private static final int OVER_DISTANCE = 10;
+    private static final int DISTANCE_PER = 5;
 
-    public Over50FarePolicy(DistanceFarePolicy next) {
+    public Over10FarePolicy(OverFarePolicy next) {
         super(next);
     }
 

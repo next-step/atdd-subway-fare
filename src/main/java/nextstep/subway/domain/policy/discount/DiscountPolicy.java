@@ -1,9 +1,9 @@
-package nextstep.subway.fare;
+package nextstep.subway.domain.policy.discount;
 
-public abstract class AgeFarePolicy {
-    private final AgeFarePolicy next;
+public abstract class DiscountPolicy {
+    private final DiscountPolicy next;
 
-    public AgeFarePolicy(AgeFarePolicy next) {
+    public DiscountPolicy(DiscountPolicy next) {
         this.next = next;
     }
 
