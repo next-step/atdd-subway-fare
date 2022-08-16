@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.policy.payment.PaymentUtil;
+
 import java.util.List;
 
 public class Path {
@@ -19,6 +21,10 @@ public class Path {
 
     public int extractDuration() {
         return sections.totalDuration();
+    }
+
+    public int extractFare() {
+        return PaymentUtil.getFare(sections.totalDistance(), sections.MaxAdditionalCharge());
     }
 
     public List<Station> getStations() {

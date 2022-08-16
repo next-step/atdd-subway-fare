@@ -2,7 +2,6 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
@@ -14,8 +13,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
+
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
@@ -48,7 +48,8 @@ public class PathService {
             .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        return new PathResponse(stations, distance, duration, Fare.of(distance).getFare());
+        int fare = path.extractFare();
+        return new PathResponse(stations, distance, duration, fare);
     }
 
     private Station getStation(Long source) {

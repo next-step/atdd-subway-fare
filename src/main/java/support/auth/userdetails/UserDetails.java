@@ -7,6 +7,8 @@ public interface UserDetails {
 
     Object getPassword();
 
+    int getAge();
+
     List<String> getAuthorities();
 
     boolean checkCredentials(Object credentials);

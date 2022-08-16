@@ -1,6 +1,10 @@
 package support.auth.token;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 import java.util.List;
@@ -14,18 +18,19 @@ public class JwtTokenProvider {
         this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    public String createToken(String principal, List<String> roles) {
+    public String createToken(String principal, int age, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(principal);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .claim("roles", roles)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(validity)
+            .claim("age", age)
+            .claim("roles", roles)
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
     }
 
     public String getPrincipal(String token) {
@@ -34,6 +39,10 @@ public class JwtTokenProvider {
 
     public List<String> getRoles(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("roles", List.class);
+    }
+
+    public int getAge(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age", Integer.class);
     }
 
     public boolean validateToken(String token) {
@@ -45,5 +54,7 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+
 }
 
