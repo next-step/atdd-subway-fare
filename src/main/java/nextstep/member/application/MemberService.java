@@ -45,7 +45,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findMemberByUser(User user) {
         return memberRepository.findByEmail(user.getUsername())
-                .orElse(new GuestMember());
+                .orElse(GuestMember.getInstance());
     }
 
     public void updateMember(String email, MemberUpdateRequest param) {

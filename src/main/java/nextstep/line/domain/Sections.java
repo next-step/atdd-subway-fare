@@ -111,17 +111,14 @@ public class Sections {
         }
 
         List<Long> result = new ArrayList<>();
+        Long firstStation = findFirstStation();
+        result.add(firstStation);
 
-        Optional<Section> sectionOpt = findSectionByUpStation(findFirstStation());
-        while (sectionOpt.isPresent()) {
-            Section section = sectionOpt.get();
-            result.add(section.getUpStationId());
-            sectionOpt = findSectionByUpStation(section.getDownStationId());
-
-            if (sectionOpt.isEmpty()) {
-                result.add(section.getDownStationId());
-                break;
-            }
+        Optional<Section> nextSectionOpt = findSectionByUpStation(firstStation);
+        while (nextSectionOpt.isPresent()) {
+            Long nextUpStation = nextSectionOpt.get().getDownStationId();
+            result.add(nextUpStation);
+            nextSectionOpt = findSectionByUpStation(nextUpStation);
         }
 
         return result;
@@ -154,18 +151,18 @@ public class Sections {
                 .sum();
     }
 
-    public boolean containsAnyOf(List<Section> anotherSections) {
-        for (Section section : this.sections) {
-            for (Section anotherSection : anotherSections) {
-                if (section.hasDuplicateSection(anotherSection.getUpStationId(), anotherSection.getDownStationId())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    public boolean containsAnyOf(List<Section> otherSections) {
+        return otherSections.stream()
+                .anyMatch(this::contains);
     }
 
+    private boolean contains(Section anotherSection) {
+        return this.sections.stream()
+                .anyMatch(it -> it.hasDuplicateSection(
+                        anotherSection.getUpStationId(),
+                        anotherSection.getDownStationId()
+                ));
+    }
 
     public List<Section> getSections() {
         return sections;
