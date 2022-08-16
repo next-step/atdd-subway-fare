@@ -7,10 +7,13 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
+    private final Map<PathType, DijkstraShortestPath<Long, SectionEdge>> graphCache = new EnumMap<>(PathType.class);
     private final List<Long> vertexes;
     private final List<Section> edges;
 
@@ -57,6 +60,10 @@ public class SubwayMap {
     }
 
     private DijkstraShortestPath<Long, SectionEdge> createGraphOfType(PathType type) {
+        if (graphCache.containsKey(type)) {
+            return graphCache.get(type);
+        }
+
         SimpleDirectedWeightedGraph<Long, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         vertexes.forEach(graph::addVertex);
@@ -67,7 +74,9 @@ public class SubwayMap {
                     graph.setEdgeWeight(it, it.weight());
                 });
 
-        return new DijkstraShortestPath<>(graph);
+        DijkstraShortestPath<Long, SectionEdge> resultGraph = new DijkstraShortestPath<>(graph);
+        graphCache.put(type, resultGraph);
+        return resultGraph;
     }
 
     public int shortestDistance(Long source, Long target) {
