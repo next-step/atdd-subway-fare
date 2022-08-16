@@ -4,7 +4,7 @@ import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.discount.DiscountCalculator;
+import nextstep.subway.domain.discount.DiscountPolicy;
 import nextstep.subway.domain.fare.AdditionalFarePolicy;
 import nextstep.subway.domain.fare.BasicFarePolicy;
 import nextstep.subway.domain.path.Path;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import support.auth.userdetails.User;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -25,10 +24,13 @@ public class PathService {
 
     private MemberService memberService;
 
-    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
+    private List<DiscountPolicy> discountPolicies;
+
+    public PathService(LineService lineService, StationService stationService, MemberService memberService, List<DiscountPolicy> discountPolicies) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.memberService = memberService;
+        this.discountPolicies = discountPolicies;
     }
 
     public PathResponse findPath(User user, Long source, Long target, String type) {
@@ -44,7 +46,11 @@ public class PathService {
 
         if(user.getUsername() != null) {
             Member member = memberService.findByEmail(user.getUsername());
-            fare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.get(member), fare);
+            // DiscountPolicyByAge
+            // DiscountPolicyByMemberShip
+            for(DiscountPolicy discountPolicy : discountPolicies) {
+                fare = discountPolicy.discountFare(member, fare);
+            }
         }
 
         return PathResponse.of(path, fare);

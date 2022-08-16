@@ -1,10 +1,11 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.discount.DiscountCalculator;
+import nextstep.subway.domain.discount.DiscountPolicyByAgeCalculator;
 import nextstep.subway.domain.fare.AdditionalFarePolicy;
 import nextstep.subway.domain.fare.BasicFarePolicy;
 import org.junit.jupiter.api.DisplayName;
@@ -104,11 +105,12 @@ public class FarePolicyTest {
     @MethodSource("calculateApplyToDiscountChildFare")
     void calculateOverFareApplyDiscountChildren(int distance, long expectedFare) {
         // given
+        Member member = new Member("member@email.com", "password", 12);
         BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
         long fare = basicFarePolicy.calculateOverFare(distance);
 
         // when
-        long discountFare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.CHILDREN, fare);
+        long discountFare = DiscountPolicyByAgeCalculator.applyToDiscountFare(member, fare);
 
         // then
         assertThat(discountFare).isEqualTo(expectedFare);
@@ -135,11 +137,12 @@ public class FarePolicyTest {
     void calculateOverFareApplyDiscountTeenager(int distance, long expectedFare) {
 
         // given
+        Member member = new Member("member@email.com", "password", 18);
         BasicFarePolicy basicFarePolicy = new BasicFarePolicy();
         long fare = basicFarePolicy.calculateOverFare(distance);
 
         // when
-        long discountFare = DiscountCalculator.applyToDiscountFare(DiscountCalculator.DiscountPolicy.TEENAGER, fare);
+        long discountFare = DiscountPolicyByAgeCalculator.applyToDiscountFare(member, fare);
 
         // then
         assertThat(discountFare).isEqualTo(expectedFare);
