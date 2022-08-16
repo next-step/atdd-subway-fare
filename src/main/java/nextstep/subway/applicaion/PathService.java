@@ -1,14 +1,13 @@
 package nextstep.subway.applicaion;
 
 import java.util.List;
-import nextstep.common.exception.CustomException;
-import nextstep.common.exception.PathErrorMessage;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.path.finder.PathFinder;
+import nextstep.subway.domain.path.finder.PathFinderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,20 +25,11 @@ public class PathService {
     public PathResponse findPath(Long source, Long target, PathType pathType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
-
-        validateStationEquals(upStation, downStation);
-
         List<Line> lines = lineService.findLines();
 
-        PathFinder pathFinder = pathType.getPathFinder(lines);
-        Path path = pathFinder.findPath(upStation, downStation);
+        PathFinder pathFinder = new PathFinderImpl(lines);
+        Path path = pathFinder.findPath(upStation, downStation, pathType);
 
         return PathResponse.of(path);
-    }
-
-    private void validateStationEquals(Station source, Station target) {
-        if (source.equals(target)) {
-            throw new CustomException(PathErrorMessage.PATH_DUPLICATION);
-        }
     }
 }

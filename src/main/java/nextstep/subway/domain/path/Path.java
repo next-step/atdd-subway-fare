@@ -3,12 +3,15 @@ package nextstep.subway.domain.path;
 import java.util.List;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.finder.FareCalculator;
 
 public class Path {
-    private Sections sections;
+    private final Sections sections;
+    private final int shortDistance;
 
-    public Path(Sections sections) {
+    public Path(Sections sections, int shortDistance) {
         this.sections = sections;
+        this.shortDistance = shortDistance;
     }
 
     public Sections getSections() {
@@ -21,6 +24,10 @@ public class Path {
 
     public int extractDuration() {
         return sections.totalDuration();
+    }
+
+    public int extractFare() {
+        return new FareCalculator().calculator(shortDistance);
     }
 
     public List<Station> getStations() {

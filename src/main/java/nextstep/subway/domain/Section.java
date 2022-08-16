@@ -1,5 +1,8 @@
 package nextstep.subway.domain;
 
+import nextstep.common.exception.CustomException;
+import nextstep.common.exception.PathErrorMessage;
+import nextstep.subway.domain.path.PathType;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
@@ -60,6 +63,16 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getWeight(PathType pathType) {
+        if (pathType == PathType.DISTANCE) {
+            return getDistance();
+        } else if (pathType == PathType.DURATION) {
+            return getDuration();
+        }
+
+        throw new CustomException(PathErrorMessage.PATH_TYPE_NOT_SEARCH);
     }
 
     public boolean isSameUpStation(Station station) {
