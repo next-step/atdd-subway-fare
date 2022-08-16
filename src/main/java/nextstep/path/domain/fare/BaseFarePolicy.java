@@ -1,6 +1,8 @@
-package nextstep.path.domain.fare2;
+package nextstep.path.domain.fare;
 
 public class BaseFarePolicy extends FarePolicy {
+
+    private static final int BASE_FARE = 1250;
 
     public BaseFarePolicy(FarePolicy nextPolicy) {
         super(nextPolicy);
@@ -8,6 +10,6 @@ public class BaseFarePolicy extends FarePolicy {
 
     @Override
     public int apply(int beforeFare) {
-        return nextPolicy.apply(1250);
+        return nextPolicy.apply(BASE_FARE);
     }
 }

@@ -5,11 +5,12 @@ import nextstep.line.domain.Section;
 
 import java.util.List;
 
-public class LineExtraFarePolicy implements FarePolicy {
+public class LineExtraFarePolicy extends FarePolicy {
     private final List<Line> lines;
     private final List<Section> pathSections;
 
-    public LineExtraFarePolicy(List<Line> lines, List<Section> pathSections) {
+    public LineExtraFarePolicy(List<Line> lines, List<Section> pathSections, FarePolicy nextPolicy) {
+        super(nextPolicy);
         this.lines = lines;
         this.pathSections = pathSections;
     }
@@ -22,6 +23,6 @@ public class LineExtraFarePolicy implements FarePolicy {
                 .max()
                 .orElse(0);
 
-        return beforeFare + extraFare;
+        return nextPolicy.apply(beforeFare + extraFare);
     }
 }

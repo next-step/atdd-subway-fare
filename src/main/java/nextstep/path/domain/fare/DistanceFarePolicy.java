@@ -1,10 +1,10 @@
 package nextstep.path.domain.fare;
 
-public class DistanceFarePolicy implements FarePolicy {
+public class DistanceFarePolicy extends FarePolicy {
+
     private static final int BASE_FARE_DISTANCE = 10;
     private static final int LONG_DISTANCE = 50;
 
-    private static final int BASE_FARE = 1250;
     private static final int BONUS_FARE = 100;
 
     private static final int SHORT_DISTANCE_INTERVAL_FOR_BONUS = 5;
@@ -12,33 +12,30 @@ public class DistanceFarePolicy implements FarePolicy {
 
     private final int distance;
 
-    public DistanceFarePolicy(int distance) {
+    DistanceFarePolicy(int distance, FarePolicy nextPolicy) {
+        super(nextPolicy);
         this.distance = distance;
     }
 
     @Override
     public int apply(int beforeFare) {
-        return beforeFare + calculateFare(distance);
+        return nextPolicy.apply(beforeFare + extraFare(distance));
     }
 
-    private int calculateFare(int distance) {
-        return BASE_FARE + calculateOverFare(distance);
-    }
-
-    private int calculateOverFare(int distance) {
+    private int extraFare(int distance) {
         if (distance <= BASE_FARE_DISTANCE) {
             return 0;
         }
 
         if (distance <= LONG_DISTANCE) {
-            return calculateOverFare(distance - BASE_FARE_DISTANCE, SHORT_DISTANCE_INTERVAL_FOR_BONUS);
+            return extraFare(distance - BASE_FARE_DISTANCE, SHORT_DISTANCE_INTERVAL_FOR_BONUS);
         }
 
-        return calculateOverFare(LONG_DISTANCE - (BASE_FARE_DISTANCE + 1), SHORT_DISTANCE_INTERVAL_FOR_BONUS)
-        + calculateOverFare(distance - LONG_DISTANCE, LONG_DISTANCE_INTERVAL_FOR_BONUS);
+        return extraFare(LONG_DISTANCE - (BASE_FARE_DISTANCE + 1), SHORT_DISTANCE_INTERVAL_FOR_BONUS)
+                + extraFare(distance - LONG_DISTANCE, LONG_DISTANCE_INTERVAL_FOR_BONUS);
     }
 
-    private int calculateOverFare(int overDistance, int distanceInterval) {
+    private int extraFare(int overDistance, int distanceInterval) {
         int overTimes = (int) Math.ceil((overDistance + 1d) / distanceInterval);
         return overTimes * BONUS_FARE;
     }

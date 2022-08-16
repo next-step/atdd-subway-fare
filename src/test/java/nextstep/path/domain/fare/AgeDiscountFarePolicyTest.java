@@ -7,8 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MemberAgeFarePolicyTest {
-
+class AgeDiscountFarePolicyTest {
 
     @DisplayName("나이 기반 요금 할인")
     @ParameterizedTest
@@ -20,8 +19,9 @@ class MemberAgeFarePolicyTest {
     })
     void apply(int age, int expected) {
         Member member = new Member("email@email.com", "password", age);
+        FarePolicy policy = new AgeDiscountFarePolicy(member, new NullFarePolicy());
 
-        int result = new MemberAgeFarePolicy(member).apply(1800);
+        int result = policy.apply(1800);
 
         assertThat(result).isEqualTo(expected);
     }

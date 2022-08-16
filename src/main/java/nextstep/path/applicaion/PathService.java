@@ -9,7 +9,7 @@ import nextstep.path.applicaion.dto.PathRequest;
 import nextstep.path.applicaion.dto.PathResponse;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.SubwayMap;
-import nextstep.path.domain.fare2.FareCalculator;
+import nextstep.path.domain.fare.FareCalculator;
 import nextstep.station.application.StationService;
 import nextstep.station.application.dto.StationResponse;
 import nextstep.station.domain.Station;
@@ -41,8 +41,8 @@ public class PathService {
         List<Long> pathStationIds = path.getStations();
 
         int distance = subwayMap.shortestDistance(request.getSource(), request.getTarget());
-        //FareCalculator fareCalculator = FareCalculatorFactory.create(distance, lines, path.getSections(), member);
         int fare = new FareCalculator(member, lines, path.getSections(), distance).calculate();
+
         return new PathResponse(createStationResponses(pathStationIds), path, fare);
     }
 

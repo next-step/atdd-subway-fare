@@ -1,6 +1,12 @@
 package nextstep.path.domain.fare;
 
-@FunctionalInterface
-public interface FarePolicy {
-    int apply(int beforeFare);
+public abstract class FarePolicy {
+    protected final FarePolicy nextPolicy;
+
+    FarePolicy(FarePolicy nextPolicy) {
+        this.nextPolicy = nextPolicy;
+    }
+
+    public abstract int apply(int beforeFare);
+
 }

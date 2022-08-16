@@ -19,15 +19,16 @@ class LineExtraFarePolicyTest {
         Line lineTwo = new Line("2호선", "green", 200);
         Line lineThree = new Line("3호선", "green", 300);
 
-        Section containedSection = new Section(1L, 2L, 4, 4);
-        lineOne.addSection(containedSection);
-        lineTwo.addSection(containedSection);
+        Section pathSection = new Section(1L, 2L, 4, 4);
+        lineOne.addSection(pathSection);
+        lineTwo.addSection(pathSection);
 
         List<Line> lines = List.of(lineOne, lineTwo, lineThree);
-        List<Section> pathSections = List.of(containedSection);
+        List<Section> pathSections = List.of(pathSection);
 
         // when
-        int result = new LineExtraFarePolicy(lines, pathSections).apply(0);
+        LineExtraFarePolicy policy = new LineExtraFarePolicy(lines, pathSections, new NullFarePolicy());
+        int result = policy.apply(0);
 
         // then
         assertThat(result).isEqualTo(200);
