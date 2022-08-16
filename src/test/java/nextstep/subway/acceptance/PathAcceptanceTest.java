@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,9 +51,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 40, 8);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 50, 6);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 10, 4);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 40, 8, 0);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 50, 6, 900);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 10, 4, 1000);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 30, 2));
     }
@@ -112,7 +113,54 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(fare).isEqualTo(overTenKiloFare);
     }
 
+    @Test
+    @DisplayName("비회원 거리 경로 및 요금 조회")
+    void findPathByDistanceForDefault() {
+        // when
+        ExtractableResponse<Response> response = 비회원_최단_거리_경로_조회(교대역, 양재역);
+
+        // then
+        경로확인(response, 교대역, 남부터미널역, 양재역);
+        요금확인(response, 1850);
+    }
+
+    @Test
+    @DisplayName("청소년의 거리 경로 및 요금 조회")
+    void findPathByDistanceForTeen() {
+        // when
+        ExtractableResponse<Response> response = 연령별_최단_거리_경로_조회(청소년, 교대역, 양재역);
+
+        // then
+        경로확인(response, 교대역, 남부터미널역, 양재역);
+        요금확인(response, 1550);
+    }
+
+    @Test
+    @DisplayName("어린이의 거리 경로 및 요금 조회")
+    void findPathByDistanceForChild() {
+        // when
+        ExtractableResponse<Response> response = 연령별_최단_거리_경로_조회(어린이, 교대역, 양재역);
+
+        // then
+        경로확인(response, 교대역, 남부터미널역, 양재역);
+        요금확인(response, 1100);
+    }
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+        return given(관리자).log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATHS_PATH, source, target, DISTANCE)
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회_요청(Long source, Long target) {
+        return given(관리자).log().all()
+                .when().get(PATHS_PATH, source, target, DURATION)
+                .then().log().all()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 비회원_최단_거리_경로_조회(Long source, Long target) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -120,14 +168,14 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회_요청(final long source, final long target) {
-        return RestAssured.given().log().all()
-                .when().get(PATHS_PATH, source, target, DURATION)
-                .then().log().all()
-                .extract();
+    private ExtractableResponse<Response> 연령별_최단_거리_경로_조회(String token, Long source, Long target) {
+        return given(token).log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATHS_PATH, source, target, DISTANCE)
+                .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int price) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -136,6 +184,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("price", price + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
