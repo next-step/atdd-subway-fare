@@ -7,6 +7,10 @@ public class User implements UserDetails {
     private String password;
     private List<String> authorities;
 
+    public User() {
+
+    }
+
     public User(String username, String password, List<String> authorities) {
         this.username = username;
         this.password = password;

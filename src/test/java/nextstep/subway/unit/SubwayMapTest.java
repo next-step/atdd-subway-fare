@@ -4,8 +4,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.domain.path.DistancePathStrategy;
-import nextstep.subway.domain.path.DurationPathStrategy;
+import nextstep.subway.domain.path.PathStrategies;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,9 +31,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", 500);
+        이호선 = new Line("2호선", "red", 900);
+        삼호선 = new Line("3호선", "red", 400);
 
         신분당선.addSection(강남역, 양재역, 3, 3);
         이호선.addSection(교대역, 강남역, 3, 3);
@@ -46,7 +45,7 @@ public class SubwayMapTest {
     void findPathByDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, new DistancePathStrategy());
+        SubwayMap subwayMap = new SubwayMap(lines, PathStrategies.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -61,7 +60,7 @@ public class SubwayMapTest {
     void findPathByDuration() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, new DurationPathStrategy());
+        SubwayMap subwayMap = new SubwayMap(lines, PathStrategies.DURATION);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -75,7 +74,7 @@ public class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines, new DistancePathStrategy());
+        SubwayMap subwayMap = new SubwayMap(lines, PathStrategies.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);

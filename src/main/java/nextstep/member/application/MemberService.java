@@ -25,7 +25,7 @@ public class MemberService {
     }
 
     public MemberResponse findMember(String email) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        Member member = findByEmail(email);
         return MemberResponse.of(member);
     }
 
@@ -35,7 +35,7 @@ public class MemberService {
     }
 
     public void updateMember(String email, MemberRequest param) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        Member member = findByEmail(email);
         member.update(param.toMember());
     }
 
@@ -45,5 +45,9 @@ public class MemberService {
 
     public void deleteMember(String email) {
         memberRepository.deleteByEmail(email);
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
     }
 }

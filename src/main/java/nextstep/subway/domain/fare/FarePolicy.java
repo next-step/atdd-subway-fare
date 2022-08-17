@@ -1,6 +1,7 @@
 package nextstep.subway.domain.fare;
 
-public interface FarePolicy {
+import nextstep.subway.domain.Sections;
 
-    long calculateOverFare(int distance);
+public interface FarePolicy {
+    long calculateOverFare(Sections sections);
 }
