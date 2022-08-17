@@ -1,4 +1,4 @@
-package nextstep.subway.util;
+package nextstep.subway.util.subwaymap;
 
 import java.util.Arrays;
 

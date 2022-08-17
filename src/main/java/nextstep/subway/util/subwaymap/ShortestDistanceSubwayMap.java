@@ -1,4 +1,4 @@
-package nextstep.subway.util;
+package nextstep.subway.util.subwaymap;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -9,16 +9,25 @@ import nextstep.subway.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface SubwayMap {
-    PathType pathType();
+@Component
+public class ShortestDistanceSubwayMap implements SubwayMap {
+    @Override
+    public PathType pathType() {
+        return PathType.DISTANCE;
+    }
 
-    Path findPath(List<Line> lines, Station source, Station target);
+    @Override
+    public Path path(List<Line> lines, Station source, Station target) {
+        return shortestPath(lines, source, target);
+    }
 
-    default Path findShortestPath(List<Line> lines, Station source, Station target) {
+    @Override
+    public Path shortestPath(List<Line> lines, Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -56,5 +65,10 @@ public interface SubwayMap {
                 .collect(Collectors.toList()));
 
         return new Path(sections);
+    }
+
+    @Override
+    public boolean isDefaultPathShortest() {
+        return true;
     }
 }
