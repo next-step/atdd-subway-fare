@@ -44,9 +44,12 @@ public class PathTypeTest {
         assertThat(duration).isEqualTo(5);
     }
 
-    @DisplayName("유형별로 알맞는 값이 나오는지 확인")
-    @ParameterizedTest
-    @CsvSource({"DISTANCE, 10", "DURATION, 5"})
+    @DisplayName("유형별로 알맞는 거리값이 나오는지 확인")
+    @ParameterizedTest(name = "{index} ==> ''{0}'' 선택시 ''{1}''가 출력되어야 함")
+    @CsvSource({
+            "DISTANCE, 10",
+            "DURATION, 5"
+    })
     void getValuePerType(String type, int value) {
         assertThat(PathType.valueOf(type).getValue(강남_역삼)).isEqualTo(value);
     }
