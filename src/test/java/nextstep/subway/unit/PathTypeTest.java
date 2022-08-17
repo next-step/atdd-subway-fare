@@ -1,5 +1,7 @@
 package nextstep.subway.unit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathTypeTest {
     private Station 강남역;
@@ -22,7 +22,7 @@ public class PathTypeTest {
     void Setup() {
         강남역 = new Station("강남역");
         역삼역 = new Station("역삼역");
-        이호선 = new Line("2호선", "green");
+        이호선 = new Line("2호선", "green", 100);
         강남_역삼 = new Section(이호선, 강남역, 역삼역, 10, 5);
 
 
