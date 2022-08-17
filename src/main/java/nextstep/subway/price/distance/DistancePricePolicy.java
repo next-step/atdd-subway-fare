@@ -1,8 +1,5 @@
 package nextstep.subway.price.distance;
 
-import nextstep.subway.price.PricePolicy;
-import org.springframework.stereotype.Component;
-
 public class DistancePricePolicy {
     private static final int BASIC_PRICE = 1250;
     private static final int BASE_DISTANCE = 10;
