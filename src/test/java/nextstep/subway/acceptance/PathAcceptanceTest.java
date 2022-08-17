@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -45,16 +46,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
         도곡역 = 지하철역_생성_요청(관리자, "도곡역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 12, 4);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 50, 5);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 12, 4, 0);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 50, 5, 1000);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2, 500);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(양재역, 도곡역, 52, 7));
     }
 
     /**
-     * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
      * Then 총 거리와 소요 시간을 함께 응답함
      */
     @Test
@@ -65,12 +66,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로_정보_비교(response, 5, 5, 1_250)
+            () -> 경로_정보_비교(response, 5, 5, 2_250)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 총 거리와 소요 시간을 함께 응답함
      */
     @Test
@@ -81,12 +82,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로_정보_비교(response, 5, 5, 1_250)
+            () -> 경로_정보_비교(response, 5, 5, 1_750)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -97,12 +98,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로_정보_비교(response, 5, 5, 1_250)
+            () -> 경로_정보_비교(response, 5, 5, 1_750)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -113,12 +114,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
-            () -> 경로_정보_비교(response, 14, 6, 1_350)
+            () -> 경로_정보_비교(response, 14, 6, 1_850)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -129,12 +130,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
-            () -> 경로_정보_비교(response, 55, 10, 2_150)
+            () -> 경로_정보_비교(response, 55, 10, 2_650)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 10KM 이내 최소 시간 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 10KM 이내 최소 시간 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -145,12 +146,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로_정보_비교(response, 5, 5, 1_250)
+            () -> 경로_정보_비교(response, 5, 5, 1_750)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최소 시간 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 10KM 초과 50KM 이하 최소 시간 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -161,12 +162,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
-            () -> 경로_정보_비교(response, 14, 6, 1_350)
+            () -> 경로_정보_비교(response, 14, 6, 1_850)
         );
     }
 
     /**
-     * When 출발역에서 도착역까지의 50KM 초과 최소 시간 경로 조회를 요청
+     * When 비회원 출발역에서 도착역까지의 50KM 초과 최소 시간 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -177,7 +178,160 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
-            () -> 경로_정보_비교(response, 55, 10, 2_150)
+            () -> 경로_정보_비교(response, 55, 10, 2_650)
+        );
+    }
+
+    /**
+     * When 어린이 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 어린이_두_역_10KM_이내_최단_거리_경로_조회() {
+        // when
+        어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어린이, 교대역, 양재역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 700)
+        );
+    }
+
+    /**
+     * When 어린이 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 어린이_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
+        // when
+        어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어린이, 남부터미널역, 강남역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
+            () -> 경로_정보_비교(response, 14, 6, 1_000)
+        );
+    }
+
+    /**
+     * When 어린이 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 어린이_두_역_경로_50KM_초과_최단_거리_경로_조회() {
+        // when
+        어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어린이, 남부터미널역, 도곡역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
+            () -> 경로_정보_비교(response, 55, 10, 1_150)
+        );
+    }
+
+    /**
+     * When  청소년 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 청소년_두_역_10KM_이내_최단_거리_경로_조회() {
+        // when
+        청소년 = 로그인_되어_있음(TEEN_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(청소년, 교대역, 양재역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 1_120)
+        );
+    }
+
+    /**
+     * When 청소년 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 청소년_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
+        // when
+        청소년 = 로그인_되어_있음(TEEN_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(청소년, 남부터미널역, 강남역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
+            () -> 경로_정보_비교(response, 14, 6, 1_200)
+        );
+    }
+
+    /**
+     * When 청소년 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 청소년_두_역_경로_50KM_초과_최단_거리_경로_조회() {
+        // when
+        청소년 = 로그인_되어_있음(TEEN_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(청소년, 남부터미널역, 도곡역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
+            () -> 경로_정보_비교(response, 55, 10, 1_840)
+        );
+    }
+
+    /**
+     * When  어른 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 어른_두_역_10KM_이내_최단_거리_경로_조회() {
+        // when
+        어른 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어른, 교대역, 양재역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
+            () -> 경로_정보_비교(response, 5, 5, 1_750)
+        );
+    }
+
+    /**
+     * When 어른 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 어른_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
+        // when
+        어른 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어른, 남부터미널역, 강남역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
+            () -> 경로_정보_비교(response, 14, 6, 1_850)
+        );
+    }
+
+    /**
+     * When 어른 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Then 총 거리와 소요 시간, 요금을 함께 응답함
+     */
+    @Test
+    void 어른_두_역_경로_50KM_초과_최단_거리_경로_조회() {
+        // when
+        어른 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+        ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어른, 남부터미널역, 도곡역, PathType.DISTANCE.name());
+
+        // then
+        assertAll(
+            () -> 지하철역_경로_비교(response, 남부터미널역, 양재역, 도곡역),
+            () -> 경로_정보_비교(response, 55, 10, 2_650)
         );
     }
 
@@ -189,7 +343,14 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private ExtractableResponse<Response> 로그인_회원_두_역의_경로_조회를_요청(String token, Long source, Long target, String pathType) {
+        return CommonAuthRestAssured.given(token)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths?source={sourceId}&target={targetId}&pathType={pathType}", source, target, pathType)
+            .then().log().all().extract();
+    }
+
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -198,6 +359,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("extraFare", extraFare + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
