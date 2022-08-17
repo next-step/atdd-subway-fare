@@ -101,7 +101,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then : 시간이 적게 걸리는 순으로 조회가 되고 요금은 계산되지 않는다
      */
 
-    @DisplayName("두 역의 최단 거리 시간을 조회하고 요금은 계산되지 않는다")
+    @DisplayName("두 역의 최단 거리 시간을 조회하고 요금은 최단거리 기준으로 계산된다")
     @Test
     void findPathByDurationAndFare() {
         // when
@@ -109,7 +109,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(0);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1350);
     }
 
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String type) {
