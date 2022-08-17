@@ -12,8 +12,8 @@ public class PricePolicyCalculateTest {
 
     PricePolicy 요금_정책;
 
-    int 일곱살 = 7;
-    int 열다섯살 = 15;
+    int 어린이 = 7;
+    int 청소년 = 15;
     int 열아홉살 = 19;
 
     int 기본요금 = 1250;
@@ -28,7 +28,7 @@ public class PricePolicyCalculateTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
     public void childDiscountCalculatePrice(int distance) {
-        요금_정책 = new PricePolicyCalculate(distance, 일곱살, 0);
+        요금_정책 = new PricePolicyCalculate(distance, 어린이, 0);
 
         assertThat(요금_정책.calculatePrice()).isEqualTo(450);
     }
@@ -37,7 +37,7 @@ public class PricePolicyCalculateTest {
     @ParameterizedTest
     @ValueSource(ints = {15, 20, 25, 30, 35, 40, 45, 50})
     public void childDiscountOfTenCalculatePrice(int distance) {
-        요금_정책 = new PricePolicyCalculate(distance, 일곱살, 0);
+        요금_정책 = new PricePolicyCalculate(distance, 어린이, 0);
 
         int price = 십키로_이상_거리_요금_계산(distance);
 
@@ -48,7 +48,7 @@ public class PricePolicyCalculateTest {
     @ParameterizedTest
     @ValueSource(ints = {50, 55, 60, 65, 70, 75, 80})
     public void childDiscountOfFiftyCalculatePrice(int distance) {
-        요금_정책 = new PricePolicyCalculate(distance, 일곱살, 0);
+        요금_정책 = new PricePolicyCalculate(distance, 어린이, 0);
 
         int price = 오심키로_초과_거리_요금_게산(distance);
 
@@ -59,7 +59,7 @@ public class PricePolicyCalculateTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
     public void teenagerDiscountCalculatePrice(int distance) {
-        요금_정책 = new PricePolicyCalculate(distance, 열다섯살, 0);
+        요금_정책 = new PricePolicyCalculate(distance, 청소년, 0);
 
         assertThat(요금_정책.calculatePrice()).isEqualTo(720);
     }
@@ -68,7 +68,7 @@ public class PricePolicyCalculateTest {
     @ParameterizedTest
     @ValueSource(ints = {15, 20, 25, 30, 35, 40, 45, 50})
     public void teenagerDiscountOfTenCalculatePrice(int distance) {
-        요금_정책 = new PricePolicyCalculate(distance, 열다섯살, 0);
+        요금_정책 = new PricePolicyCalculate(distance, 청소년, 0);
 
         int price = 십키로_이상_거리_요금_계산(distance);
 
@@ -79,7 +79,7 @@ public class PricePolicyCalculateTest {
     @ParameterizedTest
     @ValueSource(ints = {50, 55, 60, 65, 70, 75, 80})
     public void teenagerDiscountOfFitfyCalculatePrice(int distance) {
-        요금_정책 = new PricePolicyCalculate(distance, 열다섯살, 0);
+        요금_정책 = new PricePolicyCalculate(distance, 청소년, 0);
 
         int price = 오심키로_초과_거리_요금_게산(distance);
 

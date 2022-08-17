@@ -30,7 +30,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
 
-    private String 아이;
+    private String 어린이;
     private String 청소년;
     private String 어른;
 
@@ -71,7 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
 
-        아이 = 로그인_되어_있음("child@email.com", "password");
+        어린이 = 로그인_되어_있음("child@email.com", "password");
         청소년 = 로그인_되어_있음("teenager@email.com", "password");
         어른 = 로그인_되어_있음("nineteen@email.com", "password");
     }
@@ -231,18 +231,18 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 지하철 노선에 지하철역이 등록되어있음
      *
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
-     * And 아이 할인
+     * And 어린이 할인
      *
      * Then 최단 거리 경로를 응답(총 거리 10km 이하)
      * And 총 거리와 소요 시간을 함께 응답함
      * And 총 거리와 소요 시간을 함께 응답함
      *
      */
-    @DisplayName("아이 할인 환승하지 않는 최단 거리 조회")
+    @DisplayName("어린이 할인 환승하지 않는 최단 거리 조회")
     @Test
     void childOfFindPathByDistance() {
         // when
-        ExtractableResponse<Response> 경로_조회 = 로그인_후_두_역의_최단_거리_경로_조회를_요청(아이, 강남역 , 역삼역);
+        ExtractableResponse<Response> 경로_조회 = 로그인_후_두_역의_최단_거리_경로_조회를_요청(어린이, 강남역 , 역삼역);
 
         // then
         최단_경로_및_요금_계산(경로_조회, new Long[] { 강남역, 역삼역 }, 700);
@@ -254,17 +254,17 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 지하철 노선에 지하철역이 등록되어있음
      *
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
-     * And 아이 할인
+     * And 어린이 할인
      *
      * Then 최단 거리 경로를 응답(총 거리 10km 초과)
      * And 총 거리와 소요 시간을 함께 응답함
      * And 총 거리와 소요 시간을 함께 응답함
      */
-    @DisplayName("아이 할인 환승하여 두 역 최단 거리를 조회한 경우")
+    @DisplayName("어린이 할인 환승하여 두 역 최단 거리를 조회한 경우")
     @Test
     void childOfTransforFindPathByDistance() {
         // when
-        ExtractableResponse<Response> 경로_조회 = 로그인_후_두_역의_최단_거리_경로_조회를_요청(아이, 강남역, 남부터미널역);
+        ExtractableResponse<Response> 경로_조회 = 로그인_후_두_역의_최단_거리_경로_조회를_요청(어린이, 강남역, 남부터미널역);
 
         // then
         최단_경로_및_요금_계산(경로_조회, new Long[] { 강남역, 교대역, 남부터미널역 }, 550);
@@ -276,17 +276,17 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 지하철 노선에 지하철역이 등록되어있음
      *
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
-     * And 아이 할인
+     * And 어린이 할인
      *
      * Then 최단 거리 경로를 응답(총 거리 50km 초과)
      * And 총 거리와 소요 시간을 함께 응답함
      * And 총 거리와 소요 시간을 함께 응답함
      */
-    @DisplayName("아이 할인 50km 거리 이상 환승하여 두 역 최단 거리를 조회한 경우")
+    @DisplayName("어린이 할인 50km 거리 이상 환승하여 두 역 최단 거리를 조회한 경우")
     @Test
     void childOfOverDistance50FindPathByDistance() {
         // when
-        ExtractableResponse<Response> 경로_조회 = 로그인_후_두_역의_최단_거리_경로_조회를_요청(아이, 남부터미널역, 당산역);
+        ExtractableResponse<Response> 경로_조회 = 로그인_후_두_역의_최단_거리_경로_조회를_요청(어린이, 남부터미널역, 당산역);
 
         // then
         최단_경로_및_요금_계산(경로_조회, new Long[] { 남부터미널역, 교대역, 당산역 }, 950);
