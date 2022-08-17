@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import support.ticket.Ticket;
+import support.ticket.TicketType;
 
 @RestController
 public class PathController {
@@ -17,7 +19,7 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+    public ResponseEntity<PathResponse> findPath(@Ticket TicketType ticketType, @RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
+        return ResponseEntity.ok(pathService.findPath(source, target, type, ticketType));
     }
 }

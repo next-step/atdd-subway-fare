@@ -7,6 +7,7 @@ import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
+import support.ticket.TicketType;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, TicketType ticketType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -28,6 +29,6 @@ public class PathService {
 
         Path path = pathType.findPath(subwayMap, upStation, downStation);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, ticketType);
     }
 }
