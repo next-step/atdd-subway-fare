@@ -50,7 +50,7 @@ public class PathFinderImplTest {
     PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
-    Path path = pathFinder.findPath(교대역, 양재역, PathType.DISTANCE);
+    Path path = pathFinder.findPath(교대역, 양재역, PathType.DISTANCE, 30);
 
     // then
     assertAll(
@@ -68,7 +68,7 @@ public class PathFinderImplTest {
     PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
-    Path path = pathFinder.findPath(양재역, 교대역, PathType.DISTANCE);
+    Path path = pathFinder.findPath(양재역, 교대역, PathType.DISTANCE, 30);
 
     // then
     assertAll(
@@ -86,7 +86,7 @@ public class PathFinderImplTest {
     PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
-    Path path = pathFinder.findPath(교대역, 양재역, PathType.DURATION);
+    Path path = pathFinder.findPath(교대역, 양재역, PathType.DURATION, 30);
 
     // then
     assertAll(
@@ -104,7 +104,7 @@ public class PathFinderImplTest {
     PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
-    Path path = pathFinder.findPath(양재역, 교대역, PathType.DURATION);
+    Path path = pathFinder.findPath(양재역, 교대역, PathType.DURATION, 30);
 
     // then
     assertAll(
@@ -122,6 +122,6 @@ public class PathFinderImplTest {
     PathFinder pathFinder = new PathFinderImpl(lines);
 
     // when
-    assertThatThrownBy(() -> pathFinder.findPath(양재역, 교대역, null)).isInstanceOf(CustomException.class);
+    assertThatThrownBy(() -> pathFinder.findPath(양재역, 교대역, null, 30)).isInstanceOf(CustomException.class);
   }
 }

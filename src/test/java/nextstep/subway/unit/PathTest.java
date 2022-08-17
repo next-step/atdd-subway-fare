@@ -31,7 +31,7 @@ public class PathTest {
     이호선.addSection(강남역, 역삼역, 10, 10);
     이호선.addSection(역삼역, 삼성역, 5, 5);
 
-    Path path = new Path(new Sections(이호선.getSections()), 15);
+    Path path = new Path(new Sections(이호선.getSections()), 15, 30);
 
     assertThat(path.extractDuration()).isEqualTo(15);
   }
@@ -41,7 +41,7 @@ public class PathTest {
     이호선.addSection(강남역, 역삼역, 4, 10);
     이호선.addSection(역삼역, 삼성역, 5, 5);
 
-    Path path = new Path(new Sections(이호선.getSections()), 9);
+    Path path = new Path(new Sections(이호선.getSections()), 9, 30);
 
     assertThat(path.extractFare()).isEqualTo(1_250);
   }
@@ -51,7 +51,7 @@ public class PathTest {
     이호선.addSection(강남역, 역삼역, 10, 10);
     이호선.addSection(역삼역, 삼성역, 15, 5);
 
-    Path path = new Path(new Sections(이호선.getSections()), 25);
+    Path path = new Path(new Sections(이호선.getSections()), 25, 30);
 
     assertThat(path.extractFare()).isEqualTo(1_550);
   }
@@ -61,8 +61,28 @@ public class PathTest {
     이호선.addSection(강남역, 역삼역, 20, 10);
     이호선.addSection(역삼역, 삼성역, 42, 5);
 
-    Path path = new Path(new Sections(이호선.getSections()), 62);
+    Path path = new Path(new Sections(이호선.getSections()), 62, 30);
 
     assertThat(path.extractFare()).isEqualTo(2_250);
+  }
+
+  @Test
+  void 어린이_구간_길이_10KM_이내_요금_조회() {
+    이호선.addSection(강남역, 역삼역, 4, 10);
+    이호선.addSection(역삼역, 삼성역, 5, 5);
+
+    Path path = new Path(new Sections(이호선.getSections()), 9, 12);
+
+    assertThat(path.extractFare()).isEqualTo(450);
+  }
+
+  @Test
+  void 청소년_구간_길이_10KM_이내_요금_조회() {
+    이호선.addSection(강남역, 역삼역, 4, 10);
+    이호선.addSection(역삼역, 삼성역, 5, 5);
+
+    Path path = new Path(new Sections(이호선.getSections()), 9, 18);
+
+    assertThat(path.extractFare()).isEqualTo(720);
   }
 }
