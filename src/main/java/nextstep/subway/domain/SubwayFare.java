@@ -9,6 +9,9 @@ public class SubwayFare {
     private static final int EXTRA_FARE_LESS_LONG_DISTANCE = 5;
     private static final int EXTRA_FARE_OVER_LONG_DISTANCE = 8;
 
+    private SubwayFare(){
+
+    }
 
     public static int calculateFare(int distance) {
         int overDistance = distance - BASE_FARE_DISTANCE;
