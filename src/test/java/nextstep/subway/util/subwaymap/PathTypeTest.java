@@ -1,5 +1,6 @@
-package nextstep.subway.util;
+package nextstep.subway.util.subwaymap;
 
+import nextstep.subway.util.subwaymap.PathType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
