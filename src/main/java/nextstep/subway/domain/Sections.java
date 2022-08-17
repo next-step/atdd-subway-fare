@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import java.util.NoSuchElementException;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -154,5 +155,12 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int getMaxLineFare() {
+        return sections.stream()
+            .mapToInt(section -> section.getLine().getExtraFare())
+            .max()
+            .orElseThrow(NoSuchElementException::new);
     }
 }

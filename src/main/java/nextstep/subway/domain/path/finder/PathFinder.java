@@ -6,5 +6,5 @@ import nextstep.subway.domain.path.PathType;
 
 public interface PathFinder {
 
-  Path findPath(Station source, Station target, PathType pathType);
+  Path findPath(Station source, Station target, PathType pathType, int age);
 }
