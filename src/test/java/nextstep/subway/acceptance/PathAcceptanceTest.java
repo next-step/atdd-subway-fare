@@ -98,7 +98,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * When : 두 역에 대해 걸리는 시간을 기반으로 조회를 요청하면
-     * Then : 시간이 적게 걸리는 순으로 조회가 되고 요금은 계산되지 않는다
+     * Then : 시간이 적게 걸리는 순으로 조회가 되고 요금은 최단거리 기준으로 계산된다.
      */
 
     @DisplayName("두 역의 최단 거리 시간을 조회하고 요금은 최단거리 기준으로 계산된다")
