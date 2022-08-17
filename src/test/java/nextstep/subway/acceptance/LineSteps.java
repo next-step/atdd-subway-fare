@@ -9,14 +9,29 @@ import java.util.Map;
 
 public class LineSteps extends AcceptanceTestSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, String name, String color) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("extraFare", 0);
+
         return given(token)
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 추가_요금_지하철_노선_생성_요청(String token, String name, String color, int extraFare) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("extraFare", extraFare);
+
+        return given(token)
+            .body(params)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .when().post("/lines")
+            .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
