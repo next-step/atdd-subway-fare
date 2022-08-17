@@ -18,7 +18,7 @@ public class PathController {
     private final PathService pathService;
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal User user,
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal(isLogined = false) User user,
         @RequestParam Long source,
           @RequestParam Long target
         , @RequestParam PathType pathType) {
