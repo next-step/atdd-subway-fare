@@ -1,10 +1,11 @@
 package nextstep.subway.price.discount;
 
-public class AdultDiscountPolicy implements DiscountPolicyService {
+public class AdultDiscountPolicy implements DiscountPolicyCalculate {
+    private final static int NINETEEN_AGE = 19;
 
     @Override
     public boolean condition(Integer age) {
-        return age >= 19;
+        return age >= NINETEEN_AGE;
     }
 
     @Override
