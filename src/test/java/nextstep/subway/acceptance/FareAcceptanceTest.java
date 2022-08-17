@@ -73,6 +73,32 @@ class FareAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(450);
     }
 
+    @DisplayName("노선에 추가 요금이 있고 청소년의 경우 요금 계산 시 노선 요금 추가금에 350원을 공제한 금액의 20%할인 된다.")
+    @Test
+    void getFareTeenagerWithLineFare() {
+        // given
+        String 청소년 = 로그인_되어_있음("teenager@email.com", "password");
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(청소년, 강남역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1440);
+    }
+
+    @DisplayName("노선에 추가 요금이 있고 어린이의 경우 요금 계산 시 노선 요금 추가금에 350원을 공제한 금액의 50%할인 된다.")
+    @Test
+    void getFareChildrenWithLineFare() {
+        // given
+        String 어린이 = 로그인_되어_있음("children@email.com", "password");
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(어린이, 강남역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(900);
+    }
+
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(String token, Long source, Long target) {
         return given(token)
