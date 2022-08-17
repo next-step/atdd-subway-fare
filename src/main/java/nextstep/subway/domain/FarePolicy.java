@@ -2,9 +2,9 @@ package nextstep.subway.domain;
 
 public abstract class FarePolicy {
 
-    private FarePolicy next;
+    private FarePolicy next = null;
 
-    public FarePolicy(FarePolicy next) {
+    public void setNext(FarePolicy next) {
         this.next = next;
     }
 
@@ -26,7 +26,7 @@ public abstract class FarePolicy {
         return calculate(fare);
     }
 
-    public abstract boolean applicable();
+    abstract boolean applicable();
 
-    public abstract int calculate(int fare);
+    abstract int calculate(int fare);
 }
