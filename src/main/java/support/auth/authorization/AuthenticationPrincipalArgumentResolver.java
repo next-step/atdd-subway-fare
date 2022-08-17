@@ -1,6 +1,8 @@
 package support.auth.authorization;
 
+import java.util.Objects;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -18,7 +20,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLogined = parameter.getParameterAnnotation(AuthenticationPrincipal.class).isLogined();
 
-        return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
+        if(!isLogined && Objects.isNull(authentication)) {
+            return User.guest();
+        }
+
+        return new User(authentication.getPrincipal().toString(), null, authentication.getAge(), authentication.getAuthorities());
     }
 }

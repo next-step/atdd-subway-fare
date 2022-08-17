@@ -10,4 +10,6 @@ public interface UserDetails {
     List<String> getAuthorities();
 
     boolean checkCredentials(Object credentials);
+
+    Integer getAge();
 }

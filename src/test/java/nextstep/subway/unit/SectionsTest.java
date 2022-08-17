@@ -18,10 +18,13 @@ public class SectionsTest {
     Station 강남역;
     Station 삼성역;
     Station 남부터미널역;
+    Station 양재역;
 
     Line 이호선;
+    Line 삼호선;
 
     Sections sections;
+    Sections 구간_리스트;
 
     @BeforeEach
     void setUp() {
@@ -30,12 +33,16 @@ public class SectionsTest {
         강남역 = createStation(2L, "강남역");
         남부터미널역 = createStation(3L, "남부터미널역");
         삼성역 = createStation(4L, "삼성역");
+        양재역 = createStation(5L, "양재역");
 
-        이호선 = new Line("2호선", "red");
-
+        이호선 = new Line("2호선", "red", 500);
+        삼호선 = new Line("3호선", "green");
+        
         이호선.addSection(교대역, 강남역, 3, 5);
         이호선.addSection(강남역, 삼성역, 5, 10);
+        삼호선.addSection(교대역, 양재역, 10, 10);
         sections = new Sections(이호선.getSections());
+        구간_리스트 = new Sections(삼호선.getSections());
     }
 
     private Station createStation(long id, String name) {
@@ -78,5 +85,22 @@ public class SectionsTest {
         assertThat(section.getDuration()).isEqualTo(15);
         assertThat(section.getDistance()).isEqualTo(8);
     }
+
+    @DisplayName("최고 추가요금 반환하는 테스트")
+    @Test
+    void findaddtionPriceTest() {
+        int price = sections.findadditionPrice();
+
+        assertThat(price).isEqualTo(500);
+    }
+
+    @DisplayName("추가 요금이 안 적혀 있을 경우, 0을 반환합니다.")
+    @Test
+    void ffindaddtionPriceOfZeroTest() {
+        int price = 구간_리스트.findadditionPrice();
+
+        assertThat(price).isEqualTo(0);
+    }
+
 
 }

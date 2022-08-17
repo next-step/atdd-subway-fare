@@ -77,6 +77,15 @@ public class Sections {
         return result;
     }
 
+    public int findadditionPrice() {
+        return sections.stream()
+            .map(Section::getLine)
+            .distinct()
+            .mapToInt(Line::getAdditionPrice)
+            .min()
+            .orElseGet(() -> 0);
+    }
+
     private void checkDuplicateSection(Section section) {
         sections.stream()
             .filter(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))
