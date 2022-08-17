@@ -1,11 +1,11 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.AgeDiscountPolicy;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.DiscountPolicy;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.SubwayMap.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,10 +48,10 @@ public class SubwayMapTest {
     void findPathWithDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = PathType.DISTANCE.getInstance(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE, AgeDiscountPolicy.ADULT);
+        Path path = subwayMap.findPath(교대역, 양재역, DiscountPolicy.ADULT, null);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -62,10 +62,10 @@ public class SubwayMapTest {
     void findPathWithDuration() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = PathType.DURATION.getInstance(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION, AgeDiscountPolicy.ADULT);
+        Path path = subwayMap.findPath(교대역, 양재역, DiscountPolicy.ADULT, null);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -76,10 +76,10 @@ public class SubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
+        SubwayMap subwayMap = PathType.DISTANCE.getInstance(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE, AgeDiscountPolicy.ADULT);
+        Path path = subwayMap.findPath(양재역, 교대역, DiscountPolicy.ADULT, null);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

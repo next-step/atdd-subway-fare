@@ -1,13 +1,13 @@
 package nextstep.subway.applicaion;
 
 import nextstep.member.application.MemberService;
-import nextstep.subway.domain.AgeDiscountPolicy;
+import nextstep.subway.domain.DiscountPolicy;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.SubwayMap.SubwayMap;
 import org.springframework.stereotype.Service;
 import support.auth.userdetails.User;
 
@@ -25,13 +25,13 @@ public class PathService {
         this.memberService = memberService;
     }
 
-    public PathResponse findPath(User user, Long source, Long target, PathType type) {
+    public PathResponse findPath(User user, Long source, Long target, PathType type, String time) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        AgeDiscountPolicy ageDiscountPolicy = AgeDiscountPolicy.of(getCurrentUserAge(user.getUsername()));
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation, type, ageDiscountPolicy);
+        DiscountPolicy discountPolicy = DiscountPolicy.of(getCurrentUserAge(user.getUsername()));
+        SubwayMap subwayMap = type.getInstance(lines);
+        Path path = subwayMap.findPath(upStation, downStation, discountPolicy, time);
 
         return PathResponse.of(path);
     }

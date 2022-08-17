@@ -13,28 +13,28 @@ class FarePolicyTest {
     @DisplayName("10KM 요금 계산")
     @Test
     void defaultFare() {
-        int fare = FarePolicy.calculateFare(9);
-        assertThat(fare).isEqualTo(DEFAULT_FARE);
+        FarePolicy farePolicy = FarePolicy.of(9);
+        assertThat(farePolicy.calculate(9)).isEqualTo(DEFAULT_FARE);
     }
 
     @DisplayName("10km 초과 요금 조회")
     @Test
     void over10KmFare() {
-        int fare = FarePolicy.calculateFare(10);
-        assertThat(fare).isEqualTo(DEFAULT_FARE + 100);
+        FarePolicy farePolicy = FarePolicy.of(10);
+        assertThat(farePolicy.calculate(10)).isEqualTo(DEFAULT_FARE + 100);
     }
 
     @DisplayName("49km 요금 조회")
     @Test
     void over49KmFare() {
-        int fare = FarePolicy.calculateFare(49);
-        assertThat(fare).isEqualTo(DEFAULT_FARE + 800);
+        FarePolicy farePolicy = FarePolicy.of(49);
+        assertThat(farePolicy.calculate(49)).isEqualTo(DEFAULT_FARE + 800);
     }
 
     @DisplayName("50km 초과 요금 조회")
     @Test
     void over50KmFare() {
-        int fare = FarePolicy.calculateFare(50);
-        assertThat(fare).isEqualTo(DEFAULT_FARE + 800 + 100);
+        FarePolicy farePolicy = FarePolicy.of(50);
+        assertThat(farePolicy.calculate(50)).isEqualTo(DEFAULT_FARE + 800 + 100);
     }
 }

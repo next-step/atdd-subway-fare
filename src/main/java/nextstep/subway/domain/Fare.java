@@ -3,19 +3,21 @@ package nextstep.subway.domain;
 public class Fare {
     private int totalDistance;
     private int additionalFare;
-    private AgeDiscountPolicy ageDiscountPolicy;
+    private DiscountPolicy discountPolicy;
+    private FarePolicy farePolicy;
 
-    public Fare(int totalDistance, int additionalFare, AgeDiscountPolicy ageDiscountPolicy) {
+    public Fare(int totalDistance, int additionalFare, DiscountPolicy discountPolicy) {
         this.totalDistance = totalDistance;
         this.additionalFare = additionalFare;
-        this.ageDiscountPolicy = ageDiscountPolicy;
+        this.discountPolicy = discountPolicy;
+        this.farePolicy = FarePolicy.of(totalDistance);
     }
 
     public Fare(int totalDistance) {
-        this(totalDistance, 0, AgeDiscountPolicy.ADULT);
+        this(totalDistance, 0, DiscountPolicy.ADULT);
     }
 
     public int value() {
-        return ageDiscountPolicy.discount(additionalFare + FarePolicy.calculateFare(totalDistance));
+        return discountPolicy.discount(additionalFare + farePolicy.calculate(totalDistance));
     }
 }

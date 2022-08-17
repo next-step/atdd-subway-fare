@@ -449,45 +449,31 @@ class PathAcceptanceTest extends AcceptanceTest {
         @DisplayName("가장 빠른 도착 경로 기준으로")
         @Nested
         class Context_with_Arrival_Time {
-            Long 서초역;
-            Long 강남역;
-            Long 역삼역;
-            Long 선릉역;
-            Long 양재역;
-
-            Long 이호선;
-            Long 신분당선;
 
             @BeforeEach
             void setUp() {
-                서초역 = 지하철역_생성_요청(관리자, "서초역").jsonPath().getLong("id");
-                강남역 = 지하철역_생성_요청(관리자, "강남역").jsonPath().getLong("id");
-                역삼역 = 지하철역_생성_요청(관리자, "역삼역").jsonPath().getLong("id");
-                선릉역 = 지하철역_생성_요청(관리자, "선릉역").jsonPath().getLong("id");
-                양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
+                Long 노선E = 지하철_노선_생성_요청("노선E", "green", 지하철A역, 지하철B역, 5, 3, LocalTime.of(5, 0), LocalTime.of(23, 0), 10);
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선E, createSectionCreateParams(지하철B역, 지하철C역, 7, 4));
+                지하철_노선에_지하철_구간_생성_요청(관리자, 노선E, createSectionCreateParams(지하철C역, 지하철D역, 4, 3));
 
-                이호선 = 지하철_노선_생성_요청("2호선", "green", 서초역, 강남역, 5, 3, LocalTime.of(5, 0), LocalTime.of(23, 0), 10);
-                지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(역삼역, 선릉역, 7, 4));
-                지하철_노선에_지하철_구간_생성_요청(관리자, 이호선, createSectionCreateParams(역삼역, 선릉역, 4, 3));
-
-                신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 6, 4, 900, LocalTime.of(5, 0), LocalTime.of(23, 0), 20);
+                지하철_노선_생성_요청("노선F", "red", 지하철B역, 지하철E역, 6, 4, 900, LocalTime.of(5, 0), LocalTime.of(23, 0), 20);
             }
 
-            @DisplayName("환승이 없는 서초역에서 선릉역까지 10:00 기준으로 조회하면, 도착 시간은 10:10 이다.")
+            @DisplayName("환승이 없는 지하철B역에서 지하철D역까지 10:00 기준으로 조회하면, 도착 시간은 10:10 이다.")
             @Test
             void findPathByArrivalTimeOfSameLine() {
                 // given
                 LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 00, 00));
 
                 // when
-                ExtractableResponse<Response> response = 두_역의_가장_빠른_도착_경로_조회를_요청(given(관리자), 서초역, 선릉역, dateTime.format(DATE_TIME_PATH));
+                ExtractableResponse<Response> response = 두_역의_가장_빠른_도착_경로_조회를_요청(given(관리자), 지하철B역, 지하철D역, dateTime.format(DATE_TIME_PATH));
 
                 // then
-                final int 거리_16km = 16;
-                final int 시간_10분 = 10;
+                final int 거리_11km = 11;
+                final int 시간_7분 = 7;
                 final int 요금_1350원 = 1350;
                 final String 도착_시간_오늘_10시_10분 = dateTime.plusMinutes(10).format(DATE_TIME_PATH);
-                경로_조회_응답_검증(response, 거리_16km, 시간_10분, 요금_1350원, 도착_시간_오늘_10시_10분, 서초역, 강남역, 역삼역, 선릉역);
+                경로_조회_응답_검증(response, 거리_11km, 시간_7분, 요금_1350원, 도착_시간_오늘_10시_10분, 지하철B역, 지하철C역, 지하철D역);
             }
 
             @DisplayName("추가요금이 있는 신분당선이 포함된 환승이 있는 서초역에서 양재역까지 10:00 기준으로 조회하면, 도착 시간은 10:24 이다.")
@@ -497,14 +483,31 @@ class PathAcceptanceTest extends AcceptanceTest {
                 LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 00, 00));
 
                 // when
-                ExtractableResponse<Response> response = 두_역의_가장_빠른_도착_경로_조회를_요청(given(관리자), 서초역, 양재역, dateTime.format(DATE_TIME_PATH));
+                ExtractableResponse<Response> response = 두_역의_가장_빠른_도착_경로_조회를_요청(given(관리자), 지하철A역, 지하철E역, dateTime.format(DATE_TIME_PATH));
 
                 // then
                 final int 거리_11km = 11;
-                final int 시간_10분 = 10;
-                final int 요금_2150원 = 2150;
+                final int 시간_7분 = 7;
+                final int 요금_2250원 = 2250;
                 final String 도착_시간_오늘_10시_24분 = dateTime.plusMinutes(24).format(DATE_TIME_PATH);
-                경로_조회_응답_검증(response, 거리_11km, 시간_10분, 요금_2150원, 도착_시간_오늘_10시_24분, 서초역, 강남역, 양재역);
+                경로_조회_응답_검증(response, 거리_11km, 시간_7분, 요금_2250원, 도착_시간_오늘_10시_24분, 지하철A역, 지하철B역, 지하철E역);
+            }
+
+            @DisplayName("환승이 없는 지하철B역에서 지하철D역까지 23:00 막차 시간 기준으로 조회하면, 도착 시간은 다음날 05:10 이다.")
+            @Test
+            void findPathByArrivalTimeOfSameLineAfterEndTime() {
+                // given
+                LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 00, 00));
+
+                // when
+                ExtractableResponse<Response> response = 두_역의_가장_빠른_도착_경로_조회를_요청(given(관리자), 지하철B역, 지하철D역, dateTime.format(DATE_TIME_PATH));
+
+                // then
+                final int 거리_11km = 11;
+                final int 시간_7분 = 7;
+                final int 요금_1350원 = 1350;
+                final String 도착_시간_내일_5시_10분 = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(5, 10)).format(DATE_TIME_PATH);
+                경로_조회_응답_검증(response, 거리_11km, 시간_7분, 요금_1350원, 도착_시간_내일_5시_10분, 지하철B역, 지하철C역, 지하철D역);
             }
 
         }

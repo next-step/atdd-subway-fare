@@ -20,7 +20,8 @@ public class PathSteps {
                 .queryParams(Map.of(
                         "source", source,
                         "target", target,
-                        "type", PathType.DISTANCE.name()
+                        "type", PathType.DISTANCE.name(),
+                        "time", ""
                 ))
                 .when().get("/paths")
                 .then().log().all().extract();
@@ -32,7 +33,8 @@ public class PathSteps {
                 .queryParams(Map.of(
                         "source", source,
                         "target", target,
-                        "type", PathType.DURATION.name()
+                        "type", PathType.DURATION.name(),
+                        "time", ""
                 ))
                 .when().get("/paths")
                 .then().log().all().extract();
@@ -64,7 +66,7 @@ public class PathSteps {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
-        assertThat(response.jsonPath().getInt("arrivalTime")).isEqualTo(arrivalTime);
+        assertThat(response.jsonPath().getString("arrivalTime")).isEqualTo(arrivalTime);
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
     }
 }

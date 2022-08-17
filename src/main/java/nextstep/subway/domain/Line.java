@@ -117,6 +117,10 @@ public class Line {
         sections.delete(station);
     }
 
+    public boolean matchSection(Section section) {
+        return this.sections.contains(section);
+    }
+
     public static class LineBuilder {
         private String name;
         private String color;
