@@ -1,24 +1,24 @@
 package nextstep.subway.applicaion;
 
+import lombok.AllArgsConstructor;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.service.SubwayMap;
+import nextstep.subway.domain.service.chain.FareChainCalculator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
+    private final FareChainCalculator fareChainCalculator;
 
-    public PathService(LineService lineService, StationService stationService) {
-        this.lineService = lineService;
-        this.stationService = stationService;
-    }
 
     public PathResponse findPath(Long source, Long target, PathType type) {
         Station upStation = stationService.findById(source);
@@ -27,6 +27,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fareChainCalculator.operate(path.extractDistance()));
     }
 }

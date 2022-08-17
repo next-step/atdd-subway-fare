@@ -466,7 +466,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2&amp;type=DURATION HTTP/1.1
 Accept: application/json
-Host: localhost:63546</code></pre>
+Host: localhost:50442</code></pre>
 </div>
 </div>
 </div>
@@ -504,13 +504,13 @@ Host: localhost:63546</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Set-Cookie: JSESSIONID=4C571901F1B49F841B2E7EAC95292F7C; Path=/; HttpOnly
+Set-Cookie: JSESSIONID=D4B61ECD8764DEF4A42142015F590A4C; Path=/; HttpOnly
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Mon, 15 Aug 2022 07:38:11 GMT
+Date: Tue, 16 Aug 2022 06:06:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 151
+Content-Length: 168
 
 {
   "stations" : [ {
@@ -521,7 +521,8 @@ Content-Length: 151
     "name" : "선릉역"
   } ],
   "distance" : 10,
-  "duration" : 10
+  "duration" : 10,
+  "fare" : 1250
 }</code></pre>
 </div>
 </div>
@@ -567,6 +568,11 @@ Content-Length: 151
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">목적지 까지의 소요시간</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지하철 운임요금</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -577,7 +583,7 @@ Content-Length: 151
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-15 16:29:25 +0900
+Last updated 2022-08-16 13:06:55 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

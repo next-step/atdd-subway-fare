@@ -1,13 +1,12 @@
 package nextstep.subway.domain;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 
+@AllArgsConstructor
 public class Path {
     private Sections sections;
-
-    public Path(Sections sections) {
-        this.sections = sections;
-    }
 
     public Sections getSections() {
         return sections;
