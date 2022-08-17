@@ -7,6 +7,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
+import support.auth.userdetails.GuestUser;
 import support.auth.userdetails.User;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
@@ -18,6 +19,10 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            return GuestUser.create();
+        }
 
         return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
     }
