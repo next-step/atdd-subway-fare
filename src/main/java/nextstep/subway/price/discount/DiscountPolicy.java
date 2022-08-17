@@ -8,14 +8,14 @@ public enum DiscountPolicy {
     TEENAGER(new TeenagerDiscountPolicy()),
     ADULT(new AdultDiscountPolicy());
 
-    private DiscountPolicyService discountPolicyService;
+    private DiscountPolicyCalculate discountPolicyService;
 
-    DiscountPolicy(DiscountPolicyService discountPolicyService) {
+    DiscountPolicy(DiscountPolicyCalculate discountPolicyService) {
         this.discountPolicyService = discountPolicyService;
     }
 
     public static int discount(Integer price, Integer age) {
-        DiscountPolicyService discountPolicyService = Arrays.stream(values())
+        DiscountPolicyCalculate discountPolicyService = Arrays.stream(values())
             .map(discountPolicy -> discountPolicy.discountPolicyService)
             .filter(discount -> discount.condition(age))
             .findFirst()

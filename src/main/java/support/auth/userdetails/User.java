@@ -1,5 +1,6 @@
 package support.auth.userdetails;
 
+import java.util.Collections;
 import java.util.List;
 
 public class User implements UserDetails {
@@ -16,7 +17,7 @@ public class User implements UserDetails {
     }
 
     public static User guest() {
-        return new User(null, null, null, null);
+        return new User(null, null, null, Collections.emptyList());
     }
 
     @Override
