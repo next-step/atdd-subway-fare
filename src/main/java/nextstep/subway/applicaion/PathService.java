@@ -1,6 +1,8 @@
 package nextstep.subway.applicaion;
 
 import java.util.List;
+import nextstep.common.exception.CustomException;
+import nextstep.common.exception.PathErrorMessage;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
@@ -23,6 +25,8 @@ public class PathService {
     }
 
     public PathResponse findPath(Long source, Long target, PathType pathType, int age) {
+        validateAge(age);
+
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -31,5 +35,11 @@ public class PathService {
         Path path = pathFinder.findPath(upStation, downStation, pathType, age);
 
         return PathResponse.of(path);
+    }
+
+    private void validateAge(int age) {
+        if (age < 0) {
+            throw new CustomException(PathErrorMessage.AGE_NEGATIVE);
+        }
     }
 }

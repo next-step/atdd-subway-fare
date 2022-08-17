@@ -239,6 +239,11 @@ public class PathServiceMockTest {
     경로_조회_정보_비교(result, 3, 56, 8, 1_840);
   }
 
+  @Test
+  void 나이_음수_에러() {
+    assertThatThrownBy(() -> pathService.findPath(교대역_id, 교대역_id, PathType.DURATION, -1)).isInstanceOf(CustomException.class);
+  }
+
   private void 경로_조회_정보_비교(PathResponse result, int 지하쳘역_갯수, int 거리, int 시간, int 요금) {
     assertAll(
         () -> assertThat(result.getStations().size()).isEqualTo(지하쳘역_갯수),
