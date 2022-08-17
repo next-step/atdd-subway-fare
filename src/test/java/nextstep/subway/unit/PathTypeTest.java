@@ -7,6 +7,8 @@ import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,6 +42,16 @@ public class PathTypeTest {
         int duration = PathType.valueOf("DURATION").getValue(강남_역삼);
 
         assertThat(duration).isEqualTo(5);
+    }
+
+    @DisplayName("유형별로 알맞는 거리값이 나오는지 확인")
+    @ParameterizedTest(name = "{index} ==> ''{0}'' 선택시 ''{1}''가 출력되어야 함")
+    @CsvSource({
+            "DISTANCE, 10",
+            "DURATION, 5"
+    })
+    void getValuePerType(String type, int value) {
+        assertThat(PathType.valueOf(type).getValue(강남_역삼)).isEqualTo(value);
     }
 
 }

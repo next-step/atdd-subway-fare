@@ -25,4 +25,5 @@ public class PathService {
 
         return PathResponse.of(path);
     }
+
 }
