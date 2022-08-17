@@ -66,7 +66,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 교대역, 남부터미널역, 양재역),
-            () -> 경로_정보_비교(response, 5, 5, 2_250)
+            () -> 경로_정보_비교(response, 5, 5, 1_750)
         );
     }
 
@@ -212,7 +212,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> 지하철역_경로_비교(response, 남부터미널역, 교대역, 강남역),
-            () -> 경로_정보_비교(response, 14, 6, 1_000)
+            () -> 경로_정보_비교(response, 14, 6, 750)
         );
     }
 
