@@ -45,7 +45,11 @@ public class SubwayFareTest {
 
     @DisplayName("거리별 요금")
     @ParameterizedTest
-    @CsvSource({"9,0", "46,800", "56, 900"})
+    @CsvSource({
+            "9,0",
+            "46,800",
+            "56, 900"
+    })
     public void calculateFarePerDistance(int distance, int overFare) {
         totalFare = fare.calculateFare(distance);
         assertThat(totalFare).isEqualTo(baseFare + overFare);
