@@ -18,7 +18,10 @@ public class UserDetailsAuthenticationProvider implements AuthenticationManager 
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal);
         checkAuthentication(userDetails, authenticationToken);
 
-        return new Authentication(userDetails.getUsername(), userDetails.getAuthorities());
+        return new Authentication(
+                userDetails.getUsername(),
+                userDetails.getAuthorities(),
+                userDetails.getAge());
     }
 
     private void checkAuthentication(UserDetails userDetails, AuthenticationToken token) {

@@ -6,6 +6,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -175,6 +176,13 @@ public class Sections {
         return sections.stream()
                 .mapToInt(Section::getDuration)
                 .sum();
+    }
+
+    public int maxPrice() {
+        return sections.stream()
+                .mapToInt(section -> section.getLine().getPrice())
+                .max()
+                .orElseThrow(NoSuchElementException::new);
     }
 
 }

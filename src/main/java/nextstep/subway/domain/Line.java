@@ -5,6 +5,9 @@ import java.util.List;
 
 @Entity
 public class Line {
+
+    private static final int DEFAULT_FARE = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,12 +17,19 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
+    private int price;
+
     public Line() {
     }
 
     public Line(String name, String color) {
+        this(name, color, DEFAULT_FARE);
+    }
+
+    public Line(String name, String color, int price) {
         this.name = name;
         this.color = color;
+        this.price = price;
     }
 
     public Long getId() {
@@ -36,6 +46,10 @@ public class Line {
 
     public List<Section> getSections() {
         return sections.getSections();
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     public void update(String name, String color) {
@@ -58,4 +72,5 @@ public class Line {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
 }
