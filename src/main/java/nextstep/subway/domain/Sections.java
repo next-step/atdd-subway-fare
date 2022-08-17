@@ -161,25 +161,7 @@ public class Sections {
     }
 
     public int totalFare() {
-
-        if (totalDistance() <= 10) {
-            return 1250;
-        }
-
-        if (totalDistance() <= 50) {
-            return 1250 + calculateOverFareBetweenTenAndFifty(totalDistance());
-        }
-
-        return 1250 + calculateOverFareBetweenTenAndFifty(50) + calculateOverFareDistanceOverFifty(totalDistance());
-
+        return DistanceFarePolicy.create(totalDistance()).calculateFare();
     }
-
-    private int calculateOverFareBetweenTenAndFifty(int distance) {
-        return (int) ((Math.ceil((distance - 11) / 5) + 1) * 100);
-    }
-
-    private int calculateOverFareDistanceOverFifty(int distance) {
-        return (int) ((Math.ceil((distance - 51) / 8) + 1) * 100);
-    }
-
+    
 }
