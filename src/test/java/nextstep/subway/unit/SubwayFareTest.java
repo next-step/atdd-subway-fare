@@ -1,7 +1,5 @@
 package nextstep.subway.unit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import nextstep.subway.domain.SubwayFare;
 import nextstep.subway.domain.SubwayFarePolicyType;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayFareTest {
     private final int baseFare = 1250;
@@ -25,14 +25,14 @@ public class SubwayFareTest {
     @Test
     public void calculateBaseDistance() {
 
-        totalFare = subwayFare.calculateFare(9);
+        totalFare = subwayFare.calculateFare(0, 9);
         assertThat(totalFare).isEqualTo(baseFare);
     }
 
     @DisplayName("50km 이하의 거리 요금")
     @Test
     public void calculateOverDistance() {
-        totalFare = subwayFare.calculateFare(46);
+        totalFare = subwayFare.calculateFare(0, 46);
         assertThat(totalFare).isEqualTo(baseFare + 800);
 
     }
@@ -40,7 +40,7 @@ public class SubwayFareTest {
     @DisplayName("50Km 초과의 거리 요금")
     @Test
     public void calculateOverLongDistance() {
-        totalFare = subwayFare.calculateFare(56);
+        totalFare = subwayFare.calculateFare(0, 56);
         assertThat(totalFare).isEqualTo(baseFare + 900);
     }
 
@@ -52,20 +52,20 @@ public class SubwayFareTest {
             "56, 900"
     })
     public void calculateFarePerDistance(int distance, int overFare) {
-        totalFare = subwayFare.calculateFare(distance);
+        totalFare = subwayFare.calculateFare(0, distance);
         assertThat(totalFare).isEqualTo(baseFare + overFare);
     }
 
     @DisplayName("나이별 할인 요금")
     @ParameterizedTest
     @CsvSource({
-            "1250, CHILD, 450",
-            "2150, YOUTH, 1440",
-            "2550, ADULT, 2550"
+            "9, CHILD, 450",
+            "46, YOUTH, 1360",
+            "56, ADULT, 2150"
     })
-    public void discountFarePerAgr(int totalFare, String person, int discountFare) {
+    public void discountFarePerAge(int totalDistance, String person, int discountFare) {
         SubwayFare subwayFare = new SubwayFare(SubwayFarePolicyType.valueOf(person));
-        int results = subwayFare.discountFare(totalFare);
+        int results = subwayFare.calculateFare(0, totalDistance);
         assertThat(results).isEqualTo(discountFare);
     }
 }
