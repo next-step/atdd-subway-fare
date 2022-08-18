@@ -20,7 +20,7 @@ class TeenagerDiscountPolicyTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {12, 13, 15, 18, 19})
+    @ValueSource(ints = {-1, 12, 13, 15, 18, 19})
     void teenagerSupport(int age) {
         TeenagerDiscountPolicy teenagerDiscountPolicy = new TeenagerDiscountPolicy();
 
