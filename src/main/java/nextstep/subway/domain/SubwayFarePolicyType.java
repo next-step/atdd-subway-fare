@@ -12,11 +12,27 @@ public enum SubwayFarePolicyType {
     private int deductionFare;
     private double discountPercent;
 
-    SubwayFarePolicyType(int minAge, int maxAge, int deductionFare, double discountPercent) {
+    SubwayFarePolicyType(Integer minAge, Integer maxAge, int deductionFare, double discountPercent) {
         this.minAge = minAge;
         this.maxAge = maxAge;
         this.deductionFare = deductionFare;
         this.discountPercent = discountPercent;
+    }
+
+    public static SubwayFarePolicyType byAge(Integer age){
+
+        if(SubwayFarePolicyType.CHILD.getMinAge() > age && age >0){
+            return SubwayFarePolicyType.INFANT;
+        }
+        if (SubwayFarePolicyType.CHILD.getMaxAge() >= age
+                && SubwayFarePolicyType.CHILD.getMinAge() <= age) {
+            return SubwayFarePolicyType.CHILD;
+        }
+        if (SubwayFarePolicyType.YOUTH.getMaxAge() >= age
+                && SubwayFarePolicyType.YOUTH.getMinAge() <= age) {
+            return SubwayFarePolicyType.YOUTH;
+        }
+        return SubwayFarePolicyType.ADULT;
     }
 
     public int getMinAge() {
@@ -34,4 +50,6 @@ public enum SubwayFarePolicyType {
     public double getDiscountPercent() {
         return discountPercent;
     }
+
+
 }
