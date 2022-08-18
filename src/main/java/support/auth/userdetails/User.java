@@ -5,11 +5,13 @@ import java.util.List;
 public class User implements UserDetails {
     private String username;
     private String password;
+    private Integer age;
     private List<String> authorities;
 
-    public User(String username, String password, List<String> authorities) {
+    public User(String username, String password, Integer age, List<String> authorities) {
         this.username = username;
         this.password = password;
+        this.age = age;
         this.authorities = authorities;
     }
 
@@ -21,6 +23,11 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public int getAge() {
+        return age;
     }
 
     @Override

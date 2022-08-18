@@ -8,9 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -43,7 +40,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청(관리자, "2호선", "green", 교대역, 강남역, 10, 1);
-        신분당선 = 지하철_노선_생성_요청(관리자, "신분당선", "red", 강남역, 양재역, 10, 2);
+        신분당선 = 지하철_노선_생성_요청(관리자, "신분당선", "red", 강남역, 양재역, 10, 2, 900);
         삼호선 = 지하철_노선_생성_요청(관리자, "3호선", "orange", 교대역, 남부터미널역, 2, 3);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, 남부터미널역, 양재역, 3, 4);
@@ -57,7 +54,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250);
     }
 
 
@@ -70,7 +67,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(3);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_350);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
@@ -89,12 +86,4 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
-        return params;
-    }
 }

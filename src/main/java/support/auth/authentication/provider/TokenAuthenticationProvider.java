@@ -20,9 +20,9 @@ public class TokenAuthenticationProvider implements AuthenticationManager {
         }
 
         String principal = jwtTokenProvider.getPrincipal(authenticationToken.getPrincipal());
+        int age = jwtTokenProvider.getAge(authenticationToken.getPrincipal());
         List<String> roles = jwtTokenProvider.getRoles(authenticationToken.getPrincipal());
 
-        Authentication authentication = new Authentication(principal, roles);
-        return authentication;
+        return new Authentication(principal, age, roles);
     }
 }

@@ -8,8 +8,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps extends AcceptanceTestSteps {
+
     public static Long 지하철_노선_생성_요청(String token, String name, String color, Long upStation,
                                     Long downStation, int distance, int duration) {
+        return 지하철_노선_생성_요청(token, name, color, upStation, downStation, distance, duration, 0);
+    }
+
+    public static Long 지하철_노선_생성_요청(String token, String name, String color, Long upStation,
+                                    Long downStation, int distance, int duration, int fare) {
+        Map<String, String> lineCreateParams = lineCreateParams(name, color, upStation, downStation, distance, duration, fare);
+        return LineSteps.지하철_노선_생성_요청(token, lineCreateParams).jsonPath().getLong("id");
+    }
+
+    private static Map<String, String> lineCreateParams(String name, String color, Long upStation, Long downStation,
+                                                        int distance, int duration, int fare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -18,16 +30,14 @@ public class LineSteps extends AcceptanceTestSteps {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("fare", fare + "");
 
-        return LineSteps.지하철_노선_생성_요청(token, lineCreateParams).jsonPath().getLong("id");
+        return lineCreateParams;
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, String name, String color) {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", name);
-        params.put("color", color);
         return given(token)
-                .body(params)
+                .body(Map.of("name", name, "color", color))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all().extract();

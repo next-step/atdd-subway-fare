@@ -156,5 +156,9 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
+    public List<Line> allLinesPassingBy() {
+        return sections.stream().map(Section::getLine).distinct().collect(Collectors.toList());
+    }
+
 
 }
