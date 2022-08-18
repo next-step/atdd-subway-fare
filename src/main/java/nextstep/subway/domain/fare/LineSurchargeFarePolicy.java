@@ -3,17 +3,14 @@ package nextstep.subway.domain.fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
+import org.springframework.stereotype.Component;
 
-public class LineSurchargeFareCalculator extends AbstractFareCalculatorChain {
-
-    @Override
-    public boolean support(Path path) {
-        return true;
-    }
+@Component
+public class LineSurchargeFarePolicy implements FarePolicy {
 
     @Override
-    protected int convert(Path path, int initialFare) {
-        return initialFare + getMaximumSurcharge(path);
+    public int fare(Path path) {
+        return getMaximumSurcharge(path);
     }
 
     private int getMaximumSurcharge(Path path) {

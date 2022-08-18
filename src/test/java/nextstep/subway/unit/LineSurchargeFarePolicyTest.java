@@ -1,15 +1,14 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.*;
-import nextstep.subway.domain.fare.FareCalculatorChain;
-import nextstep.subway.domain.fare.LineSurchargeFareCalculator;
+import nextstep.subway.domain.fare.LineSurchargeFarePolicy;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LineSurchargeFareCalculatorTest {
+class LineSurchargeFarePolicyTest {
 
     private Line 신분당선;
     private Line 분당선;
@@ -36,9 +35,9 @@ class LineSurchargeFareCalculatorTest {
                 new Section(분당선, 정자역, 수내역, 3, 1)
         ));
         Path path = new Path(sections);
-        FareCalculatorChain lineSurchargeFareCalculator = new LineSurchargeFareCalculator();
+        LineSurchargeFarePolicy lineSurchargeFarePolicy = new LineSurchargeFarePolicy();
 
-        var fare = lineSurchargeFareCalculator.calculate(path, 0);
+        var fare = lineSurchargeFarePolicy.fare(path);
 
         assertThat(fare).isEqualTo(신분당선.getSurcharge());
     }

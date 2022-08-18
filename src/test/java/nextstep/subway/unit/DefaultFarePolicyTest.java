@@ -2,8 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Sections;
-import nextstep.subway.domain.fare.DefaultFareCalculator;
-import nextstep.subway.domain.fare.FareCalculatorChain;
+import nextstep.subway.domain.fare.DefaultFarePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DefaultFareCalculatorTest {
+class DefaultFarePolicyTest {
 
     private Path path;
 
@@ -22,7 +21,7 @@ class DefaultFareCalculatorTest {
 
     @Test
     void defaultFare() {
-        FareCalculatorChain defaultFareCalculator = new DefaultFareCalculator();
-        assertThat(defaultFareCalculator.calculate(path, 0)).isEqualTo(1250);
+        DefaultFarePolicy policy = new DefaultFarePolicy();
+        assertThat(policy.fare(path)).isEqualTo(1250);
     }
 }

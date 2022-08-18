@@ -4,7 +4,7 @@ import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.discount.DiscountPolicy;
-import nextstep.subway.domain.fare.FareCalculatorChain;
+import nextstep.subway.domain.fare.FarePolicy;
 import org.springframework.stereotype.Service;
 import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
@@ -15,22 +15,25 @@ import java.util.Objects;
 @Service
 public class FareService {
 
-    private final FareCalculatorChain fareCalculatorChain;
-    private final MemberService memberService;
+    private final List<FarePolicy> farePolicies;
     private final List<DiscountPolicy> discountPolicies;
+    private final MemberService memberService;
 
     public FareService(
-            FareCalculatorChain fareCalculator,
-            MemberService memberService,
-            List<DiscountPolicy> discountPolicies
+            List<FarePolicy> farePolicies,
+            List<DiscountPolicy> discountPolicies,
+            MemberService memberService
     ) {
-        this.fareCalculatorChain = fareCalculator;
-        this.memberService = memberService;
+        this.farePolicies = farePolicies;
         this.discountPolicies = discountPolicies;
+        this.memberService = memberService;
     }
 
     public int calculate(Path path) {
-        int fare = fareCalculatorChain.calculate(path, 0);
+        int fare = farePolicies
+                .stream()
+                .mapToInt(policy -> policy.fare(path))
+                .sum();
         return discount(fare);
     }
 

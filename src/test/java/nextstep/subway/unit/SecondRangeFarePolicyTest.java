@@ -1,8 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.fare.FareCalculatorChain;
-import nextstep.subway.domain.fare.SecondRangeFareCalculator;
+import nextstep.subway.domain.fare.SecondRangeFarePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SecondRangeFareCalculatorTest {
+class SecondRangeFarePolicyTest {
     private Path path;
 
     @BeforeEach
@@ -33,9 +32,9 @@ class SecondRangeFareCalculatorTest {
     })
     void firstRangeFare(int distance, int expectedFare) {
         when(path.extractDistance()).thenReturn(distance);
-        FareCalculatorChain calculator = new SecondRangeFareCalculator();
+        SecondRangeFarePolicy policy = new SecondRangeFarePolicy();
 
-        int fare = calculator.calculate(path, 0);
+        int fare = policy.fare(path);
 
         assertThat(fare).isEqualTo(expectedFare);
     }
