@@ -14,7 +14,7 @@ public class JwtTokenProvider {
         this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    public String createToken(String principal, List<String> roles) {
+    public String createToken(String principal, Integer age, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(principal);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -23,6 +23,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
+                .claim("age", age)
                 .claim("roles", roles)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
@@ -30,6 +31,10 @@ public class JwtTokenProvider {
 
     public String getPrincipal(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Integer getAge(String token){
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age", Integer.class);
     }
 
     public List<String> getRoles(String token) {
