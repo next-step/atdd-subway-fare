@@ -159,4 +159,9 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int totalFare() {
+        return DistanceFarePolicy.create(totalDistance()).calculateFare();
+    }
+    
 }

@@ -12,8 +12,9 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
-import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
+import static nextstep.subway.domain.PathType.DISTANCE;
+import static nextstep.subway.domain.PathType.DURATION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -31,24 +32,24 @@ public class PathDocumentation extends Documentation {
     void pathByDistance() {
 
         PathResponse pathResponse = new PathResponse(
-                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5);
+                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
         when(pathService.findPath(any(), anyLong(), anyLong())).thenReturn(pathResponse);
 
         AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet());
 
-        두_역의_최단_거리_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
+        두_역의_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L, DISTANCE);
     }
 
     @Test
     void pathByDuration() {
 
         PathResponse pathResponse = new PathResponse(
-                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5);
+                Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
         when(pathService.findPath(any(PathType.class), anyLong(), anyLong())).thenReturn(pathResponse);
 
-        두_역의_최소_시간_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
+        두_역의_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L, DURATION);
     }
 
     private ResponseFieldsSnippet getResponseFieldsSnippet() {
@@ -56,7 +57,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 ID"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경과 시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경과 시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("운행ㄴ 요금")
         );
     }
 
