@@ -65,7 +65,7 @@ class LineServiceMockTest {
     void 추가_요금_있는_라인_생성() {
         when(lineRepository.findById(이호선.getId())).thenReturn(Optional.of(이호선));
 
-        Line line = lineService.findById(1L);
+        Line line = lineService.findById(이호선.getId());
 
         assertThat(line.getExtraFare()).isEqualTo(500);
     }

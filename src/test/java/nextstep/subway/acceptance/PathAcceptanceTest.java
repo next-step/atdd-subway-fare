@@ -55,7 +55,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
      * Then 총 거리와 소요 시간을 함께 응답함
      */
     @Test
@@ -71,7 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 총 거리와 소요 시간을 함께 응답함
      */
     @Test
@@ -87,7 +87,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -103,7 +103,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -119,7 +119,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -135,7 +135,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 10KM 이내 최소 시간 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 10KM 이내 최소 시간 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -151,7 +151,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 10KM 초과 50KM 이하 최소 시간 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 10KM 초과 50KM 이하 최소 시간 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -167,7 +167,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 비회원 출발역에서 도착역까지의 50KM 초과 최소 시간 경로 조회를 요청
+     * When 비회원이 출발역에서 도착역까지의 50KM 초과 최소 시간 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
@@ -183,13 +183,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 어린이 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Given 어린이 회원 로그인 요청
+     * When 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 어린이_두_역_10KM_이내_최단_거리_경로_조회() {
-        // when
+        // given
         어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어린이, 교대역, 양재역, PathType.DISTANCE.name());
 
         // then
@@ -200,13 +203,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 어린이 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Given 어린이 회원 로그인 요청
+     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 어린이_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
-        // when
+        // given
         어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어린이, 남부터미널역, 강남역, PathType.DISTANCE.name());
 
         // then
@@ -217,13 +223,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 어린이 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Given 어린이 회원 로그인 요청
+     * When 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 어린이_두_역_경로_50KM_초과_최단_거리_경로_조회() {
-        // when
+        // given
         어린이 = 로그인_되어_있음(CHILD_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어린이, 남부터미널역, 도곡역, PathType.DISTANCE.name());
 
         // then
@@ -234,13 +243,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When  청소년 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Given 청소년 회원 로그인 요청
+     * When  출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 청소년_두_역_10KM_이내_최단_거리_경로_조회() {
-        // when
+        // given
         청소년 = 로그인_되어_있음(TEEN_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(청소년, 교대역, 양재역, PathType.DISTANCE.name());
 
         // then
@@ -251,13 +263,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 청소년 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Given 청소년 회원 로그인 요청
+     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 청소년_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
-        // when
+        // given
         청소년 = 로그인_되어_있음(TEEN_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(청소년, 남부터미널역, 강남역, PathType.DISTANCE.name());
 
         // then
@@ -268,13 +283,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 청소년 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Given 청소년 회원 로그인 요청
+     * When 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 청소년_두_역_경로_50KM_초과_최단_거리_경로_조회() {
-        // when
+        // given
         청소년 = 로그인_되어_있음(TEEN_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(청소년, 남부터미널역, 도곡역, PathType.DISTANCE.name());
 
         // then
@@ -285,13 +303,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When  어른 출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
+     * Given 어른 회원 로그인 요청
+     * When  출발역에서 도착역까지의 10KM 이내 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 어른_두_역_10KM_이내_최단_거리_경로_조회() {
-        // when
+        // given
         어른 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어른, 교대역, 양재역, PathType.DISTANCE.name());
 
         // then
@@ -302,13 +323,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 어른 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
+     * Given 어른 회원 로그인 요청
+     * When 출발역에서 도착역까지의 10KM 초과 50KM 이하 최단 거리 경로 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 어른_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
-        // when
+        // given
         어른 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어른, 남부터미널역, 강남역, PathType.DISTANCE.name());
 
         // then
@@ -319,13 +343,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 어른 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
+     * Given 어른 회원 로그인 요청
+     * When 출발역에서 도착역까지의 50KM 초과 경로 최단 거리 조회를 요청
      * Then 총 거리와 소요 시간, 요금을 함께 응답함
      */
     @Test
     void 어른_두_역_경로_50KM_초과_최단_거리_경로_조회() {
-        // when
+        // given
         어른 = 로그인_되어_있음(ADULT_EMAIL, PASSWORD);
+
+        // when
         ExtractableResponse<Response> response = 로그인_회원_두_역의_경로_조회를_요청(어른, 남부터미널역, 도곡역, PathType.DISTANCE.name());
 
         // then

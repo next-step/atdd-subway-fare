@@ -2,6 +2,8 @@ package nextstep.subway.domain;
 
 import javax.persistence.*;
 import java.util.List;
+import nextstep.common.exception.CustomException;
+import nextstep.common.exception.LineErrorMessage;
 
 @Entity
 public class Line {
@@ -15,19 +17,24 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
-    public Line() {
-    }
+    public Line() {}
 
     public Line(String name, String color) {
-        this.name = name;
-        this.color = color;
-        this.extraFare = 0;
+        this(name, color, 0);
     }
 
     public Line(String name, String color, int extraFare) {
+        validateExtraFare(extraFare);
+
         this.name = name;
         this.color = color;
         this.extraFare = extraFare;
+    }
+
+    private void validateExtraFare(int extraFare) {
+        if (extraFare < 0) {
+            throw new CustomException(LineErrorMessage.LINE_EXTRA_FARE_NEGATIVE);
+        }
     }
 
     public Long getId() {

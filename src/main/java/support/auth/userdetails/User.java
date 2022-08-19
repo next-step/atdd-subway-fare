@@ -1,6 +1,7 @@
 package support.auth.userdetails;
 
 import java.util.List;
+import java.util.Optional;
 
 public class User implements UserDetails {
     private String username;
@@ -8,9 +9,7 @@ public class User implements UserDetails {
     private int age;
     private List<String> authorities;
 
-    public User() {
-        this.age = 30;
-    }
+    public User() {}
 
     public User(String username, String password, int age, List<String> authorities) {
         this.username = username;
@@ -31,7 +30,7 @@ public class User implements UserDetails {
 
     @Override
     public int getAge() {
-        return age;
+        return Optional.of(age).orElse(Integer.MAX_VALUE);
     }
 
     @Override

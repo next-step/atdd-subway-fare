@@ -21,7 +21,7 @@ public class LineSteps extends AcceptanceTestSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 추가_요금_지하철_노선_생성_요청(String token, String name, String color, int extraFare) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String token, String name, String color, int extraFare) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);

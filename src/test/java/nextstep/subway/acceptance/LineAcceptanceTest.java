@@ -36,7 +36,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLineExtraFare() {
         // when
-        ExtractableResponse<Response> response = 추가_요금_지하철_노선_생성_요청(관리자, "2호선", "green", 500);
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청(관리자, "2호선", "green", 500);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
