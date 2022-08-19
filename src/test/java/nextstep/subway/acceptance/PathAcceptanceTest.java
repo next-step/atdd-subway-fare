@@ -54,7 +54,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathByDistance() {
+    void 거리기준_최단_경로_조회() {
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
@@ -70,7 +70,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("두 역의 최단 소요시간 경로를 조회한다.")
     @Test
-    void findPathByDuration() {
+    void 소요시간_기준_최단거리_조회() {
         //when
         ExtractableResponse<Response> response = 두_역의_최단_소요시간_경로_조회를_요청(교대역, 양재역);
 
@@ -87,13 +87,16 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("두 역의 최단 거리 경로 운임 요금을 조회한다.")
     @Test
-    void FindFaresOnThePathByDistance() {
+    void 최단거리_기준_운임요금_조회() {
         //when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         //then
         최단_거리_경로_운임요금_조회_검증(response, BASE_FARE, 교대역, 남부터미널역, 양재역);
     }
+
+
+
 
     private void 최단_거리_경로_운임요금_조회_검증(ExtractableResponse<Response> response, int fare, Long ... stationIds) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
