@@ -4,9 +4,13 @@ import nextstep.subway.domain.service.chain.FareChain;
 import nextstep.subway.domain.service.chain.FareChainCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,56 +22,37 @@ public class FareChainTest {
     private FareChain basicChain;
 
     @Autowired
-    @Qualifier("tenToFiftyKiloFareCalculator")
+    @Qualifier("mediumDistancePassengerFareCalculator")
     private FareChain tenToFiftyChain;
 
     @Autowired
-    @Qualifier("overFiftyKiloFareCalculator")
+    @Qualifier("longDistancePassengerFareCalculator")
     private FareChain overToFiftyChain;
 
     private FareChainCalculator fareChainCalculator;
 
     @BeforeEach
     void setUp() {
-        fareChainCalculator = new FareChainCalculator(basicChain, tenToFiftyChain, overToFiftyChain);
+        Map<String, FareChain> fareChainMap = Map.of(
+                "basicFareCalculator", basicChain,
+                "mediumDistancePassengerFareCalculator", tenToFiftyChain,
+                "longDistancePassengerFareCalculator", overToFiftyChain
+        );
+
+        fareChainCalculator = new FareChainCalculator(fareChainMap);
     }
 
-    @Test
-    void basicCalculator() {
-        final int oneDistance = 1;
-        final int tenDistance = 10;
-        final int baseFare = 1250;
+    /*
+     * 거리가 10일 경우 기본요금 1250
+     * 거리가 11일 경우 1350 (5km 마다 100원씩 추가요금 부여)
+     * 거리가 51일 경우 2150 (8km 마다 100원씩 추가요금 부여)
+     */
+    @ParameterizedTest
+    @CsvSource(value = {"10:1250", "11:1350", "51:2150"}, delimiter = ':')
+    void calculate(String distance, String fare) {
+        int extractFare = fareChainCalculator.operate(Integer.parseInt(distance));
 
-        int 거리가_1_일때_요금 = fareChainCalculator.operate(oneDistance);
-        int 거리가_10_일때_요금 = fareChainCalculator.operate(tenDistance);
-
-        assertThat(거리가_1_일때_요금).isEqualTo(baseFare);
-        assertThat(거리가_10_일때_요금).isEqualTo(baseFare);
-    }
-
-
-    @Test
-    void tenToFiftyCalculator() {
-        final int fiftyDistance = 50;
-        final int elevenDistance = 11;
-        final int fiftyFare = 2050;
-        final int elevenFare = 1350;
-
-        int 거리가_50_일때_요금 = fareChainCalculator.operate(fiftyDistance);
-        int 거리가_11_일때_요금 = fareChainCalculator.operate(elevenDistance);
-
-        assertThat(거리가_50_일때_요금).isEqualTo(fiftyFare);
-        assertThat(거리가_11_일때_요금).isEqualTo(elevenFare);
-    }
-
-    @Test
-    void overToFiftyCalculator() {
-        final int distance = 51;
-        final int fiftyOneFare = 2150;
-
-        int 거리가_51_일때_요금 = fareChainCalculator.operate(distance);
-
-        assertThat(거리가_51_일때_요금).isEqualTo(fiftyOneFare);
+        assertThat(extractFare).isEqualTo(Integer.parseInt(fare));
     }
 
 

@@ -3,7 +3,7 @@ package nextstep.subway.domain.service.chain;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TenToFiftyKiloFareCalculator implements FareChain {
+public class MediumDistancePassengerFareCalculator implements FareChain {
     private static final int MAX_DISTANCE = 50;
 
     private FareChain nextChain;
