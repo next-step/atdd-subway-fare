@@ -40,6 +40,6 @@ public class Favorite {
     }
 
     public boolean isCreatedBy(Long memberId) {
-        return this.memberId == memberId;
+        return this.memberId.equals(memberId);
     }
 }

@@ -43,13 +43,13 @@ class LineServiceMockTest {
         ReflectionTestUtils.setField(역삼역, "id", 2L);
         삼성역 = new Station("삼성역");
         ReflectionTestUtils.setField(삼성역, "id", 3L);
-        이호선 = new Line("2호선", "green");
+        이호선 = new Line("2호선", "green", 500);
         이호선.addSection(강남역, 역삼역, 10, 10);
         ReflectionTestUtils.setField(이호선, "id", 1L);
     }
 
     @Test
-    void addSection() {
+    void 구간_추가() {
         when(lineRepository.findById(이호선.getId())).thenReturn(Optional.of(이호선));
         when(stationService.findById(역삼역.getId())).thenReturn(역삼역);
         when(stationService.findById(삼성역.getId())).thenReturn(삼성역);
@@ -59,5 +59,14 @@ class LineServiceMockTest {
         Line line = lineService.findById(1L);
 
         assertThat(line.getSections().size()).isEqualTo(2);
+    }
+
+    @Test
+    void 추가_요금_있는_라인_생성() {
+        when(lineRepository.findById(이호선.getId())).thenReturn(Optional.of(이호선));
+
+        Line line = lineService.findById(이호선.getId());
+
+        assertThat(line.getExtraFare()).isEqualTo(500);
     }
 }

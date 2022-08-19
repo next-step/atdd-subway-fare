@@ -15,7 +15,10 @@ import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
     private static final String EMAIL = "admin@email.com";
-    private static final String PASSWORD = "password";
+    static final String CHILD_EMAIL = "child@email.com";
+    static final String TEEN_EMAIL = "teen@email.com";
+    static final String ADULT_EMAIL = "adult@email.com";
+    static final String PASSWORD = "password";
 
     @LocalServerPort
     int port;
@@ -27,6 +30,9 @@ public class AcceptanceTest {
     private DataLoader dataLoader;
 
     String 관리자;
+    String 어린이;
+    String 청소년;
+    String 어른;
 
     @BeforeEach
     public void setUp() {

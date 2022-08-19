@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.common.exception.CustomException;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -183,5 +184,10 @@ class LineTest {
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 추가_요금_음수_에러() {
+        assertThatThrownBy(() -> new Line("2호선", "green", -1)).isInstanceOf(CustomException.class);
     }
 }

@@ -1,6 +1,7 @@
 package nextstep.subway.documentation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -37,7 +38,7 @@ public class PathDocumentation extends Documentation {
             ), 10, 20, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), anyInt())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -47,7 +48,8 @@ public class PathDocumentation extends Documentation {
                     requestParameters(
                         parameterWithName("source").description("출발역 id"),
                         parameterWithName("target").description("도착역 id"),
-                        parameterWithName("pathType").description("경로 타입")
+                        parameterWithName("pathType").description("경로 타입"),
+                        parameterWithName("age").description("나이")
                     ),
                     responseFields(
                         fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로역정보"),
@@ -61,6 +63,7 @@ public class PathDocumentation extends Documentation {
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
                 .queryParam("pathType", PathType.DISTANCE.name())
+                .queryParam("age", 30)
                 .when().get("/paths")
                 .then().log().all().extract();
     }

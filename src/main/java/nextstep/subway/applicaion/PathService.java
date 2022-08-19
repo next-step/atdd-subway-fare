@@ -1,6 +1,8 @@
 package nextstep.subway.applicaion;
 
 import java.util.List;
+import nextstep.common.exception.CustomException;
+import nextstep.common.exception.PathErrorMessage;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
@@ -22,13 +24,13 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, int age) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
         PathFinder pathFinder = new PathFinderImpl(lines);
-        Path path = pathFinder.findPath(upStation, downStation, pathType);
+        Path path = pathFinder.findPath(upStation, downStation, pathType, age);
 
         return PathResponse.of(path);
     }

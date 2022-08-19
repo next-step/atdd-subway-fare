@@ -26,7 +26,8 @@ public class PathFinderImpl implements PathFinder {
   }
 
   @Override
-  public Path findPath(Station source, Station target, PathType pathType) {
+  public Path findPath(Station source, Station target, PathType pathType, int age) {
+    validateAge(age);
     validateStationEquals(source, target);
 
     addStationGraph();
@@ -34,7 +35,13 @@ public class PathFinderImpl implements PathFinder {
     Sections sections = getShortestPath(source, target, pathType);
     int shortDistance = getShortDistance(source, target, pathType, sections);
 
-    return new Path(sections, shortDistance);
+    return new Path(sections, shortDistance, age);
+  }
+
+  private void validateAge(int age) {
+    if (age < 0) {
+      throw new CustomException(PathErrorMessage.AGE_NEGATIVE);
+    }
   }
 
   private void validateStationEquals(Station source, Station target) {

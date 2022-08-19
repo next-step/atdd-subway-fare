@@ -54,9 +54,9 @@ public class PathServiceTest {
     도곡역 = stationRepository.save(new Station("도곡역")).getId();
     대치역 = stationRepository.save(new Station("대치역")).getId();
 
-    신분당선 = lineRepository.save(new Line("신분당선", "red")).getId();
-    이호선 = lineRepository.save(new Line("2호선", "red")).getId();
-    삼호선 = lineRepository.save(new Line("3호선", "red")).getId();
+    신분당선 = lineRepository.save(new Line("신분당선", "red", 1000)).getId();
+    이호선 = lineRepository.save(new Line("2호선", "red", 0)).getId();
+    삼호선 = lineRepository.save(new Line("3호선", "red", 500)).getId();
 
     lineService.addSection(신분당선, new SectionRequest(강남역, 양재역, 3, 3));
     lineService.addSection(이호선, new SectionRequest(교대역, 강남역, 3, 2));
@@ -68,63 +68,110 @@ public class PathServiceTest {
 
   @Test
   void 두_역_최단_거리_조회() {
-    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DISTANCE);
+    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DISTANCE, 30);
 
-    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
+    경로_조회_정보_비교(result, 3, 6, 5, 2_250);
   }
 
   @Test
   void 두_역_최소_시간_조회() {
-    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DURATION);
+    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DURATION, 30);
 
-    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
+    경로_조회_정보_비교(result, 3, 6, 5, 2_250);
   }
 
   @Test
   void 같은역_조회_에러() {
-    assertThatThrownBy(() -> pathService.findPath(교대역, 교대역, PathType.DURATION)).isInstanceOf(CustomException.class);
+    assertThatThrownBy(() -> pathService.findPath(교대역, 교대역, PathType.DURATION, 30)).isInstanceOf(CustomException.class);
   }
 
   @Test
   void 두_역_10KM_이내_최단_거리_경로_조회() {
-    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DISTANCE);
+    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DISTANCE, 30);
 
-    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
+    경로_조회_정보_비교(result, 3, 6, 5, 2_250);
   }
 
   @Test
   void 두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
-    PathResponse result = pathService.findPath(남부터미널역, 강남역, PathType.DISTANCE);
+    PathResponse result = pathService.findPath(남부터미널역, 강남역, PathType.DISTANCE, 30);
 
-    경로_조회_정보_비교(result, 3, 18, 6, 1_450);
+    경로_조회_정보_비교(result, 3, 18, 6, 1_950);
   }
 
   @Test
   void 두_역_경로_50KM_초과_최단_거리_경로_조회() {
-    PathResponse result = pathService.findPath(양재역, 대치역, PathType.DISTANCE);
+    PathResponse result = pathService.findPath(양재역, 대치역, PathType.DISTANCE, 30);
 
-    경로_조회_정보_비교(result, 3, 56, 8, 2_150);
+    경로_조회_정보_비교(result, 3, 56, 8, 2_650);
   }
 
   @Test
   void 두_역_10KM_이내_최소_시간_경로_조회() {
-    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DURATION);
+    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DURATION, 30);
 
-    경로_조회_정보_비교(result, 3, 6, 5, 1_250);
+    경로_조회_정보_비교(result, 3, 6, 5, 2_250);
   }
 
   @Test
   void 두_역_10KM_초과_50KM_이하_최소_시간_경로_조회() {
-    PathResponse result = pathService.findPath(남부터미널역, 강남역, PathType.DURATION);
+    PathResponse result = pathService.findPath(남부터미널역, 강남역, PathType.DURATION, 30);
 
-    경로_조회_정보_비교(result, 3, 18, 6, 1_450);
+    경로_조회_정보_비교(result, 3, 18, 6, 1_950);
   }
 
   @Test
   void 두_역_경로_50KM_초과_최소_시간_경로_조회() {
-    PathResponse result = pathService.findPath(남부터미널역, 양재역, PathType.DURATION);
+    PathResponse result = pathService.findPath(남부터미널역, 양재역, PathType.DURATION, 30);
 
-    경로_조회_정보_비교(result, 2, 58, 4, 2_150);
+    경로_조회_정보_비교(result, 2, 58, 4, 2_650);
+  }
+
+  @Test
+  void 어린이_두_역_10KM_이내_최단_거리_경로_조회() {
+    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DISTANCE, 12);
+
+    경로_조회_정보_비교(result, 3, 6, 5, 950);
+  }
+
+  @Test
+  void 어린이_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
+    PathResponse result = pathService.findPath(남부터미널역, 강남역, PathType.DISTANCE, 12);
+
+    경로_조회_정보_비교(result, 3, 18, 6, 800);
+  }
+
+  @Test
+  void 어린이_두_역_경로_50KM_초과_최단_거리_경로_조회() {
+    PathResponse result = pathService.findPath(양재역, 대치역, PathType.DISTANCE, 12);
+
+    경로_조회_정보_비교(result, 3, 56, 8, 1_150);
+  }
+
+  @Test
+  void 청소년_두_역_10KM_이내_최단_거리_경로_조회() {
+    PathResponse result = pathService.findPath(교대역, 양재역, PathType.DISTANCE, 18);
+
+    경로_조회_정보_비교(result, 3, 6, 5, 1_520);
+  }
+
+  @Test
+  void 청소년_두_역_10KM_초과_50KM_이하_최단_거리_경로_조회() {
+    PathResponse result = pathService.findPath(남부터미널역, 강남역, PathType.DISTANCE, 18);
+
+    경로_조회_정보_비교(result, 3, 18, 6, 1_280);
+  }
+
+  @Test
+  void 청소년_두_역_경로_50KM_초과_최단_거리_경로_조회() {
+    PathResponse result = pathService.findPath(양재역, 대치역, PathType.DISTANCE, 18);
+
+    경로_조회_정보_비교(result, 3, 56, 8, 1_840);
+  }
+
+  @Test
+  void 나이_음수_에러() {
+    assertThatThrownBy(() -> pathService.findPath(양재역, 대치역, PathType.DURATION, -1)).isInstanceOf(CustomException.class);
   }
 
   private void 경로_조회_정보_비교(PathResponse result, int 지하쳘역_갯수, int 거리, int 시간, int 요금) {
