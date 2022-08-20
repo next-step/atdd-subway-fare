@@ -1,15 +1,18 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Station;
+import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
 
@@ -30,9 +33,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", 500);
+        이호선 = new Line("2호선", "red", 100);
+        삼호선 = new Line("3호선", "red", 200);
 
         신분당선.addSection(강남역, 양재역, 3, 5);
         이호선.addSection(교대역, 강남역, 3, 6);

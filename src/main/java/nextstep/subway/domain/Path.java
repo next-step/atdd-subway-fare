@@ -27,11 +27,18 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare(){
-        return SubwayFare.calculateFare(shortDistance);
+    /*
+        public int extractFare(){
+            return SubwayFare.calculateFare(shortDistance);
+        }
+    */
+    public int extractExtraCharge() {
+        return sections.getMaxExtraCharge();
     }
 
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+
 }

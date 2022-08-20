@@ -31,6 +31,7 @@ public class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
 
     }
+
     private void addStationEdge(PathType pathType){
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -40,6 +41,7 @@ public class SubwayMap {
                     graph.setEdgeWeight(sectionEdge, pathType.getValue(it));
                 });
     }
+
     private void addReverseStationEdge(PathType pathType){
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -50,12 +52,14 @@ public class SubwayMap {
                     graph.setEdgeWeight(sectionEdge, pathType.getValue(it));
                 });
     }
+
     private int findShortDistance(Station source, Station target, PathType pathType, Sections sections){
         if(pathType.name().equals("DURATION")){
             return findPathByStationEdge(source, target,  PathType.valueOf("DISTANCE")).totalDistance();
         }
         return sections.totalDistance();
     }
+
     private Sections findPathByStationEdge(Station source, Station target, PathType pathType){
         graph  = new SimpleDirectedWeightedGraph<>(SectionEdge.class);;
         addStation();

@@ -1,13 +1,14 @@
 package nextstep.subway.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 
 @Embeddable
 public class Sections {
@@ -23,6 +24,12 @@ public class Sections {
 
     public List<Section> getSections() {
         return sections;
+    }
+
+    public int getMaxExtraCharge() {
+        return sections.stream()
+                .mapToInt(section -> section.getLine().getExtraCharge())
+                .max().orElseThrow(NoSuchElementException::new);
     }
 
     public void add(Section section) {

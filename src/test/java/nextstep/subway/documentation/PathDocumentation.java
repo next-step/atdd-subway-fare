@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -33,7 +32,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 4, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(anyInt(), anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
@@ -50,7 +49,11 @@ public class PathDocumentation extends Documentation {
                                         fieldWithPath("stations[].name").description("지하철역 이름"),
                                         fieldWithPath("distance").description("총 이동거리"),
                                         fieldWithPath("duration").description("총 소요 시간"),
-                                        fieldWithPath("fare").description("운임 요금")
+                                        fieldWithPath("fare")
+                                                .description(
+                                                        "운임 요금 +" + "\n" +
+                                                                "(청소년(13~18) : 운임에서 350원을 공제한 금액의 20%할인, +" + "\n"
+                                                                + "어린이(6~12) : 운임에서 350원을 공제한 금액의 50%할인)")
                                 )
                         )
                 )
