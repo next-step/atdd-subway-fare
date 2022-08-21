@@ -16,6 +16,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 class PathDocumentation extends Documentation {
@@ -62,9 +66,25 @@ class PathDocumentation extends Documentation {
     private void 경로_조회(Long source, Long target, String type) {
         RestAssured
                 .given(spec).log().all()
-                .filter(document("path-" + type,
+                .filter(document(
+                        "path-" + type,
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("출발역 ID"),
+                                parameterWithName("target").description("도착역 ID"),
+                                parameterWithName("type").description("경로 타입 (DISTANCE, DURATION)")
+                        ),
+                        responseFields(
+                                fieldWithPath("stations").description("경로 내 역 리스트"),
+                                fieldWithPath("stations[].id").description("경로 내 역 ID"),
+                                fieldWithPath("stations[].name").description("경로 내 역 이름"),
+                                fieldWithPath("distance").description("경로의 총 거리"),
+                                fieldWithPath("duration").description("경로의 총 소요시간"),
+                                fieldWithPath("fare").description("출발-도착역간 최단거리 기준 요금")
+                        )
+                    )
+                )
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)

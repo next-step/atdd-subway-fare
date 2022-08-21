@@ -11,10 +11,12 @@ public class PathService {
 
     private final LineService lineService;
     private final StationService stationService;
+    private final FareService fareService;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, FareService fareService) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.fareService = fareService;
     }
 
     public PathResponse findPath(Long source, Long target, PathType type) {
@@ -24,12 +26,13 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path shortestPath = subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
+        int fare = fareService.calculate(shortestPath);
 
         if (PathType.DURATION.equals(type)) {
             Path path = subwayMap.findPath(upStation, downStation, type);
-            return PathResponse.of(path, shortestPath.getFare());
+            return PathResponse.of(path, fare);
         }
 
-        return PathResponse.of(shortestPath, shortestPath.getFare());
+        return PathResponse.of(shortestPath, fare);
     }
 }

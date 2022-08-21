@@ -29,15 +29,19 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 남부터미널역;
     private Long 양재시민의숲역;
     private Long 청계산입구역;
+    private Long 서현역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private Long 분당선;
+    private Integer 신분당선_추가요금 = 900;
+    private Integer 분당선_추가요금 = 300;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
+     * 교대역    --- *2호선* ---   강남역                                           서현역
+     * |                        |                                               |
+     * *3호선*                   *신분당선*                                       *분당선*
+     * |                        |                                               |
      * 남부터미널역  --- *3호선* --- 양재 --- *신분당선* --- 양재시민의숲 --- *신분당선* --- 청계산입구
      */
     @BeforeEach
@@ -50,10 +54,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재시민의숲역 = 지하철역_생성_요청(관리자, "양재시민의숲역").jsonPath().getLong("id");
         청계산입구역 = 지하철역_생성_요청(관리자, "청계산입구역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
+        서현역 = 지하철역_생성_요청(관리자, "서현역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 3);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2, 0);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2, 신분당선_추가요금);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 3, 0);
+        분당선 = 지하철_노선_생성_요청("분당선", "yellow", 청계산입구역, 서현역, 2, 3, 분당선_추가요금);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
         지하철_노선에_지하철_구간_생성_요청(관리자, 신분당선, createSectionCreateParams(양재역, 양재시민의숲역, 7, 3));
@@ -87,7 +93,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given
         var 수유역 = 지하철역_생성_요청(관리자, "수유역").jsonPath().getLong("id");
         var 쌍문역 = 지하철역_생성_요청(관리자, "쌍문역").jsonPath().getLong("id");
-        var 사호선 = 지하철_노선_생성_요청("4호선", "skyblue", 수유역, 쌍문역, 10, 2);
+        var 사호선 = 지하철_노선_생성_요청("4호선", "skyblue", 수유역, 쌍문역, 10, 2, 0);
 
         // when
         var response = 두_역의_경로_조회를_요청(교대역, 수유역, type.name());
@@ -125,8 +131,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_경로_조회를_요청(강남역, 양재시민의숲역, "DISTANCE");
 
         // then
-        // 기본요금 + 10km 초과시 5km 마다 100원
-        거리와_요금_확인(response, 17, 1250 + 200);
+        // 기본요금 + 10km 초과시 5km 마다 100원 + 신분당선 추가요금
+        거리와_요금_확인(response, 17, 1250 + 200 + 신분당선_추가요금);
     }
 
     @DisplayName("두 역의 경로 조회시 요금 반환 (50km 초과)")
@@ -136,8 +142,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_경로_조회를_요청(교대역, 청계산입구역, "DISTANCE");
 
         // then
-        // 기본요금 + 10km 초과시 5km 마다 100원 + 50km 초과시 8km 마다 100원
-        거리와_요금_확인(response, 62, 1250 + 800 + 200);
+        // 기본요금 + 10km 초과시 5km 마다 100원 + 50km 초과시 8km 마다 100원 + 신분당선 추가요금
+        거리와_요금_확인(response, 62, 1250 + 800 + 200 + 신분당선_추가요금);
     }
 
     @DisplayName("운임을 실제 경로와 관계없이 최단경로 기준으로 책정")
@@ -149,6 +155,38 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertEquals(fareA, fareB);
+    }
+
+    @DisplayName("추가 요금이 있는 노선을 이용할 경우 측정된 요금에 추가")
+    @Test
+    void fareCalculateWithAdditionalFareLine() {
+        var response = 두_역의_경로_조회를_요청(양재역, 양재시민의숲역, "DISTANCE");
+
+        거리와_요금_확인(response, 7, 1250 + 신분당선_추가요금);
+    }
+
+    @DisplayName("추가 요금이 있는 노선을 환승할 경우 가장 높은 금액만 추가")
+    @Test
+    void fareCalculateWithMaximumAdditionalLineFare() {
+        var response = 두_역의_경로_조회를_요청(교대역, 서현역, "DISTANCE");
+
+        거리와_요금_확인(response, 64, 1250 + 800 + 200 + 신분당선_추가요금);
+    }
+
+    @DisplayName("청소년 로그인 사용자의 경우 350원을 공제한 금액의 20% 할인")
+    @Test
+    void teenagerDiscount() {
+        var response = 두_역의_경로_조회를_요청(청소년, 교대역, 양재역, "DISTANCE");
+
+        거리와_요금_확인(response, 5, (int) ((1250 - 350) * 0.8));
+    }
+
+    @DisplayName("어린이 로그인 사용자의 경우 350원을 공제한 금액의 50% 할인")
+    @Test
+    void childrenDiscount() {
+        var response = 두_역의_경로_조회를_요청(어린이, 교대역, 양재역, "DISTANCE");
+
+        거리와_요금_확인(response, 5, (int) ((1250 - 350) * 0.5));
     }
 
     private void 경로_검증(ExtractableResponse<Response> response, List<Long> stations, int distance, int duration) {
@@ -170,7 +208,15 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(String token, Long source, Long target, String type) {
+        return AcceptanceTestSteps
+                .given(token)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .then().log().all().extract();
+    }
+
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -179,6 +225,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("surcharge", surcharge + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
