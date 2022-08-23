@@ -5,7 +5,7 @@ import nextstep.member.domain.MemberRepository;
 import nextstep.member.domain.RoleType;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class DataLoader {
@@ -16,7 +16,9 @@ public class DataLoader {
     }
 
     public void loadData() {
-        memberRepository.save(new Member("admin@email.com", "password", 20, Arrays.asList(RoleType.ROLE_ADMIN.name())));
-        memberRepository.save(new Member("member@email.com", "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member("admin@email.com", "password", 20, List.of(RoleType.ROLE_ADMIN.name())));
+        memberRepository.save(new Member("member@email.com", "password", 20, List.of(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member("children@email.com", "password", 7, List.of(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member("teenager@email.com", "password", 7, List.of(RoleType.ROLE_MEMBER.name())));
     }
 }
