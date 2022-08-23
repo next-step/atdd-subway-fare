@@ -26,9 +26,18 @@ public class MemberService {
     }
 
     public MemberResponse findMember(String email) {
-        Member member = memberRepository.findByEmail(email).orElse(new Guest());
+        Member member = findByEmail(email);
         return MemberResponse.of(member);
     }
+
+    public Member findMemberByUsername(String email) {
+        return findByEmail(email);
+    }
+
+    private Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElse(new Guest());
+    }
+
 
     public void updateMember(Long id, MemberRequest param) {
         Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
