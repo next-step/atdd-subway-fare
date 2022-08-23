@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class Path {
@@ -10,6 +11,13 @@ public class Path {
 
     public Sections getSections() {
         return sections;
+    }
+
+    public List<Line> findIncludedLines() {
+        List<Section> extractSections = this.sections.getSections();
+        return extractSections.stream()
+                              .map(Section::getLine)
+                              .collect(Collectors.toList());
     }
 
     public int extractDistance() {

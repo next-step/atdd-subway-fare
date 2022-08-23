@@ -1,7 +1,6 @@
 package nextstep.subway.domain.service;
 
 import lombok.AllArgsConstructor;
-import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
