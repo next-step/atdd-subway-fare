@@ -2,6 +2,7 @@ package nextstep.member.application;
 
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
+import nextstep.member.domain.Guest;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,12 @@ public class MemberService {
     }
 
     public MemberResponse findMember(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findById(id).orElse(new Guest());
         return MemberResponse.of(member);
     }
 
     public MemberResponse findMember(String email) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findByEmail(email).orElse(new Guest());
         return MemberResponse.of(member);
     }
 
