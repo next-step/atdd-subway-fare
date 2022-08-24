@@ -110,7 +110,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     void findPathByDistanceOver50km() {
         var response = 두_역의_최단_경로_조회를_요청(교대역, 선릉역, DISTANCE);
 
-        두_역의_최단_경로_정상적으로_조회됨(response, 55, 60, 2250, 교대역, 남부터미널역, 양재역, 잠실역, 선릉역);
+        두_역의_최단_경로_정상적으로_조회됨(response, 55, 60, 2150, 교대역, 남부터미널역, 양재역, 잠실역, 선릉역);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. (청소년 탑승객)")
@@ -120,7 +120,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         var response = 두_역의_최단_경로_조회를_요청(어린이, 교대역, 양재역, DISTANCE);
 
-        두_역의_최단_경로_정상적으로_조회됨(response, 5, 10, 800, 교대역, 남부터미널역, 양재역);
+        두_역의_최단_경로_정상적으로_조회됨(response, 5, 10, 530, 교대역, 남부터미널역, 양재역);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. (어린이 탑승객)")
@@ -130,7 +130,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         var response = 두_역의_최단_경로_조회를_요청(청소년, 교대역, 양재역, DISTANCE);
 
-        두_역의_최단_경로_정상적으로_조회됨(response, 5, 10, 1070, 교대역, 남부터미널역, 양재역);
+        두_역의_최단_경로_정상적으로_조회됨(response, 5, 10, 800, 교대역, 남부터미널역, 양재역);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. (추가 요금이 있는 노선을 지나는경우)")
