@@ -5,11 +5,6 @@ import java.util.List;
 
 @Entity
 public class Member {
-    private static final int CHILDREN_AGE_MIN = 6;
-    private static final int CHILDREN_AGE_MAX = 12;
-    private static final int TEENAGE_AGE_MIN = 13;
-    private static final int TEENAGE_AGE_MAX = 18;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,14 +34,6 @@ public class Member {
         this.password = password;
         this.age = age;
         this.roles = roles;
-    }
-
-    public boolean isChildren() {
-        return CHILDREN_AGE_MIN <= age && age <= CHILDREN_AGE_MAX;
-    }
-
-    public boolean isTeenage() {
-        return TEENAGE_AGE_MIN <= age && age <= TEENAGE_AGE_MAX;
     }
 
     public Long getId() {

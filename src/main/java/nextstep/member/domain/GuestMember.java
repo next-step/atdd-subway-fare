@@ -10,12 +10,7 @@ public class GuestMember extends Member {
     }
 
     @Override
-    public boolean isChildren() {
-        return false;
-    }
-
-    @Override
-    public boolean isTeenage() {
-        return false;
+    public Integer getAge() {
+        return Integer.MAX_VALUE;
     }
 }
