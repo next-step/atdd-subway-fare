@@ -25,7 +25,7 @@ class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.findPath(1L, 2L, "DISTANCE")).thenReturn(경로_생성());
+        when(pathService.findPath(null, 1L, 2L, "DISTANCE")).thenReturn(경로_생성());
 
         RestAssured
                 .given(spec).log().all()

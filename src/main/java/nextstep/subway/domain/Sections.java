@@ -25,6 +25,13 @@ public class Sections {
         return sections;
     }
 
+    public List<Line> getPassingLines() {
+        return this.sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     public void add(Section section) {
         if (this.sections.isEmpty()) {
             this.sections.add(section);
@@ -92,7 +99,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), section.getDuration()));
+                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
                     sections.remove(it);
                 });
     }
@@ -103,7 +110,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), section.getDuration()));
+                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
                     sections.remove(it);
                 });
     }

@@ -1,8 +1,9 @@
-package nextstep.subway.util;
+package nextstep.subway.util.subwaymap;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
+import nextstep.subway.util.subwaymap.ShortestDurationSubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,7 +48,7 @@ class ShortestDurationSubwayMapTest {
         ShortestDurationSubwayMap subwayMap = new ShortestDurationSubwayMap();
 
         // when
-        Path path = subwayMap.findPath(lines, 교대역, 양재역);
+        Path path = subwayMap.path(lines, 교대역, 양재역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -61,7 +62,7 @@ class ShortestDurationSubwayMapTest {
         ShortestDurationSubwayMap subwayMap = new ShortestDurationSubwayMap();
 
         // when
-        Path path = subwayMap.findPath(lines, 양재역, 교대역);
+        Path path = subwayMap.path(lines, 양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
