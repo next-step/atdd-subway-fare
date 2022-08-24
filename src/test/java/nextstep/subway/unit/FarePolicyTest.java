@@ -1,17 +1,12 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.*;
-import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
+import nextstep.subway.domain.DistanceFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FareTest {
+public class FarePolicyTest {
 
     @DisplayName("구간 거리 10km이하 요금 조회 ")
     @Test
