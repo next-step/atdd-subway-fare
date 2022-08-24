@@ -39,11 +39,11 @@ public class PathService {
         Path path = subwayMap.path(lines, upStation, downStation);
 
         if (subwayMap.isDefaultPathShortest()) {
-            return PathResponse.of(path, FareCalculator.calculate(path, member));
+            return PathResponse.of(path, FareCalculator.calculate(path, member.getAge()));
         }
 
         Path shortestPath = subwayMap.shortestPath(lines, upStation, downStation);
-        return PathResponse.of(path, FareCalculator.calculate(shortestPath, member));
+        return PathResponse.of(path, FareCalculator.calculate(shortestPath, member.getAge()));
     }
 
     private Member findMemberByEmail(String email) {

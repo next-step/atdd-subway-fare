@@ -1,28 +1,28 @@
 package nextstep.subway.util.fare;
 
-
-import nextstep.member.domain.Member;
 import nextstep.subway.domain.Path;
 
 public class FareCalculator {
-    private static final FareChain filterChain;
+    public static int calculate(Path path, int age) {
+        int distanceFare = calculateDistanceFare(path);
+        int lineSurcharge = calculateLineSurcharge(path);
+        int fare = distanceFare + lineSurcharge;
 
-    private FareCalculator() {
+        int discount = calculateAgeDiscount(fare, age);
+
+        return fare - discount;
     }
 
-    static {
-        FareChain ageFare = new AgeFare();
-        FareChain overTenKiloMeterFare = new OverTenKiloMeterFare();
-        FareChain overFiftyKiloMeterFare = new OverFiftyKiloMeterFare();
-        FareChain surchargeLineFare = new SurchargeLineFare();
-
-        filterChain = ageFare;
-        ageFare.connect(overTenKiloMeterFare);
-        overTenKiloMeterFare.connect(overFiftyKiloMeterFare);
-        overFiftyKiloMeterFare.connect(surchargeLineFare);
+    private static int calculateDistanceFare(Path path) {
+        return DistanceFarePolicy.calculate(path.extractDistance());
     }
 
-    public static int calculate(Path path, Member member) {
-        return filterChain.calculate(path, member);
+
+    private static int calculateLineSurcharge(Path path) {
+        return LineSurchargePolicy.calculate(path.getPassingLines());
+    }
+
+    private static int calculateAgeDiscount(int fare, int age) {
+        return AgeDiscountPolicy.calculate(fare, age);
     }
 }
