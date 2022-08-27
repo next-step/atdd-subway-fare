@@ -26,7 +26,7 @@ public class SubwayMapTest {
     /**
      * 교대역    --- *2호선* ---   강남역
      * |                        |
-     * *3호선*                   *신분당선*
+     * *3호선*                   *신분당선* 추가요금 900
      * |                        |
      * 남부터미널역  --- *3호선* ---   양재
      */
@@ -39,9 +39,9 @@ public class SubwayMapTest {
         고속터미널역 = createStation(5L, "고속터미널역");
         신사역 = createStation(6L, "신사역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", 900);
+        이호선 = new Line("2호선", "red", 900);
+        삼호선 = new Line("3호선", "red", 500);
 
         신분당선.addSection(강남역, 양재역, 3, 5);
         이호선.addSection(교대역, 강남역, 3, 5);
@@ -77,7 +77,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.extractDistance()).isEqualTo(6);
-        assertThat(path.extractFare()).isEqualTo(1250);
+        assertThat(path.extractFare()).isEqualTo(2150);
     }
 
 
@@ -86,9 +86,10 @@ public class SubwayMapTest {
      * |
      * 교대역    --- *2호선* ---   강남역
      * |                        |
-     * *3호선*                   *신분당선*
+     * *3호선*                   *신분당선* 추가요금 900
      * |                        |
      * 남부터미널역  --- *3호선* ---   양재
+     *                  추가요금 500
      */
     @DisplayName("최단 거리 구간 조회 구간 거리 10 ~ 50")
     @Test
@@ -103,7 +104,7 @@ public class SubwayMapTest {
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역));
         assertThat(path.extractDistance()).isEqualTo(20);
-        assertThat(path.extractFare()).isEqualTo(1450);
+        assertThat(path.extractFare()).isEqualTo(2350);
     }
 
     @DisplayName("최단 거리 구간 조회 구간 거리 50km이상")
@@ -117,7 +118,7 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(양재역, 신사역);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역, 신사역));
         assertThat(path.extractDistance()).isEqualTo(66);
-        assertThat(path.extractFare()).isEqualTo(2250);
+        assertThat(path.extractFare()).isEqualTo(3150);
     }
 
     @DisplayName("최단 시간 구간 조회")
