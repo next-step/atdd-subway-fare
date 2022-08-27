@@ -1,14 +1,14 @@
 package nextstep.subway.domain;
 
-public class ChildrenDiscountPolicy extends DistanceFarePolicy {
+public class YouthDiscountPolicy extends AgeDiscountPolicy {
 
-    public ChildrenDiscountPolicy(int distance) {
-        super(distance);
+    public YouthDiscountPolicy(int fare) {
+        super(fare);
     }
 
     @Override
-    public int calculateFare() {
-        return DEFAULT_FARE;
+    public int discount() {
+        return (int) ((getFare() - 350) * 0.8);
     }
 
 }
