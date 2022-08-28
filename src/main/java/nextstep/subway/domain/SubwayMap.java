@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import support.auth.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public abstract class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target) {
+    public Path findPath(Station source, Station target, UserDetails user) {
 
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
@@ -46,7 +47,7 @@ public abstract class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        return Path.of(Sections.of(sections), user);
     }
 
     protected abstract void registerSections(SimpleDirectedWeightedGraph<Station, SectionEdge> graph);

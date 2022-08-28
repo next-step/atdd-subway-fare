@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+import support.auth.userdetails.UserDetails;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.domain.PathType.DISTANCE;
@@ -34,7 +35,7 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
-        when(pathService.findPath(any(), anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyLong(), anyLong(), any(UserDetails.class))).thenReturn(pathResponse);
 
         AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet());
 
@@ -47,7 +48,7 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
-        when(pathService.findPath(any(PathType.class), anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(any(PathType.class), anyLong(), anyLong(), any(UserDetails.class))).thenReturn(pathResponse);
 
         두_역의_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L, DURATION);
     }
