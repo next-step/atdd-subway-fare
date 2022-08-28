@@ -17,11 +17,15 @@ public class Sections {
     public Sections() {
     }
 
-    public Sections(List<Section> sections) {
+    private Sections(List<Section> sections) {
         this.sections = sections;
     }
 
-    public List<Section> getSections() {
+    public static Sections of(List<Section> sections) {
+        return new Sections(sections);
+    }
+
+    public List<Section> sections() {
         return sections;
     }
 
