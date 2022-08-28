@@ -1,16 +1,20 @@
 package nextstep.subway.domain;
 
+import support.auth.userdetails.UserDetails;
+
 import java.util.List;
 
 public class Path {
     private Sections sections;
+    private UserDetails user;
 
-    public Path(Sections sections) {
+    private Path(Sections sections, UserDetails user) {
+        this.user = user;
         this.sections = sections;
     }
 
-    public Sections getSections() {
-        return sections;
+    public static Path of(Sections sections, UserDetails user) {
+        return new Path(sections, user);
     }
 
     public int extractDistance() {
@@ -22,10 +26,12 @@ public class Path {
     }
 
     public int extractFare() {
-        return sections.totalFare();
+        int maxAddFare = sections.sections().stream().mapToInt(section -> section.getLine().getAddFare()).filter(section -> section >= 0).max().orElse(0);
+        return sections.totalFare() + maxAddFare;
     }
 
     public List<Station> getStations() {
         return sections.getStations();
     }
+
 }
