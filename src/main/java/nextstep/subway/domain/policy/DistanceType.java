@@ -1,6 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.policy;
 
-public enum FarePolicy {
+public enum DistanceType {
     DEFAULT {
         @Override
         public int calculate(int distance) {
@@ -27,7 +27,7 @@ public enum FarePolicy {
     public static final int EVERY_5KM = 5;
     public static final int EVERY_8KM = 8;
 
-    public static FarePolicy of(int distance) {
+    public static DistanceType of(int distance) {
         if (distance < TEN_KILO_METER) {
             return DEFAULT;
         }

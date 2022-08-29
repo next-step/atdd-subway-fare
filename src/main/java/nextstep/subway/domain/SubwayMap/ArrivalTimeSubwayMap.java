@@ -1,7 +1,6 @@
 package nextstep.subway.domain.SubwayMap;
 
 import nextstep.subway.domain.ArrivalTime;
-import nextstep.subway.domain.DiscountPolicy;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
@@ -22,8 +21,8 @@ public class ArrivalTimeSubwayMap extends SubwayMap {
     }
 
     @Override
-    public Path findPath(Station source, Station target, DiscountPolicy discountPolicy, String time) {
-        Path path = super.findPath(source, target, discountPolicy, time);
+    public Path findPath(Station source, Station target, int age, String time) {
+        Path path = super.findPath(source, target, age, time);
         ArrivalTime arrivalTime = new ArrivalTime(path.getSections(), lines, time);
         return new Path(path, arrivalTime);
     }

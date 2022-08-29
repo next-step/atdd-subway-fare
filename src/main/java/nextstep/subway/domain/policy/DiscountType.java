@@ -1,6 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.policy;
 
-public enum DiscountPolicy {
+public enum DiscountType {
     BABY {
         @Override
         public int discount(int fare) {
@@ -28,7 +28,7 @@ public enum DiscountPolicy {
 
     public static final String INVALID_AGE_MESSAGE = "It starts from 1 year old in Korean age.";
 
-    public static DiscountPolicy of(int age) {
+    public static DiscountType of(int age) {
         if (age <= 0) {
             throw new IllegalArgumentException(INVALID_AGE_MESSAGE);
         }

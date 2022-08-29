@@ -1,6 +1,6 @@
 package nextstep.subway.domain.SubwayMap;
 
-import nextstep.subway.domain.DiscountPolicy;
+import nextstep.subway.domain.policy.DiscountType;
 import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -22,7 +22,7 @@ public abstract class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, DiscountPolicy discountPolicy, String time) {
+    public Path findPath(Station source, Station target, int age, String time) {
         // 다익스트라 최단 경로 찾기
         GraphPath<Station, SectionEdge> result = getGraphPath(source, target);
 
@@ -35,7 +35,7 @@ public abstract class SubwayMap {
                 .max()
                 .orElse(0);
 
-        return new Path(sections, new Fare(sections.totalDistance(), maxAdditionalFare, discountPolicy));
+        return new Path(sections, new Fare(sections.totalDistance(), maxAdditionalFare, age));
     }
 
     protected void validateConnectSection(GraphPath<Station, SectionEdge> result) {
