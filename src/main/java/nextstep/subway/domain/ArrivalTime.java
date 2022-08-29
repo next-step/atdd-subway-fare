@@ -8,14 +8,14 @@ import java.util.List;
 import static nextstep.support.entity.Formatters.DATE_TIME_PATH;
 
 public class ArrivalTime {
-    private List<Section> sections;
-    private List<Line> lines;
+    private Sections sections;
+    private Lines lines;
     private LocalDateTime dateTime;
     private LocalTime startTime;
 
     public ArrivalTime(List<Section> sections, List<Line> lines, String time) {
-        this.sections = sections;
-        this.lines = lines;
+        this.sections = new Sections(sections);
+        this.lines = new Lines(lines);
         this.dateTime = LocalDateTime.parse(time, DATE_TIME_PATH);
         this.startTime = findLine(sections.get(0)).getStartTime();
     }
@@ -28,7 +28,7 @@ public class ArrivalTime {
         LocalDateTime currentDateTime = dateTime;
         Line currentLine = null;
 
-        for (Section section : sections) {
+        for (Section section : sections.getSections()) {
             Line line = findLine(section);
             if (!line.equals(currentLine)) {
                 currentLine = line;
@@ -62,10 +62,7 @@ public class ArrivalTime {
     }
 
     private Line findLine(Section section) {
-        return lines.stream()
-                .filter(item -> item.getSections().contains(section))
-                .findFirst()
-                .get();
+        return lines.indexOf(section);
     }
 
     private LocalDateTime changeTime(LocalDateTime dateTime, LocalTime time) {
