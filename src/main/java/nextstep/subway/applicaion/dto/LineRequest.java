@@ -3,6 +3,7 @@ package nextstep.subway.applicaion.dto;
 import nextstep.subway.domain.Line;
 
 import java.time.LocalTime;
+import java.util.function.Supplier;
 
 import static java.time.format.DateTimeFormatter.ISO_TIME;
 
@@ -78,8 +79,8 @@ public class LineRequest {
         return intervalTime;
     }
 
-    public Line toLineEntity() {
-        return Line.builder()
+    public Supplier<Line> getEntitySupplier() {
+        return () -> Line.builder()
                 .name(this.name)
                 .color(this.color)
                 .additionalFare(this.additionalFare)

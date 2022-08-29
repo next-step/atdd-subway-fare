@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Entity
 public class Line {
@@ -81,21 +82,23 @@ public class Line {
         return sections.getSections();
     }
 
-    public void update(String name, String color, int additionalFare, LocalTime startTime, LocalTime endTime, int intervalTime) {
-        if (name != null) {
-            this.name = name;
+    public void update(Supplier<Line> supplier) {
+        Line line = supplier.get();
+
+        if (line.name != null) {
+            this.name = line.name;
         }
-        if (color != null) {
-            this.color = color;
+        if (line.color != null) {
+            this.color = line.color;
         }
-        this.additionalFare = additionalFare;
-        if (startTime != null) {
-            this.startTime = startTime;
+        this.additionalFare = line.additionalFare;
+        if (line.startTime != null) {
+            this.startTime = line.startTime;
         }
-        if (endTime != null) {
-            this.endTime = endTime;
+        if (line.endTime != null) {
+            this.endTime = line.endTime;
         }
-        this.intervalTime = intervalTime;
+        this.intervalTime = line.intervalTime;
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
