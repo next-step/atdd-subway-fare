@@ -150,4 +150,8 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public boolean contains(Section section) {
+        return this.sections.contains(section);
+    }
 }

@@ -19,6 +19,7 @@ import static nextstep.subway.acceptance.member.MemberSteps.로그인_되어_있
 import static nextstep.subway.acceptance.path.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -37,10 +38,10 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역", now, now),
                         new StationResponse(2L, "역삼역", now, now)
-                ), 10, 4, 1250
+                ), 10, 4, 1250, null
         );
         String accessToken = 로그인_되어_있음("member@email.com", "password");
-        when(pathService.findPath(any(User.class), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(User.class), anyLong(), anyLong(), any(PathType.class), anyString())).thenReturn(pathResponse);
 
         두_역의_최단_거리_경로_조회를_요청(given(accessToken, spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L);
     }
@@ -53,7 +54,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].modifiedDate").type(JsonFieldType.STRING).description("수정일자"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경과 시간"),
-                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금"),
+                fieldWithPath("arrivalTime").type(JsonFieldType.STRING).description("도착 시간")
         );
     }
 
@@ -61,7 +63,8 @@ public class PathDocumentation extends Documentation {
         return requestParameters(
                 parameterWithName("source").description("출발역 ID"),
                 parameterWithName("target").description("도착역 ID"),
-                parameterWithName("type").description("경로 조회 타입")
+                parameterWithName("type").description("경로 조회 타입"),
+                parameterWithName("time").description("조회 기준 시간")
         );
     }
 }

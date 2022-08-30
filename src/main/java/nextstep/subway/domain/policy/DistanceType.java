@@ -1,21 +1,21 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.policy;
 
-public enum FarePolicy {
+public enum DistanceType {
     DEFAULT {
         @Override
-        protected int calculate(int distance) {
+        public int calculate(int distance) {
             return DEFAULT_FARE;
         }
     },
     TEN_KILO {
         @Override
-        protected int calculate(int distance) {
+        public int calculate(int distance) {
             return DEFAULT_FARE + calculateOverFare(distance - TEN_KILO_METER, EVERY_5KM);
         }
     },
     FIFTY_KILO {
         @Override
-        protected int calculate(int distance) {
+        public int calculate(int distance) {
             return DEFAULT_FARE + calculateOverFare(FIFTY_KILO_METER - TEN_KILO_METER, EVERY_5KM)
                     + calculateOverFare(distance - FIFTY_KILO_METER, EVERY_8KM);
         }
@@ -27,20 +27,20 @@ public enum FarePolicy {
     public static final int EVERY_5KM = 5;
     public static final int EVERY_8KM = 8;
 
-    public static int calculateFare(int distance) {
+    public static DistanceType of(int distance) {
         if (distance < TEN_KILO_METER) {
-            return DEFAULT.calculate(distance);
+            return DEFAULT;
         }
         if (distance < FIFTY_KILO_METER) {
-            return TEN_KILO.calculate(distance);
+            return TEN_KILO;
 
         }
-        return FIFTY_KILO.calculate(distance);
+        return FIFTY_KILO;
     }
 
     protected int calculateOverFare(int distance, int overKiloMeter) {
         return (int) ((Math.ceil((distance - 1) / overKiloMeter) + 1) * 100);
     }
 
-    protected abstract int calculate(int distance);
+    public abstract int calculate(int distance);
 }

@@ -1,21 +1,39 @@
 package nextstep.subway.domain;
 
-public class Fare {
-    private int totalDistance;
-    private int additionalFare;
-    private AgeDiscountPolicy ageDiscountPolicy;
+import nextstep.subway.domain.policy.AdditionalFarePolicy;
+import nextstep.subway.domain.policy.DiscountFarePolicy;
+import nextstep.subway.domain.policy.DiscountType;
+import nextstep.subway.domain.policy.DistanceFarePolicy;
+import nextstep.subway.domain.policy.FarePolicy;
 
-    public Fare(int totalDistance, int additionalFare, AgeDiscountPolicy ageDiscountPolicy) {
-        this.totalDistance = totalDistance;
-        this.additionalFare = additionalFare;
-        this.ageDiscountPolicy = ageDiscountPolicy;
+public class Fare {
+    private FarePolicy farePolicy;
+
+    public Fare(int distance, int additionalFare, int age) {
+        this.farePolicy = new DiscountFarePolicy(
+                age,
+                new AdditionalFarePolicy(
+                        additionalFare,
+                        new DistanceFarePolicy(distance)
+                )
+        );
     }
 
-    public Fare(int totalDistance) {
-        this(totalDistance, 0, AgeDiscountPolicy.ADULT);
+    public Fare(int distance, int additionalFare, DiscountType discountType) {
+        this.farePolicy = new DiscountFarePolicy(
+                discountType,
+                new AdditionalFarePolicy(
+                        additionalFare,
+                        new DistanceFarePolicy(distance)
+                )
+        );
+    }
+
+    public Fare(int distance) {
+        this(distance, 0, DiscountType.ADULT);
     }
 
     public int value() {
-        return ageDiscountPolicy.discount(additionalFare + FarePolicy.calculateFare(totalDistance));
+        return farePolicy.calculate();
     }
 }

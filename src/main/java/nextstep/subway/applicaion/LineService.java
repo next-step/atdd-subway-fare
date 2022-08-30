@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,7 @@ public class LineService {
 
     @Transactional
     public LineResponse saveLine(LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getAdditionalFare()));
+        Line line = saveLine(request.getEntitySupplier());
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
@@ -62,7 +63,7 @@ public class LineService {
     @Transactional
     public void updateLine(Long id, LineRequest lineRequest) {
         Line line = findById(id);
-        line.update(lineRequest.getName(), lineRequest.getColor(), line.getAdditionalFare());
+        line.update(lineRequest.getEntitySupplier());
     }
 
     @Transactional
@@ -85,5 +86,9 @@ public class LineService {
         Station station = stationService.findById(stationId);
 
         line.deleteSection(station);
+    }
+
+    private Line saveLine(Supplier<Line> supplier) {
+        return lineRepository.save(supplier.get());
     }
 }
