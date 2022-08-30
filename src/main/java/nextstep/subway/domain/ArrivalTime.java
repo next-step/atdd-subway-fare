@@ -13,6 +13,9 @@ public class ArrivalTime {
     private LocalDateTime dateTime;
     private LocalTime startTime;
 
+    private LocalDateTime currentDateTime;
+    private Line currentLine = null;
+
     public ArrivalTime(List<Section> sections, List<Line> lines, String time) {
         this.sections = new Sections(sections);
         this.lines = new Lines(lines);
@@ -25,24 +28,44 @@ public class ArrivalTime {
     }
 
     private LocalDateTime getTimeOfFastestPath(LocalDateTime dateTime) {
-        LocalDateTime currentDateTime = dateTime;
-        Line currentLine = null;
+        this.currentDateTime = dateTime;
 
         for (Section section : sections.getSections()) {
-            Line line = findLine(section);
-            if (!line.equals(currentLine)) {
-                currentLine = line;
-                currentDateTime = calculateTimeInBeforeStations(currentDateTime, currentLine, section);
-
-                if (goingLastTime(currentDateTime, currentLine.getEndTime())) {
-                    return getTimeOfFirstPath();
-                }
+            if (confirmPathCondition(section)) {
+                return getTimeOfFirstPath();
             }
-
-            currentDateTime = currentDateTime.plusMinutes(section.getDuration());
         }
 
         return currentDateTime;
+    }
+
+    private boolean confirmPathCondition(Section section) {
+        Line line = findLine(section);
+        boolean notSameLine = !line.equals(currentLine);
+
+        setupCurrentDateTime(notSameLine, line, section);
+        if (notSameLine && goingLastTime(line.getEndTime())) {
+            return true;
+        }
+        setupCurrentLine(notSameLine, line);
+        return false;
+    }
+
+    private void setupCurrentDateTime(boolean notSameLine, Line line, Section section) {
+        if (notSameLine) {
+            this.currentDateTime = calculateTimeInBeforeStations(line, section);
+        }
+        this.currentDateTime = currentDateTime.plusMinutes(section.getDuration());
+    }
+
+    private void setupCurrentLine(boolean notSameLine, Line line) {
+        if (notSameLine) {
+            this.currentLine = line;
+        }
+    }
+
+    private LocalDateTime getCurrentDateTime(boolean notSameLine) {
+        return null;
     }
 
     private LocalDateTime getTimeOfFirstPath() {
@@ -50,11 +73,11 @@ public class ArrivalTime {
         return getTimeOfFastestPath(nextDayAtStartDateTime);
     }
 
-    private boolean goingLastTime(LocalDateTime dateTime, LocalTime endTime) {
-        return dateTime.isAfter(changeTime(dateTime, endTime));
+    private boolean goingLastTime(LocalTime endTime) {
+        return currentDateTime.isAfter(changeTime(currentDateTime, endTime));
     }
 
-    private LocalDateTime calculateTimeInBeforeStations(LocalDateTime currentDateTime, Line currentLine, Section section) {
+    private LocalDateTime calculateTimeInBeforeStations(Line currentLine, Section section) {
         LocalDateTime targetTime = changeTime(currentDateTime, currentLine.getStartTime());
         LocalDateTime fastestDepartureTime = findFastestDepartureTime(currentDateTime, targetTime, currentLine.getIntervalTime());
         int beforeDuration = getBeforeDuration(currentLine, section);
