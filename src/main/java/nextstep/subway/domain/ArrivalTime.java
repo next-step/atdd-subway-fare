@@ -64,10 +64,6 @@ public class ArrivalTime {
         }
     }
 
-    private LocalDateTime getCurrentDateTime(boolean notSameLine) {
-        return null;
-    }
-
     private LocalDateTime getTimeOfFirstPath() {
         LocalDateTime nextDayAtStartDateTime = changeTime(dateTime.plusDays(1), startTime);
         return getTimeOfFastestPath(nextDayAtStartDateTime);
@@ -109,12 +105,5 @@ public class ArrivalTime {
             return findFastestDepartureTime(referenceTime, targetTime.plusMinutes(interval), interval);
         }
         return targetTime;
-    }
-
-    private LocalTime findTimeRequired(LocalTime baseTime, LocalTime time, int interval) {
-        if (baseTime.isAfter(time)) {
-            return findTimeRequired(baseTime, time.plusMinutes(interval), interval);
-        }
-        return time;
     }
 }
