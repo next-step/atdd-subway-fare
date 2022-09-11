@@ -1,9 +1,9 @@
 package nextstep.subway.domain;
 
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@NoArgsConstructor
-public abstract class AgeDiscountPolicy {
+@Getter
+public abstract class DiscountPolicy {
 
     private int fare;
 
@@ -12,11 +12,11 @@ public abstract class AgeDiscountPolicy {
     public static final int CHILDREN_START_AGE = 6;
     public static final int CHILDREN_END_AGE = 12;
 
-    protected AgeDiscountPolicy(int fare) {
+    protected DiscountPolicy(int fare) {
         this.fare = fare;
     }
 
-    public static AgeDiscountPolicy create(int fare, int age) {
+    public static DiscountPolicy create(int fare, int age) {
 
         if (age >= CHILDREN_START_AGE && age <= CHILDREN_END_AGE) {
             return new ChildrenDiscountPolicy(fare);
@@ -25,11 +25,10 @@ public abstract class AgeDiscountPolicy {
         if (age >= YOUTH_START_AGE && age <= YOUTH_END_AGE) {
             return new YouthDiscountPolicy(fare);
         }
-        return null;
+
+        return new DefaultDiscountPolicy(fare);
     }
 
     public abstract int discount();
-    public int getFare() {
-        return fare;
-    }
+
 }
