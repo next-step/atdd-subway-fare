@@ -1,6 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.line;
 
 import lombok.NoArgsConstructor;
+import nextstep.subway.domain.station.Station;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;

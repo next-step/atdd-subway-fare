@@ -1,9 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare.discount;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.subway.domain.fare.discount.Children;
-import nextstep.subway.domain.fare.discount.Teenager;
 
 @NoArgsConstructor
 @Getter

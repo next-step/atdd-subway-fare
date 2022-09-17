@@ -1,4 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare.discount;
+
+import nextstep.subway.domain.fare.discount.DiscountFarePolicy;
 
 public class Default extends DiscountFarePolicy {
 

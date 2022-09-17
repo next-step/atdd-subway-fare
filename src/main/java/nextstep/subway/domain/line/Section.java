@@ -1,5 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.line;
 
+import nextstep.subway.domain.line.Line;
+import nextstep.subway.domain.station.Station;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
