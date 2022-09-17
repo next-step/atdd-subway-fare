@@ -1,9 +1,11 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
 import support.auth.userdetails.UserDetails;
 
 import java.util.List;
 
+@Getter
 public class Path {
     private Sections sections;
     private UserDetails user;
@@ -25,9 +27,8 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int extractFare() {
-        int maxAddFare = sections.sections().stream().mapToInt(section -> section.getLine().getAddFare()).filter(section -> section >= 0).max().orElse(0);
-        return sections.totalFare() + maxAddFare;
+    public int lineExtraFare() {
+        return sections.lineExtraFare();
     }
 
     public List<Station> getStations() {

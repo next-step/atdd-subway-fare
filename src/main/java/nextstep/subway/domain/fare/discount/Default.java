@@ -1,8 +1,8 @@
 package nextstep.subway.domain;
 
-public class DefaultDiscount extends DiscountFarePolicy {
+public class Default extends DiscountFarePolicy {
 
-    public DefaultDiscount(int fare) {
+    public Default(int fare) {
         super(fare);
     }
 

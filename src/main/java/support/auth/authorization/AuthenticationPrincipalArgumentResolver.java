@@ -7,7 +7,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import support.auth.context.Authentication;
 import support.auth.context.SecurityContextHolder;
-import support.auth.userdetails.AnonymousUser;
 import support.auth.userdetails.User;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
@@ -20,7 +19,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            return new AnonymousUser();
+            return new User();
         }
         return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
     }

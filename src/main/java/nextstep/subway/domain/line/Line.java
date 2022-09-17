@@ -1,10 +1,12 @@
 package nextstep.subway.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 @Entity
 public class Line {
@@ -18,9 +20,6 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
-    public Line() {
-    }
-
     public Line(String name, String color, int addFare) {
         this.name = name;
         this.color = color;
@@ -29,6 +28,10 @@ public class Line {
 
     public List<Section> getSections() {
         return sections.sections();
+    }
+
+    public int lineExtraFare() {
+        return sections.lineExtraFare();
     }
 
     public void update(String name, String color) {
