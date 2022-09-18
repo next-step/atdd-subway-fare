@@ -4,18 +4,17 @@ import nextstep.subway.acceptance.AcceptanceTestSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
-import support.auth.userdetails.UserDetails;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
-import static nextstep.subway.domain.PathType.DISTANCE;
-import static nextstep.subway.domain.PathType.DURATION;
+import static nextstep.subway.domain.path.PathType.DISTANCE;
+import static nextstep.subway.domain.path.PathType.DURATION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -35,7 +34,7 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
-        when(pathService.findPath(any(), anyLong(), anyLong(), any(UserDetails.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet());
 
@@ -48,7 +47,7 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(new StationResponse(1L, "강남역"), new StationResponse(2L, "역삼역")), 10, 5, 1250);
 
-        when(pathService.findPath(any(PathType.class), anyLong(), anyLong(), any(UserDetails.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(PathType.class), anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         두_역의_경로_조회를_요청(AcceptanceTestSteps.given(spec, "path", getRequestParametersSnippet(), getResponseFieldsSnippet()), 1L, 2L, DURATION);
     }

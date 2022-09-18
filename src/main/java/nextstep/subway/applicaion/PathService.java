@@ -1,28 +1,31 @@
 package nextstep.subway.applicaion;
 
+import lombok.RequiredArgsConstructor;
+import nextstep.member.domain.Guest;
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.line.Line;
+import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.PathType;
 import org.springframework.stereotype.Service;
-import support.auth.userdetails.UserDetails;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final MemberRepository memberRepository;
 
-    public PathService(LineService lineService, StationService stationService) {
-        this.lineService = lineService;
-        this.stationService = stationService;
-    }
-
-    public PathResponse findPath(PathType pathType, Long source, Long target, UserDetails user) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
+    public PathResponse findPath(PathType pathType, Long source, Long target, String userName) {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = SubwayMap.create(lines, pathType);
-        Path path = subwayMap.findPath(upStation, downStation, user);
+        Member member = memberRepository.findByEmail(userName).orElse(new Guest());
+        Path path = subwayMap.findPath(stationService.findById(source), stationService.findById(target), member.getAge());
         return PathResponse.of(path);
     }
+
 }
