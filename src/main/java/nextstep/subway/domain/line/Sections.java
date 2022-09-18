@@ -6,10 +6,7 @@ import nextstep.subway.domain.station.Station;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -166,18 +163,11 @@ public class Sections {
     }
 
     public int lineExtraFare() {
-        boolean seen = false;
-        int best = 0;
-        for (Section section : this.sections()) {
-            int addFare = section.getLine().getAddFare();
-            if (addFare >= 0) {
-                if (!seen || addFare > best) {
-                    seen = true;
-                    best = addFare;
-                }
-            }
-        }
-        return seen ? best : 0;
+        return this.sections()
+                .stream()
+                .mapToInt(section -> section.getLine().getAddFare())
+                .filter(section -> section >= 0)
+                .max().orElse(0);
     }
     
 }
