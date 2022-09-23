@@ -1,26 +1,13 @@
-package support.auth.userdetails;
+package nextstep.member.domain;
 
-import java.util.List;
+import lombok.NoArgsConstructor;
 
-public class AnonymousUser implements UserDetails {
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
+@NoArgsConstructor
+public class Guest extends Member {
 
     @Override
-    public String getPassword() {
-        return null;
+    public Integer getAge() {
+        return Integer.MAX_VALUE;
     }
 
-    @Override
-    public List<String> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public boolean checkCredentials(Object credentials) {
-        return false;
-    }
 }

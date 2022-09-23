@@ -1,7 +1,10 @@
 package support.auth.userdetails;
 
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@NoArgsConstructor
 public class User implements UserDetails {
     private String username;
     private String password;
