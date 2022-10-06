@@ -1,9 +1,9 @@
-package nextstep.subway.util.subwaymap;
+package nextstep.subway.util.pathfinder;
 
 import java.util.Arrays;
 
 public enum PathType {
-    DISTANCE("DISTANCE"), DURATION("DURATION");
+    DISTANCE("DISTANCE"), DURATION("DURATION"), ARRIVAL_TIME("ARRIVAL_TIME");
 
     PathType(String name) {
         this.name = name;
@@ -11,7 +11,7 @@ public enum PathType {
 
     private final String name;
 
-    public static PathType find(String pathType) {
+    public static PathType from(String pathType) {
         return Arrays.stream(PathType.values())
                 .filter(provider -> provider.equalsName(pathType))
                 .findAny()

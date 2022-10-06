@@ -1,6 +1,5 @@
-package nextstep.subway.util.subwaymap;
+package nextstep.subway.util.pathfinder;
 
-import nextstep.subway.util.subwaymap.PathType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,13 +13,13 @@ class PathTypeTest {
     @CsvSource(value = {"DISTANCE:DISTANCE", "DURATION:DURATION"}, delimiter = ':')
     @ParameterizedTest
     void find(String type, PathType pathType) {
-        assertThat(PathType.find(type)).isEqualTo(pathType);
+        assertThat(PathType.from(type)).isEqualTo(pathType);
     }
 
     @DisplayName("존재하지 않는 타입을 찾을 경우 예외를 발생시킨다.")
     @Test
     void findNonExistentPathType() {
-        assertThatThrownBy(() -> PathType.find("example"))
+        assertThatThrownBy(() -> PathType.from("example"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
