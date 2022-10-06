@@ -209,7 +209,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("가장 빨리 도착하는 경로를 조회한다. (도착 시간이 다음날로 넘어가는 경우)")
     @Test
     void fastestArrivalTimePathNextDay() {
-
         var response = 가장빨리_도착하는_경로_조회를_요청(양재역, 선릉역, "202208042350", ARRIVAL_TIME);
 
         가장빨리_도착하는_경로_정상적으로_조회됨(response, 50, 50, 2050, "202208051020", 양재역, 잠실역, 선릉역);
