@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -25,7 +26,7 @@ class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.findPath(null, 1L, 2L, "DISTANCE")).thenReturn(경로_생성());
+        when(pathService.findPath(any(), any())).thenReturn(경로_생성());
 
         RestAssured
                 .given(spec).log().all()
