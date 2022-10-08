@@ -1,9 +1,8 @@
-package nextstep.subway.util.subwaymap;
+package nextstep.subway.util.pathfinder;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
-import nextstep.subway.util.subwaymap.ShortestDurationSubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ShortestDurationSubwayMapTest {
+class ShortestDurationPathFinderTest {
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -45,13 +44,12 @@ class ShortestDurationSubwayMapTest {
     void findPath() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        ShortestDurationSubwayMap subwayMap = new ShortestDurationSubwayMap();
 
         // when
-        Path path = subwayMap.path(lines, 교대역, 양재역);
+        Path path = ShortestDurationPathFinder.find(lines, 교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역));
     }
 
     @DisplayName("최소 소요시간 경로를 조회한다.(반대 방향)")
@@ -59,13 +57,12 @@ class ShortestDurationSubwayMapTest {
     void findPathOppositely() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        ShortestDurationSubwayMap subwayMap = new ShortestDurationSubwayMap();
 
         // when
-        Path path = subwayMap.path(lines, 양재역, 교대역);
+        Path path = ShortestDurationPathFinder.find(lines, 양재역, 교대역);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 남부터미널역, 교대역));
     }
 
     private Station createStation(long id, String name) {

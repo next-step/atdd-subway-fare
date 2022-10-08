@@ -1,4 +1,4 @@
-package nextstep.subway.util.subwaymap;
+package nextstep.subway.util.pathfinder;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -9,25 +9,12 @@ import nextstep.subway.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
-public class ShortestDistanceSubwayMap implements SubwayMap {
-    @Override
-    public PathType pathType() {
-        return PathType.DISTANCE;
-    }
-
-    @Override
-    public Path path(List<Line> lines, Station source, Station target) {
-        return shortestPath(lines, source, target);
-    }
-
-    @Override
-    public Path shortestPath(List<Line> lines, Station source, Station target) {
+public class ShortestDurationPathFinder {
+    public static Path find(List<Line> lines, Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -43,7 +30,7 @@ public class ShortestDistanceSubwayMap implements SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, it.getDuration());
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -53,22 +40,17 @@ public class ShortestDistanceSubwayMap implements SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, it.getDuration());
                 });
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
-        Sections sections = new Sections(result.getEdgeList().stream()
+        List<Section> sections = result.getEdgeList().stream()
                 .map(SectionEdge::getSection)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
 
-        return new Path(sections);
-    }
-
-    @Override
-    public boolean isDefaultPathShortest() {
-        return true;
+        return new Path(new Sections(sections));
     }
 }

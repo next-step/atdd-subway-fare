@@ -1,5 +1,9 @@
 package nextstep.subway.applicaion.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalTime;
+
 public class LineRequest {
     private String name;
     private String color;
@@ -8,6 +12,14 @@ public class LineRequest {
     private int distance;
     private int duration;
     private int surcharge;
+
+    @JsonFormat(pattern = "HHmm")
+    private LocalTime startTime;
+
+    @JsonFormat(pattern = "HHmm")
+    private LocalTime endTime;
+
+    private int interval;
 
     public String getName() {
         return name;
@@ -35,5 +47,17 @@ public class LineRequest {
 
     public int getSurcharge() {
         return surcharge;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public int getInterval() {
+        return interval;
     }
 }

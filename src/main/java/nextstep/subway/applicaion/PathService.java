@@ -3,47 +3,57 @@ package nextstep.subway.applicaion;
 import nextstep.member.domain.GuestMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
+import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.util.fare.FareCalculator;
-import nextstep.subway.util.subwaymap.SubwayMap;
-import nextstep.subway.util.subwaymap.SubwayMapFactory;
+import nextstep.subway.util.pathfinder.FastestArrivalTimePathFinder;
+import nextstep.subway.util.pathfinder.PathType;
+import nextstep.subway.util.pathfinder.ShortestDistancePathFinder;
+import nextstep.subway.util.pathfinder.ShortestDurationPathFinder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static nextstep.subway.util.pathfinder.PathType.*;
 
 @Service
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final SubwayMapFactory subwayMapFactory;
     private final MemberRepository memberRepository;
 
-    public PathService(LineService lineService, StationService stationService,
-                       SubwayMapFactory subwayMapFactory, MemberRepository memberRepository) {
+    public PathService(LineService lineService, StationService stationService, MemberRepository memberRepository) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.subwayMapFactory = subwayMapFactory;
         this.memberRepository = memberRepository;
     }
 
-    public PathResponse findPath(String email, Long source, Long target, String type) {
+    public PathResponse findPath(String email, PathRequest request) {
         Member member = findMemberByEmail(email);
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
+        Station source = stationService.findById(request.getSource());
+        Station target = stationService.findById(request.getTarget());
         List<Line> lines = lineService.findLines();
 
-        SubwayMap subwayMap = subwayMapFactory.subwayMap(type);
-        Path path = subwayMap.path(lines, upStation, downStation);
+        Path shortestPath = ShortestDistancePathFinder.find(lines, source, target);
+        int fare = FareCalculator.calculate(shortestPath, member.getAge());
 
-        if (subwayMap.isDefaultPathShortest()) {
-            return PathResponse.of(path, FareCalculator.calculate(path, member.getAge()));
+        if (request.getType() == ARRIVAL_TIME) {
+            return FastestArrivalTimePathFinder.find(lines, request.getTime(), source, target, fare);
         }
 
-        Path shortestPath = subwayMap.shortestPath(lines, upStation, downStation);
-        return PathResponse.of(path, FareCalculator.calculate(shortestPath, member.getAge()));
+        if (request.getType() == DISTANCE) {
+            return PathResponse.of(shortestPath, fare);
+        }
+
+        if (request.getType() == DURATION) {
+            Path path = ShortestDurationPathFinder.find(lines, source, target);
+            return PathResponse.of(path, fare);
+        }
+
+        throw new IllegalArgumentException("지원하지 않는 경로타입입니다.");
     }
 
     private Member findMemberByEmail(String email) {
