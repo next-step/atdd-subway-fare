@@ -64,7 +64,7 @@ public class LineExtraFareTest {
         assertThat(path.extractDistance()).isEqualTo(4);
         assertThat(path.extractDuration()).isEqualTo(5);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역));
-        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).lineExtraFare()).isEqualTo(0);
+        assertThat(createFare(path).lineExtraFare()).isEqualTo(0);
     }
 
     /**
@@ -87,7 +87,7 @@ public class LineExtraFareTest {
         assertThat(path.extractDistance()).isEqualTo(2);
         assertThat(path.extractDuration()).isEqualTo(10);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
-        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).lineExtraFare()).isEqualTo(500);
+        assertThat(createFare(path).lineExtraFare()).isEqualTo(500);
     }
 
     /**
@@ -110,13 +110,17 @@ public class LineExtraFareTest {
         assertThat(path.extractDistance()).isEqualTo(4);
         assertThat(path.extractDuration()).isEqualTo(10);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(남부터미널역, 양재역, 강남역));
-        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).lineExtraFare()).isEqualTo(500);
+        assertThat(createFare(path).lineExtraFare()).isEqualTo(500);
     }
 
     private Station createStation(long id, String name) {
         Station station = new Station(name);
         ReflectionTestUtils.setField(station, "id", id);
         return station;
+    }
+
+    private static Fare createFare(Path path) {
+        return new Fare(path.extractDistance(), path.getSections(), 20);
     }
 
 }
