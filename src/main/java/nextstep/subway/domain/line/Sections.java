@@ -1,4 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.line;
+
+import lombok.NoArgsConstructor;
+import nextstep.subway.domain.station.Station;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -9,19 +12,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 @Embeddable
 public class Sections {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
-    public Sections() {
-    }
-
-    public Sections(List<Section> sections) {
+    private Sections(List<Section> sections) {
         this.sections = sections;
     }
 
-    public List<Section> getSections() {
+    public static Sections of(List<Section> sections) {
+        return new Sections(sections);
+    }
+
+    public List<Section> sections() {
         return sections;
     }
 
@@ -66,7 +71,7 @@ public class Sections {
             Station finalUpStation = upStation;
             Optional<Section> section = findSectionAsUpStation(finalUpStation);
 
-            if (!section.isPresent()) {
+            if (section.isEmpty()) {
                 break;
             }
 
@@ -158,10 +163,6 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
-    }
-
-    public int totalFare() {
-        return DistanceFarePolicy.create(totalDistance()).calculateFare();
     }
     
 }

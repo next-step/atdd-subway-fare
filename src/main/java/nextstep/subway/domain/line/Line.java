@@ -1,8 +1,14 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.line;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import nextstep.subway.domain.station.Station;
 
 import javax.persistence.*;
 import java.util.List;
 
+@NoArgsConstructor
+@Getter
 @Entity
 public class Line {
     @Id
@@ -10,32 +16,19 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int addFare;
 
     @Embedded
     private Sections sections = new Sections();
 
-    public Line() {
-    }
-
-    public Line(String name, String color) {
+    public Line(String name, String color, int addFare) {
         this.name = name;
         this.color = color;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
+        this.addFare = addFare;
     }
 
     public List<Section> getSections() {
-        return sections.getSections();
+        return sections.sections();
     }
 
     public void update(String name, String color) {

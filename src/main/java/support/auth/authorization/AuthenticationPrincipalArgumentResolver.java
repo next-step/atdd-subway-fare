@@ -18,7 +18,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        if (authentication == null) {
+            return new User();
+        }
         return new User(authentication.getPrincipal().toString(), null, authentication.getAuthorities());
     }
 }

@@ -5,9 +5,9 @@ import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
 import nextstep.subway.applicaion.dto.FavoriteResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.domain.Favorite;
-import nextstep.subway.domain.FavoriteRepository;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.favorite.Favorite;
+import nextstep.subway.domain.favorite.FavoriteRepository;
+import nextstep.subway.domain.station.Station;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

@@ -1,6 +1,8 @@
 package nextstep.subway.domain;
 
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import nextstep.subway.domain.line.Line;
+import nextstep.subway.domain.line.Section;
+import nextstep.subway.domain.station.Station;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
