@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
@@ -58,12 +59,12 @@ public class LineExtraFareTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(교대역, 강남역, 20);
+        Path path = subwayMap.findPath(교대역, 강남역);
 
         assertThat(path.extractDistance()).isEqualTo(4);
         assertThat(path.extractDuration()).isEqualTo(5);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역));
-        assertThat(path.lineExtraFare()).isEqualTo(0);
+        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).lineExtraFare()).isEqualTo(0);
     }
 
     /**
@@ -81,12 +82,12 @@ public class LineExtraFareTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, 20);
+        Path path = subwayMap.findPath(교대역, 양재역);
 
         assertThat(path.extractDistance()).isEqualTo(2);
         assertThat(path.extractDuration()).isEqualTo(10);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
-        assertThat(path.lineExtraFare()).isEqualTo(500);
+        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).lineExtraFare()).isEqualTo(500);
     }
 
     /**
@@ -104,12 +105,12 @@ public class LineExtraFareTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(남부터미널역, 강남역, 20);
+        Path path = subwayMap.findPath(남부터미널역, 강남역);
 
         assertThat(path.extractDistance()).isEqualTo(4);
         assertThat(path.extractDuration()).isEqualTo(10);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(남부터미널역, 양재역, 강남역));
-        assertThat(path.lineExtraFare()).isEqualTo(500);
+        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).lineExtraFare()).isEqualTo(500);
     }
 
     private Station createStation(long id, String name) {

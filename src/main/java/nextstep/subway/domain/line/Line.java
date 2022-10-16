@@ -31,10 +31,6 @@ public class Line {
         return sections.sections();
     }
 
-    public int lineExtraFare() {
-        return sections.lineExtraFare();
-    }
-
     public void update(String name, String color) {
         if (name != null) {
             this.name = name;

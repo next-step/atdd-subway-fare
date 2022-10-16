@@ -6,6 +6,7 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
@@ -24,8 +25,8 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = SubwayMap.create(lines, pathType);
         Member member = memberRepository.findByEmail(userName).orElse(new Guest());
-        Path path = subwayMap.findPath(stationService.findById(source), stationService.findById(target), member.getAge());
-        return PathResponse.of(path);
+        Path path = subwayMap.findPath(stationService.findById(source), stationService.findById(target));
+        Fare fare = new Fare(path.extractDistance(), path.getSections(), member.getAge());
+        return PathResponse.of(path, fare.calculate());
     }
-
 }

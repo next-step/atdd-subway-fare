@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.Path;
 import nextstep.subway.domain.path.PathType;
@@ -72,7 +73,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, 20);
+        Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
         assertThat(path.extractDistance()).isEqualTo(6);
@@ -88,12 +89,12 @@ public class SubwayMapTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(양재역, 고속터미널역, 20);
+        Path path = subwayMap.findPath(양재역, 고속터미널역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역));
         assertThat(path.extractDistance()).isEqualTo(20);
-        assertThat(path.extractFare()).isEqualTo(2350);
+        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).calculate()).isEqualTo(2350);
     }
 
     @DisplayName("최단 거리 구간 조회 구간 거리 50km이상")
@@ -104,11 +105,11 @@ public class SubwayMapTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(양재역, 신사역, 20);
+        Path path = subwayMap.findPath(양재역, 신사역);
 
         assertThat(path.extractDuration()).isEqualTo(16);
         assertThat(path.extractDistance()).isEqualTo(66);
-        assertThat(path.extractFare()).isEqualTo(3150);
+        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).calculate()).isEqualTo(3150);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역, 신사역));
 
     }
@@ -121,7 +122,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DURATION);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, 20);
+        Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
         assertThat(path.extractDistance()).isEqualTo(6);
@@ -136,7 +137,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = SubwayMap.create(lines, PathType.DISTANCE);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, 20);
+        Path path = subwayMap.findPath(양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

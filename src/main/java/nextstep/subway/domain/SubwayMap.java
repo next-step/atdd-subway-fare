@@ -27,7 +27,7 @@ public abstract class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, int age) {
+    public Path findPath(Station source, Station target) {
 
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
@@ -52,7 +52,7 @@ public abstract class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return Path.of(Sections.of(sections), age);
+        return Path.of(Sections.of(sections));
     }
 
     protected abstract void registerSections(SimpleDirectedWeightedGraph<Station, SectionEdge> graph);

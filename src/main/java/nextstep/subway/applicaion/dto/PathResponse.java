@@ -20,7 +20,7 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, int fare) {
 
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
@@ -31,7 +31,7 @@ public class PathResponse {
                 .stations(stations)
                 .distance(path.extractDistance())
                 .duration(path.extractDuration())
-                .fare(path.extractFare())
+                .fare(fare)
                 .build();
     }
 
