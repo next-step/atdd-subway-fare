@@ -94,7 +94,7 @@ public class SubwayMapTest {
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역));
         assertThat(path.extractDistance()).isEqualTo(20);
-        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).calculate()).isEqualTo(2350);
+        assertThat(createFare(path).calculate()).isEqualTo(2350);
     }
 
     @DisplayName("최단 거리 구간 조회 구간 거리 50km이상")
@@ -109,7 +109,7 @@ public class SubwayMapTest {
 
         assertThat(path.extractDuration()).isEqualTo(16);
         assertThat(path.extractDistance()).isEqualTo(66);
-        assertThat(new Fare(path.extractDistance(), path.getSections(), 20).calculate()).isEqualTo(3150);
+        assertThat(createFare(path).calculate()).isEqualTo(3150);
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역, 고속터미널역, 신사역));
 
     }
@@ -148,5 +148,9 @@ public class SubwayMapTest {
         ReflectionTestUtils.setField(station, "id", id);
 
         return station;
+    }
+
+    private static Fare createFare(Path path) {
+        return new Fare(path.extractDistance(), path.getSections(), 20);
     }
 }
