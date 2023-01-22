@@ -1,4 +1,4 @@
-package support.auth.token;
+package nextstep.member.application.dto;
 
 public class TokenRequest {
     private String email;

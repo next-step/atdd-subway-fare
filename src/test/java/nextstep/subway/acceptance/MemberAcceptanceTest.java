@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
+    public static final String ADMIN = "admin@email.com";
     public static final String PASSWORD = "password";
     public static final int AGE = 20;
 
@@ -64,13 +65,13 @@ class MemberAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-    @DisplayName("회원 정보를 관리한다.")
+    @DisplayName("내 정보를 조회한다.")
     @Test
-    void manageMember() {
-    }
+    void getMyInfo() {
+        String accessToken = 베어러_인증_로그인_요청(ADMIN, PASSWORD).jsonPath().getString("accessToken");
 
-    @DisplayName("나의 정보를 관리한다.")
-    @Test
-    void manageMyInfo() {
+        ExtractableResponse<Response> response = 회원_정보_조회_요청(accessToken);
+
+        회원_정보_조회됨(response, ADMIN, AGE);
     }
 }

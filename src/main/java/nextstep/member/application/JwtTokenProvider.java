@@ -1,18 +1,18 @@
-package support.auth.token;
+package nextstep.member.application;
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class JwtTokenProvider {
+    @Value("${security.jwt.token.secret-key}")
     private String secretKey;
+    @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
-
-    public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
-        this.secretKey = secretKey;
-        this.validityInMilliseconds = validityInMilliseconds;
-    }
 
     public String createToken(String principal, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(principal);

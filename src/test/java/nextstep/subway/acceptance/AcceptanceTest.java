@@ -1,28 +1,22 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
-import nextstep.DataLoader;
+import nextstep.subway.utils.DataLoader;
 import nextstep.subway.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import static nextstep.subway.acceptance.MemberSteps.로그인_되어_있음;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 
 @ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class AcceptanceTest {
-    private static final String EMAIL = "admin@email.com";
-    private static final String PASSWORD = "password";
-
-    @LocalServerPort
-    int port;
+    public static final String EMAIL = "admin@email.com";
+    public static final String PASSWORD = "password";
 
     @Autowired
     private DatabaseCleanup databaseCleanup;
-
     @Autowired
     private DataLoader dataLoader;
 
@@ -30,10 +24,9 @@ public class AcceptanceTest {
 
     @BeforeEach
     public void setUp() {
-        RestAssured.port = port;
         databaseCleanup.execute();
         dataLoader.loadData();
 
-        관리자 = 로그인_되어_있음(EMAIL, PASSWORD);
+        관리자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
 }

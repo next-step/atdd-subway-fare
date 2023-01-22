@@ -1,4 +1,4 @@
-package support.auth.authorization;
+package nextstep.member.domain;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

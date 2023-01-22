@@ -3,10 +3,10 @@ package nextstep.member.ui;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
+import nextstep.member.domain.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import support.auth.authorization.AuthenticationPrincipal;
-import support.auth.userdetails.User;
 
 import java.net.URI;
 
@@ -43,21 +43,9 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal User user) {
-        MemberResponse member = memberService.findMember(user.getUsername());
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        MemberResponse member = memberService.findMember(loginMember.getId());
         return ResponseEntity.ok().body(member);
-    }
-
-    @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal User user, @RequestBody MemberRequest param) {
-        memberService.updateMember(user.getUsername(), param);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/members/me")
-    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal User user) {
-        memberService.deleteMember(user.getUsername());
-        return ResponseEntity.noContent().build();
     }
 }
 

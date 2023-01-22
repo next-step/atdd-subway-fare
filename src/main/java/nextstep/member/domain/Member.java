@@ -2,12 +2,14 @@ package nextstep.member.domain;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String email;
     private String password;
     private Integer age;
@@ -60,5 +62,9 @@ public class Member {
         this.email = member.email;
         this.password = member.password;
         this.age = member.age;
+    }
+
+    public boolean checkPassword(String password) {
+        return Objects.equals(this.password, password);
     }
 }
