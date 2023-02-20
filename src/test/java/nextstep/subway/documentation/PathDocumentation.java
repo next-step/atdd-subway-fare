@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
@@ -24,9 +25,9 @@ class PathDocumentation extends Documentation {
 
         final PathResponse pathResponse = new PathResponse(Lists.newArrayList(
                 new StationResponse(1L, "강남역"),
-                new StationResponse(2L, "역삼역")), 10);
+                new StationResponse(2L, "역삼역")), 10, 20);
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         given(this.spec)
                 .filter(
@@ -35,7 +36,7 @@ class PathDocumentation extends Documentation {
                                 getPathResponseFieldsSnippet()
                         )
                 )
-                .when().get("/paths?source={source}&target={target}", 1L, 2L).then().log().all()
+                .when().get("/paths?source={source}&target={target}&type={type}", 1L, 2L, "DISTANCE").then().log().all()
         .assertThat().statusCode(is(HttpStatus.OK.value()));
     }
 }
