@@ -1,23 +1,23 @@
 package nextstep.subway.unit;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LineServiceMockTest {
@@ -26,7 +26,6 @@ class LineServiceMockTest {
     @Mock
     private StationService stationService;
 
-    @Autowired
     private LineService lineService;
     private Station 강남역;
     private Station 역삼역;
@@ -44,7 +43,7 @@ class LineServiceMockTest {
         삼성역 = new Station("삼성역");
         ReflectionTestUtils.setField(삼성역, "id", 3L);
         이호선 = new Line("2호선", "green");
-        이호선.addSection(강남역, 역삼역, 10);
+        이호선.addSection(강남역, 역삼역, 10, 5);
         ReflectionTestUtils.setField(이호선, "id", 1L);
     }
 
