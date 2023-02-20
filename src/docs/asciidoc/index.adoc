@@ -11,4 +11,11 @@
 
 === 경로 조회
 
-operation::path[snippets='http-request,http-response']
+.request
+include::{snippets}/path/http-request.adoc[]
+.request
+include::{snippets}/path/request-parameters.adoc[]
+
+.response
+include::{snippets}/path/http-response.adoc[]
+include::{snippets}/path/response-fields.adoc[]
