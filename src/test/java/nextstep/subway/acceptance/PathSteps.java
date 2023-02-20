@@ -23,7 +23,8 @@ public class PathSteps {
     public static RequestParametersSnippet getPathRequestParametersSnippet() {
         return requestParameters(
                 parameterWithName("source").description("The source is station for ascending"),
-                parameterWithName("target").description("The target is station for descending"));
+                parameterWithName("target").description("The target is station for descending"),
+                parameterWithName("type").description("The type is station for search condition"));
     }
 
     public static ResponseFieldsSnippet getPathResponseFieldsSnippet() {
@@ -31,6 +32,7 @@ public class PathSteps {
                 fieldWithPath("stations").description(""),
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("Id of the station"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("Name of the station"),
-                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance is between up and down"));
+                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance is shortest distance between two stations."),
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("The duration is minimum time between two stations."));
     }
 }
