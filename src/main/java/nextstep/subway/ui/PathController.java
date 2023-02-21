@@ -11,7 +11,8 @@ import nextstep.subway.domain.PathSearchType;
 
 @RestController
 public class PathController {
-    private PathService pathService;
+
+    private final PathService pathService;
 
     public PathController(PathService pathService) {
         this.pathService = pathService;
@@ -21,8 +22,8 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(
         @RequestParam Long source,
         @RequestParam Long target,
-        @RequestParam PathSearchType pathSearchType
+        @RequestParam(name = "type") PathSearchType pathSearchType
     ) {
-        return ResponseEntity.ok(pathService.findPath(source, target));
+        return ResponseEntity.ok(pathService.findPath(source, target, pathSearchType));
     }
 }

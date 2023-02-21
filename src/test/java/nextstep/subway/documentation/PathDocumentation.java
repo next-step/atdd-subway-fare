@@ -16,6 +16,7 @@ import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathSearchType;
 
 class PathDocumentation extends Documentation {
 
@@ -33,10 +34,10 @@ class PathDocumentation extends Documentation {
             10
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         // when
-        ExtractableResponse<Response> response = PathSteps.지하철_경로_조회(spec, 1L, 2L);
+        ExtractableResponse<Response> response = PathSteps.지하철_경로_조회(spec, 1L, 2L, PathSearchType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
