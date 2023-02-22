@@ -2,7 +2,7 @@ package nextstep.subway.domain;
 
 import java.util.List;
 
-import nextstep.subway.applicaion.FareCalculator;
+import nextstep.subway.util.FareCalculator;
 
 public class Path {
 
