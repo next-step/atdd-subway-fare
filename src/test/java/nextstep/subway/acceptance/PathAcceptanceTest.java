@@ -55,6 +55,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
     }
 
+    /**
+     * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
+     * Then 최단 거리 기준 경로를 총 거리, 소요 시간, 지하철 요금과 함께 응답한다.
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
@@ -65,13 +69,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
             () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(10)
+            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(10),
+            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250)
         );
     }
 
     /**
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
-     * Then 최소 시간 기준 경로를 총 거리, 소요 시간과 함께 응답한다.
+     * Then 최소 시간 기준 경로를 총 거리, 소요 시간, 지하철 요금과 함께 응답한다.
      */
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
@@ -83,7 +88,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
             () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
-            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(8)
+            () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(8),
+            () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_450)
         );
     }
 
