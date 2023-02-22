@@ -22,6 +22,24 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public int extractFare() {
+        int distance = extractDistance();
+
+        if (distance <= 10) {
+            return 1250;
+        }
+
+        if (distance <= 50) {
+            return 1250 + calculateOverFare(distance - 10, 5);
+        }
+
+        return 1250 + calculateOverFare(distance - 10, 8);
+    }
+
+    private int calculateOverFare(int distance, int kilometer) {
+        return (int) ((Math.ceil((distance - 1) / kilometer) + 1) * 100);
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }

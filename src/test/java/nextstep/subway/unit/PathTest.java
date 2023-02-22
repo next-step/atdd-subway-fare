@@ -48,4 +48,11 @@ class PathTest {
         // when & then
         assertThat(path.extractDuration()).isEqualTo(8);
     }
+
+    @DisplayName("지하철 구간의 요금을 구한다.")
+    @Test
+    void extractFare() {
+        // when & then
+        assertThat(path.extractFare()).isEqualTo(1_450);
+    }
 }

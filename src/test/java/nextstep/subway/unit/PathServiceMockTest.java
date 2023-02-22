@@ -92,7 +92,8 @@ class PathServiceMockTest {
         assertAll(
             () -> assertThat(stations).containsExactly(교대역.getName(), 남부터미널역.getName(), 양재역.getName()),
             () -> assertThat(path.getDistance()).isEqualTo(10),
-            () -> assertThat(path.getDuration()).isEqualTo(16)
+            () -> assertThat(path.getDuration()).isEqualTo(16),
+            () -> assertThat(path.getFare()).isEqualTo(1_250)
         );
 
     }
@@ -109,7 +110,8 @@ class PathServiceMockTest {
         assertAll(
             () -> assertThat(stations).containsExactly(교대역.getName(), 강남역.getName(), 양재역.getName()),
             () -> assertThat(path.getDistance()).isEqualTo(20),
-            () -> assertThat(path.getDuration()).isEqualTo(10)
+            () -> assertThat(path.getDuration()).isEqualTo(10),
+            () -> assertThat(path.getFare()).isEqualTo(1_450)
         );
     }
 }
