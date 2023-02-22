@@ -6,8 +6,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
 
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import io.restassured.RestAssured;
@@ -34,7 +32,8 @@ public class PathSteps {
                     fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 id"),
                     fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
                     fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                    fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간")
+                    fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
+                    fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
                 )))
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
