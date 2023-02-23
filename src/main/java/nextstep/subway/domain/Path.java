@@ -2,8 +2,6 @@ package nextstep.subway.domain;
 
 import java.util.List;
 
-import nextstep.subway.util.FareCalculator;
-
 public class Path {
 
     private final Sections sections;
@@ -25,7 +23,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return FareCalculator.calculate(extractDistance());
+        return Fare.calculate(extractDistance());
     }
 
     public List<Station> getStations() {
