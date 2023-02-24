@@ -83,7 +83,7 @@ class PathServiceMockTest {
     @DisplayName("최단 거리 경로를 조회한다.")
     @Test
     void findPathByDistance() {
-        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), PathSearchType.DISTANCE);
+        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), PathSearchType.DISTANCE, 20);
 
         List<String> stations = path.getStations().stream()
             .map(StationResponse::getName)
@@ -101,7 +101,7 @@ class PathServiceMockTest {
     @DisplayName("최단 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
-        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), PathSearchType.DURATION);
+        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), PathSearchType.DURATION, 20);
 
         List<String> stations = path.getStations().stream()
             .map(StationResponse::getName)
