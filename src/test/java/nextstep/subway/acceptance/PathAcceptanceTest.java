@@ -251,7 +251,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 사용자가 회원 가입 및 로그인을 요청하고
+     * Given 사용자가 로그인을 요청하고
      * When 지하철 경로 조회를 요청한 로그인 사용자가 성인이라면
      * Then 지하철 요금은 할인되지 않은 요금이다.
      */
@@ -259,7 +259,6 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByAdultMember() {
         // given
-        회원_생성_요청("adult@email.com", "password", 20);
         String accessToken = 베어러_인증_로그인_요청("adult@email.com", "password").jsonPath().getString("accessToken");
 
         // when
@@ -267,6 +266,24 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250);
+    }
+
+    /**
+     * Given 사용자가 회원 가입 및 로그인을 요청하고
+     * When 지하철 경로 조회를 요청한 로그인 사용자가 청소년이라면
+     * Then 지하철 요금은 운임에서 350원을 공제한 금액의 20%가 할인된 요금이다.
+     */
+    @DisplayName("로그인 사용자가 청소년이라면, 지하철 요금은 운임에서 350원을 공제한 금액의 20%가 할인된 요금이다.")
+    @Test
+    void findPathByTeenagerMember() {
+        // given
+        String accessToken = 베어러_인증_로그인_요청("teenager@email.com", "password").jsonPath().getString("accessToken");
+
+        // when
+        ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(720);
     }
 
     private ExtractableResponse<Response> 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
