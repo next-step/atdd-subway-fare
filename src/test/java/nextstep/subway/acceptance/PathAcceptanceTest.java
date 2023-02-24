@@ -26,11 +26,17 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 합정역;
     private Long 양재역;
     private Long 공덕역;
+    private Long 서울역;
     private Long 남부터미널역;
+    private Long 종로3가역;
+    private Long 동대문역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
     private Long 육호선;
+    private Long 일호선;
+    private Long 오호선;
+    private Long 공항철도선;
 
     /**
      * Given 지하철역이 등록되어있음
@@ -42,7 +48,11 @@ class PathAcceptanceTest extends AcceptanceTest {
      *     │                        │                                                                         │
      *   *3호선*                 *신분당선*                                                                   *6호선*
      *     │                        │                                                                         │
-     * 남부터미널역 ── *3호선* ───── 양재역                                                                     공덕역
+     * 남부터미널역 ── *3호선* ───── 양재역                                          서울역 ───── *공항철도* ───── 공덕역
+     *                                                                             │
+     *                                                                          *1호선*
+     *                                                                             │
+     *                                                                         종로3가역 ── *5호선* ── 동대문역
      */
     @BeforeEach
     public void setUp() {
@@ -54,12 +64,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         합정역 = 지하철역_생성_요청("합정역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         공덕역 = 지하철역_생성_요청("공덕역").jsonPath().getLong("id");
+        서울역 = 지하철역_생성_요청("서울역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+        종로3가역 = 지하철역_생성_요청("종로3가역").jsonPath().getLong("id");
+        동대문역 = 지하철역_생성_요청("동대문역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
         육호선 = 추가_요금이_있는_지하철_노선_생성_요청("6호선", "brown", 합정역, 공덕역, 8, 3, 500);
+        공항철도선 = 추가_요금이_있는_지하철_노선_생성_요청("공항철도선", "lightblue", 공덕역, 서울역, 10, 5, 900);
+        일호선 = 추가_요금이_있는_지하철_노선_생성_요청("1호선", "blue", 서울역, 종로3가역, 5, 2, 300);
+        오호선 = 추가_요금이_있는_지하철_노선_생성_요청("5호선", "purple", 종로3가역, 동대문역, 5, 3, 400);
 
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 성수역, 20, 10));
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(성수역, 합정역, 25, 12));
@@ -148,9 +164,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 노선을 이용하면
-     * Then 총 지하철 요금은 기본 요금에 노선의 추가 요금이 더해진 금액이다.
+     * Then 총 지하철 요금은 (기본 요금 + 노선의 추가 요금) 이다.
      */
-    @DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 노선을 이용하면, 총 지하철 요금은 기본 요금에 노선의 추가 요금이 더해진 금액이다.")
+    @DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 노선을 이용하면, 총 지하철 요금은 (기본 요금 + 노선의 추가 요금) 이다.")
     @Test
     void basicDistanceWithExtraFare() {
         // when
@@ -158,6 +174,20 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_750);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 여러 노선을 이용하면
+     * Then 총 지하철 요금은 (기본 요금 + 노선들의 추가 요금 중 가장 큰 추가 요금) 이다.
+     */
+    @DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 여러 노선을 이용하면, 총 지하철 요금은 (기본 요금 + 노선들의 추가 요금 중 가장 큰 추가 요금) 이다.")
+    @Test
+    void basicDistanceWithExtraFares() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(서울역, 동대문역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_650);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
