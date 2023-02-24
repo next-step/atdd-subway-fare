@@ -59,7 +59,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
-        육호선 = 지하철_노선_생성_요청("6호선", "brown", 합정역, 공덕역, 5, 7);
+        육호선 = 추가_요금이_있는_지하철_노선_생성_요청("6호선", "brown", 합정역, 공덕역, 8, 3, 500);
 
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 성수역, 20, 10));
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(성수역, 합정역, 25, 12));
@@ -157,7 +157,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(합정역, 공덕역);
 
         // then
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_150);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_750);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
@@ -177,6 +177,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return 추가_요금이_있는_지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
+    }
+
+    private Long 추가_요금이_있는_지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -185,6 +189,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("extraFare", extraFare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
