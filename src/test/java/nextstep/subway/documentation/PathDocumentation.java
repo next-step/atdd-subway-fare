@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+@DisplayName("경로 구간 문서화")
 class PathDocumentation extends Documentation {
 
     private static final String 최소시간 = "DURATION";
