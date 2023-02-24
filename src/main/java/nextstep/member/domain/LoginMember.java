@@ -1,21 +1,32 @@
 package nextstep.member.domain;
 
-import java.util.List;
-
 public class LoginMember {
-    private Long id;
-    private List<String> roles;
 
-    public LoginMember(Long id, List<String> roles) {
-        this.id = id;
-        this.roles = roles;
+    private Long memberId;
+    private String email;
+    private Integer age;
+
+    private LoginMember() {}
+
+    public LoginMember(final Long memberId, final String email, final Integer age) {
+        this.memberId = memberId;
+        this.email = email;
+        this.age = age;
     }
 
-    public Long getId() {
-        return id;
+    public static LoginMember from(final Member member) {
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Integer getAge() {
+        return age;
     }
 }
