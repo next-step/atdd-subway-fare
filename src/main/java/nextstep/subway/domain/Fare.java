@@ -33,13 +33,14 @@ public enum Fare {
         this.extraFareOperator = extraFareOperator;
     }
 
-    public static int calculate(int distance) {
+    public static int calculate(int distance, int lineExtraFare, int age) {
         int extraFare = Arrays.stream(values())
             .filter(it -> it.predicate.test(distance))
             .findFirst()
             .orElse(BASIC)
             .extraFareOperator.apply(distance);
-        return BASIC_FARE + extraFare;
+        int fare = BASIC_FARE + extraFare + lineExtraFare;
+        return DiscountPolicy.discount(fare, age);
     }
 
     private static int calculateExtraFare(int distance, int unit) {

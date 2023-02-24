@@ -159,7 +159,7 @@ public class Sections {
             .sum();
     }
 
-    public int extraFare() {
+    public int lineExtraFare() {
         return sections.stream()
             .mapToInt(Section::getExtraFare)
             .max()

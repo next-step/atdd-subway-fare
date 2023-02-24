@@ -283,7 +283,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
 
         // then
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_070);
     }
 
     /**
@@ -301,7 +301,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
 
         // then
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_070);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
     }
 
     private ExtractableResponse<Response> 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
