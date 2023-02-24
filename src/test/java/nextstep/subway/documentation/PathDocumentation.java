@@ -1,5 +1,6 @@
 package nextstep.subway.documentation;
 
+import static nextstep.subway.applicaion.dto.SearchType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -29,10 +30,10 @@ public class PathDocumentation extends Documentation {
 				new StationResponse(2L, "역삼역")
 			), 10, 5
 		);
-		when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+		when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
 		// when
-		ExtractableResponse<Response> searchResponse = PathSteps.searchPathDistance(spec, 1L, 2L, "");
+		ExtractableResponse<Response> searchResponse = PathSteps.searchPathDistance(spec, 1L, 2L, DISTANCE);
 
 		// then
 		assertThat(searchResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
