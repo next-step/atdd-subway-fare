@@ -1,6 +1,5 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
@@ -10,41 +9,33 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
+import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
+    public static final long SOURCE_ID = 1L;
+    public static final long TARGET_ID = 2L;
     @MockBean
     private PathService pathService;
 
     @Test
     void path() {
+        // Given
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "강남역"),
-                        new StationResponse(2L, "역삼역")
+                        new StationResponse(SOURCE_ID, "강남역"),
+                        new StationResponse(TARGET_ID, "역삼역")
                 ), 10
         );
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        ExtractableResponse<Response> response = RestAssured
-                .given(this.spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .when().get("/paths")
-                .then().log().all().extract();
+        // When
+        ExtractableResponse<Response> response = 경로_조회_요청(spec, SOURCE_ID, TARGET_ID);
 
+        // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }
