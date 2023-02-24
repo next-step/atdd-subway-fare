@@ -57,8 +57,8 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance) {
-		LineCreateRequest lineRequest = new LineCreateRequest(name, color, upStationId, downStationId, distance);
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+		LineCreateRequest lineRequest = new LineCreateRequest(name, color, upStationId, downStationId, distance, duration);
 
 		ExtractableResponse<Response> response = RestAssured
 			.given().log().all()

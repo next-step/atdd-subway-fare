@@ -9,8 +9,8 @@ import nextstep.subway.applicaion.dto.SectionCreateRequest;
 
 public class SectionSteps {
 
-	public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance) {
-		SectionCreateRequest sectionRequest = new SectionCreateRequest(upStationId, downStationId, distance);
+	public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+		SectionCreateRequest sectionRequest = new SectionCreateRequest(upStationId, downStationId, distance, duration);
 
 		ExtractableResponse<Response> response = RestAssured
 			.given().log().all()
