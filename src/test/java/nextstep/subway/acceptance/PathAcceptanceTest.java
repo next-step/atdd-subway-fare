@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.StationSteps.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -247,6 +248,34 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_950);
+    }
+
+    /**
+     * Given 사용자가 회원 가입 및 로그인을 요청하고
+     * When 지하철 경로 조회를 요청한 로그인 사용자가 성인이라면
+     * Then 지하철 요금은 할인되지 않은 요금이다.
+     */
+    @DisplayName("로그인 사용자가 성인이라면, 지하철 요금은 할인되지 않은 요금이다.")
+    @Test
+    void findPathByAdultMember() {
+        // given
+        회원_생성_요청("adult@email.com", "password", 20);
+        String accessToken = 베어러_인증_로그인_요청("adult@email.com", "password").jsonPath().getString("accessToken");
+
+        // when
+        ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250);
+    }
+
+    private ExtractableResponse<Response> 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
+        return RestAssured
+            .given().log().all()
+            .auth().oauth2(accessToken)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths?source={sourceId}&target={targetId}&type={pathSearchType}", source, target, PathSearchType.DISTANCE)
+            .then().log().all().extract();
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
