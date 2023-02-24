@@ -161,7 +161,7 @@ public class Sections {
 
     public int extraFare() {
         return sections.stream()
-            .mapToInt(it -> it.getLine().getExtraFare())
+            .mapToInt(Section::getExtraFare)
             .max()
             .orElse(0);
     }
