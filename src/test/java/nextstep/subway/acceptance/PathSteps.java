@@ -10,9 +10,16 @@ import org.springframework.http.MediaType;
 import java.util.Map;
 
 public class PathSteps {
+    public static ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target) {
+        RequestSpecification spec = new RequestSpecBuilder()
+                .addQueryParams(Map.of("source", source, "target", target, "type", "DURATION"))
+                .build();
+        return 두_역의_최단_거리_경로_조회를_요청(spec);
+    }
+
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         RequestSpecification spec = new RequestSpecBuilder()
-                .addQueryParams(Map.of("source", source, "target", target))
+                .addQueryParams(Map.of("source", source, "target", target, "type", "DISTANCE"))
                 .build();
         return 두_역의_최단_거리_경로_조회를_요청(spec);
     }
