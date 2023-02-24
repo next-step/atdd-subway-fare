@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import static nextstep.subway.applicaion.dto.SearchType.*;
+
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -8,13 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.subway.applicaion.dto.SearchType;
 
 @RequiredArgsConstructor
 public class SubwayMap {
 
     private final List<Line> lines;
 
-    public Path findPath(Station source, Station target, String type) {
+    public Path findPath(Station source, Station target, SearchType type) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -46,16 +49,16 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-	private void SectionEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it, String type) {
+	private void SectionEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it, SearchType type) {
 		SectionEdge sectionEdge = SectionEdge.of(it);
 		graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
 		graph.setEdgeWeight(sectionEdge, getWeightByType(it, type));
 	}
 
-	private int getWeightByType(Section section, String type) {
-		if (type.equals("DURATION")) {
-			return section.getDuration();
+	private int getWeightByType(Section section, SearchType type) {
+		if (type.equals(DISTANCE)) {
+			return section.getDistance();
 		}
-		return section.getDistance();
+		return section.getDuration();
 	}
 }

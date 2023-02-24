@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static nextstep.subway.applicaion.dto.SearchType.*;
 import static nextstep.subway.steps.LineSteps.*;
 import static nextstep.subway.steps.PathSteps.*;
 import static nextstep.subway.steps.SectionSteps.*;
@@ -61,7 +62,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 타입에_따라_두_역의_경로_조회를_요청(교대역, 양재역, DISTANCE);
 
         // then
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
@@ -82,7 +83,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 	@Test
 	void findPathByTime() {
 		// when
-		ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, "DURATION");
+		ExtractableResponse<Response> response = 타입에_따라_두_역의_경로_조회를_요청(교대역, 양재역, DURATION);
 
 		// then
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
