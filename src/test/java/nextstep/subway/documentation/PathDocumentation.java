@@ -27,12 +27,12 @@ public class PathDocumentation extends Documentation {
 			Lists.newArrayList(
 				new StationResponse(1L, "강남역"),
 				new StationResponse(2L, "역삼역")
-			), 10
+			), 10, 5
 		);
-		when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+		when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
 		// when
-		ExtractableResponse<Response> searchResponse = PathSteps.searchPath(spec, 1L, 2L);
+		ExtractableResponse<Response> searchResponse = PathSteps.searchPathDistance(spec, 1L, 2L, "");
 
 		// then
 		assertThat(searchResponse.statusCode()).isEqualTo(HttpStatus.OK.value());

@@ -12,6 +12,9 @@ import static nextstep.subway.steps.LineSteps.*;
 import static nextstep.subway.steps.PathSteps.*;
 import static nextstep.subway.steps.SectionSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -19,6 +22,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
@@ -49,23 +53,30 @@ class PathAcceptanceTest extends AcceptanceTest {
 		지하철_노선에_지하철_구간_생성_요청(삼호선, 남부터미널역, 양재역, 3, 10);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+	/**
+	 * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
+	 * Then 최단 거리 기준 경로, 총 거리, 소요 시간을 응답
+	 * **/
+    @DisplayName("두 역의 최단 거리 경로를 조회")
     @Test
     void findPathByDistance() {
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
+		int totalDistance = response.jsonPath().getInt("distance");
+		int totalDuration = response.jsonPath().getInt("duration");
+		assertAll(
+			() -> assertThat(stationsIds).containsExactly(교대역, 남부터미널역, 양재역),
+			() -> assertThat(totalDistance).isEqualTo(5),
+			() -> assertThat(totalDuration).isEqualTo(20)
+		);
     }
 
 	/**
-	 * Given 지하철역이 등록되어있음
-	 * And 지하철 노선이 등록되어있음
-	 * And 지하철 노선에 지하철역이 등록되어있음
-	 * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
-	 * Then 최소 시간 기준 경로를 응답
-	 * And 총 거리와 소요 시간을 함께 응답함
+	 * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
+	 * Then 최소 시간 기준 경로, 총 거리, 소요 시간을 응답
 	 * **/
 	@DisplayName("두 역의 최소 시간 경로를 조회")
 	@Test
@@ -74,6 +85,13 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, "DURATION");
 
 		// then
-		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
+		int totalDistance = response.jsonPath().getInt("distance");
+		int totalDuration = response.jsonPath().getInt("duration");
+		assertAll(
+			() -> assertThat(stationsIds).containsExactly(교대역, 강남역, 양재역),
+			() -> assertThat(totalDistance).isEqualTo(20),
+			() -> assertThat(totalDuration).isEqualTo(5)
+		);
 	}
 }
