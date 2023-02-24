@@ -115,9 +115,10 @@ class PathTest {
     }
 
     @DisplayName("추가 요금이 있는 여러 노선이 포함된 지하철 구간일 경우, 추가 요금은 추가 요금 중 가장 높은 금액으로 적용한다.")
-    @Test
-    void extraFareWithExtraFareLines() {
+    @CsvSource(value = {"20, 2_450", "13, 2_030", "12, 1_400"})
+    @ParameterizedTest
+    void extraFareWithExtraFareLines(int age, int fare) {
         // when & then
-        assertThat(삼호선_오호선_구간.extractFare(20)).isEqualTo(2_450);
+        assertThat(삼호선_오호선_구간.extractFare(age)).isEqualTo(fare);
     }
 }
