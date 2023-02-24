@@ -3,7 +3,8 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
+
+    private final Sections sections;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -19,6 +20,10 @@ public class Path {
 
     public int extractDuration() {
         return sections.totalDuration();
+    }
+
+    public int extractFare() {
+        return Fare.calculate(extractDistance());
     }
 
     public List<Station> getStations() {

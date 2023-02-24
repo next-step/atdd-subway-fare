@@ -50,13 +50,6 @@ public class SubwayMap {
     private void addSectionEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section, PathSearchType pathSearchType) {
         SectionEdge sectionEdge = SectionEdge.of(section);
         graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-        graph.setEdgeWeight(sectionEdge, getWeight(section, pathSearchType));
-    }
-
-    private int getWeight(Section section, PathSearchType pathSearchType) {
-        if (pathSearchType.isDistance()) {
-            return section.getDistance();
-        }
-        return section.getDuration();
+        graph.setEdgeWeight(sectionEdge, pathSearchType.getWeight(section));
     }
 }
