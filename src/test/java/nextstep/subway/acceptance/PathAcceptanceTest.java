@@ -25,10 +25,12 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 성수역;
     private Long 합정역;
     private Long 양재역;
+    private Long 공덕역;
     private Long 남부터미널역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private Long 육호선;
 
     /**
      * Given 지하철역이 등록되어있음
@@ -37,10 +39,10 @@ class PathAcceptanceTest extends AcceptanceTest {
      *
      *     │·········· 10 ··········│··············· 20 ···············│················· 25 ·················│
      *   교대역 ───── *2호선* ───── 강남역 ────────── *2호선* ────────── 성수역 ──────────── *2호선* ──────────── 합정역
-     *     │                        │
-     *   *3호선*                 *신분당선*
-     *     │                        │
-     * 남부터미널역 ── *3호선* ───── 양재역
+     *     │                        │                                                                         │
+     *   *3호선*                 *신분당선*                                                                   *6호선*
+     *     │                        │                                                                         │
+     * 남부터미널역 ── *3호선* ───── 양재역                                                                     공덕역
      */
     @BeforeEach
     public void setUp() {
@@ -51,11 +53,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         성수역 = 지하철역_생성_요청("성수역").jsonPath().getLong("id");
         합정역 = 지하철역_생성_요청("합정역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
+        공덕역 = 지하철역_생성_요청("공덕역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
+        육호선 = 지하철_노선_생성_요청("6호선", "brown", 합정역, 공덕역, 5, 7);
 
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 성수역, 20, 10));
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(성수역, 합정역, 25, 12));
@@ -140,6 +144,20 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_850);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 노선을 이용하면
+     * Then 총 지하철 요금은 기본 요금에 노선의 추가 요금이 더해진 금액이다.
+     */
+    @DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 노선을 이용하면, 총 지하철 요금은 기본 요금에 노선의 추가 요금이 더해진 금액이다.")
+    @Test
+    void basicDistanceWithExtraFare() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(합정역, 공덕역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_150);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
