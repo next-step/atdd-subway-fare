@@ -35,12 +35,12 @@ class LineServiceTest {
 
         Line line = lineService.findById(이호선.getId());
 
-        assertThat(line.getSections().size()).isEqualTo(2);
+        assertThat(line.getSections()).hasSize(2);
     }
 
     private Line createLine(Station 강남역, Station 역삼역) {
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10,20);
         return line;
     }
 }

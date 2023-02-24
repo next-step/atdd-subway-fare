@@ -44,7 +44,7 @@ class LineServiceMockTest {
         삼성역 = new Station("삼성역");
         ReflectionTestUtils.setField(삼성역, "id", 3L);
         이호선 = new Line("2호선", "green");
-        이호선.addSection(강남역, 역삼역, 10);
+        이호선.addSection(강남역, 역삼역, 10, 10);
         ReflectionTestUtils.setField(이호선, "id", 1L);
     }
 
@@ -58,6 +58,6 @@ class LineServiceMockTest {
 
         Line line = lineService.findById(1L);
 
-        assertThat(line.getSections().size()).isEqualTo(2);
+        assertThat(line.getSections()).hasSize(2);
     }
 }
