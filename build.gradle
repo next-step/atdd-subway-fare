@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'java'
+    id "io.freefair.lombok" version "6.6.2"
 }
 
 configurations {
