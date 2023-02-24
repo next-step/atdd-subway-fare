@@ -16,6 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 구간 관리 기능")
 class SectionAcceptanceTest extends AcceptanceTest {
+
+    private static final int LINE_DURATION = 10;
+    private static final int LINE_DISTANCE = 10;
+    private static final int SECTION_DURATION = 5;
+    private static final int SECTION_DISTANCE = 5;
+
     private Long 신분당선;
 
     private Long 강남역;
@@ -80,7 +86,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("color", "bg-red-600");
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", 10 + "");
+        lineCreateParams.put("distance", LINE_DISTANCE + "");
+        lineCreateParams.put("duration", LINE_DURATION + "");
         return lineCreateParams;
     }
 
@@ -88,7 +95,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
-        params.put("distance", 6 + "");
+        params.put("distance", SECTION_DISTANCE + "");
+        params.put("duration", SECTION_DURATION + "");
         return params;
     }
 }
