@@ -2,7 +2,13 @@ package nextstep.subway.domain;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 
 @Entity
@@ -36,6 +42,29 @@ public class Section extends DefaultWeightedEdge {
         this.duration = duration;
     }
 
+    public Section(final Station upStation, final Station downStation, final int distance, final int duration) {
+        this(null, upStation, downStation, distance, duration);
+    }
+
+    public static Section of(final Section upSection, final Section downSection) {
+        return new Section(upSection.getLine(), downSection.getUpStation(), upSection.getDownStation(),
+                upSection.getDistance() + downSection.getDistance(),
+                upSection.getDuration() + downSection.getDuration());
+    }
+
+    public boolean isSameUpStation(Station station) {
+        return this.upStation == station;
+    }
+
+    public boolean isSameDownStation(Station station) {
+        return this.downStation == station;
+    }
+
+    public boolean hasDuplicateSection(Station upStation, Station downStation) {
+        return (this.upStation == upStation && this.downStation == downStation)
+                || (this.upStation == downStation && this.downStation == upStation);
+    }
+
     public Long getId() {
         return id;
     }
@@ -58,18 +87,5 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDuration() {
         return duration;
-    }
-
-    public boolean isSameUpStation(Station station) {
-        return this.upStation == station;
-    }
-
-    public boolean isSameDownStation(Station station) {
-        return this.downStation == station;
-    }
-
-    public boolean hasDuplicateSection(Station upStation, Station downStation) {
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
     }
 }
