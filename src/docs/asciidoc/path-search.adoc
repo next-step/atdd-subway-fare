@@ -1,0 +1,28 @@
+= Subway Application API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[path]]
+== 지하철 경로
+
+=== 경로 조회
+
+== Request
+
+==== Parameters
+include::{snippets}/path/request-parameters.adoc[]
+
+==== HTTP request
+include::{snippets}/path/http-request.adoc[]
+
+== Response
+
+==== fields
+include::{snippets}/path/response-fields.adoc[]
+
+==== HTTP response
+include::{snippets}/path/http-response.adoc[]
