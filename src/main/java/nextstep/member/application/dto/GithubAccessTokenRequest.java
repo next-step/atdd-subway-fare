@@ -12,8 +12,7 @@ public class GithubAccessTokenRequest {
         this.client_secret = client_secret;
     }
 
-    public GithubAccessTokenRequest() {
-    }
+    private GithubAccessTokenRequest() {}
 
     public String getCode() {
         return code;

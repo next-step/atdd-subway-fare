@@ -11,8 +11,7 @@ public class GithubProfileResponse {
         this.email = email;
     }
 
-    public GithubProfileResponse() {
-    }
+    private GithubProfileResponse() {}
 
     public String getEmail() {
         return email;
