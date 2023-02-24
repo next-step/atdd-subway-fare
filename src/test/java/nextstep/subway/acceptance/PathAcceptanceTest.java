@@ -43,16 +43,19 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
      *
-     *     │·········· 10 ··········│··············· 20 ···············│················· 25 ·················│
-     *   교대역 ───── *2호선* ───── 강남역 ────────── *2호선* ────────── 성수역 ──────────── *2호선* ──────────── 합정역
-     *     │                        │                                                                         │
-     *   *3호선*                 *신분당선*                                                                   *6호선*
-     *     │                        │                                                                         │
-     * 남부터미널역 ── *3호선* ───── 양재역                                          서울역 ───── *공항철도* ───── 공덕역
-     *                                                                             │
-     *                                                                          *1호선*
-     *                                                                             │
-     *                                                                         종로3가역 ── *5호선* ── 동대문역
+     *     |·········· 10 ··········|··············· 20 ···············|················· 25 ·················|
+     *   교대역 ───── *2호선* ───── 강남역 ────────── *2호선* ────────── 성수역 ──────────── *2호선* ──────────── 합정역 ···
+     *     │                        │                                                                         │     ·
+     *   *3호선*                 *신분당선*                                                                   *6호선*  8 (+500)
+     *     │                        │                                                                         │     ·
+     * 남부터미널역 ── *3호선* ───── 양재역                                     ·····서울역 ───── *공항철도* ───── 공덕역 ···
+     *                                                                     ·       │ \····· 10 (+900) ·····/
+     *                                                                     ·       │
+     *                                                                  5 (+300) *1호선*
+     *                                                                     ·       │
+     *                                                                     ·       │
+     *                                                                     ····종로3가역 ─── *5호선* ─── 동대문역
+     *                                                                                \··· 5 (+400) ···/
      */
     @BeforeEach
     public void setUp() {
@@ -63,9 +66,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         성수역 = 지하철역_생성_요청("성수역").jsonPath().getLong("id");
         합정역 = 지하철역_생성_요청("합정역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
+        남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         공덕역 = 지하철역_생성_요청("공덕역").jsonPath().getLong("id");
         서울역 = 지하철역_생성_요청("서울역").jsonPath().getLong("id");
-        남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         종로3가역 = 지하철역_생성_요청("종로3가역").jsonPath().getLong("id");
         동대문역 = 지하철역_생성_요청("동대문역").jsonPath().getLong("id");
 
@@ -166,7 +169,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 노선을 이용하면
      * Then 총 지하철 요금은 (기본 요금 + 노선의 추가 요금) 이다.
      */
-    @DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 노선을 이용하면, 총 지하철 요금은 (기본 요금 + 노선의 추가 요금) 이다.")
+    @DisplayName("구간 길이가 10km 이내이고 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 노선 추가 요금) 이다.")
     @Test
     void basicDistanceWithExtraFare() {
         // when
@@ -178,9 +181,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 여러 노선을 이용하면
-     * Then 총 지하철 요금은 (기본 요금 + 노선들의 추가 요금 중 가장 큰 추가 요금) 이다.
+     * Then 총 지하철 요금은 (기본 요금 + 가장 큰 노선 추가 요금) 이다.
      */
-    @DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 여러 노선을 이용하면, 총 지하철 요금은 (기본 요금 + 노선들의 추가 요금 중 가장 큰 추가 요금) 이다.")
+    @DisplayName("구간 길이가 10km 이내이고 여러 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 가장 큰 노선 추가 요금) 이다.")
     @Test
     void basicDistanceWithExtraFares() {
         // when
@@ -189,6 +192,21 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_650);
     }
+
+    /**
+     * When 출발역에서 도착역까지의 구간 길이가 10km 초과 50km 이내이고, 추가 요금이 있는 노선을 이용하면
+     * Then 총 지하철 요금은 (기본 요금 + 추가 요금 + 노선 추가 요금) 이다.
+     */
+    @DisplayName("구간 길이가 10km 초과 50km 이내이고 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금 + 노선 추가 요금) 이다.")
+    @Test
+    void middleDistanceWithExtraFare() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(성수역, 공덕역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_250);
+    }
+
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
