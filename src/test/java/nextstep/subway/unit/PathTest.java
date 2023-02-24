@@ -98,7 +98,7 @@ class PathTest {
         assertThat(분당선_구간.extractDuration()).isEqualTo(8);
     }
 
-    @DisplayName("지하철 구간의 요금을 구한다.")
+    @DisplayName("지하철 구간의 연령별 요금을 구한다.")
     @CsvSource(value = {"20, 1_250", "13, 1_070", "12, 800"})
     @ParameterizedTest
     void extractFare(int age, int fare) {
@@ -106,11 +106,12 @@ class PathTest {
         assertThat(팔호선_구간.extractFare(age)).isEqualTo(fare);
     }
 
-    @DisplayName("추가 요금이 있는 노선이 포함된 지하철 구간의 요금을 구한다.")
-    @Test
-    void extractFareWithExtraFareLine() {
+    @DisplayName("추가 요금이 있는 노선이 포함된 지하철 구간의 연령별 요금을 구한다.")
+    @CsvSource(value = {"20, 2_150", "13, 1_790", "12, 1_250"})
+    @ParameterizedTest
+    void extractFareWithExtraFareLine(int age, int fare) {
         // when & then
-        assertThat(삼호선_구간.extractFare(20)).isEqualTo(2_150);
+        assertThat(삼호선_구간.extractFare(age)).isEqualTo(fare);
     }
 
     @DisplayName("추가 요금이 있는 여러 노선이 포함된 지하철 구간일 경우, 추가 요금은 추가 요금 중 가장 높은 금액으로 적용한다.")

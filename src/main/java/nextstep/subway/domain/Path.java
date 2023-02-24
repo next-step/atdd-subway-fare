@@ -23,8 +23,8 @@ public class Path {
     }
 
     public int extractFare(int age) {
-        int fare = Fare.calculate(extractDistance());
-        return fare - extractDiscountedFare(fare, age) + sections.extraFare();
+        int fare = Fare.calculate(extractDistance()) + sections.extraFare();
+        return fare - extractDiscountedFare(fare, age);
     }
 
     private int extractDiscountedFare(int fare, int age) {
