@@ -21,21 +21,30 @@ public class Member {
     @Column(name = "role")
     private List<String> roles;
 
-    public Member() {
+    protected Member() {}
+
+    public Member(final String email, final String password, final Integer age, final List<String> roles) {
+        this.email = email;
+        this.password = password;
+        this.age = age;
+        this.roles = roles;
     }
 
-    public Member(String email, String password, Integer age) {
+    public Member(final String email, final String password, final Integer age) {
         this.email = email;
         this.password = password;
         this.age = age;
         this.roles = List.of(RoleType.ROLE_MEMBER.name());
     }
 
-    public Member(String email, String password, Integer age, List<String> roles) {
-        this.email = email;
-        this.password = password;
-        this.age = age;
-        this.roles = roles;
+    public void update(Member member) {
+        this.email = member.email;
+        this.password = member.password;
+        this.age = member.age;
+    }
+
+    public boolean checkPassword(String password) {
+        return Objects.equals(this.password, password);
     }
 
     public Long getId() {
@@ -56,15 +65,5 @@ public class Member {
 
     public List<String> getRoles() {
         return roles;
-    }
-
-    public void update(Member member) {
-        this.email = member.email;
-        this.password = member.password;
-        this.age = member.age;
-    }
-
-    public boolean checkPassword(String password) {
-        return Objects.equals(this.password, password);
     }
 }
