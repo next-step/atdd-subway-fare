@@ -50,17 +50,23 @@ class PathTest {
         삼호선 = new Line("3호선", "orange", 900);
         오호선 = new Line("5호선", "purple", 1200);
 
-        분당선_구간 = new Path(new Sections(List.of(
+        분당선_구간 = 지하철_경로_생성(
             new Section(분당선, 수서역, 복정역, 10, 5),
             new Section(분당선, 복정역, 가천대역, 8, 3)
-        )));
+        );
 
-        삼호선_구간 = new Path(new Sections(List.of(new Section(삼호선, 수서역, 오금역, 5, 4))));
+        삼호선_구간 = 지하철_경로_생성(
+            new Section(삼호선, 수서역, 오금역, 5, 4)
+        );
 
-        삼호선_오호선_구간 = new Path(new Sections(List.of(
+        삼호선_오호선_구간 = 지하철_경로_생성(
             new Section(삼호선, 수서역, 오금역, 5, 4),
             new Section(오호선, 오금역, 마천역, 4, 2)
-        )));
+        );
+    }
+
+    private Path 지하철_경로_생성(Section... sections) {
+        return new Path(new Sections(List.of(sections)));
     }
 
     @DisplayName("지하철 구간의 총 거리를 구한다.")
