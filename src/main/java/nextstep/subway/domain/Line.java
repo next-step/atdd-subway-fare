@@ -13,18 +13,27 @@ public class Line {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String color;
 
     @Embedded
     private Sections sections = new Sections();
 
+    private int extraFare;
+
     public Line() {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public Long getId() {
@@ -41,6 +50,10 @@ public class Line {
 
     public List<Section> getSections() {
         return sections.getSections();
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 
     public void update(String name, String color) {

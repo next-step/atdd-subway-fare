@@ -23,7 +23,7 @@ public class Path {
     }
 
     public int extractFare() {
-        return Fare.calculate(extractDistance());
+        return Fare.calculate(extractDistance()) + sections.extraFare();
     }
 
     public List<Station> getStations() {
