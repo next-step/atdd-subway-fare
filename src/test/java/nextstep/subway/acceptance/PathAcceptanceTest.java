@@ -197,7 +197,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 구간 길이가 10km 초과 50km 이내이고, 추가 요금이 있는 노선을 이용하면
      * Then 총 지하철 요금은 (기본 요금 + 추가 요금 + 노선 추가 요금) 이다.
      */
-    @DisplayName("구간 길이가 10km 초과 50km 이내이고 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금 + 노선 추가 요금) 이다.")
+    @DisplayName("구간 길이가 10km 초과 50km 이내이고 여러 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 가장 큰 노선 추가 요금) 이다.")
     @Test
     void middleDistanceWithExtraFare() {
         // when
@@ -207,6 +207,19 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_250);
     }
 
+    /**
+     * When 출발역에서 도착역까지의 구간 길이가 10km 초과 50km 이내이고, 추가 요금이 있는 여러 노선을 이용하면
+     * Then 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 가장 큰 노선 추가 요금) 이다.
+     */
+    @DisplayName("구간 길이가 10km 초과 50km 이내이고 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 노선 추가 요금) 이다.")
+    @Test
+    void middleDistanceWithExtraFares() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(성수역, 서울역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_850);
+    }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
