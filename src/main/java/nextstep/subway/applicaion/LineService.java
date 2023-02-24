@@ -1,8 +1,8 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.LineCreateRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
-import nextstep.subway.applicaion.dto.SectionRequest;
+import nextstep.subway.applicaion.dto.SectionCreateRequest;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
@@ -25,7 +25,7 @@ public class LineService {
     }
 
     @Transactional
-    public LineResponse saveLine(LineRequest request) {
+    public LineResponse saveLine(LineCreateRequest request) {
         Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
@@ -54,9 +54,9 @@ public class LineService {
     }
 
     @Transactional
-    public void updateLine(Long id, LineRequest lineRequest) {
+    public void updateLine(Long id, LineCreateRequest lineCreateRequest) {
         Line line = findById(id);
-        line.update(lineRequest.getName(), lineRequest.getColor());
+        line.update(lineCreateRequest.getName(), lineCreateRequest.getColor());
     }
 
     @Transactional
@@ -65,12 +65,12 @@ public class LineService {
     }
 
     @Transactional
-    public void addSection(Long lineId, SectionRequest sectionRequest) {
-        Station upStation = stationService.findById(sectionRequest.getUpStationId());
-        Station downStation = stationService.findById(sectionRequest.getDownStationId());
+    public void addSection(Long lineId, SectionCreateRequest sectionCreateRequest) {
+        Station upStation = stationService.findById(sectionCreateRequest.getUpStationId());
+        Station downStation = stationService.findById(sectionCreateRequest.getDownStationId());
         Line line = findById(lineId);
 
-        line.addSection(upStation, downStation, sectionRequest.getDistance());
+        line.addSection(upStation, downStation, sectionCreateRequest.getDistance());
     }
 
     private List<StationResponse> createStationResponses(Line line) {
