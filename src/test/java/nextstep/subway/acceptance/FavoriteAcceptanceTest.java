@@ -9,7 +9,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static nextstep.subway.acceptance.FavoriteSteps.*;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_목록_조회_요청;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_목록_조회됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_삭제_요청;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_삭제됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_생성됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_생성을_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
