@@ -11,10 +11,12 @@ import java.util.List;
 public class PathService {
     private LineService lineService;
     private StationService stationService;
+    private FarePolicy farePolicy;
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.farePolicy = new BaseFarePolicy();
     }
 
     public PathResponse findPath(PathRequest pathRequest) {
@@ -31,6 +33,6 @@ public class PathService {
 
     private SubwayMap createSubwayMap(PathType pathType) {
         List<Line> lines = lineService.findLines();
-        return new SubwayMap(lines, pathType);
+        return new SubwayMap(lines, pathType, farePolicy);
     }
 }
