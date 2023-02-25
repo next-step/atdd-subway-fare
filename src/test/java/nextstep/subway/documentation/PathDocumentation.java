@@ -18,6 +18,8 @@ import static org.mockito.BDDMockito.verify;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +61,14 @@ public class PathDocumentation extends Documentation {
     private void 문서화_요청_파라미터를_설정한다(Long source, Long target, String type) {
         this.spec
                 .queryParams("source", source, "target", target, "type", type)
-                .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+                .filter(document("path",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("Start station id of paths"),
+                                parameterWithName("target").description("End station id of paths"),
+                                parameterWithName("type").description("Shortest path type"))
+                ));
     }
 
     private void 경로_응답을_검증한다() {
