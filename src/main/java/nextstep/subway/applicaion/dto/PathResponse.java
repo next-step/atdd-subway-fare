@@ -33,7 +33,7 @@ public class PathResponse {
         int distance = path.extractDistance();
         int duration = path.extractDuration();
 
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, distance, duration, new FareResponse(path.calculateFare()));
     }
 
     public List<StationResponse> getStations() {

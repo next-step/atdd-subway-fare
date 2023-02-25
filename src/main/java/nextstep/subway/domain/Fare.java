@@ -1,9 +1,10 @@
 package nextstep.subway.domain;
 
 public class Fare {
-    private FarePolicy farePolicy;
+    private final FarePolicy farePolicy;
 
-    private Fare() {
+    public Fare() {
+        this(new BaseFarePolicy());
     }
 
     public Fare(FarePolicy farePolicy) {
