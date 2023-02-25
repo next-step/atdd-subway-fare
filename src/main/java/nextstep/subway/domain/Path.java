@@ -18,7 +18,7 @@ public class Path {
 		return sections.totalDuration();
 	}
 
-	public int extractCharge() {
+	public int extractFare() {
 		int totalDistance = extractDistance();
 
 		if (totalDistance <= 10) {

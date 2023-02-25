@@ -50,7 +50,7 @@ public class PathTest {
 
 	@DisplayName("지하철 이용 요금")
 	@Test
-	void extractChargeTest() {
-		assertThat(path.extractCharge()).isEqualTo(1350);
+	void extractFareTest() {
+		assertThat(path.extractFare()).isEqualTo(1350);
 	}
 }

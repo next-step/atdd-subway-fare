@@ -131,12 +131,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
 		int totalDistance = response.jsonPath().getInt("distance");
 		int totalDuration = response.jsonPath().getInt("duration");
-		int charge = response.jsonPath().getInt("charge");
+		int fare = response.jsonPath().getInt("fare");
 		assertAll(
 			() -> assertThat(stationsIds).containsExactly(교대역, 남부터미널역, 양재역),
 			() -> assertThat(totalDistance).isEqualTo(5),
 			() -> assertThat(totalDuration).isEqualTo(20),
-			() -> assertThat(charge).isEqualTo(1250)
+			() -> assertThat(fare).isEqualTo(1250)
 		);
 	}
 
@@ -155,12 +155,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
 		int totalDistance = response.jsonPath().getInt("distance");
 		int totalDuration = response.jsonPath().getInt("duration");
-		int charge = response.jsonPath().getInt("charge");
+		int fare = response.jsonPath().getInt("fare");
 		assertAll(
 			() -> assertThat(stationsIds).containsExactly(남부터미널역, 교대역, 강남역),
 			() -> assertThat(totalDistance).isEqualTo(12),
 			() -> assertThat(totalDuration).isEqualTo(12),
-			() -> assertThat(charge).isEqualTo(1350)
+			() -> assertThat(fare).isEqualTo(1350)
 		);
 	}
 
@@ -183,12 +183,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
 		int totalDistance = response.jsonPath().getInt("distance");
 		int totalDuration = response.jsonPath().getInt("duration");
-		int charge = response.jsonPath().getInt("charge");
+		int fare = response.jsonPath().getInt("fare");
 		assertAll(
 			() -> assertThat(stationsIds).containsExactly(남부터미널역, 교대역, 강남역, 역삼역),
 			() -> assertThat(totalDistance).isEqualTo(17),
 			() -> assertThat(totalDuration).isEqualTo(13),
-			() -> assertThat(charge).isEqualTo(1450)
+			() -> assertThat(fare).isEqualTo(1450)
 		);
 	}
 
@@ -207,12 +207,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
 		int totalDistance = response.jsonPath().getInt("distance");
 		int totalDuration = response.jsonPath().getInt("duration");
-		int charge = response.jsonPath().getInt("charge");
+		int fare = response.jsonPath().getInt("fare");
 		assertAll(
 			() -> assertThat(stationsIds).containsExactly(A_Station, B_Station, C_Station),
 			() -> assertThat(totalDistance).isEqualTo(50),
 			() -> assertThat(totalDuration).isEqualTo(10),
-			() -> assertThat(charge).isEqualTo(2050)
+			() -> assertThat(fare).isEqualTo(2050)
 		);
 	}
 
@@ -231,12 +231,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
 		int totalDistance = response.jsonPath().getInt("distance");
 		int totalDuration = response.jsonPath().getInt("duration");
-		int charge = response.jsonPath().getInt("charge");
+		int fare = response.jsonPath().getInt("fare");
 		assertAll(
 			() -> assertThat(stationsIds).containsExactly(A_Station, B_Station, C_Station, D_Station),
 			() -> assertThat(totalDistance).isEqualTo(106),
 			() -> assertThat(totalDuration).isEqualTo(20),
-			() -> assertThat(charge).isEqualTo(2750)
+			() -> assertThat(fare).isEqualTo(2750)
 		);
 	}
 }
