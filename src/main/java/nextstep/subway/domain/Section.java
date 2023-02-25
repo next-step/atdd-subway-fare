@@ -38,6 +38,16 @@ public class Section extends DefaultWeightedEdge {
         this.duration = duration;
     }
 
+    public static Section of(Section upSection, Section downSection) {
+        return new Section(
+                upSection.getLine(),
+                downSection.getUpStation(),
+                upSection.getDownStation(),
+                upSection.getDistance() + downSection.getDistance(),
+                upSection.getDuration() + downSection.getDuration()
+        );
+    }
+
     public static Section createFrontSectionOf(Section oldSection, Section newSection) {
         return new Section(
                 newSection.getLine(),
