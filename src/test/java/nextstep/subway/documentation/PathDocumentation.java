@@ -1,22 +1,16 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 @ExtendWith(MockitoExtension.class)
 public class PathDocumentation extends Documentation {
@@ -32,14 +26,9 @@ public class PathDocumentation extends Documentation {
                 ), 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        BDDMockito.given(pathService.findPath(anyLong(), anyLong())).willReturn(pathResponse);
 
-        RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
-                .accept(MediaType.APPLICATION_JSON_VALUE)
+        given("path")
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
                 .when().get("/paths")

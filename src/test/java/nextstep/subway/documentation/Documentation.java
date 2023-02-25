@@ -7,10 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 @ActiveProfiles("test")
@@ -20,13 +25,21 @@ public class Documentation {
     @LocalServerPort
     private int port;
 
-    protected RequestSpecification spec;
+    protected static RequestSpecification spec;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.port = port;
-        this.spec = new RequestSpecBuilder()
+        spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation))
                 .build();
+    }
+
+    public static RequestSpecification given(String identifier) {
+        return RestAssured.given(spec).log().all()
+                .filter(document(identifier,
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())))
+                .accept(MediaType.APPLICATION_JSON_VALUE);
     }
 }
