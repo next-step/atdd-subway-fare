@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
+
 import static nextstep.subway.acceptance.PathSteps.*;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -20,6 +22,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 class PathDocumentation extends Documentation {
 
     private static final String 최소시간 = "DURATION";
+    private static final BigDecimal 요금_1250원 = new BigDecimal("1250");
     @MockBean
     private PathService pathService;
 
@@ -30,7 +33,7 @@ class PathDocumentation extends Documentation {
         final StationResponse 강남역 = new StationResponse(1L, "강남역");
         final StationResponse 역삼역 = new StationResponse(2L, "역삼역");
         final PathResponse pathResponse = new PathResponse(Lists.newArrayList(
-                강남역, 역삼역), 10, 20);
+                강남역, 역삼역), 10, 20, 요금_1250원);
 
         when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
