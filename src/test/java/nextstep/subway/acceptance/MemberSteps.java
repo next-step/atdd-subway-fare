@@ -1,15 +1,19 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.member.domain.Member;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.common.error.MemberError.UNAUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class MemberSteps {
 
@@ -23,7 +27,7 @@ public class MemberSteps {
                 .body(params)
                 .when().post("/login/token")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value()).extract();
+                .extract();
     }
 
     public static ExtractableResponse<Response> 깃허브_인증_로그인_요청(String code) {
@@ -110,5 +114,25 @@ public class MemberSteps {
         assertThat(response.jsonPath().getString("id")).isNotNull();
         assertThat(response.jsonPath().getString("email")).isEqualTo(email);
         assertThat(response.jsonPath().getInt("age")).isEqualTo(age);
+    }
+
+    public static void 인증_로그인_응답_성공(final ExtractableResponse<Response> response) {
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getString("accessToken")).isNotBlank()
+        );
+    }
+
+    public static void 인증_로그인_응답_실패(final ExtractableResponse<Response> response) {
+
+        final JsonPath jsonPathResponse = response.response().body().jsonPath();
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value()),
+                () -> assertThat(jsonPathResponse.getString("message")).contains(UNAUTHORIZED.getMessage())
+        );
+    }
+
+    public static Member createMember(final String email, final String password, final Integer age) {
+        return new Member(email, password, age);
     }
 }

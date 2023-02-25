@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.common.exception.NoDeleteOneSectionException;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -9,20 +11,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static nextstep.common.error.SubwayError.NO_DELETE_ONE_SECTION;
+
 @Embeddable
 public class Sections {
+    public static final int ONE_SECTION = 1;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
-    public Sections() {
-    }
+    protected Sections() {}
 
-    public Sections(List<Section> sections) {
+    public Sections(final List<Section> sections) {
         this.sections = sections;
-    }
-
-    public List<Section> getSections() {
-        return sections;
     }
 
     public void add(Section section) {
@@ -30,20 +30,16 @@ public class Sections {
             this.sections.add(section);
             return;
         }
-
         checkDuplicateSection(section);
-
         rearrangeSectionWithUpStation(section);
         rearrangeSectionWithDownStation(section);
-
         sections.add(section);
     }
 
-    public void delete(Station station) {
-        if (this.sections.size() <= 1) {
-            throw new IllegalArgumentException();
+    public void delete(final Station station) {
+        if (this.sections.size() <= ONE_SECTION) {
+            throw new NoDeleteOneSectionException(NO_DELETE_ONE_SECTION);
         }
-
         Optional<Section> upSection = findSectionAsUpStation(station);
         Optional<Section> downSection = findSectionAsDownStation(station);
 
@@ -57,7 +53,6 @@ public class Sections {
         if (this.sections.isEmpty()) {
             return Collections.emptyList();
         }
-
         Station upStation = findFirstUpStation();
         List<Station> result = new ArrayList<>();
         result.add(upStation);
@@ -65,11 +60,9 @@ public class Sections {
         while (true) {
             Station finalUpStation = upStation;
             Optional<Section> section = findSectionAsUpStation(finalUpStation);
-
-            if (!section.isPresent()) {
+            if (section.isEmpty()) {
                 break;
             }
-
             upStation = section.get().getDownStation();
             result.add(upStation);
         }
@@ -77,7 +70,7 @@ public class Sections {
         return result;
     }
 
-    private void checkDuplicateSection(Section section) {
+    private void checkDuplicateSection(final Section section) {
         sections.stream()
                 .filter(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))
                 .findFirst()
@@ -86,26 +79,32 @@ public class Sections {
                 });
     }
 
-    private void rearrangeSectionWithDownStation(Section section) {
+    private void rearrangeSectionWithDownStation(final Section section) {
         sections.stream()
                 .filter(it -> it.isSameDownStation(section.getDownStation()))
                 .findFirst()
-                .ifPresent(it -> {
-                    // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance()));
-                    sections.remove(it);
-                });
+                .ifPresent(currentStation -> addUpStation(section, currentStation));
     }
 
-    private void rearrangeSectionWithUpStation(Section section) {
+    private void addUpStation(final Section section, final Section currentStation) {
+        sections.add(new Section(section.getLine(), currentStation.getUpStation(), section.getUpStation(),
+                currentStation.getDistance() - section.getDistance(),
+                currentStation.getDuration() - section.getDuration()));
+        sections.remove(currentStation);
+    }
+
+    private void rearrangeSectionWithUpStation(final Section section) {
         sections.stream()
                 .filter(it -> it.isSameUpStation(section.getUpStation()))
                 .findFirst()
-                .ifPresent(it -> {
-                    // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance()));
-                    sections.remove(it);
-                });
+                .ifPresent(currentStation -> addDownStation(section, currentStation));
+    }
+
+    private void addDownStation(final Section section, final Section currentStation) {
+        sections.add(new Section(section.getLine(), section.getDownStation(), currentStation.getDownStation(),
+                currentStation.getDistance() - section.getDistance(),
+                currentStation.getDuration() - section.getDuration()));
+        sections.remove(currentStation);
     }
 
     private Station findFirstUpStation() {
@@ -115,7 +114,6 @@ public class Sections {
         List<Station> downStations = this.sections.stream()
                 .map(Section::getDownStation)
                 .collect(Collectors.toList());
-
         return upStations.stream()
                 .filter(it -> !downStations.contains(it))
                 .findFirst()
@@ -124,30 +122,36 @@ public class Sections {
 
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
-            Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
-            );
-
+            final Section newSection = Section.of(upSection.get(), downSection.get());
             this.sections.add(newSection);
         }
     }
 
     private Optional<Section> findSectionAsUpStation(Station finalUpStation) {
         return this.sections.stream()
-                .filter(it -> it.isSameUpStation(finalUpStation))
+                .filter(section -> section.isSameUpStation(finalUpStation))
                 .findFirst();
     }
 
     private Optional<Section> findSectionAsDownStation(Station station) {
         return this.sections.stream()
-                .filter(it -> it.isSameDownStation(station))
+                .filter(section -> section.isSameDownStation(station))
                 .findFirst();
     }
 
     public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
+    }
+
+    public int totalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
+
+    public List<Section> getSections() {
+        return sections;
     }
 }

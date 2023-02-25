@@ -11,9 +11,7 @@ public class GithubAccessTokenResponse {
     private String scope;
     private String bearer;
 
-    public GithubAccessTokenResponse() {
-
-    }
+    private GithubAccessTokenResponse() {}
 
     public GithubAccessTokenResponse(String accessToken,
                                      String tokenType,

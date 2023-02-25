@@ -3,8 +3,7 @@ package nextstep.member.application.dto;
 public class GithubTokenRequest {
     private String code;
 
-    public GithubTokenRequest() {
-    }
+    private GithubTokenRequest() {}
 
     public GithubTokenRequest(String code) {
         this.code = code;

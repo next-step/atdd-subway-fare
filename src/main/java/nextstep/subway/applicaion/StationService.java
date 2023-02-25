@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +22,12 @@ public class StationService {
     @Transactional
     public StationResponse saveStation(StationRequest stationRequest) {
         Station station = stationRepository.save(new Station(stationRequest.getName()));
-        return StationResponse.of(station);
+        return StationResponse.from(station);
     }
 
     public List<StationResponse> findAllStations() {
         return stationRepository.findAll().stream()
-                .map(StationResponse::of)
+                .map(StationResponse::from)
                 .collect(Collectors.toList());
     }
 
@@ -37,18 +36,7 @@ public class StationService {
         stationRepository.deleteById(id);
     }
 
-    public StationResponse createStationResponse(Station station) {
-        return new StationResponse(
-                station.getId(),
-                station.getName()
-        );
-    }
-
     public Station findById(Long id) {
         return stationRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-    }
-
-    public List<Station> findAllStationsById(Set<Long> stationIds) {
-        return stationRepository.findAllById(stationIds);
     }
 }

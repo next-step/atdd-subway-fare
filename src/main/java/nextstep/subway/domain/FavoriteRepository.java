@@ -2,8 +2,10 @@ package nextstep.subway.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
-    List<Favorite> findByMemberId(Long memberId);
+    Optional<Favorite> findByIdAndMemberId(final Long id, final Long memberId);
+
+    void deleteByIdAndMemberId(final Long id, final Long memberId);
 }

@@ -3,7 +3,6 @@ package nextstep.subway.applicaion;
 import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
-import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
@@ -25,12 +24,12 @@ public class LineService {
     }
 
     @Transactional
-    public LineResponse saveLine(LineRequest request) {
+    public LineResponse saveLine(final LineRequest request) {
         Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
         if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSection(upStation, downStation, request.getDistance());
+            line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
         }
         return LineResponse.of(line);
     }
@@ -70,13 +69,7 @@ public class LineService {
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
         Line line = findById(lineId);
 
-        line.addSection(upStation, downStation, sectionRequest.getDistance());
-    }
-
-    private List<StationResponse> createStationResponses(Line line) {
-        return line.getStations().stream()
-                .map(it -> stationService.createStationResponse(it))
-                .collect(Collectors.toList());
+        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
     }
 
     @Transactional

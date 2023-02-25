@@ -14,21 +14,20 @@ public class Favorite {
     private Long sourceStationId;
     private Long targetStationId;
 
-    public Favorite() {
-    }
+    protected Favorite() {}
 
-    public Favorite(Long memberId, Long sourceStationId, Long targetStationId) {
+    public Favorite(final Long memberId, final Long sourceStationId, final Long targetStationId) {
         this.memberId = memberId;
         this.sourceStationId = sourceStationId;
         this.targetStationId = targetStationId;
     }
 
-    public Long getId() {
-        return id;
+    public static Favorite of(final Long memberId, final Long sourceStationId, final Long targetStationId) {
+        return new Favorite(memberId, sourceStationId, targetStationId);
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Long getId() {
+        return id;
     }
 
     public Long getSourceStationId() {
@@ -37,9 +36,5 @@ public class Favorite {
 
     public Long getTargetStationId() {
         return targetStationId;
-    }
-
-    public boolean isCreatedBy(Long memberId) {
-        return this.memberId == memberId;
     }
 }

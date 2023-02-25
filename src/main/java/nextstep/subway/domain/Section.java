@@ -2,7 +2,14 @@ package nextstep.subway.domain;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -23,16 +30,39 @@ public class Section extends DefaultWeightedEdge {
     private Station downStation;
 
     private int distance;
+    private int duration;
 
-    public Section() {
+    protected Section() {}
 
-    }
-
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(final Line line, final Station upStation, final Station downStation, final int distance, final int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
+    }
+
+    public Section(final Station upStation, final Station downStation, final int distance, final int duration) {
+        this(null, upStation, downStation, distance, duration);
+    }
+
+    public static Section of(final Section upSection, final Section downSection) {
+        return new Section(upSection.getLine(), downSection.getUpStation(), upSection.getDownStation(),
+                upSection.getDistance() + downSection.getDistance(),
+                upSection.getDuration() + downSection.getDuration());
+    }
+
+    public boolean isSameUpStation(Station station) {
+        return this.upStation == station;
+    }
+
+    public boolean isSameDownStation(Station station) {
+        return this.downStation == station;
+    }
+
+    public boolean hasDuplicateSection(Station upStation, Station downStation) {
+        return (this.upStation == upStation && this.downStation == downStation)
+                || (this.upStation == downStation && this.downStation == upStation);
     }
 
     public Long getId() {
@@ -55,16 +85,7 @@ public class Section extends DefaultWeightedEdge {
         return distance;
     }
 
-    public boolean isSameUpStation(Station station) {
-        return this.upStation == station;
-    }
-
-    public boolean isSameDownStation(Station station) {
-        return this.downStation == station;
-    }
-
-    public boolean hasDuplicateSection(Station upStation, Station downStation) {
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
+    public int getDuration() {
+        return duration;
     }
 }
