@@ -46,7 +46,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 	 * 					(di:3, dr:10)
 	 */
 	/**
-	 *   (25, 5)   (25, 5)  (56, 10)
+	 *   (25, 5)   (25, 5)  (30, 10)
 	 * A --- --- B --- --- C --- --- D
 	 * */
 	@BeforeEach
@@ -72,7 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 		AD_Line = 지하철_노선_생성_요청("AD", "black", A_Station, B_Station, 25, 5).jsonPath().getLong("id");
 
 		지하철_노선에_지하철_구간_생성_요청(AD_Line, B_Station, C_Station, 25, 5);
-		지하철_노선에_지하철_구간_생성_요청(AD_Line, C_Station, D_Station, 56, 10);
+		지하철_노선에_지하철_구간_생성_요청(AD_Line, C_Station, D_Station, 30, 10);
 	}
 
 	/**
@@ -217,11 +217,11 @@ class PathAcceptanceTest extends AcceptanceTest {
 	}
 
 	/**
-	 * When 출발역에서 도착역까지의 최단 거리가 106km 경로를 조회하면
+	 * When 출발역에서 도착역까지의 최단 거리가 80km 경로를 조회하면
 	 * Then 최단 거리, 총 거리, 소요 시간
-	 * And 50km 초과시 8km 마다 100원 추가로 2750원의 이용요금
+	 * And 50km 초과시 기본 요금 + 8km 마다 100원 추가로 2150원의 이용요금
 	 * */
-	@DisplayName("이용 거리가 106km 경로 조회")
+	@DisplayName("이용 거리가 80km 경로 조회")
 	@Test
 	void path106km() {
 		// when
@@ -234,9 +234,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 		int fare = response.jsonPath().getInt("fare");
 		assertAll(
 			() -> assertThat(stationsIds).containsExactly(A_Station, B_Station, C_Station, D_Station),
-			() -> assertThat(totalDistance).isEqualTo(106),
+			() -> assertThat(totalDistance).isEqualTo(80),
 			() -> assertThat(totalDuration).isEqualTo(20),
-			() -> assertThat(fare).isEqualTo(2750)
+			() -> assertThat(fare).isEqualTo(2150)
 		);
 	}
 }
