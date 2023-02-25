@@ -34,7 +34,7 @@ public class SubwayMap {
         WeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         addVertex(graph);
-        addEdge(pathSearchType, graph);
+        addEdge(graph, pathSearchType);
 
         return new DijkstraShortestPath<>(graph);
     }
@@ -47,14 +47,14 @@ public class SubwayMap {
                 .forEach(graph::addVertex);
     }
 
-    private void addEdge(PathSearchType pathSearchType, WeightedGraph<Station, SectionEdge> graph) {
+    private void addEdge(WeightedGraph<Station, SectionEdge> graph, PathSearchType pathSearchType) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .forEach(it -> addEdge(graph, it, pathSearchType));
+                .forEach(it -> addSectionEdge(graph, it, pathSearchType));
     }
 
 
-    private void addEdge(
+    private void addSectionEdge(
             WeightedGraph<Station, SectionEdge> graph,
             Section section,
             PathSearchType pathSearchType) {
