@@ -86,10 +86,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    /**
-     * When 지하철 노선 기존 구간에 출발역과 도착역이 같은 경우 경로 찾기를 요청하면
-     * Then 최적의 경로를 조회불가능하다
-     */
     @DisplayName("출발역과 도착역이 같아서 조회가 불가능합니다")
     @Test
     void error_showRoutes() {
@@ -102,10 +98,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    /**
-     * When 지하철 노선 기존 구간에 출발역과 도착역이 연결되어 있지 않은 경우 경로 찾기를 요청하면
-     * Then 최적의 경로를 조회불가능하다
-     */
     @DisplayName("출발역과 도착역이 연결되어 있지 않아서 조회가 불가능합니다")
     @Test
     void error_showRoutes_2() {
@@ -118,10 +110,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    /**
-     * When 지하철 노선 기존 구간에 출발역 또는 도착역이 등록되어 있지 않은 경우 경로 찾기를 요청하면
-     * Then 최적의 경로를 조회불가능하다
-     */
     @DisplayName("요청한 역이 노선의 등록되어 있지 않습니다")
     @Test
     void error_showRoutes_3() {
