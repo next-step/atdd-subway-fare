@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import static nextstep.common.ErrorMsg.*;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
@@ -32,8 +34,11 @@ public class Section extends DefaultWeightedEdge {
 	private int duration;
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
-        this.line = line;
-        this.upStation = upStation;
+		if (duration < 1) {
+			throw new IllegalArgumentException((SECTION_DURATION_WRONG_VALUE.isMessage()));
+		}
+		this.line = line;
+		this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
 		this.duration = duration;
