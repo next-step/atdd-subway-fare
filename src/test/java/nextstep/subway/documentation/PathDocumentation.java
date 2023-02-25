@@ -10,6 +10,7 @@ import org.mockito.BDDMockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +27,7 @@ public class PathDocumentation extends Documentation {
                 ), 10
         );
 
-        BDDMockito.given(pathService.findPath(anyLong(), anyLong())).willReturn(pathResponse);
+        BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
         given("path")
                 .queryParam("source", 1L)
