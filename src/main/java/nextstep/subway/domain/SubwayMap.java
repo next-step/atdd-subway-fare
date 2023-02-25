@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
-    private SectionCondition condition;
+    private final List<Line> lines;
+    private final SectionCondition condition;
 
     public SubwayMap(List<Line> lines) {
         this(lines, SectionCondition.DISTANCE);
@@ -42,7 +42,7 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it, condition);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
