@@ -9,9 +9,15 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private SectionCondition condition;
 
     public SubwayMap(List<Line> lines) {
+        this(lines, SectionCondition.DISTANCE);
+    }
+
+    public SubwayMap(List<Line> lines, SectionCondition condition) {
         this.lines = lines;
+        this.condition = condition == null ? SectionCondition.DISTANCE : condition;
     }
 
     public Path findPath(Station source, Station target) {
@@ -22,15 +28,15 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
 
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    SectionEdge sectionEdge = SectionEdge.of(it, condition);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, sectionEdge.getWeight());
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -38,9 +44,9 @@ public class SubwayMap {
                 .flatMap(it -> it.getSections().stream())
                 .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    SectionEdge sectionEdge = SectionEdge.of(it, condition);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, sectionEdge.getWeight());
                 });
 
         // 다익스트라 최단 경로 찾기
@@ -48,7 +54,7 @@ public class SubwayMap {
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
