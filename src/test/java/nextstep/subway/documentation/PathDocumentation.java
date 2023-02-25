@@ -19,19 +19,40 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @Test
-    void path() {
+    void pathDefault() {
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
-                        new StationResponse(2L, "역삼역")
-                ), 10
+                        new StationResponse(4L, "양재역")
+                ), 10, 10
         );
 
         BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        given("path")
+        given("pathDefault")
                 .queryParam("source", 1L)
-                .queryParam("target", 2L)
+                .queryParam("target", 4L)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    @Test
+    void pathDuration() {
+        PathResponse pathResponse = new PathResponse(
+                Lists.newArrayList(
+                        new StationResponse(1L, "강남역"),
+                        new StationResponse(2L, "교대역"),
+                        new StationResponse(3L, "남부터미널"),
+                        new StationResponse(4L, "양재역")
+                ), 10, 5
+        );
+
+        BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+
+        given("pathDuration")
+                .queryParam("source", 1L)
+                .queryParam("target", 4L)
+                .queryParams("type", "DURATION")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
