@@ -37,10 +37,18 @@ public enum DiscountPolicy {
 
     public static int discount(int fare, int age) {
         int discountAmount = Arrays.stream(values())
-            .filter(policy -> policy.predicate.test(age))
+            .filter(policy -> policy.isCorrespondingTo(age))
             .findFirst()
             .orElse(ADULT)
-            .operator.apply(fare);
+            .calculateDiscountAmount(fare);
         return fare - discountAmount;
+    }
+
+    private boolean isCorrespondingTo(int age) {
+        return predicate.test(age);
+    }
+
+    private int calculateDiscountAmount(int fare) {
+        return operator.apply(fare);
     }
 }

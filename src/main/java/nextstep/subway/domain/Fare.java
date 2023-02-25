@@ -35,12 +35,20 @@ public enum Fare {
 
     public static int calculate(int distance, int lineExtraFare, int age) {
         int extraFare = Arrays.stream(values())
-            .filter(it -> it.predicate.test(distance))
+            .filter(it -> it.isCorrespondingTo(distance))
             .findFirst()
             .orElse(BASIC)
-            .extraFareOperator.apply(distance);
+            .calculateExtraFare(distance);
         int fare = BASIC_FARE + extraFare + lineExtraFare;
         return DiscountPolicy.discount(fare, age);
+    }
+
+    private boolean isCorrespondingTo(int distance) {
+        return predicate.test(distance);
+    }
+
+    private int calculateExtraFare(int distance) {
+        return extraFareOperator.apply(distance);
     }
 
     private static int calculateExtraFare(int distance, int unit) {
