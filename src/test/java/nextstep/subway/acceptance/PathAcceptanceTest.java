@@ -94,7 +94,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
         assertAll(
@@ -113,7 +113,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
+        var response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
         assertAll(
@@ -132,7 +132,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void basicDistanceFare() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 강남역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 강남역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250);
@@ -146,7 +146,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void middleDistanceFare() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 성수역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 성수역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_650);
@@ -160,7 +160,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void longDistanceFare() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 합정역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 합정역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_850);
@@ -174,7 +174,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void basicDistanceWithExtraFare() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(합정역, 공덕역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(합정역, 공덕역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_750);
@@ -188,7 +188,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void basicDistanceWithExtraFares() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(서울역, 동대문역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(서울역, 동대문역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_650);
@@ -202,7 +202,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void middleDistanceWithExtraFare() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(성수역, 공덕역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(성수역, 공덕역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_250);
@@ -216,7 +216,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void middleDistanceWithExtraFares() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(성수역, 서울역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(성수역, 서울역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_850);
@@ -230,7 +230,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void longDistanceWithExtraFare() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역, 공덕역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(강남역, 공덕역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_350);
@@ -244,7 +244,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void longDistanceWithExtraFares() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(강남역, 동대문역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(강남역, 동대문역);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_950);
@@ -259,10 +259,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByAdultMember() {
         // given
-        String accessToken = 베어러_인증_로그인_요청("adult@email.com", "password").jsonPath().getString("accessToken");
+        var accessToken = 베어러_인증_로그인_요청("adult@email.com", "password").jsonPath().getString("accessToken");
 
         // when
-        ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
+        var response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250);
@@ -277,10 +277,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByTeenagerMember() {
         // given
-        String accessToken = 베어러_인증_로그인_요청("teenager@email.com", "password").jsonPath().getString("accessToken");
+        var accessToken = 베어러_인증_로그인_요청("teenager@email.com", "password").jsonPath().getString("accessToken");
 
         // when
-        ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
+        var response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_070);
@@ -295,10 +295,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByChildMember() {
         // given
-        String accessToken = 베어러_인증_로그인_요청("child@email.com", "password").jsonPath().getString("accessToken");
+        var accessToken = 베어러_인증_로그인_요청("child@email.com", "password").jsonPath().getString("accessToken");
 
         // when
-        ExtractableResponse<Response> response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
+        var response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, accessToken);
 
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
