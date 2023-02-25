@@ -4,10 +4,15 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
-@Entity
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Section extends DefaultWeightedEdge {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -24,35 +29,14 @@ public class Section extends DefaultWeightedEdge {
 
     private int distance;
 
-    public Section() {
+	private int duration;
 
-    }
-
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Line getLine() {
-        return line;
-    }
-
-    public Station getUpStation() {
-        return upStation;
-    }
-
-    public Station getDownStation() {
-        return downStation;
-    }
-
-    public int getDistance() {
-        return distance;
+		this.duration = duration;
     }
 
     public boolean isSameUpStation(Station station) {
