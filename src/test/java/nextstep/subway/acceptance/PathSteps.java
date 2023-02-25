@@ -68,6 +68,8 @@ public class PathSteps {
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("The id of the station"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The name of the station"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance is shortest distance between two stations."),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("The duration is minimum time between two stations."));
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("The duration is minimum time between two stations."),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("The fare is amount for route.")
+        );
     }
 }
