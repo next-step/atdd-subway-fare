@@ -5,30 +5,18 @@ import java.util.Objects;
 
 public class Fare {
 
-    public static final Fare BASE_FARE =  Fare.from(new BigDecimal("1250"));
+    public static final Fare BASE_FARE = new Fare(new BigDecimal("1250"));
 
     private BigDecimal fare;
 
     private Fare() {}
 
-    private Fare(final BigDecimal fare) {
+    public Fare(final BigDecimal fare) {
         this.fare = fare;
     }
 
-    public static Fare from(final BigDecimal fare) {
-        return new Fare(fare);
-    }
-
-    public static Fare from(final Long fare) {
-        return new Fare(new BigDecimal(fare));
-    }
-
     public static Fare from(final int fare) {
-        return new Fare(new BigDecimal(fare));
-    }
-
-    public BigDecimal value() {
-        return fare;
+        return new Fare(BigDecimal.valueOf(fare));
     }
 
     public Fare plus(final Fare fare) {
