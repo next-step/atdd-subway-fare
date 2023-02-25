@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathRequestType;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -39,9 +41,9 @@ class PathDocumentation extends Documentation {
                         new StationResponse(1L, "교대역"),
                         new StationResponse(2L, "남부터미널역"),
                         new StationResponse(3L, "양재역")
-                ), 10);
+                ), 10, 20);
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathRequestType.class))).thenReturn(pathResponse);
 
         this.spec.filter(document("path",
                 preprocessRequest(prettyPrint()),
@@ -50,7 +52,7 @@ class PathDocumentation extends Documentation {
                 setPathResponseFieldsDescription()
         ));
 
-        ExtractableResponse<Response> response = 경로_조회(spec, 1L, 3L);
+        ExtractableResponse<Response> response = 경로_조회(spec, 1L, 3L, PathRequestType.DISTANCE);
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -59,7 +61,9 @@ class PathDocumentation extends Documentation {
     private RequestParametersSnippet setPathRequestParametersDescription() {
         return requestParameters(
                 parameterWithName("source").description("출발역 식별자"),
-                parameterWithName("target").description("도착역 식별자"));
+                parameterWithName("target").description("도착역 식별자"),
+                parameterWithName("type").description("조회구분코드")
+        );
     }
 
     private ResponseFieldsSnippet setPathResponseFieldsDescription() {
@@ -67,6 +71,8 @@ class PathDocumentation extends Documentation {
                 fieldWithPath("stations").description("역 목록"),
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 식별자"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
-                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"));
+                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간")
+        );
     }
 }
