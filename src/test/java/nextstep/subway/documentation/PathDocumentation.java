@@ -28,7 +28,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(4L, "양재역")
-                ), 10, 10
+                ), 10, 10, 1250
         );
 
         BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
@@ -44,7 +44,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "교대역"),
                         new StationResponse(3L, "남부터미널"),
                         new StationResponse(4L, "양재역")
-                ), 10, 5
+                ), 12, 5, 1350
         );
 
         BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
