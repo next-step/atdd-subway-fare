@@ -35,6 +35,7 @@ public class SubwayMap {
 
         addVertex(graph);
         addEdge(graph, pathSearchType);
+        addReverseEdge(graph);
 
         return new DijkstraShortestPath<>(graph);
     }
@@ -51,6 +52,24 @@ public class SubwayMap {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> addSectionEdge(graph, it, pathSearchType));
+    }
+
+    private void addReverseEdge(WeightedGraph<Station, SectionEdge> graph) {
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(
+                                it.getLine(),
+                                it.getDownStation(),
+                                it.getUpStation(),
+                                it.getDistance(),
+                                it.getDuration()
+                        )
+                )
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                });
     }
 
 
@@ -70,8 +89,8 @@ public class SubwayMap {
     private Sections toSectionsBy(GraphPath<Station, SectionEdge> graphPath) {
         return new Sections(
                 graphPath.getEdgeList().stream()
-                .map(SectionEdge::getSection)
-                .collect(Collectors.toList())
+                        .map(SectionEdge::getSection)
+                        .collect(Collectors.toList())
         );
     }
 }
