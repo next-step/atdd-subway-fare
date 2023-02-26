@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import lombok.RequiredArgsConstructor;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -7,12 +8,9 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class SubwayMap {
-    private List<Line> lines;
-
-    public SubwayMap(List<Line> lines) {
-        this.lines = lines;
-    }
+    private final List<Line> lines;
 
     public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
