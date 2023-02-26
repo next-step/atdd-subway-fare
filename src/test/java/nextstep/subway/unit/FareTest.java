@@ -6,7 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static nextstep.subway.domain.Fare.DEFAULT_COST;
+import static nextstep.subway.domain.Fare.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareTest {
@@ -17,7 +17,7 @@ public class FareTest {
     void defaultFare(int distance) {
         Fare fare = new Fare(distance);
 
-        assertThat(fare.cost()).isEqualTo(DEFAULT_COST);
+        assertThat(fare.cost()).isEqualTo(DEFAULT_FARE);
     }
 
     @DisplayName("10Km 초과 시 추가운임이 부과된다.")
