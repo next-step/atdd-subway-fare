@@ -25,6 +25,6 @@ class DistanceFarePolicyTest {
     void calculateFiveIntervalExtraFare (final int weight, final String totalFare) {
         final Path path = new Path(최단_구간_목록, weight, 0);
         final Fare expected = DistanceFarePolicy.from(path).plus(Fare.BASE_FARE);
-        assertThat(expected).isEqualTo(Fare.from(new BigDecimal(totalFare)));
+        assertThat(expected).isEqualTo(new Fare(new BigDecimal(totalFare)));
     }
 }
