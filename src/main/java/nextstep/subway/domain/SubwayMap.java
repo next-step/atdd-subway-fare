@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
@@ -17,7 +18,7 @@ public class SubwayMap {
 
     public SubwayMap(List<Line> lines, SectionCondition condition) {
         this.lines = lines;
-        this.condition = condition == null ? SectionCondition.DISTANCE : condition;
+        this.condition = Objects.requireNonNullElse(condition, SectionCondition.DISTANCE);
     }
 
     public Path findPath(Station source, Station target) {
