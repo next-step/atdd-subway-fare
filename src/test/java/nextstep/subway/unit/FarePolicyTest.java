@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static nextstep.subway.domain.BaseFarePolicy.BASE_FARE;
+import static nextstep.subway.domain.BaseMemberFarePolicy.EXEMPTION_AMOUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FarePolicyTest {
@@ -43,23 +44,23 @@ class FarePolicyTest {
     }
 
     @Test
-    void 어린이_회원은_지하철_운임_요금의_50퍼_할인된다() {
+    void 어린이_회원은_350원_공제된_금액에_지하철_운임_요금의_50퍼_할인된다() {
         //given
         MemberFarePolicy memberFarePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
         //when
         int amount = memberFarePolicy.calculate(어린이_회원_생성(), 10);
         //then
-        assertThat(amount).isEqualTo(BASE_FARE * 0.5);
+        assertThat(amount).isEqualTo((int) ((BASE_FARE - EXEMPTION_AMOUNT) * 0.5));
     }
 
     @Test
-    void 청소년_회원은_지하철_운임_요금의_20퍼_할인된다() {
+    void 청소년_회원은_350원_공제된_금액에_지하철_운임_요금의_20퍼_할인된다() {
         //given
         MemberFarePolicy memberFarePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
         //when
         int amount = memberFarePolicy.calculate(청소년_회원_생성(), 10);
         //then
-        assertThat(amount).isEqualTo(BASE_FARE * 0.8);
+        assertThat(amount).isEqualTo((int) ((BASE_FARE - EXEMPTION_AMOUNT) * 0.8));
     }
 
     private static Member 어린이_회원_생성() {

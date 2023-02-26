@@ -1,6 +1,8 @@
 package nextstep.subway.domain;
 
 public class BaseFarePolicy implements FarePolicy {
+    public static final int BASE_FARE = 1250;
+    private static final int BASE_FARE_DISTANCE = 10;
     private static final int FIFTY_KM = 50;
     private static final int BASE_OVER_FARE = 100;
     private static final int OVER_10KM_BASE_FARE_DISTANCE = 5;

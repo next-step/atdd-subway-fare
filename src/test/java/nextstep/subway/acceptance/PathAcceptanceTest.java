@@ -12,6 +12,7 @@ import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static nextstep.subway.domain.BaseMemberFarePolicy.EXEMPTION_AMOUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
@@ -91,7 +92,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      *   When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      *   Then 최소 시간 기준 경로를 응답
      *   And 총 거리와 소요 시간을 함께 응답함
-     *   And 50% 할인된 지하철 이용 요금도 함께 응답함
+     *   And 운임 요금 350원 공제된 금액의 50% 할인된 지하철 이용 요금도 함께 응답함
      */
     @DisplayName("어린이 회원이 두 역의 최단 시간 경로를 조회한다.")
     @Test
@@ -105,9 +106,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로를_응답한다(findPathResponse, 교대역, 강남역, 양재역);
-        long nonMemberFare = findPathResponse.jsonPath().getLong("fare.amount");
-        long memberFare = memberFindPathResponse.jsonPath().getLong("fare.amount");
-        assertThat(memberFare).isEqualTo(nonMemberFare * 0.5);
+        int nonMemberFare = findPathResponse.jsonPath().getInt("fare.amount");
+        int memberFare = memberFindPathResponse.jsonPath().getInt("fare.amount");
+        회원_요금을_검증한다(memberFare, nonMemberFare, 0.5);
     }
 
     /**
@@ -117,7 +118,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      *   When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      *   Then 최소 시간 기준 경로를 응답
      *   And 총 거리와 소요 시간을 함께 응답함
-     *   And 20% 할인된 지하철 이용 요금도 함께 응답함
+     *   And 운임 요금 350원 공제된 금액의 20% 할인된 지하철 이용 요금도 함께 응답함
      */
     @DisplayName("청소년 회원이 두 역의 최단 시간 경로를 조회한다.")
     @Test
@@ -131,9 +132,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로를_응답한다(findPathResponse, 교대역, 강남역, 양재역);
-        long nonMemberFare = findPathResponse.jsonPath().getLong("fare.amount");
-        long memberFare = memberFindPathResponse.jsonPath().getLong("fare.amount");
-        assertThat(memberFare).isEqualTo(nonMemberFare * 0.2);
+        int nonMemberFare = findPathResponse.jsonPath().getInt("fare.amount");
+        int memberFare = memberFindPathResponse.jsonPath().getInt("fare.amount");
+        회원_요금을_검증한다(memberFare, nonMemberFare, 0.8);
     }
 
     private String 간편_가입_및_로그인_요청(String email, String password, int age) {
@@ -147,5 +148,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private void 요금를_응답한다(ExtractableResponse<Response> response) {
         assertThat(response.jsonPath().getLong("fare.amount")).isGreaterThanOrEqualTo(0);
+    }
+
+    private void 회원_요금을_검증한다(int memberFare, int nonMemberFare, double discountRate) {
+        assertThat(memberFare).isEqualTo((long) ((nonMemberFare - EXEMPTION_AMOUNT) * discountRate));
     }
 }
