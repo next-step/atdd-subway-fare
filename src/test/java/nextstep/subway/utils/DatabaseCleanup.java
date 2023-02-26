@@ -1,8 +1,8 @@
 package nextstep.subway.utils;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Profile("test")
+@ActiveProfiles("test")
 @Service
 public class DatabaseCleanup implements InitializingBean {
     @PersistenceContext

@@ -73,7 +73,7 @@ public class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역, PathSearchType.DURATION);
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
     private Station createStation(long id, String name) {
