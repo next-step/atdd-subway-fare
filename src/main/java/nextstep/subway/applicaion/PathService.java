@@ -1,5 +1,7 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.application.MemberService;
+import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
@@ -11,24 +13,34 @@ import java.util.List;
 public class PathService {
     private LineService lineService;
     private StationService stationService;
-    private FarePolicy farePolicy;
+    private MemberService memberService;
+    private MemberFarePolicy farePolicy;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.farePolicy = new BaseFarePolicy();
+        this.memberService = memberService;
+        this.farePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
     }
 
     public PathResponse findPath(PathRequest pathRequest) {
-        return findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
+        Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
+        int fare = path.calculateFare(null, farePolicy);
+        return PathResponse.of(path, fare);
     }
 
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long memberId, PathRequest pathRequest) {
+        Member member = memberService.findById(memberId);
+        Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
+        int fare = path.calculateFare(member, farePolicy);
+        return PathResponse.of(path, fare);
+    }
+
+    public Path findPath(Long source, Long target, PathType pathType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         SubwayMap subwayMap = createSubwayMap(pathType);
-        Path path = subwayMap.findPath(upStation, downStation);
-        return PathResponse.of(path, farePolicy);
+        return subwayMap.findPath(upStation, downStation);
     }
 
     private SubwayMap createSubwayMap(PathType pathType) {

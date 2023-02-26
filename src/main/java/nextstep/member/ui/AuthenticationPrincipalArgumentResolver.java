@@ -3,6 +3,7 @@ package nextstep.member.ui;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -28,6 +29,10 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
+        // 비회원 접근
+        if (Strings.isBlank(authorization)) {
+            return null;
+        }
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
