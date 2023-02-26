@@ -3,7 +3,10 @@ package nextstep.subway.domain;
 public enum PathRequestType {
     DISTANCE, DURATION;
 
-    public boolean isDuration() {
-        return this.equals(DURATION);
+    public int getWeight(Section section) {
+        if (this == DURATION) {
+            return section.getDuration();
+        }
+        return section.getDistance();
     }
 }
