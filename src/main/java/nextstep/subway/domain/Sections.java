@@ -148,7 +148,7 @@ public class Sections {
                 .findFirst();
     }
 
-    public int total(ToIntFunction<Section> condition) {
+    public int sumByCondition(ToIntFunction<Section> condition) {
         return sections.stream().mapToInt(condition).sum();
     }
 }

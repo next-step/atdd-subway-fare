@@ -14,11 +14,11 @@ public class Path {
     }
 
     public int extractDistance() {
-        return sections.total(Section::getDistance);
+        return sections.sumByCondition(Section::getDistance);
     }
 
     public int extractDuration() {
-        return sections.total(Section::getDuration);
+        return sections.sumByCondition(Section::getDuration);
     }
 
     public List<Station> getStations() {
