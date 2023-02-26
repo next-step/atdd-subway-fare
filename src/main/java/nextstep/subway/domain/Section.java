@@ -106,4 +106,14 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
+    public Section reverse() {
+        return new Section(
+                this.getLine(),
+                this.getDownStation(),
+                this.getUpStation(),
+                this.getDistance(),
+                this.getDuration()
+        );
+    }
 }

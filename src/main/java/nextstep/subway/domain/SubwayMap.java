@@ -57,14 +57,7 @@ public class SubwayMap {
     private void addReverseEdge(WeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(
-                                it.getLine(),
-                                it.getDownStation(),
-                                it.getUpStation(),
-                                it.getDistance(),
-                                it.getDuration()
-                        )
-                )
+                .map(Section::reverse)
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
