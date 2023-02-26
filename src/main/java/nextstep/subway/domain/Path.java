@@ -3,22 +3,28 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
+    private final Sections sections;
+    private final Fare fare;
 
     public Path(Sections sections) {
         this.sections = sections;
+        this.fare = new Fare(distance());
     }
 
     public Sections getSections() {
         return sections;
     }
 
-    public int extractDistance() {
+    public int distance() {
         return sections.sumByCondition(Section::getDistance);
     }
 
-    public int extractDuration() {
+    public int duration() {
         return sections.sumByCondition(Section::getDuration);
+    }
+
+    public int cost() {
+        return fare.cost();
     }
 
     public List<Station> getStations() {

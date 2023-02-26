@@ -79,7 +79,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-//        assertThat(response.jsonPath().getInt("cost")).isEqualTo(1_350);
-        assertThat(response.jsonPath().getInt("cost")).isEqualTo(0);
+        assertThat(response.jsonPath().getInt("cost")).isEqualTo(1_350);
     }
 }
