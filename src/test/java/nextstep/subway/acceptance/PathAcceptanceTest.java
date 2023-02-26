@@ -59,6 +59,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -71,6 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
     }
 
     private ExtractableResponse<Response> 두_역의_거리_경로_조회를_요청(Long source, Long target, PathRequestType type) {
