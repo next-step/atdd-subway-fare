@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.Fare;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -47,11 +48,16 @@ public class SubwayMap {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
-        List<Section> sections = result.getEdgeList().stream()
+        Sections sections = new Sections(result.getEdgeList().stream()
                 .map(it -> it.getSection())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
 
-        return new Path(new Sections(sections));
+        return new Path(
+                sections,
+                sections.totalDistance(),
+                sections.totalDuration(),
+                new Fare().calculateFare(sections.totalDistance())
+        );
     }
 
     private double getWeightByType(PathLookUpType type, Section section) {
