@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,6 +50,6 @@ public class PathDocumentation extends Documentation {
                 )
         );
 
-        두_역의_최단_거리_경로_조회를_요청(this.spec, 강남역.getId(), 역삼역.getId());
+        두_역의_최단_거리_경로_조회를_요청(this.spec, 강남역.getId(), 역삼역.getId(), PathType.DISTANCE);
     }
 }
