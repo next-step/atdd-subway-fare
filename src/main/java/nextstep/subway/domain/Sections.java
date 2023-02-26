@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -44,8 +47,8 @@ public class Sections {
             throw new IllegalArgumentException();
         }
 
-        Optional<Section> upSection = findSectionAsUpStation(station);
-        Optional<Section> downSection = findSectionAsDownStation(station);
+        Optional<Section> upSection = findSectionAs(it -> it.isSameUpStation(station));
+        Optional<Section> downSection = findSectionAs(it -> it.isSameDownStation(station));
 
         if (upSection.isPresent() && downSection.isPresent()) {
             addNewSectionForDelete(upSection.get(), downSection.get());
@@ -79,19 +82,24 @@ public class Sections {
         return result;
     }
 
+    public int totalDistance() {
+        return getTotalAs(Section::getDistance);
+    }
+
+    public int totalDuration() {
+        return getTotalAs(Section::getDuration);
+    }
+
     private void checkDuplicateSection(Section section) {
-        sections.stream()
-                .filter(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))
-                .findFirst()
-                .ifPresent(it -> {
-                    throw new IllegalArgumentException();
-                });
+        sections.forEach(it -> {
+            if (it.hasDuplicateSection(section)) {
+                throw new IllegalArgumentException();
+            }
+        });
     }
 
     private void rearrangeSectionWithDownStation(Section section) {
-        sections.stream()
-                .filter(it -> it.isSameDownStation(section.getDownStation()))
-                .findFirst()
+        findSectionAs(it -> it.isSameUpStation(section.getDownStation()))
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
                     sections.add(Section.createFrontSectionOf(it, section));
@@ -100,9 +108,7 @@ public class Sections {
     }
 
     private void rearrangeSectionWithUpStation(Section section) {
-        sections.stream()
-                .filter(it -> it.isSameUpStation(section.getUpStation()))
-                .findFirst()
+        findSectionAs(it -> it.isSameUpStation(section.getUpStation()))
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
                     sections.add(Section.createBackSectionOf(it, section));
@@ -111,21 +117,21 @@ public class Sections {
     }
 
     private Station findFirstUpStation() {
-        List<Station> upStations = this.sections.stream()
-                .map(Section::getUpStation)
-                .collect(Collectors.toList());
-        List<Station> downStations = this.sections.stream()
-                .map(Section::getDownStation)
-                .collect(Collectors.toList());
+        List<Station> upStations = getStations(Section::getUpStation);
+        List<Station> downStations = getStations(Section::getDownStation);
 
-        return upStations.stream()
-                .filter(it -> !downStations.contains(it))
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
+        downStations.forEach(upStations::remove);
+        return upStations.get(0);
     }
 
     private void addNewSectionForDelete(Section upSection, Section downSection) {
         this.sections.add(Section.of(upSection, downSection));
+    }
+
+    private Optional<Section> findSectionAs(Predicate<Section> predicate) {
+        return this.sections.stream()
+                .filter(predicate)
+                .findFirst();
     }
 
     private Optional<Section> findSectionAsUpStation(Station finalUpStation) {
@@ -134,17 +140,15 @@ public class Sections {
                 .findFirst();
     }
 
-    private Optional<Section> findSectionAsDownStation(Station station) {
+    private List<Station> getStations(Function<Section, Station> mapper) {
         return this.sections.stream()
-                .filter(it -> it.isSameDownStation(station))
-                .findFirst();
+                .map(mapper)
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
-    }
-
-    public int totalDuration() {
-        return sections.stream().mapToInt(Section::getDuration).sum();
+    private int getTotalAs(ToIntFunction<Section> mapper) {
+        return sections.stream()
+                .mapToInt(mapper)
+                .sum();
     }
 }
