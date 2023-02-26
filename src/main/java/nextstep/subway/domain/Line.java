@@ -47,6 +47,11 @@ public class Line {
         }
     }
 
+    public void addSection(Section section) {
+        section.setLine(this);
+        sections.add(section);
+    }
+
     public void addSection(Station upStation, Station downStation, int distance) {
         sections.add(new Section(this, upStation, downStation, distance));
     }

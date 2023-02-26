@@ -2,10 +2,13 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.SectionCondition;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -34,10 +37,16 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3);
-        이호선.addSection(교대역, 강남역, 3);
-        삼호선.addSection(교대역, 남부터미널역, 5);
-        삼호선.addSection(남부터미널역, 양재역, 5);
+        신분당선.addSection(createSection(강남역, 양재역, 3, 2));
+        이호선.addSection(createSection(교대역, 강남역, 3, 2));
+        삼호선.addSection(createSection(교대역, 남부터미널역, 5, 1));
+        삼호선.addSection(createSection(남부터미널역, 양재역, 5, 1));
+
+        /**
+         * 교대역        2  강남역
+         *      1              1
+         * 남부터미널    1   양재
+         */
     }
 
     @Test
@@ -66,10 +75,33 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
     }
 
+    @DisplayName("시간 기준으로 경로를 검색한다.")
+    @Test
+    void findPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines, SectionCondition.DURATION);
+
+        // when
+        Path path = subwayMap.findPath(양재역, 교대역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
+    }
+
     private Station createStation(long id, String name) {
         Station station = new Station(name);
         ReflectionTestUtils.setField(station, "id", id);
 
         return station;
+    }
+
+    private Section createSection(Station upStation, Station downStation, int distance, int duration) {
+        return Section.builder()
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(distance)
+                .duration(duration)
+                .build();
     }
 }

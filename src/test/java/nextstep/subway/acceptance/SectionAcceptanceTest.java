@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.SectionSteps.구간_생성_요청값_생성;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,10 +86,6 @@ class SectionAcceptanceTest extends AcceptanceTest {
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", 6 + "");
-        return params;
+        return 구간_생성_요청값_생성(upStationId, downStationId, 6, 0);
     }
 }
