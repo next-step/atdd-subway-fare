@@ -147,7 +147,7 @@ public class Sections {
     private List<Station> getStations(Function<Section, Station> mapper) {
         return this.sections.stream()
                 .map(mapper)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 
     private int getTotalAs(ToIntFunction<Section> mapper) {
