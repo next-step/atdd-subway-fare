@@ -1,7 +1,10 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.BaseFarePolicy;
+import nextstep.subway.domain.BaseMemberFarePolicy;
 import nextstep.subway.domain.FarePolicy;
+import nextstep.subway.domain.MemberFarePolicy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -37,5 +40,33 @@ class FarePolicyTest {
         int amount = farePolicy.calculate(distance);
 
         assertThat(amount).isEqualTo(fareAmount);
+    }
+
+    @Test
+    void 어린이_회원은_지하철_운임_요금의_50퍼_할인된다() {
+        //given
+        MemberFarePolicy memberFarePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
+        //when
+        int amount = memberFarePolicy.calculate(어린이_회원_생성(), 10);
+        //then
+        assertThat(amount).isEqualTo(BASE_FARE * 0.5);
+    }
+
+    @Test
+    void 청소년_회원은_지하철_운임_요금의_20퍼_할인된다() {
+        //given
+        MemberFarePolicy memberFarePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
+        //when
+        int amount = memberFarePolicy.calculate(청소년_회원_생성(), 10);
+        //then
+        assertThat(amount).isEqualTo(BASE_FARE * 0.8);
+    }
+
+    private static Member 어린이_회원_생성() {
+        return new Member("children@atdd.com", "atdd", 6);
+    }
+
+    private static Member 청소년_회원_생성() {
+        return new Member("teenager@atdd.com", "atdd", 13);
     }
 }
