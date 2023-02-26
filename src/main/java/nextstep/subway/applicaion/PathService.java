@@ -22,13 +22,13 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathSearchType pathSearchType) {
+    public PathResponse findPath(Long source, Long target, PathSearchType pathSearchType, int age) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathSearchType);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, age);
     }
 }

@@ -68,6 +68,10 @@ public class Section extends DefaultWeightedEdge {
         return duration;
     }
 
+    public int getExtraFare() {
+        return line.getExtraFare();
+    }
+
     public boolean isSameUpStation(Station station) {
         return this.upStation == station;
     }
