@@ -1,5 +1,6 @@
 package nextstep.member.ui;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
@@ -12,13 +13,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private JwtTokenProvider jwtTokenProvider;
-
-    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {

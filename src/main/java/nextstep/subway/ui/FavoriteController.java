@@ -1,5 +1,6 @@
 package nextstep.subway.ui;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.FavoriteService;
@@ -11,13 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 public class FavoriteController {
-    private FavoriteService favoriteService;
-
-    public FavoriteController(FavoriteService favoriteService) {
-        this.favoriteService = favoriteService;
-    }
+    private final FavoriteService favoriteService;
 
     @PostMapping("/favorites")
     public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest request) {

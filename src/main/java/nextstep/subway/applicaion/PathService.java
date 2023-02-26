@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -9,15 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
-
-    public PathService(LineService lineService, StationService stationService) {
-        this.lineService = lineService;
-        this.stationService = stationService;
-    }
+    private final LineService lineService;
+    private final StationService stationService;
 
     public PathResponse findPath(Long source, Long target) {
         Station upStation = stationService.findById(source);
