@@ -14,10 +14,11 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public class PathSteps {
-    public static ExtractableResponse<Response> searchPath(RequestSpecification spec, Long source, Long target) {
-        Map<String, Long> params = new HashMap<>();
+    public static ExtractableResponse<Response> searchPath(RequestSpecification spec, String source, String target, String type) {
+        Map<String, String> params = new HashMap<>();
         params.put("source", source);
         params.put("target", target);
+        params.put("type", type);
 
         return RestAssured
                 .given(spec).log().all()
