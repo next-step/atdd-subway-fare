@@ -3,20 +3,34 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LineTest {
+
+    private Station 강남역;
+
+    private Station 역삼역;
+
+    private Station 삼성역;
+
+    @BeforeEach
+    void setUp() {
+        강남역 = withId(new Station("강남역"), 1L);
+        역삼역 = withId(new Station("역삼역"), 2L);
+        삼성역 = withId(new Station("삼성역"), 3L);
+    }
+
     @Test
     void addSection() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 10);
@@ -28,9 +42,6 @@ class LineTest {
     @DisplayName("상행 기준으로 목록 중간에 추가할 경우")
     @Test
     void addSectionInMiddle() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 10);
@@ -47,9 +58,6 @@ class LineTest {
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
     @Test
     void addSectionInMiddle2() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 10);
@@ -66,9 +74,6 @@ class LineTest {
     @DisplayName("목록 앞에 추가할 경우")
     @Test
     void addSectionInFront() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 10);
@@ -85,9 +90,6 @@ class LineTest {
     @DisplayName("목록 뒤에 추가할 경우")
     @Test
     void addSectionBehind() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
         line.addSection(강남역, 역삼역, 10, 10);
@@ -103,9 +105,6 @@ class LineTest {
 
     @Test
     void getStations() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(강남역, 삼성역, 5, 5);
@@ -129,9 +128,6 @@ class LineTest {
 
     @Test
     void removeSection() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
@@ -143,9 +139,6 @@ class LineTest {
 
     @Test
     void removeSectionInFront() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
@@ -157,9 +150,6 @@ class LineTest {
 
     @Test
     void removeSectionInMiddle() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
-        Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
@@ -172,12 +162,17 @@ class LineTest {
     @DisplayName("구간이 하나인 노선에서 역 삭제 시 에러 발생")
     @Test
     void removeSectionNotEndOfList() {
-        Station 강남역 = new Station("강남역");
-        Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    public Station withId(Station station, Long id) {
+        Field idField = ReflectionUtils.findField(station.getClass(), "id");
+        ReflectionUtils.makeAccessible(idField);
+        ReflectionUtils.setField(idField, station, id);
+        return station;
     }
 }

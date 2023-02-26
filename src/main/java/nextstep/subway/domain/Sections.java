@@ -103,7 +103,7 @@ public class Sections {
     }
 
     private void rearrangeSectionWithDownStation(Section section) {
-        findSectionAs(it -> it.isSameUpStation(section.getDownStation()))
+        findSectionAs(it -> it.isSameDownStation(section.getDownStation()))
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
                     sections.add(Section.createFrontSectionOf(it, section));
