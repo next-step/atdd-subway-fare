@@ -4,15 +4,19 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
+@DisplayName("경로찾기 문서화 테스트")
 @ExtendWith(MockitoExtension.class)
 public class PathDocumentation extends Documentation {
     @MockBean
@@ -29,11 +33,7 @@ public class PathDocumentation extends Documentation {
 
         BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        given("pathDefault")
-                .queryParam("source", 1L)
-                .queryParam("target", 4L)
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_최단_거리_경로_조회를_요청(1L, 4L, spec, defaultFilter("pathDefault"));
     }
 
     @Test
@@ -49,11 +49,6 @@ public class PathDocumentation extends Documentation {
 
         BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
 
-        given("pathDuration")
-                .queryParam("source", 1L)
-                .queryParam("target", 4L)
-                .queryParams("type", "DURATION")
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_최소_시간_경로_조회를_요청(1L, 4L, spec, defaultFilter("pathDuration"));
     }
 }

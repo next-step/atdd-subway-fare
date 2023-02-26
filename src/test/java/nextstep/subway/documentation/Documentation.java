@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -35,11 +35,9 @@ public class Documentation {
                 .build();
     }
 
-    public static RequestSpecification given(String identifier) {
-        return RestAssured.given(spec).log().all()
-                .filter(document(identifier,
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
-                .accept(MediaType.APPLICATION_JSON_VALUE);
+    public RestDocumentationFilter defaultFilter(String identifier) {
+        return document(identifier,
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()));
     }
 }
