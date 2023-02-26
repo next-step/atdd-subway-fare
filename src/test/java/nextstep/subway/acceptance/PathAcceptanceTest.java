@@ -64,7 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로를_응답한다(response, 교대역, 남부터미널역, 양재역);
-        요금를_응답한다(response);
+        요금를_응답한다(response, 2150);
     }
 
     /**
@@ -82,7 +82,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로를_응답한다(response, 교대역, 강남역, 양재역);
-        요금를_응답한다(response);
+        요금를_응답한다(response, 1950);
     }
 
     /**
@@ -107,8 +107,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로를_응답한다(findPathResponse, 교대역, 강남역, 양재역);
         int nonMemberFare = findPathResponse.jsonPath().getInt("fare.amount");
-        int memberFare = memberFindPathResponse.jsonPath().getInt("fare.amount");
-        회원_요금을_검증한다(memberFare, nonMemberFare, 0.5);
+        요금를_응답한다(memberFindPathResponse, (int) ((nonMemberFare - EXEMPTION_AMOUNT) * 0.5));
     }
 
     /**
@@ -133,8 +132,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로를_응답한다(findPathResponse, 교대역, 강남역, 양재역);
         int nonMemberFare = findPathResponse.jsonPath().getInt("fare.amount");
-        int memberFare = memberFindPathResponse.jsonPath().getInt("fare.amount");
-        회원_요금을_검증한다(memberFare, nonMemberFare, 0.8);
+        요금를_응답한다(memberFindPathResponse, (int) ((nonMemberFare - EXEMPTION_AMOUNT) * 0.8));
     }
 
     private String 간편_가입_및_로그인_요청(String email, String password, int age) {
@@ -146,8 +144,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(ids);
     }
 
-    private void 요금를_응답한다(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getLong("fare.amount")).isGreaterThanOrEqualTo(0);
+    private void 요금를_응답한다(ExtractableResponse<Response> response, int fare) {
+        assertThat(response.jsonPath().getLong("fare.amount")).isEqualTo(fare);
     }
 
     private void 회원_요금을_검증한다(int memberFare, int nonMemberFare, double discountRate) {
