@@ -24,15 +24,48 @@ public class Section extends DefaultWeightedEdge {
 
     private int distance;
 
+    private int duration;
+
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
+    }
+
+    public static Section of(Section upSection, Section downSection) {
+        return new Section(
+                upSection.getLine(),
+                downSection.getUpStation(),
+                upSection.getDownStation(),
+                upSection.getDistance() + downSection.getDistance(),
+                upSection.getDuration() + downSection.getDuration()
+        );
+    }
+
+    public static Section createFrontSectionOf(Section oldSection, Section newSection) {
+        return new Section(
+                newSection.getLine(),
+                oldSection.getUpStation(),
+                newSection.getUpStation(),
+                oldSection.getDistance() - newSection.getDistance(),
+                oldSection.getDuration() - newSection.getDuration()
+        );
+    }
+
+    public static Section createBackSectionOf(Section oldSection, Section newSection) {
+        return new Section(
+                newSection.getLine(),
+                newSection.getDownStation(),
+                oldSection.getDownStation(),
+                oldSection.getDistance() - newSection.getDistance(),
+                oldSection.getDuration() - newSection.getDuration()
+        );
     }
 
     public Long getId() {
@@ -53,6 +86,10 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public boolean isSameUpStation(Station station) {

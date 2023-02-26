@@ -1,56 +1,75 @@
 package nextstep.subway.domain;
 
 import org.jgrapht.GraphPath;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
+
+    private final List<Line> lines;
 
     public SubwayMap(List<Line> lines) {
-        this.lines = lines;
+        this.lines = new ArrayList<>(lines);
     }
 
-    public Path findPath(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+    public Path findPath(Station source, Station target, PathSearchType pathSearchType) {
+        GraphPath<Station, SectionEdge> graphPath = makeGraph(source, target, pathSearchType);
+        return new Path(new Sections(getResultBy(graphPath)));
+    }
 
-        // 지하철 역(정점)을 등록
-        lines.stream()
+    private GraphPath<Station, SectionEdge> makeGraph(
+            Station source,
+            Station target,
+            PathSearchType pathSearchType) {
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = build(pathSearchType);
+        return dijkstraShortestPath.getPath(source, target);
+    }
+
+    private DijkstraShortestPath<Station, SectionEdge> build(PathSearchType pathSearchType) {
+        WeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+
+        addVertex(graph);
+        addEdge(graph, pathSearchType);
+
+        return new DijkstraShortestPath<>(graph);
+    }
+
+    private void addVertex(WeightedGraph<Station, SectionEdge> graph) {
+        this.lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
+    }
 
-        // 지하철 역의 연결 정보(간선)을 등록
+    private void addEdge(WeightedGraph<Station, SectionEdge> graph, PathSearchType pathSearchType) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
+                .forEach(it -> addSectionEdge(graph, it, pathSearchType));
+    }
 
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
 
-        // 다익스트라 최단 경로 찾기
-        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+    private void addSectionEdge(
+            WeightedGraph<Station, SectionEdge> graph,
+            Section section,
+            PathSearchType pathSearchType) {
+        SectionEdge sectionEdge = SectionEdge.of(section);
+        graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
+        graph.setEdgeWeight(sectionEdge, getWeight(section, pathSearchType));
+    }
 
-        List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+    private int getWeight(Section section, PathSearchType pathSearchType) {
+        return pathSearchType.isDistance() ? section.getDistance() : section.getDuration();
+    }
+
+    private List<Section> getResultBy(GraphPath<Station, SectionEdge> graphPath) {
+        return graphPath.getEdgeList().stream()
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
     }
 }
