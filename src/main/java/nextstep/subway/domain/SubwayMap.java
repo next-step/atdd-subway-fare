@@ -30,7 +30,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, getWeight(it, pathSearchType));
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -52,5 +52,12 @@ public class SubwayMap {
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
+    }
+
+    private int getWeight(Section section, PathSearchType pathSearchType) {
+        if (pathSearchType.isDistance()) {
+            return section.getDistance();
+        }
+        return section.getDuration();
     }
 }
