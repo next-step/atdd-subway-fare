@@ -28,11 +28,11 @@ public class PathService {
         Station downStation = stationService.findById(target);
         SubwayMap subwayMap = createSubwayMap(pathType);
         Path path = subwayMap.findPath(upStation, downStation);
-        return PathResponse.of(path);
+        return PathResponse.of(path, farePolicy);
     }
 
     private SubwayMap createSubwayMap(PathType pathType) {
         List<Line> lines = lineService.findLines();
-        return new SubwayMap(lines, pathType, farePolicy);
+        return new SubwayMap(lines, pathType);
     }
 }
