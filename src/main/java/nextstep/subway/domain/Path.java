@@ -1,27 +1,26 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
+
+import java.util.Collections;
 import java.util.List;
 
+@Getter
 public class Path {
-    private final Sections sections;
 
-    public Path(Sections sections) {
-        this.sections = sections;
+    private final List<Station> stations;
+
+    private final int totalDistance;
+
+    private final int totalDuration;
+
+    private Path(List<Station> stations, int totalDistance, int totalDuration) {
+        this.stations = Collections.unmodifiableList(stations);
+        this.totalDistance = totalDistance;
+        this.totalDuration = totalDuration;
     }
 
-    public Sections getSections() {
-        return sections;
-    }
-
-    public int extractDistance() {
-        return sections.totalDistance();
-    }
-
-    public int extractDuration() {
-        return sections.totalDuration();
-    }
-
-    public List<Station> getStations() {
-        return sections.getStations();
+    public static Path of(Sections sections) {
+        return new Path(sections.getStations(), sections.totalDistance(), sections.totalDuration());
     }
 }

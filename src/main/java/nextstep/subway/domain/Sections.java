@@ -90,6 +90,10 @@ public class Sections {
         return getTotalAs(Section::getDuration);
     }
 
+    public Path getResultPath() {
+        return Path.of(this);
+    }
+
     private void checkDuplicateSection(Section section) {
         sections.forEach(it -> {
             if (it.hasDuplicateSection(section)) {

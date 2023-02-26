@@ -19,7 +19,7 @@ public class SubwayMap {
 
     public Path findPath(Station source, Station target, PathSearchType pathSearchType) {
         GraphPath<Station, SectionEdge> graphPath = makeGraph(source, target, pathSearchType);
-        return new Path(new Sections(getResultBy(graphPath)));
+        return toSectionsBy(graphPath).getResultPath();
     }
 
     private GraphPath<Station, SectionEdge> makeGraph(
@@ -67,9 +67,11 @@ public class SubwayMap {
         return pathSearchType.isDistance() ? section.getDistance() : section.getDuration();
     }
 
-    private List<Section> getResultBy(GraphPath<Station, SectionEdge> graphPath) {
-        return graphPath.getEdgeList().stream()
+    private Sections toSectionsBy(GraphPath<Station, SectionEdge> graphPath) {
+        return new Sections(
+                graphPath.getEdgeList().stream()
                 .map(SectionEdge::getSection)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+        );
     }
 }
