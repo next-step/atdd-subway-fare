@@ -22,8 +22,9 @@ public class BaseMemberFarePolicy implements MemberFarePolicy {
     }
 
     @Override
-    public int calculate(Member member, int distance) {
-        int fare = calculate(distance);
+    public int calculate(Member member, Path path) {
+        int distance = path.extractDistance();
+        int fare = calculate(distance) + path.maxAdditionalFare();
         if (Objects.isNull(member)) {
             return fare;
         }

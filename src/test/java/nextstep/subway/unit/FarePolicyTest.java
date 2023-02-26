@@ -1,13 +1,12 @@
 package nextstep.subway.unit;
 
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.BaseFarePolicy;
-import nextstep.subway.domain.BaseMemberFarePolicy;
-import nextstep.subway.domain.FarePolicy;
-import nextstep.subway.domain.MemberFarePolicy;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.util.List;
 
 import static nextstep.subway.domain.BaseFarePolicy.BASE_FARE;
 import static nextstep.subway.domain.BaseMemberFarePolicy.EXEMPTION_AMOUNT;
@@ -48,7 +47,7 @@ class FarePolicyTest {
         //given
         MemberFarePolicy memberFarePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
         //when
-        int amount = memberFarePolicy.calculate(어린이_회원_생성(), 10);
+        int amount = memberFarePolicy.calculate(어린이_회원_생성(), 경로_생성(0, 10));
         //then
         assertThat(amount).isEqualTo((int) ((BASE_FARE - EXEMPTION_AMOUNT) * 0.5));
     }
@@ -58,7 +57,7 @@ class FarePolicyTest {
         //given
         MemberFarePolicy memberFarePolicy = new BaseMemberFarePolicy(new BaseFarePolicy());
         //when
-        int amount = memberFarePolicy.calculate(청소년_회원_생성(), 10);
+        int amount = memberFarePolicy.calculate(청소년_회원_생성(), 경로_생성(0, 10));
         //then
         assertThat(amount).isEqualTo((int) ((BASE_FARE - EXEMPTION_AMOUNT) * 0.8));
     }
@@ -69,5 +68,11 @@ class FarePolicyTest {
 
     private static Member 청소년_회원_생성() {
         return new Member("teenager@atdd.com", "atdd", 13);
+    }
+
+    private static Path 경로_생성(int additionalFare, int distance) {
+        Line line = new Line("", "", additionalFare);
+        Section section = new Section(line, null, null, distance);
+        return new Path(new Sections(List.of(section)));
     }
 }

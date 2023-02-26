@@ -154,4 +154,12 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int maxAdditionalFare() {
+        return sections.stream()
+                .map(Section::getLine)
+                .mapToInt(Line::getAdditionalFare)
+                .max()
+                .orElse(0);
+    }
 }
