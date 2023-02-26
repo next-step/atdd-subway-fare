@@ -27,21 +27,13 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, getWeight(it, pathSearchType));
-                });
+                .forEach(it -> addSectionEdge(graph, it, pathSearchType));
 
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
+                .forEach(it -> addSectionEdge(graph, it, pathSearchType));
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -52,6 +44,12 @@ public class SubwayMap {
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
+    }
+
+    private void addSectionEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section, PathSearchType pathSearchType) {
+        SectionEdge sectionEdge = SectionEdge.of(section);
+        graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
+        graph.setEdgeWeight(sectionEdge, getWeight(section, pathSearchType));
     }
 
     private int getWeight(Section section, PathSearchType pathSearchType) {
