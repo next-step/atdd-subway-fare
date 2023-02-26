@@ -41,7 +41,8 @@ class PathDocumentation extends Documentation {
                         new StationResponse(1L, "교대역"),
                         new StationResponse(2L, "남부터미널역"),
                         new StationResponse(3L, "양재역")
-                ), 10, 20);
+                ), 10, 20, 1450);
+
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathRequestType.class))).thenReturn(pathResponse);
 
@@ -72,7 +73,8 @@ class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 식별자"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
         );
     }
 }
