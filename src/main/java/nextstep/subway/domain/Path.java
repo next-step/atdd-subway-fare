@@ -1,9 +1,12 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.policy.FarePolicies;
+
 import java.util.List;
 
 public class Path {
     private Sections sections;
+    private FarePolicies farePolicies;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -25,7 +28,11 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int calculateFare() {
-        return 0;
+    public void apply(FarePolicies farePolicies){
+        this.farePolicies = farePolicies;
+    }
+
+    public int calculateFare(){
+        return this.farePolicies.calculate(this.extractDistance());
     }
 }
