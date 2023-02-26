@@ -150,4 +150,10 @@ public class Sections {
     public int totalDistance() {
         return sections.stream().mapToInt(Section::getDistance).sum();
     }
+
+    public int totalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
 }
