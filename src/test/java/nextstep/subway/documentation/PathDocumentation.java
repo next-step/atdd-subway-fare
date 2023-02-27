@@ -16,6 +16,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -42,7 +43,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(TARGET_ID, "역삼역")
                 ), 10
         );
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
 
         // When
         ExtractableResponse<Response> response = 경로_조회_요청(SOURCE_ID, TARGET_ID, SearchType.DURATION.name(), documentConfig("path"));
