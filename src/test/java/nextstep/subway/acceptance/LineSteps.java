@@ -9,6 +9,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("upStationId", upStation + "");
+        params.put("downStationId", downStation + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
+
+        return 지하철_노선_생성_요청(params);
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -59,6 +71,16 @@ public class LineSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", upStationId + "");
+        params.put("downStationId", downStationId + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
+
+        return 지하철_노선에_지하철_구간_생성_요청(lineId, params);
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Map<String, String> params) {
