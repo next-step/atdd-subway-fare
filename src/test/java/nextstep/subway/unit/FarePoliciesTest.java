@@ -2,8 +2,8 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.policy.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,51 +22,11 @@ class FarePoliciesTest {
         farePolicies.addPolicies(base, ten, fifth);
     }
 
-    @Test
-    @DisplayName("8km")
-    void km_8() {
-        //then 8km면 요금은 1250원이다.
-        assertThat(farePolicies.calculate(8)).isEqualTo(1250);
+    @ParameterizedTest
+    @CsvSource(value = {"8,1250", "10,1250", "12,1350", "16,1450", "50,2050", "60,2250", "65, 2250"})
+    void calculateFare(int distance, int fare) {
+        //then 거리를 넣으면 요금이 계산된다.
+        assertThat(farePolicies.calculate(distance)).isEqualTo(fare);
     }
-
-    @Test
-    @DisplayName("10km")
-    void km_10() {
-        //then 10km면 요금은 1250원이다.
-        assertThat(farePolicies.calculate(10)).isEqualTo(1250);
-    }
-    @Test
-    @DisplayName("12km")
-    void km_12() {
-        //then 12km면 요금은 1350원이다.
-        assertThat(farePolicies.calculate(12)).isEqualTo(1350);
-    }
-    @Test
-    @DisplayName("16km")
-    void km_16() {
-        //then 8km면 요금은 1450원이다.
-        assertThat(farePolicies.calculate(16)).isEqualTo(1450);
-    }
-    @Test
-    @DisplayName("50km")
-    void km_50() {
-        //then 8km면 요금은 2050원이다.
-        assertThat(farePolicies.calculate(50)).isEqualTo(2050);
-    }
-
-    @Test
-    @DisplayName("60km")
-    void km_60() {
-        //then 8km면 요금은 2250원이다.
-        assertThat(farePolicies.calculate(60)).isEqualTo(2250);
-    }
-    @Test
-    @DisplayName("65km")
-    void km_65() {
-        //then 8km면 요금은 2250원이다.
-        assertThat(farePolicies.calculate(65)).isEqualTo(2250);
-    }
-
-
 
 }
