@@ -3,12 +3,9 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.domain.Station;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -31,7 +28,7 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로의_역들_총_거리_총_소요시간이_조회됨(ExtractableResponse<Response> response, List<Long> stationIds, int distance, int duration) {
+    public static void 경로와_총_거리_총_소요시간이_조회됨(ExtractableResponse<Response> response, List<Long> stationIds, int distance, int duration) {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stationIds);
             assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
