@@ -49,7 +49,15 @@ public class SubwayMap {
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        final Path path = new Path(new Sections(sections));
+
+        int distance = path.extractDistance();
+        if (PathType.DURATION.equals(pathType)) {
+            distance = findPath(source, target, PathType.DISTANCE).extractDistance();
+        }
+        path.addFare(FareUtils.getFare(distance));
+
+        return path;
     }
 
     private int getCalculationTarget(final Section section, PathType pathType) {
