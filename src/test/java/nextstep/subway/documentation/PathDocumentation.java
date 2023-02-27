@@ -9,7 +9,6 @@ import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.SearchType;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -58,13 +57,15 @@ public class PathDocumentation extends Documentation {
                 .filter(document(documentIdentifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역 id"),
-                                parameterWithName("target").description("도착역 id")
+                                parameterWithName("target").description("도착역 id"),
+                                parameterWithName("type").description("경로 조회 조건")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로의 지하철 역 목록"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철 역 id"),
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철 역 이름"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로의 이동거리")
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로의 이동거리"),
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로의 이동시간")
                         )
                 ));
     }
