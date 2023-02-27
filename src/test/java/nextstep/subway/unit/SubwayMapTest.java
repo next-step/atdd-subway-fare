@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.applicaion.PathType;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
@@ -34,10 +35,10 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 3, 20);
-        이호선.addSection(교대역, 강남역, 3, 20);
-        삼호선.addSection(교대역, 남부터미널역, 5, 20);
-        삼호선.addSection(남부터미널역, 양재역, 5, 20);
+        신분당선.addSection(강남역, 양재역, 3, 10);
+        이호선.addSection(교대역, 강남역, 3, 10);
+        삼호선.addSection(교대역, 남부터미널역, 5, 5);
+        삼호선.addSection(남부터미널역, 양재역, 5, 5);
     }
 
     @Test
@@ -47,10 +48,23 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.거리);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+    }
+
+    @Test
+    void findPathByDuration() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.시간);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
     @Test
@@ -60,7 +74,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMap.findPath(양재역, 교대역, PathType.거리);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

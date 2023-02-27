@@ -1,7 +1,8 @@
 package nextstep.subway.applicaion;
 
 public enum PathType {
-    시간("DURATION");
+    시간("DURATION"),
+    거리("DISTANCE");
 
     private String type;
 
