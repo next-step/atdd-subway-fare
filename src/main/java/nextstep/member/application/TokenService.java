@@ -1,21 +1,17 @@
 package nextstep.member.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.member.application.dto.GithubProfileResponse;
 import nextstep.member.application.dto.TokenResponse;
 import nextstep.member.domain.Member;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class TokenService {
-    private MemberService memberService;
-    private JwtTokenProvider jwtTokenProvider;
-    private GithubClient githubClient;
-
-    public TokenService(MemberService memberService, JwtTokenProvider jwtTokenProvider, GithubClient githubClient) {
-        this.memberService = memberService;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.githubClient = githubClient;
-    }
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final GithubClient githubClient;
 
     public TokenResponse createToken(String email, String password) {
         Member member = memberService.login(email, password);

@@ -1,5 +1,8 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -9,20 +12,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static lombok.AccessLevel.PROTECTED;
+
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Sections {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
-    public Sections() {
-    }
-
     public Sections(List<Section> sections) {
         this.sections = sections;
-    }
-
-    public List<Section> getSections() {
-        return sections;
     }
 
     public void add(Section section) {
@@ -92,7 +92,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance()));
+                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
                     sections.remove(it);
                 });
     }
@@ -103,7 +103,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance()));
+                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
                     sections.remove(it);
                 });
     }
@@ -128,7 +128,8 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                    upSection.get().getDistance() + downSection.get().getDistance(),
+                    upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);
@@ -149,5 +150,11 @@ public class Sections {
 
     public int totalDistance() {
         return sections.stream().mapToInt(Section::getDistance).sum();
+    }
+
+    public int totalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }
