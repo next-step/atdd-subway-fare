@@ -8,6 +8,16 @@ import java.util.List;
 @Getter
 public class Path {
 
+    private static final int DEFAULT_FARE = 1250;
+
+    private static final int DEFAULT_FARE_DISTANCE = 10;
+
+    private static final int OVER_FARE_BETWEEN_TEN_AND_FIFTY = 50;
+
+    private static final int STANDARD_FARE_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY = 5;
+
+    private static final int STANDARD_FARE_DISTANCE_OVER_FIFTY = 8;
+
     private final List<Station> stations;
 
     private final int totalDistance;
@@ -25,18 +35,24 @@ public class Path {
     }
 
     public int getFare() {
-        if (totalDistance <= 10) {
-            return 1250;
+        if (totalDistance <= DEFAULT_FARE_DISTANCE) {
+            return DEFAULT_FARE;
         }
 
-        if (totalDistance <= 50) {
-            return 1250 + calculateOverFare(totalDistance - 10, 5);
+        if (totalDistance <= OVER_FARE_BETWEEN_TEN_AND_FIFTY) {
+            return DEFAULT_FARE + calculateOverFare(
+                    totalDistance - DEFAULT_FARE_DISTANCE,
+                    STANDARD_FARE_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY
+            );
         }
 
-        return 1250 + calculateOverFare(totalDistance - 10, 8);
+        return DEFAULT_FARE + calculateOverFare(
+                totalDistance - DEFAULT_FARE_DISTANCE,
+                STANDARD_FARE_DISTANCE_OVER_FIFTY
+        );
     }
 
     private int calculateOverFare(int distance, int kilometer) {
-        return (int) ((Math.ceil((distance - 1) / kilometer) + 1) * 100);
+        return (int) ((Math.ceil(((distance - 1) / (double) kilometer)) + 1) * 100);
     }
 }
