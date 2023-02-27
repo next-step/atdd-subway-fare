@@ -3,14 +3,20 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
+    private PathType pathType;
     private Sections sections;
 
-    public Path(Sections sections) {
+    public Path(PathType pathType, Sections sections) {
+        this.pathType = pathType;
         this.sections = sections;
     }
 
     public Sections getSections() {
         return sections;
+    }
+
+    public PathType getPathType() {
+        return pathType;
     }
 
     public int extractDistance() {

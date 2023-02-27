@@ -4,7 +4,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import nextstep.subway.applicaion.PathType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +14,11 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
-    public static ExtractableResponse<Response> searchPath(RequestSpecification spec, long source, long target, PathType pathType) {
+    public static ExtractableResponse<Response> searchPath(RequestSpecification spec, long source, long target, String type) {
         Map<String, Object> params = new HashMap<>();
         params.put("source", source);
         params.put("target", target);
-        params.put("type", pathType.getType());
+        params.put("type", type);
 
         return RestAssured
                 .given(spec).log().all()
