@@ -3,14 +3,20 @@ package nextstep.subway.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class SectionEdge extends DefaultWeightedEdge {
-    private Section section;
+    private final Section section;
+    private final Line line;
 
-    public static SectionEdge of(Section section) {
-        return new SectionEdge(section);
+    public SectionEdge(Section section, Line line) {
+        this.section = section;
+        this.line = line;
     }
 
-    public SectionEdge(Section section) {
-        this.section = section;
+    public static SectionEdge of(Section section, Line line) {
+        return new SectionEdge(section, line);
+    }
+
+    public Line getLine() {
+        return line;
     }
 
     public Section getSection() {

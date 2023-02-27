@@ -19,10 +19,16 @@ public class Line {
     public Line() {
     }
 
+    public Line(String name, String color) {
+        this.name = name;
+        this.color = color;
+        this.fare = 0;
+    }
+
     public Line(String name, String color, int fare) {
         this.name = name;
         this.color = color;
-        this.fare=  fare;
+        this.fare = fare;
     }
 
     public Long getId() {
