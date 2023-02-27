@@ -42,10 +42,10 @@ public class TokenService {
 
     public LoginMember findMemberByToken(final String credentials) {
         if (credentials.isEmpty()) {
-            throw new MissingTokenException(NOT_MISSING_TOKEN);
+            return LoginMember.GUEST;
         }
         if (!jwtTokenProvider.validateToken(credentials)) {
-            throw new MissingTokenException(NOT_VALID_TOKEN);
+            return LoginMember.GUEST;
         }
         final String email = jwtTokenProvider.getPrincipal(credentials);
         final Member member = memberService.findByEmail(email);
