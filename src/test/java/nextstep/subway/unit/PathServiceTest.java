@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,7 @@ class PathServiceTest extends ApplicationContextTest {
     @Test
     void findRouteTest() {
 
-        final PathResponse pathResponse = pathService.findPath(교대역.getId(), 양재역.getId(), DISTANCE.getType());
+        final PathResponse pathResponse = pathService.findPath(교대역.getId(), 양재역.getId(), DISTANCE.name());
 
         final List<String> stationNames = pathResponse.getStations()
                 .stream()
@@ -95,7 +96,9 @@ class PathServiceTest extends ApplicationContextTest {
         assertAll(
                 () -> assertThat(pathResponse.getStations()).hasSize(3),
                 () -> assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역"),
-                () -> assertThat(pathResponse.getDistance()).isEqualTo(5)
+                () -> assertThat(pathResponse.getDistance()).isEqualTo(5),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(10),
+                () -> assertThat(pathResponse.getFare()).isEqualTo(new BigDecimal("1250"))
         );
     }
 
@@ -103,7 +106,7 @@ class PathServiceTest extends ApplicationContextTest {
     @Test
     void error_notConnectedSourceNTarget() {
 
-        assertThatThrownBy(() -> pathService.findPath(교대역.getId(), 검암역.getId(), DISTANCE.getType()))
+        assertThatThrownBy(() -> pathService.findPath(교대역.getId(), 검암역.getId(), DISTANCE.name()))
                 .isInstanceOf(NoPathConnectedException.class)
                 .hasMessage(NO_PATH_CONNECTED.getMessage());
     }
@@ -112,7 +115,7 @@ class PathServiceTest extends ApplicationContextTest {
     @Test
     void error_sameSourceNTarget() {
 
-        assertThatThrownBy(() -> pathService.findPath(교대역.getId(), 교대역.getId(), DISTANCE.getType()))
+        assertThatThrownBy(() -> pathService.findPath(교대역.getId(), 교대역.getId(), DISTANCE.name()))
                 .isInstanceOf(SameStationException.class)
                 .hasMessage(NO_FIND_SAME_SOURCE_TARGET_STATION.getMessage());
     }
@@ -121,7 +124,7 @@ class PathServiceTest extends ApplicationContextTest {
     @Test
     void error_noRegisterStation() {
 
-        assertThatThrownBy(() -> pathService.findPath(교대역.getId(), 몽촌토성역.getId(), DISTANCE.getType()))
+        assertThatThrownBy(() -> pathService.findPath(교대역.getId(), 몽촌토성역.getId(), DISTANCE.name()))
                 .isInstanceOf(NoRegisterStationException.class)
                 .hasMessage(NO_REGISTER_LINE_STATION.getMessage());
     }

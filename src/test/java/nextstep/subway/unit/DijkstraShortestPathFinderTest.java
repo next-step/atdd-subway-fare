@@ -74,8 +74,8 @@ class DijkstraShortestPathFinderTest {
 
         assertAll(
                 () -> assertThat(경로_결과.getStations()).hasSize(3),
-                () -> assertThat(경로_결과.extractDuration()).isEqualTo(10),
-                () -> assertThat(경로_결과.extractDistance()).isEqualTo(5)
+                () -> assertThat(경로_결과.getShortestDuration()).isEqualTo(10),
+                () -> assertThat(경로_결과.getShortestDistance()).isEqualTo(5)
         );
     }
 

@@ -34,7 +34,7 @@ public class DijkstraShortestPathFinder implements ShortestPathFinder {
         addVertexFromLine(lines);
         addEdgeByLine(lines, searchType);
         addEdgeByLineOppositely(lines, searchType);
-        return new Path(new Sections(findShortestSections(source, target)));
+        return Path.from(new Sections(findShortestSections(source, target)));
     }
 
     private void addEdgeByLineOppositely(final List<Line> lines, final SearchType searchType) {
