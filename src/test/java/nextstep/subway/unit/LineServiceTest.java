@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static nextstep.subway.acceptance.LineSteps.특별요금;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -135,7 +136,7 @@ class LineServiceTest extends ApplicationContextTest {
         return lineRepository.save(new Line(name, color, fare));
     }
 
-    public static LineRequest 노선_수정_생성(final String name, final String color, final BigDecimal fare) {
+    private static LineRequest 노선_수정_생성(final String name, final String color, final BigDecimal fare) {
         final LineRequest lineRequest = new LineRequest();
         reflectionByObject(name, "name", lineRequest);
         reflectionByObject(color, "color", lineRequest);
@@ -145,9 +146,5 @@ class LineServiceTest extends ApplicationContextTest {
 
     public static void reflectionByObject(final Object field, final String filedName, final Object object) {
         ReflectionTestUtils.setField(object, filedName, field);
-    }
-
-    private BigDecimal 특별요금(final int fare) {
-        return BigDecimal.valueOf(fare);
     }
 }

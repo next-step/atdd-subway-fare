@@ -6,16 +6,18 @@ import io.restassured.response.Response;
 import nextstep.subway.domain.Line;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.StationSteps.reflectionById;
 
 public class LineSteps {
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
-        Map<String, String> params = new HashMap<>();
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(final String name, final String color, final BigDecimal fare) {
+        Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("fare", fare);
         return RestAssured
                 .given().log().all()
                 .body(params)
@@ -24,7 +26,7 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, String> params) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(final String accessToken, final Map<String, String> params) {
         return RestAssured
                 .given().log().all()
                 .auth().oauth2(accessToken)
@@ -91,5 +93,9 @@ public class LineSteps {
         final Line line = new Line(name, color);
         reflectionById(id, line);
         return line;
+    }
+
+    public static BigDecimal 특별요금(final int fare) {
+        return BigDecimal.valueOf(fare);
     }
 }
