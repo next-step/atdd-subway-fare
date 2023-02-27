@@ -7,7 +7,9 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.SearchType;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         // When
-        ExtractableResponse<Response> response = 경로_조회_요청(SOURCE_ID, TARGET_ID, documentConfig("path"));
+        ExtractableResponse<Response> response = 경로_조회_요청(SOURCE_ID, TARGET_ID, SearchType.DURATION.name(), documentConfig("path"));
 
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
