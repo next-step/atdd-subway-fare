@@ -5,13 +5,14 @@ import nextstep.member.domain.MemberRepository;
 import nextstep.member.domain.RoleType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 
-@Profile("test")
+@ActiveProfiles("test")
 @Component
 public class DataLoader {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public DataLoader(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
