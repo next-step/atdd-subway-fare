@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -42,7 +43,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
-        assertThat(section.getDuration()).isEqualTo(4);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(4));
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
@@ -62,7 +63,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
-        assertThat(section.getDuration()).isEqualTo(3);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(3));
     }
 
     @DisplayName("목록 앞에 추가할 경우")
@@ -82,7 +83,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(역삼역);
         assertThat(section.getDistance()).isEqualTo(10);
-        assertThat(section.getDuration()).isEqualTo(7);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(7));
     }
 
     @DisplayName("목록 뒤에 추가할 경우")
@@ -102,7 +103,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
-        assertThat(section.getDuration()).isEqualTo(4);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(4));
     }
 
     @Test

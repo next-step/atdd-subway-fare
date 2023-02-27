@@ -24,13 +24,14 @@ public class Section extends DefaultWeightedEdge {
 
     private int distance;
 
-    private int duration;
+    @Embedded
+    private Duration duration;
 
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+    public Section(Line line, Station upStation, Station downStation, int distance, Duration duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -58,7 +59,7 @@ public class Section extends DefaultWeightedEdge {
         return distance;
     }
 
-    public int getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 

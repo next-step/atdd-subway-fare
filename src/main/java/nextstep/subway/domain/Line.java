@@ -48,7 +48,7 @@ public class Line {
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
-        sections.add(new Section(this, upStation, downStation, distance, duration));
+        sections.add(new Section(this, upStation, downStation, distance, Duration.of(duration)));
     }
 
     public List<Station> getStations() {

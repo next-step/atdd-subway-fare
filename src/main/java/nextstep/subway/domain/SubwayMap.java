@@ -58,6 +58,6 @@ public class SubwayMap {
         if (pathType == PathType.DISTANCE) {
             return it.getDistance();
         }
-        return it.getDuration();
+        return it.getDuration().getValue();
     }
 }
