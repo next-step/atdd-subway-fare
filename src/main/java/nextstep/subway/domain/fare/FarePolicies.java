@@ -5,9 +5,9 @@ import java.util.List;
 public class FarePolicies {
 
     private static final List<FarePolicy> farePolicies = List.of(
-            new DefaultFarePolicy(),
-            new BetweenTenAndFiftyFarePolicy(),
-            new OverFiftyFarePolicy()
+            new FirstFarePolicy(),
+            new BetweenFarePolicy(10, 50, 5),
+            new LastFarePolicy(50, 8)
     );
 
     public static int getFare(final int distance) {
