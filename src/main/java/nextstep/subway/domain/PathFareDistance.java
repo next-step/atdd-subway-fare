@@ -2,7 +2,7 @@ package nextstep.subway.domain;
 
 public class PathFareDistance {
 
-    public static Fare of(final Path path) {
+    public static Fare from(final Path path) {
         return calculatorFare(path);
     }
 
