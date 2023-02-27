@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static nextstep.subway.acceptance.PathSteps.baseDocumentRequest;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.when;
 
@@ -27,7 +28,7 @@ public class PathDocumentation extends Documentation {
             ), 10,
             20);
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         baseDocumentRequest(spec, "/distance")
             .queryParam("source", 1L)
@@ -46,7 +47,7 @@ public class PathDocumentation extends Documentation {
             ), 15,
             15);
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         baseDocumentRequest(spec, "/duration")
             .queryParam("source", 1L)
