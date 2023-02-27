@@ -33,4 +33,8 @@ public class Path {
     public int getTotalFare() {
         return totalFare;
     }
+
+    public int extractDuration() {
+        return sections.totalDuration();
+    }
 }
