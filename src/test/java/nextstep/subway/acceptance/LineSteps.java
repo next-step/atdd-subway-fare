@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
-        Map<String, String> params = createLineParams(name, color);
+        Map<String, String> params = createLineParams(name, color, 0);
         return RestAssured
                 .given().log().all()
                 .body(params)
@@ -50,12 +50,12 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
-        return 지하철_노선_생성_요청(name, color, upStation, downStation, distance, 0);
+    public static Long 지하철_노선_생성_요청(String name, String color, Integer additionalFare, Long upStation, Long downStation, int distance) {
+        return 지하철_노선_생성_요청(name, color, additionalFare, upStation, downStation, distance, 0);
     }
 
-    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams = createLineParams(name, color, upStation, downStation, distance, duration);
+    public static Long 지하철_노선_생성_요청(String name, String color, Integer additionalFare, Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> lineCreateParams = createLineParams(name, color, additionalFare, upStation, downStation, distance, duration);
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
@@ -96,16 +96,17 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    private static Map<String, String> createLineParams(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> params = createLineParams(name, color);
+    private static Map<String, String> createLineParams(String name, String color, Integer additionalFare, Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> params = createLineParams(name, color, additionalFare);
         params.putAll(createSectionParams(upStation, downStation, distance, duration));
         return params;
     }
 
-    private static Map<String, String> createLineParams(String name, String color) {
+    private static Map<String, String> createLineParams(String name, String color, Integer additionalFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("additionalFare", additionalFare + "");
         return params;
     }
 

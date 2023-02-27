@@ -10,20 +10,14 @@ import java.util.stream.Collectors;
 public class SubwayMap {
     private List<Line> lines;
     private PathType pathType;
-    private FarePolicy farePolicy;
 
     public SubwayMap(List<Line> lines) {
         this(lines, PathType.DISTANCE);
     }
 
     public SubwayMap(List<Line> lines, PathType pathType) {
-        this(lines, pathType, new BaseFarePolicy());
-    }
-
-    public SubwayMap(List<Line> lines, PathType pathType, FarePolicy farePolicy) {
         this.lines = lines;
         this.pathType = pathType;
-        this.farePolicy = farePolicy;
     }
 
     public Path findPath(Station source, Station target) {
@@ -63,6 +57,6 @@ public class SubwayMap {
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections), new Fare(farePolicy));
+        return new Path(new Sections(sections));
     }
 }
