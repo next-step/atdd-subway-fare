@@ -28,7 +28,7 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public void apply(FarePolicies farePolicies){
+    public void applyFarePolicies(FarePolicies farePolicies){
         this.farePolicies = farePolicies;
     }
 

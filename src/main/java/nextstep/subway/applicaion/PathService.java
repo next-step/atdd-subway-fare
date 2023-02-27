@@ -23,7 +23,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
-        path.apply(formulateFarePolicies());
+        path.applyFarePolicies(formulateFarePolicies());
 
         return PathResponse.of(path);
     }
