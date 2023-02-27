@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 
@@ -18,6 +19,8 @@ import static nextstep.common.error.SubwayError.NO_FIND_SAME_SOURCE_TARGET_STATI
 import static nextstep.common.error.SubwayError.NO_PATH_CONNECTED;
 import static nextstep.common.error.SubwayError.NO_REGISTER_LINE_STATION;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
@@ -27,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+
+    private static final String EMAIL = "member@email.com";
+    private static final String PASSWORD = "password";
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -39,6 +45,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
     private Long 일호선;
     private String 최단거리  = SearchType.DURATION.name();
+    private String 사용자;
+
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -67,10 +75,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 6));
     }
 
-    @ParameterizedTest(name = "두 역의 {1} 경로를 조회한다.")
-    @MethodSource("providerSearchType")
-    void findPathByDistance(final String 조회조건) {
-        final ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, 조회조건);
+    @DisplayName("최적의 경로를 찾고 요금도 계산한다.")
+    @ParameterizedTest(name = "총 요금이 1250원인 경우 {0} 세는 {1} 원의 요금을 낸다.")
+    @CsvSource(value = {"6,800", "12,800", "13,1070", "18,1070", "19,1250", "20,1250"})
+    void findPathByDistance(final int age) {
+        회원_생성_요청(EMAIL, PASSWORD, age);
+        사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
+
+        final ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(사용자, 교대역, 양재역, 최단거리);
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
@@ -79,17 +91,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private static Stream<Arguments> providerSearchType() {
-        return Stream.of(
-                Arguments.of(SearchType.DISTANCE.name()),
-                Arguments.of(SearchType.DURATION.name())
-        );
-    }
-
     @DisplayName("출발역과 도착역이 같아서 조회가 불가능합니다")
     @Test
     void error_showRoutes() {
-        final ExtractableResponse<Response> 지하철_노선에_지하철_최적_경로_조회_응답 = 두_역의_경로_조회를_요청(교대역, 교대역, 최단거리);
+        final ExtractableResponse<Response> 지하철_노선에_지하철_최적_경로_조회_응답 = 두_역의_경로_조회를_요청(사용자, 교대역, 교대역, 최단거리);
 
         final JsonPath jsonPathResponse = 지하철_노선에_지하철_최적_경로_조회_응답.response().body().jsonPath();
         assertAll(
@@ -101,7 +106,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역과 도착역이 연결되어 있지 않아서 조회가 불가능합니다")
     @Test
     void error_showRoutes_2() {
-        final ExtractableResponse<Response> 지하철_노선에_지하철_최적_경로_조회_응답 = 두_역의_경로_조회를_요청(교대역, 검암역, 최단거리);
+        final ExtractableResponse<Response> 지하철_노선에_지하철_최적_경로_조회_응답 = 두_역의_경로_조회를_요청(사용자, 교대역, 검암역, 최단거리);
 
         final JsonPath jsonPathResponse = 지하철_노선에_지하철_최적_경로_조회_응답.response().body().jsonPath();
         assertAll(
@@ -113,7 +118,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("요청한 역이 노선의 등록되어 있지 않습니다")
     @Test
     void error_showRoutes_3() {
-        final ExtractableResponse<Response> 지하철_노선에_지하철_최적_경로_조회_응답 = 두_역의_경로_조회를_요청(교대역, 부평역, 최단거리);
+        final ExtractableResponse<Response> 지하철_노선에_지하철_최적_경로_조회_응답 = 두_역의_경로_조회를_요청(사용자, 교대역, 부평역, 최단거리);
 
         final JsonPath jsonPathResponse = 지하철_노선에_지하철_최적_경로_조회_응답.response().body().jsonPath();
         assertAll(

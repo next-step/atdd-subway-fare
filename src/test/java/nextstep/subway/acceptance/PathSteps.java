@@ -19,9 +19,10 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(final Long source, final Long target, final String type) {
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(final String accessToken, final Long source, final Long target, final String type) {
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();
