@@ -7,6 +7,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -49,6 +50,7 @@ public class SubwayMapTest {
         삼호선.addSection(남부터미널역, 양재역, 5, 3);
     }
 
+    @DisplayName("최단 거리 기준으로 경로를 구한다.")
     @Test
     void findPath() {
         // given
@@ -62,6 +64,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
     }
 
+    @DisplayName("최단 거리 기준으로 경로를 구한다.(출발역과 도착역이 반대)")
     @Test
     void findPathOppositely() {
         // given
@@ -75,6 +78,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
     }
 
+    @DisplayName("최소 시간 기준으로 경로를 구한다.")
     @Test
     void findPathByDuration() {
         // given
@@ -88,6 +92,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
     }
 
+    @DisplayName("최소 시간 기준으로 경로를 구한다.(출발역과 도착역이 반대)")
     @Test
     void findPathByDurationOppositely() {
         // given

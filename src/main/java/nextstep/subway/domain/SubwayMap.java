@@ -52,7 +52,7 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    public static int getCalculationTarget(final Section section, PathType pathType) {
+    private int getCalculationTarget(final Section section, PathType pathType) {
         if (PathType.DISTANCE.equals(pathType)) {
             return section.getDistance();
         }
