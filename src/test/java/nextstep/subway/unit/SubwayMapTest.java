@@ -2,10 +2,12 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.SearchType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -22,6 +24,8 @@ public class SubwayMapTest {
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+    private SubwayMap subwayMapWeightOnDistance;
+    private SubwayMap subwayMapWeightOnDuration;
 
     @BeforeEach
     void setUp() {
@@ -38,29 +42,43 @@ public class SubwayMapTest {
         이호선.addSection(교대역, 강남역, 3, 3);
         삼호선.addSection(교대역, 남부터미널역, 5, 5);
         삼호선.addSection(남부터미널역, 양재역, 5, 5);
+
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        subwayMapWeightOnDistance = new SubwayMap(lines, SearchType.DISTANCE);
+        subwayMapWeightOnDuration = new SubwayMap(lines, SearchType.DURATION);
     }
 
     @Test
-    void findPath() {
-        // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
-
+    void findPathOnDistance() {
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMapWeightOnDistance.findPath(교대역, 양재역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
     }
 
     @Test
-    void findPathOppositely() {
-        // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayMap(lines);
-
+    void findPathOnDuration() {
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMapWeightOnDuration.findPath(교대역, 양재역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+    }
+
+    @Test
+    void findPathOppositelyOnDistance() {
+        // when
+        Path path = subwayMapWeightOnDistance.findPath(양재역, 교대역);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+    }
+
+    @Test
+    void findPathOppositelyOnDuration() {
+        // when
+        Path path = subwayMapWeightOnDuration.findPath(양재역, 교대역);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

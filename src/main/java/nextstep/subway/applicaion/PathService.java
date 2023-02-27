@@ -7,6 +7,7 @@ import nextstep.subway.domain.SearchType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,14 +21,13 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, SearchType type) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
+    public PathResponse findPath(Long source, Long target, SearchType searchType) {
+        Station departureStation = stationService.findById(source);
+        Station destinationStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
 
-        // TODO: 경로 조회 기준 [DISTANCE, DURATION] 에 따라서 경로를 탐색한다
-        Path path = subwayMap.findPath(upStation, downStation);
+        SubwayMap subwayMap = new SubwayMap(lines, searchType);
+        Path path = subwayMap.findPath(departureStation, destinationStation);
 
         return PathResponse.of(path);
     }
