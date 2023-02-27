@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -14,7 +15,7 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathRequestType type) {
+    public Path findPath(Station source, Station target, PathRequestType type, Member member) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -51,7 +52,7 @@ public class SubwayMap {
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        return new Path(new Sections(sections), member);
     }
 
 }

@@ -1,7 +1,6 @@
 package nextstep.member.application;
 
 import nextstep.member.application.dto.MemberRequest;
-import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.ui.AuthenticationException;
@@ -17,14 +16,12 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public MemberResponse createMember(MemberRequest request) {
-        Member member = memberRepository.save(request.toMember());
-        return MemberResponse.of(member);
+    public Member createMember(MemberRequest request) {
+        return memberRepository.save(request.toMember());
     }
 
-    public MemberResponse findMember(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
-        return MemberResponse.of(member);
+    public Member findMember(Long id) {
+        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     public void updateMember(Long id, MemberRequest param) {

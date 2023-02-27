@@ -16,7 +16,7 @@ public class FarePolicies {
     }
 
 
-    public int calculate(int distance) {
+    public int calculate(int distance, int age) {
         return values.stream().map(policy -> policy.calculate(distance)).reduce(0, Integer::sum);
     }
 }

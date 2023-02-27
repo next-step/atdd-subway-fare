@@ -22,7 +22,7 @@ class FarePoliciesTest {
     @CsvSource(value = {"8,1250", "10,1250", "12,1350", "16,1450", "50,2050", "60,2250", "65, 2250"})
     void calculateFare(int distance, int fare) {
         //then 거리를 넣으면 요금이 계산된다.
-        assertThat(farePolicies.calculate(distance)).isEqualTo(fare);
+        assertThat(farePolicies.calculate(distance, 20)).isEqualTo(fare);
     }
 
 }
