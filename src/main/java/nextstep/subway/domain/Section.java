@@ -103,8 +103,8 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Section section) {
         Station upStation = section.getUpStation();
         Station downStation = section.getDownStation();
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
+        return (this.upStation.equals(upStation) && this.downStation.equals(downStation))
+                || (this.upStation.equals(downStation) && this.downStation.equals(upStation));
     }
 
     public Section reverse() {
