@@ -236,7 +236,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 			() -> assertThat(stationsIds).containsExactly(A_Station, B_Station, C_Station, D_Station),
 			() -> assertThat(totalDistance).isEqualTo(80),
 			() -> assertThat(totalDuration).isEqualTo(20),
-			() -> assertThat(fare).isEqualTo(2150)
+			() -> assertThat(fare).isEqualTo(2450)
 		);
 	}
 }

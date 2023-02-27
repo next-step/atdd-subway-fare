@@ -34,6 +34,9 @@ public class Section extends DefaultWeightedEdge {
 	private int duration;
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+		if (distance < 1) {
+			throw new IllegalArgumentException((SECTION_DISTANCE_WRONG_VALUE.isMessage()));
+		}
 		if (duration < 1) {
 			throw new IllegalArgumentException((SECTION_DURATION_WRONG_VALUE.isMessage()));
 		}
