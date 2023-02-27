@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import nextstep.common.exception.MissingTokenException;
 import nextstep.common.exception.NotFoundException;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
@@ -11,6 +12,7 @@ import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static nextstep.common.error.MemberError.NOT_MISSING_TOKEN;
 import static nextstep.common.error.SubwayError.NOT_FOUND;
 
 @Service
@@ -26,6 +28,7 @@ public class FavoriteService {
 
     @Transactional
     public FavoriteResponse saveFavorite(final LoginMember loginUser, final FavoriteRequest request) {
+        validateLogin(loginUser);
         final Station source = stationService.findById(request.getSource());
         final Station target = stationService.findById(request.getTarget());
         final Favorite saveFavorite = favoriteRepository.save(Favorite.of(loginUser.getMemberId(), source.getId(), target.getId()));
@@ -33,6 +36,7 @@ public class FavoriteService {
     }
 
     public FavoriteResponse showFavorite(final LoginMember loginUser, final Long id) {
+        validateLogin(loginUser);
         final Favorite favorite = favoriteRepository.findByIdAndMemberId(id, loginUser.getMemberId())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND));
         final Station source = stationService.findById(favorite.getSourceStationId());
@@ -42,6 +46,13 @@ public class FavoriteService {
 
     @Transactional
     public void removeFavorite(final LoginMember loginUser, final Long id) {
+        validateLogin(loginUser);
         favoriteRepository.deleteByIdAndMemberId(id, loginUser.getMemberId());
+    }
+
+    private void validateLogin(final LoginMember loginUser) {
+        if (loginUser.isGuest()) {
+            throw new MissingTokenException(NOT_MISSING_TOKEN);
+        }
     }
 }
