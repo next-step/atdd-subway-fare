@@ -23,6 +23,15 @@ public class Fare {
         return new Fare(this.fare.add(fare.fare));
     }
 
+    public Fare minus(final Fare deduction) {
+        return new Fare(this.fare.subtract(deduction.fare));
+    }
+
+    public Fare multiply(final Fare discountFare) {
+        final BigDecimal amount = this.fare.multiply(discountFare.fare);
+        return new Fare(amount.stripTrailingZeros());
+    }
+
     public BigDecimal getFare() {
         return fare;
     }
