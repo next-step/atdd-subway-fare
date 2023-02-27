@@ -13,11 +13,11 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 public class PathSteps {
 
 
-    public static RequestSpecification baseDocumentRequest(RequestSpecification spec) {
+    public static RequestSpecification baseDocumentRequest(RequestSpecification spec, String directory) {
         return RestAssured
             .given(spec).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .filter(document("path",
+            .filter(document("path" + directory,
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())));
     }
