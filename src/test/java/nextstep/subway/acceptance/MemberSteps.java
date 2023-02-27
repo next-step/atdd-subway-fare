@@ -88,10 +88,11 @@ public class MemberSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 회원_삭제_요청(ExtractableResponse<Response> response) {
+    public static ExtractableResponse<Response> 회원_삭제_요청(ExtractableResponse<Response> response, String accessToken) {
         String uri = response.header("Location");
         return RestAssured
                 .given().log().all()
+                .auth().oauth2(accessToken)
                 .when().delete(uri)
                 .then().log().all().extract();
     }

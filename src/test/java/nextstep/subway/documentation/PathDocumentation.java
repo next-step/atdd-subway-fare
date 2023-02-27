@@ -32,7 +32,7 @@ public class PathDocumentation extends Documentation {
                 10,
                 10
         );
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         // when
         ExtractableResponse<Response> searchResponse = PathSteps.searchPath(spec, "1", "2", PathLookUpType.DISTANCE.name());

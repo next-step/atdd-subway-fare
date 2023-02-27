@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.domain.User;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
 import nextstep.subway.domain.fare.FareService;
@@ -20,20 +21,20 @@ public class PathService {
         this.fareService = fareService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathLookUpType type) {
+    public PathResponse findPath(Long source, Long target, PathLookUpType type, User user) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
-        int totalFare = calculateTotalFare(path);
+        int totalFare = calculateTotalFare(path, user);
 
         return PathResponse.from(path, totalFare);
     }
 
-    private int calculateTotalFare(Path path) {
+    private int calculateTotalFare(Path path, User user) {
         final int fare = fareService.calculateFare(path.extractDistance());
         final int totalFare = fareService.calculateExtraFare(fare, path.getLines());
-        return totalFare;
+        return user.applyFarePolicy(totalFare);
     }
 }

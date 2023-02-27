@@ -56,10 +56,11 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteMember() {
         // given
+        String accessToken = 베어러_인증_로그인_요청(ADMIN, PASSWORD).jsonPath().getString("accessToken");
         ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
 
         // when
-        ExtractableResponse<Response> response = 회원_삭제_요청(createResponse);
+        ExtractableResponse<Response> response = 회원_삭제_요청(createResponse, accessToken);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());

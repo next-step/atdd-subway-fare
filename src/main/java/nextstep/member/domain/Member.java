@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Member {
+public class Member implements User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +22,11 @@ public class Member {
     private List<String> roles;
 
     public Member() {
+    }
+
+    public Member(Long id, List<String> roles) {
+        this.id = id;
+        this.roles = roles;
     }
 
     public Member(String email, String password, Integer age) {
@@ -50,8 +55,19 @@ public class Member {
         return password;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
+    }
+
+    @Override
+    public boolean isGuest() {
+        return false;
+    }
+
+    @Override
+    public int applyFarePolicy(int fare) {
+        final AgeFarePolicy ageFarePolicy = AgeFarePolicy.of(age);
+        return ageFarePolicy.calculateFareAppliedAgePolicy(fare);
     }
 
     public List<String> getRoles() {
