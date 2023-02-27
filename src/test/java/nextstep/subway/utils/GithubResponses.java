@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public enum GithubResponses {
-    사용자1("1", "access_token_1", "email1@email.com"),
-    사용자2("2", "access_token_2", "email2@email.com"),
+    어린이("1", "access_token_1", "email1@email.com"),
+    청소년("2", "access_token_2", "email2@email.com"),
     사용자3("3", "access_token_3", "email3@email.com"),
     사용자4("4", "access_token_4", "email4@email.com");
 
