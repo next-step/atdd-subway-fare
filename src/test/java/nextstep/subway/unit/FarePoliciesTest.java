@@ -15,11 +15,7 @@ class FarePoliciesTest {
     @BeforeEach
     void setup() {
         //given 요금 정책을 확정한다.
-        FarePolicy base = new FixedFarePolicy(1250);
-        FarePolicy ten = new BetweenUnitFarePolicy(10, 50, 5, 100);
-        FarePolicy fifth = new GreaterUnitFarePolicy(50, 8, 100);
         farePolicies = new FarePolicies();
-        farePolicies.addPolicies(base, ten, fifth);
     }
 
     @ParameterizedTest

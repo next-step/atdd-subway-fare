@@ -5,8 +5,8 @@ import nextstep.subway.domain.policy.FarePolicies;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
-    private FarePolicies farePolicies;
+    private final Sections sections;
+    private final FarePolicies farePolicies = new FarePolicies();
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -26,10 +26,6 @@ public class Path {
 
     public int extractDuration() {
         return sections.totalDuration();
-    }
-
-    public void applyFarePolicies(FarePolicies farePolicies){
-        this.farePolicies = farePolicies;
     }
 
     public int calculateFare(){
