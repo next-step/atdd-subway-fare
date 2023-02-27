@@ -1,15 +1,19 @@
 package nextstep.subway.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Embeddable
 public class Fare {
 
     public static final Fare BASE_FARE = new Fare(new BigDecimal("1250"));
 
+    @Column
     private BigDecimal fare;
 
-    private Fare() {}
+    protected Fare() {}
 
     public Fare(final BigDecimal fare) {
         this.fare = fare;
