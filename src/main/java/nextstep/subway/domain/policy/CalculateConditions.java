@@ -2,6 +2,7 @@ package nextstep.subway.domain.policy;
 
 import nextstep.subway.domain.Line;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,9 @@ public class CalculateConditions {
     }
 
     public List<Line> getLines() {
+        if(Objects.isNull(lines)){
+            return Collections.emptyList();
+        }
         return lines;
     }
 
