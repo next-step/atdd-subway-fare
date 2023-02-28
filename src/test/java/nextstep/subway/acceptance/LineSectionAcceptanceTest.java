@@ -136,6 +136,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
         lineCreateParams.put("distance", 10 + "");
+        lineCreateParams.put("duration", 10 + "");
         return lineCreateParams;
     }
 
@@ -144,6 +145,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", 6 + "");
+        params.put("duration", 6 + "");
         return params;
     }
 }
