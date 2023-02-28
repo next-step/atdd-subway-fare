@@ -91,7 +91,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 				경로를_응답한다(response, 교대역, 남부터미널역, 양재역),
 				경로의_거리를_응답한다(response, 5),
 				경로의_소요_시간을_응답한다(response, 10),
-				경로의_이용_요금을_응답한다(response, 10000)
+				경로의_이용_요금을_응답한다(response, 1250)
 		);
 	}
 
