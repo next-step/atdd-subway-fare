@@ -4,14 +4,13 @@ import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.domain.ShortType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -34,7 +33,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
