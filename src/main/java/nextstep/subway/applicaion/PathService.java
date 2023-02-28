@@ -26,7 +26,8 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, request.getType());
+        final int fare = path.calculateFare();
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fare);
     }
 }
