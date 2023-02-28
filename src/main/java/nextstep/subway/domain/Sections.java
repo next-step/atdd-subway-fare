@@ -158,7 +158,7 @@ public class Sections {
                 .map(line -> line.getExtraFare().getFare())
                 .max(BigDecimal::compareTo)
                 .map(Fare::new)
-                .orElse(Fare.base());
+                .orElse(Fare.from(0));
     }
 
     public List<Section> getSections() {
