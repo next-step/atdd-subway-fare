@@ -20,7 +20,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선 생성")
     @Test
     void createLine() {
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", 특별요금(900));
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", 추가요금(900));
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -32,8 +32,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선 목록 조회")
     @Test
     void getLines() {
-        지하철_노선_생성_요청("2호선", "green", 특별요금(900));
-        지하철_노선_생성_요청("3호선", "orange", 특별요금(900));
+        지하철_노선_생성_요청("2호선", "green", 추가요금(900));
+        지하철_노선_생성_요청("3호선", "orange", 추가요금(900));
 
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
 
@@ -44,7 +44,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선 조회")
     @Test
     void getLine() {
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", 특별요금(900));
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", 추가요금(900));
 
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
 
@@ -55,7 +55,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선 수정")
     @Test
     void updateLine() {
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", 특별요금(900));
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", 추가요금(900));
 
         Map<String, String> params = new HashMap<>();
         params.put("color", "red");
@@ -74,7 +74,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선 삭제")
     @Test
     void deleteLine() {
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", 특별요금(900));
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", 추가요금(900));
 
         ExtractableResponse<Response> response = RestAssured
                 .given().log().all()
