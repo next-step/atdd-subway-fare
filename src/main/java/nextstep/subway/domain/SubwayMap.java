@@ -28,7 +28,7 @@ public class SubwayMap {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it, it.getLine());
+                    SectionEdge sectionEdge = SectionEdge.from(it, it.getLine());
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, getWeightByType(type, it));
                 });
@@ -38,7 +38,7 @@ public class SubwayMap {
                 .flatMap(it -> it.getSections().stream())
                 .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it, it.getLine());
+                    SectionEdge sectionEdge = SectionEdge.from(it, it.getLine());
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, getWeightByType(type, it));
                 });
