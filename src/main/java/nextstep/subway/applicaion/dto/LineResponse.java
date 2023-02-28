@@ -10,14 +10,14 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
-    private BigDecimal fare;
+    private BigDecimal extraFare;
     private List<StationResponse> stations;
 
-    public LineResponse(final Long id, final String name, final String color, final BigDecimal fare, final List<StationResponse> stations) {
+    public LineResponse(final Long id, final String name, final String color, final BigDecimal extraFare, final List<StationResponse> stations) {
         this.id = id;
         this.name = name;
         this.color = color;
-        this.fare = fare;
+        this.extraFare = extraFare;
         this.stations = stations;
     }
 
@@ -40,8 +40,8 @@ public class LineResponse {
         return color;
     }
 
-    public BigDecimal getFare() {
-        return fare;
+    public BigDecimal getExtraFare() {
+        return extraFare;
     }
 
     public List<StationResponse> getStations() {
