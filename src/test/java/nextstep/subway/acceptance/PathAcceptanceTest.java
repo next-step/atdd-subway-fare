@@ -61,6 +61,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(5);
         assertThat(pathResponse.getDuration()).isEqualTo(20);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -74,6 +75,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(20);
         assertThat(pathResponse.getDuration()).isEqualTo(11);
+        assertThat(pathResponse.getFare()).isEqualTo(1450);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, PathLookUpType type) {

@@ -17,6 +17,10 @@ public class Sections {
     public Sections() {
     }
 
+    public Sections(Section section) {
+        this.sections.add(section);
+    }
+
     public Sections(List<Section> sections) {
         this.sections = sections;
     }
@@ -27,7 +31,7 @@ public class Sections {
 
     public void add(Section section) {
         if (this.sections.isEmpty()) {
-            this.sections.add(section);
+            sections.add(section);
             return;
         }
 
@@ -66,7 +70,7 @@ public class Sections {
             Station finalUpStation = upStation;
             Optional<Section> section = findSectionAsUpStation(finalUpStation);
 
-            if (!section.isPresent()) {
+            if (section.isEmpty()) {
                 break;
             }
 
@@ -75,6 +79,14 @@ public class Sections {
         }
 
         return result;
+    }
+
+    public int totalDistance() {
+        return sections.stream().mapToInt(Section::getDistance).sum();
+    }
+
+    public int totalDuration() {
+        return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
     private void checkDuplicateSection(Section section) {
@@ -158,13 +170,5 @@ public class Sections {
         return this.sections.stream()
                 .filter(it -> it.isSameDownStation(station))
                 .findFirst();
-    }
-
-    public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
-    }
-
-    public int totalDuration() {
-        return sections.stream().mapToInt(Section::getDuration).sum();
     }
 }
