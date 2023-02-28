@@ -73,12 +73,6 @@ public class LineService {
         line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
     }
 
-    private List<StationResponse> createStationResponses(Line line) {
-        return line.getStations().stream()
-                .map(it -> stationService.createStationResponse(it))
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public void deleteSection(Long lineId, Long stationId) {
         Line line = findById(lineId);
@@ -86,4 +80,5 @@ public class LineService {
 
         line.deleteSection(station);
     }
+
 }
