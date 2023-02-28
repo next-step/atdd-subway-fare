@@ -17,6 +17,15 @@ public class Path {
         return new Path(sections, sections.totalDistance(), sections.totalDuration());
     }
 
+    public Fare mergeFare(final Fare distanceFare) {
+        return distanceFare.plus(getMaxExtraFare());
+    }
+
+    public Fare getMaxExtraFare() {
+        return this.sections
+                .getMaxExtraFare();
+    }
+
     public Sections getSections() {
         return sections;
     }
