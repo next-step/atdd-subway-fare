@@ -19,7 +19,7 @@ class AgeFarePolicyTest {
     @CsvSource(value = {"6,800", "12,800"})
     void calculateYouthDiscountFare() {
         final LoginMember loginMember = new LoginMember(1L, "test@gmail.com", 6);
-        final Fare actual = AgeFarePolicy.of(loginMember, Fare.BASE_FARE);
+        final Fare actual = AgeFarePolicy.of(loginMember, Fare.from(1250));
 
         assertThat(actual).isEqualTo(Fare.from(800));
     }
@@ -29,7 +29,7 @@ class AgeFarePolicyTest {
     @CsvSource(value = {"13,1070", "18,1070"})
     void calculateChildDiscountFare() {
         final LoginMember loginMember = new LoginMember(1L, EMAIL, 13);
-        final Fare actual = AgeFarePolicy.of(loginMember, Fare.BASE_FARE);
+        final Fare actual = AgeFarePolicy.of(loginMember, Fare.from(1250));
 
         assertThat(actual).isEqualTo(Fare.from(1070));
     }
@@ -39,7 +39,7 @@ class AgeFarePolicyTest {
     @CsvSource(value = {"19,1250"})
     void calculateAdultFare() {
         final LoginMember loginMember = new LoginMember(1L, "test@gmail.com", 20);
-        final Fare actual = AgeFarePolicy.of(loginMember, Fare.BASE_FARE);
+        final Fare actual = AgeFarePolicy.of(loginMember, Fare.from(1250));
 
         assertThat(actual).isEqualTo(Fare.from(1250));
     }
