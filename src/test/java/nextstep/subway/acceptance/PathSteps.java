@@ -86,7 +86,11 @@ public class PathSteps {
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("The name of the station"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("The distance is shortest distance between two stations."),
                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("The duration is minimum time between two stations."),
-                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("The fare is amount for route.")
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("The fare is amount for route. \n" +
+                        "Additional fee per route when using a route with an additional fee, it is added to the measured fare.\n " +
+                        "For logged-in users, the rate is calculated by age.\n" +
+                        "Teenagers: 20% discount from fare minus KRW 350\n" +
+                        "Children: 50% discount from fare minus KRW 350")
         );
     }
 }
