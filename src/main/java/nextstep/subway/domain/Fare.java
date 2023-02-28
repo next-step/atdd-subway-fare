@@ -8,8 +8,7 @@ import java.util.Objects;
 @Embeddable
 public class Fare {
 
-    public static final Fare BASE_FARE = new Fare(new BigDecimal("1250"));
-
+    private static final int BASE_FARE = 1250;
     @Column
     private BigDecimal fare;
 
@@ -21,6 +20,10 @@ public class Fare {
 
     public static Fare from(final int fare) {
         return new Fare(BigDecimal.valueOf(fare));
+    }
+
+    public static Fare base() {
+        return new Fare(BigDecimal.valueOf(BASE_FARE));
     }
 
     public Fare plus(final Fare fare) {
