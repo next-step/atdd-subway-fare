@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
@@ -56,6 +57,27 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
+
+    @DisplayName("출발/도착역이 동일한 경우 경로를 조회할 수 없다.")
+    @Test
+    void findCircularPath() {
+        // when
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 교대역);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @DisplayName("존재하지 않는 역이 포함되어 있는 경우 조회할 수 없다.")
+    @Test
+    void findPathWithInvalidStation() {
+        // when
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, Long.MAX_VALUE);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
 
     /**
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청

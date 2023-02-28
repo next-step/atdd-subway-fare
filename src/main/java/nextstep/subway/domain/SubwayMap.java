@@ -22,6 +22,10 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target) {
+        if (source == target) {
+            throw new IllegalArgumentException("출발역과 도착역이 같을 수 없습니다.");
+        }
+
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
