@@ -31,13 +31,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
-     * 5분 (10km)
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
+     *                       5분 (10km)
+     *          교대역    --- *2호선* ---   강남역
+     *          |                        |
      * 10분(2km)*3호선*                *신분당선*  3분 (10km)
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
-     * 2분 (3km)
+     *          |                        |
+     *          남부터미널역  --- *3호선* ---   양재
+     *                        2분 (3km)
      */
     @BeforeEach
     public void setUp() {
@@ -71,6 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
         });
     }
 
@@ -90,6 +91,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 20, 8);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
         });
     }
 
