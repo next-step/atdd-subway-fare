@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.Duration;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -19,8 +20,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(역삼역, 삼성역, 5, 4);
 
         assertThat(line.getStations()).containsExactly(강남역, 역삼역, 삼성역);
     }
@@ -33,8 +34,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(강남역, 삼성역, 5, 4);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -42,6 +43,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(4));
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
@@ -52,8 +54,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 역삼역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(삼성역, 역삼역, 5, 4);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -61,6 +63,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(3));
     }
 
     @DisplayName("목록 앞에 추가할 경우")
@@ -71,8 +74,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(삼성역, 강남역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(삼성역, 강남역, 5, 4);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -80,6 +83,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(역삼역);
         assertThat(section.getDistance()).isEqualTo(10);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(7));
     }
 
     @DisplayName("목록 뒤에 추가할 경우")
@@ -90,8 +94,8 @@ class LineTest {
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
 
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(역삼역, 삼성역, 5, 4);
 
         assertThat(line.getSections().size()).isEqualTo(2);
         Section section = line.getSections().stream()
@@ -99,6 +103,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(Duration.of(4));
     }
 
     @Test
@@ -107,8 +112,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(강남역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(강남역, 삼성역, 5, 4);
 
         List<Station> result = line.getStations();
 
@@ -121,9 +126,9 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 7);
 
-        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5))
+        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 4))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -133,8 +138,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(역삼역, 삼성역, 5, 4);
 
         line.deleteSection(삼성역);
 
@@ -147,8 +152,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(역삼역, 삼성역, 5, 4);
 
         line.deleteSection(강남역);
 
@@ -161,8 +166,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
-        line.addSection(역삼역, 삼성역, 5);
+        line.addSection(강남역, 역삼역, 10, 7);
+        line.addSection(역삼역, 삼성역, 5, 4);
 
         line.deleteSection(역삼역);
 
@@ -175,7 +180,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 7);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
