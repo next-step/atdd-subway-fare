@@ -1,6 +1,7 @@
 package nextstep.subway.documentation;
 
 import static nextstep.subway.applicaion.dto.SearchType.*;
+import static nextstep.subway.steps.PathDocumentationSteps.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -9,7 +10,6 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.steps.PathSteps;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class PathDocumentation extends Documentation {
 		when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
 		// when
-		ExtractableResponse<Response> searchResponse = PathSteps.searchPathDistance(spec, 1L, 2L, DISTANCE);
+		ExtractableResponse<Response> searchResponse = searchPathDistance(spec, 1L, 2L, DISTANCE);
 
 		// then
 		assertThat(searchResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
