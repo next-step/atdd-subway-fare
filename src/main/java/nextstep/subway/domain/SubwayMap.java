@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.subway.domain.fare.FarePolicies;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -49,10 +50,18 @@ public class SubwayMap {
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        final Path path = new Path(new Sections(sections));
+
+        int distance = path.extractDistance();
+        if (PathType.DURATION.equals(pathType)) {
+            distance = findPath(source, target, PathType.DISTANCE).extractDistance();
+        }
+        path.addFare(FarePolicies.getFare(distance));
+
+        return path;
     }
 
-    public static int getCalculationTarget(final Section section, PathType pathType) {
+    private int getCalculationTarget(final Section section, PathType pathType) {
         if (PathType.DISTANCE.equals(pathType)) {
             return section.getDistance();
         }

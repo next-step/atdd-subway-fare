@@ -30,7 +30,7 @@ public class PathDocumentation extends Documentation {
     void path() {
         final StationResponse 강남역 = new StationResponse(1L, "강남역");
         final StationResponse 역삼역 = new StationResponse(2L, "역삼역");
-        PathResponse pathResponse = new PathResponse(Lists.newArrayList(강남역, 역삼역), 10, 5);
+        PathResponse pathResponse = new PathResponse(Lists.newArrayList(강남역, 역삼역), 10, 5, 1250);
 
         when(pathService.findPath(anyLong(), anyLong(), eq(PathType.DISTANCE))).thenReturn(pathResponse);
 
@@ -48,7 +48,8 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].id").description("지하철역 ID"),
                                 fieldWithPath("stations[].name").description("지하철역 이름"),
                                 fieldWithPath("distance").description("거리"),
-                                fieldWithPath("duration").description("소요 시간")
+                                fieldWithPath("duration").description("소요 시간"),
+                                fieldWithPath("fare").description("최단 거리 기준 이용 요금")
                         )
                 )
         );
