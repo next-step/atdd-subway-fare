@@ -9,6 +9,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,10 +30,25 @@ public class PathSteps {
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams;
+        Map<String, Object> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
+        lineCreateParams.put("upStationId", upStation + "");
+        lineCreateParams.put("downStationId", downStation + "");
+        lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
+
+        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    }
+
+    public static Long 지하철_노선_생성_요청(final String name, final String color, final Long upStation
+            , final Long downStation, final int distance, final int duration, final BigDecimal extraFare) {
+        Map<String, Object> lineCreateParams;
+        lineCreateParams = new HashMap<>();
+        lineCreateParams.put("name", name);
+        lineCreateParams.put("color", color);
+        lineCreateParams.put("extraFare", extraFare + "");
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
