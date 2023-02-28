@@ -9,7 +9,7 @@ public class FixedFarePolicy implements FarePolicy{
     }
 
     @Override
-    public int calculate(int distance) {
+    public int calculate(CalculateConditions conditions) {
         return fare;
     }
 

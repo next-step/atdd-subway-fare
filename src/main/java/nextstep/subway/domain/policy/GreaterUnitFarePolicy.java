@@ -14,11 +14,11 @@ public class GreaterUnitFarePolicy implements FarePolicy {
     }
 
     @Override
-    public int calculate(int distance) {
-        if (distance <= factor) {
+    public int calculate(CalculateConditions conditions) {
+        if (conditions.getDistance() <= factor) {
             return 0;
         }
-        return (((distance - factor - 1) / unit) + 1) * fare;
+        return (((conditions.getDistance() - factor - 1) / unit) + 1) * fare;
     }
 
 }

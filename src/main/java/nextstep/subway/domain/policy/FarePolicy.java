@@ -2,6 +2,6 @@ package nextstep.subway.domain.policy;
 
 public interface FarePolicy {
 
-    int calculate(int distance);
+    int calculate(CalculateConditions conditions);
 
 }

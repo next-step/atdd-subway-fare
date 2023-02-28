@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.member.domain.Member;
+import nextstep.subway.domain.policy.CalculateConditions;
 import nextstep.subway.domain.policy.FarePolicies;
 
 import java.util.List;
@@ -32,7 +33,16 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int calculateFare(){
-        return this.farePolicies.calculate(this.extractDistance(), member);
+    public int calculateFare() {
+        CalculateConditions conditions = setConditions();
+
+        return this.farePolicies.calculate(conditions);
     }
+
+    private CalculateConditions setConditions() {
+        return CalculateConditions.builder(extractDistance())
+                .age(member.map(Member::getAge).orElse(null))
+                .build();
+    }
+
 }
