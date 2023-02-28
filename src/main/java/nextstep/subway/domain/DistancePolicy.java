@@ -2,7 +2,11 @@ package nextstep.subway.domain;
 
 public class DistancePolicy implements FarePolicy {
 
-    public static final int DEFAULT_FARE = 1250;
+    private static final int DEFAULT_FARE = 1250;
+    private static final int DEFAULT_DISTANCE = 10;
+    private static final int MIDDLE_DISTANCE = 50;
+    private static final int MIDDLE_PER_DISTANCE_POLICY = 5;
+    private static final int EIGHT_KM_DISTANCE_POLICY = 8;
 
     private final int distance;
 
@@ -12,20 +16,31 @@ public class DistancePolicy implements FarePolicy {
 
     @Override
     public int calcFare() {
-        int fare = DEFAULT_FARE;
-
-        if (distance <= 10) {
-            return fare;
+        if (distance <= DEFAULT_DISTANCE) {
+            return firstDistanceFarePolicy();
         }
 
-        if (distance <= 50) {
-            return DEFAULT_FARE + calculateOverFare((distance - 10), 5);
+        if (distance <= MIDDLE_DISTANCE) {
+            return middleDistanceFarePolicy();
         }
 
-        return DEFAULT_FARE + calculateOverFare((50 - 10), 5) + calculateOverFare((distance - 50), 8);
+        return lastDistanceFarePolicy();
     }
 
-    private int calculateOverFare(int distance, int km) {
-        return (int) ((Math.ceil((distance - 1) / km) + 1) * 100);
+    private static int firstDistanceFarePolicy() {
+        return DEFAULT_FARE;
+    }
+
+    private int middleDistanceFarePolicy() {
+        return DEFAULT_FARE + calculateOverFare((distance - DEFAULT_DISTANCE), MIDDLE_PER_DISTANCE_POLICY);
+    }
+
+    private int lastDistanceFarePolicy() {
+        return DEFAULT_FARE + calculateOverFare((MIDDLE_DISTANCE - DEFAULT_DISTANCE), MIDDLE_PER_DISTANCE_POLICY) + calculateOverFare((distance - MIDDLE_DISTANCE), EIGHT_KM_DISTANCE_POLICY);
+
+    }
+
+    private int calculateOverFare(int distance, int perDistance) {
+        return (int) ((Math.ceil((distance - 1) / perDistance) + 1) * 100);
     }
 }
