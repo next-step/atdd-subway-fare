@@ -1,12 +1,12 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.fare.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static nextstep.subway.domain.Fare.DEFAULT_FARE;
+import static nextstep.subway.domain.fare.Fare.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareTest {
