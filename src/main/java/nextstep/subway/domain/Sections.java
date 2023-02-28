@@ -5,6 +5,7 @@ import nextstep.common.exception.NoDeleteOneSectionException;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -149,6 +150,15 @@ public class Sections {
         return sections.stream()
                 .mapToInt(Section::getDuration)
                 .sum();
+    }
+
+    public Fare getMaxExtraFare() {
+        return sections.stream()
+                .map(Section::getLine)
+                .map(line -> line.getExtraFare().getFare())
+                .max(BigDecimal::compareTo)
+                .map(Fare::new)
+                .orElse(Fare.ZERO_FARE);
     }
 
     public List<Section> getSections() {
