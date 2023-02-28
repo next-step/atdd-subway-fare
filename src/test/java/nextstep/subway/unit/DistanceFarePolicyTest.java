@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("거리 요금 계산 정책")
 class DistanceFarePolicyTest {
 
     private static Sections 최단_구간_목록 = new Sections(Lists.newArrayList());
@@ -24,7 +25,7 @@ class DistanceFarePolicyTest {
             "40,1850", "45,1950", "49,1950", "50,2050", "58,2150", "63,2150", "66,2250"})
     void calculateFiveIntervalExtraFare (final int weight, final String totalFare) {
         final Path path = new Path(최단_구간_목록, weight, 0);
-        final Fare expected = DistanceFarePolicy.from(path).plus(Fare.BASE_FARE);
+        final Fare expected = DistanceFarePolicy.from(path).plus(Fare.from(1250));
         assertThat(expected).isEqualTo(new Fare(new BigDecimal(totalFare)));
     }
 }

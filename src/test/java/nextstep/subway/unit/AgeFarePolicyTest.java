@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("연령 요금 계산 정책 테스트")
 class AgeFarePolicyTest {
 
     private static final String EMAIL = "test@gmail.com";

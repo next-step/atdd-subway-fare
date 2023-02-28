@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@DisplayName("최단 경로 찾기 다익스트라 알고리즘 기능")
 class DijkstraShortestPathFinderTest {
 
     private Station 교대역;
