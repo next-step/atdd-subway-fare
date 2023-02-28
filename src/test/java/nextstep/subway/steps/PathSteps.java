@@ -1,5 +1,6 @@
 package nextstep.subway.steps;
 
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.StationSteps.*;
 import static nextstep.subway.steps.LineSteps.*;
 import static nextstep.subway.steps.SectionSteps.지하철_노선에_지하철_구간_생성_요청;
@@ -16,13 +17,14 @@ public class PathSteps {
 	public static ExtractableResponse<Response> 타입에_따라_두_역의_경로_조회를_요청(Long source, Long target, SearchType type) {
 		return RestAssured
 			.given().log().all()
+			.auth().oauth2(GuestToken)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
 			.then().log().all()
 			.extract();
 	}
 
-	public static ExtractableResponse<Response> 회원_타입에_따라_두_역의_경로_조회를_요청(String accessToken, Long source, Long target, SearchType type) {
+	public static ExtractableResponse<Response> 타입에_따라_두_역의_경로_조회를_요청(String accessToken, Long source, Long target, SearchType type) {
 		return RestAssured
 			.given().log().all()
 			.auth().oauth2(accessToken)
@@ -31,6 +33,8 @@ public class PathSteps {
 			.then().log().all()
 			.extract();
 	}
+
+	private static String GuestToken;
 
 	public static Long 교대역;
 	public static Long 강남역;
@@ -59,6 +63,9 @@ public class PathSteps {
 	public static Long ZW_Line;
 
 	public static void setup() {
+		회원_생성_요청("guest@email.com", "password", 9999);
+		GuestToken = 베어러_인증_로그인_요청("guest@email.com", "password").jsonPath().getString("accessToken");
+
 		교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
 		강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
 		양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");

@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.SearchType;
 import nextstep.subway.domain.Line;
@@ -27,5 +28,10 @@ public class PathService {
 		Path path = subwayMap.findPath(upStation, downStation, type);
 
 		return PathResponse.of(path);
+	}
+
+	public PathResponse findPath(LoginMember loginMember, Long source, Long target, SearchType type) {
+
+		return findPath(source, target, type);
 	}
 }

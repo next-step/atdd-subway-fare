@@ -245,10 +245,11 @@ class PathAcceptanceTest extends AcceptanceTest {
 	@Test
 	void youthFareTest() {
 		// given
-		String youthToken = 회원_생성_요청("youth@email.com", "passwd", 16).jsonPath().getString("accessToken");
+		회원_생성_요청("youth@email.com", "passwd", 16);
+		String youthToken = 베어러_인증_로그인_요청("youth@email.com", "passwd").jsonPath().getString("accessToken");
 
 		// when
-		ExtractableResponse<Response> response = 회원_타입에_따라_두_역의_경로_조회를_요청(youthToken, D_Station, G_Station, DISTANCE);
+		ExtractableResponse<Response> response = 타입에_따라_두_역의_경로_조회를_요청(youthToken, D_Station, G_Station, DISTANCE);
 
 		// then
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
@@ -273,10 +274,11 @@ class PathAcceptanceTest extends AcceptanceTest {
 	@Test
 	void kidsFareTest() {
 		// given
-		String kidsToken = 회원_생성_요청("kids@email.com", "passwd", 10).jsonPath().getString("accessToken");
+		회원_생성_요청("kids@email.com", "passwd", 10);
+		String kidsToken = 베어러_인증_로그인_요청("kids@email.com", "passwd").jsonPath().getString("accessToken");
 
 		// when
-		ExtractableResponse<Response> response = 회원_타입에_따라_두_역의_경로_조회를_요청(kidsToken, D_Station, G_Station, DISTANCE);
+		ExtractableResponse<Response> response = 타입에_따라_두_역의_경로_조회를_요청(kidsToken, D_Station, G_Station, DISTANCE);
 
 		// then
 		List<Long> stationsIds = response.jsonPath().getList("stations.id", Long.class);
