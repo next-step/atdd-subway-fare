@@ -29,6 +29,9 @@ public enum AgeFarePolicy {
     }
 
     public static Fare of(final LoginMember member, final Fare fare) {
+        if (member.isGuest()) {
+            return fare;
+        }
         return findAgeFarePolicy(member.getAge()).fareFunction.apply(fare);
     }
 
