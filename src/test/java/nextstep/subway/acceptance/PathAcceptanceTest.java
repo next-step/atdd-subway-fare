@@ -71,4 +71,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
     }
+
+    @DisplayName("경로 조회 시 부과된 요금을 확인할 수 있다.")
+    @Test
+    void findPathWithFare() {
+        // when
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getInt("cost")).isEqualTo(1_350);
+    }
 }

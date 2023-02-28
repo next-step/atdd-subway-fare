@@ -9,6 +9,15 @@ public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
     private int duration;
+    private int cost;
+
+    public PathResponse(List<StationResponse> stations, int distance, int duration, int cost) {
+        this.stations = stations;
+        this.distance = distance;
+        this.duration = duration;
+        this.cost = cost;
+    }
+
 
     public PathResponse(List<StationResponse> stations, int distance, int duration) {
         this.stations = stations;
@@ -20,10 +29,11 @@ public class PathResponse {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-        int distance = path.extractDistance();
-        int duration = path.extractDuration();
+        int distance = path.distance();
+        int duration = path.duration();
+        int cost = path.cost();
 
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, distance, duration, cost);
     }
 
     public List<StationResponse> getStations() {
@@ -36,5 +46,9 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getCost() {
+        return cost;
     }
 }
