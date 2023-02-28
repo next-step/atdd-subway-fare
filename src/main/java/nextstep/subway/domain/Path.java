@@ -34,14 +34,13 @@ public class Path {
     }
 
     public int calculateFare() {
-        CalculateConditions conditions = setConditions();
-
-        return this.farePolicies.calculate(conditions);
+        return this.farePolicies.calculate(setConditions());
     }
 
     private CalculateConditions setConditions() {
         return CalculateConditions.builder(extractDistance())
                 .age(member.map(Member::getAge).orElse(null))
+                .lines(this.sections.getLines())
                 .build();
     }
 

@@ -4,19 +4,21 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public enum GithubResponses {
-    어린이("1", "access_token_1", "email1@email.com"),
-    청소년("2", "access_token_2", "email2@email.com"),
-    사용자3("3", "access_token_3", "email3@email.com"),
-    사용자4("4", "access_token_4", "email4@email.com");
+    어린이("1", "access_token_1", "email1@email.com", 10),
+    청소년("2", "access_token_2", "email2@email.com", 17),
+    사용자3("3", "access_token_3", "email3@email.com", 20),
+    사용자4("4", "access_token_4", "email4@email.com", 20);
 
     private String code;
     private String accessToken;
     private String email;
+    private int age;
 
-    GithubResponses(String code, String accessToken, String email) {
+    GithubResponses(String code, String accessToken, String email, int age) {
         this.code = code;
         this.accessToken = accessToken;
         this.email = email;
+        this.age = age;
     }
 
     public static GithubResponses findByCode(String code) {
@@ -43,6 +45,10 @@ public enum GithubResponses {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getAge() {
+        return age;
     }
 }
 
