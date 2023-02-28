@@ -7,6 +7,7 @@ import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static nextstep.subway.acceptance.PathSteps.baseDocumentRequest;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,6 +19,8 @@ public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
 
+    @LocalServerPort
+    private Integer port;
 
     @Test
     void pathByDistance() {
@@ -30,7 +33,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        baseDocumentRequest(spec, "/distance")
+        baseDocumentRequest(spec, "/distance", port)
             .queryParam("source", 1L)
             .queryParam("target", 2L)
             .queryParam("type", PathType.DISTANCE)
@@ -49,7 +52,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        baseDocumentRequest(spec, "/duration")
+        baseDocumentRequest(spec, "/duration", port)
             .queryParam("source", 1L)
             .queryParam("target", 3L)
             .queryParam("type", PathType.DURATION)

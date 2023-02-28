@@ -13,9 +13,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 public class PathSteps {
 
 
-    public static RequestSpecification baseDocumentRequest(RequestSpecification spec, String directory) {
+    public static RequestSpecification baseDocumentRequest(RequestSpecification spec, String directory, Integer port) {
         return RestAssured
-            .given(spec).log().all()
+            .given(spec).port(port).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .filter(document("path" + directory,
                 preprocessRequest(prettyPrint()),
