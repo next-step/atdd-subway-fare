@@ -27,7 +27,7 @@ public class PathTest {
 	void setup() {
 		교대역 = new Station("교대역");
 		강남역 = new Station("강남역");
-		강남역 = new Station("역삼역");
+		역삼역 = new Station("역삼역");
 
 		이호선 = new Line("2호선", "green");
 		이호선.addSection(교대역, 강남역, 10, 2);
@@ -46,5 +46,11 @@ public class PathTest {
 	@Test
 	void extractDurationTest() {
 		assertThat(path.extractDuration()).isEqualTo(3);
+	}
+
+	@DisplayName("지하철 이용 요금")
+	@Test
+	void extractFareTest() {
+		assertThat(path.extractFare()).isEqualTo(1350);
 	}
 }

@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import static nextstep.subway.domain.FareCalculation.*;
+
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +18,10 @@ public class Path {
 
 	public int extractDuration() {
 		return sections.totalDuration();
+	}
+
+	public int extractFare() {
+		return fareCalculation(extractDistance());
 	}
 
     public List<Station> getStations() {

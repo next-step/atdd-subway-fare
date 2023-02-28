@@ -32,7 +32,8 @@ public class PathSteps {
 					fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 id"),
 					fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
 					fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"),
-					fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)")
+					fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)"),
+					fieldWithPath("fare").type(JsonFieldType.NUMBER).description("이용요금(원)")
 				)))
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.queryParam("source", source)
