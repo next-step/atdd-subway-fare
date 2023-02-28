@@ -10,16 +10,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class PathController {
-    private PathService pathService;
+    private final PathService pathService;
 
     public PathController(PathService pathService) {
         this.pathService = pathService;
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember member, @RequestParam Long source, @RequestParam Long target, @RequestParam PathRequestType type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type, member));
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathRequestType type, @AuthenticationPrincipal Optional<LoginMember> loginMember) {
+        PathResponse path = pathService.findPath(source, target, type, loginMember);
+        return ResponseEntity.ok(path);
     }
 }

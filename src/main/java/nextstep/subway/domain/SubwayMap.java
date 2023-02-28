@@ -6,6 +6,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
@@ -15,7 +16,7 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathRequestType type, Member member) {
+    public Path findPath(Station source, Station target, PathRequestType type, Optional<Member> member) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록

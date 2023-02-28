@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 경로_조회(RequestSpecification spec, Long source, Long target, PathRequestType type) {
+    public static ExtractableResponse<Response> 경로_조회(RequestSpecification spec,Long source, Long target, PathRequestType type) {
 
         return RestAssured
                 .given(spec).log().all()

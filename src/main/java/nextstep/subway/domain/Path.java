@@ -4,13 +4,14 @@ import nextstep.member.domain.Member;
 import nextstep.subway.domain.policy.FarePolicies;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Path {
     private final Sections sections;
-    private final Member member;
+    private final Optional<Member> member;
     private final FarePolicies farePolicies = new FarePolicies();
 
-    public Path(Sections sections, Member member) {
+    public Path(Sections sections, Optional<Member> member) {
         this.sections = sections;
         this.member = member;
     }
@@ -32,6 +33,6 @@ public class Path {
     }
 
     public int calculateFare(){
-        return this.farePolicies.calculate(this.extractDistance(), member.getAge());
+        return this.farePolicies.calculate(this.extractDistance(), member);
     }
 }

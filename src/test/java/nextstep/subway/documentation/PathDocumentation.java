@@ -2,7 +2,6 @@ package nextstep.subway.documentation;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -17,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
+
+import java.util.Optional;
 
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +46,7 @@ class PathDocumentation extends Documentation {
                 ), 10, 20, 1450);
 
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathRequestType.class), any(LoginMember.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathRequestType.class), any(Optional.class))).thenReturn(pathResponse);
 
         this.spec.filter(document("path",
                 preprocessRequest(prettyPrint()),
