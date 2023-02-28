@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("최소 경로 찾기의 대한 테스트")
+@DisplayName("최소 경로 찾기 기능 테스트")
 @Transactional
 class PathServiceTest extends ApplicationContextTest {
 

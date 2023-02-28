@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("노선 구간의 대한 테스트")
+@DisplayName("노선 구간 기능 테스트")
 @Transactional
 class LineSectionServiceTest extends ApplicationContextTest {
 

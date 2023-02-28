@@ -17,7 +17,7 @@ import static nextstep.subway.acceptance.LineSteps.노선_생성;
 import static nextstep.subway.acceptance.StationSteps.역_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("구간들 관련 기능")
+@DisplayName("구간들 기능 테스트")
 class SectionsTest {
 
     private Line 이호선;

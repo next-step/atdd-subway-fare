@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("거리 요금 계산 정책")
+@DisplayName("거리 요금 계산 테스트")
 class DistanceFarePolicyTest {
 
     private static Sections 최단_구간_목록 = new Sections(Lists.newArrayList());

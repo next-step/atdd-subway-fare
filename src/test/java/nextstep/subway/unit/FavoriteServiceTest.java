@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("즐겨찾기 관련 테스트")
+@DisplayName("즐겨찾기 기능 테스트")
 @Transactional
 class FavoriteServiceTest extends ApplicationContextTest {
 

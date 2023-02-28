@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("인증 관련 테스트")
+@DisplayName("인증 기능 테스트")
 @Transactional
 class TokenServiceTest extends ApplicationContextTest {
 

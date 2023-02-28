@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import static nextstep.subway.acceptance.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("회원 관련 테스트")
+@DisplayName("회원 기능 테스트")
 class MemberAcceptanceTest extends AcceptanceTest {
     private static final String EMAIL = "email@email.com";
     private static final String ADMIN = "admin@email.com";

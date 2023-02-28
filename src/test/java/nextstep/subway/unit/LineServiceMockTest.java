@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@DisplayName("노선 Mock 서비스")
+@DisplayName("노선 Mock 서비스 기능 테스트")
 @ExtendWith(MockitoExtension.class)
 class LineServiceMockTest {
     @Mock

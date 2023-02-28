@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("노선 객체 단위 테스트")
+@DisplayName("노선 기능 테스트")
 class LineTest {
 
     private Station 강남역;

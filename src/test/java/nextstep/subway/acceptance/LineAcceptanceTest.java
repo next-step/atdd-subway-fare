@@ -14,7 +14,7 @@ import java.util.Map;
 import static nextstep.subway.acceptance.LineSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("지하철 노선 관리 기능")
+@DisplayName("지하철 노선 관리 기능 테스트")
 class LineAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("지하철 노선 생성")

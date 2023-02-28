@@ -26,7 +26,7 @@ import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("지하철 경로 검색")
+@DisplayName("지하철 경로 검색 기능 테스트")
 class PathAcceptanceTest extends AcceptanceTest {
 
     private static final String EMAIL = "test@email.com";

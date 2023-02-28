@@ -21,7 +21,7 @@ import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
-@DisplayName("즐겨찾기 관련 기능")
+@DisplayName("즐겨찾기 기능 테스트")
 class FavoriteAcceptanceTest extends AcceptanceTest {
     private static final String EMAIL = "member@email.com";
     private static final String PASSWORD = "password";

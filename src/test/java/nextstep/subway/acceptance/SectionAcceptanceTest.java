@@ -15,7 +15,7 @@ import static nextstep.subway.acceptance.LineSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("지하철 구간 관리 기능")
+@DisplayName("지하철 구간 관리 기능 테스트")
 class SectionAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
 
