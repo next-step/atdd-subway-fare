@@ -22,11 +22,9 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
 
-        Path path = subwayMap.findPath(upStation, downStation, Section::getDistance);;
         if (pathType == PathType.DURATION) {
-            path = subwayMap.findPath(upStation, downStation, Section::getDuration);
+            return PathResponse.of(subwayMap.findPath(upStation, downStation, Section::getDuration));
         }
-
-        return PathResponse.of(path);
+        return PathResponse.of(subwayMap.findPath(upStation, downStation, Section::getDistance));
     }
 }
