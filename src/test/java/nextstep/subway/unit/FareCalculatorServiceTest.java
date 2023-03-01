@@ -1,32 +1,28 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.applicaion.FareCalculatorService;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.policy.FareDiscountPolicies;
 import nextstep.subway.domain.policy.calculate.CalculateConditions;
-import nextstep.subway.domain.policy.FareCalculatePolicies;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
 import static nextstep.subway.domain.policy.calculate.CalculateConditions.CalculateConditionBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FarePoliciesTest {
 
-    private FareCalculatePolicies fareCalculatePolicies;
-    private FareDiscountPolicies fareDiscountPolicies;
+@SpringBootTest
+@Transactional
+class FareCalculatorServiceTest {
 
-
-    @BeforeEach
-    void setup() {
-        //given 요금 정책을 확정한다.
-        fareCalculatePolicies = new FareCalculatePolicies();
-        fareDiscountPolicies = new FareDiscountPolicies();
-    }
+    @Autowired
+    private FareCalculatorService fareCalculatorService;
 
     @ParameterizedTest
     @DisplayName("거리 비례 요금 계산")
@@ -35,7 +31,7 @@ class FarePoliciesTest {
         //when 거리를 넣어 요금을 계산한다.
         CalculateConditions conditions = new CalculateConditionBuilder(distance).build();
         //then 거리에 따라 계산된 요금이 반환된다.
-        assertThat(fareCalculatePolicies.calculate(conditions)).isEqualTo(fare);
+        assertThat(fareCalculatorService.calculateFare(conditions)).isEqualTo(fare);
     }
 
     @ParameterizedTest
@@ -47,8 +43,7 @@ class FarePoliciesTest {
                 .age(age)
                 .build();
         //then 요금을 계산한다.
-        int calculated = fareCalculatePolicies.calculate(conditions);
-        calculated = fareDiscountPolicies.discount(conditions, calculated);
+        int calculated = fareCalculatorService.calculateFare(conditions);
         //then 연령별로 할인된 요금이 반환된다.
         assertThat(calculated).isEqualTo(fare);
     }
@@ -60,11 +55,10 @@ class FarePoliciesTest {
         Line a = new Line("a", "color-a", 1000);
         Line b = new Line("b", "color-b", 500);
         CalculateConditions conditions = new CalculateConditionBuilder(50)
-                .lines(Arrays.asList(a,b))
+                .lines(Arrays.asList(a, b))
                 .build();
         //when 요금을 계산한다
-        int calculated = fareCalculatePolicies.calculate(conditions);
-        calculated = fareDiscountPolicies.discount(conditions, calculated);
+        int calculated = fareCalculatorService.calculateFare(conditions);
         //then 노선별 추가요금이 더해진 요금이 반환된다.
         assertThat(calculated).isEqualTo(3050);
     }

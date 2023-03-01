@@ -2,9 +2,7 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
-import nextstep.subway.domain.policy.FareDiscountPolicies;
 import nextstep.subway.domain.policy.calculate.CalculateConditions;
-import nextstep.subway.domain.policy.FareCalculatePolicies;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +11,12 @@ import java.util.List;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final FareCalculatePolicies fareCalculatePolicies = new FareCalculatePolicies();
-    private final FareDiscountPolicies fareDiscountPolicies = new FareDiscountPolicies();
+    private final FareCalculatorService fareCalculatorService;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, FareCalculatorService fareCalculatorService) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.fareCalculatorService = fareCalculatorService;
     }
 
     public PathResponse findPath(Long source, Long target, PathRequestType type, int age) {
@@ -28,18 +26,17 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path path = subwayMap.findPath(upStation, downStation, type);
-        int fare = calculateFare(path, age);
+        int fare = fareCalculatorService.calculateFare(setConditions(path, age));
         return PathResponse.of(path, fare);
 
     }
 
-    private int calculateFare(Path path, int age) {
-        CalculateConditions conditions = CalculateConditions.builder(path.extractDistance())
+    private CalculateConditions setConditions(Path path, int age) {
+        return CalculateConditions.builder(path.extractDistance())
                 .age(age)
                 .lines(path.getLines())
                 .build();
-
-        int fare = this.fareCalculatePolicies.calculate(conditions);
-        return this.fareDiscountPolicies.discount(conditions, fare);
     }
+
+
 }
