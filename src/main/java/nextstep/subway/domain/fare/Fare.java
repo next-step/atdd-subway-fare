@@ -12,14 +12,27 @@ public class Fare {
     private final int cost;
 
     public Fare(Sections sections) {
-        this(sections.sumByCondition(Section::getDistance), sections.allLines().stream()
-                .mapToInt(Line::getAdditionalFare)
-                .max()
-                .orElse(0));
+        this(sections, DiscountPolicy.GENERAL);
+    }
+
+    public Fare(Sections sections, DiscountPolicy discountPolicy) {
+        this(sections.sumByCondition(Section::getDistance),
+                sections.allLines()
+                        .stream()
+                        .mapToInt(Line::getAdditionalFare)
+                        .max()
+                        .orElse(0),
+                discountPolicy
+        );
     }
 
     public Fare(int distance, int additionalFare) {
-        this.cost = DEFAULT_FARE + additionalFare + calculateOverFare(distance);
+        this(distance, additionalFare, DiscountPolicy.GENERAL);
+    }
+
+    public Fare(int distance, int additionalFare, DiscountPolicy discountPolicy) {
+        int fare = DEFAULT_FARE + additionalFare + calculateOverFare(distance);
+        this.cost = discountFare(fare, discountPolicy);
     }
 
     private int calculateOverFare(int distance) {
@@ -27,6 +40,10 @@ public class Fare {
                 .filter(policy -> policy.supported(distance))
                 .mapToInt(policy -> policy.additionalFare(distance))
                 .sum();
+    }
+
+    private int discountFare(int cost, DiscountPolicy discountPolicy) {
+        return discountPolicy.apply(cost);
     }
 
     public int cost() {

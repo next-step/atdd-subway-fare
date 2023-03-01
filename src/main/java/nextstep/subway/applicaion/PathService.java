@@ -1,8 +1,10 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
 import nextstep.subway.domain.SectionCondition;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
@@ -12,21 +14,27 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final MemberRepository memberRepository;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, MemberRepository memberRepository) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.memberRepository = memberRepository;
     }
 
-    public PathResponse findPath(Long source, Long target, SectionCondition condition) {
+    public PathResponse findPath(Long source, Long target, SectionCondition condition, LoginMember loginMember) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines, condition);
-        Path path = subwayMap.findPath(upStation, downStation);
 
-        return PathResponse.of(path);
+        if (loginMember != null) {
+            Member member = memberRepository.findById(loginMember.getId()).orElseThrow(RuntimeException::new);
+            return PathResponse.of(subwayMap.findPath(upStation, downStation, member));
+        }
+
+        return PathResponse.of(subwayMap.findPath(upStation, downStation));
     }
 }

@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
+import nextstep.subway.domain.fare.DiscountPolicy;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -22,6 +24,14 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target) {
+        return new Path(findPathSections(source, target));
+    }
+
+    public Path findPath(Station source, Station target, Member member) {
+        return new Path(findPathSections(source, target), DiscountPolicy.of(member));
+    }
+
+    private Sections findPathSections(Station source, Station target) {
         if (source == target) {
             throw new IllegalArgumentException("출발역과 도착역이 같을 수 없습니다.");
         }
@@ -61,7 +71,6 @@ public class SubwayMap {
         List<Section> sections = result.getEdgeList().stream()
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
+        return new Sections(sections);
     }
 }

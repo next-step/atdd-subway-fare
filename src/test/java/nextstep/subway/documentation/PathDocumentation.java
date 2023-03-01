@@ -31,7 +31,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 10, 1250
         );
 
-        BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any(), any())).willReturn(pathResponse);
 
         두_역의_최단_거리_경로_조회를_요청(1L, 4L, spec, defaultFilter("pathDefault"));
     }
@@ -47,7 +47,7 @@ public class PathDocumentation extends Documentation {
                 ), 12, 5, 1350
         );
 
-        BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any())).willReturn(pathResponse);
+        BDDMockito.given(pathService.findPath(anyLong(), anyLong(), any(), any())).willReturn(pathResponse);
 
         두_역의_최소_시간_경로_조회를_요청(1L, 4L, spec, defaultFilter("pathDuration"));
     }

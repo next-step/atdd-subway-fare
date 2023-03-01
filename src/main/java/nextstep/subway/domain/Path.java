@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.DiscountPolicy;
 import nextstep.subway.domain.fare.Fare;
 
 import java.util.List;
@@ -9,8 +10,12 @@ public class Path {
     private final Fare fare;
 
     public Path(Sections sections) {
+        this(sections, DiscountPolicy.GENERAL);
+    }
+
+    public Path(Sections sections, DiscountPolicy policy) {
         this.sections = sections;
-        this.fare = new Fare(sections);
+        this.fare = new Fare(sections, policy);
     }
 
     public int distance() {
