@@ -96,8 +96,8 @@ public class Sections {
                             .line(section.getLine())
                             .upStation(it.getUpStation())
                             .downStation(section.getUpStation())
-                            .distance(it.getDistance().minus(section.getDistance()))
-                            .duration(it.getDuration().minus(section.getDuration()))
+                            .distance(it.minusDistance(section.getDistance()))
+                            .duration(it.minusDuration(section.getDuration()))
                             .build());
                     sections.remove(it);
                 });
@@ -113,8 +113,8 @@ public class Sections {
                             .line(section.getLine())
                             .upStation(section.getDownStation())
                             .downStation(it.getDownStation())
-                            .distance(it.getDistance().minus(section.getDistance()))
-                            .duration(it.getDuration().minus(section.getDuration()))
+                            .distance(it.minusDistance(section.getDistance()))
+                            .duration(it.minusDuration(section.getDuration()))
                             .build());
                     sections.remove(it);
                 });
@@ -140,8 +140,8 @@ public class Sections {
                     .line(upSection.get().getLine())
                     .upStation(downSection.get().getUpStation())
                     .downStation(upSection.get().getDownStation())
-                    .distance(upSection.get().getDistance().plus(downSection.get().getDistance()))
-                    .duration(upSection.get().getDuration().plus(downSection.get().getDuration()))
+                    .distance(upSection.get().plusDistance(downSection.get().getDistance()))
+                    .duration(upSection.get().plusDuration(downSection.get().getDuration()))
                     .build();
 
             this.sections.add(newSection);

@@ -77,6 +77,22 @@ public class Section extends DefaultWeightedEdge {
                 || (this.upStation == downStation && this.downStation == upStation);
     }
 
+    public Duration minusDuration(Duration duration) {
+        return this.duration.minus(duration);
+    }
+
+    public Duration plusDuration(Duration duration) {
+        return this.duration.plus(duration);
+    }
+
+    public Distance minusDistance(Distance distance) {
+        return this.distance.minus(distance);
+    }
+
+    public Distance plusDistance(Distance distance) {
+        return this.distance.plus(distance);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
