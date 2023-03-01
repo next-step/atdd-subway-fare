@@ -30,7 +30,7 @@ public class PathDocumentation extends Documentation {
 				new StationResponse(2L, "역삼역")
 			), 10, 5, 1250
 		);
-		when(pathService.findPathGuest(any())).thenReturn(pathResponse);
+		when(pathService.findPath(any(), any())).thenReturn(pathResponse);
 
 		// when
 		ExtractableResponse<Response> searchResponse = searchPathDistance(spec, 1L, 2L, DISTANCE);

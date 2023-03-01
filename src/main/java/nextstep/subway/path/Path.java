@@ -1,6 +1,7 @@
 package nextstep.subway.path;
 
-import static nextstep.subway.domain.FareCalculation.*;
+import static nextstep.subway.domain.fare.FareAgeCalculation.*;
+import static nextstep.subway.domain.fare.FareDistanceCalculation.*;
 
 import java.util.List;
 

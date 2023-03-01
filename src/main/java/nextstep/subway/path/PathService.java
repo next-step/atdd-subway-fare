@@ -22,17 +22,15 @@ public class PathService {
 	private final LineService lineService;
 	private final StationService stationService;
 
-	public PathResponse findPathGuest(PathRequest pathRequest) {
+	public PathResponse findPath(LoginMember loginMember, PathRequest pathRequest) {
 		Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
-		int fare = path.extractFare();
-		return PathResponse.of(path, fare);
-	}
-
-	public PathResponse findPathForMember(LoginMember loginMember, PathRequest pathRequest) {
-		Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
+		int fare = 0;
+		if (loginMember == null) {
+			fare = path.extractFare();
+			return PathResponse.of(path, fare);
+		}
 		Integer memberAge = memberService.findMember(loginMember.getId()).getAge();
-
-		int fare = path.discountFare(memberAge);
+		fare = path.discountFare(memberAge);
 		return PathResponse.of(path, fare);
 	}
 

@@ -19,9 +19,6 @@ public class PathController {
 	public ResponseEntity<PathResponse> findPath(
 		@AuthenticationPrincipal LoginMember loginMember,
 		@ModelAttribute PathRequest pathRequest) {
-		if (loginMember == null) {
-			return ResponseEntity.ok(pathService.findPathGuest(pathRequest));
-		}
-		return ResponseEntity.ok(pathService.findPathForMember(loginMember, pathRequest));
+		return ResponseEntity.ok(pathService.findPath(loginMember, pathRequest));
 	}
 }
