@@ -97,7 +97,12 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> createLineCreateParams(Long upStationId, Long downStationId, int distance) {
+    public static Map<String, String> createLineCreateParams(
+            final Long upStationId,
+            final Long downStationId,
+            final int distance,
+            final int duration
+    ) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", "신분당선");
@@ -105,6 +110,7 @@ public class LineSteps {
         lineCreateParams.put("upStationId", upStationId + "");
         lineCreateParams.put("downStationId", downStationId + "");
         lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
         return lineCreateParams;
     }
 }
