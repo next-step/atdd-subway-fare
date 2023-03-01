@@ -25,7 +25,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
         PathResponse pathResponse = new PathResponse(Lists.newArrayList(new StationResponse(1L, "강남역"),
-                new StationResponse(2L, "역삼역")),10, 20);
+                new StationResponse(2L, "역삼역")),10, 20, "1250원");
 
         when(pathService.findPath(anyLong(), anyLong(), eq(PathType.시간.getType()))).thenReturn(pathResponse);
 

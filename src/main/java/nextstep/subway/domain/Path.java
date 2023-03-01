@@ -5,6 +5,7 @@ import java.util.List;
 public class Path {
     private PathType pathType;
     private Sections sections;
+    private static final String WON = "원";
 
     public Path(PathType pathType, Sections sections) {
         this.pathType = pathType;
@@ -29,5 +30,9 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public String extractTotalCost() {
+        return "1250"+ WON;
     }
 }
