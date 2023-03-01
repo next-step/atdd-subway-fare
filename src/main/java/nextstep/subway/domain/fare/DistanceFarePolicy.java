@@ -1,7 +1,10 @@
 package nextstep.subway.domain.fare;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class DistanceFarePolicy {
     private static final List<DistancePolicy> farePolicies = List.of(
             new FirstPolicy(),
