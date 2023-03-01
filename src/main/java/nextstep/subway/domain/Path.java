@@ -26,6 +26,7 @@ public class Path {
     }
 
     public int calculateFare() {
-        return 0;
+        int totalDistance = extractDistance();
+        return DistanceFarePolicy.calculateFare(totalDistance);
     }
 }
