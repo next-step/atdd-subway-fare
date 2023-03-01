@@ -3,29 +3,23 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
 class FareTest {
     int defaultOverFareLine = 0;
     int maxOverFareLine = 900;
 
     @DisplayName("10km이내로 기본요금")
-    @Test
-    void basicfare(){
-        Fare fare = new Fare(1, defaultOverFareLine);
-        assertThat(fare.getFare()).isEqualTo(new BigDecimal(1250));
-    }
-
-    @DisplayName("10km이내로 기본요금")
-    @Test
-    void basicfare2(){
-        Fare fare = new Fare(10, defaultOverFareLine);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 10})
+    void basicfare(int distance){
+        Fare fare = new Fare(distance, defaultOverFareLine);
         assertThat(fare.getFare()).isEqualTo(new BigDecimal(1250));
     }
 

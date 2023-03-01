@@ -6,7 +6,8 @@ import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,35 +69,26 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 지하철 이용 요금도 함께 응답함
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-    @Test
-    void findPathByDistance() {
+    @ParameterizedTest
+    @EnumSource(value = PathType.class, names = { "거리", "시간" })
+    void findPathByDistance(PathType pathType) {
         // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(spec, 교대역, 양재역, PathType.거리.getType());
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(spec, 교대역, 양재역, pathType.getType());
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(18);
-        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(1250);
-    }
+        if (pathType.equals(PathType.거리)) {
+            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+            assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+            assertThat(response.jsonPath().getInt("duration")).isEqualTo(18);
+            assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(1750);
 
-    /**
-     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
-     * Then 최단 거리 경로를 응답
-     * And 총 거리와 소요 시간을 함께 응답함
-     * And 지하철 이용 요금도 함께 응답함
-     */
-    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
-    @Test
-    void findPathByDuration() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(spec, 교대역, 양재역, PathType.시간.getType());
+            return;
+        }
 
-        // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(14);
-        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(1450);
+        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(2350);
     }
 
     /**
