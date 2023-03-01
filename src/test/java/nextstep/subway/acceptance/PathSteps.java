@@ -34,7 +34,7 @@ public class PathSteps {
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("이름"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총거리"),
                                 fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간"),
-                                fieldWithPath("totalCost").type(JsonFieldType.STRING).description("이용요금")
+                                fieldWithPath("totalFare").type(JsonFieldType.STRING).description("이용요금")
                         )))
                 .params(params)
                 .when().get("/paths")

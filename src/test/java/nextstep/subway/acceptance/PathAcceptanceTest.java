@@ -72,12 +72,22 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("두 역의 최단거리 요금정보를 조회한다.")
     @Test
-    void findPathCost() {
+    void findPathCostByDistance() {
         // when
         ExtractableResponse<Response> response = searchPath(spec, 교대역, 양재역, PathType.거리.getType());
 
         // then
-        assertThat(response.jsonPath().getString("totalCost")).isEqualTo("1250원");
+        assertThat(response.jsonPath().getString("totalFare")).isEqualTo("1250원");
+    }
+
+    @DisplayName("두 역의 최단시간 요금정보를 조회한다.")
+    @Test
+    void findPathCostByDuration() {
+        // when
+        ExtractableResponse<Response> response = searchPath(spec, 교대역, 양재역, PathType.시간.getType());
+
+        // then
+        assertThat(response.jsonPath().getString("totalFare")).isEqualTo("1450원");
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

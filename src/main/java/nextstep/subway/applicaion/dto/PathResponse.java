@@ -8,13 +8,13 @@ public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
     private int duration;
-    private String totalCost;
+    private String totalFare;
 
-    public PathResponse(List<StationResponse> stations, int distance, int duration, String totalCost) {
+    public PathResponse(List<StationResponse> stations, int distance, int duration, String totalFare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
-        this.totalCost = totalCost;
+        this.totalFare = totalFare;
     }
 
     public static PathResponse of(Path path) {
@@ -24,8 +24,8 @@ public class PathResponse {
 
         int duration = path.extractDuration();
         int distance = path.extractDistance();
-        String totalCost = path.extractTotalCost();
-        return new PathResponse(stations, distance, duration, totalCost);
+        String totalFare = path.extractTotalFare();
+        return new PathResponse(stations, distance, duration, totalFare);
     }
 
     public List<StationResponse> getStations() {
@@ -40,7 +40,7 @@ public class PathResponse {
         return duration;
     }
 
-    public String getTotalCost() {
-        return totalCost;
+    public String getTotalFare() {
+        return totalFare;
     }
 }
