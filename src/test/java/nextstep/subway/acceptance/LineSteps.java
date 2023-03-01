@@ -10,28 +10,12 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
 public class LineSteps {
-    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", name);
-        lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-
-        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return 지하철_노선_생성_요청(createLineParams(name, color, upStation, downStation, distance, duration)).jsonPath().getLong("id");
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", name);
-        params.put("color", color);
-        return RestAssured
-            .given().log().all()
-            .body(params)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .when().post("/lines")
-            .then().log().all().extract();
+        return 지하철_노선_생성_요청(createLineParams(name, color, 0L, 0L, 0, 0));
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, String> params) {
@@ -104,5 +88,16 @@ public class LineSteps {
         return RestAssured.given().log().all()
             .when().delete("/lines/{lineId}/sections?stationId={stationId}", lineId, stationId)
             .then().log().all().extract();
+    }
+
+    private static Map<String, String> createLineParams(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("upStationId", upStation + "");
+        params.put("downStationId", downStation + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
+        return params;
     }
 }
