@@ -1,11 +1,12 @@
 package nextstep.subway.applicaion.dto;
 
+import lombok.Getter;
 import nextstep.subway.domain.Path;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
@@ -22,15 +23,8 @@ public class PathResponse {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
+        int duration = path.extractDuration();
 
-        return new PathResponse(stations, distance, 0);
-    }
-
-    public List<StationResponse> getStations() {
-        return stations;
-    }
-
-    public int getDistance() {
-        return distance;
+        return new PathResponse(stations, distance, duration);
     }
 }
