@@ -70,6 +70,16 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
     }
 
+    @DisplayName("두 역의 최단거리 요금정보를 조회한다.")
+    @Test
+    void findPathCost() {
+        // when
+        ExtractableResponse<Response> response = searchPath(spec, 교대역, 양재역, PathType.거리.getType());
+
+        // then
+        assertThat(response.jsonPath().getString("totalCost")).isEqualTo("1250원");
+    }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
