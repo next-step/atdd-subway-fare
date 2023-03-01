@@ -60,13 +60,13 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 지하철 경로 검색
-     *   Scenario: 두 역의 최소 시간 경로를 조회
-     *     Given 지하철역이 등록되어있음
-     *     And 지하철 노선이 등록되어있음
-     *     And 지하철 노선에 지하철역이 등록되어있음
-     *     When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
-     *     Then 최소 시간 기준 경로를 응답
-     *     And 총 거리와 소요 시간을 함께 응답함
+     * Scenario: 두 역의 최소 시간 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
      */
     @DisplayName("두 역의 최소 시간 경로를 조회")
     @Test
@@ -81,16 +81,16 @@ class PathAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return 두_역의_경로_조회를_요청(source, target, "DURATION");
     }
-    
+
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return 두_역의_경로_조회를_요청(source, target, "DISTANCE");
     }
 
-    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String type) {
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String pathType) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .when().get("/paths?source={sourceId}&target={targetId}&pathType={type}", source, target, pathType)
                 .then().log().all().extract();
     }
 
