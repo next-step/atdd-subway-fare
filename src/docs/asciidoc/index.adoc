@@ -14,6 +14,8 @@
 operation::createLine[snippets='request-fields,http-request,response-fields,http-response']
 
 === 경로 조회
+==== 최단 거리 검색 (로그인)
+operation::pathLogin[snippets='request-headers,request-parameters,http-request,response-fields,http-response']
 ==== 최단 거리 검색
 operation::pathDefault[snippets='http-request,http-response']
 ==== 최소 시간 검색

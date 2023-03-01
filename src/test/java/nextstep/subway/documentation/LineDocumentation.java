@@ -12,9 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,14 +38,7 @@ public class LineDocumentation extends Documentation {
 
         BDDMockito.given(lineService.saveLine(any(LineRequest.class))).willReturn(lineResponse);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("name", "신분당선");
-        params.put("color", "red");
-        params.put("upStationId", 1L + "");
-        params.put("downStationId", 2L + "");
-        params.put("distance", 10 + "");
-        params.put("duration", 10 + "");
-        params.put("additionalFare", 1_000 + "");
+        LineRequest lineRequest = new LineRequest("신분당선", "red", 1L, 2L, 10, 10, 1_000);
 
         RestDocumentationFilter filter = document("createLine",
                 requestFields(
@@ -66,6 +57,6 @@ public class LineDocumentation extends Documentation {
                         fieldWithPath("stations[].name").description("노선에 포함된 지하철역 이름"),
                         fieldWithPath("additionalFare").description("추가 요금")));
 
-        지하철_노선_생성_요청(params, spec, filter);
+        지하철_노선_생성_요청(lineRequest, spec, filter);
     }
 }

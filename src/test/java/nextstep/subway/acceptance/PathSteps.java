@@ -28,6 +28,16 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 로그인_사용자가_경로_조회를_요청(String accessToken, Long source, Long target, RequestSpecification spec, RestDocumentationFilter filter) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(filter)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type=", source, target)
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, RequestSpecification spec, RestDocumentationFilter filter) {
         return RestAssured
                 .given(spec).log().all()
