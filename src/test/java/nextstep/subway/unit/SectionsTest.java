@@ -6,14 +6,11 @@ import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class SectionsTest {
     Section 이호선_사당역_교대역_구간;
     Section 이호선_교대역_강남역_구간;
