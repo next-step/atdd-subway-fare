@@ -4,8 +4,8 @@ import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.applicaion.dto.PathSearchRequest;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.SectionCondition;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
@@ -24,11 +24,11 @@ public class PathService {
         this.memberRepository = memberRepository;
     }
 
-    public PathResponse findPath(Long source, Long target, SectionCondition condition, LoginMember loginMember) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
+    public PathResponse findPath(PathSearchRequest request, LoginMember loginMember) {
+        Station upStation = stationService.findById(request.getSource());
+        Station downStation = stationService.findById(request.getTarget());
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines, condition);
+        SubwayMap subwayMap = new SubwayMap(lines, request.getType());
 
         if (loginMember != null) {
             Member member = memberRepository.findById(loginMember.getId()).orElseThrow(RuntimeException::new);
