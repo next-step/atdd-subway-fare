@@ -78,6 +78,13 @@ public class Sections {
         return result;
     }
 
+    public List<Line> allLines() {
+        return sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toUnmodifiableList());
+    }
+
     private void checkDuplicateSection(Section section) {
         sections.stream()
                 .filter(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))

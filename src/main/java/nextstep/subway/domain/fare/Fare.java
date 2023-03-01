@@ -1,5 +1,9 @@
 package nextstep.subway.domain.fare;
 
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Sections;
+
 import java.util.stream.Stream;
 
 public class Fare {
@@ -7,8 +11,15 @@ public class Fare {
 
     private final int cost;
 
-    public Fare(int distance) {
-        this.cost = DEFAULT_FARE + calculateOverFare(distance);
+    public Fare(Sections sections) {
+        this(sections.sumByCondition(Section::getDistance), sections.allLines().stream()
+                .mapToInt(Line::getAdditionalFare)
+                .max()
+                .orElse(0));
+    }
+
+    public Fare(int distance, int additionalFare) {
+        this.cost = DEFAULT_FARE + additionalFare + calculateOverFare(distance);
     }
 
     private int calculateOverFare(int distance) {
