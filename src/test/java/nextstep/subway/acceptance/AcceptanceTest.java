@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import nextstep.SetupSpec;
 import nextstep.subway.utils.DataLoader;
 import nextstep.subway.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,7 @@ import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class AcceptanceTest {
+public class AcceptanceTest extends SetupSpec {
     public static final String EMAIL = "admin@email.com";
     public static final String PASSWORD = "password";
 
