@@ -32,7 +32,10 @@ public class Path {
     }
 
     public long extractTotalFare() {
-        Fare fare = new Fare(sections.totalDistance(), sections.overFareLine());
+        Fare fare = Fare.builder()
+                .distance(sections.totalDistance())
+                .overFareLine(sections.overFareLine())
+                .build();
 
         return fare.getFare().longValue();
     }
