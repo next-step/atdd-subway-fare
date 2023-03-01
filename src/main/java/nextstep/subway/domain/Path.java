@@ -9,7 +9,7 @@ public class Path {
 
     public Path(Sections sections) {
         this.sections = sections;
-        fare = new Fare(List.of(new DistancePolicy(sections.totalDistance())));
+        fare = new Fare();
     }
 
     public Sections getSections() {
@@ -32,4 +32,7 @@ public class Path {
         return fare.calcFare();
     }
 
+    public void addPolicy(FarePolicy farePolicy) {
+        fare.addPolicy(farePolicy);
+    }
 }
