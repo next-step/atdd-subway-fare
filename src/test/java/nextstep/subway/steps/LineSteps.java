@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.dto.LineCreateRequest;
+import nextstep.subway.applicaion.dto.LineCreateSimpleRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,12 +16,11 @@ import java.util.Map;
 
 public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", name);
-        params.put("color", color);
-        return RestAssured
+		LineCreateSimpleRequest request = new LineCreateSimpleRequest(name, color, 0);
+
+		return RestAssured
                 .given().log().all()
-                .body(params)
+                .body(request)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all().extract();
@@ -57,8 +57,22 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
-		LineCreateRequest lineRequest = new LineCreateRequest(name, color, upStationId, downStationId, distance, duration);
+	public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+		LineCreateRequest lineRequest = new LineCreateRequest(name, color, upStationId, downStationId, distance, duration, 0);
+
+		ExtractableResponse<Response> response = RestAssured
+			.given().log().all()
+			.body(lineRequest)
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.when().post("/lines")
+			.then().log().all().extract();
+
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+		return response;
+	}
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int addLineFare) {
+		LineCreateRequest lineRequest = new LineCreateRequest(name, color, upStationId, downStationId, distance, duration, addLineFare);
 
 		ExtractableResponse<Response> response = RestAssured
 			.given().log().all()

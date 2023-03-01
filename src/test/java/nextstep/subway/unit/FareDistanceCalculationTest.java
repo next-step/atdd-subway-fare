@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import static nextstep.subway.domain.FareCalculation.*;
+import static nextstep.subway.domain.fare.FareDistanceCalculation.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,34 +12,34 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class FareCalculationTest {
+public class FareDistanceCalculationTest {
 
 	@DisplayName("거리가 0이하라면 에러 발생")
 	@ParameterizedTest
 	@ValueSource(ints = {0, -1})
 	void failFareCalculation(int distance) {
-		assertThrows(IllegalArgumentException.class, () -> fareCalculation(distance));
+		assertThrows(IllegalArgumentException.class, () -> fareDistanceCalculation(distance));
 	}
 
 	@DisplayName("거리 <= 10km, 기본 요금")
 	@ParameterizedTest
 	@MethodSource("defaultDistance")
 	void fareCalculation10mkUnder(int distance, int fare) {
-		assertThat(fareCalculation(distance)).isEqualTo(fare);
+		assertThat(fareDistanceCalculation(distance)).isEqualTo(fare);
 	}
 
 	@DisplayName("10km < 거리 <= 50km, 기본 요금 + 5km 마다 100원 추가")
 	@ParameterizedTest
 	@MethodSource("underLongDistance")
 	void fareCalculation50mkUnder(int distance, int fare) {
-		assertThat(fareCalculation(distance)).isEqualTo(fare);
+		assertThat(fareDistanceCalculation(distance)).isEqualTo(fare);
 	}
 
 	@DisplayName("거리 > 50km, 기본 요금 + 5km 마다 100원 + 8km 마다 100원 추가")
 	@ParameterizedTest
 	@MethodSource("overLongDistance")
 	void fareCalculation50mkOver(int distance, int fare) {
-		assertThat(fareCalculation(distance)).isEqualTo(fare);
+		assertThat(fareDistanceCalculation(distance)).isEqualTo(fare);
 	}
 
 	private static Stream<Arguments> defaultDistance() {

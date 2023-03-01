@@ -7,12 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineCreateRequest {
+public class LineCreateSimpleRequest {
     private String name;
     private String color;
-    private Long upStationId;
-    private Long downStationId;
-    private int distance;
-	private int duration;
 	private int addLineFare;
 }

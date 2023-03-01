@@ -1,8 +1,8 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import static nextstep.common.ErrorMsg.*;
 
-public enum FareCalculation {
+public enum FareDistanceCalculation {
 
 	DEFAULT_DISTANCE(10),
 	LONG_DISTANCE(50),
@@ -17,11 +17,11 @@ public enum FareCalculation {
 
 	private int value;
 
-	FareCalculation(int value) {
+	FareDistanceCalculation(int value) {
 		this.value = value;
 	}
 
-	public static int fareCalculation(int distance) {
+	public static int fareDistanceCalculation(int distance) {
 		if (distance <= 0) {
 			throw new IllegalArgumentException(PATH_DISTANCE_0_UNDER_VALUE.isMessage());
 		}

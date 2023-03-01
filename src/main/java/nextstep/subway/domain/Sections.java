@@ -155,4 +155,8 @@ public class Sections {
 	public int totalDuration() {
 		return sections.stream().mapToInt(Section::getDuration).sum();
 	}
+
+	public int maxAddLineFare() {
+		return sections.stream().map(Section::getLine).mapToInt(Line::getAddLineFare).max().orElse(0);
+	}
 }
