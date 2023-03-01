@@ -14,6 +14,7 @@ import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_
 import static nextstep.subway.acceptance.PathSteps.노선에_추가_요금_추가_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.로그인하고_두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static nextstep.subway.utils.PathAssertionUtils.최적경로의_거리는_다음과_같다;
 import static nextstep.subway.utils.PathAssertionUtils.최적경로의_소요시간은_다음과_같다;
@@ -135,7 +136,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         어린이 = 베어러_인증_로그인_요청(CHILD_EMAIL, PASSWORD).jsonPath().getString("accessToken");
 
         // when
-        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 강남역);
+        final ExtractableResponse<Response> response = 로그인하고_두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 강남역);
 
         // then
         최적경로의_거리는_다음과_같다(response, 10);
@@ -154,7 +155,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         청소년 = 베어러_인증_로그인_요청(TEENAGER_EMAIL, PASSWORD).jsonPath().getString("accessToken");
 
         // when
-        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 강남역);
+        final ExtractableResponse<Response> response = 로그인하고_두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 강남역);
 
         // then
         최적경로의_거리는_다음과_같다(response, 10);
@@ -173,7 +174,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         어른 = 베어러_인증_로그인_요청(ADULT_EMAIL, PASSWORD).jsonPath().getString("accessToken");
 
         // when
-        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(어른, 교대역, 강남역);
+        final ExtractableResponse<Response> response = 로그인하고_두_역의_최단_거리_경로_조회를_요청(어른, 교대역, 강남역);
 
         // then
         최적경로의_거리는_다음과_같다(response, 10);
@@ -194,7 +195,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         청소년 = 베어러_인증_로그인_요청(TEENAGER_EMAIL, PASSWORD).jsonPath().getString("accessToken");
 
         // when
-        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 강남역);
+        final ExtractableResponse<Response> response = 로그인하고_두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 강남역);
 
         // then
         최적경로의_거리는_다음과_같다(response, 10);

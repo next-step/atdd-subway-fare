@@ -36,7 +36,7 @@ public class PathSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(final String token, final Long source, final Long target) {
+    public static ExtractableResponse<Response> 로그인하고_두_역의_최단_거리_경로_조회를_요청(final String token, final Long source, final Long target) {
         return RestAssured
                 .given()
                     .auth().oauth2(token)
