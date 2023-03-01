@@ -38,17 +38,31 @@ public class PathSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 노선에_추가_요금_추가_요청(final Long lineId, final int extraFare) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(final String token, final Long source, final Long target) {
+        return RestAssured
+                .given()
+                    .auth().oauth2(token)
+                    .accept(APPLICATION_JSON_VALUE)
+                    .queryParam("source", source)
+                    .queryParam("target", target)
+                    .queryParam("type", PathType.DISTANCE)
+                .when()
+                    .get("/paths")
+                .then()
+                    .log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 노선에_추가_요금_추가_요청(final Long lineId, final int fare) {
         Map<String, String> param = new HashMap<>();
-        param.put("lineId", lineId + "");
-        param.put("extraFare", extraFare + "");
+        param.put("fare", fare + "");
 
         return RestAssured
                 .given()
                     .contentType(APPLICATION_JSON_VALUE)
                     .body(param)
                 .when()
-                    .post("/paths")
+                    .post("/lines/{lineId}/fare", lineId)
                 .then()
                     .log().all()
                 .extract();
