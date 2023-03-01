@@ -14,6 +14,7 @@ public class PathSteps {
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
             .queryParam("target", target)
+            .queryParam("type", "DISTANCE")
             .when().get("/paths")
             .then().log().all().extract();
     }
@@ -25,7 +26,7 @@ public class PathSteps {
             .queryParam("source", source)
             .queryParam("target", target)
             .queryParam("type", "DISTANCE")
-            .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+            .when().get("/paths")
             .then().log().all().extract();
     }
 
@@ -36,7 +37,7 @@ public class PathSteps {
             .queryParam("source", source)
             .queryParam("target", target)
             .queryParam("type", "DURATION")
-            .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+            .when().get("/paths")
             .then().log().all().extract();
     }
 }
