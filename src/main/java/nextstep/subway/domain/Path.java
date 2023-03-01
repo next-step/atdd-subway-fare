@@ -2,6 +2,8 @@ package nextstep.subway.domain;
 
 import java.util.List;
 
+import static nextstep.subway.domain.Fare.DEFAULT_FARE;
+
 public class Path {
     private Sections sections;
 
@@ -27,6 +29,10 @@ public class Path {
 
     public int calculateFare() {
         int totalDistance = extractDistance();
-        return DistanceFarePolicy.calculateFare(totalDistance);
+
+        Fare fare = DEFAULT_FARE
+                .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance));
+        
+        return fare.getValue();
     }
 }

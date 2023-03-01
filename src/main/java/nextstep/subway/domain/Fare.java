@@ -5,6 +5,8 @@ import nextstep.subway.domain.exceptions.NegativeNumberException;
 import java.util.Objects;
 
 public class Fare {
+    public static Fare DEFAULT_FARE = Fare.of(1_250);
+
     private int value;
 
     private Fare(int value) {

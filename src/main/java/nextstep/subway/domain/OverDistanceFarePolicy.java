@@ -18,18 +18,19 @@ public enum OverDistanceFarePolicy {
         this.perKm = perKm;
     }
 
-    public static int calculateOverDistanceFare(int distance) {
+    public static Fare calculateOverDistanceFare(int distance) {
         return Arrays.stream(values())
-                .mapToInt(it -> calculateOverDistanceFare(it, distance))
-                .sum();
+                .map(it -> calculateOverDistanceFare(it, distance))
+                .reduce(Fare.of(0), Fare::plus);
     }
 
-    private static int calculateOverDistanceFare(OverDistanceFarePolicy policy, int totalDistance) {
+    private static Fare calculateOverDistanceFare(OverDistanceFarePolicy policy, int totalDistance) {
         int overDistance = Math.max(Math.min(totalDistance, policy.maxKm) - policy.minKm, 0);
         return calculateOverDistanceFare(overDistance, policy.perKm, policy.farePer);
     }
 
-    private static int calculateOverDistanceFare(int overDistance, int perKm, int farePer) {
-        return (int) (Math.ceil((overDistance + perKm - 1) / perKm) * farePer);
+    private static Fare calculateOverDistanceFare(int overDistance, int perKm, int farePer) {
+        int overFare = (int) (Math.ceil((overDistance + perKm - 1) / perKm) * farePer);
+        return Fare.of(overFare);
     }
 }
