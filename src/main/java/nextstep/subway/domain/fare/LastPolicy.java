@@ -2,8 +2,10 @@ package nextstep.subway.domain.fare;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class LastFarePolicy implements FarePolicy {
+import static lombok.AccessLevel.PROTECTED;
+
+@RequiredArgsConstructor(access = PROTECTED)
+public class LastPolicy implements DistancePolicy {
 
     private final int start;
     private final int rate;
