@@ -75,4 +75,12 @@ class MemberAcceptanceTest extends AcceptanceTest {
 
         회원_정보_조회됨(response, ADMIN, AGE);
     }
+
+    @DisplayName("내 정보를 조회한다. - 로그인하지 않은 회원의 경우 예외가 발생한다.")
+    @Test
+    void getMyInfoNotMember() {
+        ExtractableResponse<Response> response = 토큰없이_회원_정보_조회_요청();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
 }
