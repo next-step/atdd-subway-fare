@@ -1,6 +1,5 @@
 package nextstep.subway.applicaion.dto;
 
-import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
