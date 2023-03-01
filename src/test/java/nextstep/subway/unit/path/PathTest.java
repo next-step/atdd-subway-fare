@@ -53,4 +53,22 @@ public class PathTest {
 	void extractFareTest() {
 		assertThat(path.extractFare()).isEqualTo(1350);
 	}
+
+	@DisplayName("지하철 어린이 이용 요금")
+	@Test
+	void kidsDiscountFareTest() {
+		assertThat(path.discountFare(10)).isEqualTo(500);
+	}
+
+	@DisplayName("지하철 청소년 이용 요금")
+	@Test
+	void youthDiscountFareTest() {
+		assertThat(path.discountFare(18)).isEqualTo(800);
+	}
+
+	@DisplayName("지하철 성인 이용 요금")
+	@Test
+	void adultDiscountFareTest() {
+		assertThat(path.discountFare(20)).isEqualTo(1350);
+	}
 }
