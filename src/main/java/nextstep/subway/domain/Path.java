@@ -9,7 +9,7 @@ public class Path {
 
     public Path(Sections sections) {
         this.sections = sections;
-        fare = new Fare(List.of(new DistancePolicy(sections.totalDuration())));
+        fare = new Fare(List.of(new DistancePolicy(sections.totalDistance())));
     }
 
     public Sections getSections() {
