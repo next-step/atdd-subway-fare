@@ -50,6 +50,7 @@ public class SubwayMapTest {
          */
     }
 
+    @DisplayName("경로를 검색하면 거리기준으로 검색된다.")
     @Test
     void findPath() {
         // given
@@ -63,6 +64,7 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
     }
 
+    @DisplayName("반대로 검색해도 검색된다.")
     @Test
     void findPathOppositely() {
         // given
@@ -70,10 +72,10 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(new StationPair(교대역, 양재역));
+        Path path = subwayMap.findPath(new StationPair(양재역, 교대역));
 
         // then
-        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 강남역, 교대역));
     }
 
     @DisplayName("시간 기준으로 경로를 검색한다.")
@@ -84,7 +86,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines, SectionCondition.DURATION);
 
         // when
-        Path path = subwayMap.findPath(new StationPair(교대역, 양재역));
+        Path path = subwayMap.findPath(new StationPair(양재역, 교대역));
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
