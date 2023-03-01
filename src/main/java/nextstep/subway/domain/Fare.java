@@ -11,18 +11,24 @@ public class Fare {
     private static final int OVER_FARE = 100;
 
     private final int distance;
+    private int overFareLine;
     private BigDecimal fare;
 
-    public Fare(int distance) {
-        validation(distance);
+    public Fare(int distance, int overFareLine) {
+        validation(distance, overFareLine);
         this.distance = distance;
+        this.overFareLine = overFareLine;
 
         calTotalFare();
     }
 
-    private void validation(int distance) {
+    private void validation(int distance, int overFareLine) {
         if (distance <= 0) {
             throw new IllegalArgumentException("거리가 0이하일 수 없음");
+        }
+
+        if (overFareLine < 0) {
+            throw new IllegalArgumentException("노선 초과운임이 0이하일 수 없음");
         }
     }
 
@@ -33,11 +39,13 @@ public class Fare {
     private void calTotalFare() {
         if (isWithInMinDistance()) {
             fare = new BigDecimal(MIN_TOTAL_FARE);
+            fare = fare.add(new BigDecimal(overFareLine));
+
             return;
         }
 
         BigDecimal overFare = calculateOverFare(distance - MIN_DISTANCE);
-        fare = new BigDecimal(MIN_TOTAL_FARE).add(overFare);
+        fare = new BigDecimal(MIN_TOTAL_FARE).add(overFare).add(new BigDecimal(overFareLine));
     }
 
     private boolean isWithInMinDistance() {
