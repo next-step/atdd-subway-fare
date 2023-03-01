@@ -1,6 +1,8 @@
 package nextstep.subway.ui;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.member.domain.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.PathType;
@@ -15,7 +17,11 @@ public class PathController {
     private final PathService pathService;
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal(required = false) LoginMember loginMember,
+                                                 @RequestParam Long source,
+                                                 @RequestParam Long target,
+                                                 @RequestParam PathType type) {
+        return ResponseEntity.ok(pathService.findPath(loginMember, source, target, type));
     }
+
 }
