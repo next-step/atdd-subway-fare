@@ -38,6 +38,9 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     private String 사용자;
 
     /**
+     * Given 지하철역과 노선 생성을 요청, 사용자 생성 및 로그인 요청을 하고
+     */
+    /**
      * 교대역    --- *2호선* ---   강남역
      * |                        |
      * *3호선*                   *신분당선*
@@ -62,6 +65,14 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
 
+    /**
+     * When 즐겨찾기 생성 요청을 하면
+     * Then 즐겨찾기 조회 요청 시 생성한 즐겨찾기를 조회할 수 있고
+     * When 즐겨찾기 조회 요청을 하면
+     * Then 즐겨찾기 조회 요청 시 생성한 즐겨찾기를 조회할 수 있고
+     * When 즐겨찾기 삭제 요청을 하면
+     * Then 생성된 즐겨찾기가 삭제된다.
+     */
     @DisplayName("즐겨찾기를 관리한다.")
     @Test
     void manageMember() {
@@ -79,6 +90,10 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         즐겨찾기_삭제됨(즐겨찾기_삭제_응답);
     }
 
+    /**
+     * When 상행역이 누락된 즐겨찾기 생성 요청을 하면
+     * Then 즐겨찾기 생성 시 실패한다.
+     */
     @DisplayName("즐겨찾기 요청 역이 누락되어서 저장에 실패한다.")
     @Test
     void error_inputValue_saveFavorite() {
@@ -88,6 +103,10 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         요청값_누락으로_실패됨(즐겨찾기_생성_응답);
     }
 
+    /**
+     * When 로그인하지 않은 사용자가 즐겨찾기 생성 요청을 하면
+     * Then 즐겨찾기 생성 시 실패한다.
+     */
     @DisplayName("로그인하지 않은 사용자는 즐겨찾기 저장에 실패한다.")
     @Test
     void error_noAuth_saveFavorite() {
@@ -97,6 +116,10 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         권한없어서_실패됨(즐겨찾기_생성_응답);
     }
 
+    /**
+     * When 등록되지 않은 상행역을 즐겨찾기 생성 요청을 하면
+     * Then 즐겨찾기 생성 시 실패한다.
+     */
     @DisplayName("등록되지 않은 역은 즐겨찾기 저장에 실패한다.")
     @Test
     void error_noRegisterStation_saveFavorite() {
@@ -106,6 +129,11 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         역이_등록되어_있지_않아서_실패됨(즐겨찾기_생성_응답);
     }
 
+    /**
+     * Given 즐겨찾기 생성을 요청 하고
+     * When 로그인하지 않은 사용자가 즐겨찾기 조회 요청을 하면
+     * Then 즐겨찾기 조회 시 실패한다.
+     */
     @DisplayName("로그인하지 않은 사용자는 즐겨찾기 조회에 실패한다.")
     @Test
     void error_showFavorite() {
@@ -118,17 +146,24 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         권한없어서_실패됨(즐겨찾기_조회_응답);
     }
 
+    /**
+     * When 존재하지 않은 즐겨찾기 조회 요청을 하면
+     * Then 즐겨찾기 조회 시 실패한다.
+     */
     @DisplayName("존재하지 않는 즐겨찾기는 조회할 수 없다")
     @Test
     void error_noFavorite_showFavorite() {
-
-        즐겨찾기_생성_요청(사용자, 강남역, 양재역);
 
         final ExtractableResponse<Response> 즐겨찾기_조회_응답 = 즐겨찾기_조회_요청(사용자, 존재하지않음);
 
         즐겨찾기_조회_없음(즐겨찾기_조회_응답);
     }
 
+    /**
+     * Given 즐겨찾기 생성을 요청 하고
+     * When 로그인하지 않은 사용자가 즐겨찾기 삭제 요청을 하면
+     * Then 즐겨찾기 삭제 시 실패한다.
+     */
     @DisplayName("로그인하지 않은 사용자는 즐겨찾기를 제거한다.")
     @Test
     void error_removeFavorite() {
@@ -141,11 +176,13 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
         권한없어서_실패됨(즐겨찾기_삭제_응답);
     }
 
+    /**
+     * When 존재하지 않는 즐겨찾기 삭제 요청을 하면
+     * Then 즐겨찾기 삭제 시 실패한다.
+     */
     @DisplayName("존재하지 않는 즐겨찾기는 제거할 수 없다")
     @Test
     void error_noFavorite_removeFavorite() {
-
-        즐겨찾기_생성_요청(사용자, 강남역, 양재역);
 
         final ExtractableResponse<Response> 즐겨찾기_조회_응답 = 즐겨찾기_삭제_요청(사용자, 존재하지않음);
 

@@ -47,7 +47,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     private String 로그인하지_않은_토큰 = "test";
     private String 사용자_URI;
 
-
+    /**
+     * Given 지하철역, 노선, 구간, 사용자 생성 요청을 하고
+     */
     /**
      * 교대역    --- *2호선* ---   강남역
      * |                        |
@@ -76,6 +78,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         사용자_URI = 회원_생성_요청(EMAIL, PASSWORD).header("Location");
     }
 
+    /**
+     * When 로그인한 사용자가 두 역 경로 조회 요청을 하면
+     * Then 두 역의 경로 및 거리, 시간, 요금이 조회된다.
+     */
     @DisplayName("로그인 사용자가 요청한 최적의 경로를 찾고 최적의 경로 중 추가 요금이 가장 큰 금액으로 요금을 계산한다.")
     @ParameterizedTest(name = "최적의 경로 중 추가요금을 포함한 총 1750원 금액의 {0} 세는 {1} 원의 요금을 낸다.")
     @CsvSource(value = {"6,1050.0", "12,1050.0", "13,1470.0", "18,1470.0", "19,1750.0", "20,1750.0"})
@@ -92,6 +98,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * When 비로그인한 사용자가 두 역 경로 조회 요청을 하면
+     * Then 두 역의 경로 및 거리, 시간, 요금이 조회된다.
+     */
     @DisplayName("비로그인 사용자가 요청한 최적의 경로를 찾는다. 비로그인 사용자는 요금 할인없이 추가요금을 포함한 총 요금도 계산한다.")
     @Test
     void find_route_by_logout() {
@@ -105,6 +115,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * When 출발역과 도착역이 같은 두 역을 요청하면
+     * Then 경로 조회의 실패한다.
+     */
     @DisplayName("출발역과 도착역이 같아서 조회가 불가능합니다")
     @Test
     void error_showRoutes() {
@@ -119,6 +133,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * When 연결되지 않은 역을 요청하면
+     * Then 경로 조회의 실패한다.
+     */
     @DisplayName("출발역과 도착역이 연결되어 있지 않아서 조회가 불가능합니다")
     @Test
     void error_showRoutes_2() {
@@ -133,6 +151,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    /**
+     * When 등록되지 않은 역을 요청하면
+     * Then 경로 조회의 실패한다.
+     */
     @DisplayName("요청한 역이 노선의 등록되어 있지 않습니다")
     @Test
     void error_showRoutes_3() {
