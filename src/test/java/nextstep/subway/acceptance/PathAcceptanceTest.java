@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.domain.PathType;
@@ -8,10 +9,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -106,6 +111,24 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(17);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(24);
         assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(2350);
+    }
+
+    @Test
+    void findPathWithLogin(){
+        String accessToken = 베어러_인증_로그인_요청("member@email.com", "password").jsonPath().getString("accessToken");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("source", 남부터미널역);
+        params.put("target", 양재역);
+        params.put("type", PathType.거리.getType());
+
+        RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .params(params)
+                .when().get("/paths")
+                .then().statusCode(HttpStatus.OK.value())
+                .log().all().extract();
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int overFare) {
