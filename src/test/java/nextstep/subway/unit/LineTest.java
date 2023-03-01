@@ -1,9 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.Duration;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Section;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +39,7 @@ class LineTest {
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDistance()).isEqualTo(Distance.of(5));
         assertThat(section.getDuration()).isEqualTo(Duration.of(4));
     }
 
@@ -62,7 +59,7 @@ class LineTest {
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDistance()).isEqualTo(Distance.of(5));
         assertThat(section.getDuration()).isEqualTo(Duration.of(3));
     }
 
@@ -82,7 +79,7 @@ class LineTest {
                 .filter(it -> it.getUpStation() == 강남역)
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(역삼역);
-        assertThat(section.getDistance()).isEqualTo(10);
+        assertThat(section.getDistance()).isEqualTo(Distance.of(10));
         assertThat(section.getDuration()).isEqualTo(Duration.of(7));
     }
 
@@ -102,7 +99,7 @@ class LineTest {
                 .filter(it -> it.getUpStation() == 역삼역)
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
-        assertThat(section.getDistance()).isEqualTo(5);
+        assertThat(section.getDistance()).isEqualTo(Distance.of(5));
         assertThat(section.getDuration()).isEqualTo(Duration.of(4));
     }
 
