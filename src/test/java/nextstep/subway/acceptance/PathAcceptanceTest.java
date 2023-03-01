@@ -73,7 +73,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로와_총_거리_총_소요시간이_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 5, 5);
+        경로와_총_거리_총_소요시간_이용요금이_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 5, 5, 1_250);
     }
 
     /**
@@ -89,6 +89,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로와_총_거리_총_소요시간이_조회됨(response, List.of(교대역, 강남역, 양재역), 20, 4);
+        경로와_총_거리_총_소요시간_이용요금이_조회됨(response, List.of(교대역, 강남역, 양재역), 20, 4,  1_250);
     }
 }

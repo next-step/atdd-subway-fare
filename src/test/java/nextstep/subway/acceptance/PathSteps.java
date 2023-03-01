@@ -28,11 +28,12 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로와_총_거리_총_소요시간이_조회됨(ExtractableResponse<Response> response, List<Long> stationIds, int distance, int duration) {
+    public static void 경로와_총_거리_총_소요시간_이용요금이_조회됨(ExtractableResponse<Response> response, List<Long> stationIds, int distance, int duration, int fare) {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactlyElementsOf(stationIds);
             assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
             assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
         });
     }
 }
