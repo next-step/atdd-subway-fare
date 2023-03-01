@@ -18,28 +18,28 @@ public class FareCalculationTest {
 	@ParameterizedTest
 	@ValueSource(ints = {0, -1})
 	void failFareCalculation(int distance) {
-		assertThrows(IllegalArgumentException.class, () -> fareCalculation(distance));
+		assertThrows(IllegalArgumentException.class, () -> fareDistanceCalculation(distance));
 	}
 
 	@DisplayName("거리 <= 10km, 기본 요금")
 	@ParameterizedTest
 	@MethodSource("defaultDistance")
 	void fareCalculation10mkUnder(int distance, int fare) {
-		assertThat(fareCalculation(distance)).isEqualTo(fare);
+		assertThat(fareDistanceCalculation(distance)).isEqualTo(fare);
 	}
 
 	@DisplayName("10km < 거리 <= 50km, 기본 요금 + 5km 마다 100원 추가")
 	@ParameterizedTest
 	@MethodSource("underLongDistance")
 	void fareCalculation50mkUnder(int distance, int fare) {
-		assertThat(fareCalculation(distance)).isEqualTo(fare);
+		assertThat(fareDistanceCalculation(distance)).isEqualTo(fare);
 	}
 
 	@DisplayName("거리 > 50km, 기본 요금 + 5km 마다 100원 + 8km 마다 100원 추가")
 	@ParameterizedTest
 	@MethodSource("overLongDistance")
 	void fareCalculation50mkOver(int distance, int fare) {
-		assertThat(fareCalculation(distance)).isEqualTo(fare);
+		assertThat(fareDistanceCalculation(distance)).isEqualTo(fare);
 	}
 
 	private static Stream<Arguments> defaultDistance() {

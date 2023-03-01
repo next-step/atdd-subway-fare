@@ -17,7 +17,6 @@ public class PathSteps {
 	public static ExtractableResponse<Response> 타입에_따라_두_역의_경로_조회를_요청(Long source, Long target, SearchType type) {
 		return RestAssured
 			.given().log().all()
-			.auth().oauth2(GuestToken)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
 			.then().log().all()
@@ -33,8 +32,6 @@ public class PathSteps {
 			.then().log().all()
 			.extract();
 	}
-
-	private static String GuestToken;
 
 	public static Long 교대역;
 	public static Long 강남역;
@@ -63,9 +60,6 @@ public class PathSteps {
 	public static Long ZW_Line;
 
 	public static void setup() {
-		회원_생성_요청("guest@email.com", "password", 9999);
-		GuestToken = 베어러_인증_로그인_요청("guest@email.com", "password").jsonPath().getString("accessToken");
-
 		교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
 		강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
 		양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
@@ -92,7 +86,7 @@ public class PathSteps {
 		W_Station = 지하철역_생성_요청("W").jsonPath().getLong("id");
 
 		AD_Line = 지하철_노선_생성_요청("AD", "black", A_Station, B_Station, 25, 5).jsonPath().getLong("id");
-		ZW_Line = 지하철_노선_생성_요청("ZW", "white", D_Station, Z_Station, 10, 7).jsonPath().getLong("id");
+		ZW_Line = 지하철_노선_생성_요청("ZW", "white", D_Station, Z_Station, 10, 7, 1000).jsonPath().getLong("id");
 
 		지하철_노선에_지하철_구간_생성_요청(AD_Line, B_Station, C_Station, 25, 5);
 		지하철_노선에_지하철_구간_생성_요청(AD_Line, C_Station, D_Station, 30, 10);

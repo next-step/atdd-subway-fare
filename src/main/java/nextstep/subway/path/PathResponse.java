@@ -10,19 +10,19 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class PathResponse {
-    private List<StationResponse> stations;
-    private int distance;
+	private List<StationResponse> stations;
+	private int distance;
 	private int duration;
 	private int fare;
 
-    public static PathResponse of(Path path) {
-        List<StationResponse> stations = path.getStations().stream()
-                .map(StationResponse::of)
-                .collect(Collectors.toList());
-        int distance = path.extractDistance();
+	public static PathResponse of(Path path, int calculationFare) {
+		List<StationResponse> stations = path.getStations().stream()
+			.map(StationResponse::of)
+			.collect(Collectors.toList());
+		int distance = path.extractDistance();
 		int duration = path.extractDuration();
-		int fare = path.extractFare();
+		int fare = calculationFare;
 
-        return new PathResponse(stations, distance, duration, fare);
-    }
+		return new PathResponse(stations, distance, duration, fare);
+	}
 }

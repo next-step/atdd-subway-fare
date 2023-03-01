@@ -21,7 +21,7 @@ public enum FareCalculation {
 		this.value = value;
 	}
 
-	public static int fareCalculation(int distance) {
+	public static int fareDistanceCalculation(int distance) {
 		if (distance <= 0) {
 			throw new IllegalArgumentException(PATH_DISTANCE_0_UNDER_VALUE.isMessage());
 		}
@@ -37,6 +37,13 @@ public enum FareCalculation {
 			return DEFAULT_FARE.isValue() + UNDER_LONG_FARE.isValue() + calculateOverFare(distance, OVER_LONG_DISTANCE.isValue());
 		}
 		throw new IllegalArgumentException(PATH_DISTANCE_WRONG_VALUE.isMessage());
+	}
+
+	public static int fareAgeCalculation(int fare, int age) {
+
+
+
+		throw new IllegalArgumentException();
 	}
 
 	private static int calculateOverFare(int overDistance, int farePerDistance) {

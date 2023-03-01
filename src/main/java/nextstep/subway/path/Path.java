@@ -12,21 +12,33 @@ import nextstep.subway.domain.Station;
 @Getter
 @AllArgsConstructor
 public class Path {
-    private Sections sections;
+	private Sections sections;
 
-    public int extractDistance() {
-        return sections.totalDistance();
-    }
+	public int extractDistance() {
+		return sections.totalDistance();
+	}
 
 	public int extractDuration() {
 		return sections.totalDuration();
 	}
 
 	public int extractFare() {
-		return fareCalculation(extractDistance());
+		return extractDistanceFare() + extractLineFare();
 	}
 
-    public List<Station> getStations() {
-        return sections.getStations();
-    }
+	private int extractDistanceFare() {
+		return fareDistanceCalculation(extractDistance());
+	}
+
+	private int extractLineFare() {
+		return sections.maxAddLineFare();
+	}
+
+	public int discountFare(int age) {
+		return fareAgeCalculation(extractFare(), age);
+	}
+
+	public List<Station> getStations() {
+		return sections.getStations();
+	}
 }

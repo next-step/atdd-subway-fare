@@ -1,6 +1,7 @@
 package nextstep.subway.path;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.member.application.MemberService;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.StationService;
@@ -17,17 +18,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PathService {
 
+	private final MemberService memberService;
 	private final LineService lineService;
 	private final StationService stationService;
 
 	public PathResponse findPathGuest(PathRequest pathRequest) {
 		Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
-		return PathResponse.of(path);
+		int fare = path.extractFare();
+		return PathResponse.of(path, fare);
 	}
 
 	public PathResponse findPathForMember(LoginMember loginMember, PathRequest pathRequest) {
 		Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
-		return PathResponse.of(path);
+		Integer memberAge = memberService.findMember(loginMember.getId()).getAge();
+
+		int fare = path.discountFare(memberAge);
+		return PathResponse.of(path, fare);
 	}
 
 	private Path findPath(Long source, Long target, SearchType type) {
