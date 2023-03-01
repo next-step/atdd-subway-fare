@@ -26,19 +26,8 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = defaultFare;
-        fare = calculateOverFare(distance, fare);
+        int fare = path.getFare();
         return new PathResponse(stations, distance, duration, fare);
-    }
-
-    private static int calculateOverFare(int distance, int fare) {
-        if (distance > 10 && distance <= 50) {
-            fare += (int) ((Math.ceil((distance - 11) / 5) + 1) * 100);
-        }
-        if (distance > 50) {
-            fare += (int) ((Math.ceil((distance - 11) / 8) + 1) * 100);
-        }
-        return fare;
     }
 
     public List<StationResponse> getStations() {
