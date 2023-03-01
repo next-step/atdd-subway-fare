@@ -122,13 +122,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 기준으로_경로_조회_요청(교대역, 양재역, 거리);
+        ExtractableResponse<Response> response = 경로_조회_요청(교대역, 양재역, 거리);
 
         // then
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
         });
     }
 
@@ -142,13 +142,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 두_역의_최소_시간_경로를_조회() {
         // when
-        ExtractableResponse<Response> response = 기준으로_경로_조회_요청(양재역, 교대역, 시간);
+        ExtractableResponse<Response> response = 경로_조회_요청(양재역, 교대역, 시간);
 
         // then
         assertAll(() -> {
-            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 교대역);
             총_거리와_소요_시간을_함께_응답한다(response, 20, 8);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
         });
     }
 
@@ -161,7 +161,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private ExtractableResponse<Response> 기준으로_경로_조회_요청(Long sourceId, Long targetId, String shortType) {
+    private ExtractableResponse<Response> 경로_조회_요청(Long sourceId, Long targetId, String shortType) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
