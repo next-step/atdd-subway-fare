@@ -9,6 +9,7 @@ import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 검색")
@@ -52,5 +53,44 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         두_역의_최단_거리_경로_조회_검증(response, 교대역, 남부터미널역, 양재역);
+    }
+
+    /**
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     */
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathByTime() {
+
+    }
+
+    @DisplayName("경로 조회 예외 처리 기능")
+    @Nested
+    class PathExceptionTest {
+        /**
+         * When 연결되지 않은 역의 최단 거리 기준으로 경로 조회를 요청시
+         * Then 예외 처리한다
+         * When 연결되지 않은 역의 최소 시간 기준으로 경로 조회를 요청시
+         * Then 예외 처리한다
+         */
+        @DisplayName("연결되지 않은 역으로 경로 조회를 요청시 예외 처리한다.")
+        @Test
+        void findPathNotConnectedStation() {
+
+        }
+
+        /**
+         * When 존재하지 않는 역의 최단 거리 기준으로 경로 조회를 요청시
+         * Then 예외 처리한다
+         * When 존재하지 않는 역의 최소 시간 기준으로 경로 조회를 요청시
+         * Then 예외 처리한다
+         */
+        @DisplayName("존재하지 않는 역으로 경로 조회를 요청시 예외 처리한다.")
+        @Test
+        void findPathNotExistStation() {
+
+        }
     }
 }
