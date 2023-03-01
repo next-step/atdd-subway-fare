@@ -70,7 +70,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * when : 두 역의 최단 시간 경로 조회를 요청하면
-     * then : 최단 거리 경로의 역 목록을 조회할 수 있다.
+     * then : 최단 시간 경로의 역 목록을 조회할 수 있다.
      * then : 총 거리와 소요 시간을 조회할 수 있다.
      * then : 지하철 이용 요금을 최단 거리 경로 기준으로 조회할 수 있다.
      */
