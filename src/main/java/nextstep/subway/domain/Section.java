@@ -32,7 +32,7 @@ public class Section extends DefaultWeightedEdge {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, Distance distance, Duration duration) {
+    private Section(Line line, Station upStation, Station downStation, Distance distance, Duration duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -75,5 +75,54 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    static class Builder {
+        private Line line;
+        private Station upStation;
+        private Station downStation;
+        private Distance distance;
+        private Duration duration;
+
+        public Builder() {
+        }
+
+        public Builder line(Line line) {
+            this.line = line;
+            return this;
+        }
+
+        public Builder upStation(Station upStation) {
+            this.upStation = upStation;
+            return this;
+        }
+
+        public Builder downStation(Station downStation) {
+            this.downStation = downStation;
+            return this;
+        }
+
+        public Builder distance(Distance distance) {
+            this.distance = distance;
+            return this;
+        }
+
+        public Builder duration(Duration duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Section build() {
+            if (line == null || upStation == null || downStation == null
+                    || distance == null || duration == null) {
+                throw new IllegalStateException("Section 생성 불가");
+            }
+
+            return new Section(line, upStation, downStation, distance, duration);
+        }
     }
 }
