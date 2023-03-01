@@ -2,8 +2,9 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
-import nextstep.subway.domain.policy.CalculateConditions;
-import nextstep.subway.domain.policy.FarePolicies;
+import nextstep.subway.domain.policy.FareDiscountPolicies;
+import nextstep.subway.domain.policy.calculate.CalculateConditions;
+import nextstep.subway.domain.policy.FareCalculatePolicies;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.List;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final FarePolicies farePolicies = new FarePolicies();
+    private final FareCalculatePolicies fareCalculatePolicies = new FareCalculatePolicies();
+    private final FareDiscountPolicies fareDiscountPolicies = new FareDiscountPolicies();
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
@@ -37,8 +39,7 @@ public class PathService {
                 .lines(path.getLines())
                 .build();
 
-        return this.farePolicies.calculate(conditions);
-
-
+        int fare = this.fareCalculatePolicies.calculate(conditions);
+        return this.fareDiscountPolicies.discount(conditions, fare);
     }
 }

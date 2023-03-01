@@ -1,6 +1,6 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.calculate;
 
-public class FixedFarePolicy implements FarePolicy{
+public class FixedFarePolicy implements FareCalculatePolicy {
 
     private final int fare;
 

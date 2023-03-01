@@ -1,8 +1,8 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.calculate;
 
 import nextstep.subway.domain.Line;
 
-public class LineSurchargeFarePolicy implements FarePolicy{
+public class LineSurchargeFarePolicy implements FareCalculatePolicy {
 
     @Override
     public int calculate(CalculateConditions conditions) {

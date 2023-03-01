@@ -1,4 +1,6 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.discount;
+
+import nextstep.subway.domain.policy.calculate.CalculateConditions;
 
 public class AgeDistcountFarePolicy implements FareDiscountPolicy {
 
@@ -21,7 +23,7 @@ public class AgeDistcountFarePolicy implements FareDiscountPolicy {
     }
 
     @Override
-    public int calculate(int fare) {
+    public int discount(int fare) {
             return (int) ((fare - discountAmount)*(1-discountRate));
     }
 
