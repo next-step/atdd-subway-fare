@@ -2,8 +2,10 @@ package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회_검증;
+import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회_검증;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_검증;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.SectionSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
@@ -52,7 +54,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        두_역의_최단_거리_경로_조회_검증(response, 교대역, 남부터미널역, 양재역);
+        두_역의_경로_조회_검증(response, 교대역, 남부터미널역, 양재역);
     }
 
     /**
@@ -63,7 +65,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByTime() {
+        // when
+        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
+        // then
+        두_역의_경로_조회_검증(response, 교대역, 남부터미널역, 양재역);
+
+        // and
+        두_역의_최소_시간_경로_조회를_검증(response, 10L, 10L);
     }
 
     @DisplayName("경로 조회 예외 처리 기능")
