@@ -19,7 +19,7 @@ public class SubwayMap {
 
     public Path findPath(Station source, Station target, PathSearchType pathSearchType) {
         GraphPath<Station, SectionEdge> graphPath = makeGraph(source, target, pathSearchType);
-        return new Path(new Sections(getResultBy(graphPath)));
+        return toSectionsBy(graphPath).getResultPath();
     }
 
     private GraphPath<Station, SectionEdge> makeGraph(
@@ -35,6 +35,7 @@ public class SubwayMap {
 
         addVertex(graph);
         addEdge(graph, pathSearchType);
+        addReverseEdge(graph);
 
         return new DijkstraShortestPath<>(graph);
     }
@@ -53,6 +54,17 @@ public class SubwayMap {
                 .forEach(it -> addSectionEdge(graph, it, pathSearchType));
     }
 
+    private void addReverseEdge(WeightedGraph<Station, SectionEdge> graph) {
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(Section::reverse)
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                });
+    }
+
 
     private void addSectionEdge(
             WeightedGraph<Station, SectionEdge> graph,
@@ -67,9 +79,11 @@ public class SubwayMap {
         return pathSearchType.isDistance() ? section.getDistance() : section.getDuration();
     }
 
-    private List<Section> getResultBy(GraphPath<Station, SectionEdge> graphPath) {
-        return graphPath.getEdgeList().stream()
-                .map(SectionEdge::getSection)
-                .collect(Collectors.toList());
+    private Sections toSectionsBy(GraphPath<Station, SectionEdge> graphPath) {
+        return new Sections(
+                graphPath.getEdgeList().stream()
+                        .map(SectionEdge::getSection)
+                        .collect(Collectors.toList())
+        );
     }
 }

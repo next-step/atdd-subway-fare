@@ -100,8 +100,20 @@ public class Section extends DefaultWeightedEdge {
         return this.downStation == station;
     }
 
-    public boolean hasDuplicateSection(Station upStation, Station downStation) {
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
+    public boolean hasDuplicateSection(Section section) {
+        Station upStation = section.getUpStation();
+        Station downStation = section.getDownStation();
+        return (this.upStation.equals(upStation) && this.downStation.equals(downStation))
+                || (this.upStation.equals(downStation) && this.downStation.equals(upStation));
+    }
+
+    public Section reverse() {
+        return new Section(
+                this.getLine(),
+                this.getDownStation(),
+                this.getUpStation(),
+                this.getDistance(),
+                this.getDuration()
+        );
     }
 }

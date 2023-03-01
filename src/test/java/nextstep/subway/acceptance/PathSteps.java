@@ -38,7 +38,8 @@ public class PathSteps {
                                         fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 id"),
                                         fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
                                         fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리"),
-                                        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간")
+                                        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
+                                        fieldWithPath("fare").type(JsonFieldType.NUMBER).description("총 요금")
                                 )
                         )
                 )
