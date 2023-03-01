@@ -31,16 +31,29 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(List.of(
             new StationResponse(1L, "교대역"),
             new StationResponse(2L, "남부터미널역")
-        ), 10);
+        ), 10, 5);
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
     }
 
     @Test
-    void path() {
-        spec.filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
-        ExtractableResponse<Response> response = PathSteps.지하철_경로_조회(spec, 1L, 2L);
+    void 최단_거리_경로_탐색() {
+        setSpecParameters("DISTANCE");
+        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(spec, 1L, 2L);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    void 최단_시간_경로_탐색() {
+        setSpecParameters("DURATION");
+        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(spec, 1L, 2L);
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    private void setSpecParameters(String type) {
+        spec.queryParam("type", type)
+            .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
     }
 }

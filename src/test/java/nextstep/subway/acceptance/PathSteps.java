@@ -8,13 +8,12 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public class PathSteps {
-    public static ExtractableResponse<Response> 지하철_경로_조회(RequestSpecification spec, Long source, Long target) {
+    public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(RequestSpecification spec, Long source, Long target) {
         return RestAssured
             .given(spec).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", source)
             .queryParam("target", target)
-            .queryParam("type", "DISTANCE")
             .when().get("/paths")
             .then().log().all().extract();
     }
