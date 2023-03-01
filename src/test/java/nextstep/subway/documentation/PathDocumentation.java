@@ -12,9 +12,10 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -40,6 +41,7 @@ public class PathDocumentation extends Documentation {
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("인증 토큰 (optional)").optional()),
                         requestParameters(
                                 parameterWithName("source").description("출발역 ID"),
                                 parameterWithName("target").description("도착역 ID"),
@@ -58,6 +60,7 @@ public class PathDocumentation extends Documentation {
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
                 .queryParam("type", "DISTANCE")
+                .header("Authorization", "accessToken")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
