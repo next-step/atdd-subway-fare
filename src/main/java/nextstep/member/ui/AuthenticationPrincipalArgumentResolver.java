@@ -10,6 +10,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Component
@@ -27,6 +28,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
+
+        if ("/paths".startsWith(httpServletRequest.getServletPath())) {
+            return null;
+        }
+
         String authorization = webRequest.getHeader("Authorization");
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();

@@ -54,6 +54,6 @@ class FareTest {
     @Test
     void overfarePlusOverFareLint(){
         Fare fare = new Fare(51, maxOverFareLine);
-        assertThat(fare.getFare()).isEqualTo(new BigDecimal(2650));
+        assertThat(fare.getFare()).isEqualTo(new BigDecimal(1850+maxOverFareLine));
     }
 }
