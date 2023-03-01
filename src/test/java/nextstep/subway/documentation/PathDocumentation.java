@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
 
 import java.util.List;
@@ -54,6 +55,14 @@ public class PathDocumentation extends Documentation {
 
     private void setSpecParameters(String type) {
         spec.queryParam("type", type)
-            .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+            .filter(document("path",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestParameters(
+                    parameterWithName("source").description("경로 시작점의 역 id"),
+                    parameterWithName("target").description("경로 도착점의 역 id"),
+                    parameterWithName("type").description("최단 경로 구하는 기준 타입")
+                )
+            ));
     }
 }
