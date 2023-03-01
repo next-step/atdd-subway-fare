@@ -10,10 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.노선에_추가_요금_추가_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
+import static nextstep.subway.utils.PathAssertionUtils.최적경로의_거리는_다음과_같다;
+import static nextstep.subway.utils.PathAssertionUtils.최적경로의_소요시간은_다음과_같다;
+import static nextstep.subway.utils.PathAssertionUtils.최적경로의_역_아이디_목록의_순서는_다음과_같다;
+import static nextstep.subway.utils.PathAssertionUtils.최적경로의_요금은_다음과_같다;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -62,10 +66,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(200);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        최적경로의_역_아이디_목록의_순서는_다음과_같다(response, 교대역, 남부터미널역, 양재역);
+        최적경로의_거리는_다음과_같다(response, 5);
+        최적경로의_소요시간은_다음과_같다(response, 200);
+        최적경로의_요금은_다음과_같다(response, 1250);
     }
 
     /**
@@ -81,12 +85,31 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(15);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        최적경로의_역_아이디_목록의_순서는_다음과_같다(response, 교대역, 강남역, 양재역);
+        최적경로의_거리는_다음과_같다(response, 20);
+        최적경로의_소요시간은_다음과_같다(response, 15);
+        최적경로의_요금은_다음과_같다(response, 1250);
     }
 
+    /**
+     * given: 노선에 추가 요금 정책을 추가하고
+     * when : 최적 경로 요청을 하면
+     * then : 거리 비례 요금과 노선별 추가 요금이 합산되어 요금이 책정된다.
+     */
+    @DisplayName("노선에 추가 요금이 있는 경우 거리 비례 요금과 노선별 추가 요금이 합산되어 요금이 책정된다")
+    @Test
+    void findPathWhenHasExtraFareLine() {
+        // given
+        int extraFare = 900;
+        노선에_추가_요금_추가_요청(이호선, extraFare);
+
+        // when
+        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 강남역);
+
+        // then
+        최적경로의_거리는_다음과_같다(response, 10);
+        최적경로의_요금은_다음과_같다(response, 1250 + extraFare);
+    }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;

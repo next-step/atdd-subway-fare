@@ -7,6 +7,9 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class PathSteps {
@@ -30,6 +33,22 @@ public class PathSteps {
                     .queryParam("type", pathType)
                 .when()
                     .get("/paths")
+                .then()
+                    .log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 노선에_추가_요금_추가_요청(final Long lineId, final int extraFare) {
+        Map<String, String> param = new HashMap<>();
+        param.put("lineId", lineId + "");
+        param.put("extraFare", extraFare + "");
+
+        return RestAssured
+                .given()
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .body(param)
+                .when()
+                    .post("/paths")
                 .then()
                     .log().all()
                 .extract();
