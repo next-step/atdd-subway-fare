@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class PathController {
     private PathService pathService;
@@ -19,6 +21,6 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember, @RequestParam Long source, @RequestParam Long target, @RequestParam String type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+        return ResponseEntity.ok(pathService.findPath(loginMember, source, target, type));
     }
 }
