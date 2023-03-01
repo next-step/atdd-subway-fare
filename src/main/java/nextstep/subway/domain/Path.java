@@ -30,4 +30,10 @@ public class Path {
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    public long extractTotalFare() {
+        Fare fare = new Fare(sections.totalDistance());
+
+        return fare.getFare().longValue();
+    }
 }
