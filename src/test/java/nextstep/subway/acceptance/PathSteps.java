@@ -11,8 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 public class PathSteps {
-    private static final String DISTANCE = "DISTANCE";
-    private static final String DURATION = "DURATION";
+    public static final String DISTANCE = "DISTANCE";
+    public static final String DURATION = "DURATION";
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return 경로_찾기_문서화(RestAssured.given(), null, source, target, DISTANCE);

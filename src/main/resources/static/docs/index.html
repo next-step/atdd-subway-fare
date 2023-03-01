@@ -482,6 +482,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>target</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">종착역</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회 타입</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -489,9 +493,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_경로_조회_http_request"><a class="link" href="#_경로_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2&amp;type=DISTANCE HTTP/1.1
 Accept: application/json
-Host: localhost:50384</code></pre>
+Host: localhost:52868</code></pre>
 </div>
 </div>
 </div>
@@ -531,6 +535,11 @@ Host: localhost:50384</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경로 거리</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경로 시간</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -541,10 +550,10 @@ Host: localhost:50384</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 01 Mar 2023 03:04:05 GMT
+Date: Wed, 01 Mar 2023 04:59:19 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 132
+Content-Length: 151
 
 {
   "stations" : [ {
@@ -554,7 +563,8 @@ Content-Length: 132
     "id" : 2,
     "name" : "역삼역"
   } ],
-  "distance" : 10
+  "distance" : 10,
+  "duration" : 10
 }</code></pre>
 </div>
 </div>
