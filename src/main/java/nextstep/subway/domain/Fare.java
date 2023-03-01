@@ -17,7 +17,7 @@ public class Fare {
         int fare = DEFAULT_FARE;
 
         for (FarePolicy farePolicy : farePolicies) {
-            fare += farePolicy.calcFare(fare);
+            fare = farePolicy.calcFare(fare);
         }
 
         return fare;
