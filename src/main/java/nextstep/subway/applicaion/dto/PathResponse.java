@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PathResponse {
-    private static final String WON = "원";
     private List<StationResponse> stations;
     private int distance;
     private int duration;
@@ -42,7 +41,7 @@ public class PathResponse {
         return duration;
     }
 
-    public String getTotalFare() {
-        return String.valueOf(totalFare)+WON;
+    public long getTotalFare() {
+        return totalFare;
     }
 }
