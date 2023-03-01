@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.documentation.PathDocumentationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,7 +35,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(1L, 2L, spec);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(spec, 1L, 2L);
 
         // then
         assertAll(
