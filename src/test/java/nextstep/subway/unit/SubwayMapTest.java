@@ -44,7 +44,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(교대역, 양재역, new DistancePathType());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -57,7 +57,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION);
+        Path path = subwayMap.findPath(교대역, 양재역, new DurationPathType());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -70,7 +70,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(양재역, 교대역, new DistancePathType());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

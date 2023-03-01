@@ -7,31 +7,31 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Duration {
+public class Distance {
 
-    @Column(name = "duration")
+    @Column(name = "distance")
     private int value;
 
-    public static Duration of(int value) {
+    public static Distance of(int value) {
         if (value <= 0) {
-            throw new NotPositiveNumberException("소요시간은 0보다 커야 합니다");
+            throw new NotPositiveNumberException("거리는 0보다 커야 합니다");
         }
-        return new Duration(value);
+        return new Distance(value);
     }
 
-    public Duration() {
+    public Distance() {
     }
 
-    private Duration(int value) {
+    private Distance(int value) {
         this.value = value;
     }
 
-    public Duration minus(Duration that) {
-        return Duration.of(this.value - that.value);
+    public Distance minus(Distance that) {
+        return Distance.of(this.value - that.value);
     }
 
-    public Duration plus(Duration that) {
-        return Duration.of(this.value + that.value);
+    public Distance plus(Distance that) {
+        return Distance.of(this.value + that.value);
     }
 
     public int getValue() {
@@ -46,7 +46,7 @@ public class Duration {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Duration distance = (Duration) o;
+        Distance distance = (Distance) o;
         return value == distance.value;
     }
 

@@ -92,7 +92,13 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), it.getDuration().minus(section.getDuration())));
+                    sections.add(Section.builder()
+                            .line(section.getLine())
+                            .upStation(it.getUpStation())
+                            .downStation(section.getUpStation())
+                            .distance(it.minusDistance(section.getDistance()))
+                            .duration(it.minusDuration(section.getDuration()))
+                            .build());
                     sections.remove(it);
                 });
     }
@@ -103,7 +109,13 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), it.getDuration().minus(section.getDuration())));
+                    sections.add(Section.builder()
+                            .line(section.getLine())
+                            .upStation(section.getDownStation())
+                            .downStation(it.getDownStation())
+                            .distance(it.minusDistance(section.getDistance()))
+                            .duration(it.minusDuration(section.getDuration()))
+                            .build());
                     sections.remove(it);
                 });
     }
@@ -124,13 +136,13 @@ public class Sections {
 
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
-            Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration().plus(downSection.get().getDuration())
-            );
+            Section newSection = Section.builder()
+                    .line(upSection.get().getLine())
+                    .upStation(downSection.get().getUpStation())
+                    .downStation(upSection.get().getDownStation())
+                    .distance(upSection.get().plusDistance(downSection.get().getDistance()))
+                    .duration(upSection.get().plusDuration(downSection.get().getDuration()))
+                    .build();
 
             this.sections.add(newSection);
         }
@@ -149,7 +161,7 @@ public class Sections {
     }
 
     public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
+        return sections.stream().map(Section::getDistance).mapToInt(Distance::getValue).sum();
     }
 
     public int totalDuration() {
