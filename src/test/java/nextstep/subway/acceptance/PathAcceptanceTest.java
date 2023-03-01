@@ -37,10 +37,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      *  // @formatter:off
      *                   5분, 10km , 0원
-     *          교대역    --- *2호선* ---   강남역
-     *          |                        |
-     *       *3호선* 10분, 2km, 200      *신분당선*  3분, 10km, 1000원
-     *          |                       // @formatter:off  |
+     *          교대역    --- *2호선* ---      강남역
+     *          |                            |
+     *       *3호선* 10분, 2km, 200        *신분당선*  3분, 10km, 1000원
+     *          |                           |
      *          남부터미널역  --- *3호선* ---   양재
      *                     2분, 3km, 200
      *  // @formatter:on
@@ -83,7 +83,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(500);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(450);
         });
     }
 
@@ -99,7 +99,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 청소년_회원이_두_역의_최단_거리_경로를_조회_시_할인_정책_반영() {
         // Given
-        String accessToken = 회원_생성_요청_및_로그인("youth@naver.com", "pass", 12).jsonPath().getString("accessToken");
+        String accessToken = 회원_생성_요청_및_로그인("youth@naver.com", "pass", 13).jsonPath().getString("accessToken");
 
         // When
         ExtractableResponse<Response> response = 로그인_후_요청_기준으로_경로_조회_요청(교대역, 양재역, 거리, accessToken);
@@ -108,7 +108,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(720);
         });
     }
 
