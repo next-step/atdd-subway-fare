@@ -15,7 +15,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -45,7 +46,7 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("출발역 ID"),
                                 parameterWithName("target").description("도착역 ID"),
-                                parameterWithName("type").description("경로 조회 타입")
+                                parameterWithName("type").description("경로 조회 타입 DISTANCE(거리), DURATION(시간)")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("역 목록들"),
@@ -60,7 +61,6 @@ public class PathDocumentation extends Documentation {
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
                 .queryParam("type", "DISTANCE")
-                .header("Authorization", "accessToken")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
