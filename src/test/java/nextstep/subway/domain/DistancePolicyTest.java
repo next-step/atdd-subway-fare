@@ -23,10 +23,11 @@ class DistancePolicyTest {
     @DisplayName("거리에 따른 계산 요청")
     void 거리에_따른_계산_요청(int distance, int fare) {
         // When
-        DistancePolicy distancePolicy = new DistancePolicy(distance);
+        DistanceFarePolicy distancePolicy = new DistanceFarePolicy(distance);
 
         // Then
-        assertThat(distancePolicy.calcFare()).isEqualTo(fare);
+        int defaultFare = 1250;
+        assertThat(distancePolicy.calcFare(defaultFare)).isEqualTo(fare);
     }
 
 }

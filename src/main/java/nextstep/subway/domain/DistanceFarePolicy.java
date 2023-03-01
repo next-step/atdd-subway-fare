@@ -1,8 +1,7 @@
 package nextstep.subway.domain;
 
-public class DistancePolicy implements FarePolicy {
+public class DistanceFarePolicy implements FarePolicy {
 
-    private static final int DEFAULT_FARE = 1250;
     private static final int DEFAULT_DISTANCE = 10;
     private static final int MIDDLE_DISTANCE = 50;
     private static final int MIDDLE_PER_DISTANCE_POLICY = 5;
@@ -10,37 +9,34 @@ public class DistancePolicy implements FarePolicy {
 
     private final int distance;
 
-    public DistancePolicy(int distance) {
+    public DistanceFarePolicy(int distance) {
         this.distance = distance;
     }
 
     @Override
-    public int calcFare() {
+    public int calcFare(int currentFare) {
         if (distance <= DEFAULT_DISTANCE) {
-            return firstDistanceFarePolicy();
+            return currentFare;
         }
 
         if (distance <= MIDDLE_DISTANCE) {
-            return middleDistanceFarePolicy();
+            return currentFare + middleDistanceFarePolicy();
         }
 
-        return lastDistanceFarePolicy();
-    }
-
-    private static int firstDistanceFarePolicy() {
-        return DEFAULT_FARE;
+        return currentFare + lastDistanceFarePolicy();
     }
 
     private int middleDistanceFarePolicy() {
-        return DEFAULT_FARE + calculateOverFare((distance - DEFAULT_DISTANCE), MIDDLE_PER_DISTANCE_POLICY);
+        return calculateOverFare((distance - DEFAULT_DISTANCE), MIDDLE_PER_DISTANCE_POLICY);
     }
 
     private int lastDistanceFarePolicy() {
-        return DEFAULT_FARE + calculateOverFare((MIDDLE_DISTANCE - DEFAULT_DISTANCE), MIDDLE_PER_DISTANCE_POLICY) + calculateOverFare((distance - MIDDLE_DISTANCE), EIGHT_KM_DISTANCE_POLICY);
+        return calculateOverFare((MIDDLE_DISTANCE - DEFAULT_DISTANCE), MIDDLE_PER_DISTANCE_POLICY) + calculateOverFare((distance - MIDDLE_DISTANCE), EIGHT_KM_DISTANCE_POLICY);
 
     }
 
     private int calculateOverFare(int distance, int perDistance) {
         return (int) ((Math.ceil((distance - 1) / perDistance) + 1) * 100);
     }
+
 }

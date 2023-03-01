@@ -2,6 +2,6 @@ package nextstep.subway.domain;
 
 public interface FarePolicy {
 
-    int calcFare();
+    int calcFare(int currentFare);
 
 }
