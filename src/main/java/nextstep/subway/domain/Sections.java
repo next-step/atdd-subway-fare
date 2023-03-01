@@ -155,4 +155,8 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int overFareLine() {
+        return sections.stream().mapToInt(a -> a.getLine().getOverFare()).max().orElse(0);
+    }
 }
