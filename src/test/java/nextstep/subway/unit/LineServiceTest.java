@@ -9,10 +9,12 @@ import nextstep.subway.domain.StationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 class LineServiceTest {
@@ -40,7 +42,7 @@ class LineServiceTest {
 
     private Line createLine(Station 강남역, Station 역삼역) {
         Line line = new Line("2호선", "green");
-        line.addSection(강남역, 역삼역, 10);
+        line.addSection(강남역, 역삼역, 10, 10);
         return line;
     }
 }

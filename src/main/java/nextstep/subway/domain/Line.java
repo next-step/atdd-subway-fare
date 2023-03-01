@@ -47,8 +47,8 @@ public class Line {
         }
     }
 
-    public void addSection(Station upStation, Station downStation, int distance) {
-        sections.add(new Section(this, upStation, downStation, distance));
+    public void addSection(Station upStation, Station downStation, int distance, int duration) {
+        sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
     public List<Station> getStations() {
@@ -58,4 +58,5 @@ public class Line {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
 }
