@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.subway.applicaion.dto.LineFareRequest;
 import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
@@ -83,5 +84,11 @@ public class LineService {
         Station station = stationService.findById(stationId);
 
         line.deleteSection(station);
+    }
+
+    @Transactional
+    public void updateFare(final Long lindId, final LineFareRequest lineFareRequest) {
+        final Line line = findById(lindId);
+        line.updateFare(lineFareRequest.getFare());
     }
 }

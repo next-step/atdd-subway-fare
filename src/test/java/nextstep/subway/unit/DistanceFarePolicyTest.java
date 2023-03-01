@@ -1,7 +1,8 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.fare.FarePolicies;
+import nextstep.subway.domain.fare.DistanceFarePolicy;
 import nextstep.subway.domain.fare.InvalidDistanceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,13 +15,19 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class FarePoliciesTest {
+public class DistanceFarePolicyTest {
+    private DistanceFarePolicy distanceFarePolicy;
+
+    @BeforeEach
+    void setUp() {
+        distanceFarePolicy = new DistanceFarePolicy();
+    }
 
     @DisplayName("운행 거리가 10이하인 경우 기본 요금인 1250원이다.")
     @MethodSource("defaultDistance")
     @ParameterizedTest
     void distanceIsDefault(int distance) {
-        final int fare = FarePolicies.getFare(distance);
+        final int fare = distanceFarePolicy.getFare(distance);
 
         assertThat(fare).isEqualTo(1250);
     }
@@ -33,7 +40,7 @@ public class FarePoliciesTest {
     @MethodSource("betweenTenAndFifty")
     @ParameterizedTest(name = "거리: {0}, 요금: {1}")
     void distanceBetween10And50(int distance, int expectedFare) {
-        final int fare = FarePolicies.getFare(distance);
+        final int fare = distanceFarePolicy.getFare(distance);
 
         assertThat(fare).isEqualTo(expectedFare);
     }
@@ -63,7 +70,7 @@ public class FarePoliciesTest {
     @MethodSource("overFifty")
     @ParameterizedTest(name = "거리: {0}, 요금: {1}")
     void distanceOverFifty(int distance, int expectedFare) {
-        final int fare = FarePolicies.getFare(distance);
+        final int fare = distanceFarePolicy.getFare(distance);
 
         assertThat(fare).isEqualTo(expectedFare);
     }
@@ -84,7 +91,7 @@ public class FarePoliciesTest {
     @DisplayName("운행거리가 344km 초과인 경우 오류가 발생한다.")
     @Test
     void distanceOver344() {
-        assertThatThrownBy(() -> FarePolicies.getFare(345))
+        assertThatThrownBy(() -> distanceFarePolicy.getFare(345))
                 .isInstanceOf(InvalidDistanceException.class);
     }
 }

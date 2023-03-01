@@ -1,26 +1,29 @@
 package nextstep.subway.domain.fare;
 
-public interface FarePolicy {
-    int DEFAULT_FARE = 1250;
-    int EXTRA_FARE = 100;
-    int MAX_DISTANCE = 344;
+import lombok.RequiredArgsConstructor;
+import nextstep.member.application.MemberService;
+import nextstep.member.domain.LoginMember;
+import nextstep.subway.domain.Path;
+import org.springframework.stereotype.Component;
 
-    int getFare(int distance);
+@RequiredArgsConstructor
+@Component
+public class FarePolicy {
 
-    default int getFare(int distance, int min, int start, int rate) {
-        if (distance <= min) {
-            return 0;
+    private final DistanceFarePolicy distanceFarePolicy;
+    private final LineFarePolicy lineFarePolicy;
+    private final AgeFarePolicy ageFarePolicy;
+    private final MemberService memberService;
+
+    public int getFare(final Path path, final LoginMember loginMember) {
+        final int fare = distanceFarePolicy.getFare(path.extractDistance()) + lineFarePolicy.getFare(path);
+        if (loginMember.getId() == null) {
+            return fare;
         }
 
-        int extraDistance = distance - min;
-        if (start < distance) {
-            extraDistance = start - min;
-        }
+        int age = memberService.findMember(loginMember.getId())
+                .getAge();
 
-        return calculateFare(extraDistance, rate);
-    }
-
-    default int calculateFare(int distance, int extraFareRate) {
-        return (int) ((Math.ceil((distance - 1) / extraFareRate) + 1) * EXTRA_FARE);
+        return ageFarePolicy.discountUnderTeenager(age, fare);
     }
 }

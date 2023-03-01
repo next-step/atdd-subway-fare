@@ -22,14 +22,20 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private Integer fare;
 
     @Getter(NONE)
     @Embedded
     private Sections sections = new Sections();
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(final String name, final String color, final Integer fare) {
         this.name = name;
         this.color = color;
+        this.fare = fare;
     }
 
     public List<Section> getSections() {
@@ -55,5 +61,9 @@ public class Line {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    public void updateFare(final Integer fare) {
+        this.fare = fare;
     }
 }

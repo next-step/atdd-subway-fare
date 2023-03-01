@@ -11,6 +11,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,7 +26,13 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        final boolean required = parameter.getParameterAnnotation(AuthenticationPrincipal.class).required();
         String authorization = webRequest.getHeader("Authorization");
+
+        if (!required && authorization == null) {
+            return new LoginMember(null, Collections.emptyList());
+        }
+
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }

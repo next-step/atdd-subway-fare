@@ -11,6 +11,7 @@
 
 === 경로 조회
 operation::path[snippets='http-request']
+include::{snippets}/path/request-headers.adoc[]
 include::{snippets}/path/request-parameters.adoc[]
 
 operation::path[snippets='http-response']
