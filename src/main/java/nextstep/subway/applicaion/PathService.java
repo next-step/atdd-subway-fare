@@ -1,41 +1,44 @@
 package nextstep.subway.applicaion;
 
-import nextstep.member.application.MemberService;
-import nextstep.member.domain.LoginMember;
-import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.policy.CalculateConditions;
+import nextstep.subway.domain.policy.FarePolicies;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final MemberService memberService;
+    private final FarePolicies farePolicies = new FarePolicies();
 
-    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
+    public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.memberService = memberService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathRequestType type, Optional<LoginMember> loginMember) {
+    public PathResponse findPath(Long source, Long target, PathRequestType type, int age) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
 
-        Optional<Member> member = Optional.empty();
-        if(loginMember.isPresent()){
-            member = Optional.of(memberService.findMember(loginMember.get().getId()));
-        }
-
-        Path path = subwayMap.findPath(upStation, downStation, type, member);
-        return PathResponse.of(path);
+        Path path = subwayMap.findPath(upStation, downStation, type);
+        int fare = calculateFare(path, age);
+        return PathResponse.of(path, fare);
 
     }
 
+    private int calculateFare(Path path, int age) {
+        CalculateConditions conditions = CalculateConditions.builder(path.extractDistance())
+                .age(age)
+                .lines(path.getLines())
+                .build();
+
+        return this.farePolicies.calculate(conditions);
+
+
+    }
 }

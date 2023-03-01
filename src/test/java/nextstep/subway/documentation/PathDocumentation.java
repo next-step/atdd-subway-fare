@@ -17,11 +17,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
-import java.util.Optional;
-
 import static nextstep.subway.acceptance.PathSteps.경로_조회;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -46,7 +43,7 @@ class PathDocumentation extends Documentation {
                 ), 10, 20, 1450);
 
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathRequestType.class), any(Optional.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathRequestType.class), anyInt())).thenReturn(pathResponse);
 
         this.spec.filter(document("path",
                 preprocessRequest(prettyPrint()),
