@@ -1,5 +1,6 @@
 package nextstep.member.ui;
 
+import nextstep.exception.UnAuthorizedException;
 import nextstep.member.application.AuthService;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
@@ -37,7 +38,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             return new Guest();
         }
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
-            throw new AuthenticationException();
+            throw new UnAuthorizedException();
         }
         String token = authorization.split(" ")[1];
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));

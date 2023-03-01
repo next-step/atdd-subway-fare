@@ -1,5 +1,6 @@
 package nextstep.subway.domain.fare;
 
+import nextstep.exception.NotFoundException;
 import nextstep.subway.domain.Line;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,6 @@ public class FareService {
         return fare + lines.stream()
                 .mapToInt(Line::getFare)
                 .max()
-                .orElseThrow(() -> new RuntimeException("노선이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("노선이 존재하지 않습니다."));
     }
 }

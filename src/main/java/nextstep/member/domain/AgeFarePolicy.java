@@ -1,5 +1,7 @@
 package nextstep.member.domain;
 
+import nextstep.exception.BadRequestException;
+
 import java.util.Arrays;
 import java.util.function.IntPredicate;
 
@@ -22,7 +24,7 @@ public enum AgeFarePolicy {
         return Arrays.stream(AgeFarePolicy.values())
                 .filter(ageFarePolicy -> ageFarePolicy.agePredicate.test(age))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 나이가 존재하지 않습니다."));
+                .orElseThrow(() -> new BadRequestException("해당하는 나이가 존재하지 않습니다."));
     }
 
     public int calculateFareAppliedAgePolicy(int currentFare) {

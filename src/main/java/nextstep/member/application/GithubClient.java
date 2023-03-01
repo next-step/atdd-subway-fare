@@ -1,5 +1,6 @@
 package nextstep.member.application;
 
+import nextstep.exception.InternalServerException;
 import nextstep.member.application.dto.GithubAccessTokenRequest;
 import nextstep.member.application.dto.GithubAccessTokenResponse;
 import nextstep.member.application.dto.GithubProfileResponse;
@@ -44,7 +45,7 @@ public class GithubClient {
             .getBody()
             .getAccessToken();
         if (accessToken == null) {
-            throw new RuntimeException();
+            throw new InternalServerException();
         }
         return accessToken;
     }
@@ -61,7 +62,7 @@ public class GithubClient {
                 .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
                 .getBody();
         } catch (HttpClientErrorException e) {
-            throw new RuntimeException();
+            throw new InternalServerException();
         }
     }
 }

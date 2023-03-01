@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.exception.BadRequestException;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -124,7 +125,7 @@ class LineTest {
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 10))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class);
     }
 
     @Test
@@ -178,6 +179,6 @@ class LineTest {
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class);
     }
 }

@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.exception.BadRequestException;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -45,7 +47,7 @@ public class Sections {
 
     public void delete(Station station) {
         if (this.sections.size() <= 1) {
-            throw new IllegalArgumentException();
+            throw new BadRequestException();
         }
 
         Optional<Section> upSection = findSectionAsUpStation(station);
@@ -94,7 +96,7 @@ public class Sections {
                 .filter(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))
                 .findFirst()
                 .ifPresent(it -> {
-                    throw new IllegalArgumentException();
+                    throw new BadRequestException();
                 });
     }
 

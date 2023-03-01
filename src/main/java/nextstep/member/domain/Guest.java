@@ -1,24 +1,26 @@
 package nextstep.member.domain;
 
+import nextstep.exception.UnAuthorizedException;
+
 public class Guest implements User {
     @Override
     public Long getId() {
-        throw new IllegalStateException("로그인 후 시도하세요.");
+        throw new UnAuthorizedException("로그인 후 시도하세요.");
     }
 
     @Override
     public String getEmail() {
-        throw new IllegalStateException("로그인 후 시도하세요.");
+        throw new UnAuthorizedException("로그인 후 시도하세요.");
     }
 
     @Override
     public String getPassword() {
-        throw new IllegalStateException("로그인 후 시도하세요.");
+        throw new UnAuthorizedException("로그인 후 시도하세요.");
     }
 
     @Override
     public int getAge() {
-        throw new IllegalStateException("로그인 후 시도하세요.");
+        throw new UnAuthorizedException("로그인 후 시도하세요.");
     }
 
     @Override

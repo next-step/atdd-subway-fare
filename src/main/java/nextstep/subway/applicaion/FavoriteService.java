@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import nextstep.exception.BadRequestException;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
@@ -19,9 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
-    private FavoriteRepository favoriteRepository;
-    private MemberService memberService;
-    private StationService stationService;
+    private final FavoriteRepository favoriteRepository;
+    private final MemberService memberService;
+    private final StationService stationService;
 
     public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService) {
         this.favoriteRepository = favoriteRepository;
@@ -52,7 +53,7 @@ public class FavoriteService {
         MemberResponse member = memberService.findMember(memberId);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
         if (!favorite.isCreatedBy(member.getId())) {
-            throw new RuntimeException();
+            throw new BadRequestException();
         }
         favoriteRepository.deleteById(id);
     }

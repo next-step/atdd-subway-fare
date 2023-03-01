@@ -1,5 +1,6 @@
 package nextstep.member.application;
 
+import nextstep.exception.NotFoundException;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,6 @@ public class AuthService {
     }
 
     public Member findMemberById(Long id) {
-        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        return memberRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 }
