@@ -6,6 +6,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
+import org.springframework.http.HttpHeaders;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +47,21 @@ public class PathSteps {
                     .queryParam("source", source)
                     .queryParam("target", target)
                     .queryParam("type", PathType.DISTANCE)
+                .when()
+                    .get("/paths")
+                .then()
+                    .log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청_문서화(final RequestSpecification spec, final String accessToken, final Long source, final Long target, PathType pathType) {
+        return RestAssured
+                .given(spec)
+                    .header(HttpHeaders.AUTHORIZATION, accessToken)
+                    .accept(APPLICATION_JSON_VALUE)
+                    .queryParam("source", source)
+                    .queryParam("target", target)
+                    .queryParam("type", pathType)
                 .when()
                     .get("/paths")
                 .then()
