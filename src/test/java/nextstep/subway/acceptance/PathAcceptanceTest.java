@@ -70,14 +70,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(Long source, Long target, String type) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
-                .then().log().all().extract();
-    }
-
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
