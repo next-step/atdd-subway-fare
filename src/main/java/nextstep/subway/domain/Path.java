@@ -5,10 +5,12 @@ import java.util.List;
 public class Path {
     private Sections sections;
     private final FareChain fareChain;
+    private int extraFare;
 
-    public Path(Sections sections, FareChain fareChain) {
+    public Path(Sections sections, FareChain fareChain, int extraFare) {
         this.sections = sections;
-        this.fareChain =fareChain;
+        this.fareChain = fareChain;
+        this.extraFare = extraFare;
     }
 
     public int extractDistance() {
@@ -20,7 +22,7 @@ public class Path {
     }
 
     public int calculateFare() {
-        return fareChain.calculateFare(sections.totalDistance());
+        return fareChain.calculateFare(sections.totalDistance()) + extraFare;
     }
 
     public Sections getSections() {
