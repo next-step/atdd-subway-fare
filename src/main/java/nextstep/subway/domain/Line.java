@@ -27,7 +27,10 @@ public class Line {
     public Line(String name, String color, int overFare) {
         this.name = name;
         this.color = color;
-        this.overFare = overFare;
+
+        if (overFare > 0) {
+            this.overFare = overFare;
+        }
     }
 
     public Long getId() {

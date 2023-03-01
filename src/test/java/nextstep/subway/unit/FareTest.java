@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 class FareTest {
     int defaultOverFareLine = 0;
-    int maxOverFareLine = 800;
+    int maxOverFareLine = 900;
 
     @DisplayName("10km이내로 기본요금")
     @Test
