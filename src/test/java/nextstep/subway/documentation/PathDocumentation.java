@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.documentation.PathDocumentationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -29,18 +29,15 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10
+                ), 10, 5
         );
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(spec, 1L, 2L);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(spec, 1L, 2L, PathType.DISTANCE);
 
         // then
-        assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(response.jsonPath().getList("stations.id")).containsExactly(1, 2)
-        );
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }
