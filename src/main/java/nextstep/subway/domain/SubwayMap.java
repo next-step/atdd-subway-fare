@@ -23,19 +23,15 @@ public class SubwayMap {
         this.condition = Objects.requireNonNullElse(condition, SectionCondition.DISTANCE);
     }
 
-    public Path findPath(Station source, Station target) {
-        return new Path(findPathSections(source, target));
+    public Path findPath(StationPair stationPair) {
+        return new Path(findPathSections(stationPair));
     }
 
-    public Path findPath(Station source, Station target, Member member) {
-        return new Path(findPathSections(source, target), DiscountPolicy.of(member));
+    public Path findPathWithMember(StationPair stationPair, Member member) {
+        return new Path(findPathSections(stationPair), DiscountPolicy.of(member));
     }
 
-    private Sections findPathSections(Station source, Station target) {
-        if (source == target) {
-            throw new IllegalArgumentException("출발역과 도착역이 같을 수 없습니다.");
-        }
-
+    private Sections findPathSections(StationPair stationPair) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -66,7 +62,7 @@ public class SubwayMap {
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(stationPair.getSource(), stationPair.getTarget());
 
         List<Section> sections = result.getEdgeList().stream()
                 .map(SectionEdge::getSection)

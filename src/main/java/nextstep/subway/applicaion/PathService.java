@@ -1,12 +1,13 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.application.MemberService;
 import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
-import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.PathSearchRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.StationPair;
 import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,12 @@ import java.util.List;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    public PathService(LineService lineService, StationService stationService, MemberRepository memberRepository) {
+    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.memberRepository = memberRepository;
+        this.memberService = memberService;
     }
 
     public PathResponse findPath(PathSearchRequest request, LoginMember loginMember) {
@@ -30,11 +31,12 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines, request.getType());
 
+        StationPair stationPair = new StationPair(upStation, downStation);
         if (loginMember != null) {
-            Member member = memberRepository.findById(loginMember.getId()).orElseThrow(RuntimeException::new);
-            return PathResponse.of(subwayMap.findPath(upStation, downStation, member));
+            Member member = memberService.findById(loginMember.getId());
+            return PathResponse.of(subwayMap.findPathWithMember(stationPair, member));
         }
 
-        return PathResponse.of(subwayMap.findPath(upStation, downStation));
+        return PathResponse.of(subwayMap.findPath(stationPair));
     }
 }
