@@ -16,7 +16,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
-    public static ExtractableResponse<Response> searchPath(RequestSpecification spec, long source, long target, String type) {
+    public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(RequestSpecification spec, long source, long target, String type) {
         Map<String, Object> params = new HashMap<>();
         params.put("source", source);
         params.put("target", target);

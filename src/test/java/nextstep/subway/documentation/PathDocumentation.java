@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-import java.math.BigDecimal;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -32,7 +30,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong(), eq(PathType.시간.getType()))).thenReturn(pathResponse);
 
         // when
-        ExtractableResponse<Response> searchResponse = PathSteps.searchPath(spec, 1L, 2L, PathType.시간.getType());
+        ExtractableResponse<Response> searchResponse = PathSteps.두_역의_최단_경로_조회를_요청(spec, 1L, 2L, PathType.시간.getType());
         assertThat(searchResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }
