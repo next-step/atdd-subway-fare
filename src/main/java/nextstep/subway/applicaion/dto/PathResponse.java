@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion.dto;
 
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
