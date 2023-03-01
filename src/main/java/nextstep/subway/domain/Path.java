@@ -2,15 +2,12 @@ package nextstep.subway.domain;
 
 import java.util.List;
 
-public class Path {
+import static nextstep.subway.domain.Fare.BASIC_FARE;
+import static nextstep.subway.domain.Fare.OVER_FARE;
+import static nextstep.subway.domain.OverFareLevel.LEVEL1;
+import static nextstep.subway.domain.OverFareLevel.LEVEL2;
 
-    private static final int BASIC_FARE = 1250;
-    private static final int OVER_FARE = 100;
-    
-    private static final int LEVEL1_OVER_FARE_INTERVAL = 5;
-    private static final int LEVEL2_OVER_FARE_INTERVAL = 8;
-    private static final int LEVEL1_OVER_FARE_POINT = 10;
-    private static final int LEVEL2_OVER_FARE_POINT = 50;
+public class Path {
 
     private Sections sections;
 
@@ -36,19 +33,19 @@ public class Path {
 
     public int getFare() {
         int distance = extractDistance();
-        if (distance <= LEVEL1_OVER_FARE_POINT) {
-            return BASIC_FARE;
+        if (distance <= LEVEL1.getLimit()) {
+            return BASIC_FARE.getAmount();
         }
-        if (distance <= LEVEL2_OVER_FARE_POINT) {
-            return BASIC_FARE
-                + calculateOverFare(distance - LEVEL1_OVER_FARE_POINT, LEVEL1_OVER_FARE_INTERVAL);
+        if (distance <= LEVEL2.getLimit()) {
+            return BASIC_FARE.getAmount()
+                + calculateOverFare(distance - LEVEL1.getLimit(), LEVEL1.getInterval());
         }
-        return BASIC_FARE
-            + calculateOverFare(LEVEL2_OVER_FARE_POINT - LEVEL1_OVER_FARE_POINT, LEVEL1_OVER_FARE_INTERVAL)
-            + calculateOverFare(distance - LEVEL2_OVER_FARE_POINT , LEVEL2_OVER_FARE_INTERVAL);
+        return BASIC_FARE.getAmount()
+            + calculateOverFare(LEVEL2.getLimit() - LEVEL1.getLimit(), LEVEL1.getInterval())
+            + calculateOverFare(distance - LEVEL2.getLimit(), LEVEL2.getInterval());
     }
 
     private int calculateOverFare(int distance, int interval) {
-        return (int) ((Math.ceil((distance - 1) / interval) + 1) * OVER_FARE);
+        return (int) ((Math.ceil((distance - 1) / interval) + 1) * OVER_FARE.getAmount());
     }
 }
