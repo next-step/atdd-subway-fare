@@ -25,7 +25,7 @@ public class SectionsTest {
     void setUp() {
         Line 이호선 = new Line("이호선", "green");
         Line 사호선 = new Line("사호선", "yellow", 500);
-        Line 신분당선 = new Line("신분당선", "red", 800);
+        Line 신분당선 = new Line("신분당선", "red", 900);
 
         이호선_사당역_교대역_구간 = new Section(이호선, new Station("사당역"), new Station("교대역"), 10, 5);
         이호선_교대역_강남역_구간 = new Section(이호선, new Station("교대역"), new Station("강남역"), 10, 5);
@@ -65,6 +65,6 @@ public class SectionsTest {
 
         Sections sections = new Sections(sectionList);
 
-        assertThat(sections.overFareLine()).isEqualTo(800);
+        assertThat(sections.overFareLine()).isEqualTo(900);
     }
 }
