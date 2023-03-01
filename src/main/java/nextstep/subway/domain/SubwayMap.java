@@ -58,6 +58,15 @@ public class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        return new Path(
+            new Sections(sections),
+            new FareChain(
+                List.of(
+                    new DefaultFare(),
+                    new OverTenFare(),
+                    new OverFiftyFare()
+                )
+            )
+        );
     }
 }
