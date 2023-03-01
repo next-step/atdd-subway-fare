@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.searchPath;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,7 +54,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_경로_조회를_요청(교대역, 양재역, PathType.거리.getType());
+        ExtractableResponse<Response> response = searchPath(spec, 교대역, 양재역, PathType.거리.getType());
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
@@ -63,7 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_경로_조회를_요청(교대역, 양재역, PathType.시간.getType());
+        ExtractableResponse<Response> response = searchPath(spec, 교대역, 양재역, PathType.시간.getType());
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
