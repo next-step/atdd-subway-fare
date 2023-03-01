@@ -14,9 +14,16 @@ public class Fare {
     private BigDecimal fare;
 
     public Fare(int distance) {
+        validation(distance);
         this.distance = distance;
 
         calTotalFare();
+    }
+
+    private void validation(int distance) {
+        if (distance <= 0) {
+            throw new IllegalArgumentException("거리가 0이하일 수 없음");
+        }
     }
 
     public BigDecimal getFare() {
@@ -26,6 +33,7 @@ public class Fare {
     private void calTotalFare() {
         if (isWithInMinDistance()) {
             fare = new BigDecimal(MIN_TOTAL_FARE);
+            return;
         }
 
         BigDecimal overFare = calculateOverFare(distance - MIN_DISTANCE);
