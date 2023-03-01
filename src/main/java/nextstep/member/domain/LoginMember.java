@@ -1,5 +1,6 @@
 package nextstep.member.domain;
 
+import java.util.Collections;
 import java.util.List;
 
 public class LoginMember {
@@ -9,6 +10,14 @@ public class LoginMember {
     public LoginMember(Long id, List<String> roles) {
         this.id = id;
         this.roles = roles;
+    }
+
+    public static LoginMember empty() {
+        return new LoginMember(null, Collections.emptyList());
+    }
+
+    public boolean isEmpty(){
+        return id == null;
     }
 
     public Long getId() {

@@ -3,7 +3,6 @@ package nextstep.member.ui;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -12,7 +11,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
@@ -29,9 +27,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        boolean required = parameter.getParameterAnnotation(AuthenticationPrincipal.class).required();
+
         String authorization = webRequest.getHeader("Authorization");
-        if (Strings.isBlank(authorization)) {
-            return Optional.empty();
+        if (!required && authorization == null) {
+            return LoginMember.empty();
         }
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
@@ -41,6 +41,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
         List<String> roles = jwtTokenProvider.getRoles(token);
 
-        return Optional.of(new LoginMember(id, roles));
+        return new LoginMember(id, roles);
     }
 }
