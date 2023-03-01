@@ -1,11 +1,13 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.exception.MinimumDurationException;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
+    public static final int MINIMUM_DURATION = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +31,9 @@ public class Section extends DefaultWeightedEdge {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance, Integer duration) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        validateDuration(duration);
+
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -72,6 +76,12 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    private void validateDuration(int duration) {
+        if(duration < MINIMUM_DURATION) {
+            throw new MinimumDurationException();
+        }
     }
 
 }
