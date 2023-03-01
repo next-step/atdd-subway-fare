@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Path {
 
-    private Sections sections;
-    private Fare fare;
+    private final Sections sections;
+    private final Fare fare;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -35,4 +35,5 @@ public class Path {
     public void addPolicy(FarePolicy farePolicy) {
         fare.addPolicy(farePolicy);
     }
+
 }

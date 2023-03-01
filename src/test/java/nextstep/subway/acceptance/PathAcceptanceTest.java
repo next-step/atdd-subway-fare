@@ -1,13 +1,11 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.utils.GithubResponses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +13,8 @@ import java.util.Map;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.깃허브_인증_로그인_요청;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청_및_로그인;
+import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
+import static nextstep.subway.acceptance.PathSteps.로그인_후_요청_기준으로_경로_조회_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -33,10 +33,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
 
-
     /**
      *  // @formatter:off
-     *                   5분, 10km , 0원
+     *                   5분, 10km, 100원
      *          교대역    --- *2호선* ---      강남역
      *          |                            |
      *       *3호선* 10분, 2km, 200        *신분당선*  3분, 10km, 1000원
@@ -56,9 +55,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5, 100);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3, 1000);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10, 200);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 2));
     }
@@ -68,7 +67,8 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청 시
      * Then 최단 거리 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
-     * And 운임에서 350원을 공제한 금액의 50%할인
+     * AND 추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가
+     * And 운임에서 350원을 공제한 금액의 50% 할인
      */
     @DisplayName("어린이 회원이 두 역의 최단 거리 경로를 조회 시 할인 정책 반영")
     @Test
@@ -83,17 +83,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(450);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(550);
+            // 추가 운임 + 어린이 할인
         });
     }
-
 
     /**
      * Given 13세 이상~19세 미만의 나이로 로그인을 하고
      * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청 시
      * Then 최단 거리 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
-     * And 운임에서 350원을 공제한 금액의 20%할인
+     * And 추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가
+     * And 운임에서 350원을 공제한 금액의 20% 할인
      */
     @DisplayName("청소년 회원이 두 역의 최단 거리 경로를 조회 시 할인 정책 반영")
     @Test
@@ -108,7 +109,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(720);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(880);
+            // (1250 + 200 - 350) * 0.8
+            // 추가 운임 + 청소년 할인
         });
     }
 
@@ -128,7 +131,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+            // (1250 + 200)
+            // 추가 운임
         });
     }
 
@@ -148,28 +153,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(양재역, 강남역, 교대역);
             총_거리와_소요_시간을_함께_응답한다(response, 20, 8);
-            assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+            assertThat(response.jsonPath().getInt("fare")).isEqualTo(2450);
+            // 1250 + 1000 + 200
         });
     }
 
-    private ExtractableResponse<Response> 로그인_후_요청_기준으로_경로_조회_요청(Long sourceId, Long targetId, String shortType, String accessToken) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .auth().oauth2(accessToken)
-                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", sourceId, targetId, shortType)
-                .then().log().all().extract();
-    }
-
-    private ExtractableResponse<Response> 경로_조회_요청(Long sourceId, Long targetId, String shortType) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", sourceId, targetId, shortType)
-                .then().log().all().extract();
-    }
-
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFee) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -178,6 +167,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("extraFee", extraFee + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
