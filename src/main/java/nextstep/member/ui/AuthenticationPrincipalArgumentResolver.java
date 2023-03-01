@@ -3,6 +3,7 @@ package nextstep.member.ui;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -29,12 +30,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
+        String authorization = webRequest.getHeader("Authorization");
 
-        if ("/paths".startsWith(httpServletRequest.getServletPath())) {
+        if (isOptionalAuthPath(httpServletRequest.getServletPath(), authorization)) {
             return null;
         }
 
-        String authorization = webRequest.getHeader("Authorization");
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
@@ -44,5 +45,13 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         List<String> roles = jwtTokenProvider.getRoles(token);
 
         return new LoginMember(id, roles);
+    }
+
+    private boolean isOptionalAuthPath(String servletPath, String authorization) {
+        if (!"/paths".startsWith(servletPath)) {
+            return false;
+        }
+
+        return Strings.isEmpty(authorization);
     }
 }
