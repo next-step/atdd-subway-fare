@@ -71,7 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(18);
-        assertThat(response.jsonPath().getString("totalFare")).isEqualTo("1250원");
+        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(1250);
     }
 
     /**
@@ -90,7 +90,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(14);
-        assertThat(response.jsonPath().getString("totalFare")).isEqualTo("1450원");
+        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(1450);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.domain.PathType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.HashMap;
@@ -27,14 +28,14 @@ public class PathSteps {
                 .filter(document("path", requestParameters(
                                 parameterWithName("source").description("시작 지하철역 id"),
                                 parameterWithName("target").description("종료 지하철역 id"),
-                                parameterWithName("type").description("최단경로 검색 기준 타입")),
+                                parameterWithName("type").description("최단경로 검색 기준 타입 ("+ PathType.시간.getType() +", "+ PathType.거리.getType() +")")),
                         responseFields(
                                 fieldWithPath("stations[]").type(JsonFieldType.ARRAY).description("결과코드"),
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("id"),
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("이름"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총거리"),
-                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간"),
-                                fieldWithPath("totalFare").type(JsonFieldType.STRING).description("이용요금")
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총거리 (km)"),
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간 (분)"),
+                                fieldWithPath("totalFare").type(JsonFieldType.NUMBER).description("이용요금 (원)")
                         )))
                 .params(params)
                 .when().get("/paths")
