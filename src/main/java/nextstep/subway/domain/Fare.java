@@ -10,7 +10,7 @@ public class Fare {
     private static final int MIN_TOTAL_FARE = 1250;
     private static final int OVER_FARE = 100;
 
-    private int distance;
+    private final int distance;
     private BigDecimal fare;
 
     public Fare(int distance) {

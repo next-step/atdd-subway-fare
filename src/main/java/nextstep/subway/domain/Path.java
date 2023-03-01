@@ -3,7 +3,6 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
-    private static final String WON = "원";
     private PathType pathType;
     private Sections sections;
 
@@ -32,9 +31,9 @@ public class Path {
         return sections.getStations();
     }
 
-    public String extractTotalFare() {
+    public long extractTotalFare() {
         Fare fare = new Fare(sections.totalDistance());
 
-        return fare.getFare().toString()+WON;
+        return fare.getFare().longValue();
     }
 }
