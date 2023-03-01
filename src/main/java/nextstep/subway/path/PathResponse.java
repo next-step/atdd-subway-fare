@@ -1,8 +1,8 @@
-package nextstep.subway.applicaion.dto;
+package nextstep.subway.path;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import nextstep.subway.domain.Path;
+import nextstep.subway.applicaion.dto.StationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

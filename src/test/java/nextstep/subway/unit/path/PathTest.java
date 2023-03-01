@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
+import nextstep.subway.path.Path;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 

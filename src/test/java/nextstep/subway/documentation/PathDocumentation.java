@@ -7,8 +7,8 @@ import static org.mockito.Mockito.*;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.path.PathService;
+import nextstep.subway.path.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 
 import org.assertj.core.util.Lists;
@@ -30,7 +30,7 @@ public class PathDocumentation extends Documentation {
 				new StationResponse(2L, "역삼역")
 			), 10, 5, 1250
 		);
-		when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+		when(pathService.findPathGuest(any())).thenReturn(pathResponse);
 
 		// when
 		ExtractableResponse<Response> searchResponse = searchPathDistance(spec, 1L, 2L, DISTANCE);

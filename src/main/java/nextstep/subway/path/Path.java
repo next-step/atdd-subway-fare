@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.path;
 
 import static nextstep.subway.domain.FareCalculation.*;
 
@@ -6,6 +6,8 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import nextstep.subway.domain.Sections;
+import nextstep.subway.domain.Station;
 
 @Getter
 @AllArgsConstructor
