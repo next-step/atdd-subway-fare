@@ -3,7 +3,9 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +57,15 @@ public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(Map<String, String> params) {
         return RestAssured
                 .given().log().all()
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/lines")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(Map<String, String> params, RequestSpecification spec, RestDocumentationFilter filter) {
+        return RestAssured
+                .given(spec).log().all().filter(filter)
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
