@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
 
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -62,6 +64,14 @@ public class PathDocumentation extends Documentation {
                     parameterWithName("source").description("경로 시작점의 역 id"),
                     parameterWithName("target").description("경로 도착점의 역 id"),
                     parameterWithName("type").description("최단 경로 구하는 기준 타입")
+                ),
+                responseFields(
+                    fieldWithPath("stations").type(JsonFieldType.ARRAY).description("지하철역"),
+                    fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역의 id"),
+                    fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역의 이름"),
+                    fieldWithPath("distance").type(JsonFieldType.NUMBER).description("역 사이의 거리"),
+                    fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
+                    fieldWithPath("fare").type(JsonFieldType.NUMBER).description("운임요금")
                 )
             ));
     }
