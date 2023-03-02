@@ -1,14 +1,15 @@
 package nextstep.subway.utils;
 
+import java.util.Arrays;
+
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
+
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.domain.RoleType;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
-@Profile("test")
+@ActiveProfiles("test")
 @Component
 public class DataLoader {
     private MemberRepository memberRepository;
