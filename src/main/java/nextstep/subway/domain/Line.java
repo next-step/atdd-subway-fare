@@ -18,11 +18,6 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color) {
-        this.name = name;
-        this.color = color;
-    }
-
     public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
