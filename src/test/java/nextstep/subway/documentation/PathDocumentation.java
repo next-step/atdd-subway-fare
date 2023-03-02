@@ -32,7 +32,7 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = new PathResponse(List.of(
             new StationResponse(1L, "교대역"),
             new StationResponse(2L, "남부터미널역")
-        ), 10, 5);
+        ), 10, 5, 10);
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
     }
