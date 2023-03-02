@@ -130,7 +130,8 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                    upSection.get().sumDistance(downSection.get().getDistance()),
+                    upSection.get().sumDuration(downSection.get().getDuration())
             );
 
             this.sections.add(newSection);

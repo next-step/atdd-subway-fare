@@ -30,13 +30,6 @@ public class Section extends DefaultWeightedEdge {
     public Section() {
 
     }
-    
-    public Section(Line line, Station upStation, Station downStation, int distance) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-    }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
@@ -65,5 +58,13 @@ public class Section extends DefaultWeightedEdge {
 
     public int minusDistance(int distance) {
         return this.distance - distance;
+    }
+
+    public int sumDistance(int distance) {
+        return this.distance + distance;
+    }
+
+    public int sumDuration(int duration) {
+        return this.duration + duration;
     }
 }
