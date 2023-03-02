@@ -48,10 +48,6 @@ public class Line {
         return additionalFare;
     }
 
-    public boolean hasAdditionalFare() {
-        return additionalFare > 0;
-    }
-
     public void update(String name, String color) {
         if (name != null) {
             this.name = name;
