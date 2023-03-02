@@ -53,4 +53,9 @@ public class MemberService {
 
         return member.get();
     }
+
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException());
+    }
 }

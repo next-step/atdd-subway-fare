@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
             1_250
         );
 
-        when(pathService.findPath(any())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), any())).thenReturn(pathResponse);
 
         RestAssured
             .given().log().all()
