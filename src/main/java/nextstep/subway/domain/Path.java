@@ -5,10 +5,17 @@ import java.util.List;
 public class Path {
     private PathType pathType;
     private Sections sections;
+    private boolean loginStaus = false;
+    private int userAge = 0;
 
     public Path(PathType pathType, Sections sections) {
         this.pathType = pathType;
         this.sections = sections;
+    }
+
+    public void isLogin(int age) {
+        this.loginStaus = true;
+        this.userAge = age;
     }
 
     public Sections getSections() {
@@ -32,7 +39,12 @@ public class Path {
     }
 
     public long extractTotalFare() {
-        Fare fare = new Fare(sections.totalDistance());
+        Fare fare = Fare.builder()
+                .loginStatus(loginStaus)
+                .age(userAge)
+                .distance(sections.totalDistance())
+                .overFareLine(sections.overFareLine())
+                .build();
 
         return fare.getFare().longValue();
     }

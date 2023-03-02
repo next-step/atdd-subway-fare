@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int overFare = 0;
 
     @Embedded
     private Sections sections = new Sections();
@@ -20,6 +22,23 @@ public class Line {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public Line(String name, String color, int overFare) {
+        this.name = name;
+        this.color = color;
+
+        if (this.overFare != overFare) {
+            validationOverFare(overFare);
+
+            this.overFare = overFare;
+        }
+    }
+
+    private void validationOverFare(int overFare) {
+        if (1 > overFare) {
+            throw new IllegalArgumentException("노선의 초과운임은 1보다 작을 수 없음");
+        }
     }
 
     public Long getId() {
@@ -36,6 +55,10 @@ public class Line {
 
     public List<Section> getSections() {
         return sections.getSections();
+    }
+
+    public int getOverFare() {
+        return overFare;
     }
 
     public void update(String name, String color) {

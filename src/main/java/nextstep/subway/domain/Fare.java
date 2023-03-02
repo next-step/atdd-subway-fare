@@ -1,6 +1,9 @@
 package nextstep.subway.domain;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Fare {
     private static final int MIN_DISTANCE = 10;
@@ -11,33 +14,47 @@ public class Fare {
     private static final int OVER_FARE = 100;
 
     private final int distance;
+    private final int overFareLine;
     private BigDecimal fare;
 
-    public Fare(int distance) {
-        validation(distance);
+    @Builder
+    public Fare(boolean loginStatus, int distance, int overFareLine, int age) {
+        validation(distance, overFareLine);
         this.distance = distance;
+        this.overFareLine = overFareLine;
 
         calTotalFare();
+
+        if (loginStatus) {
+            Discount discount = new Discount(age);
+            this.fare = discount.discountFare(this.fare);
+        }
     }
 
-    private void validation(int distance) {
+    private void validation(int distance, int overFareLine) {
         if (distance <= 0) {
             throw new IllegalArgumentException("거리가 0이하일 수 없음");
+        }
+
+        if (overFareLine < 0) {
+            throw new IllegalArgumentException("노선 초과운임이 0이하일 수 없음");
         }
     }
 
     public BigDecimal getFare() {
-        return fare;
+        return fare.setScale(0, RoundingMode.FLOOR);
     }
 
     private void calTotalFare() {
         if (isWithInMinDistance()) {
             fare = new BigDecimal(MIN_TOTAL_FARE);
+            fare = fare.add(new BigDecimal(overFareLine));
+
             return;
         }
 
         BigDecimal overFare = calculateOverFare(distance - MIN_DISTANCE);
-        fare = new BigDecimal(MIN_TOTAL_FARE).add(overFare);
+        fare = new BigDecimal(MIN_TOTAL_FARE).add(overFare).add(new BigDecimal(overFareLine));
     }
 
     private boolean isWithInMinDistance() {
