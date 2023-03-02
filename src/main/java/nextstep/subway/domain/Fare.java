@@ -10,6 +10,7 @@ import java.util.Objects;
 public class Fare implements Comparable<Fare> {
     public static Fare DEFAULT_FARE = Fare.of(1_250);
     public static Fare ZERO_FARE = Fare.of(0);
+    public static Fare AGE_DISCOUNT_EXEMPTION_FARE = Fare.of(350);
 
     @Column(name = "fare")
     private int value;
