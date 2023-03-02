@@ -2,6 +2,7 @@ package nextstep.member.ui;
 
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
+import nextstep.member.domain.Guest;
 import nextstep.member.domain.LoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -30,8 +31,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String authorization = webRequest.getHeader("Authorization");
 
         AuthenticationPrincipal annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        assert annotation != null;
         if (!annotation.required() && authorization == null) {
-            return null;
+            return new Guest();
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {

@@ -3,7 +3,7 @@ package nextstep.subway.domain.fare;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 
-public enum FarePolicy {
+public enum DistanceFarePolicy {
     NONE(distance -> distance <= 10, distance -> 0),
     OVER_10_KM(distance -> distance > 10,
             distance -> {
@@ -19,7 +19,7 @@ public enum FarePolicy {
     private final IntPredicate predicate;
     private final IntFunction<Integer> function;
 
-    FarePolicy(IntPredicate predicate, IntFunction<Integer> function) {
+    DistanceFarePolicy(IntPredicate predicate, IntFunction<Integer> function) {
         this.predicate = predicate;
         this.function = function;
     }

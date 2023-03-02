@@ -1,7 +1,5 @@
 package nextstep.subway.domain;
 
-import nextstep.member.domain.Member;
-import nextstep.subway.domain.fare.DiscountPolicy;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -23,13 +21,11 @@ public class SubwayMap {
         this.condition = Objects.requireNonNullElse(condition, SectionCondition.DISTANCE);
     }
 
-    public Path findPath(StationPair stationPair) {
+    public Path findPath(Station upStation, Station downStation) {
+        StationPair stationPair = new StationPair(upStation, downStation);
         return new Path(findPathSections(stationPair));
     }
 
-    public Path findPathWithMember(StationPair stationPair, Member member) {
-        return new Path(findPathSections(stationPair), DiscountPolicy.of(member));
-    }
 
     private Sections findPathSections(StationPair stationPair) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);

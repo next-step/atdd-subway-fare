@@ -6,9 +6,10 @@ import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.PathSearchRequest;
 import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.StationPair;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.fare.FarePolicyManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class PathService {
     private final LineService lineService;
     private final StationService stationService;
     private final MemberService memberService;
+    private final FarePolicyManager fareManager;
 
-    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
+    public PathService(LineService lineService, StationService stationService, MemberService memberService, FarePolicyManager fareManager) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.memberService = memberService;
+        this.fareManager = fareManager;
     }
 
     public PathResponse findPath(PathSearchRequest request, LoginMember loginMember) {
@@ -31,12 +34,10 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines, request.getType());
 
-        StationPair stationPair = new StationPair(upStation, downStation);
-        if (loginMember != null) {
-            Member member = memberService.findById(loginMember.getId());
-            return PathResponse.of(subwayMap.findPathWithMember(stationPair, member));
-        }
+        Member member = memberService.findByLoginMember(loginMember);
+        Path path = subwayMap.findPath(upStation, downStation);
 
-        return PathResponse.of(subwayMap.findPath(stationPair));
+        int cost = fareManager.calculate(path, member);
+        return PathResponse.of(path, cost);
     }
 }

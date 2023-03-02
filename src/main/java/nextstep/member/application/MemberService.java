@@ -2,6 +2,7 @@ package nextstep.member.application;
 
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
+import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.ui.AuthenticationException;
@@ -30,6 +31,14 @@ public class MemberService {
     public void updateMember(Long id, MemberRequest param) {
         Member member = findById(id);
         member.update(param.toMember());
+    }
+
+    public Member findByLoginMember(LoginMember member) {
+        if (member.isGuest()) {
+            return Member.guest();
+        }
+
+        return findById(member.getId());
     }
 
     public Member findById(Long id) {
