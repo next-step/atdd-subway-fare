@@ -3,8 +3,6 @@ package nextstep.subway.domain.fare;
 import java.util.stream.Stream;
 
 public class DistanceFarePolicyHandler extends FarePolicyHandler {
-    public static final int DEFAULT_FARE = 1_250;
-
     @Override
     public Fare execute(Fare fare) {
         int distance = fare.getPath().distance();
@@ -14,6 +12,6 @@ public class DistanceFarePolicyHandler extends FarePolicyHandler {
                 .mapToInt(policy -> policy.additionalFare(distance))
                 .sum();
 
-        return fare.withModified(DEFAULT_FARE + overFare);
+        return fare.withModified(fare.getCost() + overFare);
     }
 }

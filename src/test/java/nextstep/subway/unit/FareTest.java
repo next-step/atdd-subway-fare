@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static nextstep.subway.domain.fare.DistanceFarePolicyHandler.DEFAULT_FARE;
+import static nextstep.subway.domain.fare.Fare.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 

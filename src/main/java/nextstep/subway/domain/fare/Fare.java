@@ -4,6 +4,8 @@ import nextstep.member.domain.Member;
 import nextstep.subway.domain.Path;
 
 public class Fare {
+    public static final int DEFAULT_FARE = 1_250;
+
     private final Path path;
     private final Member member;
     private final int cost;
@@ -15,7 +17,7 @@ public class Fare {
     }
 
     public static Fare of(Path path, Member member) {
-        return new Fare(path, member, 0);
+        return new Fare(path, member, DEFAULT_FARE);
     }
 
     public Fare withModified(int fare) {
