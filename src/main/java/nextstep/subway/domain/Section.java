@@ -32,11 +32,20 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        validatePositive(distance);
+        validatePositive(duration);
+
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    private void validatePositive(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("양수가만 입력가능 합니다 " + number);
+        }
     }
 
     public boolean isSameUpStation(Station station) {
