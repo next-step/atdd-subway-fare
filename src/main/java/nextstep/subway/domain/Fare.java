@@ -29,7 +29,7 @@ public class Fare implements Comparable<Fare> {
     }
 
     public Fare minus(Fare that) {
-        return null;
+        return Fare.of(this.value - that.value);
     }
 
     public Fare plus(Fare that) {
