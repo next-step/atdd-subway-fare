@@ -198,14 +198,14 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams;
+        Map<String, Object> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("upStationId", upStation);
+        lineCreateParams.put("downStationId", downStation);
+        lineCreateParams.put("distance", distance);
+        lineCreateParams.put("duration", duration);
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }

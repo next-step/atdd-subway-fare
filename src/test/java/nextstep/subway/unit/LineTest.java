@@ -31,7 +31,7 @@ class LineTest {
 
     @Test
     void addSection() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
@@ -42,7 +42,7 @@ class LineTest {
     @DisplayName("상행 기준으로 목록 중간에 추가할 경우")
     @Test
     void addSectionInMiddle() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(강남역, 삼성역, 5, 5);
@@ -58,7 +58,7 @@ class LineTest {
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")
     @Test
     void addSectionInMiddle2() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(삼성역, 역삼역, 5, 5);
@@ -74,7 +74,7 @@ class LineTest {
     @DisplayName("목록 앞에 추가할 경우")
     @Test
     void addSectionInFront() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(삼성역, 강남역, 5, 5);
@@ -90,7 +90,7 @@ class LineTest {
     @DisplayName("목록 뒤에 추가할 경우")
     @Test
     void addSectionBehind() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
@@ -105,7 +105,7 @@ class LineTest {
 
     @Test
     void getStations() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(강남역, 삼성역, 5, 5);
 
@@ -119,7 +119,7 @@ class LineTest {
     void addSectionAlreadyIncluded() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 5))
@@ -128,7 +128,7 @@ class LineTest {
 
     @Test
     void removeSection() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
 
@@ -139,7 +139,7 @@ class LineTest {
 
     @Test
     void removeSectionInFront() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
 
@@ -150,7 +150,7 @@ class LineTest {
 
     @Test
     void removeSectionInMiddle() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 5);
 
@@ -162,7 +162,7 @@ class LineTest {
     @DisplayName("구간이 하나인 노선에서 역 삭제 시 에러 발생")
     @Test
     void removeSectionNotEndOfList() {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 900);
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
