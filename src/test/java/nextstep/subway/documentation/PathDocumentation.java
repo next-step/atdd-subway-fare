@@ -12,6 +12,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -40,10 +42,11 @@ public class PathDocumentation extends Documentation {
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("인증 토큰 (optional)").optional()),
                         requestParameters(
                                 parameterWithName("source").description("출발역 ID"),
                                 parameterWithName("target").description("도착역 ID"),
-                                parameterWithName("type").description("경로 조회 타입")
+                                parameterWithName("type").description("경로 조회 타입 DISTANCE(거리), DURATION(시간)")
                         ),
                         responseFields(
                                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("역 목록들"),

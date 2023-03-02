@@ -1,15 +1,17 @@
 package nextstep.subway.domain;
 
+import nextstep.member.application.dto.MemberResponse;
+
 import java.util.List;
 
 public class Path {
 
-    private Sections sections;
-    private Fare fare;
+    private final Sections sections;
+    private final Fare fare;
 
     public Path(Sections sections) {
         this.sections = sections;
-        fare = new Fare(List.of(new DistancePolicy(sections.totalDistance())));
+        fare = new Fare();
     }
 
     public Sections getSections() {
@@ -30,6 +32,23 @@ public class Path {
 
     public int calcFare() {
         return fare.calcFare();
+    }
+
+    public void addPolicy(FarePolicy farePolicy) {
+        fare.addPolicy(farePolicy);
+    }
+
+    public void calcFareForNotMember() {
+        int maxLineExtraFare = sections.getMaxExtraFare();
+        addPolicy(new DistanceFarePolicy(extractDistance()));
+        addPolicy(new ExtraSectionFarePolicy(maxLineExtraFare));
+    }
+
+    public void calcFareForMember(MemberResponse member) {
+        int maxLineExtraFare = sections.getMaxExtraFare();
+        addPolicy(new DistanceFarePolicy(extractDistance()));
+        addPolicy(new ExtraSectionFarePolicy(maxLineExtraFare));
+        addPolicy(new AgeFarePolicy(member.getAge()));
     }
 
 }
