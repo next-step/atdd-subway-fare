@@ -27,7 +27,7 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int calculateFare() {
+    public int calculateFare(int age) {
         int totalDistance = extractDistance();
         List<Line> lines = sections.getLines();
 
@@ -35,6 +35,8 @@ public class Path {
                 .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance))
                 .plus(new AdditionalLineFarePolicy().calculateAdditionalLineFare(lines));
 
-        return fare.getValue();
+        Fare fare2 = Fare.of(fare.getValue() - AgeDiscountPolicy.calculateAgeDiscountFare(fare, age).getValue());
+        
+        return fare2.getValue();
     }
 }
