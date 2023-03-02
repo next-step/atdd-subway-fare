@@ -2,12 +2,20 @@ package nextstep.subway.domain;
 
 import nextstep.subway.domain.exceptions.NegativeNumberException;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
-public class Fare {
+@Embeddable
+public class Fare implements Comparable<Fare> {
     public static Fare DEFAULT_FARE = Fare.of(1_250);
+    public static Fare ZERO_FARE = Fare.of(0);
 
+    @Column(name = "fare")
     private int value;
+
+    public Fare() {
+    }
 
     private Fare(int value) {
         this.value = value;
@@ -43,5 +51,10 @@ public class Fare {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public int compareTo(Fare that) {
+        return Integer.valueOf(this.value).compareTo(that.value);
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static nextstep.subway.domain.Fare.ZERO_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -15,7 +16,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
 
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(역삼역, 삼성역, 5, 4);
@@ -29,7 +30,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
 
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(강남역, 삼성역, 5, 4);
@@ -49,7 +50,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
 
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(삼성역, 역삼역, 5, 4);
@@ -69,7 +70,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
 
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(삼성역, 강남역, 5, 4);
@@ -89,7 +90,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
 
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(역삼역, 삼성역, 5, 4);
@@ -108,7 +109,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(강남역, 삼성역, 5, 4);
 
@@ -122,7 +123,7 @@ class LineTest {
     void addSectionAlreadyIncluded() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
 
         assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 4))
@@ -134,7 +135,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(역삼역, 삼성역, 5, 4);
 
@@ -148,7 +149,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(역삼역, 삼성역, 5, 4);
 
@@ -162,7 +163,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
         line.addSection(역삼역, 삼성역, 5, 4);
 
@@ -176,7 +177,7 @@ class LineTest {
     void removeSectionNotEndOfList() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
