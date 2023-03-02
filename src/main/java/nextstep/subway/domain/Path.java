@@ -4,15 +4,11 @@ import java.util.List;
 
 public class Path {
     private final Sections sections;
-    private final int totalDistance;
-    private final int totalDuration;
-    private final int totalFare;
+    private final SectionEdges sectionEdges;
 
-    public Path(Sections sections, int totalDistance, int totalDuration, int totalFare) {
+    public Path(Sections sections, SectionEdges sectionEdges) {
         this.sections = sections;
-        this.totalDistance = totalDistance;
-        this.totalDuration = totalDuration;
-        this.totalFare = totalFare;
+        this.sectionEdges = sectionEdges;
     }
 
     public Sections getSections() {
@@ -22,19 +18,19 @@ public class Path {
         return sections.getStations();
     }
 
-    public int getTotalDistance() {
-        return totalDistance;
+    public SectionEdges getSectionEdges() {
+        return sectionEdges;
     }
 
-    public int getTotalDuration() {
-        return totalDuration;
-    }
-
-    public int getTotalFare() {
-        return totalFare;
+    public int extractDistance() {
+        return sections.totalDistance();
     }
 
     public int extractDuration() {
         return sections.totalDuration();
+    }
+
+    public List<Line> getLines() {
+        return sectionEdges.getLines();
     }
 }

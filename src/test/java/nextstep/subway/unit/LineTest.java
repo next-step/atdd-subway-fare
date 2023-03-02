@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.exception.BadRequestException;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -17,7 +18,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
@@ -31,7 +32,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(강남역, 삼성역, 5, 10);
@@ -50,7 +51,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(삼성역, 역삼역, 5, 10);
@@ -69,7 +70,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0 );
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(삼성역, 강남역, 5, 10);
@@ -88,7 +89,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
 
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
@@ -106,7 +107,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(강남역, 삼성역, 5, 10);
 
@@ -120,11 +121,11 @@ class LineTest {
     void addSectionAlreadyIncluded() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 5, 10))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class);
     }
 
     @Test
@@ -132,7 +133,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
 
@@ -146,7 +147,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
 
@@ -160,7 +161,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 삼성역 = new Station("삼성역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
         line.addSection(역삼역, 삼성역, 5, 10);
 
@@ -174,10 +175,10 @@ class LineTest {
     void removeSectionNotEndOfList() {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", 0);
         line.addSection(강남역, 역삼역, 10, 10);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class);
     }
 }

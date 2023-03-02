@@ -20,15 +20,15 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse from(Path path, int fare) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
 
         return new PathResponse(stations,
-                path.getTotalDistance(),
-                path.getTotalDuration(),
-                path.getTotalFare()
+                path.extractDistance(),
+                path.extractDuration(),
+                fare
         );
     }
 

@@ -56,10 +56,11 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteMember() {
         // given
+        String accessToken = 베어러_인증_로그인_요청(ADMIN, PASSWORD).jsonPath().getString("accessToken");
         ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
 
         // when
-        ExtractableResponse<Response> response = 회원_삭제_요청(createResponse);
+        ExtractableResponse<Response> response = 회원_삭제_요청(createResponse, accessToken);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -73,5 +74,13 @@ class MemberAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 회원_정보_조회_요청(accessToken);
 
         회원_정보_조회됨(response, ADMIN, AGE);
+    }
+
+    @DisplayName("내 정보를 조회한다. - 로그인하지 않은 회원의 경우 예외가 발생한다.")
+    @Test
+    void getMyInfoNotMember() {
+        ExtractableResponse<Response> response = 토큰없이_회원_정보_조회_요청();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 }
