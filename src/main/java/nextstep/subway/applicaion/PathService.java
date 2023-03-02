@@ -29,7 +29,7 @@ public class PathService {
 
         return loginMember.isAnonymousMember() ?
                 getAnonymousPathResponse(path) :
-                getMemberPathResponse(loginMember, path);
+                getLoginMemberPathResponse(loginMember, path);
     }
 
     private static PathResponse getAnonymousPathResponse(Path path) {
@@ -42,7 +42,7 @@ public class PathService {
         );
     }
 
-    private PathResponse getMemberPathResponse(LoginMember loginMember, Path path) {
+    private PathResponse getLoginMemberPathResponse(LoginMember loginMember, Path path) {
         MemberResponse memberResponse = memberService.findMember(loginMember.getId());
 
         FarePolicy ageDisCountFarePolicy = AgeDiscountFarePolicyFactory.getPolicy(memberResponse.getAge());
