@@ -4,8 +4,8 @@ import java.util.List;
 
 import static nextstep.subway.domain.Fare.BASIC_FARE;
 import static nextstep.subway.domain.Fare.OVER_FARE;
-import static nextstep.subway.domain.OverFareLevel.LEVEL1;
-import static nextstep.subway.domain.OverFareLevel.LEVEL2;
+import static nextstep.subway.domain.OverFareLevel.OVER_10KM;
+import static nextstep.subway.domain.OverFareLevel.OVER_50KM;
 
 public class Path {
 
@@ -33,16 +33,16 @@ public class Path {
 
     public int getFare() {
         int distance = extractDistance();
-        if (distance <= LEVEL1.getLimit()) {
+        if (distance <= OVER_10KM.getStart()) {
             return BASIC_FARE.getAmount();
         }
-        if (distance <= LEVEL2.getLimit()) {
+        if (distance <= OVER_50KM.getStart()) {
             return BASIC_FARE.getAmount()
-                + calculateOverFare(distance - LEVEL1.getLimit(), LEVEL1.getInterval());
+                + calculateOverFare(distance - OVER_10KM.getStart(), OVER_10KM.getInterval());
         }
         return BASIC_FARE.getAmount()
-            + calculateOverFare(LEVEL2.getLimit() - LEVEL1.getLimit(), LEVEL1.getInterval())
-            + calculateOverFare(distance - LEVEL2.getLimit(), LEVEL2.getInterval());
+            + calculateOverFare(OVER_50KM.getStart() - OVER_10KM.getStart(), OVER_10KM.getInterval())
+            + calculateOverFare(distance - OVER_50KM.getStart(), OVER_50KM.getInterval());
     }
 
     private int calculateOverFare(int distance, int interval) {

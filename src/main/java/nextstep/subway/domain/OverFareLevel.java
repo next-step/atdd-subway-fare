@@ -2,22 +2,22 @@ package nextstep.subway.domain;
 
 public enum OverFareLevel {
 
-    LEVEL1(5, 10),
-    LEVEL2(8, 50);
+    OVER_10KM(5, 10),
+    OVER_50KM(8, 50);
 
     private final int interval;
-    private final int limit;
+    private final int start;
 
-    OverFareLevel(int interval, int limit) {
+    OverFareLevel(int interval, int start) {
         this.interval = interval;
-        this.limit = limit;
+        this.start = start;
     }
 
     public int getInterval() {
         return interval;
     }
 
-    public int getLimit() {
-        return limit;
+    public int getStart() {
+        return start;
     }
 }
