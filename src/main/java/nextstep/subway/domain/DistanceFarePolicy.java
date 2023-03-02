@@ -1,7 +1,5 @@
 package nextstep.subway.domain;
 
-import static nextstep.subway.domain.DistanceFare.*;
-
 public class DistanceFarePolicy extends AbstractFarePolicy {
 
     private final int maxExtraFare;
@@ -16,35 +14,13 @@ public class DistanceFarePolicy extends AbstractFarePolicy {
     }
 
     @Override
-    public int calculateFare(int distance) {
-        int result = calculate(distance) + maxExtraFare;
+    public int calculateFare(int fare) {
+        int result = fare + maxExtraFare;
 
         if (hasNext()) {
-            return result + nextPolicy.calculateFare(distance);
+            return nextPolicy.calculateFare(result);
         }
 
         return result;
-    }
-
-    private int calculate(int distance) {
-        if (distance <= DEFAULT_DISTANCE.getValue()) {
-            return DEFAULT.getValue();
-        }
-
-        if (distance <= DistanceFare.OVER_BETWEEN_TEN_AND_FIFTY.getValue()) {
-            return DEFAULT.getValue() + calculateOverFare(
-                    distance - DEFAULT_DISTANCE.getValue(),
-                    STANDARD_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY.getValue()
-            );
-        }
-
-        return DEFAULT.getValue() + calculateOverFare(
-                distance - DEFAULT_DISTANCE.getValue(),
-                STANDARD_FARE_DISTANCE_OVER_FIFTY.getValue()
-        );
-    }
-
-    private int calculateOverFare(int distance, int kilometer) {
-        return (int) ((Math.ceil(((distance - 1) / (double) kilometer)) + 1) * 100);
     }
 }

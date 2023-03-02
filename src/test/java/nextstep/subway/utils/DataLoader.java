@@ -20,6 +20,8 @@ public class DataLoader {
     public void loadData() {
         memberRepository.save(new Member("admin@email.com", "password", 20, Arrays.asList(RoleType.ROLE_ADMIN.name())));
         memberRepository.save(new Member("member@email.com", "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member("child@email.com", "password", 12, Arrays.asList(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member("teenager@email.com", "password", 14, Arrays.asList(RoleType.ROLE_MEMBER.name())));
         memberRepository.save(new Member(GithubResponses.사용자1.getEmail(), "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
         memberRepository.save(new Member(GithubResponses.사용자2.getEmail(), "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
         memberRepository.save(new Member(GithubResponses.사용자3.getEmail(), "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));

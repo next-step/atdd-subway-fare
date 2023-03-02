@@ -4,6 +4,9 @@ import java.util.List;
 
 public class LoginMember {
     private Long id;
+
+    private int age;
+
     private List<String> roles;
 
     public LoginMember(Long id, List<String> roles) {

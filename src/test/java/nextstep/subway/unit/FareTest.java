@@ -1,11 +1,12 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.DistanceFare;
+import nextstep.subway.domain.DistanceFarePolicy;
+import nextstep.subway.domain.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 public class FareTest {
 
