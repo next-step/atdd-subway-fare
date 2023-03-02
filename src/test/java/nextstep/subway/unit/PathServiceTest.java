@@ -71,4 +71,16 @@ public class PathServiceTest {
                         .containsExactly(교대역.getName(), 강남역.getName(), 양재역.getName(), 남부터미널역.getName())
         );
     }
+
+    @DisplayName("경로 타입 거리 기준으로 경로를 조회한다.")
+    @Test
+    void findPathTypeDistance() {
+        PathResponse path = pathService.findPath(교대역.getId(), 남부터미널역.getId(), "DISTANCE");
+
+        org.junit.jupiter.api.Assertions.assertAll(
+                () -> Assertions.assertThat(path.getDistance()).isEqualTo(30),
+                () -> Assertions.assertThat(path.getStations()).extracting("name")
+                        .containsExactly(교대역.getName(), 강남역.getName(), 양재역.getName(), 남부터미널역.getName())
+        );
+    }
 }
