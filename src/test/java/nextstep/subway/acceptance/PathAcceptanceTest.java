@@ -10,6 +10,7 @@ import java.util.List;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.*;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
@@ -26,6 +27,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
     private Long 신신분당선;
     private Long 경강선;
+    private String 청소년_AccessToken;
+    private String 어린이_AccessToken;
+
 
     /**
      *ㅤㅤㅤㅤㅤㅤㅤㅤ시간: 2 / 거리: 2 <br>
@@ -49,7 +53,8 @@ class PathAcceptanceTest extends AcceptanceTest {
      * 
      * GIVEN: 지하철역이 등록되어있음 <br>
      * GIVEN: 지하철 노선이 등록되어있음 <br>
-     * GIVEN: 지하철 노선에 지하철역이 등록되어있음
+     * GIVEN: 지하철 노선에 지하철역이 등록되어있음<br>
+     * GIVEN 청소년, 어린이가 회원가입을 한다<br>
      */
 
     @BeforeEach
@@ -70,6 +75,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         경강선 = 지하철_노선_생성_요청("경강선", "blue", 판교역, 이매역, 2, 2, 1000).jsonPath().getLong("id");
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, 남부터미널역, 양재역, 2, 2);
+
+        회원_생성_요청("teen@gmail.com", "qwe123", 13);
+        var 청소년_베어러_인증_로그인_응답 = 베어러_인증_로그인_요청("teen@gmail.com", "qwe123");
+        청소년_AccessToken = Access_Token을_가져온다(청소년_베어러_인증_로그인_응답);
+
+        회원_생성_요청("baby@gmail.com", "qwe123", 6);
+        var 어린이_베어러_인증_로그인_응답 = 베어러_인증_로그인_요청("baby@gmail.com", "qwe123");
+        어린이_AccessToken = Access_Token을_가져온다(어린이_베어러_인증_로그인_응답);
     }
 
     /**
@@ -119,5 +132,39 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         경로와_총_거리_총_소요시간_이용요금이_조회됨(두_역의_최단_시간_경로_조회를_응답, List.of(강남역, 양재역, 판교역, 이매역), 7, 6,  강남_이매_예상_요금);
+    }
+
+    /**
+     * WHEN 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청 <br>
+     * THEN 13세이상, 19세미만인 회원은 청소년 할인을 받는다<br>
+     */
+    @DisplayName("두 역의 최단 시간 경로를 조회 - 청소년 할인")
+    @Test
+    void findPathByDiscountTeenagerDiscount() {
+        // given
+        var 예상_요금 = 1250 - ((1_250 - 350) * 20) / 100; // 기본요금 - 청소년 할인 요금
+
+        // when
+        var response = 두_역의_최단_시간_경로_조회를_요청(청소년_AccessToken, 교대역, 양재역);
+
+        // then
+        경로와_총_거리_총_소요시간_이용요금이_조회됨(response, List.of(교대역, 강남역, 양재역), 5, 4,  예상_요금);
+    }
+
+    /**
+     * WHEN 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청 <br>
+     * THEN 6세이상, 13세미만인 회원은 어린이 할인을 받는다<br>
+     */
+    @DisplayName("두 역의 최단 시간 경로를 조회 - 어린이 할인")
+    @Test
+    void findPathByDiscountChildrenDiscount() {
+        // given
+        var 예상_요금 = 1250 - ((1_250 - 350) * 50) / 100; // 기본요금 - 어린이 할인 요금
+
+        // when
+        var response = 두_역의_최단_시간_경로_조회를_요청(어린이_AccessToken, 교대역, 양재역);
+
+        // then
+        경로와_총_거리_총_소요시간_이용요금이_조회됨(response, List.of(교대역, 강남역, 양재역), 5, 4,  예상_요금);
     }
 }
