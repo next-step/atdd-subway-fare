@@ -2,7 +2,7 @@ package nextstep.subway.domain;
 
 import nextstep.common.exception.CannotInstanceException;
 
-public class AgeDiscountFarePolicyFactory {
+public final class AgeDiscountFarePolicyFactory {
 
     private AgeDiscountFarePolicyFactory() {
         throw new CannotInstanceException();
