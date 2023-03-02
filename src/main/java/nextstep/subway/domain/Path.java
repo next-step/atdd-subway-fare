@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.member.application.dto.MemberResponse;
+
 import java.util.List;
 
 public class Path {
@@ -34,6 +36,19 @@ public class Path {
 
     public void addPolicy(FarePolicy farePolicy) {
         fare.addPolicy(farePolicy);
+    }
+
+    public void calcFareForNotMember() {
+        int maxLineExtraFare = sections.getMaxExtraFare();
+        addPolicy(new DistanceFarePolicy(extractDistance()));
+        addPolicy(new ExtraSectionFarePolicy(maxLineExtraFare));
+    }
+
+    public void calcFareForMember(MemberResponse member) {
+        int maxLineExtraFare = sections.getMaxExtraFare();
+        addPolicy(new DistanceFarePolicy(extractDistance()));
+        addPolicy(new ExtraSectionFarePolicy(maxLineExtraFare));
+        addPolicy(new AgeFarePolicy(member.getAge()));
     }
 
 }

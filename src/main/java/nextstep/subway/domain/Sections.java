@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.exception.NotFoundMaxExtraFeeException;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -154,6 +156,13 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int getMaxExtraFare() {
+        return this.sections.stream()
+                .mapToInt(value -> value.getLine().getExtraFare())
+                .max()
+                .orElseThrow(NotFoundMaxExtraFeeException::new);
     }
 
 }

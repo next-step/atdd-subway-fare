@@ -25,8 +25,7 @@ public class PathService {
 
     public PathResponse findPath(PathRequest pathRequest) {
         Path path = getPath(pathRequest);
-        path.addPolicy(new DistanceFarePolicy(path.extractDistance()));
-        path.addPolicy(new ExtraSectionFarePolicy(path.maxSectionExtraFare()));
+        path.calcFareForNotMember();
 
         return PathResponse.of(path);
     }
@@ -34,10 +33,7 @@ public class PathService {
     public PathResponse findPathWithMember(PathRequest pathRequest, LoginMember loginMember) {
         MemberResponse member = memberService.findMember(loginMember.getId());
         Path path = getPath(pathRequest);
-        path.addPolicy(new DistanceFarePolicy(path.extractDistance()));
-        path.addPolicy(new ExtraSectionFarePolicy(path.maxSectionExtraFare()));
-        path.addPolicy(new AgeFarePolicy(member.getAge()));
-
+        path.calcFareForMember(member);
         return PathResponse.of(path);
     }
 
