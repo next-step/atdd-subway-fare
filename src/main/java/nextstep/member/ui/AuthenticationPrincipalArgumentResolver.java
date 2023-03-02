@@ -27,7 +27,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        boolean required = parameter.getParameterAnnotation(AuthenticationPrincipal.class).required();
+
         String authorization = webRequest.getHeader("Authorization");
+        if (!required && authorization == null) {
+            return LoginMember.empty();
+        }
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }

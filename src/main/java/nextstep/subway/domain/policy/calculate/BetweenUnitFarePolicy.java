@@ -1,6 +1,6 @@
-package nextstep.subway.domain.policy;
+package nextstep.subway.domain.policy.calculate;
 
-public class BetweenUnitFarePolicy implements FarePolicy {
+public class BetweenUnitFarePolicy implements FareCalculatePolicy {
 
     private final int start;
     private final int end;
@@ -16,14 +16,14 @@ public class BetweenUnitFarePolicy implements FarePolicy {
     }
 
     @Override
-    public int calculate(int distance) {
-        if (distance <= start) {
+    public int calculate(CalculateConditions conditions) {
+        if (conditions.getDistance() <= start) {
             return 0;
         }
-        if (distance > end) {
+        if (conditions.getDistance() > end) {
             return (((end - start - 1) / unit) + 1) * fare;
         }
-        return (((distance - start - 1) / unit) + 1) * fare;
+        return (((conditions.getDistance() - start - 1) / unit) + 1) * fare;
     }
 
 }

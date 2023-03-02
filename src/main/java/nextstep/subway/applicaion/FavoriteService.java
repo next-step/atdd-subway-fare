@@ -1,7 +1,7 @@
 package nextstep.subway.applicaion;
 
 import nextstep.member.application.MemberService;
-import nextstep.member.application.dto.MemberResponse;
+import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
 import nextstep.subway.applicaion.dto.FavoriteResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
-    private FavoriteRepository favoriteRepository;
-    private MemberService memberService;
-    private StationService stationService;
+    private final FavoriteRepository favoriteRepository;
+    private final MemberService memberService;
+    private final StationService stationService;
 
     public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService) {
         this.favoriteRepository = favoriteRepository;
@@ -30,13 +30,13 @@ public class FavoriteService {
     }
 
     public void createFavorite(Long memberId, FavoriteRequest request) {
-        MemberResponse member = memberService.findMember(memberId);
+        Member member = memberService.findMember(memberId);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
     }
 
     public List<FavoriteResponse> findFavorites(Long memberId) {
-        MemberResponse member = memberService.findMember(memberId);
+        Member member = memberService.findMember(memberId);
         List<Favorite> favorites = favoriteRepository.findByMemberId(member.getId());
         Map<Long, Station> stations = extractStations(favorites);
 
@@ -49,7 +49,7 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(Long memberId, Long id) {
-        MemberResponse member = memberService.findMember(memberId);
+        Member member = memberService.findMember(memberId);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
         if (!favorite.isCreatedBy(member.getId())) {
             throw new RuntimeException();
