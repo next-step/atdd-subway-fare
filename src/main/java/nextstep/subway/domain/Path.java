@@ -21,7 +21,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public Sections getSections() {
-        return sections;
+    public List<Line> includedLines() {
+        return sections.allLines();
     }
 }

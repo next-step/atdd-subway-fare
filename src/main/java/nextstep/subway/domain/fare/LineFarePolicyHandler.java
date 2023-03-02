@@ -6,8 +6,7 @@ public class LineFarePolicyHandler extends FarePolicyHandler {
     @Override
     public Fare execute(Fare fare) {
         int additionalFare = fare.getPath()
-                .getSections()
-                .allLines()
+                .includedLines()
                 .stream()
                 .mapToInt(Line::getAdditionalFare)
                 .max()

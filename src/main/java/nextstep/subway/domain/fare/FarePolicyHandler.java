@@ -4,11 +4,11 @@ public abstract class FarePolicyHandler {
 
     protected FarePolicyHandler next;
 
-    public void next(FarePolicyHandler nextPolicyHandler) {
+    public final void next(FarePolicyHandler nextPolicyHandler) {
         this.next = nextPolicyHandler;
     }
 
-    public Fare apply(Fare fare) {
+    public final Fare apply(Fare fare) {
         Fare execute = execute(fare);
 
         if (hasNext()) {
