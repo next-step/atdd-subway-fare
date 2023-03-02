@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -12,7 +13,8 @@ import static org.mockito.Mockito.mock;
 
 public class PathTest {
 
-    @ParameterizedTest
+    @DisplayName("거리에 따라 추가요금이 상이하게 부과된다.")
+    @ParameterizedTest(name = "거리가 {0}km일 때 요금은 총 {1}원이다.")
     @MethodSource("distanceSource")
     void fares_vary_depending_on_the_distance(int distance, int fare) {
         // given
@@ -27,6 +29,7 @@ public class PathTest {
         // then
         assertThat(sut).isEqualTo(fare);
     }
+
 
     private static Stream<Arguments> distanceSource() {
         return Stream.of(
