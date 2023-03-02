@@ -6,22 +6,22 @@ import java.util.function.Function;
 public enum AgeDiscountPolicy {
     CHILDREN_DISCOUNT(50, age -> age >= 6 && age < 13),
     TEENAGER_DISCOUNT(20, age -> age >= 13 && age < 19),
-    NO_DISCOUNT(0, age -> age >= 20);
+    ELSE(0, age -> age < 6 || age >= 20);
 
-    private int discountRate;
+    private int discountPercent;
     private Function<Integer, Boolean> ageDiscountCondition;
 
-    AgeDiscountPolicy(int discountRate, Function<Integer, Boolean> ageDiscountCondition) {
-        this.discountRate = discountRate;
+    AgeDiscountPolicy(int discountPercent, Function<Integer, Boolean> ageDiscountCondition) {
+        this.discountPercent = discountPercent;
         this.ageDiscountCondition = ageDiscountCondition;
     }
 
     public static Fare calculateAgeDiscountFare(Fare fare, int age) {
-        int discountRate = Arrays.stream(values())
+        int discountPercent = Arrays.stream(values())
                 .filter(it -> it.ageDiscountCondition.apply(age))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException(""))
-                .discountRate;
+                .findFirst().orElseThrow(() -> new IllegalStateException("[NEED HOTFIX] 나이에 해당하는 enum이 없습니다. age: " + age))
+                .discountPercent;
 
-        return Fare.of(fare.minus(Fare.of(350)).getValue() * discountRate / 100);
+        return fare.minus(Fare.of(350)).ofPercent(discountPercent);
     }
 }
