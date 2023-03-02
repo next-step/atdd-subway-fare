@@ -27,10 +27,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathRequest.getType());
 
-        if (loginMember.isAnonymousMember()) {
-            return getAnonymousPathResponse(path);
-        }
-
         return loginMember.isAnonymousMember() ?
                 getAnonymousPathResponse(path) :
                 getMemberPathResponse(loginMember, path);
