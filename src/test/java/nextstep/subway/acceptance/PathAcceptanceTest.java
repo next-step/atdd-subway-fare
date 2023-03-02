@@ -66,33 +66,11 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 지하철 노선에 지하철역이 등록되어있음
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
-     * And 총 거리와 소요 시간과 요금을 함께 응답함
-     */
-    @DisplayName("두 역의 최소 시간 경로를 조회")
-    @Test
-    void findPathByTime() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
-
-        // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(3);
-    }
-
-    /**
-     * Feature: 지하철 경로 검색
-     * Scenario: 두 역의 최소 시간 경로를 조회
-     * Given 지하철역이 등록되어있음
-     * And 지하철 노선이 등록되어있음
-     * And 지하철 노선에 지하철역이 등록되어있음
-     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
-     * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함계 응답함
      */
     @DisplayName("두 역의 최소 시간 경로를 조회")
     @Test
-    void findPathByDistanceAndCalculateFare() {
+    void findPathByTime() {
         // when
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
