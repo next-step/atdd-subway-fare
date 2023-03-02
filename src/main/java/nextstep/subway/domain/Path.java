@@ -35,8 +35,6 @@ public class Path {
                 .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance))
                 .plus(new AdditionalLineFarePolicy().calculateAdditionalLineFare(lines));
 
-        Fare fare2 = Fare.of(fare.getValue() - AgeDiscountPolicy.calculateAgeDiscountFare(fare, age).getValue());
-        
-        return fare2.getValue();
+        return fare.minus(AgeDiscountPolicy.calculateAgeDiscountFare(fare, age)).getValue();
     }
 }

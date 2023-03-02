@@ -22,6 +22,6 @@ public enum AgeDiscountPolicy {
                 .findFirst().orElseThrow(() -> new IllegalArgumentException(""))
                 .discountRate;
 
-        return Fare.of((fare.getValue() - 350) * discountRate / 100);
+        return Fare.of(fare.minus(Fare.of(350)).getValue() * discountRate / 100);
     }
 }
