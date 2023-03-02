@@ -69,6 +69,10 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 총 거리와 소요 시간을 함께 응답함
      * AND 추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가
      * And 운임에서 350원을 공제한 금액의 50% 할인
+     *
+     *     요금 계산 공식
+     *    (1250 - 350) / 2
+     *     기본요금 + 추가 운임 + 청소년 할인
      */
     @DisplayName("어린이 회원이 두 역의 최단 거리 경로를 조회 시 할인 정책 반영")
     @Test
@@ -84,7 +88,6 @@ class PathAcceptanceTest extends AcceptanceTest {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
             assertThat(response.jsonPath().getInt("fare")).isEqualTo(550);
-            // 추가 운임 + 어린이 할인
         });
     }
 
@@ -95,6 +98,10 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 총 거리와 소요 시간을 함께 응답함
      * And 추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가
      * And 운임에서 350원을 공제한 금액의 20% 할인
+     *
+     *         계산 공식
+     *    (1250 + 200 - 350) * 0.8
+     *     기본요금 + 추가 운임 + 청소년 할인
      */
     @DisplayName("청소년 회원이 두 역의 최단 거리 경로를 조회 시 할인 정책 반영")
     @Test
@@ -110,8 +117,6 @@ class PathAcceptanceTest extends AcceptanceTest {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
             assertThat(response.jsonPath().getInt("fare")).isEqualTo(880);
-            // (1250 + 200 - 350) * 0.8
-            // 추가 운임 + 청소년 할인
         });
     }
 
@@ -120,6 +125,9 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최단 거리 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
      * And 지하철 이용 요금도 함께 응답함
+     *
+     * 금액 계산
+     * 1250 + 추가운임 200
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
@@ -132,8 +140,6 @@ class PathAcceptanceTest extends AcceptanceTest {
             assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
             총_거리와_소요_시간을_함께_응답한다(response, 5, 12);
             assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
-            // (1250 + 200)
-            // 추가 운임
         });
     }
 
