@@ -29,10 +29,12 @@ public class Path {
 
     public int calculateFare() {
         int totalDistance = extractDistance();
+        List<Line> lines = sections.getLines();
 
         Fare fare = DEFAULT_FARE
-                .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance));
-        
+                .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance))
+                .plus(new AdditionalLineFarePolicy().calculateAdditionalLineFare(lines));
+
         return fare.getValue();
     }
 }
