@@ -63,6 +63,10 @@ public class Line {
         return sections.getStations();
     }
 
+    public int getExtraFare() {
+        return extraFare;
+    }
+
     public void deleteSection(Station station) {
         sections.delete(station);
     }

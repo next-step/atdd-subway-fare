@@ -25,6 +25,7 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathRequest.getType());
 
-        return PathResponse.of(path);
+        Fare fare = Fare.of(new DistanceFarePolicy(path.getMaxExtraFare()), path.getTotalDistance());
+        return PathResponse.of(path, fare);
     }
 }

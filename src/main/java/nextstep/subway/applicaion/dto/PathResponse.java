@@ -1,6 +1,8 @@
 package nextstep.subway.applicaion.dto;
 
 import lombok.Getter;
+import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.FarePolicy;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
@@ -22,11 +24,11 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, Fare fare) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-        return new PathResponse(stations, path.getTotalDistance(), path.getTotalDuration(), path.getFare());
+        return new PathResponse(stations, path.getTotalDistance(), path.getTotalDuration(), fare.get());
     }
 
     public List<StationResponse> getStations() {

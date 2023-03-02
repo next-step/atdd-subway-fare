@@ -9,6 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.fixtures.StationFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
@@ -21,6 +22,17 @@ public class SubwayMapTest {
     private Line 이호선;
     private Line 삼호선;
 
+    /**
+     *
+     *
+     *             3
+     * 교대역  --- *2호선* ---   강남역
+     * |                        |
+     * 5  *3호선*                   *신분당선*    3
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     *                  5
+     */
     @BeforeEach
     void setUp() {
         교대역 = createStation(1L, "교대역");
@@ -76,6 +88,22 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+    }
+
+    @DisplayName("경로중 노선의 가장높은 금액의 추가요금만 적용한다")
+    @Test
+    void 경로중_노선의_가장높은_금액의_추가요금만_적용한다() {
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // 500 추가
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, PathSearchType.DISTANCE);
+        Fare fare = Fare.of(new DistanceFarePolicy(path.getMaxExtraFare()), path.getTotalDistance());
+
+        // then
+        assertThat(fare.get()).isEqualTo(DistanceFare.DEFAULT.getValue() + 500);
     }
 
     private Station createStation(long id, String name) {
