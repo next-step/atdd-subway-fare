@@ -11,11 +11,17 @@ public class LoginMember {
         this.roles = roles;
     }
 
+    public static LoginMember GUEST = new LoginMember(null, List.of());
+
     public Long getId() {
         return id;
     }
 
     public List<String> getRoles() {
         return roles;
+    }
+    
+    public boolean isGuest() {
+        return this.equals(GUEST);
     }
 }
