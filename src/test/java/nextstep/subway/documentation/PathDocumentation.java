@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import static nextstep.subway.acceptance.PathSteps.DISTANCE;
 import static nextstep.subway.acceptance.PathSteps.경로_찾기_문서화;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -42,7 +43,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         RestDocumentationFilter document = document(
                 "path",
