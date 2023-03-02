@@ -31,9 +31,18 @@ class PathTypeTest {
     @ParameterizedTest(name = "distance : {0}")
     @ValueSource(ints = {1, 100, 9999})
     void distance(int distance) {
-        Section section = new Section(line, upStation, downStation, distance);
+        Section section = new Section(line, upStation, downStation, distance, distance - 1000);
 
         assertThat(PathType.DISTANCE.getStrategy().apply(section)).isEqualTo(distance);
+    }
+
+    @DisplayName("경로 타입 시간을 기준으로 가중치를 가져온다.")
+    @ParameterizedTest(name = "duration : {0}")
+    @ValueSource(ints = {1, 100, 9999})
+    void duraiton(int duration) {
+        Section section = new Section(line, upStation, downStation, duration - 1000, duration);
+
+        assertThat(PathType.DURATION.getStrategy().apply(section)).isEqualTo(duration);
     }
 
     private static Stream<Arguments> provideForFindByName() {

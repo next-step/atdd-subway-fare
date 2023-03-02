@@ -48,11 +48,11 @@ class SubwayMapTest {
         삼호선 = new Line("3호선", "green");
         수인분당선 = new Line("수인분당선", "yellow");
 
-        이호선.addSection(교대역, 강남역, 10);
-        삼호선.addSection(교대역, 남부터미널역, 900);
-        삼호선.addSection(남부터미널역, 양재역, 10);
-        신분당선.addSection(강남역, 양재역, 10);
-        수인분당선.addSection(죽전역, 정자역, 20);
+        이호선.addSection(교대역, 강남역, 10, 10);
+        삼호선.addSection(교대역, 남부터미널역, 900, 900);
+        삼호선.addSection(남부터미널역, 양재역, 10, 10);
+        신분당선.addSection(강남역, 양재역, 10, 10);
+        수인분당선.addSection(죽전역, 정자역, 20, 20);
 
         lines.addAll(List.of(이호선, 삼호선, 신분당선));
     }
@@ -62,7 +62,7 @@ class SubwayMapTest {
     void findByPath() {
         SubwayMap subwayMap = new SubwayMap(this.lines);
 
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
 
         assertAll(
                 () -> assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역),
@@ -78,11 +78,11 @@ class SubwayMapTest {
         Station 존재하지_않는_역2 = new Station("존재하지 않는 역2");
 
         assertAll(
-                () -> assertThatThrownBy(() -> subwayMap.findPath(강남역, 존재하지_않는_역1))
+                () -> assertThatThrownBy(() -> subwayMap.findPath(강남역, 존재하지_않는_역1, PathType.DISTANCE))
                         .isInstanceOf(PathNotFoundException.class),
-                () -> assertThatThrownBy(() -> subwayMap.findPath(존재하지_않는_역1, 강남역))
+                () -> assertThatThrownBy(() -> subwayMap.findPath(존재하지_않는_역1, 강남역, PathType.DISTANCE))
                         .isInstanceOf(PathNotFoundException.class),
-                () -> assertThatThrownBy(() -> subwayMap.findPath(존재하지_않는_역1, 존재하지_않는_역2))
+                () -> assertThatThrownBy(() -> subwayMap.findPath(존재하지_않는_역1, 존재하지_않는_역2, PathType.DISTANCE))
                         .isInstanceOf(PathNotFoundException.class)
         );
     }
@@ -93,9 +93,9 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(this.lines);
 
         assertAll(
-                () -> assertThatThrownBy(() -> subwayMap.findPath(강남역, 죽전역))
+                () -> assertThatThrownBy(() -> subwayMap.findPath(강남역, 죽전역, PathType.DISTANCE))
                         .isInstanceOf(PathNotFoundException.class),
-                () -> assertThatThrownBy(() -> subwayMap.findPath(죽전역, 강남역))
+                () -> assertThatThrownBy(() -> subwayMap.findPath(죽전역, 강남역, PathType.DISTANCE))
                         .isInstanceOf(PathNotFoundException.class)
         );
     }
@@ -108,7 +108,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역);
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -122,7 +122,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역);
+        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

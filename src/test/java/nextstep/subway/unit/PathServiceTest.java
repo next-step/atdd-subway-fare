@@ -54,16 +54,16 @@ public class PathServiceTest {
         삼호선 = new Line("3호선", "green");
         lineRepository.saveAll(List.of(이호선, 신분당선, 삼호선));
 
-        이호선.addSection(교대역, 강남역, 10);
-        삼호선.addSection(교대역, 남부터미널역, 900);
-        삼호선.addSection(남부터미널역, 양재역, 10);
-        신분당선.addSection(강남역, 양재역, 10);
+        이호선.addSection(교대역, 강남역, 10, 10);
+        삼호선.addSection(교대역, 남부터미널역, 900, 900);
+        삼호선.addSection(남부터미널역, 양재역, 10, 10);
+        신분당선.addSection(강남역, 양재역, 10, 10);
     }
 
     @DisplayName("거리 기준으로 경로를 조회한다.")
     @Test
     void findPath() {
-        PathResponse path = pathService.findPath(교대역.getId(), 남부터미널역.getId());
+        PathResponse path = pathService.findPath(교대역.getId(), 남부터미널역.getId(), "DISTANCE");
 
         org.junit.jupiter.api.Assertions.assertAll(
                 () -> Assertions.assertThat(path.getDistance()).isEqualTo(30),

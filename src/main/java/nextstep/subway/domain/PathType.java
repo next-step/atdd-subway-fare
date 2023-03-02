@@ -5,7 +5,7 @@ import java.util.function.Function;
 import nextstep.subway.domain.exception.PathTypeNotFoundException;
 
 public enum PathType {
-    DISTANCE(Section::getDistance);
+    DISTANCE(Section::getDistance), DURATION(Section::getDuration);
 
     private final Function<Section, Integer> graphWeightStrategy;
 
