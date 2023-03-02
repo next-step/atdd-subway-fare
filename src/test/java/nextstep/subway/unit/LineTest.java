@@ -6,11 +6,10 @@ import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
+import static nextstep.subway.fixtures.StationFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -24,9 +23,9 @@ class LineTest {
 
     @BeforeEach
     void setUp() {
-        강남역 = withId(new Station("강남역"), 1L);
-        역삼역 = withId(new Station("역삼역"), 2L);
-        삼성역 = withId(new Station("삼성역"), 3L);
+        강남역 = withId(강남역(), 강남역_ID);
+        역삼역 = withId(역삼역(), 역삼역_ID);
+        삼성역 = withId(삼성역(), 삼성역_ID);
     }
 
     @Test
@@ -167,12 +166,5 @@ class LineTest {
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    public Station withId(Station station, Long id) {
-        Field idField = ReflectionUtils.findField(station.getClass(), "id");
-        ReflectionUtils.makeAccessible(idField);
-        ReflectionUtils.setField(idField, station, id);
-        return station;
     }
 }
