@@ -10,15 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PathController {
-    private PathService pathService;
+    private final PathService pathService;
 
     public PathController(PathService pathService) {
         this.pathService = pathService;
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam String type) { // TODO enum 변경고려
-        PathType pathType = PathType.valueOf(type);
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestPathType PathType pathType) { // TODO enum 변경고려
         return ResponseEntity.ok(pathService.findPath(source, target, pathType));
     }
 }
