@@ -1,9 +1,11 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
+@Getter
 @Entity
 public class Section extends DefaultWeightedEdge {
     @Id
@@ -23,11 +25,12 @@ public class Section extends DefaultWeightedEdge {
     private Station downStation;
 
     private int distance;
+    private int duration;
 
     public Section() {
 
     }
-
+    
     public Section(Line line, Station upStation, Station downStation, int distance) {
         this.line = line;
         this.upStation = upStation;
@@ -35,24 +38,12 @@ public class Section extends DefaultWeightedEdge {
         this.distance = distance;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Line getLine() {
-        return line;
-    }
-
-    public Station getUpStation() {
-        return upStation;
-    }
-
-    public Station getDownStation() {
-        return downStation;
-    }
-
-    public int getDistance() {
-        return distance;
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        this.line = line;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public boolean isSameUpStation(Station station) {
@@ -66,5 +57,13 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    public int minusDuration(int duration) {
+        return this.duration - duration;
+    }
+
+    public int minusDistance(int distance) {
+        return this.distance - distance;
     }
 }

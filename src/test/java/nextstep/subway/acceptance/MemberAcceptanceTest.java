@@ -59,6 +59,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> createResponse = 회원_생성_요청(EMAIL, PASSWORD, AGE);
 
         // when
+
+
         ExtractableResponse<Response> response = 회원_삭제_요청(createResponse);
 
         // then
