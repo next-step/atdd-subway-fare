@@ -26,15 +26,15 @@ public class PathService {
         this.memberService = memberService;
     }
 
-    public PathResponse findPath(LoginMember loginMember, Long source, Long target, String type) {
+    public PathResponse findPath(Optional<LoginMember> loginMember, Long source, Long target, String type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, PathType.convertType(type));
 
-        if (Optional.ofNullable(loginMember).isPresent()) {
-            MemberResponse memberResponse = memberService.findMember(loginMember.getId());
+        if (loginMember.isPresent()) {
+            MemberResponse memberResponse = memberService.findMember(loginMember.get().getId());
             path.isLogin(memberResponse.getAge());
         }
 
