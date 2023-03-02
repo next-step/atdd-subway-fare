@@ -25,7 +25,10 @@ public enum DistanceFarePolicy {
     }
 
     public static Fare from(final Path path) {
-        return findFarePolicy(path.getShortestDistance()).fareFunction.apply(path.getShortestDistance());
+        final Fare distanceFare = findFarePolicy(path.getShortestDistance())
+                .fareFunction.apply(path.getShortestDistance())
+                .plus(Fare.base());
+        return path.mergeFare(distanceFare);
     }
 
     private static DistanceFarePolicy findFarePolicy(final Integer distance) {

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 
 import static nextstep.subway.acceptance.PathSteps.*;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,7 @@ class PathDocumentation extends Documentation {
         final PathResponse pathResponse = new PathResponse(Lists.newArrayList(
                 강남역, 역삼역), 10, 20, 요금_1250원);
 
-        when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         given(this.spec)
                 .filter(

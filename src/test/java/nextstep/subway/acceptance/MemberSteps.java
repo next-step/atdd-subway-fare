@@ -42,6 +42,19 @@ public class MemberSteps {
                 .statusCode(HttpStatus.OK.value()).extract();
     }
 
+    public static ExtractableResponse<Response> 회원_생성_요청(String email, String password) {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post("/members")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 회원_생성_요청(String email, String password, Integer age) {
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
@@ -78,6 +91,21 @@ public class MemberSteps {
 
     public static ExtractableResponse<Response> 회원_정보_수정_요청(ExtractableResponse<Response> response, String email, String password, Integer age) {
         String uri = response.header("Location");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+        params.put("age", age + "");
+
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().put(uri)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 회원_정보_수정_요청(final String uri, String email, String password, Integer age) {
 
         Map<String, String> params = new HashMap<>();
         params.put("email", email);

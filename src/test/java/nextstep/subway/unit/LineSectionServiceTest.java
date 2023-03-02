@@ -4,6 +4,7 @@ import nextstep.common.exception.NoDeleteOneSectionException;
 import nextstep.subway.acceptance.ApplicationContextTest;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.SectionRequest;
+import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Section;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static nextstep.common.error.SubwayError.NO_DELETE_ONE_SECTION;
@@ -24,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("노선 구간의 대한 테스트")
+@DisplayName("노선 구간 기능 테스트")
 @Transactional
 class LineSectionServiceTest extends ApplicationContextTest {
 
@@ -134,6 +136,10 @@ class LineSectionServiceTest extends ApplicationContextTest {
     }
 
     private Line createLineBySections(final String name, final String color, final List<Section> sections) {
-        return lineRepository.save(new Line(name, color, new Sections(sections)));
+        return lineRepository.save(new Line(name, color, new Sections(sections), new Fare(BigDecimal.ZERO)));
+    }
+
+    private Line createLineBySections(final String name, final String color, final List<Section> sections, final BigDecimal fare) {
+        return lineRepository.save(new Line(name, color, new Sections(sections), new Fare(fare)));
     }
 }
