@@ -45,11 +45,11 @@ public class PathService {
     private PathResponse getLoginMemberPathResponse(LoginMember loginMember, Path path) {
         MemberResponse memberResponse = memberService.findMember(loginMember.getId());
 
-        FarePolicy ageDisCountFarePolicy = AgeDiscountFarePolicyFactory.getPolicy(memberResponse.getAge());
+        FarePolicy ageDiscountFarePolicy = AgeDiscountFarePolicyFactory.getPolicy(memberResponse.getAge());
 
         Fare fare = Fare.of(
                 new DistanceFarePolicy(
-                        ageDisCountFarePolicy,
+                        ageDiscountFarePolicy,
                         path.getMaxExtraFare()
                 ),
                 path.getTotalDistance()
