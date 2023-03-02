@@ -27,49 +27,33 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
 
-    private Long 학여울역;
-
-    private Long 대청역;
-
-    private Long 가락시장;
-
-    private Long 오금역;
 
     /**
      * Given 지하철역이 등록되어있음
      * And 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
-     *
-     *                    10
-     *       교대역  --- *2호선* ---   강남역
-     *        |                        |
-     *   2  *3호선*                   *신분당선*    10
-     *        |                        |
-     *      남부터미널역  --- *3호선* ---   양재 --- 학여울 --- 대청 --- 가락시장 --- 오금역
-     *                      3              10       10      20         10
+     * <p>
+     * 10
+     * 교대역  --- *2호선* ---   강남역
+     * |                        |
+     * 2  *3호선*                   *신분당선*    10
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     * 3
      */
     @BeforeEach
     public void setUp() {
         super.setUp();
 
-        교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
-        강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
-        양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
-        남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
-        학여울역 = 지하철역_생성_요청("학여울역").jsonPath().getLong("id");
-        대청역 = 지하철역_생성_요청("대청역").jsonPath().getLong("id");
-        가락시장 = 지하철역_생성_요청("가락시장").jsonPath().getLong("id");
-        오금역 = 지하철역_생성_요청("오금역").jsonPath().getLong("id");
+        교대역 = extractId(지하철역_생성_요청("교대역"));
+        강남역 = extractId(지하철역_생성_요청("강남역"));
+        양재역 = extractId(지하철역_생성_요청("양재역"));
+        남부터미널역 = extractId(지하철역_생성_요청("남부터미널역"));
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 6);
-
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(양재역, 학여울역, 10, 3));
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(학여울역, 대청역, 10, 3));
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(대청역, 가락시장, 20, 3));
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(가락시장, 오금역, 10, 3));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -106,8 +90,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("최단거리기준 거리가 10km 이내일경우 기본운임으로 계산된다")
     @Test
     void 최단거리기준_거리가_10km_이내일경우_기본운임으로_계산된다() {
+        // given
+
+
+        // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 강남역, PathSearchType.DISTANCE);
 
+        // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE);
     }
 
@@ -116,12 +105,26 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최소 시간 기준 경로를 응답하고
      * And 총 거리와 소요 시간을 함께 응답한다
      * And 지하철 이용 요금도 함께 응답함
+     * <p>
+     * 10
+     * 교대역  --- *2호선* ---   강남역
+     * |                        |
+     * 2  *3호선*                   *신분당선*    10
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재 --- 학여울
+     * 3              10
      */
     @DisplayName("최단거리기준 거리가 15km 일경우 기본운임에 200원이 추가된다.")
     @Test
     void 최단거리기준_거리가_15km_일경우_기본운임에_200원이_추가된다() {
+        // given
+        Long 학여울역 = extractId(지하철역_생성_요청("학여울역"));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(양재역, 학여울역, 10, 3));
+
+        // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 학여울역, PathSearchType.DISTANCE);
 
+        // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE + 200);
     }
 
@@ -130,12 +133,34 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최소 시간 기준 경로를 응답하고
      * And 총 거리와 소요 시간을 함께 응답한다
      * And 지하철 이용 요금도 함께 응답함
+     * <p>
+     * 10
+     * 교대역  --- *2호선* ---   강남역
+     * |                        |
+     * 2  *3호선*                   *신분당선*    10
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재 --- 학여울 --- 대청 --- 가락시장 --- 오금역
+     * 3              10       10      20         10
      */
     @DisplayName("최단거리기준 거리가 55km 일경우 기본운임에 700원이 추가된다.")
     @Test
     void 최단거리기준_거리가_55km_일경우_기본운임에_700원이_추가된다() {
+        // given
+        Long 학여울역 = extractId(지하철역_생성_요청("학여울역"));
+        Long 대청역 = extractId(지하철역_생성_요청("대청역"));
+        Long 가락시장 = extractId(지하철역_생성_요청("가락시장"));
+        Long 오금역 = extractId(지하철역_생성_요청("오금역"));
+
+
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(양재역, 학여울역, 10, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(학여울역, 대청역, 10, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(대청역, 가락시장, 20, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(가락시장, 오금역, 10, 3));
+
+        // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 오금역, PathSearchType.DISTANCE);
 
+        // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE + 700);
     }
 
@@ -192,5 +217,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         params.put("distance", distance + "");
         params.put("duration", duration + "");
         return params;
+    }
+
+    private Long extractId(ExtractableResponse<Response> response) {
+        return response.jsonPath().getLong("id");
     }
 }
