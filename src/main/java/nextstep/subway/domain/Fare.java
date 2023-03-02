@@ -36,6 +36,10 @@ public class Fare implements Comparable<Fare> {
         return Fare.of(this.value + that.value);
     }
 
+    public Fare ofPercent(int percent) {
+        return null;
+    }
+
     public int getValue() {
         return value;
     }
