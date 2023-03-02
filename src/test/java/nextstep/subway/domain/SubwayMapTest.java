@@ -127,4 +127,17 @@ class SubwayMapTest {
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
     }
+
+    @DisplayName("경로 타입 거리를 기준으로 경로를 조회한다.")
+    @Test
+    void findPathTypeDistance() {
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
+
+        assertAll(
+                () -> assertThat(path.extractDistance()).isEqualTo(20),
+                () -> assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역))
+        );
+    }
 }

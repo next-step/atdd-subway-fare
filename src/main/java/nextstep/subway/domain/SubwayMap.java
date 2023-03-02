@@ -23,6 +23,13 @@ public class SubwayMap {
         return findShortestPath(source, target, graph);
     }
 
+    public Path findPath(Station source, Station target, PathType pathType) {
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        addVertex(graph);
+        addNode(graph, pathType);
+        return findShortestPath(source, target, graph);
+    }
+
     private void addVertex(final SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
@@ -47,6 +54,25 @@ public class SubwayMap {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, it.getDistance());
+                });
+    }
+
+    private void addNode(final SimpleDirectedWeightedGraph<Station, SectionEdge> graph, final PathType pathType) {
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    graph.setEdgeWeight(sectionEdge, pathType.getStrategy().apply(it));
+                });
+
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    graph.setEdgeWeight(sectionEdge, pathType.getStrategy().apply(it));
                 });
     }
 
