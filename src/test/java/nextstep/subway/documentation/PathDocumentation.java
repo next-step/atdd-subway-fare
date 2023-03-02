@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.documentation.PathDocumentationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +33,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(spec, 1L, 2L, PathType.DISTANCE);
