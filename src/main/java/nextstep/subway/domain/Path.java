@@ -5,18 +5,10 @@ import lombok.Getter;
 import java.util.Collections;
 import java.util.List;
 
+import static nextstep.subway.domain.DistanceFare.*;
+
 @Getter
 public class Path {
-
-    private static final int DEFAULT_FARE = 1250;
-
-    private static final int DEFAULT_FARE_DISTANCE = 10;
-
-    private static final int OVER_FARE_BETWEEN_TEN_AND_FIFTY = 50;
-
-    private static final int STANDARD_FARE_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY = 5;
-
-    private static final int STANDARD_FARE_DISTANCE_OVER_FIFTY = 8;
 
     private final List<Station> stations;
 
@@ -35,20 +27,20 @@ public class Path {
     }
 
     public int getFare() {
-        if (totalDistance <= DEFAULT_FARE_DISTANCE) {
-            return DEFAULT_FARE;
+        if (totalDistance <= DEFAULT_DISTANCE.getValue()) {
+            return DEFAULT.getValue();
         }
 
-        if (totalDistance <= OVER_FARE_BETWEEN_TEN_AND_FIFTY) {
-            return DEFAULT_FARE + calculateOverFare(
-                    totalDistance - DEFAULT_FARE_DISTANCE,
-                    STANDARD_FARE_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY
+        if (totalDistance <= DistanceFare.OVER_BETWEEN_TEN_AND_FIFTY.getValue()) {
+            return DEFAULT.getValue() + calculateOverFare(
+                    totalDistance - DEFAULT_DISTANCE.getValue(),
+                    STANDARD_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY.getValue()
             );
         }
 
-        return DEFAULT_FARE + calculateOverFare(
-                totalDistance - DEFAULT_FARE_DISTANCE,
-                STANDARD_FARE_DISTANCE_OVER_FIFTY
+        return DEFAULT.getValue() + calculateOverFare(
+                totalDistance - DEFAULT_DISTANCE.getValue(),
+                STANDARD_FARE_DISTANCE_OVER_FIFTY.getValue()
         );
     }
 
