@@ -11,26 +11,7 @@
 
 === 최단 경로 조회
 
-operation::path/distance[snippets='http-request']
-
-|===
-|Type |Field |Description
-
-|Long |source |출발역
-|Long |target |도착역
-|String |type |조회 타입 - DISTANCE, DURATION
-|===
-
-operation::path/distance[snippets='http-response']
-
-|===
-|Type |Field |Description
-
-|StationResponse |stations |경로에 포함된 역 정보
-|int |distance |총 거리
-|int |duration |총 소요시간
-|int |fare |요금
-|===
+operation::path/distance[snippets='http-request,http-response']
 
 === 최소 시간 경로 조회
 
