@@ -36,11 +36,11 @@ public class PathTest {
     /**
      * 10km초과∼50km까지(5km마다 100원)
      */
-    @DisplayName("거리가 20km일경우 200원의 추가요금이 포함된다")
+    @DisplayName("거리가 16km일경우 200원의 추가요금이 포함된다")
     @Test
     void 거리가_20km일경우_200원의_추가요금이_포함된다() {
         // given
-        when(sections.totalDistance()).thenReturn(20);
+        when(sections.totalDistance()).thenReturn(16);
 
         // when
         Path path = Path.of(sections);
@@ -52,7 +52,7 @@ public class PathTest {
     /**
      * 50km초과 시 (8km마다 100원)
      */
-    @DisplayName("거리가 60km일경우 700원의 추가요금이 포함된다")
+    @DisplayName("거리가 60km일경우 800원의 추가요금이 포함된다")
     @Test
     void 거리가_60km일경우_700원의_추가요금이_포함된다() {
         // given
@@ -62,6 +62,6 @@ public class PathTest {
         Path path = Path.of(sections);
 
         // then
-        assertThat(path.getFare()).isEqualTo(DEFAULT_FEE + 700);
+        assertThat(path.getFare()).isEqualTo(DEFAULT_FEE + 800);
     }
 }

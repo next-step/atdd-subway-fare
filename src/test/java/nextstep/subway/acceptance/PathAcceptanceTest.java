@@ -117,12 +117,12 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 총 거리와 소요 시간을 함께 응답한다
      * And 지하철 이용 요금도 함께 응답함
      */
-    @DisplayName("최단거리기준 거리가 15km 일경우 기본운임에 100원이 추가된다.")
+    @DisplayName("최단거리기준 거리가 15km 일경우 기본운임에 200원이 추가된다.")
     @Test
-    void 최단거리기준_거리가_15km_일경우_기본운임에_100원이_추가된다() {
+    void 최단거리기준_거리가_15km_일경우_기본운임에_200원이_추가된다() {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 학여울역, PathSearchType.DISTANCE);
 
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE + 100);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE + 200);
     }
 
     /**
@@ -131,12 +131,12 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 총 거리와 소요 시간을 함께 응답한다
      * And 지하철 이용 요금도 함께 응답함
      */
-    @DisplayName("최단거리기준 거리가 55km 일경우 기본운임에 600원이 추가된다.")
+    @DisplayName("최단거리기준 거리가 55km 일경우 기본운임에 700원이 추가된다.")
     @Test
-    void 최단거리기준_거리가_55km_일경우_기본운임에_600원이_추가된다() {
+    void 최단거리기준_거리가_55km_일경우_기본운임에_700원이_추가된다() {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 오금역, PathSearchType.DISTANCE);
 
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE + 600);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FEE + 700);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(
