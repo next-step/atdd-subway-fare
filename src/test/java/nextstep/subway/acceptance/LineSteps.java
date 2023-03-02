@@ -22,10 +22,11 @@ public class LineSteps {
         return 지하철_노선_생성_요청(params);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int additionalFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("additionalFare", additionalFare + "");
         return RestAssured
                 .given().log().all()
                 .body(params)
