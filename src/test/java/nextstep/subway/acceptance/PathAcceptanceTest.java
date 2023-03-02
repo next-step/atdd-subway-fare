@@ -91,11 +91,20 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         if (pathType.equals(PathType.거리)) {
-            최단거리_검색응답_검증(false, response);
+            최단_검색응답_역_검증(response, 교대역, 남부터미널역, 양재역);
+            최단_검색응답_거리_검증(response, 5);
+            최단_검색응답_시간_검증(response, 18);
+            최단_검색응답_이용요금_검증(response, (long) 기본_운임비용 + 삼호선_초과운임);
+
             return;
         }
 
-        최단시간_검색응답_검증(response);
+        최단_검색응답_역_검증(response, 교대역, 강남역, 양재역);
+        최단_검색응답_거리_검증(response, 20);
+        최단_검색응답_시간_검증(response, 14);
+
+        int distance = response.jsonPath().getInt("distance");
+        최단_검색응답_이용요금_검증(response, (long) 기본_운임비용 + 오km마다_100원_초과운임_계산(distance) + 신분당선_초과운임);
     }
 
     /**
@@ -109,10 +118,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(spec, 남부터미널역, 신논현역, PathType.시간.getType());
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역,교대역, 강남역, 신논현역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(17);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(24);
-        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(기본_운임비용 + 오km마다_100원_초과운임_계산(response.jsonPath().getInt("distance")) + 신분당선_초과운임);
+        최단_검색응답_역_검증(response, 남부터미널역,교대역, 강남역, 신논현역);
+        최단_검색응답_거리_검증(response, 17);
+        최단_검색응답_시간_검증(response, 24);
+
+        int distance = response.jsonPath().getInt("distance");
+        최단_검색응답_이용요금_검증(response, (long) 기본_운임비용 + 오km마다_100원_초과운임_계산(distance) + 신분당선_초과운임);
     }
 
     /**
@@ -127,7 +138,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         ExtractableResponse<Response> response = 회원계정으로_두_역의_경로_조회를_요청(spec, accessToken, 교대역, 양재역, PathType.거리.getType());
 
-        최단거리_검색응답_검증(true, response);
+        최단_검색응답_역_검증(response, 교대역, 남부터미널역, 양재역);
+        최단_검색응답_거리_검증(response, 5);
+        최단_검색응답_시간_검증(response, 18);
+
+        Long expected = (long) ((기본_운임비용 + 삼호선_초과운임 - 350) * (1 - 청소년_할인_비율));
+        최단_검색응답_이용요금_검증(response, expected);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int overFare) {
@@ -153,26 +169,20 @@ class PathAcceptanceTest extends AcceptanceTest {
         return params;
     }
 
-    private void 최단시간_검색응답_검증(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(14);
-        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(기본_운임비용 + 오km마다_100원_초과운임_계산(response.jsonPath().getInt("distance")) + 신분당선_초과운임);
+    private void 최단_검색응답_역_검증(ExtractableResponse<Response> response, Long... stations) {
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
     }
 
-    private void 최단거리_검색응답_검증(boolean isDiscount, ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(18);
+    private void 최단_검색응답_거리_검증(ExtractableResponse<Response> response, int distance) {
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+    }
 
-        if (isDiscount) {
-            Long expected = (long) ((기본_운임비용 + 삼호선_초과운임 - 350) * (1 - 청소년_할인_비율));
-            assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(expected);
+    private void 최단_검색응답_시간_검증(ExtractableResponse<Response> response, int duration) {
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+    }
 
-            return;
-        }
-
-        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(기본_운임비용 + 삼호선_초과운임);
+    private void 최단_검색응답_이용요금_검증(ExtractableResponse<Response> response, Long totalFare) {
+        assertThat(response.jsonPath().getLong("totalFare")).isEqualTo(totalFare);
     }
 
     private int 오km마다_100원_초과운임_계산(int distance) {

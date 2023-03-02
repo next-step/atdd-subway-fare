@@ -28,8 +28,16 @@ public class Line {
         this.name = name;
         this.color = color;
 
-        if (overFare > 0) {
+        if (this.overFare != overFare) {
+            validationOverFare(overFare);
+
             this.overFare = overFare;
+        }
+    }
+
+    private void validationOverFare(int overFare) {
+        if (1 > overFare) {
+            throw new IllegalArgumentException("노선의 초과운임은 1보다 작을 수 없음");
         }
     }
 
