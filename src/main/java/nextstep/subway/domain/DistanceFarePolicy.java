@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.exception.MinimumDistanceException;
+
 public class DistanceFarePolicy implements FarePolicy {
 
     private static final int DEFAULT_DISTANCE = 10;
@@ -10,7 +12,15 @@ public class DistanceFarePolicy implements FarePolicy {
     private final int distance;
 
     public DistanceFarePolicy(int distance) {
+        validateDistance(distance);
+
         this.distance = distance;
+    }
+
+    private void validateDistance(int distance) {
+        if (distance < 1) {
+            throw new MinimumDistanceException();
+        }
     }
 
     @Override
