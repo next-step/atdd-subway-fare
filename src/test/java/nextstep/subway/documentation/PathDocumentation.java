@@ -8,11 +8,16 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
@@ -34,8 +39,17 @@ public class PathDocumentation extends Documentation {
         RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                        requestParameters(
+                                parameterWithName("source").description("출발역 아이디"),
+                                parameterWithName("target").description("도착역 아이디"),
+                                parameterWithName("type").description("조회 기준")),
+                        responseFields(
+                                fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로 지하철역 목록"),
+                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 아이디"),
+                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요시간(분)"),
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("거리(km)"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금"))))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
