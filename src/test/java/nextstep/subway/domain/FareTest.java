@@ -27,4 +27,14 @@ class FareTest {
 
         assertThat(five.plus(three)).isEqualTo(eight);
     }
+
+    @Test
+    void 이용요금에_이용요금을_뺄_수_있다() {
+        var eight = Fare.of(8);
+        var five = Fare.of(5);
+        var three = Fare.of(3);
+
+        assertThat(eight.minus(five)).isEqualTo(three);
+    }
+
 }
