@@ -13,7 +13,7 @@ public class LineSteps {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        params.put("extraFare", color);
+        params.put("extraFare", extraFare + "");
 
         return RestAssured
                 .given().log().all()
