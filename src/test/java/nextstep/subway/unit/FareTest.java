@@ -11,17 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static nextstep.subway.domain.fare.Fare.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 
 public class FareTest {
@@ -87,7 +83,7 @@ public class FareTest {
     }
 
     @DisplayName("나이별 할인 정책을 적용할 수 있다.")
-    @MethodSource
+    @CsvSource({"6,800", "12,800", "18,1070", "19,1250"})
     @ParameterizedTest(name = "기본 요금(" + DEFAULT_FARE + "원)에서 {0}세 할인을 받으면 {1}원")
     void applyDiscount(int age, int expected) {
         Path path = getFixturePathWithDistance(10);
@@ -95,15 +91,6 @@ public class FareTest {
         int cost = fareManager.calculate(path, getMemberWithAge(age));
 
         assertThat(cost).isEqualTo(expected);
-    }
-
-    static Stream<Arguments> applyDiscount() {
-        return Stream.of(
-                arguments(6, 800),
-                arguments(12, 800),
-                arguments(18, 1_070),
-                arguments(19, 1_250)
-        );
     }
 
     private Path getFixturePathWithDistance(int distance) {
