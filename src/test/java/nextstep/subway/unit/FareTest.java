@@ -100,8 +100,7 @@ public class FareTest {
         Section 역삼역_강남역 = createSection(역삼역, 강남역, distance);
         이호선.addSection(역삼역_강남역);
 
-        Path path = new Path(new Sections(List.of(역삼역_강남역)));
-        return path;
+        return new Path(new Sections(List.of(역삼역_강남역)));
     }
 
     private Member getMemberWithAge(int age) {
