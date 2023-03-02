@@ -3,11 +3,12 @@ package nextstep.subway.acceptance;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.HashMap;
@@ -20,13 +21,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
 
-    private static final String 소요시간 = "DURATION";
-    private static final String 거리 = "DISTANCE";
+
 
     private Long 교대역;
     private Long 강남역;
@@ -70,7 +69,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("노션별 추가 요금")
     @Nested
-    class 노선별_추가_요금 {
+    public class 노선별_추가_요금 {
         private Long 가락시장;
         private Long 석촌역;
         private Long 송파역;
@@ -303,48 +302,6 @@ class PathAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration),
             () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare)
         );
-    }
-
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
-        return 두_역의_경로_조회를_요청(source, target, 거리, accessToken);
-    }
-
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
-        return 두_역의_경로_조회를_요청(source, target, 소요시간, accessToken);
-    }
-
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return 두_역의_경로_조회를_요청(source, target, 거리);
-    }
-
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return 두_역의_경로_조회를_요청(source, target, 소요시간);
-    }
-
-    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(
-        Long source,
-        Long target,
-        String shortestType
-    ) {
-        return RestAssured
-            .given().log().all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .when().get("/paths?source={sourceId}&target={targetId}&type={shortestType}", source, target, shortestType)
-            .then().log().all().extract();
-    }
-
-    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(
-        Long source,
-        Long target,
-        String shortestType,
-        String accessToken
-    ) {
-        return RestAssured
-            .given().log().all()
-            .auth().oauth2(accessToken)
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .when().get("/paths?source={sourceId}&target={targetId}&type={shortestType}", source, target, shortestType)
-            .then().log().all().extract();
     }
 
     private Long 지하철_노선_생성_요청(
