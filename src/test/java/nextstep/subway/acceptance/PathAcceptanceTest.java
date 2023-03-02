@@ -253,11 +253,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         @ParameterizedTest
         @CsvSource(
             value = {
-                "6,800",
-                "12,800",
-                "13,1070",
-                "18,1070",
-                "19,1250",
+                "6,900",
+                "12,900",
+                "13,1230",
+                "18,1230",
+                "19,1450",
             }
         )
         void findPathByDistance(int age, int fare) {
@@ -314,11 +314,23 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return 두_역의_경로_조회를_요청(source, target, 거리, "");
+        return 두_역의_경로_조회를_요청(source, target, 거리);
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return 두_역의_경로_조회를_요청(source, target, 소요시간, "");
+        return 두_역의_경로_조회를_요청(source, target, 소요시간);
+    }
+
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(
+        Long source,
+        Long target,
+        String shortestType
+    ) {
+        return RestAssured
+            .given().log().all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths?source={sourceId}&target={targetId}&type={shortestType}", source, target, shortestType)
+            .then().log().all().extract();
     }
 
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(
