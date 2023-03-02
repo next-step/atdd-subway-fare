@@ -18,4 +18,8 @@ public class LoginMember {
     public List<String> getRoles() {
         return roles;
     }
+
+    public boolean isAnonymousMember() {
+        return false;
+    }
 }
