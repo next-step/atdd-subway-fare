@@ -17,8 +17,8 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam String pathType) { // TODO enum 변경고려
-        PathType type = PathType.valueOf(pathType);
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam String type) { // TODO enum 변경고려
+        PathType pathType = PathType.valueOf(type);
+        return ResponseEntity.ok(pathService.findPath(source, target, pathType));
     }
 }
