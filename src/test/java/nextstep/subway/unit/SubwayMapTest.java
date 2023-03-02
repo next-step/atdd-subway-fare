@@ -90,9 +90,52 @@ public class SubwayMapTest {
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 남부터미널역, 교대역));
     }
 
-    @DisplayName("요금 계산 = 기본요금 + 50km 초과 요금")
+    @DisplayName("요금 계산 = 기본요금")
     @Test
-    void calculateFare() {
+    void calculateFare1() {
+        교대역 = createStation(1L, "교대역");
+        강남역 = createStation(2L, "강남역");
+        양재역 = createStation(3L, "양재역");
+        남부터미널역 = createStation(4L, "남부터미널역");
+
+        신분당선 = new Line("신분당선", "red");
+        이호선 = new Line("2호선", "red");
+        삼호선 = new Line("3호선", "red");
+
+        신분당선.addSection(강남역, 양재역, 5, 5);
+        이호선.addSection(교대역, 강남역, 5, 10);
+        삼호선.addSection(교대역, 남부터미널역, 50, 1);
+        삼호선.addSection(남부터미널역, 양재역, 50, 2);
+
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.calculateFare()).isEqualTo(1250); //총거리 60 = 기본10 + 추가50 = 1250 + 1000
+    }
+
+    @DisplayName("요금 계산 = 기본요금 + 10 ~ 50km 요금")
+    @Test
+    void calculateFare3() {
+        교대역 = createStation(1L, "교대역");
+        강남역 = createStation(2L, "강남역");
+        양재역 = createStation(3L, "양재역");
+        남부터미널역 = createStation(4L, "남부터미널역");
+
+        신분당선 = new Line("신분당선", "red");
+        이호선 = new Line("2호선", "red");
+        삼호선 = new Line("3호선", "red");
+
+        신분당선.addSection(강남역, 양재역, 30, 5);
+        이호선.addSection(교대역, 강남역, 30, 10);
+        삼호선.addSection(교대역, 남부터미널역, 50, 1);
+        삼호선.addSection(남부터미널역, 양재역, 50, 2);
+
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
@@ -103,6 +146,35 @@ public class SubwayMapTest {
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
         assertThat(path.calculateFare()).isEqualTo(1250 + 1000); //총거리 60 = 기본10 + 추가50 = 1250 + 1000
+    }
+
+    @DisplayName("요금 계산 = 기본요금 + 10 ~ 50km 요금 + 50km 초과요금")
+    @Test
+    void calculateFare() {
+        교대역 = createStation(1L, "교대역");
+        강남역 = createStation(2L, "강남역");
+        양재역 = createStation(3L, "양재역");
+        남부터미널역 = createStation(4L, "남부터미널역");
+
+        신분당선 = new Line("신분당선", "red");
+        이호선 = new Line("2호선", "red");
+        삼호선 = new Line("3호선", "red");
+
+        신분당선.addSection(강남역, 양재역, 26, 5);
+        이호선.addSection(교대역, 강남역, 50, 10);
+        삼호선.addSection(교대역, 남부터미널역, 50, 1);
+        삼호선.addSection(남부터미널역, 양재역, 50, 2);
+
+        // given
+        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.calculateFare()).isEqualTo(1250 + 1000 + 200); //총거리 76 = 기본10 + 추가50 + 추가16= 1250 + 1000 + 200
     }
 
     private Station createStation(long id, String name) {

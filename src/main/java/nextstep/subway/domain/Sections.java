@@ -161,7 +161,7 @@ public class Sections {
         int totalDistance = totalDistance();
         int fare = 0;
 
-        if (totalDistance < DEFAULT_FARE_DISTANCE) {
+        if (totalDistance <= DEFAULT_FARE_DISTANCE) {
             return DEFAULT_FARE;
         } else if (totalDistance > 10 + DEFAULT_FARE_DISTANCE && totalDistance <= 50 + DEFAULT_FARE_DISTANCE) {
             totalDistance -= DEFAULT_FARE_DISTANCE;
@@ -171,7 +171,7 @@ public class Sections {
             fare += DEFAULT_FARE;
 
             totalDistance -= 50;
-            fare += (int) ((Math.ceil((totalDistance - 1) / 5) + 1) * 100);
+            fare += 1000;
 
             fare += (int) ((Math.ceil((totalDistance - 1) / 8) + 1) * 100);
             return fare;
