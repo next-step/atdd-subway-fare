@@ -63,4 +63,18 @@ public class PathSteps {
             .when().get("/paths?source={sourceId}&target={targetId}&type={pathType}", source, target, PathType.DURATION)
             .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 토큰을_가지고_두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
+        return baseRequest()
+            .auth().oauth2(accessToken)
+            .when().get("/paths?source={sourceId}&target={targetId}&type={pathType}", source, target, PathType.DISTANCE)
+            .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 토큰을_가지고_두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
+        return baseRequest()
+            .auth().oauth2(accessToken)
+            .when().get("/paths?source={sourceId}&target={targetId}&type={pathType}", source, target, PathType.DURATION)
+            .then().log().all().extract();
+    }
 }
