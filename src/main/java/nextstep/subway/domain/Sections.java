@@ -3,10 +3,7 @@ package nextstep.subway.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -159,6 +156,21 @@ public class Sections {
     }
 
     public int calculateFare() {
+        int total = distancePolicyfare();
+        total += subwayPolicyFare(sections);
+
+        return total;
+    }
+
+    private int subwayPolicyFare(List<Section> sections) {
+        return sections.stream()
+                .map(Section::getLine)
+                .filter(line -> Objects.nonNull(line.getLineFare()))
+                .mapToInt(Line::getLineFare)
+                .sum();
+    }
+
+    private int distancePolicyfare() {
         int distance = totalDistance();
         Fare fare = Fare.of(distance);
         return fare.calculate(distance);
