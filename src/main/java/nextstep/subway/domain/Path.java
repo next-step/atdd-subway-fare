@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Path {
 	private Sections sections;
-	private int fare;
 
 	public Path(Sections sections) {
 		this.sections = sections;
@@ -24,13 +23,5 @@ public class Path {
 
 	public int extractDuration() {
 		return sections.totalDuration();
-	}
-
-	public int getFare() {
-		return fare;
-	}
-
-	public void setFare(int fare) {
-		this.fare = fare;
 	}
 }
