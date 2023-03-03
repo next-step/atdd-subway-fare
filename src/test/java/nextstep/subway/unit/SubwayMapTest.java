@@ -116,7 +116,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare()).isEqualTo(1250); //총거리 60 = 기본10 + 추가50 = 1250 + 1000
+        assertThat(path.calculateFare()).isEqualTo(1250);
     }
 
     @DisplayName("요금 계산 = 기본요금 + 10 ~ 50km 요금")
@@ -131,7 +131,7 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 30, 5);
+        신분당선.addSection(강남역, 양재역, 20, 5);
         이호선.addSection(교대역, 강남역, 30, 10);
         삼호선.addSection(교대역, 남부터미널역, 50, 1);
         삼호선.addSection(남부터미널역, 양재역, 50, 2);
@@ -145,7 +145,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare()).isEqualTo(1250 + 1000); //총거리 60 = 기본10 + 추가50 = 1250 + 1000
+        assertThat(path.calculateFare()).isEqualTo(1250 + 800); //총거리 50 = 기본10 + 추가40 = 1250 + 800
     }
 
     @DisplayName("요금 계산 = 기본요금 + 10 ~ 50km 요금 + 50km 초과요금")
@@ -160,7 +160,7 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 26, 5);
+        신분당선.addSection(강남역, 양재역, 8, 5);
         이호선.addSection(교대역, 강남역, 50, 10);
         삼호선.addSection(교대역, 남부터미널역, 50, 1);
         삼호선.addSection(남부터미널역, 양재역, 50, 2);
@@ -174,7 +174,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare()).isEqualTo(1250 + 1000 + 200); //총거리 76 = 기본10 + 추가50 + 추가16= 1250 + 1000 + 200
+        assertThat(path.calculateFare()).isEqualTo(1250 + 800 + 100); //총거리 58 = 기본10 + 추가40 + 추가8= 1250 + 1000 + 100
     }
 
     private Station createStation(long id, String name) {

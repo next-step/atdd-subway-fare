@@ -15,10 +15,10 @@ public enum Fare {
             distance -> DEFAULT_FARE),
     SECTION1(
             distance -> distance > DEFAULT_DISTANCE && distance <= SECTION1_DISTANCE,
-            distance -> DEFAULT.calculate(distance) + calculateOverFare(distance - DEFAULT_DISTANCE, 5)),
+            distance -> DEFAULT_FARE + calculateOverFare(distance - DEFAULT_DISTANCE, 5)),
     SECTION2(
             distance -> distance > SECTION1_DISTANCE,
-            distance -> SECTION1.calculate(distance) + calculateOverFare(distance - SECTION1_DISTANCE, 8));
+            distance -> SECTION1.calculate(SECTION1_DISTANCE) + calculateOverFare(distance - SECTION1_DISTANCE, 8));
 
     private final IntPredicate matchPredicate;
     private final IntFunction<Integer> calculateFunc;
@@ -31,11 +31,16 @@ public enum Fare {
     }
 
     public int calculate(int distance) {
-        return calculateFunc.apply(distance);
+        Integer apply = calculateFunc.apply(distance);
+        System.out.println("apply = " + apply);
+        return apply;
     }
 
     private static int calculateOverFare(int distance, int wight) {
-        return (int) ((Math.ceil((distance - 1) / wight) + 1) * 100);
+        int i = (int) ((Math.ceil((distance - 1) / wight) + 1) * 100);
+        System.out.println(distance);
+        System.out.println("i = " + i);
+        return i;
     }
 
     static class Constants {

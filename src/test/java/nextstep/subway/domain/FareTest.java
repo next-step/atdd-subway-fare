@@ -32,6 +32,6 @@ class FareTest {
         int amount = fare.calculate(58);
 
         assertThat(fare).isEqualTo(Fare.SECTION2);
-        assertThat(amount).isEqualTo(1250 + 1000 + 100);
+        assertThat(amount).isEqualTo(1250 + 800 + 100);
     }
 }
