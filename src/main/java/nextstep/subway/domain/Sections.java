@@ -159,24 +159,9 @@ public class Sections {
     }
 
     public int calculateFare() {
-        int totalDistance = totalDistance();
-        int fare = 0;
-
-        if (totalDistance <= DEFAULT_FARE_DISTANCE) {
-            return DEFAULT_FARE;
-        } else if (totalDistance > 10 + DEFAULT_FARE_DISTANCE && totalDistance <= 50 + DEFAULT_FARE_DISTANCE) {
-            totalDistance -= DEFAULT_FARE_DISTANCE;
-            return DEFAULT_FARE + (int) ((Math.ceil((totalDistance - 1) / 5) + 1) * 100);
-        } else {
-            totalDistance -= DEFAULT_FARE_DISTANCE;
-            fare += DEFAULT_FARE;
-
-            totalDistance -= 50;
-            fare += 1000;
-
-            fare += (int) ((Math.ceil((totalDistance - 1) / 8) + 1) * 100);
-            return fare;
-        }
+        int distance = totalDistance();
+        Fare fare = Fare.of(distance);
+        return fare.calculate(distance);
     }
 
 }
