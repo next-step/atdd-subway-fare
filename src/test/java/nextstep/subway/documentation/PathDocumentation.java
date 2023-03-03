@@ -34,6 +34,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         baseDocumentRequest(spec, "/distance", port)
+            .header("Authorization", "Bearer dXNlcjpzZWNyZXQ=")
             .queryParam("source", 1L)
             .queryParam("target", 2L)
             .queryParam("type", PathType.DISTANCE)
@@ -53,6 +54,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         baseDocumentRequest(spec, "/duration", port)
+            .header("Authorization", "Bearer dXNlcjpzZWNyZXQ=")
             .queryParam("source", 1L)
             .queryParam("target", 3L)
             .queryParam("type", PathType.DURATION)
