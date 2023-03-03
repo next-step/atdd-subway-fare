@@ -6,11 +6,19 @@ import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 
+import static nextstep.subway.domain.Fare.Constants.*;
+
 @RequiredArgsConstructor
 public enum Fare {
-    DEFAULT(distance -> distance <= 10 && distance >= 0, distance -> 1250),
-    SECTION1(distance -> distance <= 50 + 10 && distance > 10 + 10, distance -> 1250 + calculateOverFare(distance - 10, 5)),
-    SECTION2(distance -> distance > 50 + 10, distance -> 1250 + 1000 + calculateOverFare(distance - 60, 8));
+    DEFAULT(
+            distance -> distance >= MIN_DISTANCE && distance <= DEFAULT_DISTANCE,
+            distance -> DEFAULT_FARE),
+    SECTION1(
+            distance -> distance > DEFAULT_DISTANCE && distance <= SECTION1_DISTANCE,
+            distance -> DEFAULT.calculate(distance) + calculateOverFare(distance - DEFAULT_DISTANCE, 5)),
+    SECTION2(
+            distance -> distance > SECTION1_DISTANCE,
+            distance -> SECTION1.calculate(distance) + calculateOverFare(distance - SECTION1_DISTANCE, 8));
 
     private final IntPredicate matchPredicate;
     private final IntFunction<Integer> calculateFunc;
@@ -28,5 +36,12 @@ public enum Fare {
 
     private static int calculateOverFare(int distance, int wight) {
         return (int) ((Math.ceil((distance - 1) / wight) + 1) * 100);
+    }
+
+    static class Constants {
+        public static final int DEFAULT_DISTANCE = 10;
+        public static final int MIN_DISTANCE = 0;
+        public static final int DEFAULT_FARE = 1250;
+        public static final int SECTION1_DISTANCE = 50;
     }
 }

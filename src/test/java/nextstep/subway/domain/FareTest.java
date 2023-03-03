@@ -28,8 +28,8 @@ class FareTest {
 
     @Test
     void 이차_추가_구간요금_계산() {
-        Fare fare = Fare.of(68);
-        int amount = fare.calculate(68);
+        Fare fare = Fare.of(58);
+        int amount = fare.calculate(58);
 
         assertThat(fare).isEqualTo(Fare.SECTION2);
         assertThat(amount).isEqualTo(1250 + 1000 + 100);
