@@ -20,7 +20,11 @@ public class Path {
     public int extractDuration() {
         return sections.totalDuration();
     }
-    
+
+    public int calculateFare() {
+        return Fare.calculate(extractDistance());
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }
