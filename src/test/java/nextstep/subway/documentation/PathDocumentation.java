@@ -1,6 +1,5 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -23,6 +22,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 public class PathDocumentation extends Documentation {
 
+    private static final String FIND_PATH = "path";
     @MockBean
     private PathService pathService;
 
@@ -35,9 +35,8 @@ public class PathDocumentation extends Documentation {
                 ), 10);
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        final RequestSpecification requestSpec = RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
+        final RequestSpecification requestSpec = documentRequestSpecification()
+                .filter(document(FIND_PATH,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(

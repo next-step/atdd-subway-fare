@@ -29,4 +29,9 @@ public class Documentation {
                 .addFilter(documentationConfiguration(restDocumentation))
                 .build();
     }
+
+    protected RequestSpecification documentRequestSpecification() {
+        return RestAssured
+                .given(spec).log().all();
+    }
 }
