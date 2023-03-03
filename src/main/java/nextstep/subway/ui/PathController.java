@@ -20,7 +20,7 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(
-        @AuthenticationPrincipal User user,
+        @AuthenticationPrincipal(required = false) User user,
         @ModelAttribute PathRequest request
     ) {
         return ResponseEntity.ok(pathService.findPath(request, user));

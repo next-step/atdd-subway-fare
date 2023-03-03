@@ -50,11 +50,6 @@ public class Member {
         return Objects.equals(this.password, password);
     }
 
-    public int calculateDiscountFare(int fare) {
-        final DiscountPolicy discountPolicy = DiscountPolicy.findDiscountPolicy(age);
-        return discountPolicy.calculateDiscountFare(fare);
-    }
-
     public Long getId() {
         return id;
     }

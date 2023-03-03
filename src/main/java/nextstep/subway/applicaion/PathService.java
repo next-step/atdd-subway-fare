@@ -2,6 +2,7 @@ package nextstep.subway.applicaion;
 
 import java.util.List;
 import nextstep.member.application.MemberService;
+import nextstep.member.domain.DiscountPolicy;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.User;
 import nextstep.subway.applicaion.dto.PathRequest;
@@ -41,7 +42,9 @@ public class PathService {
             return PathResponse.of(path, fare);
         }
         final Member member = memberService.findById(user.getId());
-        final int discountFare = member.calculateDiscountFare(fare);
+
+        final DiscountPolicy discountPolicy = DiscountPolicy.findDiscountPolicy(member.getAge());
+        final int discountFare = discountPolicy.calculateDiscountFare(fare);
 
         return PathResponse.of(path, discountFare);
     }
