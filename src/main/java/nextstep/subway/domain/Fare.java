@@ -32,12 +32,16 @@ public enum Fare {
     }
 
     public static int calculate(int distance) {
+        return calculate(distance, 0);
+    }
+
+    public static int calculate(int distance, int lineExtraFare) {
         var fare = Arrays.stream(values())
             .filter(it -> satisfyCondition(it, distance))
             .findFirst()
             .orElse(BELOW_10KM);
 
-        return BASE_FARE + calculateExtraFare(fare, distance);
+        return BASE_FARE + calculateExtraFare(fare, distance) + lineExtraFare;
     }
 
     private static boolean satisfyCondition(Fare fare, int distance) {

@@ -45,6 +45,10 @@ public class Line {
         return color;
     }
 
+    public int getExtraFare() {
+        return extraFare;
+    }
+
     public List<Section> getSections() {
         return sections.getSections();
     }
