@@ -9,18 +9,23 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension.class)
 public class Documentation {
+
     protected RequestSpecification spec;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         this.spec = new RequestSpecBuilder()
-                .addFilter(documentationConfiguration(restDocumentation))
-                .build();
+            .addFilter(documentationConfiguration(restDocumentation)
+                .operationPreprocessors()
+                .withRequestDefaults(prettyPrint())
+                .withResponseDefaults(prettyPrint()))
+            .build();
     }
 }

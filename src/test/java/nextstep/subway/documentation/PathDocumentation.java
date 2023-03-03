@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(1L, "강남역"),
                 new StationResponse(2L, "역삼역")
             ), 10,
-            20);
+            20, 1450);
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
@@ -48,7 +48,7 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(1L, "강남역"),
                 new StationResponse(3L, "양재역")
             ), 15,
-            15);
+            15, 1350);
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 

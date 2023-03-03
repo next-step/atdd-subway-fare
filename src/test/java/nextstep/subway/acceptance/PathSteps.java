@@ -6,20 +6,44 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
-
 
     public static RequestSpecification baseDocumentRequest(RequestSpecification spec, String directory, Integer port) {
         return RestAssured
             .given(spec).port(port).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .filter(document("path" + directory,
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint())));
+                getRequestParametersSnippet(),
+                getResponseFieldsSnippet()));
+    }
+
+    private static ResponseFieldsSnippet getResponseFieldsSnippet() {
+        return responseFields(
+            fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로에 포함되는 역의 목록"),
+            fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역의 아이디"),
+            fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역의 번호"),
+            fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리"),
+            fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간"),
+            fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
+        );
+    }
+
+    private static RequestParametersSnippet getRequestParametersSnippet() {
+        return requestParameters(
+            parameterWithName("source").description("출발역"),
+            parameterWithName("target").description("도착역"),
+            parameterWithName("type").description("조회타입")
+        );
     }
 
     private static RequestSpecification baseRequest() {
