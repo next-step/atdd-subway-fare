@@ -10,12 +10,16 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
 public class LineSteps {
+    public static Long 추가요금_존재하는_지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
+        return 지하철_노선_생성_요청(createLineParams(name, color, upStation, downStation, distance, duration, extraFare)).jsonPath().getLong("id");
+    }
+
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        return 지하철_노선_생성_요청(createLineParams(name, color, upStation, downStation, distance, duration)).jsonPath().getLong("id");
+        return 지하철_노선_생성_요청(createLineParams(name, color, upStation, downStation, distance, duration, 0)).jsonPath().getLong("id");
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
-        return 지하철_노선_생성_요청(createLineParams(name, color, 0L, 0L, 0, 0));
+        return 지하철_노선_생성_요청(createLineParams(name, color, 0L, 0L, 0, 0, 0));
     }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, String> params) {
@@ -91,7 +95,7 @@ public class LineSteps {
             .then().log().all().extract();
     }
 
-    private static Map<String, String> createLineParams(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private static Map<String, String> createLineParams(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -99,6 +103,7 @@ public class LineSteps {
         params.put("downStationId", downStation + "");
         params.put("distance", distance + "");
         params.put("duration", duration + "");
+        params.put("extraFare", extraFare + "");
         return params;
     }
 }
