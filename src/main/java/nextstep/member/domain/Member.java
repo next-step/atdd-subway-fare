@@ -25,10 +25,12 @@ public class Member {
     }
 
     public Member(String email, String password, Integer age) {
-        this.email = email;
-        this.password = password;
-        this.age = age;
-        this.roles = List.of(RoleType.ROLE_MEMBER.name());
+        this(
+            email,
+            password,
+            age,
+            List.of(RoleType.ROLE_MEMBER.name())
+        );
     }
 
     public Member(String email, String password, Integer age, List<String> roles) {
@@ -36,6 +38,16 @@ public class Member {
         this.password = password;
         this.age = age;
         this.roles = roles;
+    }
+
+    public void update(Member member) {
+        this.email = member.email;
+        this.password = member.password;
+        this.age = member.age;
+    }
+
+    public boolean checkPassword(String password) {
+        return Objects.equals(this.password, password);
     }
 
     public Long getId() {
@@ -56,15 +68,5 @@ public class Member {
 
     public List<String> getRoles() {
         return roles;
-    }
-
-    public void update(Member member) {
-        this.email = member.email;
-        this.password = member.password;
-        this.age = member.age;
-    }
-
-    public boolean checkPassword(String password) {
-        return Objects.equals(this.password, password);
     }
 }

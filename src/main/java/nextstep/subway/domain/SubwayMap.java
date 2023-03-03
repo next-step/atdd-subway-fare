@@ -1,11 +1,10 @@
 package nextstep.subway.domain;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
@@ -58,6 +57,13 @@ public class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
+        final int extraFare = sections.stream()
+            .map(Section::getLine)
+            .distinct()
+            .mapToInt(Line::getExtraFare)
+            .max()
+            .orElse(0);
+
         return new Path(
             new Sections(sections),
             new FareChain(
@@ -66,7 +72,8 @@ public class SubwayMap {
                     new OverTenFare(),
                     new OverFiftyFare()
                 )
-            )
+            ),
+            extraFare
         );
     }
 }

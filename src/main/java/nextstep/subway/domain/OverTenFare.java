@@ -7,10 +7,10 @@ public class OverTenFare implements Fare {
 
     @Override
     public int calculateOverFare(int distance) {
-        if (distance <= 10) {
+        if (distance <= DEFAULT_DISTANCE) {
             return 0;
         }
-        if (distance > 50) {
+        if (distance > OVER_TEN_MAXIMUM_DISTANCE) {
             return (int) ((Math.ceil((OVER_TEN_MAXIMUM_DISTANCE - DEFAULT_DISTANCE - 1) / 5) + 1) * 100);
         }
         return (int) ((Math.ceil((distance - DEFAULT_DISTANCE - 1) / 5) + 1) * 100);

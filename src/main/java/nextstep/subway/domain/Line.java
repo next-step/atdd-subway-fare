@@ -1,7 +1,11 @@
 package nextstep.subway.domain;
 
-import javax.persistence.*;
 import java.util.List;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Line {
@@ -11,6 +15,8 @@ public class Line {
     private String name;
     private String color;
 
+    private int extraFare;
+
     @Embedded
     private Sections sections = new Sections();
 
@@ -18,24 +24,13 @@ public class Line {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public List<Section> getSections() {
-        return sections.getSections();
+        this.extraFare = extraFare;
     }
 
     public void update(String name, String color) {
@@ -64,11 +59,31 @@ public class Line {
         );
     }
 
-    public List<Station> getStations() {
-        return sections.getStations();
-    }
-
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
+    }
+
+    public List<Section> getSections() {
+        return sections.getSections();
+    }
+
+    public List<Station> getStations() {
+        return sections.getStations();
     }
 }
