@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.domain.Age;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
@@ -28,6 +29,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType);
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, Age.of(age));
     }
 }

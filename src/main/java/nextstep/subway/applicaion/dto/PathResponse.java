@@ -3,6 +3,7 @@ package nextstep.subway.applicaion.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import nextstep.subway.domain.Age;
 import nextstep.subway.domain.Path;
 
 public class PathResponse {
@@ -18,13 +19,13 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, Age age) {
         List<StationResponse> stations = path.getStations().stream()
             .map(StationResponse::of)
             .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.calculateFare();
+        int fare = path.calculateFare(age);
 
         return new PathResponse(stations, distance, duration, fare);
     }
