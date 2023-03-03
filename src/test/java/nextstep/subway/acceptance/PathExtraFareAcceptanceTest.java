@@ -67,4 +67,58 @@ public class PathExtraFareAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(2350);
     }
+
+    /**
+     * Given 어린이 사용자가 로그인하고
+     * When 최단 경로를 구할 경우,
+     * Then 계산되는 최종 요금에 350원을 공제하고 나머지 금액의 50%를 할인한다.
+     */
+    @DisplayName("어린이 사용자가 최단 경로를 구할 경우, 계산한 요금에 350원을 공제하고 나머지 금액의 50%을 할인한다.")
+    @Test
+    void calculateFareWithChildUser() {
+        // given
+        String token = MemberSteps.베어러_인증_로그인_요청("children@email.com", "password").jsonPath().getString("accessToken");
+
+        // when
+        var response = 로그인_사용자_두_역의_최단_거리_경로_조회를_요청(token, 교대역, 이매역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1000);
+    }
+
+    /**
+     * Given 청소년 사용자가 로그인하고
+     * When 최단 경로를 구할 경우,
+     * Then 계산되는 최종 요금에 350원을 공제하고 나머지 금액의 20%를 할인한다.
+     */
+    @DisplayName("청소년 사용자가 최단 경로를 구할 경우, 계산한 요금에 350원을 공제하고 나머지 금액의 20%를 할인한다.")
+    @Test
+    void calculateFareWithTeenAgeUser() {
+        // given
+        String token = MemberSteps.베어러_인증_로그인_요청("teenager@email.com", "password").jsonPath().getString("accessToken");
+
+        // when
+        var response = 로그인_사용자_두_역의_최단_거리_경로_조회를_요청(token, 교대역, 이매역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1600);
+    }
+
+    /**
+     * Given 성인 사용자가 로그인하고
+     * When 최단 경로를 구할 경우,
+     * Then 별도의 할인 없이 최종 요금이 계산된다.
+     */
+    @DisplayName("성인 사용자가 최단 경로를 구할 경우, 별도의 할인 없이 최종 요금을 계산한다.")
+    @Test
+    void calculateFareWithAdultUser() {
+        // given
+        String token = MemberSteps.베어러_인증_로그인_요청("adult@email.com", "password").jsonPath().getString("accessToken");
+
+        // when
+        var response = 로그인_사용자_두_역의_최단_거리_경로_조회를_요청(token, 교대역, 이매역);
+
+        // then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2350);
+    }
 }
