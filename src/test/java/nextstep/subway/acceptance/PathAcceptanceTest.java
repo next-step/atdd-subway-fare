@@ -24,6 +24,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 	private Long 강남역;
 	private Long 양재역;
 	private Long 남부터미널역;
+	private Long 청계산입구역;
 	private Long 이호선;
 	private Long 신분당선;
 	private Long 삼호선;
@@ -33,7 +34,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 	 * |                        |
 	 * *3호선*                   *신분당선*
 	 * |                        |
-	 * 남부터미널역  --- *3호선* ---   양재
+	 * 남부터미널역  --- *3호선* ---   양재역
+	 * 							|
+	 * 						     청계산입구역
 	 */
 	@BeforeEach
 	public void setUp() {
@@ -43,12 +46,14 @@ class PathAcceptanceTest extends AcceptanceTest {
 		강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
 		양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
 		남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+		청계산입구역 = 지하철역_생성_요청("청계산입구역").jsonPath().getLong("id");
 
 		이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
 		신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
 		삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
 
 		지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
+		지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 청계산입구역, 3, 5));
 	}
 
 	@DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -93,6 +98,20 @@ class PathAcceptanceTest extends AcceptanceTest {
 				경로의_소요_시간을_응답한다(response, 10),
 				경로의_이용_요금을_응답한다(response, 1250)
 		);
+	}
+
+	/**
+	 * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 노선을 이용하면
+	 * Then 총 지하철 요금은 기본 요금에 노선의 추가 요금이 더해진 금액이다.
+	 */
+	@DisplayName("지하철 구간 길이가 10km 이내이고 추가 요금이 있는 노선을 이용하면, 총 지하철 요금은 기본 요금에 노선의 추가 요금이 더해진 금액이다.")
+	@Test
+	void findPathByDistanceWithExtraFare() {
+		// when
+		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역, 청계산입구역);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(2150);
 	}
 
 	private ExtractableResponse<Response> 지하철_이용요금을_포함한_두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
