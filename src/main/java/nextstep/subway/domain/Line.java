@@ -26,6 +26,12 @@ public class Line {
         this.color = color;
     }
 
+    public Line(String name, String color, Integer lineFare) {
+        this.name = name;
+        this.color = color;
+        this.lineFare = lineFare;
+    }
+
     public List<Section> getSections() {
         return sections.getSections();
     }
