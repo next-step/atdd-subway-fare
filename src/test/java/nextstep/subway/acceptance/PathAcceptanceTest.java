@@ -69,7 +69,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(55);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250 + 900);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250 + 900 + 500);  // 기본료 + 거리비례추가요금 + 추가요금이 있는노선
     }
 
     /**
