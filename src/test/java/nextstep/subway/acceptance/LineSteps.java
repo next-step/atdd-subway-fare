@@ -31,6 +31,19 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
+    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> lineCreateParams;
+        lineCreateParams = new HashMap<>();
+        lineCreateParams.put("name", name);
+        lineCreateParams.put("color", color);
+        lineCreateParams.put("upStationId", upStation + "");
+        lineCreateParams.put("downStationId", downStation + "");
+        lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
+
+        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
         return RestAssured
                 .given().log().all()
