@@ -31,7 +31,10 @@ public class Documentation {
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.port = port;
         spec = new RequestSpecBuilder()
-                .addFilter(documentationConfiguration(restDocumentation))
+                .addFilter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
                 .build();
     }
 

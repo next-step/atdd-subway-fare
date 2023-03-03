@@ -4,15 +4,9 @@ import java.util.List;
 
 public class Path {
     private final Sections sections;
-    private final Fare fare;
 
     public Path(Sections sections) {
         this.sections = sections;
-        this.fare = new Fare(distance());
-    }
-
-    public Sections getSections() {
-        return sections;
     }
 
     public int distance() {
@@ -23,11 +17,11 @@ public class Path {
         return sections.sumByCondition(Section::getDuration);
     }
 
-    public int cost() {
-        return fare.cost();
-    }
-
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public List<Line> includedLines() {
+        return sections.allLines();
     }
 }

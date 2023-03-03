@@ -19,6 +19,25 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 로그인_사용자가_경로_조회를_요청(String accessToken, Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .auth().oauth2(accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 로그인_사용자가_경로_조회를_요청(String accessToken, Long source, Long target, RequestSpecification spec, RestDocumentationFilter filter) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(filter)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type=", source, target)
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, RequestSpecification spec, RestDocumentationFilter filter) {
         return RestAssured
                 .given(spec).log().all()
@@ -53,6 +72,21 @@ public class PathSteps {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("additionalFare", 0 + "");
+
+        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    }
+
+    public static Long 추가_요금이_있는_지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFare) {
+        Map<String, String> lineCreateParams;
+        lineCreateParams = new HashMap<>();
+        lineCreateParams.put("name", name);
+        lineCreateParams.put("color", color);
+        lineCreateParams.put("upStationId", upStation + "");
+        lineCreateParams.put("downStationId", downStation + "");
+        lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("additionalFare", additionalFare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }

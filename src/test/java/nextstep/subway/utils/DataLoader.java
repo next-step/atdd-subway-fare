@@ -11,7 +11,7 @@ import java.util.Arrays;
 @Profile("test")
 @Component
 public class DataLoader {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public DataLoader(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -24,5 +24,7 @@ public class DataLoader {
         memberRepository.save(new Member(GithubResponses.사용자2.getEmail(), "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
         memberRepository.save(new Member(GithubResponses.사용자3.getEmail(), "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
         memberRepository.save(new Member(GithubResponses.사용자4.getEmail(), "password", 20, Arrays.asList(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member(GithubResponses.어린이_사용자.getEmail(), "password", 6, Arrays.asList(RoleType.ROLE_MEMBER.name())));
+        memberRepository.save(new Member(GithubResponses.청소년_사용자.getEmail(), "password", 13, Arrays.asList(RoleType.ROLE_MEMBER.name())));
     }
 }

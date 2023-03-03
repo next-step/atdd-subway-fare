@@ -21,7 +21,13 @@ public class SubwayMap {
         this.condition = Objects.requireNonNullElse(condition, SectionCondition.DISTANCE);
     }
 
-    public Path findPath(Station source, Station target) {
+    public Path findPath(Station upStation, Station downStation) {
+        StationPair stationPair = new StationPair(upStation, downStation);
+        return new Path(findPathSections(stationPair));
+    }
+
+
+    private Sections findPathSections(StationPair stationPair) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -52,12 +58,11 @@ public class SubwayMap {
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(stationPair.getSource(), stationPair.getTarget());
 
         List<Section> sections = result.getEdgeList().stream()
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
-
-        return new Path(new Sections(sections));
+        return new Sections(sections);
     }
 }

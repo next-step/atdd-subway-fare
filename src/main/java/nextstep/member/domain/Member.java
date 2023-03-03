@@ -21,7 +21,7 @@ public class Member {
     @Column(name = "role")
     private List<String> roles;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password, Integer age) {
@@ -36,6 +36,10 @@ public class Member {
         this.password = password;
         this.age = age;
         this.roles = roles;
+    }
+
+    public static Member guest() {
+        return new Member("guest", "guest", 0, List.of());
     }
 
     public Long getId() {

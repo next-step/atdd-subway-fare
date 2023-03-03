@@ -3,8 +3,8 @@ package nextstep.member.domain;
 import java.util.List;
 
 public class LoginMember {
-    private Long id;
-    private List<String> roles;
+    private final Long id;
+    private final List<String> roles;
 
     public LoginMember(Long id, List<String> roles) {
         this.id = id;
@@ -17,5 +17,9 @@ public class LoginMember {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public boolean isGuest() {
+        return false;
     }
 }
