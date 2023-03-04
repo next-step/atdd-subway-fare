@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
+    private final List<Line> lines;
+    private final ShortestPathType type;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(List<Line> lines, ShortestPathType type) {
         this.lines = lines;
+        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
@@ -30,7 +32,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, type.getWeight(it));
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -40,7 +42,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, type.getWeight(it));
                 });
 
         // 다익스트라 최단 경로 찾기
