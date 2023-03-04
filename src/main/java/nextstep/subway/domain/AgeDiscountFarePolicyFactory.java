@@ -25,6 +25,6 @@ public final class AgeDiscountFarePolicyFactory {
     }
 
     private static boolean isChild(int age) {
-        return age >= 6 & age < 13;
+        return age >= 6 && age < 13;
     }
 }
