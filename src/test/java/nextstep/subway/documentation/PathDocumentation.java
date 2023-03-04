@@ -13,7 +13,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -53,7 +52,7 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
-                .queryParam("type", "DISTANCE")
+                .queryParam("type", "DISTANCE", "DURATION")
                 .when().get("/paths")
                 .then().log().all().extract();
     }
