@@ -12,7 +12,7 @@ class OverDistanceFarePolicyTest {
     @ValueSource(ints = {1, 10})
     void 총_거리가_10KM_이하인_경우_추가_요금은_없다(int distance) {
         // when
-        Fare fare = OverDistanceFarePolicy.calculateOverDistanceFare(distance);
+        Fare fare = OverDistanceFarePolicy.create().calculateOverDistanceFare(distance);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(0));
@@ -29,7 +29,7 @@ class OverDistanceFarePolicyTest {
     })
     void 총_거리에서_10KM_초과이고_50KM_이하인_거리는_5KM마다_추가_요금_100원이_추가된다(int distance, int expectedFare) {
         // when
-        Fare fare = OverDistanceFarePolicy.calculateOverDistanceFare(distance);
+        Fare fare = OverDistanceFarePolicy.create().calculateOverDistanceFare(distance);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(expectedFare));
@@ -44,7 +44,7 @@ class OverDistanceFarePolicyTest {
     })
     void 총_거리에서_50KM를_초과한_거리는_8KM마다_추가_요금_100원이_추가된다(int distance, int expectedFare) {
         // when
-        Fare fare = OverDistanceFarePolicy.calculateOverDistanceFare(distance);
+        Fare fare = OverDistanceFarePolicy.create().calculateOverDistanceFare(distance);
 
         // then
         assertThat(fare).isEqualTo(Fare.of(expectedFare));

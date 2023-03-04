@@ -32,7 +32,7 @@ public class Path {
         List<Line> lines = sections.getLines();
 
         Fare fare = DEFAULT_FARE
-                .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance))
+                .plus(OverDistanceFarePolicy.create().calculateOverDistanceFare(totalDistance))
                 .plus(new AdditionalLineFarePolicy().calculateAdditionalLineFare(lines));
 
         return fare.minus(AgeDiscountPolicy.calculateAgeDiscountFare(fare, age)).getValue();
