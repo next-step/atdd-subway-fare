@@ -27,6 +27,7 @@ public class PathResponse {
         int distance = path.extractDistance();
         int duration = path.extractDuration();
         int fare = path.extractFare(age);
+        
         return new PathResponse(stations, distance, duration, fare);
     }
 

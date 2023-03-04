@@ -254,6 +254,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 				.when().get("/paths?source={sourceId}&target={targetId}&type={pathSearchType}", source, target, PathSearchType.DISTANCE)
 				.then().log().all().extract();
 	}
+  
 	private ExtractableResponse<Response> 지하철_이용요금을_포함한_두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
 		return RestAssured
 				.given().log().all()
