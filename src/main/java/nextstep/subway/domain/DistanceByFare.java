@@ -3,9 +3,7 @@ package nextstep.subway.domain;
 import lombok.Getter;
 
 @Getter
-public enum DistanceFare {
-
-    DEFAULT(1250),
+public enum DistanceByFare {
 
     DEFAULT_DISTANCE(10),
 
@@ -17,7 +15,7 @@ public enum DistanceFare {
 
     private final int value;
 
-    DistanceFare(int value) {
+    DistanceByFare(int value) {
         this.value = value;
     }
 }

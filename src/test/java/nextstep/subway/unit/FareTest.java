@@ -1,11 +1,11 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.DistanceFare;
 import nextstep.subway.domain.DistanceFarePolicy;
 import nextstep.subway.domain.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static nextstep.subway.fixtures.FareFixtures.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareTest {
@@ -18,7 +18,7 @@ public class FareTest {
         Fare fare = Fare.of(new DistanceFarePolicy(0), 10);
 
         // then
-        assertThat(fare.get()).isEqualTo(DistanceFare.DEFAULT.getValue());
+        assertThat(fare.get()).isEqualTo(DEFAULT_FARE);
     }
 
     /**
@@ -31,7 +31,7 @@ public class FareTest {
         Fare fare = Fare.of(new DistanceFarePolicy(0), 16);
 
         // then
-        assertThat(fare.get()).isEqualTo(DistanceFare.DEFAULT.getValue() + 200);
+        assertThat(fare.get()).isEqualTo(DEFAULT_FARE + 200);
     }
 
     /**
@@ -44,7 +44,7 @@ public class FareTest {
         Fare fare = Fare.of(new DistanceFarePolicy(0), 60);
 
         // then
-        assertThat(fare.get()).isEqualTo(DistanceFare.DEFAULT.getValue() + 800);
+        assertThat(fare.get()).isEqualTo(DEFAULT_FARE + 800);
     }
 
     @DisplayName("이용거리가 10km이내이고 노선추가요금이 있을경우 추가요금을 부과한다")
@@ -57,6 +57,6 @@ public class FareTest {
         Fare fare = Fare.of(new DistanceFarePolicy(extraFare), 10);
 
         // then
-        assertThat(fare.get()).isEqualTo(DistanceFare.DEFAULT.getValue() + extraFare);
+        assertThat(fare.get()).isEqualTo(DEFAULT_FARE + extraFare);
     }
 }

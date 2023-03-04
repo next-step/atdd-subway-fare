@@ -9,7 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static nextstep.subway.fixtures.StationFixtures.*;
+import static nextstep.subway.fixtures.FareFixtures.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
@@ -23,15 +23,13 @@ public class SubwayMapTest {
     private Line 삼호선;
 
     /**
-     *
-     *
-     *             3
+     * 3
      * 교대역  --- *2호선* ---   강남역
      * |                        |
      * 5  *3호선*                   *신분당선*    3
      * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
-     *                  5
+     * 남부터미널역  --- *3호선* ---   양재경
+     * 5
      */
     @BeforeEach
     void setUp() {
@@ -102,7 +100,7 @@ public class SubwayMapTest {
         Fare fare = Fare.of(new DistanceFarePolicy(path.getMaxExtraFare()), path.getTotalDistance());
 
         // then
-        assertThat(fare.get()).isEqualTo(DistanceFare.DEFAULT.getValue() + 500);
+        assertThat(fare.get()).isEqualTo(DEFAULT_FARE + 500);
     }
 
     private Station createStation(long id, String name) {

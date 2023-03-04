@@ -1,8 +1,10 @@
 package nextstep.subway.domain;
 
-import static nextstep.subway.domain.DistanceFare.*;
+import static nextstep.subway.domain.DistanceByFare.*;
 
 public class Fare {
+
+    private static final int DEFAULT_FARE = 1250;
 
     private final FarePolicy farePolicy;
 
@@ -27,17 +29,17 @@ public class Fare {
 
     private int calculate(int distance) {
         if (distance <= DEFAULT_DISTANCE.getValue()) {
-            return DEFAULT.getValue();
+            return DEFAULT_FARE;
         }
 
-        if (distance <= DistanceFare.OVER_BETWEEN_TEN_AND_FIFTY.getValue()) {
-            return DEFAULT.getValue() + calculateOverFare(
+        if (distance <= DistanceByFare.OVER_BETWEEN_TEN_AND_FIFTY.getValue()) {
+            return DEFAULT_FARE + calculateOverFare(
                     distance - DEFAULT_DISTANCE.getValue(),
                     STANDARD_DISTANCE_OVER_BETWEEN_TEN_AND_FIFTY.getValue()
             );
         }
 
-        return DEFAULT.getValue() + calculateOverFare(
+        return DEFAULT_FARE + calculateOverFare(
                 distance - DEFAULT_DISTANCE.getValue(),
                 STANDARD_FARE_DISTANCE_OVER_FIFTY.getValue()
         );
