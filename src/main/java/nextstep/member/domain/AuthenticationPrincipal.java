@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthenticationPrincipal {
-    boolean optional() default false;
+    boolean required() default true;
 }

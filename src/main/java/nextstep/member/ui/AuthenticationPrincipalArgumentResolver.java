@@ -29,10 +29,10 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        boolean optional = Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)).optional();
+        boolean required = Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)).required();
         String authorization = webRequest.getHeader("Authorization");
 
-        if (optional && authorization == null) {
+        if (!required && authorization == null) {
             return new LoginMember(null, 20, List.of());
         }
 
