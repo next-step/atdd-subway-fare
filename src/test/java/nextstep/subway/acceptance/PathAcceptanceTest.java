@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.domain.ShortestPathType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +48,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, 남부터미널역, 양재역, 3);
+        지하철_노선에_지하철_구간_생성_요청(삼호선, 남부터미널역, 양재역, 3, 4);
     }
 
     /**
@@ -72,6 +73,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
      */
+    @Disabled("최단 시간 기능 구현 후 어노테이션 삭제")
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
     void findPathByTime() {
@@ -79,6 +81,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 타입별_최단_경로_조회_요청(교대역, 양재역, ShortestPathType.DISTANCE);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
     }
 }

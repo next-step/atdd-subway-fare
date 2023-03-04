@@ -67,7 +67,8 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance) {
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
@@ -102,8 +103,8 @@ public class LineSteps {
         Map<String, String> params = new HashMap<>();
         params.put("name", String.valueOf(name));
         params.put("color", String.valueOf(color));
-        params.put("upStation", String.valueOf(upStation));
-        params.put("downStation", String.valueOf(downStation));
+        params.put("upStationId", String.valueOf(upStation));
+        params.put("downStationId", String.valueOf(downStation));
         params.put("distance", String.valueOf(distance));
         params.put("duration", String.valueOf(duration));
 

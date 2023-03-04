@@ -12,6 +12,7 @@ import java.util.Map;
 import static nextstep.subway.acceptance.FavoriteSteps.*;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.SectionSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 @DisplayName("즐겨찾기 관련 기능")
@@ -48,7 +49,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2);
 
-        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 4));
 
         사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
@@ -82,13 +83,5 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("distance", distance + "");
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        return params;
     }
 }

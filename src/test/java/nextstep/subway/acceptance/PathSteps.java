@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PathSteps {
 
-    private static ExtractableResponse<Response> 타입별_최단_경로_조회_요청(RequestSpecification spec) {
+    public static ExtractableResponse<Response> 타입별_최단_경로_조회_요청(RequestSpecification spec) {
         return RestAssured
                 .given(spec).log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -20,6 +20,7 @@ public class PathSteps {
                 .then().log().all()
                 .extract();
     }
+
 
     public static ExtractableResponse<Response> 타입별_최단_경로_조회_요청(Long source, Long target, ShortestPathType type) {
         RequestSpecification spec = new RequestSpecBuilder()
