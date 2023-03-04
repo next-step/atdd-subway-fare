@@ -24,10 +24,13 @@ class PathAcceptanceTest extends AcceptanceTest {
 	private Long 강남역;
 	private Long 양재역;
 	private Long 남부터미널역;
-	private Long 청계산입구역;
+	private Long 판교역;
+	private Long 경기광주역;
+	private Long 곤지암역;
 	private Long 이호선;
 	private Long 신분당선;
 	private Long 삼호선;
+	private Long 경강선;
 
 	/**
 	 * 교대역    --- *2호선* ---   강남역
@@ -36,7 +39,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 	 * |                        |
 	 * 남부터미널역  --- *3호선* ---   양재역
 	 * 							|
-	 * 						     청계산입구역
+	 * 						     판교역 -------*경강선* 1200원 추가 요금------경기광주역------곤지암역
 	 */
 	@BeforeEach
 	public void setUp() {
@@ -46,15 +49,18 @@ class PathAcceptanceTest extends AcceptanceTest {
 		강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
 		양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
 		남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
-		청계산입구역 = 지하철역_생성_요청("청계산입구역").jsonPath().getLong("id");
+		판교역 = 지하철역_생성_요청("판교역").jsonPath().getLong("id");
+		경기광주역 = 지하철역_생성_요청("경기광주역").jsonPath().getLong("id");
+		곤지암역 = 지하철역_생성_요청("곤지암역").jsonPath().getLong("id");
 
 		이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 4);
 		신분당선 = 추가요금이_있는_지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4,900);
+		경강선 = 추가요금이_있는_지하철_노선_생성_요청("경강선", "black", 판교역, 경기광주역, 4, 4,1200);
 		삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
-		삼호선 = 지하철_노선_생성_요청("1호선", "brue", 교대역, 남부터미널역, 2, 5);
 
 		지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 5));
-		지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 청계산입구역, 3, 5));
+		지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 판교역, 3, 5));
+		지하철_노선에_지하철_구간_생성_요청(경강선, createSectionCreateParams(경기광주역, 곤지암역, 50, 5));
 	}
 
 	@DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -109,10 +115,80 @@ class PathAcceptanceTest extends AcceptanceTest {
 	@Test
 	void findPathByDistanceWithExtraFare() {
 		// when
-		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역, 청계산입구역);
+		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(양재역, 판교역);
 
 		// then
 		assertThat(response.jsonPath().getInt("fare")).isEqualTo(2150);
+	}
+
+	/**
+	 * When 출발역에서 도착역까지의 구간 길이가 10km 이내이고, 추가 요금이 있는 여러 노선을 이용하면
+	 * Then 총 지하철 요금은 (기본 요금 + 가장 큰 노선 추가 요금) 이다.
+	 */
+	@DisplayName("구간 길이가 10km 이내이고 여러 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 가장 큰 노선 추가 요금) 이다.")
+	@Test
+	void findPathByDistanceWithExtraFares() {
+		// when
+		var response = 두_역의_최단_거리_경로_조회를_요청(양재역, 경기광주역);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(2450);
+	}
+
+	/**
+	 * When 출발역에서 도착역까지의 구간 길이가 10km 초과 50km 이내이고, 추가 요금이 있는 노선을 이용하면
+	 * Then 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 노선 추가 요금) 이다.
+	 */
+	@DisplayName("구간 길이가 10km 초과 50km 이내이고 여러 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 가장 큰 노선 추가 요금) 이다.")
+	@Test
+	void findPathByMiddleDistanceWithExtraFare() {
+		// when
+		var response = 두_역의_최단_거리_경로_조회를_요청(강남역, 판교역);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
+	}
+
+	/**
+	 * When 출발역에서 도착역까지의 구간 길이가 10km 초과 50km 이내이고, 추가 요금이 있는 여러 노선을 이용하면
+	 * Then 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 가장 큰 노선 추가 요금) 이다.
+	 */
+	@DisplayName("구간 길이가 10km 초과 50km 이내이고 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금(5km 당 100원) + 노선 추가 요금) 이다.")
+	@Test
+	void findPathByMiddleDistanceWithExtraFares() {
+		// when
+		var response = 두_역의_최단_거리_경로_조회를_요청(강남역, 경기광주역);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(2650);
+	}
+
+	/**
+	 * When 출발역에서 도착역까지의 구간 길이가 50km 초과이고, 추가 요금이 있는 노선을 이용하면
+	 * Then 총 지하철 요금은 (기본 요금 + 추가 요금(8km 당 100원) + 노선 추가 요금) 이다.
+	 */
+	@DisplayName("구간 길이가 50km 초과이고 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금(8km 당 100원) + 노선 추가 요금) 이다.")
+	@Test
+	void longDistanceWithExtraFare() {
+		// when
+		var response = 두_역의_최단_거리_경로_조회를_요청(판교역, 곤지암역);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(3350);
+	}
+
+	/**
+	 * When 출발역에서 도착역까지의 구간 길이가 50km 초과이고, 추가 요금이 있는 여러 노선을 이용하면
+	 * Then 총 지하철 요금은 (기본 요금 + 추가 요금(8km 당 100원) + 가장 큰 노선 추가 요금) 이다.
+	 */
+	@DisplayName("구간 길이가 50km 초과이고 여러 추가 요금 노선이 포함되었다면, 총 지하철 요금은 (기본 요금 + 추가 요금(8km 당 100원) + 가장 큰 노선 추가 요금) 이다.")
+	@Test
+	void longDistanceWithExtraFares() {
+		// when
+		var response = 두_역의_최단_거리_경로_조회를_요청(양재역, 곤지암역);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(3350);
 	}
 
 	private ExtractableResponse<Response> 지하철_이용요금을_포함한_두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
