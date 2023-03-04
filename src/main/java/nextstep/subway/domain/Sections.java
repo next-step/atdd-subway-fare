@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
+    public static final int DEFAULT_FARE = 1250;
+    public static final int DEFAULT_FARE_DISTANCE = 10;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -128,7 +130,8 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                    upSection.get().sumDistance(downSection.get().getDistance()),
+                    upSection.get().sumDuration(downSection.get().getDuration())
             );
 
             this.sections.add(newSection);
@@ -154,4 +157,11 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int calculateFare() {
+        int distance = totalDistance();
+        Fare fare = Fare.of(distance);
+        return fare.calculate(distance);
+    }
+
 }

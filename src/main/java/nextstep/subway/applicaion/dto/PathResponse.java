@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nextstep.subway.domain.Path;
 
@@ -7,16 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@AllArgsConstructor
 public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
     private int duration;
-
-    public PathResponse(List<StationResponse> stations, int distance, int duration) {
-        this.stations = stations;
-        this.distance = distance;
-        this.duration = duration;
-    }
+    private int fare;
 
     public static PathResponse of(Path path) {
         List<StationResponse> stations = path.getStations().stream()
@@ -24,7 +21,8 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
+        int fare = path.calculateFare();
 
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, distance, duration, fare);
     }
 }

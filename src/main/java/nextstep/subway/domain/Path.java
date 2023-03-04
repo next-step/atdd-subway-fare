@@ -24,4 +24,8 @@ public class Path {
     public int extractDuration() {
         return sections.totalDuration();
     }
+
+    public int calculateFare() {
+        return sections.calculateFare();
+    }
 }
