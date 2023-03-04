@@ -1,5 +1,6 @@
 package nextstep.member.domain;
 
+import java.util.Collections;
 import java.util.List;
 
 public class LoginMember {
@@ -18,9 +19,9 @@ public class LoginMember {
     }
 
     public List<String> getRoles() {
-        return roles;
+        return Collections.unmodifiableList(roles);
     }
-    
+
     public boolean isGuest() {
         return this.equals(GUEST);
     }
