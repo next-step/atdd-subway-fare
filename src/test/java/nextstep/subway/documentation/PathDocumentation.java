@@ -15,7 +15,6 @@ import static nextstep.subway.acceptance.PathSteps.타입별_최단_경로_조�
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -37,7 +36,7 @@ public class PathDocumentation extends Documentation {
                 List.of(new StationResponse(sourceId, "강남역"),
                         new StationResponse(targetId, "역삼역")),
                 10, 3);
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(any())).thenReturn(pathResponse);
 
         // when
         createDocumentationRequest(sourceId, targetId, ShortestPathType.DISTANCE);
@@ -58,6 +57,7 @@ public class PathDocumentation extends Documentation {
                 List.of(new StationResponse(sourceId, "강남역"),
                         new StationResponse(targetId, "역삼역")),
                 10, 3);
+        when(pathService.findPath(any())).thenReturn(pathResponse);
 
         // when
         createDocumentationRequest(sourceId, targetId, ShortestPathType.TIME);
@@ -71,12 +71,12 @@ public class PathDocumentation extends Documentation {
     }
 
     private void createDocumentationRequest(Long sourceId, Long targetId, ShortestPathType type) {
-        spec.queryParam("source", sourceId, "target", targetId, "type", type)
+        spec.queryParams("source", sourceId, "target", targetId, "type", type)
                 .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("Departure station information."),
                                 parameterWithName("target").description("Destination station information."),
-                                parameterWithName("type").description("Shortest path type.")
-                        )));
+                                parameterWithName("type").description("Shortest path type."))
+                ));
     }
 }

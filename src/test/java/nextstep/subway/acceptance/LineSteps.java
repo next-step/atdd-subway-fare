@@ -70,9 +70,11 @@ public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
+        params.put("upStationId", String.valueOf(upStationId));
+        params.put("downStationId", String.valueOf(downStationId));
+        params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(distance));
+
         return 지하철_노선에_지하철_구간_생성_요청(lineId, params);
     }
 
