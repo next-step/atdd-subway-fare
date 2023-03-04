@@ -4,11 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+import java.util.stream.Stream;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class LineTest {
     @Test
@@ -178,5 +182,25 @@ class LineTest {
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private static Stream<Arguments> provideForAddSectionFail() {
+        return Stream.of(
+                Arguments.of(null, new Station("역삼역"), 10, 10),
+                Arguments.of(new Station("강남역"), null, 10, 10),
+                Arguments.of(new Station("강남역"), new Station("역삼역"), 0, 10),
+                Arguments.of(new Station("강남역"), new Station("역삼역"), 10, 0)
+        );
+    }
+
+    @DisplayName("구간 추가시 조건에 맞지 않으면 추가하지 않는다.")
+    @ParameterizedTest(name = "상행역 : {0}, 하행역 : {1}, 거리 : {2}, 시간 : {3}")
+    @MethodSource("provideForAddSectionFail")
+    void addSectionFail(Station upStation, Station downStation, int distance, int duration) {
+        Line line = new Line("2호선", "green");
+
+        line.addSection(upStation, downStation, distance, duration);
+
+        assertThat(line.getSections()).hasSize(0);
     }
 }
