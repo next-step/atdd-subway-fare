@@ -16,3 +16,8 @@
 - gradle로 asciidoctor task를 수행시켜 문서 파일을 생성하세요
 - build > asciidoc > html5 > index.html을 브라우저로 열고 캡쳐한 이미지를 PR에 포함시켜 주세요.
 - PathSteps 클래스를 활용하여 PathDocumentation 내 코드 중복을 제거해주세요
+
+### 문서화 링크
+
+[API 문서](src/main/resources/static/docs/index.html)
+
