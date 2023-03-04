@@ -18,6 +18,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathDocumentation extends Documentation {
@@ -70,6 +72,11 @@ public class PathDocumentation extends Documentation {
 
     private void createDocumentationRequest(Long sourceId, Long targetId, ShortestPathType type) {
         spec.queryParam("source", sourceId, "target", targetId, "type", type)
-                .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+                .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("Departure station information."),
+                                parameterWithName("target").description("Destination station information."),
+                                parameterWithName("type").description("Shortest path type.")
+                        )));
     }
 }
