@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import nextstep.subway.applicaion.PathService;
 
-public class PathDocumentation extends Documentation {
+class PathDocumentation extends Documentation {
 	@MockBean
 	private PathService pathService;
 
