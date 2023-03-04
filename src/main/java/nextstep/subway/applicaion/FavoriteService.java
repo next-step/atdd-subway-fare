@@ -30,13 +30,13 @@ public class FavoriteService {
     }
 
     public void createFavorite(Long memberId, FavoriteRequest request) {
-        MemberResponse member = memberService.findMember(memberId);
+        MemberResponse member = memberService.findMemberInfo(memberId);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
     }
 
     public List<FavoriteResponse> findFavorites(Long memberId) {
-        MemberResponse member = memberService.findMember(memberId);
+        MemberResponse member = memberService.findMemberInfo(memberId);
         List<Favorite> favorites = favoriteRepository.findByMemberId(member.getId());
         Map<Long, Station> stations = extractStations(favorites);
 
@@ -49,7 +49,7 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(Long memberId, Long id) {
-        MemberResponse member = memberService.findMember(memberId);
+        MemberResponse member = memberService.findMemberInfo(memberId);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
         if (!favorite.isCreatedBy(member.getId())) {
             throw new RuntimeException();

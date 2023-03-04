@@ -2,11 +2,14 @@ package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.member.application.MemberService;
-import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.Station;
+import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,29 +35,15 @@ public class PathService {
                 getLoginMemberPathResponse(loginMember, path);
     }
 
-    private static PathResponse getAnonymousPathResponse(Path path) {
+    private PathResponse getAnonymousPathResponse(Path path) {
         return PathResponse.of(
                 path,
-                Fare.of(
-                        new DistanceFarePolicy(path.getMaxExtraFare()),
-                        path.getTotalDistance()
-                )
+                path.calculateFare()
         );
     }
 
     private PathResponse getLoginMemberPathResponse(LoginMember loginMember, Path path) {
-        MemberResponse memberResponse = memberService.findMember(loginMember.getId());
-
-        FarePolicy ageDiscountFarePolicy = AgeDiscountFarePolicyFactory.getPolicy(memberResponse.getAge());
-
-        Fare fare = Fare.of(
-                new DistanceFarePolicy(
-                        ageDiscountFarePolicy,
-                        path.getMaxExtraFare()
-                ),
-                path.getTotalDistance()
-        );
-
-        return PathResponse.of(path, fare);
+        Member member = memberService.findMember(loginMember.getId());
+        return PathResponse.of(path, path.calculateFare(member));
     }
 }
