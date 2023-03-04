@@ -41,6 +41,10 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         }
         String token = authorizationHeader.split(" ")[1];
 
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new AuthenticationException();
+        }
+
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
         List<String> roles = jwtTokenProvider.getRoles(token);
 
