@@ -2,7 +2,6 @@ package nextstep.subway.applicaion.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
@@ -22,7 +21,8 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
+        int fare = path.calculateFare();
 
-        return new PathResponse(stations, distance, duration, 1250 + 900);
+        return new PathResponse(stations, distance, duration, fare);
     }
 }
