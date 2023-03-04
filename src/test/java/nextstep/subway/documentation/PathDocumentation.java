@@ -35,7 +35,7 @@ public class PathDocumentation extends Documentation {
                 20,
 		        1250);
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         // when
         ExtractableResponse<Response> response = PathSteps.지하철_경로_조회(spec, 1L, 2L, PathSearchType.DISTANCE);

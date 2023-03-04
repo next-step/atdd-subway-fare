@@ -20,7 +20,7 @@ public class TokenService {
     public TokenResponse createToken(String email, String password) {
         Member member = memberService.login(email, password);
 
-        String token = jwtTokenProvider.createToken(member.getId().toString(), member.getRoles());
+        String token = jwtTokenProvider.createToken(member.getId().toString(), member.getRoles(), member.getAge());
 
         return new TokenResponse(token);
     }
@@ -32,7 +32,7 @@ public class TokenService {
 
         Member member = memberService.createOrFindMember(githubProfile.getEmail());
 
-        String token = jwtTokenProvider.createToken(member.getId().toString(), member.getRoles());
+        String token = jwtTokenProvider.createToken(member.getId().toString(), member.getRoles(), member.getAge());
 
         return new TokenResponse(token);
     }

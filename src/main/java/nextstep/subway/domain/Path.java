@@ -19,8 +19,8 @@ public class Path {
 	public int extractDistance() {
 		return sections.totalDistance();
 	}
-	public int extractFare() {
-		return Fare.calculate(extractDistance()) + sections.extraFare();
+	public int extractFare(int age) {
+		return Fare.calculate(extractDistance(), sections.extraFare(), age);
 	}
 	public List<Station> getStations() {
 		return sections.getStations();
