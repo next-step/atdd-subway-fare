@@ -155,4 +155,11 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public List<Line> getAllPassingLines() {
+        return sections.stream()
+            .map(Section::getLine)
+            .distinct()
+            .collect(Collectors.toList());
+    }
 }
