@@ -31,16 +31,11 @@ public enum Fare {
     }
 
     public int calculate(int distance) {
-        Integer apply = calculateFunc.apply(distance);
-        System.out.println("apply = " + apply);
-        return apply;
+        return calculateFunc.apply(distance);
     }
 
     private static int calculateOverFare(int distance, int wight) {
-        int i = (int) ((Math.ceil((distance - 1) / wight) + 1) * 100);
-        System.out.println(distance);
-        System.out.println("i = " + i);
-        return i;
+        return (int) ((Math.ceil((distance - 1) / wight) + 1) * 100);
     }
 
     static class Constants {
