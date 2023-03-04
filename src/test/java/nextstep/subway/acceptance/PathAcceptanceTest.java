@@ -18,6 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+
+    private static final String EMAIL = "email@naver.com";
+    private static final String PASSWORD = "password";
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -87,8 +91,8 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      * Given 청소년 유저를 등록함
      *  And 로그인을 하고 토큰을 받음
-     * When 토큰을 가지고 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
-     * Then 최단 거리 기준 경로를 응답
+     * When 토큰을 가지고 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
      *  And 총 거리와 소요 시간을 함께 응답함
      *  And 지하철 이용 요금도 함께 응답함
      */
@@ -100,13 +104,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         String accessToken = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
 
         // when
-        ExtractableResponse<Response> response = 토큰을_가지고_두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, accessToken);
+        ExtractableResponse<Response> response = 토큰을_가지고_두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, accessToken);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(15);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1070);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1950);
     }
 
     /**

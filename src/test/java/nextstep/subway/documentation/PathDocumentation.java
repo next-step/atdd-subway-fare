@@ -16,6 +16,7 @@ import static org.mockito.BDDMockito.when;
 
 public class PathDocumentation extends Documentation {
 
+    private static final String authorization = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc3OTUwMTg0LCJleHAiOjE2Nzc5NTM3ODQsInJvbGVzIjpbIlJPTEVfQURNSU4iLCJST0xFX0FETUlOIl19.Xerqn4RF7lN1BskE0GxRqQSa4JknE9uHXTnKahoRC9g";
     @MockBean
     private PathService pathService;
 
@@ -31,10 +32,10 @@ public class PathDocumentation extends Documentation {
             ), 10,
             20, 1450);
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         baseDocumentRequest(spec, "/distance", port)
-            .header("Authorization", "Bearer dXNlcjpzZWNyZXQ=")
+            .header("Authorization", authorization)
             .queryParam("source", 1L)
             .queryParam("target", 2L)
             .queryParam("type", PathType.DISTANCE)
@@ -51,10 +52,10 @@ public class PathDocumentation extends Documentation {
             ), 15,
             15, 1350);
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         baseDocumentRequest(spec, "/duration", port)
-            .header("Authorization", "Bearer dXNlcjpzZWNyZXQ=")
+            .header("Authorization", authorization)
             .queryParam("source", 1L)
             .queryParam("target", 3L)
             .queryParam("type", PathType.DURATION)
