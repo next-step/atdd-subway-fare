@@ -53,7 +53,7 @@ public class SubwayMapTest {
     @Test
     void findPath() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
@@ -66,7 +66,7 @@ public class SubwayMapTest {
     @Test
     void findPathOppositely() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
@@ -80,7 +80,7 @@ public class SubwayMapTest {
     @Test
     void 최소시간기준으로_경로를_반환한다() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
@@ -94,10 +94,9 @@ public class SubwayMapTest {
     @Test
     void 경로중_노선의_가장높은_금액의_추가요금만_적용한다() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
-        // 500 추가
         // when
         Path path = subwayMap.findPath(교대역, 양재역, PathSearchType.DISTANCE);
         Fare fare = Fare.of(new DistanceFarePolicy(path.getMaxExtraFare()), path.getTotalDistance());
