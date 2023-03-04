@@ -5,6 +5,8 @@ import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.ui.AuthenticationException;
+import nextstep.member.domain.exception.MemberErrorCode;
+import nextstep.member.domain.exception.NotFoundMemberException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,16 +25,19 @@ public class MemberService {
     }
 
     public MemberResponse findMemberInfo(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundMemberException(MemberErrorCode.NOT_FOUND_MEMBER));
         return MemberResponse.of(member);
     }
 
     public Member findMember(Long id) {
-        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundMemberException(MemberErrorCode.NOT_FOUND_MEMBER));
     }
 
     public void updateMember(Long id, MemberRequest param) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundMemberException(MemberErrorCode.NOT_FOUND_MEMBER));
         member.update(param.toMember());
     }
 
@@ -41,7 +46,8 @@ public class MemberService {
     }
 
     public Member login(String email, String password) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(AuthenticationException::new);
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundMemberException(MemberErrorCode.NOT_FOUND_MEMBER));
         if (!member.checkPassword(password)) {
             throw new AuthenticationException();
         }
