@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -191,6 +192,68 @@ class PathAcceptanceTest extends AcceptanceTest {
 		assertThat(response.jsonPath().getInt("fare")).isEqualTo(3350);
 	}
 
+	/**
+	 * Given 성인 사용자가 로그인을 요청하고
+	 * When 지하철 경로 조회를 요청한 로그인 사용자가 성인이라면
+	 * Then 지하철 요금은 할인되지 않은 요금이다.
+	 */
+	@DisplayName("로그인 사용자가 성인이라면, 지하철 요금은 할인되지 않은 요금이다.")
+	@Test
+	void findPathByAdultMember() {
+		// given
+		var accessToken = 베어러_인증_로그인_요청("adult@email.com", "password").jsonPath().getString("accessToken");
+
+		// when
+		var response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 남부터미널역, accessToken);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+	}
+
+	/**
+	 * Given 청소년 사용자가 로그인을 요청하고
+	 * When 지하철 경로 조회를 요청한 로그인 사용자가 청소년이라면
+	 * Then 지하철 요금은 운임에서 350원을 공제한 금액의 20%가 할인된 요금이다.
+	 */
+	@DisplayName("로그인 사용자가 청소년이라면, 지하철 요금은 운임에서 350원을 공제한 금액의 20%가 할인된 요금이다.")
+	@Test
+	void findPathByTeenagerMember() {
+		// given
+		var accessToken = 베어러_인증_로그인_요청("teenager@email.com", "password").jsonPath().getString("accessToken");
+
+		// when
+		var response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 남부터미널역, accessToken);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(1070);
+	}
+
+	/**
+	 * Given 어린이 사용자가 로그인을 요청하고
+	 * When 지하철 경로 조회를 요청한 로그인 사용자가 어린이이라면
+	 * Then 지하철 요금은 운임에서 350원을 공제한 금액의 50%가 할인된 요금이다.
+	 */
+	@DisplayName("로그인 사용자가 어린이라면, 지하철 요금은 운임에서 350원을 공제한 금액의 50%가 할인된 요금이다.")
+	@Test
+	void findPathByChildMember() {
+		// given
+		var accessToken = 베어러_인증_로그인_요청("child@email.com", "password").jsonPath().getString("accessToken");
+
+		// when
+		var response = 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(교대역, 남부터미널역, accessToken);
+
+		// then
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(800);
+	}
+
+	private ExtractableResponse<Response> 로그인_사용자가_두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
+		return RestAssured
+				.given().log().all()
+				.auth().oauth2(accessToken)
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.when().get("/paths?source={sourceId}&target={targetId}&type={pathSearchType}", source, target, PathSearchType.DISTANCE)
+				.then().log().all().extract();
+	}
 	private ExtractableResponse<Response> 지하철_이용요금을_포함한_두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
 		return RestAssured
 				.given().log().all()
