@@ -1,7 +1,10 @@
 package nextstep.subway.domain;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.List;
+
+import static org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalTimeConverter;
 
 @Entity
 public class Line {
@@ -11,6 +14,9 @@ public class Line {
     private String name;
     private String color;
     private Integer additionalFare;
+    private LocalTime firstTime;
+    private LocalTime lastTime;
+    private int subwayInterval;
 
     @Embedded
     private Sections sections = new Sections();
@@ -23,9 +29,16 @@ public class Line {
     }
 
     public Line(String name, String color, Integer additionalFare) {
+        this(name, color, additionalFare, LocalTime.of(0, 0), LocalTime.of(0, 0), 0);
+    }
+
+    public Line(String name, String color, Integer additionalFare, LocalTime firstTime, LocalTime lastTime, int subwayInterval) {
         this.name = name;
         this.color = color;
         this.additionalFare = additionalFare;
+        this.firstTime = firstTime;
+        this.lastTime = lastTime;
+        this.subwayInterval = subwayInterval;
     }
 
     public Long getId() {
@@ -42,6 +55,18 @@ public class Line {
 
     public Integer getAdditionalFare() {
         return additionalFare;
+    }
+
+    public LocalTime getFirstTime() {
+        return firstTime;
+    }
+
+    public LocalTime getLastTime() {
+        return lastTime;
+    }
+
+    public int getSubwayInterval() {
+        return subwayInterval;
     }
 
     public List<Section> getSections() {

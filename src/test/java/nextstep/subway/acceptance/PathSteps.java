@@ -7,7 +7,9 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 
 public class PathSteps {
@@ -52,7 +54,7 @@ public class PathSteps {
     }
 
     private static Map<String, String> createPathParams(Long source, Long target, String type) {
-        return createPathParams(source, target, type, LocalDateTime.now());
+        return createPathParams(source, target, type, LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)));
     }
 
     private static Map<String, String> createPathParams(Long source, Long target, String type, LocalDateTime departureDate) {
