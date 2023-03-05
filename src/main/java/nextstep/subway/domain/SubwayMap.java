@@ -3,9 +3,13 @@ package nextstep.subway.domain;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+
+import nextstep.subway.exception.NotExistedStationException;
+import nextstep.subway.exception.SameStationException;
 
 public class SubwayMap {
 	private List<Line> lines;
@@ -15,6 +19,8 @@ public class SubwayMap {
 	}
 
 	public Path findPath(Station source, Station target, PathType pathType) {
+		validateSourceAndTarget(source, target);
+
 		SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
 		// 지하철 역(정점)을 등록
@@ -44,6 +50,8 @@ public class SubwayMap {
 				graph.setEdgeWeight(sectionEdge, pathType.getWeight(it));
 			});
 
+		validateExistStation(graph, source, target);
+
 		// 다익스트라 최단 경로 찾기
 		DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
 		GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
@@ -53,5 +61,17 @@ public class SubwayMap {
 			.collect(Collectors.toList());
 
 		return new Path(new Sections(sections));
+	}
+
+	private void validateSourceAndTarget(Station source, Station target) {
+		if (source.equals(target)) {
+			throw new SameStationException();
+		}
+	}
+
+	private void validateExistStation(Graph graph, Station source, Station target) {
+		if (!graph.containsVertex(source) || !graph.containsVertex(target)) {
+			throw new NotExistedStationException();
+		}
 	}
 }
