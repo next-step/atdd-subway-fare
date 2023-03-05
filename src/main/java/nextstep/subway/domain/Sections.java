@@ -44,13 +44,15 @@ public class Sections {
             throw new IllegalArgumentException();
         }
 
-        Optional<Section> upSection = findSectionAsUpStation(station);
-        Optional<Section> downSection = findSectionAsDownStation(station);
+        Optional<Section> upStation = findSectionAsUpStation(station);
+        Optional<Section> downStation = findSectionAsDownStation(station);
 
-        addNewSectionForDelete(upSection, downSection);
+        if (upStation.isPresent() && downStation.isPresent()) {
+            addNewSectionForDelete(upStation.get(), downStation.get());
+        }
 
-        upSection.ifPresent(it -> this.sections.remove(it));
-        downSection.ifPresent(it -> this.sections.remove(it));
+        upStation.ifPresent(section -> this.sections.remove(section));
+        downStation.ifPresent(section -> this.sections.remove(section));
     }
 
     public List<Station> getStations() {
@@ -131,14 +133,14 @@ public class Sections {
                 .orElseThrow(RuntimeException::new);
     }
 
-    private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
-        if (upSection.isPresent() && downSection.isPresent()) {
+    private void addNewSectionForDelete(Section upSection, Section downSection) {
+        if (upSection != null && downSection != null) {
             Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration() + downSection.get().getDuration()
+                    upSection.getLine(),
+                    downSection.getUpStation(),
+                    upSection.getDownStation(),
+                    upSection.getDistance() + downSection.getDistance(),
+                    upSection.getDuration() + downSection.getDuration()
             );
 
             this.sections.add(newSection);
