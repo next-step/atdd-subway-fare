@@ -34,9 +34,11 @@ public class SubwayMap {
     }
 
     private void addNode(final WeightedGraph graph, final PathType pathType) {
-        Stream<Section> sectionStream = lines.stream().flatMap(it -> it.getSections().stream());
-        addEdge(sectionStream, graph, pathType);
-        addEdge(sectionStream.map(SubwayMap::createReverseSectionBy), graph, pathType);
+        addEdge(lines.stream()
+                .flatMap(it -> it.getSections().stream()), graph, pathType);
+        addEdge(lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(SubwayMap::createReverseSectionBy), graph, pathType);
     }
 
     private void addEdge(final Stream<Section> lineStream, final WeightedGraph graph, final PathType pathType) {
