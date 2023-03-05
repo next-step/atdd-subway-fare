@@ -89,7 +89,7 @@ public class Sections {
             Station finalUpStation = upStation;
             Optional<Section> section = findSectionAsUpStation(finalUpStation);
 
-            if (!section.isPresent()) {
+            if (section.isEmpty()) {
                 break;
             }
 
@@ -109,38 +109,46 @@ public class Sections {
                 });
     }
 
-    private void rearrangeSectionWithDownStation(Section section) {
+    private void rearrangeSectionWithDownStation(Section newSection) {
         sections.stream()
-                .filter(it -> it.isSameDownStation(section.getDownStation()))
+                .filter(oldSection -> oldSection.isSameDownStation(newSection.getDownStation()))
                 .findFirst()
-                .ifPresent(it -> {
-                    // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(
-                            section.getLine(),
-                            it.getUpStation(),
-                            section.getUpStation(),
-                            it.getDistance() - section.getDistance(),
-                            it.getDuration() - section.getDuration())
-                    );
-                    sections.remove(it);
+                .ifPresent(oldSection -> {
+                    addUpSection(newSection, oldSection);
+                    sections.remove(oldSection);
                 });
     }
 
-    private void rearrangeSectionWithUpStation(Section section) {
+    private void addUpSection(Section newSection, Section oldSection) {
+        // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
+        sections.add(new Section(
+                newSection.getLine(),
+                oldSection.getUpStation(),
+                newSection.getUpStation(),
+                oldSection.getDistance() - newSection.getDistance(),
+                oldSection.getDuration() - newSection.getDuration())
+        );
+    }
+
+    private void rearrangeSectionWithUpStation(Section newSection) {
         sections.stream()
-                .filter(it -> it.isSameUpStation(section.getUpStation()))
+                .filter(oldSection -> oldSection.isSameUpStation(newSection.getUpStation()))
                 .findFirst()
-                .ifPresent(it -> {
-                    // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(
-                            section.getLine(),
-                            section.getDownStation(),
-                            it.getDownStation(),
-                            it.getDistance() - section.getDistance(),
-                            it.getDuration() - section.getDuration())
-                    );
-                    sections.remove(it);
+                .ifPresent(oldSection -> {
+                    addDownSection(newSection, oldSection);
+                    sections.remove(oldSection);
                 });
+    }
+
+    private void addDownSection(Section newSection, Section oldSection) {
+        // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
+        sections.add(new Section(
+                newSection.getLine(),
+                newSection.getDownStation(),
+                oldSection.getDownStation(),
+                oldSection.getDistance() - newSection.getDistance(),
+                oldSection.getDuration() - newSection.getDuration())
+        );
     }
 
     private Station findFirstUpStation() {
