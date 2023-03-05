@@ -154,4 +154,11 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int extraFare() {
+        return sections.stream()
+                .mapToInt(Section::getExtraFare)
+                .max()
+                .orElse(0);
+    }
 }
