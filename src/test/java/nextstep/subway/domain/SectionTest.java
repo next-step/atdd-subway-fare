@@ -36,4 +36,20 @@ class SectionTest {
                 () -> assertThat(section.getDownStation()).isEqualTo(선릉역)
         );
     }
+
+    @DisplayName("하행역 끼리 연결한다.")
+    @Test
+    void replaceStationWithDownStation() {
+        Section existSection = new Section(이호선, 강남역, 역삼역, 10, 10);
+        Section newSection = new Section(이호선, 강남역, 선릉역, 3, 3);
+
+        Section section = existSection.replaceDownStationWithDownStation(newSection);
+
+        Assertions.assertAll(
+                () -> assertThat(section.getUpStation()).isEqualTo(선릉역),
+                () -> assertThat(section.getDownStation()).isEqualTo(역삼역),
+                () -> assertThat(section.getDistance()).isEqualTo(7),
+                () -> assertThat(section.getDuration()).isEqualTo(7)
+        );
+    }
 }
