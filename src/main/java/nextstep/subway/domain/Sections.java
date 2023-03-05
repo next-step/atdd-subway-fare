@@ -191,4 +191,10 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public List<Section> getOppositeSections() {
+        return sections.stream()
+                .map(section -> new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration()))
+                .collect(Collectors.toList());
+    }
 }

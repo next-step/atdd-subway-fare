@@ -58,4 +58,8 @@ public class Line {
     public void deleteSection(Station station) {
         sections.delete(station);
     }
+
+    public List<Section> getOppositeSections() {
+        return sections.getOppositeSections();
+    }
 }
