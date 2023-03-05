@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -44,8 +46,8 @@ public class Sections {
             throw new IllegalArgumentException();
         }
 
-        Optional<Section> upStation = findSectionAsUpStation(station);
-        Optional<Section> downStation = findSectionAsDownStation(station);
+        Optional<Section> upStation = findSectionBy(section -> section.isSameUpStation(station));
+        Optional<Section> downStation = findSectionBy(section -> section.isSameDownStation(station));
 
         if (upStation.isPresent() && downStation.isPresent()) {
             addNewSectionForDelete(upStation.get(), downStation.get());
@@ -69,7 +71,7 @@ public class Sections {
 
         while (true) {
             Station finalUpStation = upStation;
-            Optional<Section> section = findSectionAsUpStation(finalUpStation);
+            Optional<Section> section = findSectionBy(s -> s.isSameUpStation(finalUpStation));
 
             if (section.isEmpty()) {
                 break;
@@ -88,6 +90,12 @@ public class Sections {
                 .ifPresent(it -> {
                     throw new IllegalArgumentException();
                 });
+    }
+
+    private Optional<Section> findSectionBy(Predicate<Section> isSameStation) {
+        return this.sections.stream()
+                .filter(isSameStation)
+                .findFirst();
     }
 
     private void rearrangeSectionWithDownStation(final Section section) {
@@ -120,17 +128,19 @@ public class Sections {
     }
 
     private Station findFirstUpStation() {
-        List<Station> upStations = this.sections.stream()
-                .map(Section::getUpStation)
-                .collect(Collectors.toList());
-        List<Station> downStations = this.sections.stream()
-                .map(Section::getDownStation)
-                .collect(Collectors.toList());
+        List<Station> upStations = getStations(Section::getUpStation);
+        List<Station> downStations = getStations(Section::getDownStation);
 
         return upStations.stream()
                 .filter(it -> !downStations.contains(it))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
+    }
+
+    private List<Station> getStations(final Function<Section, Station> getUpStation) {
+        return this.sections.stream()
+                .map(getUpStation)
+                .collect(Collectors.toList());
     }
 
     private void addNewSectionForDelete(Section upSection, Section downSection) {
@@ -145,18 +155,6 @@ public class Sections {
 
             this.sections.add(newSection);
         }
-    }
-
-    private Optional<Section> findSectionAsUpStation(Station finalUpStation) {
-        return this.sections.stream()
-                .filter(it -> it.isSameUpStation(finalUpStation))
-                .findFirst();
-    }
-
-    private Optional<Section> findSectionAsDownStation(Station station) {
-        return this.sections.stream()
-                .filter(it -> it.isSameDownStation(station))
-                .findFirst();
     }
 
     public int totalDistance() {
