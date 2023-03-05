@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import java.util.Optional;
 import nextstep.subway.domain.exception.PathNotFoundException;
 import org.jgrapht.GraphPath;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
@@ -17,13 +18,13 @@ public class SubwayMap {
     }
 
     public Path findPath(Station source, Station target, PathType pathType) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        WeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
         addVertex(graph);
         addNode(graph, pathType);
         return findShortestPath(source, target, graph);
     }
 
-    private void addVertex(final SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+    private void addVertex(final WeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
@@ -31,7 +32,7 @@ public class SubwayMap {
                 .forEach(graph::addVertex);
     }
 
-    private void addNode(final SimpleDirectedWeightedGraph<Station, SectionEdge> graph, final PathType pathType) {
+    private void addNode(final WeightedGraph<Station, SectionEdge> graph, final PathType pathType) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
@@ -53,7 +54,7 @@ public class SubwayMap {
     private static Path findShortestPath(
             final Station source,
             final Station target,
-            final SimpleDirectedWeightedGraph<Station, SectionEdge> graph
+            final WeightedGraph<Station, SectionEdge> graph
     ) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
 
