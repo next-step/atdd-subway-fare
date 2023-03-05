@@ -157,4 +157,11 @@ public class Sections {
             .mapToInt(Section::getDuration)
             .sum();
     }
+
+    public int calculateLineExtraFare() {
+        return sections.stream()
+            .mapToInt(Section::getExtraFare)
+            .max()
+            .orElse(0);
+    }
 }

@@ -21,8 +21,9 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int calculateFare() {
-        return Fare.calculate(extractDistance());
+    public int calculateFare(Age age) {
+        var fare = Fare.calculate(extractDistance(), sections.calculateLineExtraFare());
+        return age.discountFare(fare);
     }
 
     public List<Station> getStations() {

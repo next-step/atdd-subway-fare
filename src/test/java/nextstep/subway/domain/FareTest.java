@@ -28,4 +28,11 @@ class FareTest {
     void longFare(int distance, int fare) {
         assertThat(Fare.calculate(distance)).isEqualTo(fare);
     }
+
+    @DisplayName("노선의 추가 요금이 주어졌을 경우, 기존의 계산된 운임에 추가 요금이 합산된다.")
+    @ParameterizedTest
+    @CsvSource({"11,1350,500", "60,1950,400"})
+    void lineExtraFare(int distance, int fare, int lineExtraFare) {
+        assertThat(Fare.calculate(distance, lineExtraFare)).isEqualTo(fare + lineExtraFare);
+    }
 }

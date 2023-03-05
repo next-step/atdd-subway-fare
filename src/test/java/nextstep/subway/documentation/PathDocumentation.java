@@ -36,7 +36,7 @@ public class PathDocumentation extends Documentation {
             new StationResponse(2L, "남부터미널역")
         ), 10, 5, 10);
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), anyInt(), any())).thenReturn(pathResponse);
     }
 
     @Test
