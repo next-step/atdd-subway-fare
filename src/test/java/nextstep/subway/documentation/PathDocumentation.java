@@ -18,7 +18,7 @@ class PathDocumentation extends Documentation {
 	@DisplayName("최단 거리 경로 조회 DOCS - 200 OK")
 	@Test
 	void pathByDistance() {
-		경로_조회_시_성공_응답을_반환(pathService);
+		최단_거리_경로_조회_시_성공_응답을_반환(pathService);
 
 		spec = spec.filter(document("path",
 			preprocessRequest(prettyPrint()),
@@ -30,12 +30,12 @@ class PathDocumentation extends Documentation {
 	@DisplayName("최소 시간 경로 조회 DOCS - 200 OK")
 	@Test
 	void pathByDuration() {
-		경로_조회_시_성공_응답을_반환(pathService);
+		최소_시간_경로_조회_시_성공_응답을_반환(pathService);
 
 		spec = spec.filter(document("path",
 			preprocessRequest(prettyPrint()),
 			preprocessResponse(prettyPrint())));
 
-		최단_거리_경로_조회_요청(spec);
+		최소_시간_경로_조회_요청(spec);
 	}
 }
