@@ -2,7 +2,7 @@ package nextstep.member.ui;
 
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
-import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.AuthMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,7 +10,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String authorization = webRequest.getHeader("Authorization");
 
         if (!required && authorization == null) {
-            return new LoginMember(null, Collections.emptyList(), 20);
+            return AuthMember.toGuest();
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
@@ -43,8 +42,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
         List<String> roles = jwtTokenProvider.getRoles(token);
-        int age = jwtTokenProvider.getAge(token);
 
-        return new LoginMember(id, roles, age);
+        return new AuthMember(id, roles);
     }
 }

@@ -1,16 +1,19 @@
 package nextstep.member.domain;
 
+import java.util.Collections;
 import java.util.List;
 
-public class LoginMember {
+public class AuthMember {
     private Long id;
     private List<String> roles;
-    private int age;
 
-    public LoginMember(Long id, List<String> roles, int age) {
+    public AuthMember(Long id, List<String> roles) {
         this.id = id;
         this.roles = roles;
-        this.age = age;
+    }
+
+    public static AuthMember toGuest() {
+        return new AuthMember(null, Collections.emptyList());
     }
 
     public Long getId() {
@@ -19,9 +22,5 @@ public class LoginMember {
 
     public List<String> getRoles() {
         return roles;
-    }
-
-    public int getAge() {
-        return age;
     }
 }
