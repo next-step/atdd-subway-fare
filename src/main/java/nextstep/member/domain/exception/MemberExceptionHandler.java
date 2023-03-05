@@ -16,7 +16,7 @@ public class MemberExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
         loggingMemberException(errorCode);
 
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(exception.getHttpStatus())
                 .body(CommonErrorResponse.of(errorCode));
     }
 
@@ -25,7 +25,7 @@ public class MemberExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
         loggingMemberException(errorCode);
 
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(exception.getHttpStatus())
                 .body(CommonErrorResponse.of(errorCode));
     }
 

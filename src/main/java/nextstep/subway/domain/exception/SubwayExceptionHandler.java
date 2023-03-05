@@ -16,7 +16,7 @@ public class SubwayExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
         loggingSubwayException(errorCode);
 
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(exception.getHttpStatus())
                 .body(CommonErrorResponse.of(errorCode));
     }
 
@@ -25,7 +25,7 @@ public class SubwayExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
         loggingSubwayException(errorCode);
 
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(exception.getHttpStatus())
                 .body(CommonErrorResponse.of(errorCode));
     }
 
