@@ -57,7 +57,10 @@ public class Sections {
         if (this.sections.isEmpty()) {
             return Collections.emptyList();
         }
+        return getSortedStations();
+    }
 
+    private List<Station> getSortedStations() {
         Station upStation = findFirstUpStation();
         List<Station> result = new ArrayList<>();
         result.add(upStation);
@@ -66,14 +69,13 @@ public class Sections {
             Station finalUpStation = upStation;
             Optional<Section> section = findSectionAsUpStation(finalUpStation);
 
-            if (!section.isPresent()) {
+            if (section.isEmpty()) {
                 break;
             }
 
             upStation = section.get().getDownStation();
             result.add(upStation);
         }
-
         return result;
     }
 
