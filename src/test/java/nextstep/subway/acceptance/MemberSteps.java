@@ -111,4 +111,8 @@ public class MemberSteps {
         assertThat(response.jsonPath().getString("email")).isEqualTo(email);
         assertThat(response.jsonPath().getInt("age")).isEqualTo(age);
     }
+
+    public static String Access_Token을_가져온다(ExtractableResponse<Response> response) {
+        return response.jsonPath().get("accessToken");
+    }
 }

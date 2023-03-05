@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static nextstep.subway.domain.Fare.ZERO_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -39,7 +40,7 @@ class LineServiceTest {
     }
 
     private Line createLine(Station 강남역, Station 역삼역) {
-        Line line = new Line("2호선", "green");
+        Line line = new Line("2호선", "green", ZERO_FARE);
         line.addSection(강남역, 역삼역, 10, 7);
         return line;
     }

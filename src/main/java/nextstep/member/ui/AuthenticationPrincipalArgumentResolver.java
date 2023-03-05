@@ -12,6 +12,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
 
+import static nextstep.member.domain.LoginMember.GUEST;
+
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private JwtTokenProvider jwtTokenProvider;
@@ -27,11 +29,21 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authorization = webRequest.getHeader("Authorization");
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
+        AuthenticationPrincipal athenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+
+        String authorizationHeader = webRequest.getHeader("Authorization");
+        if (authorizationHeader == null && !athenticationPrincipal.required()) {
+            return GUEST;
+        }
+
+        if (!"bearer".equalsIgnoreCase(authorizationHeader.split(" ")[0])) {
             throw new AuthenticationException();
         }
-        String token = authorization.split(" ")[1];
+        String token = authorizationHeader.split(" ")[1];
+
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new AuthenticationException();
+        }
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
         List<String> roles = jwtTokenProvider.getRoles(token);

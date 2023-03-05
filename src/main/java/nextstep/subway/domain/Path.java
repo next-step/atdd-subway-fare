@@ -27,12 +27,14 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int calculateFare() {
+    public int calculateFare(int age) {
         int totalDistance = extractDistance();
+        List<Line> lines = sections.getLines();
 
         Fare fare = DEFAULT_FARE
-                .plus(OverDistanceFarePolicy.calculateOverDistanceFare(totalDistance));
-        
-        return fare.getValue();
+                .plus(OverDistanceFarePolicy.create().calculateOverDistanceFare(totalDistance))
+                .plus(new AdditionalLineFarePolicy().calculateAdditionalLineFare(lines));
+
+        return fare.minus(AgeDiscountPolicy.calculateAgeDiscountFare(fare, age)).getValue();
     }
 }

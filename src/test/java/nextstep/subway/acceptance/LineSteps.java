@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps {
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -17,14 +17,16 @@ public class LineSteps {
         params.put("downStationId", downStation + "");
         params.put("distance", distance + "");
         params.put("duration", duration + "");
+        params.put("additionalFare", additionalFare + "");
 
         return 지하철_노선_생성_요청(params);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int additionalFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("additionalFare", additionalFare + "");
         return RestAssured
                 .given().log().all()
                 .body(params)

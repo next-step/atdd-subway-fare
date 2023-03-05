@@ -9,12 +9,14 @@ import java.util.Objects;
 @Embeddable
 public class Duration {
 
+    private static int MIN_DURATION_VALUE = 1;
+
     @Column(name = "duration")
     private int value;
 
     public static Duration of(int value) {
-        if (value <= 0) {
-            throw new NotPositiveNumberException("소요시간은 0보다 커야 합니다");
+        if (value <= MIN_DURATION_VALUE) {
+            throw new NotPositiveNumberException("소요시간은 " + MIN_DURATION_VALUE + "보다 작을 수 없습니다");
         }
         return new Duration(value);
     }

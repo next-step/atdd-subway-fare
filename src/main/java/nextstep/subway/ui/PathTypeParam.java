@@ -1,19 +1,20 @@
 package nextstep.subway.ui;
 
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.DistancePathType;
+import nextstep.subway.domain.DurationPathType;
+import nextstep.subway.domain.PathType;
 
 public enum PathTypeParam {
-    DISTANCE, DURATION;
+    DISTANCE(new DistancePathType()),
+    DURATION(new DurationPathType());
+
+    private PathType pathType;
+
+    PathTypeParam(PathType pathType) {
+        this.pathType = pathType;
+    }
 
     public PathType toDomain() {
-        if (this == DISTANCE) {
-            return new DistancePathType();
-        }
-        
-        if (this == DURATION) {
-            return new DurationPathType();
-        }
-        
-        throw new IllegalArgumentException("변경할 수 있는 PathTye이 없음");
+        return this.pathType;
     }
 }

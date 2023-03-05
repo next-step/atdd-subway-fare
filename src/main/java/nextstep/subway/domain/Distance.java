@@ -9,12 +9,14 @@ import java.util.Objects;
 @Embeddable
 public class Distance {
 
+    private static int MIN_DISTANCE_VALUE = 1;
+
     @Column(name = "distance")
     private int value;
 
     public static Distance of(int value) {
-        if (value <= 0) {
-            throw new NotPositiveNumberException("거리는 0보다 커야 합니다");
+        if (value < MIN_DISTANCE_VALUE) {
+            throw new NotPositiveNumberException("거리는 " + MIN_DISTANCE_VALUE + "보다 작을 수 없습니다");
         }
         return new Distance(value);
     }

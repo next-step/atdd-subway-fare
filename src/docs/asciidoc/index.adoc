@@ -9,6 +9,5 @@
 [[path]]
 == 지하철 경로
 
-=== 경로 조회
-
-operation::path[snippets='http-request,http-response,request-parameters,response-fields']
+=== `GET /paths` - 경로 조회
+operation::path[snippets='http-request,http-response,request-headers,request-parameters,response-fields']

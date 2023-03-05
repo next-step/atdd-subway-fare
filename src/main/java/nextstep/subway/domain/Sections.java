@@ -53,6 +53,13 @@ public class Sections {
         downSection.ifPresent(it -> this.sections.remove(it));
     }
 
+    public List<Line> getLines() {
+        return sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     public List<Station> getStations() {
         if (this.sections.isEmpty()) {
             return Collections.emptyList();
@@ -166,5 +173,11 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().map(Section::getDuration).mapToInt(Duration::getValue).sum();
+    }
+    
+    public List<Fare> findAdditionalFares() {
+        return sections.stream()
+                .map(it -> it.getLine().getAdditionalFare())
+                .collect(Collectors.toList());
     }
 }

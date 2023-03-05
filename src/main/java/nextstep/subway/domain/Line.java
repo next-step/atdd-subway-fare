@@ -12,14 +12,18 @@ public class Line {
     private String color;
 
     @Embedded
+    private Fare additionalFare;
+
+    @Embedded
     private Sections sections = new Sections();
 
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, Fare additionalFare) {
         this.name = name;
         this.color = color;
+        this.additionalFare = additionalFare;
     }
 
     public Long getId() {
@@ -32,6 +36,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public Fare getAdditionalFare() {
+        return additionalFare;
     }
 
     public List<Section> getSections() {
