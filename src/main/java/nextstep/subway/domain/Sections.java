@@ -88,22 +88,20 @@ public class Sections {
                 });
     }
 
-    private void rearrangeSectionWithDownStation(Section section) {
+    private void rearrangeSectionWithDownStation(final Section section) {
         sections.stream()
                 .filter(it -> it.isSameDownStation(section.getDownStation()))
                 .findFirst()
-                .ifPresent(it -> {
-                    // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(
-                            new Section(
-                                    section.getLine(),
-                                    it.getUpStation(),
-                                    section.getUpStation(),
-                                    it.getDistance() - section.getDistance(),
-                                    it.getDuration() - section.getDuration())
-                    );
-                    sections.remove(it);
-                });
+                .ifPresent(existingSection -> connectExistingUpStationAndNewUpStation(existingSection, section));
+    }
+
+    private void connectExistingUpStationAndNewUpStation(
+            final Section existingSection,
+            final Section newSection
+    ) {
+        Section section = existingSection.replaceDownStationWithUpStation(newSection);
+        sections.add(section);
+        sections.remove(existingSection);
     }
 
     private void rearrangeSectionWithUpStation(Section section) {
