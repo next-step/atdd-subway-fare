@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -80,5 +81,25 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 		// then
 		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+	}
+
+	@DisplayName("두 역의 최단 거리 경로를 조회한다. - 실패 ")
+	@Test
+	void findPathByDistance_FAIL_SAME_SOURCE_AND_TARGET() {
+		// when
+		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 교대역);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@DisplayName("두 역의 최소 시간 경로를 조회한다. - 실패")
+	@Test
+	void findPathByDuration_FAIL_SAME_SOURCE_AND_TARGET() {
+		// when
+		ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 교대역);
+
+		// then
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 	}
 }
