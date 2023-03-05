@@ -1,10 +1,10 @@
 package nextstep.subway.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalTimeConverter;
 
 @Entity
 public class Line {
@@ -104,7 +104,28 @@ public class Line {
         sections.delete(station);
     }
 
+    public LocalDateTime getNextSchedule(LocalDateTime date) {
+        List<LocalTime> schedule = getSchedule();
+        if (schedule.isEmpty()) {
+            throw new IllegalArgumentException("노선 스케줄이 비어있습니다.");
+        }
+        LocalTime firstTime = schedule.get(0);
+        return schedule.stream()
+                .sorted()
+                .filter(time -> time.isAfter(date.toLocalTime()))
+                .findFirst()
+                .map(time -> LocalDateTime.of(date.toLocalDate(), time))
+                .orElse(LocalDateTime.of(date.toLocalDate().plusDays(1), firstTime));
+    }
+
     public List<LocalTime> getSchedule() {
-        return null;
+        List<LocalTime> schedule = new ArrayList<>();
+        LocalTime currentTime = firstTime;
+        while (currentTime.isBefore(lastTime)) {
+            schedule.add(currentTime);
+            currentTime = currentTime.plusMinutes(intervalMinute);
+        }
+        schedule.add(lastTime);
+        return schedule;
     }
 }

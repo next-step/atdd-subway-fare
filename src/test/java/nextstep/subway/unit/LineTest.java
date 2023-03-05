@@ -6,6 +6,7 @@ import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -202,5 +203,32 @@ class LineTest {
         List<LocalTime> schedule = line.getSchedule();
         // then
         assertThat(schedule).hasSize(18);
+    }
+
+    @Test
+    void getNextSchedule() {
+        // given
+        Line line = new Line("2호선", "green", 0,
+                LocalTime.of(5, 0),
+                LocalTime.of(22, 0), 60);
+        // when
+        LocalDateTime searchDate = LocalDateTime.of(2023, 3, 5, 18, 0);
+        LocalDateTime schedule = line.getNextSchedule(searchDate);
+        // then
+        assertThat(schedule).isEqualTo(searchDate.plusHours(1));
+    }
+
+    @DisplayName("조회한 일자가 막차 시간을 넘어서면 다음날 첫차 시간을 조회된다.")
+    @Test
+    void getNextSchedule2() {
+        // given
+        Line line = new Line("2호선", "green", 0,
+                LocalTime.of(5, 0),
+                LocalTime.of(22, 0), 60);
+        // when
+        LocalDateTime searchDate = LocalDateTime.of(2023, 3, 5, 22, 1);
+        LocalDateTime schedule = line.getNextSchedule(searchDate);
+        // then
+        assertThat(schedule).isEqualTo(LocalDateTime.of(2023, 3, 6, 5, 0));
     }
 }
