@@ -1,70 +1,83 @@
 package nextstep.subway.domain;
 
-import org.jgrapht.graph.DefaultWeightedEdge;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import javax.persistence.*;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "line_id")
-    private Line line;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "line_id")
+	private Line line;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "up_station_id")
-    private Station upStation;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "up_station_id")
+	private Station upStation;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "down_station_id")
-    private Station downStation;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "down_station_id")
+	private Station downStation;
 
-    private int distance;
+	private int distance;
 
-    public Section() {
+	private int duration;
 
-    }
+	public Section() {
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-    }
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+		this.line = line;
+		this.upStation = upStation;
+		this.downStation = downStation;
+		this.distance = distance;
+		this.duration = duration;
+	}
 
-    public Line getLine() {
-        return line;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Station getUpStation() {
-        return upStation;
-    }
+	public Line getLine() {
+		return line;
+	}
 
-    public Station getDownStation() {
-        return downStation;
-    }
+	public Station getUpStation() {
+		return upStation;
+	}
 
-    public int getDistance() {
-        return distance;
-    }
+	public Station getDownStation() {
+		return downStation;
+	}
 
-    public boolean isSameUpStation(Station station) {
-        return this.upStation == station;
-    }
+	public int getDistance() {
+		return distance;
+	}
 
-    public boolean isSameDownStation(Station station) {
-        return this.downStation == station;
-    }
+	public int getDuration() {
+		return duration;
+	}
 
-    public boolean hasDuplicateSection(Station upStation, Station downStation) {
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
-    }
+	public boolean isSameUpStation(Station station) {
+		return this.upStation == station;
+	}
+
+	public boolean isSameDownStation(Station station) {
+		return this.downStation == station;
+	}
+
+	public boolean hasDuplicateSection(Station upStation, Station downStation) {
+		return (this.upStation == upStation && this.downStation == downStation)
+			|| (this.upStation == downStation && this.downStation == upStation);
+	}
 }
