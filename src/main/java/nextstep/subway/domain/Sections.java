@@ -40,17 +40,40 @@ public class Sections {
     }
 
     public void delete(Station station) {
-        if (this.sections.size() <= 1) {
-            throw new IllegalArgumentException();
+        validateOnlyOneSection();
+
+        List<Section> findSections = findSectionByStation(station);
+
+        mergeSection(findSections);
+        removeSections(findSections);
+    }
+
+    private void removeSections(List<Section> findSections) {
+        findSections.forEach(this::removeSection);
+    }
+
+    private void removeSection(Section removeSection) {
+        this.sections.removeIf(section -> section.equals(removeSection));
+    }
+
+    private void mergeSection(List<Section> findSections) {
+        if (findSections.size() == 2) {
+            addMergeSection(findSections.get(0), findSections.get(1));
         }
+    }
 
-        Optional<Section> upSection = findSectionAsUpStation(station);
-        Optional<Section> downSection = findSectionAsDownStation(station);
+    private void addMergeSection(Section firstSection, Section secondSection) {
+        Station newUpStation = firstSection.getUpStation();
+        Station newDownStation = secondSection.getDownStation();
+        int newDistance = firstSection.getDistance() + secondSection.getDistance();
+        int newDuration = firstSection.getDuration() + secondSection.getDuration();
+        this.sections.add(new Section(firstSection.getLine(), newUpStation, newDownStation, newDistance, newDuration));
+    }
 
-        addNewSectionForDelete(upSection, downSection);
-
-        upSection.ifPresent(it -> this.sections.remove(it));
-        downSection.ifPresent(it -> this.sections.remove(it));
+    private void validateOnlyOneSection() {
+        if (this.sections.size() <= 1) {
+            throw new IllegalStateException("등록된 구간이 2개보다 적을 경우 구간을 삭제할 수 없습니다.");
+        }
     }
 
     public List<Station> getStations() {
@@ -134,20 +157,6 @@ public class Sections {
                 .orElseThrow(RuntimeException::new);
     }
 
-    private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
-        if (upSection.isPresent() && downSection.isPresent()) {
-            Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration() + downSection.get().getDuration()
-            );
-
-            this.sections.add(newSection);
-        }
-    }
-
     private Optional<Section> findSectionAsUpStation(Station finalUpStation) {
         return this.sections.stream()
                 .filter(it -> it.isSameUpStation(finalUpStation))
@@ -158,6 +167,13 @@ public class Sections {
         return this.sections.stream()
                 .filter(it -> it.isSameDownStation(station))
                 .findFirst();
+    }
+
+    private List<Section> findSectionByStation(Station station) {
+        List<Section> findSections = new ArrayList<>();
+        findSectionAsDownStation(station).ifPresent(findSections::add);
+        findSectionAsUpStation(station).ifPresent(findSections::add);
+        return findSections;
     }
 
     public int totalDistance() {

@@ -178,6 +178,6 @@ class LineTest {
         line.addSection(강남역, 역삼역, 10, 8);
 
         assertThatThrownBy(() -> line.deleteSection(역삼역))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 }
