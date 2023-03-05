@@ -25,7 +25,7 @@ class SectionTest {
 
     @DisplayName("상행역 끼리 연결한다.")
     @Test
-    void replaceStationWithUpStation() {
+    void replaceDownStationWithUpStation() {
         Section existSection = new Section(이호선, 강남역, 역삼역, 10, 10);
         Section newSection = new Section(이호선, 선릉역, 역삼역, 3, 3);
 
@@ -41,11 +41,11 @@ class SectionTest {
 
     @DisplayName("하행역 끼리 연결한다.")
     @Test
-    void replaceStationWithDownStation() {
+    void replaceUpStationWithDownStation() {
         Section existSection = new Section(이호선, 강남역, 역삼역, 10, 10);
         Section newSection = new Section(이호선, 강남역, 선릉역, 3, 3);
 
-        Section section = existSection.replaceDownStationWithDownStation(newSection);
+        Section section = existSection.replaceUpStationWithDownStation(newSection);
 
         Assertions.assertAll(
                 () -> assertThat(section.getUpStation()).isEqualTo(선릉역),
