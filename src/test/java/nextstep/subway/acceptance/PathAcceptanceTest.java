@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
@@ -65,6 +68,23 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로를_응답한다(response, 교대역, 남부터미널역, 양재역);
         요금를_응답한다(response, 2150);
+    }
+
+    /**
+     * Scenario: 특정 시간 기준 가장 빨리 도착할 수 있는 경로를 조회
+     *   When 10시에 출발역에서 도착역까지의 가장 빨리 도착할 수 있는 경로 조회를 요청하면
+     *   Then 조회 경로 중 가장 빠른 도착 시간을 응답한다
+     */
+    @DisplayName("특정 시간 기준 가장 빨리 도착할 수 있는 경로를 조회한다.")
+    @Test
+    void findPathFromDate() {
+        // when
+        LocalDateTime now = LocalDateTime.now();
+        ExtractableResponse<Response> response = 두_역의_가장_빠른_경로_조회를_요청(교대역, 양재역, LocalDateTime.of(now.toLocalDate(), LocalTime.of(10, 0)));
+
+        // then
+        경로를_응답한다(response, 교대역, 남부터미널역, 양재역);
+        도착시간을_응답한다(response, LocalDateTime.of(now.toLocalDate(), LocalTime.of(10, 13)));
     }
 
     /**
@@ -150,5 +170,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private void 회원_요금을_검증한다(int memberFare, int nonMemberFare, double discountRate) {
         assertThat(memberFare).isEqualTo((long) ((nonMemberFare - EXEMPTION_AMOUNT) * discountRate));
+    }
+
+    private void 도착시간을_응답한다(ExtractableResponse<Response> response, LocalDateTime destinationDate) {
+        assertThat(response.jsonPath().getObject("destinationDate", LocalDateTime.class)).isEqualTo(destinationDate);
     }
 }

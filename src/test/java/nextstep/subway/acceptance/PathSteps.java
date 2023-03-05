@@ -7,11 +7,16 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class PathSteps {
     public static final String DISTANCE = "DISTANCE";
     public static final String DURATION = "DURATION";
+
+    public static ExtractableResponse<Response> 두_역의_가장_빠른_경로_조회를_요청(Long source, Long target, LocalDateTime departureDate) {
+        return 두_역의_최단_경로_조회를_요청(createRequestSpecification(source, target, DURATION, departureDate));
+    }
 
     public static ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(Long source, Long target) {
         return 두_역의_최단_경로_조회를_요청(createRequestSpecification(source, target, DURATION));
@@ -47,12 +52,22 @@ public class PathSteps {
     }
 
     private static Map<String, String> createPathParams(Long source, Long target, String type) {
-        return Map.of("source", source + "", "target", target + "", "type", type);
+        return createPathParams(source, target, type, LocalDateTime.now());
+    }
+
+    private static Map<String, String> createPathParams(Long source, Long target, String type, LocalDateTime departureDate) {
+        return Map.of("source", source + "", "target", target + "", "type", type, "departureDate", departureDate + "");
     }
 
     private static RequestSpecification createRequestSpecification(Long source, Long target, String type) {
         return new RequestSpecBuilder()
                 .addQueryParams(createPathParams(source, target, type))
+                .build();
+    }
+
+    private static RequestSpecification createRequestSpecification(Long source, Long target, String type, LocalDateTime departureDate) {
+        return new RequestSpecBuilder()
+                .addQueryParams(createPathParams(source, target, type, departureDate))
                 .build();
     }
 }
