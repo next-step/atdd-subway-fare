@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,11 +42,11 @@ public class FareAcceptanceTest extends AcceptanceTest {
 
     /**
      * <이동거리|이동시간>
-     * 교대역 --- <10|10> --- 강남역 --- <2|2> --- 역삼역 --- <3|3> --- 선릉역  --- <1|1> --- 왕십리역
+     * 교대역 --- <10|10> --- 강남역 --- <2|2> --- 역삼역 --- <3|3> --- 선릉역  --- <1|1> --- 왕십리역 *하행종착역*
      * |
      * <50|50>
      * |
-     * 신촌역 --- <8|8> --- 종합운동작역 --- <4|4> --- 건대입구역 --- <4|4> --- 사당역
+     * 신촌역 --- <8|8> --- 종합운동작역 --- <4|4> --- 건대입구역 --- <4|4> --- 사당역 *상행종착역*
      */
     @Override
     @BeforeEach
@@ -63,6 +64,14 @@ public class FareAcceptanceTest extends AcceptanceTest {
         사당역 = 지하철역_생성_요청("사당역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 10);
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 역삼역, 2, 2));
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(역삼역, 선릉역, 3, 3));
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(선릉역, 왕십리역, 1, 1));
+
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(신촌역, 교대역, 50, 50));
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(종합운동장역, 신촌역, 8, 8));
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(건대입구역, 종합운동장역, 4, 4));
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(사당역, 건대입구역, 4, 4));
     }
 
     @Nested
@@ -154,7 +163,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
 
             assertAll(
                     () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(62),
-                    () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_150)
+                    () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_250)
             );
         }
 
@@ -180,5 +189,14 @@ public class FareAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("duration", duration + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    }
+
+    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", upStationId + "");
+        params.put("downStationId", downStationId + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
+        return params;
     }
 }
