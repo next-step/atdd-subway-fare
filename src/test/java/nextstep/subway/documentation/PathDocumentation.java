@@ -41,7 +41,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(SOURCE_ID, "강남역"),
                         new StationResponse(TARGET_ID, "역삼역")
-                ), 10, 10);
+                ), 10, 10, 1_250);
         when(pathService.findPath(anyLong(), anyLong(), any(SearchType.class))).thenReturn(pathResponse);
 
         // When
