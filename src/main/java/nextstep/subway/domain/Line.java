@@ -16,7 +16,7 @@ public class Line {
     private Integer additionalFare;
     private LocalTime firstTime;
     private LocalTime lastTime;
-    private int subwayInterval;
+    private int intervalMinute;
 
     @Embedded
     private Sections sections = new Sections();
@@ -32,13 +32,16 @@ public class Line {
         this(name, color, additionalFare, LocalTime.of(0, 0), LocalTime.of(0, 0), 0);
     }
 
-    public Line(String name, String color, Integer additionalFare, LocalTime firstTime, LocalTime lastTime, int subwayInterval) {
+    public Line(String name, String color, Integer additionalFare, LocalTime firstTime, LocalTime lastTime, int intervalMinute) {
+        if (firstTime.isAfter(lastTime)) {
+            throw new IllegalArgumentException("첫차 시간이 막차 시간보다 늦을 수 없습니다.");
+        }
         this.name = name;
         this.color = color;
         this.additionalFare = additionalFare;
         this.firstTime = firstTime;
         this.lastTime = lastTime;
-        this.subwayInterval = subwayInterval;
+        this.intervalMinute = intervalMinute;
     }
 
     public Long getId() {
@@ -65,8 +68,8 @@ public class Line {
         return lastTime;
     }
 
-    public int getSubwayInterval() {
-        return subwayInterval;
+    public int getIntervalMinute() {
+        return intervalMinute;
     }
 
     public List<Section> getSections() {
@@ -99,5 +102,9 @@ public class Line {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    public List<LocalTime> getSchedule() {
+        return null;
     }
 }

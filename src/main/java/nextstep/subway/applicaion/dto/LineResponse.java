@@ -40,7 +40,7 @@ public class LineResponse {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getAdditionalFare(),
-                line.getFirstTime(), line.getLastTime(), line.getSubwayInterval(), stations);
+                line.getFirstTime(), line.getLastTime(), line.getIntervalMinute(), stations);
     }
 
     public Long getId() {

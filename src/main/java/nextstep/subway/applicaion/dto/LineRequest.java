@@ -14,7 +14,7 @@ public class LineRequest {
     private LocalTime firstTime;
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime lastTime;
-    private int subwayInterval;
+    private int intervalMinute;
     private Long upStationId;
     private Long downStationId;
     private int distance;
@@ -27,7 +27,7 @@ public class LineRequest {
         if (Objects.isNull(lastTime)) {
             lastTime = LocalTime.of(0, 0);
         }
-        return new Line(name, color, additionalFare, firstTime, lastTime, subwayInterval);
+        return new Line(name, color, additionalFare, firstTime, lastTime, intervalMinute);
     }
 
     public String getName() {
@@ -66,7 +66,7 @@ public class LineRequest {
         return lastTime;
     }
 
-    public int getSubwayInterval() {
-        return subwayInterval;
+    public int getIntervalMinute() {
+        return intervalMinute;
     }
 }

@@ -61,10 +61,10 @@ public class LineSteps {
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Integer additionalFare,
-                                    LocalTime firstTime, LocalTime lastTime, int subwayInterval,
+                                    LocalTime firstTime, LocalTime lastTime, int intervalMinute,
                                     Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams = createLineParams(name, color, additionalFare,
-                firstTime, lastTime, subwayInterval,
+                firstTime, lastTime, intervalMinute,
                 upStation, downStation, distance, duration);
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
@@ -117,22 +117,22 @@ public class LineSteps {
     }
 
     private static Map<String, String> createLineParams(String name, String color, Integer additionalFare,
-                                                        LocalTime firstTime, LocalTime lastTime, int subwayInterval,
+                                                        LocalTime firstTime, LocalTime lastTime, int intervalMinute,
                                                         Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> params = createLineParams(name, color, additionalFare, firstTime, lastTime, subwayInterval);
+        Map<String, String> params = createLineParams(name, color, additionalFare, firstTime, lastTime, intervalMinute);
         params.putAll(createSectionParams(upStation, downStation, distance, duration));
         return params;
     }
 
     private static Map<String, String> createLineParams(String name, String color, Integer additionalFare,
-                                                        LocalTime firstTime, LocalTime lastTime, int subwayInterval) {
+                                                        LocalTime firstTime, LocalTime lastTime, int intervalMinute) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("additionalFare", additionalFare + "");
         params.put("firstTime", firstTime + "");
         params.put("lastTime", lastTime + "");
-        params.put("subwayInterval", subwayInterval + "");
+        params.put("intervalMinute", intervalMinute + "");
         return params;
     }
 
