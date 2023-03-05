@@ -39,7 +39,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(any())).thenReturn(pathResponse);
 
         // when
-        createDocumentationRequest(sourceId, targetId, ShortestPathType.DISTANCE);
+        createDocumentationRequest("pathDistance", sourceId, targetId, ShortestPathType.DISTANCE);
         var response = 타입별_최단_경로_조회_요청(spec);
 
         // then
@@ -60,7 +60,7 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(any())).thenReturn(pathResponse);
 
         // when
-        createDocumentationRequest(sourceId, targetId, ShortestPathType.TIME);
+        createDocumentationRequest("pathTime", sourceId, targetId, ShortestPathType.TIME);
         var response = 타입별_최단_경로_조회_요청(spec);
 
         // then
@@ -70,9 +70,9 @@ public class PathDocumentation extends Documentation {
         );
     }
 
-    private void createDocumentationRequest(Long sourceId, Long targetId, ShortestPathType type) {
+    private void createDocumentationRequest(String identifier, Long sourceId, Long targetId, ShortestPathType type) {
         spec.queryParams("source", sourceId, "target", targetId, "type", type)
-                .filter(document("path", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                .filter(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("Departure station information."),
                                 parameterWithName("target").description("Destination station information."),
