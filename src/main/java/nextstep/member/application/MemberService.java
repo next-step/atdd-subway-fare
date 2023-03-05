@@ -10,8 +10,6 @@ import nextstep.member.ui.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -60,12 +58,8 @@ public class MemberService {
 
     @Transactional
     public Member createOrFindMember(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isEmpty()) {
-            return memberRepository.save(new Member(email, "", 0));
-        }
-
-        return member.get();
+        return memberRepository.findByEmail(email)
+                .orElse(memberRepository.save(new Member(email, "", 0)));
     }
 
     private Member findMemberById(Long id) {
