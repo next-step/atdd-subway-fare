@@ -84,24 +84,14 @@ public class Sections {
     }
 
     private void checkDuplicateSection(Section section) {
-        sections.stream()
-                .filter(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))
-                .findFirst()
+        findSectionBy(it -> it.hasDuplicateSection(section.getUpStation(), section.getDownStation()))
                 .ifPresent(it -> {
                     throw new IllegalArgumentException();
                 });
     }
 
-    private Optional<Section> findSectionBy(Predicate<Section> isSameStation) {
-        return this.sections.stream()
-                .filter(isSameStation)
-                .findFirst();
-    }
-
     private void rearrangeSectionWithDownStation(final Section section) {
-        sections.stream()
-                .filter(it -> it.isSameDownStation(section.getDownStation()))
-                .findFirst()
+        findSectionBy(it -> it.isSameDownStation(section.getDownStation()))
                 .ifPresent(existingSection -> connectExistingUpStationAndNewUpStation(existingSection, section));
     }
 
@@ -115,10 +105,14 @@ public class Sections {
     }
 
     private void rearrangeSectionWithUpStation(Section section) {
-        sections.stream()
-                .filter(it -> it.isSameUpStation(section.getUpStation()))
-                .findFirst()
+        findSectionBy(it -> it.isSameUpStation(section.getUpStation()))
                 .ifPresent(existingSection -> connectExistingDownStationAndNewDownStation(existingSection, section));
+    }
+
+    private Optional<Section> findSectionBy(Predicate<Section> sectionPredicate) {
+        return this.sections.stream()
+                .filter(sectionPredicate)
+                .findFirst();
     }
 
     private void connectExistingDownStationAndNewDownStation(final Section existingSection, final Section newSection) {
