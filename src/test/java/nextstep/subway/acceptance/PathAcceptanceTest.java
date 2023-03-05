@@ -71,6 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 		// then
 		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+		시간_총합과_거리_총합이_조회됨(response, 13, 5);
 	}
 
 	@DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -81,6 +82,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 		// then
 		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+		시간_총합과_거리_총합이_조회됨(response, 10, 20);
+
 	}
 
 	@DisplayName("두 역의 최단 거리 경로를 조회한다. - 실패 ")

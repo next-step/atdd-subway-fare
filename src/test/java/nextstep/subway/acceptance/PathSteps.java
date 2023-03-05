@@ -1,5 +1,7 @@
 package nextstep.subway.acceptance;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,5 +59,10 @@ public class PathSteps {
 		params.put("distance", distance + "");
 		params.put("duration", duration + "");
 		return params;
+	}
+
+	public static void 시간_총합과_거리_총합이_조회됨(ExtractableResponse<Response> response, int sumOfDuration, int sumOfDistance) {
+		assertThat(response.jsonPath().getInt("duration")).isEqualTo(sumOfDuration);
+		assertThat(response.jsonPath().getInt("distance")).isEqualTo(sumOfDistance);
 	}
 }
