@@ -2,6 +2,7 @@ package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.member.application.MemberService;
+import nextstep.member.domain.IdentificationMember;
 import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathRequest;
@@ -23,16 +24,16 @@ public class PathService {
     private final MemberService memberService;
 
     @Transactional(readOnly = true)
-    public PathResponse findPath(LoginMember loginMember, PathRequest pathRequest) {
+    public PathResponse findPath(IdentificationMember identificationMember, PathRequest pathRequest) {
         Station upStation = stationService.findById(pathRequest.getSource());
         Station downStation = stationService.findById(pathRequest.getTarget());
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathRequest.getType());
 
-        return loginMember.isAnonymousMember() ?
+        return identificationMember.isAnonymousMember() ?
                 getAnonymousPathResponse(path) :
-                getLoginMemberPathResponse(loginMember, path);
+                getLoginMemberPathResponse(identificationMember, path);
     }
 
     private PathResponse getAnonymousPathResponse(Path path) {
@@ -42,8 +43,8 @@ public class PathService {
         );
     }
 
-    private PathResponse getLoginMemberPathResponse(LoginMember loginMember, Path path) {
-        Member member = memberService.findMember(loginMember.getId());
+    private PathResponse getLoginMemberPathResponse(IdentificationMember identificationMember, Path path) {
+        Member member = memberService.findMember(identificationMember.getId());
         return PathResponse.of(path, path.calculateFare(member));
     }
 }

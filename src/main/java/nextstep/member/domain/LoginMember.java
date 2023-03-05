@@ -2,7 +2,7 @@ package nextstep.member.domain;
 
 import java.util.List;
 
-public class LoginMember {
+public class LoginMember implements IdentificationMember {
     private Long id;
 
     private int age;
