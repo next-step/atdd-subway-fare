@@ -25,15 +25,17 @@ public class PathService {
 
     public PathResponse findPath(PathRequest pathRequest) {
         Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
-        int fare = path.calculateFare(null, farePolicy);
-        return PathResponse.of(path, fare);
+        Fare fare = new Fare(path);
+        int fareAmount = fare.calculate(farePolicy);
+        return PathResponse.of(path, fareAmount);
     }
 
     public PathResponse findPath(Long memberId, PathRequest pathRequest) {
         Member member = memberService.findById(memberId);
         Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType());
-        int fare = path.calculateFare(member, farePolicy);
-        return PathResponse.of(path, fare);
+        Fare fare = new Fare(member, path);
+        int fareAmount = fare.calculate(farePolicy);
+        return PathResponse.of(path, fareAmount);
     }
 
     public Path findPath(Long source, Long target, PathType pathType) {

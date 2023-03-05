@@ -30,8 +30,4 @@ public class Path {
     public int maxAdditionalFare() {
         return sections.maxAdditionalFare();
     }
-
-    public int calculateFare(Member member, MemberFarePolicy farePolicy) {
-        return farePolicy.calculate(member, this);
-    }
 }
