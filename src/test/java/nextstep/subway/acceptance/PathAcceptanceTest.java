@@ -4,7 +4,9 @@ import static nextstep.subway.acceptance.LineSteps.*;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.*;
-import static org.assertj.core.api.Assertions.*;
+import static nextstep.subway.acceptance.common.CommonSteps.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -70,7 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
 		// then
-		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+		경로의_역_목록을_검증함(response, List.of(교대역, 남부터미널역, 양재역));
 		시간_총합과_거리_총합이_조회됨(response, 13, 5);
 	}
 
@@ -81,9 +83,8 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
 		// then
-		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+		경로의_역_목록을_검증함(response, List.of(교대역, 강남역, 양재역));
 		시간_총합과_거리_총합이_조회됨(response, 10, 20);
-
 	}
 
 	@DisplayName("두 역의 최단 거리 경로를 조회한다. - 실패 ")
@@ -93,7 +94,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 교대역);
 
 		// then
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+		응답_상태_코드_검증(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@DisplayName("두 역의 최소 시간 경로를 조회한다. - 실패")
@@ -103,6 +104,6 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 교대역);
 
 		// then
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+		응답_상태_코드_검증(response, HttpStatus.BAD_REQUEST);
 	}
 }
