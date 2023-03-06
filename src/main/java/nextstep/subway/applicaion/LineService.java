@@ -28,7 +28,7 @@ public class LineService {
         if (stationService.checkExistsId(request.getUpStationId(), request.getDownStationId())) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
-            line.addSectionIfPossible(upStation, downStation, request.getDistance(), request.getDuration());
+            line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
         }
         return LineResponse.of(line);
     }
