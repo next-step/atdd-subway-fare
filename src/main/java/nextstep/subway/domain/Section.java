@@ -91,20 +91,22 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section replaceDownStationWithUpStation(final Section section) {
-        return new Section(
-                this.getLine(),
-                this.getUpStation(),
-                section.getUpStation(),
-                this.getDistance() - section.getDistance(),
-                this.getDuration() - section.getDuration()
-        );
+        return createSectionBetweenExistSection(this.getUpStation(), section.getUpStation(), section);
     }
 
     public Section replaceUpStationWithDownStation(final Section section) {
+        return createSectionBetweenExistSection(section.getDownStation(), this.getDownStation(), section);
+    }
+
+    private Section createSectionBetweenExistSection(
+            final Station upStation,
+            final Station downStation,
+            final Section section
+    ) {
         return new Section(
-                section.getLine(),
-                section.getDownStation(),
-                this.getDownStation(),
+                this.getLine(),
+                upStation,
+                downStation,
                 this.getDistance() - section.getDistance(),
                 this.getDuration() - section.getDuration()
         );
