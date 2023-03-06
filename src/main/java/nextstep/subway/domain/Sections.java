@@ -157,7 +157,6 @@ public class Sections {
     public int calculateFare() {
         int totalFare = distanceFarePolicy();
         totalFare += lineFarePolicy(sections);
-
         return totalFare;
     }
 
