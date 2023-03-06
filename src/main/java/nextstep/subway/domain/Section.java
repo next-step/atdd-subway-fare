@@ -23,34 +23,35 @@ public class Section extends DefaultWeightedEdge {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    @Embedded
-    private Distance distance;
+    private int distance;
 
-    @Embedded
-    private Duration duration;
+    private int duration;
 
     public Section() {
 
     }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
-        validateAddSection(line, upStation, downStation);
+        validateAddSection(line, upStation, downStation, distance, duration);
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = new Distance(distance);
-        this.duration = new Duration(duration);
+        this.distance = distance;
+        this.duration = duration;
     }
 
     private void validateAddSection(
             final Line line,
             final Station upStation,
-            final Station downStation
+            final Station downStation,
+            final int distance,
+            final int duration
     ) {
-        if (line == null || upStation == null || downStation == null) {
+        if (line == null || upStation == null || downStation == null || distance == 0 || duration == 0) {
             throw new SectionCreateException();
         }
     }
+
 
     public Long getId() {
         return id;
@@ -69,11 +70,11 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return distance.getValue();
+        return distance;
     }
 
     public int getDuration() {
-        return duration.getValue();
+        return duration;
     }
 
     public boolean isSameUpStation(Station station) {
@@ -90,22 +91,20 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section replaceDownStationWithUpStation(final Section section) {
-        return createSectionBetweenExistSection(this.getUpStation(), section.getUpStation(), section);
+        return new Section(
+                this.getLine(),
+                this.getUpStation(),
+                section.getUpStation(),
+                this.getDistance() - section.getDistance(),
+                this.getDuration() - section.getDuration()
+        );
     }
 
     public Section replaceUpStationWithDownStation(final Section section) {
-        return createSectionBetweenExistSection(section.getDownStation(), this.getDownStation(), section);
-    }
-
-    private Section createSectionBetweenExistSection(
-            final Station upStation,
-            final Station downStation,
-            final Section section
-    ) {
         return new Section(
-                this.getLine(),
-                upStation,
-                downStation,
+                section.getLine(),
+                section.getDownStation(),
+                this.getDownStation(),
                 this.getDistance() - section.getDistance(),
                 this.getDuration() - section.getDuration()
         );
