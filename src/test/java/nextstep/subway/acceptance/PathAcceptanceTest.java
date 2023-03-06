@@ -3,15 +3,18 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.utils.GithubResponses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.깃허브_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,6 +57,42 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Given 지하철역이 등록되어있음
      * And 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
+     * When 로그인
+     * and 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("로그인한 유저의 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistance2() {
+        //given
+        int fare = 1250 + 900 + 500; // 기본료 + 거리비례추가요금 + 추가요금이 있는노선
+        fare = 어린이_요금_할인(fare);
+
+        // when
+        ExtractableResponse<Response> 깃허브_로그인_응답 = 깃허브_인증_로그인_요청(GithubResponses.사용자1.getCode());
+
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(깃허브_로그인_응답, 교대역, 양재역);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(55);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+    }
+
+    private int 어린이_요금_할인(int fare) {
+        return (int) ((fare - 350) * 0.5);
+    }
+
+    /**
+     * Feature: 지하철 경로 검색
+     * Scenario: 두 역의 최단 거리 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     *
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
      * Then 최단 거리 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
@@ -95,16 +134,22 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return 두_역의_경로_조회를_요청(source, target, "DURATION");
+        return 두_역의_경로_조회를_요청(null, source, target, "DURATION");
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return 두_역의_경로_조회를_요청(source, target, "DISTANCE");
+        return 두_역의_최단_거리_경로_조회를_요청(null, source, target);
     }
 
-    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String pathType) {
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(ExtractableResponse<Response> 깃허브_로그인_응답, Long source, Long target) {
+        String accessToken = 깃허브_로그인_응답.jsonPath().getString("accessToken");
+        return 두_역의_경로_조회를_요청(accessToken, source, target, "DISTANCE");
+    }
+
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(String accessToken, Long source, Long target, String pathType) {
         return RestAssured
                 .given().log().all()
+                .header(HttpHeaders.AUTHORIZATION, "token "+ accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, pathType)
                 .then().log().all().extract();
