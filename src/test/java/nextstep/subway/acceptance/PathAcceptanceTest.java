@@ -64,6 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금을 함께 응답함
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
