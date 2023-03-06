@@ -47,9 +47,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 10);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 0, 교대역, 강남역, 10, 10);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 500, 강남역, 양재역, 10, 10);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 900,교대역, 남부터미널역, 2, 2);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
     }
@@ -75,7 +75,31 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250 + 900)
+        );
+    }
+
+    /**
+     * Feature: 지하철 경로 검색
+     *
+     *   Scenario: 추가운임이 다른 노선을 경유하는 두 역의 최단 거리 경로를 조회
+     *     When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     *     Then 최단 거리 경로를 응답
+     *     And 총 거리와 소요 시간을 함께 응답함
+     *     And 지하철 이용 요금도 함께 응답함
+     */
+    @DisplayName("추가운임이 다른 노선을 경유하는 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistance2() {
+        // when
+        ExtractableResponse<Response> response = 경로_조회_요청(남부터미널역, 강남역, SearchType.DISTANCE.name());
+
+        // then
+        assertAll(
+                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역),
+                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(12),
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(12),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_450 + 900)
         );
     }
 
@@ -97,15 +121,17 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250 + 900)
         );
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, int surcharge, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
+        lineCreateParams.put("surcharge", surcharge + "");
+
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
