@@ -164,6 +164,7 @@ public class Sections {
     private int subwayPolicyFare(List<Section> sections) {
         return sections.stream()
                 .map(Section::getLine)
+                .distinct()
                 .filter(line -> Objects.nonNull(line.getLineFare()))
                 .mapToInt(Line::getLineFare)
                 .sum();
