@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion.dto;
 
+import java.util.ArrayList;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
@@ -9,11 +10,24 @@ public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
     private int duration;
+    private int fare;
 
     public PathResponse(final List<StationResponse> stations, final int distance, final int duration) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    public PathResponse(
+            final ArrayList<StationResponse> stations,
+            final int distance,
+            final int duration,
+            final int fare
+    ) {
+        this.stations = stations;
+        this.distance = distance;
+        this.duration = duration;
+        this.fare = fare;
     }
 
     public static PathResponse of(Path path) {
@@ -36,5 +50,9 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getFare() {
+        return fare;
     }
 }
