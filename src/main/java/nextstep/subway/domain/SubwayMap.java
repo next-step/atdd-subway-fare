@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
+    private final List<Line> lines;
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathType pathType, Integer age) {
+    public Path findPath(Station source, Station target, PathType pathType) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
