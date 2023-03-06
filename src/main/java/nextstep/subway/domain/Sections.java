@@ -8,8 +8,7 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
-    public static final int DEFAULT_FARE = 1250;
-    public static final int DEFAULT_FARE_DISTANCE = 10;
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
