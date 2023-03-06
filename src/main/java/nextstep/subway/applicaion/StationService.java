@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import java.util.Arrays;
 import nextstep.subway.applicaion.dto.StationRequest;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Station;
@@ -42,6 +43,10 @@ public class StationService {
                 station.getId(),
                 station.getName()
         );
+    }
+
+    public boolean checkExistsId(Long... ids) {
+        return stationRepository.findAllById(Arrays.asList(ids)).size() == ids.length;
     }
 
     public Station findById(Long id) {
