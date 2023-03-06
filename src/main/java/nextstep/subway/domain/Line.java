@@ -40,6 +40,10 @@ public class Line {
         return color;
     }
 
+    public int getSurcharge() {
+        return surcharge;
+    }
+
     public List<Section> getSections() {
         return sections.getSections();
     }

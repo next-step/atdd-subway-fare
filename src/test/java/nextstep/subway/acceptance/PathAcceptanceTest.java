@@ -99,7 +99,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(12),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(12),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_450 + 900)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_250 + 100 + 900)
         );
     }
 

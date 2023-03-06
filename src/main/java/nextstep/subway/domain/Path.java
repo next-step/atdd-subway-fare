@@ -26,6 +26,11 @@ public class Path {
     }
 
     public int extractFare() {
-        return FarePolicy.calculate(extractDistance());
+        int totalFare = 0;
+
+        totalFare += FarePolicy.calculate(extractDistance());
+        totalFare += sections.getMaxSurcharge();
+
+        return totalFare;
     }
 }
