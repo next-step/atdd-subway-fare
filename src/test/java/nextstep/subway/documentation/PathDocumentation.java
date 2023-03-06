@@ -38,7 +38,7 @@ public class PathDocumentation extends Documentation {
 
         // when
         // then
-        두_역의_경로_조회_요청(1L, 2L, DISTANCE_TYPE, basicDocumentSpec("path/success/distance"));
+        두_역의_경로_조회_요청(1L, 2L, DISTANCE_TYPE, pathParametersDocumentSpec("path/success/distance"));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PathDocumentation extends Documentation {
 
         // when
         // then
-        두_역의_경로_조회_요청(1L, 2L, DURATION_TYPE, basicDocumentSpec("path/success/duration"));
+        두_역의_경로_조회_요청(1L, 2L, DURATION_TYPE, pathParametersDocumentSpec("path/success/duration"));
     }
 
     @Test
