@@ -33,7 +33,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 20, 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
