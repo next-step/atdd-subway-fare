@@ -13,6 +13,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 public class PathSteps {
 
     private final static String DISTANCE_TYPE = "DISTANCE";
+    private final static String DURATION_TYPE = "DURATION";
 
     public static RequestSpecification basicDocumentRequest(final RequestSpecification spec,
                                                             final String path) {
@@ -28,6 +29,11 @@ public class PathSteps {
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(final Long source,
                                                                      final Long target) {
         return 두_역의_경로_조회_요청(source, target, DISTANCE_TYPE);
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(final Long source,
+                                                                     final Long target) {
+        return 두_역의_경로_조회_요청(source, target, DURATION_TYPE);
     }
 
     private static ExtractableResponse<Response> 두_역의_경로_조회_요청(final Long source,

@@ -64,6 +64,15 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최소 시간 기준 경로를 응답받는다.
      * And 총 거리와 소요 시간을 함께 응답받는다.
      */
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathByDuration() {
+        // when
+        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+
+        // then
+        경로_조회_검증(response, 20, 7, 교대역, 강남역, 양재역);
+    }
 
     private Long 지하철_노선_생성_요청(final String name,
                               final String color,
