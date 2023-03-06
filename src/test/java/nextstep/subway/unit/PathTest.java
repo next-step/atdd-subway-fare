@@ -16,10 +16,9 @@ public class PathTest {
     @Test
     void getArrivalTime() {
         Line 이호선 = new Line("이호선", "yellow", 500, LocalTime.of(5, 0), LocalTime.of(23, 0), 10);
-        Section section1 = new Section(이호선, new Station("서초역"), new Station("강남역"), 10, 3);
-        Section section2 = new Section(이호선, new Station("강남역"), new Station("역삼역"), 8, 4);
-        Section section3 = new Section(이호선, new Station("역삼역"), new Station("선릉역"), 15, 3);
-        Path path = new Path(new Sections(List.of(section1, section2, section3)));
+        Section section1 = new Section(이호선, new Station("강남역"), new Station("역삼역"), 8, 4);
+        Section section2 = new Section(이호선, new Station("역삼역"), new Station("선릉역"), 15, 3);
+        Path path = new Path(new Sections(List.of(section1, section2)));
 
         LocalDateTime arrivalTime = path.getArrivalTime(LocalDateTime.of(2023, 3, 6, 10, 0));
 

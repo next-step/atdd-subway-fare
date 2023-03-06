@@ -3,6 +3,8 @@ package nextstep.subway.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Section extends DefaultWeightedEdge {
@@ -76,5 +78,13 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    public LocalDateTime getNextSchedule(LocalDateTime departureDate) {
+        return line.getNextSchedule(departureDate);
+    }
+
+    public boolean isTransfer(Line line) {
+        return Objects.isNull(line) && !this.line.equals(line);
     }
 }

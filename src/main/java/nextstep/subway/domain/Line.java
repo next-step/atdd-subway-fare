@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Line {
@@ -112,7 +113,7 @@ public class Line {
         LocalTime firstTime = schedule.get(0);
         return schedule.stream()
                 .sorted()
-                .filter(time -> time.isAfter(date.toLocalTime()))
+                .filter(time -> time.equals(date.toLocalTime()) || time.isAfter(date.toLocalTime()))
                 .findFirst()
                 .map(time -> LocalDateTime.of(date.toLocalDate(), time))
                 .orElse(LocalDateTime.of(date.toLocalDate().plusDays(1), firstTime));
@@ -127,5 +128,18 @@ public class Line {
         }
         schedule.add(lastTime);
         return schedule;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Line line = (Line) o;
+        return Objects.equals(getName(), line.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }
