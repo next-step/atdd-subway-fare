@@ -7,6 +7,9 @@ public class BasicDistanceFareFormula implements DistanceFareFormula {
     private static final int BASE_DISTANCE = 10;
     private static final int BASE_FARE = 1250;
     private static final int ADDITIONAL_FARE = 100;
+    private static final int BASIC_ADDITIONAL_DISTANCE_LIMIT = 50;
+    private static final int BASIC_ADDITIONAL_DISTANCE = 5;
+    private static final int EXTRA_ADDITIONAL_DISTANCE = 8;
 
     @Override
     public int calculate(final int distance) {
@@ -23,12 +26,12 @@ public class BasicDistanceFareFormula implements DistanceFareFormula {
         int temp = BASE_DISTANCE;
         int fare = BASE_FARE;
         while (temp < distance) {
-            if (temp < 50) {
-                temp += 5;
+            if (temp < BASIC_ADDITIONAL_DISTANCE_LIMIT) {
+                temp += BASIC_ADDITIONAL_DISTANCE;
                 fare += ADDITIONAL_FARE;
                 continue;
             }
-            temp += 8;
+            temp += EXTRA_ADDITIONAL_DISTANCE;
             fare += ADDITIONAL_FARE;
         }
         return fare;
