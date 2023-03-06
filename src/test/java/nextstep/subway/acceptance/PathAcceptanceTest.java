@@ -76,7 +76,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         두_역의_경로_조회_검증(response, 교대역, 남부터미널역, 양재역);
 
         // and
-        두_역의_최소_시간_경로_조회를_검증(response, 5L, 12L, 1250);
+        두_역의_최소_시간_경로_조회를_검증(response, 5L, 12L, 1350);
     }
 
     @DisplayName("경로 조회 예외 처리 기능")
