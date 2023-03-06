@@ -53,11 +53,13 @@ public class PathSteps {
     public static void 두_역의_최소_시간_경로_조회를_검증(
             final ExtractableResponse<Response> response,
             final Long distance,
-            final Long duration
+            final Long duration,
+            final int fare
     ) {
         Assertions.assertAll(
                 () -> assertThat(response.jsonPath().getLong("distance")).isEqualTo(distance),
-                () -> assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration)
+                () -> assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare)
         );
     }
 
