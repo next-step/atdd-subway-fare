@@ -155,13 +155,13 @@ public class Sections {
     }
 
     public int calculateFare() {
-        int total = distancePolicyfare();
-        total += subwayPolicyFare(sections);
+        int totalFare = distanceFarePolicy();
+        totalFare += lineFarePolicy(sections);
 
-        return total;
+        return totalFare;
     }
 
-    private int subwayPolicyFare(List<Section> sections) {
+    private int lineFarePolicy(List<Section> sections) {
         return sections.stream()
                 .map(Section::getLine)
                 .distinct()
@@ -170,10 +170,10 @@ public class Sections {
                 .sum();
     }
 
-    private int distancePolicyfare() {
+    private int distanceFarePolicy() {
         int distance = totalDistance();
-        Fare fare = Fare.of(distance);
-        return fare.calculate(distance);
+        DistacneFarePolicy distacneFarePolicy = DistacneFarePolicy.of(distance);
+        return distacneFarePolicy.calculate(distance);
     }
 
 }

@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 
-import static nextstep.subway.domain.Fare.Constants.*;
+import static nextstep.subway.domain.DistacneFarePolicy.Constants.*;
 
 @RequiredArgsConstructor
-public enum Fare {
+public enum DistacneFarePolicy {
     DEFAULT(
             distance -> distance >= MIN_DISTANCE && distance <= DEFAULT_DISTANCE,
             distance -> DEFAULT_FARE),
@@ -23,7 +23,7 @@ public enum Fare {
     private final IntPredicate matchPredicate;
     private final IntFunction<Integer> calculateFunc;
 
-    public static Fare of(int distance) {
+    public static DistacneFarePolicy of(int distance) {
         return Arrays.stream(values())
                 .filter(a -> a.matchPredicate.test(distance))
                 .findAny()
