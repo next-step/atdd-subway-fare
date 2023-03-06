@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
-import static nextstep.subway.acceptance.PathSteps.basicDocumentRequest;
+import static nextstep.subway.acceptance.PathSteps.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -38,12 +38,7 @@ public class PathDocumentation extends Documentation {
 
         // when
         // then
-        basicDocumentRequest(spec, "path/success/distance")
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_경로_조회_요청(1L, 2L, DISTANCE_TYPE, basicDocumentSpec("path/success/distance"));
     }
 
     @Test
@@ -64,12 +59,7 @@ public class PathDocumentation extends Documentation {
 
         // when
         // then
-        basicDocumentRequest(spec, "path/success/duration")
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .queryParam("type", "DURATION")
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_경로_조회_요청(1L, 2L, DURATION_TYPE, basicDocumentSpec("path/success/duration"));
     }
 
     @Test
@@ -80,12 +70,7 @@ public class PathDocumentation extends Documentation {
 
         // when
         // then
-        basicDocumentRequest(spec, "path/failure/sameStation")
-                .queryParam("source", 1L)
-                .queryParam("target", 1L)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_경로_조회_요청(1L, 1L, DISTANCE_TYPE, basicDocumentSpec("path/failure/sameStation"));
     }
 
     @Test
@@ -96,11 +81,6 @@ public class PathDocumentation extends Documentation {
 
         // when
         // then
-        basicDocumentRequest(spec, "path/failure/notLinked")
-                .queryParam("source", 1L)
-                .queryParam("target", 3L)
-                .queryParam("type", "DISTANCE")
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_경로_조회_요청(1L, 3L, DISTANCE_TYPE, basicDocumentSpec("path/failure/notLinked"));
     }
 }
