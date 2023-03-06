@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.exception.SectionCreateException;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
@@ -31,12 +32,26 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        validateAddSection(line, upStation, downStation, distance, duration);
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
     }
+
+    private void validateAddSection(
+            final Line line,
+            final Station upStation,
+            final Station downStation,
+            final int distance,
+            final int duration
+    ) {
+        if (line == null || upStation == null || downStation == null || distance == 0 || duration == 0) {
+            throw new SectionCreateException();
+        }
+    }
+
 
     public Long getId() {
         return id;

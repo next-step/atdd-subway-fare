@@ -2,10 +2,15 @@ package nextstep.subway.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.stream.Stream;
+import nextstep.subway.domain.exception.SectionCreateException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("구간 관련 기능")
 class SectionTest {
@@ -53,5 +58,27 @@ class SectionTest {
                 () -> assertThat(section.getDistance()).isEqualTo(7),
                 () -> assertThat(section.getDuration()).isEqualTo(7)
         );
+    }
+
+    private static Stream<Arguments> provideForCreateSectionFail() {
+        Station upStation = new Station("강남역");
+        Station downStation = new Station("역삼역");
+        Line line = new Line("2호선", "green");
+
+        return Stream.of(
+                Arguments.of(null, upStation, downStation, 10, 10),
+                Arguments.of(line, null, downStation, 10, 10),
+                Arguments.of(line, upStation, null, 10, 10),
+                Arguments.of(line, upStation, downStation, 0, 10),
+                Arguments.of(line, upStation, downStation, 10, 0)
+        );
+    }
+
+    @DisplayName("구간 생성시 조건에 맞지 않으면 추가하지 않는다.")
+    @ParameterizedTest(name = "상행역 : {0}, 하행역 : {1}, 거리 : {2}, 시간 : {3}")
+    @MethodSource("provideForCreateSectionFail")
+    void createSectionFail(Line line, Station upStation, Station downStation, int distance, int duration) {
+        assertThatThrownBy(() -> new Section(line, upStation, downStation, distance, duration))
+                .isInstanceOf(SectionCreateException.class);
     }
 }
