@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
+    private FarePolicy farePolicy = new DistanceFarePolicy(new BasicDistanceFareFormula());
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -23,5 +24,9 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int calculateFare() {
+        return farePolicy.apply(extractDistance());
     }
 }
