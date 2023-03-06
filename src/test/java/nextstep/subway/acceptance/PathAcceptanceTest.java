@@ -6,10 +6,13 @@ import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_또는_시간_경로_조회를_요청;
@@ -59,7 +62,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(given(), 교대역, 양재역, PathType.DISTANCE);
 
         // then
         assertAll(
@@ -78,7 +81,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(교대역, 양재역, PathType.DURATION);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(given(), 교대역, 양재역, PathType.DURATION);
 
         // then
         assertAll(
@@ -86,6 +89,25 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(7)
         );
+    }
+
+    /**
+     * given 총 4개의 역, 3개의 노선이 등록된 상황에서
+     * when 출발역, 도착역, 시간 기준 최단 시간 & 최단 거리 경로 조회를 요청했을 때
+     * then 각 최단 경로에 대한 총 요금을 계산할 수 있다.
+     */
+    @DisplayName("두 역의 최단 경로에 대한 총 요금을 조회한다.")
+    @ParameterizedTest
+    @CsvSource(value = {
+            "DURATION, 1450",
+            "DISTANCE, 1250"
+    })
+    void findPathAndCalculateFare(PathType pathType, int fare) {
+        // when
+        ExtractableResponse<Response> 교대_양재_최단_경로_응답 = 두_역의_최단_거리_또는_시간_경로_조회를_요청(given(), 교대역, 양재역, pathType);
+
+        // then
+        assertThat(교대_양재_최단_경로_응답.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
