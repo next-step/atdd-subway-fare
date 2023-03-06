@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
@@ -41,6 +42,7 @@ public class PathDocumentation extends Documentation {
 
         RequestSpecification requestSpecification = documentConfig(
                 "path",
+                List.of(headerWithName("Authorization").description("인증 토큰").optional()),
                 List.of(parameterWithName("source").description("출발역 id"),
                         parameterWithName("target").description("도착역 id"),
                         parameterWithName("type").description("경로 조회 조건")),

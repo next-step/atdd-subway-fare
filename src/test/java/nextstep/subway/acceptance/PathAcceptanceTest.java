@@ -64,7 +64,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         청소년 = 베어러_인증_로그인_요청(Users.청소년.getEmail(), Users.청소년.getPassword()).jsonPath().getString("accessToken");
         어린이 = 베어러_인증_로그인_요청(Users.어린이.getEmail(), Users.어린이.getPassword()).jsonPath().getString("accessToken");
     }
-    
+
     /**
      * Feature: 지하철 경로 검색
      *
