@@ -85,7 +85,7 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public boolean isTransfer(Line line) {
-        return Objects.isNull(line) && !this.line.equals(line);
+        return Objects.isNull(line) || !this.line.equals(line);
     }
 
     @Override

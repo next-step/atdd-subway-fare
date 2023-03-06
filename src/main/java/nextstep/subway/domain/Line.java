@@ -93,8 +93,10 @@ public class Line {
         addSection(upStation, downStation, distance, 0);
     }
 
-    public void addSection(Station upStation, Station downStation, int distance, int duration) {
-        sections.add(new Section(this, upStation, downStation, distance, duration));
+    public Section addSection(Station upStation, Station downStation, int distance, int duration) {
+        Section section = new Section(this, upStation, downStation, distance, duration);
+        sections.add(section);
+        return section;
     }
 
     public List<Station> getStations() {
