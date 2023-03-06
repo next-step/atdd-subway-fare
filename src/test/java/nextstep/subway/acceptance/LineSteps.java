@@ -9,10 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps {
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
-        Map<String, String> params = new HashMap<>();
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int extraFare) {
+        Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("extraFare", extraFare);
         return RestAssured
                 .given().log().all()
                 .body(params)
@@ -21,7 +22,7 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, String> params) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, Object> params) {
         return RestAssured
                 .given().log().all()
                 .auth().oauth2(accessToken)
@@ -52,7 +53,7 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(Map<String, String> params) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(Map<String, Object> params) {
         return RestAssured
                 .given().log().all()
                 .body(params)

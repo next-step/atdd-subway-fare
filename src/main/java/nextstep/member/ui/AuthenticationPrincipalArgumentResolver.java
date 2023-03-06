@@ -1,6 +1,7 @@
 package nextstep.member.ui;
 
 import nextstep.member.application.JwtTokenProvider;
+import nextstep.member.domain.AnonymousMember;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
 import org.springframework.core.MethodParameter;
@@ -28,6 +29,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
+
+        if (authorization == null) {
+            return new AnonymousMember();
+        }
+
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }

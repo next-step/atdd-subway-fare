@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
+
+    private static final int NO_EXTRA_FARE = 0;
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -92,6 +95,13 @@ public class Sections {
 
     public Path getResultPath() {
         return Path.of(this);
+    }
+
+    public int getMaxExtraFare() {
+        return this.sections.stream()
+                .mapToInt(it -> it.getLine().getExtraFare())
+                .max()
+                .orElse(NO_EXTRA_FARE);
     }
 
     private void checkDuplicateSection(Section section) {

@@ -2,8 +2,11 @@ package nextstep.member.domain;
 
 import java.util.List;
 
-public class LoginMember {
+public class LoginMember implements IdentificationMember {
     private Long id;
+
+    private int age;
+
     private List<String> roles;
 
     public LoginMember(Long id, List<String> roles) {
@@ -17,5 +20,9 @@ public class LoginMember {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public boolean isAnonymousMember() {
+        return false;
     }
 }

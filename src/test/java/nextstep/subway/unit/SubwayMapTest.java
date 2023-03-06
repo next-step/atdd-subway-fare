@@ -9,6 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.fixtures.FareFixtures.DEFAULT_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
@@ -21,6 +22,15 @@ public class SubwayMapTest {
     private Line 이호선;
     private Line 삼호선;
 
+    /**
+     * 3
+     * 교대역  --- *2호선* ---   강남역
+     * |                        |
+     * 5  *3호선*                   *신분당선*    3
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재경
+     * 5
+     */
     @BeforeEach
     void setUp() {
         교대역 = createStation(1L, "교대역");
@@ -28,9 +38,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", 500);
+        이호선 = new Line("2호선", "red", 400);
+        삼호선 = new Line("3호선", "red", 900);
 
         신분당선.addSection(강남역, 양재역, 3, 5);
         이호선.addSection(교대역, 강남역, 3, 5);
@@ -41,7 +51,7 @@ public class SubwayMapTest {
     @Test
     void findPath() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
@@ -54,7 +64,7 @@ public class SubwayMapTest {
     @Test
     void findPathOppositely() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
@@ -68,7 +78,7 @@ public class SubwayMapTest {
     @Test
     void 최소시간기준으로_경로를_반환한다() {
         // given
-        List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
@@ -76,6 +86,21 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+    }
+
+    @DisplayName("경로중 노선의 가장높은 금액의 추가요금만 적용한다")
+    @Test
+    void 경로중_노선의_가장높은_금액의_추가요금만_적용한다() {
+        // given
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 양재역, PathSearchType.DISTANCE);
+        Fare fare = Fare.of(new DistanceFarePolicy(path.getMaxExtraFare()), path.getTotalDistance());
+
+        // then
+        assertThat(fare.get()).isEqualTo(DEFAULT_FARE + 500);
     }
 
     private Station createStation(long id, String name) {
