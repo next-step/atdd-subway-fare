@@ -29,7 +29,7 @@ public class PathService {
         Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType(), pathRequest.getDepartureDate());
         Fare fare = new Fare(path);
         int fareAmount = fare.calculate(farePolicy);
-        return PathResponse.of(path, fareAmount);
+        return PathResponse.of(path, fareAmount, path.getArrivalTime(pathRequest.getDepartureDate()));
     }
 
     public PathResponse findPath(Long memberId, PathRequest pathRequest) {
@@ -37,7 +37,7 @@ public class PathService {
         Path path = findPath(pathRequest.getSource(), pathRequest.getTarget(), pathRequest.getType(), pathRequest.getDepartureDate());
         Fare fare = new Fare(member, path);
         int fareAmount = fare.calculate(farePolicy);
-        return PathResponse.of(path, fareAmount);
+        return PathResponse.of(path, fareAmount, path.getArrivalTime(pathRequest.getDepartureDate()));
     }
 
     public Path findPath(Long source, Long target, PathType pathType, LocalDateTime departureDate) {

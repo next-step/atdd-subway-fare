@@ -35,13 +35,13 @@ public class PathResponse {
         this.destinationDate = destinationDate;
     }
 
-    public static PathResponse of(Path path, int fare) {
+    public static PathResponse of(Path path, int fare, LocalDateTime arrivalDate) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        return new PathResponse(stations, distance, duration, new FareResponse(fare), LocalDateTime.now());
+        return new PathResponse(stations, distance, duration, new FareResponse(fare), arrivalDate);
     }
 
     public List<StationResponse> getStations() {

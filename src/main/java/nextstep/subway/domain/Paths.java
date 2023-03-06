@@ -15,7 +15,7 @@ public class Paths {
         LocalDateTime miniumArrivalDate = LocalDateTime.MAX;
         for (Path path : paths) {
             LocalDateTime arrivalTime = path.getArrivalTime(departureDate);
-            if (miniumArrivalDate.isBefore(arrivalTime)) {
+            if (miniumArrivalDate.isAfter(arrivalTime)) {
                 miniumArrivalDate = arrivalTime;
                 miniumArrivalPath = path;
             }

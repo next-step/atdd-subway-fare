@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
@@ -68,8 +69,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로를_응답한다(response, 교대역, 남부터미널역, 양재역);
-        요금를_응답한다(response, 2150);
+        경로를_응답한다(response, 교대역, 강남역, 양재역);
+        요금를_응답한다(response, 1950);
     }
 
     /**
@@ -85,8 +86,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_가장_빠른_경로_조회를_요청(교대역, 양재역, LocalDateTime.of(now.toLocalDate(), LocalTime.of(10, 0)));
 
         // then
-        경로를_응답한다(response, 교대역, 남부터미널역, 양재역);
-        도착시간을_응답한다(response, LocalDateTime.of(now.toLocalDate(), LocalTime.of(10, 13)));
+        경로를_응답한다(response, 교대역, 강남역, 양재역);
+        도착시간을_응답한다(response, LocalDateTime.of(now.toLocalDate(), LocalTime.of(10, 12)));
     }
 
     /**
@@ -175,6 +176,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private void 도착시간을_응답한다(ExtractableResponse<Response> response, LocalDateTime destinationDate) {
-        assertThat(response.jsonPath().getObject("destinationDate", LocalDateTime.class)).isEqualTo(destinationDate);
+        String responseField = response.jsonPath().getString("destinationDate");
+        assertThat(LocalDateTime.parse(responseField, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))).isEqualTo(destinationDate);
     }
 }

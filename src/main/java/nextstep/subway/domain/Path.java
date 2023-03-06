@@ -32,6 +32,9 @@ public class Path {
     }
 
     public LocalDateTime getArrivalTime(LocalDateTime departureDate) {
+        if (departureDate == null) {
+            return null;
+        }
         Line boardingLine = null;
         List<Section> sectionList = sections.getSections();
         for (Section section : sectionList) {

@@ -212,10 +212,10 @@ class LineTest {
                 LocalTime.of(5, 0),
                 LocalTime.of(22, 0), 60);
         // when
-        LocalDateTime searchDate = LocalDateTime.of(2023, 3, 5, 18, 0);
+        LocalDateTime searchDate = LocalDateTime.of(2023, 3, 5, 18, 1);
         LocalDateTime schedule = line.getFirstUpNextSchedule(searchDate);
         // then
-        assertThat(schedule).isEqualTo(searchDate.plusHours(1));
+        assertThat(schedule).isEqualTo(LocalDateTime.of(2023, 3, 5, 19, 0));
     }
 
     @DisplayName("조회한 일자가 막차 시간을 넘어서면 다음날 첫차 시간을 조회된다.")
