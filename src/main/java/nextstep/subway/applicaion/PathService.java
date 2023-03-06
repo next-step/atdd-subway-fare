@@ -14,13 +14,13 @@ import java.util.List;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final FareCalculateService fareCalculateService;
+    private final FareCalculateDomainService fareCalculateDomainService;
     private final MemberService memberService;
 
-    public PathService(LineService lineService, StationService stationService, FareCalculateService fareCalculateService, MemberService memberService) {
+    public PathService(LineService lineService, StationService stationService, FareCalculateDomainService fareCalculateDomainService, MemberService memberService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.fareCalculateService = fareCalculateService;
+        this.fareCalculateDomainService = fareCalculateDomainService;
         this.memberService = memberService;
     }
 
@@ -45,8 +45,8 @@ public class PathService {
     private int getFare(Path path, @Nullable LoginMember loginMember) {
         if (loginMember != null) {
             MemberResponse member = memberService.findMember(loginMember.getId());
-            return fareCalculateService.calculateFareAmount(path, member.getAge());
+            return fareCalculateDomainService.calculateFareAmount(path, member.getAge());
         }
-        return fareCalculateService.calculateFareAmount(path);
+        return fareCalculateDomainService.calculateFareAmount(path);
     }
 }

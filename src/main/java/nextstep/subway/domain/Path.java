@@ -31,6 +31,6 @@ public class Path {
         return sections.getAllPassingLines().stream()
             .max(Comparator.comparing(Line::getAdditionalFare))
             .map(Line::getAdditionalFare)
-            .orElseThrow(RuntimeException::new);
+            .orElseThrow(IllegalStateException::new);
     }
 }

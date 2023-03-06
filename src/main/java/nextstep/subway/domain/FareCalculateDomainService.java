@@ -10,9 +10,10 @@ import static nextstep.subway.domain.OverFareLevel.OVER_10KM;
 import static nextstep.subway.domain.OverFareLevel.OVER_50KM;
 
 @Service
-public class FareCalculateService {
+public class FareCalculateDomainService {
 
     private static final int BASE_DISCOUNT_AMOUNT = 350;
+    private static final int ZERO_DISCOUNT = 0;
 
     public int calculateFareAmount(Path path) {
         return getBasicFare(path) + path.getLineAdditionalFare();
@@ -25,10 +26,10 @@ public class FareCalculateService {
 
     private int getBasicFare(Path path) {
         int distance = path.extractDistance();
-        if (distance <= OVER_10KM.getStart()) {
+        if (OVER_10KM.matches(distance)) {
             return BASIC_FARE.getAmount();
         }
-        if (distance <= OVER_50KM.getStart()) {
+        if (OVER_50KM.matches(distance)) {
             return BASIC_FARE.getAmount()
                 + calculateOverFare(distance - OVER_10KM.getStart(), OVER_10KM.getInterval());
         }
@@ -48,7 +49,7 @@ public class FareCalculateService {
         if (CHILDREN.isAgeOf(age)) {
             return calculateDiscount(totalFare, CHILDREN.getDiscountPercentage());
         }
-        return 0;
+        return ZERO_DISCOUNT;
     }
 
     private int calculateDiscount(int totalFare, int percentage) {

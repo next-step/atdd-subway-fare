@@ -14,9 +14,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class FareCalculateServiceTest {
+class FareCalculateDomainServiceTest {
 
-    private final FareCalculateService fareCalculateService = new FareCalculateService();
+    private final FareCalculateDomainService fareCalculateDomainService = new FareCalculateDomainService();
 
     @DisplayName("추가 요금이 없는 노선인 경우 거리에 따른 요금만이 발생한다.")
     @ParameterizedTest(name = "거리가 {0}km일 때 요금은 총 {1}원이다.")
@@ -28,7 +28,7 @@ class FareCalculateServiceTest {
         given(path.getLineAdditionalFare()).willReturn(0);
 
         // when
-        int sut = fareCalculateService.calculateFareAmount(path);
+        int sut = fareCalculateDomainService.calculateFareAmount(path);
 
         // then
         assertThat(sut).isEqualTo(fare);
@@ -60,7 +60,7 @@ class FareCalculateServiceTest {
         Path path = subwayMap.findPath(교대역, 강남역, Section::getDistance);
 
         // when
-        int sut = fareCalculateService.calculateFareAmount(path);
+        int sut = fareCalculateDomainService.calculateFareAmount(path);
 
         // then
         assertThat(sut).isEqualTo(2350);
@@ -83,7 +83,7 @@ class FareCalculateServiceTest {
         Path path = subwayMap.findPath(교대역, 양재역, Section::getDistance);
 
         // when
-        int sut = fareCalculateService.calculateFareAmount(path);
+        int sut = fareCalculateDomainService.calculateFareAmount(path);
 
         // then
         assertThat(sut).isEqualTo(2550);
@@ -104,7 +104,7 @@ class FareCalculateServiceTest {
         Path path = subwayMap.findPath(교대역, 강남역, Section::getDistance);
 
         // when
-        int sut = fareCalculateService.calculateFareAmount(path, age);
+        int sut = fareCalculateDomainService.calculateFareAmount(path, age);
 
         // then
         assertThat(sut).isEqualTo(1950);
@@ -125,7 +125,7 @@ class FareCalculateServiceTest {
         Path path = subwayMap.findPath(교대역, 강남역, Section::getDistance);
 
         // when
-        int sut = fareCalculateService.calculateFareAmount(path, age);
+        int sut = fareCalculateDomainService.calculateFareAmount(path, age);
 
         // then
         assertThat(sut).isEqualTo(1350);
@@ -145,7 +145,7 @@ class FareCalculateServiceTest {
         Path path = subwayMap.findPath(교대역, 강남역, Section::getDistance);
 
         // when
-        int sut = fareCalculateService.calculateFareAmount(path, 13);
+        int sut = fareCalculateDomainService.calculateFareAmount(path, 13);
 
         // then
         assertThat(sut).isEqualTo(1129);
