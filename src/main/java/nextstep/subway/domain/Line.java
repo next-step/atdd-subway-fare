@@ -105,8 +105,21 @@ public class Line {
         sections.delete(station);
     }
 
-    public LocalDateTime getNextSchedule(LocalDateTime date) {
-        List<LocalTime> schedule = getSchedule();
+    public LocalDateTime getSectionSchedule(Section findSection, LocalDateTime date) {
+        LocalDateTime schedule = getFirstUpNextSchedule(date);
+        List<Section> sections = this.sections.getSortedSections();
+        for (Section section : sections) {
+            if (section.equals(findSection)) {
+                break;
+            }
+            schedule = schedule.plusMinutes(section.getDuration());
+        }
+        return schedule;
+    }
+
+
+    public LocalDateTime getFirstUpNextSchedule(LocalDateTime date) {
+        List<LocalTime> schedule = getFirstUpSchedule();
         if (schedule.isEmpty()) {
             throw new IllegalArgumentException("노선 스케줄이 비어있습니다.");
         }
@@ -119,7 +132,7 @@ public class Line {
                 .orElse(LocalDateTime.of(date.toLocalDate().plusDays(1), firstTime));
     }
 
-    public List<LocalTime> getSchedule() {
+    public List<LocalTime> getFirstUpSchedule() {
         List<LocalTime> schedule = new ArrayList<>();
         LocalTime currentTime = firstTime;
         while (currentTime.isBefore(lastTime)) {

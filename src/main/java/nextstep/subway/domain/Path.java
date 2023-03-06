@@ -47,7 +47,7 @@ public class Path {
     }
 
     private long checkWaitingTime(Section section, LocalDateTime departureDate) {
-        LocalDateTime nextSchedule = section.getNextSchedule(departureDate);
+        LocalDateTime nextSchedule = section.getSectionSchedule(departureDate);
         if (!departureDate.isEqual(nextSchedule)) {
             Duration duration = Duration.between(departureDate, nextSchedule);
             return duration.toMinutes();

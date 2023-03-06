@@ -80,11 +80,24 @@ public class Section extends DefaultWeightedEdge {
                 || (this.upStation == downStation && this.downStation == upStation);
     }
 
-    public LocalDateTime getNextSchedule(LocalDateTime departureDate) {
-        return line.getNextSchedule(departureDate);
+    public LocalDateTime getSectionSchedule(LocalDateTime departureDate) {
+        return line.getSectionSchedule(this, departureDate);
     }
 
     public boolean isTransfer(Line line) {
         return Objects.isNull(line) && !this.line.equals(line);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return Objects.equals(getLine(), section.getLine()) && Objects.equals(getUpStation(), section.getUpStation()) && Objects.equals(getDownStation(), section.getDownStation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLine(), getUpStation(), getDownStation());
     }
 }

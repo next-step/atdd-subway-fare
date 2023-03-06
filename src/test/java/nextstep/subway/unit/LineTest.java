@@ -200,7 +200,7 @@ class LineTest {
                 LocalTime.of(5, 0),
                 LocalTime.of(22, 0), 60);
         // when
-        List<LocalTime> schedule = line.getSchedule();
+        List<LocalTime> schedule = line.getFirstUpSchedule();
         // then
         assertThat(schedule).hasSize(18);
     }
@@ -213,7 +213,7 @@ class LineTest {
                 LocalTime.of(22, 0), 60);
         // when
         LocalDateTime searchDate = LocalDateTime.of(2023, 3, 5, 18, 0);
-        LocalDateTime schedule = line.getNextSchedule(searchDate);
+        LocalDateTime schedule = line.getFirstUpNextSchedule(searchDate);
         // then
         assertThat(schedule).isEqualTo(searchDate.plusHours(1));
     }
@@ -227,7 +227,7 @@ class LineTest {
                 LocalTime.of(22, 0), 60);
         // when
         LocalDateTime searchDate = LocalDateTime.of(2023, 3, 5, 22, 1);
-        LocalDateTime schedule = line.getNextSchedule(searchDate);
+        LocalDateTime schedule = line.getFirstUpNextSchedule(searchDate);
         // then
         assertThat(schedule).isEqualTo(LocalDateTime.of(2023, 3, 6, 5, 0));
     }
