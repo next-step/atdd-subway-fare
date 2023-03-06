@@ -7,6 +7,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
@@ -58,5 +59,10 @@ public class PathSteps {
                 () -> assertThat(response.jsonPath().getLong("distance")).isEqualTo(distance),
                 () -> assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration)
         );
+    }
+
+    public static void 정상_요청이_아닐_경우_예외_처리한다(final ExtractableResponse<Response> findByDistanceResponse) {
+        org.assertj.core.api.Assertions.assertThat(findByDistanceResponse.statusCode())
+                .isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }

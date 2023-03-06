@@ -6,6 +6,7 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회_검�
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_검증;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.정상_요청이_아닐_경우_예외_처리한다;
 import static nextstep.subway.acceptance.SectionSteps.createSectionCreateParams;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
@@ -20,6 +21,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 정자역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
@@ -29,7 +31,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 남부터미널역  --- *3호선* ---   양재       정자역
      */
     @BeforeEach
     public void setUp() {
@@ -39,6 +41,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+        정자역 = 지하철역_생성_요청("정자역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 10);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 10);
@@ -87,7 +90,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         @DisplayName("연결되지 않은 역으로 경로 조회를 요청시 예외 처리한다.")
         @Test
         void findPathNotConnectedStation() {
+            var findByDistanceResponse = 두_역의_최단_거리_경로_조회를_요청(교대역, 정자역);
 
+            정상_요청이_아닐_경우_예외_처리한다(findByDistanceResponse);
+
+            var findByDurationResponse = 두_역의_최소_시간_경로_조회를_요청(교대역, 정자역);
+
+            정상_요청이_아닐_경우_예외_처리한다(findByDurationResponse);
         }
 
         /**
@@ -99,7 +108,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         @DisplayName("존재하지 않는 역으로 경로 조회를 요청시 예외 처리한다.")
         @Test
         void findPathNotExistStation() {
+            var findByDistanceResponse = 두_역의_최단_거리_경로_조회를_요청(교대역, Long.MAX_VALUE);
 
+            정상_요청이_아닐_경우_예외_처리한다(findByDistanceResponse);
+
+            var findByDurationResponse = 두_역의_최소_시간_경로_조회를_요청(교대역, Long.MAX_VALUE);
+
+            정상_요청이_아닐_경우_예외_처리한다(findByDurationResponse);
         }
     }
 }
