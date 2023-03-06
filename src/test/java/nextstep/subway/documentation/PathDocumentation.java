@@ -35,7 +35,6 @@ public class PathDocumentation extends Documentation {
         PathResponse pathResponse = PathResponse.of(
                 List.of(new StationResponse(sourceId, "강남역"),
                         new StationResponse(targetId, "역삼역")),
-                // TODO: 기능 구현 완료 후 요금 수정
                 10, 3, 1250);
         when(pathService.findPath(any())).thenReturn(pathResponse);
 
@@ -58,7 +57,7 @@ public class PathDocumentation extends Documentation {
                 List.of(new StationResponse(sourceId, "강남역"),
                         new StationResponse(targetId, "역삼역")),
                 // TODO: 기능 구현 완료 후 요금 수정
-                10, 3, 1250);
+                15, 3, 1350);
         when(pathService.findPath(any())).thenReturn(pathResponse);
 
         // when

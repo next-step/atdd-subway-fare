@@ -28,8 +28,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        // TODO: 요금정보 기능 구현 후 수정.
-        int fare = 1250;
+        int fare = path.fare();
 
         return new PathResponse(stations, distance, duration, fare);
     }
@@ -44,5 +43,9 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getFare() {
+        return fare;
     }
 }
