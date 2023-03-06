@@ -24,15 +24,18 @@ public class Section extends DefaultWeightedEdge {
 
     private int distance;
 
+    private int duration;
+
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -55,16 +58,40 @@ public class Section extends DefaultWeightedEdge {
         return distance;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public boolean isSameUpStation(Station station) {
-        return this.upStation == station;
+        return this.upStation.equals(station);
     }
 
     public boolean isSameDownStation(Station station) {
-        return this.downStation == station;
+        return this.downStation.equals(station);
     }
 
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
+        return (this.upStation.equals(upStation) && this.downStation.equals(downStation))
+                || (this.upStation.equals(downStation) && this.downStation.equals(upStation));
+    }
+
+    public Section replaceDownStationWithUpStation(final Section section) {
+        return new Section(
+                this.getLine(),
+                this.getUpStation(),
+                section.getUpStation(),
+                this.getDistance() - section.getDistance(),
+                this.getDuration() - section.getDuration()
+        );
+    }
+
+    public Section replaceUpStationWithDownStation(final Section section) {
+        return new Section(
+                section.getLine(),
+                section.getDownStation(),
+                this.getDownStation(),
+                this.getDistance() - section.getDistance(),
+                this.getDuration() - section.getDuration()
+        );
     }
 }
