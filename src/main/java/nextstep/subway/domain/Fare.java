@@ -22,7 +22,7 @@ public class Fare {
             additionalFare = (int) ((Math.ceil((additionalDistance - 1) / 8) + 1) * 100);
         }
 
-        return (int) ((Math.ceil((distance - additionalDistance - 10 - 1) / 5) + 1) * 100);
+        return additionalFare + (int) ((Math.ceil((distance - additionalDistance - 10 - 1) / 5) + 1) * 100);
     }
 
     public int getFare() {
