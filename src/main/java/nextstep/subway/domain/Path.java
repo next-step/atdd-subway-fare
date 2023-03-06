@@ -4,11 +4,10 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
-    private FarePolicy farePolicy;
+    private FarePolicy farePolicy = new DistanceFarePolicy(new BasicDistanceFareFormula());
 
-    public Path(Sections sections, FarePolicy farePolicy) {
+    public Path(Sections sections) {
         this.sections = sections;
-        this.farePolicy = farePolicy;
     }
 
     public Sections getSections() {
