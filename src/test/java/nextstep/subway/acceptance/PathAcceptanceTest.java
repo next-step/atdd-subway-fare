@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.깃허브_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,22 +69,17 @@ class PathAcceptanceTest extends AcceptanceTest {
     void findPathByDistance2() {
         //given
         int fare = 1250 + 900 + 500; // 기본료 + 거리비례추가요금 + 추가요금이 있는노선
-        fare = 어린이_요금_할인(fare);
+        fare = (int) ((fare - 350) * 0.5);
 
         // when
-        ExtractableResponse<Response> 깃허브_로그인_응답 = 깃허브_인증_로그인_요청(GithubResponses.사용자1.getCode());
-
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(깃허브_로그인_응답, 교대역, 양재역);
+        ExtractableResponse<Response> 로그인_응답 = 베어러_인증_로그인_요청("member@email.com", "password");
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(로그인_응답, 교대역, 양재역);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(55);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
-    }
-
-    private int 어린이_요금_할인(int fare) {
-        return (int) ((fare - 350) * 0.5);
     }
 
     /**
@@ -141,15 +137,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         return 두_역의_최단_거리_경로_조회를_요청(null, source, target);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(ExtractableResponse<Response> 깃허브_로그인_응답, Long source, Long target) {
-        String accessToken = 깃허브_로그인_응답.jsonPath().getString("accessToken");
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(ExtractableResponse<Response> 로그인_응답, Long source, Long target) {
+        String accessToken = 로그인_응답.jsonPath().getString("accessToken");
         return 두_역의_경로_조회를_요청(accessToken, source, target, "DISTANCE");
     }
 
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(String accessToken, Long source, Long target, String pathType) {
         return RestAssured
                 .given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, "token "+ accessToken)
+                .header(HttpHeaders.AUTHORIZATION, "bearer "+ accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, pathType)
                 .then().log().all().extract();
