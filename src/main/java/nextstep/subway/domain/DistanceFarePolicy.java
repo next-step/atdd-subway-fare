@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public enum FarePolicy {
+public enum DistanceFarePolicy {
     NOT_MORE_THAN_10KM(
             distance -> distance <= Constants.TEN_KM,
             distance -> 0
@@ -22,7 +22,7 @@ public enum FarePolicy {
     private final Predicate<Integer> predicate;
     private final UnaryOperator<Integer> extraFareOperator;
 
-    FarePolicy(Predicate<Integer> predicate, UnaryOperator<Integer> extraFareOperator) {
+    DistanceFarePolicy(Predicate<Integer> predicate, UnaryOperator<Integer> extraFareOperator) {
         this.predicate = predicate;
         this.extraFareOperator = extraFareOperator;
     }

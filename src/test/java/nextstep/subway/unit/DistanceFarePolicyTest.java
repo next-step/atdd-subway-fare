@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.FarePolicy;
+import nextstep.subway.domain.DistanceFarePolicy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FarePolicyTest {
+public class DistanceFarePolicyTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -22,7 +22,7 @@ public class FarePolicyTest {
             "51,2_150",
     })
     void calculateTotalFare(int distance, int fare) {
-        assertThat(FarePolicy.calculate(distance)).isEqualTo(fare);
+        assertThat(DistanceFarePolicy.calculate(distance)).isEqualTo(fare);
     }
 
     /**
@@ -46,7 +46,7 @@ public class FarePolicyTest {
             "50,59,8, 200",
     })
     void calculateExtraFare(int start, int end, int unit, int expected) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Method method = FarePolicy.class.getDeclaredMethod("calculateExtraFare", int.class, int.class, int.class);
+        Method method = DistanceFarePolicy.class.getDeclaredMethod("calculateExtraFare", int.class, int.class, int.class);
         method.setAccessible(true);
 
         int result = (int) method.invoke(null,start, end, unit);

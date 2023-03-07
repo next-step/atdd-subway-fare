@@ -28,7 +28,7 @@ public class Path {
     public int extractFare() {
         int totalFare = 0;
 
-        totalFare += FarePolicy.calculate(extractDistance());
+        totalFare += DistanceFarePolicy.calculate(extractDistance());
         totalFare += sections.getMaxSurcharge();
 
         return totalFare;
