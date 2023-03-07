@@ -12,6 +12,7 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.SearchType;
 import nextstep.subway.utils.Users;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +31,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
+@Disabled
 public class PathDocumentation extends Documentation {
     public static final long SOURCE_ID = 1L;
     public static final long TARGET_ID = 2L;

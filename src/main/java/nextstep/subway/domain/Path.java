@@ -24,13 +24,4 @@ public class Path {
     public List<Station> getStations() {
         return sections.getStations();
     }
-
-    public int extractFare() {
-        int totalFare = 0;
-
-        totalFare += DistanceFarePolicy.calculate(extractDistance());
-        totalFare += sections.getMaxSurcharge();
-
-        return totalFare;
-    }
 }
