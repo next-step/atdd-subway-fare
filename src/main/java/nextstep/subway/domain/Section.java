@@ -34,7 +34,7 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
-        validateAddSection(line, upStation, downStation, distance, duration);
+        validateAddSection(line, upStation, downStation);
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -45,11 +45,9 @@ public class Section extends DefaultWeightedEdge {
     private void validateAddSection(
             final Line line,
             final Station upStation,
-            final Station downStation,
-            final int distance,
-            final int duration
+            final Station downStation
     ) {
-        if (line == null || upStation == null || downStation == null || distance == 0 || duration == 0) {
+        if (line == null || upStation == null || downStation == null) {
             throw new SectionCreateException();
         }
     }
