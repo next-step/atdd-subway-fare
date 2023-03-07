@@ -48,11 +48,13 @@ public class PathSteps {
     }
 
     public static void 경로_조회_검증(final ExtractableResponse<Response> response,
-                         final int distance,
-                         final int duration,
+                         final int expectedDistance,
+                         final int expectedDuration,
+                         final int expectedFare,
                          final Long... expectedStationId) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(expectedStationId);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(expectedDistance);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(expectedDuration);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(expectedFare);
     }
 }
