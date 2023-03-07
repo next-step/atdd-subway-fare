@@ -73,7 +73,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회_검증(response, 16, 7, 1450, 교대역, 강남역, 양재역);
+        경로_조회_검증(response, 16, 7, 1350, 교대역, 강남역, 양재역);
     }
 
     private Long 지하철_노선_생성_요청(final String name,
