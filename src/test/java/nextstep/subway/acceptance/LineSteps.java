@@ -3,12 +3,14 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps {
+
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
@@ -31,9 +33,23 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(final RequestSpecification requestSpecification, Map<String, Object> params) {
+        return requestSpecification
+            .body(params)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .when().post("/lines")
+            .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청() {
         return RestAssured
                 .given().log().all()
+                .when().get("/lines")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_목록_조회_요청(final RequestSpecification requestSpecification) {
+        return requestSpecification
                 .when().get("/lines")
                 .then().log().all().extract();
     }
@@ -49,6 +65,26 @@ public class LineSteps {
         return RestAssured
                 .given().log().all()
                 .when().get("/lines/{id}", id)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_조회_요청(final RequestSpecification requestSpecification, final Long id) {
+        return requestSpecification
+                .when().get("/lines/{id}", id)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_수정_요청(final RequestSpecification requestSpecification, final long id, final Map<String, String> params) {
+        return requestSpecification
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().put("/lines/{id}", id)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_삭제_요청(final RequestSpecification requestSpecification, final long id) {
+        return requestSpecification
+                .when().delete("/lines/{id}", id)
                 .then().log().all().extract();
     }
 
