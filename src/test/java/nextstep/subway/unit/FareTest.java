@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static nextstep.subway.domain.Fare.BASIC_FARE;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class FareTest {
+class FareTest {
     @DisplayName("기본운임(10㎞ 이내) : 기본운임 1,250원")
     @ParameterizedTest
     @ValueSource(ints = {1, 10})
