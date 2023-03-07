@@ -31,6 +31,6 @@ public class BasicDistanceFareFormula implements DistanceFareFormula {
         if (distance <= 0) {
             return 0;
         }
-        return (int) ((Math.ceil((distance - 1) / basicAdditionalDistance) + 1) * ADDITIONAL_FARE);
+        return (int) ((Math.ceil((double) (distance - 1) / basicAdditionalDistance) + 1) * ADDITIONAL_FARE);
     }
 }
