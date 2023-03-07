@@ -16,9 +16,9 @@ import static nextstep.subway.acceptance.AcceptanceTestSteps.given;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_또는_시간_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.최단_경로_조회됨;
+import static nextstep.subway.acceptance.PathSteps.최단_경로의_거리에_대한_요금이_조회됨;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -65,11 +65,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(given(), 교대역, 양재역, PathType.DISTANCE);
 
         // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(5),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(8)
-        );
+        int expectedDistance = 5;
+        int expectedDuration = 8;
+        최단_경로_조회됨(response, expectedDistance, expectedDuration, 교대역, 남부터미널역, 양재역);
     }
 
     /**
@@ -84,11 +82,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_또는_시간_경로_조회를_요청(given(), 교대역, 양재역, PathType.DURATION);
 
         // then
-        assertAll(
-                () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
-                () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(7)
-        );
+        int expectedDistance = 20;
+        int expectedDuration = 7;
+        최단_경로_조회됨(response, expectedDistance, expectedDuration, 교대역, 강남역, 양재역);
     }
 
     /**
@@ -102,12 +98,12 @@ class PathAcceptanceTest extends AcceptanceTest {
             "DURATION, 1450",
             "DISTANCE, 1250"
     })
-    void findPathAndCalculateFare(PathType pathType, int fare) {
+    void findPathAndCalculateFare(PathType pathType, int expectedFare) {
         // when
         ExtractableResponse<Response> 교대_양재_최단_경로_응답 = 두_역의_최단_거리_또는_시간_경로_조회를_요청(given(), 교대역, 양재역, pathType);
 
         // then
-        assertThat(교대_양재_최단_경로_응답.jsonPath().getInt("fare")).isEqualTo(fare);
+        최단_경로의_거리에_대한_요금이_조회됨(교대_양재_최단_경로_응답, expectedFare);
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
