@@ -29,7 +29,7 @@ public enum FareType {
                 .orElseThrow(() -> new IllegalArgumentException("거리가 0 이거나 음수일 경우 요금 계산할 수 없습니다."));
     }
 
-    public boolean match(int distance) {
+    private boolean match(int distance) {
         return this.fareTypeCheck.test(distance);
     }
 
