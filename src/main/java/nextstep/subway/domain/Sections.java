@@ -166,7 +166,8 @@ public class Sections {
                 .distinct()
                 .filter(line -> Objects.nonNull(line.getLineFare()))
                 .mapToInt(Line::getLineFare)
-                .sum();
+                .max()
+                .orElse(0);
     }
 
     private int distanceFarePolicy() {
