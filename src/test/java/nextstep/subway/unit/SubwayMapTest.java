@@ -188,7 +188,7 @@ public class SubwayMapTest {
         남부터미널역 = createStation(4L, "남부터미널역");
 
         신분당선 = new Line("신분당선", "red", 500);
-        이호선 = new Line("2호선", "red");
+        이호선 = new Line("2호선", "red", 400);
         삼호선 = new Line("3호선", "red");
 
         신분당선.addSection(강남역, 양재역, 5, 5);
@@ -205,7 +205,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare(0)).isEqualTo(1250 + 500);
+        assertThat(path.calculateFare(22)).isEqualTo(1250 + 500);
     }
 
     @DisplayName("요금 계산 = 기본요금 + 청소년요금")
