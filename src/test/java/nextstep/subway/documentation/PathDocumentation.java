@@ -48,7 +48,7 @@ public class PathDocumentation extends Documentation {
         MemberResponse memberResponse = new MemberResponse(0L, "admin@gmail.com", 6);
 
         when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
-        when(jwtTokenProvider.getPrincipal(any())).thenReturn("admin@gmail.com");
+        when(jwtTokenProvider.getPrincipal(any())).thenReturn("1");
         when(jwtTokenProvider.getRoles(any())).thenReturn(new ArrayList<>());
         when(memberService.findMember(any())).thenReturn(memberResponse);
 
