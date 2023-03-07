@@ -92,7 +92,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 상행역과 기존 구간의 상행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
+                    sections.add(new Section(section.getLine(), it.getUpStation(), section.getUpStation(), it.subDistance(section.getDistance()), it.subDuration(section.getDuration())));
                     sections.remove(it);
                 });
     }
@@ -103,7 +103,7 @@ public class Sections {
                 .findFirst()
                 .ifPresent(it -> {
                     // 신규 구간의 하행역과 기존 구간의 하행역에 대한 구간을 추가한다.
-                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.getDistance() - section.getDistance(), it.getDuration() - section.getDuration()));
+                    sections.add(new Section(section.getLine(), section.getDownStation(), it.getDownStation(), it.subDistance(section.getDistance()), it.subDuration(section.getDuration())));
                     sections.remove(it);
                 });
     }
@@ -128,8 +128,8 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance(),
-                    upSection.get().getDuration() + downSection.get().getDuration()
+                    upSection.get().addDistance(downSection.get().getDistance()),
+                    upSection.get().addDuration(downSection.get().getDuration())
             );
 
             this.sections.add(newSection);

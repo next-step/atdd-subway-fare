@@ -86,4 +86,20 @@ public class Section extends DefaultWeightedEdge {
 
         return getDuration();
     }
+
+    public int addDistance(final int distance) {
+        return this.distance + distance;
+    }
+
+    public int addDuration(final int duration) {
+        return this.duration + duration;
+    }
+
+    public int subDistance(final int distance) {
+        return this.distance - distance;
+    }
+
+    public int subDuration(final int duration) {
+        return this.duration - duration;
+    }
 }
