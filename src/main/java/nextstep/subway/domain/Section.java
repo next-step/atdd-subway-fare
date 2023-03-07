@@ -67,20 +67,20 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public boolean isSameUpStation(Station station) {
-        return this.upStation == station;
+        return this.upStation.equals(station);
     }
 
     public boolean isSameDownStation(Station station) {
-        return this.downStation == station;
+        return this.downStation.equals(station);
     }
 
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
-        return (this.upStation == upStation && this.downStation == downStation)
-                || (this.upStation == downStation && this.downStation == upStation);
+        return (this.upStation.equals(upStation) && this.downStation.equals(downStation))
+                || (this.upStation.equals(downStation) && this.downStation.equals(upStation));
     }
 
     public int getTypeValue(final PathType type) {
-        if (type == PathType.DISTANCE) {
+        if (type.equals(PathType.DISTANCE)) {
             return getDistance();
         }
 
