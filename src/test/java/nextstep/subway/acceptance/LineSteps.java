@@ -33,7 +33,7 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(final RequestSpecification requestSpecification, Map<String, Object> params) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(final RequestSpecification requestSpecification, final Map<String, Object> params) {
         return requestSpecification
             .body(params)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -85,15 +85,6 @@ public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_삭제_요청(final RequestSpecification requestSpecification, final long id) {
         return requestSpecification
                 .when().delete("/lines/{id}", id)
-                .then().log().all().extract();
-    }
-
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(Map<String, String> params) {
-        return RestAssured
-                .given().log().all()
-                .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines")
                 .then().log().all().extract();
     }
 

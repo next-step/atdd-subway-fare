@@ -65,7 +65,7 @@ public class LineDocumentation extends Documentation {
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름")
                         )));
-        final ExtractableResponse<Response> response = 지하철_노선_생성_요청(requestSpec, 지하철_노선_생성_파라미터("2호선", "green", 1L, 2L, 10));
+        final ExtractableResponse<Response> response = 지하철_노선_생성_요청(requestSpec, 지하철_노선_생성_파라미터("2호선", "green", 1L, 2L, 10, 8));
 
         assertAll(() -> {
             assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -188,13 +188,15 @@ public class LineDocumentation extends Documentation {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-    private Map<String, Object> 지하철_노선_생성_파라미터(final String name, final String color, final long upStationId, final long downStationId, final int distance) {
+    private Map<String, Object> 지하철_노선_생성_파라미터(final String name, final String color, final long upStationId,
+                                               final long downStationId, final int distance, final int duration) {
         final Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
         return params;
     }
 
