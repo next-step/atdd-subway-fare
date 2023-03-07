@@ -1,9 +1,9 @@
 package nextstep.subway.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.stream.Stream;
-import nextstep.subway.domain.exception.SectionCreateException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,6 +79,6 @@ class SectionTest {
     @MethodSource("provideForCreateSectionFail")
     void createSectionFail(Line line, Station upStation, Station downStation, int distance, int duration) {
         assertThatThrownBy(() -> new Section(line, upStation, downStation, distance, duration))
-                .isInstanceOf(SectionCreateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
