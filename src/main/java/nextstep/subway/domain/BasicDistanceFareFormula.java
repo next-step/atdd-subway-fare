@@ -10,30 +10,30 @@ public class BasicDistanceFareFormula implements DistanceFareFormula {
     private static final int BASIC_ADDITIONAL_DISTANCE_LIMIT = 50;
     private static final int BASIC_ADDITIONAL_DISTANCE = 5;
     private static final int EXTRA_ADDITIONAL_DISTANCE = 8;
+    private static final int BASIC_ADDITIONAL_DISTANCE_FARE = 2050;
 
     @Override
     public int calculate(final int distance) {
         if (distance < DISTANCE_MIN) {
             throw new DistanceMinException(DISTANCE_MIN);
         }
-        if (distance < BASE_DISTANCE) {
+        if (distance <= BASE_DISTANCE) {
             return BASE_FARE;
         }
-        return calculateAdditionalFare(distance);
+        if (distance <= BASIC_ADDITIONAL_DISTANCE_LIMIT) {
+            return BASE_FARE + calculateAdditionalFare(distance - BASE_DISTANCE, BASIC_ADDITIONAL_DISTANCE);
+        }
+        return BASIC_ADDITIONAL_DISTANCE_FARE
+                + calculateAdditionalFare(distance - BASIC_ADDITIONAL_DISTANCE_LIMIT, EXTRA_ADDITIONAL_DISTANCE);
     }
 
-    private int calculateAdditionalFare(final Integer distance) {
-        int temp = BASE_DISTANCE;
-        int fare = BASE_FARE;
-        while (temp < distance) {
-            if (temp < BASIC_ADDITIONAL_DISTANCE_LIMIT) {
-                temp += BASIC_ADDITIONAL_DISTANCE;
-                fare += ADDITIONAL_FARE;
-                continue;
-            }
-            temp += EXTRA_ADDITIONAL_DISTANCE;
-            fare += ADDITIONAL_FARE;
+    private int calculateAdditionalFare(
+            final int distance,
+            final int basicAdditionalDistance
+    ) {
+        if (distance <= 0) {
+            return 0;
         }
-        return fare;
+        return (int) ((Math.ceil((distance - 1) / basicAdditionalDistance) + 1) * ADDITIONAL_FARE);
     }
 }
