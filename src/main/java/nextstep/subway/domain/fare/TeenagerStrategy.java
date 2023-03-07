@@ -1,13 +1,13 @@
 package nextstep.subway.domain.fare;
 
-public class TeenagerStrategy extends AbstractFareStrategy {
+public class TeenagerStrategy implements AgeFareStrategy {
     @Override
     public boolean match(int age) {
         return age >= 13 && age < 19;
     }
 
     @Override
-    public int calculateFare(int fare) {
-        return calculateFareByWeight(fare, 0.8);
+    public double getWeight() {
+        return 0.8;
     }
 }

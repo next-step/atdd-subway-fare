@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.FareCalculator;
 import nextstep.subway.domain.fare.FareStrategyFactory;
 
 import java.util.List;
@@ -31,7 +32,9 @@ public class Path {
     public int calculateFare(Optional<Integer> age) {
         int fare = sections.calculateFare();
 
-        return age.map(a -> FareStrategyFactory.of(a).calculateFare(fare))
+        return age.map(a -> FareStrategyFactory.of(a))
+                .map(FareCalculator::new)
+                .map(c -> c.calculateFare(fare))
                 .orElse(fare);
     }
 
