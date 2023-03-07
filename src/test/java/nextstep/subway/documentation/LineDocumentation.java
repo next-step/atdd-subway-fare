@@ -56,7 +56,8 @@ public class LineDocumentation extends Documentation {
                                 fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔"),
                                 fieldWithPath("upStationId").type(JsonFieldType.NUMBER).description("상행종점역 ID"),
                                 fieldWithPath("downStationId").type(JsonFieldType.NUMBER).description("하행종점역 ID"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("노선 길이")
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("노선 길이"),
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간")
                         ),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("노선 ID"),
