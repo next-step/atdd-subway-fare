@@ -81,7 +81,7 @@ public class SubwayMap {
                     .map(SectionEdge::getSection)
                     .collect(Collectors.toList());
 
-            return new Path(new Sections(sections));
+            return new Path(new Sections(sections), new DistanceFarePolicy(new BasicDistanceFareFormula()));
         } catch (IllegalArgumentException exception) {
             throw new PathNotFoundException();
         }
