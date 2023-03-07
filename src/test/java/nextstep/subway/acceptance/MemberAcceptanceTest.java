@@ -12,11 +12,11 @@ import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.회원_정보_수정_요청;
 import static nextstep.subway.acceptance.MemberSteps.회원_정보_조회_요청;
 import static nextstep.subway.acceptance.MemberSteps.회원_정보_조회됨;
+import static nextstep.subway.utils.Users.성인;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberAcceptanceTest extends AcceptanceTest {
-    public static final String EMAIL = "email@email.com";
-    public static final String ADMIN = "admin@email.com";
+    public static final String EMAIL = "email123123@email.com";
     public static final String PASSWORD = "password";
     public static final int AGE = 20;
 
@@ -73,10 +73,11 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("내 정보를 조회한다.")
     @Test
     void getMyInfo() {
-        String accessToken = 베어러_인증_로그인_요청(ADMIN, PASSWORD).jsonPath().getString("accessToken");
+        // DataLoader로 적재해둔 값으로 테스트
+        String accessToken = 베어러_인증_로그인_요청(성인.getEmail(), 성인.getPassword()).jsonPath().getString("accessToken");
 
         ExtractableResponse<Response> response = 회원_정보_조회_요청(accessToken);
 
-        회원_정보_조회됨(response, ADMIN, AGE);
+        회원_정보_조회됨(response, 성인.getEmail(), 성인.getAge());
     }
 }

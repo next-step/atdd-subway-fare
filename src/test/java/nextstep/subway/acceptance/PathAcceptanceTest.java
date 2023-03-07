@@ -15,7 +15,6 @@ import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.PathSteps.경로_조회_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
