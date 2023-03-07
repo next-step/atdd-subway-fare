@@ -29,6 +29,10 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
 
+        if (type.equals(PathType.DURATION)) {
+            path.setMinDistance(subwayMap.findPath(upStation, downStation, PathType.DISTANCE).extractDistance());
+        }
+
         return PathResponse.of(path);
     }
 }

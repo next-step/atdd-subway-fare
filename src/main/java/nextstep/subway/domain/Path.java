@@ -6,6 +6,8 @@ public class Path {
     private Sections sections;
     private FarePolicy farePolicy;
 
+    private int minDistance;
+
     public Path(final Sections sections,
                 final FarePolicy farePolicy) {
         this.sections = sections;
@@ -28,7 +30,14 @@ public class Path {
         return sections.getStations();
     }
 
+    public void setMinDistance(final int distance) {
+        minDistance = distance;
+    }
+
     public int getFare() {
+        if (minDistance > 0) {
+            return farePolicy.calculator(minDistance);
+        }
         return farePolicy.calculator(sections.totalDistance());
     }
 }
