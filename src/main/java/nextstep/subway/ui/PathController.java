@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class PathController {
     private final PathService pathService;
@@ -19,7 +21,10 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestPathType PathType pathType, @AuthenticationPrincipal LoginMember loginMember) {
-        return ResponseEntity.ok(pathService.findPath(source, target, pathType, loginMember.getId()));
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestPathType PathType pathType, @AuthenticationPrincipal(nullable = true) LoginMember loginMember) {
+        Optional<Long> memberId = Optional.ofNullable(loginMember)
+                .map(LoginMember::getId);
+
+        return ResponseEntity.ok(pathService.findPath(source, target, pathType, memberId));
     }
 }

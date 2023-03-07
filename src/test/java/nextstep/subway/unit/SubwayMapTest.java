@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
 
+    private static final int 성인 = 22;
+
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -118,7 +120,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare(0)).isEqualTo(1250);
+        assertThat(path.calculateFare(성인)).isEqualTo(1250);
     }
 
     @DisplayName("요금 계산 = 기본요금 + 10 ~ 50km 요금")
@@ -147,7 +149,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare(0)).isEqualTo(1250 + 800); //총거리 50 = 기본10 + 추가40 = 1250 + 800
+        assertThat(path.calculateFare(성인)).isEqualTo(1250 + 800); //총거리 50 = 기본10 + 추가40 = 1250 + 800
     }
 
     @DisplayName("요금 계산 = 기본요금 + 10 ~ 50km 요금 + 50km 초과요금")
@@ -176,7 +178,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare(0)).isEqualTo(1250 + 800 + 100); //총거리 58 = 기본10 + 추가40 + 추가8= 1250 + 1000 + 100
+        assertThat(path.calculateFare(성인)).isEqualTo(1250 + 800 + 100); //총거리 58 = 기본10 + 추가40 + 추가8= 1250 + 1000 + 100
     }
 
     @DisplayName("요금 계산 = 기본요금 + 노선요금")
@@ -205,7 +207,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
-        assertThat(path.calculateFare(22)).isEqualTo(1250 + 500);
+        assertThat(path.calculateFare(성인)).isEqualTo(1250 + 500);
     }
 
     @DisplayName("요금 계산 = 기본요금 + 청소년요금")

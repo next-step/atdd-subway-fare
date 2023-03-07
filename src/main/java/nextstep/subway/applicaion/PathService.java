@@ -7,6 +7,7 @@ import nextstep.subway.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,15 +16,17 @@ public class PathService {
     private final StationService stationService;
     private final MemberService memberService;
 
-    public PathResponse findPath(Long source, Long target, PathType pathType, Long memberId) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, Optional<Long> memberId) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
-        Integer age = memberService.findMember(memberId).getAge();
-
         List<Line> lines = lineService.findLines();
+
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType);
 
-        return PathResponse.of(path, age);
+        Optional<Integer> age = memberId.map(id -> memberService.findMember(id).getAge());
+        int fare = path.calculateFare(age);
+
+        return PathResponse.of(path, fare);
     }
 }

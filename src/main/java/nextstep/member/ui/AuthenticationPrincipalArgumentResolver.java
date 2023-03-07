@@ -5,6 +5,7 @@ import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -28,14 +29,29 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
+
+        if (!StringUtils.hasText(authorization) && isNullable(parameter)) {
+            return null;
+        }
+
+        if (isInvalidAuthHeader(authorization)) {
             throw new AuthenticationException();
         }
+
         String token = authorization.split(" ")[1];
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
         List<String> roles = jwtTokenProvider.getRoles(token);
 
         return new LoginMember(id, roles);
+    }
+
+    private boolean isInvalidAuthHeader(String authorization) {
+        return !"bearer".equalsIgnoreCase(authorization.split(" ")[0]);
+    }
+
+    private boolean isNullable(MethodParameter parameter) {
+        AuthenticationPrincipal annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        return annotation != null && annotation.nullable();
     }
 }
