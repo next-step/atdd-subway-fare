@@ -86,7 +86,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Given 지하철역이 등록되어있음
      * And 지하철 노선이 등록되어있음
      * And 지하철 노선에 지하철역이 등록되어있음
-     *
+     * <p>
      * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
      * Then 최단 거리 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
@@ -96,14 +96,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
 
-        ExtractableResponse<Response> 로그인_응답 = 베어러_인증_로그인_요청("member@email.com", "password");
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(로그인_응답, 교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(55);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(11);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo((int)(((1250 + 900 + 500) - 350) * 0.5));  // 기본료 + 거리비례추가요금 + 추가요금이 있는노선 -> 유아요금 적용
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250 + 900 + 500);  // 기본료 + 거리비례추가요금 + 추가요금이 있는노선
     }
 
     /**
@@ -120,8 +119,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByTime() {
         // when
-        ExtractableResponse<Response> 로그인_응답 = 베어러_인증_로그인_요청("member@email.com", "password");
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(로그인_응답, 교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
@@ -129,9 +127,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(3);
     }
 
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(ExtractableResponse<Response> 로그인_응답, Long source, Long target) {
-        String accessToken = 로그인_응답.jsonPath().getString("accessToken");
-        return 두_역의_경로_조회를_요청(accessToken, source, target, "DURATION");
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+        return 두_역의_경로_조회를_요청(source, target, "DURATION");
+    }
+
+    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+        return 두_역의_경로_조회를_요청(source, target, "DISTANCE");
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(ExtractableResponse<Response> 로그인_응답, Long source, Long target) {
@@ -142,7 +143,15 @@ class PathAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(String accessToken, Long source, Long target, String pathType) {
         return RestAssured
                 .given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, "bearer "+ accessToken)
+                .header(HttpHeaders.AUTHORIZATION, "bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, pathType)
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String pathType) {
+        return RestAssured
+                .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, pathType)
                 .then().log().all().extract();
