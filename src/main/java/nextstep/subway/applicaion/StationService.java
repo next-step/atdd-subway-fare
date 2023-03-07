@@ -38,13 +38,6 @@ public class StationService {
         stationRepository.deleteById(id);
     }
 
-    public StationResponse createStationResponse(Station station) {
-        return new StationResponse(
-                station.getId(),
-                station.getName()
-        );
-    }
-
     public boolean checkExistsId(Long... ids) {
         return stationRepository.findAllById(Arrays.asList(ids)).size() == ids.length;
     }
