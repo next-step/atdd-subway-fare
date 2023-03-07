@@ -54,6 +54,6 @@ public class SubwayMap {
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        return new Path(new Sections(sections), new DistanceFarePolicy());
     }
 }

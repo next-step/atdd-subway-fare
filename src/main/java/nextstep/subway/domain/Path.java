@@ -4,9 +4,12 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
+    private FarePolicy farePolicy;
 
-    public Path(Sections sections) {
+    public Path(final Sections sections,
+                final FarePolicy farePolicy) {
         this.sections = sections;
+        this.farePolicy = farePolicy;
     }
 
     public Sections getSections() {
@@ -23,5 +26,9 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int getFare() {
+        return farePolicy.calculator(sections.totalDistance());
     }
 }
