@@ -26,7 +26,8 @@ public class Section extends DefaultWeightedEdge {
     @Embedded
     private Distance distance;
 
-    private int duration;
+    @Embedded
+    private Duration duration;
 
     public Section() {
 
@@ -38,7 +39,7 @@ public class Section extends DefaultWeightedEdge {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = new Distance(distance);
-        this.duration = duration;
+        this.duration = new Duration(duration);
     }
 
     private void validateAddSection(
@@ -74,7 +75,7 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDuration() {
-        return duration;
+        return duration.getValue();
     }
 
     public boolean isSameUpStation(Station station) {
