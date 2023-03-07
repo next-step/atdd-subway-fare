@@ -17,9 +17,6 @@ public class BasicDistanceFareFormula implements DistanceFareFormula {
         if (distance < DISTANCE_MIN) {
             throw new DistanceMinException(DISTANCE_MIN);
         }
-        if (distance <= BASE_DISTANCE) {
-            return BASE_FARE;
-        }
         if (distance <= BASIC_ADDITIONAL_DISTANCE_LIMIT) {
             return BASE_FARE + calculateAdditionalFare(distance - BASE_DISTANCE, BASIC_ADDITIONAL_DISTANCE);
         }
