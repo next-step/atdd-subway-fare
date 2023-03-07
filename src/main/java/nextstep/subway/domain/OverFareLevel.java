@@ -20,4 +20,8 @@ public enum OverFareLevel {
     public int getStart() {
         return start;
     }
+
+    public boolean matches(int distance) {
+        return distance <= this.start;
+    }
 }

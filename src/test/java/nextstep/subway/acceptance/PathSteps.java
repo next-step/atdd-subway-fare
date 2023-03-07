@@ -6,10 +6,13 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -23,8 +26,15 @@ public class PathSteps {
             .given(spec).port(port).log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .filter(document("path" + directory,
+                getRequestHeadersSnippet(),
                 getRequestParametersSnippet(),
                 getResponseFieldsSnippet()));
+    }
+
+    private static RequestHeadersSnippet getRequestHeadersSnippet() {
+        return requestHeaders(
+            headerWithName("authorization").description("액세스 토큰").optional()
+        );
     }
 
     private static ResponseFieldsSnippet getResponseFieldsSnippet() {
@@ -60,6 +70,13 @@ public class PathSteps {
 
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
         return baseRequest()
+            .when().get("/paths?source={sourceId}&target={targetId}&type={pathType}", source, target, PathType.DURATION)
+            .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 토큰을_가지고_두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String accessToken) {
+        return baseRequest()
+            .auth().oauth2(accessToken)
             .when().get("/paths?source={sourceId}&target={targetId}&type={pathType}", source, target, PathType.DURATION)
             .then().log().all().extract();
     }

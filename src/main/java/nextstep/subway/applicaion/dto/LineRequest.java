@@ -9,6 +9,8 @@ public class LineRequest {
 
     private int duration;
 
+    private int additionalFare;
+
     public String getName() {
         return name;
     }
@@ -31,5 +33,9 @@ public class LineRequest {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getAdditionalFare() {
+        return additionalFare;
     }
 }
