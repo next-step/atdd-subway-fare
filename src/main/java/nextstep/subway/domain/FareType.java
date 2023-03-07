@@ -1,7 +1,7 @@
 package nextstep.subway.domain;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
+import java.util.function.IntPredicate;
 
 public enum FareType {
     BASIC(0, 0, distance -> distance > 0 && distance <= 10),
@@ -14,9 +14,9 @@ public enum FareType {
 
     private final int extraUnitDistance;
     private final int extraBoundaryDistance;
-    private final Predicate<Integer> fareTypeCheck;
+    private final IntPredicate fareTypeCheck;
 
-    FareType(int extraUnitDistance, int extraBoundaryDistance, Predicate<Integer> fareTypeCheck) {
+    FareType(int extraUnitDistance, int extraBoundaryDistance, IntPredicate fareTypeCheck) {
         this.extraUnitDistance = extraUnitDistance;
         this.extraBoundaryDistance = extraBoundaryDistance;
         this.fareTypeCheck = fareTypeCheck;
