@@ -16,6 +16,16 @@ public abstract class SubwayMap {
         this.lines = lines;
     }
 
+    public static SubwayMap getMapByFindType(final List<Line> lines, final FindType findType) {
+        if (findType.equals(FindType.DISTANCE)) {
+            return new SubwayDistanceMap(lines);
+        }
+        if (findType.equals(FindType.DURATION)) {
+            return new SubwayDurationMap(lines);
+        }
+        throw new RuntimeException("SubwayMap 생성 불가");
+    }
+
     public Path findPath(Station source, Station target) {
         registerVertex(lines);
         registerEdge(lines);
