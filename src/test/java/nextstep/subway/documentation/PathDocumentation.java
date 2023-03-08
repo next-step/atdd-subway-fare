@@ -27,6 +27,7 @@ public class PathDocumentation extends Documentation {
 
     private Long sourceId = 1L;
     private Long targetId = 2L;
+    private String accessToken = "Bearer asdfasdfasdfkuoivcivjwiejtiw35jaksjdfaisdf93";
 
     @DisplayName("최단 거리 경로를 조회하고 문서화한다")
     @Test
@@ -71,7 +72,8 @@ public class PathDocumentation extends Documentation {
     }
 
     private void createDocumentationRequest(String identifier, Long sourceId, Long targetId, ShortestPathType type) {
-        spec.queryParams("source", sourceId, "target", targetId, "type", type)
+        spec.auth().oauth2(accessToken)
+                .queryParams("source", sourceId, "target", targetId, "type", type)
                 .filter(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("Departure station information."),
