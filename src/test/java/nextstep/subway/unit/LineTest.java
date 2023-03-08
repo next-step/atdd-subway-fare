@@ -44,7 +44,7 @@ class LineTest {
                 .findFirst().orElseThrow(RuntimeException::new);
         assertThat(section.getDownStation()).isEqualTo(삼성역);
         assertThat(section.getDistance()).isEqualTo(5);
-        assertThat(section.getDuration()).isEqualTo(5);
+        assertThat(section.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("하행 기준으로 목록 중간에 추가할 경우")

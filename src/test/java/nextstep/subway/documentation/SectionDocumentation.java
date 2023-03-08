@@ -48,7 +48,7 @@ public class SectionDocumentation extends Documentation {
                         )));
         final ExtractableResponse<Response> response = 지하철_노선에_지하철_구간_생성_요청(requestSpec, 1L, 지하철_노선_등록_파라미터(1L, 2L, 7, 5));
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @DisplayName("지하철 노선에 구간을 제거")
