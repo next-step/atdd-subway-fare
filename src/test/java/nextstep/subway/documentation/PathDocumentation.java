@@ -27,7 +27,7 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @Test
-    void path() {
+    void findPathByDistance() {
         final PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
                                 parameterWithName("source").description("출발역"),
                                 parameterWithName("target").description("도착역")
                         )));
-        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(requestSpec, 1L, 2L);
+        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(requestSpec, 1L, 2L, "distance");
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsOnly(1L, 2L);

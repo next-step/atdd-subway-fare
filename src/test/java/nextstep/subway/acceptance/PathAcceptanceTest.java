@@ -56,7 +56,17 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(defaultRequestSpecification(), 교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(defaultRequestSpecification(), 교대역, 양재역, "distance");
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+    }
+
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
+    @Test
+    void findPathByDuration() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(defaultRequestSpecification(), 교대역, 양재역, "duration");
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
