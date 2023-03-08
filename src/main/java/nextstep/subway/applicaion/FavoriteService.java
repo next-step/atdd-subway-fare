@@ -2,6 +2,7 @@ package nextstep.subway.applicaion;
 
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
+import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
 import nextstep.subway.applicaion.dto.FavoriteResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -49,9 +50,9 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(Long memberId, Long id) {
-        MemberResponse member = memberService.findMember(memberId);
+        final Member member = memberService.findByMemberId(memberId);
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
-        if (!favorite.isCreatedBy(member.getId())) {
+        if (!favorite.isCreatedBy(member)) {
             throw new RuntimeException();
         }
         favoriteRepository.deleteById(id);
