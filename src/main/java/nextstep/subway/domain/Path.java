@@ -10,8 +10,15 @@ public class Path {
 
     public Path(final Sections sections,
                 final FarePolicy farePolicy) {
+        this(sections, farePolicy, 0);
+    }
+
+    public Path(final Sections sections,
+                final FarePolicy farePolicy,
+                final int minDistance) {
         this.sections = sections;
         this.farePolicy = farePolicy;
+        this.minDistance = minDistance;
     }
 
     public Sections getSections() {
@@ -28,10 +35,6 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
-    }
-
-    public void setMinDistance(final int distance) {
-        minDistance = distance;
     }
 
     public int getFare() {
