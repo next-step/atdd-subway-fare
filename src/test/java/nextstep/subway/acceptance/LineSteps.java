@@ -5,6 +5,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.MediaType;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +60,15 @@ public class LineSteps {
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
+    public static Long 지하철_노선_생성_요청(String name, String color, Integer additionalFare,
+                                    LocalTime firstTime, LocalTime lastTime, int intervalMinute,
+                                    Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> lineCreateParams = createLineParams(name, color, additionalFare,
+                firstTime, lastTime, intervalMinute,
+                upStation, downStation, distance, duration);
+        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(Map<String, String> params) {
         return RestAssured
                 .given().log().all()
@@ -96,17 +106,33 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
+    private static Map<String, String> createLineParams(String name, String color, Integer additionalFare) {
+        LocalTime defaultTime = LocalTime.of(0, 0);
+        return createLineParams(name, color, additionalFare, defaultTime, defaultTime, 0);
+    }
+
     private static Map<String, String> createLineParams(String name, String color, Integer additionalFare, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> params = createLineParams(name, color, additionalFare);
+        LocalTime defaultTime = LocalTime.of(0, 0);
+        return createLineParams(name, color, additionalFare, defaultTime, defaultTime, 0, upStation, downStation, distance, duration);
+    }
+
+    private static Map<String, String> createLineParams(String name, String color, Integer additionalFare,
+                                                        LocalTime firstTime, LocalTime lastTime, int intervalMinute,
+                                                        Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> params = createLineParams(name, color, additionalFare, firstTime, lastTime, intervalMinute);
         params.putAll(createSectionParams(upStation, downStation, distance, duration));
         return params;
     }
 
-    private static Map<String, String> createLineParams(String name, String color, Integer additionalFare) {
+    private static Map<String, String> createLineParams(String name, String color, Integer additionalFare,
+                                                        LocalTime firstTime, LocalTime lastTime, int intervalMinute) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("additionalFare", additionalFare + "");
+        params.put("firstTime", firstTime + "");
+        params.put("lastTime", lastTime + "");
+        params.put("intervalMinute", intervalMinute + "");
         return params;
     }
 

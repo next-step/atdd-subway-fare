@@ -1,7 +1,7 @@
 package nextstep.subway.domain;
 
-import nextstep.member.domain.Member;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Path {
@@ -31,7 +31,30 @@ public class Path {
         return sections.maxAdditionalFare();
     }
 
-    public int calculateFare(Member member, MemberFarePolicy farePolicy) {
-        return farePolicy.calculate(member, this);
+    public LocalDateTime getArrivalTime(LocalDateTime departureDate) {
+        if (departureDate == null) {
+            return null;
+        }
+        Line boardingLine = null;
+        List<Section> sectionList = sections.getSections();
+        for (Section section : sectionList) {
+            if (section.isTransfer(boardingLine)) {
+                boardingLine = section.getLine();
+                long waitingTime = checkWaitingTime(section, departureDate);
+                departureDate = departureDate.plusMinutes(waitingTime);
+            }
+            int durationTime = section.getDuration();
+            departureDate = departureDate.plusMinutes(durationTime);
+        }
+        return departureDate;
+    }
+
+    private long checkWaitingTime(Section section, LocalDateTime departureDate) {
+        LocalDateTime nextSchedule = section.getSectionSchedule(departureDate);
+        if (!departureDate.isEqual(nextSchedule)) {
+            Duration duration = Duration.between(departureDate, nextSchedule);
+            return duration.toMinutes();
+        }
+        return 0L;
     }
 }

@@ -25,6 +25,19 @@ public class Sections {
         return sections;
     }
 
+    public List<Section> getSortedSections() {
+        List<Section> sortedSections = new ArrayList<>();
+        Station findStation = findFirstUpStation();
+        while (true) {
+            Optional<Section> findSection = findSectionAsUpStation(findStation);
+            if (findSection.isEmpty()) break;
+            Section section = findSection.get();
+            sortedSections.add(section);
+            findStation = section.getDownStation();
+        }
+        return sortedSections;
+    }
+
     public void add(Section section) {
         if (this.sections.isEmpty()) {
             this.sections.add(section);
