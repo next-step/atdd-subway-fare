@@ -96,6 +96,14 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(final RequestSpecification requestSpecification, final Long lineId, final Map<String, Object> params) {
+        return requestSpecification
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post("/lines/{lineId}/sections", lineId)
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(String accessToken, Long lineId, Map<String, String> params) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
@@ -107,6 +115,12 @@ public class LineSteps {
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_제거_요청(Long lineId, Long stationId) {
         return RestAssured.given().log().all()
+                .when().delete("/lines/{lineId}/sections?stationId={stationId}", lineId, stationId)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_제거_요청(final RequestSpecification requestSpecification, final Long lineId, final Long stationId) {
+        return requestSpecification
                 .when().delete("/lines/{lineId}/sections?stationId={stationId}", lineId, stationId)
                 .then().log().all().extract();
     }
