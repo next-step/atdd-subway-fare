@@ -3,6 +3,7 @@ package nextstep.member;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.context.SecurityContextHolder;
 import nextstep.member.domain.AnonymousUser;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.Filter;
@@ -14,11 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+@Component
 public class AnonymousAuthenticationFilter implements Filter {
     private final String principal = AnonymousUser.PRINCIPAL;
     private final List<String> roleType = AnonymousUser.ROLES;
 
-    private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public AnonymousAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     /**
      * 스프링 시큐리티에서는 security context 내부의 Authentication에 익명사용자에 대한 authorization을 등록한다.
