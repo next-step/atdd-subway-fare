@@ -49,7 +49,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 6);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 3);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 2));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -74,11 +74,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         return LineSteps.지하철_노선_생성_요청(defaultRequestSpecification(), lineCreateParams).jsonPath().getLong("id");
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
+    private Map<String, Object> createSectionCreateParams(final Long upStationId, final Long downStationId, final int distance, final int duration) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("upStationId", upStationId);
+        params.put("downStationId", downStationId);
+        params.put("distance", distance);
+        params.put("duration", duration);
         return params;
     }
 }
