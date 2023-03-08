@@ -193,14 +193,13 @@ class LineTest {
         );
     }
 
-    @DisplayName("구간 추가시 조건에 맞지 않으면 추가하지 않는다.")
+    @DisplayName("구간 추가시 조건에 맞지 않으면 예외 처리한다.")
     @ParameterizedTest(name = "상행역 : {0}, 하행역 : {1}, 거리 : {2}, 시간 : {3}")
     @MethodSource("provideForAddSectionFail")
     void addSectionFail(Station upStation, Station downStation, int distance, int duration) {
         Line line = new Line("2호선", "green");
 
-        line.addSection(upStation, downStation, distance, duration);
-
-        assertThat(line.getSections()).hasSize(0);
+        assertThatThrownBy(() -> line.addSection(upStation, downStation, distance, duration))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

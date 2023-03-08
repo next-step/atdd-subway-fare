@@ -26,6 +26,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, PathType.findBy(pathTypeName));
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, path.calculateFare());
     }
 }

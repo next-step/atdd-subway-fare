@@ -31,7 +31,7 @@ class PathTypeTest {
     @ParameterizedTest(name = "distance : {0}")
     @ValueSource(ints = {1, 100, 9999})
     void distance(int distance) {
-        Section section = new Section(line, upStation, downStation, distance, distance - 1000);
+        Section section = new Section(line, upStation, downStation, distance, 100);
 
         assertThat(PathType.DISTANCE.getStrategy().apply(section)).isEqualTo(distance);
     }
@@ -40,7 +40,7 @@ class PathTypeTest {
     @ParameterizedTest(name = "duration : {0}")
     @ValueSource(ints = {1, 100, 9999})
     void duraiton(int duration) {
-        Section section = new Section(line, upStation, downStation, duration - 1000, duration);
+        Section section = new Section(line, upStation, downStation, 100, duration);
 
         assertThat(PathType.DURATION.getStrategy().apply(section)).isEqualTo(duration);
     }

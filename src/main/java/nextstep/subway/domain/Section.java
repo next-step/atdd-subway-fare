@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.exception.SectionCreateException;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
@@ -22,20 +23,33 @@ public class Section extends DefaultWeightedEdge {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    private int distance;
+    @Embedded
+    private Distance distance;
 
-    private int duration;
+    @Embedded
+    private Duration duration;
 
     public Section() {
 
     }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        validateAddSection(line, upStation, downStation);
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = distance;
-        this.duration = duration;
+        this.distance = new Distance(distance);
+        this.duration = new Duration(duration);
+    }
+
+    private void validateAddSection(
+            final Line line,
+            final Station upStation,
+            final Station downStation
+    ) {
+        if (line == null || upStation == null || downStation == null) {
+            throw new SectionCreateException();
+        }
     }
 
     public Long getId() {
@@ -55,11 +69,11 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public int getDistance() {
-        return distance;
+        return distance.getValue();
     }
 
     public int getDuration() {
-        return duration;
+        return duration.getValue();
     }
 
     public boolean isSameUpStation(Station station) {
@@ -76,20 +90,22 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section replaceDownStationWithUpStation(final Section section) {
-        return new Section(
-                this.getLine(),
-                this.getUpStation(),
-                section.getUpStation(),
-                this.getDistance() - section.getDistance(),
-                this.getDuration() - section.getDuration()
-        );
+        return createSectionBetweenExistSection(this.getUpStation(), section.getUpStation(), section);
     }
 
     public Section replaceUpStationWithDownStation(final Section section) {
+        return createSectionBetweenExistSection(section.getDownStation(), this.getDownStation(), section);
+    }
+
+    private Section createSectionBetweenExistSection(
+            final Station upStation,
+            final Station downStation,
+            final Section section
+    ) {
         return new Section(
-                section.getLine(),
-                section.getDownStation(),
-                this.getDownStation(),
+                this.getLine(),
+                upStation,
+                downStation,
                 this.getDistance() - section.getDistance(),
                 this.getDuration() - section.getDuration()
         );

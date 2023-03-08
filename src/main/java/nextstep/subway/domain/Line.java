@@ -1,7 +1,11 @@
 package nextstep.subway.domain;
 
-import javax.persistence.*;
 import java.util.List;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Line {
@@ -47,19 +51,21 @@ public class Line {
         }
     }
 
-    public void addSection(Station upStation, Station downStation, int distance, int duration) {
-        if (canAddSection(upStation, downStation, distance, duration)) {
-            sections.add(new Section(this, upStation, downStation, distance, duration));
-        }
-    }
-
-    private boolean canAddSection(
+    public void addSectionIfPossible(
             final Station upStation,
-            final Station downStation,
+            final Station station,
             final int distance,
             final int duration
     ) {
-        return upStation != null && downStation != null && distance != 0 && duration != 0;
+        try {
+            addSection(upStation, station, distance, duration);
+        } catch (IllegalArgumentException exception) {
+            // 예외가 발생하면 구간을 추가하지 않는다.
+        }
+    }
+
+    public void addSection(Station upStation, Station downStation, int distance, int duration) {
+        sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
     public List<Station> getStations() {

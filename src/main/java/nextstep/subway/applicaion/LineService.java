@@ -1,7 +1,6 @@
 package nextstep.subway.applicaion;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
@@ -26,16 +25,12 @@ public class LineService {
     @Transactional
     public LineResponse saveLine(LineRequest request) {
         Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        Station upStation = getNullableStationBy(request.getUpStationId());
-        Station downStation = getNullableStationBy(request.getDownStationId());
-        line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
+        if (stationService.checkExistsId(request.getUpStationId(), request.getDownStationId())) {
+            Station upStation = stationService.findById(request.getUpStationId());
+            Station downStation = stationService.findById(request.getDownStationId());
+            line.addSectionIfPossible(upStation, downStation, request.getDistance(), request.getDuration());
+        }
         return LineResponse.of(line);
-    }
-
-    private Station getNullableStationBy(final Long stationId) {
-        return Optional.ofNullable(stationId)
-                .map(id -> stationService.findById(id))
-                .orElse(null);
     }
 
     public List<Line> findLines() {
