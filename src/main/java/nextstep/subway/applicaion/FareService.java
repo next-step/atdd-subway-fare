@@ -1,6 +1,5 @@
 package nextstep.subway.applicaion;
 
-import nextstep.member.application.MemberService;
 import nextstep.member.domain.AuthenticatedUser;
 import nextstep.member.domain.LoginMember;
 import nextstep.subway.domain.AgeFarePolicy;
@@ -11,12 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FareService {
-
-    private final MemberService memberService;
-
-    public FareService(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     /**
      * 요금 정책
@@ -52,7 +45,8 @@ public class FareService {
     private int getCalculatedAgeFare(int fare, AuthenticatedUser user) {
         int age = -1;
         if (user instanceof LoginMember) {
-            age = memberService.findMember(((LoginMember) user).getId()).getAge();
+            LoginMember loginMember = (LoginMember) user;
+            age = loginMember.getAge();
         }
         return AgeFarePolicy.calculate(fare, age);
     }

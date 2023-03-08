@@ -44,9 +44,9 @@ class FareServiceTest {
         Member 청소년 = memberRepository.findByEmail(Users.청소년.getEmail()).get();
         Member 성인 = memberRepository.findByEmail(Users.성인.getEmail()).get();
 
-        어린이사용자 = new LoginMember(어린이.getId(), 어린이.getRoles());
-        청소년사용자 = new LoginMember(청소년.getId(), 청소년.getRoles());
-        성인사용자 = new LoginMember(성인.getId(), 성인.getRoles());
+        어린이사용자 = new LoginMember(어린이.getId(), 어린이.getAge(), 어린이.getRoles());
+        청소년사용자 = new LoginMember(청소년.getId(), 청소년.getAge(), 청소년.getRoles());
+        성인사용자 = new LoginMember(성인.getId(), 성인.getAge(), 성인.getRoles());
         익명사용자 = new AnonymousUser();
 
         // path

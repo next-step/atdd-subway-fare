@@ -1,10 +1,12 @@
 package nextstep.member.ui;
 
 import nextstep.member.application.JwtTokenProvider;
+import nextstep.member.application.MemberService;
 import nextstep.member.context.SecurityContextHolder;
 import nextstep.member.domain.AnonymousUser;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.Member;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -13,14 +15,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.List;
-
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final MemberService memberService;
 
-    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
+    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider, MemberService memberService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.memberService = memberService;
     }
 
     @Override
@@ -64,8 +66,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String token = authorization.split(" ")[1];
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
-        List<String> roles = jwtTokenProvider.getRoles(token);
-
-        return new LoginMember(id, roles);
+        Member member = memberService.getMember(id);
+        return new LoginMember(member.getId(), member.getAge(), member.getRoles());
     }
 }

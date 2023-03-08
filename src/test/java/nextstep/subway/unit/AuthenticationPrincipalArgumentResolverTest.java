@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.member.application.JwtTokenProvider;
+import nextstep.member.application.MemberService;
 import nextstep.member.domain.AnonymousUser;
 import nextstep.member.domain.AuthenticatedUser;
 import nextstep.member.domain.LoginMember;
@@ -17,31 +18,32 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.MethodParameter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import static nextstep.subway.utils.Users.성인;
-import static nextstep.subway.utils.Users.어린이;
-import static nextstep.subway.utils.Users.청소년;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DataJpaTest
+@SpringBootTest
+@ActiveProfiles("test")
 public class AuthenticationPrincipalArgumentResolverTest {
 
     private AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver;
 
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     private MethodParameter parameter;
 
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberService memberService;
 
     @Mock
     private NativeWebRequest webRequest;
@@ -51,29 +53,14 @@ public class AuthenticationPrincipalArgumentResolverTest {
     private String tokenOf어린이사용자;
 
     @BeforeEach
-    void setUp() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException {
-        // JWT provider 필드값 주입 (리플렉션 활용)
-        jwtTokenProvider = new JwtTokenProvider();
-
-        Field secretKey = JwtTokenProvider.class.getDeclaredField("secretKey");
-        secretKey.setAccessible(true);
-        secretKey.set(jwtTokenProvider, "atdd-secret-key");
-
-        Field validityInMilliseconds = JwtTokenProvider.class.getDeclaredField("validityInMilliseconds");
-        validityInMilliseconds.setAccessible(true);
-        validityInMilliseconds.set(jwtTokenProvider, 3600000);
-
+    void setUp() throws NoSuchMethodException {
         // authenticationPrincipalArgumentResolver 객체 할당
-        authenticationPrincipalArgumentResolver = new AuthenticationPrincipalArgumentResolver(jwtTokenProvider);
+        authenticationPrincipalArgumentResolver = new AuthenticationPrincipalArgumentResolver(jwtTokenProvider, memberService);
 
         // resolveArgument 메서드의 MethodParameter 할당 (AuthenticationPrincipal 어노테이션이 붙은 첫번째 인자만 테스트한다.)
         parameter = new MethodParameter(PathController.class.getDeclaredMethod("findPath", AuthenticatedUser.class, Long.class, Long.class, SearchType.class), 0);
 
         // 사용자 authentication
-        memberRepository.save(new Member(성인.getEmail(), 성인.getPassword(), 성인.getAge(), Arrays.asList(RoleType.ROLE_MEMBER.name())));
-        memberRepository.save(new Member(청소년.getEmail(), 청소년.getPassword(), 청소년.getAge(), Arrays.asList(RoleType.ROLE_MEMBER.name())));
-        memberRepository.save(new Member(어린이.getEmail(), 어린이.getPassword(), 어린이.getAge(), Arrays.asList(RoleType.ROLE_MEMBER.name())));
-
         Member 성인사용자 = memberRepository.findByEmail(Users.성인.getEmail()).get();
         Member 청소년사용자 = memberRepository.findByEmail(Users.청소년.getEmail()).get();
         Member 어린이사용자 = memberRepository.findByEmail(Users.어린이.getEmail()).get();
@@ -90,7 +77,8 @@ public class AuthenticationPrincipalArgumentResolverTest {
         LoginMember 성인 = (LoginMember) authenticationPrincipalArgumentResolver.resolveArgument(parameter, null, webRequest, null);
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(tokenOf성인사용자));
-        LoginMember loginMember = new LoginMember(id, Arrays.asList(RoleType.ROLE_MEMBER.name()));
+        Member member = memberService.getMember(id);
+        LoginMember loginMember = new LoginMember(member.getId(), member.getAge(), member.getRoles());
         assertThat(성인).isEqualTo(loginMember);
     }
 
@@ -105,7 +93,8 @@ public class AuthenticationPrincipalArgumentResolverTest {
         LoginMember 청소년 = (LoginMember) authenticationPrincipalArgumentResolver.resolveArgument(parameter, null, webRequest, null);
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(tokenOf청소년사용자));
-        LoginMember loginMember = new LoginMember(id, Arrays.asList(RoleType.ROLE_MEMBER.name()));
+        Member member = memberService.getMember(id);
+        LoginMember loginMember = new LoginMember(member.getId(), member.getAge(), member.getRoles());
         assertThat(청소년).isEqualTo(loginMember);
     }
 
@@ -116,7 +105,8 @@ public class AuthenticationPrincipalArgumentResolverTest {
         LoginMember 어린이 = (LoginMember) authenticationPrincipalArgumentResolver.resolveArgument(parameter, null, webRequest, null);
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(tokenOf어린이사용자));
-        LoginMember loginMember = new LoginMember(id, Arrays.asList(RoleType.ROLE_MEMBER.name()));
+        Member member = memberService.getMember(id);
+        LoginMember loginMember = new LoginMember(member.getId(), member.getAge(), member.getRoles());
         assertThat(어린이).isEqualTo(loginMember);
     }
 
