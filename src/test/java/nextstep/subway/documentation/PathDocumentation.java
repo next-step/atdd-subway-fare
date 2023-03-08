@@ -27,7 +27,7 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @Test
-    void findPathByDistance() {
+    void findPath() {
         final PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
@@ -41,7 +41,8 @@ public class PathDocumentation extends Documentation {
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("source").description("출발역"),
-                                parameterWithName("target").description("도착역")
+                                parameterWithName("target").description("도착역"),
+                                parameterWithName("findType").description("경로 조회 타입 (distance | duration)")
                         )));
         final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(requestSpec, 1L, 2L, "distance");
 
