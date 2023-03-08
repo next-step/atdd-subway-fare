@@ -4,7 +4,7 @@ import nextstep.member.domain.AnonymousUser;
 import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
-import nextstep.subway.applicaion.FareService;
+import nextstep.subway.applicaion.FareCalculator;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
@@ -21,12 +21,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @ActiveProfiles("test")
-class FareServiceTest {
+@SpringBootTest
+class FareCalculatorTest {
 
-    @Autowired
-    private FareService fareService;
+    private FareCalculator fareCalculator = new FareCalculator();
+
     @Autowired
     private MemberRepository memberRepository;
 
@@ -71,28 +71,28 @@ class FareServiceTest {
 
     @Test
     void getTotalFareOf어린이사용자() {
-        int totalFare = fareService.getTotalFare(어린이사용자, path);
+        int totalFare = fareCalculator.getTotalFare(어린이사용자, path);
 
         assertThat(totalFare).isEqualTo((int) ((1_250 + 200 + 900) * 0.5));
     }
 
     @Test
     void getTotalFareOf청소년사용자() {
-        int totalFare = fareService.getTotalFare(청소년사용자, path);
+        int totalFare = fareCalculator.getTotalFare(청소년사용자, path);
 
         assertThat(totalFare).isEqualTo((int) ((1_250 + 200 + 900) * 0.8));
     }
 
     @Test
     void getTotalFareOf성인사용자() {
-        int totalFare = fareService.getTotalFare(성인사용자, path);
+        int totalFare = fareCalculator.getTotalFare(성인사용자, path);
 
         assertThat(totalFare).isEqualTo(1_250 + 200 + 900);
     }
 
     @Test
     void getTotalFareOf익명사용자() {
-        int totalFare = fareService.getTotalFare(익명사용자, path);
+        int totalFare = fareCalculator.getTotalFare(익명사용자, path);
 
         assertThat(totalFare).isEqualTo(1_250 + 200 + 900);
     }

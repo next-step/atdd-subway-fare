@@ -6,10 +6,8 @@ import nextstep.subway.domain.AgeFarePolicy;
 import nextstep.subway.domain.DistanceFarePolicy;
 import nextstep.subway.domain.LineSurchargePolicy;
 import nextstep.subway.domain.Path;
-import org.springframework.stereotype.Service;
 
-@Service
-public class FareService {
+public class FareCalculator {
 
     /**
      * 요금 정책

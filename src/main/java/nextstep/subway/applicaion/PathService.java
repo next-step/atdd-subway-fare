@@ -15,18 +15,17 @@ import java.util.List;
 public class PathService {
     private final LineService lineService;
     private final StationService stationService;
-    private final FareService fareService;
+    private final FareCalculator fareCalculator = new FareCalculator();
 
-    public PathService(LineService lineService, StationService stationService, FareService fareService) {
+    public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
         this.stationService = stationService;
-        this.fareService = fareService;
     }
 
     public PathResponse findPath(AuthenticatedUser user, Long source, Long target, SearchType searchType) {
         Path path = getPath(source, target, searchType);
 
-        int totalFare = fareService.getTotalFare(user, path);
+        int totalFare = fareCalculator.getTotalFare(user, path);
 
         return PathResponse.of(path, totalFare);
     }
