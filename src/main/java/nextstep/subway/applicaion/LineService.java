@@ -36,14 +36,14 @@ public class LineService {
     }
 
     private boolean isValidSaveRequest(final LineRequest request) {
-        return isNotNullUpStationIdAndDownStationId(request) && isNotZeroDistanceAndDuration(request);
+        return isNotNullStationId(request) && isValidDistanceAndDuration(request);
     }
 
-    private boolean isNotZeroDistanceAndDuration(final LineRequest request) {
-        return request.getDistance() != 0;
+    private boolean isValidDistanceAndDuration(final LineRequest request) {
+        return request.getDistance() > 0 && request.getDuration() > 0;
     }
 
-    private boolean isNotNullUpStationIdAndDownStationId(final LineRequest request) {
+    private boolean isNotNullStationId(final LineRequest request) {
         return request.getUpStationId() != null && request.getDownStationId() != null;
     }
 
