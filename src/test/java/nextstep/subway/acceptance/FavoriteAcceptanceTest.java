@@ -12,11 +12,11 @@ import java.util.Map;
 import static nextstep.subway.acceptance.FavoriteSteps.*;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_로그인_성공_토큰_발급됨;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 @DisplayName("즐겨찾기 관련 기능")
-public class FavoriteAcceptanceTest extends AcceptanceTest {
+class FavoriteAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "member@email.com";
     public static final String PASSWORD = "password";
 
@@ -45,13 +45,13 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청(관리자, "양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청(관리자, "남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 8);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 7);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 3);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 0, 교대역, 강남역, 10, 8);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 0,  강남역, 양재역, 10, 7);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 300, 교대역, 남부터미널역, 2, 3);
 
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 4));
 
-        사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
+        사용자 = 베어러_로그인_성공_토큰_발급됨(EMAIL, PASSWORD);
     }
 
     @DisplayName("즐겨찾기를 관리한다.")
