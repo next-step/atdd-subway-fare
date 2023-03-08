@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import java.util.stream.Stream;
+
 public enum FindType {
 
     DISTANCE("distance"),
@@ -10,5 +12,16 @@ public enum FindType {
 
     FindType(final String type) {
         this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public static FindType getFindTypeFromTypeName(final String type) {
+        return Stream.of(FindType.values())
+                .filter(findType -> findType.getType().equals(type))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
     }
 }
