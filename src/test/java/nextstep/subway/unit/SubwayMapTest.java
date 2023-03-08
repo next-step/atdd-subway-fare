@@ -34,10 +34,10 @@ public class SubwayMapTest {
         이호선 = new Line("2호선", "red");
         삼호선 = new Line("3호선", "red");
 
-        신분당선.addSection(강남역, 양재역, 10, 4);
-        이호선.addSection(교대역, 강남역, 10, 3);
-        삼호선.addSection(교대역, 남부터미널역, 2, 3);
-        삼호선.addSection(남부터미널역, 양재역, 3, 5);
+        신분당선.addSection(강남역, 양재역, 20, 4);
+        이호선.addSection(교대역, 강남역, 15, 3);
+        삼호선.addSection(교대역, 남부터미널역, 8, 3);
+        삼호선.addSection(남부터미널역, 양재역, 20, 5);
     }
 
     @Test
@@ -51,6 +51,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역));
+        assertThat(path.getFare()).isEqualTo(1750);
     }
 
     @Test
@@ -64,6 +65,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 남부터미널역, 교대역));
+        assertThat(path.getFare()).isEqualTo(1750);
     }
 
     @Test
@@ -77,6 +79,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 강남역, 양재역));
+        assertThat(path.getFare()).isEqualTo(1750);
     }
 
     @Test
@@ -90,6 +93,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 강남역, 교대역));
+        assertThat(path.getFare()).isEqualTo(1750);
     }
 
     private Station createStation(long id, String name) {
