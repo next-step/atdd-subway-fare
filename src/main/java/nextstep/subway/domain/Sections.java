@@ -3,16 +3,12 @@ package nextstep.subway.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
-    public static final int DEFAULT_FARE = 1250;
-    public static final int DEFAULT_FARE_DISTANCE = 10;
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -159,9 +155,25 @@ public class Sections {
     }
 
     public int calculateFare() {
+        int totalFare = distanceFarePolicy();
+        totalFare += lineFarePolicy(sections);
+        return totalFare;
+    }
+
+    private int lineFarePolicy(List<Section> sections) {
+        return sections.stream()
+                .map(Section::getLine)
+                .distinct()
+                .filter(line -> Objects.nonNull(line.getLineFare()))
+                .mapToInt(Line::getLineFare)
+                .max()
+                .orElse(0);
+    }
+
+    private int distanceFarePolicy() {
         int distance = totalDistance();
-        Fare fare = Fare.of(distance);
-        return fare.calculate(distance);
+        DistacneFarePolicy distacneFarePolicy = DistacneFarePolicy.of(distance);
+        return distacneFarePolicy.calculate(distance);
     }
 
 }

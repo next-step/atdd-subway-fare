@@ -1,28 +1,32 @@
 package nextstep.subway.applicaion;
 
+import lombok.RequiredArgsConstructor;
+import nextstep.member.application.MemberService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final MemberService memberService;
 
-    public PathService(LineService lineService, StationService stationService) {
-        this.lineService = lineService;
-        this.stationService = stationService;
-    }
-
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, Optional<Long> memberId) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
+
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, pathType);
 
-        return PathResponse.of(path);
+        Optional<Integer> age = memberId.map(id -> memberService.findMember(id).getAge());
+        int fare = path.calculateFare(age);
+
+        return PathResponse.of(path, fare);
     }
 }

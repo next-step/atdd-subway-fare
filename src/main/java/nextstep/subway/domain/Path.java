@@ -1,9 +1,13 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.FareCalculator;
+import nextstep.subway.domain.fare.FareStrategyFactory;
+
 import java.util.List;
+import java.util.Optional;
 
 public class Path {
-    private Sections sections;
+    private final Sections sections;
 
     public Path(Sections sections) {
         this.sections = sections;
@@ -25,7 +29,16 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int calculateFare() {
-        return sections.calculateFare();
+    public int calculateFare(Optional<Integer> age) {
+        int fare = sections.calculateFare();
+
+        return age.map(a -> FareStrategyFactory.of(a))
+                .map(FareCalculator::new)
+                .map(c -> c.calculateFare(fare))
+                .orElse(fare);
+    }
+
+    public int calculateFare(int age) {
+        return calculateFare(Optional.of(age));
     }
 }
