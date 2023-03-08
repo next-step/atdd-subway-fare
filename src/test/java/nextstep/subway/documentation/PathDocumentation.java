@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -33,7 +34,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
                 ), 10);
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         final RequestSpecification requestSpec = documentRequestSpecification()
                 .filter(document(FIND_PATH,

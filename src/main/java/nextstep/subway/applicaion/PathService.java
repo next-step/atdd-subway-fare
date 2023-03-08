@@ -3,10 +3,12 @@ package nextstep.subway.applicaion;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class PathService {
     private LineService lineService;
     private StationService stationService;
@@ -16,11 +18,11 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
+    public PathResponse findPath(final Long source, final Long target, final FindType findType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayDistanceMap(lines);
+        final SubwayMap subwayMap = SubwayMap.getMapByFindType(lines, findType);
         Path path = subwayMap.findPath(upStation, downStation);
 
         return PathResponse.of(path);
