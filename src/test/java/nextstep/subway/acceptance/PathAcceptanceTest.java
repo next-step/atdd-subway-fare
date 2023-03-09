@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회_검증;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_검증;
@@ -112,13 +113,29 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      * when 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
      * then 로그인 사용자의 경우 연령별 요금으로 계산한다
+     * and 청소년: 운임에서 350원을 공제한 금액의 20%할인
+     * and 어린이: 운임에서 350원을 공제한 금액의 50%할인
      */
     @DisplayName("로그인 사용자의 경우 연령별 요금으로 계산")
     @Test
     void findPathByDistanceFareCalculateByLoginUserAge() {
-        // when
+        // 청소년
+        사용자_연령별_요금_계산(청소년_EMAIL, 청소년_PASSWORD, 1870);
 
+        // 어린이
+        사용자_연령별_요금_계산(어린이_EMAIL, 어린이_PASSWORD, 1300);
+
+        // 성인
+        사용자_연령별_요금_계산(EMAIL, PASSWORD, 2250);
+    }
+
+    private void 사용자_연령별_요금_계산(final String email, final String password, final int fare) {
+        // given
+        String accessToken = 베어러_인증_로그인_요청(email, password).jsonPath().getString("accessToken");
+        // when
+        var response = 두_역의_최단_거리_경로_조회를_요청(남부터미널역, 강남역, accessToken);
         // then
+        추가요금이_있는_노선을_환승_하여_이용_할_경우_가장_높은_금액의_추가_요금만_적용한다(response, fare);
     }
 
     @DisplayName("경로 조회 예외 처리 기능")
