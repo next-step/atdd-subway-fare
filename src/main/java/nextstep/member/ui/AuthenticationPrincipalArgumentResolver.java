@@ -1,5 +1,6 @@
 package nextstep.member.ui;
 
+import java.util.Optional;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
@@ -26,8 +27,20 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authorization = webRequest.getHeader("Authorization");
+    public Object resolveArgument(
+            MethodParameter parameter,
+            ModelAndViewContainer mavContainer,
+            NativeWebRequest webRequest,
+            WebDataBinderFactory binderFactory
+    ) {
+        Optional<String> optionalAuthorization = Optional.ofNullable(webRequest.getHeader("Authorization"));
+
+        if (isNoLoginUser(parameter, optionalAuthorization)) {
+            return null;
+        }
+
+        String authorization = optionalAuthorization.get();
+
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
@@ -37,5 +50,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         List<String> roles = jwtTokenProvider.getRoles(token);
 
         return new LoginMember(id, roles);
+    }
+
+    private static boolean isNoLoginUser(final MethodParameter parameter, final Optional<String> authorization) {
+        return !parameter.getParameterAnnotation(AuthenticationPrincipal.class).required() && authorization.isEmpty();
     }
 }
