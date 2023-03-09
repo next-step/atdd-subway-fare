@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Path {
     private Sections sections;
-    private FarePolicy farePolicy;
+    private List<FarePolicy> farePolicies;
 
-    public Path(Sections sections, FarePolicy farePolicy) {
+    public Path(Sections sections, FarePolicy... farePolicy) {
         this.sections = sections;
-        this.farePolicy = farePolicy;
+        this.farePolicies = List.of(farePolicy);
     }
 
     public Sections getSections() {
@@ -28,6 +28,8 @@ public class Path {
     }
 
     public int calculateFare() {
-        return farePolicy.apply(this);
+        return farePolicies.stream()
+                .mapToInt(farePolicy -> farePolicy.apply(this))
+                .sum();
     }
 }
