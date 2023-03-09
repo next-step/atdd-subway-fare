@@ -27,12 +27,24 @@ public class LineService {
     @Transactional
     public LineResponse saveLine(final LineRequest request) {
         final Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        if (request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0) {
+        if (isValidSaveRequest(request)) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());
             line.addSection(upStation, downStation, request.getDistance(), request.getDuration());
         }
         return LineResponse.of(line);
+    }
+
+    private boolean isValidSaveRequest(final LineRequest request) {
+        return isNotNullStationId(request) && isValidDistanceAndDuration(request);
+    }
+
+    private boolean isValidDistanceAndDuration(final LineRequest request) {
+        return request.getDistance() > 0 && request.getDuration() > 0;
+    }
+
+    private boolean isNotNullStationId(final LineRequest request) {
+        return request.getUpStationId() != null && request.getDownStationId() != null;
     }
 
     public List<Line> findLines() {

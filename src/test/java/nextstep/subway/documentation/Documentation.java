@@ -62,7 +62,8 @@ public class Documentation {
                                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 ID"),
                                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
                                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 총 거리"),
-                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로 총 시간")
+                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로 총 시간"),
+                                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("이용 요금")
                         )
                 ));
     }
