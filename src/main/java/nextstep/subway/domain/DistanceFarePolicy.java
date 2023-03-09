@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-public class DistanceFarePolicy implements FarePolicy<Integer> {
+public class DistanceFarePolicy implements FarePolicy<Path> {
     private DistanceFareFormula distanceFareFormula;
 
     public DistanceFarePolicy(DistanceFareFormula distanceFareFormula) {
@@ -8,7 +8,7 @@ public class DistanceFarePolicy implements FarePolicy<Integer> {
     }
 
     @Override
-    public int apply(final Integer distance) {
-        return distanceFareFormula.calculate(distance);
+    public int apply(final Path path) {
+        return distanceFareFormula.calculate(path.extractDistance());
     }
 }
