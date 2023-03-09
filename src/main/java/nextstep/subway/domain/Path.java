@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.DistanceFareType;
+
 import java.util.List;
 
 public class Path {
