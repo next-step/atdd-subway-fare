@@ -144,7 +144,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("청소년 할인이 적용된 요금을 조회한다.")
     @Test
-    void findPathByDistance_WithYouthDiscount() {
+    void findPathByDistance_WithTeenagerDiscount() {
         // given
         String 회원토큰 = 회원_생성_요청("13YearsOld@email.com", "passwd", 13).jsonPath().getString("accessToken");
 
