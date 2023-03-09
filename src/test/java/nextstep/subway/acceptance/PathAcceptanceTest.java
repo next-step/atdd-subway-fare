@@ -109,6 +109,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         추가요금이_있는_노선을_환승_하여_이용_할_경우_가장_높은_금액의_추가_요금만_적용한다(response, 2250);
     }
 
+    /**
+     * when 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * then 로그인 사용자의 경우 연령별 요금으로 계산한다
+     */
+    @DisplayName("로그인 사용자의 경우 연령별 요금으로 계산")
+    @Test
+    void findPathByDistanceFareCalculateByLoginUserAge() {
+        // when
+
+        // then
+    }
+
     @DisplayName("경로 조회 예외 처리 기능")
     @Nested
     class PathExceptionTest {
