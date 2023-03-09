@@ -3,7 +3,7 @@ package nextstep.subway.documentation;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.applicaion.dto.response.PathResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

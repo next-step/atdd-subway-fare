@@ -2,11 +2,17 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.acceptance.support.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static nextstep.subway.acceptance.MemberSteps.*;
+import static nextstep.subway.acceptance.support.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.support.MemberSteps.회원_삭제_요청;
+import static nextstep.subway.acceptance.support.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.support.MemberSteps.회원_정보_수정_요청;
+import static nextstep.subway.acceptance.support.MemberSteps.회원_정보_조회_요청;
+import static nextstep.subway.acceptance.support.MemberSteps.회원_정보_조회됨;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberAcceptanceTest extends AcceptanceTest {

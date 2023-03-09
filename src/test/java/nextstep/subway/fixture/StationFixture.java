@@ -1,7 +1,7 @@
 package nextstep.subway.fixture;
 
 
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.applicaion.dto.response.StationResponse;
 import nextstep.subway.domain.Station;
 import org.springframework.test.util.ReflectionTestUtils;
 

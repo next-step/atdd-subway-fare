@@ -2,9 +2,9 @@ package nextstep.subway.applicaion;
 
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
-import nextstep.subway.applicaion.dto.FavoriteRequest;
-import nextstep.subway.applicaion.dto.FavoriteResponse;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.applicaion.dto.request.FavoriteRequest;
+import nextstep.subway.applicaion.dto.response.FavoriteResponse;
+import nextstep.subway.applicaion.dto.response.StationResponse;
 import nextstep.subway.domain.Favorite;
 import nextstep.subway.domain.FavoriteRepository;
 import nextstep.subway.domain.Station;
