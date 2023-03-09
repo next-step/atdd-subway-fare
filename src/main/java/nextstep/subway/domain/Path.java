@@ -28,8 +28,17 @@ public class Path {
     }
 
     public int calculateFare() {
-        return farePolicies.stream()
-                .mapToInt(farePolicy -> farePolicy.apply(this))
-                .sum();
+        validateFarePolicies();
+        int baseFare = 0;
+        for (FarePolicy farePolicy : farePolicies) {
+            baseFare = farePolicy.apply(this, baseFare);
+        }
+        return baseFare;
+    }
+
+    private void validateFarePolicies() {
+        if (farePolicies.isEmpty()) {
+            throw new IllegalArgumentException("요금 정책이 설정되지 않았습니다.");
+        }
     }
 }
