@@ -16,6 +16,10 @@ import org.springframework.test.context.ActiveProfiles;
 public class AcceptanceTest {
     public static final String EMAIL = "admin@email.com";
     public static final String PASSWORD = "password";
+    public static final String 청소년_EMAIL = "청소년@email.com";
+    public static final String 청소년_PASSWORD = "password";
+    public static final String 어린이_EMAIL = "어린이@email.com";
+    public static final String 어린이_PASSWORD = "password";
 
     @LocalServerPort
     private int port;
