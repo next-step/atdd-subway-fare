@@ -3,11 +3,11 @@ package nextstep.subway.applicaion.dto;
 public class LineRequest {
     private String name;
     private String color;
+    private int extraCharge;
     private Long upStationId;
     private Long downStationId;
     private int distance;
     private int duration;
-    private int extraCharge;
 
     public String getName() {
         return name;
