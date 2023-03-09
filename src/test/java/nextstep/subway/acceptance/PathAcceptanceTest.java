@@ -86,7 +86,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가한다.")
     @Test
-    void findPathByTimeAdditionalFare() {
+    void findPathByDistanceAdditionalFare() {
         // when
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 남부터미널역);
 
@@ -101,7 +101,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("경로 중 추가요금이 있는 노선을 환승 하여 이용 할 경우 가장 높은 금액의 추가 요금만 적용한다.")
     @Test
-    void findPathByTimeAdditionalFareOnlyHighestAmount() {
+    void findPathByDistanceAdditionalFareOnlyHighestAmount() {
         // when
         var response = 두_역의_최단_거리_경로_조회를_요청(남부터미널역, 강남역);
 
