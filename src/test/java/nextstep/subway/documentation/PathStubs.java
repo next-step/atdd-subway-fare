@@ -17,7 +17,7 @@ public class PathStubs {
 			Lists.newArrayList(
 				new StationResponse(1L, "강남역"),
 				new StationResponse(2L, "역삼역")
-			), 10, 12);
+			), 10, 12, 1_250);
 
 		when(pathService.findPath(anyLong(), anyLong(), eq(PathType.DISTANCE))).thenReturn(pathResponse);
 	}
@@ -27,7 +27,7 @@ public class PathStubs {
 			Lists.newArrayList(
 				new StationResponse(1L, "강남역"),
 				new StationResponse(2L, "역삼역")
-			), 10, 12);
+			), 12, 12, 1_350);
 
 		when(pathService.findPath(anyLong(), anyLong(), eq(PathType.DURATION))).thenReturn(pathResponse);
 	}
