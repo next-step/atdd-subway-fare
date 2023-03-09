@@ -9,11 +9,14 @@ import javax.persistence.Id;
 
 @Entity
 public class Line {
+    private static final int BASE_ADDITIONAL_FARE = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String color;
+    private AdditionalFare additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -21,9 +24,14 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(final String name, final String color) {
+        this(name, color, BASE_ADDITIONAL_FARE);
+    }
+
+    public Line(final String name, final String color, final int additionalFare) {
         this.name = name;
         this.color = color;
+        this.additionalFare = new AdditionalFare(additionalFare);
     }
 
     public Long getId() {
@@ -70,6 +78,10 @@ public class Line {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public AdditionalFare getAdditionalFare() {
+        return additionalFare;
     }
 
     public void deleteSection(Station station) {
