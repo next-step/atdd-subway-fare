@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class FareTypeTest {
+class DistanceFareTypeTest {
     @DisplayName("기본 운임 (10km 이내)으로 1250 원의 요금이 부과된다.")
     @ParameterizedTest
     @CsvSource(value = {
@@ -18,7 +18,7 @@ class FareTypeTest {
             "10, 1250"
     })
     void basicFare(int distance, int expectedFare) {
-        int actualFare = FareType.calculateFare(distance);
+        int actualFare = DistanceFareType.calculateFare(distance);
         assertThat(actualFare).isEqualTo(expectedFare);
     }
 
@@ -36,7 +36,7 @@ class FareTypeTest {
             "50, 2050",
     })
     void over10kmFare(int distance, int expectedFare) {
-        int actualFare = FareType.calculateFare(distance);
+        int actualFare = DistanceFareType.calculateFare(distance);
         assertThat(actualFare).isEqualTo(expectedFare);
     }
 
@@ -50,7 +50,7 @@ class FareTypeTest {
             "67, 2350",
     })
     void over50kmFare(int distance, int expectedFare) {
-        int actualFare = FareType.calculateFare(distance);
+        int actualFare = DistanceFareType.calculateFare(distance);
         assertThat(actualFare).isEqualTo(expectedFare);
     }
 
@@ -58,7 +58,7 @@ class FareTypeTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, 0})
     void doNotCalculateFare(int distance) {
-        assertThatThrownBy(() -> FareType.calculateFare(distance)).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> DistanceFareType.calculateFare(distance)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("거리가 0 이거나 음수일 경우 요금 계산할 수 없습니다.");
     }
 }

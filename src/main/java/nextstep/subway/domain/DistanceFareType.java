@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import java.util.Arrays;
 import java.util.function.IntPredicate;
 
-public enum FareType {
+public enum DistanceFareType {
     BASIC(0, 0, distance -> distance > 0 && distance <= 10),
     OVER_10KM(5, 10, distance -> distance > 10 && distance <= 50),
     OVER_50KM(8, 50, distance -> distance > 50);
@@ -16,15 +16,15 @@ public enum FareType {
     private final int extraBoundaryDistance;
     private final IntPredicate fareTypeCheck;
 
-    FareType(int extraUnitDistance, int extraBoundaryDistance, IntPredicate fareTypeCheck) {
+    DistanceFareType(int extraUnitDistance, int extraBoundaryDistance, IntPredicate fareTypeCheck) {
         this.extraUnitDistance = extraUnitDistance;
         this.extraBoundaryDistance = extraBoundaryDistance;
         this.fareTypeCheck = fareTypeCheck;
     }
 
-    public static FareType findByDistance(int distance) {
+    public static DistanceFareType findByDistance(int distance) {
         return Arrays.stream(values())
-                .filter(fareType -> fareType.match(distance))
+                .filter(distanceFareType -> distanceFareType.match(distance))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("거리가 0 이거나 음수일 경우 요금 계산할 수 없습니다."));
     }
