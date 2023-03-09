@@ -8,7 +8,7 @@ public class DistanceFarePolicy implements FarePolicy<Path> {
     }
 
     @Override
-    public int apply(final Path path) {
-        return distanceFareFormula.calculate(path.extractDistance());
+    public int apply(final Path path, final int baseFare) {
+        return baseFare + distanceFareFormula.calculate(path.extractDistance());
     }
 }

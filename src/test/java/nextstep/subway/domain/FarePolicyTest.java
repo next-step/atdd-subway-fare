@@ -33,6 +33,6 @@ class FarePolicyTest {
         FarePolicy farePolicy = new DistanceFarePolicy(new BasicDistanceFareFormula());
         Path path = new Path(sections, farePolicy);
 
-        assertThat(farePolicy.apply(path)).isEqualTo(fare);
+        assertThat(farePolicy.apply(path, 0)).isEqualTo(fare);
     }
 }
