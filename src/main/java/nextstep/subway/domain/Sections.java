@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import nextstep.subway.domain.exception.LineAdditionalFareException;
 
 @Embeddable
 public class Sections {
@@ -157,5 +158,12 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int extractHighestAdditionalFare() {
+        return this.sections.stream()
+                .mapToInt(section -> section.getLine().getAdditionalFare().getValue())
+                .max()
+                .orElseThrow(LineAdditionalFareException::new);
     }
 }
