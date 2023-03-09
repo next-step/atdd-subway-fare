@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public enum FarePolicy {
-    NOT_MORE_THAN_10KM (
+public enum DistanceFarePolicy {
+    NOT_MORE_THAN_10KM(
             distance -> distance <= Constants.TEN_KM,
             distance -> 0
     ),
@@ -22,7 +22,7 @@ public enum FarePolicy {
     private final Predicate<Integer> predicate;
     private final UnaryOperator<Integer> extraFareOperator;
 
-    FarePolicy(Predicate<Integer> predicate, UnaryOperator<Integer> extraFareOperator) {
+    DistanceFarePolicy(Predicate<Integer> predicate, UnaryOperator<Integer> extraFareOperator) {
         this.predicate = predicate;
         this.extraFareOperator = extraFareOperator;
     }
@@ -40,6 +40,14 @@ public enum FarePolicy {
         return extraFare;
     }
 
+    /**
+     * 추가 운임에 대한 거리에 따른 계산 메서드
+     *
+     * @param start 시작 위치
+     * @param end   도착 위치
+     * @param unit  추가 운임의 단위거리
+     * @return 거리에 따른 추가운임
+     */
     private static int calculateExtraFare(int start, int end, int unit) {
         return (int) ((Math.ceil((end - start - 1) / unit) + 1) * 100);
     }

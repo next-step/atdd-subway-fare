@@ -12,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthAcceptanceTest extends AcceptanceTest {
 
-
     @DisplayName("Bearer Auth")
     @Test
     void bearerAuth() {

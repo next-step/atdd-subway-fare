@@ -25,7 +25,7 @@ public class SectionsTest {
         // Given
         강남역 = new Station("강남역");
         역삼역 = new Station("역삼역");
-        이호선 = new Line("2호선", "green");
+        이호선 = new Line("2호선", "green", 0);
 
         ArrayList<Section> initialSection = new ArrayList<>();
         initialSection.add(new Section(이호선, 강남역, 역삼역, 10, 10));

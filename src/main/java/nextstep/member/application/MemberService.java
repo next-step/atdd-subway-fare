@@ -17,18 +17,22 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public Member getMember(Long id) {
+        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
     public MemberResponse createMember(MemberRequest request) {
         Member member = memberRepository.save(request.toMember());
         return MemberResponse.of(member);
     }
 
     public MemberResponse findMember(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        Member member = getMember(id);
         return MemberResponse.of(member);
     }
 
     public void updateMember(Long id, MemberRequest param) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        Member member = getMember(id);
         member.update(param.toMember());
     }
 

@@ -171,4 +171,11 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int getMaxSurcharge() {
+        return sections.stream()
+                .mapToInt(section -> section.getLine().getSurcharge())
+                .max()
+                .orElse(0);
+    }
 }
