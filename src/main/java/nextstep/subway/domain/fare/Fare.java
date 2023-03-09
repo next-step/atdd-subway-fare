@@ -1,15 +1,24 @@
 package nextstep.subway.domain.fare;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Fare {
-    private final List<FarePolicy> farePolicies;
+    private static final int BASIC_FARE = 1_250;
 
-    public Fare() {
-        this.farePolicies = List.of(new BasicFare(), new OverTenKmFare(), new OverFiftyKmFare());
+    private final List<FarePolicy> farePolicies = new ArrayList<>();
+
+    public int calculateFare() {
+        int fare = BASIC_FARE;
+
+        for (FarePolicy farePolicy : farePolicies) {
+            fare = farePolicy.calculateOverFare(fare);
+        }
+
+        return fare;
     }
 
-    public int calculateFare(int distance) {
-        return farePolicies.stream().mapToInt(farePolicy -> farePolicy.calculateOverFare(distance)).sum();
+    public void addPolicy(FarePolicy farePolicy) {
+        farePolicies.add(farePolicy);
     }
 }

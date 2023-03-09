@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_후_로그인;
 import static nextstep.subway.acceptance.PathSteps.로그인_상태로_타입별_최단_경로_조회_요청;
 import static nextstep.subway.acceptance.PathSteps.타입별_최단_경로_조회_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -49,7 +49,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 3);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 4);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 900, 강남역, 양재역, 10, 4);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, 남부터미널역, 양재역, 3, 4);
@@ -113,7 +113,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(7),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(20),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_450)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(2_350)
         );
     }
 
@@ -146,7 +146,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance_WithTeenagerDiscount() {
         // given
-        String 회원토큰 = 회원_생성_요청("13YearsOld@email.com", "passwd", 13).jsonPath().getString("accessToken");
+        String 회원토큰 = 회원_생성_후_로그인("13YearsOld@email.com", "passwd", 13).jsonPath().getString("accessToken");
 
         // when
         ExtractableResponse<Response> response = 로그인_상태로_타입별_최단_경로_조회_요청(회원토큰, 교대역, 판교역, ShortestPathType.DISTANCE);
@@ -169,7 +169,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance_WithChildDiscount() {
         // given
-        String 회원토큰 = 회원_생성_요청("12YearsOld@email.com", "passwd", 12).jsonPath().getString("accessToken");
+        String 회원토큰 = 회원_생성_후_로그인("12YearsOld@email.com", "passwd", 12).jsonPath().getString("accessToken");
 
         // when
         ExtractableResponse<Response> response = 로그인_상태로_타입별_최단_경로_조회_요청(회원토큰, 교대역, 판교역, ShortestPathType.DISTANCE);
@@ -179,7 +179,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역, 판교역),
                 () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(28),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(25),
-                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(665)
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(1_050)
         );
     }
 }

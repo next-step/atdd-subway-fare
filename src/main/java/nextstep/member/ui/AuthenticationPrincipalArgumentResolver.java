@@ -11,9 +11,11 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+    public static final int LOGOUT_USER_AGE = 20;
     private JwtTokenProvider jwtTokenProvider;
 
     public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
@@ -27,15 +29,23 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        boolean required = Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)).required();
+
         String authorization = webRequest.getHeader("Authorization");
+
+        if (!required && authorization == null) {
+            return new LoginMember(null, LOGOUT_USER_AGE, List.of());
+        }
+
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
         String token = authorization.split(" ")[1];
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
+        int age = jwtTokenProvider.getAge(token);
         List<String> roles = jwtTokenProvider.getRoles(token);
 
-        return new LoginMember(id, roles);
+        return new LoginMember(id, age, roles);
     }
 }

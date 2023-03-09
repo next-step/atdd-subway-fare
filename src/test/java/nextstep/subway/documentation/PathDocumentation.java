@@ -16,6 +16,8 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -27,7 +29,6 @@ public class PathDocumentation extends Documentation {
 
     private Long sourceId = 1L;
     private Long targetId = 2L;
-    private String accessToken = "Bearer asdfasdfasdfkuoivcivjwiejtiw35jaksjdfaisdf93";
 
     @DisplayName("최단 거리 경로를 조회하고 문서화한다")
     @Test
@@ -37,7 +38,7 @@ public class PathDocumentation extends Documentation {
                 List.of(new StationResponse(sourceId, "강남역"),
                         new StationResponse(targetId, "역삼역")),
                 10, 3, 1250);
-        when(pathService.findPath(any())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), any())).thenReturn(pathResponse);
 
         // when
         createDocumentationRequest("pathDistance", sourceId, targetId, ShortestPathType.DISTANCE);
@@ -58,7 +59,27 @@ public class PathDocumentation extends Documentation {
                 List.of(new StationResponse(sourceId, "강남역"),
                         new StationResponse(targetId, "역삼역")),
                 15, 3, 1350);
-        when(pathService.findPath(any())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), any())).thenReturn(pathResponse);
+
+        // when
+        createDocumentationRequest("pathTime", sourceId, targetId, ShortestPathType.TIME);
+        var response = 타입별_최단_경로_조회_요청(spec);
+
+        // then
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getList("stations.id")).containsExactly(1, 2)
+        );
+    }
+
+    @DisplayName("최단 시간 경로를 조회하고 문서화한다")
+    @Test
+    void findPath_WithShortestTimePathAndLogin() {
+        PathResponse pathResponse = PathResponse.of(
+                List.of(new StationResponse(sourceId, "강남역"),
+                        new StationResponse(targetId, "역삼역")),
+                15, 3, 1350);
+        when(pathService.findPath(any(), any())).thenReturn(pathResponse);
 
         // when
         createDocumentationRequest("pathTime", sourceId, targetId, ShortestPathType.TIME);
@@ -72,9 +93,9 @@ public class PathDocumentation extends Documentation {
     }
 
     private void createDocumentationRequest(String identifier, Long sourceId, Long targetId, ShortestPathType type) {
-        spec.auth().oauth2(accessToken)
+        spec
                 .queryParams("source", sourceId, "target", targetId, "type", type)
-                .filter(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                .filter(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), requestHeaders(headerWithName("Authorization").description("인증 토큰 (optional)").optional()),
                         requestParameters(
                                 parameterWithName("source").description("Departure station information."),
                                 parameterWithName("target").description("Destination station information."),
