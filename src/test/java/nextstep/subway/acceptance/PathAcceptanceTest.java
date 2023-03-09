@@ -79,6 +79,32 @@ class PathAcceptanceTest extends AcceptanceTest {
         두_역의_최소_시간_경로_조회를_검증(response, 5L, 12L, 1250);
     }
 
+    /**
+     * when 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * and 추가 요금이 있는 노선을 이용 할 경우
+     * then 측정된 요금에 추가한다
+     */
+    @DisplayName("추가 요금이 있는 노선을 이용 할 경우 측정된 요금에 추가한다.")
+    @Test
+    void findPathByTimeAdditionalFare() {
+        // when
+
+        // then
+    }
+
+    /**
+     * when 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청
+     * and 경로 중 추가요금이 있는 노선을 환승 하여 이용 할 경우
+     * then 가장 높은 금액의 추가 요금만 적용한다
+     */
+    @DisplayName("경로 중 추가요금이 있는 노선을 환승 하여 이용 할 경우 가장 높은 금액의 추가 요금만 적용한다.")
+    @Test
+    void findPathByTimeAdditionalFareOnlyHighestAmount() {
+        // when
+
+        // then
+    }
+
     @DisplayName("경로 조회 예외 처리 기능")
     @Nested
     class PathExceptionTest {
