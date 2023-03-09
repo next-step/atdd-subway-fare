@@ -28,6 +28,6 @@ public class Path {
     }
 
     public int calculateFare() {
-        return farePolicy.apply(extractDistance());
+        return farePolicy.apply(this);
     }
 }
