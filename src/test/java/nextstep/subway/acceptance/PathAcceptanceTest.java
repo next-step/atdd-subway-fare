@@ -6,6 +6,8 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경�
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_검증;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.정상_요청이_아닐_경우_예외_처리한다;
+import static nextstep.subway.acceptance.PathSteps.추가_요금이_있는_노선을_이용_할_경우_측정된_요금에_추가한다;
+import static nextstep.subway.acceptance.PathSteps.추가요금이_있는_노선을_환승_하여_이용_할_경우_가장_높은_금액의_추가_요금만_적용한다;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +76,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         두_역의_경로_조회_검증(response, 교대역, 남부터미널역, 양재역);
 
         // and
-        두_역의_최소_시간_경로_조회를_검증(response, 5L, 12L, 1250);
+        두_역의_최소_시간_경로_조회를_검증(response, 5L, 12L, 1450);
     }
 
     /**
@@ -86,8 +88,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByTimeAdditionalFare() {
         // when
+        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 남부터미널역);
 
         // then
+        추가_요금이_있는_노선을_이용_할_경우_측정된_요금에_추가한다(response, 1450);
     }
 
     /**
@@ -99,8 +103,10 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByTimeAdditionalFareOnlyHighestAmount() {
         // when
+        var response = 두_역의_최소_시간_경로_조회를_요청(남부터미널역, 강남역);
 
         // then
+        추가요금이_있는_노선을_환승_하여_이용_할_경우_가장_높은_금액의_추가_요금만_적용한다(response, 2250);
     }
 
     @DisplayName("경로 조회 예외 처리 기능")
