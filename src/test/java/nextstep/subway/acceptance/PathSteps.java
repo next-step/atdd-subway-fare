@@ -19,6 +19,21 @@ public class PathSteps {
         return 경로_찾기_문서화(RestAssured.given(), null, source, target, DISTANCE);
     }
 
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(
+            final Long source,
+            final Long target,
+            final String accessToken
+    ) {
+        return RestAssured.given()
+                .auth().oauth2(accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", DISTANCE)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(final Long source, final Long target) {
         return 경로_찾기_문서화(RestAssured.given(), null, source, target, DURATION);
     }
