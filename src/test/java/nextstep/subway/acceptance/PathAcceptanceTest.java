@@ -44,10 +44,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         정자역 = 지하철역_생성_요청("정자역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 10, 0);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 10, 900);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 10, 400);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 2, 200);
-        팔호선 = 지하철_노선_생성_요청("8호선", "yellow", 남부터미널역, 양재역, 3, 10, 900);
+        팔호선 = 지하철_노선_생성_요청("8호선", "yellow", 남부터미널역, 양재역, 3, 10, 0);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -88,7 +88,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByTimeAdditionalFare() {
         // when
-        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 남부터미널역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 남부터미널역);
 
         // then
         추가_요금이_있는_노선을_이용_할_경우_측정된_요금에_추가한다(response, 1450);
@@ -103,7 +103,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByTimeAdditionalFareOnlyHighestAmount() {
         // when
-        var response = 두_역의_최소_시간_경로_조회를_요청(남부터미널역, 강남역);
+        var response = 두_역의_최단_거리_경로_조회를_요청(남부터미널역, 강남역);
 
         // then
         추가요금이_있는_노선을_환승_하여_이용_할_경우_가장_높은_금액의_추가_요금만_적용한다(response, 2250);
