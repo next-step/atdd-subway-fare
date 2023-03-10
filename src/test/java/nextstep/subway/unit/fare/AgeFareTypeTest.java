@@ -1,5 +1,6 @@
-package nextstep.subway.domain.fare;
+package nextstep.subway.unit.fare;
 
+import nextstep.subway.domain.fare.AgeFareType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
