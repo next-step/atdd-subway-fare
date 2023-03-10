@@ -12,6 +12,6 @@ public class LinePolicy implements FarePolicy {
 
     @Override
     public Fare addFare(Fare fare, FareBasis fareBasis) {
-        return fare.addExtraLineFare(fareBasis.getLineCharge());
+        return fare.addExtraLineFare(fareBasis.getLineFare());
     }
 }

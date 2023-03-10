@@ -3,12 +3,12 @@ package nextstep.subway.domain.fare;
 public class FareBasis {
     private int distance;
     private int age;
-    private int lineCharge;
+    private int lineFare;
 
-    public FareBasis(int distance, int age, int lineCharge) {
+    public FareBasis(int distance, int age, int lineFare) {
         this.distance = distance;
         this.age = age;
-        this.lineCharge = lineCharge;
+        this.lineFare = lineFare;
     }
 
     public int getDistance() {
@@ -19,7 +19,7 @@ public class FareBasis {
         return age;
     }
 
-    public int getLineCharge() {
-        return lineCharge;
+    public int getLineFare() {
+        return lineFare;
     }
 }
