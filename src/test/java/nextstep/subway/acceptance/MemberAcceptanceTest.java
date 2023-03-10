@@ -68,7 +68,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("내 정보를 조회한다.")
     @Test
     void getMyInfo() {
-        String accessToken = 베어러_로그인_성공_토큰_발급됨(EMAIL, PASSWORD);
+        String accessToken = 베어러_로그인_성공_토큰_발급됨(ADMIN, PASSWORD);
 
         ExtractableResponse<Response> response = 회원_정보_조회_요청(accessToken);
 
