@@ -100,7 +100,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @ParameterizedTest
     @CsvSource(value = {
             "DURATION, 1450",
-            "DISTANCE, 1250"
+            "DISTANCE, 1550"
     })
     void findPathAndCalculateFare(PathType pathType, int expectedFare) {
         // when
