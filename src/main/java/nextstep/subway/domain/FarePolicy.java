@@ -8,9 +8,9 @@ public enum FarePolicy {
 	BASIC(distance -> distance > 0,
 		distance -> 1_250),
 	OVER_10KM_AND_UNDER_50KM(distance -> distance > 10,
-		distance -> (distance - 10 / 5) * 100),
+		distance -> ((1 + Math.min((distance - 10), 39) / 5) * 100)),
 	OVER_50KM(distance -> distance > 50,
-		distance -> (distance - 50 / 8) * 100);
+		distance -> ((1 + (distance - 50) / 8) * 100));
 
 	private final IntPredicate condition;
 	private final IntFunction<Integer> calculate;
