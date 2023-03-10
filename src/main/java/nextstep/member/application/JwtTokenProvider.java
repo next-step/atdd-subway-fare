@@ -38,7 +38,7 @@ public class JwtTokenProvider {
     }
 
     public int getAge(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age", int.class);
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age", Integer.class);
     }
 
     public boolean validateToken(String token) {
