@@ -195,6 +195,19 @@ public class Sections {
     public List<Section> getOppositeSections() {
         return sections.stream()
                 .map(section -> new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private List<Line> getLines() {
+        return this.sections.stream()
+                .map(Section::getLine)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public int extraFare() {
+        return getLines().stream()
+                .mapToInt(Line::getExtraFare)
+                .max()
+                .orElse(0);
     }
 }
