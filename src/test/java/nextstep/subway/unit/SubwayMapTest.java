@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.assertj.core.util.Lists;
@@ -47,7 +48,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, "DISTANCE");
+        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -60,7 +61,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, "DISTANCE");
+        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));
