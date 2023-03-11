@@ -14,41 +14,32 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPathOfMinimumDistance(Station source, Station target) {
+    public Path findPath(Station source, Station target, String type) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
         registerStation(graph);
         registerSection(graph);
 
         // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
+        if (type.equals("DISTANCE")) {
+            lines.stream()
+                    .flatMap(it -> it.getSections().stream())
+                    .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                    .forEach(it -> {
+                        SectionEdge sectionEdge = SectionEdge.of(it);
+                        graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                        graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    });
+        } else {
+            lines.stream()
+                    .flatMap(it -> it.getSections().stream())
+                    .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                    .forEach(it -> {
+                        SectionEdge sectionEdge = SectionEdge.of(it);
+                        graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                        graph.setEdgeWeight(sectionEdge, it.getDuration());
+                    });
+        }
 
-        Path minimumPath = getMinimumPath(source, target, graph);
-        return minimumPath;
-    }
-
-
-
-    public Path findPathOfMinimumDuration(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
-        registerStation(graph);
-        registerSection(graph);
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDuration());
-                });
 
         Path minimumPath = getMinimumPath(source, target, graph);
         return minimumPath;

@@ -1,7 +1,6 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.applicaion.dto.PathMinimumDistanceResponse;
-import nextstep.subway.applicaion.dto.PathMinimumDurationResponse;
+import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
@@ -20,23 +19,14 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathMinimumDistanceResponse findPathOfMinimumDistance(Long source, Long target) {
+    public PathResponse findPath(Long source, Long target, String type) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPathOfMinimumDistance(upStation, downStation);
+        Path path = subwayMap.findPath(upStation, downStation, type);
 
-        return PathMinimumDistanceResponse.of(path);
+        return PathResponse.of(path);
     }
 
-    public PathMinimumDurationResponse findPathOfMinimumDuration(Long source, Long target) {
-        Station upStation = stationService.findById(source);
-        Station downStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPathOfMinimumDuration(upStation, downStation);
-
-        return PathMinimumDurationResponse.of(path);
-    }
 }
