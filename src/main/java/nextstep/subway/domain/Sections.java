@@ -27,8 +27,8 @@ public class Sections {
 
     public int getDistance() {
         return sections.stream()
-                .map(Section::getDistance)
-                .reduce(0, Integer::sum);
+                .mapToInt(Section::getDistance)
+                .sum();
     }
 
     public int getDuration() {

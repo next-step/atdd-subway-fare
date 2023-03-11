@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,6 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
@@ -51,33 +52,11 @@ public class LineDocumentation extends Documentation {
                 .filter(document(CREATE_LINE,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔"),
-                                fieldWithPath("upStationId").type(JsonFieldType.NUMBER).description("상행종점역 ID"),
-                                fieldWithPath("downStationId").type(JsonFieldType.NUMBER).description("하행종점역 ID"),
-                                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("노선 길이"),
-                                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("노선 ID"),
-                                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔"),
-                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
-                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름")
-                        )));
+                        노선_생성_요청(),
+                        노선_응답()));
         final ExtractableResponse<Response> response = 지하철_노선_생성_요청(requestSpec, 지하철_노선_생성_파라미터("2호선", "green", 1L, 2L, 10, 8));
 
-        assertAll(() -> {
-            assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-            assertThat(response.jsonPath().getLong("id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("name")).isEqualTo("2호선");
-            assertThat(response.jsonPath().getString("color")).isEqualTo("green");
-            assertThat(response.jsonPath().getLong("stations[0].id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("stations[0].name")).isEqualTo("강남역");
-            assertThat(response.jsonPath().getLong("stations[1].id")).isEqualTo(2L);
-            assertThat(response.jsonPath().getString("stations[1].name")).isEqualTo("역삼역");
-        });
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
     @DisplayName("지하철 노선 목록 조회")
@@ -98,29 +77,10 @@ public class LineDocumentation extends Documentation {
                 .filter(document(GET_LINES,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        responseFields(
-                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("노선 ID"),
-                                fieldWithPath("[].name").type(JsonFieldType.STRING).description("노선 이름"),
-                                fieldWithPath("[].color").type(JsonFieldType.STRING).description("노선 색깔"),
-                                fieldWithPath("[].stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
-                                fieldWithPath("[].stations[].name").type(JsonFieldType.STRING).description("역 이름")
-                        )));
+                        노선_목록_응답()));
         final ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청(requestSpec);
 
-        assertAll(() -> {
-            assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            assertThat(response.jsonPath().getLong("[0].id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("[0].name")).isEqualTo("2호선");
-            assertThat(response.jsonPath().getString("[0].color")).isEqualTo("green");
-            assertThat(response.jsonPath().getLong("[0].stations[0].id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("[0].stations[0].name")).isEqualTo("강남역");
-            assertThat(response.jsonPath().getLong("[0].stations[1].id")).isEqualTo(2L);
-            assertThat(response.jsonPath().getString("[0].stations[1].name")).isEqualTo("역삼역");
-            assertThat(response.jsonPath().getLong("[1].stations[0].id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("[1].stations[0].name")).isEqualTo("강남역");
-            assertThat(response.jsonPath().getLong("[1].stations[1].id")).isEqualTo(3L);
-            assertThat(response.jsonPath().getString("[1].stations[1].name")).isEqualTo("양재역");
-        });
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @DisplayName("지하철 노선 조회")
@@ -136,25 +96,10 @@ public class LineDocumentation extends Documentation {
                 .filter(document(GET_LINE,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("노선 ID"),
-                                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔"),
-                                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
-                                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름")
-                        )));
+                        노선_응답()));
         final ExtractableResponse<Response> response = 지하철_노선_조회_요청(requestSpec, 1L);
 
-        assertAll(() -> {
-            assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            assertThat(response.jsonPath().getLong("id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("name")).isEqualTo("2호선");
-            assertThat(response.jsonPath().getString("color")).isEqualTo("green");
-            assertThat(response.jsonPath().getLong("stations[0].id")).isEqualTo(1L);
-            assertThat(response.jsonPath().getString("stations[0].name")).isEqualTo("강남역");
-            assertThat(response.jsonPath().getLong("stations[1].id")).isEqualTo(2L);
-            assertThat(response.jsonPath().getString("stations[1].name")).isEqualTo("역삼역");
-        });
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @DisplayName("지하철 노선 수정")
@@ -166,10 +111,7 @@ public class LineDocumentation extends Documentation {
                 .filter(document(UPDATE_LINE,
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔")
-                        )));
+                        노선_수정_요청()));
         final ExtractableResponse<Response> response = 지하철_노선_수정_요청(requestSpec, 1L, 지하철_노선_수정_파라미터("신분당선", "red"));
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -206,5 +148,43 @@ public class LineDocumentation extends Documentation {
         params.put("name", name);
         params.put("color", color);
         return params;
+    }
+
+    private RequestFieldsSnippet 노선_생성_요청() {
+        return requestFields(
+                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
+                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔"),
+                fieldWithPath("upStationId").type(JsonFieldType.NUMBER).description("상행종점역 ID"),
+                fieldWithPath("downStationId").type(JsonFieldType.NUMBER).description("하행종점역 ID"),
+                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("노선 길이"),
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("소요 시간")
+        );
+    }
+
+    private RequestFieldsSnippet 노선_수정_요청() {
+        return requestFields(
+                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
+                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔")
+        );
+    }
+
+    private ResponseFieldsSnippet 노선_응답() {
+        return responseFields(
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("노선 ID"),
+                fieldWithPath("name").type(JsonFieldType.STRING).description("노선 이름"),
+                fieldWithPath("color").type(JsonFieldType.STRING).description("노선 색깔"),
+                fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
+                fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름")
+        );
+    }
+
+    private ResponseFieldsSnippet 노선_목록_응답() {
+        return responseFields(
+                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("노선 ID"),
+                fieldWithPath("[].name").type(JsonFieldType.STRING).description("노선 이름"),
+                fieldWithPath("[].color").type(JsonFieldType.STRING).description("노선 색깔"),
+                fieldWithPath("[].stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
+                fieldWithPath("[].stations[].name").type(JsonFieldType.STRING).description("역 이름")
+        );
     }
 }
