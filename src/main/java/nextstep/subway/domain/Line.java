@@ -10,7 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
-    private Integer additionalFare;
+    private int additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -22,7 +22,7 @@ public class Line {
         this(name, color, 0);
     }
 
-    public Line(String name, String color, Integer additionalFare) {
+    public Line(String name, String color, int additionalFare) {
         this.name = name;
         this.color = color;
         this.additionalFare = additionalFare;
@@ -44,7 +44,7 @@ public class Line {
         return sections.getSections();
     }
 
-    public Integer getAdditionalFare() {
+    public int getAdditionalFare() {
         return additionalFare;
     }
 
