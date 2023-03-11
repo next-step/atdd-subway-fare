@@ -95,7 +95,7 @@ public class PathDocumentation extends Documentation {
     private void createDocumentationRequest(String identifier, Long sourceId, Long targetId, ShortestPathType type) {
         spec
                 .queryParams("source", sourceId, "target", targetId, "type", type)
-                .filter(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), requestHeaders(headerWithName("Authorization").description("인증 토큰 (optional)").optional()),
+                .filter(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), requestHeaders(headerWithName("Authorization").description("Optional Authentication Token.").optional()),
                         requestParameters(
                                 parameterWithName("source").description("Departure station information."),
                                 parameterWithName("target").description("Destination station information."),
