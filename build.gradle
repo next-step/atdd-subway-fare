@@ -33,6 +33,7 @@ dependencies {
 
     // rest docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
+    // RestAssured + RestDocs
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured:2.0.5.RELEASE'
 
     // test
@@ -43,14 +44,17 @@ dependencies {
 }
 
 ext {
+    // 1. 테스트의 결과물(스니펫)을 저장할 경로를 지정합니다.
     snippetsDir = file('build/generated-snippets')
 }
 
 test {
     useJUnitPlatform()
+    // 2. `snippetsDir`로 설정한 디렉토리에 생성된 스니펫을 저장합니다.
     outputs.dir snippetsDir
 }
 
+// 문서화 테스트만 수행할 수 있게 분리
 task testDocument(type: Test) {
     useJUnitPlatform()
     filter {
@@ -59,21 +63,30 @@ task testDocument(type: Test) {
 }
 
 asciidoctor {
+    // 4. 저장된 스니펫들을 가지고 Adoc -> HTML 문서화 진행
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
-    dependsOn test
+    dependsOn test // test 실행 후 -> asciidoctor 실행 (의존)
 }
 
-bootJar {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
+asciidoctor.doFirst {
+    // 3. 새로운 docs를 생성하기 전, 기존 docs 파일을 삭제합니다.
+    delete file('src/main/resources/static/docs')
 }
 
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
 
+    // 5. from에 생성된 docs 파일들을 into 경로에 복사합니다. (로컬에서 애플리케이션 실행 후 문서 확인 가능)
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
+
+    // 6. Jar 파일로 패키징(빌드) 시, 생성된 outputDir 경로의 HTML 파일을 static/docs 폴더로 복사합니다. (배포 후 문서 접근을 위한 작업)
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }

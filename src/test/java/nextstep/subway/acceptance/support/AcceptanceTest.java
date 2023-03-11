@@ -1,4 +1,4 @@
-package nextstep.subway.acceptance;
+package nextstep.subway.acceptance.support;
 
 import nextstep.subway.utils.DataLoader;
 import nextstep.subway.utils.DatabaseCleanup;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.support.MemberSteps.베어러_인증_로그인_요청;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -20,7 +20,7 @@ public class AcceptanceTest {
     @Autowired
     private DataLoader dataLoader;
 
-    String 관리자;
+    protected String 관리자;
 
     @BeforeEach
     public void setUp() {
