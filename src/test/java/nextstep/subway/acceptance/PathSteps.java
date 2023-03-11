@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.MediaType;
@@ -61,8 +62,17 @@ public class PathSteps {
 		return params;
 	}
 
+	public static void 경로의_요금을_검증함(ExtractableResponse<Response> response, int fare) {
+		assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+	}
+
 	public static void 시간_총합과_거리_총합이_조회됨(ExtractableResponse<Response> response, int sumOfDuration, int sumOfDistance) {
 		assertThat(response.jsonPath().getInt("duration")).isEqualTo(sumOfDuration);
 		assertThat(response.jsonPath().getInt("distance")).isEqualTo(sumOfDistance);
+	}
+
+	public static void 경로의_역_목록을_검증함(ExtractableResponse<Response> response, List<Long> stations) {
+		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(
+			stations.toArray(new Long[stations.size()]));
 	}
 }

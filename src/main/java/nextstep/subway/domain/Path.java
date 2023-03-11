@@ -4,9 +4,11 @@ import java.util.List;
 
 public class Path {
 	private Sections sections;
+	private Fare fare;
 
 	public Path(Sections sections) {
 		this.sections = sections;
+		this.fare = Fare.of(extractDistance());
 	}
 
 	public Sections getSections() {
@@ -23,5 +25,9 @@ public class Path {
 
 	public int extractDuration() {
 		return sections.totalDuration();
+	}
+
+	public int calculateFare() {
+		return fare.getFare();
 	}
 }

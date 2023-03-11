@@ -11,11 +11,11 @@
 
 === 최단 경로 경로 조회 - 성공
 
-operation::path/distance/success[snippets='http-request,http-response']
+operation::path/distance/success[snippets='http-request,http-response,request-parameters,response-fields']
 
 === 최소 시간 경로 조회 - 성공
 
-operation::path/duration/success[snippets='http-request,http-response']
+operation::path/duration/success[snippets='http-request,http-response,request-parameters,response-fields']
 
 === 최단 경로 경로 조회 - 실패
 
