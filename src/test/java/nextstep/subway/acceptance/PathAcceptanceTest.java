@@ -98,7 +98,23 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
      */
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void test1() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+    }
+
+    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths/minimum-duration?source={sourceId}&target={targetId}", source, target)
+                .then().log().all().extract();
+    }
 
 
 
