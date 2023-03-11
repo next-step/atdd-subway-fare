@@ -12,7 +12,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("findType", findType)
+                .queryParam("type", findType)
                 .when().get("/paths")
                 .then().log().all()
                 .extract();
