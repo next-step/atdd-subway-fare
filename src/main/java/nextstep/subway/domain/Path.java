@@ -1,9 +1,9 @@
 package nextstep.subway.domain;
 
 import nextstep.member.domain.LoginMember;
-import nextstep.subway.domain.fare.AgeFare;
+import nextstep.subway.domain.fare.DiscountFareByAgeGroup;
 import nextstep.subway.domain.fare.DistanceFare;
-import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FareHandler;
 import nextstep.subway.domain.fare.LineWithExtraFarePolicy;
 
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.List;
 public class Path {
     private final Sections sections;
 
-    private final Fare fare;
+    private final FareHandler fareHandler;
 
-    public Path(Sections sections, Fare fare) {
+    public Path(Sections sections, FareHandler fareHandler) {
         this.sections = sections;
-        this.fare = fare;
+        this.fareHandler = fareHandler;
     }
 
     public Sections getSections() {
@@ -35,12 +35,12 @@ public class Path {
     }
 
     public int calculateFare() {
-        return fare.calculateFare();
+        return fareHandler.calculateFare();
     }
 
     public void calculateFare(LoginMember loginMember) {
-        fare.addPolicy(new DistanceFare(extractDistance()));
-        fare.addPolicy(new LineWithExtraFarePolicy(sections.getAdditionalFare()));
-        fare.addPolicy(new AgeFare(loginMember.getAge()));
+        fareHandler.addPolicy(new DistanceFare(extractDistance()));
+        fareHandler.addPolicy(new LineWithExtraFarePolicy(sections.getAdditionalFare()));
+        fareHandler.addPolicy(new DiscountFareByAgeGroup(loginMember.getAge()));
     }
 }

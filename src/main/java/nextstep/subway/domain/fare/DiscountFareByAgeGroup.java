@@ -1,6 +1,6 @@
 package nextstep.subway.domain.fare;
 
-public class AgeFare implements FarePolicy {
+public class DiscountFareByAgeGroup implements FarePolicy {
     public static final int CHILDREN_AGE_MIN = 6;
     public static final int CHILDREN_AGE_MAX = 13;
     public static final int TEENAGER_AGE_MIN = 13;
@@ -10,7 +10,7 @@ public class AgeFare implements FarePolicy {
     public static final double TEENAGER_DISCOUNT_RATE = 0.8;
     private final int age;
 
-    public AgeFare(int age) {
+    public DiscountFareByAgeGroup(int age) {
         this.age = age;
     }
 

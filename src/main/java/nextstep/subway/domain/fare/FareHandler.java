@@ -3,7 +3,7 @@ package nextstep.subway.domain.fare;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fare {
+public class FareHandler {
     private static final int BASIC_FARE = 1_250;
 
     private final List<FarePolicy> farePolicies = new ArrayList<>();
