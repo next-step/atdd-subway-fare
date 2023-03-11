@@ -3,6 +3,7 @@ package nextstep.member.ui;
 import nextstep.member.application.JwtTokenProvider;
 import nextstep.member.domain.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.NonLoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -15,7 +16,6 @@ import java.util.Objects;
 
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    public static final int LOGOUT_USER_AGE = 20;
     private JwtTokenProvider jwtTokenProvider;
 
     public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
@@ -34,7 +34,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String authorization = webRequest.getHeader("Authorization");
 
         if (!required && authorization == null) {
-            return new LoginMember(null, LOGOUT_USER_AGE, List.of());
+            return NonLoginMember.INSTANCE;
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {

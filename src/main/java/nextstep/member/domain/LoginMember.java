@@ -3,9 +3,12 @@ package nextstep.member.domain;
 import java.util.List;
 
 public class LoginMember {
-    private final Long id;
-    private final int age;
-    private final List<String> roles;
+    private Long id;
+    private int age;
+    private List<String> roles;
+
+    public LoginMember() {
+    }
 
     public LoginMember(Long id, int age, List<String> roles) {
         this.id = id;
