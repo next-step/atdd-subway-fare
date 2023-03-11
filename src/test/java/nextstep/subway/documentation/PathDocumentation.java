@@ -2,7 +2,7 @@ package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.applicaion.dto.PathMinimumDistanceResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -22,14 +22,14 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        PathResponse pathResponse = new PathResponse(
+        PathMinimumDistanceResponse pathMinimumDistanceResponse = new PathMinimumDistanceResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
                 ), 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathMinimumDistanceResponse);
 
         RestAssured
                 .given(spec).log().all()
