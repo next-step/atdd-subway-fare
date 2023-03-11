@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,10 @@ import java.util.Map;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -60,7 +66,13 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private ExtractableResponse<Response> 두_역의_경로_조회를_요청(Long source, Long target, String type) {
         return RestAssured
-                .given().log().all()
+                .given(spec).log().all()
+                .filter(document(
+                        type,
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                        )
+                )
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();
