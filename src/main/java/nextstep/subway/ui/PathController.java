@@ -15,7 +15,7 @@ public class PathController {
         this.pathService = pathService;
     }
 
-    @GetMapping("/paths")
+    @GetMapping("/paths/minimum-distance")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
         return ResponseEntity.ok(pathService.findPath(source, target));
     }

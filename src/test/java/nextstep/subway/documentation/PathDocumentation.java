@@ -41,7 +41,7 @@ public class PathDocumentation extends Documentation {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
-                .when().get("/paths")
+                .when().get("/paths/minimum-distance")
                 .then().log().all().extract();
     }
 }
