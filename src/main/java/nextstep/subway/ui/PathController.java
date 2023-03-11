@@ -17,8 +17,8 @@ public class PathController {
     }
 
     @GetMapping("/paths/minimum-distance")
-    public ResponseEntity<PathMinimumDistanceResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPath(source, target));
+    public ResponseEntity<PathMinimumDistanceResponse> findPathOfMinimumDistance(@RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findPathOfMinimumDistance(source, target));
     }
 
     @GetMapping("/paths/minimum-duration")

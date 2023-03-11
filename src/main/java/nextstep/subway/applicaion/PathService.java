@@ -20,12 +20,12 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathMinimumDistanceResponse findPath(Long source, Long target) {
+    public PathMinimumDistanceResponse findPathOfMinimumDistance(Long source, Long target) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
+        Path path = subwayMap.findPathOfMinimumDistance(upStation, downStation);
 
         return PathMinimumDistanceResponse.of(path);
     }

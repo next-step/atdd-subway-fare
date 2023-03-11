@@ -29,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 ), 10
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathMinimumDistanceResponse);
+        when(pathService.findPathOfMinimumDistance(anyLong(), anyLong())).thenReturn(pathMinimumDistanceResponse);
 
         RestAssured
                 .given(spec).log().all()
