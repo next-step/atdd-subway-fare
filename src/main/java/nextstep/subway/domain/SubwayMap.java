@@ -7,23 +7,15 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class SubwayMap {
+public class SubwayMap {
 
-    protected List<Line> lines;
-    protected final SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<Station, SectionEdge>(SectionEdge.class);
+    private final List<Line> lines;
+    private final SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<Station, SectionEdge>(SectionEdge.class);
+    private final FindType findType;
 
-    public SubwayMap(List<Line> lines) {
+    public SubwayMap(final List<Line> lines, final FindType findType) {
         this.lines = lines;
-    }
-
-    public static SubwayMap getMapByFindType(final List<Line> lines, final FindType findType) {
-        if (findType.equals(FindType.DISTANCE)) {
-            return new SubwayDistanceMap(lines);
-        }
-        if (findType.equals(FindType.DURATION)) {
-            return new SubwayDurationMap(lines);
-        }
-        throw new RuntimeException("SubwayMap 생성 불가");
+        this.findType = findType;
     }
 
     public Path findPath(Station source, Station target) {
@@ -49,5 +41,33 @@ public abstract class SubwayMap {
                 .forEach(it -> graph.addVertex(it));
     }
 
-    protected abstract void registerEdge(List<Line> lines);
+    private void registerEdge(final List<Line> lines) {
+        // 지하철 역의 연결 정보(간선)을 등록
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    setEdgeWeight(sectionEdge, it);
+                });
+
+        // 지하철 역의 연결 정보(간선)을 등록
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    setEdgeWeight(sectionEdge, it);
+                });
+    }
+
+    private void setEdgeWeight(final SectionEdge sectionEdge, final Section section) {
+        if (findType.equals(FindType.DISTANCE)) {
+            graph.setEdgeWeight(sectionEdge, section.getDistance());
+        }
+        if (findType.equals(FindType.DURATION)) {
+            graph.setEdgeWeight(sectionEdge, section.getDuration());
+        }
+    }
 }

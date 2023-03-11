@@ -41,7 +41,7 @@ public class SubwayMapTest {
     void findPathWithDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayDistanceMap(lines);
+        final SubwayMap subwayMap = new SubwayMap(lines, FindType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -54,7 +54,7 @@ public class SubwayMapTest {
     void findPathOppositelyWithDistance() {
         // given
         List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        SubwayMap subwayMap = new SubwayDistanceMap(lines);
+        final SubwayMap subwayMap = new SubwayMap(lines, FindType.DISTANCE);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);
@@ -67,7 +67,7 @@ public class SubwayMapTest {
     void findPathWithDuration() {
         // given
         final List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        final SubwayMap subwayMap = new SubwayDurationMap(lines);
+        final SubwayMap subwayMap = new SubwayMap(lines, FindType.DURATION);
 
         // when
         final Path path = subwayMap.findPath(교대역, 양재역);
@@ -80,7 +80,7 @@ public class SubwayMapTest {
     void findPathOppositelyWithDuration() {
         // given
         final List<Line> lines = Lists.newArrayList(신분당선, 이호선, 삼호선);
-        final SubwayMap subwayMap = new SubwayDurationMap(lines);
+        final SubwayMap subwayMap = new SubwayMap(lines, FindType.DURATION);
 
         // when
         Path path = subwayMap.findPath(양재역, 교대역);

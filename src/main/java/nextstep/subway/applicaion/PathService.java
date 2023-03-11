@@ -22,7 +22,7 @@ public class PathService {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        final SubwayMap subwayMap = SubwayMap.getMapByFindType(lines, findType);
+        final SubwayMap subwayMap = new SubwayMap(lines, findType);
         Path path = subwayMap.findPath(upStation, downStation);
 
         return PathResponse.of(path);
