@@ -60,6 +60,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
+        assertThat(path.getFare()).isEqualTo(1250);
     }
 
     @Test
@@ -73,6 +74,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        assertThat(path.getFare()).isEqualTo(1250);
     }
 
     @Test

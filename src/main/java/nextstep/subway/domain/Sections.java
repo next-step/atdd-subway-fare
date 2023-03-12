@@ -9,8 +9,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Embeddable
 public class Sections {
+
+    private static final int BASE_FARE = 1250;
+    private static final int MIDDLE_FULL_FARE = 800;
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -154,5 +159,20 @@ public class Sections {
 
     public int totalDuration() { return sections.stream().mapToInt(Section::getDuration).sum();}
 
-    public int calcurateFare(){ return 1; }
+    public int calculateFare() {
+        int distance = this.totalDistance();
+
+        if (distance <= 10) {
+
+            return BASE_FARE;
+        } else if (distance <= 50) {
+            distance -= 10;
+
+            return BASE_FARE +  (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+        } else {
+            distance -= 50;
+
+            return (int) BASE_FARE + MIDDLE_FULL_FARE + (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+        }
+    }
 }
