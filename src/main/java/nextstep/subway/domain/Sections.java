@@ -153,4 +153,6 @@ public class Sections {
     }
 
     public int totalDuration() { return sections.stream().mapToInt(Section::getDuration).sum();}
+
+    public int calcurateFare(){ return 1; }
 }

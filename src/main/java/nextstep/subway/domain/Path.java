@@ -19,6 +19,8 @@ public class Path {
 
     public int extractDuration() { return sections.totalDuration(); }
 
+    public int calcurateFare(){ return sections.calcurateFare(); }
+
     public List<Station> getStations() {
         return sections.getStations();
     }
