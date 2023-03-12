@@ -16,3 +16,15 @@ operation::DISTANCE[snippets='http-request,http-response']
 === 최소 시간 경로 조회
 
 operation::DURATION[snippets='http-request,http-response']
+
+=== 요금 조회 (5km)
+
+operation::FARE_5[snippets='http-request,http-response']
+
+=== 요금 조회 (15km)
+
+operation::FARE_15[snippets='http-request,http-response']
+
+=== 요금 조회 (58km)
+
+operation::FARE_58[snippets='http-request,http-response']
