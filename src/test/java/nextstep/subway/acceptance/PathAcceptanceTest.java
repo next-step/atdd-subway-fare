@@ -58,6 +58,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 두 역의 최단거리 경로 조회를 요청하면
      * Then 최단거리 기준으로 경로를 응답받는다.
      * And 총 거리와 소요 시간을 함께 응답받는다.
+     * And 최단 거리 기준의 운임 요금을 함께 응답받는다.
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
@@ -66,13 +67,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_경로_조회_요청(교대역, 양재역, DISTANCE_TYPE);
 
         // then
-        경로_조회_검증(response, 2, 20, 교대역, 남부터미널역, 양재역);
+        경로_조회_검증(response, 2, 20, 1250, 교대역, 남부터미널역, 양재역);
     }
 
     /**
      * When 두 역의 최단시간 경로 조회를 요청하면
      * Then 최단거리 기준으로 경로를 응답받는다.
      * And 총 거리와 소요 시간을 함께 응답받는다.
+     * And 최단 거리 기준의 운임 요금을 함께 응답받는다.
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
@@ -81,7 +83,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_경로_조회_요청(교대역, 양재역, DURATION_TYPE);
 
         // then
-        경로_조회_검증(response, 20, 2, 교대역, 강남역, 양재역);
+        경로_조회_검증(response, 20, 2, 1250, 교대역, 강남역, 양재역);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
