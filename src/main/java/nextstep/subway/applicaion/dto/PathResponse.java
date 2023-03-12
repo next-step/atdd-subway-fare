@@ -24,14 +24,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = 0;
-        if (distance == 5) {
-            fare = 1250;
-        } else if (distance == 15) {
-            fare = 1350;
-        } else {
-            fare = 1850;
-        }
+        int fare = path.extractFare();
 
         return new PathResponse(stations, distance, duration, fare);
     }

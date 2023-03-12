@@ -5,7 +5,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +26,7 @@ public class PathTest {
     Sections sections2;
     Sections sections3;
 
+    @BeforeEach
     public void setUp() {
         line = new Line("line", "color");
 
@@ -50,17 +51,17 @@ public class PathTest {
         assertThat(path.extractFare()).isEqualTo(1250);
     }
 
-    @DisplayName("요금을 구한다 (10km 이내)")
+    @DisplayName("요금을 구한다 (10km 초과 ~ 50km 까지)")
     @Test
     void test2() {
-        Path path = new Path(sections1);
+        Path path = new Path(sections2);
         assertThat(path.extractFare()).isEqualTo(1350);
     }
 
-    @DisplayName("요금을 구한다 (10km 이내)")
+    @DisplayName("요금을 구한다 (50km 초과)")
     @Test
     void test3() {
-        Path path = new Path(sections1);
+        Path path = new Path(sections3);
         assertThat(path.extractFare()).isEqualTo(1850);
     }
 
