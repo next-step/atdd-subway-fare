@@ -11,7 +11,7 @@ public class AgePolicy implements FarePolicy {
     }
 
     @Override
-    public Fare addFare(Fare fare, FareBasis fareBasis) {
+    public Fare calculateFare(Fare fare, FareBasis fareBasis) {
         int age = fareBasis.getAge();
         AgeFareType ageFareType = AgeFareType.findByAge(age);
         int discountFare = ageFareType.discountFare(fare.extraTotalFare());
