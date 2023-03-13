@@ -42,7 +42,12 @@ public class LineSteps {
     }
 
     public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams = createLineParams(name, color, upStation, downStation, distance, duration);
+        Map<String, String> lineCreateParams = createLineParams(name, color, 0, upStation, downStation, distance, duration);
+        return 지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+    }
+
+    public static Long 지하철_노선_생성_요청(String name, String color, int additionalFare, Long upStation, Long downStation, int distance, int duration) {
+        Map<String, String> lineCreateParams = createLineParams(name, color, additionalFare, upStation, downStation, distance, duration);
         return 지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
@@ -101,10 +106,11 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    private static Map<String, String> createLineParams(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private static Map<String, String> createLineParams(String name, String color, int additionalFare, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("name", String.valueOf(name));
         params.put("color", String.valueOf(color));
+        params.put("additionalFare", String.valueOf(additionalFare));
         params.put("upStationId", String.valueOf(upStation));
         params.put("downStationId", String.valueOf(downStation));
         params.put("distance", String.valueOf(distance));

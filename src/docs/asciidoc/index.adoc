@@ -13,8 +13,8 @@
 
 === 최단 거리 검색
 
-operation::pathDistance[snippets='http-request,request-parameters,http-response']
+operation::pathDistance[snippets='http-request,request-headers,request-parameters,http-response']
 
 === 최단 시간 검색
 
-operation::pathTime[snippets='http-request,request-parameters,http-response']
+operation::pathTime[snippets='http-request,request-headers,request-parameters,http-response']

@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.common.exception.EntityNotFoundException;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -154,5 +156,13 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int getAdditionalFare() {
+        return sections.stream()
+                .map(Section::getLine)
+                .mapToInt(Line::getAdditionalFare)
+                .max()
+                .orElseThrow(EntityNotFoundException::new);
     }
 }
