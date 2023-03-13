@@ -15,10 +15,10 @@ public class FarePolicies {
     }
 
     public int calculateFare(FareBasis fareBasis) {
-        Fare fare = new Fare();
-        for (FarePolicy farePolicy : this.farePolicies) {
-            fare = farePolicy.addFare(fare, fareBasis);
-        }
-        return fare.extraTotalFare();
+        return this.farePolicies.stream()
+                .reduce(new Fare(),
+                        (fare, farePolicy) -> farePolicy.calculateFare(fare, fareBasis),
+                        (fare1, fare2) -> fare1)
+                .extraTotalFare();
     }
 }
