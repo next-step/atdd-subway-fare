@@ -1,40 +1,25 @@
 package nextstep.subway.domain.fare;
 
 public class Fare {
-    private final int distanceFare;
-    private final int extraLineFare;
-    private final int discountFare;
+    private static final int ZERO_FARE = 0;
+
+    private final int totalFare;
 
     public Fare() {
-        this.distanceFare = 0;
-        this.extraLineFare = 0;
-        this.discountFare = 0;
+        this.totalFare = ZERO_FARE;
     }
 
-    public Fare(int distanceFare, int extraLineFare, int discountFare) {
-        this.distanceFare = distanceFare;
-        this.extraLineFare = extraLineFare;
-        this.discountFare = discountFare;
+    public Fare(int totalFare) {
+        validateMinusFare(totalFare);
+        this.totalFare = totalFare;
     }
 
-    public Fare addDistanceFare(int distanceFare) {
-        validateMinusFare(distanceFare);
-        return new Fare(distanceFare, this.extraLineFare, this.discountFare);
+    public Fare addFare(int extraFare) {
+        return new Fare(this.totalFare + extraFare);
     }
 
-    public Fare addExtraLineFare(int extraLineFare) {
-        validateMinusFare(extraLineFare);
-        return new Fare(this.distanceFare, extraLineFare, this.discountFare);
-    }
-
-    public Fare addDisCountFare(int discountFare) {
-        validateMinusFare(discountFare);
-        return new Fare(this.distanceFare, this.extraLineFare, discountFare);
-    }
-
-
-    public int calculateTotalFare() {
-        return distanceFare + extraLineFare - discountFare;
+    public Fare discountFare(int discountFare) {
+        return new Fare(this.totalFare - discountFare);
     }
 
     private void validateMinusFare(int fare) {
@@ -44,6 +29,6 @@ public class Fare {
     }
 
     public int extraTotalFare() {
-        return this.distanceFare + this.extraLineFare;
+        return this.totalFare;
     }
 }

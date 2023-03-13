@@ -14,6 +14,6 @@ public class DistancePolicy implements FarePolicy {
     public Fare addFare(Fare fare, FareBasis fareBasis) {
         int distance = fareBasis.getDistance();
         int distanceFare = DistanceFareType.calculateFare(distance);
-        return fare.addDistanceFare(distanceFare);
+        return fare.addFare(distanceFare);
     }
 }

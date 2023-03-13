@@ -19,6 +19,6 @@ public class FarePolicies {
         for (FarePolicy farePolicy : this.farePolicies) {
             fare = farePolicy.addFare(fare, fareBasis);
         }
-        return fare.calculateTotalFare();
+        return fare.extraTotalFare();
     }
 }
