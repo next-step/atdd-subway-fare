@@ -7,9 +7,11 @@ public class FarePolicies {
     private final List<FarePolicy> farePolicies = new ArrayList<>();
 
     public FarePolicies() {
-        this.farePolicies.add(DistancePolicy.getInstance());
-        this.farePolicies.add(LinePolicy.getInstance());
-        this.farePolicies.add(AgePolicy.getInstance());
+        farePolicies.addAll(List.of(
+                DistancePolicy.getInstance(),
+                LinePolicy.getInstance(),
+                AgePolicy.getInstance()
+        ));
     }
 
     public int calculateFare(FareBasis fareBasis) {
