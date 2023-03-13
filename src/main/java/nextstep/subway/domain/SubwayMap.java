@@ -19,10 +19,29 @@ public class SubwayMap {
     }
 
     public Path findPath(final Station source, final Station target, final PathType pathType) {
+        return findPath(
+                source, target, pathType,
+                new LineAdditionalFarePolicy(), new DistanceFarePolicy(new BasicDistanceFareFormula())
+        );
+    }
+
+    public Path findPath(final Station source, final Station target, final PathType pathType, final Integer age) {
+        return findPath(
+                source, target, pathType,
+                new LineAdditionalFarePolicy(), new DistanceFarePolicy(new BasicDistanceFareFormula()), new AgeFarePolicy(age)
+        );
+    }
+
+    private Path findPath(
+            final Station source,
+            final Station target,
+            final PathType pathType,
+            final FarePolicy... farePolicies
+    ) {
         WeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
         addVertex(graph);
         addNode(graph, pathType);
-        return findShortestPath(source, target, graph);
+        return findShortestPath(source, target, graph, farePolicies);
     }
 
     private void addVertex(final WeightedGraph<Station, SectionEdge> graph) {
@@ -69,7 +88,8 @@ public class SubwayMap {
     private static Path findShortestPath(
             final Station source,
             final Station target,
-            final WeightedGraph<Station, SectionEdge> graph
+            final WeightedGraph<Station, SectionEdge> graph,
+            final FarePolicy... farePolicies
     ) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
 
@@ -81,7 +101,10 @@ public class SubwayMap {
                     .map(SectionEdge::getSection)
                     .collect(Collectors.toList());
 
-            return new Path(new Sections(sections), new DistanceFarePolicy(new BasicDistanceFareFormula()));
+            return new Path(
+                    new Sections(sections),
+                    farePolicies
+            );
         } catch (IllegalArgumentException exception) {
             throw new PathNotFoundException();
         }

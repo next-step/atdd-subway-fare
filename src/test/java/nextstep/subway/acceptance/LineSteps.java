@@ -67,7 +67,8 @@ public class LineSteps {
             Long upStation,
             Long downStation,
             int distance,
-            int duration
+            int duration,
+            int additionalFare
     ) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
@@ -77,6 +78,7 @@ public class LineSteps {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("additionalFare", additionalFare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
