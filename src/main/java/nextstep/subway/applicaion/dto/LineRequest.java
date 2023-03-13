@@ -3,7 +3,7 @@ package nextstep.subway.applicaion.dto;
 public class LineRequest {
     private String name;
     private String color;
-    private Integer additionalFare;
+    private int additionalFare;
     private Long upStationId;
     private Long downStationId;
     private int distance;
@@ -17,7 +17,7 @@ public class LineRequest {
         return color;
     }
 
-    public Integer getAdditionalFare() {
+    public int getAdditionalFare() {
         return additionalFare;
     }
 
