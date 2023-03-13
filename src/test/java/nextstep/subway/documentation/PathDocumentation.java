@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -45,7 +45,7 @@ public class PathDocumentation extends Documentation {
                                 parameterWithName("target").description("도착역"),
                                 parameterWithName("type").description("경로 조회 타입 (distance | duration)")
                         )));
-        final ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(requestSpec, 1L, 2L, "distance");
+        final ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(requestSpec, 1L, 2L, "distance");
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsOnly(1L, 2L);
