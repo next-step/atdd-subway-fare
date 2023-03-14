@@ -88,7 +88,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         final String fare = response.jsonPath().getString("fare");
-        assertThat(fare.substring(0, fare.length() - 1)).isEqualTo("1550");
+        assertThat(fare.substring(0, fare.length() - 1)).isEqualTo("1250");
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, final int duration) {
