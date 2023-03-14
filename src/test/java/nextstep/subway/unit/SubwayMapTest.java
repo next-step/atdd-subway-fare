@@ -6,6 +6,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -19,9 +20,11 @@ public class SubwayMapTest {
     private Station 강남역;
     private Station 양재역;
     private Station 남부터미널역;
+    private Station 선정릉역;
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+    private Line 구호선;
 
     @BeforeEach
     void setUp() {
@@ -29,15 +32,18 @@ public class SubwayMapTest {
         강남역 = createStation(2L, "강남역");
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
+        선정릉역 = createStation(5L, "선정릉역");
 
         신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        이호선 = new Line("2호선", "green");
+        삼호선 = new Line("3호선", "orange");
+        구호선 = new Line("9호선", "brown", 500);
 
         신분당선.addSection(강남역, 양재역, 20, 4);
         이호선.addSection(교대역, 강남역, 15, 3);
         삼호선.addSection(교대역, 남부터미널역, 8, 3);
         삼호선.addSection(남부터미널역, 양재역, 20, 5);
+        구호선.addSection(양재역, 선정릉역, 10, 3);
     }
 
     @Test
@@ -94,6 +100,21 @@ public class SubwayMapTest {
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 강남역, 교대역));
         assertThat(path.getFare()).isEqualTo(1650);
+    }
+
+    @Test
+    @DisplayName("추가 요금이 있는 노선 이용")
+    void addFareLine() {
+        // given
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선, 구호선);
+        SubwayMap subwayMap = new SubwayMap(lines);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 선정릉역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역, 선정릉역));
+        assertThat(path.getFare()).isEqualTo(2350);
     }
 
     private Station createStation(long id, String name) {
