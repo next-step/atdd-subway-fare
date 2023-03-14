@@ -51,7 +51,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역));
-        assertThat(path.getFare()).isEqualTo(1750);
+        assertThat(path.getFare()).isEqualTo(1650);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 남부터미널역, 교대역));
-        assertThat(path.getFare()).isEqualTo(1750);
+        assertThat(path.getFare()).isEqualTo(1650);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 강남역, 양재역));
-        assertThat(path.getFare()).isEqualTo(1750);
+        assertThat(path.getFare()).isEqualTo(1650);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class SubwayMapTest {
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(List.of(양재역, 강남역, 교대역));
-        assertThat(path.getFare()).isEqualTo(1750);
+        assertThat(path.getFare()).isEqualTo(1650);
     }
 
     private Station createStation(long id, String name) {

@@ -46,7 +46,7 @@ public class DistanceFarePolicyTest {
         final int result = farePolicy.calculator(50);
 
         // then
-        assertThat(result).isEqualTo(DEFAULT_FARE + 900);
+        assertThat(result).isEqualTo(DEFAULT_FARE + 800);
     }
 
     @Test
@@ -56,6 +56,6 @@ public class DistanceFarePolicyTest {
         final int result = farePolicy.calculator(58);
 
         // then
-        assertThat(result).isEqualTo(DEFAULT_FARE + 900 + 200);
+        assertThat(result).isEqualTo(DEFAULT_FARE + 800 + 100);
     }
 }
