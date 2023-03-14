@@ -79,6 +79,6 @@ public class PathServiceTest {
         final PathResponse pathResponse = pathService.findPath(교대역.getId(), 양재역.getId(), FindType.DISTANCE);
 
         // then
-        assertThat(pathResponse.getFare()).isEqualTo(1250);
+        assertThat(pathResponse.getFare()).isEqualTo("1250원");
     }
 }

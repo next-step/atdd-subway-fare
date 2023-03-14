@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
-    private int fare;
+    private String fare;
 
     public PathResponse(List<StationResponse> stations, int distance, int fare) {
         this.stations = stations;
         this.distance = distance;
-        this.fare = fare;
+        this.fare = fare + "원";
     }
 
     public static PathResponse of(Path path) {
@@ -35,7 +35,7 @@ public class PathResponse {
         return distance;
     }
 
-    public int getFare() {
+    public String getFare() {
         return fare;
     }
 }
