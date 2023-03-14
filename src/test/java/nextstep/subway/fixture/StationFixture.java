@@ -12,6 +12,8 @@ import static nextstep.subway.fixture.FieldFixture.역_이름;
 public enum StationFixture {
     강남역,
     역삼역,
+    선릉역,
+    삼성역,
     양재역,
     정자역,
     ;

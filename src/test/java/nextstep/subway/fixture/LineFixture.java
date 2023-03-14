@@ -1,5 +1,7 @@
 package nextstep.subway.fixture;
 
+import nextstep.subway.domain.Line;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,5 +42,9 @@ public enum LineFixture {
         params.put(노선_상행_종점역_ID.필드명(), String.valueOf(상행종점역_id));
         params.put(노선_하행_종점역_ID.필드명(), String.valueOf(하행종점역_id));
         return params;
+    }
+
+    public Line 엔티티_생성() {
+        return new Line(노선_이름(), 노선_색깔());
     }
 }

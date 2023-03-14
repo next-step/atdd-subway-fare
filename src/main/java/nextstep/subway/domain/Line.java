@@ -1,9 +1,21 @@
 package nextstep.subway.domain;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
 
+import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PROTECTED;
+
 @Entity
+@NoArgsConstructor(access = PROTECTED)
+@Getter
 public class Line {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,26 +24,12 @@ public class Line {
     private String color;
 
     @Embedded
-    private Sections sections = new Sections();
+    @Getter(NONE)
+    private final Sections sections = new Sections();
 
-    public Line() {
-    }
-
-    public Line(String name, String color) {
+    public Line(final String name, final String color) {
         this.name = name;
         this.color = color;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
     }
 
     public List<Section> getSections() {
@@ -47,15 +45,19 @@ public class Line {
         }
     }
 
-    public void addSection(Station upStation, Station downStation, int distance) {
+    public void addSection(final Station upStation, final Station downStation, final int distance) {
         sections.add(new Section(this, upStation, downStation, distance));
+    }
+
+    public void addSection(final Station upStation, final Station downStation, final int distance, final int duration) {
+        sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
     public List<Station> getStations() {
         return sections.getStations();
     }
 
-    public void deleteSection(Station station) {
+    public void deleteSection(final Station station) {
         sections.delete(station);
     }
 }

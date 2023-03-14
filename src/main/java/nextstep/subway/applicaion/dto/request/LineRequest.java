@@ -1,29 +1,31 @@
 package nextstep.subway.applicaion.dto.request;
 
+import lombok.Getter;
+
+@Getter
 public class LineRequest {
-    private String name;
-    private String color;
-    private Long upStationId;
-    private Long downStationId;
-    private int distance;
 
-    public String getName() {
-        return name;
-    }
+    private final String name;
 
-    public String getColor() {
-        return color;
-    }
+    private final String color;
 
-    public Long getUpStationId() {
-        return upStationId;
-    }
+    private final Long upStationId;
 
-    public Long getDownStationId() {
-        return downStationId;
-    }
+    private final Long downStationId;
 
-    public int getDistance() {
-        return distance;
+    private final int distance;
+
+    private final int duration;
+
+    public LineRequest(
+            final String name, final String color, final Long upStationId,
+            final Long downStationId, final int distance, final int duration
+    ) {
+        this.name = name;
+        this.color = color;
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
+        this.distance = distance;
+        this.duration = duration;
     }
 }

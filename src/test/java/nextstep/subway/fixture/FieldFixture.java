@@ -11,6 +11,7 @@ public enum FieldFixture {
     노선_상행_종점역_ID("upStationId"),
     노선_하행_종점역_ID("downStationId"),
     구간_거리("distance"),
+    구간_소요시간("duration"),
     노선_내_역_목록("stations"),
     노선_내_역_아이디("stations.id"),
     노선_내_역_이름("stations.name"),
