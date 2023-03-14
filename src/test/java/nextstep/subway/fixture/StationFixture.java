@@ -10,6 +10,7 @@ import java.util.Map;
 import static nextstep.subway.fixture.FieldFixture.역_이름;
 
 public enum StationFixture {
+    교대역,
     강남역,
     역삼역,
     선릉역,

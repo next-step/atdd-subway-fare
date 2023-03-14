@@ -1,5 +1,7 @@
 package nextstep.subway.fixture;
 
+import nextstep.subway.applicaion.dto.request.SectionRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import static nextstep.subway.fixture.FieldFixture.구간_소요시간;
 import static nextstep.subway.fixture.FieldFixture.노선_상행_종점역_ID;
 import static nextstep.subway.fixture.FieldFixture.노선_하행_종점역_ID;
 import static nextstep.subway.fixture.StationFixture.강남역;
+import static nextstep.subway.fixture.StationFixture.교대역;
 import static nextstep.subway.fixture.StationFixture.삼성역;
 import static nextstep.subway.fixture.StationFixture.선릉역;
 import static nextstep.subway.fixture.StationFixture.양재역;
@@ -18,22 +21,23 @@ public enum SectionFixture {
 
     /** [구간 거리] (소요시간은 거리 x 2)
      *
-     *   강남역 --- 7 --- 역삼역 --- 8 --- 선릉역 --- 5 --- 삼성역
-     *     |
-     *     10
-     *     |
-     *   양재역
-     *     |
-     *     6
-     *     |
-     *   정자역
+     *  교대역 --- (6) --- 강남역 --- (7) --- 역삼역 --- (8) --- 선릉역 --- (5) --- 삼성역
+     *                      |
+     *                     (10)
+     *                      |
+     *                    양재역
+     *                      |
+     *                     (6)
+     *                      |
+     *                    정자역
      */
+    교대_강남_구간(6, 12, 교대역, 강남역),
     강남_역삼_구간(7, 14, 강남역, 역삼역),
     역삼_선릉_구간(8, 16, 역삼역, 선릉역),
     선릉_삼성_구간(5, 10, 선릉역, 삼성역),
     강남_삼성_구간(7 + 8 + 5, (7 + 8 + 5) * 2, 강남역, 삼성역),
     역삼_삼성_구간(8 + 5, (8 + 5) * 2, 역삼역, 삼성역),
-    강남_양재_구간(10, 20,강남역, 양재역),
+    강남_양재_구간(10, 20, 강남역, 양재역),
     양재_정자_구간(6, 12, 양재역, 정자역),
     강남_정자_구간(10 + 6, (10 + 6) * 2, 강남역, 정자역),
 
@@ -77,5 +81,9 @@ public enum SectionFixture {
         params.put(구간_거리.필드명(), String.valueOf(구간_거리()));
         params.put(구간_소요시간.필드명(), String.valueOf(구간_소요시간()));
         return params;
+    }
+
+    public SectionRequest 구간_요청_DTO_생성(Long 상행역_ID, Long 하행역_ID) {
+        return new SectionRequest(상행역_ID, 하행역_ID, 구간_거리(), 구간_소요시간());
     }
 }

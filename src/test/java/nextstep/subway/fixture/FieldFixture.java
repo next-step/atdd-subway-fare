@@ -3,6 +3,8 @@ package nextstep.subway.fixture;
 
 public enum FieldFixture {
     식별자_아이디("id"),
+    데이터_생성_결과_로케이션("Location"),
+
     역_아이디("stationId"),
     역_이름("name"),
 
