@@ -17,16 +17,18 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 선정릉역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private Long 구호선;
 
     /**
      * 교대역    --- *2호선* ---   강남역
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 남부터미널역  --- *3호선* ---  양재  --- *9호선* --- 선정릉
      */
     @BeforeEach
     public void setUp() {
@@ -36,10 +38,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+        선정릉역 = 지하철역_생성_요청("선정릉역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 8, 3);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 8, 4);
+        신분당선 = 추가요금_있는_지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 8, 4, 200);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 4, 3);
+        구호선 = 추가요금_있는_지하철_노선_생성_요청("9호선", "brown", 양재역, 선정릉역, 5, 3, 500);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 8, 5));
     }
@@ -64,7 +68,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 두 역의 최소 시간 기준으로 경로 조회를 요청하면
      * Then 최소 시간 기준 경로를 응답받는다.
      * And 총 거리와 소요 시간을 함께 응답받는다.
-     * And 지하철 이용 요금도 함께 응답받는다.
+     * And 추가 요금이 적용된 지하철 이용 요금도 함께 응답받는다.
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
@@ -73,7 +77,21 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회_검증(response, 16, 7, 1350, 교대역, 강남역, 양재역);
+        경로_조회_검증(response, 16, 7, 1550, 교대역, 강남역, 양재역);
+    }
+
+    /**
+     * When 추가 요금이 있는 노선 2개를 포함한 경로를 조회 요청하면
+     * Then 가장 높은 금액의 추가 요금만 적용된 지하철 요금을 응답받는다.
+     */
+    @DisplayName("가장 높은 금액의 추가 요금만 적용한다.")
+    @Test
+    void findPathAndAddFare() {
+        // when
+        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 선정릉역);
+
+        // then
+        경로_조회_검증(response, 21, 10, 1950, 교대역, 강남역, 양재역, 선정릉역);
     }
 
     private Long 지하철_노선_생성_요청(final String name,
@@ -82,6 +100,17 @@ class PathAcceptanceTest extends AcceptanceTest {
                               final Long downStation,
                               final int distance,
                               final int duration) {
+
+        return 추가요금_있는_지하철_노선_생성_요청(name, color, upStation, downStation, distance, duration, 0);
+    }
+
+    private Long 추가요금_있는_지하철_노선_생성_요청(final String name,
+                                      final String color,
+                                      final Long upStation,
+                                      final Long downStation,
+                                      final int distance,
+                                      final int duration,
+                                      final int addFare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -90,6 +119,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("addFare", addFare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
