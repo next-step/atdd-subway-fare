@@ -1,31 +1,39 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.acceptance.support.AcceptanceTest;
-import nextstep.subway.acceptance.support.LineSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static nextstep.subway.acceptance.support.LineSteps.역이_순서대로_정렬되어_있다;
+import static nextstep.subway.acceptance.support.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.support.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.support.PathSteps.두_역의_최단_거리_경로_조회_요청;
 import static nextstep.subway.acceptance.support.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
+import static nextstep.subway.fixture.LineFixture.삼호선;
+import static nextstep.subway.fixture.LineFixture.신분당선;
+import static nextstep.subway.fixture.LineFixture.이호선;
+import static nextstep.subway.fixture.SectionFixture.강남_양재_구간;
+import static nextstep.subway.fixture.SectionFixture.교대_강남_구간;
+import static nextstep.subway.fixture.SectionFixture.교대_남부터미널_구간;
+import static nextstep.subway.fixture.SectionFixture.남부터미널_양재_구간;
+import static nextstep.subway.fixture.StationFixture.강남역;
+import static nextstep.subway.fixture.StationFixture.교대역;
+import static nextstep.subway.fixture.StationFixture.남부터미널역;
+import static nextstep.subway.fixture.StationFixture.양재역;
+import static nextstep.subway.utils.JsonPathUtil.식별자_ID_추출;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    private Long 교대역;
-    private Long 강남역;
-    private Long 양재역;
-    private Long 남부터미널역;
-    private Long 이호선;
-    private Long 신분당선;
-    private Long 삼호선;
+    private Long 교대역_ID;
+    private Long 강남역_ID;
+    private Long 양재역_ID;
+    private Long 남부터미널역_ID;
+    private Long 이호선_ID;
+    private Long 신분당선_ID;
+    private Long 삼호선_ID;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -38,55 +46,25 @@ class PathAcceptanceTest extends AcceptanceTest {
     public void setUp() {
         super.setUp();
 
-        교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
-        강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
-        양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
-        남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+        교대역_ID = 식별자_ID_추출(지하철역_생성_요청(교대역));
+        강남역_ID = 식별자_ID_추출(지하철역_생성_요청(강남역));
+        양재역_ID = 식별자_ID_추출(지하철역_생성_요청(양재역));
+        남부터미널역_ID = 식별자_ID_추출(지하철역_생성_요청(남부터미널역));
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 20);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 20);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 4);
+        이호선_ID = 식별자_ID_추출(지하철_노선_생성_요청(이호선.등록_요청_데이터_생성(교대역_ID, 강남역_ID, 교대_강남_구간)));
+        신분당선_ID = 식별자_ID_추출(지하철_노선_생성_요청(신분당선.등록_요청_데이터_생성(강남역_ID, 양재역_ID, 강남_양재_구간)));
+        삼호선_ID = 식별자_ID_추출(지하철_노선_생성_요청(삼호선.등록_요청_데이터_생성(교대역_ID, 남부터미널역_ID, 교대_남부터미널_구간)));
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 6));
+        지하철_노선에_지하철_구간_생성_요청(삼호선_ID, 남부터미널_양재_구간.요청_데이터_생성(남부터미널역_ID, 양재역_ID));
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 거리 경로를 조회한다")
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> 최단_거리_경로_조회_결과 = 두_역의_최단_거리_경로_조회_요청(교대역_ID, 양재역_ID);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-    }
-
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
-                .then().log().all().extract();
-    }
-
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", name);
-        lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", duration + "");
-
-        return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
-        return params;
+        역이_순서대로_정렬되어_있다(최단_거리_경로_조회_결과, 교대역_ID, 남부터미널역_ID, 양재역_ID);
     }
 }

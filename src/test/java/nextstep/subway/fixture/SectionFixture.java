@@ -11,6 +11,7 @@ import static nextstep.subway.fixture.FieldFixture.노선_상행_종점역_ID;
 import static nextstep.subway.fixture.FieldFixture.노선_하행_종점역_ID;
 import static nextstep.subway.fixture.StationFixture.강남역;
 import static nextstep.subway.fixture.StationFixture.교대역;
+import static nextstep.subway.fixture.StationFixture.남부터미널역;
 import static nextstep.subway.fixture.StationFixture.삼성역;
 import static nextstep.subway.fixture.StationFixture.선릉역;
 import static nextstep.subway.fixture.StationFixture.양재역;
@@ -21,16 +22,18 @@ public enum SectionFixture {
 
     /** [구간 거리] (소요시간은 거리 x 2)
      *
-     *  교대역 --- (6) --- 강남역 --- (7) --- 역삼역 --- (8) --- 선릉역 --- (5) --- 삼성역
-     *                      |
-     *                     (10)
-     *                      |
-     *                    양재역
-     *                      |
-     *                     (6)
-     *                      |
-     *                    정자역
+     *   교대역     --- (6) --- 강남역 --- (7) --- 역삼역 --- (8) --- 선릉역 --- (5) --- 삼성역
+     *     |                     |
+     *    (3)                   (10)
+     *     |                     |
+     * 남부터미널역  --- (7) --- 양재역
+     *                           |
+     *                          (6)
+     *                           |
+     *                         정자역
      */
+    교대_남부터미널_구간(3, 6, 교대역, 남부터미널역),
+    남부터미널_양재_구간(7, 14, 남부터미널역, 양재역),
     교대_강남_구간(6, 12, 교대역, 강남역),
     강남_역삼_구간(7, 14, 강남역, 역삼역),
     역삼_선릉_구간(8, 16, 역삼역, 선릉역),

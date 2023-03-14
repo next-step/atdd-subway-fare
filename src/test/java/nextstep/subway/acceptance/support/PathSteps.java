@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance.support;
 
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -24,7 +25,16 @@ public class PathSteps {
         return params;
     }
 
-    public static ExtractableResponse<Response> 지하철_경로_조회_요청(RequestSpecification spec, long 출발역_id, long 도착역_id) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회_요청(long 출발역_id, long 도착역_id) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .params(경로_찾기_요청_데이터_생성(출발역_id, 도착역_id))
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회_요청(RequestSpecification spec, long 출발역_id, long 도착역_id) {
         return given(spec).log().all()
                 .filter(restDocsFilter("path"))
                 .accept(MediaType.APPLICATION_JSON_VALUE)

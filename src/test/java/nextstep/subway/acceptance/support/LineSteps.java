@@ -29,7 +29,6 @@ public class LineSteps {
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(LineFixture 노선, SectionFixture 구간, Long 상행역, Long 하행역) {
         Map<String, String> 생성_요청_데이터 = 노선.등록_요청_데이터_생성(상행역, 하행역, 구간);
-
         return 지하철_노선_생성_요청(생성_요청_데이터);
     }
 
@@ -81,11 +80,8 @@ public class LineSteps {
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long 노선_ID, SectionFixture 구간, Long 상행역, Long 하행역) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(구간.요청_데이터_생성(상행역, 하행역))
-                .when().post("/lines/{lineId}/sections", 노선_ID)
-                .then().log().all().extract();
+        Map<String, String> 생성_요청_데이터 = 구간.요청_데이터_생성(상행역, 하행역);
+        return 지하철_노선에_지하철_구간_생성_요청(노선_ID, 생성_요청_데이터);
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Map<String, String> params) {
@@ -112,8 +108,8 @@ public class LineSteps {
     }
 
 
-    public static void 역이_순서대로_정렬되어_있다(ExtractableResponse<Response> 지하철_노선_조회_결과, Long... 역_순서) {
-        assertThat(List로_추출(지하철_노선_조회_결과, 노선_내_역_아이디, Long.class)).containsExactly(역_순서);
+    public static void 역이_순서대로_정렬되어_있다(ExtractableResponse<Response> 요청_결과, Long... 역_순서) {
+        assertThat(List로_추출(요청_결과, 노선_내_역_아이디, Long.class)).containsExactly(역_순서);
     }
 
     public static void 노선_목록_정보가_조회된다(ExtractableResponse<Response> 노선_목록_조회_결과, String... 노선명) {

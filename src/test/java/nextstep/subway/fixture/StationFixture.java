@@ -17,6 +17,7 @@ public enum StationFixture {
     삼성역,
     양재역,
     정자역,
+    남부터미널역,
     ;
 
     public String 역_이름() {
