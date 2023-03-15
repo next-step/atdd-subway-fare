@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -35,9 +37,16 @@ public class Documentation {
                 .build();
     }
 
-    public static RestDocumentationFilter restDocsFilter(String API_호출_식별자) {
+    public static RestDocumentationFilter restDocsFilter(
+            String API_호출_식별자,
+            RequestParametersSnippet 파라미터_스니펫,
+            ResponseFieldsSnippet 응답_필드_스니펫
+    ) {
         return document(API_호출_식별자,
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()));
+                preprocessResponse(prettyPrint()),
+                파라미터_스니펫,
+                응답_필드_스니펫
+        );
     }
 }

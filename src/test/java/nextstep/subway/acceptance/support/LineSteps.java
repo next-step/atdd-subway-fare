@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
-import static nextstep.subway.fixture.FieldFixture.노선_내_역_아이디;
+import static nextstep.subway.fixture.FieldFixture.노선_내_역_아이디_목록;
 import static nextstep.subway.fixture.FieldFixture.노선_색깔;
 import static nextstep.subway.fixture.FieldFixture.노선_이름;
 import static nextstep.subway.fixture.FieldFixture.데이터_생성_결과_로케이션;
@@ -109,7 +109,7 @@ public class LineSteps {
 
 
     public static void 역이_순서대로_정렬되어_있다(ExtractableResponse<Response> 요청_결과, Long... 역_순서) {
-        assertThat(List로_추출(요청_결과, 노선_내_역_아이디, Long.class)).containsExactly(역_순서);
+        assertThat(List로_추출(요청_결과, 노선_내_역_아이디_목록, Long.class)).containsExactly(역_순서);
     }
 
     public static void 노선_목록_정보가_조회된다(ExtractableResponse<Response> 노선_목록_조회_결과, String... 노선명) {
