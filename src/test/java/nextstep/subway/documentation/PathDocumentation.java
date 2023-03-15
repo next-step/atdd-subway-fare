@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import static nextstep.subway.acceptance.support.PathSteps.경로_조회에_성공한다;
 import static nextstep.subway.documentation.support.PathDocumentSupport.지하철_경로_조회_요청;
-import static nextstep.subway.domain.PathType.DISTANCE;
+import static nextstep.subway.domain.path.PathType.DISTANCE;
 import static nextstep.subway.fixture.SectionFixture.강남_역삼_구간;
 import static nextstep.subway.fixture.StationFixture.강남역;
 import static nextstep.subway.fixture.StationFixture.역삼역;
@@ -48,7 +48,7 @@ class PathDocumentation extends Documentation {
                 );
                 PathResponse pathResponse = new PathResponse(역_목록, 강남_역삼_구간.구간_거리(), 강남_역삼_구간.구간_소요시간());
 
-                when(pathService.findPath(출발지역_ID, 도착지역_ID))
+                when(pathService.findPath(출발지역_ID, 도착지역_ID, DISTANCE.name()))
                         .thenReturn(pathResponse);
             }
 

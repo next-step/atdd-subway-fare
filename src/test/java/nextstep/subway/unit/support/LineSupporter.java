@@ -3,6 +3,7 @@ package nextstep.subway.unit.support;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.Path;
 import nextstep.subway.fixture.SectionFixture;
 
 import java.util.List;
@@ -15,6 +16,10 @@ public class LineSupporter {
 
     public static void 역이_순서대로_정렬되어_있다(Line 호선, Station... 역_목록) {
         assertThat(호선.getStations()).containsExactly(역_목록);
+    }
+
+    public static void 역이_순서대로_정렬되어_있다(Path 경로, Station... 역_목록) {
+        assertThat(경로.getStations()).containsExactly(역_목록);
     }
 
     public static void 구간_거리가_순서대로_저장되어_있다(List<Section> 구간_목록, Integer... 거리_목록) {
@@ -32,7 +37,7 @@ public class LineSupporter {
     }
 
     public static void 구간이_N개_저장되어_있다(Line 노선, int 구간_개수) {
-        assertThat(노선.getSections().size()).isEqualTo(구간_개수);
+        assertThat(노선.getSections()).hasSize(구간_개수);
     }
 
     public static void 구간의_상행역_하행역_정보가_일치한다(Line 노선, Station 상행역, Station 하행역) {

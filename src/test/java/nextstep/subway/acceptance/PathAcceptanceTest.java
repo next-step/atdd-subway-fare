@@ -14,8 +14,8 @@ import static nextstep.subway.acceptance.support.LineSteps.지하철_노선에_�
 import static nextstep.subway.acceptance.support.PathSteps.지하철_경로_조회_요청;
 import static nextstep.subway.acceptance.support.PathSteps.총_거리와_소요_시간이_조회된다;
 import static nextstep.subway.acceptance.support.StationSteps.지하철역_생성_요청;
-import static nextstep.subway.domain.PathType.DISTANCE;
-import static nextstep.subway.domain.PathType.DURATION;
+import static nextstep.subway.domain.path.PathType.DISTANCE;
+import static nextstep.subway.domain.path.PathType.DURATION;
 import static nextstep.subway.fixture.LineFixture.삼호선;
 import static nextstep.subway.fixture.LineFixture.신분당선;
 import static nextstep.subway.fixture.LineFixture.이호선;

@@ -1,7 +1,7 @@
 package nextstep.subway.applicaion.dto.response;
 
 import lombok.Getter;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.path.Path;
 
 import java.util.List;
 import java.util.stream.Collectors;
