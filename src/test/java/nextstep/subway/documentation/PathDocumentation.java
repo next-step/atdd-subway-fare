@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static nextstep.subway.acceptance.support.PathSteps.경로_조회에_성공한다;
-import static nextstep.subway.acceptance.support.PathSteps.두_역의_최단_거리_경로_조회_요청;
+import static nextstep.subway.acceptance.support.PathSteps.지하철_경로_조회_요청;
+import static nextstep.subway.domain.PathType.DISTANCE;
 import static nextstep.subway.fixture.SectionFixture.강남_역삼_구간;
 import static nextstep.subway.fixture.StationFixture.강남역;
 import static nextstep.subway.fixture.StationFixture.역삼역;
@@ -51,7 +52,7 @@ class PathDocumentation extends Documentation {
             @Test
             @DisplayName("200 응답 코드로 응답한다")
             void it_responses_200() {
-                ExtractableResponse<Response> 지하철_경로_조회_결과 = 두_역의_최단_거리_경로_조회_요청(spec, 1L, 2L);
+                ExtractableResponse<Response> 지하철_경로_조회_결과 = 지하철_경로_조회_요청(spec, 1L, 2L, DISTANCE.name());
 
                 경로_조회에_성공한다(지하철_경로_조회_결과);
             }

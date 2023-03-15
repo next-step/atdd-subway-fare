@@ -22,6 +22,7 @@ public enum FieldFixture {
     경로_내_역_아이디_목록("stations.id"),
     경로_조회_출발지_아이디("source"),
     경로_조회_도착지_아이디("target"),
+    경로_조회_타입("type"),
     ;
 
     private final String value;
