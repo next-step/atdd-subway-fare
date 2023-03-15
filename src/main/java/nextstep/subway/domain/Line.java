@@ -10,6 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int addFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -17,9 +18,16 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(final String name, final String color) {
+        this(name, color, 0);
+    }
+
+    public Line(final String name,
+                final String color,
+                final int addFare) {
         this.name = name;
         this.color = color;
+        this.addFare = addFare;
     }
 
     public Long getId() {
@@ -32,6 +40,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getAddFare() {
+        return addFare;
     }
 
     public List<Section> getSections() {

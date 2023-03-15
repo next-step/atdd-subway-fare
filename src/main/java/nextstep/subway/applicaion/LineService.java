@@ -26,7 +26,7 @@ public class LineService {
 
     @Transactional
     public LineResponse saveLine(final LineRequest request) {
-        final Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
+        final Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getAddFare()));
         if (isValidSaveRequest(request)) {
             Station upStation = stationService.findById(request.getUpStationId());
             Station downStation = stationService.findById(request.getDownStationId());

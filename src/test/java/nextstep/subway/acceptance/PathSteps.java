@@ -47,6 +47,20 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 로그인_사용자_두_역의_최소_시간_경로_조회를_요청(final String accessToken,
+                                                                             final Long source,
+                                                                             final Long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .queryParam("source", source)
+                .queryParam("target", target)
+                .queryParam("type", DURATION_TYPE)
+                .when().get("/paths")
+                .then().log().all().extract();
+    }
+
     public static void 경로_조회_검증(final ExtractableResponse<Response> response,
                          final int expectedDistance,
                          final int expectedDuration,

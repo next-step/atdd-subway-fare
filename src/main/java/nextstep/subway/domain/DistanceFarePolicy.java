@@ -31,6 +31,6 @@ public class DistanceFarePolicy implements FarePolicy {
 
     private int calculateOverFare(final int distance,
                                   final int chargeDistance) {
-        return (int) ((Math.ceil((distance - 1d) / chargeDistance) + 1) * ADDITIONAL_FARE);
+        return (((distance - 1) / chargeDistance) + 1) * ADDITIONAL_FARE;
     }
 }
