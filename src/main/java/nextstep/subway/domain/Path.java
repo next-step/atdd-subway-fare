@@ -1,26 +1,31 @@
 package nextstep.subway.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Path {
     private Sections sections;
     private FarePolicy farePolicy;
+    private Optional<DiscountPolicy> discountPolicy;
 
     private int addFare;
     private int minDistance;
 
     public Path(final Sections sections,
                 final FarePolicy farePolicy,
+                final DiscountPolicy discountPolicy,
                 final int addFare) {
-        this(sections, farePolicy, addFare ,0);
+        this(sections, farePolicy, discountPolicy, addFare ,0);
     }
 
     public Path(final Sections sections,
                 final FarePolicy farePolicy,
+                final DiscountPolicy discountPolicy,
                 final int addFare,
                 final int minDistance) {
         this.sections = sections;
         this.farePolicy = farePolicy;
+        this.discountPolicy = Optional.ofNullable(discountPolicy);
         this.addFare = addFare;
         this.minDistance = minDistance;
     }
@@ -43,8 +48,17 @@ public class Path {
 
     public int getFare() {
         if (minDistance > 0) {
-            return farePolicy.calculator(minDistance) + addFare;
+            return calculateFare(minDistance);
         }
-        return farePolicy.calculator(sections.totalDistance()) + addFare;
+        return calculateFare(sections.totalDistance());
+    }
+
+    private int calculateFare(final int minDistance) {
+        return getDiscountFare(farePolicy.calculator(minDistance) + addFare);
+    }
+
+    private int getDiscountFare(final int fare) {
+        return discountPolicy.map(policy -> policy.calculator(fare)).orElse(fare);
+
     }
 }

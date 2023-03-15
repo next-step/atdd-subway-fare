@@ -14,8 +14,15 @@ import java.util.stream.Stream;
 public class SubwayMap {
     private List<Line> lines;
 
+    private DiscountPolicy discountPolicy;
+
     public SubwayMap(List<Line> lines) {
+        this(lines, null);
+    }
+
+    public SubwayMap(List<Line> lines, DiscountPolicy discountPolicy) {
         this.lines = lines;
+        this.discountPolicy = discountPolicy;
     }
 
     public Path findPath(final Station source,
@@ -32,10 +39,10 @@ public class SubwayMap {
 
         if (!type.equals(PathType.DISTANCE)) {
             final int minDistance = (int) getShortiesPath(source, target, PathType.DISTANCE).getWeight();
-            return new Path(new Sections(sections), new DistanceFarePolicy(), addFare, minDistance);
+            return new Path(new Sections(sections), new DistanceFarePolicy(), discountPolicy, addFare, minDistance);
         }
 
-        return new Path(new Sections(sections), new DistanceFarePolicy(), addFare);
+        return new Path(new Sections(sections), new DistanceFarePolicy(), discountPolicy, addFare);
     }
 
     private int getMaxAddFare(final List<Section> sections) {
