@@ -1,5 +1,6 @@
 package nextstep.subway.documentation;
 
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.PathType;
@@ -35,7 +36,7 @@ public class PathDocumentation extends Documentation {
                 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         // when
         // then
@@ -57,7 +58,7 @@ public class PathDocumentation extends Documentation {
                 1450
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         // when
         // then
@@ -68,7 +69,7 @@ public class PathDocumentation extends Documentation {
     @DisplayName("경로 조회 실패-같은 출발역과 도착역")
     void path_sameStation() {
         // given
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenThrow(IllegalArgumentException.class);
+        when(pathService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class))).thenThrow(IllegalArgumentException.class);
 
         // when
         // then
@@ -79,7 +80,7 @@ public class PathDocumentation extends Documentation {
     @DisplayName("경로 조회 실패-같은 출발역과 도착역")
     void path_notLinked() {
         // given
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenThrow(IllegalArgumentException.class);
+        when(pathService.findPath(any(LoginMember.class), anyLong(), anyLong(), any(PathType.class))).thenThrow(IllegalArgumentException.class);
 
         // when
         // then
