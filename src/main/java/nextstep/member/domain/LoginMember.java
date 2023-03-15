@@ -7,10 +7,6 @@ public class LoginMember {
     private int age;
     private List<String> roles;
 
-    public LoginMember(final Long id, final List<String> roles) {
-        this(id, 0, roles);
-    }
-
     public LoginMember(final Long id,
                        final int age,
                        final List<String> roles) {

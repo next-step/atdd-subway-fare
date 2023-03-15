@@ -34,8 +34,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String token = authorization.split(" ")[1];
 
         Long id = Long.parseLong(jwtTokenProvider.getPrincipal(token));
+        int age = jwtTokenProvider.getAge(token);
         List<String> roles = jwtTokenProvider.getRoles(token);
 
-        return new LoginMember(id, roles);
+        return new LoginMember(id, age, roles);
     }
 }
