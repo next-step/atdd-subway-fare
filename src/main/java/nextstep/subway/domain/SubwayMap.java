@@ -7,6 +7,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,12 +28,21 @@ public class SubwayMap {
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
+        final int addFare = getMaxAddFare(sections);
+
         if (!type.equals(PathType.DISTANCE)) {
             final int minDistance = (int) getShortiesPath(source, target, PathType.DISTANCE).getWeight();
-            return new Path(new Sections(sections), new DistanceFarePolicy(), minDistance);
+            return new Path(new Sections(sections), new DistanceFarePolicy(), addFare, minDistance);
         }
 
-        return new Path(new Sections(sections), new DistanceFarePolicy());
+        return new Path(new Sections(sections), new DistanceFarePolicy(), addFare);
+    }
+
+    private int getMaxAddFare(final List<Section> sections) {
+        return sections.stream()
+                .mapToInt(station -> station.getLine().getAddFare())
+                .max()
+                .orElseThrow(NoSuchElementException::new);
     }
 
     private GraphPath<Station, SectionEdge> getShortiesPath(final Station source,
