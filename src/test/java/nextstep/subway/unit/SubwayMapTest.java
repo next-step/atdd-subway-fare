@@ -1,10 +1,9 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.LoginMember;
+import nextstep.member.domain.RoleType;
 import nextstep.subway.applicaion.dto.PathType;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -117,6 +116,68 @@ public class SubwayMapTest {
         assertThat(path.getFare()).isEqualTo(2350);
     }
 
+    @Test
+    @DisplayName("비로그인 요금 할인")
+    void anonymousDiscount() {
+        // given
+        final DiscountPolicy discountPolicy = new AgeDiscountPolicy(new LoginMember(-1L, 0, List.of(RoleType.ROLE_ANONYMOUS.name())));
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선, 구호선);
+        SubwayMap subwayMap = new SubwayMap(lines, discountPolicy);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 선정릉역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역, 선정릉역));
+        assertThat(path.getFare()).isEqualTo(2350);
+    }
+
+    @Test
+    @DisplayName("요금 할인 없음")
+    void noneDiscount() {
+        // given
+        final DiscountPolicy discountPolicy = new AgeDiscountPolicy(new LoginMember(-1L, 20, List.of(RoleType.ROLE_MEMBER.name())));
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선, 구호선);
+        SubwayMap subwayMap = new SubwayMap(lines, discountPolicy);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 선정릉역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역, 선정릉역));
+        assertThat(path.getFare()).isEqualTo(2350);
+    }
+    @Test
+    @DisplayName("청소년 요금 할인")
+    void teenagerDiscount() {
+        // given
+        final DiscountPolicy discountPolicy = new AgeDiscountPolicy(new LoginMember(-1L, 13, List.of(RoleType.ROLE_MEMBER.name())));
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선, 구호선);
+        SubwayMap subwayMap = new SubwayMap(lines, discountPolicy);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 선정릉역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역, 선정릉역));
+        assertThat(path.getFare()).isEqualTo(1950);
+    }
+
+    @Test
+    @DisplayName("어린이 요금 할인")
+    void childDiscount() {
+        // given
+        final DiscountPolicy discountPolicy = new AgeDiscountPolicy(new LoginMember(-1L, 6, List.of(RoleType.ROLE_MEMBER.name())));
+        List<Line> lines = List.of(신분당선, 이호선, 삼호선, 구호선);
+        SubwayMap subwayMap = new SubwayMap(lines, discountPolicy);
+
+        // when
+        Path path = subwayMap.findPath(교대역, 선정릉역, PathType.DISTANCE);
+
+        // then
+        assertThat(path.getStations()).containsExactlyElementsOf(List.of(교대역, 남부터미널역, 양재역, 선정릉역));
+        assertThat(path.getFare()).isEqualTo(1350);
+    }
     private Station createStation(long id, String name) {
         Station station = new Station(name);
         ReflectionTestUtils.setField(station, "id", id);
