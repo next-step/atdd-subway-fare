@@ -94,6 +94,48 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회_검증(response, 21, 10, 1950, 교대역, 강남역, 양재역, 선정릉역);
     }
 
+    /**
+     * When 19세 이상 사용자가 경로 조회를 요청하면
+     * Then 정상 요금을 응답받는다.
+     */
+    @Test
+    @DisplayName("19세 이상 로그인 사용자는 정상 요금이 조회된다.")
+    void findPathFareByMoreThan19() {
+        // when
+        var response = 로그인_사용자_두_역의_최소_시간_경로_조회를_요청(관리자, 교대역, 양재역);
+
+        // then
+        경로_조회_검증(response, 16, 7, 1550, 교대역, 강남역, 양재역);
+    }
+
+    /**
+     * When 어린이(6세 이상 ~ 13세 미만) 사용자가 경로 조회를 요청하면
+     * Then 350원을 공제한 금액의 50% 할인된 요금을 응답받는다.
+     */
+    @Test
+    @DisplayName("어린이 사용자는 공제한 금액의 50% 할인된 요금이 조회된다.")
+    void findPathFareByChildUser() {
+        // when
+        var response = 로그인_사용자_두_역의_최소_시간_경로_조회를_요청(어린이, 교대역, 선정릉역);
+
+        // then
+        경로_조회_검증(response, 21, 10, 1150, 교대역, 강남역, 양재역, 선정릉역);
+    }
+
+    /**
+     * When 청소년(13세 이상 ~ 19세 미만) 사용자가 경로 조회를 요청하면
+     * Then 350원을 공제한 금액의 20% 할인된 요금을 응답받는다.
+     */
+    @Test
+    @DisplayName("청소년 사용자는 공제한 금액의 20% 할인된 요금이 조회된다.")
+    void findPathFareByTeenagerUser() {
+        // when
+        var response = 로그인_사용자_두_역의_최소_시간_경로_조회를_요청(청소년, 교대역, 선정릉역);
+
+        // then
+        경로_조회_검증(response, 21, 10, 1630, 교대역, 강남역, 양재역, 선정릉역);
+    }
+
     private Long 지하철_노선_생성_요청(final String name,
                               final String color,
                               final Long upStation,
