@@ -72,8 +72,8 @@ bootJar {
 }
 
 task copyDocument(type: Copy) {
-    dependsOn asciidoctor
+    dependsOn testDocument
 
-    from file("build/docs/asciidoc")
+    from file("build/asciidoc/html5/index.html")
     into file("src/main/resources/static/docs")
 }
