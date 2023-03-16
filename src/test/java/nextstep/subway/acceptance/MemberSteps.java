@@ -26,6 +26,10 @@ public class MemberSteps {
                 .statusCode(HttpStatus.OK.value()).extract();
     }
 
+    public static String 베어러_로그인_성공_토큰_발급됨(String email, String password) {
+        return 베어러_인증_로그인_요청(email, password).jsonPath().getString("accessToken");
+    }
+
     public static ExtractableResponse<Response> 깃허브_인증_로그인_요청(String code) {
         Map<String, String> params = new HashMap<>();
         params.put("code", code);

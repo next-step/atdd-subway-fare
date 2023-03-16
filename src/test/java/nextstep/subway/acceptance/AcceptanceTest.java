@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_로그인_성공_토큰_발급됨;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -33,6 +33,6 @@ public class AcceptanceTest {
         databaseCleanup.execute();
         dataLoader.loadData();
 
-        관리자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
+        관리자 = 베어러_로그인_성공_토큰_발급됨(EMAIL, PASSWORD);
     }
 }

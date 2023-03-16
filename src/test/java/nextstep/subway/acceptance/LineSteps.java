@@ -31,11 +31,12 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    public static Long 지하철_노선_생성_요청(String name, String color, int extraFare, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
+        lineCreateParams.put("extraFare", extraFare + "");
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");

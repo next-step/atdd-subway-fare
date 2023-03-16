@@ -21,6 +21,7 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_또�
 import static nextstep.subway.documentation.DocumentSteps.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -47,7 +48,7 @@ class PathDocumentation extends Documentation {
                 ), 10, 5, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(anyInt(), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         // when
         RequestSpecification given = given(spec.filter(getDocument("path")));

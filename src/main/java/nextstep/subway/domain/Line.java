@@ -10,6 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int extraFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -17,9 +18,21 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int extraFare) {
+        validateMinusFare(extraFare);
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
+    }
+
+    private void validateMinusFare(int extraFare) {
+        if (extraFare < 0) {
+            throw new IllegalArgumentException("노선 추가 요금을 음수로 설정할 수 없습니다.");
+        }
+    }
+
+    public Line(String name, String color) {
+        this(name, color, 0);
     }
 
     public Long getId() {
@@ -32,6 +45,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 
     public List<Section> getSections() {

@@ -44,8 +44,8 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록 (역방향 포함)
         List<Section> sections =
                 Stream.concat(
-                        flatMap(lines, line -> line.getSections().stream()).stream(),
-                        flatMap(lines, line -> line.getOppositeSections().stream()).stream()
+                        flatMap(lines, line -> line.getSections().stream()),
+                        flatMap(lines, line -> line.getOppositeSections().stream())
                 ).collect(Collectors.toList());
 
         sections.forEach(section -> addEdge(graph, section));
@@ -59,13 +59,13 @@ public class SubwayMap {
 
     private void addVertex(WeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역(정점)을 등록
-        List<Station> stations = flatMap(lines, line -> line.getStations().stream());
+        List<Station> stations = flatMap(lines, line -> line.getStations().stream())
+                .collect(Collectors.toList());
         stations.forEach(graph::addVertex);
     }
 
-    private <T, R> List<R> flatMap(List<T> list, Function<T, Stream<R>> function) {
+    private <T, R> Stream<R> flatMap(List<T> list, Function<T, Stream<R>> function) {
         return list.stream()
-                .flatMap(function)
-                .collect(Collectors.toList());
+                .flatMap(function);
     }
 }
