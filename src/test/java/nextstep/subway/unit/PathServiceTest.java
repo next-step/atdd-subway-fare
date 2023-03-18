@@ -71,4 +71,14 @@ public class PathServiceTest {
                 .map(StationResponse::getId)
                 .collect(Collectors.toList())).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId());
     }
+
+    @DisplayName("최단 거리에 따른 요금 조회")
+    @Test
+    void getFareAboutShortestPath() {
+        // when
+        final PathResponse pathResponse = pathService.findPath(교대역.getId(), 양재역.getId(), FindType.DISTANCE);
+
+        // then
+        assertThat(pathResponse.getFare()).isEqualTo("1250원");
+    }
 }
