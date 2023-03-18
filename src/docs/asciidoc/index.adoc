@@ -11,17 +11,17 @@
 
 === 최단 경로 경로 조회 - 성공
 
-operation::path/distance/success[snippets='http-request,http-response,request-parameters,response-fields']
+operation::path/distance/success[snippets='request-headers,http-request,http-response,request-parameters,response-fields']
 
 === 최소 시간 경로 조회 - 성공
 
-operation::path/duration/success[snippets='http-request,http-response,request-parameters,response-fields']
+operation::path/duration/success[snippets='request-headers,http-request,http-response,request-parameters,response-fields']
 
 === 최단 경로 경로 조회 - 실패
 
-operation::path/distance/fail[snippets='http-request,http-response']
+operation::path/distance/fail[snippets='request-headers,http-request,http-response']
 
 === 최소 시간 경로 조회 - 실패
 
-operation::path/duration/fail[snippets='http-request,http-response']
+operation::path/duration/fail[snippets='request-headers,http-request,http-response']
 

@@ -19,7 +19,7 @@ public class PathStubs {
 				new StationResponse(2L, "역삼역")
 			), 10, 12, 1_250);
 
-		when(pathService.findPath(anyLong(), anyLong(), eq(PathType.DISTANCE))).thenReturn(pathResponse);
+		when(pathService.findPath(any(), anyLong(), anyLong(), eq(PathType.DISTANCE))).thenReturn(pathResponse);
 	}
 
 	public static void 최소_시간_경로_조회_시_성공_응답을_반환(PathService pathService) {
@@ -29,18 +29,18 @@ public class PathStubs {
 				new StationResponse(2L, "역삼역")
 			), 12, 12, 1_350);
 
-		when(pathService.findPath(anyLong(), anyLong(), eq(PathType.DURATION))).thenReturn(pathResponse);
+		when(pathService.findPath(any(), anyLong(), anyLong(), eq(PathType.DURATION))).thenReturn(pathResponse);
 	}
 
 	public static void 최단_거리_경로_조회_시_실패_응답을_반환(PathService pathService) {
 		Long 하나의_역 = 1L;
 
-		when(pathService.findPath(eq(하나의_역), eq(하나의_역), eq(PathType.DISTANCE))).thenThrow(SameStationException.class);
+		when(pathService.findPath(any(), eq(하나의_역), eq(하나의_역), eq(PathType.DISTANCE))).thenThrow(SameStationException.class);
 	}
 
 	public static void 최소_시간_경로_조회_시_실패_응답을_반환(PathService pathService) {
 		Long 하나의_역 = 1L;
 
-		when(pathService.findPath(eq(하나의_역), eq(하나의_역), eq(PathType.DURATION))).thenThrow(SameStationException.class);
+		when(pathService.findPath(any(), eq(하나의_역), eq(하나의_역), eq(PathType.DURATION))).thenThrow(SameStationException.class);
 	}
 }
