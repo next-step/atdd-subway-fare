@@ -14,6 +14,20 @@ import io.restassured.response.Response;
 import nextstep.subway.domain.PathType;
 
 public class PathSteps {
+	public static ExtractableResponse<Response> 로그인_유저의_두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source,
+		Long target) {
+		return RestAssured
+			.given().log().all()
+			.auth().oauth2(accessToken)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+			.queryParam("source", source)
+			.queryParam("target", target)
+			.queryParam("type", PathType.DISTANCE.name())
+			.when().get("/paths")
+			.then().log().all()
+			.extract();
+	}
+
 	public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
 		return RestAssured
 			.given().log().all()
