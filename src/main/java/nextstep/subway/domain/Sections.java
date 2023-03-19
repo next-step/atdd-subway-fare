@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.path.DistanceFarePolicy;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -161,6 +163,6 @@ public class Sections {
     }
 
     public int totalPrice() {
-        return 0;
+        return DistanceFarePolicy.calculatePrice(totalDistance());
     }
 }
