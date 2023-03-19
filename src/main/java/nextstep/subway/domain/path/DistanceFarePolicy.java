@@ -1,29 +1,24 @@
 package nextstep.subway.domain.path;
 
+import nextstep.subway.domain.fare.FarePolicy;
+import nextstep.subway.domain.fare.FirstFarePolicy;
+import nextstep.subway.domain.fare.SecondFarePolicy;
+import nextstep.subway.domain.fare.ThirdFarePolicy;
+
 public class DistanceFarePolicy {
 
-    private static final int BASIC_FARE = 1250;
-    private static final int DEFAULT_DISTANCE = 10;
+    private final FarePolicy farePolicy;
 
-    public static int calculatePrice(final int totalDistance) {
-        if (totalDistance <= DEFAULT_DISTANCE) {
-            return BASIC_FARE;
-        }
+    public DistanceFarePolicy() {
+        farePolicy = new FirstFarePolicy();
+        SecondFarePolicy secondFarePolicy = new SecondFarePolicy();
+        ThirdFarePolicy thirdFarePolicy = new ThirdFarePolicy();
 
-        if (totalDistance <= 50) {
-            return BASIC_FARE + calculateOverFareLessThan50km(totalDistance - DEFAULT_DISTANCE);
-        }
-
-        return BASIC_FARE
-                + calculateOverFareLessThan50km(40)
-                + calculateOverFareMoreThan50km(totalDistance - 50);
+        farePolicy.setNextPolicyChain(secondFarePolicy);
+        secondFarePolicy.setNextPolicyChain(thirdFarePolicy);
     }
 
-    private static int calculateOverFareLessThan50km(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
-    }
-
-    private static int calculateOverFareMoreThan50km(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+    public int calculateFare(final int totalDistance) {
+        return farePolicy.calculateFare(totalDistance);
     }
 }

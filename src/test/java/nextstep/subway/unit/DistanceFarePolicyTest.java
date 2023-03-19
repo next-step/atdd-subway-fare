@@ -18,7 +18,7 @@ class DistanceFarePolicyTest {
         @Test
         @DisplayName("기본 요금이 부과된다")
         void it_returns_basic_fare() {
-            int totalPrice = DistanceFarePolicy.calculatePrice(10);
+            int totalPrice = new DistanceFarePolicy().calculateFare(10);
             assertThat(totalPrice).isEqualTo(1250);
         }
     }
@@ -30,7 +30,7 @@ class DistanceFarePolicyTest {
         @Test
         @DisplayName("추가 요금은 5km당 100원씩 부과된다.")
         void it_surcharge_is_100_won_per_5_kilometer() {
-            int totalPrice = DistanceFarePolicy.calculatePrice(36);
+            int totalPrice = new DistanceFarePolicy().calculateFare(36);
             assertThat(totalPrice).isEqualTo(1250 + 600);
         }
     }
@@ -42,7 +42,7 @@ class DistanceFarePolicyTest {
         @Test
         @DisplayName("추가 요금은 8km당 100원씩 부과된다")
         void it_surcharge_is_100_won_per_8_kilometer() {
-            int totalPrice = DistanceFarePolicy.calculatePrice(86);
+            int totalPrice = new DistanceFarePolicy().calculateFare(86);
             assertThat(totalPrice).isEqualTo(1250 + 800 + 500);
         }
     }

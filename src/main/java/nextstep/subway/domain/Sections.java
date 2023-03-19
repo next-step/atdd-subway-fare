@@ -163,6 +163,6 @@ public class Sections {
     }
 
     public int totalPrice() {
-        return DistanceFarePolicy.calculatePrice(totalDistance());
+        return new DistanceFarePolicy().calculateFare(totalDistance());
     }
 }
