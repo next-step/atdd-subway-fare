@@ -159,4 +159,8 @@ public class Sections {
                 .mapToInt(Section::getDuration)
                 .sum();
     }
+
+    public int totalPrice() {
+        return 0;
+    }
 }

@@ -16,8 +16,8 @@ public enum FieldFixture {
     노선_내_역_목록("stations", "stations", "노선 내 역 목록"),
     노선_내_역_아이디_목록("stations.id", "stations[].id", "노선 내 역 아이디"),
     노선_내_역_이름_목록("stations.name", "stations[].name", "노선 내 역 이름"),
-    구간_거리("distance", "distance", "구간 거리"),
-    구간_소요시간("duration", "duration", "구간 소요시간"),
+    구간_거리("distance", "distance", "구간 거리 (km)"),
+    구간_소요시간("duration", "duration", "구간 소요시간 (분)"),
 
 
     경로_내_역_목록("stations", "stations", "경로 내 역 목록"),
@@ -27,7 +27,7 @@ public enum FieldFixture {
     경로_조회_출발지_아이디("source", "source", "출발지 역"),
     경로_조회_도착지_아이디("target", "target", "도착지 역"),
     경로_조회_타입("type", "type", "경로 조회 타입"),
-    경로_요금("price", "price", "경로 요금"),
+    경로_요금("price", "price", "경로 요금 (원)"),
     ;
 
     private final String field;
