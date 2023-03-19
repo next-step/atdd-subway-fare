@@ -128,7 +128,8 @@ public class Sections {
                     upSection.get().getLine(),
                     downSection.get().getUpStation(),
                     upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                    upSection.get().getDistance() + downSection.get().getDistance(),
+                    upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);
@@ -148,6 +149,14 @@ public class Sections {
     }
 
     public int totalDistance() {
-        return sections.stream().mapToInt(Section::getDistance).sum();
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
+    }
+
+    public int totalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }

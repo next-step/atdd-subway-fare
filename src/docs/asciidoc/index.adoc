@@ -11,4 +11,10 @@
 
 === 경로 조회
 
-operation::path[snippets='http-request,http-response']
+==== 최단 거리 경로 조회
+
+operation::path[snippets='request-parameters,http-request,response-fields,http-response']
+
+==== 최소 시간 경로 조회
+
+operation::path[snippets='request-parameters,http-request,response-fields,http-response']

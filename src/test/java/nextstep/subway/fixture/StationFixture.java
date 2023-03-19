@@ -12,15 +12,21 @@ import static nextstep.subway.fixture.FieldFixture.식별자_아이디;
 import static nextstep.subway.fixture.FieldFixture.역_이름;
 
 public enum StationFixture {
+    교대역,
     강남역,
     역삼역,
+    선릉역,
+    삼성역,
+    양재역,
+    정자역,
+    남부터미널역,
     ;
 
     public String 역_이름() {
         return name();
     }
 
-    public Map<String, String> 응답_데이터_생성() {
+    public Map<String, String> 요청_데이터_생성() {
         Map<String, String> params = new HashMap<>();
         params.put(역_이름.필드명(), 역_이름());
         return params;
@@ -35,7 +41,7 @@ public enum StationFixture {
     }
 
     public Station 엔티티_생성(Long id) {
-        Station station = new Station(역_이름());
+        Station station = 엔티티_생성();
         ReflectionTestUtils.setField(station, 식별자_아이디.필드명(), id);
         return station;
     }
