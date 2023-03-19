@@ -13,6 +13,7 @@ import static nextstep.subway.acceptance.support.LineSteps.지하철_노선_생�
 import static nextstep.subway.acceptance.support.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.support.PathSteps.지하철_경로_조회_요청;
 import static nextstep.subway.acceptance.support.PathSteps.총_거리와_소요_시간이_조회된다;
+import static nextstep.subway.acceptance.support.PathSteps.총_이용_요금이_조회된다;
 import static nextstep.subway.acceptance.support.StationSteps.지하철역_생성_요청;
 import static nextstep.subway.domain.path.PathType.DISTANCE;
 import static nextstep.subway.domain.path.PathType.DURATION;
@@ -69,6 +70,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      * When 교대역에서 양재역까지의 최단 거리 경로를 조회하면
      * Then 교대역 -> 남부터미널역 -> 양재역 순으로 역 목록이 조회된다
+     * And 지하철 총 이용 요금이 조회된다 (1250원)
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다")
     @Test
@@ -84,11 +86,15 @@ class PathAcceptanceTest extends AcceptanceTest {
                 교대_남부터미널_구간.구간_거리() + 남부터미널_양재_구간.구간_거리(),
                 교대_남부터미널_구간.구간_소요시간() + 남부터미널_양재_구간.구간_소요시간()
         );
+        총_이용_요금이_조회된다(경로_조회_결과, 1250);
     }
+
+
 
     /**
      * When 교대역에서 양재역까지의 최소 시간 경로를 조회하면
      * Then 교대역 -> 강남역 -> 양재역 순으로 역 목록이 조회된다
+     * And 지하철 총 이용 요금이 조회된다 (1250 + 250 = 1450원)
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다")
     @Test
@@ -104,5 +110,6 @@ class PathAcceptanceTest extends AcceptanceTest {
                 교대_강남_구간.구간_거리() + 강남_양재_구간.구간_거리(),
                 교대_강남_구간.구간_소요시간() + 강남_양재_구간.구간_소요시간()
         );
+        총_이용_요금이_조회된다(경로_조회_결과, 1450);
     }
 }

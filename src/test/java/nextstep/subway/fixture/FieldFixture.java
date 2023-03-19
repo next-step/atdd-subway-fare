@@ -27,6 +27,7 @@ public enum FieldFixture {
     경로_조회_출발지_아이디("source", "source", "출발지 역"),
     경로_조회_도착지_아이디("target", "target", "도착지 역"),
     경로_조회_타입("type", "type", "경로 조회 타입"),
+    경로_요금("price", "price", "경로 요금"),
     ;
 
     private final String field;
