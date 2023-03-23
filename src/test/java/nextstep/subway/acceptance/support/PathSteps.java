@@ -3,12 +3,12 @@ package nextstep.subway.acceptance.support;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static nextstep.subway.fixture.FieldFixture.경로_요금;
 import static nextstep.subway.fixture.FieldFixture.경로_조회_도착지_아이디;
 import static nextstep.subway.fixture.FieldFixture.경로_조회_출발지_아이디;
 import static nextstep.subway.fixture.FieldFixture.경로_조회_타입;
@@ -16,7 +16,7 @@ import static nextstep.subway.fixture.FieldFixture.구간_거리;
 import static nextstep.subway.fixture.FieldFixture.구간_소요시간;
 import static nextstep.subway.utils.JsonPathUtil.Integer로_추출;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 public class PathSteps {
 
@@ -37,14 +37,14 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static void 경로_조회에_성공한다(ExtractableResponse<Response> 지하철_경로_조회_결과) {
-        assertThat(지하철_경로_조회_결과.statusCode()).isEqualTo(HttpStatus.OK.value());
+    public static void 총_거리와_소요_시간이_조회된다(ExtractableResponse<Response> 경로_조회_결과, int 총_구간거리, int 총_소요시간) {
+        assertSoftly(softly -> {
+            softly.assertThat(Integer로_추출(경로_조회_결과, 구간_거리)).isEqualTo(총_구간거리);
+            softly.assertThat(Integer로_추출(경로_조회_결과, 구간_소요시간)).isEqualTo(총_소요시간);
+        });
     }
 
-    public static void 총_거리와_소요_시간이_조회된다(ExtractableResponse<Response> 경로_조회_결과, int 총_구간거리, int 총_소요시간) {
-        assertAll(
-                () -> assertThat(Integer로_추출(경로_조회_결과, 구간_거리)).isEqualTo(총_구간거리),
-                () -> assertThat(Integer로_추출(경로_조회_결과, 구간_소요시간)).isEqualTo(총_소요시간)
-        );
+    public static void 총_이용_요금이_조회된다(ExtractableResponse<Response> 경로_조회_결과, int 총_요금) {
+        assertThat(Integer로_추출(경로_조회_결과, 경로_요금)).isEqualTo(총_요금);
     }
 }

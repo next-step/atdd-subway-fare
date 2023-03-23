@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 
-import static nextstep.subway.acceptance.support.PathSteps.경로_조회에_성공한다;
+import static nextstep.subway.acceptance.support.CommonSupporter.조회에_성공한다;
 import static nextstep.subway.documentation.support.PathDocumentSupport.지하철_경로_조회_요청;
 import static nextstep.subway.domain.path.PathType.DISTANCE;
 import static nextstep.subway.fixture.SectionFixture.강남_역삼_구간;
@@ -44,10 +44,12 @@ class PathDocumentation extends Documentation {
             @BeforeEach
             void setUp() {
                 ArrayList<StationResponse> 역_목록 = Lists.newArrayList(
-                        강남역.응답_데이터_생성(출발지역_ID), 역삼역.응답_데이터_생성(도착지역_ID)
+                        강남역.응답_데이터_생성(출발지역_ID),
+                        역삼역.응답_데이터_생성(도착지역_ID)
                 );
-                PathResponse pathResponse = new PathResponse(역_목록, 강남_역삼_구간.구간_거리(), 강남_역삼_구간.구간_소요시간());
+                PathResponse pathResponse = new PathResponse(역_목록, 강남_역삼_구간.구간_거리(), 강남_역삼_구간.구간_소요시간(), 1250);
 
+                // RestDocs는 테스트 기반인 문서로 신뢰성이 보장되는 장점이 있는데, 테스트의 속도를 위해 Mock 테스트로 진행한다면 신뢰성이 있다고 봐야할까..??
                 when(pathService.findPath(출발지역_ID, 도착지역_ID, DISTANCE.name()))
                         .thenReturn(pathResponse);
             }
@@ -57,7 +59,7 @@ class PathDocumentation extends Documentation {
             void it_responses_200() {
                 ExtractableResponse<Response> 경로_조회_결과 = 지하철_경로_조회_요청(spec, 출발지역_ID, 도착지역_ID, DISTANCE.name());
 
-                경로_조회에_성공한다(경로_조회_결과);
+                조회에_성공한다(경로_조회_결과);
             }
         }
     }

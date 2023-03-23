@@ -13,6 +13,7 @@ import static nextstep.subway.acceptance.support.PathSteps.경로_찾기_요청_
 import static nextstep.subway.documentation.Documentation.restDocsFilter;
 import static nextstep.subway.fixture.FieldFixture.경로_내_역_아이디_목록;
 import static nextstep.subway.fixture.FieldFixture.경로_내_역_이름_목록;
+import static nextstep.subway.fixture.FieldFixture.경로_요금;
 import static nextstep.subway.fixture.FieldFixture.경로_조회_도착지_아이디;
 import static nextstep.subway.fixture.FieldFixture.경로_조회_출발지_아이디;
 import static nextstep.subway.fixture.FieldFixture.경로_조회_타입;
@@ -47,7 +48,8 @@ public class PathDocumentSupport {
                 fieldWithPath(경로_내_역_아이디_목록.문서_필드명()).type(JsonFieldType.NUMBER).description(경로_내_역_아이디_목록.필드_설명()),
                 fieldWithPath(경로_내_역_이름_목록.문서_필드명()).type(JsonFieldType.STRING).description(경로_내_역_이름_목록.필드_설명()),
                 fieldWithPath(구간_거리.문서_필드명()).type(JsonFieldType.NUMBER).description(구간_거리.필드_설명()),
-                fieldWithPath(구간_소요시간.문서_필드명()).type(JsonFieldType.NUMBER).description(구간_소요시간.필드_설명())
+                fieldWithPath(구간_소요시간.문서_필드명()).type(JsonFieldType.NUMBER).description(구간_소요시간.필드_설명()),
+                fieldWithPath(경로_요금.문서_필드명()).type(JsonFieldType.NUMBER).description(경로_요금.필드_설명())
         );
     }
 }
