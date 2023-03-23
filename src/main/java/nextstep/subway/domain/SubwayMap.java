@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 public class SubwayMap {
     private List<Line> lines;
 
+    private FareCalcurator fareCalcurator = new FareCalcurator();
+
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
     }
@@ -17,7 +19,7 @@ public class SubwayMap {
     public Path findPath(Station source, Station target, PathType type) {
         Sections sections = findShortestPathSections(source, target);
 
-        int fare = sections.calculateFare();
+        int fare = fareCalcurator.calculate(sections.totalDistance());
 
         if(type.equals(PathType.DURATION)) {
             sections = findFastPathSections(source, target);
