@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
-
+    private SimpleDirectedWeightedGraph<Station, SectionEdge> graph;
     private FareCalcurator fareCalcurator = new FareCalcurator();
 
     public SubwayMap(List<Line> lines) {
@@ -29,33 +29,11 @@ public class SubwayMap {
     }
 
     private Sections findShortestPathSections(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        // 지하철 역(정점)을 등록
-        lines.stream()
-                .flatMap(it -> it.getStations().stream())
-                .distinct()
-                .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+        setVertex();
 
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
-
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
-                });
+        setEdgeAndWeight();
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -69,33 +47,12 @@ public class SubwayMap {
     }
 
     private Sections findFastPathSections(Station source, Station target) {
-        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+        graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
-        // 지하철 역(정점)을 등록
-        lines.stream()
-                .flatMap(it -> it.getStations().stream())
-                .distinct()
-                .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+        setVertex();
 
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDuration());
-                });
+        setEdgeAndWeight();
 
-        // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDuration());
-                });
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -106,5 +63,34 @@ public class SubwayMap {
                 .collect(Collectors.toList());
 
         return new Sections(sections);
+    }
+
+    private void setVertex(){
+        lines.stream()
+                .flatMap(it -> it.getStations().stream())
+                .distinct()
+                .collect(Collectors.toList())
+                .forEach(it -> graph.addVertex(it));
+
+    }
+
+    private void setEdgeAndWeight(){
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    graph.setEdgeWeight(sectionEdge, it.getDuration());
+                });
+
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                });
     }
 }
