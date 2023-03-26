@@ -218,4 +218,48 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(1850);
     }
 
+    /**
+     * Feature: 노선 추가 요금
+     *
+     * Scenario: 추가 요금이 있는 노선의 경비를 조회
+     *
+     * Given 지하철 역이 등록되어 있음
+     * And 지하철 노선이 등록되어 있음
+     * When 출발역에서 도착역까지의 최소 거리 기준으로 경로 조회를 요청
+     * Then 최소 거리 기준으로 경로를 응답
+     * And 지하철 이용 요금도 추가요금을 포함하여 응답
+     */
+    @DisplayName("두 역의 최소 거리 경로와 지하철 요금을 조회한다.(1250원 + 1000원)")
+    @Test
+    void test5() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(강남역, 개방역, "DISTANCE", "FARE");
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 개방역);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2250);
+    }
+
+    /**
+     * Feature: 노선 추가 요금
+     *
+     * Scenario: 추가요금이 있는 노선을 두개 이상 지날 경우 가장 높은 금액의 추가 요금만 적용
+     *
+     * Given 지하철 역이 등록되어 있음
+     * And 지하철 노선이 등록되어 있음
+     * When 출발역에서 도착역까지의 최소 거리 기준으로 경로 조회를 요청
+     * Then 최소 거리 기준으로 경로를 응답
+     * And 지하철 이용 요금도 추가요금을 포함하여 응답
+     */
+    @DisplayName("두 역의 최소 거리 경로와 지하철 요금을 조회한다.(1250원 + 10000원)")
+    @Test
+    void test6() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(강남역, 수리역, "DISTANCE", "FARE");
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 개방역, 수리역);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(11250);
+    }
+
 }
