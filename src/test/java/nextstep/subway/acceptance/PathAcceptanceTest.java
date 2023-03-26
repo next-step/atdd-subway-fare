@@ -23,9 +23,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
+    private Long 신사역;
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+
     private static final String DISTANCE_TYPE = "DISTANCE";
     private static final String DURATION_TYPE = "DURATION";
 
@@ -44,14 +46,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+        신사역 = 지하철역_생성_요청("신사역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 1);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 1, 10);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 10, 10);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 1,10));
-
-
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 10,10));
+        지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(신사역, 강남역, 50,10));
     }
 
     /**
@@ -64,10 +66,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        var response = 두_역의_경로_조회_요청(교대역, 양재역, DISTANCE_TYPE);
+        var response = 두_역의_경로_조회_요청(교대역, 강남역, DISTANCE_TYPE);
+
 
         // then
-        경로_조회_검증(response, 2, 20, 1250, 교대역, 남부터미널역, 양재역);
+        경로_조회_검증(response, 10, 1, 1250, 교대역, 강남역);
     }
 
     /**
@@ -76,15 +79,31 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And 총 거리와 소요 시간을 함께 응답받는다.
      * And 최단 거리 기준의 운임 요금을 함께 응답받는다.
      */
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         // when
         var response = 두_역의_경로_조회_요청(교대역, 양재역, DURATION_TYPE);
 
         // then
-        경로_조회_검증(response, 20, 2, 1250, 교대역, 강남역, 양재역);
+        경로_조회_검증(response, 20, 2, 1450, 교대역, 강남역, 양재역);
     }
+
+    /**
+     * When 거리가 50초과인 경로를 조회하면
+     * Then 기본 운임(2050) + 50km 초과하는 거리에서 8km마다 100원의 요금이 부과된다.
+     */
+    @DisplayName("50 < 거리: 요금 확인")
+    @Test
+    void fareTest2() {
+        // when
+        var response = 두_역의_경로_조회_요청(양재역, 신사역, DURATION_TYPE);
+
+        // then
+        경로_조회_검증(response, 60, 11, 2250, 양재역, 강남역, 신사역);
+    }
+
+
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
