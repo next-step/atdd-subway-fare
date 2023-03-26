@@ -26,7 +26,7 @@ public class Path {
     }
 
     public int extractFare() {
-        int fare = Fare.calculate(extractDistance());
+        int fare = Fare.calculate(extractDistance()) + sections.getHighestLineExtraFee();
         return fare;
     }
 
