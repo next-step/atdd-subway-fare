@@ -155,4 +155,13 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int getHighestLineExtraFee() {
+        Integer integer = sections.stream()
+                .map(Section::getLineExtraFare)
+                .max(Integer::compareTo)
+                .orElse(0);
+        return integer;
+    }
+
 }

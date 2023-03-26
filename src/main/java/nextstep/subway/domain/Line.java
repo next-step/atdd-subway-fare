@@ -20,8 +20,13 @@ public class Line {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, Integer extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public Long getId() {
@@ -70,11 +75,14 @@ public class Line {
         if (this == o) return true;
         if (!(o instanceof Line)) return false;
         Line line = (Line) o;
-        return Objects.equals(getId(), line.getId());
+        if (getId() != null && line.id != null) {
+            return getId().equals(line.id);
+        }
+        return Objects.equals(getName(), line.getName()) && Objects.equals(getColor(), line.getColor()) && Objects.equals(getExtraFare(), line.getExtraFare());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(getName(), getColor(), getExtraFare());
     }
 }

@@ -76,16 +76,27 @@ public class Section extends DefaultWeightedEdge {
                 || (this.upStation == downStation && this.downStation == upStation);
     }
 
+    public int getLineExtraFare() {
+        return line.getExtraFare();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Section)) return false;
         Section section = (Section) o;
-        return Objects.equals(getId(), section.getId());
+        if (getId() != null && section.getId() != null) {
+            return getId().equals(section.getId());
+        }
+        return getDistance() == section.getDistance()
+                && getDuration() == section.getDuration()
+                && Objects.equals(getLine(), section.getLine())
+                && Objects.equals(getUpStation(), section.getUpStation())
+                && Objects.equals(getDownStation(), section.getDownStation());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(getLine(), getUpStation(), getDownStation(), getDistance(), getDuration());
     }
 }

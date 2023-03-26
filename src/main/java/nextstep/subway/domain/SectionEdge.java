@@ -22,7 +22,7 @@ public class SectionEdge extends DefaultWeightedEdge {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SectionEdge)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         SectionEdge that = (SectionEdge) o;
         return Objects.equals(getSection(), that.getSection());
     }
