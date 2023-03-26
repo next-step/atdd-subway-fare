@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
@@ -33,13 +35,17 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 논현역;
     private Long 신논현역;
     private Long 논현선;
+    private Long 개방역;
+    private Long 수리역;
+    private Long 사호선;
+    private Long 오호선;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 교대역    --- *2호선* ---   강남역     ---  4호선  ---   개방역
+     * |                        |                           /
+     * *3호선*                   *신분당선*                   5호선
+     * |                        |                           /
+     * 남부터미널역  --- *3호선* ---   양재                     수리역
      */
     @BeforeEach
     public void setUp() {
@@ -52,12 +58,19 @@ class PathAcceptanceTest extends AcceptanceTest {
         논현역 = 지하철역_생성_요청("논현역").jsonPath().getLong("id");
         신논현역 = 지하철역_생성_요청("신논현역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 15, 10);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 58, 10);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
-        논현선 = 지하철_노선_생성_요청("논현선", "orange", 논현역, 신논현역, 58, 5);
+        개방역 = 지하철역_생성_요청("개방역").jsonPath().getLong("id");
+        수리역 = 지하철역_생성_요청("수리역").jsonPath().getLong("id");
 
+
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 15, 10, 0);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 58, 10, 0);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5, 0);
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 2));
+
+        논현선 = 지하철_노선_생성_요청("논현선", "orange", 논현역, 신논현역, 58, 5, 0);
+
+        사호선 = 지하철_노선_생성_요청("사호선", "orange", 강남역, 개방역, 10, 5, 1000);
+        오호선 = 지하철_노선_생성_요청("오호선", "orange", 개방역, 수리역, 10, 5, 10000);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -84,7 +97,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int extraFare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -93,6 +106,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("extraFare", extraFare + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
@@ -125,8 +139,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_경로_조회를_요청(교대역, 양재역, "DURATION", "DURATION");
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(7);
+        JsonPath jsonPath = response.jsonPath();
+        List<Long> 경로 = jsonPath.getList("stations.id", Long.class);
+        int 걸리는_시간 = response.jsonPath().getInt("duration");
+        assertThat(경로).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(걸리는_시간).isEqualTo(7);
     }
 
     /**
