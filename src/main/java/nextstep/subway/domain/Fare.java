@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 public class Fare {
     private static final int DEFAULT_FARE_DISTANCE = 10;
     private static final int DEFAULT_FARE = 1250;
+    public static final int DEFAULT_DISTANCE = 50;
 
     private Fare() {
     }
@@ -15,7 +16,7 @@ public class Fare {
         if (distance <= DEFAULT_FARE_DISTANCE) {
             return fare;
         }
-        if (distance <= 50) {
+        if (distance <= DEFAULT_DISTANCE) {
             fare += calculateOverFare10To50(distance - DEFAULT_FARE_DISTANCE);
             return fare;
         }
