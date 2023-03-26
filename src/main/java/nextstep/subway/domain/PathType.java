@@ -4,22 +4,17 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public enum PathType {
     DISTANCE {
         @Override
-        protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section) {
-            SectionEdge sectionEdge = SectionEdge.of(section);
+        protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section) {
             graph.setEdgeWeight(sectionEdge, section.getDistance());
         }
     },
     DURATION {
         @Override
-        protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section) {
-            SectionEdge sectionEdge = SectionEdge.of(section);
+        protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section) {
             graph.setEdgeWeight(sectionEdge, section.getDuration());
         }
     },
@@ -32,11 +27,11 @@ public enum PathType {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    setEdgeWeight(graph, it);
+                    setEdgeWeight(graph, sectionEdge, it);
                 });
     }
 
-    protected abstract void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section);
+    protected abstract void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section);
 
     public static PathType of(String codeStr) {
         if (codeStr == null) {
