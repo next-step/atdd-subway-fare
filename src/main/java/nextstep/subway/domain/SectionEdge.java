@@ -2,6 +2,8 @@ package nextstep.subway.domain;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+import java.util.Objects;
+
 public class SectionEdge extends DefaultWeightedEdge {
     private Section section;
 
@@ -15,5 +17,18 @@ public class SectionEdge extends DefaultWeightedEdge {
 
     public Section getSection() {
         return section;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SectionEdge)) return false;
+        SectionEdge that = (SectionEdge) o;
+        return Objects.equals(getSection(), that.getSection());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSection());
     }
 }
