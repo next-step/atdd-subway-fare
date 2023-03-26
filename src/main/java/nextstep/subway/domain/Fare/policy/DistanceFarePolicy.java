@@ -1,10 +1,10 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.Fare.policy;
 
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 import java.util.stream.Stream;
 
-public enum FarePolicy {
+public enum DistanceFarePolicy {
 	BASIC(distance -> distance > 0,
 		distance -> 1_250),
 	OVER_10KM_AND_UNDER_50KM(distance -> distance > 10,
@@ -15,13 +15,13 @@ public enum FarePolicy {
 	private final IntPredicate condition;
 	private final IntFunction<Integer> calculate;
 
-	FarePolicy(IntPredicate condition, IntFunction<Integer> calculate) {
+	DistanceFarePolicy(IntPredicate condition, IntFunction<Integer> calculate) {
 		this.condition = condition;
 		this.calculate = calculate;
 	}
 
 	public static int calculateByDistance(int distance) {
-		return Stream.of(FarePolicy.values())
+		return Stream.of(DistanceFarePolicy.values())
 			.filter(farePolicy -> farePolicy.findPolicy(distance))
 			.mapToInt(farePolicy -> farePolicy.getFare(distance))
 			.sum();

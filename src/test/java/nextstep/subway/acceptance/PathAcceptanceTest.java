@@ -41,24 +41,24 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 	public static Stream<Arguments> providerOfPathWithinTenKM() {
 		return Stream.of(
-			Arguments.arguments(교대역, 양재역, 1_250),
-			Arguments.arguments(양재역, 교대역, 1_250),
-			Arguments.arguments(강남역, 남부터미널역, 1_250),
-			Arguments.arguments(남부터미널역, 강남역, 1_250)
+			Arguments.arguments(교대역, 양재역, 1_750),
+			Arguments.arguments(양재역, 교대역, 1_750),
+			Arguments.arguments(강남역, 남부터미널역, 1_750),
+			Arguments.arguments(남부터미널역, 강남역, 1_750)
 		);
 	}
 
 	public static Stream<Arguments> providerOfPathExceedingTenKMAndLessThanFiftyKM() {
 		return Stream.of(
-			Arguments.arguments(교대역, 신논현역, 1_750),
-			Arguments.arguments(신논현역, 교대역, 1_750)
+			Arguments.arguments(교대역, 신논현역, 2_750),
+			Arguments.arguments(신논현역, 교대역, 2_750)
 		);
 	}
 
 	public static Stream<Arguments> providerOfPathExceedingFiftyKM() {
 		return Stream.of(
-			Arguments.arguments(고속터미널역, 양재역, 2_150),
-			Arguments.arguments(양재역, 고속터미널역, 2_150)
+			Arguments.arguments(고속터미널역, 양재역, 3_150),
+			Arguments.arguments(양재역, 고속터미널역, 3_150)
 		);
 	}
 
@@ -72,7 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 	public static Stream<Arguments> providerOfPathHasTwoOrMoreLineWithAdditionalFare() {
 		return Stream.of(
-			Arguments.arguments(남부터미널역, 신논현역, 2_850),
+			Arguments.arguments(남부터미널역, 신논현역, 2_750),
 			Arguments.arguments(남부터미널역, 강남역, 1_750)
 		);
 	}
@@ -131,10 +131,10 @@ class PathAcceptanceTest extends AcceptanceTest {
 		신논현역 = 지하철역_생성_요청("신논현역").jsonPath().getLong("id");
 		교대역 = 지하철역_생성_요청("교대역").jsonPath().getLong("id");
 
-		이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 7, 5);
-		신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5);
-		삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
-		구호선 = 지하철_노선_생성_요청("9호선", "yellow", 고속터미널역, 신논현역, 17, 17);
+		이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 7, 5, 0);
+		신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5, 1000);
+		삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10, 500);
+		구호선 = 지하철_노선_생성_요청("9호선", "yellow", 고속터미널역, 신논현역, 17, 17, 800);
 
 		지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(고속터미널역, 교대역, 48, 25));
 		지하철_노선에_지하철_구간_생성_요청(신분당선, createSectionCreateParams(신논현역, 강남역, 25, 35));
@@ -248,7 +248,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 로그인_유저의_두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 양재역);
 
 		// then
-		경로의_요금을_검증함(response, 720);
+		경로의_요금을_검증함(response, 1_470);
 	}
 
 	@DisplayName("어린이 사용자일 경우, 할인이 적용된 운임을 검증한다.")
@@ -258,6 +258,6 @@ class PathAcceptanceTest extends AcceptanceTest {
 		ExtractableResponse<Response> response = 로그인_유저의_두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 양재역);
 
 		// then
-		경로의_요금을_검증함(response, 450);
+		경로의_요금을_검증함(response, 1_050);
 	}
 }

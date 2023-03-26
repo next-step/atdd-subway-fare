@@ -151,11 +151,21 @@ public class Sections {
 			.findFirst();
 	}
 
+	public List<Integer> getLineFares() {
+		return sections.stream()
+			.map(Section::getLineFare)
+			.collect(Collectors.toList());
+	}
+
 	public int totalDistance() {
 		return sections.stream().mapToInt(Section::getDistance).sum();
 	}
 
 	public int totalDuration() {
 		return sections.stream().mapToInt(Section::getDuration).sum();
+	}
+
+	public boolean isPositiveTotalDistance() {
+		return totalDistance() > 0;
 	}
 }
