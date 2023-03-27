@@ -12,7 +12,9 @@ import java.util.Map;
 import static nextstep.subway.fixture.FieldFixture.노선_내_역_아이디_목록;
 import static nextstep.subway.fixture.FieldFixture.노선_색깔;
 import static nextstep.subway.fixture.FieldFixture.노선_이름;
+import static nextstep.subway.fixture.FieldFixture.노선_추가요금;
 import static nextstep.subway.fixture.FieldFixture.데이터_생성_결과_로케이션;
+import static nextstep.subway.utils.JsonPathUtil.Integer로_추출;
 import static nextstep.subway.utils.JsonPathUtil.List로_추출;
 import static nextstep.subway.utils.JsonPathUtil.문자열로_추출;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -119,5 +121,6 @@ public class LineSteps {
     public static void 노선_정보가_조회된다(ExtractableResponse<Response> 노선_조회_결과, LineFixture 노선) {
         assertThat(문자열로_추출(노선_조회_결과, 노선_이름)).isEqualTo(노선.노선_이름());
         assertThat(문자열로_추출(노선_조회_결과, 노선_색깔)).isEqualTo(노선.노선_색깔());
+        assertThat(Integer로_추출(노선_조회_결과, 노선_추가요금)).isEqualTo(노선.추가_요금());
     }
 }

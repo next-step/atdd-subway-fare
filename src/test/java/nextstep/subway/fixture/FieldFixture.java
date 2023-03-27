@@ -10,6 +10,7 @@ public enum FieldFixture {
 
     노선_이름("name", "name", "노선 이름"),
     노선_색깔("color", "color", "노선 색깔"),
+    노선_추가요금("additionalFare", "additionalFare", "노선 추가요금"),
     노선_상행_종점역_ID("upStationId", "upStationId", "상행역 아이디"),
     노선_하행_종점역_ID("downStationId", "downStationId", "하행역 아이디"),
 
