@@ -163,6 +163,14 @@ public class Sections {
     }
 
     public int totalPrice() {
-        return new DistanceFarePolicy().calculateFare(totalDistance());
+        return new DistanceFarePolicy(maxAdditionalFare())
+                .calculateFare(totalDistance());
+    }
+
+    private int maxAdditionalFare() {
+        return sections.stream()
+                .mapToInt(it -> it.getLine().getAdditionalFare())
+                .max()
+                .orElse(0);
     }
 }
