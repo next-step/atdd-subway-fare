@@ -52,6 +52,10 @@ public class Section extends DefaultWeightedEdge {
 		return line;
 	}
 
+	public int getLineFare() {
+		return line.getFare();
+	}
+
 	public Station getUpStation() {
 		return upStation;
 	}

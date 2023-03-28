@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import static nextstep.subway.documentation.PathSteps.*;
 import static nextstep.subway.documentation.PathStubs.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -67,6 +68,7 @@ class PathDocumentation extends Documentation {
 		return document(identifier,
 			preprocessRequest(prettyPrint()),
 			preprocessResponse(prettyPrint()),
+			requestHeaders(headerWithName("Authorization").description("Bearer AccessToken").optional()),
 			requestParameters(
 				parameterWithName("source").description("출발역 id"),
 				parameterWithName("target").description("도착역 id"),

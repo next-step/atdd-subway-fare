@@ -15,6 +15,7 @@ public class Line {
 	private Long id;
 	private String name;
 	private String color;
+	private int fare;
 
 	@Embedded
 	private Sections sections = new Sections();
@@ -22,9 +23,10 @@ public class Line {
 	public Line() {
 	}
 
-	public Line(String name, String color) {
+	public Line(String name, String color, int fare) {
 		this.name = name;
 		this.color = color;
+		this.fare = fare;
 	}
 
 	public Long getId() {
@@ -41,6 +43,10 @@ public class Line {
 
 	public List<Section> getSections() {
 		return sections.getSections();
+	}
+
+	public int getFare() {
+		return fare;
 	}
 
 	public void update(String name, String color) {
