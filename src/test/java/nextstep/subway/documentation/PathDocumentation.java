@@ -17,6 +17,7 @@ import io.restassured.response.Response;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.path.PathSearch;
 
 @DisplayName("Subway Path TEST 문서화")
 public class PathDocumentation extends Documentation {
@@ -37,7 +38,7 @@ public class PathDocumentation extends Documentation {
                     Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                    ), 10, 10
+                    ), 10, 20
                 );
 
                 when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -46,7 +47,7 @@ public class PathDocumentation extends Documentation {
             @Test
             @DisplayName("200 응답 코드로 응답한다")
             void it_responses_200() {
-                ExtractableResponse<Response> response = Path_조회_API(spec, 1L, 2L);
+                ExtractableResponse<Response> response = Path_조회_API(spec, 1L, 2L, PathSearch.DISTANCE);
                 assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
             }
         }
