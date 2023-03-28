@@ -1,5 +1,6 @@
 package nextstep.subway.domain.path;
 
+import nextstep.member.domain.MemberAge;
 import nextstep.subway.domain.fare.BasicFare;
 import nextstep.subway.domain.fare.FarePolicy;
 import nextstep.subway.domain.fare.FirstFarePolicy;
@@ -11,7 +12,7 @@ public class DistanceFarePolicy {
 
     private final FarePolicy farePolicy;
 
-    public DistanceFarePolicy(int maxAdditionalFare) {
+    public DistanceFarePolicy(final int maxAdditionalFare) {
         farePolicy = new BasicFare(maxAdditionalFare);
 
         FirstFarePolicy firstFarePolicy = new FirstFarePolicy();
@@ -23,7 +24,9 @@ public class DistanceFarePolicy {
         secondFarePolicy.setNextPolicyChain(thirdFarePolicy);
     }
 
-    public int calculateFare(final int totalDistance) {
-        return farePolicy.calculateFare(totalDistance);
+    public int calculateFare(final int totalDistance, final MemberAge memberAge) {
+        int originalFare = farePolicy.calculateFare(totalDistance);
+
+        return memberAge.discountFare(originalFare);
     }
 }

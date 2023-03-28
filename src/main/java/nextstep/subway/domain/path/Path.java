@@ -1,6 +1,7 @@
 package nextstep.subway.domain.path;
 
 import lombok.Getter;
+import nextstep.member.domain.MemberAge;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
 
@@ -26,7 +27,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public int extractPrice() {
-        return sections.totalPrice();
+    public int extractPrice(final MemberAge memberAge) {
+        return sections.totalPrice(memberAge);
     }
 }

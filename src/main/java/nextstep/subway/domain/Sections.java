@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.MemberAge;
 import nextstep.subway.domain.path.DistanceFarePolicy;
 
 import javax.persistence.CascadeType;
@@ -162,9 +163,9 @@ public class Sections {
                 .sum();
     }
 
-    public int totalPrice() {
+    public int totalPrice(final MemberAge memberAge) {
         return new DistanceFarePolicy(maxAdditionalFare())
-                .calculateFare(totalDistance());
+                .calculateFare(totalDistance(), memberAge);
     }
 
     private int maxAdditionalFare() {
