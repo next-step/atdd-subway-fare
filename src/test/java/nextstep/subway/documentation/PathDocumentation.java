@@ -40,7 +40,7 @@ public class PathDocumentation extends Documentation {
                     ), 10
                 );
 
-                when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+                when(pathService.findPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
             }
 
             @Test
