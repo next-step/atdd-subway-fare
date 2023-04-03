@@ -1,6 +1,6 @@
 package nextstep.member.domain;
 
-public enum MemberAge {
+public enum MemberAgePolicy {
     ADULT(0, 0),
     YOUTH(350, 0.2),
     CHILD(350, 0.5),
@@ -11,12 +11,12 @@ public enum MemberAge {
     private final int deductibleAmount;
     private final double discountRate;
 
-    MemberAge(final int deductibleAmount, final double discountRate) {
+    MemberAgePolicy(final int deductibleAmount, final double discountRate) {
         this.deductibleAmount = deductibleAmount;
         this.discountRate = discountRate;
     }
 
-    public static MemberAge of(final int age) {
+    public static MemberAgePolicy of(final int age) {
         if (age >= 19) {
             return ADULT;
         }

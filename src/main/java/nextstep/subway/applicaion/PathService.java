@@ -1,12 +1,12 @@
 package nextstep.subway.applicaion;
 
-import static nextstep.member.domain.MemberAge.UNKNOWN;
+import static nextstep.member.domain.MemberAgePolicy.UNKNOWN;
 
 import java.util.List;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.LoginMember;
-import nextstep.member.domain.MemberAge;
+import nextstep.member.domain.MemberAgePolicy;
 import nextstep.subway.applicaion.dto.response.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
@@ -50,6 +50,6 @@ public class PathService {
         }
 
         MemberResponse member = memberService.findMember(loginMember.getId());
-        return PathResponse.of(path, MemberAge.of(member.getAge()));
+        return PathResponse.of(path, MemberAgePolicy.of(member.getAge()));
     }
 }
