@@ -1,16 +1,10 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import nextstep.subway.acceptance.support.AcceptanceTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import static nextstep.subway.acceptance.support.CommonSupporter.조회에_성공한다;
 import static nextstep.subway.acceptance.support.LineSteps.역이_순서대로_정렬되어_있다;
 import static nextstep.subway.acceptance.support.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.support.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.support.PathSteps.로그인_후_지하철_경로_조회_요청;
 import static nextstep.subway.acceptance.support.PathSteps.지하철_경로_조회_요청;
 import static nextstep.subway.acceptance.support.PathSteps.총_거리와_소요_시간이_조회된다;
 import static nextstep.subway.acceptance.support.PathSteps.총_이용_요금이_조회된다;
@@ -20,6 +14,8 @@ import static nextstep.subway.domain.path.PathType.DURATION;
 import static nextstep.subway.fixture.LineFixture.삼호선;
 import static nextstep.subway.fixture.LineFixture.신분당선;
 import static nextstep.subway.fixture.LineFixture.이호선;
+import static nextstep.subway.fixture.MemberFixture.어린이_회원_BEOM;
+import static nextstep.subway.fixture.MemberFixture.청소년_회원_JADE;
 import static nextstep.subway.fixture.SectionFixture.강남_양재_구간;
 import static nextstep.subway.fixture.SectionFixture.교대_강남_구간;
 import static nextstep.subway.fixture.SectionFixture.교대_남부터미널_구간;
@@ -29,6 +25,13 @@ import static nextstep.subway.fixture.StationFixture.교대역;
 import static nextstep.subway.fixture.StationFixture.남부터미널역;
 import static nextstep.subway.fixture.StationFixture.양재역;
 import static nextstep.subway.utils.JsonPathUtil.식별자_ID_추출;
+
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import nextstep.subway.acceptance.support.AcceptanceTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 조회 기능 인수 테스트")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -89,12 +92,10 @@ class PathAcceptanceTest extends AcceptanceTest {
         총_이용_요금이_조회된다(경로_조회_결과, 1250);
     }
 
-
-
     /**
      * When 교대역에서 양재역까지의 최소 시간 경로를 조회하면
      * Then 교대역 -> 강남역 -> 양재역 순으로 역 목록이 조회된다
-     * And 지하철 총 이용 요금이 조회된다 (1250 + 250 = 1450원)
+     * And 지하철 총 이용 요금이 조회된다 (1250 + 900(신분당선 추가요금) + 200 = 2350원)
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다")
     @Test
@@ -110,6 +111,51 @@ class PathAcceptanceTest extends AcceptanceTest {
                 교대_강남_구간.구간_거리() + 강남_양재_구간.구간_거리(),
                 교대_강남_구간.구간_소요시간() + 강남_양재_구간.구간_소요시간()
         );
-        총_이용_요금이_조회된다(경로_조회_결과, 1450);
+        총_이용_요금이_조회된다(경로_조회_결과, 2350);
+    }
+
+    /**
+     * When  청소년 계정으로 교대역에서 양재역까지의 최소 시간 경로를 조회하면
+     * Then 교대역 -> 강남역 -> 양재역 순으로 역 목록이 조회된다
+     * And 청소년 요금이 할인된 지하철 총 이용 요금이 조회된다 ((1250 + 900 + 200 - 350) x 0.8 = 1600원)
+     */
+    @DisplayName("청소년 계정으로 로그인한 후 두 역의 최소 시간 경로를 조회한다")
+    @Test
+    void find_path_by_duration_with_youth_account() {
+        // when
+        ExtractableResponse<Response> 경로_조회_결과 = 로그인_후_지하철_경로_조회_요청(청소년_회원_JADE, 교대역_ID, 양재역_ID, DURATION.name());
+
+        // then
+        조회에_성공한다(경로_조회_결과);
+        역이_순서대로_정렬되어_있다(경로_조회_결과, 교대역_ID, 강남역_ID, 양재역_ID);
+        총_거리와_소요_시간이_조회된다(
+                경로_조회_결과,
+                교대_강남_구간.구간_거리() + 강남_양재_구간.구간_거리(),
+                교대_강남_구간.구간_소요시간() + 강남_양재_구간.구간_소요시간()
+        );
+        총_이용_요금이_조회된다(경로_조회_결과, 1600);
+    }
+
+    /**
+     * Given 어린이 계정으로 로그인이 되어있고
+     * When  교대역에서 양재역까지의 최소 시간 경로를 조회하면
+     * Then 교대역 -> 강남역 -> 양재역 순으로 역 목록이 조회된다
+     * And 어린이 요금이 할인된 지하철 총 이용 요금이 조회된다 ((1250 + 900 + 200 - 350) x 0.5 = 1000원)
+     */
+    @DisplayName("어린이 계정으로 로그인한 후 두 역의 최소 시간 경로를 조회한다")
+    @Test
+    void find_path_by_duration_with_child_account() {
+        // when
+        ExtractableResponse<Response> 경로_조회_결과 = 로그인_후_지하철_경로_조회_요청(어린이_회원_BEOM, 교대역_ID, 양재역_ID, DURATION.name());
+
+        // then
+        조회에_성공한다(경로_조회_결과);
+        역이_순서대로_정렬되어_있다(경로_조회_결과, 교대역_ID, 강남역_ID, 양재역_ID);
+        총_거리와_소요_시간이_조회된다(
+                경로_조회_결과,
+                교대_강남_구간.구간_거리() + 강남_양재_구간.구간_거리(),
+                교대_강남_구간.구간_소요시간() + 강남_양재_구간.구간_소요시간()
+        );
+        총_이용_요금이_조회된다(경로_조회_결과, 1000);
     }
 }

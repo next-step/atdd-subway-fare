@@ -22,14 +22,16 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int additionalFare;
 
     @Embedded
     @Getter(NONE)
     private final Sections sections = new Sections();
 
-    public Line(final String name, final String color) {
+    public Line(final String name, final String color, final int additionalFare) {
         this.name = name;
         this.color = color;
+        this.additionalFare = additionalFare;
     }
 
     public List<Section> getSections() {

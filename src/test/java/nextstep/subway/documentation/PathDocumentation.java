@@ -50,7 +50,9 @@ class PathDocumentation extends Documentation {
                 PathResponse pathResponse = new PathResponse(역_목록, 강남_역삼_구간.구간_거리(), 강남_역삼_구간.구간_소요시간(), 1250);
 
                 // RestDocs는 테스트 기반인 문서로 신뢰성이 보장되는 장점이 있는데, 테스트의 속도를 위해 Mock 테스트로 진행한다면 신뢰성이 있다고 봐야할까..??
-                when(pathService.findPath(출발지역_ID, 도착지역_ID, DISTANCE.name()))
+                // -> API 문서는 실제 기능을 구현하기 전에 미리 만들어서 클라이언트팀에게 전달해줘야 하는 상황이 많으므로 Mock이 적합할 수도 있을 듯 함
+                // -> 또한 문서화 테스트는 비즈니스 로직 검증의 목적보다는 약속된 인터페이스가 일치하는지만 확인하면 되므로 내부 로직의 신뢰성은 통합/단위 테스트로 잡아주자!
+                when(pathService.findPath(null, 출발지역_ID, 도착지역_ID, DISTANCE.name()))
                         .thenReturn(pathResponse);
             }
 

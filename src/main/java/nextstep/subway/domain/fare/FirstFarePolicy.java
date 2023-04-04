@@ -3,7 +3,6 @@ package nextstep.subway.domain.fare;
 public class FirstFarePolicy implements FarePolicy {
 
     private static final int DISTANCE_THRESHOLDS = 10;
-    private static final int BASIC_FARE = 1250;
     private FarePolicy nextPolicyChain;
 
     @Override
@@ -13,11 +12,10 @@ public class FirstFarePolicy implements FarePolicy {
 
     @Override
     public int calculateFare(final int distance) {
-        if (distance > DISTANCE_THRESHOLDS) {
-            return BASIC_FARE
-                    + nextPolicyChain.calculateFare(distance);
+        if (distance <= DISTANCE_THRESHOLDS) {
+            return 0;
         }
 
-        return BASIC_FARE;
+        return nextPolicyChain.calculateFare(distance);
     }
 }

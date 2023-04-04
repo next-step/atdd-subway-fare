@@ -1,6 +1,7 @@
 package nextstep.subway.applicaion.dto.response;
 
 import lombok.Getter;
+import nextstep.member.domain.MemberAgePolicy;
 import nextstep.subway.domain.path.Path;
 
 import java.util.List;
@@ -20,13 +21,13 @@ public class PathResponse {
         this.price = price;
     }
 
-    public static PathResponse of(final Path path) {
+    public static PathResponse of(final Path path, final MemberAgePolicy memberAgePolicy) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int price = path.extractPrice();
+        int price = path.extractPrice(memberAgePolicy);
 
         return new PathResponse(stations, distance, duration, price);
     }

@@ -1,10 +1,10 @@
 package nextstep.subway.domain.path;
 
+import java.util.List;
 import lombok.Getter;
+import nextstep.member.domain.MemberAgePolicy;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
-
-import java.util.List;
 
 @Getter
 public class Path {
@@ -26,7 +26,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public int extractPrice() {
-        return sections.totalPrice();
+    public int extractPrice(final MemberAgePolicy memberAgePolicy) {
+        return sections.totalPrice(memberAgePolicy);
     }
 }

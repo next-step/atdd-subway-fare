@@ -25,7 +25,7 @@ public class LineService {
 
     @Transactional
     public LineResponse saveLine(final LineRequest request) {
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), request.getAdditionalFare()));
         createFirstSection(request, line);
 
         return LineResponse.of(line);

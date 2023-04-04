@@ -10,6 +10,7 @@ public enum FieldFixture {
 
     노선_이름("name", "name", "노선 이름"),
     노선_색깔("color", "color", "노선 색깔"),
+    노선_추가요금("additionalFare", "additionalFare", "노선 추가요금"),
     노선_상행_종점역_ID("upStationId", "upStationId", "상행역 아이디"),
     노선_하행_종점역_ID("downStationId", "downStationId", "하행역 아이디"),
 
@@ -28,6 +29,13 @@ public enum FieldFixture {
     경로_조회_도착지_아이디("target", "target", "도착지 역"),
     경로_조회_타입("type", "type", "경로 조회 타입"),
     경로_요금("price", "price", "경로 요금 (원)"),
+
+    회원_이메일("email", "email", "회원 이메일"),
+    회원_비밀번호("password", "password", "회원 비밀번호"),
+    회원_나이("age", "age", "회원 나이"),
+    회원_권한_목록("roles", "roles", "회원 권한 목록"),
+
+    Access_Token("accessToken", "accessToken", "Access Token"),
     ;
 
     private final String field;
