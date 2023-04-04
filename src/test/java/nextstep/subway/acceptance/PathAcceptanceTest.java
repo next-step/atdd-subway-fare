@@ -1,9 +1,9 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.path.PathSearch;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,8 +70,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given
 
         // when
-        String type = "DURATION";
-        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(강남역, 가상의역, type);
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(강남역, 가상의역, PathSearch.DURATION);
 
         // then
         Integer duration = response.jsonPath().<Integer>get("duration");
@@ -92,7 +92,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
-    private ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target, String type) {
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target,  PathSearch type) {
         return RestAssured
             .given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
