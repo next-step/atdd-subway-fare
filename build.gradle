@@ -58,17 +58,14 @@ task testDocument(type: Test) {
     }
 }
 
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
 asciidoctor {
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
     dependsOn test
-}
-
-bootJar {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
 }
 
 task copyDocument(type: Copy) {
@@ -76,4 +73,11 @@ task copyDocument(type: Copy) {
 
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }

@@ -2,9 +2,12 @@ package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
+import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.PathFinder;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.path.PathFinderFactory;
+import nextstep.subway.domain.path.PathSearch;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +22,15 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target) {
+    public PathResponse findPath(Long source, Long target, PathSearch searchType) {
+
+        List<Line> lines = lineService.findLines();
+        PathFinder pathFinder = PathFinderFactory.getPathFinder(lines, searchType);
+
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
-        List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
+
+        Path path = pathFinder.findPath(upStation, downStation);
 
         return PathResponse.of(path);
     }
