@@ -36,7 +36,10 @@ public class LineService {
     }
 
     private boolean isRequestValid(LineRequest request) {
-        return request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0 && request.getDuration() != 0;
+        return request.getUpStationId() != null
+                && request.getDownStationId() != null
+                && request.getDistance() != 0
+                && request.getDuration() != 0;
     }
 
     public List<Line> findLines() {
