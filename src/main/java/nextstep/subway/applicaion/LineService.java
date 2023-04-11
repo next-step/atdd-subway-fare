@@ -35,7 +35,7 @@ public class LineService {
         return LineResponse.of(line);
     }
 
-    private static boolean isRequestValid(LineRequest request) {
+    private boolean isRequestValid(LineRequest request) {
         return request.getUpStationId() != null && request.getDownStationId() != null && request.getDistance() != 0 && request.getDuration() != 0;
     }
 
