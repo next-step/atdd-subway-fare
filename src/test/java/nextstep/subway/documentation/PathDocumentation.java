@@ -30,7 +30,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "삼성역"),
                         new StationResponse(2L, "역삼역")
-                ), 10, 20
+                ), 10, 20, 1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
