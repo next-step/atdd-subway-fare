@@ -1,5 +1,11 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.DefaultFareHandler;
+import nextstep.subway.domain.fare.ExtraFareLineFareHandler;
+import nextstep.subway.domain.fare.FareHandler;
+import nextstep.subway.domain.fare.OverFiftyKiloFareHandler;
+import nextstep.subway.domain.fare.TenKiloToFiftyKiloFareHandler;
+
 import java.util.List;
 
 public class Path {
@@ -26,8 +32,10 @@ public class Path {
     }
 
     public int extractFare() {
-        int fare = Fare.calculate(extractDistance()) + sections.getHighestLineExtraFee();
-        return fare;
+        FareHandler fareChain = new DefaultFareHandler(new TenKiloToFiftyKiloFareHandler(new OverFiftyKiloFareHandler(new ExtraFareLineFareHandler(null, sections))));
+        int totalDistance = extractDistance();
+        Fare totalFare = fareChain.handle(totalDistance);
+        return totalFare.getFare();
     }
 
 }

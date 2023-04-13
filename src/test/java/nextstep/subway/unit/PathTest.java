@@ -28,7 +28,7 @@ public class PathTest {
 
     @BeforeEach
     public void setUp() {
-        line = new Line("line", "color");
+        line = new Line("line", "color", 0);
 
         station1 = new Station("1");
         station2 = new Station("2");
@@ -62,7 +62,7 @@ public class PathTest {
     @Test
     void test3() {
         Path path = new Path(sections3);
-        assertThat(path.extractFare()).isEqualTo(1850);
+        assertThat(path.extractFare()).isEqualTo(2150);
     }
 
 }

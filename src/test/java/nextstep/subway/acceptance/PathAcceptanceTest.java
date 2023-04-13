@@ -215,7 +215,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(논현역, 신논현역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1850);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(2150);
     }
 
     /**
