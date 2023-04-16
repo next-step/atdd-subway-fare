@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.member.application.dto.MemberResponse;
+import nextstep.subway.domain.fare.AgeDiscountFareHandler;
 import nextstep.subway.domain.fare.DefaultFareHandler;
 import nextstep.subway.domain.fare.ExtraFareLineFareHandler;
 import nextstep.subway.domain.fare.FareHandler;
@@ -31,8 +33,8 @@ public class Path {
         return sections.getStations();
     }
 
-    public int extractFare() {
-        FareHandler fareChain = new DefaultFareHandler(new TenKiloToFiftyKiloFareHandler(new OverFiftyKiloFareHandler(new ExtraFareLineFareHandler(null, sections))));
+    public int extractFare(MemberResponse loginMember) {
+        FareHandler fareChain = new AgeDiscountFareHandler(new DefaultFareHandler(new TenKiloToFiftyKiloFareHandler(new OverFiftyKiloFareHandler(new ExtraFareLineFareHandler(null, sections)))), loginMember);
         int totalDistance = extractDistance();
         Fare totalFare = fareChain.handle(totalDistance);
         return totalFare.getFare();
