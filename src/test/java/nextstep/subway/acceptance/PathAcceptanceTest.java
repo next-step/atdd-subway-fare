@@ -8,14 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
-import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -25,6 +25,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+    public static final String EMAIL_13 = "email_13@email.com";
+    public static final String EMAIL_6 = "email_6@email.com";
+    public static final String PASSWORD = "password";
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -71,6 +74,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         사호선 = 지하철_노선_생성_요청("사호선", "orange", 강남역, 개방역, 10, 5, 1000);
         오호선 = 지하철_노선_생성_요청("오호선", "orange", 개방역, 수리역, 10, 5, 10000);
+
+        회원_생성_요청(EMAIL_13, PASSWORD, 13);
+        회원_생성_요청(EMAIL_6, PASSWORD, 6);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -92,6 +98,21 @@ class PathAcceptanceTest extends AcceptanceTest {
                         preprocessResponse(prettyPrint())
                         )
                 )
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> 로그인한_사용자가_두_역의_경로_조회를_요청(Long source, Long target, String type, String accessToken, String identifier) {
+        return RestAssured
+                .given(spec).log().all()
+                .filter(document(
+                                identifier,
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                )
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();
@@ -260,6 +281,82 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 개방역, 수리역);
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(11450);
+    }
+
+
+    /**
+     * Feature: 로그인 한 사용자의 요금 계산
+     *
+     * Scenario: 로그인 한 사용자(13세)가 2km 를 이동했을 때의 요금을 계산한다.
+     *
+     * Given 지하철 역(교대역, 남부터미널역)이 등록되어 있음
+     * And 지하철 노선(3호선)이 등록되어 있음
+     * And 13세의 사용자가 등록되어 있음
+     * And 로그인하여 사용자의 인증 토큰을 들고 있음
+     * When 경로 조회를 요청
+     * Then 청소년(13세 이상, 19세미만) 요금이 적용된 지하철 이용 요금이 응답됨
+     */
+    @DisplayName("13살의 사용자가 로그인 했을 때의 지하철 요금을 조회한다.")
+    @Test
+    void test7() {
+        // given
+        String accessToken = 베어러_인증_로그인_요청(EMAIL_13, PASSWORD).jsonPath().getString("accessToken");
+
+        // when
+        ExtractableResponse<Response> pathResponse = 로그인한_사용자가_두_역의_경로_조회를_요청(교대역, 남부터미널역, "DISTANCE", accessToken, "FARE");
+
+        // then
+        assertThat(pathResponse.jsonPath().getInt("fare")).isEqualTo(1070);
+    }
+
+    /**
+     * Featrue: 로그인 한 사용자의 요금 계산
+     *
+     * Scenario: 로그인 한 사용자(6세)가 2km 를 이동했을 때의 요금을 계산한다.
+     *
+     * Given 지하철 역(교대역, 남부터미널역)이 등록되어 있음
+     * And 지하철 노선(3호선)이 등록되어 있음
+     * And 6세의 사용자가 등록되어 있음
+     * And 로그인하여 사용자의 인증 토큰을 들고 있음
+     * When 경로 조회를 요청
+     * Then 어린이(6세 이상, 13세 미만) 요금이 적용된 지하철 이용 요금이 응답됨
+     */
+    @DisplayName("6살의 사용자가 로그인 했을 때의 지하철 요금을 조회한다.")
+    @Test
+    void test8() {
+        // given
+        String accessToken = 베어러_인증_로그인_요청(EMAIL_6, PASSWORD).jsonPath().getString("accessToken");
+
+        // when
+        ExtractableResponse<Response> pathResponse = 로그인한_사용자가_두_역의_경로_조회를_요청(교대역, 남부터미널역, "DISTANCE", accessToken, "FARE");
+
+        // then
+        assertThat(pathResponse.jsonPath().getInt("fare")).isEqualTo(800);
+    }
+
+    /**
+     * Feature: 로그인 한 사용자의 복합 요금 계산
+     *
+     * Scenario: 로그인 한 사용자(13세)가 교대역-강남역-개방역(25km)를 이동했을 때의 요금을 계산한다.
+     *
+     * Given 지하철 역(교대역, 강남역, 개방역)이 등록되어 있음
+     * And 지하철 노선(2호선, 4호선-추가요금 1000원)이 등록되어 있음
+     * And 13세의 사용자가 등록되어 있음
+     * And 로그인하여 사용자의 인증 토큰을 들고 있음
+     * When 경로 조회를 요청
+     * Then 청소년(13세 이상, 19세미만) 요금과 추가운임(10km초과 ~ 50km까지 5km마다 100원)이 적용된 지하철 이용 요금이 응답됨
+     */
+    @DisplayName("로그인 한 사용자(13세)가 25km를 이동한 후 노선 추가요금 1000원을 계산했을 때의 요금을 계산한다.")
+    @Test
+    void test9() {
+        // given
+        String accessToken = 베어러_인증_로그인_요청(EMAIL_13, PASSWORD).jsonPath().getString("accessToken");
+
+        // when
+        ExtractableResponse<Response> pathResponse = 로그인한_사용자가_두_역의_경로_조회를_요청(교대역, 개방역, "DISTANCE", accessToken, "FARE");
+
+        // then
+        assertThat(pathResponse.jsonPath().getInt("fare")).isEqualTo(2110);
     }
 
 }
