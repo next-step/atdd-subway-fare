@@ -93,9 +93,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given(spec).log().all()
                 .filter(document(
-                        identifier,
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
+                                identifier,
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
                         )
                 )
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -123,29 +123,29 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", duration + "");
-        lineCreateParams.put("extraFare", extraFare + "");
+        lineCreateParams.put("upStationId", String.valueOf(upStation));
+        lineCreateParams.put("downStationId", String.valueOf(downStation));
+        lineCreateParams.put("distance", String.valueOf(distance));
+        lineCreateParams.put("duration", String.valueOf(duration));
+        lineCreateParams.put("extraFare", String.valueOf(extraFare));
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
+        params.put("upStationId", String.valueOf(upStationId));
+        params.put("downStationId", String.valueOf(downStationId));
+        params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
         return params;
     }
 
     /**
      * Feature: 지하철 경로 검색
-     *
+     * <p>
      * Scenario: 두 역의 최소 시간 경로를 조회
-     *
+     * <p>
      * Given 지하철 역이 등록되어 있음
      * And 지하철 노선이 등록되어 있음
      * And 지하철 노선에 지하철역이 등록되어 있음
@@ -169,9 +169,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 지하철 경로 검색
-     *
+     * <p>
      * Scenario: 두 역의 최단 거리 경로를 조회
-     *
+     * <p>
      * Given 지하철 역이 등록되어 있음
      * And 지하철 노선이 등록되어 있음
      * And 지하철 노선에 지하철역이 등록되어 있음
@@ -193,9 +193,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 지하철 경로 검색
-     *
+     * <p>
      * Scenario: 두 역의 최단 거리 경로를 조회
-     *
+     * <p>
      * Given 지하철 역이 등록되어 있음
      * And 지하철 노선이 등록되어 있음
      * And 지하철 노선에 지하철역이 등록되어 있음
@@ -217,9 +217,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 지하철 경로 검색
-     *
+     * <p>
      * Scenario: 두 역의 최단 거리 경로를 조회
-     *
+     * <p>
      * Given 지하철 역이 등록되어 있음
      * And 지하철 노선이 등록되어 있음
      * And 지하철 노선에 지하철역이 등록되어 있음
@@ -241,9 +241,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 노선 추가 요금
-     *
+     * <p>
      * Scenario: 추가 요금이 있는 노선의 경비를 조회
-     *
+     * <p>
      * Given 지하철 역이 등록되어 있음
      * And 지하철 노선이 등록되어 있음
      * When 출발역에서 도착역까지의 최소 거리 기준으로 경로 조회를 요청
@@ -263,9 +263,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 노선 추가 요금
-     *
+     * <p>
      * Scenario: 추가요금이 있는 노선을 두개 이상 지날 경우 가장 높은 금액의 추가 요금만 적용
-     *
+     * <p>
      * Given 지하철 역이 등록되어 있음
      * And 지하철 노선이 등록되어 있음
      * When 출발역에서 도착역까지의 최소 거리 기준으로 경로 조회를 요청
@@ -286,9 +286,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 로그인 한 사용자의 요금 계산
-     *
+     * <p>
      * Scenario: 로그인 한 사용자(13세)가 2km 를 이동했을 때의 요금을 계산한다.
-     *
+     * <p>
      * Given 지하철 역(교대역, 남부터미널역)이 등록되어 있음
      * And 지하철 노선(3호선)이 등록되어 있음
      * And 13세의 사용자가 등록되어 있음
@@ -311,9 +311,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Featrue: 로그인 한 사용자의 요금 계산
-     *
+     * <p>
      * Scenario: 로그인 한 사용자(6세)가 2km 를 이동했을 때의 요금을 계산한다.
-     *
+     * <p>
      * Given 지하철 역(교대역, 남부터미널역)이 등록되어 있음
      * And 지하철 노선(3호선)이 등록되어 있음
      * And 6세의 사용자가 등록되어 있음
@@ -336,9 +336,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Feature: 로그인 한 사용자의 복합 요금 계산
-     *
+     * <p>
      * Scenario: 로그인 한 사용자(13세)가 교대역-강남역-개방역(25km)를 이동했을 때의 요금을 계산한다.
-     *
+     * <p>
      * Given 지하철 역(교대역, 강남역, 개방역)이 등록되어 있음
      * And 지하철 노선(2호선, 4호선-추가요금 1000원)이 등록되어 있음
      * And 13세의 사용자가 등록되어 있음

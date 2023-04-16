@@ -3,7 +3,7 @@ package nextstep.subway.domain.fare;
 import nextstep.subway.domain.Fare;
 
 public abstract class FareHandler {
-    private FareHandler fareHandler;
+    private final FareHandler fareHandler;
 
     public FareHandler(FareHandler fareHandler) {
         this.fareHandler = fareHandler;

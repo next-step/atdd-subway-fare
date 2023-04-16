@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import java.util.HashMap;
 import java.util.Map;
 
-import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_조회_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_제거_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -78,8 +81,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", "신분당선");
         lineCreateParams.put("color", "bg-red-600");
-        lineCreateParams.put("upStationId", upStationId + "");
-        lineCreateParams.put("downStationId", downStationId + "");
+        lineCreateParams.put("upStationId", String.valueOf(upStationId));
+        lineCreateParams.put("downStationId", String.valueOf(downStationId));
         lineCreateParams.put("distance", 10 + "");
         lineCreateParams.put("duration", 10 + "");
         return lineCreateParams;
@@ -87,8 +90,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
         Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
+        params.put("upStationId", String.valueOf(upStationId));
+        params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", 6 + "");
         params.put("duration", 6 + "");
         return params;

@@ -9,7 +9,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static nextstep.subway.acceptance.FavoriteSteps.*;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_목록_조회_요청;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_목록_조회됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_삭제_요청;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_삭제됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_생성됨;
+import static nextstep.subway.acceptance.FavoriteSteps.즐겨찾기_생성을_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -77,20 +82,20 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
         lineCreateParams.put("color", color);
-        lineCreateParams.put("upStationId", upStation + "");
-        lineCreateParams.put("downStationId", downStation + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("upStationId", String.valueOf(upStation));
+        lineCreateParams.put("downStationId", String.valueOf(downStation));
+        lineCreateParams.put("distance", String.valueOf(distance));
+        lineCreateParams.put("duration", String.valueOf(duration));
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
+        params.put("upStationId", String.valueOf(upStationId));
+        params.put("downStationId", String.valueOf(downStationId));
+        params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
 
         return params;
     }

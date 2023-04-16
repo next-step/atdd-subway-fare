@@ -15,9 +15,9 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
-    private MemberService memberService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final MemberService memberService;
 
     public PathService(LineService lineService, StationService stationService, MemberService memberService) {
         this.lineService = lineService;

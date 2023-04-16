@@ -9,6 +9,14 @@ public class StationResponse {
     private Long id;
     private String name;
 
+    public StationResponse() {
+    }
+
+    public StationResponse(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public static StationResponse of(Station station) {
         return new StationResponse(station.getId(), station.getName());
     }
@@ -17,14 +25,6 @@ public class StationResponse {
         return stations.stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-    }
-
-    public StationResponse() {
-    }
-
-    public StationResponse(Long id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public Long getId() {

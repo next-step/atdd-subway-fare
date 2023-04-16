@@ -4,7 +4,7 @@ import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.Sections;
 
 public class ExtraFareLineFareHandler extends FareHandler {
-    private Sections sections;
+    private final Sections sections;
 
     public ExtraFareLineFareHandler(FareHandler fareHandler, Sections sections) {
         super(fareHandler);

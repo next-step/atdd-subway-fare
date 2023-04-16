@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FavoriteSteps {
     public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(String accessToken, Long source, Long target) {
         Map<String, String> params = new HashMap<>();
-        params.put("source", source + "");
-        params.put("target", target + "");
+        params.put("source", String.valueOf(source));
+        params.put("target", String.valueOf(target));
 
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)

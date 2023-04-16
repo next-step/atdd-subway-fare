@@ -20,6 +20,17 @@ public enum PathType {
     },
     ;
 
+    public static PathType of(String codeStr) {
+        if (codeStr == null) {
+            throw new IllegalArgumentException("잘못된 타입입니다.");
+        }
+        String code = codeStr.toUpperCase();
+        return Arrays.stream(values())
+                .filter(pathType -> pathType.name().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 타입입니다."));
+    }
+
     public void registerEdge(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
@@ -32,15 +43,4 @@ public enum PathType {
     }
 
     protected abstract void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section);
-
-    public static PathType of(String codeStr) {
-        if (codeStr == null) {
-            throw new IllegalArgumentException("잘못된 타입입니다.");
-        }
-        String code = codeStr.toUpperCase();
-        return Arrays.stream(values())
-                .filter(pathType -> pathType.name().equals(code))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 타입입니다."));
-    }
 }
