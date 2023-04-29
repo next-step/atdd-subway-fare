@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TokenService {
-    private MemberService memberService;
-    private JwtTokenProvider jwtTokenProvider;
-    private GithubClient githubClient;
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final GithubClient githubClient;
 
     public TokenService(MemberService memberService, JwtTokenProvider jwtTokenProvider, GithubClient githubClient) {
         this.memberService = memberService;

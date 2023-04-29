@@ -1,15 +1,16 @@
 package nextstep.subway.applicaion.dto;
 
+import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.domain.Path;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PathResponse {
-    private List<StationResponse> stations;
-    private int distance;
-    private int duration;
-    private int fare;
+    private final List<StationResponse> stations;
+    private final int distance;
+    private final int duration;
+    private final int fare;
 
     public PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {
         this.stations = stations;
@@ -18,13 +19,13 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, MemberResponse loginMember) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = path.extractFare();
+        int fare = path.extractFare(loginMember);
 
         return new PathResponse(stations, distance, duration, fare);
     }

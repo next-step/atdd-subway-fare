@@ -1,34 +1,39 @@
 package nextstep.subway.domain;
 
 public class Fare {
-    private static final int DEFAULT_FARE_DISTANCE = 10;
-    private static final int DEFAULT_FARE = 1250;
+    public static final Fare ZERO = new Fare(0);
+    private static final int DEDUCTION = 350;
+    private static final double TEENAGERS_DISCOUNT_PERCENT = 0.2;
+    private static final double CHILDREN_DISCOUNT_PERCENT = 0.5;
 
-    private Fare() {
+    private final int fare;
+
+    private Fare(int fare) {
+        this.fare = fare;
     }
 
-    public static int calculate(int distance) {
-        if (distance <= 0) {
-            throw new IllegalArgumentException("요금 계산시 거리는 1 이상 이어야 합니다.");
+    public static Fare of(int fare) {
+        if (fare < 0) {
+            throw new IllegalArgumentException("요금은 음수가 될 수 없습니다.");
         }
-        int fare = DEFAULT_FARE;
-        if (distance <= DEFAULT_FARE_DISTANCE) {
-            return fare;
-        }
-        if (distance <= 50) {
-            fare += calculateOverFare10To50(distance - DEFAULT_FARE_DISTANCE);
-            return fare;
-        }
-        fare += calculateOverFare50Over(distance - DEFAULT_FARE_DISTANCE);
+        return new Fare(fare);
+    }
+
+    public Fare add(Fare other) {
+        return new Fare(this.fare + other.fare);
+    }
+
+    public Fare teenagersDiscountFare() {
+        int discountFare = (int) (((double) (fare - DEDUCTION)) * TEENAGERS_DISCOUNT_PERCENT);
+        return new Fare(fare - discountFare);
+    }
+
+    public Fare childrenDiscountFare() {
+        int discountFare = (int) (((double) (fare - DEDUCTION)) * CHILDREN_DISCOUNT_PERCENT);
+        return new Fare(fare - discountFare);
+    }
+
+    public int getFare() {
         return fare;
     }
-
-    private static int calculateOverFare10To50(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
-    }
-
-    private static int calculateOverFare50Over(int distance) {
-        return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
-    }
-
 }

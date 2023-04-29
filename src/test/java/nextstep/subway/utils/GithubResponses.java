@@ -9,9 +9,9 @@ public enum GithubResponses {
     사용자3("3", "access_token_3", "email3@email.com"),
     사용자4("4", "access_token_4", "email4@email.com");
 
-    private String code;
-    private String accessToken;
-    private String email;
+    private final String code;
+    private final String accessToken;
+    private final String email;
 
     GithubResponses(String code, String accessToken, String email) {
         this.code = code;

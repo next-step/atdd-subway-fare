@@ -42,7 +42,7 @@ public class MemberSteps {
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
-        params.put("age", age + "");
+        params.put("age", String.valueOf(age));
 
         return RestAssured
                 .given().log().all()
@@ -78,7 +78,7 @@ public class MemberSteps {
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
-        params.put("age", age + "");
+        params.put("age", String.valueOf(age));
 
         return RestAssured
                 .given().log().all()

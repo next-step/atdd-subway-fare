@@ -1,7 +1,12 @@
 package nextstep.subway.domain;
 
-import javax.persistence.*;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Line {
@@ -10,16 +15,22 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private Integer extraFare;
 
     @Embedded
-    private Sections sections = new Sections();
+    private final Sections sections = new Sections();
 
     public Line() {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, Integer extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public Long getId() {
@@ -32,6 +43,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public Integer getExtraFare() {
+        return extraFare;
     }
 
     public List<Section> getSections() {
@@ -57,5 +72,21 @@ public class Line {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Line)) return false;
+        Line line = (Line) o;
+        if (getId() != null && line.id != null) {
+            return getId().equals(line.id);
+        }
+        return Objects.equals(getName(), line.getName()) && Objects.equals(getColor(), line.getColor()) && Objects.equals(getExtraFare(), line.getExtraFare());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getColor(), getExtraFare());
     }
 }

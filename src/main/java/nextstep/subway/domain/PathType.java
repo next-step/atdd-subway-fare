@@ -8,33 +8,17 @@ import java.util.List;
 public enum PathType {
     DISTANCE {
         @Override
-        public void registerEdge(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-            lines.stream()
-                    .flatMap(it -> it.getSections().stream())
-                    .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                    .forEach(it -> {
-                        SectionEdge sectionEdge = SectionEdge.of(it);
-                        graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                        graph.setEdgeWeight(sectionEdge, it.getDistance());
-                    });
+        protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section) {
+            graph.setEdgeWeight(sectionEdge, section.getDistance());
         }
     },
     DURATION {
         @Override
-        public void registerEdge(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
-            lines.stream()
-                    .flatMap(it -> it.getSections().stream())
-                    .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                    .forEach(it -> {
-                        SectionEdge sectionEdge = SectionEdge.of(it);
-                        graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                        graph.setEdgeWeight(sectionEdge, it.getDuration());
-                    });
+        protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section) {
+            graph.setEdgeWeight(sectionEdge, section.getDuration());
         }
     },
     ;
-
-    public abstract void registerEdge(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph);
 
     public static PathType of(String codeStr) {
         if (codeStr == null) {
@@ -46,4 +30,17 @@ public enum PathType {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 타입입니다."));
     }
+
+    public void registerEdge(List<Line> lines, SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .forEach(it -> {
+                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+                    setEdgeWeight(graph, sectionEdge, it);
+                });
+    }
+
+    protected abstract void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section);
 }
