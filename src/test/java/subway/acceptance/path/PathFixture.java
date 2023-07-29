@@ -1,9 +1,14 @@
 package subway.acceptance.path;
 
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import subway.acceptance.line.LineFixture;
 import subway.acceptance.line.LineSteps;
 import subway.acceptance.line.SectionFixture;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static subway.acceptance.station.StationFixture.getStationId;
 
 public class PathFixture {
@@ -28,5 +33,11 @@ public class PathFixture {
         var A호선_끝에_구간_추가 = SectionFixture.구간_요청_만들기(getStationId("성수역"), getStationId("왕십리역"), 3L);
         LineSteps.구간_추가_API(A호선_URI, 삼호선_끝에_구간_추가);
         LineSteps.구간_추가_API(삼호선_URI, A호선_끝에_구간_추가);
+    }
+
+    public static RestDocumentationFilter 경로_필터() {
+        return document("path",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()));
     }
 }
