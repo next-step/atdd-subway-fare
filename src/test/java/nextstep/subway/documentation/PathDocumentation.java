@@ -1,10 +1,12 @@
 package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
+import nextstep.marker.Documentation;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-public class PathDocumentation extends Documentation {
+@Documentation
+class PathDocumentation {
 
     @Test
     void path() {
