@@ -13,8 +13,9 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 
@@ -49,6 +50,10 @@ class PathDocumentation extends Document {
         return document("path",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestParameters(
+                        parameterWithName("source").description("출발 역 id"),
+                        parameterWithName("target").description("도착 역 id")
+                ),
                 responseFields(
                         fieldWithPath(".distance").description("경로 거리"),
                         fieldWithPath(".stationResponses[]").description("경로 내 지하철 역 목록"),
