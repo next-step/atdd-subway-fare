@@ -14,32 +14,28 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
+
+@Retention(RetentionPolicy.RUNTIME)
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@Retention(RetentionPolicy.RUNTIME)
-@Import({Documentation.DocumentationSetter.class})
 @ExtendWith(RestDocumentationExtension.class)
+@Import({Documentation.DocumentationSetter.class})
 public @interface Documentation {
 
     @TestComponent
     class DocumentationSetter implements ApplicationListener<ServletWebServerInitializedEvent> {
-        protected RequestSpecification spec;
 
         @Override
         public void onApplicationEvent(ServletWebServerInitializedEvent event) {
             RestAssured.port = event.getWebServer().getPort();
         }
-
-        @BeforeEach
-        public void setUp(RestDocumentationContextProvider restDocumentation) {
-            this.spec = new RequestSpecBuilder()
-                    .addFilter(documentationConfiguration(restDocumentation))
-                    .build();
-        }
     }
 }
+
+
