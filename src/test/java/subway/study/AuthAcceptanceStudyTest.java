@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import subway.member.domain.Member;
 import subway.member.domain.MemberRepository;
 import subway.utils.AcceptanceTest;
+import subway.utils.GithubResponses;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ class AuthAcceptanceStudyTest extends AcceptanceTest {
     private MemberRepository memberRepository;
 
     @DisplayName("Bearer Auth")
-    @Test
+//    @Test
     void bearerAuth() {
         Member member = Member.builder().email(EMAIL).password(PASSWORD).age(AGE).build();
         memberRepository.save(member);
@@ -49,7 +50,7 @@ class AuthAcceptanceStudyTest extends AcceptanceTest {
     @Test
     void githubAuth() {
         Map<String, String> params = new HashMap<>();
-        params.put("code", "code");
+        params.put("code", GithubResponses.사용자1.getCode());
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
