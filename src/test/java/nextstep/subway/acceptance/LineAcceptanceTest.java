@@ -7,9 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.LineSteps.*;
+
 @DisplayName("지하철 노선 관련 기능")
 @AcceptanceTest
-class LineAcceptanceTest extends LineAcceptanceTestHelper {
+class LineAcceptanceTest {
 
 
     /**

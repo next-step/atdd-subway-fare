@@ -7,12 +7,17 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.LineSteps.createLines;
+import static nextstep.subway.steps.PathSteps.getPath;
+import static nextstep.subway.steps.PathSteps.verifyFoundPath;
+import static nextstep.subway.steps.SectionSteps.createSection;
+import static nextstep.subway.steps.StationSteps.createStation;
 import static nextstep.utils.AcceptanceTestUtils.getId;
 import static nextstep.utils.AcceptanceTestUtils.verifyResponseStatus;
 
 
 @AcceptanceTest
-public class PathAcceptanceTest extends PathAcceptanceTestHelper {
+public class PathAcceptanceTest {
 
     private Long 교대역;
     private Long 강남역;

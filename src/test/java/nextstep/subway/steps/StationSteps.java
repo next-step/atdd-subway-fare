@@ -1,4 +1,4 @@
-package nextstep.subway.acceptance;
+package nextstep.subway.steps;
 
 import io.restassured.response.ValidatableResponse;
 import nextstep.utils.AcceptanceTestUtils;
@@ -6,11 +6,11 @@ import nextstep.utils.AcceptanceTestUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-class StationAcceptanceTestHelper {
+public class StationSteps {
 
-    protected static final String STATIONS_RESOURCE_URL = "/stations";
+    public static final String STATIONS_RESOURCE_URL = "/stations";
 
-    protected ValidatableResponse createStation(String stationName) {
+    public static ValidatableResponse createStation(String stationName) {
         Map<String, String> params = new HashMap<>();
         params.put("name", stationName);
 

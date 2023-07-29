@@ -12,9 +12,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.LineSteps.*;
+import static nextstep.subway.steps.SectionSteps.*;
+import static nextstep.subway.steps.StationSteps.createStation;
+
 @DisplayName("지하철 노선 관련 기능")
 @AcceptanceTest
-class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
+class SectionAcceptanceTest {
 
 
     @Nested

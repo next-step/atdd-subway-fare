@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.FavoriteSteps.*;
+import static nextstep.subway.steps.LineSteps.createLines;
+import static nextstep.subway.steps.StationSteps.createStation;
+
 @AcceptanceTest
-public class FavoriteAcceptanceTest extends FavoriteAcceptanceTestHelper {
+public class FavoriteAcceptanceTest {
 
 
     private Long 교대역;
