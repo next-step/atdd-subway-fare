@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import io.restassured.RestAssured;
 import nextstep.subway.utils.DataLoader;
 import nextstep.subway.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ public class AcceptanceTest {
 
     @BeforeEach
     public void setUp() {
+        RestAssured.port = RestAssured.DEFAULT_PORT;
         databaseCleanup.execute();
         dataLoader.loadData();
 
