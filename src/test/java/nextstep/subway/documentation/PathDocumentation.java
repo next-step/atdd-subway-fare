@@ -1,15 +1,14 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -47,14 +46,8 @@ public class PathDocumentation extends Documentation {
                         , subsectionWithPath("distance").description("조회한 경로 구간의 거리")
                 )
         );
+        spec.filter(restDocumentationFilter);
 
-        RestAssured
-                .given(spec).log().all()
-                .filter(restDocumentationFilter)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", 1L)
-                .queryParam("target", 2L)
-                .when().get("/paths")
-                .then().log().all().extract();
+        두_역의_최단_거리_경로_조회를_요청(spec, 1L, 2L);
     }
 }
