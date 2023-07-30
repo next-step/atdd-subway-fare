@@ -6,9 +6,11 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -26,11 +28,16 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
+        // given
+        Long 강남역 = 1L;
+        Long 역삼역 = 2L;
+        int distance = 10;
+
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
-                        new StationResponse(1L, "강남역"),
-                        new StationResponse(2L, "역삼역")
-                ), 10
+                        new StationResponse(강남역, "강남역"),
+                        new StationResponse(역삼역, "역삼역")
+                ), distance
         );
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
@@ -48,6 +55,12 @@ public class PathDocumentation extends Documentation {
         );
         spec.filter(restDocumentationFilter);
 
-        두_역의_최단_거리_경로_조회를_요청(spec, 1L, 2L);
+        // when
+        var response = 두_역의_최단_거리_경로_조회를_요청(spec, 강남역, 역삼역);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 역삼역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
     }
 }
