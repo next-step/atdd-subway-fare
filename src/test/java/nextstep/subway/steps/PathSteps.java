@@ -2,6 +2,7 @@ package nextstep.subway.steps;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
+import nextstep.subway.controller.request.enums.PathType;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -5,6 +5,7 @@ import nextstep.subway.domain.exception.NotEnoughSectionException;
 import nextstep.subway.domain.vo.Sections;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,10 +28,10 @@ public class Line {
     protected Line() {
     }
 
-    private Line(String name, String color, Station upStation, Station downStation, Long distance) {
+    private Line(String name, String color, Station upStation, Station downStation, Long distance, Integer duration) {
         this.name = name;
         this.color = color;
-        this.sections.add(Section.of(upStation, downStation, distance));
+        this.sections.add(Section.of(upStation, downStation, distance, duration));
     }
 
     public List<Section> getSections() {
@@ -61,6 +62,10 @@ public class Line {
         return this.sections.sumOfDistance();
     }
 
+    public int getDuration() {
+        return this.sections.sumOfDuration();
+    }
+
     public List<Station> getStations() {
         return this.sections.getStations();
     }
@@ -71,6 +76,7 @@ public class Line {
         private Station upStation;
         private Station downStation;
         private Long distance;
+        private Integer duration;
 
         private Builder() {
         }
@@ -105,8 +111,14 @@ public class Line {
             return this;
         }
 
+        public Builder duration(Integer duration) {
+            Objects.requireNonNull(duration);
+            this.duration = duration;
+            return this;
+        }
+
         public Line build() {
-            return new Line(this.name, this.color, upStation, downStation, distance);
+            return new Line(this.name, this.color, upStation, downStation, distance, duration);
         }
 
 

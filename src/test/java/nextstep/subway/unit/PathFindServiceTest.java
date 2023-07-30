@@ -143,9 +143,9 @@ class PathFindServiceTest {
         }
 
         private void givenLines() {
-            given(이호선.getSections()).willReturn(Collections.singletonList(Section.of(교대역, 강남역, 5L)));
-            given(삼호선.getSections()).willReturn(List.of(Section.of(교대역, 남부터미널역, 7L), Section.of(남부터미널역, 양재역, 2L)));
-            given(신분당선.getSections()).willReturn(List.of(Section.of(강남역, 양재역, 10L)));
+            given(이호선.getSections()).willReturn(Collections.singletonList(Section.of(교대역, 강남역, 5L, 20)));
+            given(삼호선.getSections()).willReturn(List.of(Section.of(교대역, 남부터미널역, 7L, 28), Section.of(남부터미널역, 양재역, 2L, 8)));
+            given(신분당선.getSections()).willReturn(List.of(Section.of(강남역, 양재역, 10L, 40)));
             given(lineRepository.findAll()).willReturn(List.of(이호선, 신분당선, 삼호선));
         }
 

@@ -27,7 +27,8 @@ class LineAcceptanceTest {
     void 지하철노선을_생성한다() {
         //when
         int distance = 10;
-        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+        int duration = 40;
+        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
 
         //then
         AcceptanceTestUtils.verifyResponseStatus(lineCratedResponse, HttpStatus.CREATED);
@@ -35,7 +36,7 @@ class LineAcceptanceTest {
         ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(AcceptanceTestUtils.getLocation(lineCratedResponse));
         AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
 
-        verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance, "강남역", "언주역");
+        verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance, duration, "강남역", "언주역");
     }
 
     /**
@@ -47,8 +48,10 @@ class LineAcceptanceTest {
     @Test
     void 지하철노선_목록을_조회한다() {
         //given
-        createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10);
-        createLinesWithStations("수인분당선", "bg-green-600", "수원역", "분당역", 10);
+        int distance = 10;
+        int duration = 40;
+        createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
+        createLinesWithStations("수인분당선", "bg-green-600", "수원역", "분당역", distance, duration);
 
         //when
         ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(LINES_RESOURCE_URL);
@@ -56,8 +59,8 @@ class LineAcceptanceTest {
         //then
         AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
 
-        verifyFoundLineWithPath("[0]", foundLineResponse, "신분당선", "bg-red-600", "강남역", "언주역");
-        verifyFoundLineWithPath("[1]", foundLineResponse, "수인분당선", "bg-green-600", "수원역", "분당역");
+        verifyFoundLineWithPath("[0]", foundLineResponse, "신분당선", "bg-red-600", distance, duration, "강남역", "언주역");
+        verifyFoundLineWithPath("[1]", foundLineResponse, "수인분당선", "bg-green-600", distance, duration, "수원역", "분당역");
     }
 
     /**
@@ -70,7 +73,8 @@ class LineAcceptanceTest {
     void 지하철노선을_조회한다() {
         //given
         int distance = 10;
-        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+        int duration = 40;
+        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
 
         //when
         ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(AcceptanceTestUtils.getLocation(lineCratedResponse));
@@ -78,7 +82,7 @@ class LineAcceptanceTest {
         //then
         AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
 
-        verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance, "강남역", "언주역");
+        verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance, duration, "강남역", "언주역");
     }
 
     /**
@@ -91,7 +95,8 @@ class LineAcceptanceTest {
     void 지하철_노선을_수정한다() {
         //given
         int distance = 10;
-        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+        int duration = 40;
+        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
 
         //when
         ValidatableResponse modifiedLineResponse = modifyLine("바뀐 분당선", "bg-green-600", AcceptanceTestUtils.getLocation(lineCratedResponse));
@@ -101,7 +106,7 @@ class LineAcceptanceTest {
 
         ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(AcceptanceTestUtils.getLocation(lineCratedResponse));
         AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
-        verifyFoundLine(foundLineResponse, "바뀐 분당선", "bg-green-600", distance, "강남역", "언주역");
+        verifyFoundLine(foundLineResponse, "바뀐 분당선", "bg-green-600", distance, duration, "강남역", "언주역");
     }
 
 
@@ -114,7 +119,7 @@ class LineAcceptanceTest {
     @Test
     void 지하철_노선을_제거한다() {
         //given
-        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10);
+        ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10, 40);
 
         //when
         ValidatableResponse deletedLineResponse = AcceptanceTestUtils.deleteResource(AcceptanceTestUtils.getLocation(lineCratedResponse));

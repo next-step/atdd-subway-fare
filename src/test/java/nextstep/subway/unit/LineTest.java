@@ -39,7 +39,7 @@ class LineTest {
         @Test
         void 기존_노선_하행역에_신규_구간_하행역_등록_성공() {
             // given
-            Section section = Section.of(eonjuStation, seongsuStation, 3L);
+            Section section = Section.of(eonjuStation, seongsuStation, 3L, 12);
 
             // when
             Assertions.assertDoesNotThrow(() -> secondaryLine.add(section));
@@ -52,7 +52,7 @@ class LineTest {
         @Test
         void 기존_노선_상행역에_신규_구간_상행역_등록_성공() {
             // given
-            Section section = Section.of(seongsuStation, gangnameStation, 3L);
+            Section section = Section.of(seongsuStation, gangnameStation, 3L, 12);
 
             // when
             Assertions.assertDoesNotThrow(() -> secondaryLine.add(section));
@@ -65,7 +65,7 @@ class LineTest {
         @Test
         void 기존_노선_하행역에_신규_구간_상행역_등록_성공() {
             // given
-            Section section = Section.of(seongsuStation, eonjuStation, 3L);
+            Section section = Section.of(seongsuStation, eonjuStation, 3L, 12);
 
             // when
             Assertions.assertDoesNotThrow(() -> secondaryLine.add(section));
@@ -78,7 +78,7 @@ class LineTest {
         @Test
         void 기존_노선_상행역에_신규_구간_하행역_등록_성공() {
             // given
-            Section section = Section.of(gangnameStation, seongsuStation, 3L);
+            Section section = Section.of(gangnameStation, seongsuStation, 3L, 12);
 
             // when
             Assertions.assertDoesNotThrow(() -> secondaryLine.add(section));
@@ -91,7 +91,7 @@ class LineTest {
         @Test
         void 신규_구간_하행역_기등록_실패() {
             // given
-            Section section = Section.of(gangnameStation, eonjuStation, 3L);
+            Section section = Section.of(gangnameStation, eonjuStation, 3L, 12);
 
             // when & then
             thenCode(() -> secondaryLine.add(section)).isInstanceOf(CanNotAddSectionException.class);
@@ -99,9 +99,9 @@ class LineTest {
 
         @CsvSource(value = {"10", "11", "12"})
         @ParameterizedTest
-        void 신규_구간_길이가_기존과_동일하거나_더_크면_실패(long distance) {
+        void 신규_구간_길이가_기존과_동일하거나_더_크면_실패(int distance) {
             // given
-            Section section = Section.of(gangnameStation, eonjuStation, distance);
+            Section section = Section.of(gangnameStation, eonjuStation, (long) distance, distance * 4);
 
             // when & then
             thenCode(() -> secondaryLine.add(section)).isInstanceOf(CanNotAddSectionException.class);
@@ -110,7 +110,7 @@ class LineTest {
         @Test
         void 신규_구간_기등록_실패() {
             // given
-            Section section = Section.of(gangnameStation, eonjuStation, 10L);
+            Section section = Section.of(gangnameStation, eonjuStation, 10L, 40);
 
             // when & then
             thenCode(() -> secondaryLine.add(section)).isInstanceOf(CanNotAddSectionException.class);
@@ -120,7 +120,7 @@ class LineTest {
         void 신규_구간_노선_구간_상행_하행_모두_미등록_실패() {
             // given
             Station newStation = getStation("뚝섬역", 4L);
-            Section section = Section.of(seongsuStation, newStation, 10L);
+            Section section = Section.of(seongsuStation, newStation, 10L, 40);
 
             // when & then
             thenCode(() -> secondaryLine.add(section)).isInstanceOf(CanNotAddSectionException.class);
@@ -154,7 +154,7 @@ class LineTest {
         @Test
         void 상행역_구간_제거() {
             // given
-            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L));
+            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L, 12));
 
             // when
             secondaryLine.remove(gangnameStation);
@@ -169,7 +169,7 @@ class LineTest {
         @Test
         void 하행역_구간_제거() {
             // given
-            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L));
+            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L, 12));
 
             // when
             secondaryLine.remove(seongsuStation);
@@ -184,7 +184,7 @@ class LineTest {
         @Test
         void 중간역_구간_제거() {
             // given
-            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L));
+            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L, 12));
 
             // when
             secondaryLine.remove(eonjuStation);
@@ -200,7 +200,7 @@ class LineTest {
         void 없는_역을_제거_할수_없다() {
             // given
             Station notInLineStation = getStation("보라매역", 4L);
-            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L));
+            secondaryLine.add(Section.of(eonjuStation, seongsuStation, 3L, 12));
 
             // when & then
             thenCode(() -> secondaryLine.remove(notInLineStation)).isInstanceOf(Exception.class);

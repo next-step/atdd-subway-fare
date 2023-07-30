@@ -2,6 +2,7 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ValidatableResponse;
 import nextstep.marker.AcceptanceTest;
+import nextstep.subway.controller.request.enums.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,11 +43,11 @@ public class PathAcceptanceTest {
         양재역 = getId(createStation("양재역"));
         남부터미널역 = getId(createStation("남부터미널역"));
 
-        이호선 = getId(createLines("2호선", "green", 교대역, 강남역, 10L));
-        신분당선 = getId(createLines("신분당선", "red", 강남역, 양재역, 10L));
-        삼호선 = getId(createLines("3호선", "orange", 교대역, 남부터미널역, 2L));
+        이호선 = getId(createLines("2호선", "green", 교대역, 강남역, 10L, 40));
+        신분당선 = getId(createLines("신분당선", "red", 강남역, 양재역, 10L, 40));
+        삼호선 = getId(createLines("3호선", "orange", 교대역, 남부터미널역, 2L, 8));
 
-        createSection(삼호선, 남부터미널역, 양재역, 3);
+        createSection(삼호선, 남부터미널역, 양재역, 3L, 12);
     }
 
 
@@ -78,7 +79,7 @@ public class PathAcceptanceTest {
             ValidatableResponse pathResponse = getPath(강남역, 남부터미널역, PathType.DISTANCE);
 
             // then
-            verifyFoundPath(pathResponse, 12L, 48L, "강남역", "교대역", "남부터미널역");
+            verifyFoundPath(pathResponse, 12L, 48, "강남역", "교대역", "남부터미널역");
         }
 
         @Test
@@ -87,7 +88,7 @@ public class PathAcceptanceTest {
             ValidatableResponse pathResponse = getPath(강남역, 양재역, PathType.DISTANCE);
 
             // then
-            verifyFoundPath(pathResponse, 10L, 40L, "강남역", "양재역");
+            verifyFoundPath(pathResponse, 10L, 40, "강남역", "양재역");
         }
 
     }
@@ -129,7 +130,7 @@ public class PathAcceptanceTest {
             ValidatableResponse pathResponse = getPath(강남역, 양재역, PathType.DURATION);
 
             // then
-            verifyFoundPath(pathResponse, 10L, 40,"강남역", "양재역");
+            verifyFoundPath(pathResponse, 10L, 40, "강남역", "양재역");
         }
 
     }
@@ -140,7 +141,7 @@ public class PathAcceptanceTest {
         @Test
         void 출발역과_도착역이_같은_경우() {
             // when
-            ValidatableResponse pathResponse = getPath(강남역, 강남역);
+            ValidatableResponse pathResponse = getPath(강남역, 강남역, PathType.DISTANCE);
 
             // then
             verifyResponseStatus(pathResponse, HttpStatus.BAD_REQUEST);
@@ -150,7 +151,7 @@ public class PathAcceptanceTest {
         void 출발역과_도착역이_연결되지_않은_경우() {
             // when
             Long 까치산역 = getId(createStation("까치산역"));
-            ValidatableResponse pathResponse = getPath(까치산역, 강남역);
+            ValidatableResponse pathResponse = getPath(까치산역, 강남역, PathType.DISTANCE);
 
             // then
             verifyResponseStatus(pathResponse, HttpStatus.BAD_REQUEST);
@@ -159,7 +160,7 @@ public class PathAcceptanceTest {
         @Test
         void 존재하지_않은_출발역이나_도착역을_조회_할_경우() {
             // when
-            ValidatableResponse pathResponse = getPath(10000L, 강남역);
+            ValidatableResponse pathResponse = getPath(10000L, 강남역, PathType.DISTANCE);
 
             // then
             verifyResponseStatus(pathResponse, HttpStatus.NOT_FOUND);

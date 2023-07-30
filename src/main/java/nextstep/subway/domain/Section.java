@@ -21,18 +21,22 @@ public class Section {
     @Column(nullable = false)
     private Long distance;
 
+    @Column(nullable = false)
+    private Integer duration;
+
 
     protected Section() {
     }
 
-    private Section(Station upStation, Station downStation, Long distance) {
+    private Section(Station upStation, Station downStation, Long distance, Integer duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public static Section of(Station upStation, Station downStation, Long distance) {
-        return new Section(upStation, downStation, distance);
+    public static Section of(Station upStation, Station downStation, Long distance, Integer duration) {
+        return new Section(upStation, downStation, distance, duration);
     }
 
     public Long getId() {
@@ -49,6 +53,10 @@ public class Section {
 
     public Long getDistance() {
         return distance;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 
     public boolean isDifferentAs(Section section) {

@@ -51,7 +51,7 @@ public class PathFinderTest {
         신분당선 = getLine(2L, "신분당선", "red", 강남역, 양재역, 10L);
         삼호선 = getLine(3L, "3호선", "orange", 교대역, 남부터미널역, 2L);
 
-        createSection(1L, 삼호선, 남부터미널역, 양재역, 3L);
+        createSection(1L, 삼호선, 남부터미널역, 양재역, 3L, 12);
 
 
         List<Section> sections = List.of(이호선, 신분당선, 삼호선).stream()
@@ -150,8 +150,8 @@ public class PathFinderTest {
         return station;
     }
 
-    private void createSection(long id, Line line, Station upStation, Station downStation, Long distance) {
-        Section section = spy(Section.of(upStation, downStation, distance));
+    private void createSection(long id, Line line, Station upStation, Station downStation, Long distance, Integer duration) {
+        Section section = spy(Section.of(upStation, downStation, distance, duration));
         BDDMockito.given(section.getId()).willReturn(id);
         line.add(section);
     }

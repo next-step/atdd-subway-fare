@@ -52,7 +52,7 @@ class LineServiceTest {
     @Test
     void 노선_생성() {
         // given
-        LineCreateRequest lineCreateRequest = new LineCreateRequest("2호선", "bg-green-300", gangnameStation.getId(), eonjuStation.getId(), 10L);
+        LineCreateRequest lineCreateRequest = new LineCreateRequest("2호선", "bg-green-300", gangnameStation.getId(), eonjuStation.getId(), 10L, 40);
 
         // when
         LineResponse response = lineService.saveLine(lineCreateRequest);

@@ -1,6 +1,7 @@
 package nextstep.subway.documentation;
 
 import io.restassured.response.ValidatableResponse;
+import nextstep.subway.controller.request.enums.PathType;
 import nextstep.subway.controller.resonse.PathResponse;
 import nextstep.subway.controller.resonse.StationResponse;
 import nextstep.subway.service.PathFindService;
@@ -35,11 +36,11 @@ class PathDocumentation extends Document {
 
     @Test
     void path() {
-        ValidatableResponse pathFoundResponse = PathSteps.getPath(강남역_id, 역삼역_id);
+        ValidatableResponse pathFoundResponse = PathSteps.getPath(강남역_id, 역삼역_id, PathType.DISTANCE);
 
         verifyResponseStatus(pathFoundResponse, HttpStatus.OK);
 
-        PathSteps.verifyFoundPath(pathFoundResponse, 10L, 강남역_이름, 역삼역_이름);
+        PathSteps.verifyFoundPath(pathFoundResponse, 10L, 40, 강남역_이름, 역삼역_이름);
     }
 
     @Override

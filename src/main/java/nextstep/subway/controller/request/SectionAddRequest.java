@@ -7,6 +7,7 @@ public class SectionAddRequest implements SectionAddCommand {
     private Long upStationId;
     private Long downStationId;
     private Long distance;
+    private Integer duration;
 
     public SectionAddRequest() {
     }
@@ -17,15 +18,23 @@ public class SectionAddRequest implements SectionAddCommand {
         this.distance = distance;
     }
 
+    @Override
     public Long getUpStationId() {
         return upStationId;
     }
 
+    @Override
     public Long getDownStationId() {
         return downStationId;
     }
 
+    @Override
     public Long getDistance() {
         return distance;
+    }
+
+    @Override
+    public Integer getDuration() {
+        return duration;
     }
 }

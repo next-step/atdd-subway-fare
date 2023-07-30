@@ -40,6 +40,7 @@ public class LineService {
                 .distance(createCommand.getDistance())
                 .name(createCommand.getName())
                 .color(createCommand.getColor())
+                .duration(createCommand.getDuration())
                 .build();
 
         Line satedLine = lineRepository.save(line);
@@ -84,7 +85,8 @@ public class LineService {
                 line.getName(),
                 line.getColor(),
                 stationResponses,
-                line.getDistance());
+                line.getDistance(),
+                line.getDuration());
     }
 
     @Transactional
@@ -94,7 +96,7 @@ public class LineService {
         Station upStation = stationRepository.getReferenceById(sectionAddCommand.getUpStationId());
         Station downStation = stationRepository.getReferenceById(sectionAddCommand.getDownStationId());
 
-        Section savedSection = Section.of(upStation, downStation, sectionAddCommand.getDistance());
+        Section savedSection = Section.of(upStation, downStation, sectionAddCommand.getDistance(), sectionAddCommand.getDuration());
         line.add(savedSection);
     }
 

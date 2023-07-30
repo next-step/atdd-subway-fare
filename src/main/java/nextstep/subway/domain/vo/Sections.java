@@ -46,8 +46,9 @@ public class Sections {
     private void splitSectionUpStationBase(Section oldSection, Section newSection) {
         this.sections.remove(oldSection);
         Long newSectionDistance = newSection.getDistance();
-        Section newUpSection = Section.of(newSection.getUpStation(), newSection.getDownStation(), newSectionDistance);
-        Section newDownSection = Section.of(newSection.getDownStation(), oldSection.getDownStation(), oldSection.getDistance() - newSectionDistance);
+        Integer newSectionDuration = newSection.getDuration();
+        Section newUpSection = Section.of(newSection.getUpStation(), newSection.getDownStation(), newSectionDistance, newSectionDuration);
+        Section newDownSection = Section.of(newSection.getDownStation(), oldSection.getDownStation(), oldSection.getDistance() - newSectionDistance, oldSection.getDuration() - newSectionDuration);
         this.sections.add(newUpSection);
         this.sections.add(newDownSection);
     }
@@ -55,8 +56,9 @@ public class Sections {
     private void splitSectionDownStationBase(Section oldSection, Section newSection) {
         this.sections.remove(oldSection);
         Long newSectionDistance = newSection.getDistance();
-        Section newUpSection = Section.of(oldSection.getUpStation(), newSection.getUpStation(), newSectionDistance);
-        Section newDownSection = Section.of(newSection.getUpStation(), newSection.getDownStation(), oldSection.getDistance() - newSectionDistance);
+        Integer newSectionDuration = newSection.getDuration();
+        Section newUpSection = Section.of(oldSection.getUpStation(), newSection.getUpStation(), newSectionDistance, newSectionDuration);
+        Section newDownSection = Section.of(newSection.getUpStation(), newSection.getDownStation(), oldSection.getDistance() - newSectionDistance, oldSection.getDuration() - newSectionDuration);
         this.sections.add(newUpSection);
         this.sections.add(newDownSection);
     }
@@ -105,7 +107,8 @@ public class Sections {
         Station newUpStation = upStationSection.getUpStation();
         Station newDownStation = downStationSection.getDownStation();
         long newDistance = upStationSection.getDistance() + downStationSection.getDistance();
-        Section newUpSection = Section.of(newUpStation, newDownStation, newDistance);
+        int newDuration = upStationSection.getDuration() + downStationSection.getDuration();
+        Section newUpSection = Section.of(newUpStation, newDownStation, newDistance, newDuration);
 
         this.sections.add(newUpSection);
         this.sections.remove(upStationSection);
@@ -168,5 +171,9 @@ public class Sections {
 
     public Optional<Section> getStationSection(Predicate<Section> condition) {
         return this.sections.stream().filter(condition).findFirst();
+    }
+
+    public int sumOfDuration() {
+        return this.sections.stream().mapToInt(Section::getDuration).sum();
     }
 }
