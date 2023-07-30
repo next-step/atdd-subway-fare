@@ -1,7 +1,7 @@
 package nextstep.subway.documentation;
 
 import io.restassured.response.ValidatableResponse;
-import nextstep.subway.controller.request.enums.PathType;
+import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.controller.resonse.PathResponse;
 import nextstep.subway.controller.resonse.StationResponse;
 import nextstep.subway.service.PathFindService;
@@ -48,16 +48,17 @@ class PathDocumentation extends Document {
         final StationResponse 강남역 = new StationResponse(강남역_id, 강남역_이름);
         final StationResponse 역삼역 = new StationResponse(역삼역_id, 역삼역_이름);
 
-        final PathResponse pathResponse = new PathResponse(List.of(강남역, 역삼역), 10L);
+        final PathResponse pathResponse = new PathResponse(List.of(강남역, 역삼역), 10L, 40);
 
-        given(pathFindService.getShortestPath(강남역_id, 역삼역_id)).willReturn(pathResponse);
+        given(pathFindService.getPath(강남역_id, 역삼역_id, PathType.DISTANCE)).willReturn(pathResponse);
 
         return document("path",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestParameters(
                         parameterWithName("source").description("출발 역 id"),
-                        parameterWithName("target").description("도착 역 id")
+                        parameterWithName("target").description("도착 역 id"),
+                        parameterWithName("type").description("경로 조회 타입")
                 ),
                 responseFields(
                         fieldWithPath(".distance").description("경로 거리"),

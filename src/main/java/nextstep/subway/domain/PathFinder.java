@@ -1,12 +1,15 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.domain.vo.Path;
+import nextstep.subway.domain.vo.Sections;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PathFinder {
 
@@ -17,10 +20,10 @@ public class PathFinder {
     }
 
     public boolean isValidPath(Station sourceStation, Station targetStation) {
-        return initializePath(sourceStation, targetStation).map(PathFinder::mapToPath).isPresent();
+        return initializePath(sourceStation, targetStation, PathType.DISTANCE).map(this::mapToPath).isPresent();
     }
 
-    private Optional<GraphPath<Station, DefaultWeightedEdge>> initializePath(Station sourceStation, Station targetStation) {
+    private Optional<GraphPath<Station, DefaultWeightedEdge>> initializePath(Station sourceStation, Station targetStation, PathType type) {
         if (Objects.equals(sourceStation, targetStation)) {
             return Optional.empty();
         }
@@ -28,22 +31,24 @@ public class PathFinder {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
 
         addStationVertexes(graph);
-        addSectionEdges(graph);
+        addSectionEdges(type, graph);
 
         DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         return Optional.ofNullable(dijkstraShortestPath.getPath(sourceStation, targetStation));
     }
 
-    public Path getShortestPath(Station sourceStation, Station targetStation) {
-        return initializePath(sourceStation, targetStation)
-                .map(PathFinder::mapToPath)
+    public Path getShortestPath(Station sourceStation, Station targetStation, PathType type) {
+        return initializePath(sourceStation, targetStation, type)
+                .map(this::mapToPath)
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    private static Path mapToPath(GraphPath<Station, DefaultWeightedEdge> path) {
+    private Path mapToPath(GraphPath<Station, DefaultWeightedEdge> path) {
         List<Station> stations = path.getVertexList();
-        long distance = (long) path.getWeight();
-        return new Path(stations, distance);
+        Sections sectionsInPath = new Sections(sections.stream()
+                .filter(section -> stations.contains(section.getUpStation()) && stations.contains(section.getDownStation()))
+                .collect(Collectors.toSet()));
+        return new Path(stations, sectionsInPath.sumOfDistance(), sectionsInPath.sumOfDuration());
     }
 
     private void addStationVertexes(WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
@@ -53,7 +58,7 @@ public class PathFinder {
                 .forEach(graph::addVertex);
     }
 
-    private void addSectionEdges(WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        sections.forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance()));
+    private void addSectionEdges(PathType type, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+        sections.forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getValueOfType(type)));
     }
 }

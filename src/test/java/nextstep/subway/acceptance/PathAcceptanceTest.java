@@ -2,7 +2,7 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ValidatableResponse;
 import nextstep.marker.AcceptanceTest;
-import nextstep.subway.controller.request.enums.PathType;
+import nextstep.subway.domain.enums.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

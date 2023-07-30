@@ -5,6 +5,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.domain.vo.Path;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,9 +48,9 @@ public class PathFinderTest {
         양재역 = getStation(3L, "양재역");
         남부터미널역 = getStation(4L, "남부터미널역");
 
-        이호선 = getLine(1L, "2호선", "green", 교대역, 강남역, 10L);
-        신분당선 = getLine(2L, "신분당선", "red", 강남역, 양재역, 10L);
-        삼호선 = getLine(3L, "3호선", "orange", 교대역, 남부터미널역, 2L);
+        이호선 = getLine(1L, "2호선", "green", 교대역, 강남역, 10L, 40);
+        신분당선 = getLine(2L, "신분당선", "red", 강남역, 양재역, 10L, 40);
+        삼호선 = getLine(3L, "3호선", "orange", 교대역, 남부터미널역, 2L, 8);
 
         createSection(1L, 삼호선, 남부터미널역, 양재역, 3L, 12);
 
@@ -67,28 +68,28 @@ public class PathFinderTest {
         @Test
         void 교대역에서_양재역을_가는_최단_경로는_교대_남부터미널_양재_5미터이다() {
             // when
-            Path shortestPath = pathFinder.getShortestPath(교대역, 양재역);
+            Path shortestPath = pathFinder.getShortestPath(교대역, 양재역, PathType.DISTANCE);
 
             // then
-            verifyShortestPath(shortestPath, 5L, "교대역", "남부터미널역", "양재역");
+            verifyShortestPath(shortestPath, 5L, 20, "교대역", "남부터미널역", "양재역");
         }
 
         @Test
         void 강남역에서_남부터미널역을_가는_최단_경로는_강남_교대_남부터미널_12미터이다() {
             // when
-            Path shortestPath = pathFinder.getShortestPath(강남역, 남부터미널역);
+            Path shortestPath = pathFinder.getShortestPath(강남역, 남부터미널역, PathType.DISTANCE);
 
             // then
-            verifyShortestPath(shortestPath, 12L, "강남역", "교대역", "남부터미널역");
+            verifyShortestPath(shortestPath, 12L, 48, "강남역", "교대역", "남부터미널역");
         }
 
         @Test
         void 강남역에서_양재역을_가는_최단_경로는_강남_양재_10미터이다() {
             // when
-            Path shortestPath = pathFinder.getShortestPath(강남역, 양재역);
+            Path shortestPath = pathFinder.getShortestPath(강남역, 양재역, PathType.DISTANCE);
 
             // then
-            verifyShortestPath(shortestPath, 10L, "강남역", "양재역");
+            verifyShortestPath(shortestPath, 10L, 40, "강남역", "양재역");
         }
 
         @Test
@@ -97,8 +98,9 @@ public class PathFinderTest {
             Assertions.assertTrue(pathFinder.isValidPath(강남역, 양재역));
         }
 
-        private void verifyShortestPath(Path shortestPath, long distance, String... stationNames) {
+        private void verifyShortestPath(Path shortestPath, long distance, int duration, String... stationNames) {
             Assertions.assertEquals(distance, shortestPath.getDistance());
+            Assertions.assertEquals(duration, shortestPath.getDuration());
             assertThat(shortestPath.getStations()).hasSize(stationNames.length)
                     .map(Station::getName)
                     .containsExactly(stationNames);
@@ -112,7 +114,7 @@ public class PathFinderTest {
         @Test
         void 출발역과_도착역이_같은_경우() {
             // when & then
-            thenCode(() -> pathFinder.getShortestPath(강남역, 강남역)).isInstanceOf(IllegalArgumentException.class);
+            thenCode(() -> pathFinder.getShortestPath(강남역, 강남역, PathType.DISTANCE)).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -121,7 +123,7 @@ public class PathFinderTest {
             Station 다른역 = getStation(5L, "다른역");
 
             // when & then
-            thenCode(() -> pathFinder.getShortestPath(강남역, 다른역)).isInstanceOf(IllegalArgumentException.class);
+            thenCode(() -> pathFinder.getShortestPath(강남역, 다른역, PathType.DISTANCE)).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -131,13 +133,14 @@ public class PathFinderTest {
         }
     }
 
-    private Line getLine(long id, String name, String color, Station upStation, Station downStation, Long distance) {
+    private Line getLine(long id, String name, String color, Station upStation, Station downStation, Long distance, Integer duration) {
         Line line = spy(Line.builder()
                 .name(name)
                 .color(color)
                 .distance(distance)
                 .upStation(upStation)
                 .downStation(downStation)
+                .duration(duration)
                 .build());
         BDDMockito.given(line.getId()).willReturn(id);
         return line;

@@ -30,7 +30,7 @@ class LineTest {
         gangnameStation = getStation("강남역", 1L);
         eonjuStation = getStation("언주역", 2L);
         seongsuStation = getStation("성수역", 3L);
-        secondaryLine = getLine("2호선", "bg-red-600", 10L, gangnameStation, eonjuStation, 1L);
+        secondaryLine = getLine("2호선", "bg-red-600", 10L, 40, gangnameStation, eonjuStation, 1L);
     }
 
     @Nested
@@ -237,13 +237,14 @@ class LineTest {
         }
     }
 
-    private static Line getLine(String name, String color, Long distance, Station upStation, Station downStation, Long id) {
+    private static Line getLine(String name, String color, Long distance, Integer duration, Station upStation, Station downStation, Long id) {
         Line secondaryLine = spy(Line.builder()
                 .name(name)
                 .color(color)
                 .distance(distance)
                 .upStation(upStation)
                 .downStation(downStation)
+                .duration(duration)
                 .build());
         given(upStation.getId()).willReturn(id);
         return secondaryLine;

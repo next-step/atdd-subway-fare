@@ -7,6 +7,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.domain.vo.Path;
 import nextstep.subway.repository.LineRepository;
 import nextstep.subway.repository.StationRepository;
@@ -29,19 +30,20 @@ public class PathFindService {
         this.stationRepository = stationRepository;
     }
 
-    public PathResponse getShortestPath(Long sourceStationId, Long targetStationId) {
+    public PathResponse getPath(Long sourceStationId, Long targetStationId, PathType type) {
         Station sourceStation = stationRepository.findById(sourceStationId)
                 .orElseThrow(() -> new NotFoundStationException(sourceStationId));
         Station targetStation = stationRepository.findById(targetStationId)
                 .orElseThrow(() -> new NotFoundStationException(targetStationId));
 
-        Path shortestPath = getShortestPath(sourceStation, targetStation);
+        Path shortestPath = getPathFinder().getShortestPath(sourceStation, targetStation, type);
 
         return new PathResponse(
                 shortestPath.getStations().stream()
                         .map(StationResponse::new)
                         .collect(Collectors.toList()),
-                shortestPath.getDistance()
+                shortestPath.getDistance(),
+                shortestPath.getDuration()
         );
     }
 
@@ -56,10 +58,6 @@ public class PathFindService {
                 .orElseThrow(() -> new NotFoundStationException(targetStationId));
 
         return getPathFinder().isValidPath(sourceStation, targetStation);
-    }
-
-    private Path getShortestPath(Station sourceStation, Station targetStation) {
-        return getPathFinder().getShortestPath(sourceStation, targetStation);
     }
 
     private PathFinder getPathFinder() {

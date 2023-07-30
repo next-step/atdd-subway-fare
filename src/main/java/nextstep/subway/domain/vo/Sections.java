@@ -5,10 +5,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.exception.IllegalSectionStationException;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 @Embeddable
@@ -21,6 +18,10 @@ public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     public Sections() {
+    }
+
+    public Sections(Collection<Section> sections) {
+        this.sections = new ArrayList<>(sections);
     }
 
     public List<Section> getValue() {
