@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import static nextstep.favorite.accpetance.FavoriteSteps.*;
-import static nextstep.utils.AcceptanceUtils.*;
+import static nextstep.subway.acceptance.StationLineSectionSteps.createStationLineSection;
+import static nextstep.subway.acceptance.StationLineSteps.createStationLine;
+import static nextstep.subway.acceptance.StationSteps.createStationsAndGetStationMap;
 
 @DisplayName("경로 즐겨찾기 기능")
 public class FavoritePathAcceptanceTest extends AcceptanceTest {

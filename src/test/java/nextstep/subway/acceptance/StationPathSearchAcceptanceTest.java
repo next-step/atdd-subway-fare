@@ -1,6 +1,5 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.path.json.JsonPath;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import static nextstep.utils.AcceptanceUtils.*;
+import static nextstep.subway.acceptance.PathSteps.searchStationPath;
+import static nextstep.subway.acceptance.StationLineSectionSteps.createStationLineSection;
+import static nextstep.subway.acceptance.StationLineSteps.createStationLine;
+import static nextstep.subway.acceptance.StationSteps.createStationsAndGetStationMap;
 
 
 @DisplayName("지하철 경로 조회 기능")
@@ -26,18 +28,18 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     Map<String, Long> stationIdByName;
 
     @BeforeEach
-     public void setUp2() {
+    public void setUp2() {
         //given
         stationIdByName = createStationsAndGetStationMap(List.of("혜화", "동대문", "동대문역사문화공원", "종로3가", "종로5가", "동묘앞", "양산", "남양산"));
 
-        final Long line1 = createStationLine("1호선", "blue", stationIdByName.get("종로3가"), stationIdByName.get("종로5가"), BigDecimal.valueOf(3L));
-        createStationLineSection(line1, stationIdByName.get("종로5가"), stationIdByName.get("동대문"), BigDecimal.valueOf(5L));
-        createStationLineSection(line1, stationIdByName.get("동대문"), stationIdByName.get("동묘앞"), BigDecimal.valueOf(5L));
+        var line1 = createStationLine("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), stationIdByName);
+        createStationLineSection(line1, "종로5가", "동대문", BigDecimal.valueOf(5L), stationIdByName);
+        createStationLineSection(line1, "동대문", "동묘앞", BigDecimal.valueOf(5L), stationIdByName);
 
-        final Long line2 = createStationLine("4호선", "mint", stationIdByName.get("혜화"), stationIdByName.get("동대문"), BigDecimal.ONE);
-        createStationLineSection(line2, stationIdByName.get("동대문"), stationIdByName.get("동대문역사문화공원"), BigDecimal.TEN);
+        var line2 = createStationLine("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, stationIdByName);
+        createStationLineSection(line2, "동대문", "동대문역사문화공원", BigDecimal.TEN, stationIdByName);
 
-        createStationLine("부산2호선", "red", stationIdByName.get("양산"), stationIdByName.get("남양산"), BigDecimal.TEN);
+        createStationLine("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, stationIdByName);
     }
 
     /**
@@ -49,12 +51,12 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     @Test
     void searchStationPathTest() {
         //when
-        final JsonPath response = searchStationPath("종로3가", "동대문역사문화공원", HttpStatus.OK);
-        final BigDecimal distance = response.getObject("distance", BigDecimal.class);
-        final List<String> pathStationNames = response.getList("stations.name", String.class);
+        var searchResponse = searchStationPath("종로3가", "동대문역사문화공원", HttpStatus.OK);
+        var distance = searchResponse.getObject("distance", BigDecimal.class);
+        var pathStationNames = searchResponse.getList("stations.name", String.class);
 
         //then
-        final BigDecimal expectedDistance = BigDecimal.valueOf(18);
+        var expectedDistance = BigDecimal.valueOf(18);
         Assertions.assertEquals(0, expectedDistance.compareTo(distance));
         Assertions.assertArrayEquals(List.of("종로3가", "종로5가", "동대문", "동대문역사문화공원").toArray(), pathStationNames.toArray());
     }
