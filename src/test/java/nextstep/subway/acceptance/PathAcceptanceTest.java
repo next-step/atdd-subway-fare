@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,11 +30,12 @@ class PathAcceptanceTest extends AcceptanceTest {
     private RequestSpecification requestSpecification;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * (d=distance, t=duration)
+     * 교대역    --- *2호선* ---        강남역
+     * |              (d10,t3)          |
+     * *3호선* (d2,t2)        (d10, t10) *신분당선*
+     * |                 (d3,t10)       |
+     * 남부터미널역  --- *3호선* ---      양재
      */
     @BeforeEach
     public void setUp() {
@@ -71,7 +73,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathBy_Distance() {
+        // when
+        var response = 두_역의_경로_조회를_요청(requestSpecification, 교대역, 양재역, "DISTANCE");
 
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
     /**
@@ -82,7 +88,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathBy_Duration() {
+        // when
+        var response = 두_역의_경로_조회를_요청(requestSpecification, 교대역, 양재역, "DURATION");
 
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {

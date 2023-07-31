@@ -16,4 +16,13 @@ public class PathSteps {
                 .when().get("/paths?source={sourceId}&target={targetId}", source, target)
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청(RequestSpecification requestSpecification
+            , Long source, Long target, String type) {
+        return RestAssured
+                .given(requestSpecification).log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+                .then().log().all().extract();
+    }
 }
