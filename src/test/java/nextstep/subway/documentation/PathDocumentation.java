@@ -30,6 +30,6 @@ public class PathDocumentation extends Documentation {
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         // then
-        PathSteps.문서용_두_역의_최단_거리_경로_조회를_요청(getRequestSpecification("path"), 1L, 2L);
+        PathSteps.두_역의_최단_거리_경로_조회를_요청(getRequestSpecification("path"), 1L, 2L);
     }
 }
