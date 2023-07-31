@@ -18,9 +18,9 @@ git rebase upstream/songteaheon
 # 할 일
 ## 0단계 - 뼈대 코드 준비 & 문서화 실습
 - [ ] 경로 찾기 기능을 문서화하기 위한 테스트를 작성하세요.
-  - [ ] PathDocumentation의 path 메서드를 완성시키세요. 
-  - [ ] PathDocumentation의 테스트를 수행시켜 snippet을 생성하세요. 
-  - [ ] gradle로 asciidoctor task를 수행시켜 문서 파일을 생성하세요 
+  - [X] PathDocumentation의 path 메서드를 완성시키세요. 
+  - [X] PathDocumentation의 테스트를 수행시켜 snippet을 생성하세요. 
+  - [X] gradle로 asciidoctor task를 수행시켜 문서 파일을 생성하세요 
   - [ ] build > asciidoc > html5 > index.html을 브라우저로 열고 캡쳐한 이미지를 PR에 포함시켜 주세요. 
-  - [ ] PathSteps 클래스를 활용하여 PathDocumentation 내 코드 중복을 제거해주세요 
+  - [X] PathSteps 클래스를 활용하여 PathDocumentation 내 코드 중복을 제거해주세요 
 - [ ] 테스트 작성 후 Spring Rest Docs 적용을 통해 문서에 기재할 정보를 설정하세요.
