@@ -98,4 +98,24 @@ public class StationPathAccumulateServiceTest {
         final BigDecimal expectedDistance = BigDecimal.valueOf(17);
         Assertions.assertEquals(0, distance.compareTo(expectedDistance));
     }
+
+    @DisplayName("역 id 목록의 전체 소요시간 계산")
+    @Test
+    void accumulateTotalDuration() {
+        //given
+        final List<Long> pathStationIds = Stream.of("A역", "I역", "H역", "G역", "F역", "E역")
+                .map(stationIdByName::get)
+                .collect(Collectors.toList());
+
+        //when
+        final List<StationLineSection> pathSections = pathStationIds.stream()
+                .map(sectionByDownStationId::get)
+                .collect(Collectors.toList());
+
+        final Long duration = stationPathAccumulateService.accumulateTotalDuration(pathStationIds, pathSections);
+
+        //then
+        final Long expectedDuration = 1000 * 60 * 20L;
+        Assertions.assertEquals(expectedDuration, duration);
+    }
 }

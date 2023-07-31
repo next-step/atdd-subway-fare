@@ -1,7 +1,6 @@
 package nextstep.subway.domain.service;
 
 import nextstep.subway.domain.StationLineSection;
-import org.jgrapht.alg.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -29,6 +28,21 @@ public class StationPathAccumulateService {
                 .map(StationLineSection::getDistance)
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
+    }
+
+    public Long accumulateTotalDuration(List<Long> pathStationIds, List<StationLineSection> stationLineSections) {
+        if (CollectionUtils.isEmpty(stationLineSections)) {
+            return 0L;
+        }
+
+        final Map<Long, StationLineSection> sectionByUpStationId = getStationLineSectionMapByUpStationId(stationLineSections);
+
+        return pathStationIds.stream()
+                .map(sectionByUpStationId::get)
+                .filter(Objects::nonNull)
+                .map(StationLineSection::getDuration)
+                .reduce(Long::sum)
+                .orElse(0L);
     }
 
     private Map<Long, StationLineSection> getStationLineSectionMapByUpStationId(List<StationLineSection> stationLineSections) {
