@@ -126,14 +126,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     }
 
     private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", "신분당선");
-        lineCreateParams.put("color", "bg-red-600");
-        lineCreateParams.put("upStationId", upStationId + "");
-        lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", 10 + "");
-        return lineCreateParams;
+        return getLineCreateParams("신분당선", "bg-red-600", upStationId, downStationId, 10, 0);
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
