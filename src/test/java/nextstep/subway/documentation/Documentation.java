@@ -11,6 +11,10 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 @ActiveProfiles("test")
@@ -29,5 +33,15 @@ public class Documentation {
         this.spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation))
                 .build();
+    }
+
+    public RequestSpecification getSpec(String identifier) {
+
+        return spec.filter(document(
+                identifier,
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())
+            )
+        );
     }
 }
