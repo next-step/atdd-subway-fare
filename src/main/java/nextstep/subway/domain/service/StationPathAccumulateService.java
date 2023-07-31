@@ -1,0 +1,42 @@
+package nextstep.subway.domain.service;
+
+import nextstep.subway.domain.StationLineSection;
+import org.jgrapht.alg.util.Pair;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+@Service
+public class StationPathAccumulateService {
+
+    public BigDecimal accumulateTotalDistance(List<Long> pathStationIds, List<StationLineSection> stationLineSections) {
+        if (CollectionUtils.isEmpty(pathStationIds)) {
+            return BigDecimal.ZERO;
+        }
+
+        final Map<Long, StationLineSection> sectionByUpStationId = getStationLineSectionMapByUpStationId(stationLineSections);
+
+        return pathStationIds.stream()
+                .map(sectionByUpStationId::get)
+                .filter(Objects::nonNull)
+                .map(StationLineSection::getDistance)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    private Map<Long, StationLineSection> getStationLineSectionMapByUpStationId(List<StationLineSection> stationLineSections) {
+        if (CollectionUtils.isEmpty(stationLineSections)) {
+            return Collections.emptyMap();
+        }
+
+        return stationLineSections.stream()
+                .collect(Collectors.toMap(StationLineSection::getUpStationId, Function.identity()));
+    }
+}
