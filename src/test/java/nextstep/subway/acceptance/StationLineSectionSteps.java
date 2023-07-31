@@ -12,20 +12,48 @@ public class StationLineSectionSteps {
     private StationLineSectionSteps() {
     }
 
+    @Deprecated
     public static void createStationLineSection(Long lineId, String upStationName, String downStationName, BigDecimal distance, Map<String, Long> stationIdByName) {
         createStationLineSection(lineId, stationIdByName.get(upStationName), stationIdByName.get(downStationName), distance, HttpStatus.OK);
     }
 
+    public static void createStationLineSection(Long lineId, String upStationName, String downStationName, BigDecimal distance, Long duration, Map<String, Long> stationIdByName) {
+        createStationLineSection(lineId, stationIdByName.get(upStationName), stationIdByName.get(downStationName), distance, duration, HttpStatus.OK);
+    }
+
+    @Deprecated
     public static void createStationLineSection(Long lineId, Long upStationId, Long downStationId, BigDecimal distance) {
         createStationLineSection(lineId, upStationId, downStationId, distance, HttpStatus.OK);
     }
 
+    public static void createStationLineSection(Long lineId, Long upStationId, Long downStationId, BigDecimal distance, Long duration) {
+        createStationLineSection(lineId, upStationId, downStationId, distance, duration, HttpStatus.OK);
+    }
+
+    @Deprecated
     public static void createStationLineSection(Long lineId, Long upStationId, Long downStationId, BigDecimal distance, HttpStatus expectedStatus) {
         final Map<String, String> stationLineSectionCreateRequest = new HashMap<>();
 
         stationLineSectionCreateRequest.put("upStationId", String.valueOf(upStationId));
         stationLineSectionCreateRequest.put("downStationId", String.valueOf(downStationId));
         stationLineSectionCreateRequest.put("distance", distance.toString());
+
+        RestAssured.given().log().all()
+                .body(stationLineSectionCreateRequest)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/lines/" + lineId + "/sections")
+                .then().log().all()
+                .statusCode(expectedStatus.value())
+                .extract();
+    }
+
+    public static void createStationLineSection(Long lineId, Long upStationId, Long downStationId, BigDecimal distance, Long duration, HttpStatus expectedStatus) {
+        final Map<String, String> stationLineSectionCreateRequest = new HashMap<>();
+
+        stationLineSectionCreateRequest.put("upStationId", String.valueOf(upStationId));
+        stationLineSectionCreateRequest.put("downStationId", String.valueOf(downStationId));
+        stationLineSectionCreateRequest.put("distance", distance.toString());
+        stationLineSectionCreateRequest.put("duration", duration.toString());
 
         RestAssured.given().log().all()
                 .body(stationLineSectionCreateRequest)
