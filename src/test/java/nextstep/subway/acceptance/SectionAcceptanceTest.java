@@ -12,9 +12,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.LineSteps.*;
+import static nextstep.subway.steps.SectionSteps.*;
+import static nextstep.subway.steps.StationSteps.createStation;
+
 @DisplayName("지하철 노선 관련 기능")
 @AcceptanceTest
-class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
+class SectionAcceptanceTest {
 
 
     @Nested
@@ -31,16 +35,18 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         void 기존_노선_상행역에_신규_구간_상행역_등록_성공() {
             //given
             long distance = 10L;
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+            int duration = 40;
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long upStationId = AcceptanceTestUtils.getLong(lineCratedResponse, UP_STATION_ID_JSON_PATH);
 
             long newSectionDistance = 3L;
+            int newSectionDuration = 12;
             ValidatableResponse stationCreatedResponse = createStation("길음역");
             Long newStationId = AcceptanceTestUtils.getId(stationCreatedResponse);
 
             //when
-            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, upStationId, newStationId, newSectionDistance);
+            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, upStationId, newStationId, newSectionDistance, newSectionDuration);
 
             //then
             AcceptanceTestUtils.verifyResponseStatus(sectionCreatedResponse, HttpStatus.OK);
@@ -49,7 +55,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             AcceptanceTestUtils.verifyResponseStatus(createdSectionResponse, HttpStatus.OK);
 
             LineResponse lineResponse = createdSectionResponse.extract().as(LineResponse.class);
-            verifyLineResponse(lineResponse, "신분당선", "bg-red-600", distance);
+            verifyLineResponse(lineResponse, "신분당선", "bg-red-600", distance, duration);
             verifyLineResponseStationNames(lineResponse, "강남역", "길음역", "언주역");
         }
 
@@ -64,16 +70,18 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         void 기존_노선_상행역에_신규_구간_하행역_등록_성공() {
             //given
             long distance = 10L;
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+            int duration = 40;
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long upStationId = AcceptanceTestUtils.getLong(lineCratedResponse, UP_STATION_ID_JSON_PATH);
 
             long newSectionDistance = 3L;
+            int newSectionDuration = 12;
             ValidatableResponse stationCreatedResponse = createStation("길음역");
             Long newStationId = AcceptanceTestUtils.getId(stationCreatedResponse);
 
             //when
-            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, newStationId, upStationId, newSectionDistance);
+            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, newStationId, upStationId, newSectionDistance, newSectionDuration);
 
             //then
             AcceptanceTestUtils.verifyResponseStatus(sectionCreatedResponse, HttpStatus.OK);
@@ -82,7 +90,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             AcceptanceTestUtils.verifyResponseStatus(createdSectionResponse, HttpStatus.OK);
 
             LineResponse lineResponse = createdSectionResponse.extract().as(LineResponse.class);
-            verifyLineResponse(lineResponse, "신분당선", "bg-red-600", distance + newSectionDistance);
+            verifyLineResponse(lineResponse, "신분당선", "bg-red-600", distance + newSectionDistance, duration + newSectionDuration);
             verifyLineResponseStationNames(lineResponse, "길음역", "강남역", "언주역");
         }
 
@@ -98,16 +106,17 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         void 기존_노선_하행역에_신규_구간_상행역_등록_성공() {
             //given
             long distance = 10L;
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, 40);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
 
             long newSectionDistance = 3L;
+            int newSectionDuration = 12;
             ValidatableResponse stationCreatedResponse = createStation("길음역");
             Long newStationId = AcceptanceTestUtils.getId(stationCreatedResponse);
 
             //when
-            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, downStationId, newStationId, newSectionDistance);
+            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, downStationId, newStationId, newSectionDistance, newSectionDuration);
 
             //then
             AcceptanceTestUtils.verifyResponseStatus(sectionCreatedResponse, HttpStatus.OK);
@@ -128,9 +137,9 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
          */
         @CsvSource(value = {"10", "11", "12"})
         @ParameterizedTest
-        void 중간에_들어가는_신규_구간_길이가_기존과_동일하거나_더_크면_실패(long newSectionDistance) {
+        void 중간에_들어가는_신규_구간_길이가_기존과_동일하거나_더_크면_실패(int newSectionDistance) {
             //given
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L, 40);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
 
@@ -138,7 +147,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             Long newStationId = AcceptanceTestUtils.getId(stationCreatedResponse);
 
             //when
-            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, newStationId, downStationId, newSectionDistance);
+            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, newStationId, downStationId, newSectionDistance, newSectionDistance * 4);
 
             //then
             AcceptanceTestUtils.verifyResponseStatus(sectionCreatedResponse, HttpStatus.BAD_REQUEST);
@@ -154,13 +163,13 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         @Test
         void 신규_구간_기등록_실패() {
             //given
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L, 40);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long upStationId = AcceptanceTestUtils.getLong(lineCratedResponse, UP_STATION_ID_JSON_PATH);
             long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
 
             //when
-            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, upStationId, downStationId, 2L);
+            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, upStationId, downStationId, 2L, 8);
 
             //then
             AcceptanceTestUtils.verifyResponseStatus(sectionCreatedResponse, HttpStatus.BAD_REQUEST);
@@ -176,7 +185,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         @Test
         void 신규_구간_노선_구간_상행_하행_모두_미등록_실패() {
             //given
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L, 40);
             ValidatableResponse firstNewStationCreatedResponse = createStation("부천역");
             Long firstNewStationId = AcceptanceTestUtils.getId(firstNewStationCreatedResponse);
 
@@ -185,7 +194,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
 
             //when
-            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, firstNewStationId, secondNewStationId, 2L);
+            ValidatableResponse sectionCreatedResponse = createSection(createdLineId, firstNewStationId, secondNewStationId, 2L, 8);
 
             //then
             AcceptanceTestUtils.verifyResponseStatus(sectionCreatedResponse, HttpStatus.BAD_REQUEST);
@@ -207,7 +216,8 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         void 상행역_구간_제거_성공() {
             //given
             long distance = 10L;
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+            int duration = 40;
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, 40);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long upStationId = AcceptanceTestUtils.getLong(lineCratedResponse, UP_STATION_ID_JSON_PATH);
             long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
@@ -216,8 +226,9 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             StationResponse stationResponse = stationCreatedResponse.extract().as(StationResponse.class);
             Long newDownStationId = stationResponse.getId();
             long newSectionDistance = 3L;
+            int newSectionDuration = 12;
 
-            createSection(createdLineId, downStationId, newDownStationId, newSectionDistance);
+            createSection(createdLineId, downStationId, newDownStationId, newSectionDistance, newSectionDuration);
 
             //when
             ValidatableResponse sectionDeletedResponse = AcceptanceTestUtils.deleteResource(AcceptanceTestUtils.getLocation(lineCratedResponse) + SECTION_RESOURCE_URL + "?stationId=" + upStationId);
@@ -228,7 +239,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(LINES_RESOURCE_URL + "/" + createdLineId);
             AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
 
-            verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", newSectionDistance, "언주역", "길음역");
+            verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", newSectionDistance, newSectionDuration, "언주역", "길음역");
         }
 
         /**
@@ -241,7 +252,8 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         void 하행역_구간_제거_성공() {
             //given
             long distance = 10L;
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+            int duration = 40;
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
 
@@ -249,8 +261,9 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             StationResponse stationResponse = stationCreatedResponse.extract().as(StationResponse.class);
             Long newDownStationId = stationResponse.getId();
             long newSectionDistance = 3L;
+            int newSectionDuration = 12;
 
-            createSection(createdLineId, downStationId, newDownStationId, newSectionDistance);
+            createSection(createdLineId, downStationId, newDownStationId, newSectionDistance, newSectionDuration);
 
             //when
             ValidatableResponse sectionDeletedResponse = AcceptanceTestUtils.deleteResource(AcceptanceTestUtils.getLocation(lineCratedResponse) + SECTION_RESOURCE_URL + "?stationId=" + newDownStationId);
@@ -261,7 +274,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(LINES_RESOURCE_URL + "/" + createdLineId);
             AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
 
-            verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance, "강남역", "언주역");
+            verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance, duration, "강남역", "언주역");
         }
 
         /**
@@ -274,7 +287,8 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         void 중간역_구간_제거_성공() {
             //given
             long distance = 10L;
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance);
+            int duration = 40;
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", distance, duration);
             long createdLineId = AcceptanceTestUtils.getId(lineCratedResponse);
             long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
 
@@ -282,8 +296,9 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             StationResponse stationResponse = stationCreatedResponse.extract().as(StationResponse.class);
             Long newDownStationId = stationResponse.getId();
             long newSectionDistance = 3L;
+            int newSectionDuration = 12;
 
-            createSection(createdLineId, downStationId, newDownStationId, newSectionDistance);
+            createSection(createdLineId, downStationId, newDownStationId, newSectionDistance, newSectionDuration);
 
             //when
             ValidatableResponse sectionDeletedResponse = AcceptanceTestUtils.deleteResource(AcceptanceTestUtils.getLocation(lineCratedResponse) + SECTION_RESOURCE_URL + "?stationId=" + downStationId);
@@ -294,7 +309,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
             ValidatableResponse foundLineResponse = AcceptanceTestUtils.getResource(LINES_RESOURCE_URL + "/" + createdLineId);
             AcceptanceTestUtils.verifyResponseStatus(foundLineResponse, HttpStatus.OK);
 
-            verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance + newSectionDistance, "강남역", "길음역");
+            verifyFoundLine(foundLineResponse, "신분당선", "bg-red-600", distance + newSectionDistance, duration + newSectionDuration, "강남역", "길음역");
         }
 
 
@@ -312,7 +327,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         @Test
         void 지하철노선_구간_제거시_구간이_한개인_경우_상행역_제거_실패() {
             //given
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L, 40);
             Long upStationId = AcceptanceTestUtils.getLong(lineCratedResponse, UP_STATION_ID_JSON_PATH);
 
             //when
@@ -331,7 +346,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         @Test
         void 지하철노선_구간_제거시_구간이_한개인_경우_하행역_제거_실패() {
             //given
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L, 40);
             Long downStationId = AcceptanceTestUtils.getLong(lineCratedResponse, DOWN_STATION_ID_JSON_PATH);
 
             //when
@@ -350,7 +365,7 @@ class SectionAcceptanceTest extends SectionAcceptanceTestHelper {
         @Test
         void 지하철노선_구간_제거시_구간에_없는_역인_경우_실패() {
             //given
-            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L);
+            ValidatableResponse lineCratedResponse = createLinesWithStations("신분당선", "bg-red-600", "강남역", "언주역", 10L, 40);
             Long notInSectionStationId = AcceptanceTestUtils.getId(createStation("성수역"));
 
             //when

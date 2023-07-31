@@ -47,8 +47,8 @@ class FavoriteServiceTest {
         언주역 = getStation("언주역");
         성수역 = getStation("성수역");
         신설동역 = getStation("신설동역");
-        이호선 = getLine("2호선", "bg-green-300", 강남역, 언주역, 10L);
-        신설동선 = getLine("신설동선", "bg-red-300", 성수역, 신설동역, 7L);
+        이호선 = getLine("2호선", "bg-green-300", 강남역, 언주역, 10L, 40);
+        신설동선 = getLine("신설동선", "bg-red-300", 성수역, 신설동역, 7L, 28);
         회원 = getMember("email", "password", 20);
         다른_회원 = getMember("other-email", "password", 20);
     }
@@ -129,13 +129,14 @@ class FavoriteServiceTest {
         Assertions.assertThrows(ForbiddenException.class, () -> favoriteService.deleteFavorite(다른_회원.getEmail(), createdFavoriteResponse.getId()));
     }
 
-    private Line getLine(String name, String color, Station upStation, Station downStation, long distance) {
+    private Line getLine(String name, String color, Station upStation, Station downStation, long distance, int duration) {
         Line secondaryLine = Line.builder()
                 .name(name)
                 .color(color)
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(distance)
+                .duration(duration)
                 .build();
         return lineRepository.save(secondaryLine);
     }

@@ -7,4 +7,6 @@ public interface SectionAddCommand {
     Long getDownStationId();
 
     Long getDistance();
+
+    Integer getDuration();
 }

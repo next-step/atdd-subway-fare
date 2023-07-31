@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.FavoriteSteps.*;
+import static nextstep.subway.steps.LineSteps.createLines;
+import static nextstep.subway.steps.StationSteps.createStation;
+
 @AcceptanceTest
-public class FavoriteAcceptanceTest extends FavoriteAcceptanceTestHelper {
+public class FavoriteAcceptanceTest {
 
 
     private Long 교대역;
@@ -39,8 +43,8 @@ public class FavoriteAcceptanceTest extends FavoriteAcceptanceTestHelper {
         양재역 = AcceptanceTestUtils.getId(createStation("양재역"));
         남부터미널역 = AcceptanceTestUtils.getId(createStation("남부터미널역"));
 
-        이호선 = AcceptanceTestUtils.getId(createLines("2호선", "green", 교대역, 강남역, 10L));
-        삼호선 = AcceptanceTestUtils.getId(createLines("3호선", "orange", 남부터미널역, 양재역, 2L));
+        이호선 = AcceptanceTestUtils.getId(createLines("2호선", "green", 교대역, 강남역, 10L, 8));
+        삼호선 = AcceptanceTestUtils.getId(createLines("3호선", "orange", 남부터미널역, 양재역, 2L, 8));
 
         회원 = AcceptanceTestUtils.getResource(AcceptanceTestUtils.getLocation(createMember("email", "password", 20))).extract().jsonPath().getString("email");
         다른_회원 = AcceptanceTestUtils.getResource(AcceptanceTestUtils.getLocation(createMember("other-email", "password", 20))).extract().jsonPath().getString("email");

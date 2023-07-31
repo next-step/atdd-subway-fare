@@ -7,6 +7,7 @@ import nextstep.subway.controller.resonse.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.repository.LineRepository;
 import nextstep.subway.repository.StationRepository;
 import nextstep.subway.service.PathFindService;
@@ -92,7 +93,7 @@ class PathFindServiceTest {
             givenLines();
 
             // when
-            PathResponse shortestPath = pathFindService.getShortestPath(교대역Id, 양재역Id);
+            PathResponse shortestPath = pathFindService.getPath(교대역Id, 양재역Id, PathType.DISTANCE);
 
             // then
             verifyShortestPathResponse(shortestPath, 9L, 교대역Id, 남부터미널역Id, 양재역Id);
@@ -109,7 +110,7 @@ class PathFindServiceTest {
             givenLines();
 
             // when
-            PathResponse shortestPath = pathFindService.getShortestPath(강남역Id, 남부터미널역Id);
+            PathResponse shortestPath = pathFindService.getPath(강남역Id, 남부터미널역Id, PathType.DISTANCE);
 
             // then
             verifyShortestPathResponse(shortestPath, 12L, 강남역Id, 교대역Id, 남부터미널역Id);
@@ -125,7 +126,7 @@ class PathFindServiceTest {
             givenLines();
 
             // when
-            PathResponse shortestPath = pathFindService.getShortestPath(강남역Id, 양재역Id);
+            PathResponse shortestPath = pathFindService.getPath(강남역Id, 양재역Id, PathType.DISTANCE);
 
             // then
             verifyShortestPathResponse(shortestPath, 10L, 강남역Id, 양재역Id);
@@ -143,9 +144,9 @@ class PathFindServiceTest {
         }
 
         private void givenLines() {
-            given(이호선.getSections()).willReturn(Collections.singletonList(Section.of(교대역, 강남역, 5L)));
-            given(삼호선.getSections()).willReturn(List.of(Section.of(교대역, 남부터미널역, 7L), Section.of(남부터미널역, 양재역, 2L)));
-            given(신분당선.getSections()).willReturn(List.of(Section.of(강남역, 양재역, 10L)));
+            given(이호선.getSections()).willReturn(Collections.singletonList(Section.of(교대역, 강남역, 5L, 20)));
+            given(삼호선.getSections()).willReturn(List.of(Section.of(교대역, 남부터미널역, 7L, 28), Section.of(남부터미널역, 양재역, 2L, 8)));
+            given(신분당선.getSections()).willReturn(List.of(Section.of(강남역, 양재역, 10L, 40)));
             given(lineRepository.findAll()).willReturn(List.of(이호선, 신분당선, 삼호선));
         }
 
@@ -167,7 +168,7 @@ class PathFindServiceTest {
             given(stationRepository.findById(강남역Id)).willReturn(Optional.of(강남역));
 
             // when & then
-            thenCode(() -> pathFindService.getShortestPath(강남역Id, 강남역Id)).isInstanceOf(IllegalArgumentException.class);
+            thenCode(() -> pathFindService.getPath(강남역Id, 강남역Id, PathType.DISTANCE)).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -178,7 +179,7 @@ class PathFindServiceTest {
             given(stationRepository.findById(6L)).willReturn(Optional.of(다른역));
 
             // when & then
-            thenCode(() -> pathFindService.getShortestPath(강남역Id, 6L)).isInstanceOf(IllegalArgumentException.class);
+            thenCode(() -> pathFindService.getPath(강남역Id, 6L, PathType.DISTANCE)).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -187,7 +188,7 @@ class PathFindServiceTest {
             given(stationRepository.findById(8L)).willReturn(Optional.empty());
 
             // when & then
-            thenCode(() -> pathFindService.getShortestPath(8L, 남부터미널역Id)).isInstanceOf(NotFoundStationException.class);
+            thenCode(() -> pathFindService.getPath(8L, 남부터미널역Id, PathType.DISTANCE)).isInstanceOf(NotFoundStationException.class);
         }
 
         @Test

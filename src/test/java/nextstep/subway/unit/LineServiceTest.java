@@ -46,13 +46,13 @@ class LineServiceTest {
         gangnameStation = getStation("강남역");
         eonjuStation = getStation("언주역");
         seongsuStation = getStation("성수역");
-        secondaryLine = getLine("2호선", "bg-green-300", gangnameStation, eonjuStation, 10L);
+        secondaryLine = getLine("2호선", "bg-green-300", gangnameStation, eonjuStation, 10L, 40);
     }
 
     @Test
     void 노선_생성() {
         // given
-        LineCreateRequest lineCreateRequest = new LineCreateRequest("2호선", "bg-green-300", gangnameStation.getId(), eonjuStation.getId(), 10L);
+        LineCreateRequest lineCreateRequest = new LineCreateRequest("2호선", "bg-green-300", gangnameStation.getId(), eonjuStation.getId(), 10L, 40);
 
         // when
         LineResponse response = lineService.saveLine(lineCreateRequest);
@@ -116,7 +116,7 @@ class LineServiceTest {
     @Test
     void 구간_추가() {
         // given
-        SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L);
+        SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L, 12);
 
         // when
         lineService.addSection(secondaryLine.getId(), sectionAddCommand);
@@ -134,7 +134,7 @@ class LineServiceTest {
         @Test
         void 상행역_구간_제거() {
             // given
-            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L);
+            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L, 12);
             lineService.addSection(secondaryLine.getId(), sectionAddCommand);
 
             LineResponse savedLineResponse = lineService.findLineById(secondaryLine.getId());
@@ -153,7 +153,7 @@ class LineServiceTest {
         @Test
         void 하행역_구간_제거() {
             // given
-            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L);
+            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L, 12);
             lineService.addSection(secondaryLine.getId(), sectionAddCommand);
 
             LineResponse savedLineResponse = lineService.findLineById(secondaryLine.getId());
@@ -172,7 +172,7 @@ class LineServiceTest {
         @Test
         void 중간역_구간_제거() {
             // given
-            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L);
+            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L, 12);
             lineService.addSection(secondaryLine.getId(), sectionAddCommand);
 
             LineResponse savedLineResponse = lineService.findLineById(secondaryLine.getId());
@@ -193,7 +193,7 @@ class LineServiceTest {
             // given
             Station notInSectionStation = getStation("고척역");
 
-            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L);
+            SectionAddCommand sectionAddCommand = new SectionAddRequest((eonjuStation.getId()), seongsuStation.getId(), 3L, 12);
             lineService.addSection(secondaryLine.getId(), sectionAddCommand);
 
             LineResponse savedLineResponse = lineService.findLineById(secondaryLine.getId());
@@ -242,13 +242,14 @@ class LineServiceTest {
         }
     }
 
-    private Line getLine(String name, String color, Station upStation, Station downStation, long distance) {
+    private Line getLine(String name, String color, Station upStation, Station downStation, long distance, int duration) {
         Line secondaryLine = Line.builder()
                 .name(name)
                 .color(color)
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(distance)
+                .duration(duration)
                 .build();
         return lineRepository.save(secondaryLine);
     }

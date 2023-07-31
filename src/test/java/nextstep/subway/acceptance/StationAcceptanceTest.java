@@ -7,12 +7,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.steps.StationSteps.createStation;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 @DisplayName("지하철역 관련 기능")
 @AcceptanceTest
-class StationAcceptanceTest extends StationAcceptanceTestHelper {
+class StationAcceptanceTest {
 
     private static final String RESOURCE_URL = "/stations";
 

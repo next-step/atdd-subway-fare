@@ -11,4 +11,6 @@ public interface LineCreateCommand {
     Long getDownStationId();
 
     Long getDistance();
+
+    Integer getDuration();
 }

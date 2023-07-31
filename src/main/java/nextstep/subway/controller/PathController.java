@@ -1,6 +1,7 @@
 package nextstep.subway.controller;
 
 import nextstep.subway.controller.resonse.PathResponse;
+import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.service.PathFindService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,8 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
-        PathResponse shortestPathResponse = pathFindService.getShortestPath(source, target);
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
+        PathResponse shortestPathResponse = pathFindService.getPath(source, target, type);
         return ResponseEntity.ok(shortestPathResponse);
     }
 
