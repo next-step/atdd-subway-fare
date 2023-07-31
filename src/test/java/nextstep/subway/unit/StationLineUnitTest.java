@@ -93,7 +93,7 @@ public class StationLineUnitTest {
 
         //when
         final Throwable throwable = Assertions.assertThrows(StationLineSectionSplitException.class,
-                () -> line.createSection(lineUpStation, sectionDownStation, BigDecimal.TEN));
+                () -> line.createSection(lineUpStation, sectionDownStation, BigDecimal.TEN, 1000L));
 
         Assertions.assertEquals("can't split existing section into larger distance section", throwable.getMessage());
     }
@@ -151,7 +151,7 @@ public class StationLineUnitTest {
         createEntityTestIds(line.getSections(), 1L);
 
         //when
-        Assertions.assertDoesNotThrow(() -> line.createSection(sectionUpStation, lineUpStation, BigDecimal.TEN));
+        Assertions.assertDoesNotThrow(() -> line.createSection(sectionUpStation, lineUpStation, BigDecimal.TEN, 1000L));
 
         //then
         final List<Station> expectedLineStations = List.of(sectionUpStation, lineUpStation, lineDownStation);
@@ -188,7 +188,7 @@ public class StationLineUnitTest {
         createEntityTestIds(line.getSections(), 1L);
 
         //when
-        Assertions.assertDoesNotThrow(() -> line.createSection(lineDownStation, sectionDownStation, BigDecimal.TEN));
+        Assertions.assertDoesNotThrow(() -> line.createSection(lineDownStation, sectionDownStation, BigDecimal.TEN, 1000L));
 
         //then
         final List<Station> expectedLineStations = List.of(lineUpStation, lineDownStation, sectionDownStation);
@@ -227,7 +227,7 @@ public class StationLineUnitTest {
 
         //when & then
         final Throwable throwable = Assertions.assertThrows(StationLineCreateException.class,
-                () -> line.createSection(sectionUpStation, sectionDownStation, BigDecimal.TEN));
+                () -> line.createSection(sectionUpStation, sectionDownStation, BigDecimal.TEN, 1000L));
 
         Assertions.assertEquals("one of section up station and down station exactly exist only one to line", throwable.getMessage());
     }
@@ -254,7 +254,7 @@ public class StationLineUnitTest {
 
         //when & then
         final Throwable throwable = Assertions.assertThrows(StationLineCreateException.class,
-                () -> line.createSection(lineUpStation, lineDownStation, BigDecimal.TEN));
+                () -> line.createSection(lineUpStation, lineDownStation, BigDecimal.TEN, 1000L));
 
         Assertions.assertEquals("one of section up station and down station exactly exist only one to line", throwable.getMessage());
     }
@@ -277,7 +277,7 @@ public class StationLineUnitTest {
                 .distance(BigDecimal.TEN)
                 .build();
 
-        line.createSection(bStation, cStation, BigDecimal.ONE);
+        line.createSection(bStation, cStation, BigDecimal.ONE, 1000L);
 
         createEntityTestId(line, 1L);
         createEntityTestIds(line.getSections(), 1L);
@@ -310,7 +310,7 @@ public class StationLineUnitTest {
                 .distance(BigDecimal.TEN)
                 .build();
 
-        line.createSection(bStation, cStation, BigDecimal.ONE);
+        line.createSection(bStation, cStation, BigDecimal.ONE, 1000L);
 
         createEntityTestId(line, 1L);
         createEntityTestIds(line.getSections(), 1L);
@@ -391,7 +391,7 @@ public class StationLineUnitTest {
                 .distance(BigDecimal.TEN)
                 .build();
 
-        line.createSection(bStation, cStation, BigDecimal.ONE);
+        line.createSection(bStation, cStation, BigDecimal.ONE, 1000L);
 
         createEntityTestId(line, 1L);
         createEntityTestIds(line.getSections(), 1L);
@@ -426,7 +426,7 @@ public class StationLineUnitTest {
                 .distance(BigDecimal.TEN)
                 .build();
 
-        line.createSection(bStation, cStation, BigDecimal.ONE);
+        line.createSection(bStation, cStation, BigDecimal.ONE, 1000L);
 
         createEntityTestId(line, 1L);
         createEntityTestIds(line.getSections(), 1L);
@@ -491,7 +491,7 @@ public class StationLineUnitTest {
                 .build();
         createEntityTestId(line, 1L);
 
-        line.createSection(bStation, cStation, BigDecimal.ONE);
+        line.createSection(bStation, cStation, BigDecimal.ONE, 1000L);
         createEntityTestIds(line.getSections(), 1L);
 
         //when & then

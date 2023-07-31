@@ -136,7 +136,7 @@ public class StationLineServiceMockTest {
                 .distance(BigDecimal.TEN)
                 .build();
 
-        line.createSection(bStation, cStation, BigDecimal.TEN);
+        line.createSection(bStation, cStation, BigDecimal.TEN, 1000L);
 
         createEntityTestId(line, 1L);
         createEntityTestIds(line.getSections(), 1L);

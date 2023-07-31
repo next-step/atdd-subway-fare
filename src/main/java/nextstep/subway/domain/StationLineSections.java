@@ -28,17 +28,6 @@ public class StationLineSections {
         sections.add(section);
     }
 
-    @Deprecated
-    public void appendStationLineSection(Station upStation, Station downStation, BigDecimal distance) {
-        final StationLineSection section = StationLineSection.builder()
-                .upStation(upStation)
-                .downStation(downStation)
-                .distance(distance)
-                .build();
-
-        appendNewSection(section);
-    }
-
     public void appendStationLineSection(Station upStation, Station downStation, BigDecimal distance, Long duration) {
         final StationLineSection section = StationLineSection.builder()
                 .upStation(upStation)

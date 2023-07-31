@@ -39,20 +39,20 @@ public class StationShortestPathCalculateServiceTest {
 
         //A,B,C
         final StationLine line_1 = StationLineSpec.of(stationByName.get("A역"), stationByName.get("B역"), BigDecimal.valueOf(8L));
-        line_1.createSection(stationByName.get("B역"), stationByName.get("C역"), BigDecimal.ONE);
+        line_1.createSection(stationByName.get("B역"), stationByName.get("C역"), BigDecimal.ONE, 1000L);
 
         //C,D,E
         final StationLine line_2 = StationLineSpec.of(stationByName.get("C역"), stationByName.get("D역"), BigDecimal.valueOf(9L));
-        line_2.createSection(stationByName.get("D역"), stationByName.get("E역"), BigDecimal.valueOf(7L));
+        line_2.createSection(stationByName.get("D역"), stationByName.get("E역"), BigDecimal.valueOf(7L), 1000L);
 
         //E,F,G
         final StationLine line_3 = StationLineSpec.of(stationByName.get("E역"), stationByName.get("F역"), BigDecimal.valueOf(4L));
-        line_3.createSection(stationByName.get("F역"), stationByName.get("G역"), BigDecimal.valueOf(3L));
+        line_3.createSection(stationByName.get("F역"), stationByName.get("G역"), BigDecimal.valueOf(3L), 1000L);
 
         //G,H,I,A
         final StationLine line_4 = StationLineSpec.of(stationByName.get("G역"), stationByName.get("H역"), BigDecimal.ONE);
-        line_4.createSection(stationByName.get("H역"), stationByName.get("I역"), BigDecimal.valueOf(7L));
-        line_4.createSection(stationByName.get("I역"), stationByName.get("A역"), BigDecimal.valueOf(2L));
+        line_4.createSection(stationByName.get("H역"), stationByName.get("I역"), BigDecimal.valueOf(7L), 1000L);
+        line_4.createSection(stationByName.get("I역"), stationByName.get("A역"), BigDecimal.valueOf(2L), 1000L);
 
         //Y,Z
         final StationLine line_5 = StationLineSpec.of(stationByName.get("Y역"), stationByName.get("Z역"), BigDecimal.valueOf(4L));
