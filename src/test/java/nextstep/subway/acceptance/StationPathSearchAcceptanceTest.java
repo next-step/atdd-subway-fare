@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.PathSteps.searchStationPath;
-import static nextstep.subway.acceptance.PathSteps.searchStationPathOld;
 import static nextstep.subway.acceptance.StationLineSectionSteps.createStationLineSection;
 import static nextstep.subway.acceptance.StationLineSteps.createStationLine;
 import static nextstep.subway.acceptance.StationSteps.createStationsAndGetStationMap;
@@ -76,7 +75,7 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     @Test
     void searchStationPath_Same_SourceStation_And_TargetStation() {
         //when & then
-        searchStationPathOld("종로3가", "종로3가", HttpStatus.BAD_REQUEST);
+        searchStationPath("종로3가", "종로3가", StationPathSearchRequestType.DISTANCE, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -87,6 +86,6 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     @Test
     void searchStationPath_Not_Linked_SourceStation_And_TargetStation() {
         //when & then
-        searchStationPathOld("종로3가", "양산", HttpStatus.BAD_REQUEST);
+        searchStationPath("종로3가", "양산", StationPathSearchRequestType.DISTANCE, HttpStatus.BAD_REQUEST);
     }
 }

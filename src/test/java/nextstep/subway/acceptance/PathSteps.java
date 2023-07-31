@@ -31,22 +31,6 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    @Deprecated
-    public static JsonPath searchStationPathOld(String startStation, String destinationStation, HttpStatus status) {
-        final Map<String, Long> stationIdByName = getStations().getList("$", StationResponse.class)
-                .stream()
-                .collect(Collectors.toMap(StationResponse::getName, StationResponse::getId));
-
-        return RestAssured.given().log().all()
-                .queryParam("source", stationIdByName.get(startStation))
-                .queryParam("target", stationIdByName.get(destinationStation))
-                .get("/paths")
-                .then().log().all()
-                .statusCode(status.value())
-                .extract()
-                .jsonPath();
-    }
-
     public static JsonPath searchStationPath(String startStation, String destinationStation, StationPathSearchRequestType type, HttpStatus status) {
         final Map<String, Long> stationIdByName = getStations().getList("$", StationResponse.class)
                 .stream()

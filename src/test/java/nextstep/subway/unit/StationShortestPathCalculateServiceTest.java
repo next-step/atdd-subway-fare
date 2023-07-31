@@ -139,13 +139,10 @@ public class StationShortestPathCalculateServiceTest {
     @Test
     void searchStationPath_Not_Exists_Path_Between_SourceStation_TargetStation() {
         //when
-        final Throwable throwable = Assertions.assertThrows(StationLineSearchFailException.class,
-                () -> stationShortestPathCalculateService.calculateShortestPath(
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> stationShortestPathCalculateService.getShortestPathStations(
                         stationByName.get("A역"),
                         stationByName.get("Z역"),
-                        stationLineSections));
-
-        //then
-        Assertions.assertEquals("there is no path between start station and destination station", throwable.getMessage());
+                        StationPathSearchRequestType.DISTANCE));
     }
 }
