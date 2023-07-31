@@ -45,32 +45,11 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 종로3가에서 동대문역사문화공원으로 경로 조회를 요청한다
-     * Then 종로3가에서 동대문역사문화공원으로 경로 역의 목록으로 (종로3가, 종로5가, 동대문, 동대문역사문화공원)를 응답한다
-     * Then 전체 경로로 18을 응답한다
-     */
-    @Deprecated
-    @DisplayName("정상적인 지하철 경로 조회")
-    @Test
-    void searchStationPathTest_Old() {
-        //when
-        var searchResponse = searchStationPathOld("종로3가", "동대문역사문화공원", HttpStatus.OK);
-        var distance = searchResponse.getObject("distance", BigDecimal.class);
-        var pathStationNames = searchResponse.getList("stations.name", String.class);
-
-        //then
-        var expectedDistance = BigDecimal.valueOf(18);
-        Assertions.assertEquals(0, expectedDistance.compareTo(distance));
-        Assertions.assertArrayEquals(List.of("종로3가", "종로5가", "동대문", "동대문역사문화공원").toArray(), pathStationNames.toArray());
-    }
-
-    /**
      * When 종로3가에서 동대문역사문화공원으로 DISTANCE TYPE으로 경로 조회를 요청한다
      * Then 종로3가에서 동대문역사문화공원으로 경로 역의 목록으로 (종로3가, 종로5가, 동대문, 동대문역사문화공원)를 응답한다
      * Then 전체 경로의 최단거리로 18을 응답한다
      * Then 전체 경로의 최소시간으로 15를 응답한다
      */
-    @Deprecated
     @DisplayName("정상적인 지하철 경로 조회")
     @Test
     void searchStationPathTest() {

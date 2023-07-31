@@ -10,5 +10,6 @@ import java.util.List;
 @Builder
 public class StationPathResponse {
     private BigDecimal distance;
+    private Long duration;
     private List<StationResponse> stations;
 }
