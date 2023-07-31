@@ -63,6 +63,28 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
     }
 
+    /**
+     * Given 지하철역과 지하철노선에 역을 등록하고
+     * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
+     * Then 최단 거리 기준 경로를 응답한다
+     */
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathBy_Distance() {
+
+    }
+
+    /**
+     * Given 지하철역과 지하철노선에 역을 등록하고
+     * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
+     * Then 최소 시간 기준 경로를 응답한다
+     */
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathBy_Duration() {
+
+    }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
