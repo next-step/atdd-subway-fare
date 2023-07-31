@@ -58,7 +58,7 @@ public class StationShortestPathCalculateServiceTest {
         line_4.createSection(stationByName.get("I역"), stationByName.get("A역"), BigDecimal.valueOf(2L), ONE_MIN * 6);
 
         //Y,Z
-        final StationLine line_5 = StationLineSpec.of(stationByName.get("Y역"), stationByName.get("Z역"), BigDecimal.valueOf(4L));
+        final StationLine line_5 = StationLineSpec.of(stationByName.get("Y역"), stationByName.get("Z역"), BigDecimal.valueOf(4L), ONE_MIN * 3);
 
         stationLines = List.of(line_1, line_2, line_3, line_4, line_5);
         createEntityTestIds(stationLines, 1L);

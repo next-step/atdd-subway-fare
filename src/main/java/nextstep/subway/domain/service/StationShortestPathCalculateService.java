@@ -18,6 +18,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class StationShortestPathCalculateService {
+    @Deprecated
     public ShortestStationPath calculateShortestPath(
             Station startStation,
             Station destinationStation,
@@ -38,6 +39,7 @@ public class StationShortestPathCalculateService {
                 .build();
     }
 
+    @Deprecated
     private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraphFrom(List<StationLineSection> stationLineSections) {
         final WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
 
@@ -54,7 +56,32 @@ public class StationShortestPathCalculateService {
         return graph;
     }
 
-    public List<Long> getShortestPathStations(Station a역, Station e역, List<StationLineSection> stationLineSections, StationPathSearchRequestType type) {
-        return Collections.emptyList();
+    public List<Long> getShortestPathStations(Station startStation, Station destinationStation, List<StationLineSection> stationLineSections, StationPathSearchRequestType type) {
+        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(stationLineSections, type);
+
+        final DijkstraShortestPath<Long, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        final GraphPath<Long, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation.getId(), destinationStation.getId());
+
+        if (Objects.isNull(path)) {
+            throw new StationLineSearchFailException("there is no path between start station and destination station");
+        }
+
+        return path.getVertexList();
+    }
+
+    private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraphFrom(List<StationLineSection> stationLineSections, StationPathSearchRequestType type) {
+        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+
+        stationLineSections.forEach(stationLineSection -> {
+            final Long upStationId = stationLineSection.getUpStationId();
+            final Long downStationId = stationLineSection.getDownStationId();
+            final Number weight = type.calculateWeightOf(stationLineSection);
+
+            graph.addVertex(upStationId);
+            graph.addVertex(downStationId);
+            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), weight.doubleValue());
+        });
+
+        return graph;
     }
 }
