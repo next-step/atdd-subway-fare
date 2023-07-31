@@ -58,14 +58,6 @@ public class StationLine {
         this.color = color;
     }
 
-    @Deprecated
-    public void createSection(Station sectionUpStation, Station sectionDownStation, BigDecimal distance) {
-        checkSectionStationExistOnlyOneToLine(sectionUpStation, sectionDownStation);
-
-        sections.appendStationLineSection(sectionUpStation, sectionDownStation, distance);
-        sections.apply(this);
-    }
-
     public void createSection(Station sectionUpStation, Station sectionDownStation, BigDecimal distance, Long duration) {
         checkSectionStationExistOnlyOneToLine(sectionUpStation, sectionDownStation);
 

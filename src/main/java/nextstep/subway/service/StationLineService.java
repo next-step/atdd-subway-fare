@@ -33,6 +33,7 @@ public class StationLineService {
 			.upStation(upStation)
 			.downStation(downStation)
 			.distance(request.getDistance())
+            .duration(request.getDuration())
 			.build();
 
 		return StationLineResponse.fromEntity(stationLineRepository.save(stationLine));
@@ -81,7 +82,7 @@ public class StationLineService {
 		final StationLine stationLine = stationLineRepository.findById(lineId)
 			.orElseThrow(() -> new EntityNotFoundException("station line not found"));
 
-		stationLine.createSection(upStation, downStation, request.getDistance());
+		stationLine.createSection(upStation, downStation, request.getDistance(), request.getDuration());
 	}
 
 	@Transactional
