@@ -42,9 +42,33 @@ public class PathSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> getMinimumTimePathForDocument(long sourceId,
+                                                                           long targetId,
+                                                                           RequestSpecification spec,
+                                                                           RestDocumentationFilter filter) {
+        UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
+                .fromUriString("/path")
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .queryParam("type","DURATION")
+                .build();
+        return RestAssured.given(spec).log().all()
+                .filter(filter)
+                .when().get(retrieveQueryWithBaseUri.toUri())
+                .then().log().all()
+                .extract();
+    }
 
-    public static RestDocumentationFilter 경로_필터() {
-        return document("path",
+
+
+    public static RestDocumentationFilter 최단거리경로_필터() {
+        return document("shortestPath",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()));
+    }
+
+    public static RestDocumentationFilter 최소시간경로_필터() {
+        return document("minimumTimePath",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()));
     }

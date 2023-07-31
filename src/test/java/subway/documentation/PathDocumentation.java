@@ -18,7 +18,7 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @Test
-    void path() {
+    void shortestPath() {
         // given
         StationResponse 강남역 = StationResponse.builder().id(1L).name("강남역").build();
         StationResponse 역삼역 = StationResponse.builder().id(2L).name("역삼역").build();
@@ -32,7 +32,30 @@ public class PathDocumentation extends Documentation {
         var response = PathSteps.getShortestPathForDocument(강남역.getId(),
                 역삼역.getId(),
                 this.spec,
-                PathSteps.경로_필터());
+                PathSteps.최단거리경로_필터());
+
+        // then
+        var list = response.jsonPath().getList("stations.name", String.class);
+        assertThat(list).containsExactlyInAnyOrder("강남역", "역삼역");
+    }
+
+
+    @Test
+    void minimumTimePath() {
+        // given
+        StationResponse 강남역 = StationResponse.builder().id(1L).name("강남역").build();
+        StationResponse 역삼역 = StationResponse.builder().id(2L).name("역삼역").build();
+        PathRetrieveResponse pathRetrieve = PathRetrieveResponse.builder()
+                .stations(List.of(강남역, 역삼역))
+                .distance(10)
+                .build();
+        when(pathService.getShortestPath(anyLong(), anyLong())).thenReturn(pathRetrieve); // TODO: 스터빙 고쳐요
+
+        // when
+        var response = PathSteps.getMinimumTimePathForDocument(강남역.getId(),
+                역삼역.getId(),
+                this.spec,
+                PathSteps.최소시간경로_필터());
 
         // then
         var list = response.jsonPath().getList("stations.name", String.class);
