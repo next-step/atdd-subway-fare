@@ -31,25 +31,42 @@ public class StationLineSection {
     @Column
     private BigDecimal distance;
 
+    @Column
+    private Long duration;
+
     @Builder
-    public StationLineSection(Station upStation, Station downStation, BigDecimal distance) {
+    public StationLineSection(Station upStation, Station downStation, BigDecimal distance, Long duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public void splitSection(Station newStation, Station standardStation, BigDecimal newSectionDistance) {
-        this.distance = distance.subtract(newSectionDistance);
-
-        if (this.distance.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new StationLineSectionSplitException("can't split existing section into larger distance section");
-        }
+    public void splitSection(Station newStation, Station standardStation, BigDecimal newSectionDistance, Long newDuration) {
+        splitDistance(newSectionDistance);
+        splitDuration(newDuration);
 
         if (standardStation.equals(upStation)) {
             this.upStation = newStation;
             return;
         }
         this.downStation = newStation;
+    }
+
+    private void splitDistance(BigDecimal newSectionDistance) {
+        this.distance = distance.subtract(newSectionDistance);
+
+        if (this.distance.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new StationLineSectionSplitException("can't split existing section into larger distance section");
+        }
+    }
+
+    private void splitDuration(Long newDuration) {
+        this.duration = this.duration - newDuration;
+
+        if (this.duration <= 0) {
+            throw new StationLineSectionSplitException("can't split existing section into larger duration section");
+        }
     }
 
     public Station getNewStation(List<Station> lineStations) {

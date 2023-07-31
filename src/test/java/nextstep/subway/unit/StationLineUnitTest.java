@@ -18,45 +18,6 @@ import static nextstep.utils.UnitTestUtils.createEntityTestId;
 import static nextstep.utils.UnitTestUtils.createEntityTestIds;
 
 public class StationLineUnitTest {
-
-    @Deprecated
-    @DisplayName("정상적인 노선의 역 사이에 구간의 추가")
-    @Test
-    void createStationLineSection_newStation_Between_LineStations_Old() {
-        //given
-        final Station lineUpStation = new Station("lineUpStation");
-        final Station lineDownStation = new Station("lineDownStation");
-        final Station sectionDownStation = new Station("newStation");
-
-        createEntityTestIds(List.of(lineUpStation, lineDownStation, sectionDownStation), 1L);
-
-        final StationLine line = StationLine.builder()
-                .name("1호선")
-                .color("blue")
-                .upStation(lineUpStation)
-                .downStation(lineDownStation)
-                .distance(BigDecimal.TEN)
-                .build();
-
-        createEntityTestId(line, 1L);
-        createEntityTestIds(line.getSections(), 1L);
-
-        //when
-        Assertions.assertDoesNotThrow(() -> line.createSection(lineUpStation, sectionDownStation, BigDecimal.ONE));
-
-        //then
-        final List<Station> expectedLineStations = List.of(lineUpStation, sectionDownStation, lineDownStation);
-        final List<BigDecimal> lineSectionDistances = line.getSections()
-                .stream()
-                .map(StationLineSection::getDistance)
-                .collect(Collectors.toList());
-
-        Assertions.assertArrayEquals(expectedLineStations.toArray(), line.getAllStations().toArray());
-
-        Assertions.assertEquals(BigDecimal.ONE, lineSectionDistances.get(0));
-        Assertions.assertEquals(BigDecimal.valueOf(9), lineSectionDistances.get(1));
-    }
-
     @DisplayName("정상적인 노선의 역 사이에 구간의 추가")
     @Test
     void createStationLineSection_newStation_Between_LineStations() {
@@ -364,46 +325,6 @@ public class StationLineUnitTest {
         Assertions.assertFalse(line.getAllStations().contains(aStation));
     }
 
-    @Deprecated
-    @DisplayName("정상적인 노선의 중간역 삭제")
-    @Test
-    void deleteStationLineSection_middleStation_Old() {
-        //given
-        final Station aStation = new Station("aStation");
-        final Station bStation = new Station("bStation");
-        final Station cStation = new Station("cStation");
-
-        createEntityTestIds(List.of(aStation, bStation, cStation), 1L);
-
-        final StationLine line = StationLine.builder()
-                .name("1호선")
-                .color("blue")
-                .upStation(aStation)
-                .downStation(bStation)
-                .distance(BigDecimal.TEN)
-                .build();
-
-        line.createSection(bStation, cStation, BigDecimal.ONE);
-
-        createEntityTestId(line, 1L);
-        createEntityTestIds(line.getSections(), 1L);
-
-        //when
-        Assertions.assertDoesNotThrow(() -> line.deleteSection(bStation));
-
-        //then
-        final Station lineFirstStation = line.getLineFirstStation();
-        final Station lineLastStation = line.getLineLastStation();
-
-        Assertions.assertEquals(aStation, lineFirstStation);
-        Assertions.assertEquals(cStation, lineLastStation);
-        Assertions.assertFalse(line.getAllStations().contains(bStation));
-
-        final BigDecimal expectedNewSectionDistance = BigDecimal.valueOf(11);
-        final BigDecimal sectionDistance = line.getSections().get(0).getDistance();
-        Assertions.assertEquals(0, sectionDistance.compareTo(expectedNewSectionDistance));
-    }
-
     @DisplayName("정상적인 노선의 중간역 삭제")
     @Test
     void deleteStationLineSection_middleStation() {
@@ -424,7 +345,7 @@ public class StationLineUnitTest {
                 .duration(three_min)
                 .build();
 
-        long four_min = 1000 * 60 * 3;
+        long four_min = 1000 * 60 * 4;
         line.createSection(bStation, cStation, BigDecimal.ONE, four_min);
 
         createEntityTestId(line, 1L);

@@ -27,7 +27,7 @@ public class StationLine {
     private StationLineSections sections;
 
     @Builder
-    public StationLine(String name, String color, Station upStation, Station downStation, BigDecimal distance) {
+    public StationLine(String name, String color, Station upStation, Station downStation, BigDecimal distance, Long duration) {
         if (upStation.equals(downStation)) {
             throw new StationLineCreateException("upStation and downStation can't be equal");
         }
@@ -39,6 +39,7 @@ public class StationLine {
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(distance)
+                .duration(duration)
                 .build();
 
         sections = StationLineSections.builder()
@@ -57,12 +58,21 @@ public class StationLine {
         this.color = color;
     }
 
+    @Deprecated
     public void createSection(Station sectionUpStation, Station sectionDownStation, BigDecimal distance) {
         checkSectionStationExistOnlyOneToLine(sectionUpStation, sectionDownStation);
 
         sections.appendStationLineSection(sectionUpStation, sectionDownStation, distance);
         sections.apply(this);
     }
+
+    public void createSection(Station sectionUpStation, Station sectionDownStation, BigDecimal distance, Long duration) {
+        checkSectionStationExistOnlyOneToLine(sectionUpStation, sectionDownStation);
+
+        sections.appendStationLineSection(sectionUpStation, sectionDownStation, distance, duration);
+        sections.apply(this);
+    }
+
 
     private void checkSectionStationExistOnlyOneToLine(Station sectionUpStation, Station sectionDownStation) {
         if (isStationExistingToLine(sectionUpStation) == isStationExistingToLine(sectionDownStation)) {
