@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import nextstep.subway.acceptance.LineSteps;
 import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.LineResponse;
+import nextstep.subway.applicaion.dto.StationResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -19,7 +20,15 @@ public class LineDocumentation extends Documentation {
     @Test
     void lineCreate() {
         //given
-        LineResponse response = new LineResponse(1L, "2호선", "green", 90, List.of());
+        LineResponse response = new LineResponse(
+                1L,
+                "2호선",
+                "green",
+                90,
+                List.of(new StationResponse(1L, "노원역"),
+                        new StationResponse(2L, "마들역")
+                )
+        );
 
         //when
         when(lineService.saveLine(any())).thenReturn(response);
