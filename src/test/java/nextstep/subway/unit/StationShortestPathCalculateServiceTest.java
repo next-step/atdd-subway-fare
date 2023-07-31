@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationLine;
+import nextstep.subway.domain.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.subway.domain.service.StationShortestPathCalculateService;
@@ -12,6 +13,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -21,9 +26,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static nextstep.utils.UnitTestUtils.createEntityTestIds;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 public class StationShortestPathCalculateServiceTest {
-    StationShortestPathCalculateService stationShortestPathCalculateService = new StationShortestPathCalculateService();
+    @InjectMocks
+    StationShortestPathCalculateService stationShortestPathCalculateService;
+
+    @Mock
+    StationLineRepository stationLineRepository;
 
     Map<String, Station> stationByName;
     List<Station> stations;
@@ -78,11 +89,13 @@ public class StationShortestPathCalculateServiceTest {
     @DisplayName("지하철 최단거리 경로의 역id 목록 조회")
     @Test
     void searchStationPathWithShortestDistance() {
+        //given
+        given(stationLineRepository.findAll()).willReturn(stationLines);
+
         //when
         final List<Long> pathStationIds = stationShortestPathCalculateService.getShortestPathStations(
                 stationByName.get("A역"),
                 stationByName.get("E역"),
-                stationLineSections,
                 StationPathSearchRequestType.DISTANCE);
 
         //then
@@ -100,11 +113,13 @@ public class StationShortestPathCalculateServiceTest {
     @DisplayName("지하철 최소시간 경로의 역id 목록 조회")
     @Test
     void searchStationPathWithShortestDuration() {
+        //given
+        given(stationLineRepository.findAll()).willReturn(stationLines);
+
         //when
         final List<Long> pathStationIds = stationShortestPathCalculateService.getShortestPathStations(
                 stationByName.get("A역"),
                 stationByName.get("E역"),
-                stationLineSections,
                 StationPathSearchRequestType.DURATION);
 
         //then

@@ -2,6 +2,8 @@ package nextstep.subway.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.StationLine;
+import nextstep.subway.domain.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.exception.StationLineSearchFailException;
 import org.jgrapht.GraphPath;
@@ -11,12 +13,16 @@ import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StationShortestPathCalculateService {
+    private final StationLineRepository stationLineRepository;
+
     @Deprecated
     public ShortestStationPath calculateShortestPath(
             Station startStation,
@@ -55,8 +61,8 @@ public class StationShortestPathCalculateService {
         return graph;
     }
 
-    public List<Long> getShortestPathStations(Station startStation, Station destinationStation, List<StationLineSection> stationLineSections, StationPathSearchRequestType type) {
-        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(stationLineSections, type);
+    public List<Long> getShortestPathStations(Station startStation, Station destinationStation, StationPathSearchRequestType type) {
+        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(getTotalStationLineSection(), type);
 
         final DijkstraShortestPath<Long, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         final GraphPath<Long, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation.getId(), destinationStation.getId());
@@ -82,5 +88,13 @@ public class StationShortestPathCalculateService {
         });
 
         return graph;
+    }
+
+    private List<StationLineSection> getTotalStationLineSection() {
+        return stationLineRepository.findAll()
+                .stream()
+                .map(StationLine::getSections)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }

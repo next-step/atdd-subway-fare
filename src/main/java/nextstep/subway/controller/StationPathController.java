@@ -1,6 +1,7 @@
 package nextstep.subway.controller;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
 import nextstep.subway.service.dto.StationPathResponse;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ public class StationPathController {
     @GetMapping
     public ResponseEntity<StationPathResponse> getStationPath(
             @RequestParam("source") Long startStationId,
-            @RequestParam("target") Long destinationStationId) {
-        final StationPathResponse response = stationPathService.searchStationPath(startStationId, destinationStationId);
+            @RequestParam("target") Long destinationStationId,
+            @RequestParam("type") StationPathSearchRequestType type) {
+        final StationPathResponse response = stationPathService.searchStationPath(startStationId, destinationStationId, type);
 
         return ResponseEntity.ok(response);
     }

@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationLine;
+import nextstep.subway.domain.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.domain.service.StationPathAccumulateService;
 import nextstep.subway.unit.fixture.StationLineSpec;
@@ -10,6 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -20,9 +25,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static nextstep.utils.UnitTestUtils.createEntityTestIds;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 public class StationPathAccumulateServiceTest {
-    StationPathAccumulateService stationPathAccumulateService = new StationPathAccumulateService();
+    @InjectMocks
+    StationPathAccumulateService stationPathAccumulateService;
+
+    @Mock
+    StationLineRepository stationLineRepository;
+
     Map<String, Station> stationByName;
     Map<String, Long> stationIdByName;
     Map<Long, StationLineSection> sectionByDownStationId;
@@ -83,16 +95,14 @@ public class StationPathAccumulateServiceTest {
     @Test
     void accumulateTotalDistance() {
         //given
+        given(stationLineRepository.findAll()).willReturn(stationLines);
+
         final List<Long> pathStationIds = Stream.of("A역", "I역", "H역", "G역", "F역", "E역")
                 .map(stationIdByName::get)
                 .collect(Collectors.toList());
 
         //when
-        final List<StationLineSection> pathSections = pathStationIds.stream()
-                .map(sectionByDownStationId::get)
-                .collect(Collectors.toList());
-
-        final BigDecimal distance = stationPathAccumulateService.accumulateTotalDistance(pathStationIds, pathSections);
+        final BigDecimal distance = stationPathAccumulateService.accumulateTotalDistance(pathStationIds);
 
         //then
         final BigDecimal expectedDistance = BigDecimal.valueOf(17);
@@ -103,16 +113,14 @@ public class StationPathAccumulateServiceTest {
     @Test
     void accumulateTotalDuration() {
         //given
+        given(stationLineRepository.findAll()).willReturn(stationLines);
+
         final List<Long> pathStationIds = Stream.of("A역", "I역", "H역", "G역", "F역", "E역")
                 .map(stationIdByName::get)
                 .collect(Collectors.toList());
 
         //when
-        final List<StationLineSection> pathSections = pathStationIds.stream()
-                .map(sectionByDownStationId::get)
-                .collect(Collectors.toList());
-
-        final Long duration = stationPathAccumulateService.accumulateTotalDuration(pathStationIds, pathSections);
+        final Long duration = stationPathAccumulateService.accumulateTotalDuration(pathStationIds);
 
         //then
         final Long expectedDuration = 1000 * 60 * 20L;
