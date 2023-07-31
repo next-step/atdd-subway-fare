@@ -48,7 +48,7 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
      * When 종로3가에서 동대문역사문화공원으로 DISTANCE TYPE으로 경로 조회를 요청한다
      * Then 종로3가에서 동대문역사문화공원으로 경로 역의 목록으로 (종로3가, 종로5가, 동대문, 동대문역사문화공원)를 응답한다
      * Then 전체 경로의 최단거리로 18을 응답한다
-     * Then 전체 경로의 최소시간으로 15를 응답한다
+     * Then 전체 경로의 최소시간으로 13초를 응답한다
      */
     @DisplayName("정상적인 지하철 경로 조회")
     @Test
@@ -61,7 +61,7 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
 
         //then
         var expectedDistance = BigDecimal.valueOf(18);
-        var expectedDuration = 15L;
+        var expectedDuration = 1000 * 13L;
 
         Assertions.assertEquals(0, expectedDistance.compareTo(distance));
         Assertions.assertEquals(expectedDuration, duration);
