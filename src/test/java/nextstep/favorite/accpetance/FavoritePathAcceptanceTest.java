@@ -1,5 +1,6 @@
 package nextstep.favorite.accpetance;
 
+import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +45,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void createFavoritePath() {
         //when
-        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", stationIdByName);
+        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", StationPathSearchRequestType.DISTANCE, stationIdByName);
 
         //then
         즐겨찾기_경로_등록됨(사용자1_토큰, "종로3가", "동대문", 0);
@@ -58,7 +59,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void createFavoritePath_With_InvalidToken() {
         //when & then
-        즐겨찾기_경로_등록("invalidToken", "종로3가", "동대문", stationIdByName, HttpStatus.UNAUTHORIZED);
+        즐겨찾기_경로_등록("invalidToken", "종로3가", "동대문", StationPathSearchRequestType.DISTANCE, stationIdByName, HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -69,7 +70,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void createFavoritePath_InvalidPath() {
         //when & then
-        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "양산", stationIdByName, HttpStatus.BAD_REQUEST);
+        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "양산", StationPathSearchRequestType.DISTANCE, stationIdByName, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -82,8 +83,8 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void getFavoritePaths() {
         //given
-        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "종로5가", stationIdByName);
-        즐겨찾기_경로_등록(사용자1_토큰, "동대문", "동묘앞", stationIdByName);
+        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "종로5가", StationPathSearchRequestType.DISTANCE, stationIdByName);
+        즐겨찾기_경로_등록(사용자1_토큰, "동대문", "동묘앞", StationPathSearchRequestType.DISTANCE, stationIdByName);
 
         //when & then
         즐겨찾기_경로_등록됨(사용자1_토큰, "종로3가", "종로5가", 0);
@@ -99,7 +100,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteFavoritePath() {
         //given
-        var createResponse = 즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", stationIdByName);
+        var createResponse = 즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", StationPathSearchRequestType.DISTANCE, stationIdByName);
 
         //when
         즐겨찾기_경로_삭제(사용자1_토큰, createResponse);

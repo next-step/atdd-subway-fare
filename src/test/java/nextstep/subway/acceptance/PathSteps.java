@@ -18,7 +18,7 @@ public class PathSteps {
     private PathSteps() {
     }
 
-    public static void 지하철_경로_조회(RequestSpecification specification, RestDocumentationFilter filter, Long sourceId, Long targetId) {
+    public static void 지하철_경로_조회(RequestSpecification specification, RestDocumentationFilter filter, Long sourceId, Long targetId, StationPathSearchRequestType type) {
         RestAssured
                 .given(specification).log().all()
                 .filter(filter)
@@ -26,6 +26,7 @@ public class PathSteps {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
+                .queryParam("type", type)
                 .when().get("/paths")
                 .then().log().all().extract();
     }

@@ -11,6 +11,7 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.fixture.MemberSpec;
 import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
 import nextstep.subway.service.dto.StationPathResponse;
 import nextstep.subway.service.dto.StationResponse;
@@ -74,19 +75,20 @@ class FavoritePathServiceTest {
                 .build();
 
         given(favoritePathRepository.save(any(FavoritePath.class))).willReturn(FavoritePathSpec.of(member, source, target));
-        given(stationPathService.searchStationPath(source, target)).willReturn(stationPathResponse);
+        given(stationPathService.searchStationPath(source, target, StationPathSearchRequestType.DISTANCE)).willReturn(stationPathResponse);
 
         //when
         final FavoritePathRequest request = new FavoritePathRequest();
         request.setSource(source);
         request.setTarget(target);
+        request.setType(StationPathSearchRequestType.DISTANCE);
 
         favoritePathService.createFavoritePath(email, request);
 
         //then
         then(memberRepository).should(times(1)).findByEmail(email);
         then(favoritePathRepository).should(times(1)).save(any(FavoritePath.class));
-        then(stationPathService).should(times(1)).searchStationPath(source, target);
+        then(stationPathService).should(times(1)).searchStationPath(source, target, StationPathSearchRequestType.DISTANCE);
     }
 
     @DisplayName("정상적인 즐겨찾기 경로 목록 조회")
