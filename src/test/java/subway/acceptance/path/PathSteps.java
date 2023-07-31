@@ -8,6 +8,11 @@ import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+
 public class PathSteps {
     public static ExtractableResponse<Response> getShortestPath(long sourceId, long targetId) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
@@ -38,4 +43,9 @@ public class PathSteps {
     }
 
 
+    public static RestDocumentationFilter 경로_필터() {
+        return document("path",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()));
+    }
 }

@@ -2,7 +2,6 @@ package subway.documentation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import subway.acceptance.path.PathFixture;
 import subway.acceptance.path.PathSteps;
 import subway.path.application.PathService;
 import subway.path.application.dto.PathRetrieveResponse;
@@ -33,7 +32,7 @@ public class PathDocumentation extends Documentation {
         var response = PathSteps.getShortestPathForDocument(강남역.getId(),
                 역삼역.getId(),
                 this.spec,
-                PathFixture.경로_필터());
+                PathSteps.경로_필터());
 
         // then
         var list = response.jsonPath().getList("stations.name", String.class);
