@@ -59,7 +59,7 @@ test {
 task testDocument(type: Test) {
     useJUnitPlatform()
     filter {
-        includeTestsMatching "*.documentation.*"
+        includeTestsMatching "documentation.*"
     }
 }
 
@@ -71,14 +71,8 @@ asciidoctor {
 
 bootJar {
     dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
+    copy {
+        from file("build/docs/asciidoc")
+        into file("src/main/resources/static/docs")
     }
-}
-
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
 }
