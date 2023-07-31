@@ -52,7 +52,7 @@ public class PathDocumentation extends Documentation {
                 , requestParameters(
                         parameterWithName("source").description("출발역 id")
                         , parameterWithName("target").description("도착역 id")
-                        , parameterWithName("type").description("거리 or 시간")
+                        , parameterWithName("type").description("조회타입, DISTANCE(거리) or DURATION(시간)")
                 )
                 , responseFields(
                         subsectionWithPath("stations").description("출발역으로부터 도착역까지의 경로에 있는 역 목록")

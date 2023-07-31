@@ -22,5 +22,7 @@ public class LineTest {
 
         // then
         assertThat(line.getSections().size()).isEqualTo(1);
+        assertThat(line.getStations().stream().map(Station::getName))
+                .containsExactly(강남역.getName(), 양재역.getName());
     }
 }
