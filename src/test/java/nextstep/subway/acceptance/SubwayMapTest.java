@@ -22,6 +22,14 @@ public class SubwayMapTest {
     private Station 교대역;
     private Station 남부터미널역;
 
+    private final int 교대역_강남역_거리 = 10;
+    private final int 교대역_강남역_시간 = 3;
+    private final int 강남역_양재역_거리 = 10;
+    private final int 강남역_양재역_시간 = 5;
+    private final int 교대역_남부터미널역_거리 = 2;
+    private final int 교대역_남부터미널역_시간 = 2;
+    private final int 남부터미널역_양재역_거리 = 3;
+    private final int 남부터미널역_양재역_시간 = 10;
 
     /**
      * (d=distance, t=duration)
@@ -41,31 +49,39 @@ public class SubwayMapTest {
         교대역 = new Station("교대역");
         남부터미널역 = new Station("남부터미널역");
 
-        이호선.addSection(교대역, 강남역, 10, 3);
-        신분당선.addSection(강남역, 양재역, 10, 5);
-        삼호선.addSection(교대역, 남부터미널역, 2, 2);
-        삼호선.addSection(남부터미널역, 양재역, 3, 10);
+        이호선.addSection(교대역, 강남역, 교대역_강남역_거리, 교대역_강남역_시간);
+        신분당선.addSection(강남역, 양재역, 강남역_양재역_거리, 강남역_양재역_시간);
+        삼호선.addSection(교대역, 남부터미널역, 교대역_남부터미널역_거리, 교대역_남부터미널역_시간);
+        삼호선.addSection(남부터미널역, 양재역, 남부터미널역_양재역_거리, 남부터미널역_양재역_시간);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPath_distance() {
+        // given
         SubwayMap subwayMap = new SubwayMap(Arrays.asList(신분당선, 이호선, 삼호선));
+
+        // when
         Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
 
+        // then
         assertThat(path.getStations().stream().map(Station::getName))
-                .containsExactly("교대역", "남부터미널역", "양재역");
-        assertThat(path.extractDistance()).isEqualTo(5);
+                .containsExactly(교대역.getName(), 남부터미널역.getName(), 양재역.getName());
+        assertThat(path.extractDistance()).isEqualTo(교대역_남부터미널역_거리 + 남부터미널역_양재역_거리);
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPath_duration() {
+        // given
         SubwayMap subwayMap = new SubwayMap(Arrays.asList(신분당선, 이호선, 삼호선));
+
+        // when
         Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION);
 
+        // then
         assertThat(path.getStations().stream().map(Station::getName))
-                .containsExactly("교대역", "강남역", "양재역");
-        assertThat(path.extractDuration()).isEqualTo(8);
+                .containsExactly(교대역.getName(), 강남역.getName(), 양재역.getName());
+        assertThat(path.extractDuration()).isEqualTo(교대역_강남역_시간 + 강남역_양재역_시간);
     }
 }

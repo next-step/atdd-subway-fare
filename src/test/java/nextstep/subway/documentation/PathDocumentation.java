@@ -3,6 +3,7 @@ package nextstep.subway.documentation;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,7 +29,7 @@ public class PathDocumentation extends Documentation {
     private PathService pathService;
 
     @Test
-    void path_new() {
+    void path() {
         // given
         Long 강남역 = 1L;
         Long 역삼역 = 2L;
@@ -63,7 +64,7 @@ public class PathDocumentation extends Documentation {
         spec.filter(restDocumentationFilter);
 
         // when
-        var response = 두_역의_경로_조회를_요청(spec, 강남역, 역삼역, "DURATION");
+        var response = 두_역의_경로_조회를_요청(spec, 강남역, 역삼역, PathType.DURATION.toString());
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
