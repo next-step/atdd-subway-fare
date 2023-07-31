@@ -34,6 +34,10 @@ public class LineResponse {
         this.duration = duration;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public Long getId() {
         return id;
     }
