@@ -11,6 +11,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,5 +52,9 @@ public class StationShortestPathCalculateService {
         });
 
         return graph;
+    }
+
+    public List<Long> getShortestPathStations(Station a역, Station e역, List<StationLineSection> stationLineSections, StationPathSearchRequestType type) {
+        return Collections.emptyList();
     }
 }

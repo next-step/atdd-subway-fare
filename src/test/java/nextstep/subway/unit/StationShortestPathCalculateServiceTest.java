@@ -4,6 +4,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationLine;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.domain.service.ShortestStationPath;
+import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.subway.domain.service.StationShortestPathCalculateService;
 import nextstep.subway.exception.StationLineSearchFailException;
 import nextstep.subway.unit.fixture.StationLineSpec;
@@ -30,6 +31,8 @@ public class StationShortestPathCalculateServiceTest {
     List<StationLine> stationLines;
     List<StationLineSection> stationLineSections;
 
+    static final Long ONE_MIN = 1000 * 60L;
+
     @BeforeEach
     void setUp() {
         //given
@@ -38,21 +41,21 @@ public class StationShortestPathCalculateServiceTest {
                 .collect(Collectors.toMap(Station::getName, Function.identity()));
 
         //A,B,C
-        final StationLine line_1 = StationLineSpec.of(stationByName.get("A역"), stationByName.get("B역"), BigDecimal.valueOf(8L));
-        line_1.createSection(stationByName.get("B역"), stationByName.get("C역"), BigDecimal.ONE, 1000L);
+        final StationLine line_1 = StationLineSpec.of(stationByName.get("A역"), stationByName.get("B역"), BigDecimal.valueOf(8L), ONE_MIN * 4);
+        line_1.createSection(stationByName.get("B역"), stationByName.get("C역"), BigDecimal.ONE, ONE_MIN * 2);
 
         //C,D,E
-        final StationLine line_2 = StationLineSpec.of(stationByName.get("C역"), stationByName.get("D역"), BigDecimal.valueOf(9L));
-        line_2.createSection(stationByName.get("D역"), stationByName.get("E역"), BigDecimal.valueOf(7L), 1000L);
+        final StationLine line_2 = StationLineSpec.of(stationByName.get("C역"), stationByName.get("D역"), BigDecimal.valueOf(9L), ONE_MIN * 5);
+        line_2.createSection(stationByName.get("D역"), stationByName.get("E역"), BigDecimal.valueOf(7L), ONE_MIN * 3);
 
         //E,F,G
-        final StationLine line_3 = StationLineSpec.of(stationByName.get("E역"), stationByName.get("F역"), BigDecimal.valueOf(4L));
-        line_3.createSection(stationByName.get("F역"), stationByName.get("G역"), BigDecimal.valueOf(3L), 1000L);
+        final StationLine line_3 = StationLineSpec.of(stationByName.get("E역"), stationByName.get("F역"), BigDecimal.valueOf(4L), ONE_MIN * 4);
+        line_3.createSection(stationByName.get("F역"), stationByName.get("G역"), BigDecimal.valueOf(3L), ONE_MIN * 4);
 
         //G,H,I,A
-        final StationLine line_4 = StationLineSpec.of(stationByName.get("G역"), stationByName.get("H역"), BigDecimal.ONE);
-        line_4.createSection(stationByName.get("H역"), stationByName.get("I역"), BigDecimal.valueOf(7L), 1000L);
-        line_4.createSection(stationByName.get("I역"), stationByName.get("A역"), BigDecimal.valueOf(2L), 1000L);
+        final StationLine line_4 = StationLineSpec.of(stationByName.get("G역"), stationByName.get("H역"), BigDecimal.ONE, ONE_MIN);
+        line_4.createSection(stationByName.get("H역"), stationByName.get("I역"), BigDecimal.valueOf(7L), ONE_MIN * 5);
+        line_4.createSection(stationByName.get("I역"), stationByName.get("A역"), BigDecimal.valueOf(2L), ONE_MIN * 6);
 
         //Y,Z
         final StationLine line_5 = StationLineSpec.of(stationByName.get("Y역"), stationByName.get("Z역"), BigDecimal.valueOf(4L));
@@ -73,9 +76,10 @@ public class StationShortestPathCalculateServiceTest {
         createEntityTestIds(stationLineSections, 1L);
     }
 
+    @Deprecated
     @DisplayName("정상적인 지하철 경로 조회")
     @Test
-    void searchStationPath() {
+    void searchStationPathOld() {
         //when
         final ShortestStationPath path = stationShortestPathCalculateService.calculateShortestPath(
                 stationByName.get("A역"),
@@ -98,6 +102,51 @@ public class StationShortestPathCalculateServiceTest {
 
         Assertions.assertArrayEquals(expectedPathStationNames.toArray(), resultPathStationNames.toArray());
     }
+
+    @DisplayName("지하철 최단거리 경로 조회")
+    @Test
+    void searchStationPathWithShortestDistance() {
+        //when
+        final List<Long> pathStationIds = stationShortestPathCalculateService.getShortestPathStations(
+                stationByName.get("A역"),
+                stationByName.get("E역"),
+                stationLineSections,
+                StationPathSearchRequestType.DISTANCE);
+
+        //then
+        final Map<Long, Station> stationById = stations.stream()
+                .collect(Collectors.toMap(Station::getId, Function.identity()));
+
+        final List<String> expectedPathStationNames = List.of("A역", "I역", "H역", "G역", "F역", "E역");
+
+        Assertions.assertArrayEquals(expectedPathStationNames.toArray(), pathStationIds
+                .stream()
+                .map(stationById::get)
+                .map(Station::getName).toArray());
+    }
+
+    @DisplayName("지하철 최소시간 경로 조회")
+    @Test
+    void searchStationPathWithShortestDuration() {
+        //when
+        final List<Long> pathStationIds = stationShortestPathCalculateService.getShortestPathStations(
+                stationByName.get("A역"),
+                stationByName.get("E역"),
+                stationLineSections,
+                StationPathSearchRequestType.DURATION);
+
+        //then
+        final Map<Long, Station> stationById = stations.stream()
+                .collect(Collectors.toMap(Station::getId, Function.identity()));
+
+        final List<String> expectedPathStationNames = List.of("A역", "B역", "C역", "D역", "E역");
+
+        Assertions.assertArrayEquals(expectedPathStationNames.toArray(), pathStationIds
+                .stream()
+                .map(stationById::get)
+                .map(Station::getName).toArray());
+    }
+
 
     @DisplayName("출발역과 도착역 간의 경로가 존재하지 않는 경우 예외")
     @Test
