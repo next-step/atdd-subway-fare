@@ -126,7 +126,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     }
 
     private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
-        return getLineCreateParams("신분당선", "bg-red-600", upStationId, downStationId, 10, 0);
+        return getLineCreateParams("신분당선", "bg-red-600", upStationId, downStationId, 10, 10);
     }
 
     private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
