@@ -28,11 +28,23 @@ public class StationLineSections {
         sections.add(section);
     }
 
+    @Deprecated
     public void appendStationLineSection(Station upStation, Station downStation, BigDecimal distance) {
         final StationLineSection section = StationLineSection.builder()
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(distance)
+                .build();
+
+        appendNewSection(section);
+    }
+
+    public void appendStationLineSection(Station upStation, Station downStation, BigDecimal distance, Long duration) {
+        final StationLineSection section = StationLineSection.builder()
+                .upStation(upStation)
+                .downStation(downStation)
+                .distance(distance)
+                .duration(duration)
                 .build();
 
         appendNewSection(section);
@@ -70,7 +82,7 @@ public class StationLineSections {
                 .findFirst()
                 .orElseThrow(() -> new StationLineSectionCreateException("can't find standardStation included section"));
 
-        neighborSection.splitSection(newStation, standardStation, section.getDistance());
+        neighborSection.splitSection(newStation, standardStation, section.getDistance(), section.getDuration());
 
         final int indexOfNeighborSection = getSections().indexOf(neighborSection);
         final int indexOfNewSection = isStandardStationUpSide ? indexOfNeighborSection : indexOfNeighborSection + 1;
@@ -140,11 +152,13 @@ public class StationLineSections {
 
     public void mergeStationLineSection(StationLineSection upSection, StationLineSection downSection) {
         final BigDecimal totalDistance = upSection.getDistance().add(downSection.getDistance());
+        final Long duration = upSection.getDuration() + downSection.getDuration();
 
         final StationLineSection mergedSection = StationLineSection.builder()
                 .upStation(upSection.getUpStation())
                 .downStation(downSection.getDownStation())
                 .distance(totalDistance)
+                .duration(duration)
                 .build();
 
         final int indexOfDownSection = sections.indexOf(downSection);
