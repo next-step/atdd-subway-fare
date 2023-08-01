@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStrategy {
+public abstract class AbstractPathFinder {
     protected void validIsSameOriginStation(Station sourceStation, Station targetStation) {
         if (sourceStation.equals(targetStation)) {
             throw new SubwayBadRequestException(SubwayMessage.PATH_REQUEST_STATION_IS_SAME_ORIGIN);

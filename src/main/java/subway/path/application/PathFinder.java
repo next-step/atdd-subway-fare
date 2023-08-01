@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PathFinder {  // TODO
+public class PathFinder {
     private final PathStrategy strategy;
 
     public PathFinder(PathStrategy strategy) {
@@ -25,7 +25,6 @@ public class PathFinder {  // TODO
 
         List<Station> stations = getStations(sections);
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = getGraph(sections, stations);
-
         List<Station> stationsIntPath = getPath(graph, sourceStation, targetStation);
 
         return strategy.findPath(graph, sections, stationsIntPath, sourceStation, targetStation);

@@ -19,7 +19,7 @@ public class PathService {  // TODO
 
     private final StationService stationService;
     private final LineService lineService;
-    private final ShortestDistancePathStrategy shortestDistancePathStrategy;
+    private final ShortestDistancePathFinder shortestDistancePathStrategy;
     private final PathFinderFactory pathFinderFactory;
 
     public PathRetrieveResponse getPath(long sourceStationId, long targetStationId, PathRetrieveType type) {

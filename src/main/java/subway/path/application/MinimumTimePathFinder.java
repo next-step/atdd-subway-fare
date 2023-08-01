@@ -11,16 +11,10 @@ import subway.station.domain.Station;
 import java.util.List;
 
 @Component
-public class MinimumTimePathStrategy extends AbstractPathStrategy implements PathStrategy { // TODO
+public class MinimumTimePathFinder extends AbstractPathFinder implements PathStrategy {
 
     @Override
     public PathRetrieveResponse findPath(WeightedMultigraph<Station, DefaultWeightedEdge> graph, List<Section> sections, List<Station> stationsInPath, Station sourceStation, Station targetStation) {
-//        validIsSameOriginStation(sourceStation, targetStation);
-//
-//        List<Station> stations = getStations(sections);
-//        WeightedMultigraph<Station, DefaultWeightedEdge> graph = getGraph(sections, stations);
-//
-//        List<Station> stationsInPath = getPath(graph, sourceStation, targetStation);
         Long totalDistance = getDistanceInMinimumTimePath(stationsInPath, sections);
         Double minimumWeight = getWeightOfPath(graph, sourceStation, targetStation);
 
@@ -29,14 +23,6 @@ public class MinimumTimePathStrategy extends AbstractPathStrategy implements Pat
                 .distance(totalDistance)
                 .duration(minimumWeight.longValue())
                 .build();
-    }
-
-    @Override
-    public Long getTotalWeightInPath(List<Station> stationsInPath, List<Section> sections) {
-        List<Section> sectionsInPath = getSections(stationsInPath, sections);
-        return sectionsInPath.stream()
-                .map(Section::getDistance)
-                .reduce(0L, Long::sum);
     }
 
     @Override

@@ -9,8 +9,8 @@ import subway.path.domain.PathRetrieveType;
 @Component
 @RequiredArgsConstructor
 public class PathFinderFactory {
-    private final MinimumTimePathStrategy minimumTimePathStrategy;
-    private final ShortestDistancePathStrategy shortestDistancePathStrategy;
+    private final MinimumTimePathFinder minimumTimePathStrategy;
+    private final ShortestDistancePathFinder shortestDistancePathStrategy;
 
     public PathFinder createFinder(PathRetrieveType type) {
         switch (type) {
