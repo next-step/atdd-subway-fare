@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static subway.acceptance.station.StationFixture.getStation;
 
 @DisplayName("ShortestDistancePathFinder 단위 테스트")
-public class ShortestDistancePathFinderMockTest {
+public class ShortestDistancePathFinderTest {
     private ShortestDistancePathFinder shortestDistancePathFinder;
 
     private Line 이호선;

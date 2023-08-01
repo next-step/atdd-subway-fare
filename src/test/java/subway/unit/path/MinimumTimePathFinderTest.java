@@ -8,7 +8,6 @@ import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.MinimumTimePathFinder;
-import subway.path.application.ShortestDistancePathFinder;
 import subway.path.application.dto.PathRetrieveResponse;
 import subway.station.application.dto.StationResponse;
 import subway.station.domain.Station;
@@ -21,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static subway.acceptance.station.StationFixture.getStation;
 
 @DisplayName("MinimumTimePathFinder 단위 테스트")
-public class MinimumTimePathFinderMockTest {
+public class MinimumTimePathFinderTest {
     private MinimumTimePathFinder minimumTimePathFinder;
 
     private Line 이호선;

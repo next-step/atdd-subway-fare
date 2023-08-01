@@ -48,11 +48,7 @@ public class PathSteps {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .build();
-        return RestAssured.given(spec).log().all()
-                .filter(filter)
-                .when().get(retrieveQueryWithBaseUri.toUri())
-                .then().log().all()
-                .extract();
+        return getPathForDocument(spec, filter, retrieveQueryWithBaseUri);
     }
 
     public static ExtractableResponse<Response> getMinimumTimePathForDocument(long sourceId,
@@ -65,9 +61,15 @@ public class PathSteps {
                 .queryParam("target", targetId)
                 .queryParam("type","DURATION")
                 .build();
+        return getPathForDocument(spec, filter, retrieveQueryWithBaseUri);
+    }
+
+    private static ExtractableResponse<Response> getPathForDocument(RequestSpecification spec,
+                                                                    RestDocumentationFilter filter,
+                                                                    UriComponents uri) {
         return RestAssured.given(spec).log().all()
                 .filter(filter)
-                .when().get(retrieveQueryWithBaseUri.toUri())
+                .when().get(uri.toUri())
                 .then().log().all()
                 .extract();
     }
