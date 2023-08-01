@@ -9,6 +9,7 @@ public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
     private int duration;
+    private int fare;
 
     public PathResponse(List<StationResponse> stations, int distance) {
         this.stations = stations;
@@ -19,6 +20,13 @@ public class PathResponse {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    public PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {
+        this.stations = stations;
+        this.distance = distance;
+        this.duration = duration;
+        this.fare = fare;
     }
 
     public static PathResponse of(Path path) {
@@ -40,5 +48,9 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getFare() {
+        return fare;
     }
 }
