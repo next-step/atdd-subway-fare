@@ -6,6 +6,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import subway.acceptance.path.PathSteps;
 import subway.path.application.PathService;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.PathRetrieveType;
 import subway.station.application.dto.StationResponse;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class PathDocumentation extends Documentation {
                 .stations(List.of(강남역, 역삼역))
                 .distance(10)
                 .build();
-        when(pathService.getShortestPath(anyLong(), anyLong())).thenReturn(pathRetrieve);
+        when(pathService.getPath(anyLong(), anyLong(), PathRetrieveType.DISTANCE)).thenReturn(pathRetrieve);
 
         // when
         var response = PathSteps.getShortestPathForDocument(강남역.getId(),
@@ -51,7 +52,7 @@ public class PathDocumentation extends Documentation {
                 .stations(List.of(강남역, 역삼역))
                 .distance(10)
                 .build();
-        when(pathService.getShortestPath(anyLong(), anyLong())).thenReturn(pathRetrieve); // TODO: 스터빙 고쳐요
+        when(pathService.getPath(anyLong(), anyLong(), PathRetrieveType.DURATION)).thenReturn(pathRetrieve); // TODO: 스터빙 고쳐요
 
         // when
         var response = PathSteps.getMinimumTimePathForDocument(강남역.getId(),

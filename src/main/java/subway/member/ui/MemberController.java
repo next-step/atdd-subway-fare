@@ -47,7 +47,6 @@ public class MemberController {
     @PutMapping("/{id}")
     public ResponseEntity<MemberRetrieveResponse> updateMember(@PathVariable Long id,
                                                                @RequestBody MemberRequest param) {
-        // TODO : 이거 DTO 쪼개야됨...
         memberService.updateMember(id, param);
         return ResponseEntity.ok().build();
     }

@@ -35,7 +35,7 @@ public class FavoriteService {
 
         Station sourceStation = stationService.findStationById(request.getSource());
         Station targetStation = stationService.findStationById(request.getTarget());
-        pathService.getShortestPath(sourceStation, targetStation);
+        pathService.checkPathValidation(sourceStation, targetStation);
         Favorite favorite = Favorite.builder()
                 .member(member)
                 .sourceStation(sourceStation)

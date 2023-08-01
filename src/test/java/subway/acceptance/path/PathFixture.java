@@ -22,7 +22,7 @@ public class PathFixture {
          *
          * 건대역 ---- *A호선* --- dt:7, dr: 1 ---- 성수역 ---- dt:3, dr:4 ---- 왕십리역
          *
-         * [교대-양재]
+         * ex) 교대-양재
          * 최단거리 : 교대 - 남부터미널 - 양재
          * 최소시간 : 교대 - 강남 - 양재
          * </pre>
@@ -47,8 +47,7 @@ public class PathFixture {
         var A호선_URI = A호선_응답.header("Location");
 
         var A호선_끝에_구간_추가 = SectionFixture.구간_요청_만들기(getStationId("성수역"), getStationId("왕십리역"), 3L, 4L);
-        LineSteps.구간_추가_API(A호선_URI, 삼호선_끝에_구간_추가);
-        LineSteps.구간_추가_API(삼호선_URI, A호선_끝에_구간_추가);
+        LineSteps.구간_추가_API(A호선_URI, A호선_끝에_구간_추가);
     }
 
 }

@@ -78,7 +78,7 @@ public class Section {
 
     private void validDuration(long newDuration) {
         if (this.getDuration() <= newDuration) {
-            throw new SubwayBadRequestException(9999L, "새로 추가되는 구간의 길이는 기존 시간보다 같거나 더 길 수 없습니다."); // TODO: valid Duration constant
+            throw new SubwayBadRequestException(SubwayMessage.SECTION_OVER_DURATION);
         }
     }
 }

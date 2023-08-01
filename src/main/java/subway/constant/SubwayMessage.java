@@ -15,6 +15,7 @@ public enum SubwayMessage {
     SECTION_OVER_DISTANCE(2004L, "새로 추가되는 구간의 길이는 기존 구간보다 같거나 더 길 수 없습니다."),
     SECTION_NOT_FOUND_UP_STATION_IN_SECTION(2005L, "상행역으로 지정된 구간을 찾을 수 없습니다."),
     SECTION_NOT_FOUND_DOWN_STATION_IN_SECTION(2006L, "하행역으로 지정된 구간을 찾을 수 없습니다."),
+    SECTION_OVER_DURATION(2007L, "새로 추가되는 구간의 시간은 기존 시간보다 같거나 더 길 수 없습니다."),
     STATION_DELETE_MINIMAL_VALID(3000L, "역은 %d개 이하일 수 없습니다."),
     STATION_NOT_FOUND(3001L, "존재하지 않는 역 입니다"),
     STATION_IS_ALREADY_EXIST_IN_LINE(3002L, "이미 %s과 %s의 구간이 존재합니다."),

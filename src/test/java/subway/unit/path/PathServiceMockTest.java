@@ -9,9 +9,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.application.PathFinder;
+import subway.path.application.MinimumTimePathFinder;
+import subway.path.application.ShortestDistancePathFinder;
 import subway.path.application.PathService;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
 import subway.station.application.dto.StationResponse;
 import subway.station.domain.Station;
@@ -29,7 +31,9 @@ public class PathServiceMockTest {
     @Mock
     private LineService lineService;
     @Mock
-    private PathFinder pathFinder;
+    private ShortestDistancePathFinder shortestDistancePathFinder;
+    @Mock
+    private MinimumTimePathFinder minimumTimePathFinder; //TODO:  만드세요 ㅎㅎ
     @InjectMocks
     private PathService pathService;
 
@@ -37,9 +41,9 @@ public class PathServiceMockTest {
      * Given 구간이 있을 때
      * When 경로 조회를 하면
      * Then 경로 내 역이 목록으로 반환된다
-     * Then 경로의 총 길이가 반환된다
+     * Then 최단거리 경로의 총 길이가 반환된다
      */
-    @DisplayName("경로 조회")
+    @DisplayName("최단거리 경로 조회")
     @Test
     void getShortestPath() {
         // given
@@ -61,10 +65,10 @@ public class PathServiceMockTest {
         when(stationService.findStationById(1L)).thenReturn(강남역);
         when(stationService.findStationById(3L)).thenReturn(선릉역);
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
-        when(pathFinder.findShortestPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
+        when(shortestDistancePathFinder.findPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
 
         // when
-        PathRetrieveResponse shortestPath = pathService.getShortestPath(강남역.getId(), 선릉역.getId());
+        PathRetrieveResponse shortestPath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DISTANCE);
 
         // then
         assertThat(shortestPath.getStations())
