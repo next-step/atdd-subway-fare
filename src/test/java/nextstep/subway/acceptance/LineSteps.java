@@ -102,6 +102,16 @@ public class LineSteps {
                                                           int distance,
                                                           int duration) {
         Map<String, String> params = getLineCreateParams(name, color);
+        Map<String, String> sectionCreateParams = getSectionCreateParams(upStationId, downStationId, distance, duration);
+        params.putAll(sectionCreateParams);
+        return params;
+    }
+
+    public static Map<String, String> getSectionCreateParams(Long upStationId,
+                                                             Long downStationId,
+                                                             int distance,
+                                                             int duration) {
+        Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
