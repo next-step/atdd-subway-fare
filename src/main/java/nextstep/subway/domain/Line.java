@@ -1,6 +1,10 @@
 package nextstep.subway.domain;
 
-import javax.persistence.*;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
 
 @Entity
@@ -47,8 +51,8 @@ public class Line {
         }
     }
 
-    public void addSection(Station upStation, Station downStation, int distance) {
-        sections.add(new Section(this, upStation, downStation, distance));
+    public void addSection(Station upStation, Station downStation, int distance, int duration) {
+        sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
     public List<Station> getStations() {
