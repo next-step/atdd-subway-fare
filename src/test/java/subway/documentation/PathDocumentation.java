@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @DisplayName("경로 기능 인터페이스 문서 테스트")
@@ -28,8 +29,9 @@ public class PathDocumentation extends Documentation {
         PathRetrieveResponse pathRetrieve = PathRetrieveResponse.builder()
                 .stations(List.of(강남역, 역삼역))
                 .distance(10)
+                .duration(10)
                 .build();
-        when(pathService.getPath(anyLong(), anyLong(), PathRetrieveType.DISTANCE)).thenReturn(pathRetrieve);
+        when(pathService.getPath(anyLong(), anyLong(), eq(PathRetrieveType.DISTANCE))).thenReturn(pathRetrieve);
 
         // when
         var response = PathSteps.getShortestPathForDocument(강남역.getId(),
@@ -51,8 +53,9 @@ public class PathDocumentation extends Documentation {
         PathRetrieveResponse pathRetrieve = PathRetrieveResponse.builder()
                 .stations(List.of(강남역, 역삼역))
                 .distance(10)
+                .duration(10)
                 .build();
-        when(pathService.getPath(anyLong(), anyLong(), PathRetrieveType.DURATION)).thenReturn(pathRetrieve); // TODO: 스터빙 고쳐요
+        when(pathService.getPath(anyLong(), anyLong(), eq(PathRetrieveType.DURATION))).thenReturn(pathRetrieve);
 
         // when
         var response = PathSteps.getMinimumTimePathForDocument(강남역.getId(),
