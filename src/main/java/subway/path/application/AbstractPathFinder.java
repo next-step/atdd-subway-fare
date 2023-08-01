@@ -10,21 +10,8 @@ import subway.station.domain.Station;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class AbstractPathFinder {
-    protected void validIsSameOriginStation(Station sourceStation, Station targetStation) {
-        if (sourceStation.equals(targetStation)) {
-            throw new SubwayBadRequestException(SubwayMessage.PATH_REQUEST_STATION_IS_SAME_ORIGIN);
-        }
-    }
-
-    protected List<Station> getStations(List<Section> sections) {
-        return sections.stream()
-                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
-                .collect(Collectors.toList());
-    }
-
     protected List<Section> getSections(List<Station> stationsInPath, List<Section> sections) {
         return sections.stream()
                 .filter(section -> isSectionInPath(section, stationsInPath))
@@ -32,8 +19,8 @@ public abstract class AbstractPathFinder {
     }
 
     protected Double getWeightOfPath(WeightedMultigraph<Station, DefaultWeightedEdge> graph,
-                                  Station sourceStation,
-                                  Station targetStation) {
+                                     Station sourceStation,
+                                     Station targetStation) {
         try {
             DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
             return dijkstraShortestPath.getPathWeight(sourceStation, targetStation);
