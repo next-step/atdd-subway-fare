@@ -22,6 +22,7 @@ public enum SubwayMessage {
     STATION_NOT_FOUND_IN_SECTION(3003L, "삭제 할 역을 구간에서 찾을 수 없습니다."),
     PATH_NOT_CONNECTED_IN_SECTION(4000L, "역이 연결되어 있지 않습니다."),
     PATH_REQUEST_STATION_IS_SAME_ORIGIN(4001L, "요청 경로의 시작과 종료가 동일합니다."),
+    PATH_INVALID_REQUEST_TYPE(4002L, "잘못된 경로 타입 입니다."),
     AUTH_PASSWORD_IS_NOT_VALID(5000L, "로그인 정보가 일치하지 않습니다"),
     AUTH_TOKEN_NOT_FOUND_FROM_HEADERS(5001L, "토큰을 헤더에서 가져올 수 없습니다."),
     AUTH_INVALID_TOKEN(5002L, "올바른 토큰이 아닙니다."),

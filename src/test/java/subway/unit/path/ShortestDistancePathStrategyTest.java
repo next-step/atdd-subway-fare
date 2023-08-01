@@ -8,7 +8,6 @@ import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.PathFinder;
-import subway.path.application.ShortestDistancePathFinder;
 import subway.path.application.ShortestDistancePathStrategy;
 import subway.path.application.dto.PathRetrieveResponse;
 import subway.station.application.dto.StationResponse;

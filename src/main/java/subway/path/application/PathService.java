@@ -19,8 +19,8 @@ public class PathService {  // TODO
 
     private final StationService stationService;
     private final LineService lineService;
-    private final MinimumTimePathStrategy minimumTimePathStrategy;
     private final ShortestDistancePathStrategy shortestDistancePathStrategy;
+    private final PathFinderFactory pathFinderFactory;
 
     public PathRetrieveResponse getPath(long sourceStationId, long targetStationId, PathRetrieveType type) {
         Station sourceStation = stationService.findStationById(sourceStationId);
@@ -28,16 +28,8 @@ public class PathService {  // TODO
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
 
-        PathRetrieveResponse pathFind = PathRetrieveResponse.builder().build();
-        if (type.equals(PathRetrieveType.DISTANCE)) {
-            PathFinder pathFinder = new PathFinder(shortestDistancePathStrategy);
-            pathFind = pathFinder.findPath(sections, sourceStation, targetStation);
-        }
-        if (type.equals(PathRetrieveType.DURATION)) {
-            PathFinder pathFinder = new PathFinder(minimumTimePathStrategy);
-            pathFind = pathFinder.findPath(sections, sourceStation, targetStation);
-        }
-        return pathFind;
+        PathFinder pathFinder = pathFinderFactory.createFinder(type);
+        return pathFinder.findPath(sections, sourceStation, targetStation);
     }
 
     public void checkPathValidation(Station sourceStation, Station targetStation) {

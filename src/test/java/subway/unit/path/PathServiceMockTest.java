@@ -1,6 +1,7 @@
 package subway.unit.path;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -8,11 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.application.MinimumTimePathStrategy;
 import subway.path.application.PathFinder;
+import subway.path.application.PathFinderFactory;
 import subway.path.application.PathService;
-import subway.path.application.PathStrategy;
-import subway.path.application.ShortestDistancePathStrategy;
 import subway.path.application.dto.PathRetrieveResponse;
 import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
@@ -22,26 +21,18 @@ import subway.station.domain.Station;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @DisplayName("PathService 단위 테스트 (stub)")
 @ExtendWith(MockitoExtension.class)
 public class PathServiceMockTest {
-    /**
-     * 전략패턴으로 스터빙이 잘 안되서 이부분은 제외하고 제출합니다..
-     */
     @Mock
     private StationService stationService;
     @Mock
     private LineService lineService;
-    @InjectMocks
-    private ShortestDistancePathStrategy shortestDistancePathFinder;
-    @InjectMocks
-    private MinimumTimePathStrategy minimumTimePathFinder;
-    //    @Mock
-//    private PathFinder pathFinder;
+    @Mock
+    private PathFinderFactory pathFinderFactory;
     @InjectMocks
     private PathService pathService;
 
@@ -52,7 +43,7 @@ public class PathServiceMockTest {
      * Then 최단거리 경로의 총 길이가 반환된다
      */
     @DisplayName("최단거리 경로 조회")
-//    @Test
+    @Test
     void getShortestDistancePath() {
         // given
         Station 강남역 = new Station(1L, "강남역");
@@ -69,12 +60,13 @@ public class PathServiceMockTest {
 
         List<StationResponse> stationResponses = List.of(StationResponse.from(강남역), StationResponse.from(역삼역), StationResponse.from(선릉역));
         PathRetrieveResponse response = PathRetrieveResponse.builder().distance(10L).stations(stationResponses).build();
-//        PathFinder pathFinder = new PathFinder(shortestDistancePathFinder);
+        PathFinder pathFinder = mock(PathFinder.class);
+        when(pathFinderFactory.createFinder(PathRetrieveType.DISTANCE)).thenReturn(pathFinder);
 
         when(stationService.findStationById(1L)).thenReturn(강남역);
         when(stationService.findStationById(3L)).thenReturn(선릉역);
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
-//        when(pathFinder.findPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
+        when(pathFinder.findPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
 
         // when
         PathRetrieveResponse shortestPath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DISTANCE);
@@ -95,7 +87,7 @@ public class PathServiceMockTest {
      * Then 최소시간 경로의 총 길이가 반환된다
      */
     @DisplayName("최소시간 경로 조회")
-//    @Test
+    @Test
     void getMinimumTimePath() {
         // given
         Station 강남역 = new Station(1L, "강남역");
@@ -112,17 +104,13 @@ public class PathServiceMockTest {
 
         List<StationResponse> stationResponses = List.of(StationResponse.from(강남역), StationResponse.from(역삼역), StationResponse.from(선릉역));
         PathRetrieveResponse response = PathRetrieveResponse.builder().distance(10L).duration(10L).stations(stationResponses).build();
-//        PathFinder pathFinder = mock(PathFinder.class);
-//        PathStrategy strategy = minimumTimePathFinder;
-        PathStrategy strategy = new MinimumTimePathStrategy();
-        PathFinder pathFinder = new PathFinder(strategy);
+        PathFinder pathFinder = mock(PathFinder.class);
+        when(pathFinderFactory.createFinder(PathRetrieveType.DURATION)).thenReturn(pathFinder);
 
         when(stationService.findStationById(1L)).thenReturn(강남역);
         when(stationService.findStationById(3L)).thenReturn(선릉역);
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
         when(pathFinder.findPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
-        doNothing().when(strategy).setEdgeWeight(any(), any(), any());
-        when(strategy.findPath(any(), any(), any(), any(), any())).thenReturn(response);
 
         // when
         PathRetrieveResponse minimumTimePath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DURATION);
