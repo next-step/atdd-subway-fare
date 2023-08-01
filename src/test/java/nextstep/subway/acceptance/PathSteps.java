@@ -17,7 +17,14 @@ public class PathSteps {
                                                                      Long target) {
         return requestSpecification
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, "DISTANCE")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+        return RestAssured.given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, "DURATION")
                 .then().log().all().extract();
     }
 }
