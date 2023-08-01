@@ -19,8 +19,6 @@ public class PathService {  // TODO
 
     private final StationService stationService;
     private final LineService lineService;
-//    private final ShortestDistancePathFinder shortestDistancePathFinder;
-//    private final MinimumTimePathFinder minimumTimePathFinder;
     private final MinimumTimePathStrategy minimumTimePathStrategy;
     private final ShortestDistancePathStrategy shortestDistancePathStrategy;
 
