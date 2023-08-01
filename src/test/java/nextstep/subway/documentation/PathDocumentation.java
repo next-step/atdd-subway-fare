@@ -49,7 +49,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        RestDocumentationFilter restDocumentationFilter = document("path_fare"
+        RestDocumentationFilter restDocumentationFilter = document("path"
                 , preprocessRequest(prettyPrint())
                 , preprocessResponse(prettyPrint())
                 , requestParameters(
