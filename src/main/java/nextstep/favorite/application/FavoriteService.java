@@ -10,6 +10,7 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        pathService.findPath(request.getSource(), request.getTarget());
+        pathService.findPath(request.getSource(), request.getTarget(), SubwayMap.Type.DISTANCE);
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
