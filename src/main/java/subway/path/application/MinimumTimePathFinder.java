@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
-public class MinimumTimePathFinder implements PathFinder {
+//@Component
+public class MinimumTimePathFinder{  // TODO
     public PathRetrieveResponse findPath(List<Section> sections,
                                          Station sourceStation,
                                          Station targetStation) {

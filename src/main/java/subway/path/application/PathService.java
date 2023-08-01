@@ -15,12 +15,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PathService {
+public class PathService {  // TODO
 
     private final StationService stationService;
     private final LineService lineService;
-    private final ShortestDistancePathFinder shortestDistancePathFinder;
-    private final MinimumTimePathFinder minimumTimePathFinder;
+//    private final ShortestDistancePathFinder shortestDistancePathFinder;
+//    private final MinimumTimePathFinder minimumTimePathFinder;
+    private final MinimumTimePathStrategy minimumTimePathStrategy;
+    private final ShortestDistancePathStrategy shortestDistancePathStrategy;
 
     public PathRetrieveResponse getPath(long sourceStationId, long targetStationId, PathRetrieveType type) {
         Station sourceStation = stationService.findStationById(sourceStationId);
@@ -30,10 +32,12 @@ public class PathService {
 
         PathRetrieveResponse pathFind = PathRetrieveResponse.builder().build();
         if (type.equals(PathRetrieveType.DISTANCE)) {
-            pathFind = shortestDistancePathFinder.findPath(sections, sourceStation, targetStation);
+            PathFinder pathFinder = new PathFinder(shortestDistancePathStrategy);
+            pathFind = pathFinder.findPath(sections, sourceStation, targetStation);
         }
         if (type.equals(PathRetrieveType.DURATION)) {
-            pathFind = minimumTimePathFinder.findPath(sections, sourceStation, targetStation);
+            PathFinder pathFinder = new PathFinder(minimumTimePathStrategy);
+            pathFind = pathFinder.findPath(sections, sourceStation, targetStation);
         }
         return pathFind;
     }
@@ -41,7 +45,8 @@ public class PathService {
     public void checkPathValidation(Station sourceStation, Station targetStation) {
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
-        shortestDistancePathFinder.findPath(sections, sourceStation, targetStation);
+        PathFinder pathFinder = new PathFinder(shortestDistancePathStrategy);
+        pathFinder.findPath(sections, sourceStation, targetStation);
     }
 
     private List<Section> getAllSections(List<Line> lines) {

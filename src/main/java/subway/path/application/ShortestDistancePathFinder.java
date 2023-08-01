@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
-public class ShortestDistancePathFinder implements PathFinder {
+//@Component
+public class ShortestDistancePathFinder {  // TODO
     public PathRetrieveResponse findPath(List<Section> sections,
                                          Station sourceStation,
                                          Station targetStation) {
