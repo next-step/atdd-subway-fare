@@ -104,6 +104,17 @@ class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
     void findPathBy_Distance_Fare() {
+        // when
+        var response = 두_역의_경로_조회를_요청(requestSpecification, 교대역, 양재역, PathType.DISTANCE.toString());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class))
+                .containsExactly(교대역, 남부터미널역, 양재역);
+
+        // and
+        assertThat(response.jsonPath().getInt("distance"))
+                .isEqualTo(교대역_남부터미널역_거리 + 남부터미널역_양재역_거리);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance
