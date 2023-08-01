@@ -45,6 +45,10 @@ public class Section extends DefaultWeightedEdge {
         this.duration = duration;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public Long getId() {
         return id;
     }

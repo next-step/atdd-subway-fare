@@ -8,10 +8,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private List<Line> lines;
 
-    public SubwayMap(List<Line> lines) {
+    public enum Type {DURATION, DISTANCE}
+
+    private final List<Line> lines;
+    private final Type type;
+
+    public SubwayMap(List<Line> lines, Type type) {
         this.lines = lines;
+        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
@@ -30,7 +35,12 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    if (Type.DISTANCE.equals(type)) {
+                        graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    }
+                    if (Type.DURATION.equals(type)) {
+                        graph.setEdgeWeight(sectionEdge, it.getDuration());
+                    }
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
