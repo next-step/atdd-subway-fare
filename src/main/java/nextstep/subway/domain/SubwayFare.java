@@ -7,7 +7,7 @@ public class SubwayFare {
     private final int CHARGE_DISTANCE_EIGHT = 8;
     private final int ADDITIONAL_CHARGE_RATE = 100;
 
-    public int calculateOverFare(int distance, int chargeDistance) {
+    private int calculateOverFare(int distance, int chargeDistance) {
         return (int) ((Math.ceil((distance - 1) / chargeDistance) + 1) * ADDITIONAL_CHARGE_RATE);
     }
 

@@ -35,51 +35,6 @@ public class PathDocumentation extends Documentation {
         Long 역삼역 = 2L;
         int distance = 10;
         int duration = 3;
-
-        PathResponse pathResponse = new PathResponse(
-                Lists.newArrayList(
-                        new StationResponse(강남역, "강남역"),
-                        new StationResponse(역삼역, "역삼역")
-                )
-                , distance
-                , duration
-        );
-
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
-
-        RestDocumentationFilter restDocumentationFilter = document("path"
-                , preprocessRequest(prettyPrint())
-                , preprocessResponse(prettyPrint())
-                , requestParameters(
-                        parameterWithName("source").description("출발역 id")
-                        , parameterWithName("target").description("도착역 id")
-                        , parameterWithName("type").description("조회타입, DISTANCE(거리) or DURATION(시간)")
-                )
-                , responseFields(
-                        subsectionWithPath("stations").description("출발역으로부터 도착역까지의 경로에 있는 역 목록")
-                        , subsectionWithPath("distance").description("조회한 경로 구간의 거리")
-                        , subsectionWithPath("duration").description("조회한 경로 구간의 소요시간")
-                )
-        );
-        spec.filter(restDocumentationFilter);
-
-        // when
-        var response = 두_역의_경로_조회를_요청(spec, 강남역, 역삼역, PathType.DURATION.toString());
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 역삼역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
-    }
-
-    @Test
-    void path_fare() {
-        // given
-        Long 강남역 = 1L;
-        Long 역삼역 = 2L;
-        int distance = 10;
-        int duration = 3;
         int fare = 1250;
 
         PathResponse pathResponse = new PathResponse(
