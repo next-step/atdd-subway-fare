@@ -36,4 +36,11 @@ public class LineDocumentation extends Documentation {
         //then
         LineSteps.지하철_노선_생성_요청(getRequestSpecification("line"), "2호선", "green");
     }
+
+    @Test
+    void sectionAdd() {
+        //then
+        LineSteps.지하철_노선에_지하철_구간_생성_요청(getRequestSpecification("section"),
+                1L, LineSteps.getSectionCreateParams(1L, 2L, 10, 90));
+    }
 }

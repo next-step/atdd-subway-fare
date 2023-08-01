@@ -66,16 +66,16 @@ public class LineSteps {
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(Long lineId, Map<String, String> params) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/lines/{lineId}/sections", lineId)
-                .then().log().all().extract();
+        return 지하철_노선에_지하철_구간_생성_요청(RestAssured.given().log().all(), lineId, params);
     }
 
     public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(String accessToken, Long lineId, Map<String, String> params) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
+        return 지하철_노선에_지하철_구간_생성_요청(RestAssured.given().log().all().auth().oauth2(accessToken), lineId, params);
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선에_지하철_구간_생성_요청(RequestSpecification requestSpecification,
+                                                                     Long lineId, Map<String, String> params) {
+        return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
                 .when().post("/lines/{lineId}/sections", lineId)
