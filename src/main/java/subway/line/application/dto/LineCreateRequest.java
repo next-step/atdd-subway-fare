@@ -27,11 +27,9 @@ public class LineCreateRequest {
     private Long downStationId;
 
     @Min(value = 1L, message = DISTANCE_MIN_MESSAGE)
-    @NotBlank(message = DISTANCE_MIN_MESSAGE)
     private Long distance;
 
     @Min(value = 1L, message = DURATION_MIN_MESSAGE)
-    @NotBlank(message = DURATION_MIN_MESSAGE)
     private Long duration;
 
     public static Line to(LineCreateRequest request) {

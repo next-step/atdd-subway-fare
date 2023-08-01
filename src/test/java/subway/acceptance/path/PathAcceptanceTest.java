@@ -13,19 +13,23 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.acceptance.station.StationFixture.getStationId;
 
-@DisplayName("경로 관련 기능")
+@DisplayName("경로 인수 테스트")
 public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * <pre>
-     * 교대역  ---- *2호선* --- d:10 ------  강남역
-     * |                                    |
-     * *3호선*                            *신분당선*
-     * d:2                                 d:10
-     * |                                   |
-     * 남부터미널역  --- *3호선* -- d:3 --- 양재역
+     * 교대역  ---- *2호선* --- dt:10, dr:5 ------  강남역
+     * |                                             |
+     * *3호선*                                    *신분당선*
+     * dt:2, dr:3                                dt:10, dr:6
+     * |                                             |
+     * 남부터미널역  --- *3호선* -- dt:3, dr:15 ---- 양재역
      *
-     * 건대역 ---- *A호선* --- d:7 ---- 성수역 ---- d:3 ---- 왕십리역
+     * 건대역 ---- *A호선* --- dt:7, dr: 1 ---- 성수역 ---- dt:3, dr:4 ---- 왕십리역
+     *
+     * [교대-양재]
+     * 최단거리 : 교대 - 남부터미널 - 양재
+     * 최소시간 : 교대 - 강남 - 양재
      * </pre>
      */
 

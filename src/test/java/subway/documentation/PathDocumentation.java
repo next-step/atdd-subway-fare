@@ -1,5 +1,6 @@
 package subway.documentation;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import subway.acceptance.path.PathSteps;
@@ -13,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+@DisplayName("경로 기능 인터페이스 문서 테스트")
 public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;

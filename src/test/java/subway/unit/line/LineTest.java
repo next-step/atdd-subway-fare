@@ -90,12 +90,14 @@ class LineTest {
         Station 선릉역 = new Station(3L, "선릉역");
         Station 역삼역 = new Station(2L, "역삼역");
         final long distance = 8;
+        final long duration = 8;
 
         Section section = Section.builder()
                 .line(line)
                 .upStation(선릉역)
                 .downStation(역삼역)
                 .distance(distance)
+                .duration(duration)
                 .build();
         line.addSection(section);
 
@@ -120,11 +122,13 @@ class LineTest {
         Station 역삼역 = new Station(2L, "역삼역");
 
         final long distance = 5;
+        final long duration = 5;
         Section section = Section.builder()
                 .line(line)
                 .upStation(선릉역)
                 .downStation(역삼역)
                 .distance(distance)
+                .duration(duration)
                 .build();
         line.addSection(section);
 

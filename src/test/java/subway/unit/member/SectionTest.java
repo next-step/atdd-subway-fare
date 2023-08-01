@@ -9,6 +9,7 @@ import subway.station.domain.Station;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@DisplayName("구간 단위 테스트")
 class SectionTest {
 
     /**
@@ -24,10 +25,10 @@ class SectionTest {
         Station 강남역 = new Station(1L, "강남역");
         Station 역삼역 = new Station(2L, "역삼역");
         Station 선릉역 = new Station(3L, "선릉역");
-        Section 기존_구간 = Section.builder().upStation(강남역).downStation(선릉역).distance(10L).build();
+        Section 기존_구간 = Section.builder().upStation(강남역).downStation(선릉역).distance(10L).duration(10L).build();
 
         // when
-        Section 새구간 = Section.builder().upStation(역삼역).downStation(선릉역).distance(5L).build();
+        Section 새구간 = Section.builder().upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
         기존_구간.changeDownStation(새구간);
 
         // then
@@ -50,10 +51,10 @@ class SectionTest {
         Station 강남역 = new Station(1L, "강남역");
         Station 역삼역 = new Station(2L, "역삼역");
         Station 선릉역 = new Station(3L, "선릉역");
-        Section 기존_구간 = Section.builder().upStation(강남역).downStation(선릉역).distance(10L).build();
+        Section 기존_구간 = Section.builder().upStation(강남역).downStation(선릉역).distance(10L).duration(10L).build();
 
         // when
-        Section 새구간 = Section.builder().upStation(강남역).downStation(역삼역).distance(5L).build();
+        Section 새구간 = Section.builder().upStation(강남역).downStation(역삼역).distance(5L).duration(5L).build();
         기존_구간.changeUpStation(새구간);
 
         // then

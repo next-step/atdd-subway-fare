@@ -13,7 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.acceptance.station.StationFixture.getStationId;
 
-@DisplayName("지하철 노선 관련 기능")
+@DisplayName("노선 인수 테스트")
 public class LineAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
