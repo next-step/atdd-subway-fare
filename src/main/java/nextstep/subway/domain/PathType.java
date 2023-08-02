@@ -9,4 +9,8 @@ public enum PathType {
     PathType(String description) {
         this.description = description;
     }
+
+    public int value(Section section) {
+        return this == DISTANCE ? section.getDistance() : section.getDuration();
+    }
 }
