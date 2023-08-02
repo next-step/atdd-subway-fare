@@ -1,16 +1,14 @@
 package nextstep.subway.applicaion;
 
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class PathService {
+    private static PathType DEFAULT_PATH_TYPE = PathType.DISTANCE;
     private LineService lineService;
     private StationService stationService;
 
@@ -20,11 +18,15 @@ public class PathService {
     }
 
     public PathResponse findPath(Long source, Long target) {
+        return findPath(source, target, DEFAULT_PATH_TYPE);
+    }
+
+    public PathResponse findPath(Long source, Long target, PathType pathType) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation);
+        Path path = subwayMap.findPath(upStation, downStation, pathType);
 
         return PathResponse.of(path);
     }
