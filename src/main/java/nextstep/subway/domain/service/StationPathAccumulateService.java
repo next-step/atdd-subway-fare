@@ -10,7 +10,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class StationPathAccumulateService {
         final List<StationLine> stationLines = stationLineRepository.findAll();
         final List<StationLineSection> stationLineSections = getPathStationLineSections(stationLines, pathStationIds);
 
-        final Map<Long, StationLineSection> sectionByUpStationId = getStationLineSectionMapByUpStationId(stationLineSections);
+        final Map<Long, StationLineSection> sectionByUpStationId = getStationLineSectionByUpStationId(stationLineSections);
 
         return pathStationIds.stream()
                 .map(sectionByUpStationId::get)
@@ -43,7 +42,7 @@ public class StationPathAccumulateService {
         final List<StationLine> stationLines = stationLineRepository.findAll();
         final List<StationLineSection> stationLineSections = getPathStationLineSections(stationLines, pathStationIds);
 
-        final Map<Long, StationLineSection> sectionByUpStationId = getStationLineSectionMapByUpStationId(stationLineSections);
+        final Map<Long, StationLineSection> sectionByUpStationId = getStationLineSectionByUpStationId(stationLineSections);
 
         return pathStationIds.stream()
                 .map(sectionByUpStationId::get)
@@ -97,7 +96,7 @@ public class StationPathAccumulateService {
                         .orElse(null));
     }
 
-    private Map<Long, StationLineSection> getStationLineSectionMapByUpStationId(List<StationLineSection> stationLineSections) {
+    private Map<Long, StationLineSection> getStationLineSectionByUpStationId(List<StationLineSection> stationLineSections) {
         if (CollectionUtils.isEmpty(stationLineSections)) {
             return Collections.emptyMap();
         }
