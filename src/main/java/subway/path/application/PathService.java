@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PathService {  // TODO
+public class PathService {
 
     private final StationService stationService;
     private final LineService lineService;
@@ -35,7 +35,7 @@ public class PathService {  // TODO
     public void checkPathValidation(Station sourceStation, Station targetStation) {
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
-        PathFinder pathFinder = new PathFinder(shortestDistancePathStrategy);
+        PathFinder pathFinder = pathFinderFactory.createFinder(PathRetrieveType.DISTANCE);
         pathFinder.findPath(sections, sourceStation, targetStation);
     }
 

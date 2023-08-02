@@ -23,8 +23,8 @@ public class PathFinder {
     public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
         validIsSameOriginStation(sourceStation, targetStation);
 
-        List<Station> stations = getStations(sections);
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = getGraph(sections, stations);
+//        List<Station> stations = getStations(sections);
+        WeightedMultigraph<Station, DefaultWeightedEdge> graph = getGraph(sections);
         List<Station> stationsIntPath = getPath(graph, sourceStation, targetStation);
 
         return strategy.findPath(graph, sections, stationsIntPath, sourceStation, targetStation);
@@ -53,8 +53,9 @@ public class PathFinder {
                 .collect(Collectors.toList());
     }
 
-    private WeightedMultigraph<Station, DefaultWeightedEdge> getGraph(List<Section> sections, List<Station> stations) {
+    private WeightedMultigraph<Station, DefaultWeightedEdge> getGraph(List<Section> sections) {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        List<Station> stations = getStations(sections);
 
         stations.forEach(graph::addVertex);
         sections.forEach(section -> {
