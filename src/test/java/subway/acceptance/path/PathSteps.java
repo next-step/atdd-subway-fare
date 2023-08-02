@@ -11,6 +11,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
@@ -31,7 +35,7 @@ public class PathSteps {
                 .fromUriString("/path")
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
-                .queryParam("type","DURATION")
+                .queryParam("type", "DURATION")
                 .build();
         return RestAssured.given().log().all()
                 .when().get(retrieveQueryWithBaseUri.toUri())
@@ -47,19 +51,20 @@ public class PathSteps {
                 .fromUriString("/path")
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
+                .queryParam("type", "DISTANCE")
                 .build();
         return getPathForDocument(spec, filter, retrieveQueryWithBaseUri);
     }
 
     public static ExtractableResponse<Response> getMinimumTimePathForDocument(long sourceId,
-                                                                           long targetId,
-                                                                           RequestSpecification spec,
-                                                                           RestDocumentationFilter filter) {
+                                                                              long targetId,
+                                                                              RequestSpecification spec,
+                                                                              RestDocumentationFilter filter) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
                 .fromUriString("/path")
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
-                .queryParam("type","DURATION")
+                .queryParam("type", "DURATION")
                 .build();
         return getPathForDocument(spec, filter, retrieveQueryWithBaseUri);
     }
@@ -75,16 +80,31 @@ public class PathSteps {
     }
 
 
-
     public static RestDocumentationFilter 최단거리경로_필터() {
         return document("shortestPath",
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()));
+                preprocessResponse(prettyPrint()),
+                requestParameters(parameterWithName("source").description("출발역 ID"),
+                        parameterWithName("target").description("도착역 ID"),
+                        parameterWithName("type").description("조회타입 : DISTANCE").optional()),
+                responseFields(subsectionWithPath("stations").description("경로에 포함된 역 목록 (출발역-도착역 순)"),
+                        subsectionWithPath("distance").description("경로의 총 구간 길이"),
+                        subsectionWithPath("duration").description("경로의 총 소요 시간"),
+                        subsectionWithPath("fare").description("경로의 운임")
+                ));
     }
 
     public static RestDocumentationFilter 최소시간경로_필터() {
         return document("minimumTimePath",
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()));
+                preprocessResponse(prettyPrint()),
+                requestParameters(parameterWithName("source").description("출발역 ID"),
+                        parameterWithName("target").description("도착역 ID"),
+                        parameterWithName("type").description("조회타입 : DURATION")),
+                responseFields(subsectionWithPath("stations").description("경로에 포함된 역 목록 (출발역-도착역 순)"),
+                        subsectionWithPath("distance").description("경로의 총 구간 길이"),
+                        subsectionWithPath("duration").description("경로의 총 소요 시간"),
+                        subsectionWithPath("fare").description("경로의 운임")
+                ));
     }
 }
