@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static nextstep.subway.acceptance.LineSteps.getLineCreateParams;
+import static nextstep.subway.acceptance.LineSteps.노선_생성_요청값_생성;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -44,7 +44,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 5);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, LineSteps.getSectionCreateParams(남부터미널역, 양재역, 3, 6));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, LineSteps.구간_생성_요청값_생성(남부터미널역, 양재역, 3, 6));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -70,7 +70,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams = getLineCreateParams(name, color, upStation, downStation, distance, duration);
+        Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, duration);
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }

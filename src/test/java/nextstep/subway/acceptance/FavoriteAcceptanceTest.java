@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.FavoriteSteps.*;
-import static nextstep.subway.acceptance.LineSteps.getLineCreateParams;
+import static nextstep.subway.acceptance.LineSteps.노선_생성_요청값_생성;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -51,7 +51,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2);
 
-        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, LineSteps.getSectionCreateParams(남부터미널역, 양재역, 3, 10));
+        지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, LineSteps.구간_생성_요청값_생성(남부터미널역, 양재역, 3, 10));
 
         사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
@@ -85,7 +85,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
-        Map<String, String> lineCreateParams = getLineCreateParams(name, color, upStation, downStation, distance, 10);
+        Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, 10);
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
