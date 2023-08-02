@@ -17,11 +17,13 @@ public class MinimumTimePathFinder extends AbstractPathFinder implements PathStr
     public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
         Long totalDistance = getTotalDistanceInPath(sections);
         Long totalDuration = getTotalDurationInPath(sections);
+        long totalFareFromDistance = calculateFare(totalDistance);
 
         return PathRetrieveResponse.builder()
                 .stations(StationResponse.from(sections))
                 .distance(totalDistance)
                 .duration(totalDuration)
+                .fare(totalFareFromDistance)
                 .build();
     }
 

@@ -25,7 +25,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * |                                             |
      * 남부터미널역  --- *3호선* -- dt:3, dr:15 ---- 양재역
      *
-     * 건대역 ---- *A호선* --- dt:7, dr: 1 ---- 성수역 ---- dt:3, dr:4 ---- 왕십리역
+     * 건대역 ---- *A호선* --- dt:7, dr: 1 ---- 성수역 ---- dt:3, dr:4 ---- 왕십리역 ---- dt: 17, dr:8 ---- 강변역
      *
      * ex) 교대-양재
      * 최단거리 : 교대 - 남부터미널 - 양재
@@ -173,5 +173,68 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         var duration = response.jsonPath().get("duration");
         assertThat(duration).isEqualTo(8);
+    }
+
+    // week 4-2
+
+    /**
+     * Given 2개의 구간을 가진 노선이 있고
+     * When 노선의 상행역과 하행역으로 경로를 조회하면
+     * Then 3개의 역이 출력된다
+     * Then 운임이 출력된다.
+     */
+    @DisplayName("기본운임을 넘지 않는 경로의 운임을 조회한다")
+    @Test
+    void getPathFareInDefaultFare() {
+        // when
+        var response = PathSteps.getMinimumTimePath(getStationId("건대역"), getStationId("왕십리역"));
+
+        // then
+        List<String> list = response.jsonPath().getList("stations.name", String.class);
+        assertThat(list).containsExactlyInAnyOrder("건대역", "성수역", "왕십리역");
+
+        // then
+        var fare = response.jsonPath().get("fare");
+        assertThat(fare).isEqualTo(1250);
+    }
+
+    /**
+     * Given 2개의 구간을 가진 노선이 있고
+     * When 노선의 상행역과 하행역으로 경로를 조회하면
+     * Then 3개의 역이 출력된다
+     * Then 운임이 출력된다.
+     */
+    @DisplayName("기본운임이 넘고 50km 미만인 경로의 운임을 조회한다")
+    @Test
+    void getPathFareOverDefaultFare() {
+        // when
+        var response = PathSteps.getShortestPath(getStationId("건대역"), getStationId("강변역"));
+
+        // then
+        List<String> list = response.jsonPath().getList("stations.name", String.class);
+
+        // then
+        var fare = response.jsonPath().get("fare");
+        assertThat(fare).isEqualTo(1650);
+    }
+
+    /**
+     * Given 2개의 구간을 가진 노선이 있고
+     * When 노선의 상행역과 하행역으로 경로를 조회하면
+     * Then 3개의 역이 출력된다
+     * Then 운임이 출력된다.
+     */
+    @DisplayName("기본운임이 넘고 50km 초과인 경로의 운임을 조회한다")
+    @Test
+    void getPathFareOverFiftyKm() {
+        // when
+        var response = PathSteps.getShortestPath(getStationId("건대역"), getStationId("잠실역"));
+
+        // then
+        List<String> list = response.jsonPath().getList("stations.name", String.class);
+
+        // then
+        var fare = response.jsonPath().get("fare");
+        assertThat(fare).isEqualTo(2150);
     }
 }

@@ -27,6 +27,11 @@ public class PathFixture {
 
         var A호선_끝에_구간_추가 = SectionFixture.구간_요청_만들기(getStationId("성수역"), getStationId("왕십리역"), 3L, 4L);
         LineSteps.구간_추가_API(A호선_URI, A호선_끝에_구간_추가);
+        var A호선_끝에_구간_초과운임_추가 = SectionFixture.구간_요청_만들기(getStationId("왕십리역"), getStationId("강변역"), 17L, 8L);
+        LineSteps.구간_추가_API(A호선_URI, A호선_끝에_구간_초과운임_추가);
+        var A호선_끝에_구간_초과운임_50KM이상_추가 = SectionFixture.구간_요청_만들기(getStationId("강변역"), getStationId("잠실역"), 25L, 8L);
+        LineSteps.구간_추가_API(A호선_URI, A호선_끝에_구간_초과운임_50KM이상_추가);
+
     }
 
 }
