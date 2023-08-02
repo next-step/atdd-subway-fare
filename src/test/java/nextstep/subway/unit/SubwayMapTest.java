@@ -1,9 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +38,7 @@ public class SubwayMapTest {
     @Test
     void findPathByDistance() {
         //given
-        SubwayMap subwayMap = new SubwayMap(List.of(이호선, 신분당선, 삼호선), SubwayMap.Type.DISTANCE);
+        SubwayMap subwayMap = new SubwayByDistanceMap(List.of(이호선, 신분당선, 삼호선));
 
         //when
         Path path = subwayMap.findPath(교대역, 양재역);
@@ -53,7 +50,7 @@ public class SubwayMapTest {
     @Test
     void findPathByDuration() {
         //given
-        SubwayMap subwayMap = new SubwayMap(List.of(이호선, 신분당선, 삼호선), SubwayMap.Type.DURATION);
+        SubwayMap subwayMap = new SubwayByDurationMap(List.of(이호선, 신분당선, 삼호선));
 
         //when
         Path path = subwayMap.findPath(교대역, 양재역);

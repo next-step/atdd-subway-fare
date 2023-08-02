@@ -7,16 +7,11 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubwayMap {
-
-    public enum Type {DURATION, DISTANCE}
-
+public abstract class SubwayMap {
     private final List<Line> lines;
-    private final Type type;
 
-    public SubwayMap(List<Line> lines, Type type) {
+    public SubwayMap(List<Line> lines) {
         this.lines = lines;
-        this.type = type;
     }
 
     public Path findPath(Station source, Station target) {
@@ -27,7 +22,7 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
 
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
@@ -35,12 +30,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    if (Type.DISTANCE.equals(type)) {
-                        graph.setEdgeWeight(sectionEdge, it.getDistance());
-                    }
-                    if (Type.DURATION.equals(type)) {
-                        graph.setEdgeWeight(sectionEdge, it.getDuration());
-                    }
+                    setEdgeWeight(graph, sectionEdge, it);
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -58,9 +48,11 @@ public class SubwayMap {
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
     }
+
+    abstract protected void setEdgeWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, SectionEdge sectionEdge, Section section);
 }
