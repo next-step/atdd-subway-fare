@@ -9,7 +9,6 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
-    private int duration;
     private List<StationResponse> stations;
 
     public static LineResponse of(Line line) {
@@ -24,18 +23,6 @@ public class LineResponse {
         this.name = name;
         this.color = color;
         this.stations = stations;
-    }
-
-    public LineResponse(Long id, String name, String color, int duration, List<StationResponse> stations) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.stations = stations;
-        this.duration = duration;
-    }
-
-    public int getDuration() {
-        return duration;
     }
 
     public Long getId() {

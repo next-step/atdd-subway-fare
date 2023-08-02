@@ -24,7 +24,6 @@ public class LineDocumentation extends Documentation {
                 1L,
                 "2호선",
                 "green",
-                90,
                 List.of(new StationResponse(1L, "노원역"),
                         new StationResponse(2L, "마들역")
                 )
