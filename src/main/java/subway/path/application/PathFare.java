@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathFare {
+    private final GraphBuilder graphBuilder;
     private static final long BASIC_FARE = 1250L;
 
+    public PathFare() {
+        this.graphBuilder = new GraphBuilder(new ShortestDistancePathFinder());
+    }
     public long calculateFare(final List<Section> sections, Station sourceStation, Station targetStation) {
-        WeightedMultigraph<Station, SectionEdge> graph = getGraphByCalculateFare(sections);
-        List<Section> sectionsInPath = getPath(graph, sourceStation, targetStation);
+        WeightedMultigraph<Station, SectionEdge> graph = graphBuilder.getGraph(sections);
+        List<Section> sectionsInPath = graphBuilder.getPath(graph, sourceStation, targetStation);
 
         long totalFare = BASIC_FARE;
         Long distance = getTotalDistanceInPath(sectionsInPath);

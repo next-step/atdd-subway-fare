@@ -16,17 +16,21 @@ import java.util.stream.Stream;
 
 public class PathFinder {
 
-    private final PathStrategy strategy;
+    private PathStrategy strategy;
+    private final GraphBuilder graphBuilder;
     private final PathFare pathFare = new PathFare();
 
     public PathFinder(PathStrategy strategy) {
         this.strategy = strategy;
+        this.graphBuilder = new GraphBuilder(strategy);
     }
 
     public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
         validIsSameOriginStation(sourceStation, targetStation);
-        WeightedMultigraph<Station, SectionEdge> graph = getGraph(sections);
-        List<Section> sectionsInPath = getPath(graph, sourceStation, targetStation);
+//        WeightedMultigraph<Station, SectionEdge> graph = getGraph(sections);
+//        List<Section> sectionsInPath = getPath(graph, sourceStation, targetStation);
+        WeightedMultigraph<Station, SectionEdge> graph = graphBuilder.getGraph(sections);
+        List<Section> sectionsInPath = graphBuilder.getPath(graph, sourceStation, targetStation);
 
         Long totalDistance = getTotalDistanceInPath(sectionsInPath);
         Long totalDuration = getTotalDurationInPath(sectionsInPath);
