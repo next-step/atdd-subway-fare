@@ -29,12 +29,14 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.searchPath(anyLong(), anyLong())).thenReturn(new PathResponse(
+        PathResponse pathResponse = new PathResponse(
                 List.of(new StationResponse(1L, "교대역"),
                         new StationResponse(4L, "남부터미널역"),
                         new StationResponse(3L, "양재역")),
                 10
-        ));
+        );
+        
+        when(pathService.searchPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
