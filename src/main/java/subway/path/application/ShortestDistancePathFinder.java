@@ -6,6 +6,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Component;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.SectionEdge;
 import subway.station.application.dto.StationResponse;
 import subway.station.domain.Station;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class ShortestDistancePathFinder extends AbstractPathFinder implements PathStrategy {
 
     @Override
-    public PathRetrieveResponse findPath(WeightedMultigraph<Station, DefaultWeightedEdge> graph, List<Section> sections, List<Station> stationsInPath,Station sourceStation, Station targetStation) {
+    public PathRetrieveResponse findPath(WeightedMultigraph<Station, SectionEdge> graph, List<Section> sections, List<Station> stationsInPath,Station sourceStation, Station targetStation) {
         Long totalDuration = getDurationInShortestDistancePath(stationsInPath, sections);
         Double minimumWeight = getWeightOfPath(graph, sourceStation, targetStation);
 
@@ -27,7 +28,7 @@ public class ShortestDistancePathFinder extends AbstractPathFinder implements Pa
     }
 
     @Override
-    public void setEdgeWeight(WeightedMultigraph<Station, DefaultWeightedEdge> graph, Section section, DefaultWeightedEdge edge) {
+    public void setEdgeWeight(WeightedMultigraph<Station, SectionEdge> graph, Section section, SectionEdge edge) {
         graph.setEdgeWeight(edge, section.getDistance());
     }
 

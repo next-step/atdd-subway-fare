@@ -6,6 +6,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import subway.constant.SubwayMessage;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Section;
+import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -18,11 +19,11 @@ public abstract class AbstractPathFinder {
                 .collect(Collectors.toList());
     }
 
-    protected Double getWeightOfPath(WeightedMultigraph<Station, DefaultWeightedEdge> graph,
+    protected Double getWeightOfPath(WeightedMultigraph<Station, SectionEdge> graph,
                                      Station sourceStation,
                                      Station targetStation) {
         try {
-            DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+            DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
             return dijkstraShortestPath.getPathWeight(sourceStation, targetStation);
         } catch (IllegalArgumentException e) {
             throw new SubwayBadRequestException(SubwayMessage.PATH_NOT_CONNECTED_IN_SECTION);

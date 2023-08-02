@@ -7,6 +7,7 @@ import subway.constant.SubwayMessage;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -22,9 +23,7 @@ public class PathFinder {
 
     public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
         validIsSameOriginStation(sourceStation, targetStation);
-
-//        List<Station> stations = getStations(sections);
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = getGraph(sections);
+        WeightedMultigraph<Station, SectionEdge> graph = getGraph(sections);
         List<Station> stationsIntPath = getPath(graph, sourceStation, targetStation);
 
         return strategy.findPath(graph, sections, stationsIntPath, sourceStation, targetStation);
@@ -36,11 +35,11 @@ public class PathFinder {
         }
     }
 
-    private List<Station> getPath(WeightedMultigraph<Station, DefaultWeightedEdge> graph,
+    private List<Station> getPath(WeightedMultigraph<Station, SectionEdge> graph,
                                   Station sourceStation,
                                   Station targetStation) {
         try {
-            DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+            DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
             return dijkstraShortestPath.getPath(sourceStation, targetStation).getVertexList();
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new SubwayBadRequestException(SubwayMessage.PATH_NOT_CONNECTED_IN_SECTION);
@@ -53,13 +52,16 @@ public class PathFinder {
                 .collect(Collectors.toList());
     }
 
-    private WeightedMultigraph<Station, DefaultWeightedEdge> getGraph(List<Section> sections) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+    private WeightedMultigraph<Station, SectionEdge> getGraph(List<Section> sections) {
+//        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
         List<Station> stations = getStations(sections);
 
         stations.forEach(graph::addVertex);
         sections.forEach(section -> {
-            DefaultWeightedEdge edge = graph.addEdge(section.getUpStation(), section.getDownStation());
+            SectionEdge edge = new SectionEdge(section);
+//            DefaultWeightedEdge edge = graph.addEdge(section.getUpStationpStation(), section.getDownStation());
+            graph.addEdge(section.getUpStation(), section.getDownStation(), edge);
             strategy.setEdgeWeight(graph, section, edge);
         });
 
