@@ -15,8 +15,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathFinder {
-    private static final long BASIC_FARE = 1250L;
+
     private final PathStrategy strategy;
+    private final PathFare pathFare = new PathFare();
 
     public PathFinder(PathStrategy strategy) {
         this.strategy = strategy;
@@ -29,10 +30,11 @@ public class PathFinder {
 
         Long totalDistance = getTotalDistanceInPath(sectionsInPath);
         Long totalDuration = getTotalDurationInPath(sectionsInPath);
-        long totalFareFromDistance = calculateFare(totalDistance);
+        long totalFareFromDistance = pathFare.calculateFare(sections, sourceStation, targetStation);
+        List<Station> stationsInPath = getStations(sectionsInPath);
 
         return PathRetrieveResponse.builder()
-                .stations(StationResponse.from(sectionsInPath))
+                .stations(StationResponse.from(stationsInPath))
                 .distance(totalDistance)
                 .duration(totalDuration)
                 .fare(totalFareFromDistance)
@@ -91,25 +93,5 @@ public class PathFinder {
                 .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
                 .distinct()
                 .collect(Collectors.toList());
-    }
-
-    private long calculateFare(final long distance) {
-        long totalFare = BASIC_FARE;
-        if (distance > 10 && distance <= 50) {
-            totalFare += calculateOverFareWithTenDistance(distance - 10);
-        }
-        if (distance > 50) {
-            totalFare += calculateOverFareWithTenDistance(40);
-            totalFare += calculateOverFareWithFiftyDistance(distance - 50);
-        }
-        return totalFare;
-    }
-
-    private long calculateOverFareWithTenDistance(long distance) {
-        return (long) ((Math.ceil((distance - 1) / 5) + 1) * 100);
-    }
-
-    private long calculateOverFareWithFiftyDistance(long distance) {
-        return (long) ((Math.ceil((distance - 1) / 8) + 1) * 100);
     }
 }

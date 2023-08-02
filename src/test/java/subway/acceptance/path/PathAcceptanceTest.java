@@ -239,6 +239,26 @@ public class PathAcceptanceTest extends AcceptanceTest {
     /**
      * Given 2개의 구간을 가진 노선이 있고
      * When 노선의 상행역과 하행역으로 경로를 조회하면
+     * Then 운임이 출력된다.
+     */
+    @DisplayName("기본운임이 넘고 50km 미만인 경로의 최소시간 경로와 최단거리 경로가 다른 운임을 조회한다")
+    @Test
+    void getPathFareOverDefaultFareWithDifferentWeight() {
+        // when
+        var response = PathSteps.getMinimumTimePath(getStationId("교대역"), getStationId("양재역"));
+
+        // then
+        List<String> list = response.jsonPath().getList("stations.name", String.class);
+        assertThat(list).containsExactlyInAnyOrder("교대역", "강남역", "양재역");
+
+        // then
+        var fare = response.jsonPath().get("fare");
+        assertThat(fare).isEqualTo(1250);
+    }
+
+    /**
+     * Given 2개의 구간을 가진 노선이 있고
+     * When 노선의 상행역과 하행역으로 경로를 조회하면
      * Then 3개의 역이 출력된다
      * Then 운임이 출력된다.
      */
