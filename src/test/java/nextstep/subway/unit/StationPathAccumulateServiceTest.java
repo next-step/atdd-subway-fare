@@ -105,6 +105,7 @@ public class StationPathAccumulateServiceTest {
         final BigDecimal distance = stationPathAccumulateService.accumulateTotalDistance(pathStationIds);
 
         //then
+        //A - 2km - I - 7km - H - 1km - G - 3km - F - 4km - E
         final BigDecimal expectedDistance = BigDecimal.valueOf(17);
         Assertions.assertEquals(0, distance.compareTo(expectedDistance));
     }
@@ -123,6 +124,7 @@ public class StationPathAccumulateServiceTest {
         final Long duration = stationPathAccumulateService.accumulateTotalDuration(pathStationIds);
 
         //then
+        //A - 6min - I - 5min - H - 1min - G - 4min - F - 4min - E
         final Long expectedDuration = 1000 * 60 * 20L;
         Assertions.assertEquals(expectedDuration, duration);
     }

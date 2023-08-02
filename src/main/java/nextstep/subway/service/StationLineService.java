@@ -5,6 +5,7 @@ import nextstep.subway.domain.*;
 import nextstep.subway.exception.EntityNotFoundException;
 import nextstep.subway.service.dto.StationLineCreateRequest;
 import nextstep.subway.service.dto.StationLineResponse;
+import nextstep.subway.service.dto.StationLineSectionCreateRequest;
 import nextstep.subway.service.dto.StationLineUpdateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

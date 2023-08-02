@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.service.dto;
 
 import lombok.Data;
 

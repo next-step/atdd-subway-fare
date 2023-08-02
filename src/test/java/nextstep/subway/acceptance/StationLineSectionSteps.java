@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import nextstep.subway.service.dto.StationLineSectionCreateRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -22,15 +23,15 @@ public class StationLineSectionSteps {
     }
 
     public static void createStationLineSection(Long lineId, Long upStationId, Long downStationId, BigDecimal distance, Long duration, HttpStatus expectedStatus) {
-        final Map<String, String> stationLineSectionCreateRequest = new HashMap<>();
+        StationLineSectionCreateRequest request = new StationLineSectionCreateRequest();
 
-        stationLineSectionCreateRequest.put("upStationId", String.valueOf(upStationId));
-        stationLineSectionCreateRequest.put("downStationId", String.valueOf(downStationId));
-        stationLineSectionCreateRequest.put("distance", distance.toString());
-        stationLineSectionCreateRequest.put("duration", duration.toString());
+        request.setUpStationId(upStationId);
+        request.setDownStationId(downStationId);
+        request.setDistance(distance);
+        request.setDuration(duration);
 
         RestAssured.given().log().all()
-                .body(stationLineSectionCreateRequest)
+                .body(request)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines/" + lineId + "/sections")
                 .then().log().all()

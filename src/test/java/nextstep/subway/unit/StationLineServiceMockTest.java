@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.*;
 import nextstep.subway.exception.EntityNotFoundException;
 import nextstep.subway.service.StationLineService;
+import nextstep.subway.service.dto.StationLineSectionCreateRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
