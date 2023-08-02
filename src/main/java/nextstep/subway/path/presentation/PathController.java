@@ -17,7 +17,6 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> showPath(@RequestParam Long source, @RequestParam Long target) {
-        // source, target이 null로 들어오는 경우는 어떻게 처리할까?
         return ResponseEntity.ok().body(pathService.searchPath(source, target));
     }
 }
