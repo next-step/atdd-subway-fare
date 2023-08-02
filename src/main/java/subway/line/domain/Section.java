@@ -44,17 +44,24 @@ public class Section {
     @Column(nullable = false)
     private Long distance;
 
+    @Column(nullable = false)
+    private Long duration;
+
 
     public void changeDownStation(Section newSection) {
         validDistance(newSection.getDistance());
+        validDuration(newSection.getDuration());
         this.distance = this.getDistance() - newSection.getDistance();
+        this.duration = this.getDuration() - newSection.getDuration();
         this.downStation = newSection.getUpStation();
     }
 
 
     public void changeUpStation(Section newSection) {
         validDistance(newSection.getDistance());
+        validDuration(newSection.getDuration());
         this.distance = this.getDistance() - newSection.getDistance();
+        this.duration = this.getDuration() - newSection.getDuration();
         this.upStation = newSection.getDownStation();
     }
 
@@ -67,6 +74,11 @@ public class Section {
         if (this.getDistance() <= newDistance) {
             throw new SubwayBadRequestException(SubwayMessage.SECTION_OVER_DISTANCE);
         }
+    }
 
+    private void validDuration(long newDuration) {
+        if (this.getDuration() <= newDuration) {
+            throw new SubwayBadRequestException(SubwayMessage.SECTION_OVER_DURATION);
+        }
     }
 }

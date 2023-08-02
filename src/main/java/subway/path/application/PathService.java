@@ -6,6 +6,7 @@ import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -18,20 +19,23 @@ public class PathService {
 
     private final StationService stationService;
     private final LineService lineService;
-    private final PathFinder pathFinder;
+    private final PathFinderFactory pathFinderFactory;
 
-    public PathRetrieveResponse getShortestPath(long sourceStationId, long targetStationId) {
+    public PathRetrieveResponse getPath(long sourceStationId, long targetStationId, PathRetrieveType type) {
         Station sourceStation = stationService.findStationById(sourceStationId);
         Station targetStation = stationService.findStationById(targetStationId);
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
-        return pathFinder.findShortestPath(sections, sourceStation, targetStation);
+
+        PathFinder pathFinder = pathFinderFactory.createFinder(type);
+        return pathFinder.findPath(sections, sourceStation, targetStation);
     }
 
-    public PathRetrieveResponse getShortestPath(Station sourceStation, Station targetStation) {
+    public void checkPathValidation(Station sourceStation, Station targetStation) {
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
-        return pathFinder.findShortestPath(sections, sourceStation, targetStation);
+        PathFinder pathFinder = pathFinderFactory.createFinder(PathRetrieveType.DISTANCE);
+        pathFinder.findPath(sections, sourceStation, targetStation);
     }
 
     private List<Section> getAllSections(List<Line> lines) {
@@ -39,6 +43,4 @@ public class PathService {
                 .flatMap(line -> line.getLineSections().getSections().stream())
                 .collect(Collectors.toList());
     }
-
-
 }

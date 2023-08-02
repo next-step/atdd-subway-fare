@@ -71,6 +71,7 @@ public class LineService {
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(lineRequest.getDistance())
+                .duration(lineRequest.getDuration())
                 .build();
         line.addSection(section);
         return LineRetrieveResponse.from(line);
@@ -86,6 +87,7 @@ public class LineService {
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(request.getDistance())
+                .duration(request.getDuration())
                 .build();
         foundLine.addSection(section);
     }

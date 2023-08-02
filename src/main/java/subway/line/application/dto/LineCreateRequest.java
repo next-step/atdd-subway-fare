@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 public class LineCreateRequest {
 
     private static final String DISTANCE_MIN_MESSAGE = "구간의 최소 거리는 1 이상이어야 합니다.";
+    private static final String DURATION_MIN_MESSAGE = "구간의 최소 시간은 1 이상이어야 합니다.";
 
     @NotBlank
     private String name;
@@ -27,6 +28,9 @@ public class LineCreateRequest {
 
     @Min(value = 1L, message = DISTANCE_MIN_MESSAGE)
     private Long distance;
+
+    @Min(value = 1L, message = DURATION_MIN_MESSAGE)
+    private Long duration;
 
     public static Line to(LineCreateRequest request) {
         return Line.builder()

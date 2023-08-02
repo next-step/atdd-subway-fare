@@ -12,6 +12,7 @@ import subway.utils.AcceptanceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("즐겨찾기 인수 테스트")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
     private String accessToken = "";
 

@@ -10,11 +10,13 @@ import java.util.Map;
 public class SectionFixture {
     public static Map<String, String> 구간_요청_만들기(final Long upStationId,
                                                 final Long downStationId,
-                                                final Long distance) {
+                                                final Long distance,
+                                                final Long duration) {
         Map<String, String> request = new HashMap<>();
         request.put("downStationId", String.valueOf(downStationId));
         request.put("upStationId", String.valueOf(upStationId));
         request.put("distance", String.valueOf(distance));
+        request.put("duration", String.valueOf(duration));
         return request;
     }
     public static Line 이호선_기본구간_생성() {
@@ -27,12 +29,14 @@ public class SectionFixture {
                 .build();
 
         final long distance = 10;
+        final long duration = 10;
 
         Section section = Section.builder()
                 .line(line)
                 .upStation(강남역)
                 .downStation(역삼역)
                 .distance(distance)
+                .duration(duration)
                 .build();
         line.addSection(section);
         return line;
