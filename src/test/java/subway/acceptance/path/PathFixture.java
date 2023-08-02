@@ -4,7 +4,6 @@ import subway.acceptance.line.LineFixture;
 import subway.acceptance.line.LineSteps;
 import subway.acceptance.line.SectionFixture;
 
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static subway.acceptance.station.StationFixture.getStationId;
 
 public class PathFixture {

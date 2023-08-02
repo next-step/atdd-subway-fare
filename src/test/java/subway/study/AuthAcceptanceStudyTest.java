@@ -3,6 +3,7 @@ package subway.study;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ class AuthAcceptanceStudyTest extends AcceptanceTest {
     private MemberRepository memberRepository;
 
     @DisplayName("Bearer Auth")
-//    @Test
+    @Test
+    @Disabled
     void bearerAuth() {
         Member member = Member.builder().email(EMAIL).password(PASSWORD).age(AGE).build();
         memberRepository.save(member);

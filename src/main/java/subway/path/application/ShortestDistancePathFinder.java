@@ -1,7 +1,6 @@
 package subway.path.application;
 
 
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Component;
 import subway.line.domain.Section;
@@ -16,13 +15,13 @@ import java.util.List;
 public class ShortestDistancePathFinder extends AbstractPathFinder implements PathStrategy {
 
     @Override
-    public PathRetrieveResponse findPath(WeightedMultigraph<Station, SectionEdge> graph, List<Section> sections, List<Station> stationsInPath,Station sourceStation, Station targetStation) {
-        Long totalDuration = getDurationInShortestDistancePath(stationsInPath, sections);
-        Double minimumWeight = getWeightOfPath(graph, sourceStation, targetStation);
+    public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
+        Long totalDuration = getTotalDurationInPath(sections);
+        Long totalDistance = getTotalDistanceInPath(sections);
 
         return PathRetrieveResponse.builder()
-                .stations(StationResponse.from(stationsInPath))
-                .distance(minimumWeight.longValue())
+                .stations(StationResponse.from(sections))
+                .distance(totalDistance)
                 .duration(totalDuration)
                 .build();
     }
@@ -31,12 +30,4 @@ public class ShortestDistancePathFinder extends AbstractPathFinder implements Pa
     public void setEdgeWeight(WeightedMultigraph<Station, SectionEdge> graph, Section section, SectionEdge edge) {
         graph.setEdgeWeight(edge, section.getDistance());
     }
-
-    private Long getDurationInShortestDistancePath(List<Station> stationsInPath, List<Section> sections) {
-        List<Section> sectionsInPath = getSections(stationsInPath, sections);
-        return sectionsInPath.stream()
-                .map(Section::getDuration)
-                .reduce(0L, Long::sum);
-    }
-
 }

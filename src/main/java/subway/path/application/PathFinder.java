@@ -1,7 +1,6 @@
 package subway.path.application;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.constant.SubwayMessage;
 import subway.exception.SubwayBadRequestException;
@@ -24,10 +23,11 @@ public class PathFinder {
     public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
         validIsSameOriginStation(sourceStation, targetStation);
         WeightedMultigraph<Station, SectionEdge> graph = getGraph(sections);
-        List<Station> stationsIntPath = getPath(graph, sourceStation, targetStation);
+        List<Section> sectionsInPath = getPath(graph, sourceStation, targetStation);
 
-        return strategy.findPath(graph, sections, stationsIntPath, sourceStation, targetStation);
+        return strategy.findPath(sectionsInPath, sourceStation, targetStation);
     }
+
 
     private void validIsSameOriginStation(Station sourceStation, Station targetStation) {
         if (sourceStation.equals(targetStation)) {
@@ -35,36 +35,38 @@ public class PathFinder {
         }
     }
 
-    private List<Station> getPath(WeightedMultigraph<Station, SectionEdge> graph,
+    private List<Section> getPath(WeightedMultigraph<Station, SectionEdge> graph,
                                   Station sourceStation,
                                   Station targetStation) {
         try {
-            DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-            return dijkstraShortestPath.getPath(sourceStation, targetStation).getVertexList();
+            final DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+            final List<SectionEdge> edgeList = dijkstraShortestPath.getPath(sourceStation, targetStation).getEdgeList();
+            return edgeList.stream()
+                    .map(SectionEdge::getSection)
+                    .collect(Collectors.toList());
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new SubwayBadRequestException(SubwayMessage.PATH_NOT_CONNECTED_IN_SECTION);
         }
     }
 
-    private List<Station> getStations(List<Section> sections) {
-        return sections.stream()
-                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
-                .collect(Collectors.toList());
-    }
-
     private WeightedMultigraph<Station, SectionEdge> getGraph(List<Section> sections) {
-//        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
         List<Station> stations = getStations(sections);
 
         stations.forEach(graph::addVertex);
         sections.forEach(section -> {
-            SectionEdge edge = new SectionEdge(section);
-//            DefaultWeightedEdge edge = graph.addEdge(section.getUpStationpStation(), section.getDownStation());
-            graph.addEdge(section.getUpStation(), section.getDownStation(), edge);
-            strategy.setEdgeWeight(graph, section, edge);
+            SectionEdge sectionEdge = new SectionEdge(section);
+            graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
+            strategy.setEdgeWeight(graph, section, sectionEdge);
         });
 
         return graph;
+    }
+
+    private List<Station> getStations(List<Section> sections) {
+        return sections.stream()
+                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

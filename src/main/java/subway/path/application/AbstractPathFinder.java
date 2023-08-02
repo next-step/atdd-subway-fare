@@ -1,39 +1,21 @@
 package subway.path.application;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
-import subway.constant.SubwayMessage;
-import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Section;
-import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class AbstractPathFinder {
-    protected List<Section> getSections(List<Station> stationsInPath, List<Section> sections) {
+
+    protected Long getTotalDurationInPath(List<Section> sections) {
         return sections.stream()
-                .filter(section -> isSectionInPath(section, stationsInPath))
-                .collect(Collectors.toList());
+                .map(Section::getDuration)
+                .reduce(0L, Long::sum);
     }
 
-    protected Double getWeightOfPath(WeightedMultigraph<Station, SectionEdge> graph,
-                                     Station sourceStation,
-                                     Station targetStation) {
-        try {
-            DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-            return dijkstraShortestPath.getPathWeight(sourceStation, targetStation);
-        } catch (IllegalArgumentException e) {
-            throw new SubwayBadRequestException(SubwayMessage.PATH_NOT_CONNECTED_IN_SECTION);
-        }
-    }
-
-    private boolean isSectionInPath(Section section, List<Station> stationsInPath) {
-        int indexOfUpStation = stationsInPath.indexOf(section.getUpStation());
-        return indexOfUpStation != -1 &&
-                indexOfUpStation + 1 < stationsInPath.size() &&
-                stationsInPath.get(indexOfUpStation + 1).equals(section.getDownStation());
+    protected Long getTotalDistanceInPath(List<Section> sections) {
+        return sections.stream()
+                .map(Section::getDistance)
+                .reduce(0L, Long::sum);
     }
 }

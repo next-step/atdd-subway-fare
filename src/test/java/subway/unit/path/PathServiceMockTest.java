@@ -49,10 +49,7 @@ public class PathServiceMockTest {
         Station 강남역 = new Station(1L, "강남역");
         Station 역삼역 = new Station(2L, "역삼역");
         Station 선릉역 = new Station(3L, "선릉역");
-        Line 이호선 = Line.builder()
-                .name("이호선")
-                .color("random")
-                .build();
+        Line 이호선 = Line.builder().name("이호선").color("random").build();
         Section 이호선_1구간 = Section.builder().id(1L).upStation(강남역).downStation(역삼역).distance(5L).duration(5L).build();
         이호선.addSection(이호선_1구간);
         Section 이호선_2구간 = Section.builder().id(2L).upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
@@ -93,10 +90,7 @@ public class PathServiceMockTest {
         Station 강남역 = new Station(1L, "강남역");
         Station 역삼역 = new Station(2L, "역삼역");
         Station 선릉역 = new Station(3L, "선릉역");
-        Line 이호선 = Line.builder()
-                .name("이호선")
-                .color("random")
-                .build();
+        Line 이호선 = Line.builder().name("이호선").color("random").build();
         Section 이호선_1구간 = Section.builder().id(1L).upStation(강남역).downStation(역삼역).distance(5L).duration(5L).build();
         이호선.addSection(이호선_1구간);
         Section 이호선_2구간 = Section.builder().id(2L).upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
