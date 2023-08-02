@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.dto.PathResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +19,7 @@ class PathDocumentation extends Documentation {
     @DisplayName("경로 조회 문서")
     @Test
     void findPath() {
-        PathResponse pathResponse = 경로_조회_예시_응답();
+        var pathResponse = 경로_조회_예시_응답();
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
         출력_필드_추가("findPath", spec);
