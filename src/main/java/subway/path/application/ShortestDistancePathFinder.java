@@ -16,8 +16,8 @@ public class ShortestDistancePathFinder extends AbstractPathFinder implements Pa
 
     @Override
     public PathRetrieveResponse findPath(List<Section> sections, Station sourceStation, Station targetStation) {
-        Long totalDuration = getTotalDurationInPath(sections);
         Long totalDistance = getTotalDistanceInPath(sections);
+        Long totalDuration = getTotalDurationInPath(sections);
 
         return PathRetrieveResponse.builder()
                 .stations(StationResponse.from(sections))
