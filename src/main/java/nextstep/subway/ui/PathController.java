@@ -20,6 +20,6 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source,
         @RequestParam Long target, @RequestParam PathType type) {
 
-        return ResponseEntity.ok(pathService.findPath(source, target));
+        return ResponseEntity.ok(pathService.findPath(source, target, type));
     }
 }

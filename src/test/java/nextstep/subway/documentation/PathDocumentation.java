@@ -1,10 +1,5 @@
 package nextstep.subway.documentation;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-
 import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -14,11 +9,16 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.RequestFieldsSnippet;
-import org.springframework.restdocs.payload.RequestPartFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
 public class PathDocumentation extends Documentation {
 
@@ -37,7 +37,7 @@ public class PathDocumentation extends Documentation {
             180
         );
 
-        when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         PathSteps.두_역의_최단_거리_경로_조회를_요청_docs(1L, 2L, PathType.DISTANCE.name(),
                 getSpec("path", getPathRequestParamSnippet(), getPathResponseFieldsSnippet())
