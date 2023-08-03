@@ -12,4 +12,5 @@ public class PathRetrieveResponse {
     private List<StationResponse> stations;
     private long distance;
     private long duration;
+    private long fare;
 }

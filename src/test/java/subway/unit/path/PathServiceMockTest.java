@@ -13,6 +13,7 @@ import subway.path.application.PathFinder;
 import subway.path.application.PathFinderFactory;
 import subway.path.application.PathService;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.Path;
 import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
 import subway.station.application.dto.StationResponse;
@@ -55,8 +56,8 @@ public class PathServiceMockTest {
         Section 이호선_2구간 = Section.builder().id(2L).upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
         이호선.addSection(이호선_2구간);
 
-        List<StationResponse> stationResponses = List.of(StationResponse.from(강남역), StationResponse.from(역삼역), StationResponse.from(선릉역));
-        PathRetrieveResponse response = PathRetrieveResponse.builder().distance(10L).stations(stationResponses).build();
+        List<Station> stations = List.of(강남역, 역삼역, 선릉역);
+        Path response = Path.builder().totalDistance(10L).stations(stations).build();
         PathFinder pathFinder = mock(PathFinder.class);
         when(pathFinderFactory.createFinder(PathRetrieveType.DISTANCE)).thenReturn(pathFinder);
 
@@ -96,8 +97,8 @@ public class PathServiceMockTest {
         Section 이호선_2구간 = Section.builder().id(2L).upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
         이호선.addSection(이호선_2구간);
 
-        List<StationResponse> stationResponses = List.of(StationResponse.from(강남역), StationResponse.from(역삼역), StationResponse.from(선릉역));
-        PathRetrieveResponse response = PathRetrieveResponse.builder().distance(10L).duration(10L).stations(stationResponses).build();
+        List<Station> stations = List.of(강남역, 역삼역, 선릉역);
+        Path response = Path.builder().totalDistance(10L).totalDuration(10L).stations(stations).build();
         PathFinder pathFinder = mock(PathFinder.class);
         when(pathFinderFactory.createFinder(PathRetrieveType.DURATION)).thenReturn(pathFinder);
 

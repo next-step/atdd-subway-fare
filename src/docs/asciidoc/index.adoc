@@ -11,8 +11,8 @@
 
 === 최단거리경로 조회
 
-operation::shortestPath[snippets='http-request,http-response,response-body']
+operation::shortestPath[snippets='http-request,request-parameters,http-response,response-fields']
 
 === 최소시간경로 조회
 
-operation::minimumTimePath[snippets='http-request,http-response,response-body']
+operation::minimumTimePath[snippets='http-request,request-parameters,http-response,response-fields']

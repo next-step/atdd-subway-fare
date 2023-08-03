@@ -30,6 +30,7 @@ public class PathDocumentation extends Documentation {
                 .stations(List.of(강남역, 역삼역))
                 .distance(10)
                 .duration(10)
+                .fare(1250L)
                 .build();
         when(pathService.getPath(anyLong(), anyLong(), eq(PathRetrieveType.DISTANCE))).thenReturn(pathRetrieve);
 
@@ -54,6 +55,7 @@ public class PathDocumentation extends Documentation {
                 .stations(List.of(강남역, 역삼역))
                 .distance(10)
                 .duration(10)
+                .fare(1250L)
                 .build();
         when(pathService.getPath(anyLong(), anyLong(), eq(PathRetrieveType.DURATION))).thenReturn(pathRetrieve);
 
@@ -67,6 +69,7 @@ public class PathDocumentation extends Documentation {
         var list = response.jsonPath().getList("stations.name", String.class);
         assertThat(list).containsExactlyInAnyOrder("강남역", "역삼역");
     }
+
 
 
 }
