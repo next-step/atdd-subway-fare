@@ -1,18 +1,20 @@
 package nextstep.subway.acceptance;
 
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_조회_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_제거_요청;
+import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static nextstep.subway.acceptance.LineSteps.*;
-import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 구간 관리 기능")
 class SectionAcceptanceTest extends AcceptanceTest {
@@ -35,6 +37,19 @@ class SectionAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
+    private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
+        Map<String, String> lineCreateParams;
+        lineCreateParams = new HashMap<>();
+        lineCreateParams.put("name", "신분당선");
+        lineCreateParams.put("color", "bg-red-600");
+        lineCreateParams.put("upStationId", upStationId + "");
+        lineCreateParams.put("downStationId", downStationId + "");
+        lineCreateParams.put("distance", 10 + "");
+        lineCreateParams.put("duration", 500 + "");
+
+        return lineCreateParams;
+    }
+
     /**
      * When 지하철 노선에 새로운 구간 추가를 요청 하면
      * Then 노선에 새로운 구간이 추가된다
@@ -50,6 +65,16 @@ class SectionAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 양재역, 정자역);
+    }
+
+    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("upStationId", upStationId + "");
+        params.put("downStationId", downStationId + "");
+        params.put("distance", 6 + "");
+        params.put("duration", 600 + "");
+
+        return params;
     }
 
     /**
@@ -71,24 +96,5 @@ class SectionAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(신분당선);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 양재역);
-    }
-
-    private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", "신분당선");
-        lineCreateParams.put("color", "bg-red-600");
-        lineCreateParams.put("upStationId", upStationId + "");
-        lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", 10 + "");
-        return lineCreateParams;
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", 6 + "");
-        return params;
     }
 }
