@@ -1,7 +1,5 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.domain.enums.PathType;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -89,7 +87,4 @@ public class Section {
         return this.distance <= newSection.getDistance();
     }
 
-    public long getValueOfType(PathType type) {
-        return type.isDistance() ? this.distance : this.duration;
-    }
 }

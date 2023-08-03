@@ -62,7 +62,7 @@ public class PathAcceptanceTest {
      * And 총 거리와 소요 시간을 함께 응답함
      */
     @Nested
-    class Success_Ditance {
+    class Success_Distance {
 
         @Test
         void 교대역에서_양재역을_가는_최단_경로는_교대_남부터미널_양재_5미터이다() {
@@ -107,7 +107,7 @@ public class PathAcceptanceTest {
     class Success_Duration {
 
         @Test
-        void 교대역에서_양재역을_가는_최단_경로는_교대_남부터미널_양재_5미터이다() {
+        void 교대역에서_양재역을_가는_최단시간_경로는_교대_남부터미널_양재_20분이다() {
             // when
             ValidatableResponse pathResponse = getPath(교대역, 양재역, PathType.DURATION);
 
@@ -116,7 +116,7 @@ public class PathAcceptanceTest {
         }
 
         @Test
-        void 강남역에서_남부터미널역을_가는_최단_경로는_강남_교대_남부터미널_12미터이다() {
+        void 강남역에서_남부터미널역을_가는_최단시간_경로는_강남_교대_남부터미널_48분이다() {
             // when
             ValidatableResponse pathResponse = getPath(강남역, 남부터미널역, PathType.DURATION);
 
@@ -125,7 +125,7 @@ public class PathAcceptanceTest {
         }
 
         @Test
-        void 강남역에서_양재역을_가는_최단_경로는_강남_양재_10미터이다() {
+        void 강남역에서_양재역을_가는_최단시간_경로는_강남_양재_40분이다() {
             // when
             ValidatableResponse pathResponse = getPath(강남역, 양재역, PathType.DURATION);
 
