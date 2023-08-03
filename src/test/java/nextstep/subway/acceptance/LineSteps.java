@@ -40,6 +40,12 @@ public class LineSteps {
             .then().log().all().extract();
     }
 
+    public static Long 지하철_노선_생성_요청_후_id_추출(String name, String color,
+        Long upStationId, Long downStationId, int distance, int duration) {
+
+        return 지하철_노선_생성_요청(name, color, upStationId, downStationId, distance, duration)
+            .jsonPath().getLong("id");
+    }
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, String> params) {
         return RestAssured
