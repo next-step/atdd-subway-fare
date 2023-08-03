@@ -14,7 +14,7 @@ public class PathSteps {
 
     public static final String PATH_RESOURCE_URL = "/paths";
 
-    public static ValidatableResponse getPath(Long sourceStationId, Long targetStationId, PathType type) {
+    public static ValidatableResponse getPath(Long sourceStationId, Long targetStationId, String type) {
         Map<String, Object> params = new HashMap<>();
         params.put("source", sourceStationId);
         params.put("target", targetStationId);

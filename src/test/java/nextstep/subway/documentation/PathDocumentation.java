@@ -36,7 +36,7 @@ class PathDocumentation extends Document {
 
     @Test
     void path() {
-        ValidatableResponse pathFoundResponse = PathSteps.getPath(강남역_id, 역삼역_id, PathType.DISTANCE);
+        ValidatableResponse pathFoundResponse = PathSteps.getPath(강남역_id, 역삼역_id, "DISTANCE");
 
         verifyResponseStatus(pathFoundResponse, HttpStatus.OK);
 
@@ -50,7 +50,7 @@ class PathDocumentation extends Document {
 
         final PathResponse pathResponse = new PathResponse(List.of(강남역, 역삼역), 10L, 40, 0);
 
-        given(pathFindService.getPath(강남역_id, 역삼역_id, PathType.DISTANCE)).willReturn(pathResponse);
+        given(pathFindService.getPath(강남역_id, 역삼역_id, "DISTANCE")).willReturn(pathResponse);
 
         return document("path",
                 preprocessRequest(prettyPrint()),

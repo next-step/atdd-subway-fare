@@ -53,15 +53,15 @@ public class PathAcceptanceTest {
 
     /**
      * Feature: 지하철 경로 검색
-     *
-     *   Scenario: 두 역의 최단 거리 경로를 조회
-     *     Given 지하철역이 등록되어있음
-     *     And 지하철 노선이 등록되어있음
-     *     And 지하철 노선에 지하철역이 등록되어있음
-     *     When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
-     *     Then 최단 거리 경로를 응답
-     *     And 총 거리와 소요 시간을 함께 응답함
-     *     And 지하철 이용 요금도 함께 응답함
+     * <p>
+     * Scenario: 두 역의 최단 거리 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     * Then 최단 거리 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
      */
     @Nested
     class Success_Distance {
@@ -69,43 +69,43 @@ public class PathAcceptanceTest {
         @Test
         void 교대역에서_양재역을_가는_최단_경로는_교대_남부터미널_양재_5미터이다() {
             // when
-            ValidatableResponse pathResponse = getPath(교대역, 양재역, PathType.DISTANCE);
+            ValidatableResponse pathResponse = getPath(교대역, 양재역, "DISTANCE");
 
             // then
-            verifyFoundPath(pathResponse, 5L, 20, 0, "교대역", "남부터미널역", "양재역");
+            verifyFoundPath(pathResponse, 5L, 20, 1250, "교대역", "남부터미널역", "양재역");
         }
 
         @Test
         void 강남역에서_남부터미널역을_가는_최단_경로는_강남_교대_남부터미널_12미터이다() {
             // when
-            ValidatableResponse pathResponse = getPath(강남역, 남부터미널역, PathType.DISTANCE);
+            ValidatableResponse pathResponse = getPath(강남역, 남부터미널역, "DISTANCE");
 
             // then
-            verifyFoundPath(pathResponse, 12L, 48, 0, "강남역", "교대역", "남부터미널역");
+            verifyFoundPath(pathResponse, 12L, 48, 1350, "강남역", "교대역", "남부터미널역");
         }
 
         @Test
         void 강남역에서_양재역을_가는_최단_경로는_강남_양재_10미터이다() {
             // when
-            ValidatableResponse pathResponse = getPath(강남역, 양재역, PathType.DISTANCE);
+            ValidatableResponse pathResponse = getPath(강남역, 양재역, "DISTANCE");
 
             // then
-            verifyFoundPath(pathResponse, 10L, 40, 0, "강남역", "양재역");
+            verifyFoundPath(pathResponse, 10L, 40, 1250, "강남역", "양재역");
         }
 
     }
 
     /**
      * Feature: 지하철 경로 검색
-     *
-     *   Scenario: 두 역의 최단 시간 경로를 조회
-     *     Given 지하철역이 등록되어있음
-     *     And 지하철 노선이 등록되어있음
-     *     And 지하철 노선에 지하철역이 등록되어있음
-     *     When 출발역에서 도착역까지의 최단 시간 경로 조회를 요청
-     *     Then 최단 시간 경로를 응답
-     *     And 총 거리와 소요 시간을 함께 응답함
-     *     And 지하철 이용 요금도 함께 응답함
+     * <p>
+     * Scenario: 두 역의 최단 시간 경로를 조회
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 출발역에서 도착역까지의 최단 시간 경로 조회를 요청
+     * Then 최단 시간 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
      */
     @Nested
     class Success_Duration {
@@ -113,28 +113,28 @@ public class PathAcceptanceTest {
         @Test
         void 교대역에서_양재역을_가는_최단시간_경로는_교대_남부터미널_양재_20분이다() {
             // when
-            ValidatableResponse pathResponse = getPath(교대역, 양재역, PathType.DURATION);
+            ValidatableResponse pathResponse = getPath(교대역, 양재역, "DURATION");
 
             // then
-            verifyFoundPath(pathResponse, 5L, 20, 0, "교대역", "남부터미널역", "양재역");
+            verifyFoundPath(pathResponse, 5L, 20, 1250, "교대역", "남부터미널역", "양재역");
         }
 
         @Test
         void 강남역에서_남부터미널역을_가는_최단시간_경로는_강남_교대_남부터미널_48분이다() {
             // when
-            ValidatableResponse pathResponse = getPath(강남역, 남부터미널역, PathType.DURATION);
+            ValidatableResponse pathResponse = getPath(강남역, 남부터미널역, "DURATION");
 
             // then
-            verifyFoundPath(pathResponse, 12L, 48, 0, "강남역", "교대역", "남부터미널역");
+            verifyFoundPath(pathResponse, 12L, 48, 1350, "강남역", "교대역", "남부터미널역");
         }
 
         @Test
         void 강남역에서_양재역을_가는_최단시간_경로는_강남_양재_40분이다() {
             // when
-            ValidatableResponse pathResponse = getPath(강남역, 양재역, PathType.DURATION);
+            ValidatableResponse pathResponse = getPath(강남역, 양재역, "DURATION");
 
             // then
-            verifyFoundPath(pathResponse, 10L, 40, 0, "강남역", "양재역");
+            verifyFoundPath(pathResponse, 10L, 40, 1250, "강남역", "양재역");
         }
 
     }
@@ -145,7 +145,7 @@ public class PathAcceptanceTest {
         @Test
         void 출발역과_도착역이_같은_경우() {
             // when
-            ValidatableResponse pathResponse = getPath(강남역, 강남역, PathType.DISTANCE);
+            ValidatableResponse pathResponse = getPath(강남역, 강남역, "DISTANCE");
 
             // then
             verifyResponseStatus(pathResponse, HttpStatus.BAD_REQUEST);
@@ -155,7 +155,7 @@ public class PathAcceptanceTest {
         void 출발역과_도착역이_연결되지_않은_경우() {
             // when
             Long 까치산역 = getId(createStation("까치산역"));
-            ValidatableResponse pathResponse = getPath(까치산역, 강남역, PathType.DISTANCE);
+            ValidatableResponse pathResponse = getPath(까치산역, 강남역, "DISTANCE");
 
             // then
             verifyResponseStatus(pathResponse, HttpStatus.BAD_REQUEST);
@@ -164,7 +164,7 @@ public class PathAcceptanceTest {
         @Test
         void 존재하지_않은_출발역이나_도착역을_조회_할_경우() {
             // when
-            ValidatableResponse pathResponse = getPath(10000L, 강남역, PathType.DISTANCE);
+            ValidatableResponse pathResponse = getPath(10000L, 강남역, "DISTANCE");
 
             // then
             verifyResponseStatus(pathResponse, HttpStatus.NOT_FOUND);

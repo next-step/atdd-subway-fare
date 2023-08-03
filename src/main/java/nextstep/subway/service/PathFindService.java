@@ -3,10 +3,7 @@ package nextstep.subway.service;
 import nextstep.common.NotFoundStationException;
 import nextstep.subway.controller.resonse.PathResponse;
 import nextstep.subway.controller.resonse.StationResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.Section;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.*;
 import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.domain.vo.Path;
 import nextstep.subway.repository.LineRepository;
@@ -30,13 +27,13 @@ public class PathFindService {
         this.stationRepository = stationRepository;
     }
 
-    public PathResponse getPath(Long sourceStationId, Long targetStationId, PathType type) {
+    public PathResponse getPath(Long sourceStationId, Long targetStationId, String type) {
         Station sourceStation = stationRepository.findById(sourceStationId)
                 .orElseThrow(() -> new NotFoundStationException(sourceStationId));
         Station targetStation = stationRepository.findById(targetStationId)
                 .orElseThrow(() -> new NotFoundStationException(targetStationId));
 
-        Path shortestPath = getPathFinder().getShortestPath(sourceStation, targetStation, type);
+        Path shortestPath = getPathFinder().getShortestPath(sourceStation, targetStation, PathType.valueOf(type));
 
         return new PathResponse(
                 shortestPath.getStations().stream()
@@ -44,7 +41,7 @@ public class PathFindService {
                         .collect(Collectors.toList()),
                 shortestPath.getDistance(),
                 shortestPath.getDuration(),
-                0
+                SubwayFare.calculateFare(shortestPath)
         );
     }
 
