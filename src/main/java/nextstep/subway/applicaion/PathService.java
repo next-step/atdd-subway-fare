@@ -27,7 +27,13 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path path = subwayMap.findPath(upStation, downStation, pathType);
-        Path shortestDistancePath = subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
+        Path shortestDistancePath;
+
+        if (pathType == PathType.DISTANCE) {
+            shortestDistancePath = new Path(path.getSections());
+        } else {
+            shortestDistancePath = subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
+        }
 
         return PathResponse.of(path, shortestDistancePath);
     }
