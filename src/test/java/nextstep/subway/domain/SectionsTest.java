@@ -44,9 +44,9 @@ class SectionsTest {
 
         //then
         assertThat(sections.getStations()).containsExactly(부평역, 부천역, 개봉역, 구로역);
-        assertThat(sections.getSections())
-            .extracting("distance")
-            .containsOnly(10, 7, 9);
+        assertThat(sections.getSections()).extracting("distance").containsOnly(10, 7, 9);
+        assertThat(sections.getSections()).extracting("duration").containsOnly(200, 250, 350);
+
     }
 
     @Test
@@ -66,9 +66,8 @@ class SectionsTest {
 
         //then
         assertThat(sections.getStations()).containsExactly(부평역, 부천역, 개봉역, 구로역);
-        assertThat(sections.getSections())
-            .extracting("distance")
-            .containsOnly(10, 7, 9);
+        assertThat(sections.getSections()).extracting("distance").containsOnly(10, 7, 9);
+        assertThat(sections.getSections()).extracting("duration").containsOnly(200, 250, 350);
 
     }
 }
