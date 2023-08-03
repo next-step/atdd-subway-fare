@@ -7,14 +7,25 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubwayMap {
+public abstract class SubwayMap {
     private List<Line> lines;
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathType pathType) {
+    public static SubwayMap of(List<Line> lines) {
+        return new SubwayDistanceMap(lines);
+    }
+
+    public static SubwayMap of(List<Line> lines, PathType pathType) {
+        if (pathType == PathType.DURATION) {
+            return new SubwayDurationMap(lines);
+        }
+        return new SubwayDistanceMap(lines);
+    }
+
+    public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -30,7 +41,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, getWeight(it, pathType));
+                    graph.setEdgeWeight(sectionEdge, getWeight(it));
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -41,7 +52,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, getWeight(it, pathType));
+                    graph.setEdgeWeight(sectionEdge, getWeight(it));
                 });
 
         // 다익스트라 최단 경로 찾기
@@ -55,10 +66,5 @@ public class SubwayMap {
         return new Path(new Sections(sections));
     }
 
-    private int getWeight(Section section, PathType pathType) {
-        if (pathType == PathType.DISTANCE) {
-            return section.getDistance();
-        }
-        return section.getDuration();
-    }
+    abstract int getWeight(Section section);
 }
