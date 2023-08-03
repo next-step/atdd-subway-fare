@@ -16,12 +16,10 @@ import java.util.stream.Stream;
 
 public class PathFinder {
 
-    private final PathStrategy strategy;
     private final GraphBuilder graph;
     private final PathFare pathFare = new PathFare();
 
     public PathFinder(PathStrategy strategy) {
-        this.strategy = strategy;
         this.graph = new GraphBuilder(strategy);
     }
 
@@ -47,34 +45,6 @@ public class PathFinder {
     private void validIsSameOriginStation(Station sourceStation, Station targetStation) {
         if (sourceStation.equals(targetStation)) {
             throw new SubwayBadRequestException(SubwayMessage.PATH_REQUEST_STATION_IS_SAME_ORIGIN);
-        }
-    }
-
-    private WeightedMultigraph<Station, SectionEdge> getGraph(List<Section> sections) {
-        WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
-        List<Station> stations = getStations(sections);
-
-        stations.forEach(graph::addVertex);
-        sections.forEach(section -> {
-            SectionEdge sectionEdge = new SectionEdge(section);
-            graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-            strategy.setEdgeWeight(graph, section, sectionEdge);
-        });
-
-        return graph;
-    }
-
-    private List<Section> getPath(WeightedMultigraph<Station, SectionEdge> graph,
-                                  Station sourceStation,
-                                  Station targetStation) {
-        try {
-            final DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-            final List<SectionEdge> edgeList = dijkstraShortestPath.getPath(sourceStation, targetStation).getEdgeList();
-            return edgeList.stream()
-                    .map(SectionEdge::getSection)
-                    .collect(Collectors.toList());
-        } catch (IllegalArgumentException | NullPointerException e) {
-            throw new SubwayBadRequestException(SubwayMessage.PATH_NOT_CONNECTED_IN_SECTION);
         }
     }
 

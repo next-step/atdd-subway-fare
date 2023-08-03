@@ -9,15 +9,13 @@ import subway.path.domain.PathRetrieveType;
 @Component
 @RequiredArgsConstructor
 public class PathFinderFactory {
-    private final MinimumTimePathFinder minimumTimePathStrategy;
-    private final ShortestDistancePathFinder shortestDistancePathStrategy;
 
     public PathFinder createFinder(PathRetrieveType type) {
         switch (type) {
             case DISTANCE:
-                return new PathFinder(shortestDistancePathStrategy);
+                return new PathFinder(new ShortestDistancePathFinder());
             case DURATION:
-                return new PathFinder(minimumTimePathStrategy);
+                return new PathFinder(new MinimumTimePathFinder());
             default:
                 throw new SubwayBadRequestException(SubwayMessage.PATH_INVALID_REQUEST_TYPE);
         }

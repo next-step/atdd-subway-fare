@@ -2,12 +2,10 @@ package subway.path.application;
 
 
 import org.jgrapht.graph.WeightedMultigraph;
-import org.springframework.stereotype.Component;
 import subway.line.domain.Section;
 import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
-@Component
 public class ShortestDistancePathFinder implements PathStrategy {
 
     @Override

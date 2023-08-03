@@ -8,12 +8,18 @@ import subway.station.domain.Station;
 import java.util.List;
 
 public class PathFare {
-    private final GraphBuilder graph;
     private static final long BASIC_FARE = 1250L;
+    private static final long FIRST_OVER_CHARGE_SECTION_BY_DISTANCE = 10L;
+    private static final long FIRST_DIVISOR = 5L;
+    private static final long SECOND_OVER_CHARGE_SECTION_BY_DISTANCE = 50L;
+    private static final long SECOND_DIVISOR = 8L;
+    private static final long REMAIN_SECTION_DISTANCE = SECOND_OVER_CHARGE_SECTION_BY_DISTANCE - FIRST_OVER_CHARGE_SECTION_BY_DISTANCE;
+    private final GraphBuilder graph;
 
     public PathFare() {
         this.graph = new GraphBuilder(new ShortestDistancePathFinder());
     }
+
     public long calculateFare(final List<Section> sections, Station sourceStation, Station targetStation) {
         WeightedMultigraph<Station, SectionEdge> graph = this.graph.getGraph(sections);
         List<Section> sectionsInPath = this.graph.getPath(graph, sourceStation, targetStation);
@@ -26,19 +32,6 @@ public class PathFare {
         return totalFare;
     }
 
-    private long calculateAdditionalFare(Long distance) {
-        long additionalFare = 0L;
-
-        if (distance > 50) {
-            additionalFare += calculateOverFareWithTenDistance(40);
-            additionalFare += calculateOverFareWithFiftyDistance(distance - 50);
-        } else if (distance > 10) {
-            additionalFare += calculateOverFareWithTenDistance(distance - 10);
-        }
-
-        return additionalFare;
-    }
-
     private Long getTotalDistanceInPath(List<Section> sections) {
         return sections.stream()
                 .map(Section::getDistance)
@@ -46,11 +39,20 @@ public class PathFare {
     }
 
 
-    private long calculateOverFareWithTenDistance(long distance) {
-        return (long) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+    private long calculateAdditionalFare(Long distance) {
+        long additionalFare = 0L;
+
+        if (distance > SECOND_OVER_CHARGE_SECTION_BY_DISTANCE) {
+            additionalFare += calculateOverFare(REMAIN_SECTION_DISTANCE, FIRST_DIVISOR);
+            additionalFare += calculateOverFare(distance - SECOND_OVER_CHARGE_SECTION_BY_DISTANCE, SECOND_DIVISOR);
+        } else if (distance > FIRST_OVER_CHARGE_SECTION_BY_DISTANCE) {
+            additionalFare += calculateOverFare(distance - FIRST_OVER_CHARGE_SECTION_BY_DISTANCE, FIRST_DIVISOR);
+        }
+
+        return additionalFare;
     }
 
-    private long calculateOverFareWithFiftyDistance(long distance) {
-        return (long) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+    private long calculateOverFare(long distance, long divisor) {
+        return (long) ((Math.ceil((distance - 1) / divisor) + 1) * 100);
     }
 }
