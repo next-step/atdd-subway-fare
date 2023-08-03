@@ -1,18 +1,21 @@
 package nextstep.subway.acceptance;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.Map;
+import nextstep.subway.domain.Station;
 import org.springframework.http.MediaType;
 
 public class PathSteps {
-  public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+  public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String type) {
     return RestAssured
         .given().log().all()
         .accept(MediaType.APPLICATION_JSON_VALUE)
-        .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+        .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
         .then().log().all().extract();
   }
 
@@ -34,5 +37,9 @@ public class PathSteps {
     params.put("downStationId", downStationId + "");
     params.put("distance", distance + "");
     return params;
+  }
+
+  public static void 역의_순서_검증(ExtractableResponse<Response> response, Long... stations) {
+    assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
   }
 }
