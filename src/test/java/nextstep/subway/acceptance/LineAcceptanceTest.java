@@ -48,7 +48,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         var 양재역 = 지하철역_생성_요청_후_id_추출("양재역");
 
         // when
-        var createResponse = 지하철_노선_생성_요청("2호선", "green");
+        var createResponse = 지하철_노선_생성_요청("2호선", "green", 강남역, 양재역, 10, 100);
 
         // then
         assertThat(createResponse.statusCode()).isEqualTo(HttpStatus.CREATED.value());
