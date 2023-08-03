@@ -15,8 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.RequestPartFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
@@ -37,12 +39,14 @@ public class Documentation {
                 .build();
     }
 
-    public RequestSpecification getSpec(String identifier) {
+    public RequestSpecification getSpec(String identifier, RequestParametersSnippet request, ResponseFieldsSnippet response) {
 
         return spec.filter(document(
                 identifier,
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint())
+                preprocessResponse(prettyPrint()),
+                request,
+                response
             )
         );
     }
