@@ -7,6 +7,7 @@ import nextstep.subway.acceptance.PathSteps;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,6 +30,6 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        PathSteps.두_역의_최단_거리_경로_조회를_요청_docs(1L, 2L, getSpec("path"));
+        PathSteps.두_역의_최단_거리_경로_조회를_요청_docs(1L, 2L, PathType.DISTANCE.name(), getSpec("path"));
     }
 }
