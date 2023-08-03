@@ -24,4 +24,8 @@ public class Path {
     public int extractDuration() {
         return sections.totalDuration();
     }
+
+    public int fare() {
+        return SubwayFare.calculateFare(sections.totalDistance());
+    }
 }

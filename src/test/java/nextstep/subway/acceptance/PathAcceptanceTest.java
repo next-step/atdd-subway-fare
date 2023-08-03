@@ -69,15 +69,22 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Given 지하철역과 지하철노선에 역을 등록하고
      * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
      * Then 최단 거리 기준 경로를 응답한다
+     * And 총 거리, 소요 시간, 지하철 이용 요금을 함께 응답한다
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathBy_Distance() {
+    void findPathBy_Distance_Fare() {
         // when
         var response = 두_역의_경로_조회를_요청(requestSpecification, 교대역, 양재역, PathType.DISTANCE.toString());
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getList("stations.id", Long.class))
+                .containsExactly(교대역, 남부터미널역, 양재역);
+
+        // and
+        assertThat(response.jsonPath().getInt("distance"))
+                .isEqualTo(교대역_남부터미널역_거리 + 남부터미널역_양재역_거리);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     /**

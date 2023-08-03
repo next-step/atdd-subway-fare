@@ -30,7 +30,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getPathTypeValue(pathType));
+                    graph.setEdgeWeight(sectionEdge, pathType.value(it));
                 });
 
         // 지하철 역의 연결 정보(간선)을 등록
@@ -41,7 +41,7 @@ public class SubwayMap {
                 .forEach(it -> {
                     SectionEdge sectionEdge = SectionEdge.of(it);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getPathTypeValue(pathType));
+                    graph.setEdgeWeight(sectionEdge, pathType.value(it));
                 });
 
         // 다익스트라 최단 경로 찾기

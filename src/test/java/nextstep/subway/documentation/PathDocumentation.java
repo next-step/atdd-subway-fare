@@ -35,6 +35,7 @@ public class PathDocumentation extends Documentation {
         Long 역삼역 = 2L;
         int distance = 10;
         int duration = 3;
+        int fare = 1250;
 
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
@@ -43,6 +44,7 @@ public class PathDocumentation extends Documentation {
                 )
                 , distance
                 , duration
+                , fare
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -59,6 +61,7 @@ public class PathDocumentation extends Documentation {
                         subsectionWithPath("stations").description("출발역으로부터 도착역까지의 경로에 있는 역 목록")
                         , subsectionWithPath("distance").description("조회한 경로 구간의 거리")
                         , subsectionWithPath("duration").description("조회한 경로 구간의 소요시간")
+                        , subsectionWithPath("fare").description("지하철 이용 요금")
                 )
         );
         spec.filter(restDocumentationFilter);
@@ -71,5 +74,6 @@ public class PathDocumentation extends Documentation {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 역삼역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 }
