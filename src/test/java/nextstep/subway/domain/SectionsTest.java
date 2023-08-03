@@ -90,6 +90,7 @@ class SectionsTest {
         //then
         assertThat(sections.getStations()).containsExactly(부평역, 부천역, 구로역);
         assertThat(sections.getSections()).extracting("distance").containsOnly(10, 26);
+        assertThat(sections.getSections()).extracting("duration").containsOnly(200, 900);
 
     }
 }

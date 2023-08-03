@@ -136,10 +136,11 @@ public class Sections {
     private void addNewSectionForDelete(Optional<Section> upSection, Optional<Section> downSection) {
         if (upSection.isPresent() && downSection.isPresent()) {
             Section newSection = new Section(
-                    upSection.get().getLine(),
-                    downSection.get().getUpStation(),
-                    upSection.get().getDownStation(),
-                    upSection.get().getDistance() + downSection.get().getDistance()
+                upSection.get().getLine(),
+                downSection.get().getUpStation(),
+                upSection.get().getDownStation(),
+                upSection.get().getDistance() + downSection.get().getDistance(),
+                upSection.get().getDuration() + downSection.get().getDuration()
             );
 
             this.sections.add(newSection);
