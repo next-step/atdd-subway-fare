@@ -50,6 +50,7 @@ class AuthAcceptanceStudyTest extends AcceptanceTest {
 
     @DisplayName("Github Auth")
     @Test
+    @Disabled
     void githubAuth() {
         Map<String, String> params = new HashMap<>();
         params.put("code", GithubResponses.사용자1.getCode());

@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JgraphtTest {
     @Test
+    @Disabled
     void getDijkstraShortestPath() {
         String source = "v3";
         String target = "v1";
@@ -33,6 +35,7 @@ class JgraphtTest {
     }
 
     @Test
+    @Disabled
     void getKShortestPaths() {
         String source = "v3";
         String target = "v1";

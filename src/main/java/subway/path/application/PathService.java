@@ -21,7 +21,6 @@ public class PathService {
 
     private final StationService stationService;
     private final LineService lineService;
-    private final PathFinderFactory pathFinderFactory;
 
     public PathRetrieveResponse getPath(long sourceStationId, long targetStationId, PathRetrieveType type) {
         Station sourceStation = stationService.findStationById(sourceStationId);
@@ -29,7 +28,7 @@ public class PathService {
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
 
-        PathFinder pathFinder = pathFinderFactory.createFinder(type);
+        PathFinder pathFinder = PathFinderFactory.createFinder(type);
         Path path = pathFinder.findPath(sections, sourceStation, targetStation);
 
         return PathRetrieveResponse.builder()
@@ -43,7 +42,7 @@ public class PathService {
     public void checkPathValidation(Station sourceStation, Station targetStation) {
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
-        PathFinder pathFinder = pathFinderFactory.createFinder(PathRetrieveType.DISTANCE);
+        PathFinder pathFinder = PathFinderFactory.createFinder(PathRetrieveType.DISTANCE);
         pathFinder.findPath(sections, sourceStation, targetStation);
     }
 
