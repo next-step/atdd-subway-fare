@@ -58,8 +58,7 @@ public class SubwayMap {
     private int getWeight(Section section, PathType pathType) {
         if (pathType == PathType.DISTANCE) {
             return section.getDistance();
-        } else {
-            return section.getDuration();
         }
+        return section.getDuration();
     }
 }
