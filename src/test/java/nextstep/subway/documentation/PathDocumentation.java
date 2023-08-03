@@ -62,6 +62,8 @@ class PathDocumentation extends Document {
                 ),
                 responseFields(
                         fieldWithPath(".distance").description("경로 거리"),
+                        fieldWithPath(".duration").description("경로 시간"),
+                        fieldWithPath(".fare").description("요금"),
                         fieldWithPath(".stationResponses[]").description("경로 내 지하철 역 목록"),
                         fieldWithPath(".stationResponses[].id").description("지하철 역 id"),
                         fieldWithPath(".stationResponses[].name").description("지하철 역 이름")
