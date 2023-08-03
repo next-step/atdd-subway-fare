@@ -9,8 +9,6 @@ import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PathFinder {
 
@@ -26,16 +24,11 @@ public class PathFinder {
         WeightedMultigraph<Station, SectionEdge> graph = this.graph.getGraph(sections);
         List<Section> sectionsInPath = this.graph.getPath(graph, sourceStation, targetStation);
 
-        Long totalDistance = getTotalDistanceInPath(sectionsInPath);
-        Long totalDuration = getTotalDurationInPath(sectionsInPath);
         long totalFareByDistance = pathFare.calculateFare(sections, sourceStation, targetStation);
-        List<Station> stationsInPath = getStations(sectionsInPath);
 
-        return Path.builder().totalDistance(totalDistance)
-                .totalDuration(totalDuration)
-                .totalFare(totalFareByDistance)
-                .stations(stationsInPath)
-                .build();
+        return Path.builder()
+                .sections(sectionsInPath)
+                .totalFare(totalFareByDistance).build();
     }
 
 
@@ -43,24 +36,5 @@ public class PathFinder {
         if (sourceStation.equals(targetStation)) {
             throw new SubwayBadRequestException(SubwayMessage.PATH_REQUEST_STATION_IS_SAME_ORIGIN);
         }
-    }
-
-    private Long getTotalDurationInPath(List<Section> sections) {
-        return sections.stream()
-                .map(Section::getDuration)
-                .reduce(0L, Long::sum);
-    }
-
-    private Long getTotalDistanceInPath(List<Section> sections) {
-        return sections.stream()
-                .map(Section::getDistance)
-                .reduce(0L, Long::sum);
-    }
-
-    private List<Station> getStations(List<Section> sections) {
-        return sections.stream()
-                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
-                .distinct()
-                .collect(Collectors.toList());
     }
 }
