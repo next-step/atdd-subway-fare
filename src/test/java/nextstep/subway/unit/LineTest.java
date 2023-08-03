@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.marker.ClassicUnitTest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -13,11 +14,14 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 
+import static nextstep.subway.unit.utils.ClassicUnitTestUtils.getLine;
+import static nextstep.subway.unit.utils.ClassicUnitTestUtils.getStation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.thenCode;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.spy;
 
+@ClassicUnitTest
 class LineTest {
 
     private Line secondaryLine;
@@ -237,22 +241,4 @@ class LineTest {
         }
     }
 
-    private static Line getLine(String name, String color, Long distance, Integer duration, Station upStation, Station downStation, Long id) {
-        Line secondaryLine = spy(Line.builder()
-                .name(name)
-                .color(color)
-                .distance(distance)
-                .upStation(upStation)
-                .downStation(downStation)
-                .duration(duration)
-                .build());
-        given(upStation.getId()).willReturn(id);
-        return secondaryLine;
-    }
-
-    private static Station getStation(String name, Long id) {
-        Station station = spy(Station.create(() -> name));
-        given(station.getId()).willReturn(id);
-        return station;
-    }
 }
