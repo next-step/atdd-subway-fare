@@ -21,6 +21,11 @@ public class StationSteps {
                 .extract();
     }
 
+    public static Long 지하철역_생성_요청_후_id_추출(String name) {
+
+        return 지하철역_생성_요청(name).jsonPath().getLong("id");
+    }
+
     public static ExtractableResponse<Response> 지하철역_생성_요청(String accessToken, String name) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
