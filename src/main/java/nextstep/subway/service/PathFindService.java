@@ -43,7 +43,8 @@ public class PathFindService {
                         .map(StationResponse::new)
                         .collect(Collectors.toList()),
                 shortestPath.getDistance(),
-                shortestPath.getDuration()
+                shortestPath.getDuration(),
+                0
         );
     }
 

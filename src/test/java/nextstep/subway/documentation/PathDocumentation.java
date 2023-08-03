@@ -40,7 +40,7 @@ class PathDocumentation extends Document {
 
         verifyResponseStatus(pathFoundResponse, HttpStatus.OK);
 
-        PathSteps.verifyFoundPath(pathFoundResponse, 10L, 40, 강남역_이름, 역삼역_이름);
+        PathSteps.verifyFoundPath(pathFoundResponse, 10L, 40, 0, 강남역_이름, 역삼역_이름);
     }
 
     @Override
@@ -48,7 +48,7 @@ class PathDocumentation extends Document {
         final StationResponse 강남역 = new StationResponse(강남역_id, 강남역_이름);
         final StationResponse 역삼역 = new StationResponse(역삼역_id, 역삼역_이름);
 
-        final PathResponse pathResponse = new PathResponse(List.of(강남역, 역삼역), 10L, 40);
+        final PathResponse pathResponse = new PathResponse(List.of(강남역, 역삼역), 10L, 40, 0);
 
         given(pathFindService.getPath(강남역_id, 역삼역_id, PathType.DISTANCE)).willReturn(pathResponse);
 
