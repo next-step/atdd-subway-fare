@@ -9,8 +9,7 @@ import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.PathFinder;
 import subway.path.application.ShortestDistancePathFinder;
-import subway.path.application.dto.PathRetrieveResponse;
-import subway.station.application.dto.StationResponse;
+import subway.path.domain.Path;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -82,15 +81,15 @@ public class ShortestDistancePathTest {
     @Test
     void getShortestDistancePath() {
         // when
-        PathRetrieveResponse shortestPath = shortestDistancePathFinder.findPath(구간목록, getStation("교대역"), getStation("양재역"));
+        Path shortestPath = shortestDistancePathFinder.findPath(구간목록, getStation("교대역"), getStation("양재역"));
 
         // then
         assertThat(shortestPath.getStations())
-                .extracting(StationResponse::getName)
+                .extracting(Station::getName)
                 .containsExactlyInAnyOrder("교대역", "남부터미널역", "양재역");
 
         // then
-        assertThat(shortestPath.getDistance()).isEqualTo(5L);
+        assertThat(shortestPath.getTotalDistance()).isEqualTo(5L);
     }
 
     /**

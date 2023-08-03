@@ -9,8 +9,7 @@ import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.MinimumTimePathFinder;
 import subway.path.application.PathFinder;
-import subway.path.application.dto.PathRetrieveResponse;
-import subway.station.application.dto.StationResponse;
+import subway.path.domain.Path;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -81,15 +80,15 @@ public class MinimumTimePathFinderTest {
     @Test
     void getMinimumTimePath() {
         // when
-        PathRetrieveResponse shortestPath = minimumTimePathFinder.findPath(구간목록, getStation("교대역"), getStation("양재역"));
+        Path shortestPath = minimumTimePathFinder.findPath(구간목록, getStation("교대역"), getStation("양재역"));
 
         // then
         assertThat(shortestPath.getStations())
-                .extracting(StationResponse::getName)
+                .extracting(Station::getName)
                 .containsExactlyInAnyOrder("교대역", "강남역", "양재역");
 
         // then
-        assertThat(shortestPath.getDuration()).isEqualTo(11L);
+        assertThat(shortestPath.getTotalDuration()).isEqualTo(11L);
     }
 
     /**

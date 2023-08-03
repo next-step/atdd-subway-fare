@@ -6,8 +6,10 @@ import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathRetrieveResponse;
+import subway.path.domain.Path;
 import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
+import subway.station.application.dto.StationResponse;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -28,7 +30,14 @@ public class PathService {
         List<Section> sections = getAllSections(lines);
 
         PathFinder pathFinder = pathFinderFactory.createFinder(type);
-        return pathFinder.findPath(sections, sourceStation, targetStation);
+        Path path = pathFinder.findPath(sections, sourceStation, targetStation);
+
+        return PathRetrieveResponse.builder()
+                .stations(StationResponse.from(path.getStations()))
+                .distance(path.getTotalDistance())
+                .duration(path.getTotalDuration())
+                .fare(path.getTotalFare())
+                .build();
     }
 
     public void checkPathValidation(Station sourceStation, Station targetStation) {

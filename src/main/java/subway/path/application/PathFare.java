@@ -21,8 +21,8 @@ public class PathFare {
     }
 
     public long calculateFare(final List<Section> sections, Station sourceStation, Station targetStation) {
-        WeightedMultigraph<Station, SectionEdge> graph = this.graph.getGraph(sections);
-        List<Section> sectionsInPath = this.graph.getPath(graph, sourceStation, targetStation);
+        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(sections);
+        List<Section> sectionsInPath = graph.getPath(sectionGraph, sourceStation, targetStation);
 
         long totalFare = BASIC_FARE;
         Long distance = getTotalDistanceInPath(sectionsInPath);
@@ -37,7 +37,6 @@ public class PathFare {
                 .map(Section::getDistance)
                 .reduce(0L, Long::sum);
     }
-
 
     private long calculateAdditionalFare(Long distance) {
         long additionalFare = 0L;
