@@ -1,5 +1,6 @@
 package nextstep.favorite.accpetance;
 
+import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import static nextstep.favorite.accpetance.FavoriteSteps.*;
-import static nextstep.utils.AcceptanceUtils.*;
+import static nextstep.subway.acceptance.StationLineSectionSteps.createStationLineSection;
+import static nextstep.subway.acceptance.StationLineSteps.createStationLine;
+import static nextstep.subway.acceptance.StationSteps.createStationsAndGetStationMap;
 
 @DisplayName("경로 즐겨찾기 기능")
 public class FavoritePathAcceptanceTest extends AcceptanceTest {
@@ -24,14 +27,14 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
         //given
         stationIdByName = createStationsAndGetStationMap(List.of("혜화", "동대문", "동대문역사문화공원", "종로3가", "종로5가", "동묘앞", "양산", "남양산"));
 
-        var line1 = createStationLine("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), stationIdByName);
-        createStationLineSection(line1, "종로5가", "동대문", BigDecimal.valueOf(5L), stationIdByName);
-        createStationLineSection(line1, "동대문", "동묘앞", BigDecimal.valueOf(5L), stationIdByName);
+        var line1 = createStationLine("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), 1000L, stationIdByName);
+        createStationLineSection(line1, "종로5가", "동대문", BigDecimal.valueOf(5L), 1000L, stationIdByName);
+        createStationLineSection(line1, "동대문", "동묘앞", BigDecimal.valueOf(5L), 1000L, stationIdByName);
 
-        var line2 = createStationLine("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, stationIdByName);
-        createStationLineSection(line2, "동대문", "동대문역사문화공원", BigDecimal.TEN, stationIdByName);
+        var line2 = createStationLine("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, 1000L, stationIdByName);
+        createStationLineSection(line2, "동대문", "동대문역사문화공원", BigDecimal.TEN, 1000L, stationIdByName);
 
-        createStationLine("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, stationIdByName);
+        createStationLine("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, 1000L, stationIdByName);
     }
 
     /**
@@ -42,7 +45,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void createFavoritePath() {
         //when
-        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", stationIdByName);
+        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", StationPathSearchRequestType.DISTANCE, stationIdByName);
 
         //then
         즐겨찾기_경로_등록됨(사용자1_토큰, "종로3가", "동대문", 0);
@@ -56,7 +59,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void createFavoritePath_With_InvalidToken() {
         //when & then
-        즐겨찾기_경로_등록("invalidToken", "종로3가", "동대문", stationIdByName, HttpStatus.UNAUTHORIZED);
+        즐겨찾기_경로_등록("invalidToken", "종로3가", "동대문", StationPathSearchRequestType.DISTANCE, stationIdByName, HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -67,7 +70,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void createFavoritePath_InvalidPath() {
         //when & then
-        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "양산", stationIdByName, HttpStatus.BAD_REQUEST);
+        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "양산", StationPathSearchRequestType.DISTANCE, stationIdByName, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -80,8 +83,8 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void getFavoritePaths() {
         //given
-        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "종로5가", stationIdByName);
-        즐겨찾기_경로_등록(사용자1_토큰, "동대문", "동묘앞", stationIdByName);
+        즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "종로5가", StationPathSearchRequestType.DISTANCE, stationIdByName);
+        즐겨찾기_경로_등록(사용자1_토큰, "동대문", "동묘앞", StationPathSearchRequestType.DISTANCE, stationIdByName);
 
         //when & then
         즐겨찾기_경로_등록됨(사용자1_토큰, "종로3가", "종로5가", 0);
@@ -97,7 +100,7 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteFavoritePath() {
         //given
-        var createResponse = 즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", stationIdByName);
+        var createResponse = 즐겨찾기_경로_등록(사용자1_토큰, "종로3가", "동대문", StationPathSearchRequestType.DISTANCE, stationIdByName);
 
         //when
         즐겨찾기_경로_삭제(사용자1_토큰, createResponse);

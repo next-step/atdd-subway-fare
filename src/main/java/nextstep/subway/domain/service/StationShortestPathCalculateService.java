@@ -2,6 +2,8 @@ package nextstep.subway.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.StationLine;
+import nextstep.subway.domain.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.exception.StationLineSearchFailException;
 import org.jgrapht.GraphPath;
@@ -10,19 +12,18 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StationShortestPathCalculateService {
-    public ShortestStationPath calculateShortestPath(
-            Station startStation,
-            Station destinationStation,
-            List<StationLineSection> stationLineSections) {
+    private final StationLineRepository stationLineRepository;
 
-        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(stationLineSections);
+    public List<Long> getShortestPathStations(Station startStation, Station destinationStation, StationPathSearchRequestType type) {
+        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(getTotalStationLineSection(), type);
 
         final DijkstraShortestPath<Long, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         final GraphPath<Long, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation.getId(), destinationStation.getId());
@@ -31,25 +32,30 @@ public class StationShortestPathCalculateService {
             throw new StationLineSearchFailException("there is no path between start station and destination station");
         }
 
-        return ShortestStationPath.builder()
-                .stationIds(path.getVertexList())
-                .distance(BigDecimal.valueOf(path.getWeight()))
-                .build();
+        return path.getVertexList();
     }
 
-    private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraphFrom(List<StationLineSection> stationLineSections) {
+    private WeightedMultigraph<Long, DefaultWeightedEdge> makeGraphFrom(List<StationLineSection> stationLineSections, StationPathSearchRequestType type) {
         final WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
 
         stationLineSections.forEach(stationLineSection -> {
             final Long upStationId = stationLineSection.getUpStationId();
             final Long downStationId = stationLineSection.getDownStationId();
-            final BigDecimal distance = stationLineSection.getDistance();
+            final Number weight = type.calculateWeightOf(stationLineSection);
 
             graph.addVertex(upStationId);
             graph.addVertex(downStationId);
-            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), distance.doubleValue());
+            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), weight.doubleValue());
         });
 
         return graph;
+    }
+
+    private List<StationLineSection> getTotalStationLineSection() {
+        return stationLineRepository.findAll()
+                .stream()
+                .map(StationLine::getSections)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }

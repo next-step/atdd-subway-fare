@@ -3,6 +3,7 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.*;
 import nextstep.subway.exception.EntityNotFoundException;
 import nextstep.subway.service.StationLineService;
+import nextstep.subway.service.dto.StationLineSectionCreateRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -136,7 +137,7 @@ public class StationLineServiceMockTest {
                 .distance(BigDecimal.TEN)
                 .build();
 
-        line.createSection(bStation, cStation, BigDecimal.TEN);
+        line.createSection(bStation, cStation, BigDecimal.TEN, 1000L);
 
         createEntityTestId(line, 1L);
         createEntityTestIds(line.getSections(), 1L);

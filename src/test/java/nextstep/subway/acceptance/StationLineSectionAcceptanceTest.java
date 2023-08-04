@@ -10,10 +10,14 @@ import org.springframework.http.HttpStatus;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static nextstep.utils.AcceptanceUtils.*;
+import static nextstep.subway.acceptance.StationLineSectionSteps.createStationLineSection;
+import static nextstep.subway.acceptance.StationLineSectionSteps.deleteStationLineSection;
+import static nextstep.subway.acceptance.StationLineSteps.createStationLine;
+import static nextstep.subway.acceptance.StationLineSteps.getStationLine;
+import static nextstep.subway.acceptance.StationSteps.createStations;
 
 @DisplayName("지하철 구간 관리 기능")
-public class StationSectionAcceptanceTest extends AcceptanceTest {
+public class StationLineSectionAcceptanceTest extends AcceptanceTest {
 
     private Long aStationId;
     private Long bStationId;
@@ -22,7 +26,7 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     public void createStation() {
-        final List<Long> stationIds = createStations(List.of("A역", "B역", "C역", "D역"));
+        var stationIds = createStations(List.of("A역", "B역", "C역", "D역"));
 
         aStationId = stationIds.get(0);
         bStationId = stationIds.get(1);
@@ -40,14 +44,14 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_To_Between_Station() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.valueOf(8));
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(5));
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.valueOf(8), 5000L);
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(5), 6000L);
 
         //when
-        createStationLineSection(lineId, aStationId, dStationId, BigDecimal.valueOf(3), HttpStatus.OK);
+        createStationLineSection(lineId, aStationId, dStationId, BigDecimal.valueOf(3), 1000L, HttpStatus.OK);
 
         //then
-        final List<String> stationNames = getStationLine(lineId).getList("stations.name", String.class);
+        var stationNames = getStationLine(lineId).getList("stations.name", String.class);
         Assertions.assertArrayEquals(List.of("A역", "D역", "B역", "C역").toArray(), stationNames.toArray());
     }
 
@@ -61,14 +65,14 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_To_FirstUpStation() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN, 1000L);
 
         //when
-        createStationLineSection(lineId, dStationId, aStationId, BigDecimal.ONE);
+        createStationLineSection(lineId, dStationId, aStationId, BigDecimal.ONE, 1000L);
 
         //then
-        final List<String> stationNames = getStationLine(lineId).getList("stations.name", String.class);
+        var stationNames = getStationLine(lineId).getList("stations.name", String.class);
         Assertions.assertArrayEquals(List.of("D역", "A역", "B역", "C역").toArray(), stationNames.toArray());
     }
 
@@ -82,14 +86,14 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_To_LastDownStation() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN, 1000L);
 
         //when
-        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.ONE);
+        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.ONE, 1000L);
 
         //then
-        final List<String> stationNames = getStationLine(lineId).getList("stations.name", String.class);
+        var stationNames = getStationLine(lineId).getList("stations.name", String.class);
         Assertions.assertArrayEquals(List.of("A역", "B역", "C역", "D역").toArray(), stationNames.toArray());
     }
 
@@ -102,10 +106,10 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void create_12M_StationLineSection_To_Between_Station_Has_10M() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
 
         //when & then
-        createStationLineSection(lineId, aStationId, cStationId, BigDecimal.valueOf(12), HttpStatus.BAD_REQUEST);
+        createStationLineSection(lineId, aStationId, cStationId, BigDecimal.valueOf(12), 1000L, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -118,11 +122,11 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_Both_Station_Existing_To_StationLine() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN, 1000L);
 
         //when & then
-        createStationLineSection(lineId, aStationId, cStationId, BigDecimal.TEN, HttpStatus.BAD_REQUEST);
+        createStationLineSection(lineId, aStationId, cStationId, BigDecimal.TEN, 1000L, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -134,10 +138,10 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_Both_Station_NotExisting_To_stationLine() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
 
         //when & then
-        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.TEN, HttpStatus.BAD_REQUEST);
+        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.TEN, 1000L, HttpStatus.BAD_REQUEST);
     }
 
 
@@ -151,16 +155,16 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineSection_Middle_Station() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
+        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
 
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2));
-        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5));
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2), 1000L);
+        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5), 1000L);
 
         //when
         deleteStationLineSection(lineId, cStationId, HttpStatus.OK);
 
         //then
-        final List<String> stationNames = getStationLine(lineId).getList("stations.name", String.class);
+        var stationNames = getStationLine(lineId).getList("stations.name", String.class);
         Assertions.assertArrayEquals(List.of("A역", "B역", "D역").toArray(), stationNames.toArray());
     }
 
@@ -174,16 +178,16 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineSection_First_Station() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
 
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2));
-        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5));
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2), 1000L);
+        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5), 1000L);
 
         //when
         deleteStationLineSection(lineId, aStationId, HttpStatus.OK);
 
         //then
-        final List<String> stationNames = getStationLine(lineId).getList("stations.name", String.class);
+        var stationNames = getStationLine(lineId).getList("stations.name", String.class);
         Assertions.assertArrayEquals(List.of("B역", "C역", "D역").toArray(), stationNames.toArray());
     }
 
@@ -197,16 +201,16 @@ public class StationSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineSection_Last_Station() {
         //given
-        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L);
 
-        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2));
-        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5));
+        createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2), 1000L);
+        createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5), 1000L);
 
         //when
         deleteStationLineSection(lineId, dStationId, HttpStatus.OK);
 
         //then
-        final List<String> stationNames = getStationLine(lineId).getList("stations.name", String.class);
+        var stationNames = getStationLine(lineId).getList("stations.name", String.class);
         Assertions.assertArrayEquals(List.of("A역", "B역", "C역").toArray(), stationNames.toArray());
     }
 }

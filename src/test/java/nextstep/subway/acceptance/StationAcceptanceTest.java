@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static nextstep.utils.AcceptanceUtils.*;
+import static nextstep.subway.acceptance.StationSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철역 관련 기능")
@@ -25,7 +25,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         createStation("강남역");
 
         // then
-        final List<String> stationNames = getStations().getList("name", String.class);
+        var stationNames = getStations().getList("name", String.class);
 
         assertThat(stationNames).containsAnyOf("강남역");
     }
@@ -42,7 +42,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         createStations(List.of("수유역", "강변역"));
 
         //when
-        final List<String> resultStationNames = getStations().getList("name", String.class);
+        var resultStationNames = getStations().getList("name", String.class);
 
         //then
         Assertions.assertEquals(2, resultStationNames.size());
@@ -59,13 +59,13 @@ public class StationAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationTest() {
         //given
-        final long stationId = createStation("홍대입구역");
+        var stationId = createStation("홍대입구역");
 
         //when
         deleteStation(stationId);
 
         //then
-        final List<String> getStationsResponse = getStations().getList("name", String.class);
+        var getStationsResponse = getStations().getList("name", String.class);
 
         Assertions.assertEquals(0, getStationsResponse.size());
     }

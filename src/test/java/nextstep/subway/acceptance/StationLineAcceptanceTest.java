@@ -1,6 +1,5 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.path.json.JsonPath;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static nextstep.utils.AcceptanceUtils.*;
+import static nextstep.subway.acceptance.StationLineSteps.*;
+import static nextstep.subway.acceptance.StationSteps.createStations;
 
 @DisplayName("지하철 노선 관련 기능")
 public class StationLineAcceptanceTest extends AcceptanceTest {
@@ -23,13 +23,13 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineTest() {
         //given
-        final List<Long> stationIds = createStations(List.of("수유역", "강변역"));
+        var stationIds = createStations(List.of("수유역", "강변역"));
 
         //when
-        final Long lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN);
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L);
 
         //then
-        final List<Long> lineIds = getStationLines().getList("id", Long.class);
+        var lineIds = getStationLines().getList("id", Long.class);
 
         Assertions.assertTrue(lineIds.contains(lineId));
     }
@@ -46,14 +46,14 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     @Test
     void getStationLinesTest() {
         //given
-        final List<Long> line1_stationIds = createStations(List.of("시청역", "서울역"));
-        final List<Long> line2_stationIds = createStations(List.of("신촌역", "홍대입구역"));
+        var line1_stationIds = createStations(List.of("시청역", "서울역"));
+        var line2_stationIds = createStations(List.of("신촌역", "홍대입구역"));
 
-        createStationLine("1호선", "blue", line1_stationIds.get(0), line1_stationIds.get(1), BigDecimal.ONE);
-        createStationLine("2호선", "green", line2_stationIds.get(0), line2_stationIds.get(1), BigDecimal.TEN);
+        createStationLine("1호선", "blue", line1_stationIds.get(0), line1_stationIds.get(1), BigDecimal.ONE, 1000L);
+        createStationLine("2호선", "green", line2_stationIds.get(0), line2_stationIds.get(1), BigDecimal.TEN, 1000L);
 
         //when
-        final List<Long> lineIds = getStationLines().getList("id", Long.class);
+        var lineIds = getStationLines().getList("id", Long.class);
 
         //then
         Assertions.assertEquals(2, lineIds.size());
@@ -69,17 +69,17 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     @Test
     void getStationLineTest() {
         //given
-        final List<Long> stationIds = createStations(List.of("수유역", "강변역"));
-        final Long lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN);
+        var stationIds = createStations(List.of("수유역", "강변역"));
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L);
 
         //when
-        final JsonPath jsonPath = getStationLine(lineId);
+        var stationLine = getStationLine(lineId);
 
         //then
-        Assertions.assertEquals("4호선", jsonPath.getString("name"));
-        Assertions.assertEquals("blue", jsonPath.getString("color"));
-        Assertions.assertEquals("수유역", jsonPath.getString("stations[0].name"));
-        Assertions.assertEquals("강변역", jsonPath.getString("stations[1].name"));
+        Assertions.assertEquals("4호선", stationLine.getString("name"));
+        Assertions.assertEquals("blue", stationLine.getString("color"));
+        Assertions.assertEquals("수유역", stationLine.getString("stations[0].name"));
+        Assertions.assertEquals("강변역", stationLine.getString("stations[1].name"));
     }
 
     /**
@@ -92,16 +92,16 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateStationLineTest() {
         //given
-        final List<Long> stationIds = createStations(List.of("수유역", "강변역"));
-        final Long lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN);
+        var stationIds = createStations(List.of("수유역", "강변역"));
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L);
 
         //when
         updateStationLine(lineId, "9호선", "brown");
 
         //then
-        final JsonPath jsonPath = getStationLine(lineId);
-        Assertions.assertEquals("9호선", jsonPath.getString("name"));
-        Assertions.assertEquals("brown", jsonPath.getString("color"));
+        var stationLine = getStationLine(lineId);
+        Assertions.assertEquals("9호선", stationLine.getString("name"));
+        Assertions.assertEquals("brown", stationLine.getString("color"));
     }
 
     /**
@@ -114,14 +114,14 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineTest() {
         //given
-        final List<Long> stationIds = createStations(List.of("수유역", "강변역"));
-        final Long lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN);
+        var stationIds = createStations(List.of("수유역", "강변역"));
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L);
 
         //when
         deleteStationLine(lineId);
 
         //then
-        final List<Long> lineIds = getStationLines().getList("id", Long.class);
+        var lineIds = getStationLines().getList("id", Long.class);
 
         Assertions.assertFalse(lineIds.contains(lineId));
     }
