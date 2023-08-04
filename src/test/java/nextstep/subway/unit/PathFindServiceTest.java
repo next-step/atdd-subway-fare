@@ -7,7 +7,6 @@ import nextstep.subway.controller.resonse.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.enums.PathType;
 import nextstep.subway.repository.LineRepository;
 import nextstep.subway.repository.StationRepository;
 import nextstep.subway.service.PathFindService;
@@ -93,7 +92,7 @@ class PathFindServiceTest {
             givenLines();
 
             // when
-            PathResponse shortestPath = pathFindService.getPath(교대역Id, 양재역Id, PathType.DISTANCE);
+            PathResponse shortestPath = pathFindService.getPath(교대역Id, 양재역Id, "DISTANCE");
 
             // then
             verifyShortestPathResponse(shortestPath, 9L, 교대역Id, 남부터미널역Id, 양재역Id);
@@ -110,7 +109,7 @@ class PathFindServiceTest {
             givenLines();
 
             // when
-            PathResponse shortestPath = pathFindService.getPath(강남역Id, 남부터미널역Id, PathType.DISTANCE);
+            PathResponse shortestPath = pathFindService.getPath(강남역Id, 남부터미널역Id, "DISTANCE");
 
             // then
             verifyShortestPathResponse(shortestPath, 12L, 강남역Id, 교대역Id, 남부터미널역Id);
@@ -126,7 +125,7 @@ class PathFindServiceTest {
             givenLines();
 
             // when
-            PathResponse shortestPath = pathFindService.getPath(강남역Id, 양재역Id, PathType.DISTANCE);
+            PathResponse shortestPath = pathFindService.getPath(강남역Id, 양재역Id, "DISTANCE");
 
             // then
             verifyShortestPathResponse(shortestPath, 10L, 강남역Id, 양재역Id);
@@ -168,7 +167,7 @@ class PathFindServiceTest {
             given(stationRepository.findById(강남역Id)).willReturn(Optional.of(강남역));
 
             // when & then
-            thenCode(() -> pathFindService.getPath(강남역Id, 강남역Id, PathType.DISTANCE)).isInstanceOf(IllegalArgumentException.class);
+            thenCode(() -> pathFindService.getPath(강남역Id, 강남역Id, "DISTANCE")).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -179,7 +178,7 @@ class PathFindServiceTest {
             given(stationRepository.findById(6L)).willReturn(Optional.of(다른역));
 
             // when & then
-            thenCode(() -> pathFindService.getPath(강남역Id, 6L, PathType.DISTANCE)).isInstanceOf(IllegalArgumentException.class);
+            thenCode(() -> pathFindService.getPath(강남역Id, 6L, "DISTANCE")).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -188,7 +187,7 @@ class PathFindServiceTest {
             given(stationRepository.findById(8L)).willReturn(Optional.empty());
 
             // when & then
-            thenCode(() -> pathFindService.getPath(8L, 남부터미널역Id, PathType.DISTANCE)).isInstanceOf(NotFoundStationException.class);
+            thenCode(() -> pathFindService.getPath(8L, 남부터미널역Id, "DISTANCE")).isInstanceOf(NotFoundStationException.class);
         }
 
         @Test

@@ -59,6 +59,6 @@ public class PathFinder {
     }
 
     private void addSectionEdges(PathType type, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        sections.forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getValueOfType(type)));
+        sections.forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), type.getValue(section)));
     }
 }
