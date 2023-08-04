@@ -21,6 +21,32 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color,
+        Long upStationId, Long downStationId, int distance, int duration) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("upStationId", upStationId + "");
+        params.put("downStationId", downStationId + "");
+        params.put("distance", distance + "");
+        params.put("duration", duration + "");
+
+        return RestAssured
+            .given().log().all()
+            .body(params)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .when().post("/lines")
+            .then().log().all().extract();
+    }
+
+    public static Long 지하철_노선_생성_요청_후_id_추출(String name, String color,
+        Long upStationId, Long downStationId, int distance, int duration) {
+
+        return 지하철_노선_생성_요청(name, color, upStationId, downStationId, distance, duration)
+            .jsonPath().getLong("id");
+    }
+
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String accessToken, Map<String, String> params) {
         return RestAssured
                 .given().log().all()
