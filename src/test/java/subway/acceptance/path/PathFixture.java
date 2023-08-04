@@ -6,6 +6,7 @@ import subway.acceptance.line.SectionFixture;
 
 import static subway.acceptance.station.StationFixture.getStationId;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class PathFixture {
     public static void 이호선_삼호선_신분당선_A호선_생성_호출() {
         var 이호선_요청 = LineFixture.generateLineCreateRequest("2호선", "bg-green-600", getStationId("강남역"), getStationId("교대역"), 10L, 5L);

@@ -9,6 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class LineSteps {
 
     public static ExtractableResponse<Response> 노선_생성_API(final Map<String, String> line) {

@@ -5,6 +5,7 @@ import subway.acceptance.station.StationFixture;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class FavoriteFixture {
     public static Map<String, String> 즐겨찾기_등록_요청_만들기(long source, long target) {
         Map<String, String> request = new HashMap<>();

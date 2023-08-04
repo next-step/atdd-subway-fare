@@ -13,6 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.acceptance.station.StationFixture.getStationId;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("노선 인수 테스트")
 public class LineAcceptanceTest extends AcceptanceTest {
 

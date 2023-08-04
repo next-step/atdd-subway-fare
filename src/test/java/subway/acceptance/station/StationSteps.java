@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class StationSteps {
 
     public static ExtractableResponse<Response> 역_생성_API(final String stationName) {

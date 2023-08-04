@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("Line 단위 테스트")
 class LineTest {
 

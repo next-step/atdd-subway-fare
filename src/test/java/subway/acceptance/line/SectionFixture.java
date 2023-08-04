@@ -7,6 +7,7 @@ import subway.station.domain.Station;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class SectionFixture {
     public static Map<String, String> 구간_요청_만들기(final Long upStationId,
                                                 final Long downStationId,

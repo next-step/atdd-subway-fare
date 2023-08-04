@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class AuthSteps {
 
     public static ExtractableResponse<Response> 로그인_API(final Map<String, String> auth) {

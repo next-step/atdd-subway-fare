@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class MemberSteps {
 
 

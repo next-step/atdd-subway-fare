@@ -9,6 +9,7 @@ import subway.station.domain.Station;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("구간 단위 테스트")
 class SectionTest {
 

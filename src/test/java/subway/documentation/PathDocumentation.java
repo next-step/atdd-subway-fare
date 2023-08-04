@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 기능 인터페이스 문서 테스트")
 public class PathDocumentation extends Documentation {
     @MockBean

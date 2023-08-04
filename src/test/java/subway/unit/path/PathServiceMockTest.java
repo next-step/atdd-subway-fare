@@ -21,6 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathService 단위 테스트 (stub)")
 @ExtendWith(MockitoExtension.class)
 public class PathServiceMockTest {

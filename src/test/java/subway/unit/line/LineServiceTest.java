@@ -18,6 +18,7 @@ import subway.station.domain.StationRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("LineService 단위 테스트 (spring integration test)")
 @SpringBootTest
 @Transactional

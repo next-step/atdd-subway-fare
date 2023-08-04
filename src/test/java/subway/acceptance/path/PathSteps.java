@@ -22,7 +22,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
-
+@SuppressWarnings("NonAsciiCharacters")
 public class PathSteps {
     public static ExtractableResponse<Response> getShortestPath(long sourceId, long targetId) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder

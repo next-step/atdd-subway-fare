@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class AuthFixture {
     public static Map<String, String> 로그인_요청_만들기(String email, String password) {
         Map<String, String> params = new HashMap<>();

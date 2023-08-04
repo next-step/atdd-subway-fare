@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static subway.acceptance.station.StationFixture.getStation;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("ShortestDistancePathFinder 단위 테스트")
 public class ShortestDistancePathTest {
     private PathFinder shortestDistancePathFinder;

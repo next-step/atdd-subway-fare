@@ -3,6 +3,7 @@ package subway.acceptance.line;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class LineFixture {
 
     public static Map<String, String> 일호선_요청_만들기(final Long upStationId, final Long downStationId) {

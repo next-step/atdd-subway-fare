@@ -9,6 +9,7 @@ import subway.acceptance.line.LineSteps;
 import subway.acceptance.station.StationFixture;
 import subway.utils.AcceptanceTest;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class PathFareAcceptanceTest extends AcceptanceTest {
 
     // week 4-3
