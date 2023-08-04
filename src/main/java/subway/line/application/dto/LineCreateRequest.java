@@ -32,10 +32,14 @@ public class LineCreateRequest {
     @Min(value = 1L, message = DURATION_MIN_MESSAGE)
     private Long duration;
 
+    @Builder.Default
+    private long surcharge = 0L;
+
     public static Line to(LineCreateRequest request) {
         return Line.builder()
                 .name(request.getName())
                 .color(request.getColor())
+                .surcharge(request.getSurcharge())
                 .build();
     }
 }

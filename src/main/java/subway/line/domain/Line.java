@@ -33,6 +33,9 @@ public class Line {
     @Column(nullable = false)
     private String color;
 
+    @Column(nullable = false)
+    private long surcharge;
+
     @Builder.Default
     @Embedded
     private LineSections lineSections = new LineSections();
