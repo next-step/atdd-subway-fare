@@ -84,7 +84,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistanceByDuration() {
         // given
-        String type = "DURATION";
+        String type = PathType.DURATION.name();
 
         // when
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, type);
