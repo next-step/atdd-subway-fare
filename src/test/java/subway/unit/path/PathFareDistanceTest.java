@@ -5,11 +5,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.path.application.PathFareDistance;
+import subway.path.application.dto.PathFareCalculationInfo;
 import subway.station.domain.Station;
+
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathFareDistanceTest (경로 총 거리 운임 계산) 단위 테스트")
 public class PathFareDistanceTest {
+
+    private final static long BASE_FARE = 1250L;
+    private PathFareDistance pathFareDistance;
+    private List<Section> sections;
 
     /**
      * 1~10  : 1250 -- 1구간..
@@ -28,6 +38,7 @@ public class PathFareDistanceTest {
     @BeforeEach
     void beforeEach() {
 
+        // TODO : to fixture.....
         Station 강남역 = Station.builder().id(1L).name("강남역").build();
         Station 교대역 = Station.builder().id(2L).name("교대역").build();
         Station 남부터미널역 = Station.builder().id(3L).name("남부터미널역").build();
@@ -61,11 +72,8 @@ public class PathFareDistanceTest {
         A호선.addSection(왕십리_강변_구간);
         A호선.addSection(강변_잠실_구간);
 
-//        System.out.println(이호선.getName() + " / " + 이호선.getSurcharge() + " / " + 이호선.getStations()); TODO : 제거
-//        System.out.println(삼호선.getName() + " / " + 삼호선.getSurcharge() + " / " + 삼호선.getStations());
-//        System.out.println(신분당선.getName() + " / " + 신분당선.getSurcharge() + " / " + 신분당선.getStations());
-//        System.out.println(A호선.getName() + " / " + A호선.getSurcharge() + " / " + A호선.getStations());
-
+        sections = List.of(강남_교대_구간, 교대_남부터미널_구간, 남터_양재_구간, 양재_강남_구간, 건대_성수_구간, 성수_왕십리_구간, 왕십리_강변_구간, 강변_잠실_구간);
+        pathFareDistance = new PathFareDistance();
     }
 
     /**
@@ -75,8 +83,22 @@ public class PathFareDistanceTest {
      */
     @DisplayName("초과운임이 발생하지 않는 경로의 계산된 운임 계산")
     @Test
-    void fareByDefaultDistance(){
+    void fareByDefaultDistance() {
+        // given
+        Station 건대역 = Station.builder().id(5L).name("건대역").build();
+        Station 왕십리역 = Station.builder().id(7L).name("왕십리역").build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .sections(sections)
+                .sourceStation(건대역)
+                .targetStation(왕십리역)
+                .build();
 
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(1250L);
     }
 
     /**
@@ -86,8 +108,22 @@ public class PathFareDistanceTest {
      */
     @DisplayName("첫번째 과금 구간의 초과운임이 발생하는 경로의 계산된 운임 계산")
     @Test
-    void fareByFirstSurchargeDistance(){
+    void fareByFirstSurchargeDistance() {
+        // given
+        Station 건대역 = Station.builder().id(5L).name("건대역").build();
+        Station 강변역 = Station.builder().id(8L).name("강변역").build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .sections(sections)
+                .sourceStation(건대역)
+                .targetStation(강변역)
+                .build();
 
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(1650L);
     }
 
     /**
@@ -97,8 +133,22 @@ public class PathFareDistanceTest {
      */
     @DisplayName("두번째 과금 구간의 초과운임이 발생하는 경로의 계산된 운임 계산")
     @Test
-    void fareBySecondSurchargeDistance(){
+    void fareBySecondSurchargeDistance() {
+        // given
+        Station 건대역 = Station.builder().id(5L).name("건대역").build();
+        Station 잠실역 = Station.builder().id(9L).name("잠실역").build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .sections(sections)
+                .sourceStation(건대역)
+                .targetStation(잠실역)
+                .build();
 
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(2150L);
     }
 
     /**
@@ -108,7 +158,21 @@ public class PathFareDistanceTest {
      */
     @DisplayName("최단거리경로를 기준으로 하는 경로의 계산된 운임 계산")
     @Test
-    void fareByShortestDistance(){
+    void fareByShortestDistance() {
+        // given
+        Station 교대역 = Station.builder().id(2L).name("교대역").build();
+        Station 양재역 = Station.builder().id(4L).name("양재역").build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .sections(sections)
+                .sourceStation(교대역)
+                .targetStation(양재역)
+                .build();
 
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(1250L);
     }
 }

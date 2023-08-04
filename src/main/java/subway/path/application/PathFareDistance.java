@@ -32,7 +32,9 @@ public class PathFareDistance {
     }
 
     private Long getTotalDistanceInPath(List<Section> sections) {
-        return sections.stream().map(Section::getDistance).reduce(0L, Long::sum);
+        return sections.stream()
+                .map(Section::getDistance)
+                .reduce(0L, Long::sum);
     }
 
     private long calculateAdditionalFare(Long distance) {
