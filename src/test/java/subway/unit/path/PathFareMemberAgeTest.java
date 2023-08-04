@@ -1,16 +1,25 @@
 package subway.unit.path;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.member.domain.Member;
+import subway.path.application.PathFareMemberAge;
+import subway.path.application.dto.PathFareCalculationInfo;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathFareMemberAge (회원 운임 할인) 단위 테스트")
 public class PathFareMemberAgeTest {
-    private final Member 비회원 = null;
-    private final Member 어린이 = Member.builder().age(7).build();
-    private final Member 청소년 = Member.builder().age(17).build();
-    private final Member 그외_회원 = Member.builder().age(23).build();
+
+    private final static long BASE_FARE = 2000;
+    private PathFareMemberAge pathFareMemberAge;
+
+    @BeforeEach
+    void beforeEach() {
+        pathFareMemberAge = new PathFareMemberAge();
+    }
 
     /**
      * Given 요금이 있고
@@ -20,7 +29,18 @@ public class PathFareMemberAgeTest {
     @DisplayName("비회원 운임 계산")
     @Test
     void guestFare() {
+        // given
+        final Member 비회원 = null;
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .member(비회원)
+                .build();
 
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(BASE_FARE);
     }
 
     /**
@@ -31,7 +51,18 @@ public class PathFareMemberAgeTest {
     @DisplayName("어린이 운임 계산")
     @Test
     void childFare() {
+        // given
+        final Member 어린이 = Member.builder().age(7).build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .member(어린이)
+                .build();
 
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(825L);
     }
 
     /**
@@ -42,6 +73,18 @@ public class PathFareMemberAgeTest {
     @DisplayName("청소년 운임 계산")
     @Test
     void teenageFare() {
+        // given
+        final Member 청소년 = Member.builder().age(17).build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .member(청소년)
+                .build();
+
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(1320L);
 
     }
 
@@ -53,6 +96,18 @@ public class PathFareMemberAgeTest {
     @DisplayName("일반회원 운임 계산")
     @Test
     void memberFare() {
+        // given
+        final Member 그외_회원 = Member.builder().age(23).build();
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
+                .fare(BASE_FARE)
+                .member(그외_회원)
+                .build();
+
+        // when
+        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+
+        // then
+        assertThat(calcInfoResponse.getFare()).isEqualTo(BASE_FARE);
 
     }
 }

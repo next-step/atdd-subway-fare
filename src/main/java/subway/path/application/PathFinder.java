@@ -4,6 +4,8 @@ import org.jgrapht.graph.WeightedMultigraph;
 import subway.constant.SubwayMessage;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Section;
+import subway.path.application.dto.PathFareCalculationInfo;
+import subway.path.application.dto.PathFinderRequest;
 import subway.path.domain.Path;
 import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
@@ -19,18 +21,25 @@ public class PathFinder {
         this.graph = new GraphBuilder(strategy);
     }
 
-    public Path findPath(List<Section> sections, Station sourceStation, Station targetStation) {
-        validIsSameOriginStation(sourceStation, targetStation);
-        WeightedMultigraph<Station, SectionEdge> graph = this.graph.getGraph(sections);
-        List<Section> sectionsInPath = this.graph.getPath(graph, sourceStation, targetStation);
+    public Path findPath(PathFinderRequest request) {
+        validIsSameOriginStation(request.getSourceStation(), request.getTargetStation());
+        WeightedMultigraph<Station, SectionEdge> graph = this.graph.getGraph(request.getSections());
+        List<Section> searchedSections = this.graph.getPath(graph, request.getSourceStation(), request.getTargetStation());
 
-        long totalFareByDistance = pathFare.calculateFare(sections, sourceStation, targetStation);
+//        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder() // TODO : 이거 집어넣으세요...
+//                .sourceStation(request.getSourceStation())
+//                .targetStation(request.getTargetStation())
+//                .wholeSections(request.getSections())
+//                .searchedSections(searchedSections)
+//                .member(request.getMember())
+//                .build();
+//        long totalFareByDistance = pathFare.calculateFare(calcInfo);
+        long totalFareByDistance = pathFare.calculateFare(request.getSections(), request.getSourceStation(), request.getTargetStation());
 
         return Path.builder()
-                .sections(sectionsInPath)
+                .sections(searchedSections)
                 .totalFare(totalFareByDistance).build();
     }
-
 
     private void validIsSameOriginStation(Station sourceStation, Station targetStation) {
         if (sourceStation.equals(targetStation)) {

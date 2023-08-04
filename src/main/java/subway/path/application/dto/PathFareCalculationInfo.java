@@ -3,6 +3,7 @@ package subway.path.application.dto;
 import lombok.Builder;
 import lombok.Getter;
 import subway.line.domain.Section;
+import subway.member.domain.Member;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class PathFareCalculationInfo {
     private Station targetStation;
     private List<Section> wholeSections;
     private List<Section> searchedSections;
+    private Member member;
 
     public PathFareCalculationInfo withUpdatedFare(long updatedFare) {
         return PathFareCalculationInfo.builder()

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.path.application.dto.PathFinderRequest;
 import subway.path.application.dto.PathRetrieveResponse;
 import subway.path.domain.Path;
 import subway.path.domain.PathRetrieveType;
@@ -29,7 +30,8 @@ public class PathService {
         List<Section> sections = getAllSections(lines);
 
         PathFinder pathFinder = PathFinderFactory.createFinder(type);
-        Path path = pathFinder.findPath(sections, sourceStation, targetStation);
+        PathFinderRequest pathFinderRequest = PathFinderRequest.builder().member(null).sourceStation(sourceStation).targetStation(targetStation).sections(sections).build();
+        Path path = pathFinder.findPath(pathFinderRequest);
 
         return PathRetrieveResponse.builder()
                 .stations(StationResponse.from(path.getStations()))
@@ -43,7 +45,8 @@ public class PathService {
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
         List<Section> sections = getAllSections(lines);
         PathFinder pathFinder = PathFinderFactory.createFinder(PathRetrieveType.DISTANCE);
-        pathFinder.findPath(sections, sourceStation, targetStation);
+        PathFinderRequest pathFinderRequest = PathFinderRequest.builder().sourceStation(sourceStation).targetStation(targetStation).sections(sections).build();
+        pathFinder.findPath(pathFinderRequest);
     }
 
     private List<Section> getAllSections(List<Line> lines) {

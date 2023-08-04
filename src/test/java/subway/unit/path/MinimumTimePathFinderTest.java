@@ -9,6 +9,7 @@ import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.MinimumTimePathFinder;
 import subway.path.application.PathFinder;
+import subway.path.application.dto.PathFinderRequest;
 import subway.path.domain.Path;
 import subway.station.domain.Station;
 
@@ -81,7 +82,8 @@ public class MinimumTimePathFinderTest {
     @Test
     void getMinimumTimePath() {
         // when
-        Path shortestPath = minimumTimePathFinder.findPath(구간목록, getStation("교대역"), getStation("양재역"));
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(getStation("교대역")).targetStation(getStation("양재역")).sections(구간목록).build();
+        Path shortestPath = minimumTimePathFinder.findPath(pathFinderRequest);
 
         // then
         assertThat(shortestPath.getStations())
@@ -101,7 +103,8 @@ public class MinimumTimePathFinderTest {
     @Test
     void getMinimumTimePathWithSameOrigin() {
         // when/then
-        assertThatThrownBy(() -> minimumTimePathFinder.findPath(구간목록, getStation("교대역"), getStation("교대역")))
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(getStation("교대역")).targetStation(getStation("교대역")).sections(구간목록).build();
+        assertThatThrownBy(() -> minimumTimePathFinder.findPath(pathFinderRequest))
                 .isInstanceOf(SubwayBadRequestException.class);
     }
 
@@ -114,7 +117,8 @@ public class MinimumTimePathFinderTest {
     @Test
     void getMinimumTimePathNotConnectedSection() {
         // when/then
-        assertThatThrownBy(() -> minimumTimePathFinder.findPath(구간목록, getStation("교대역"), getStation("왕십리역")))
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(getStation("교대역")).targetStation(getStation("왕십리역")).sections(구간목록).build();
+        assertThatThrownBy(() -> minimumTimePathFinder.findPath(pathFinderRequest))
                 .isInstanceOf(SubwayBadRequestException.class);
     }
 
@@ -127,7 +131,8 @@ public class MinimumTimePathFinderTest {
     @Test
     void getMinimumTimePathNotExistStation() {
         // when/then
-        assertThatThrownBy(() -> minimumTimePathFinder.findPath(구간목록, new Station(99L, "그런역"), new Station(98L, "저런역")))
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(new Station(99L, "그런역")).targetStation(new Station(98L, "저런역")).sections(구간목록).build();
+        assertThatThrownBy(() -> minimumTimePathFinder.findPath(pathFinderRequest))
                 .isInstanceOf(SubwayBadRequestException.class);
     }
 
