@@ -1,0 +1,3 @@
+=== 경로 조회
+operation::path[snippets='http-request,request-parameters']
+operation::path[snippets='http-response,response-fields']

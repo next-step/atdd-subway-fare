@@ -42,13 +42,14 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 }
 
+// snippetsDir 경로를 위한 변수 설정
 ext {
     snippetsDir = file('build/generated-snippets')
 }
 
 test {
     useJUnitPlatform()
-    outputs.dir snippetsDir
+    outputs.dir snippetsDir // 스니펫 생성 위치 설정
 }
 
 task testDocument(type: Test) {
@@ -61,9 +62,15 @@ task testDocument(type: Test) {
 asciidoctor {
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
+
+    sources { // 특정 파일만 html로 만든다.
+        include '**/index.adoc'
+    }
+    baseDirFollowsSourceDir() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
     dependsOn test
 }
 
+// 배포시 문서를 포함하기 위한 설정
 bootJar {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}/html5") {
@@ -71,6 +78,7 @@ bootJar {
     }
 }
 
+// 배포와 상관없이 로컬에서만 확인하기 위한 테스트
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
 
