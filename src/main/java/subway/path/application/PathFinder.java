@@ -15,7 +15,7 @@ public class PathFinder {
     private final GraphBuilder graph;
     private final PathFare pathFare = new PathFare();
 
-    public PathFinder(PathStrategy strategy) {
+    public PathFinder(PathFinderStrategy strategy) {
         this.graph = new GraphBuilder(strategy);
     }
 

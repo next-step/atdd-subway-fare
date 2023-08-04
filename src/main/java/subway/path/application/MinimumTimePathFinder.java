@@ -5,7 +5,7 @@ import subway.line.domain.Section;
 import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
-public class MinimumTimePathFinder implements PathStrategy {
+public class MinimumTimePathFinder implements PathFinderStrategy {
 
     @Override
     public void setEdgeWeight(WeightedMultigraph<Station, SectionEdge> graph, Section section, SectionEdge edge) {

@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GraphBuilder {
-    private final PathStrategy pathStrategy;
+    private final PathFinderStrategy pathFinderStrategy;
 
-    public GraphBuilder(PathStrategy pathStrategy) {
-        this.pathStrategy = pathStrategy;
+    public GraphBuilder(PathFinderStrategy pathFinderStrategy) {
+        this.pathFinderStrategy = pathFinderStrategy;
     }
 
     public WeightedMultigraph<Station, SectionEdge> getGraph(List<Section> sections) {
@@ -27,7 +27,7 @@ public class GraphBuilder {
         sections.forEach(section -> {
             SectionEdge sectionEdge = new SectionEdge(section);
             graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
-            pathStrategy.setEdgeWeight(graph, section, sectionEdge);
+            pathFinderStrategy.setEdgeWeight(graph, section, sectionEdge);
         });
 
         return graph;
