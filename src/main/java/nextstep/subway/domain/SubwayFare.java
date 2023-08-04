@@ -14,7 +14,7 @@ public class SubwayFare {
         return (int) ((Math.ceil((distance - 1) / chargeDistance) + 1) * ADDITIONAL_CHARGE_RATE);
     }
 
-    public static int calculateFare(int distance) {
+    public static int calculateDistanceFare(int distance) {
         validateDistance(distance);
 
         int fare = BASIC_FARE;
@@ -38,13 +38,13 @@ public class SubwayFare {
     }
 
     public static int calculateFare(Path path) {
-        int distanceFare = calculateFare(path.extractDistance());
+        int distanceFare = calculateDistanceFare(path.extractDistance());
         int lineSurcharge = calculateLineFare(path.getSections());
 
         return distanceFare + lineSurcharge;
     }
 
-    private static Integer calculateLineFare(Sections sections) {
+    public static int calculateLineFare(Sections sections) {
         return sections.getSections().stream()
                 .map(Section::getLine)
                 .map(Line::getSurcharge)

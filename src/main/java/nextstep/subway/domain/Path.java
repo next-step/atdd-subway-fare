@@ -26,6 +26,6 @@ public class Path {
     }
 
     public int fare() {
-        return SubwayFare.calculateFare(sections.totalDistance());
+        return SubwayFare.calculateFare(this);
     }
 }
