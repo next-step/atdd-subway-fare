@@ -36,4 +36,19 @@ public class SubwayFare {
             throw new IllegalArgumentException("거리가 올바르지 않습니다.");
         }
     }
+
+    public static int calculateFare(Path path) {
+        int distanceFare = calculateFare(path.extractDistance());
+        int lineSurcharge = calculateLineFare(path.getSections());
+
+        return distanceFare + lineSurcharge;
+    }
+
+    private static Integer calculateLineFare(Sections sections) {
+        return sections.getSections().stream()
+                .map(Section::getLine)
+                .map(Line::getSurcharge)
+                .reduce(Integer::max)
+                .orElse(0);
+    }
 }

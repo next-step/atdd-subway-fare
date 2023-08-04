@@ -14,6 +14,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int surcharge;
 
     @Embedded
     private Sections sections = new Sections();
@@ -26,6 +27,12 @@ public class Line {
         this.color = color;
     }
 
+    public Line(String name, String color, int surcharge) {
+        this.name = name;
+        this.color = color;
+        this.surcharge = surcharge;
+    }
+
     public Long getId() {
         return id;
     }
@@ -36,6 +43,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getSurcharge() {
+        return surcharge;
     }
 
     public List<Section> getSections() {
