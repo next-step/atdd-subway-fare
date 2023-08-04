@@ -13,14 +13,16 @@ public class PathFareCalculationInfo {
     private long fare;
     private Station sourceStation;
     private Station targetStation;
-    private List<Section> sections;
+    private List<Section> wholeSections;
+    private List<Section> searchedSections;
 
     public PathFareCalculationInfo withUpdatedFare(long updatedFare) {
         return PathFareCalculationInfo.builder()
                 .fare(updatedFare)
                 .sourceStation(this.sourceStation)
                 .targetStation(this.targetStation)
-                .sections(this.sections)
+                .wholeSections(this.wholeSections)
+                .searchedSections(this.searchedSections)
                 .build();
     }
 }

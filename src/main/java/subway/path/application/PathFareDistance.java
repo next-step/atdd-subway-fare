@@ -21,7 +21,7 @@ public class PathFareDistance {
     }
 
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
-        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(calcInfo.getSections());
+        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(calcInfo.getWholeSections());
         List<Section> sectionsInPath = graph.getPath(sectionGraph, calcInfo.getSourceStation(), calcInfo.getTargetStation());
 
         long totalFare = calcInfo.getFare();
