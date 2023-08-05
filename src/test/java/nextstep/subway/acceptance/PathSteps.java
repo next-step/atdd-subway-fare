@@ -2,13 +2,18 @@ package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.subway.service.dto.StationResponse;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -31,7 +36,7 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static JsonPath searchStationPath(String startStation, String destinationStation, StationPathSearchRequestType type, HttpStatus status) {
+    public static ExtractableResponse<Response> 지하철_경로_조회(String startStation, String destinationStation, StationPathSearchRequestType type, HttpStatus status) {
         final Map<String, Long> stationIdByName = getStations().getList("$", StationResponse.class)
                 .stream()
                 .collect(Collectors.toMap(StationResponse::getName, StationResponse::getId));
@@ -43,7 +48,21 @@ public class PathSteps {
                 .get("/paths")
                 .then().log().all()
                 .statusCode(status.value())
-                .extract()
-                .jsonPath();
+                .extract();
     }
+
+    public static void 지하철_경로_조회됨(ExtractableResponse<Response> response, BigDecimal expectedDistance, BigDecimal expectedFee, Long expectedDuration, List<String> expectedStationNames) {
+        var jsonPath = response.jsonPath();
+
+        var distance = jsonPath.getObject("distance", BigDecimal.class);
+        var duration = jsonPath.getLong("duration");
+        var fee = jsonPath.getObject("fee", BigDecimal.class);
+        var pathStationNames = jsonPath.getList("stations.name", String.class);
+
+        Assertions.assertEquals(0, expectedDistance.compareTo(distance));
+        Assertions.assertEquals(expectedDuration, duration);
+        Assertions.assertEquals(0, expectedFee.compareTo(fee));
+        Assertions.assertArrayEquals(expectedStationNames.toArray(), pathStationNames.toArray());
+    }
+
 }
