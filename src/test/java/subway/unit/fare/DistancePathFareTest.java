@@ -1,12 +1,12 @@
-package subway.unit.path;
+package subway.unit.fare;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.acceptance.path.PathFixture;
 import subway.line.domain.Section;
-import subway.path.application.PathFareChain;
-import subway.path.application.PathFareDistance;
+import subway.path.application.fare.PathFareChain;
+import subway.path.application.fare.DistancePathFare;
 import subway.path.application.dto.PathFareCalculationInfo;
 import subway.station.domain.Station;
 
@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathFareDistanceTest (경로 총 거리 운임 계산) 단위 테스트")
-public class PathFareDistanceTest {
+public class DistancePathFareTest {
 
     private final static long BASE_FARE = 1250L;
     private PathFareChain pathFare;
@@ -39,8 +39,8 @@ public class PathFareDistanceTest {
     @BeforeEach
     void beforeEach() {
         sections = PathFixture.단위_테스트_인스턴스_생성();
-        PathFareDistance pathFareDistance = new PathFareDistance();
-        pathFare = PathFareChain.chain(pathFareDistance);
+        DistancePathFare distancePathFare = new DistancePathFare();
+        pathFare = PathFareChain.chain(distancePathFare);
     }
 
     /**

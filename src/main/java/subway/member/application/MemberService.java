@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import subway.auth.principal.UserPrincipal;
+import subway.auth.userdetails.UserDetails;
 import subway.constant.SubwayMessage;
 import subway.exception.SubwayNotFoundException;
 import subway.member.application.dto.MemberRequest;
@@ -50,6 +51,12 @@ public class MemberService {
     public MemberRetrieveResponse findMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .map(MemberRetrieveResponse::from)
+                .orElseThrow(() -> new SubwayNotFoundException(SubwayMessage.MEMBER_NOT_FOUND));
+    }
+
+    public Member getMember(UserPrincipal principal) {
+        String email = principal.getUsername();
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new SubwayNotFoundException(SubwayMessage.MEMBER_NOT_FOUND));
     }
 }

@@ -27,4 +27,14 @@ public class PathFareCalculationInfo {
                 .searchedSections(this.searchedSections)
                 .build();
     }
+
+    public static PathFareCalculationInfo from(PathFinderRequest request, List<Section> sections) {
+        return PathFareCalculationInfo.builder()
+                .sourceStation(request.getSourceStation())
+                .targetStation(request.getTargetStation())
+                .wholeSections(request.getSections())
+                .searchedSections(sections)
+                .member(request.getMember())
+                .build();
+    }
 }

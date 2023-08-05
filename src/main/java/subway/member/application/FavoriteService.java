@@ -26,16 +26,17 @@ import java.util.List;
 public class FavoriteService {
     private final StationService stationService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final FavoriteRepository favoriteRepository;
     private final PathService pathService;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public FavoriteCreateResponse createFavorite(UserPrincipal principal, FavoriteCreateRequest request) {
-        Member member = getMember(principal);
+        Member member = memberService.getMember(principal);
 
         Station sourceStation = stationService.findStationById(request.getSource());
         Station targetStation = stationService.findStationById(request.getTarget());
-        pathService.checkPathValidation(sourceStation, targetStation);
+        pathService.validPath(sourceStation, targetStation);
         Favorite favorite = Favorite.builder()
                 .member(member)
                 .sourceStation(sourceStation)

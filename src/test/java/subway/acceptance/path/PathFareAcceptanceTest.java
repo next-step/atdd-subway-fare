@@ -13,20 +13,40 @@ import subway.utils.AcceptanceTest;
 public class PathFareAcceptanceTest extends AcceptanceTest {
 
     // week 4-3
-    // TODO : Path 인수 테스트랑 합쳐야해요.
+
+    /**
+     * <pre>
+     * 교대역 ----- *2호선:100원* ----- 길이:10, 시간:5 ------ 강남역
+     * |                                                  |
+     * |                                           *신분당선:1200원*
+     * 길이:2, 시간:3                                  길이:10, 시간:6
+     * |                                                  |
+     * 남부터미널역  ------ *3호선:500원* 길이:3, 시간:15 ------ 양재역
+     *
+     * 건대역 ---- *A호선 (긴 노선):0원* --- 길이:7, 시간: 1 ---- 성수역
+     *                                                      |
+     *                                                 길이:3, 시간:4
+     *                                                      |
+     * 잠실역 -- 길이:25, 시간:8 -- 강변역 -- 길이:17, 시간:8 ---- 왕십리역
+     *
+     * ex) 교대-양재
+     * 최단거리 : 교대 - 남부터미널 - 양재
+     * 최소시간 : 교대 - 강남 - 양재
+     * </pre>
+     */
 
     @Nested
-    @DisplayName("")
+    @DisplayName("경로")
     class PathTest {
         @BeforeEach
         void createLine() {
             StationFixture.기본_역_생성_호출();
-            PathFixture.이호선_삼호선_신분당선_A호선_생성_호출();
+            PathFixture.노선_요금을_가진_이호선_삼호선_신분당선_A호선_생성_호출();
         }
 
         @Nested
         @DisplayName("")
-        class LineDefaultFare {
+        class LineSurcharge {
             /**
              * Given 추가운임이 있는 노선이 있고
              * When 경로를 조회하면

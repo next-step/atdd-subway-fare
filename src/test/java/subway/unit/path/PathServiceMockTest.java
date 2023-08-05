@@ -10,6 +10,7 @@ import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.PathService;
+import subway.path.application.dto.PathRetrieveRequest;
 import subway.path.application.dto.PathRetrieveResponse;
 import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
@@ -56,7 +57,13 @@ public class PathServiceMockTest {
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
 
         // when
-        PathRetrieveResponse shortestPath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DISTANCE);
+        PathRetrieveRequest request = PathRetrieveRequest.builder()
+                .source(강남역.getId())
+                .target(선릉역.getId())
+                .type(PathRetrieveType.DISTANCE)
+                .principal(null)
+                .build();
+        PathRetrieveResponse shortestPath = pathService.getPath(request);
 
         // then
         assertThat(shortestPath.getStations())
@@ -91,7 +98,14 @@ public class PathServiceMockTest {
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
 
         // when
-        PathRetrieveResponse minimumTimePath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DURATION);
+
+        PathRetrieveRequest request = PathRetrieveRequest.builder()
+                .source(강남역.getId())
+                .target(선릉역.getId())
+                .type(PathRetrieveType.DURATION)
+                .principal(null)
+                .build();
+        PathRetrieveResponse minimumTimePath = pathService.getPath(request);
 
         // then
         assertThat(minimumTimePath.getStations())

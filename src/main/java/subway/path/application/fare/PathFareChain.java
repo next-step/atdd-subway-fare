@@ -1,4 +1,4 @@
-package subway.path.application;
+package subway.path.application.fare;
 
 import subway.path.application.dto.PathFareCalculationInfo;
 

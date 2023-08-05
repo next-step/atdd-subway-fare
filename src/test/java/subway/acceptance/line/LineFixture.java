@@ -30,6 +30,24 @@ public class LineFixture {
         return lineRequest;
     }
 
+    public static Map<String, String> generateLineCreateRequest(final String name,
+                                                                final String color,
+                                                                final Long upStationId,
+                                                                final Long downStationId,
+                                                                final Long distance,
+                                                                final Long duration,
+                                                                final Long surcharge) {
+        Map<String, String> lineRequest = new HashMap<>();
+        lineRequest.put("name", name);
+        lineRequest.put("color", color);
+        lineRequest.put("upStationId", String.valueOf(upStationId));
+        lineRequest.put("downStationId", String.valueOf(downStationId));
+        lineRequest.put("distance", String.valueOf(distance));
+        lineRequest.put("duration", String.valueOf(duration));
+        lineRequest.put("surcharge", String.valueOf(surcharge));
+        return lineRequest;
+    }
+
     public static Map<String, String> generateLineModifyRequest(String name,
                                                                 String color) {
         Map<String, String> lineRequest = new HashMap<>();

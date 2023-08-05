@@ -176,6 +176,4 @@ class LineTest {
         long sectionsCount = line.getLineSections().getSectionsCount();
         assertThat(sectionsCount).isEqualTo(1);
     }
-
-
 }

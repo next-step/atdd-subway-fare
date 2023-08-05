@@ -1,15 +1,16 @@
-package subway.path.application;
+package subway.path.application.fare;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
+import subway.path.application.path.ShortestDistancePathFinder;
 import subway.path.application.dto.PathFareCalculationInfo;
+import subway.path.application.graph.GraphBuilder;
 import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
 
-public class PathFare {
-    private static final long BASIC_FARE = 1250L;
+public class DistancePathFare extends PathFareChain{
     private static final long FIRST_OVER_CHARGE_SECTION_BY_DISTANCE = 10L;
     private static final long FIRST_DIVISOR = 5L;
     private static final long SECOND_OVER_CHARGE_SECTION_BY_DISTANCE = 50L;
@@ -17,24 +18,21 @@ public class PathFare {
     private static final long REMAIN_SECTION_DISTANCE = SECOND_OVER_CHARGE_SECTION_BY_DISTANCE - FIRST_OVER_CHARGE_SECTION_BY_DISTANCE;
     private final GraphBuilder graph;
 
-    public PathFare() {
+    public DistancePathFare() {
         this.graph = new GraphBuilder(new ShortestDistancePathFinder());
     }
 
-    public long calculateFare(PathFareCalculationInfo calcInfo) {
-        return 0;
-    }
+    @Override
+    public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
+        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(calcInfo.getWholeSections());
+        List<Section> sectionsInPath = graph.getPath(sectionGraph, calcInfo.getSourceStation(), calcInfo.getTargetStation());
 
-    public long calculateFare(final List<Section> sections, Station sourceStation, Station targetStation) {
-        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(sections);
-        List<Section> sectionsInPath = graph.getPath(sectionGraph, sourceStation, targetStation);
-
-        long totalFare = BASIC_FARE;
+        long totalFare = calcInfo.getFare();
         Long distance = getTotalDistanceInPath(sectionsInPath);
 
         totalFare += calculateAdditionalFare(distance);
-
-        return totalFare;
+        PathFareCalculationInfo calcInfoResponse = calcInfo.withUpdatedFare(totalFare);
+        return super.nextCalculateFare(calcInfoResponse);
     }
 
     private Long getTotalDistanceInPath(List<Section> sections) {

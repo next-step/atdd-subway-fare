@@ -1,4 +1,4 @@
-package subway.path.application;
+package subway.path.application.fare;
 
 import subway.line.domain.Section;
 import subway.path.application.dto.PathFareCalculationInfo;
@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PathFareLineSurcharge extends PathFareChain{
+public class LineSurchargePathFare extends PathFareChain{
 
     @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {

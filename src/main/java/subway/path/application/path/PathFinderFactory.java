@@ -1,4 +1,4 @@
-package subway.path.application;
+package subway.path.application.path;
 
 import subway.constant.SubwayMessage;
 import subway.exception.SubwayBadRequestException;

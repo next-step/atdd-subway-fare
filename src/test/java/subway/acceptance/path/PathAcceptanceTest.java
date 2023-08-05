@@ -180,7 +180,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(duration).isEqualTo(8);
     }
 
-    // week 4-2
+    /**
+     * week 4-2 -> week 4-3 -> {@link PathFareAcceptanceTest} 이동
+     */
 
     /**
      * 1~10  : 1250

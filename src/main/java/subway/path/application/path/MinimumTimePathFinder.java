@@ -1,4 +1,4 @@
-package subway.path.application;
+package subway.path.application.path;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;

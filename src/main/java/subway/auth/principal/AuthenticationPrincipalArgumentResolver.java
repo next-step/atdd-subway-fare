@@ -23,14 +23,45 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) {
+        AuthenticationPrincipal authPrincipalAnnotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        boolean isRequired = authPrincipalAnnotation.required();
+
         String authorization = webRequest.getHeader("Authorization");
-        validAuthorization(authorization);
+
+        if (!isValidAuthorization(authorization)) {
+            if (isRequired) {
+                throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
+            } else {
+                // Not required, return null if authorization is not valid
+                return null;
+            }
+        }
+
         String token = authorization.split(" ")[1];
-        validToken(token);
+
+        if (!jwtTokenProvider.validateToken(token)) {
+            if (isRequired) {
+                throw new AuthenticationException(SubwayMessage.AUTH_INVALID_TOKEN);
+            } else {
+                // Not required, return null if token is not valid
+                return null;
+            }
+        }
+
         String username = jwtTokenProvider.getPrincipal(token);
         String role = jwtTokenProvider.getRoles(token);
 
         return new UserPrincipal(username, role);
+    }
+
+    private static boolean isValidAuthorization(String authorization) {
+        if (authorization == null) {
+            return false;
+        }
+        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
+            return false;
+        }
+        return true;
     }
 
     private void validToken(String token) {

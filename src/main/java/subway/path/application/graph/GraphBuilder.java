@@ -1,10 +1,11 @@
-package subway.path.application;
+package subway.path.application.graph;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.constant.SubwayMessage;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Section;
+import subway.path.application.path.PathFinderStrategy;
 import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
