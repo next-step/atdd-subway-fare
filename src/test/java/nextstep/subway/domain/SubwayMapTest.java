@@ -73,7 +73,7 @@ class SubwayMapTest {
          *
          * GIVEN 정점 4개, 간선 4개
          * WHEN station1에서 station3으로 가는 경로 조회하면
-         * THEN station1-station2-station3으로 경로가 나온다.
+         * THEN station1-station2-station3으로 경로가 나온다. 거리는 11이다.
          */
         @Test
         @DisplayName("경로 조회 테스트 1 (환승 있는 경우1) - 정점 4개, 간선 4개")
@@ -92,6 +92,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
+            assertThat(path.getDistance()).isEqualTo(11);
         }
 
         /**
@@ -102,7 +103,7 @@ class SubwayMapTest {
          *
          * GIVEN 정점 4개, 간선 4개
          * WHEN station1에서 station3으로 가는 경로 조회하면
-         * THEN: station1-station2-station3으로 경로가 나온다.
+         * THEN: station1-station2-station3으로 경로가 나온다. 거리는 21이다.
          */
         @Test
         @DisplayName("경로 조회 테스트 2 (환승 있는 경우2) - 정점 4개, 간선 4개")
@@ -120,6 +121,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station4Id, station3Id);
+            assertThat(path.getDistance()).isEqualTo(21);
         }
 
         /**
@@ -128,7 +130,7 @@ class SubwayMapTest {
          *
          * GIVEN 정점 3개, 간선 2개
          * WHEN station1에서 station3으로 가는 경로 조회하면
-         * THEN: station1-station2-station3으로 경로가 나온다.
+         * THEN: station1-station2-station3으로 경로가 나온다. 거리는 19이다.
          */
         @Test
         @DisplayName("경로 조회 테스트 3 (환승 없는 경우) - 정점 3개, 간선 2개")
@@ -144,6 +146,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
+            assertThat(path.getDistance()).isEqualTo(19);
         }
 
         /**
@@ -153,7 +156,7 @@ class SubwayMapTest {
          *
          * GIVEN 정점 7개, 간선 7개
          * WHEN station1에서 station4으로 가는 경로 조회하면
-         * THEN: station1-station2-station3-station4으로 경로가 나온다.
+         * THEN: station1-station2-station3-station4으로 경로가 나온다. 거리는 8이다.
          */
         @Test
         @DisplayName("경로 조회 테스트 4 (환승 없는게 빠른 경우) - 정점 7개, 간선 7개")
@@ -175,6 +178,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id, station4Id);
+            assertThat(path.getDistance()).isEqualTo(8);
         }
 
         /**
@@ -184,7 +188,7 @@ class SubwayMapTest {
          *
          * GIVEN 정점 7개, 간선 7개
          * WHEN station1에서 station4으로 가는 경로 조회하면
-         * THEN: station1-station2-station6-station7-station4으로 경로가 나온다.
+         * THEN: station1-station2-station6-station7-station4으로 경로가 나온다. 거리는 20이다.
          */
         @Test
         @DisplayName("경로 조회 테스트 5 (환승 하는게 빠른 경우) - 정점 7개, 간선 7개")
@@ -206,6 +210,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station6Id, station7Id, station4Id);
+            assertThat(path.getDistance()).isEqualTo(20);
         }
         
         private void addSection(Line line, Station upStation, Station downStation, int distance) {
