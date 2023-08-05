@@ -55,9 +55,8 @@ public class SubwayFareTest {
     @Test
     void calculateBasicFare() {
         // given
-        Section section = new Section(이호선, 교대역, 강남역, 10, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when
         int surcharge = SubwayFare.calculateFare(path, 게스트_사용자);
@@ -71,9 +70,8 @@ public class SubwayFareTest {
     void calculateOverFare_Over10_Upto50() {
         // given
         int distance = 16;
-        Section section = new Section(이호선, 교대역, 강남역, distance, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, distance, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when
         int surcharge = SubwayFare.calculateFare(path, 게스트_사용자);
@@ -87,9 +85,8 @@ public class SubwayFareTest {
     void calculateOverFare_Over50() {
         // given
         int distance = 58;
-        Section section = new Section(이호선, 교대역, 강남역, distance, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, distance, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when
         int surcharge = SubwayFare.calculateFare(path, 게스트_사용자);
@@ -103,9 +100,8 @@ public class SubwayFareTest {
     void calculateDistanceFare_InvalidDistance_Exception() {
         // given
         int distance = -1;
-        Section section = new Section(이호선, 교대역, 강남역, distance, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, distance, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when, then
         assertThatThrownBy(() -> SubwayFare.calculateFare(path, 게스트_사용자))
@@ -117,9 +113,8 @@ public class SubwayFareTest {
     @Test
     void calculateLineFare() {
         // given
-        Section section = new Section(신분당선, 강남역, 양재역, 8, 5);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 강남역_양재역_구간 = new Section(신분당선, 강남역, 양재역, 8, 5);
+        path = createPath(강남역_양재역_구간);
 
         // when
         int lineSurcharge = SubwayFare.calculateFare(path, 게스트_사용자);
@@ -134,8 +129,7 @@ public class SubwayFareTest {
         // given
         Section 강남역_양재역_구간 = new Section(신분당선, 강남역, 양재역, 3, 5);
         Section 남부터미널_양재역_구간 = new Section(삼호선, 남부터미널역, 양재역, 5, 3);
-        Sections sections = new Sections(List.of(강남역_양재역_구간, 남부터미널_양재역_구간));
-        path = new Path(sections);
+        path = createPath(강남역_양재역_구간, 남부터미널_양재역_구간);
 
         // when
         int lineSurcharge = SubwayFare.calculateFare(path, 게스트_사용자);
@@ -148,9 +142,8 @@ public class SubwayFareTest {
     @Test
     void calculateAgeFare_Teenager() {
         // given
-        Section section = new Section(이호선, 교대역, 강남역, 10, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when
         int fare = SubwayFare.calculateFare(path, 청소년_사용자);
@@ -163,9 +156,8 @@ public class SubwayFareTest {
     @Test
     void calculateAgeFare_Children() {
         // given
-        Section section = new Section(이호선, 교대역, 강남역, 10, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when
         int fare = SubwayFare.calculateFare(path, 어린이_사용자);
@@ -178,14 +170,18 @@ public class SubwayFareTest {
     @Test
     void calculateAgeFare_Adult() {
         // given
-        Section section = new Section(이호선, 교대역, 강남역, 10, 3);
-        Sections sections = new Sections(List.of(section));
-        path = new Path(sections);
+        Section 교대역_강남역_구간 = new Section(이호선, 교대역, 강남역, 10, 3);
+        path = createPath(교대역_강남역_구간);
 
         // when
         int fare = SubwayFare.calculateFare(path, 성인_사용자);
 
         // then
         assertThat(fare).isEqualTo(1250);
+    }
+
+    private Path createPath(Section... section) {
+        Sections sections = new Sections(List.of(section));
+        return new Path(sections);
     }
 }

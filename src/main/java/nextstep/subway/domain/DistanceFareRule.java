@@ -11,6 +11,10 @@ public class DistanceFareRule implements FareCalculationRule {
     private static final int CHARGE_DISTANCE_EIGHT = 8;
     private static final int ADDITIONAL_CHARGE_RATE = 100;
 
+    public void setNextRule(FareCalculationRule nextRule) {
+        this.nextRule = nextRule;
+    }
+
     @Override
     public int calculateFare(Path path, Member member, int totalFare) {
         int distance = path.getSections().totalDistance();
@@ -31,10 +35,6 @@ public class DistanceFareRule implements FareCalculationRule {
         } else {
             return nextRule.calculateFare(path, member, totalFare);
         }
-    }
-
-    public void setNextRule(FareCalculationRule nextRule) {
-        this.nextRule = nextRule;
     }
 
     private static void validateDistance(int distance) {
