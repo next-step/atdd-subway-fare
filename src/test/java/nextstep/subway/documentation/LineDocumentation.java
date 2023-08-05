@@ -52,10 +52,4 @@ public class LineDocumentation extends Documentation {
 
         지하철_노선_생성_요청(requestSpecification, "강남역", "red", 5, 6);
     }
-
-    @Test
-    void updateLine() {}
-
-    @Test
-    void addSection() {}
 }
