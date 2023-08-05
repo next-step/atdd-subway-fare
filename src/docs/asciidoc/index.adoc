@@ -27,4 +27,7 @@ operation::path[snippets='response-fields']
 
 operation::line[snippets='http-request,http-response']
 
+=== Request
+operation::line[snippets='request-fields']
+
 
