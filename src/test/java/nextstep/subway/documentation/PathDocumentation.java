@@ -34,11 +34,15 @@ public class PathDocumentation extends Documentation {
                                  preprocessResponse(prettyPrint()),
                                  requestParameters(
                                         parameterWithName("source").description("출발역 ID"),
-                                        parameterWithName("target").description("도착역 ID")),
+                                        parameterWithName("target").description("도착역 ID"),
+                                        parameterWithName("type").description("경로 조회 기준 (DURATION: 소요시간, DISTANCE: 거리)")
+                                 ),
                                 responseFields(
                                         fieldWithPath("stations[].id").description("지하철역 ID"),
                                         fieldWithPath("stations[].name").description("지하철역 이름"),
-                                        fieldWithPath("distance").description("조회된 경로 거리")))
+                                        fieldWithPath("distance").description("조회된 경로 거리"),
+                                        fieldWithPath("duration").description("조회된 경로 소요시간"))
+                        )
                 );
 
 
@@ -50,6 +54,6 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        경로_조회_요청(requestSpecification);
+        경로_조회_요청(requestSpecification, 1L, 2L, "DISTANCE");
     }
 }

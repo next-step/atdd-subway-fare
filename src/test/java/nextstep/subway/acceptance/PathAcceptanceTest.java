@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,11 +27,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 삼호선;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 교대역    --- *2호선* (거리:10, 시간:2) ---   강남역
+     * |                                        |
+     * *3호선* (거리:2, 기간:31)                  *신분당선* (거리:10, 시간:3)
+     * |                                        |
+     * 남부터미널역  --- *3호선*(거리:3, 시간:21) ---   양재
      */
     @BeforeEach
     public void setUp() {
@@ -41,29 +42,43 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 11);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 11);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 21);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 2);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 3);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 31);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 31));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 21));
     }
 
+    /**
+     * When: 교대-양재 최단거리 경로와 거리, 시간을 조회하면
+     * Then: 경로는 교대역-남부터미널역-양재역이고, 거리는 5, 시간은 52분이다.
+     */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathByDistance() {
+    void findPathByDistance_DISTANCE() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, "DISTANCE");
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(52L);
     }
 
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
-                .then().log().all().extract();
+    /**
+     * When: 교대-양재 최소소요시간 경로와 거리, 시간을 조회하면
+     * Then: 경로는 교대역-강남역-양재역이고, 거리는 20, 시간은 5분이다.
+     */
+    @DisplayName("두 역의 최소 소요시간 경로를 조회한다.")
+    @Test
+    void findPathByDistance_DURATION() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, "DURATION");
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(20L);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(5L);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
