@@ -4,12 +4,15 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -22,16 +25,15 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @SuppressWarnings("NonAsciiCharacters")
 public class PathSteps {
+
+
     public static ExtractableResponse<Response> getShortestPath(long sourceId, long targetId) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
                 .fromUriString("/path")
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .build();
-        return RestAssured.given().log().all()
-                .when().get(retrieveQueryWithBaseUri.toUri())
-                .then().log().all()
-                .extract();
+        return getRetrievePath(retrieveQueryWithBaseUri);
     }
 
     public static ExtractableResponse<Response> getShortestPath(long sourceId, long targetId, String accessToken) {
@@ -40,11 +42,7 @@ public class PathSteps {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .build();
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .when().get(retrieveQueryWithBaseUri.toUri())
-                .then().log().all()
-                .extract();
+        return getRetrievePathWithAccessToken(retrieveQueryWithBaseUri, accessToken);
     }
 
     public static ExtractableResponse<Response> getMinimumTimePath(long sourceId, long targetId) {
@@ -54,10 +52,7 @@ public class PathSteps {
                 .queryParam("target", targetId)
                 .queryParam("type", "DURATION")
                 .build();
-        return RestAssured.given().log().all()
-                .when().get(retrieveQueryWithBaseUri.toUri())
-                .then().log().all()
-                .extract();
+        return getRetrievePath(retrieveQueryWithBaseUri);
     }
 
     public static ExtractableResponse<Response> getMinimumTimePath(long sourceId, long targetId, String accessToken) {
@@ -67,9 +62,20 @@ public class PathSteps {
                 .queryParam("target", targetId)
                 .queryParam("type", "DURATION")
                 .build();
+        return getRetrievePathWithAccessToken(retrieveQueryWithBaseUri, accessToken);
+    }
+
+    public static ExtractableResponse<Response> getRetrievePathWithAccessToken(UriComponents uri, String accessToken) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
-                .when().get(retrieveQueryWithBaseUri.toUri())
+                .when().get(uri.toUri())
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> getRetrievePath(UriComponents uri) {
+        return RestAssured.given().log().all()
+                .when().get(uri.toUri())
                 .then().log().all()
                 .extract();
     }
@@ -77,33 +83,37 @@ public class PathSteps {
     public static ExtractableResponse<Response> getShortestPathForDocument(long sourceId,
                                                                            long targetId,
                                                                            RequestSpecification spec,
-                                                                           RestDocumentationFilter filter) {
+                                                                           RestDocumentationFilter filter,
+                                                                           String accessToken) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
                 .fromUriString("/path")
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", "DISTANCE")
                 .build();
-        return getPathForDocument(spec, filter, retrieveQueryWithBaseUri);
+        return getPathForDocument(spec, filter, retrieveQueryWithBaseUri, accessToken);
     }
 
     public static ExtractableResponse<Response> getMinimumTimePathForDocument(long sourceId,
                                                                               long targetId,
                                                                               RequestSpecification spec,
-                                                                              RestDocumentationFilter filter) {
+                                                                              RestDocumentationFilter filter,
+                                                                              String accessToken) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
                 .fromUriString("/path")
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", "DURATION")
                 .build();
-        return getPathForDocument(spec, filter, retrieveQueryWithBaseUri);
+        return getPathForDocument(spec, filter, retrieveQueryWithBaseUri, accessToken);
     }
 
     private static ExtractableResponse<Response> getPathForDocument(RequestSpecification spec,
                                                                     RestDocumentationFilter filter,
-                                                                    UriComponents uri) {
+                                                                    UriComponents uri,
+                                                                    String accessToken) {
         return RestAssured.given(spec).log().all()
+                .header("Authorization", "Bearer " + accessToken)
                 .filter(filter)
                 .when().get(uri.toUri())
                 .then().log().all()
@@ -115,6 +125,7 @@ public class PathSteps {
         return document("shortestPath",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                getPathRetrieveRequestHeaders(),
                 getPathRetrieveRequestParameters(),
                 getPathRetrieveResponseFields());
     }
@@ -123,8 +134,15 @@ public class PathSteps {
         return document("minimumTimePath",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                getPathRetrieveRequestHeaders(),
                 getPathRetrieveRequestParameters(),
                 getPathRetrieveResponseFields());
+    }
+
+    private static RequestHeadersSnippet getPathRetrieveRequestHeaders() {
+        return requestHeaders(
+                headerWithName("Authorization").description("로그인 후 JWT 토큰")
+        );
     }
 
     private static RequestParametersSnippet getPathRetrieveRequestParameters() {

@@ -199,7 +199,7 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
          * When 여러개의 노선을 지나가는 경로를 조회하면
          * Then 노선의 추가운임 중 가장 높은 추가운임 하나만 적용된 총 운임이 출력된다.
          */
-        @DisplayName("여러 노선이 포함된 경로의 가장 높은 기본요금을 가진 운임을 계산한다. ")
+        @DisplayName("여러 노선이 포함된 경로의 가장 높은 기본요금을 가진 운임을 계산한다.")
         @Test
         void getPathFareWithMaxLineSurcharge() {
             // when

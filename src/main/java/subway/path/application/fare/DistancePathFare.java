@@ -11,16 +11,9 @@ public class DistancePathFare extends PathFareChain {
     private static final long SECOND_OVER_CHARGE_SECTION_BY_DISTANCE = 50L;
     private static final long SECOND_DIVISOR = 8L;
     private static final long REMAIN_SECTION_DISTANCE = SECOND_OVER_CHARGE_SECTION_BY_DISTANCE - FIRST_OVER_CHARGE_SECTION_BY_DISTANCE;
-//    private final GraphBuilder graph;
-//
-//    public DistancePathFare() {
-//        this.graph = new GraphBuilder(new ShortestDistancePathFinder());
-//    }
 
     @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
-//        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(calcInfo.getSections());
-//        List<Section> sectionsInPath = graph.getPath(sectionGraph, calcInfo.getSourceStation(), calcInfo.getTargetStation()); // TODO
         List<Section> sections = calcInfo.getSections();
 
         long totalFare = calcInfo.getFare();

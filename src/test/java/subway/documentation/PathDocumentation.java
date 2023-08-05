@@ -1,8 +1,11 @@
 package subway.documentation;
 
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import subway.acceptance.member.MemberFixture;
 import subway.acceptance.path.PathSteps;
 import subway.path.application.PathService;
 import subway.path.application.dto.PathRetrieveRequest;
@@ -18,9 +21,14 @@ import static org.mockito.Mockito.when;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("경로 기능 인터페이스 문서 테스트")
 public class PathDocumentation extends Documentation {
+    private static String accessToken;
     @MockBean
     private PathService pathService;
 
+    @BeforeEach
+    void beforeEach() {
+        accessToken = MemberFixture.일반_회원_생성_로그인_후_토큰();
+    }
     @Test
     void shortestPath() {
         // given
@@ -38,7 +46,8 @@ public class PathDocumentation extends Documentation {
         var apiResponse = PathSteps.getShortestPathForDocument(강남역.getId(),
                 역삼역.getId(),
                 this.spec,
-                PathSteps.최단거리경로_필터());
+                PathSteps.최단거리경로_필터(),
+                accessToken);
 
         // then
         var list = apiResponse.jsonPath().getList("stations.name", String.class);
@@ -63,7 +72,8 @@ public class PathDocumentation extends Documentation {
         var apiResponse = PathSteps.getMinimumTimePathForDocument(강남역.getId(),
                 역삼역.getId(),
                 this.spec,
-                PathSteps.최소시간경로_필터());
+                PathSteps.최소시간경로_필터(),
+                accessToken);
 
         // then
         var list = apiResponse.jsonPath().getList("stations.name", String.class);

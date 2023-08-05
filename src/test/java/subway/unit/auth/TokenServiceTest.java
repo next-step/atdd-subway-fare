@@ -53,6 +53,5 @@ public class TokenServiceTest {
         // when/then
         assertThatThrownBy(() -> tokenService.createToken(EMAIL, "FAILED_PASSWORD"))
                 .isInstanceOf(AuthenticationException.class);
-
     }
 }
