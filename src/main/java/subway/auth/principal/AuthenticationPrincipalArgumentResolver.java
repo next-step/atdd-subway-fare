@@ -25,14 +25,21 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                                   WebDataBinderFactory binderFactory) {
         AuthenticationPrincipal authPrincipalAnnotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         boolean isRequired = authPrincipalAnnotation.required();
-
         String authorization = webRequest.getHeader("Authorization");
+        String token = validAuthorizationAndGetToken(authorization, isRequired);
 
+        if (token == null) {
+            return null;
+        }
+
+        return getUserPrincipalFromToken(token);
+    }
+
+    private String validAuthorizationAndGetToken(String authorization, boolean isRequired) {
         if (!isValidAuthorization(authorization)) {
             if (isRequired) {
                 throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
             } else {
-                // Not required, return null if authorization is not valid
                 return null;
             }
         }
@@ -43,18 +50,22 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             if (isRequired) {
                 throw new AuthenticationException(SubwayMessage.AUTH_INVALID_TOKEN);
             } else {
-                // Not required, return null if token is not valid
                 return null;
             }
         }
 
+        return token;
+    }
+
+    private UserPrincipal getUserPrincipalFromToken(String token) {
         String username = jwtTokenProvider.getPrincipal(token);
         String role = jwtTokenProvider.getRoles(token);
 
         return new UserPrincipal(username, role);
     }
 
-    private static boolean isValidAuthorization(String authorization) {
+
+    private boolean isValidAuthorization(String authorization) {
         if (authorization == null) {
             return false;
         }
@@ -62,20 +73,5 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             return false;
         }
         return true;
-    }
-
-    private void validToken(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new AuthenticationException(SubwayMessage.AUTH_INVALID_TOKEN);
-        }
-    }
-
-    private static void validAuthorization(String authorization) {
-        if (authorization == null) {
-            throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
-        }
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
-            throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
-        }
     }
 }

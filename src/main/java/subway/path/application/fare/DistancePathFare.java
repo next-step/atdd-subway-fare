@@ -2,15 +2,15 @@ package subway.path.application.fare;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
-import subway.path.application.path.ShortestDistancePathFinder;
 import subway.path.application.dto.PathFareCalculationInfo;
 import subway.path.application.graph.GraphBuilder;
+import subway.path.application.path.ShortestDistancePathFinder;
 import subway.path.domain.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
 
-public class DistancePathFare extends PathFareChain{
+public class DistancePathFare extends PathFareChain {
     private static final long FIRST_OVER_CHARGE_SECTION_BY_DISTANCE = 10L;
     private static final long FIRST_DIVISOR = 5L;
     private static final long SECOND_OVER_CHARGE_SECTION_BY_DISTANCE = 50L;
@@ -32,6 +32,7 @@ public class DistancePathFare extends PathFareChain{
 
         totalFare += calculateAdditionalFare(distance);
         PathFareCalculationInfo calcInfoResponse = calcInfo.withUpdatedFare(totalFare);
+
         return super.nextCalculateFare(calcInfoResponse);
     }
 

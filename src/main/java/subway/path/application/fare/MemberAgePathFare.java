@@ -3,7 +3,7 @@ package subway.path.application.fare;
 import subway.member.domain.Member;
 import subway.path.application.dto.PathFareCalculationInfo;
 
-public class MemberAgePathFare extends PathFareChain{
+public class MemberAgePathFare extends PathFareChain {
 
     @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
@@ -16,8 +16,8 @@ public class MemberAgePathFare extends PathFareChain{
         double discountRate = getDiscountRateByAge(memberAge);
 
         long memberDiscountFare = calculateDiscountedFare(calcInfo.getFare(), discountRate);
-
         PathFareCalculationInfo calcInfoResponse = calcInfo.withUpdatedFare(memberDiscountFare);
+
         return super.nextCalculateFare(calcInfoResponse);
     }
 
@@ -33,7 +33,6 @@ public class MemberAgePathFare extends PathFareChain{
 
     private long calculateDiscountedFare(long fare, double discountRate) {
         if (discountRate == 1.0) {
-            // 19세 초과인 경우, 아무런 공제도 적용되지 않습니다.
             return fare;
         } else {
             long deduction = fare - 350;
