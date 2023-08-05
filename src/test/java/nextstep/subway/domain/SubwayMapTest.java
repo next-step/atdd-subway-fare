@@ -92,8 +92,8 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.getDistance()).isEqualTo(11);
-            assertThat(path.getDuration()).isEqualTo(2);
+            assertThat(path.extractDistance()).isEqualTo(11);
+            assertThat(path.extractDuration()).isEqualTo(2);
         }
 
         /**
@@ -122,7 +122,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station4Id, station3Id);
-            assertThat(path.getDistance()).isEqualTo(21);
+            assertThat(path.extractDistance()).isEqualTo(21);
         }
 
         /**
@@ -147,7 +147,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.getDistance()).isEqualTo(19);
+            assertThat(path.extractDistance()).isEqualTo(19);
         }
 
         /**
@@ -179,7 +179,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id, station4Id);
-            assertThat(path.getDistance()).isEqualTo(8);
+            assertThat(path.extractDistance()).isEqualTo(8);
         }
 
         /**
@@ -211,7 +211,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station6Id, station7Id, station4Id);
-            assertThat(path.getDistance()).isEqualTo(20);
+            assertThat(path.extractDistance()).isEqualTo(20);
         }
         
         private void addSection(Line line, Station upStation, Station downStation, int distance) {
@@ -253,8 +253,8 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.getDuration()).isEqualTo(11);
-            assertThat(path.getDistance()).isEqualTo(2);
+            assertThat(path.extractDuration()).isEqualTo(11);
+            assertThat(path.extractDistance()).isEqualTo(2);
         }
 
         /**
@@ -283,7 +283,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station4Id, station3Id);
-            assertThat(path.getDuration()).isEqualTo(21);
+            assertThat(path.extractDuration()).isEqualTo(21);
         }
 
         /**
@@ -308,7 +308,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.getDuration()).isEqualTo(19);
+            assertThat(path.extractDuration()).isEqualTo(19);
         }
 
         /**
@@ -340,7 +340,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id, station4Id);
-            assertThat(path.getDuration()).isEqualTo(8);
+            assertThat(path.extractDuration()).isEqualTo(8);
         }
 
         /**
@@ -372,7 +372,7 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station6Id, station7Id, station4Id);
-            assertThat(path.getDuration()).isEqualTo(20);
+            assertThat(path.extractDuration()).isEqualTo(20);
         }
 
         private void addSection(Line line, Station upStation, Station downStation, int duration) {
