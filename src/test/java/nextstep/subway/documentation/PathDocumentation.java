@@ -14,7 +14,6 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -48,7 +47,8 @@ public class PathDocumentation extends Documentation {
                 , fare
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(), anyString())).thenReturn(pathResponse);
+        when(pathService.findPath(any(), anyString()))
+                .thenReturn(pathResponse);
 
         RestDocumentationFilter restDocumentationFilter = document("path"
                 , preprocessRequest(prettyPrint())
