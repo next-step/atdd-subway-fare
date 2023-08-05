@@ -64,6 +64,20 @@ public class StationPathAccumulateService {
                 .collect(Collectors.toList());
     }
 
+    private StationLineSection getSectionByPairStationId(List<StationLine> stationLines, Long stationId, Long neighborStationId) {
+        final List<StationLineSection> sections = StationLineSection.of(stationLines);
+        final Map<Long, StationLineSectionMap> sectionMapByDownStation = getSectionMapByDownStation(sections);
+        final Map<Long, StationLineSectionMap> sectionMapByUpStation = getSectionMapByUpStation(sections);
+
+        return Optional.ofNullable(stationId)
+                .map(sectionMapByDownStation::get)
+                .map(sectionByDownStation -> sectionByDownStation.getSectionBy(neighborStationId))
+                .orElse(Optional.ofNullable(stationId)
+                        .map(sectionMapByUpStation::get)
+                        .map(sectionByUpStation -> sectionByUpStation.getSectionBy(neighborStationId))
+                        .orElse(null));
+    }
+
     private Map<Long, StationLineSectionMap> getSectionMapByDownStation(List<StationLineSection> sections) {
         final Map<Long, List<StationLineSection>> sectionMapByDownStation = sections.stream()
                 .collect(Collectors.groupingBy(StationLineSection::getDownStationId, Collectors.toList()));
@@ -78,20 +92,6 @@ public class StationPathAccumulateService {
 
         return sectionMapByDownStation.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> StationLineSectionMap.of(entry.getValue(), StationLineSection::getDownStationId)));
-    }
-
-    private StationLineSection getSectionByPairStationId(List<StationLine> stationLines, Long stationId, Long neighborStationId) {
-        final List<StationLineSection> sections = StationLineSection.of(stationLines);
-        final Map<Long, StationLineSectionMap> sectionMapByDownStation = getSectionMapByDownStation(sections);
-        final Map<Long, StationLineSectionMap> sectionMapByUpStation = getSectionMapByUpStation(sections);
-
-        return Optional.ofNullable(stationId)
-                .map(sectionMapByDownStation::get)
-                .map(sectionByDownStation -> sectionByDownStation.getSectionBy(neighborStationId))
-                .orElse(Optional.ofNullable(stationId)
-                        .map(sectionMapByUpStation::get)
-                        .map(sectionByUpStation -> sectionByUpStation.getSectionBy(neighborStationId))
-                        .orElse(null));
     }
 
     private Map<Long, StationLineSection> getStationLineSectionByUpStationId(List<StationLineSection> stationLineSections) {
