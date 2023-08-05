@@ -5,7 +5,9 @@ import nextstep.subway.exception.StationLineSectionSplitException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -94,5 +96,12 @@ public class StationLineSection {
     //associate util method
     public void apply(StationLine line) {
         this.line = line;
+    }
+
+    public static List<StationLineSection> of(List<StationLine> stationLines) {
+        return stationLines.stream()
+                .map(StationLine::getSections)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }

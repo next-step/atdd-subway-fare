@@ -53,47 +53,45 @@ public class StationPathAccumulateService {
     }
 
     private List<StationLineSection> getPathStationLineSections(List<StationLine> stationLines, List<Long> pathStationIds) {
-        final Map<Long, Map<Long, StationLineSection>> sectionByUpStationByDownStation = getSectionByUpStationByDownStation(stationLines);
-        final Map<Long, Map<Long, StationLineSection>> sectionByDownStationByUpStation = getSectionByDownStationByUpStation(stationLines);
-
         return IntStream.range(0, pathStationIds.size() - 1)
                 .mapToObj(stationIndex -> {
                     Long stationId = pathStationIds.get(stationIndex);
                     Long neighborStationId = pathStationIds.get(stationIndex + 1);
 
-                    return getSectionByPairStationId(sectionByUpStationByDownStation, sectionByDownStationByUpStation, stationId, neighborStationId);
+                    return getSectionByPairStationId(stationLines, stationId, neighborStationId);
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    private Map<Long, Map<Long, StationLineSection>> getSectionByUpStationByDownStation(List<StationLine> stationLines) {
-        return stationLines.stream()
-                .map(StationLine::getSections)
-                .flatMap(Collection::stream)
-                .collect(Collectors.groupingBy(StationLineSection::getUpStationId,
-                        Collectors.toMap(StationLineSection::getDownStationId, Function.identity())));
-    }
+    private StationLineSection getSectionByPairStationId(List<StationLine> stationLines, Long stationId, Long neighborStationId) {
+        final List<StationLineSection> sections = StationLineSection.of(stationLines);
+        final Map<Long, StationLineSectionMap> sectionMapByDownStation = getSectionMapByDownStation(sections);
+        final Map<Long, StationLineSectionMap> sectionMapByUpStation = getSectionMapByUpStation(sections);
 
-    private Map<Long, Map<Long, StationLineSection>> getSectionByDownStationByUpStation(List<StationLine> stationLines) {
-        return stationLines.stream()
-                .map(StationLine::getSections)
-                .flatMap(Collection::stream)
-                .collect(Collectors.groupingBy(StationLineSection::getDownStationId,
-                        Collectors.toMap(StationLineSection::getUpStationId, Function.identity())));
-    }
-
-    private StationLineSection getSectionByPairStationId(Map<Long, Map<Long, StationLineSection>> sectionByUpStationByDownStation,
-                                                         Map<Long, Map<Long, StationLineSection>> sectionByDownStationByUpStation,
-                                                         Long stationId,
-                                                         Long neighborStationId) {
         return Optional.ofNullable(stationId)
-                .map(sectionByUpStationByDownStation::get)
-                .map(sectionByDownStation -> sectionByDownStation.get(neighborStationId))
+                .map(sectionMapByDownStation::get)
+                .map(sectionByDownStation -> sectionByDownStation.getSectionBy(neighborStationId))
                 .orElse(Optional.ofNullable(stationId)
-                        .map(sectionByDownStationByUpStation::get)
-                        .map(sectionByUpStation -> sectionByUpStation.get(neighborStationId))
+                        .map(sectionMapByUpStation::get)
+                        .map(sectionByUpStation -> sectionByUpStation.getSectionBy(neighborStationId))
                         .orElse(null));
+    }
+
+    private Map<Long, StationLineSectionMap> getSectionMapByDownStation(List<StationLineSection> sections) {
+        final Map<Long, List<StationLineSection>> sectionMapByDownStation = sections.stream()
+                .collect(Collectors.groupingBy(StationLineSection::getDownStationId, Collectors.toList()));
+
+        return sectionMapByDownStation.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> StationLineSectionMap.of(entry.getValue(), StationLineSection::getUpStationId)));
+    }
+
+    private Map<Long, StationLineSectionMap> getSectionMapByUpStation(List<StationLineSection> sections) {
+        final Map<Long, List<StationLineSection>> sectionMapByDownStation = sections.stream()
+                .collect(Collectors.groupingBy(StationLineSection::getUpStationId, Collectors.toList()));
+
+        return sectionMapByDownStation.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> StationLineSectionMap.of(entry.getValue(), StationLineSection::getDownStationId)));
     }
 
     private Map<Long, StationLineSection> getStationLineSectionByUpStationId(List<StationLineSection> stationLineSections) {

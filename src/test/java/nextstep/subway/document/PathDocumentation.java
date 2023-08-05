@@ -40,6 +40,7 @@ public class PathDocumentation extends Documentation {
 
         final StationPathResponse pathResponse = StationPathResponse.builder()
                 .stations(List.of(station1, station2))
+                .fee(BigDecimal.TEN)
                 .distance(BigDecimal.TEN).build();
 
         when(stationPathService.searchStationPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
@@ -50,6 +51,7 @@ public class PathDocumentation extends Documentation {
                 responseFields(
                         fieldWithPath(".distance").description("지하철 경로 전체 거리"),
                         fieldWithPath(".duration").description("지하철 경로 전체 소요 시간"),
+                        fieldWithPath(".fee").description("지하철 경로 전체 요금"),
                         fieldWithPath(".stations[]").description("지하철 경로 역 목록"),
                         fieldWithPath(".stations[].id").description("지하철 역 id"),
                         fieldWithPath(".stations[].name").description("지하철 역 이름")

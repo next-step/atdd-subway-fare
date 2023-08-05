@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 public class StationLineSectionSteps {
@@ -23,12 +22,7 @@ public class StationLineSectionSteps {
     }
 
     public static void createStationLineSection(Long lineId, Long upStationId, Long downStationId, BigDecimal distance, Long duration, HttpStatus expectedStatus) {
-        StationLineSectionCreateRequest request = new StationLineSectionCreateRequest();
-
-        request.setUpStationId(upStationId);
-        request.setDownStationId(downStationId);
-        request.setDistance(distance);
-        request.setDuration(duration);
+        var request = new StationLineSectionCreateRequest(upStationId, downStationId, distance, duration);
 
         RestAssured.given().log().all()
                 .body(request)

@@ -78,10 +78,7 @@ class FavoritePathServiceTest {
         given(stationPathService.searchStationPath(source, target, StationPathSearchRequestType.DISTANCE)).willReturn(stationPathResponse);
 
         //when
-        final FavoritePathRequest request = new FavoritePathRequest();
-        request.setSource(source);
-        request.setTarget(target);
-        request.setType(StationPathSearchRequestType.DISTANCE);
+        var request = new FavoritePathRequest(source,target,StationPathSearchRequestType.DISTANCE);
 
         favoritePathService.createFavoritePath(email, request);
 

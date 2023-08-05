@@ -1,7 +1,6 @@
 package nextstep.favorite.accpetance;
 
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.favorite.service.dto.FavoritePathRequest;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class FavoriteSteps {
@@ -26,11 +24,7 @@ public class FavoriteSteps {
     public static ExtractableResponse<Response> 즐겨찾기_경로_등록(String accessToken, String sourceStationName, String targetStationName,
                                                            StationPathSearchRequestType type,
                                                            Map<String, Long> stationIdByName, HttpStatus expectedStats) {
-        FavoritePathRequest request = new FavoritePathRequest();
-
-        request.setSource(stationIdByName.get(sourceStationName));
-        request.setTarget(stationIdByName.get(targetStationName));
-        request.setType(type);
+        FavoritePathRequest request = new FavoritePathRequest(stationIdByName.get(sourceStationName), stationIdByName.get(targetStationName), type);
 
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
@@ -43,22 +37,22 @@ public class FavoriteSteps {
     }
 
     public static void 즐겨찾기_경로_등록됨(String accessToken, String sourceStationName, String targetStationName, int order) {
-        final JsonPath jsonPath = RestAssured.given().log().all()
+        var jsonPath = RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .when().get("/favorites")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .extract().jsonPath();
 
-        final String source = String.format("[%d].source.name", order);
-        final String target = String.format("[%d].target.name", order);
+        var source = String.format("[%d].source.name", order);
+        var target = String.format("[%d].target.name", order);
 
         Assertions.assertEquals(sourceStationName, jsonPath.getString(source));
         Assertions.assertEquals(targetStationName, jsonPath.getString(target));
     }
 
     public static void 즐겨찾기_경로_존재하지않음(String accessToken) {
-        final JsonPath jsonPath = RestAssured.given().log().all()
+        var jsonPath = RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .when().get("/favorites")
                 .then().log().all()
@@ -69,7 +63,7 @@ public class FavoriteSteps {
     }
 
     public static void 즐겨찾기_경로_삭제(String 사용자1_토큰, ExtractableResponse<Response> response) {
-        final String uri = response.header("Location");
+        var uri = response.header("Location");
 
         RestAssured.given().log().all()
                 .auth().oauth2(사용자1_토큰)
