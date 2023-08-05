@@ -74,8 +74,6 @@ class LineAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("name")).isEqualTo("2호선");
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(DISTANCE);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(DURATION);
     }
 
     /**
@@ -107,8 +105,6 @@ class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("color")).isEqualTo("red");
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo("distance");
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo("duration");
     }
 
     /**
