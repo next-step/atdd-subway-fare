@@ -31,9 +31,7 @@ class SubwayMapTest {
     private Long station5Id = 15L;
     private Long station6Id = 16L;
     private Long station7Id = 17L;
-
-    private static final int NOT_USED_DURATION = 0;
-
+    
     @BeforeEach
     void init() {
 
@@ -64,6 +62,9 @@ class SubwayMapTest {
     @DisplayName("거리 기준 경로 조회 테스트")
     public class SearchPathByDistanceTest {
 
+        private static final int NOT_USED_DURATION = 0;
+
+
         /**
          *
          * line1: station1 - (9) - station2
@@ -79,10 +80,10 @@ class SubwayMapTest {
         void searchPath1() {
 
             // given
-            line1.addSection(station1, station2, 9);
-            line2.addSection(station2, station3, 2);
-            line3.addSection(station3, station4, 10);
-            line3.addSection(station4, station1, 11);
+            addSection(line1, station1, station2, 9);
+            addSection(line2, station2, station3, 2);
+            addSection(line3, station3, station4, 10);
+            addSection(line3, station4, station1, 11);
 
             // when
             SubwayMap subwayMap = new SubwayMap(List.of(line1, line2, line3));
@@ -108,10 +109,10 @@ class SubwayMapTest {
         void searchPath2() {
 
             // given
-            line1.addSection(station1, station2, 22);
-            line2.addSection(station2, station3, 15);
-            line3.addSection(station3, station4, 10);
-            line3.addSection(station4, station1, 11);
+            addSection(line1, station1, station2, 22);
+            addSection(line2, station2, station3, 15);
+            addSection(line3, station3, station4, 10);
+            addSection(line3, station4, station1, 11);
 
             // when
             SubwayMap subwayMap = new SubwayMap(List.of(line1, line2, line3));
@@ -134,8 +135,8 @@ class SubwayMapTest {
         void searchPath3() {
 
             // given
-            line1.addSection(station1, station2, 10);
-            line1.addSection(station2, station3, 9);
+            addSection(line1, station1, station2, 10);
+            addSection(line1, station2, station3, 9);
 
             // when
             SubwayMap subwayMap = new SubwayMap(List.of(line1, line2, line3));
@@ -159,14 +160,14 @@ class SubwayMapTest {
         void searchPath4() {
 
             // given
-            line1.addSection(station1, station2, 2);
-            line1.addSection(station2, station3, 3);
-            line1.addSection(station3, station4, 3);
+            addSection(line1, station1, station2, 2);
+            addSection(line1, station2, station3, 3);
+            addSection(line1, station3, station4, 3);
 
-            line2.addSection(station5, station2, 7);
-            line2.addSection(station2, station6, 2);
-            line2.addSection(station6, station7, 2);
-            line2.addSection(station7, station4, 4);
+            addSection(line2, station5, station2, 7);
+            addSection(line2, station2, station6, 2);
+            addSection(line2, station6, station7, 2);
+            addSection(line2, station7, station4, 4);
 
             // when
             SubwayMap subwayMap = new SubwayMap(List.of(line1, line2));
@@ -190,14 +191,14 @@ class SubwayMapTest {
         void searchPath5() {
 
             // given
-            line1.addSection(station1, station2, 12);
-            line1.addSection(station2, station3, 10);
-            line1.addSection(station3, station4, 20);
+            addSection(line1, station1, station2, 12);
+            addSection(line1, station2, station3, 10);
+            addSection(line1, station3, station4, 20);
 
-            line2.addSection(station5, station2, 7);
-            line2.addSection(station2, station6, 2);
-            line2.addSection(station6, station7, 2);
-            line2.addSection(station7, station4, 4);
+            addSection(line2, station5, station2, 7);
+            addSection(line2, station2, station6, 2);
+            addSection(line2, station6, station7, 2);
+            addSection(line2, station7, station4, 4);
 
             // when
             SubwayMap subwayMap = new SubwayMap(List.of(line1, line2));
@@ -205,6 +206,10 @@ class SubwayMapTest {
 
             // then
             assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station6Id, station7Id, station4Id);
+        }
+        
+        private void addSection(Line line, Station upStation, Station downStation, int distance) {
+            line.addSection(upStation, downStation, distance, NOT_USED_DURATION);
         }
     }
 
