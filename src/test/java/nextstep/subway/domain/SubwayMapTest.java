@@ -48,6 +48,15 @@ class SubwayMapTest {
         station6 = spy(Station.class);
         station7 = spy(Station.class);
 
+
+        when(station1.getId()).thenReturn(station1Id);
+        when(station2.getId()).thenReturn(station2Id);
+        when(station3.getId()).thenReturn(station3Id);
+        when(station4.getId()).thenReturn(station4Id);
+        when(station5.getId()).thenReturn(station5Id);
+        when(station6.getId()).thenReturn(station6Id);
+        when(station7.getId()).thenReturn(station7Id);
+
     }
 
     /**
@@ -65,10 +74,6 @@ class SubwayMapTest {
     void searchPath1() {
 
         // given
-        when(station1.getId()).thenReturn(station1Id);
-        when(station2.getId()).thenReturn(station2Id);
-        when(station3.getId()).thenReturn(station3Id);
-
         line1.addSection(station1, station2, 9);
         line2.addSection(station2, station3, 2);
         line3.addSection(station3, station4, 10);
@@ -98,10 +103,6 @@ class SubwayMapTest {
     void searchPath2() {
 
         // given
-        when(station1.getId()).thenReturn(station1Id);
-        when(station3.getId()).thenReturn(station3Id);
-        when(station4.getId()).thenReturn(station4Id);
-
         line1.addSection(station1, station2, 22);
         line2.addSection(station2, station3, 15);
         line3.addSection(station3, station4, 10);
@@ -128,10 +129,6 @@ class SubwayMapTest {
     void searchPath3() {
 
         // given
-        when(station1.getId()).thenReturn(station1Id);
-        when(station2.getId()).thenReturn(station2Id);
-        when(station3.getId()).thenReturn(station3Id);
-
         line1.addSection(station1, station2, 10);
         line1.addSection(station2, station3, 9);
 
@@ -157,11 +154,6 @@ class SubwayMapTest {
     void searchPath4() {
 
         // given
-        when(station1.getId()).thenReturn(station1Id);
-        when(station2.getId()).thenReturn(station2Id);
-        when(station3.getId()).thenReturn(station3Id);
-        when(station4.getId()).thenReturn(station4Id);
-
         line1.addSection(station1, station2, 2);
         line1.addSection(station2, station3, 3);
         line1.addSection(station3, station4, 3);
@@ -193,12 +185,6 @@ class SubwayMapTest {
     void searchPath5() {
 
         // given
-        when(station1.getId()).thenReturn(station1Id);
-        when(station2.getId()).thenReturn(station2Id);
-        when(station4.getId()).thenReturn(station4Id);
-        when(station6.getId()).thenReturn(station6Id);
-        when(station7.getId()).thenReturn(station7Id);
-
         line1.addSection(station1, station2, 12);
         line1.addSection(station2, station3, 10);
         line1.addSection(station3, station4, 20);
