@@ -34,6 +34,19 @@ public class PathSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> getShortestPath(long sourceId, long targetId, String accessToken) {
+        UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
+                .fromUriString("/path")
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .build();
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().get(retrieveQueryWithBaseUri.toUri())
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> getMinimumTimePath(long sourceId, long targetId) {
         UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
                 .fromUriString("/path")
@@ -42,6 +55,20 @@ public class PathSteps {
                 .queryParam("type", "DURATION")
                 .build();
         return RestAssured.given().log().all()
+                .when().get(retrieveQueryWithBaseUri.toUri())
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> getMinimumTimePath(long sourceId, long targetId, String accessToken) {
+        UriComponents retrieveQueryWithBaseUri = UriComponentsBuilder
+                .fromUriString("/path")
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .queryParam("type", "DURATION")
+                .build();
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
                 .when().get(retrieveQueryWithBaseUri.toUri())
                 .then().log().all()
                 .extract();

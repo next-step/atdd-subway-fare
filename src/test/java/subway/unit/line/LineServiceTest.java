@@ -35,7 +35,7 @@ public class LineServiceTest {
      * When 구간을 추가하면
      * Then 구간을 조회 할 수 있다.
      */
-    @DisplayName("노선에 구간을 추가한다")
+    @DisplayName("구간 추가")
     @Test
     void addSection() {
         // given
@@ -62,7 +62,7 @@ public class LineServiceTest {
      * When 노선을 1개 삭제하면
      * Then 1개의 구간을 가진 노선이 된다.
      */
-    @DisplayName("노선의 구간을 삭제한다.")
+    @DisplayName("구간 삭제")
     @Test
     void deleteSection() {
         // given
@@ -104,7 +104,7 @@ public class LineServiceTest {
      * When 노선의 정보를 변경하면
      * Then 노선의 정보가 변경 된 것을 죄회로 확인할 수 있다.
      */
-    @DisplayName("노선의 정보를 변경한다")
+    @DisplayName("노선 정보 수정")
     @Test
     void updateLine() {
         // given
@@ -140,7 +140,7 @@ public class LineServiceTest {
      * When 노선을 삭제 하면
      * Then 노선이 조회되지 않는다.
      */
-    @DisplayName("노선을 삭제한다")
+    @DisplayName("노선 삭제")
     @Test
     void deleteLine() {
         // given
@@ -170,7 +170,7 @@ public class LineServiceTest {
      * When 노선을 저장하면
      * Then 노선이 저장된 것을 조회로 확인할 수 있다.
      */
-    @DisplayName("노선을 저장한다.")
+    @DisplayName("노선 저장")
     @Test
     void saveLine() {
         // when
