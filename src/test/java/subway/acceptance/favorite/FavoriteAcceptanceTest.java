@@ -1,4 +1,4 @@
-package subway.acceptance.member;
+package subway.acceptance.favorite;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import subway.acceptance.auth.AuthFixture;
+import subway.acceptance.member.MemberSteps;
 import subway.acceptance.path.PathFixture;
 import subway.acceptance.station.StationFixture;
 import subway.utils.AcceptanceTest;

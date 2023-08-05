@@ -1,4 +1,4 @@
-package subway.acceptance.member;
+package subway.acceptance.favorite;
 
 import subway.acceptance.station.StationFixture;
 

@@ -8,10 +8,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LineSurchargePathFare extends PathFareChain {
-
+    //    private final GraphBuilder graph;
+//
+//    public LineSurchargePathFare() {
+//        this.graph = new GraphBuilder(new ShortestDistancePathFinder());
+//    }
     @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
-        List<Section> sections = calcInfo.getSearchedSections();
+//        WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(calcInfo.getSections());
+//        List<Section> sectionsInPath = graph.getPath(sectionGraph, calcInfo.getSourceStation(), calcInfo.getTargetStation());
+        List<Section> sections = calcInfo.getSections();
         List<Long> orderedSurcharges = sections.stream()
                 .map(section -> section.getLine().getSurcharge())
                 .sorted(Comparator.reverseOrder())

@@ -2,7 +2,7 @@ package subway.acceptance.path;
 
 import subway.acceptance.line.LineFixture;
 import subway.acceptance.line.LineSteps;
-import subway.acceptance.line.SectionFixture;
+import subway.acceptance.section.SectionFixture;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.station.domain.Station;

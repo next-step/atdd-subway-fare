@@ -16,19 +16,19 @@ import java.util.List;
 
 public class PathFinder {
 
-    private final GraphBuilder graph;
+    private final GraphBuilder strategyGraph;
     private final PathFare pathFare = new PathFare();
 
     public PathFinder(PathFinderStrategy strategy) {
-        this.graph = new GraphBuilder(strategy);
+        this.strategyGraph = new GraphBuilder(strategy);
     }
 
     public Path findPath(PathFinderRequest request) {
         validIsSameOriginStation(request.getSourceStation(), request.getTargetStation());
-        WeightedMultigraph<Station, SectionEdge> graph = this.graph.getGraph(request.getSections());
-        List<Section> searchedSections = this.graph.getPath(graph, request.getSourceStation(), request.getTargetStation());
+        WeightedMultigraph<Station, SectionEdge> pathSectionGraph = strategyGraph.getGraph(request.getSections());
+        List<Section> searchedSections = strategyGraph.getPath(pathSectionGraph, request.getSourceStation(), request.getTargetStation());
 
-        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.from(request, searchedSections);
+        PathFareCalculationInfo calcInfo = PathFareCalculationInfo.from(request);
         long fare = pathFare.calculateFare(calcInfo);
 
         return Path.builder()

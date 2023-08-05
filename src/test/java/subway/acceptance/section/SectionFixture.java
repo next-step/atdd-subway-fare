@@ -1,4 +1,4 @@
-package subway.acceptance.line;
+package subway.acceptance.section;
 
 import subway.line.domain.Line;
 import subway.line.domain.Section;

@@ -1,4 +1,4 @@
-package subway.acceptance.member;
+package subway.acceptance.favorite;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

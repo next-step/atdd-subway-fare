@@ -6,7 +6,8 @@ public class PathFare {
     private final PathFareChain pathFareChain;
 
     public PathFare() {
-        this.pathFareChain = PathFareChain.chain(new DistancePathFare(),
+        this.pathFareChain = PathFareChain.chain(new GraphPathFare(),
+                new DistancePathFare(),
                 new LineSurchargePathFare(),
                 new MemberAgePathFare());
     }

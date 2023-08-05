@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.acceptance.path.PathFixture;
 import subway.line.domain.Section;
+import subway.path.application.fare.GraphPathFare;
 import subway.path.application.fare.PathFareChain;
 import subway.path.application.fare.DistancePathFare;
 import subway.path.application.dto.PathFareCalculationInfo;
@@ -39,8 +40,9 @@ public class DistancePathFareTest {
     @BeforeEach
     void beforeEach() {
         sections = PathFixture.단위_테스트_인스턴스_생성();
+        GraphPathFare graphPathFare = new GraphPathFare();
         DistancePathFare distancePathFare = new DistancePathFare();
-        pathFare = PathFareChain.chain(distancePathFare);
+        pathFare = PathFareChain.chain(graphPathFare, distancePathFare);
     }
 
     /**
@@ -56,7 +58,7 @@ public class DistancePathFareTest {
         Station 왕십리역 = Station.builder().id(7L).name("왕십리역").build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .wholeSections(sections)
+                .sections(sections)
                 .sourceStation(건대역)
                 .targetStation(왕십리역)
                 .build();
@@ -81,7 +83,7 @@ public class DistancePathFareTest {
         Station 강변역 = Station.builder().id(8L).name("강변역").build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .wholeSections(sections)
+                .sections(sections)
                 .sourceStation(건대역)
                 .targetStation(강변역)
                 .build();
@@ -106,7 +108,7 @@ public class DistancePathFareTest {
         Station 잠실역 = Station.builder().id(9L).name("잠실역").build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .wholeSections(sections)
+                .sections(sections)
                 .sourceStation(건대역)
                 .targetStation(잠실역)
                 .build();
@@ -131,7 +133,7 @@ public class DistancePathFareTest {
         Station 양재역 = Station.builder().id(4L).name("양재역").build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .wholeSections(sections)
+                .sections(sections)
                 .sourceStation(교대역)
                 .targetStation(양재역)
                 .build();

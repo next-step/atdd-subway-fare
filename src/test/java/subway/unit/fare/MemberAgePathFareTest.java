@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.member.domain.Member;
-import subway.path.application.fare.PathFareChain;
-import subway.path.application.fare.MemberAgePathFare;
 import subway.path.application.dto.PathFareCalculationInfo;
+import subway.path.application.fare.MemberAgePathFare;
+import subway.path.application.fare.PathFareChain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
