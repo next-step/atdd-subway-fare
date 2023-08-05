@@ -19,14 +19,14 @@ public class SubwayFare {
     public static int calculateDistanceFare(int distance) {
         validateDistance(distance);
 
-        int fare = BASIC_FARE;
+        int fare = 0;
 
         if (distance > BASIC_DISTANCE && distance <= 50) {
             fare += calculateOverFare(distance - BASIC_DISTANCE, CHARGE_DISTANCE_FIVE);
         }
 
         if (distance > 50) {
-            fare += (calculateOverFare(distance - BASIC_DISTANCE, CHARGE_DISTANCE_FIVE) +
+            fare += (calculateOverFare(distance - BASIC_DISTANCE - (distance - 50), CHARGE_DISTANCE_FIVE) +
                     calculateOverFare(distance - 50, CHARGE_DISTANCE_EIGHT));
         }
 
@@ -40,10 +40,13 @@ public class SubwayFare {
     }
 
     public static int calculateFare(Path path, Member member) {
-        int distanceFare = calculateDistanceFare(path.extractDistance());
-        int lineSurcharge = calculateLineFare(path.getSections());
+        int totalFare = BASIC_FARE;
 
-        return calculateAgeFare(member, distanceFare + lineSurcharge);
+        totalFare += calculateDistanceFare(path.extractDistance());
+        totalFare += calculateLineFare(path.getSections());
+        totalFare = calculateAgeFare(member, totalFare);
+
+        return totalFare;
     }
 
     public static int calculateLineFare(Sections sections) {

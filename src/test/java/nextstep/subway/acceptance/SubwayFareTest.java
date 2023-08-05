@@ -17,49 +17,59 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class SubwayFareTest {
     private static final int 신분당선_추가요금 = 900;
     private static final int 삼호선_추가요금 = 300;
-    private static final int 기본요금 = 1250;
 
-    @DisplayName("이용 거리가 10km 이내인 경우 기본운임 요금을 반환한다")
+    @DisplayName("거리별 정책 - 이용 거리가 10km 이내인 경우 기본운임 요금을 반환한다. (추가요금 0원)")
     @Test
     void calculateBasicFare() {
-        // when
+        // given
         int distance = 10;
-        int fare = SubwayFare.calculateDistanceFare(distance);
+
+        // when
+        int surcharge = SubwayFare.calculateDistanceFare(distance);
 
         // then
-        assertThat(fare).isEqualTo(1250);
+        assertThat(surcharge).isEqualTo(0);
     }
 
-    @DisplayName("이용 거리가 10km 초과 ~ 50km 이내인 경우 5km 마다 100원의 추가운임이 부과된다.")
+    @DisplayName("거리별 정책 - 이용 거리가 10km 초과 ~ 50km 이내인 경우 5km 마다 100원의 추가운임이 부과된다.")
     @Test
     void calculateOverFare_Over10_Upto50() {
+        // given
+        int distance = 16;
+
         // when
-        int fare = SubwayFare.calculateDistanceFare(16);
+        int surcharge = SubwayFare.calculateDistanceFare(distance);
 
         // then
-        assertThat(fare).isEqualTo(1450);
+        assertThat(surcharge).isEqualTo(200);
     }
 
-    @DisplayName("이용 거리가 50km 초과 시 8km마다 100원의 추가운임이 부과된다.")
+    @DisplayName("거리별 정책 - 이용 거리가 50km 초과 시 8km마다 100원의 추가운임이 부과된다.")
     @Test
     void calculateOverFare_Over50() {
+        // given
+        int distance = 58;
+
         // when
-        int fare = SubwayFare.calculateDistanceFare(58);
+        int surcharge = SubwayFare.calculateDistanceFare(58);
 
         // then
-        assertThat(fare).isEqualTo(2350);
+        assertThat(surcharge).isEqualTo(900);
     }
 
     @DisplayName("요금계산 시 거리가 0보다 작은 경우 에러가 발생한다")
     @Test
     void calculateDistanceFare_InvalidDistance_Exception() {
+        // given
+        int distance = -1;
+
         // when, then
-        assertThatThrownBy(() -> SubwayFare.calculateDistanceFare(-1))
+        assertThatThrownBy(() -> SubwayFare.calculateDistanceFare(distance))
                 .isInstanceOf(RuntimeException.class)
                 .message().isEqualTo("거리가 올바르지 않습니다.");
     }
 
-    @DisplayName("요금계산 시 추가요금이 있는 노선인 경우 추가요금을 반환한다")
+    @DisplayName("노선별 정책 - 요금계산 시 추가요금이 있는 노선인 경우 추가요금을 반환한다")
     @Test
     void calculateLineFare() {
         // given
@@ -75,7 +85,7 @@ public class SubwayFareTest {
         assertThat(lineSurcharge).isEqualTo(신분당선_추가요금);
     }
 
-    @DisplayName("요금계산 시 추가요금이 있는 노선이 여러개인 경우 가장 높은 금액의 추가요금을 반환한다")
+    @DisplayName("노선별 정책 - 요금계산 시 추가요금이 있는 노선이 여러개인 경우 가장 높은 금액의 추가요금을 반환한다")
     @Test
     void calculateLineFare_MaxSurcharge() {
         // given
@@ -94,7 +104,7 @@ public class SubwayFareTest {
         assertThat(lineSurcharge).isEqualTo(신분당선_추가요금);
     }
 
-    @DisplayName("요금계산 시 로그인 사용자의 연령이 청소년(13세 이상 ~ 19세 미만)인 경우 운임에서 350원을 공제한 금액의 20%를 할인한다")
+    @DisplayName("나이별 정책 - 요금계산 시 로그인 사용자의 연령이 청소년(13세 이상 ~ 19세 미만)인 경우 운임에서 350원을 공제한 금액의 20%를 할인한다")
     @Test
     void calculateAgeFare_Teenager() {
         // given
@@ -108,7 +118,7 @@ public class SubwayFareTest {
         assertThat(fare).isEqualTo(800);
     }
 
-    @DisplayName("요금계산 시 로그인 사용자의 연령이 어린이(6세 이상 ~ 13세 미만)인 경우 운임에서 350원을 공제한 금액의 50%를 할인한다")
+    @DisplayName("나이별 정책 - 요금계산 시 로그인 사용자의 연령이 어린이(6세 이상 ~ 13세 미만)인 경우 운임에서 350원을 공제한 금액의 50%를 할인한다")
     @Test
     void calculateAgeFare_Children() {
         // given
