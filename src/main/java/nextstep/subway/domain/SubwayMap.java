@@ -16,6 +16,7 @@ public class SubwayMap {
         this.pathType = pathType;
     }
 
+    @Deprecated
     public SubwayMap(List<Line> lines) {
         this(lines, PathType.DISTANCE);
     }
