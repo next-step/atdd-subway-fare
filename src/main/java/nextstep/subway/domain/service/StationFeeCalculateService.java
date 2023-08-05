@@ -11,11 +11,8 @@ public class StationFeeCalculateService {
     public static final BigDecimal baseFee = BigDecimal.valueOf(1250);
 
     public BigDecimal calculateFee(BigDecimal distance) {
-        final BigDecimal additionalFee = Arrays.stream(StationFeePolicyBySection.values())
+        return Arrays.stream(StationFeePolicyBySection.values())
                 .map(policy -> policy.calculateSectionFee(distance))
-                .reduce(BigDecimal::add)
-                .orElse(BigDecimal.ZERO);
-
-        return baseFee.add(additionalFee);
+                .reduce(baseFee, BigDecimal::add);
     }
 }
