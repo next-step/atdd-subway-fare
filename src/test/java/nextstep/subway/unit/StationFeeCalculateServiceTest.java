@@ -26,7 +26,7 @@ public class StationFeeCalculateServiceTest {
 
     @DisplayName("10KM<=..<=50KM 구간 요금 계산")
     @Test
-    void calculateFeeTest_MORE_THAN10KM_LESS_THAN_50KM() {
+    void calculateFeeTest_MORE_THAN_10KM_LESS_THAN_50KM() {
         //given
         final BigDecimal distance = BigDecimal.valueOf(24);
 

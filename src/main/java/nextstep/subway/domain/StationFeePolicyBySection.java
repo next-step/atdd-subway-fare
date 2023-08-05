@@ -25,8 +25,7 @@ public enum StationFeePolicyBySection {
         }
 
         final BigDecimal sectionFee = distance.subtract(boundaryDistance)
-                .subtract(BigDecimal.ONE)
-                .divide(feeIncreasedDistanceUnit, RoundingMode.DOWN)
+                .divide(feeIncreasedDistanceUnit, 0, RoundingMode.DOWN)
                 .add(BigDecimal.ONE)
                 .multiply(feePerDistanceUnit);
 
@@ -38,8 +37,8 @@ public enum StationFeePolicyBySection {
     private Optional<BigDecimal> calculateMaximumSectionFee() {
         return Optional.ofNullable(nextPolicy)
                 .map(StationFeePolicyBySection::getBoundaryDistance)
-                .map(nextSectionDistance -> nextSectionDistance.subtract(boundaryDistance))
-                .map(sectionDistance -> sectionDistance.divide(feeIncreasedDistanceUnit, RoundingMode.CEILING))
+                .map(nextSectionBoundaryDistance -> nextSectionBoundaryDistance.subtract(boundaryDistance))
+                .map(sectionDistance -> sectionDistance.divide(feeIncreasedDistanceUnit, 0, RoundingMode.DOWN))
                 .map(feePerDistanceUnit::multiply);
     }
 }

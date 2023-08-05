@@ -3,6 +3,7 @@ package nextstep.subway.service;
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.service.StationFeeCalculateService;
 import nextstep.subway.domain.service.StationPathAccumulateService;
 import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.subway.domain.service.StationShortestPathCalculateService;
@@ -24,6 +25,7 @@ public class StationPathService {
     private final StationRepository stationRepository;
     private final StationShortestPathCalculateService stationShortestPathCalculateService;
     private final StationPathAccumulateService stationPathAccumulateService;
+    private final StationFeeCalculateService stationFeeCalculateService;
 
     @Transactional(readOnly = true)
     public StationPathResponse searchStationPath(Long startStationId, Long destinationStationId, StationPathSearchRequestType type) {
@@ -40,6 +42,7 @@ public class StationPathService {
 
         final List<Long> pathStationIds = stationShortestPathCalculateService.getShortestPathStations(startStation, destinationStation, type);
         final BigDecimal distance = stationPathAccumulateService.accumulateTotalDistance(pathStationIds);
+        final BigDecimal fee = stationFeeCalculateService.calculateFee(distance);
         final Long duration = stationPathAccumulateService.accumulateTotalDuration(pathStationIds);
 
         return StationPathResponse.builder()
@@ -48,6 +51,7 @@ public class StationPathService {
                         .map(StationResponse::fromEntity)
                         .collect(Collectors.toList()))
                 .distance(distance)
+                .fee(fee)
                 .duration(duration)
                 .build();
     }
