@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
@@ -91,5 +92,33 @@ public class SubwayFareTest {
 
         // then
         assertThat(lineSurcharge).isEqualTo(신분당선_추가요금);
+    }
+
+    @DisplayName("요금계산 시 로그인 사용자의 연령이 청소년(13세 이상 ~ 19세 미만)인 경우 운임에서 350원을 공제한 금액의 20%를 할인한다")
+    @Test
+    void calculateAgeFare_Teenager() {
+        // given
+        Member member = new Member("email", "password", 15);
+        int totalFare = 1350;
+
+        // when
+        int fare = SubwayFare.calculateAgeFare(member, totalFare);
+
+        // then
+        assertThat(fare).isEqualTo(800);
+    }
+
+    @DisplayName("요금계산 시 로그인 사용자의 연령이 어린이(6세 이상 ~ 13세 미만)인 경우 운임에서 350원을 공제한 금액의 50%를 할인한다")
+    @Test
+    void calculateAgeFare_Children() {
+        // given
+        Member member = new Member("email", "password", 6);
+        int totalFare = 1350;
+
+        // when
+        int fare = SubwayFare.calculateAgeFare(member, totalFare);
+
+        // then
+        assertThat(fare).isEqualTo(500);
     }
 }

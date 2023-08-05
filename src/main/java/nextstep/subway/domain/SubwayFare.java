@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
+
 public class SubwayFare {
     private static final int BASIC_FARE = 1250;
     private static final int BASIC_DISTANCE = 10;
@@ -50,5 +52,18 @@ public class SubwayFare {
                 .map(Line::getSurcharge)
                 .reduce(Integer::max)
                 .orElse(0);
+    }
+
+    public static int calculateAgeFare(Member member, int fare) {
+        double discountRate = 0.0;
+        int deductionFee = 350;
+
+        if (member.getAge() >= 13 && member.getAge() < 19) {
+            discountRate = 0.2;
+        } else if (member.getAge() >= 6 && member.getAge() < 13) {
+            discountRate = 0.5;
+        }
+
+        return (int) ((fare - deductionFee) * (1 - discountRate));
     }
 }
