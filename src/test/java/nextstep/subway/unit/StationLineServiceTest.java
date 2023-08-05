@@ -49,11 +49,7 @@ public class StationLineServiceTest {
         final StationLine savedStationLine = stationLineRepository.save(line);
 
         //when
-        final StationLineSectionCreateRequest request = new StationLineSectionCreateRequest();
-        request.setUpStationId(savedBStation.getId());
-        request.setDownStationId(savedCStation.getId());
-        request.setDistance(BigDecimal.ONE);
-
+        var request = new StationLineSectionCreateRequest(savedBStation.getId(), savedCStation.getId(), BigDecimal.ONE, 1000L);
         Assertions.assertDoesNotThrow(() -> stationLineService.createStationLineSection(savedStationLine.getLineId(), request));
 
         //then
@@ -84,11 +80,7 @@ public class StationLineServiceTest {
 
         final StationLine savedStationLine = stationLineRepository.save(line);
 
-        final StationLineSectionCreateRequest request = new StationLineSectionCreateRequest();
-        request.setUpStationId(savedBStation.getId());
-        request.setDownStationId(savedCStation.getId());
-        request.setDistance(BigDecimal.ONE);
-
+        var request = new StationLineSectionCreateRequest(savedBStation.getId(), savedCStation.getId(), BigDecimal.ONE, 1000L);
         stationLineService.createStationLineSection(savedStationLine.getLineId(), request);
 
         //when

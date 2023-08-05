@@ -29,7 +29,7 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     Map<String, Long> stationIdByName;
 
     @BeforeEach
-    public void setUp2() {
+    public void setUpStationMap() {
         //given
         stationIdByName = createStationsAndGetStationMap(List.of("혜화", "동대문", "동대문역사문화공원", "종로3가", "종로5가", "동묘앞", "양산", "남양산"));
 

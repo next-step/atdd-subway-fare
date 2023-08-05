@@ -2,6 +2,7 @@ package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import nextstep.subway.service.dto.StationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -16,11 +17,10 @@ public class StationSteps {
     }
 
     public static Long createStation(String name) {
-        final Map<String, String> stationCreateRequest = new HashMap<>();
-        stationCreateRequest.put("name", name);
+        var request = new StationRequest(name);
 
         return RestAssured.given().log().all()
-                .body(stationCreateRequest)
+                .body(request)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .post("/stations")
                 .then().log().all()

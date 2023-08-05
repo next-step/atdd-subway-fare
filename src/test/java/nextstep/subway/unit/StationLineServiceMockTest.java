@@ -60,14 +60,11 @@ public class StationLineServiceMockTest {
 
         given(stationLineRepository.findById(line.getLineId())).willReturn(Optional.of(line));
 
-        //when & then
-        final StationLineSectionCreateRequest request = new StationLineSectionCreateRequest();
-        request.setUpStationId(bStation.getId());
-        request.setDownStationId(cStation.getId());
-        request.setDistance(BigDecimal.TEN);
-
+        //when
+        var request = new StationLineSectionCreateRequest(bStation.getId(), cStation.getId(), BigDecimal.TEN, 1000L);
         Assertions.assertDoesNotThrow(() -> stationLineService.createStationLineSection(line.getLineId(), request));
 
+        //then
         then(stationRepository).should(times(1))
                 .findById(bStation.getId());
         then(stationRepository).should(times(1))
@@ -101,11 +98,7 @@ public class StationLineServiceMockTest {
         createEntityTestIds(line.getSections(), 1L);
 
         //when & then
-        final StationLineSectionCreateRequest request = new StationLineSectionCreateRequest();
-        request.setUpStationId(bStation.getId());
-        request.setDownStationId(cStation.getId());
-        request.setDistance(BigDecimal.TEN);
-
+        var request = new StationLineSectionCreateRequest(bStation.getId(), cStation.getId(), BigDecimal.TEN, 1000L);
         Assertions.assertThrows(EntityNotFoundException.class,
                 () -> stationLineService.createStationLineSection(line.getLineId(), request));
 
