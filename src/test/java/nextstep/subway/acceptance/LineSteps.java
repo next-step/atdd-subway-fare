@@ -17,7 +17,7 @@ public class LineSteps {
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(RequestSpecification requestSpecification,
                                                              String name,
                                                              String color) {
-        Map<String, String> params = 노선_생성_요청값_생성(name, color);
+        Map<String, String> params = 노선_생성_요청값_생성(name, color, null, null, 0, 0);
 
         return requestSpecification
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -88,15 +88,10 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static Map<String, String> 노선_생성_요청값_생성(String name, String color) {
+    public static Map<String, String> 노선_생성_요청값_생성(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        return params;
-    }
-
-    public static Map<String, String> 노선_생성_요청값_생성(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = 노선_생성_요청값_생성(name, color);
         Map<String, String> sectionCreateParams = 구간_생성_요청값_생성(upStationId, downStationId, distance, duration);
         params.putAll(sectionCreateParams);
         return params;
