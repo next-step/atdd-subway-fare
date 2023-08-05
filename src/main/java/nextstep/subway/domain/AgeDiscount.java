@@ -29,7 +29,6 @@ public enum AgeDiscount {
     }
 
     public static boolean isDiscount(int age) {
-        return Arrays.stream(values())
-                .anyMatch(ageDiscount -> ageDiscount.ageRange.test(age));
+        return getByAge(age).discountRate > 0;
     }
 }
