@@ -1,0 +1,13 @@
+= 인증 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+=== 일반 로그인
+operation::auth-login[snippets='http-request,http-response']
+
+=== Github 로그인
+operation::auth-github-login[snippets='http-request,http-response']

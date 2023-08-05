@@ -3,12 +3,20 @@
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 2
+:toclevels: 3
 :sectlinks:
 
-[[path]]
-== 지하철 경로
+== 인증
+* link:auth.html[인증 API, window=_blank]
 
-=== 경로 조회
+== 회원
+* link:member.html[회원 API, window=_blank]
 
-operation::path[snippets='http-request,http-response']
+== 지하철
+* link:station.html[지하철 역 API, window=_blank]
+* link:line.html[지하철 노선 API, window=_blank]
+* link:section.html[지하철 구간 API, window=_blank]
+* link:path.html[지하철 경로 API, window=_blank]
+
+== 즐겨찾기
+* link:favorite.html[즐겨찾기 API, window=_blank]

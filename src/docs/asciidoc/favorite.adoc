@@ -1,0 +1,20 @@
+= 즐겨찾기 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 즐겨찾기 관리 API
+
+=== 즐겨찾기 생성
+operation::favorite-create[snippets='http-request,http-response']
+
+=== 즐겨찾기 삭제
+operation::favorite-delete[snippets='http-request,http-response']
+
+== 즐겨찾기 조회 API
+
+=== 즐겨찾기 전체 조회
+operation::favorite-show[snippets='http-request,http-response']

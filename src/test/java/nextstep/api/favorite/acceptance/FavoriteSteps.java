@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
 import nextstep.api.favorite.application.dto.FavoriteRequest;
 import nextstep.api.favorite.application.dto.FavoriteResponse;
 
@@ -16,13 +17,18 @@ public class FavoriteSteps {
 
     public static final String BASE_URL = "/favorites";
 
-    public static ValidatableResponse 즐겨찾기_생성을_요청한다(final String token, final Long source, final Long target) {
-        return RestAssured.given().log().all()
+    public static ValidatableResponse 즐겨찾기_생성을_요청한다(final String token, final Long source, final Long target,
+                                                    final RequestSpecification restAssured) {
+        return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer " + token)
                 .body(new FavoriteRequest(source, target))
                 .when().post(BASE_URL)
-                .then().log().all();
+                .then();
+    }
+
+    public static ValidatableResponse 즐겨찾기_생성을_요청한다(final String token, final Long source, final Long target) {
+        return 즐겨찾기_생성을_요청한다(token, source, target, RestAssured.given());
     }
 
     public static void 즐겨찾기_생성에_성공한다(final String token, final Long source, final Long target) {
@@ -31,11 +37,15 @@ public class FavoriteSteps {
         statusCodeShouldBe(response, HttpStatus.CREATED);
     }
 
-    public static ValidatableResponse 모든_즐겨찾기_조회를_요청한다(final String token) {
-        return RestAssured.given()
+    public static ValidatableResponse 모든_즐겨찾기_조회를_요청한다(final String token, final RequestSpecification restAssured) {
+        return restAssured
                 .header("Authorization", "Bearer " + token)
                 .when().get(BASE_URL)
                 .then();
+    }
+
+    public static ValidatableResponse 모든_즐겨찾기_조회를_요청한다(final String token) {
+        return 모든_즐겨찾기_조회를_요청한다(token, RestAssured.given());
     }
 
     public static List<FavoriteResponse> 모든_즐겨찾기_조회에_성공한다(final String token) {
@@ -46,6 +56,14 @@ public class FavoriteSteps {
         return response.extract()
                 .jsonPath()
                 .getList("", FavoriteResponse.class);
+    }
+
+    public static ValidatableResponse 즐겨찾기_제거를_요청한다(final String token, final Long id,
+                                                    final RequestSpecification restAssured) {
+        return restAssured
+                .header("Authorization", "Bearer " + token)
+                .when().delete(BASE_URL + "/" + id)
+                .then();
     }
 
     public static ValidatableResponse 즐겨찾기_제거를_요청한다(final String token, final Long id) {

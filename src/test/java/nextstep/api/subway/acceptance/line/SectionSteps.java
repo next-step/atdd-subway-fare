@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
 import nextstep.api.ExceptionResponse;
 import nextstep.api.subway.applicaion.line.dto.request.SectionRequest;
 import nextstep.api.subway.applicaion.line.dto.response.LineResponse;
@@ -14,6 +16,16 @@ import nextstep.api.subway.applicaion.line.dto.response.LineResponse;
 public class SectionSteps {
 
     public static final String BASE_URL = "/lines";
+
+    public static ValidatableResponse 지하철구간_등록_요청(
+            final Long lineId, final Long upStationId, final Long downStationId, final int distance,
+            final RequestSpecification restAssured) {
+        return restAssured
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new SectionRequest(upStationId, downStationId, distance))
+                .when().post(BASE_URL + "/" + lineId + "/sections")
+                .then();
+    }
 
     public static LineResponse 지하철구간을_등록한다(
             final Long lineId, final Long upStationId, final Long downStationId, final int distance) {
@@ -42,6 +54,14 @@ public class SectionSteps {
                 .then();
 
         return asExceptionResponse(response);
+    }
+
+    public static ValidatableResponse 지하철구간_제거_요청(final Long lineId, final Long stationId,
+                                                  final RequestSpecification restAssured) {
+        return restAssured
+                .param("stationId", stationId)
+                .when().delete(BASE_URL + "/" + lineId + "/sections")
+                .then();
     }
 
     public static void 지하철구간을_제거한다(final Long lineId, final Long stationId) {

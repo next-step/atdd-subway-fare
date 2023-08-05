@@ -8,15 +8,30 @@ import org.springframework.http.MediaType;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
 import nextstep.api.member.application.dto.MemberRequest;
 
 public class MemberSteps {
-    public static ExtractableResponse<Response> 회원_생성_요청(final String email, final String password, final Integer age) {
-        return RestAssured.given()
+
+    public static ValidatableResponse 회원_생성_요청(final String email, final String password, final Integer age,
+                                               final RequestSpecification restAssured) {
+        return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new MemberRequest(email, password, age))
                 .when().post("/members")
-                .then().extract();
+                .then();
+    }
+
+    public static ExtractableResponse<Response> 회원_생성_요청(final String email, final String password, final Integer age) {
+        return 회원_생성_요청(email, password, age, RestAssured.given()).extract();
+    }
+
+    public static ValidatableResponse 회원_정보_조회_요청(final Long id, final RequestSpecification restAssured) {
+        return restAssured
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/members/" + id)
+                .then();
     }
 
     public static ExtractableResponse<Response> 회원_정보_조회_요청(final ExtractableResponse<Response> response) {
@@ -28,12 +43,25 @@ public class MemberSteps {
                 .then().extract();
     }
 
-    public static ExtractableResponse<Response> 내_정보_조회_요청(final String token) {
-        return RestAssured.given()
+    public static ValidatableResponse 내_정보_조회_요청(final String token, final RequestSpecification restAssured) {
+        return restAssured
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/members/me")
-                .then().extract();
+                .then();
+    }
+
+    public static ExtractableResponse<Response> 내_정보_조회_요청(final String token) {
+        return 내_정보_조회_요청(token, RestAssured.given()).extract();
+    }
+
+    public static ValidatableResponse 회원_정보_수정_요청(final Long id, final String email, final String password,
+                                                  final Integer age, final RequestSpecification restAssured) {
+        return restAssured
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new MemberRequest(email, password, age))
+                .when().put("members/" + id)
+                .then();
     }
 
     public static ExtractableResponse<Response> 회원_정보_수정_요청(final ExtractableResponse<Response> response,
@@ -47,6 +75,12 @@ public class MemberSteps {
                 .body(new MemberRequest(email, password, age))
                 .when().put(uri)
                 .then().extract();
+    }
+
+    public static ValidatableResponse 회원_삭제_요청(final Long id, final RequestSpecification restAssured) {
+        return restAssured
+                .when().delete("members/" + id)
+                .then();
     }
 
     public static ExtractableResponse<Response> 회원_삭제_요청(final ExtractableResponse<Response> response) {
