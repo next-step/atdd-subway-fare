@@ -7,9 +7,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PathFareLineSurcharge {
+public class PathFareLineSurcharge extends PathFareChain{
 
-
+    @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
         List<Section> sections = calcInfo.getSearchedSections();
         List<Long> surcharges = sections.stream()
@@ -18,6 +18,7 @@ public class PathFareLineSurcharge {
                 .collect(Collectors.toList());
         long maxSurcharge = surcharges.get(0) + calcInfo.getFare();
 
-        return calcInfo.withUpdatedFare(maxSurcharge);
+        PathFareCalculationInfo calcInfoResponse = calcInfo.withUpdatedFare(maxSurcharge);
+        return super.nextCalculateFare(calcInfoResponse);
     }
 }

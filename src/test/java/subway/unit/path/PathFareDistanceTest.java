@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.acceptance.path.PathFixture;
 import subway.line.domain.Section;
+import subway.path.application.PathFareChain;
 import subway.path.application.PathFareDistance;
 import subway.path.application.dto.PathFareCalculationInfo;
 import subway.station.domain.Station;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class PathFareDistanceTest {
 
     private final static long BASE_FARE = 1250L;
-    private PathFareDistance pathFareDistance;
+    private PathFareChain pathFare;
     private List<Section> sections;
 
     /**
@@ -38,7 +39,8 @@ public class PathFareDistanceTest {
     @BeforeEach
     void beforeEach() {
         sections = PathFixture.단위_테스트_인스턴스_생성();
-        pathFareDistance = new PathFareDistance();
+        PathFareDistance pathFareDistance = new PathFareDistance();
+        pathFare = PathFareChain.chain(pathFareDistance);
     }
 
     /**
@@ -60,7 +62,7 @@ public class PathFareDistanceTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(1250L);
@@ -85,7 +87,7 @@ public class PathFareDistanceTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(1650L);
@@ -110,7 +112,7 @@ public class PathFareDistanceTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(2150L);
@@ -135,7 +137,7 @@ public class PathFareDistanceTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareDistance.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(1250L);

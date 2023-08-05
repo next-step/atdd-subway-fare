@@ -8,7 +8,7 @@ import subway.station.domain.Station;
 
 import java.util.List;
 
-public class PathFareDistance {
+public class PathFareDistance extends PathFareChain{
     private static final long FIRST_OVER_CHARGE_SECTION_BY_DISTANCE = 10L;
     private static final long FIRST_DIVISOR = 5L;
     private static final long SECOND_OVER_CHARGE_SECTION_BY_DISTANCE = 50L;
@@ -20,6 +20,7 @@ public class PathFareDistance {
         this.graph = new GraphBuilder(new ShortestDistancePathFinder());
     }
 
+    @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
         WeightedMultigraph<Station, SectionEdge> sectionGraph = graph.getGraph(calcInfo.getWholeSections());
         List<Section> sectionsInPath = graph.getPath(sectionGraph, calcInfo.getSourceStation(), calcInfo.getTargetStation());
@@ -28,7 +29,8 @@ public class PathFareDistance {
         Long distance = getTotalDistanceInPath(sectionsInPath);
 
         totalFare += calculateAdditionalFare(distance);
-        return calcInfo.withUpdatedFare(totalFare);
+        PathFareCalculationInfo calcInfoResponse = calcInfo.withUpdatedFare(totalFare);
+        return super.nextCalculateFare(calcInfoResponse);
     }
 
     private Long getTotalDistanceInPath(List<Section> sections) {

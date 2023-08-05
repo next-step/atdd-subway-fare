@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.member.domain.Member;
+import subway.path.application.PathFareChain;
 import subway.path.application.PathFareMemberAge;
 import subway.path.application.dto.PathFareCalculationInfo;
 
@@ -14,11 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PathFareMemberAgeTest {
 
     private final static long BASE_FARE = 2000;
-    private PathFareMemberAge pathFareMemberAge;
+    private PathFareChain pathFare;
 
     @BeforeEach
     void beforeEach() {
-        pathFareMemberAge = new PathFareMemberAge();
+        PathFareMemberAge pathFareMemberAge = new PathFareMemberAge();
+        pathFare = PathFareChain.chain(pathFareMemberAge);
     }
 
     /**
@@ -37,7 +39,7 @@ public class PathFareMemberAgeTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(BASE_FARE);
@@ -59,7 +61,7 @@ public class PathFareMemberAgeTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(825L);
@@ -81,7 +83,7 @@ public class PathFareMemberAgeTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(1320L);
@@ -104,7 +106,7 @@ public class PathFareMemberAgeTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareMemberAge.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(BASE_FARE);

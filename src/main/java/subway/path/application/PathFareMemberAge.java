@@ -3,8 +3,9 @@ package subway.path.application;
 import subway.member.domain.Member;
 import subway.path.application.dto.PathFareCalculationInfo;
 
-public class PathFareMemberAge {
+public class PathFareMemberAge extends PathFareChain{
 
+    @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
         if (calcInfo.getMember() == null) {
             return calcInfo;
@@ -14,8 +15,10 @@ public class PathFareMemberAge {
         long memberAge = targetMember.getAge();
         double discountRate = getDiscountRateByAge(memberAge);
 
-        long fare = calculateDiscountedFare(calcInfo.getFare(), discountRate);
-        return calcInfo.withUpdatedFare(fare);
+        long memberDiscountFare = calculateDiscountedFare(calcInfo.getFare(), discountRate);
+
+        PathFareCalculationInfo calcInfoResponse = calcInfo.withUpdatedFare(memberDiscountFare);
+        return super.nextCalculateFare(calcInfoResponse);
     }
 
     private double getDiscountRateByAge(long age) {

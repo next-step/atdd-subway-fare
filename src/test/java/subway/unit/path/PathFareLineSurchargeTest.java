@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.path.application.PathFareChain;
 import subway.path.application.PathFareLineSurcharge;
 import subway.path.application.dto.PathFareCalculationInfo;
 import subway.station.domain.Station;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("PathFareLineSurcharge (노선 기본 운임 계산) 단위 테스트")
 public class PathFareLineSurchargeTest {
     private final static long BASE_FARE = 1250L;
-    private PathFareLineSurcharge pathFareLineSurchargea;
+    private PathFareChain pathFare;
 
     /**
      * 2호선 : 100
@@ -50,7 +51,7 @@ public class PathFareLineSurchargeTest {
          * </pre>
          */
 
-//        Station 강남역 = Station.builder().id(1L).name("강남역").build();
+//        Station 강남역 = Station.builder().id(1L).name("강남역").build(); // TODO : 이거 지워야됨.
 //        Station 교대역 = Station.builder().id(2L).name("교대역").build();
 //        Station 남부터미널역 = Station.builder().id(3L).name("남부터미널역").build();
 //        Station 양재역 = Station.builder().id(4L).name("양재역").build();
@@ -83,7 +84,8 @@ public class PathFareLineSurchargeTest {
 //        A호선.addSection(왕십리_강변_구간);
 //        A호선.addSection(강변_잠실_구간);
 
-        pathFareLineSurchargea = new PathFareLineSurcharge();
+        PathFareLineSurcharge pathFareLineSurcharge = new PathFareLineSurcharge();
+        pathFare = PathFareChain.chain(pathFareLineSurcharge);
     }
 
     /**
@@ -109,7 +111,7 @@ public class PathFareLineSurchargeTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareLineSurchargea.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(BASE_FARE);
@@ -142,7 +144,7 @@ public class PathFareLineSurchargeTest {
                 .build();
 
         // when
-        PathFareCalculationInfo calcInfoResponse = pathFareLineSurchargea.calculateFare(calcInfo);
+        PathFareCalculationInfo calcInfoResponse = pathFare.calculateFare(calcInfo);
 
         // then
         assertThat(calcInfoResponse.getFare()).isEqualTo(BASE_FARE + 신분당선_기본요금);
