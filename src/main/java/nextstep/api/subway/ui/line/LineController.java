@@ -35,31 +35,23 @@ public class LineController {
 
     @GetMapping
     public ResponseEntity<List<LineResponse>> showLines() {
-        return ResponseEntity
-                .ok()
-                .body(lineService.findAllLines());
+        return ResponseEntity.ok().body(lineService.findAllLines());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LineResponse> findLine(@PathVariable final Long id) {
-        return ResponseEntity
-                .ok()
-                .body(lineService.findLine(id));
+        return ResponseEntity.ok().body(lineService.findLine(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateLine(@PathVariable final Long id, @RequestBody final LineUpdateRequest request) {
         lineService.updateLine(id, request);
-        return ResponseEntity
-                .ok()
-                .build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLine(@PathVariable final Long id) {
         lineService.deleteLine(id);
-        return ResponseEntity
-                .noContent()
-                .build();
+        return ResponseEntity.noContent().build();
     }
 }

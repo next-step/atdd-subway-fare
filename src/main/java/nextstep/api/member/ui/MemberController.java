@@ -24,28 +24,30 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/members")
-    public ResponseEntity<Void> createMember(@RequestBody final MemberRequest request) {
+    public ResponseEntity<MemberResponse> createMember(@RequestBody final MemberRequest request) {
         final var response = memberService.createMember(request);
-        return ResponseEntity.created(URI.create("/members/" + response.getId())).build();
+        return ResponseEntity
+                .created(URI.create("/members/" + response.getId()))
+                .body(response);
+    }
+
+    @PutMapping("/members/{id}")
+    public ResponseEntity<Void> updateMember(@PathVariable final Long id,
+                                             @RequestBody final MemberRequest param) {
+        memberService.updateMember(id, param);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/members/{id}")
+    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/members/{id}")
     public ResponseEntity<MemberResponse> findMember(@PathVariable final Long id) {
         final var response = memberService.findMember(id);
         return ResponseEntity.ok().body(response);
-    }
-
-    @PutMapping("/members/{id}")
-    public ResponseEntity<MemberResponse> updateMember(@PathVariable final Long id,
-                                                       @RequestBody final MemberRequest param) {
-        memberService.updateMember(id, param);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/members/{id}")
-    public ResponseEntity<MemberResponse> deleteMember(@PathVariable Long id) {
-        memberService.deleteMember(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/members/me")

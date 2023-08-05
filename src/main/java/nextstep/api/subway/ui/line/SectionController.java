@@ -24,16 +24,12 @@ public class SectionController {
     public ResponseEntity<LineResponse> appendSection(@PathVariable final Long lineId,
                                                       @RequestBody final SectionRequest request) {
         final var response = lineService.appendSection(lineId, request);
-        return ResponseEntity
-                .ok()
-                .body(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> removeSection(@PathVariable final Long lineId, @RequestParam final Long stationId) {
         lineService.removeSection(lineId, stationId);
-        return ResponseEntity
-                .noContent()
-                .build();
+        return ResponseEntity.noContent().build();
     }
 }
