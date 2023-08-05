@@ -8,6 +8,8 @@ public class SubwayFare {
     private static final int CHARGE_DISTANCE_FIVE = 5;
     private static final int CHARGE_DISTANCE_EIGHT = 8;
     private static final int ADDITIONAL_CHARGE_RATE = 100;
+    private static final int DISTANCE_FIFTY = 50;
+    private static final int DEDUCTION_FEE = 350;
 
     private SubwayFare() {
     }
@@ -21,13 +23,14 @@ public class SubwayFare {
 
         int fare = 0;
 
-        if (distance > BASIC_DISTANCE && distance <= 50) {
+        if (distance > BASIC_DISTANCE && distance <= DISTANCE_FIFTY) {
             fare += calculateOverFare(distance - BASIC_DISTANCE, CHARGE_DISTANCE_FIVE);
         }
 
-        if (distance > 50) {
-            fare += (calculateOverFare(distance - BASIC_DISTANCE - (distance - 50), CHARGE_DISTANCE_FIVE) +
-                    calculateOverFare(distance - 50, CHARGE_DISTANCE_EIGHT));
+        if (distance > DISTANCE_FIFTY) {
+            int distanceOverFifty = distance - DISTANCE_FIFTY;
+            fare += calculateOverFare(distance - BASIC_DISTANCE - distanceOverFifty, CHARGE_DISTANCE_FIVE);
+            fare += calculateOverFare(distanceOverFifty, CHARGE_DISTANCE_EIGHT);
         }
 
         return fare;
@@ -58,19 +61,15 @@ public class SubwayFare {
     }
 
     public static int calculateAgeFare(Member member, int fare) {
-        double discountRate = 0.0;
-        int deductionFee = 350;
         int resultAmount = fare;
+        double discountAmount = 0;
 
-        if (member.getAge() >= 13 && member.getAge() < 19) {
-            resultAmount -= deductionFee;
-            discountRate = 0.2;
-        } else if (member.getAge() >= 6 && member.getAge() < 13) {
-            resultAmount -= deductionFee;
-            discountRate = 0.5;
+        if (AgeDiscount.isDiscount(member.getAge())) {
+            resultAmount -= DEDUCTION_FEE;
+            AgeDiscount ageDiscount = AgeDiscount.getByAge(member.getAge());
+            discountAmount = resultAmount * ageDiscount.getDiscountRate();
         }
 
-        double discountAmount = resultAmount * discountRate;
         return (int) (resultAmount - discountAmount);
     }
 }

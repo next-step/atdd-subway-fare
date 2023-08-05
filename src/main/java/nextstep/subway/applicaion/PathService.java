@@ -32,15 +32,11 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         Path path = subwayMap.findPath(upStation, downStation, request.getType());
-        Path shortestDistancePath;
+        Path shortestDistancePath = (request.getType() == PathType.DISTANCE) ? new Path(path.getSections())
+                : subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
 
-        if (request.getType() == PathType.DISTANCE) {
-            shortestDistancePath = new Path(path.getSections());
-        } else {
-            shortestDistancePath = subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
-        }
-
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberRepository
+                .findByEmail(email)
                 .orElseGet(() -> new Member(email, "", 0));
 
         return PathResponse.of(path, shortestDistancePath, member);
