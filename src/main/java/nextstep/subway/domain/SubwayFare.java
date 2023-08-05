@@ -39,11 +39,11 @@ public class SubwayFare {
         }
     }
 
-    public static int calculateFare(Path path) {
+    public static int calculateFare(Path path, Member member) {
         int distanceFare = calculateDistanceFare(path.extractDistance());
         int lineSurcharge = calculateLineFare(path.getSections());
 
-        return distanceFare + lineSurcharge;
+        return calculateAgeFare(member, distanceFare + lineSurcharge);
     }
 
     public static int calculateLineFare(Sections sections) {
@@ -57,13 +57,17 @@ public class SubwayFare {
     public static int calculateAgeFare(Member member, int fare) {
         double discountRate = 0.0;
         int deductionFee = 350;
+        int resultAmount = fare;
 
         if (member.getAge() >= 13 && member.getAge() < 19) {
+            resultAmount -= deductionFee;
             discountRate = 0.2;
         } else if (member.getAge() >= 6 && member.getAge() < 13) {
+            resultAmount -= deductionFee;
             discountRate = 0.5;
         }
 
-        return (int) ((fare - deductionFee) * (1 - discountRate));
+        double discountAmount = resultAmount * discountRate;
+        return (int) (resultAmount - discountAmount);
     }
 }

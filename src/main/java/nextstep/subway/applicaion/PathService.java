@@ -1,5 +1,7 @@
 package nextstep.subway.applicaion;
 
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -14,13 +16,15 @@ import java.util.List;
 public class PathService {
     private LineService lineService;
     private StationService stationService;
+    private MemberRepository memberRepository;
 
-    public PathService(LineService lineService, StationService stationService) {
+    public PathService(LineService lineService, StationService stationService, MemberRepository memberRepository) {
         this.lineService = lineService;
         this.stationService = stationService;
+        this.memberRepository = memberRepository;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, String email) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
@@ -35,6 +39,9 @@ public class PathService {
             shortestDistancePath = subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
         }
 
-        return PathResponse.of(path, shortestDistancePath);
+        Member member = memberRepository.findByEmail(email)
+                .orElseGet(() -> new Member(email, "", 0));
+
+        return PathResponse.of(path, shortestDistancePath, member);
     }
 }
