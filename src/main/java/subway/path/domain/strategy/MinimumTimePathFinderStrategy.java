@@ -1,15 +1,14 @@
-package subway.path.application.path;
-
+package subway.path.domain.strategy;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
-import subway.path.domain.SectionEdge;
+import subway.path.domain.graph.SectionEdge;
 import subway.station.domain.Station;
 
-public class ShortestDistancePathFinder implements PathFinderStrategy {
+public class MinimumTimePathFinderStrategy implements PathFinderStrategy {
 
     @Override
     public void setEdgeWeight(WeightedMultigraph<Station, SectionEdge> graph, Section section, SectionEdge edge) {
-        graph.setEdgeWeight(edge, section.getDistance());
+        graph.setEdgeWeight(edge, section.getDuration());
     }
 }

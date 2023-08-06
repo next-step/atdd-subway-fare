@@ -1,11 +1,11 @@
-package subway.path.application.fare;
+package subway.path.domain.handler;
 
 import subway.line.domain.Section;
 import subway.path.application.dto.PathFareCalculationInfo;
 
 import java.util.List;
 
-public class DistancePathFare extends PathFareChain {
+public class DistancePathFareHandler extends PathFareChain {
     private static final long FIRST_OVER_CHARGE_SECTION_BY_DISTANCE = 10L;
     private static final long FIRST_DIVISOR = 5L;
     private static final long SECOND_OVER_CHARGE_SECTION_BY_DISTANCE = 50L;

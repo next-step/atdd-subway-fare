@@ -5,22 +5,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.member.domain.Member;
 import subway.path.application.dto.PathFareCalculationInfo;
-import subway.path.application.fare.MemberAgePathFare;
-import subway.path.application.fare.PathFareChain;
+import subway.path.domain.handler.MemberAgePathFareHandler;
+import subway.path.domain.handler.PathFareChain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathFareMemberAge (회원 운임 할인) 단위 테스트")
-public class MemberAgePathFareTest {
+public class MemberAgePathFareHandlerTest {
 
     private final static long BASE_FARE = 2000;
     private PathFareChain pathFare;
 
     @BeforeEach
     void beforeEach() {
-        MemberAgePathFare memberAgePathFare = new MemberAgePathFare();
-        pathFare = PathFareChain.chain(memberAgePathFare);
+        MemberAgePathFareHandler memberAgePathFareHandler = new MemberAgePathFareHandler();
+        pathFare = PathFareChain.chain(memberAgePathFareHandler);
     }
 
     /**

@@ -1,8 +1,8 @@
-package subway.path.application.path;
+package subway.path.domain.strategy;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
-import subway.path.domain.SectionEdge;
+import subway.path.domain.graph.SectionEdge;
 import subway.station.domain.Station;
 
 public interface PathFinderStrategy {

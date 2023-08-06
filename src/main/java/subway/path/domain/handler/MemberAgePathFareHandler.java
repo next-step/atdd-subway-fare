@@ -1,9 +1,8 @@
-package subway.path.application.fare;
+package subway.path.domain.handler;
 
-import subway.member.domain.Member;
 import subway.path.application.dto.PathFareCalculationInfo;
 
-public class MemberAgePathFare extends PathFareChain {
+public class MemberAgePathFareHandler extends PathFareChain {
 
     @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {

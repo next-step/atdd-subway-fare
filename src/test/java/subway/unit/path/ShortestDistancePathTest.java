@@ -7,8 +7,8 @@ import subway.acceptance.station.StationFixture;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.application.path.PathFinder;
-import subway.path.application.path.ShortestDistancePathFinder;
+import subway.path.domain.PathFinder;
+import subway.path.domain.strategy.ShortestDistancePathFinderStrategy;
 import subway.path.application.dto.PathFinderRequest;
 import subway.path.domain.Path;
 import subway.station.domain.Station;
@@ -46,7 +46,7 @@ public class ShortestDistancePathTest {
 
     @BeforeEach
     void beforeEach() {
-        ShortestDistancePathFinder shortestDistancePathStrategy = new ShortestDistancePathFinder();
+        ShortestDistancePathFinderStrategy shortestDistancePathStrategy = new ShortestDistancePathFinderStrategy();
         shortestDistancePathFinder = new PathFinder(shortestDistancePathStrategy);
 
         StationFixture.기본_역_생성();

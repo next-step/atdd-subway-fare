@@ -1,19 +1,19 @@
-package subway.path.application.fare;
+package subway.path.domain.handler;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathFareCalculationInfo;
-import subway.path.application.graph.GraphBuilder;
-import subway.path.application.path.ShortestDistancePathFinder;
-import subway.path.domain.SectionEdge;
+import subway.path.domain.graph.GraphBuilder;
+import subway.path.domain.strategy.ShortestDistancePathFinderStrategy;
+import subway.path.domain.graph.SectionEdge;
 import subway.station.domain.Station;
 
 import java.util.List;
 
-public class GraphPathFare extends PathFareChain {
+public class GraphPathFareHandler extends PathFareChain {
     private final GraphBuilder graph;
-    public GraphPathFare() {
-        this.graph = new GraphBuilder(new ShortestDistancePathFinder());
+    public GraphPathFareHandler() {
+        this.graph = new GraphBuilder(new ShortestDistancePathFinderStrategy());
     }
     @Override
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {

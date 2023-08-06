@@ -7,8 +7,8 @@ import subway.acceptance.station.StationFixture;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.application.path.MinimumTimePathFinder;
-import subway.path.application.path.PathFinder;
+import subway.path.domain.strategy.MinimumTimePathFinderStrategy;
+import subway.path.domain.PathFinder;
 import subway.path.application.dto.PathFinderRequest;
 import subway.path.domain.Path;
 import subway.station.domain.Station;
@@ -22,7 +22,7 @@ import static subway.acceptance.station.StationFixture.getStation;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("MinimumTimePathFinder 단위 테스트")
-public class MinimumTimePathFinderTest {
+public class MinimumTimePathFinderStrategyTest {
     private PathFinder minimumTimePathFinder;
     private Line 이호선;
     private Line 삼호선;
@@ -46,7 +46,7 @@ public class MinimumTimePathFinderTest {
 
     @BeforeEach
     void beforeEach() {
-        MinimumTimePathFinder minimumTimePathStrategy = new MinimumTimePathFinder();
+        MinimumTimePathFinderStrategy minimumTimePathStrategy = new MinimumTimePathFinderStrategy();
         minimumTimePathFinder = new PathFinder(minimumTimePathStrategy);
 
         StationFixture.기본_역_생성();

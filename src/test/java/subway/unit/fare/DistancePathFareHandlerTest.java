@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.acceptance.path.PathFixture;
 import subway.line.domain.Section;
-import subway.path.application.fare.GraphPathFare;
-import subway.path.application.fare.PathFareChain;
-import subway.path.application.fare.DistancePathFare;
+import subway.path.domain.handler.GraphPathFareHandler;
+import subway.path.domain.handler.PathFareChain;
+import subway.path.domain.handler.DistancePathFareHandler;
 import subway.path.application.dto.PathFareCalculationInfo;
 import subway.station.domain.Station;
 
@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathFareDistanceTest (경로 총 거리 운임 계산) 단위 테스트")
-public class DistancePathFareTest {
+public class DistancePathFareHandlerTest {
 
     private final static long BASE_FARE = 1250L;
     private PathFareChain pathFare;
@@ -40,9 +40,9 @@ public class DistancePathFareTest {
     @BeforeEach
     void beforeEach() {
         sections = PathFixture.단위_테스트_인스턴스_생성();
-        GraphPathFare graphPathFare = new GraphPathFare();
-        DistancePathFare distancePathFare = new DistancePathFare();
-        pathFare = PathFareChain.chain(graphPathFare, distancePathFare);
+        GraphPathFareHandler graphPathFareHandler = new GraphPathFareHandler();
+        DistancePathFareHandler distancePathFareHandler = new DistancePathFareHandler();
+        pathFare = PathFareChain.chain(graphPathFareHandler, distancePathFareHandler);
     }
 
     /**

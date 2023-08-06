@@ -1,4 +1,4 @@
-package subway.path.application.path;
+package subway.path.domain;
 
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.constant.SubwayMessage;
@@ -6,10 +6,9 @@ import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathFareCalculationInfo;
 import subway.path.application.dto.PathFinderRequest;
-import subway.path.application.fare.PathFare;
-import subway.path.application.graph.GraphBuilder;
-import subway.path.domain.Path;
-import subway.path.domain.SectionEdge;
+import subway.path.domain.graph.GraphBuilder;
+import subway.path.domain.graph.SectionEdge;
+import subway.path.domain.strategy.PathFinderStrategy;
 import subway.station.domain.Station;
 
 import java.util.List;

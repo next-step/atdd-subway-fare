@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.path.application.dto.PathFareCalculationInfo;
-import subway.path.application.fare.GraphPathFare;
-import subway.path.application.fare.LineSurchargePathFare;
-import subway.path.application.fare.PathFareChain;
+import subway.path.domain.handler.GraphPathFareHandler;
+import subway.path.domain.handler.LineSurchargePathFareHandler;
+import subway.path.domain.handler.PathFareChain;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathFareLineSurcharge (노선 기본 운임 계산) 단위 테스트")
-public class LineSurchargePathFareTest {
+public class LineSurchargePathFareHandlerTest {
     private final static long BASE_FARE = 1250L;
     private PathFareChain pathFare;
 
@@ -52,9 +52,9 @@ public class LineSurchargePathFareTest {
          * </pre>
          */
 
-        GraphPathFare graphPathFare = new GraphPathFare();
-        LineSurchargePathFare lineSurchargePathFare = new LineSurchargePathFare();
-        pathFare = PathFareChain.chain(graphPathFare, lineSurchargePathFare);
+        GraphPathFareHandler graphPathFareHandler = new GraphPathFareHandler();
+        LineSurchargePathFareHandler lineSurchargePathFareHandler = new LineSurchargePathFareHandler();
+        pathFare = PathFareChain.chain(graphPathFareHandler, lineSurchargePathFareHandler);
     }
 
     /**
