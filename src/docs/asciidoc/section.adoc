@@ -1,0 +1,13 @@
+= 지하철 구간 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+=== 구간 등록
+operation::section-create[snippets='http-request,http-response']
+
+=== 구간 삭제
+operation::section-delete[snippets='http-request,http-response']

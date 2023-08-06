@@ -1,0 +1,26 @@
+= 지하철 노선 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 노선 관리 API
+
+=== 노선 생성
+operation::line-create[snippets='http-request,http-response']
+
+=== 노선 수정
+operation::line-update[snippets='http-request,http-response']
+
+=== 노선 삭제
+operation::line-delete[snippets='http-request,http-response']
+
+== 노선 조회 API
+
+=== 노선 전체 조회
+operation::line-show[snippets='http-request,http-response']
+
+=== 노선 단일 조회
+operation::line-find[snippets='http-request,http-response']

@@ -1,0 +1,22 @@
+= 인증 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+=== 회원가입
+operation::member-create[snippets='http-request,http-response']
+
+=== 회원정보 수정
+operation::member-update[snippets='http-request,http-response']
+
+=== 회원탈퇴
+operation::member-delete[snippets='http-request,http-response']
+
+=== 내 정보 조회
+operation::member-find-me[snippets='http-request,http-response']
+
+=== 회원정보 조회
+operation::member-find[snippets='http-request,http-response']
