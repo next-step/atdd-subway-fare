@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.constant.FindPathType;
 import org.springframework.http.MediaType;
 
 public class PathSteps {
@@ -24,9 +25,9 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, RequestSpecification requestSpecification) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, RequestSpecification requestSpecification, String type) {
         return requestSpecification
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all()
                 .extract();
     }
