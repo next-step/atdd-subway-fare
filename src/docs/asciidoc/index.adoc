@@ -19,3 +19,15 @@ operation::path[snippets='request-parameters']
 === Response
 operation::path[snippets='response-fields']
 
+
+[[line]]
+== 지하철 노선
+
+=== 노선 생성
+
+operation::line[snippets='http-request,http-response']
+
+=== Request
+operation::line[snippets='request-fields']
+
+
