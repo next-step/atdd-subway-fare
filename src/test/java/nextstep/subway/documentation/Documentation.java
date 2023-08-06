@@ -9,8 +9,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 @ActiveProfiles("test")
@@ -28,6 +35,20 @@ public class Documentation {
 
         this.spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation))
+                .addFilter(document("path",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("source").description("출발역 ID"),
+                                parameterWithName("target").description("도착역 ID"),
+                                parameterWithName("type").description("경로 조회 방식(DISTANCE: 최단 경로)")
+                        ),
+                        responseFields(
+                                fieldWithPath("stations.[].id").description("역 ID"),
+                                fieldWithPath("stations.[].name").description("역 이름"),
+                                fieldWithPath("distance").description("지나가는 거리 합")
+                        )
+                ))
                 .build();
     }
 }
