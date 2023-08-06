@@ -12,13 +12,6 @@ public class PathResponse {
 
     private int fare;
 
-    @Deprecated
-    public PathResponse(List<StationResponse> stations, int distance, int duration) {
-        this.stations = stations;
-        this.distance = distance;
-        this.duration = duration;
-    }
-
     public PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {
         this.stations = stations;
         this.distance = distance;

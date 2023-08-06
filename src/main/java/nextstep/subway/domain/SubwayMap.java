@@ -16,11 +16,6 @@ public class SubwayMap {
         this.pathType = pathType;
     }
 
-    @Deprecated
-    public SubwayMap(List<Line> lines) {
-        this(lines, PathType.DISTANCE);
-    }
-
     public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
