@@ -35,7 +35,7 @@ public class MemberAgePathFareTest {
         final Member 비회원 = null;
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .member(비회원)
+                .memberAge(0L)
                 .build();
 
         // when
@@ -57,7 +57,7 @@ public class MemberAgePathFareTest {
         final Member 어린이 = Member.builder().age(7).build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .member(어린이)
+                .memberAge(어린이.getAge())
                 .build();
 
         // when
@@ -79,7 +79,7 @@ public class MemberAgePathFareTest {
         final Member 청소년 = Member.builder().age(17).build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .member(청소년)
+                .memberAge(청소년.getAge())
                 .build();
 
         // when
@@ -102,7 +102,7 @@ public class MemberAgePathFareTest {
         final Member 그외_회원 = Member.builder().age(23).build();
         PathFareCalculationInfo calcInfo = PathFareCalculationInfo.builder()
                 .fare(BASE_FARE)
-                .member(그외_회원)
+                .memberAge(그외_회원.getAge())
                 .build();
 
         // when

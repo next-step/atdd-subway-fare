@@ -43,14 +43,14 @@ public class PathService {
     }
 
     public PathRetrieveResponse getPath(PathRetrieveRequest request) {
-        Member member = getMemberFromPrincipal(request.getPrincipal());
-        return getPath(request.getSource(), request.getTarget(), request.getType(), member);
+        long memberAge = getMemberFromPrincipal(request.getPrincipal());
+        return getPath(request.getSource(), request.getTarget(), request.getType(), memberAge);
     }
 
     private PathRetrieveResponse getPath(long sourceStationId,
                                          long targetStationId,
                                          PathRetrieveType type,
-                                         Member member) {
+                                         long memberAge) {
         Station sourceStation = stationService.findStationById(sourceStationId);
         Station targetStation = stationService.findStationById(targetStationId);
         List<Line> lines = lineService.findByStation(sourceStation, targetStation);
@@ -58,8 +58,7 @@ public class PathService {
 
         PathFinder pathFinder = PathFinderFactory.createFinder(type);
         PathFinderRequest pathFinderRequest = PathFinderRequest.builder()
-//                .memberAge(member.getAge())
-                .member(member) // TODO
+                .memberAge(memberAge)
                 .sourceStation(sourceStation)
                 .targetStation(targetStation)
                 .sections(sections)
@@ -80,10 +79,11 @@ public class PathService {
                 .collect(Collectors.toList());
     }
 
-    private Member getMemberFromPrincipal(UserPrincipal principal) {
+    private long getMemberFromPrincipal(UserPrincipal principal) {
         if (principal != null) {
-            return memberService.getMember(principal);
+            Member member = memberService.getMember(principal);
+            return member.getAge();
         }
-        return null;
+        return 0;
     }
 }

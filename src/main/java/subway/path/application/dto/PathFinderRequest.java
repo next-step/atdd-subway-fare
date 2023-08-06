@@ -14,6 +14,5 @@ public class PathFinderRequest {
     private List<Section> sections;
     private Station sourceStation;
     private Station targetStation;
-    private Member member; // TODO 비교 후 제거
-//    private long memberAge;
+    private long memberAge;
 }

@@ -16,7 +16,6 @@ public class PathFareCalculationInfo {
     private Station sourceStation;
     private Station targetStation;
     private List<Section> sections;
-    private Member member; // TODO : 비교 후 제거
     private long memberAge;
 
 
@@ -26,8 +25,7 @@ public class PathFareCalculationInfo {
                 .sourceStation(request.getSourceStation())
                 .targetStation(request.getTargetStation())
                 .sections(request.getSections())
-                .member(request.getMember()) // TODO
-//                .memberAge(request.getMemberAge())
+                .memberAge(request.getMemberAge())
                 .build();
     }
 
@@ -37,8 +35,7 @@ public class PathFareCalculationInfo {
                 .sourceStation(this.sourceStation)
                 .targetStation(this.targetStation)
                 .sections(this.sections)
-                .member(this.member) // TODO
-//                .memberAge(this.memberAge)
+                .memberAge(this.memberAge)
                 .build();
     }
 
@@ -48,8 +45,7 @@ public class PathFareCalculationInfo {
                 .sourceStation(this.sourceStation)
                 .targetStation(this.targetStation)
                 .sections(sections)
-                .member(this.member) // TODO
-//                .memberAge(this.memberAge)
+                .memberAge(this.memberAge)
                 .build();
     }
 }
