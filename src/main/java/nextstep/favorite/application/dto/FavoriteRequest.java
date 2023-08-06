@@ -1,8 +1,11 @@
 package nextstep.favorite.application.dto;
 
+import nextstep.subway.constant.FindPathType;
+
 public class FavoriteRequest {
     private Long source;
     private Long target;
+    private FindPathType type;
 
     public FavoriteRequest() {
     }
@@ -18,5 +21,9 @@ public class FavoriteRequest {
 
     public Long getTarget() {
         return target;
+    }
+
+    public FindPathType getType() {
+        return type;
     }
 }
