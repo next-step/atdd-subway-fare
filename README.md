@@ -41,8 +41,8 @@ git rebase upstream/songteaheon
 
 ## 2단계
 - [ ] 1단계 리뷰 반영
-  - [ ] SubwayMapTest 수정
-  - [ ] PathAcceptanceTest 수정
+  - [ ] SubwayMapTest 수정 - 질문하기 ParameterizedTest
+  - [X] PathAcceptanceTest 수정
 - [ ] 경로 조회 결과에 요금 정보를 포함하세요.
   - [ ] 경로 조회 시, 계산된 금액도 포함하도록 수정한다.
   - [ ] 실제 경로가 아닌 최단거리 기준으로 금액을 계산한다.
