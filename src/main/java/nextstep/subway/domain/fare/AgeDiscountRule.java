@@ -1,6 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import nextstep.member.domain.Member;
+import nextstep.subway.domain.Path;
 import org.springframework.util.ObjectUtils;
 
 public class AgeDiscountRule implements FareCalculationRule {
@@ -13,13 +14,13 @@ public class AgeDiscountRule implements FareCalculationRule {
     }
 
     @Override
-    public int calculateFare(Path path, Member member, int fare) {
-        int discountedAmount = calculateDiscountedAmount(member.getAge(), fare);
+    public int calculateFare(Path path, int age, int fare) {
+        int discountedAmount = calculateDiscountedAmount(age, fare);
 
         if (ObjectUtils.isEmpty(nextRule)) {
             return discountedAmount;
         } else {
-            return nextRule.calculateFare(path, member, discountedAmount);
+            return nextRule.calculateFare(path, age, discountedAmount);
         }
     }
 

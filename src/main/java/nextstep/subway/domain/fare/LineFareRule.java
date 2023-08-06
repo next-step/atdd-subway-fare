@@ -1,6 +1,9 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
-import nextstep.member.domain.Member;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.Section;
+import nextstep.subway.domain.Sections;
 import org.springframework.util.ObjectUtils;
 
 public class LineFareRule implements FareCalculationRule {
@@ -11,14 +14,14 @@ public class LineFareRule implements FareCalculationRule {
     }
 
     @Override
-    public int calculateFare(Path path, Member member, int fare) {
+    public int calculateFare(Path path, int age, int fare) {
         int surcharge = calculateFare(path.getSections());
         fare += surcharge;
 
         if (ObjectUtils.isEmpty(nextRule)) {
             return fare;
         } else {
-            return nextRule.calculateFare(path, member, fare);
+            return nextRule.calculateFare(path, age, fare);
         }
     }
 

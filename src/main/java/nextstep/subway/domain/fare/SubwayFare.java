@@ -1,6 +1,7 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import nextstep.member.domain.Member;
+import nextstep.subway.domain.Path;
 
 public class SubwayFare {
     private static final int BASIC_FARE = 1250;
@@ -21,6 +22,6 @@ public class SubwayFare {
 
     public static int calculateFare(Path path, Member member) {
         FareCalculationRule fareCalculationChain = buildFareCalculationChain();
-        return fareCalculationChain.calculateFare(path, member, BASIC_FARE);
+        return fareCalculationChain.calculateFare(path, member.getAge(), BASIC_FARE);
     }
 }

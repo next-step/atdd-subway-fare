@@ -1,6 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.member.domain.Member;
+import nextstep.subway.domain.fare.SubwayFare;
 
 import java.util.List;
 

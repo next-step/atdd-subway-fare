@@ -1,6 +1,6 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
-import nextstep.member.domain.Member;
+import nextstep.subway.domain.Path;
 import org.springframework.util.ObjectUtils;
 
 public class DistanceFareRule implements FareCalculationRule {
@@ -16,8 +16,8 @@ public class DistanceFareRule implements FareCalculationRule {
     }
 
     @Override
-    public int calculateFare(Path path, Member member, int totalFare) {
-        int distance = path.getSections().totalDistance();
+    public int calculateFare(Path path, int age, int totalFare) {
+        int distance = path.extractDistance();
         validateDistance(distance);
 
         if (distance > BASIC_DISTANCE && distance <= DISTANCE_FIFTY) {
@@ -33,7 +33,7 @@ public class DistanceFareRule implements FareCalculationRule {
         if (ObjectUtils.isEmpty(nextRule)) {
             return totalFare;
         } else {
-            return nextRule.calculateFare(path, member, totalFare);
+            return nextRule.calculateFare(path, age, totalFare);
         }
     }
 

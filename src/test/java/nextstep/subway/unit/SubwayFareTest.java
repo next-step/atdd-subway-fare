@@ -1,4 +1,4 @@
-package nextstep.subway.acceptance;
+package nextstep.subway.unit;
 
 import nextstep.member.domain.Member;
 import nextstep.subway.domain.Line;
@@ -6,7 +6,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Sections;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.SubwayFare;
+import nextstep.subway.domain.fare.SubwayFare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
