@@ -9,9 +9,13 @@ public class MemberAgePathFare extends PathFareChain {
     public PathFareCalculationInfo calculateFare(PathFareCalculationInfo calcInfo) {
         if (calcInfo.getMember() == null) {
             return calcInfo;
-        }
+        } // TODO : 비교후 제거
+//        if (calcInfo.getMemberAge() < 1) {
+//            return calcInfo;
+//        }
 
         Member targetMember = calcInfo.getMember();
+//        final long memberAge = calcInfo.getMemberAge();
         long memberAge = targetMember.getAge();
         double discountRate = getDiscountRateByAge(memberAge);
 

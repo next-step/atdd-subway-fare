@@ -13,6 +13,7 @@ import subway.exception.AuthenticationException;
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private final JwtTokenProvider jwtTokenProvider;
+    private static final String NULL_TOKEN = "NULL_TOKEN";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -28,7 +29,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String authorization = webRequest.getHeader("Authorization");
         String token = validAuthorizationAndGetToken(authorization, isRequired);
 
-        if (token == null) {
+        if (NULL_TOKEN.equals(token)) {
             return null;
         }
 
@@ -37,24 +38,24 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     private String validAuthorizationAndGetToken(String authorization, boolean isRequired) {
         if (!isValidAuthorization(authorization)) {
-            if (isRequired) {
-                throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
-            } else {
-                return null;
-            }
+            handleInvalidToken(isRequired);
+            return NULL_TOKEN;
         }
 
         String token = authorization.split(" ")[1];
 
         if (!jwtTokenProvider.validateToken(token)) {
-            if (isRequired) {
-                throw new AuthenticationException(SubwayMessage.AUTH_INVALID_TOKEN);
-            } else {
-                return null;
-            }
+            handleInvalidToken(isRequired);
+            return NULL_TOKEN;
         }
 
         return token;
+    }
+
+    private void handleInvalidToken(boolean isRequired) {
+        if (isRequired) {
+            throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
+        }
     }
 
     private UserPrincipal getUserPrincipalFromToken(String token) {
@@ -64,14 +65,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return new UserPrincipal(username, role);
     }
 
-
     private boolean isValidAuthorization(String authorization) {
-        if (authorization == null) {
-            return false;
-        }
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
-            return false;
-        }
-        return true;
+        return authorization != null && "bearer".equalsIgnoreCase(authorization.split(" ")[0]);
     }
 }

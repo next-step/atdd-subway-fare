@@ -277,7 +277,7 @@ public class PathFareAcceptanceTest extends AcceptanceTest {
 
         /**
          * Given 노선이 있고
-         * Given 나이가 19 초과인 회원이
+         * Given 어린이도, 청소년도 아닌 회원이
          * When 여러개의 노선을 지나가는 경로를 조회하면
          * Then 원래 금액이 출력된다.
          */

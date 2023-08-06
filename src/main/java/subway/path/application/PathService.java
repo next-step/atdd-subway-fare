@@ -58,7 +58,8 @@ public class PathService {
 
         PathFinder pathFinder = PathFinderFactory.createFinder(type);
         PathFinderRequest pathFinderRequest = PathFinderRequest.builder()
-                .member(member)
+//                .memberAge(member.getAge())
+                .member(member) // TODO
                 .sourceStation(sourceStation)
                 .targetStation(targetStation)
                 .sections(sections)
