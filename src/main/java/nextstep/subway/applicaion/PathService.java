@@ -16,24 +16,26 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    // TODO: make test and refactoring
     public PathResponse findPath(Long source, Long target, PathType type) {
+
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
+
         SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
 
+        int fare = new FareCalculator(path.extractDistance()).fare();
+
         if (type != PathType.DISTANCE) {
-            SubwayMap subwayMapForFare = new SubwayMap(lines, type);
-            Path pathForFare = subwayMapForFare.findPath(upStation, downStation);
-            FareCalculator fareCalculator = new FareCalculator(pathForFare.extractDistance());
-            int fare = fareCalculator.fare();
-            return PathResponse.of(path, fare);
+            fare = findFareByDistance(upStation, downStation, lines);
         }
 
-        FareCalculator fareCalculator = new FareCalculator(path.extractDistance());
-        int fare = fareCalculator.fare();
         return PathResponse.of(path, fare);
+    }
+
+    private static int findFareByDistance(Station upStation, Station downStation, List<Line> lines) {
+        Path distancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
+        return new FareCalculator(distancePath.extractDistance()).fare();
     }
 }
