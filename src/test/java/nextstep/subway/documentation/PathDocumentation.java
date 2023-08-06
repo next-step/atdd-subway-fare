@@ -39,7 +39,7 @@ public class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        PathSteps.두_역의_최단_거리_경로_조회를_요청_docs(1L, 2L, PathType.DISTANCE.name(),
+        PathSteps.두_역의_경로_조회를_요청_docs(1L, 2L, PathType.DISTANCE.name(),
                 getSpec("path", getPathRequestParamSnippet(), getPathResponseFieldsSnippet())
         );
     }

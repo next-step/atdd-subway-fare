@@ -9,14 +9,13 @@ import org.springframework.http.MediaType;
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target,
-        String type) {
+    public static ExtractableResponse<Response> 두_역의_타입에따른_경로_조회를_요청(Long source, Long target, String type) {
 
-        return 두_역의_최단_거리_경로_조회를_요청_docs(source, target, type, new RequestSpecBuilder().build());
+        return 두_역의_경로_조회를_요청_docs(source, target, type, new RequestSpecBuilder().build());
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청_docs(Long source, Long target,
-        String type, RequestSpecification spec) {
+    public static ExtractableResponse<Response> 두_역의_경로_조회를_요청_docs(Long source, Long target, String type,
+                                                                    RequestSpecification spec) {
 
         return RestAssured
             .given(spec).log().all()

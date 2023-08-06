@@ -2,7 +2,7 @@ package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청_후_id_추출;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_타입에따른_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,7 +59,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE.name());
+        var response = 두_역의_타입에따른_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE.name());
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
@@ -82,10 +82,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     void findPathByDuration() {
 
         // when
-        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, PathType.DURATION.name());
+        var response = 두_역의_타입에따른_경로_조회를_요청(교대역, 양재역, PathType.DURATION.name());
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(40);
     }
 }
