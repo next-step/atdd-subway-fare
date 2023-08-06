@@ -24,4 +24,8 @@ public class Path {
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    public int getFare() {
+        return Fare.of(extractDistance()).get();
+    }
 }

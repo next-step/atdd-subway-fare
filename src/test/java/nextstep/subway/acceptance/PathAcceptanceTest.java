@@ -56,6 +56,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최단 거리 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
      */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
@@ -70,6 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getLong("distance")).isNotNull();
         assertThat(response.jsonPath().getLong("duration")).isNotNull();
+        assertThat(response.jsonPath().getLong("fare")).isNotNull();
     }
 
     /**
@@ -79,6 +81,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
      * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금도 함께 응답함
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
@@ -93,6 +96,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getLong("distance")).isNotNull();
         assertThat(response.jsonPath().getLong("duration")).isNotNull();
+        assertThat(response.jsonPath().getLong("fare")).isNotNull();
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String type) {

@@ -14,6 +14,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
@@ -28,7 +30,7 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10, 5
+                ), 10, 5, 1250
         );
 
         when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
@@ -41,7 +43,15 @@ public class PathDocumentation extends Documentation {
                         requestParameters(
                                 parameterWithName("source").description("Source station Id"),
                                 parameterWithName("target").description("Target station Id"),
-                                parameterWithName("type").description("Path type is DISTANCE or DURATION"))
+                                parameterWithName("type").description("Path type is DISTANCE or DURATION")),
+                        responseFields(
+                                fieldWithPath("stations").description("Station list"),
+                                fieldWithPath("stations[].id").description("Station Id"),
+                                fieldWithPath("stations[].name").description("Station name"),
+                                fieldWithPath("distance").description("Distance between source and target station"),
+                                fieldWithPath("duration").description("Duration between source and target station"),
+                                fieldWithPath("fare").description("Fare between source and target station")
+                        )
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
