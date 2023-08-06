@@ -7,13 +7,18 @@ public class FareCalculator {
     private static final int OVER_FARE_INTERVAL_UNTIL_50KM = 5;
     private static final int OVER_FARE_INTERVAL_AFTER_50KM = 8;
 
-    private int distance;
+
+    private int distanceBasic;
+    private int distanceOver10km;
+    private int distanceOver50km;
 
     public FareCalculator(int distance) {
-        this.distance = distance;
+        this.distanceBasic = Math.min(distance, 10);
+        this.distanceOver10km = Math.max(distance - 10, 0);
+        this.distanceOver50km = Math.max(distance - 50, 0);
     }
 
     public int fare() {
-        return 1250;
+        return BASE_FARE;
     }
 }
