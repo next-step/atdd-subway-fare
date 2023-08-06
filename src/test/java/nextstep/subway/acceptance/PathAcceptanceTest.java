@@ -6,13 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.노선_생성_요청값_생성;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -57,17 +57,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-    }
-
-    @DisplayName("두 역의 최단 거리가 10km ~ 50km 일 때 5km 마다 100원이 추가된다.")
-    @Test
-    void findPathBetween10KmAnd50Km() {
-        // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
-
-        // then
-        assertThat(response.jsonPath().getInt("fee")).isEqualTo(1450);
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 19, 11, 1450);
     }
 
     @DisplayName("두 역의 최단 거리가 50km 초과 일 때 8km 마다 100원이 추가된다.")
@@ -77,19 +67,17 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 오금역);
 
         // then
-        assertThat(response.jsonPath().getInt("fee")).isEqualTo(2250);
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역, 오금역), 59, 31, 2250);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         //when
-        ExtractableResponse<Response> response = PathSteps.두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         //then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
-        assertThat(response.jsonPath().getInt("duration")).isEqualTo(10);
+        경로_조회됨(response, List.of(교대역, 강남역, 양재역), 20, 10, 1450);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
