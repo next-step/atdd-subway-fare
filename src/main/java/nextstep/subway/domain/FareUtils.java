@@ -7,7 +7,7 @@ public class FareUtils {
 
     public static int calculateOverFare(int overDistance, int interval, int overFarePerInterval) {
 
-        if (overDistance == 0) {
+        if (overDistance <= 0) {
             return 0;
         }
 
