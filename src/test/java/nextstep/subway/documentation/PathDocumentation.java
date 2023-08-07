@@ -10,7 +10,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_및_소요시간_조회를_요청_문서화;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -51,6 +51,6 @@ public class PathDocumentation extends Documentation {
                                 fieldWithPath("duration").description("총 소요 시간")
                         )));
 
-        두_역의_최단_거리_경로_조회를_요청(1L, 2L, requestSpecification, FindPathType.DURATION.getType());
+        두_역의_최단_거리_경로_및_소요시간_조회를_요청_문서화(1L, 2L, requestSpecification, FindPathType.DURATION.getType());
     }
 }

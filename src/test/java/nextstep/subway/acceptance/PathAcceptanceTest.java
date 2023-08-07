@@ -1,20 +1,18 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.constant.FindPathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.PathSteps.*;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_및_소요시간_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
@@ -54,10 +52,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_및_소요시간_조회를_요청(교대역, 양재역, FindPathType.DISTANCE.getType());
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
     }
 
     /**
@@ -78,11 +77,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given : 선행조건 기술
 
         // when : 기능 수행
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_소요시간_조회를_요청(교대역, 양재역, "DURATION");
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_및_소요시간_조회를_요청(교대역, 양재역, FindPathType.DURATION.getType());
         
         // then : 결과 확인
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getLong("duration")).isEqualTo(21);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(21);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {

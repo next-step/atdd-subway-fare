@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.constant.FindPathType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -12,10 +13,11 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FavoriteSteps {
-    public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(String accessToken, Long source, Long target) {
+    public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(String accessToken, Long source, Long target, String type) {
         Map<String, String> params = new HashMap<>();
         params.put("source", source + "");
         params.put("target", target + "");
+        params.put("type", type);
 
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)

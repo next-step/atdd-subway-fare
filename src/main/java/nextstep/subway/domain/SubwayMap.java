@@ -25,19 +25,21 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
 
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
-                    graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    if (type == FindPathType.DISTANCE) {
-                        graph.setEdgeWeight(sectionEdge, it.getDistance());
-                    } else {
-                        graph.setEdgeWeight(sectionEdge, it.getDuration());
-                    }
+                    addEdge(graph, it);
+                });
+
+        // 지하철 역의 연결 정보(간선)을 등록
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .forEach(it -> {
+                    addEdge(graph, it);
                 });
 
         // 다익스트라 최단 경로 찾기
@@ -45,9 +47,20 @@ public class SubwayMap {
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
+    }
+
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it) {
+        SectionEdge sectionEdge = SectionEdge.of(it);
+        graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+        if (type == FindPathType.DISTANCE) {
+            graph.setEdgeWeight(sectionEdge, it.getDistance());
+        }
+        if (type == FindPathType.DURATION) {
+            graph.setEdgeWeight(sectionEdge, it.getDuration());
+        }
     }
 }

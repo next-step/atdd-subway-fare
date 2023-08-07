@@ -9,6 +9,7 @@ import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.constant.FindPathType;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 
