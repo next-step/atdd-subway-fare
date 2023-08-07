@@ -9,7 +9,7 @@ public class PathResponse {
     private List<StationResponse> stations;
     private int distance;
 
-    public PathResponse(List<StationResponse> stations, int distance) {
+    public PathResponse(List<StationResponse> stations, int distance, int duration) {
         this.stations = stations;
         this.distance = distance;
     }
@@ -19,8 +19,9 @@ public class PathResponse {
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
+        int duration = path.extractDuration();
 
-        return new PathResponse(stations, distance);
+        return new PathResponse(stations, distance, duration);
     }
 
     public List<StationResponse> getStations() {

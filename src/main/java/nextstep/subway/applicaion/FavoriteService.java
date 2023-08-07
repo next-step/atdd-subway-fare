@@ -6,6 +6,7 @@ import nextstep.auth.AuthenticationException;
 import nextstep.subway.applicaion.dto.FavoriteResponse;
 import nextstep.subway.domain.Favorite;
 import nextstep.subway.domain.FavoriteRepository;
+import nextstep.subway.domain.PathWeight;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 import nextstep.subway.applicaion.dto.FavoriteRequest;
@@ -34,7 +35,7 @@ public class FavoriteService {
     Station target = stationRepository.findById(request.getTarget())
         .orElseThrow(() -> new IllegalArgumentException("마지막역이 존재 하지 않습니다."));
 
-    pathService.findPath(request.getSource(), request.getTarget());
+    pathService.findPath(request.getSource(), request.getTarget(), PathWeight.DISTANCE);
     Favorite favorite = favoriteRepository.save(Favorite.of(userId, source, target));
     return FavoriteResponse.of(favorite);
   }
