@@ -1,21 +1,24 @@
 package nextstep.subway.acceptance;
 
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_목록_조회_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_조회_요청;
+import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static nextstep.subway.acceptance.LineSteps.*;
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
+
     /**
      * When 지하철 노선을 생성하면
      * Then 지하철 노선 목록 조회 시 생성한 노선을 찾을 수 있다
@@ -31,6 +34,37 @@ class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> listResponse = 지하철_노선_목록_조회_요청();
 
         assertThat(listResponse.jsonPath().getList("name")).contains("2호선");
+    }
+
+    /**
+     * Given 종착역 지하철역이 등록되어 있음
+     * When 종창역과 소요시간과 거리를 함께 지하철 노선을 생성하면
+     * Then 지하철 노선 목록 조회 시 생성한 노선을 찾을 수 있다
+     */
+    @DisplayName("종착역과 소요시간과 거리를 함께 지하철 노선 생성")
+    @Test
+    void createLineWithDurationAndDistanceAndStationId() {
+        // given
+        var 신사역 = 지하철역_생성_요청("신사역").jsonPath().getLong("id");
+        var 광교역 = 지하철역_생성_요청("광교역").jsonPath().getLong("id");
+        int 신사역에서_광교역까지의_거리 = 15;
+        int 신사역에서_광교역까지_걸리는_시간 = 42 * 60;
+
+        // when
+        var response = 지하철_노선_생성_요청(
+                "신분당선",
+                "red",
+                신사역,
+                광교역,
+                신사역에서_광교역까지의_거리,
+                신사역에서_광교역까지_걸리는_시간
+        );
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        ExtractableResponse<Response> listResponse = 지하철_노선_목록_조회_요청();
+
+        assertThat(listResponse.jsonPath().getList("name")).contains("신분당선");
     }
 
     /**

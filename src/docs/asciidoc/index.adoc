@@ -9,6 +9,16 @@
 [[path]]
 == 지하철 경로
 
-=== 경로 조회
+=== 최단 거리 경로 조회
 
-operation::findPath[snippets='http-request,http-response']
+operation::findPathByDistance[snippets='http-request,http-response']
+
+=== 최단 최소 경로 조회
+
+operation::findPathByDuration[snippets='http-request,http-response']
+
+[[line]]
+== 지하철 노선
+
+=== 노선 생성
+operation::saveLine[snippets='http-request,http-response']

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PathController {
+
     private PathService pathService;
 
     public PathController(PathService pathService) {
@@ -16,7 +17,8 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findPath(source, target));
+    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target,
+            @RequestParam String type) {
+        return ResponseEntity.ok(pathService.findPath(source, target, type));
     }
 }

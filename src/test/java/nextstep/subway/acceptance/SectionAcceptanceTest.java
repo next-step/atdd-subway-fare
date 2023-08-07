@@ -89,6 +89,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", 6 + "");
+        params.put("duration", 12 + "");
         return params;
     }
 }

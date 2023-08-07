@@ -34,7 +34,7 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        pathService.findPath(request.getSource(), request.getTarget());
+        pathService.findPath(request.getSource(), request.getTarget(), "DISTANCE");
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
