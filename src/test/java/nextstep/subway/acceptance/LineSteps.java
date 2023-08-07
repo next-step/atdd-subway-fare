@@ -1,8 +1,10 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.MediaType;
@@ -23,6 +25,12 @@ public class LineSteps {
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId,
             Long downStationId, int distance, int duration) {
+        return 지하철_노선_생성_요청(name, color, upStationId, downStationId, distance, duration,
+                new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId,
+            Long downStationId, int distance, int duration, RequestSpecification specification) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -31,7 +39,9 @@ public class LineSteps {
         params.put("distance", distance);
         params.put("duration", duration);
         return RestAssured
-                .given().log().all()
+                .given()
+                .spec(specification)
+                .log().all()
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")

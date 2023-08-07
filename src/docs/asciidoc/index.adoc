@@ -12,3 +12,9 @@
 === 경로 조회
 
 operation::findPath[snippets='http-request,http-response']
+
+[[line]]
+== 지하철 노선
+
+=== 노선 생성
+operation::saveLine[snippets='http-request,http-response']
