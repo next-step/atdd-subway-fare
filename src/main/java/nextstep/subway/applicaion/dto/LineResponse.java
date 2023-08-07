@@ -16,7 +16,7 @@ public class LineResponse {
         List<StationResponse> stations = line.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
-        return new LineResponse(line.getId(), line.getName(), line.getColor(), stations);
+        return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getAdditionalFare(), stations);
     }
 
     @Deprecated
