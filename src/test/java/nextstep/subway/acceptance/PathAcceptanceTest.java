@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.노선_생성_요청값_생성;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
@@ -86,6 +87,18 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When: 두 역의 최단 거리 경로를 조회한다.
      * Then: 운임에서 350원을 공제한 금액의 50%할인된 금액이 반환된다.
      */
+    @Test
+    void findPathByChildrenMember() {
+        //given
+        MemberSteps.회원_생성_요청("children@gmail.com", "password", 12);
+        String accessToken = 베어러_인증_로그인_요청("children@gmail.com", "password").jsonPath().getString("accessToken");
+
+        //when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+
+        // then
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 19, 11, 700);
+    }
 
     /**
      * Given: 청소년 회원을 생성한다.
@@ -93,6 +106,18 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When: 두 역의 최단 거리 경로를 조회한다.
      * Then: 운임에서 350원을 공제한 금액의 20%할인된 금액이 반환된다.
      */
+    @Test
+    void findPathByTeenAgerMember() {
+        //given
+        MemberSteps.회원_생성_요청("teenager@gmail.com", "password", 18);
+        String accessToken = 베어러_인증_로그인_요청("teenager@gmail.com", "password").jsonPath().getString("accessToken");
+
+        //when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+
+        // then
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 19, 11, 1120);
+    }
 
     /**
      * Given: 성인 회원을 생성한다.
@@ -100,6 +125,18 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When: 두 역의 최단 거리 경로를 조회한다.
      * Then: 할인되지 않은 운임이 반환된다.
      */
+    @Test
+    void findPathByAdultMember() {
+        //given
+        MemberSteps.회원_생성_요청("adult@gmail.com", "password", 19);
+        String accessToken = 베어러_인증_로그인_요청("adult@gmail.com", "password").jsonPath().getString("accessToken");
+
+        //when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(accessToken, 교대역, 양재역);
+
+        // then
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 19, 11, 1750);
+    }
 
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
