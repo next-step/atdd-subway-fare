@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import java.math.BigDecimal;
+
 public class FareCalculator {
 
     private static final int BASE_FARE = 1250;
@@ -23,6 +25,10 @@ public class FareCalculator {
         this.distanceOver10km = Math.min(Math.max(distance - FIRST_OVER_FARE_SECTION_START, 0), FIRST_OVER_FARE_SECTION_MAX_DISTANCE);
         this.distanceOver50km = Math.max(distance - SECOND_OVER_FARE_SECTION_START, 0);
         this.fareByLine = fareByLine;
+    }
+
+    public int fare(int age) {
+        return new DiscountByAge(age, fare()).getDiscountedFare();
     }
 
     public int fare() {
