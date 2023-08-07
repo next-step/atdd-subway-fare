@@ -27,7 +27,12 @@ public class FareCalculator {
         this.fareByLine = fareByLine;
     }
 
-    public int fare(int age) {
+    public int fare(Integer age) {
+
+        if (age == null) {
+            return fare();
+        }
+
         return new DiscountByAge(age, fare()).getDiscountedFare();
     }
 
