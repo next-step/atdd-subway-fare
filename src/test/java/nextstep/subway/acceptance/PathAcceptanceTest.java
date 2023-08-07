@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
 
+    public static final String 최단거리 = "DISTANCE";
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -51,7 +52,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, 최단거리);
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
