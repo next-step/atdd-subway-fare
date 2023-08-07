@@ -11,10 +11,6 @@ public class CalculateFareUtils {
 
     public static int getFare(int distance) {
 
-        if (distance == 0) {
-            return 0;
-        }
-
         if (distance > DEFAULT_FARE_DISTANCE && distance <= 50) {
             return DEFAULT_FARE + calculateOverFareUnder50(distance - DEFAULT_FARE_DISTANCE);
         }

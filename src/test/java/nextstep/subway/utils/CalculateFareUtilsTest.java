@@ -1,22 +1,15 @@
 package nextstep.subway.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 class CalculateFareUtilsTest {
 
     private static final int DEFAULT_FARE = 1250;
-
-    @Test
-    @DisplayName("0km 면 요금이 없음")
-    void whenZeroKm() {
-
-        assertThat(CalculateFareUtils.getFare(0)).isZero();
-    }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 10})
