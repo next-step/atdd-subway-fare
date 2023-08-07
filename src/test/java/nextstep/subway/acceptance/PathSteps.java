@@ -19,11 +19,23 @@ import org.springframework.http.MediaType;
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String type) {
-        return 두_역의_최단_거리_경로_조회를_요청(source, target, type, new RequestSpecBuilder().build());
+    public static final String 최단거리 = "DISTANCE";
+    public static final String 최소시간 = "DURATION";
+
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리, new RequestSpecBuilder().build());
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target,
+            RequestSpecification specification) {
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리, specification);
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 타입_따라_두_역의_경로_조회를_요청(
             Long source,
             Long target,
             String type,
@@ -36,7 +48,8 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
+    public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance,
+            int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -44,15 +57,17 @@ public class PathSteps {
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    public static Map<String, String> 세션_생성_파라미터_생성(Long upStationId, Long downStationId, int distance) {
+    public static Map<String, String> 세션_생성_파라미터_생성(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
+        params.put("duration", duration + "");
         return params;
     }
 
