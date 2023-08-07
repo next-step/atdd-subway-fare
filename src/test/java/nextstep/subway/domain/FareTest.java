@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FareTest {
     @DisplayName("경로에 따른 요금을 계산한다.")
     @ParameterizedTest
-    @MethodSource("provideGetFareArguments")
+    @MethodSource("provideGetFareArgumentsWithDistance")
     void getFare(int distance, int expectedFare) {
         // when
         int fare = Fare.of(distance).get();
@@ -21,7 +21,18 @@ public class FareTest {
         assertThat(fare).isEqualTo(expectedFare);
     }
 
-    public static Stream<Arguments> provideGetFareArguments() {
+    @DisplayName("추가 요금과 경로에 따른 요금을 계산한다.")
+    @ParameterizedTest
+    @MethodSource("provideGetFareArgumentsWithDistanceAndExtraCharge")
+    void getFare(int distance, int extraCharge, int expectedFare) {
+        // when
+        int fare = Fare.of(distance, extraCharge).get();
+
+        // then
+        assertThat(fare).isEqualTo(expectedFare);
+    }
+
+    public static Stream<Arguments> provideGetFareArgumentsWithDistance() {
         return Stream.of(
                 Arguments.of(1, 1250),
                 Arguments.of(10, 1250),
@@ -50,4 +61,15 @@ public class FareTest {
         );
     }
 
+    public static Stream<Arguments> provideGetFareArgumentsWithDistanceAndExtraCharge() {
+        return Stream.of(
+                Arguments.of(1, 0, 1250),
+                Arguments.of(1, 100, 1350),
+                Arguments.of(1, 1000, 2250),
+                Arguments.of(10, 1000, 2250),
+                Arguments.of(11, 1000, 2350),
+                Arguments.of(50, 1000, 3050),
+                Arguments.of(74, 1000, 3350)
+        );
+    }
 }

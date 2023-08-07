@@ -9,6 +9,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.snippet.Snippet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -40,18 +41,8 @@ public class PathDocumentation extends Documentation {
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("Source station Id"),
-                                parameterWithName("target").description("Target station Id"),
-                                parameterWithName("type").description("Path type is DISTANCE or DURATION")),
-                        responseFields(
-                                fieldWithPath("stations").description("Station list"),
-                                fieldWithPath("stations[].id").description("Station Id"),
-                                fieldWithPath("stations[].name").description("Station name"),
-                                fieldWithPath("distance").description("Distance between source and target station"),
-                                fieldWithPath("duration").description("Duration between source and target station"),
-                                fieldWithPath("fare").description("Fare between source and target station")
-                        )
+                        createPathRequestParameters(),
+                        createPathResponseFields()
                 ))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
@@ -59,5 +50,22 @@ public class PathDocumentation extends Documentation {
                 .queryParam("type", "DURATION")
                 .when().get("/paths")
                 .then().log().all().extract();
+    }
+
+    private Snippet createPathRequestParameters() {
+        return requestParameters(
+                parameterWithName("source").description("Source station Id"),
+                parameterWithName("target").description("Target station Id"),
+                parameterWithName("type").description("Path type is DISTANCE or DURATION"));
+    }
+
+    private Snippet createPathResponseFields() {
+        return responseFields(
+                fieldWithPath("stations").description("Station list"),
+                fieldWithPath("stations[].id").description("Station Id"),
+                fieldWithPath("stations[].name").description("Station name"),
+                fieldWithPath("distance").description("Distance between source and target station"),
+                fieldWithPath("duration").description("Duration between source and target station"),
+                fieldWithPath("fare").description("Fare between source and target station"));
     }
 }

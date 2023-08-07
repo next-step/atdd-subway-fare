@@ -26,6 +26,6 @@ public class Path {
     }
 
     public int getFare() {
-        return Fare.of(extractDistance()).get();
+        return Fare.of(extractDistance(), sections.getMaxExtraCharge()).get();
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -75,6 +76,10 @@ public class Sections {
         }
 
         return result;
+    }
+
+    public int getMaxExtraCharge() {
+        return getDistinctLines().stream().mapToInt(Line::getExtraCharge).max().orElse(0);
     }
 
     private void checkDuplicateSection(Section section) {
@@ -156,5 +161,13 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    private Set<Line> getDistinctLines() {
+        if (this.sections.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        return sections.stream().map(Section::getLine).collect(Collectors.toSet());
     }
 }

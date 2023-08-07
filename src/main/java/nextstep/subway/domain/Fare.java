@@ -5,15 +5,21 @@ public class Fare {
     private static final int OVER_FARE_PER_DISTANCE = 100;
     private static final int DEFAULT_DISTANCE = 10;
     private final int distance;
+    private final int extraCharge;
     private final int fare;
 
-    private Fare(int distance) {
+    private Fare(int distance, int extraCharge) {
         this.distance = distance;
+        this.extraCharge = extraCharge;
         this.fare = calculate();
     }
 
     public static Fare of(int distance) {
-        return new Fare(distance);
+        return new Fare(distance, 0);
+    }
+
+    public static Fare of(int distance, int extraCharge) {
+        return new Fare(distance, extraCharge);
     }
 
     public int get() {
@@ -21,7 +27,7 @@ public class Fare {
     }
 
     private int calculate() {
-        int fare = DEFAULT_FARE;
+        int fare = DEFAULT_FARE + extraCharge;
 
         int overDistance = this.distance - DEFAULT_DISTANCE;
         if (overDistance > 0) {
