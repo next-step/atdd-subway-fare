@@ -80,6 +80,28 @@ class PathAcceptanceTest extends AcceptanceTest {
         경로_조회됨(response, List.of(교대역, 강남역, 양재역), 20, 10, 2450);
     }
 
+    /**
+     * Given: 어린이 회원을 생성한다.
+     * Given: 어린이 회원이 로그인한다.
+     * When: 두 역의 최단 거리 경로를 조회한다.
+     * Then: 운임에서 350원을 공제한 금액의 50%할인된 금액이 반환된다.
+     */
+
+    /**
+     * Given: 청소년 회원을 생성한다.
+     * Given: 청소년 회원이 로그인한다.
+     * When: 두 역의 최단 거리 경로를 조회한다.
+     * Then: 운임에서 350원을 공제한 금액의 20%할인된 금액이 반환된다.
+     */
+
+    /**
+     * Given: 성인 회원을 생성한다.
+     * Given: 성인 회원이 로그인한다.
+     * When: 두 역의 최단 거리 경로를 조회한다.
+     * Then: 할인되지 않은 운임이 반환된다.
+     */
+
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
         Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, duration, surcharge);
 
