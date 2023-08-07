@@ -3,6 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.utils.GithubResponses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +27,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+
+    private String 어린이;
+    private String 청소년;
 
     /**
      * 교대역    --- *2호선* (거리:10, 시간:2) ---   강남역
@@ -47,6 +52,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 31, 0);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 21));
+
+        어린이 = 베어러_인증_로그인_요청(GithubResponses.어린이.getEmail(), PASSWORD).jsonPath().getString("accessToken");
+        청소년 = 베어러_인증_로그인_요청(GithubResponses.청소년.getEmail(), PASSWORD).jsonPath().getString("accessToken");
     }
 
     /**
@@ -63,7 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
         assertThat(response.jsonPath().getLong("duration")).isEqualTo(52L);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(2150);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1250);
     }
 
     /**
@@ -80,7 +88,38 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getLong("distance")).isEqualTo(20L);
         assertThat(response.jsonPath().getLong("duration")).isEqualTo(5L);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(2150);
+    }
+
+    /**
+     * When: 어린이 사용자가 교대-양재 최단거리와 요금을 조회하면
+     * Then: 거리는 5이고, 요금은 850원이다.
+     */
+    @DisplayName("어린이 사용자가 두 역의 최소 최단경로 요금을 조회한다.")
+    @Test
+    void findPathByDistance_child_fare() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 양재역, "DISTANCE");
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(850L);
+    }
+
+    /**
+     * When: 청소년 사용자가 교대-양재 최단거리와 요금을 조회하면
+     * Then: 거리는 5이고, 요금은 1050원이다.
+     */
+    @DisplayName("청소년 사용자가 두 역의 최소 최단경로 요금을 조회한다.")
+    @Test
+    void findPathByDistance_teen_fare() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 양재역, "DISTANCE");
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1050);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFare) {
