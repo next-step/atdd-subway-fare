@@ -52,8 +52,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
     남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-    이호선 = 지하철_노선_생성_요청("2호선", "green", 강남역, 양재역, 10);
-    삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2);
+    이호선 = 지하철_노선_생성_요청("2호선", "green", 강남역, 양재역, 10, 5);
+    삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 6);
 
   }
   @Nested

@@ -9,11 +9,15 @@ import java.util.stream.Collectors;
 
 public class SubwayMap {
     private List<Line> lines;
+    private final PathWeight pathWeight;
 
-    public SubwayMap(List<Line> lines) {
-        this.lines = lines;
+    public SubwayMap(List<Line> lines, PathWeight pathWeight) {
+      this.lines = lines;
+      this.pathWeight = pathWeight;
     }
-
+  public SubwayMap(List<Line> lines) {
+    this(lines, PathWeight.DISTANCE);
+  }
     public Path findPath(Station source, Station target) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
@@ -28,7 +32,7 @@ public class SubwayMap {
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    SectionEdge sectionEdge = SectionEdge.of(it, pathWeight);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
                     graph.setEdgeWeight(sectionEdge, it.getDistance());
                 });
@@ -36,11 +40,11 @@ public class SubwayMap {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
                 .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance()))
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
                 .forEach(it -> {
-                    SectionEdge sectionEdge = SectionEdge.of(it);
+                    SectionEdge sectionEdge = SectionEdge.of(it, pathWeight);
                     graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-                    graph.setEdgeWeight(sectionEdge, it.getDistance());
+                    graph.setEdgeWeight(sectionEdge, sectionEdge.getEdgeWeight());
                 });
 
         // 다익스트라 최단 경로 찾기
@@ -55,4 +59,6 @@ public class SubwayMap {
 
         return new Path(new Sections(sections));
     }
+
+
 }
