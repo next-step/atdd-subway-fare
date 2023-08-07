@@ -35,6 +35,11 @@ public class PathSteps {
         return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, new RequestSpecBuilder().build());
     }
 
+    public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target,
+            RequestSpecification specification) {
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, specification);
+    }
+
     public static ExtractableResponse<Response> 타입_따라_두_역의_경로_조회를_요청(
             Long source,
             Long target,
