@@ -10,6 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private Long additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -17,9 +18,16 @@ public class Line {
     public Line() {
     }
 
+    @Deprecated
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public Line(String name, String color, Long additionalFare) {
+        this.name = name;
+        this.color = color;
+        this.additionalFare = additionalFare;
     }
 
     public Long getId() {
@@ -57,5 +65,9 @@ public class Line {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+
+    public Long getAdditionalFare() {
+        return additionalFare;
     }
 }
