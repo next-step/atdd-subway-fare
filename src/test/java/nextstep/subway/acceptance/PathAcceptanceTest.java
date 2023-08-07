@@ -30,7 +30,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
-     * 남부터미널역  --- *3호선* ---   양재   --- 오금
+     * 남부터미널역  --- *3호선* ---   양재  -- *3호선* -- 오금
      */
     @BeforeEach
     public void setUp() {
@@ -42,9 +42,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         오금역 = 지하철역_생성_요청("오금역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 10, 5);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 5, 200);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 5, 1000);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 10, 5, 300);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, LineSteps.구간_생성_요청값_생성(남부터미널역, 양재역, 9, 6));
         지하철_노선에_지하철_구간_생성_요청(삼호선, LineSteps.구간_생성_요청값_생성(양재역, 오금역, 40, 20));
@@ -57,7 +57,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 19, 11, 1450);
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역), 19, 11, 1750);
     }
 
     @DisplayName("두 역의 최단 거리가 50km 초과 일 때 8km 마다 100원이 추가된다.")
@@ -67,7 +67,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 오금역);
 
         // then
-        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역, 오금역), 59, 31, 2250);
+        경로_조회됨(response, List.of(교대역, 남부터미널역, 양재역, 오금역), 59, 31, 2550);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -77,11 +77,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         //then
-        경로_조회됨(response, List.of(교대역, 강남역, 양재역), 20, 10, 1450);
+        경로_조회됨(response, List.of(교대역, 강남역, 양재역), 20, 10, 2450);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, duration);
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int surcharge) {
+        Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, duration, surcharge);
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }

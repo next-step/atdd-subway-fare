@@ -34,7 +34,7 @@ public class LineDocumentation extends Documentation {
         when(lineService.saveLine(any())).thenReturn(response);
 
         //then
-        Map<String, String> params = LineSteps.노선_생성_요청값_생성("2호선", "green", 1L, 2L, 10, 90);
+        Map<String, String> params = LineSteps.노선_생성_요청값_생성("2호선", "green", 1L, 2L, 10, 90, 0);
         LineSteps.지하철_노선_생성_요청(getRequestSpecification("line"), params);
     }
 
