@@ -56,4 +56,22 @@ class SubwayMapTest {
                         )
         );
     }
+
+    @DisplayName("최소 시간 경로 조회")
+    @Test
+    void findPathByDuration() {
+        // when
+        Path path = subwayMap.findPath(gyodaeStation, yangjaeStation, FindPathType.DURATION);
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(path.extractDuration()).isEqualTo(15),
+                () -> assertThat(path.getStations()).usingRecursiveComparison()
+                        .isEqualTo(
+                                List.of(StationResponse.of(gyodaeStation),
+                                        StationResponse.of(gangnameStation),
+                                        StationResponse.of(yangjaeStation))
+                        )
+        );
+    }
 }
