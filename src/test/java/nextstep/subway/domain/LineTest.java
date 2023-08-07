@@ -21,6 +21,6 @@ class LineTest {
         // then
         Section section = line.getSections().get(0);
         Section exceptedSection = new Section(line, sinsaStation, gwanggyoStation, 15, 42 * 60);
-        assertThat(section).usingRecursiveComparison().isEqualTo(section);
+        assertThat(section).usingRecursiveComparison().isEqualTo(exceptedSection);
     }
 }

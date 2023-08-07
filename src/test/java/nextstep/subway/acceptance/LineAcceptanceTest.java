@@ -45,8 +45,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLineWithDurationAndDistanceAndStationId() {
         // given
-        var 신사역_아이디 = 지하철역_생성_요청("신사역").jsonPath().getLong("id");
-        var 광교역_아이디 = 지하철역_생성_요청("광교역").jsonPath().getLong("id");
+        var 신사역 = 지하철역_생성_요청("신사역").jsonPath().getLong("id");
+        var 광교역 = 지하철역_생성_요청("광교역").jsonPath().getLong("id");
         int 신사역에서_광교역까지의_거리 = 15;
         int 신사역에서_광교역까지_걸리는_시간 = 42 * 60;
 
@@ -54,8 +54,8 @@ class LineAcceptanceTest extends AcceptanceTest {
         var response = 지하철_노선_생성_요청(
                 "신분당선",
                 "red",
-                신사역_아이디,
-                광교역_아이디,
+                신사역,
+                광교역,
                 신사역에서_광교역까지의_거리,
                 신사역에서_광교역까지_걸리는_시간
         );

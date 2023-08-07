@@ -31,13 +31,13 @@ public class LineSteps {
 
     public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId,
             Long downStationId, int distance, int duration, RequestSpecification specification) {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        params.put("upStationId", upStationId);
-        params.put("downStationId", downStationId);
-        params.put("distance", distance);
-        params.put("duration", duration);
+        params.put("upStationId", upStationId+"");
+        params.put("downStationId", downStationId+"");
+        params.put("distance", distance+"");
+        params.put("duration", duration+"");
         return RestAssured
                 .given()
                 .spec(specification)
