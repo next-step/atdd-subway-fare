@@ -10,7 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
-    private Long additionalFare;
+    private Integer additionalFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -18,7 +18,7 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color, Long additionalFare) {
+    public Line(String name, String color, Integer additionalFare) {
         this.name = name;
         this.color = color;
         this.additionalFare = additionalFare;
@@ -61,7 +61,7 @@ public class Line {
         sections.delete(station);
     }
 
-    public Long getAdditionalFare() {
+    public Integer getAdditionalFare() {
         return additionalFare;
     }
 }

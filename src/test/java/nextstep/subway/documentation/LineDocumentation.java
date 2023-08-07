@@ -40,7 +40,7 @@ public class LineDocumentation extends Documentation {
                                          fieldWithPath("additionalFare").description("추가요금")))
                 );
 
-        when(lineService.saveLine(any(LineRequest.class))).thenReturn(new LineResponse(1L, "강남역", "red", 900L, List.of()));
+        when(lineService.saveLine(any(LineRequest.class))).thenReturn(new LineResponse(1L, "강남역", "red", 900, List.of()));
 
         지하철_노선_생성_요청(requestSpecification, "강남역", "red", 5, 6, 900);
     }

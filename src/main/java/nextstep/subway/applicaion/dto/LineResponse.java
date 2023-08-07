@@ -9,7 +9,7 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
-    private Long additionalFare;
+    private int additionalFare;
     private List<StationResponse> stations;
 
     public static LineResponse of(Line line) {
@@ -19,7 +19,7 @@ public class LineResponse {
         return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getAdditionalFare(), stations);
     }
 
-    public LineResponse(Long id, String name, String color, Long additionalFare, List<StationResponse> stations) {
+    public LineResponse(Long id, String name, String color, int additionalFare, List<StationResponse> stations) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -43,7 +43,7 @@ public class LineResponse {
         return stations;
     }
 
-    public Long getAdditionalFare() {
+    public int getAdditionalFare() {
         return additionalFare;
     }
 }

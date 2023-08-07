@@ -80,7 +80,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getLong("distance")).isEqualTo(20L);
         assertThat(response.jsonPath().getLong("duration")).isEqualTo(5L);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1250);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(2150);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFare) {

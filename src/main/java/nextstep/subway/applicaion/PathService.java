@@ -25,7 +25,7 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
 
-        int fare = new FareCalculator(path.extractDistance()).fare();
+        int fare = new FareCalculator(path.extractDistance(), path.getAdditionalFare()).fare();
 
         if (type != PathType.DISTANCE) {
             fare = findFareByDistance(upStation, downStation, lines);
@@ -36,6 +36,6 @@ public class PathService {
 
     private static int findFareByDistance(Station upStation, Station downStation, List<Line> lines) {
         Path distancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
-        return new FareCalculator(distancePath.extractDistance()).fare();
+        return new FareCalculator(distancePath.extractDistance(), distancePath.getAdditionalFare()).fare();
     }
 }

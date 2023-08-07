@@ -16,15 +16,17 @@ public class FareCalculator {
     private int distanceBasic;
     private int distanceOver10km;
     private int distanceOver50km;
+    private int fareByLine;
 
-    public FareCalculator(int distance) {
+    public FareCalculator(int distance, int fareByLine) {
         this.distanceBasic = Math.min(distance, FIRST_OVER_FARE_SECTION_START);
         this.distanceOver10km = Math.min(Math.max(distance - FIRST_OVER_FARE_SECTION_START, 0), FIRST_OVER_FARE_SECTION_MAX_DISTANCE);
         this.distanceOver50km = Math.max(distance - SECOND_OVER_FARE_SECTION_START, 0);
+        this.fareByLine = fareByLine;
     }
 
     public int fare() {
-        return BASE_FARE + new OverFareCalculator(OVER_FARE_INTERVAL_UNTIL_50KM, OVER_FARE).calculateOverFare(this.distanceOver10km)
+        return BASE_FARE + fareByLine + new OverFareCalculator(OVER_FARE_INTERVAL_UNTIL_50KM, OVER_FARE).calculateOverFare(this.distanceOver10km)
                 + new OverFareCalculator(OVER_FARE_INTERVAL_AFTER_50KM, OVER_FARE).calculateOverFare(this.distanceOver50km);
     }
 }

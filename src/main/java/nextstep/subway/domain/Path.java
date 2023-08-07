@@ -4,9 +4,11 @@ import java.util.List;
 
 public class Path {
     private final Sections sections;
+    private final int additionalFare;
 
-    public Path(Sections sections) {
+    public Path(List<Line> lines, Sections sections) {
         this.sections = sections;
+        this.additionalFare = lines.stream().map(Line::getAdditionalFare).reduce(0, Integer::max);
     }
 
     public Sections getSections() {
@@ -23,5 +25,9 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int getAdditionalFare() {
+        return additionalFare;
     }
 }
