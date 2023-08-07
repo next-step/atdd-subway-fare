@@ -26,14 +26,19 @@ public class PathSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification spec, Long source, Long target, String type) {
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(RequestSpecification spec, Long source, Long target) {
         return RestAssured
                 .given(spec).log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("source", source)
-                .queryParam("target", target)
-                .queryParam("type", type)
-                .when().get("/paths")
+                .when().get("/paths?source={sourceId}&target={targetId}&type=DISTANCE", source, target)
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단_시간_경로_조회를_요청(RequestSpecification spec, Long source, Long target) {
+        return RestAssured
+                .given(spec).log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type=DURATION", source, target)
                 .then().log().all().extract();
     }
 }

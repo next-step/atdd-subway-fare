@@ -33,11 +33,11 @@ public class PathDocumentation extends Documentation {
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "역삼역")
-                ), 10
+                ), 10, 10
         );
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        두_역의_최단_거리_경로_조회를_요청(spec, 1L, 2L, "DISTANCE");
+        두_역의_최단_거리_경로_조회를_요청(spec, 1L, 2L);
     }
 }
