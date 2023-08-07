@@ -28,7 +28,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -46,8 +46,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
-        지하철_노선_생성_요청("3호선", "orange", DISTANCE, DURATION);
+        지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
+        지하철_노선_생성_요청("3호선", "orange", DISTANCE, DURATION, 0);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
@@ -66,7 +66,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
@@ -85,7 +85,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
         int afterDistance = 10;
         int afterDuration = 16;
 
@@ -116,7 +116,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
 
         // when
         ExtractableResponse<Response> response = RestAssured
