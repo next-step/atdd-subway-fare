@@ -1,6 +1,14 @@
 package nextstep.subway.domain;
 
-public enum FindPathType {
-    DISTANCE
+import java.util.Arrays;
 
+public enum FindPathType {
+    DURATION, DISTANCE;
+
+    public static FindPathType find(String typeName) {
+        return Arrays.stream(FindPathType.values())
+                .filter(eachFindPathType -> eachFindPathType.name().equals(typeName))
+                .findFirst()
+                .orElse(FindPathType.DISTANCE);
+    }
 }
