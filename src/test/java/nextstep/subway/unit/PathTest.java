@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +70,36 @@ public class PathTest {
 
         //then
         Assertions.assertThat(path.getFee()).isEqualTo(1950);
+    }
+
+    @Test
+    void 청소년_회원_거리_10km_이하_요금_계산() {
+        //when
+        Path path = new Path(new Sections(List.of(중계_노원)));
+        Member member = new Member("teenager", "password", 18);
+
+        //then
+        Assertions.assertThat(path.getFee(member)).isEqualTo(800);
+    }
+
+    @Test
+    void 어린이_회원_거리_10km_이하_요금_계산() {
+        //when
+        Path path = new Path(new Sections(List.of(중계_노원)));
+        Member member = new Member("children", "password", 12);
+
+        //then
+        Assertions.assertThat(path.getFee(member)).isEqualTo(500);
+    }
+
+    @Test
+    void 성인_회원_거리_10km_이하_요금_계산() {
+        //when
+        Path path = new Path(new Sections(List.of(중계_노원)));
+        Member member = new Member("children", "password", 19);
+
+        //then
+        Assertions.assertThat(path.getFee(member)).isEqualTo(1350);
     }
 
 }

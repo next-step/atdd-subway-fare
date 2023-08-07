@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
+
 import java.util.List;
 
 public class Path {
@@ -30,4 +32,7 @@ public class Path {
         return sections.getLineSurcharge() + DistanceFeeType.getDistanceFee(totalDistance).calculateFee(totalDistance);
     }
 
+    public int getFee(Member member) {
+        return AgeFeeType.getAgeFeeTypeByAge(member.getAge()).getDiscountFee(getFee());
+    }
 }
