@@ -28,6 +28,7 @@ public class PathMockTest {
     void 거리_10km_이하_요금_계산() {
         //when
         when(sections.totalDistance()).thenReturn(10);
+        when(sections.getLineSurcharge()).thenReturn(0);
 
         //then
         Assertions.assertThat(path.getFee()).isEqualTo(1250);
@@ -37,6 +38,7 @@ public class PathMockTest {
     void 거리_10km_초과_50km_까지_요금_계산() {
         //when
         when(sections.totalDistance()).thenReturn(16);
+        when(sections.getLineSurcharge()).thenReturn(0);
 
         //then
         Assertions.assertThat(path.getFee()).isEqualTo(1450);
@@ -46,6 +48,7 @@ public class PathMockTest {
     void 거리_50km_초과_요금_계산() {
         //when
         when(sections.totalDistance()).thenReturn(58);
+        when(sections.getLineSurcharge()).thenReturn(0);
 
         //then
         Assertions.assertThat(path.getFee()).isEqualTo(2150);

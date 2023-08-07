@@ -27,8 +27,7 @@ public class Path {
 
     public int getFee() {
         int totalDistance = sections.totalDistance();
-        return DistanceFeeType.getDistanceFee(totalDistance)
-                .calculateFee(totalDistance);
+        return sections.getLineSurcharge() + DistanceFeeType.getDistanceFee(totalDistance).calculateFee(totalDistance);
     }
 
 }

@@ -3,10 +3,7 @@ package nextstep.subway.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -170,5 +167,10 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int getLineSurcharge() {
+        return sections.stream().map(Section::getLine).collect(Collectors.toSet())
+                .stream().map(Line::getSurcharge).mapToInt(s -> s).max().orElse(0);
     }
 }
