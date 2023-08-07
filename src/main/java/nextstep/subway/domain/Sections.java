@@ -154,4 +154,8 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public boolean isInLine(Line line) {
+        return this.sections.stream().anyMatch(section -> line.getSections().contains(section));
+    }
 }

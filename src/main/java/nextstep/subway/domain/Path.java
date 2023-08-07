@@ -8,7 +8,7 @@ public class Path {
 
     public Path(List<Line> lines, Sections sections) {
         this.sections = sections;
-        this.additionalFare = lines.stream().map(Line::getAdditionalFare).reduce(0, Integer::max);
+        this.additionalFare = lines.stream().filter(sections::isInLine).map(Line::getAdditionalFare).reduce(0, Integer::max);
     }
 
     public Sections getSections() {
