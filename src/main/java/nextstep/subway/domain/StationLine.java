@@ -23,17 +23,21 @@ public class StationLine {
     @Column
     private String color;
 
+    @Column
+    private BigDecimal additionalFee;
+
     @Embedded
     private StationLineSections sections;
 
     @Builder
-    public StationLine(String name, String color, Station upStation, Station downStation, BigDecimal distance, Long duration) {
+    public StationLine(String name, String color, Station upStation, Station downStation, BigDecimal distance, Long duration, BigDecimal additionalFee) {
         if (upStation.equals(downStation)) {
             throw new StationLineCreateException("upStation and downStation can't be equal");
         }
 
         this.name = name;
         this.color = color;
+        this.additionalFee = additionalFee;
 
         final StationLineSection section = StationLineSection.builder()
                 .upStation(upStation)

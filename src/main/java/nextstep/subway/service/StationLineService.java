@@ -35,6 +35,7 @@ public class StationLineService {
 			.downStation(downStation)
 			.distance(request.getDistance())
             .duration(request.getDuration())
+			.additionalFee(request.getAdditionalFee())
 			.build();
 
 		return StationLineResponse.fromEntity(stationLineRepository.save(stationLine));
