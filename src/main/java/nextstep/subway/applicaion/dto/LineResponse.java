@@ -19,14 +19,6 @@ public class LineResponse {
         return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getAdditionalFare(), stations);
     }
 
-    @Deprecated
-    public LineResponse(Long id, String name, String color, List<StationResponse> stations) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.stations = stations;
-    }
-
     public LineResponse(Long id, String name, String color, Long additionalFare, List<StationResponse> stations) {
         this.id = id;
         this.name = name;
