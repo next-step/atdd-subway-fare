@@ -9,6 +9,7 @@ import subway.station.domain.Station;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("구간 단위 테스트")
 class SectionTest {
 
@@ -18,7 +19,7 @@ class SectionTest {
      * Then 새 구간의 상행역은 기존 구간의 하행역이 된다.
      * Then 새로 들어온 구간의 길이 만큼 기존 구간의 길이가 줄어든다
      */
-    @DisplayName("해당 구간의 하행에 새로운 구간을 추가")
+    @DisplayName("구간 추가 : 해당 구간의 하행에 새로운 구간을 추가")
     @Test
     void changeDownStation() {
         // given
@@ -44,7 +45,7 @@ class SectionTest {
      * Then 새 구간의 하행역은 기존 구간의 상행역이 된다.
      * Then 새로 들어온 구간의 길이 만큼 기존 구간의 길이가 줄어든다
      */
-    @DisplayName("해당 구간의 상행에 새로운 구간을 추가")
+    @DisplayName("구간 추가 : 해당 구간의 상행에 새로운 구간을 추가")
     @Test
     void changeUpStation() {
         // given
@@ -69,7 +70,7 @@ class SectionTest {
      * When 기존 구간 보다 긴 새 구간을 추가하려고 하면
      * Then 추가되지 않는다.
      */
-    @DisplayName("기존 구간 이상의 길이는 추가되지 않음")
+    @DisplayName("구간 추가 : 기존 구간 이상의 길이는 추가 불가능")
     @Test
     void changeStationFail() {
         // given
@@ -92,7 +93,7 @@ class SectionTest {
      * Then 2번째 구간의 하행역을 1번째 구간의 하행역으로 옮기고
      * Then 2번째 구간의 길이 만큼 1번째 구간의 길이를 늘린다.
      */
-    @DisplayName("구간의 하행역과 이어진 구간의 하행역을 해당 구간의 하행역으로 이동")
+    @DisplayName("구간 추가 : 구간의 하행역과 이어진 구간의 하행역을 해당 구간의 하행역으로 이동")
     @Test
     void pullDownStationFromUpStationOfTargetSection() {
         // given

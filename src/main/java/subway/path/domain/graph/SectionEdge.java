@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.domain.graph;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

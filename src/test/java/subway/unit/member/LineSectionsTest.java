@@ -14,6 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("LineSection 단위 테스트")
 class LineSectionsTest {
 
@@ -23,7 +24,7 @@ class LineSectionsTest {
      * When 구간을 추가 하면
      * Then 구간이 추가 된다.
      */
-    @DisplayName("구간 추가 기능")
+    @DisplayName("구간 추가")
     @Test
     void add() {
         // given
@@ -135,7 +136,7 @@ class LineSectionsTest {
      * When 노선에 상행역과 하행역이 모두 존재하지 않는 구간을
      * Then 구간이 추가되지 않는다.
      */
-    @DisplayName("노선 추가 기능 : 역 없음")
+    @DisplayName("노선 추가 : 역 없음")
     @Test
     void addAppendSectionNotExistStation() {
         // given
@@ -164,7 +165,7 @@ class LineSectionsTest {
      * When 상행선과 하행선을 요청하면
      * Then 역 목록이 반환된다.
      */
-    @DisplayName("역 목록 조회 기능")
+    @DisplayName("역 목록 조회")
     @Test
     void getStations() {
         // given
@@ -183,7 +184,7 @@ class LineSectionsTest {
      * When 마지막 역의 구간을 삭제하면
      * Then 노선의 구간이 삭제된다
      */
-    @DisplayName("역으로 구간 제거 기능")
+    @DisplayName("역으로 구간 제거")
     @Test
     void removeSectionByStation() {
         // given
@@ -201,7 +202,7 @@ class LineSectionsTest {
      * When 구간을 삭제하면
      * Then 노선의 구간이 삭제 되지 않는다.
      */
-    @DisplayName("역으로 구간 제거 기능 : 최소 구간")
+    @DisplayName("역으로 구간 제거 : 최소 구간")
     @Test
     void removeSectionByStationMinimumSectionCount() {
         // given
@@ -220,7 +221,7 @@ class LineSectionsTest {
      * When 노선의 중간 역인 구간을 삭제하면
      * Then 구간이 삭제된다.
      */
-    @DisplayName("역으로 구간 제거 기능 : 구간 중간 삭제")
+    @DisplayName("역으로 구간 제거 : 구간 중간 삭제")
     @Test
     void removeSectionByStationLastStation() {
         // given
@@ -239,7 +240,7 @@ class LineSectionsTest {
      * When 구간이 연결되지 않은 역을 삭제 하려고 하면
      * Then 구간이 삭제되지 않는다.
      */
-    @DisplayName("역으로 구간 제거 기능 : 없는 역 삭제")
+    @DisplayName("역으로 구간 제거 : 없는 역 삭제")
     @Test
     void removeSectionByNotExistStation() {
         // given

@@ -12,6 +12,7 @@ import subway.member.application.dto.MemberRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("MemberService 단위 테스트 (spring integration test)")
 @SpringBootTest
 @Transactional

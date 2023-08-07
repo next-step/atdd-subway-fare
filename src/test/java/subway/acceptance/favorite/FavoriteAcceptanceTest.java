@@ -1,4 +1,4 @@
-package subway.acceptance.member;
+package subway.acceptance.favorite;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,12 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import subway.acceptance.auth.AuthFixture;
+import subway.acceptance.member.MemberSteps;
 import subway.acceptance.path.PathFixture;
 import subway.acceptance.station.StationFixture;
 import subway.utils.AcceptanceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("즐겨찾기 인수 테스트")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
     private String accessToken = "";

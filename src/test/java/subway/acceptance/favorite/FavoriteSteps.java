@@ -1,4 +1,4 @@
-package subway.acceptance.member;
+package subway.acceptance.favorite;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class FavoriteSteps {
 
     public static ExtractableResponse<Response> 즐겨찾기_생성_API(final String accessToken, Map<String, String> request) {

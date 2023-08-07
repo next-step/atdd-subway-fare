@@ -15,6 +15,7 @@ import subway.station.domain.Station;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("MemberFavoritesTest 단위 테스트 (spring integration test)")
 @SpringBootTest
 @Transactional
@@ -33,7 +34,7 @@ public class MemberFavoritesTest {
         memberFavorites = new MemberFavorites();
     }
 
-    @DisplayName("즐겨찾기 추가 기능")
+    @DisplayName("즐겨찾기 추가")
     @Test
     void add() {
         // given
@@ -49,7 +50,7 @@ public class MemberFavoritesTest {
         assertThat(favorites.size()).isEqualTo(1L);
     }
 
-    @DisplayName("즐겨찾기 추가 기능 : 중복 불가")
+    @DisplayName("즐겨찾기 추가 : 중복 불가")
     @Test
     void addWithAlreadyFavorite() {
         // given
@@ -64,7 +65,7 @@ public class MemberFavoritesTest {
         assertThatThrownBy(() -> memberFavorites.add(build, member)).isInstanceOf(SubwayBadRequestException.class);
     }
 
-    @DisplayName("즐겨찾기 삭제 기능")
+    @DisplayName("즐겨찾기 삭제")
     @Test
     void remove() {
         // given
@@ -80,7 +81,7 @@ public class MemberFavoritesTest {
         assertThat(memberFavorites.getFavorites().size()).isEqualTo(0L);
     }
 
-    @DisplayName("즐겨찾기 삭제 기능 : 다른 소유자의 즐겨찾기 삭제 불가")
+    @DisplayName("즐겨찾기 삭제 : 다른 소유자의 즐겨찾기 삭제 불가")
     @Test
     void removeWithNotMyOwn() {
         // given

@@ -9,11 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.application.PathFinder;
-import subway.path.application.PathFinderFactory;
 import subway.path.application.PathService;
+import subway.path.application.dto.PathRetrieveRequest;
 import subway.path.application.dto.PathRetrieveResponse;
-import subway.path.domain.Path;
 import subway.path.domain.PathRetrieveType;
 import subway.station.application.StationService;
 import subway.station.application.dto.StationResponse;
@@ -22,9 +20,9 @@ import subway.station.domain.Station;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("PathService 단위 테스트 (stub)")
 @ExtendWith(MockitoExtension.class)
 public class PathServiceMockTest {
@@ -32,8 +30,6 @@ public class PathServiceMockTest {
     private StationService stationService;
     @Mock
     private LineService lineService;
-    @Mock
-    private PathFinderFactory pathFinderFactory;
     @InjectMocks
     private PathService pathService;
 
@@ -56,18 +52,18 @@ public class PathServiceMockTest {
         Section 이호선_2구간 = Section.builder().id(2L).upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
         이호선.addSection(이호선_2구간);
 
-        List<Station> stations = List.of(강남역, 역삼역, 선릉역);
-        Path response = Path.builder().totalDistance(10L).stations(stations).build();
-        PathFinder pathFinder = mock(PathFinder.class);
-        when(pathFinderFactory.createFinder(PathRetrieveType.DISTANCE)).thenReturn(pathFinder);
-
         when(stationService.findStationById(1L)).thenReturn(강남역);
         when(stationService.findStationById(3L)).thenReturn(선릉역);
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
-        when(pathFinder.findPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
 
         // when
-        PathRetrieveResponse shortestPath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DISTANCE);
+        PathRetrieveRequest request = PathRetrieveRequest.builder()
+                .source(강남역.getId())
+                .target(선릉역.getId())
+                .type(PathRetrieveType.DISTANCE)
+                .principal(null)
+                .build();
+        PathRetrieveResponse shortestPath = pathService.getPath(request);
 
         // then
         assertThat(shortestPath.getStations())
@@ -97,18 +93,19 @@ public class PathServiceMockTest {
         Section 이호선_2구간 = Section.builder().id(2L).upStation(역삼역).downStation(선릉역).distance(5L).duration(5L).build();
         이호선.addSection(이호선_2구간);
 
-        List<Station> stations = List.of(강남역, 역삼역, 선릉역);
-        Path response = Path.builder().totalDistance(10L).totalDuration(10L).stations(stations).build();
-        PathFinder pathFinder = mock(PathFinder.class);
-        when(pathFinderFactory.createFinder(PathRetrieveType.DURATION)).thenReturn(pathFinder);
-
         when(stationService.findStationById(1L)).thenReturn(강남역);
         when(stationService.findStationById(3L)).thenReturn(선릉역);
         when(lineService.findByStation(강남역, 선릉역)).thenReturn(List.of(이호선));
-        when(pathFinder.findPath(이호선.getLineSections().getSections(), 강남역, 선릉역)).thenReturn(response);
 
         // when
-        PathRetrieveResponse minimumTimePath = pathService.getPath(강남역.getId(), 선릉역.getId(), PathRetrieveType.DURATION);
+
+        PathRetrieveRequest request = PathRetrieveRequest.builder()
+                .source(강남역.getId())
+                .target(선릉역.getId())
+                .type(PathRetrieveType.DURATION)
+                .principal(null)
+                .build();
+        PathRetrieveResponse minimumTimePath = pathService.getPath(request);
 
         // then
         assertThat(minimumTimePath.getStations())

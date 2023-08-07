@@ -1,9 +1,11 @@
-package subway.acceptance.line;
+package subway.acceptance.section;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import subway.acceptance.line.LineFixture;
+import subway.acceptance.line.LineSteps;
 import subway.acceptance.station.StationFixture;
 import subway.utils.AcceptanceTest;
 
@@ -12,6 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.acceptance.station.StationFixture.getStationId;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("구간 인수 테스트")
 public class SectionAcceptanceTest extends AcceptanceTest {
 

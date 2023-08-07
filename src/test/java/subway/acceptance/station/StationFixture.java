@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class StationFixture {
     public static final Map<String, Long> stationsIdMap = new HashMap<>();
 

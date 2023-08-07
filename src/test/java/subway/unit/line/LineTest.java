@@ -3,7 +3,7 @@ package subway.unit.line;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import subway.acceptance.line.SectionFixture;
+import subway.acceptance.section.SectionFixture;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.station.domain.Station;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("Line 단위 테스트")
 class LineTest {
 
@@ -20,7 +21,7 @@ class LineTest {
      * When 구간을 만들면
      * Then 노선에 구간이 추가 된다.
      */
-    @DisplayName("노선에 구간을 추가 한다")
+    @DisplayName("구간 추가")
     @Test
     void addSection() {
         // given
@@ -51,7 +52,7 @@ class LineTest {
      * When 노선의 마지막에 구간을 만들면
      * Then 노선에 구간이 추가 된다.
      */
-    @DisplayName("노선의 마지막에 구간을 추가 한다.")
+    @DisplayName("구간 추가 : 노선의 가장 끝에 추가")
     @Test
     void addSectionEndOfLine() {
         // given
@@ -80,7 +81,7 @@ class LineTest {
      * When 노선의 처음에 구간을 만들면
      * Then 노선에 구간이 추가 된다.
      */
-    @DisplayName("노선의 처음에 구간을 추가 한다.")
+    @DisplayName("구간 추가 : 노선의 가장 앞에 추가")
     @Test
     void addSectionFrontOfLine() {
         // given
@@ -111,7 +112,7 @@ class LineTest {
      * When 노선의 중간 구간을 만들면
      * Then 노선에 구간이 추가 된다.
      */
-    @DisplayName("노선의 중간에 구간을 추가 한다.")
+    @DisplayName("구간 추가 : 노선의 중간에 추가")
     @Test
     void addSectionInMiddleOfLine() {
         // given
@@ -143,7 +144,7 @@ class LineTest {
      * When 역을 조회하면
      * Then 역 목록을 얻을 수 있다
      */
-    @DisplayName("노선에서 역을 조회한다.")
+    @DisplayName("역 조회")
     @Test
     void getStations() {
         // given
@@ -161,7 +162,7 @@ class LineTest {
      * When 마지막 역을 삭제 하려고 하면
      * Then 구간을 삭제할 수 있다
      */
-    @DisplayName("노선에서 마지막 역의 구간을 삭제한다.")
+    @DisplayName("구간 삭제 : 마지막 역 삭제")
     @Test
     void deleteSectionByStation() {
         // given
@@ -175,6 +176,4 @@ class LineTest {
         long sectionsCount = line.getLineSections().getSectionsCount();
         assertThat(sectionsCount).isEqualTo(1);
     }
-
-
 }

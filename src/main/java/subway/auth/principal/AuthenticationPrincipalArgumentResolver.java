@@ -13,6 +13,7 @@ import subway.exception.AuthenticationException;
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private final JwtTokenProvider jwtTokenProvider;
+    private static final String NULL_TOKEN = "NULL_TOKEN";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -23,28 +24,48 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) {
+        AuthenticationPrincipal authPrincipalAnnotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        boolean isRequired = authPrincipalAnnotation.required();
         String authorization = webRequest.getHeader("Authorization");
-        validAuthorization(authorization);
+        String token = validAuthorizationAndGetToken(authorization, isRequired);
+
+        if (NULL_TOKEN.equals(token)) {
+            return null;
+        }
+
+        return getUserPrincipalFromToken(token);
+    }
+
+    private String validAuthorizationAndGetToken(String authorization, boolean isRequired) {
+        if (!isValidAuthorization(authorization)) {
+            handleInvalidToken(isRequired);
+            return NULL_TOKEN;
+        }
+
         String token = authorization.split(" ")[1];
-        validToken(token);
+
+        if (!jwtTokenProvider.validateToken(token)) {
+            handleInvalidToken(isRequired);
+            return NULL_TOKEN;
+        }
+
+        return token;
+    }
+
+    private void handleInvalidToken(boolean isRequired) {
+        if (isRequired) {
+            throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
+        }
+    }
+
+    private UserPrincipal getUserPrincipalFromToken(String token) {
         String username = jwtTokenProvider.getPrincipal(token);
         String role = jwtTokenProvider.getRoles(token);
 
         return new UserPrincipal(username, role);
     }
 
-    private void validToken(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new AuthenticationException(SubwayMessage.AUTH_INVALID_TOKEN);
-        }
-    }
-
-    private static void validAuthorization(String authorization) {
-        if (authorization == null) {
-            throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
-        }
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
-            throw new AuthenticationException(SubwayMessage.AUTH_TOKEN_NOT_FOUND_FROM_HEADERS);
-        }
+    private boolean isValidAuthorization(String authorization) {
+        return authorization != null && "bearer".equalsIgnoreCase(authorization.split(" ")[0]);
     }
 }

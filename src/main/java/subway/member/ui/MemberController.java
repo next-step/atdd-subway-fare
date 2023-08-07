@@ -15,6 +15,7 @@ import subway.member.application.MemberService;
 import subway.member.application.dto.MemberRequest;
 import subway.member.application.dto.MemberRetrieveResponse;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -27,7 +28,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createMember(@RequestBody MemberRequest request) {
+    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequest request) {
         MemberRetrieveResponse member = memberService.createMember(request);
         return ResponseEntity.created(URI.create("/members/" + member.getId())).build();
     }
@@ -46,7 +47,7 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MemberRetrieveResponse> updateMember(@PathVariable Long id,
-                                                               @RequestBody MemberRequest param) {
+                                                               @RequestBody @Valid MemberRequest param) {
         memberService.updateMember(id, param);
         return ResponseEntity.ok().build();
     }

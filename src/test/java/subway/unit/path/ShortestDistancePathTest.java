@@ -7,8 +7,9 @@ import subway.acceptance.station.StationFixture;
 import subway.exception.SubwayBadRequestException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.application.PathFinder;
-import subway.path.application.ShortestDistancePathFinder;
+import subway.path.domain.PathFinder;
+import subway.path.domain.strategy.ShortestDistancePathFinderStrategy;
+import subway.path.application.dto.PathFinderRequest;
 import subway.path.domain.Path;
 import subway.station.domain.Station;
 
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static subway.acceptance.station.StationFixture.getStation;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayName("ShortestDistancePathFinder 단위 테스트")
 public class ShortestDistancePathTest {
     private PathFinder shortestDistancePathFinder;
@@ -44,7 +46,7 @@ public class ShortestDistancePathTest {
 
     @BeforeEach
     void beforeEach() {
-        ShortestDistancePathFinder shortestDistancePathStrategy = new ShortestDistancePathFinder();
+        ShortestDistancePathFinderStrategy shortestDistancePathStrategy = new ShortestDistancePathFinderStrategy();
         shortestDistancePathFinder = new PathFinder(shortestDistancePathStrategy);
 
         StationFixture.기본_역_생성();
@@ -81,7 +83,8 @@ public class ShortestDistancePathTest {
     @Test
     void getShortestDistancePath() {
         // when
-        Path shortestPath = shortestDistancePathFinder.findPath(구간목록, getStation("교대역"), getStation("양재역"));
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(getStation("교대역")).targetStation(getStation("양재역")).sections(구간목록).build();
+        Path shortestPath = shortestDistancePathFinder.findPath(pathFinderRequest);
 
         // then
         assertThat(shortestPath.getStations())
@@ -101,7 +104,8 @@ public class ShortestDistancePathTest {
     @Test
     void getShortestDistancePathWithSameOrigin() {
         // when/then
-        assertThatThrownBy(() -> shortestDistancePathFinder.findPath(구간목록, getStation("교대역"), getStation("교대역")))
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(getStation("교대역")).targetStation(getStation("교대역")).sections(구간목록).build();
+        assertThatThrownBy(() -> shortestDistancePathFinder.findPath(pathFinderRequest))
                 .isInstanceOf(SubwayBadRequestException.class);
     }
 
@@ -114,7 +118,8 @@ public class ShortestDistancePathTest {
     @Test
     void getShortestDistancePathNotConnectedSection() {
         // when/then
-        assertThatThrownBy(() -> shortestDistancePathFinder.findPath(구간목록, getStation("교대역"), getStation("왕십리역")))
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(getStation("교대역")).targetStation(getStation("왕십리역")).sections(구간목록).build();
+        assertThatThrownBy(() -> shortestDistancePathFinder.findPath(pathFinderRequest))
                 .isInstanceOf(SubwayBadRequestException.class);
     }
 
@@ -127,7 +132,8 @@ public class ShortestDistancePathTest {
     @Test
     void getShortestDistancePathNotExistStation() {
         // when/then
-        assertThatThrownBy(() -> shortestDistancePathFinder.findPath(구간목록, new Station(99L, "그런역"), new Station(98L, "저런역")))
+        var pathFinderRequest = PathFinderRequest.builder().sourceStation(new Station(99L, "그런역")).targetStation(new Station(98L, "저런역")).sections(구간목록).build();
+        assertThatThrownBy(() -> shortestDistancePathFinder.findPath(pathFinderRequest))
                 .isInstanceOf(SubwayBadRequestException.class);
     }
 
