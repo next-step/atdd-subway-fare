@@ -91,8 +91,7 @@ class SubwayMapTest {
 
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.extractDistance()).isEqualTo(11);
+            verifyStationsAndDistance(path, List.of(station1Id, station2Id, station3Id), 11);
             assertThat(path.extractDuration()).isEqualTo(2);
         }
 
@@ -121,8 +120,7 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station3);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station4Id, station3Id);
-            assertThat(path.extractDistance()).isEqualTo(21);
+            verifyStationsAndDistance(path, List.of(station1Id, station4Id, station3Id), 21);
         }
 
         /**
@@ -146,8 +144,7 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station3);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.extractDistance()).isEqualTo(19);
+            verifyStationsAndDistance(path, List.of(station1Id, station2Id, station3Id), 19);
         }
 
         /**
@@ -178,8 +175,7 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station4);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id, station4Id);
-            assertThat(path.extractDistance()).isEqualTo(8);
+            verifyStationsAndDistance(path, List.of(station1Id, station2Id, station3Id, station4Id), 8);
         }
 
         /**
@@ -210,12 +206,17 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station4);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station6Id, station7Id, station4Id);
-            assertThat(path.extractDistance()).isEqualTo(20);
+            verifyStationsAndDistance(path, List.of(station1Id, station2Id, station6Id, station7Id, station4Id), 20);
         }
         
         private void addSection(Line line, Station upStation, Station downStation, int distance) {
             line.addSection(upStation, downStation, distance, FIXED_DURATION);
+        }
+
+        private void verifyStationsAndDistance(Path path, List<Long> stations, int expectedDistance) {
+            assertThat(path.getStations().stream().map(Station::getId)
+                               .collect(Collectors.toList())).containsExactlyElementsOf(stations);
+            assertThat(path.extractDistance()).isEqualTo(expectedDistance);
         }
     }
 
@@ -252,9 +253,7 @@ class SubwayMapTest {
 
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.extractDuration()).isEqualTo(11);
-            assertThat(path.extractDistance()).isEqualTo(2);
+            verifyStationsAndDuration(path, List.of(station1Id, station2Id, station3Id), 11);
         }
 
         /**
@@ -282,8 +281,7 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station3);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station4Id, station3Id);
-            assertThat(path.extractDuration()).isEqualTo(21);
+            verifyStationsAndDuration(path, List.of(station1Id, station4Id, station3Id), 21);
         }
 
         /**
@@ -307,8 +305,7 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station3);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id);
-            assertThat(path.extractDuration()).isEqualTo(19);
+            verifyStationsAndDuration(path, List.of(station1Id, station2Id, station3Id), 19);
         }
 
         /**
@@ -339,8 +336,7 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station4);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station3Id, station4Id);
-            assertThat(path.extractDuration()).isEqualTo(8);
+            verifyStationsAndDuration(path, List.of(station1Id, station2Id, station3Id, station4Id), 8);
         }
 
         /**
@@ -371,12 +367,17 @@ class SubwayMapTest {
             Path path = subwayMap.findPath(station1, station4);
 
             // then
-            assertThat(path.getStations().stream().map(Station::getId).collect(Collectors.toList())).containsExactly(station1Id, station2Id, station6Id, station7Id, station4Id);
-            assertThat(path.extractDuration()).isEqualTo(20);
+            verifyStationsAndDuration(path, List.of(station1Id, station2Id, station6Id, station7Id, station4Id), 20);
         }
 
         private void addSection(Line line, Station upStation, Station downStation, int duration) {
             line.addSection(upStation, downStation, FIXED_DISTANCE, duration);
+        }
+
+        private void verifyStationsAndDuration(Path path, List<Long> stations, int expectedDuration) {
+            assertThat(path.getStations().stream().map(Station::getId)
+                               .collect(Collectors.toList())).containsExactlyElementsOf(stations);
+            assertThat(path.extractDuration()).isEqualTo(expectedDuration);
         }
     }
 

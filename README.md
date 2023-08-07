@@ -38,3 +38,13 @@ git rebase upstream/songteaheon
   - [X] 단위 테스트 작성
   - [X] 기능 구현
   - [X] 개발 흐름을 파악할 수 있도록 커밋을 작은 단위로 나누어 구현해보세요.
+
+## 2단계
+- [ ] 1단계 리뷰 반영
+  - [ ] SubwayMapTest 수정 - 질문하기 ParameterizedTest
+  - [X] PathAcceptanceTest 수정
+- [X] 경로 조회 결과에 요금 정보를 포함하세요. (실제 경로가 아닌 최단거리 기준으로 금액을 계산한다.)
+  - [X] 인수 테스트 (수정)
+  - [X] 문서화
+  - [X] 단위 테스트 작성
+  - [X] 코드 수정
