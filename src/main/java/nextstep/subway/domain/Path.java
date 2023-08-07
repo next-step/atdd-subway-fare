@@ -1,6 +1,5 @@
 package nextstep.subway.domain;
 
-import nextstep.member.domain.Member;
 import nextstep.subway.domain.fare.SubwayFare;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class Path {
         return sections.totalDuration();
     }
 
-    public int fare(Member member) {
-        return SubwayFare.calculateFare(this, member);
+    public int fare(int age) {
+        return SubwayFare.calculateFare(this, age);
     }
 }

@@ -42,7 +42,7 @@ public class SubwayFareTest {
         path = createPath(section);
 
         // when
-        int fare = SubwayFare.calculateFare(path, 청소년_사용자);
+        int fare = SubwayFare.calculateFare(path, 청소년_사용자.getAge());
 
         // then
         assertThat(fare).isEqualTo(1600);
@@ -56,7 +56,7 @@ public class SubwayFareTest {
         path = createPath(section);
 
         // when
-        int fare = SubwayFare.calculateFare(path, 게스트_사용자);
+        int fare = SubwayFare.calculateFare(path, 게스트_사용자.getAge());
 
         // then
         assertThat(fare).isEqualTo(2350);

@@ -1,6 +1,5 @@
 package nextstep.subway.applicaion;
 
-import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -25,7 +24,7 @@ public class PathService {
         this.memberRepository = memberRepository;
     }
 
-    public PathResponse findPath(PathRequest request, String email) {
+    public PathResponse findPath(PathRequest request, int age) {
         Station upStation = stationService.findById(request.getSource());
         Station downStation = stationService.findById(request.getTarget());
         List<Line> lines = lineService.findLines();
@@ -35,10 +34,6 @@ public class PathService {
         Path shortestDistancePath = (request.getType() == PathType.DISTANCE) ? new Path(path.getSections())
                 : subwayMap.findPath(upStation, downStation, PathType.DISTANCE);
 
-        Member member = memberRepository
-                .findByEmail(email)
-                .orElseGet(() -> new Member(email, "", 0));
-
-        return PathResponse.of(path, shortestDistancePath, member);
+        return PathResponse.of(path, shortestDistancePath, age);
     }
 }

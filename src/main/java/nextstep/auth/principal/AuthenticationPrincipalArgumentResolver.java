@@ -2,7 +2,7 @@ package nextstep.auth.principal;
 
 import nextstep.auth.AuthenticationException;
 import nextstep.auth.token.JwtTokenProvider;
-import nextstep.member.domain.RoleType;
+import nextstep.auth.userdetails.UserDetailsService;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -12,9 +12,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private JwtTokenProvider jwtTokenProvider;
+    private UserDetailsService userDetailsService;
 
-    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
+    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -28,17 +30,16 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
         AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         if (!authenticationPrincipal.required() && !StringUtils.hasText(authorization)) {
-            return new UserPrincipal("guest", RoleType.ROLE_GUEST.toString());
+            return userDetailsService.getNullUserDetails();
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
+
         String token = authorization.split(" ")[1];
-
         String username = jwtTokenProvider.getPrincipal(token);
-        String role = jwtTokenProvider.getRoles(token);
 
-        return new UserPrincipal(username, role);
+        return userDetailsService.loadUserByUsername(username);
     }
 }

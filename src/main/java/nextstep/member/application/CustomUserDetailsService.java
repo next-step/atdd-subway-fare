@@ -6,6 +6,7 @@ import nextstep.auth.userdetails.UserDetailsService;
 import nextstep.member.domain.CustomUserDetails;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
+import nextstep.member.domain.NonLoginMember;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         Member member = memberRepository.findByEmail(username).orElseThrow(AuthenticationException::new);
-        return new CustomUserDetails(member.getEmail(), member.getPassword(), member.getRole());
+        return new CustomUserDetails(member.getEmail(), member.getPassword(), member.getRole(), member.getAge());
+    }
+
+    @Override
+    public UserDetails getNullUserDetails() {
+        return new NonLoginMember();
     }
 }
