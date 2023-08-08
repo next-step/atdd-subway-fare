@@ -50,25 +50,63 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
+     * Scenario : 두 역의 최단 거리 경로를 조회
      * Given : 지하철역을 4개 생성하고
      * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 구간을 생성하고
      * And : 하나의 지하철역에 1개의 구간을 추가한 후
-     * When : 최단 경로 조회를 요청하면
-     * Then : 경로와 거리를 응답한다.
+     * When : 최단 거리 경로 조회를 요청하면
+     * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
     @DisplayName("출발역으로 부터 도착역으로의 최단경로 조회")
     @Test
-    void searchPath() {
+    void searchShortestDistancePath() {
         // when
-        ExtractableResponse<Response> pathsResponse = PathStep.최단거리_조회_요청(1, 3, RestAssuredUtils.given_절_생성());
+        ExtractableResponse<Response> pathsResponse = PathStep.경로_조회_요청(1, 3, "DISTANCE", RestAssuredUtils.given_절_생성());
 
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+
         List<String> stationNames = pathsResponse.jsonPath().getList("stations.name", String.class);
-        int distance = pathsResponse.jsonPath().getInt("distance");
+        int distance = 총_이동거리_추출(pathsResponse);
+        int duration = 소요시간_추출(pathsResponse);
 
         assertThat(stationNames).hasSize(3);
         assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
         assertThat(distance).isEqualTo(5);
+        assertThat(duration).isEqualTo(10);
+    }
+
+    private int 총_이동거리_추출(ExtractableResponse<Response> pathsResponse) {
+        return pathsResponse.jsonPath().getInt("distance");
+    }
+
+    private int 소요시간_추출(ExtractableResponse<Response> pathsResponse) {
+        return pathsResponse.jsonPath().getInt("duration");
+    }
+
+    /**
+     * Scenario : 두 역의 최소 시간 경로를 조회
+     * Given : 지하철역을 4개 생성하고
+     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 구간을 생성하고
+     * And : 하나의 지하철역에 1개의 구간을 추가한 후
+     * When : 최소 시간 경로 조회를 요청하면
+     * Then : 경로와 거리, 총 소요 시간을 응답한다.
+     */
+    @Test
+    void searchShortestDurationPath() {
+        // when
+        ExtractableResponse<Response> pathsResponse = PathStep.경로_조회_요청(1, 3, "DURATION", RestAssuredUtils.given_절_생성());
+
+        // then
+        assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<String> stationNames = pathsResponse.jsonPath().getList("stations.name", String.class);
+        int distance = 총_이동거리_추출(pathsResponse);
+        int duration = 소요시간_추출(pathsResponse);
+
+        assertThat(stationNames).hasSize(3);
+        assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
+        assertThat(distance).isEqualTo(5);
+        assertThat(duration).isEqualTo(10);
     }
 }

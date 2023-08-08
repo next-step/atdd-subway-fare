@@ -4,15 +4,17 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import java.util.Map;
+import java.util.Objects;
 
 public class PathStep {
     private PathStep() {
     }
 
-    public static ExtractableResponse<Response> 최단거리_조회_요청(int sourceStationId, int targetStationId, RequestSpecification requestSpecification) {
-        Map<String, Integer> params = Map.of(
+    public static ExtractableResponse<Response> 경로_조회_요청(int sourceStationId, int targetStationId, String type, RequestSpecification requestSpecification) {
+        Map<String, Object> params = Map.of(
                 "source", sourceStationId,
-                "target", targetStationId
+                "target", targetStationId,
+                "type", type
         );
 
         return requestSpecification

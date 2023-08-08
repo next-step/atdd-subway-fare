@@ -1,6 +1,6 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.acceptance.step.PathStep.최단거리_조회_요청;
+import static nextstep.subway.acceptance.step.PathStep.경로_조회_요청;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -54,6 +54,6 @@ public class PathDocumentation extends Documentation {
                 )
         );
 
-        최단거리_조회_요청(1, 2, RestAssuredUtils.given_절_생성(spec, document));
+        경로_조회_요청(1, 2, RestAssuredUtils.given_절_생성(spec, document));
     }
 }
