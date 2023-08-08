@@ -30,12 +30,6 @@ public class PathResponse {
         return new PathResponse(stations, distance, duration, fee);
     }
 
-    public static PathResponse of(Path path, Member member) {
-        PathResponse response = of(path);
-        response.fee = path.getFee(member);
-        return response;
-    }
-
     public List<StationResponse> getStations() {
         return stations;
     }

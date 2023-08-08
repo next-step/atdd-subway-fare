@@ -1,8 +1,6 @@
 package nextstep.subway.applicaion;
 
 import nextstep.auth.principal.UserPrincipal;
-import nextstep.member.application.MemberService;
-import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -13,8 +11,8 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
     private final MemberRepository memberRepository;
 
     public PathService(LineService lineService, StationService stationService, MemberRepository memberRepository) {
@@ -32,7 +30,7 @@ public class PathService {
 
         if (userPrincipal != null) {
             Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(IllegalAccessError::new);
-            return PathResponse.of(path, member);
+            path.setMember(member);
         }
         return PathResponse.of(path);
     }

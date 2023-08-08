@@ -75,31 +75,31 @@ public class PathTest {
     @Test
     void 청소년_회원_거리_10km_이하_요금_계산() {
         //when
-        Path path = new Path(new Sections(List.of(중계_노원)));
         Member member = new Member("teenager", "password", 18);
+        Path path = new Path(new Sections(List.of(중계_노원)), member);
 
         //then
-        Assertions.assertThat(path.getFee(member)).isEqualTo(800);
+        Assertions.assertThat(path.getFee()).isEqualTo(800);
     }
 
     @Test
     void 어린이_회원_거리_10km_이하_요금_계산() {
         //when
-        Path path = new Path(new Sections(List.of(중계_노원)));
         Member member = new Member("children", "password", 12);
+        Path path = new Path(new Sections(List.of(중계_노원)), member);
 
         //then
-        Assertions.assertThat(path.getFee(member)).isEqualTo(500);
+        Assertions.assertThat(path.getFee()).isEqualTo(500);
     }
 
     @Test
     void 성인_회원_거리_10km_이하_요금_계산() {
         //when
-        Path path = new Path(new Sections(List.of(중계_노원)));
         Member member = new Member("children", "password", 19);
+        Path path = new Path(new Sections(List.of(중계_노원)), member);
 
         //then
-        Assertions.assertThat(path.getFee(member)).isEqualTo(1350);
+        Assertions.assertThat(path.getFee()).isEqualTo(1350);
     }
 
 }

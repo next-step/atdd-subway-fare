@@ -5,10 +5,16 @@ import nextstep.member.domain.Member;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
+    private final Sections sections;
+    private Member member;
+
+    public Path(Sections sections, Member member) {
+        this.sections = sections;
+        this.member = member;
+    }
 
     public Path(Sections sections) {
-        this.sections = sections;
+        this(sections, null);
     }
 
     public Sections getSections() {
@@ -17,6 +23,10 @@ public class Path {
 
     public int extractDistance() {
         return sections.totalDistance();
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public int extractDuration() {
@@ -29,10 +39,13 @@ public class Path {
 
     public int getFee() {
         int totalDistance = sections.totalDistance();
-        return sections.getLineSurcharge() + DistanceFeeType.getDistanceFee(totalDistance).calculateFee(totalDistance);
+        int lineSurcharge = sections.getLineSurcharge();
+        int distanceFee = DistanceFeeType.getDistanceFee(totalDistance).calculateFee(totalDistance);
+        int totalFee = lineSurcharge + distanceFee;
+        if (member != null) {
+            return AgeFeeType.getAgeFeeTypeByAge(member.getAge()).getDiscountFee(totalFee);
+        }
+        return totalFee;
     }
 
-    public int getFee(Member member) {
-        return AgeFeeType.getAgeFeeTypeByAge(member.getAge()).getDiscountFee(getFee());
-    }
 }

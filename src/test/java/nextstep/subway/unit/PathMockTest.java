@@ -63,9 +63,10 @@ public class PathMockTest {
         when(sections.totalDistance()).thenReturn(10);
         when(sections.getLineSurcharge()).thenReturn(0);
         when(member.getAge()).thenReturn(18);
+        path.setMember(member);
 
         //then
-        Assertions.assertThat(path.getFee(member)).isEqualTo(720);
+        Assertions.assertThat(path.getFee()).isEqualTo(720);
     }
 
     @Test
@@ -74,9 +75,10 @@ public class PathMockTest {
         when(sections.totalDistance()).thenReturn(10);
         when(sections.getLineSurcharge()).thenReturn(0);
         when(member.getAge()).thenReturn(12);
+        path.setMember(member);
 
         //then
-        Assertions.assertThat(path.getFee(member)).isEqualTo(450);
+        Assertions.assertThat(path.getFee()).isEqualTo(450);
     }
 
     @Test
@@ -85,8 +87,9 @@ public class PathMockTest {
         when(sections.totalDistance()).thenReturn(10);
         when(sections.getLineSurcharge()).thenReturn(0);
         when(member.getAge()).thenReturn(19);
+        path.setMember(member);
 
         //then
-        Assertions.assertThat(path.getFee(member)).isEqualTo(1250);
+        Assertions.assertThat(path.getFee()).isEqualTo(1250);
     }
 }
