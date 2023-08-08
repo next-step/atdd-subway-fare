@@ -2,6 +2,7 @@ package nextstep.subway.domain.service;
 
 import lombok.Builder;
 import nextstep.subway.domain.StationLine;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +18,10 @@ public class StationLineAdditionalFeeCalculator extends AbstractStationPathFeeCa
     }
 
     private BigDecimal getMaximumFeeOfLineAdditionalFee(List<StationLine> lines) {
+        if (CollectionUtils.isEmpty(lines)) {
+            return BigDecimal.ZERO;
+        }
+
         return lines.stream()
                 .map(StationLine::getAdditionalFee)
                 .max(BigDecimal::compareTo)

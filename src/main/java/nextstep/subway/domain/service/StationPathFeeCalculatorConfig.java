@@ -10,16 +10,17 @@ public class StationPathFeeCalculatorConfig {
     private final static BigDecimal FEE_PER_DISTANCE_UNIT = BigDecimal.valueOf(100);
 
     @Bean
-    public AbstractStationPathFeeCalculator secondSectionPathFeeCalculator() {
-        return SectionPathFeeCalculator.builder()
+    public AbstractStationPathFeeCalculator pathFeeCalculator() {
+        final AbstractStationPathFeeCalculator stationLineAdditionalFeeCalculator = StationLineAdditionalFeeCalculator.builder()
+                .build();
+
+        final AbstractStationPathFeeCalculator secondSectionPathFeeCalculator = SectionPathFeeCalculator.builder()
                 .startPoint(BigDecimal.valueOf(51))
                 .feeIncreasedDistanceUnit(BigDecimal.valueOf(8))
                 .feePerDistanceUnit(FEE_PER_DISTANCE_UNIT)
+                .nextPathFeeCalculator(stationLineAdditionalFeeCalculator)
                 .build();
-    }
 
-    @Bean
-    public AbstractStationPathFeeCalculator firstSectionPathFeeCalculator(AbstractStationPathFeeCalculator secondSectionPathFeeCalculator) {
         return SectionPathFeeCalculator.builder()
                 .startPoint(BigDecimal.TEN)
                 .endPoint(BigDecimal.valueOf(50))

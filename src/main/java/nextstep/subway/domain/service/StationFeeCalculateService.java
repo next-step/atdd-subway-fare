@@ -1,20 +1,29 @@
 package nextstep.subway.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.subway.domain.StationLine;
+import nextstep.subway.domain.StationLineRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class StationFeeCalculateService {
     public static final BigDecimal baseFee = BigDecimal.valueOf(1250);
 
-    private final AbstractStationPathFeeCalculator firstSectionPathFeeCalculator;
+    private final AbstractStationPathFeeCalculator pathFeeCalculator;
+    private final StationPathAggregationService stationPathAggregationService;
+    private final StationLineRepository stationLineRepository;
 
-    public BigDecimal calculateFee(BigDecimal distance) {
-        return firstSectionPathFeeCalculator.calculateFee(baseFee, StationPathFeeContext.builder()
+    public BigDecimal calculateFee(BigDecimal distance, List<Long> pathStationIds) {
+        final List<StationLine> totalLines = stationLineRepository.findAll();
+        final List<StationLine> pathLines = stationPathAggregationService.getPathStationLine(totalLines, pathStationIds);
+
+        return pathFeeCalculator.calculateFee(baseFee, StationPathFeeContext.builder()
                 .distance(distance)
+                .lines(pathLines)
                 .build());
     }
 }

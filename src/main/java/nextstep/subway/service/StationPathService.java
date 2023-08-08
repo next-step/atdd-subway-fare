@@ -42,7 +42,7 @@ public class StationPathService {
 
         final List<Long> pathStationIds = stationShortestPathCalculateService.getShortestPathStations(startStation, destinationStation, type);
         final BigDecimal distance = stationPathAccumulateService.accumulateTotalDistance(pathStationIds);
-        final BigDecimal fee = stationFeeCalculateService.calculateFee(distance);
+        final BigDecimal fee = stationFeeCalculateService.calculateFee(distance, pathStationIds);
         final Long duration = stationPathAccumulateService.accumulateTotalDuration(pathStationIds);
 
         return StationPathResponse.builder()

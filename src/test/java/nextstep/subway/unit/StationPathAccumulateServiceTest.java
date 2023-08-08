@@ -5,6 +5,7 @@ import nextstep.subway.domain.StationLine;
 import nextstep.subway.domain.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.domain.service.StationPathAccumulateService;
+import nextstep.subway.domain.service.StationPathAggregationService;
 import nextstep.subway.unit.fixture.StationLineSpec;
 import nextstep.subway.unit.fixture.StationSpec;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static nextstep.utils.UnitTestUtils.createEntityTestIds;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +38,8 @@ public class StationPathAccumulateServiceTest {
     @Mock
     StationLineRepository stationLineRepository;
 
+    @Spy
+    StationPathAggregationService stationPathAggregationService;
     Map<String, Station> stationByName;
     Map<String, Long> stationIdByName;
     Map<Long, StationLineSection> sectionByDownStationId;
