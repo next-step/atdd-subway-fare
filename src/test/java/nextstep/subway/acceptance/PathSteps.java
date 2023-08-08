@@ -41,12 +41,13 @@ public class PathSteps {
     }
 
     public static void 경로_조회_검증(ExtractableResponse<Response> response, List<Long> expectedIds, int distance,
-            int duration) {
+            int duration,int fare) {
         Assertions.assertAll(
                 () -> assertThat(response.jsonPath().getList("stations.id", Long.class))
                         .containsAll(expectedIds),
                 () -> assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance),
-                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration)
+                () -> assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration),
+                () -> assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare)
         );
     }
 

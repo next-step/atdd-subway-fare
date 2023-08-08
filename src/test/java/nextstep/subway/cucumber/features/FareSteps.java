@@ -86,6 +86,6 @@ public class FareSteps {
 
     @And("지하철 이용 요금도 함께 응답함")
     public void provideFare() {
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(0);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(100);
     }
 }
