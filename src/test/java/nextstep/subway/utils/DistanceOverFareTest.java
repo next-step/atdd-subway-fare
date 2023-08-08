@@ -2,21 +2,20 @@ package nextstep.subway.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import nextstep.subway.domain.farechain.DistanceOverFare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class CalculateFareUtilsTest {
-
-    private static final int DEFAULT_FARE = 1250;
+class DistanceOverFareTest {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 10})
-    @DisplayName("10km 까지는 기본요금")
+    @DisplayName("10km 까지는 거리에따른 추가요금이 없음")
     void defaultFare(int distance) {
 
-        assertThat(CalculateFareUtils.getFare(distance)).isEqualTo(DEFAULT_FARE);
+        assertThat(DistanceOverFare.getOverDistanceFare(distance)).isZero();
     }
 
     @ParameterizedTest
@@ -24,7 +23,7 @@ class CalculateFareUtilsTest {
     @DisplayName("10km 부터는 5km 당 100원 (1번 부과)")
     void calFareUnder50_1(int distance) {
 
-        assertThat(CalculateFareUtils.getFare(distance)).isEqualTo(DEFAULT_FARE + 100);
+        assertThat(DistanceOverFare.getOverDistanceFare(distance)).isEqualTo(100);
     }
 
     @ParameterizedTest
@@ -32,19 +31,19 @@ class CalculateFareUtilsTest {
     @DisplayName("10km 부터는 5km 당 100원 (2번 부과)")
     void calFareUnder50_2(int distance) {
 
-        assertThat(CalculateFareUtils.getFare(distance)).isEqualTo(DEFAULT_FARE + 200);
+        assertThat(DistanceOverFare.getOverDistanceFare(distance)).isEqualTo(200);
     }
 
     @Test
     @DisplayName("50km 이면 8번 부과")
     void calFareWhen50km() {
-        assertThat(CalculateFareUtils.getFare(50)).isEqualTo(DEFAULT_FARE + 800);
+        assertThat(DistanceOverFare.getOverDistanceFare(50)).isEqualTo(800);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {51,58})
     @DisplayName("50km 초과시 8km 마다 100원 (1번 부과)")
     void calFareWhen50km(int distance) {
-        assertThat(CalculateFareUtils.getFare(distance)).isEqualTo(DEFAULT_FARE + 800 + 100);
+        assertThat(DistanceOverFare.getOverDistanceFare(distance)).isEqualTo(800 + 100);
     }
 }
