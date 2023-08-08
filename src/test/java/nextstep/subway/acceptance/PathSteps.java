@@ -44,4 +44,13 @@ public class PathSteps {
   public static void 역의_순서_검증(ExtractableResponse<Response> response, Long... stations) {
     assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
   }
+  public static void 경로_조회_거리_검증(ExtractableResponse<Response> response, Long distance) {
+    assertThat(response.jsonPath().getLong("distance")).isEqualTo(distance);
+  }
+  public static void 경로_조회_시간_검증(ExtractableResponse<Response> response, Long duration) {
+    assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration);
+  }
+  public static void 경로_조회_요금_검증(ExtractableResponse<Response> response, int fare) {
+    assertThat(response.jsonPath().getLong("fare")).isEqualTo(fare);
+  }
 }
