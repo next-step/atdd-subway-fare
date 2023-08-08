@@ -11,26 +11,6 @@ public class LineStep {
     private LineStep() {
     }
 
-    public static ExtractableResponse<Response> 지하철_노선을_생성한다(String upStationName, String downStationName, String lineName) {
-        ExtractableResponse<Response> responseOfUpStation = StationStep.지하철역을_생성한다(upStationName);
-        ExtractableResponse<Response> responseOfDownStation = StationStep.지하철역을_생성한다(downStationName);
-
-        Map<String, Object> params = Map.of(
-                "name", lineName,
-                "color", "bg-red-600",
-                "upStationId", extractId(responseOfUpStation),
-                "downStationId", extractId(responseOfDownStation),
-                "distance", 10
-        );
-
-        return RestAssured.given().log().all()
-                .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines")
-                .then().log().all()
-                .extract();
-    }
-
     public static ExtractableResponse<Response> 지하철_노선을_생성한다(Long upStationId, Long downStationId, String lineName, int distance, int duration) {
         Map<String, Object> params = Map.of(
                 "name", lineName,
@@ -65,10 +45,6 @@ public class LineStep {
                 .when().post("/lines")
                 .then().log().all()
                 .extract();
-    }
-
-    private static long extractId(ExtractableResponse<Response> responseOfCreateStation) {
-        return responseOfCreateStation.jsonPath().getLong("id");
     }
 
     public static ExtractableResponse<Response> 지하철_노선을_조회한다(long lineId) {

@@ -46,7 +46,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         신분당선 = LineStep.지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10).jsonPath().getLong("id");
         삼호선 = LineStep.지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2).jsonPath().getLong("id");
 
-        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3);
+        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 10);
     }
 
     /**

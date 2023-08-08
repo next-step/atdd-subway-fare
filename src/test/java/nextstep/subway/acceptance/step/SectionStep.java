@@ -11,11 +11,12 @@ public class SectionStep {
     private SectionStep() {
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_구간을_등록한다(long lineId, long upStationId, long downStationId, int distance) {
+    public static ExtractableResponse<Response> 지하철_노선_구간을_등록한다(long lineId, long upStationId, long downStationId, int distance, int duration) {
         Map<String, ? extends Number> params = Map.of(
                 "upStationId", upStationId,
                 "downStationId", downStationId,
-                "distance", distance
+                "distance", distance,
+                "duration", duration
         );
 
         return RestAssured.given().log().all()
