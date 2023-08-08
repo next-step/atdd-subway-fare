@@ -23,4 +23,19 @@ class FareCalculatorTest {
         // then
         assertThat(fare).isEqualTo(expect);
     }
+
+    @DisplayName("거리가 50km이하시 요금 8km 마다 100원 추가한다")
+    @ParameterizedTest
+    @CsvSource({
+            "51,1100",
+            "58,1100",
+            "59,1200"
+    })
+    void shouldAdd100WonForEach8KmWhenDistanceIsGreaterThan50Km(int distance,int expect) {
+        // when
+        int fare = FareCalculator.calculateByDistance(distance);
+
+        // then
+        assertThat(fare).isEqualTo(expect);
+    }
 }
