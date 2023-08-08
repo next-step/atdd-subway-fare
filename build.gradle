@@ -36,6 +36,8 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit:7.13.0'
     testImplementation 'io.cucumber:cucumber-spring:7.13.0'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.13.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.9.3'
+
 
     // rest docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
