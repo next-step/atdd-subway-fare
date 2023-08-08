@@ -47,8 +47,8 @@ class LineAcceptanceTest extends AcceptanceTest {
         // given
         var 신사역 = 지하철역_생성_요청("신사역").jsonPath().getLong("id");
         var 광교역 = 지하철역_생성_요청("광교역").jsonPath().getLong("id");
-        int 신사역에서_광교역까지의_거리 = 15;
-        int 신사역에서_광교역까지_걸리는_시간 = 42 * 60;
+        var 신사역에서_광교역까지의_거리 = 15;
+        var 신사역에서_광교역까지_걸리는_시간 = 42 * 60;
 
         // when
         var response = 지하철_노선_생성_요청(
