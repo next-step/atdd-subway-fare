@@ -1,20 +1,20 @@
 package nextstep.subway.acceptance;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import nextstep.subway.acceptance.step.LineStep;
 import nextstep.subway.acceptance.step.PathStep;
 import nextstep.subway.acceptance.step.SectionStep;
 import nextstep.subway.acceptance.step.StationStep;
 import nextstep.utils.AcceptanceTest;
+import nextstep.utils.RestAssuredUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 관련 기능")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -60,7 +60,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void searchPath() {
         // when
-        ExtractableResponse<Response> pathsResponse = PathStep.출발_역에서_도착_역까지의_최단거리_조회(1, 3);
+        ExtractableResponse<Response> pathsResponse = PathStep.최단거리_조회_요청(1, 3, RestAssuredUtils.given_절_생성());
 
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());

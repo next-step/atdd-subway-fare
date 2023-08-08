@@ -1,29 +1,27 @@
 package nextstep.subway.documentation;
 
-import io.restassured.RestAssured;
-import nextstep.subway.acceptance.step.PathStep;
-import nextstep.subway.path.application.PathService;
-import nextstep.subway.path.dto.PathResponse;
-import nextstep.subway.station.dto.StationResponse;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.restassured3.RestDocumentationFilter;
-
-import java.util.List;
-
-import static io.restassured.RestAssured.when;
-import static nextstep.subway.acceptance.step.PathStep.*;
+import static nextstep.subway.acceptance.step.PathStep.최단거리_조회_요청;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+
+import java.util.List;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.station.dto.StationResponse;
+import nextstep.utils.RestAssuredUtils;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 @DisplayName("경로 탐색 문서화")
 public class PathDocumentation extends Documentation {
@@ -56,6 +54,6 @@ public class PathDocumentation extends Documentation {
                 )
         );
 
-        출발_역에서_도착_역까지의_최단거리_조회_문서화(spec, document);
+        최단거리_조회_요청(1, 2, RestAssuredUtils.given_절_생성(spec, document));
     }
 }
