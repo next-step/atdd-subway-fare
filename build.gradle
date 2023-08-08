@@ -31,6 +31,12 @@ dependencies {
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
+    // cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.13.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.13.0'
+    testImplementation 'io.cucumber:cucumber-spring:7.13.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.13.0'
+
     // rest docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured:2.0.5.RELEASE'
