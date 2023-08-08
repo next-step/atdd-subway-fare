@@ -33,7 +33,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
 
         // when
-        ExtractableResponse<Response> createSectionResponse = 지하철_노선_구간을_등록한다(lineId, 노선_상행_Id, 구간_하행_Id, 5, 10);
+        ExtractableResponse<Response> createSectionResponse = 지하철_노선_구간을_등록한다(lineId, 노선_상행_Id, 구간_하행_Id, 5, 5);
 
         // then
         assertThat(createSectionResponse.statusCode()).isEqualTo(HttpStatus.OK.value());

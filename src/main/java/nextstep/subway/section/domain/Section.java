@@ -25,16 +25,20 @@ public class Section {
 
     private Integer distance;
 
+    private Integer duration;
+
     protected Section() {
     }
 
-    public Section(Station upStation, Station downStation, Integer distance) {
+    public Section(Station upStation, Station downStation, Integer distance, Integer duration) {
         validateStation(upStation, downStation);
         validateDistance(distance);
+        validateDuration(duration);
 
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     private void validateStation(Station upStation, Station downStation) {
@@ -44,8 +48,16 @@ public class Section {
     }
 
     private void validateDistance(Integer distance) {
-        if (distance <= 0) {
-            throw new IllegalArgumentException("구간 길이는 0보다 커야 합니다.");
+        validatePositive(distance);
+    }
+
+    private void validateDuration(Integer duration) {
+        validatePositive(duration);
+    }
+
+    private void validatePositive(Integer number) {
+        if (number <= 0) {
+            throw new IllegalArgumentException("구간 길이, 소요 시간은 0보다 커야 합니다.");
         }
     }
 
@@ -59,6 +71,10 @@ public class Section {
 
     public Integer getDistance() {
         return distance;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 
     public Station getUpStation() {
@@ -125,5 +141,9 @@ public class Section {
 
     public boolean hasSameDownStationId(Long lastStationId) {
         return downStation.hasEqualId(lastStationId);
+    }
+
+    public boolean hasSameOrLongerDuration(Section newSection) {
+        return duration.equals(newSection.duration) || duration < newSection.duration;
     }
 }
