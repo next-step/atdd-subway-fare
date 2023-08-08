@@ -42,11 +42,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = StationStep.지하철역을_생성한다("양재역").jsonPath().getLong("id");
         남부터미널역 = StationStep.지하철역을_생성한다("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = LineStep.지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10).jsonPath().getLong("id");
-        신분당선 = LineStep.지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10).jsonPath().getLong("id");
-        삼호선 = LineStep.지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2).jsonPath().getLong("id");
+        이호선 = LineStep.지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 8).jsonPath().getLong("id");
+        신분당선 = LineStep.지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 10).jsonPath().getLong("id");
+        삼호선 = LineStep.지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 5).jsonPath().getLong("id");
 
-        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 10);
+        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 6);
     }
 
     /**
@@ -57,7 +57,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * When : 최단 거리 경로 조회를 요청하면
      * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
-    @DisplayName("출발역으로 부터 도착역으로의 최단경로 조회")
+    @DisplayName("최단 거리 경로 조회")
     @Test
     void searchShortestDistancePath() {
         // when
@@ -92,6 +92,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * When : 최소 시간 경로 조회를 요청하면
      * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
+    @DisplayName("최소 시간 경로 조회")
     @Test
     void searchShortestDurationPath() {
         // when

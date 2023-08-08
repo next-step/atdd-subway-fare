@@ -54,11 +54,11 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         양재역 = Id_추출(지하철역을_생성한다("양재역"));
         남부터미널역 = Id_추출(지하철역을_생성한다("남부터미널역"));
 
-        이호선 = Id_추출(지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10));
-        신분당선 = Id_추출(지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10));
-        삼호선 = Id_추출(지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2));
+        이호선 = Id_추출(지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 8));
+        신분당선 = Id_추출(지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 10));
+        삼호선 = Id_추출(지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 5));
 
-        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 10);
+        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 6);
     }
 
     private Long Id_추출(ExtractableResponse<Response> response) {
@@ -210,7 +210,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         // given
         Long 증미역 = Id_추출(지하철역을_생성한다("증미역"));
         Long 등촌역 = Id_추출(지하철역을_생성한다("등촌역"));
-        Id_추출(지하철_노선을_생성한다("9호선", "brown", 증미역, 등촌역, 10));
+        Id_추출(지하철_노선을_생성한다("9호선", "brown", 증미역, 등촌역, 10, 6));
 
         회원_생성_요청(EMAIL, PASSWORD, AGE);
         String accessToken = 토큰_추출(일반_로그인_요청(EMAIL, PASSWORD));

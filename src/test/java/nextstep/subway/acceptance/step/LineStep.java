@@ -12,31 +12,18 @@ public class LineStep {
     }
 
     public static ExtractableResponse<Response> 지하철_노선을_생성한다(Long upStationId, Long downStationId, String lineName, int distance, int duration) {
-        Map<String, Object> params = Map.of(
-                "name", lineName,
-                "color", "bg-red-600",
-                "upStationId", upStationId,
-                "downStationId", downStationId,
-                "distance", distance,
-                "duration", duration
-        );
-
-        return RestAssured.given().log().all()
-                .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines")
-                .then().log().all()
-                .extract();
+        return 지하철_노선을_생성한다(lineName, "bg-red-600", upStationId, downStationId, distance, duration);
     }
 
 
-    public static ExtractableResponse<Response> 지하철_노선을_생성한다(String lineName, String color, Long upStationId, Long downStationId, int distance) {
+    public static ExtractableResponse<Response> 지하철_노선을_생성한다(String lineName, String color, Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, Object> params = Map.of(
                 "name", lineName,
                 "color", color,
                 "upStationId", upStationId,
                 "downStationId", downStationId,
-                "distance", distance
+                "distance", distance,
+                "duration", duration
         );
 
         return RestAssured.given().log().all()

@@ -101,7 +101,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
         long lineId = Id_추출(지하철_노선을_생성한다(강남역, 양재시민의숲역, "신분당선", 10, 10));
 
-        지하철_노선_구간을_등록한다(lineId, 강남역, 양재역, 5, 10);
+        지하철_노선_구간을_등록한다(lineId, 강남역, 양재역, 5, 5);
         지하철_노선_구간을_등록한다(lineId, 신논현역, 강남역, 10, 10);
 
         // when
@@ -112,9 +112,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertThat(Id_추출(responseOfFindLine)).isEqualTo(lineId);
 
         List<Long> upStationIds = 응답_결과에서_구간의_상행역_Id를_추출한다(responseOfFindLine);
-        assertThat(upStationIds.get(0)).isEqualTo(신논현역);
-        assertThat(upStationIds.get(1)).isEqualTo(강남역);
-        assertThat(upStationIds.get(2)).isEqualTo(양재역);
+        assertThat(upStationIds).containsExactly(신논현역, 강남역, 양재역);
     }
 
     private List<Long> 응답_결과에서_구간의_상행역_Id를_추출한다(ExtractableResponse<Response> responseOfCreateStation) {
