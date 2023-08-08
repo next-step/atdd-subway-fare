@@ -43,7 +43,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_To_Between_Station() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.valueOf(8), 5000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.valueOf(8), 5000L, BigDecimal.ZERO);
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(5), 6000L);
 
         //when
@@ -64,7 +64,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_To_FirstUpStation() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN, 1000L);
 
         //when
@@ -85,7 +85,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_To_LastDownStation() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN, 1000L);
 
         //when
@@ -105,7 +105,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void create_12M_StationLineSection_To_Between_Station_Has_10M() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //when & then
         createStationLineSection(lineId, aStationId, cStationId, BigDecimal.valueOf(12), 1000L, HttpStatus.BAD_REQUEST);
@@ -121,7 +121,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_Both_Station_Existing_To_StationLine() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.TEN, 1000L);
 
         //when & then
@@ -137,7 +137,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createStationLineSection_Both_Station_NotExisting_To_stationLine() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //when & then
         createStationLineSection(lineId, cStationId, dStationId, BigDecimal.TEN, 1000L, HttpStatus.BAD_REQUEST);
@@ -154,7 +154,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineSection_Middle_Station() {
         //given
-        final Long lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        final Long lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2), 1000L);
         createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5), 1000L);
@@ -177,7 +177,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineSection_First_Station() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2), 1000L);
         createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5), 1000L);
@@ -200,7 +200,7 @@ public class StationLineSectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStationLineSection_Last_Station() {
         //given
-        var lineId = createStationLineNew("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("1호선", "blue", aStationId, bStationId, BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         createStationLineSection(lineId, bStationId, cStationId, BigDecimal.valueOf(2), 1000L);
         createStationLineSection(lineId, cStationId, dStationId, BigDecimal.valueOf(5), 1000L);

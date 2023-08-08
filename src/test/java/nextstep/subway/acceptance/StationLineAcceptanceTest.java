@@ -26,7 +26,7 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
         var stationIds = createStations(List.of("수유역", "강변역"));
 
         //when
-        var lineId = createStationLineNew("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //then
         var lineIds = getStationLines().getList("id", Long.class);
@@ -49,8 +49,8 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
         var line1_stationIds = createStations(List.of("시청역", "서울역"));
         var line2_stationIds = createStations(List.of("신촌역", "홍대입구역"));
 
-        createStationLineNew("1호선", "blue", line1_stationIds.get(0), line1_stationIds.get(1), BigDecimal.ONE, 1000L, BigDecimal.ZERO);
-        createStationLineNew("2호선", "green", line2_stationIds.get(0), line2_stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        createStationLine("1호선", "blue", line1_stationIds.get(0), line1_stationIds.get(1), BigDecimal.ONE, 1000L, BigDecimal.ZERO);
+        createStationLine("2호선", "green", line2_stationIds.get(0), line2_stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //when
         var lineIds = getStationLines().getList("id", Long.class);
@@ -70,7 +70,7 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     void getStationLineTest() {
         //given
         var stationIds = createStations(List.of("수유역", "강변역"));
-        var lineId = createStationLineNew("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //when
         var stationLine = getStationLine(lineId);
@@ -93,7 +93,7 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     void updateStationLineTest() {
         //given
         var stationIds = createStations(List.of("수유역", "강변역"));
-        var lineId = createStationLineNew("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //when
         updateStationLine(lineId, "9호선", "brown");
@@ -115,7 +115,7 @@ public class StationLineAcceptanceTest extends AcceptanceTest {
     void deleteStationLineTest() {
         //given
         var stationIds = createStations(List.of("수유역", "강변역"));
-        var lineId = createStationLineNew("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
+        var lineId = createStationLine("4호선", "blue", stationIds.get(0), stationIds.get(1), BigDecimal.TEN, 1000L, BigDecimal.ZERO);
 
         //when
         deleteStationLine(lineId);

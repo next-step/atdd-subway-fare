@@ -1,13 +1,20 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.Station;
+import nextstep.subway.domain.StationLine;
 import nextstep.subway.domain.service.AbstractStationPathFeeCalculator;
 import nextstep.subway.domain.service.SectionPathFeeCalculator;
+import nextstep.subway.domain.service.StationLineAdditionalFeeCalculator;
 import nextstep.subway.domain.service.StationPathFeeContext;
+import nextstep.subway.unit.fixture.StationLineSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import static nextstep.utils.UnitTestUtils.createEntityTestIds;
 
 public class StationFeeCalculateServiceTest {
 
@@ -64,5 +71,42 @@ public class StationFeeCalculateServiceTest {
 
         //then
         Assertions.assertEquals(0, fee.compareTo(BigDecimal.valueOf(1250 + 800 + 300)));
+    }
+
+    @DisplayName("추가 요금이 있는 노선의 요금계산")
+    @Test
+    void calculateFeeTest_Line_AdditionalFee() {
+        //given
+        final Station aStation = new Station("aStation");
+        final Station bStation = new Station("bStation");
+        final Station cStation = new Station("cStation");
+        final Station dStation = new Station("dStation");
+
+        createEntityTestIds(List.of(aStation, bStation, cStation, dStation), 1L);
+
+        //1호선
+        final BigDecimal line_1_additionalFee = BigDecimal.valueOf(600);
+        final StationLine line_1 = StationLineSpec.of(aStation, bStation, BigDecimal.ONE, 1000L, line_1_additionalFee);
+        //2호선
+        final BigDecimal line_2_additionalFee = BigDecimal.valueOf(900);
+        final StationLine line_2 = StationLineSpec.of(cStation, dStation, BigDecimal.TEN, 1000L, line_2_additionalFee);
+
+        final AbstractStationPathFeeCalculator lineAdditionalFeeCalculator = StationLineAdditionalFeeCalculator.builder()
+                .build();
+
+        final BigDecimal baseFee = BigDecimal.valueOf(1250);
+        final BigDecimal distance = BigDecimal.valueOf(5);
+        final List<StationLine> lines = List.of(line_1, line_2);
+
+
+        final StationPathFeeContext context = StationPathFeeContext.builder()
+                .distance(distance)
+                .lines(lines)
+                .build();
+        //when
+        final BigDecimal fee = lineAdditionalFeeCalculator.calculateFee(baseFee, context);
+
+        //then
+        Assertions.assertEquals(0, fee.compareTo(BigDecimal.valueOf(1250 + 900)));
     }
 }

@@ -21,7 +21,6 @@ public abstract class AbstractStationPathFeeCalculator {
     public BigDecimal calculateFee(BigDecimal baseFee, StationPathFeeContext context) {
         final BigDecimal resultFee = baseFee.add(calculate(context));
 
-        log.info("result fee:"+resultFee);
         if (Objects.nonNull(nextPathFeeCalculator)) {
             return nextPathFeeCalculator.calculateFee(resultFee, context);
         }

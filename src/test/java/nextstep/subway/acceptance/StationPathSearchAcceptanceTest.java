@@ -2,7 +2,6 @@ package nextstep.subway.acceptance;
 
 import nextstep.subway.domain.service.StationPathSearchRequestType;
 import nextstep.utils.AcceptanceTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 import static nextstep.subway.acceptance.PathSteps.*;
 import static nextstep.subway.acceptance.StationLineSectionSteps.createStationLineSection;
-import static nextstep.subway.acceptance.StationLineSteps.createStationLineNew;
+import static nextstep.subway.acceptance.StationLineSteps.createStationLine;
 import static nextstep.subway.acceptance.StationSteps.createStationsAndGetStationMap;
 
 
@@ -33,14 +32,14 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
         //given
         stationIdByName = createStationsAndGetStationMap(List.of("혜화", "동대문", "동대문역사문화공원", "종로3가", "종로5가", "동묘앞", "양산", "남양산"));
 
-        var line1 = createStationLineNew("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), 3000L, BigDecimal.ZERO, stationIdByName);
+        var line1 = createStationLine("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), 3000L, BigDecimal.valueOf(500), stationIdByName);
         createStationLineSection(line1, "종로5가", "동대문", BigDecimal.valueOf(5L), 4000L, stationIdByName);
         createStationLineSection(line1, "동대문", "동묘앞", BigDecimal.valueOf(5L), 5000L, stationIdByName);
 
-        var line2 = createStationLineNew("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, 2000L, BigDecimal.ZERO, stationIdByName);
+        var line2 = createStationLine("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, 2000L, BigDecimal.valueOf(1500), stationIdByName);
         createStationLineSection(line2, "동대문", "동대문역사문화공원", BigDecimal.TEN, 6000L, stationIdByName);
 
-        createStationLineNew("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, 1000L, BigDecimal.ZERO, stationIdByName);
+        createStationLine("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, 1000L, BigDecimal.ZERO, stationIdByName);
     }
 
     /**
@@ -52,7 +51,8 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("정상적인 지하철 경로 조회")
     @Test
-    void searchStationPathTest() {
+    @Deprecated
+    void searchStationPathTestOld() {
         //when
         var searchResponse = 지하철_경로_조회("종로3가", "동대문역사문화공원", StationPathSearchRequestType.DISTANCE, HttpStatus.OK);
 
@@ -64,6 +64,29 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
 
         지하철_경로_조회됨(searchResponse, expectedDistance, expectedFee, expectedDuration, expectedStation);
     }
+
+    /**
+     * When 추가비용이 500원인 1호선인 종로3가에서 추가비용이 1500원인 4호선 동대문역사문화공원으로 DISTANCE TYPE으로 경로 조회를 요청한다
+     * Then 종로3가에서 동대문역사문화공원으로 경로 역의 목록으로 (종로3가, 종로5가, 동대문, 동대문역사문화공원)를 응답한다
+     * Then 전체 경로의 최단거리로 18KM을 응답한다
+     * Then 전체 경로의 최소시간으로 13초를 응답한다
+     * Then 전체 경로의 요금으로 1450(1250+100*2)원 + 추가요금(1500)을 응답한다
+     */
+    @DisplayName("정상적인 지하철 경로 조회")
+    @Test
+    void searchStationPathTest_With_AdditionalLineFee() {
+        //when
+        var searchResponse = 지하철_경로_조회("종로3가", "동대문역사문화공원", StationPathSearchRequestType.DISTANCE, HttpStatus.OK);
+
+        //then
+        var expectedDistance = BigDecimal.valueOf(18);
+        var expectedFee = BigDecimal.valueOf(1450 + 1500);
+        var expectedDuration = 1000 * 13L;
+        var expectedStation = List.of("종로3가", "종로5가", "동대문", "동대문역사문화공원");
+
+        지하철_경로_조회됨(searchResponse, expectedDistance, expectedFee, expectedDuration, expectedStation);
+    }
+
 
     /**
      * When 종로3가에서 종로3가 경로 조회를 요청한다

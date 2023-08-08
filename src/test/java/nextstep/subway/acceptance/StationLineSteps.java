@@ -8,18 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 public class StationLineSteps {
     private StationLineSteps() {
     }
 
-    public static Long createStationLineNew(String name, String color, String upStationName, String downStationName, BigDecimal distance, Long duration, BigDecimal additionalFee, Map<String, Long> stationIdByName) {
-        return createStationLineNew(name, color, stationIdByName.get(upStationName), stationIdByName.get(downStationName), distance, duration, additionalFee);
+    public static Long createStationLine(String name, String color, String upStationName, String downStationName, BigDecimal distance, Long duration, BigDecimal additionalFee, Map<String, Long> stationIdByName) {
+        return createStationLine(name, color, stationIdByName.get(upStationName), stationIdByName.get(downStationName), distance, duration, additionalFee);
     }
 
-    public static Long createStationLineNew(String name, String color, Long upStationId, Long downStationId, BigDecimal distance, Long duration, BigDecimal additionalFee) {
+    public static Long createStationLine(String name, String color, Long upStationId, Long downStationId, BigDecimal distance, Long duration, BigDecimal additionalFee) {
         var request = new StationLineCreateRequest(name, color, upStationId, downStationId, distance, duration, additionalFee);
 
         return RestAssured.given().log().all()
