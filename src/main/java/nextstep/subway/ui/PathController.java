@@ -1,11 +1,13 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.principal.AuthenticationPrincipal;
+import nextstep.auth.userdetails.UserDetails;
 import nextstep.subway.applicaion.PathService;
+import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.domain.PathType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,8 +19,8 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target
-            , @RequestParam PathType type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+    public ResponseEntity<PathResponse> findPath(@ModelAttribute PathRequest request
+            , @AuthenticationPrincipal(required = false) UserDetails userDetails) {
+        return ResponseEntity.ok(pathService.findPath(request, userDetails.getAge()));
     }
 }

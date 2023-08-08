@@ -1,4 +1,4 @@
-package nextstep.subway.acceptance;
+package nextstep.subway.unit;
 
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;

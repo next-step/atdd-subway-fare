@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +36,11 @@ class PathAcceptanceTest extends AcceptanceTest {
     private final int 남부터미널역_양재역_거리 = 3;
     private final int 남부터미널역_양재역_시간 = 10;
 
+    private final int 신분당선_추가요금 = 900;
+    private final int 이호선_추가요금 = 0;
+    private final int 삼호선_추가요금 = 700;
+    private final int 기본요금 = 1250;
+
     private RequestSpecification requestSpecification;
 
     /**
@@ -54,10 +61,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 교대역_강남역_거리, 교대역_강남역_시간);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 강남역_양재역_거리, 강남역_양재역_시간);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 교대역_강남역_거리, 교대역_강남역_시간
+                , 이호선_추가요금);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 강남역_양재역_거리, 강남역_양재역_시간
+                , 신분당선_추가요금);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 교대역_남부터미널역_거리
-                , 교대역_남부터미널역_시간);
+                , 교대역_남부터미널역_시간, 삼호선_추가요금);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 남부터미널역_양재역_거리
                 , 남부터미널역_양재역_시간));
@@ -70,10 +79,42 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
      * Then 최단 거리 기준 경로를 응답한다
      * And 총 거리, 소요 시간, 지하철 이용 요금을 함께 응답한다
+     * And 요금 계산시 최단거리 기준 및 노선별 추가요금 정책이 적용된다
+     * And 로그인 사용자의 경우 연령별 요금 정책이 적용된다.
      */
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @DisplayName("로그인한 사용자의 두 역의 최단 거리 경로를 조회한다.")
     @Test
-    void findPathBy_Distance_Fare() {
+    void findPathBy_Distance_Fare_Login() {
+        // given
+        회원_생성_요청("email", "password", 15);
+        String accessToken = 베어러_인증_로그인_요청("email", "password").jsonPath()
+                .getString("accessToken");
+
+        // when
+        var response = 두_역의_경로_조회를_요청(requestSpecification, 교대역, 양재역, PathType.DISTANCE.toString()
+                , accessToken);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class))
+                .containsExactly(교대역, 남부터미널역, 양재역);
+
+        // and
+        assertThat(response.jsonPath().getInt("distance"))
+                .isEqualTo(교대역_남부터미널역_거리 + 남부터미널역_양재역_거리);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1280);
+    }
+
+    /**
+     * Given 지하철역과 지하철노선에 역을 등록하고
+     * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
+     * Then 최단 거리 기준 경로를 응답한다
+     * And 총 거리, 소요 시간, 지하철 이용 요금을 함께 응답한다
+     * And 요금 계산시 최단거리 기준 및 노선별 추가요금 정책이 적용된다
+     * And 비로그인 사용자의 경우 연령별 요금 정책이 적용되지 않는다
+     */
+    @DisplayName("로그인하지 않은 사용자의 두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathBy_Distance_Fare_NotLogin() {
         // when
         var response = 두_역의_경로_조회를_요청(requestSpecification, 교대역, 양재역, PathType.DISTANCE.toString());
 
@@ -84,7 +125,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         // and
         assertThat(response.jsonPath().getInt("distance"))
                 .isEqualTo(교대역_남부터미널역_거리 + 남부터미널역_양재역_거리);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1950);
     }
 
     /**
@@ -103,7 +144,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance
-            , int duration) {
+            , int duration, int surcharge) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -112,6 +153,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
+        lineCreateParams.put("surcharge", surcharge + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
