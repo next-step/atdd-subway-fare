@@ -43,29 +43,6 @@ public class StationPathSearchAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * When 종로3가에서 동대문역사문화공원으로 DISTANCE TYPE으로 경로 조회를 요청한다
-     * Then 종로3가에서 동대문역사문화공원으로 경로 역의 목록으로 (종로3가, 종로5가, 동대문, 동대문역사문화공원)를 응답한다
-     * Then 전체 경로의 최단거리로 18KM을 응답한다
-     * Then 전체 경로의 최소시간으로 13초를 응답한다
-     * Then 전체 경로의 요금으로 1450(1250+100*2)원을 응답한다
-     */
-    @DisplayName("정상적인 지하철 경로 조회")
-    @Test
-    @Deprecated
-    void searchStationPathTestOld() {
-        //when
-        var searchResponse = 지하철_경로_조회("종로3가", "동대문역사문화공원", StationPathSearchRequestType.DISTANCE, HttpStatus.OK);
-
-        //then
-        var expectedDistance = BigDecimal.valueOf(18);
-        var expectedFee = BigDecimal.valueOf(1450);
-        var expectedDuration = 1000 * 13L;
-        var expectedStation = List.of("종로3가", "종로5가", "동대문", "동대문역사문화공원");
-
-        지하철_경로_조회됨(searchResponse, expectedDistance, expectedFee, expectedDuration, expectedStation);
-    }
-
-    /**
      * When 추가비용이 500원인 1호선인 종로3가에서 추가비용이 1500원인 4호선 동대문역사문화공원으로 DISTANCE TYPE으로 경로 조회를 요청한다
      * Then 종로3가에서 동대문역사문화공원으로 경로 역의 목록으로 (종로3가, 종로5가, 동대문, 동대문역사문화공원)를 응답한다
      * Then 전체 경로의 최단거리로 18KM을 응답한다
