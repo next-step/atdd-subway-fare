@@ -12,9 +12,9 @@ import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
-import nextstep.subway.applicaion.PathService;
-import nextstep.subway.applicaion.StationService;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.application.PathService;
+import nextstep.subway.application.StationService;
+import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 

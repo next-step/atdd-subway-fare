@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.application.dto.StationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,7 +1,7 @@
-package nextstep.subway.applicaion;
+package nextstep.subway.application;
 
 import java.util.List;
-import nextstep.subway.applicaion.dto.PathResponse;
+import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
