@@ -13,23 +13,44 @@ public class FareTest {
     @DisplayName("경로에 따른 요금을 계산한다.")
     @ParameterizedTest
     @MethodSource("provideGetFareArgumentsWithDistance")
-    void getFare(int distance, int expectedFare) {
+    void getFareByDistance(int distance, int expectedFare) {
+        // given
+        Fare fare = Fare.of(DistanceFarePolicy.of(distance));
+
         // when
-        int fare = Fare.of(distance).get();
+        int fareValue = fare.get();
 
         // then
-        assertThat(fare).isEqualTo(expectedFare);
+        assertThat(fareValue).isEqualTo(expectedFare);
     }
 
     @DisplayName("추가 요금과 경로에 따른 요금을 계산한다.")
     @ParameterizedTest
     @MethodSource("provideGetFareArgumentsWithDistanceAndExtraCharge")
-    void getFare(int distance, int extraCharge, int expectedFare) {
+    void getFareByDistanceAndExtraCharge(int distance, int extraCharge, int expectedFare) {
+        // given
+        Fare fare = Fare.of(DistanceFarePolicy.of(distance));
+        fare.add(ExtraChargeFarePolicy.of(extraCharge));
+
         // when
-        int fare = Fare.of(distance, extraCharge).get();
+        int fareValue = fare.get();
 
         // then
-        assertThat(fare).isEqualTo(expectedFare);
+        assertThat(fareValue).isEqualTo(expectedFare);
+    }
+
+    @DisplayName("나이에 따른 요금을 계산한다.")
+    @ParameterizedTest
+    @MethodSource("provideGetFareArgumentsWithAge")
+    void getFareByAge(int age, int expectedFare) {
+        // given
+        Fare fare = Fare.of(DiscountFarePolicy.of(age));
+
+        // when
+        int fareValue = fare.get();
+
+        // then
+        assertThat(fareValue).isEqualTo(expectedFare);
     }
 
     public static Stream<Arguments> provideGetFareArgumentsWithDistance() {
@@ -70,6 +91,15 @@ public class FareTest {
                 Arguments.of(11, 1000, 2350),
                 Arguments.of(50, 1000, 3050),
                 Arguments.of(74, 1000, 3350)
+        );
+    }
+
+    public static Stream<Arguments> provideGetFareArgumentsWithAge() {
+        return Stream.of(
+                Arguments.of(12, 800),
+                Arguments.of(13, 1070),
+                Arguments.of(18, 1070),
+                Arguments.of(19, 1250)
         );
     }
 }

@@ -1,6 +1,7 @@
 package nextstep.subway.documentation;
 
 import io.restassured.RestAssured;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
@@ -14,6 +15,8 @@ import org.springframework.restdocs.snippet.Snippet;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -34,16 +37,18 @@ public class PathDocumentation extends Documentation {
                 ), 10, 5, 1250
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
+        when(pathService.findPath(any(UserPrincipal.class), anyLong(), anyLong(), any(PathType.class))).thenReturn(pathResponse);
 
         RestAssured
                 .given(spec).log().all()
                 .filter(document("path",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        createRequestHeaders(),
                         createPathRequestParameters(),
                         createPathResponseFields()
                 ))
+                .header("Authorization", "bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE2OTE1MDYyMDIsImV4cCI6MTY5MTUwOTgwMiwicm9sZSI6IlJPTEVfQURNSU4ifQ.LAa4LlZt9xkMsbnmtkhMCreT75iYwGKLAUIRgMFLvOw")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
@@ -67,5 +72,9 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("distance").description("Distance between source and target station"),
                 fieldWithPath("duration").description("Duration between source and target station"),
                 fieldWithPath("fare").description("Fare between source and target station"));
+    }
+
+    private Snippet createRequestHeaders() {
+        return requestHeaders(headerWithName("Authorization").description("Basic auth credentials"));
     }
 }
