@@ -3,13 +3,13 @@ package nextstep.subway.applicaion;
 import java.util.List;
 import java.util.stream.Collectors;
 import nextstep.auth.AuthenticationException;
+import nextstep.subway.applicaion.dto.FavoriteRequest;
 import nextstep.subway.applicaion.dto.FavoriteResponse;
 import nextstep.subway.domain.Favorite;
 import nextstep.subway.domain.FavoriteRepository;
 import nextstep.subway.domain.PathWeight;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
-import nextstep.subway.applicaion.dto.FavoriteRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
