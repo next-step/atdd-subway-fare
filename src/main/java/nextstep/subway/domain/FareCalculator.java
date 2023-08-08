@@ -2,11 +2,11 @@ package nextstep.subway.domain;
 
 public class FareCalculator {
 
-    public static final int FARE_PER_INTERVAL = 100;
-    public static final int DISTANCE_INTERVAL_5_KM = 5;
-    public static final int DISTANCE_INTERVAL_8_KM = 8;
-    public static final int DISTANCE_THRESHOLD_KM = 50;
-    public static final int BASE_FARE_UP_TO_50_KM = 1000;
+    private static final int FARE_PER_INTERVAL = 100;
+    private static final int DISTANCE_INTERVAL_5_KM = 5;
+    private static final int DISTANCE_INTERVAL_8_KM = 8;
+    private static final int DISTANCE_THRESHOLD_KM = 50;
+    private static final int BASE_FARE_UP_TO_50_KM = 1000;
 
     private FareCalculator() {
         throw new IllegalStateException();
