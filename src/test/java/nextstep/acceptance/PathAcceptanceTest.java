@@ -26,6 +26,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 남부터미널교대구간거리;
     private Long 흑석동작구간거리;
 
+    private Long 교대강남구간시간;
+    private Long 강남양재구간시간;
+    private Long 양재남부터미널구간시간;
+    private Long 남부터미널교대구간시간;
+    private Long 흑석동작구간시간;
+
     private Long 이호선;
     private Long 삼호선;
     private Long 신분당선;
@@ -52,11 +58,17 @@ public class PathAcceptanceTest extends AcceptanceTest {
         남부터미널교대구간거리 = 5L;
         흑석동작구간거리 = 10L;
 
-        SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리);
-        SectionStep.지하철구간_생성(신분당선,강남역,양재역,강남양재구간거리);
-        SectionStep.지하철구간_생성(삼호선,양재역,남부터미널역,양재남부터미널구간거리);
-        SectionStep.지하철구간_생성(삼호선,남부터미널역,교대역,남부터미널교대구간거리);
-        SectionStep.지하철구간_생성(구호선,흑석역,동작역,흑석동작구간거리);
+        교대강남구간시간 = 10L;
+        강남양재구간시간 = 15L;
+        양재남부터미널구간시간 = 5L;
+        남부터미널교대구간시간 = 5L;
+        흑석동작구간시간 = 10L;
+
+        SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리,교대강남구간시간);
+        SectionStep.지하철구간_생성(신분당선,강남역,양재역,강남양재구간거리,강남양재구간시간);
+        SectionStep.지하철구간_생성(삼호선,양재역,남부터미널역,양재남부터미널구간거리,양재남부터미널구간시간);
+        SectionStep.지하철구간_생성(삼호선,남부터미널역,교대역,남부터미널교대구간거리,남부터미널교대구간시간);
+        SectionStep.지하철구간_생성(구호선,흑석역,동작역,흑석동작구간거리,흑석동작구간시간);
 
     }
 

@@ -19,6 +19,9 @@ class LineTest {
     private Long 강남역삼구간거리;
     private Long 역삼선릉구간거리;
     private Long 선릉잠실구간거리;
+    private Long 강남역삼구간시간;
+    private Long 역삼선릉구간시간;
+    private Long 선릉잠실구간시간;
     private Line 이호선;
     private Section 강남역삼구간;
     private Section 역삼선릉구간;
@@ -48,10 +51,13 @@ class LineTest {
         강남역삼구간거리 = 5L;
         역삼선릉구간거리 = 20L;
         선릉잠실구간거리 = 10L;
+        강남역삼구간시간 = 5L;
+        역삼선릉구간시간 = 20L;
+        선릉잠실구간시간 = 10L;
 
-        강남역삼구간 = new Section(이호선, 강남역, 역삼역, 강남역삼구간거리);
-        역삼선릉구간 = new Section(이호선, 역삼역, 선릉역, 역삼선릉구간거리);
-        선릉잠실구간= new Section(이호선, 선릉역, 잠실역, 선릉잠실구간거리);
+        강남역삼구간 = new Section(이호선, 강남역, 역삼역, 강남역삼구간거리,강남역삼구간시간);
+        역삼선릉구간 = new Section(이호선, 역삼역, 선릉역, 역삼선릉구간거리,역삼선릉구간시간);
+        선릉잠실구간= new Section(이호선, 선릉역, 잠실역, 선릉잠실구간거리,선릉잠실구간시간);
 
     }
 
@@ -83,8 +89,8 @@ class LineTest {
                 .id(6L)
                 .name("종합운동장역")
                 .build();
-        Section 선릉삼성구간 = new Section(이호선, 선릉역, 삼성역, 선릉잠실구간거리/2-1);
-        Section 잠실운동장잠실구간 = new Section(이호선, 종합운동장역, 잠실역, 선릉잠실구간거리/2-1);
+        Section 선릉삼성구간 = new Section(이호선, 선릉역, 삼성역, 선릉잠실구간거리/2-1,선릉잠실구간시간);
+        Section 잠실운동장잠실구간 = new Section(이호선, 종합운동장역, 잠실역, 선릉잠실구간거리/2-1,선릉잠실구간시간);
 
         이호선.addSection(선릉잠실구간);
 
@@ -115,8 +121,8 @@ class LineTest {
         이호선.addSection(선릉잠실구간);
 
         //when
-        Section 기존길이보다큰경우 = new Section(이호선, 선릉역, 삼성역, 선릉잠실구간거리+1);
-        Section 기존길이와같은경우 = new Section(이호선, 종합운동장역, 잠실역, 선릉잠실구간거리);
+        Section 기존길이보다큰경우 = new Section(이호선, 선릉역, 삼성역, 선릉잠실구간거리+1,선릉잠실구간시간);
+        Section 기존길이와같은경우 = new Section(이호선, 종합운동장역, 잠실역, 선릉잠실구간거리,선릉잠실구간시간);
 
         //then
         assertThatThrownBy(() ->  이호선.addSection(기존길이보다큰경우))
@@ -131,7 +137,7 @@ class LineTest {
     @Test
     void invalidAddSection2() {
         //given
-        Section 역삼강남구간 = new Section(이호선,역삼역 , 강남역, 강남역삼구간거리);
+        Section 역삼강남구간 = new Section(이호선,역삼역 , 강남역, 강남역삼구간거리,강남역삼구간시간);
         이호선.addSection(강남역삼구간);
         //when
         Section invalidSection1 = 강남역삼구간;
@@ -150,7 +156,7 @@ class LineTest {
     @Test
     void invalidAddSection3() {
         //given
-        Section 선릉잠실구간 = new Section(이호선,선릉역 , 잠실역, 선릉잠실구간거리);
+        Section 선릉잠실구간 = new Section(이호선,선릉역 , 잠실역, 선릉잠실구간거리,선릉잠실구간시간);
         이호선.addSection(강남역삼구간);
 
         //when

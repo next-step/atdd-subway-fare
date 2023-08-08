@@ -70,7 +70,7 @@ public class Sections {
                 throw new IllegalArgumentException("역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 등록을 할 수 없음");
             }
 
-            sectionList.add(new Section(newSection.getLine(), newSection.getDownStation(), oldSection.getDownStation(), oldSection.getDistance() - newSection.getDistance()));
+            sectionList.add(new Section(newSection.getLine(), newSection.getDownStation(), oldSection.getDownStation(), oldSection.getDistance() - newSection.getDistance(),oldSection.getDuration() - newSection.getDuration()));
             sectionList.remove(oldSection);
             sectionList.add(newSection);
             return;
@@ -84,7 +84,7 @@ public class Sections {
                 throw new IllegalArgumentException("역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 등록을 할 수 없음");
             }
 
-            sectionList.add(new Section(newSection.getLine(), oldSection.getUpStation(), newSection.getUpStation(), oldSection.getDistance() - newSection.getDistance()));
+            sectionList.add(new Section(newSection.getLine(), oldSection.getUpStation(), newSection.getUpStation(), oldSection.getDistance() - newSection.getDistance(),oldSection.getDuration() - newSection.getDuration()));
             sectionList.remove(oldSection);
             sectionList.add(newSection);
             return;
@@ -159,7 +159,7 @@ public class Sections {
         if(!isFirstUpStation&&!isLastDownStation){
             Section removingUpSection = findSectionByDownStation(station.getId()).get();
             Section removingDownSection = findSectionByUpStation(station.getId()).get();
-            sectionList.add(new Section(line, removingUpSection.getUpStation(), removingDownSection.getDownStation(), removingUpSection.getDistance()+ removingDownSection.getDistance()));
+            sectionList.add(new Section(line, removingUpSection.getUpStation(), removingDownSection.getDownStation(), removingUpSection.getDistance()+ removingDownSection.getDistance(),removingUpSection.getDuration()+ removingDownSection.getDuration()));
             sectionList.remove(removingUpSection);
             sectionList.remove(removingDownSection);
         }

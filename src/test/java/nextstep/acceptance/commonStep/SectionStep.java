@@ -3,6 +3,7 @@ package nextstep.acceptance.commonStep;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.dto.SectionRequest;
 import org.springframework.http.MediaType;
 
 import java.util.HashMap;
@@ -10,16 +11,13 @@ import java.util.Map;
 
 public class SectionStep {
 
-    public static ExtractableResponse<Response> 지하철구간_생성(Long lineId, Long upStationId,Long downStationId,Long distance) {
+    public static ExtractableResponse<Response> 지하철구간_생성(Long lineId, Long upStationId,Long downStationId,Long distance,Long duration) {
 
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId",String.valueOf(upStationId));
-        params.put("downStationId",String.valueOf(downStationId));
-        params.put("distance",String.valueOf(distance));
+        SectionRequest sectionRequest = new SectionRequest(upStationId,downStationId,distance,duration);
 
         ExtractableResponse<Response> response =
                 RestAssured.given().log().all()
-                        .body(params)
+                        .body(sectionRequest)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .when().post("/lines/"+lineId+"/sections")
                         .then().log().all()

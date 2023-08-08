@@ -31,6 +31,9 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
     private Long 교대강남구간거리;
     private Long 강남양재구간거리;
 
+    private Long 교대강남구간시간;
+    private Long 강남양재구간시간;
+
     private Long 이호선;
     private Long 신분당선;
 
@@ -48,8 +51,11 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
         교대강남구간거리 = 10L;
         강남양재구간거리 = 15L;
 
-        SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리);
-        SectionStep.지하철구간_생성(신분당선,강남역,양재역,강남양재구간거리);
+        교대강남구간시간 = 10L;
+        강남양재구간시간 = 15L;
+
+        SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리,교대강남구간시간);
+        SectionStep.지하철구간_생성(신분당선,강남역,양재역,강남양재구간거리,강남양재구간시간);
 
     }
 

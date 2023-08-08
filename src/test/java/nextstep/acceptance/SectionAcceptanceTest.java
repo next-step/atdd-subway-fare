@@ -52,7 +52,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     void createSection() {
 
         // when
-        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
+        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -71,11 +71,12 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     void createSectionBetweenExistingSection() {
         //given
         Long 선릉잠실구간거리 = 20L;
-        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,선릉잠실구간거리);
+        Long 선릉잠실구간시간 = 10L;
+        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,선릉잠실구간거리,선릉잠실구간시간);
 
         // when
-        ExtractableResponse<Response> response1 = SectionStep.지하철구간_생성(이호선,선릉역,삼성역,선릉잠실구간거리/2-1);
-        ExtractableResponse<Response> response2 = SectionStep.지하철구간_생성(이호선,종합운동장역,잠실역,선릉잠실구간거리/2-1);
+        ExtractableResponse<Response> response1 = SectionStep.지하철구간_생성(이호선,선릉역,삼성역,선릉잠실구간거리/2-1,선릉잠실구간시간);
+        ExtractableResponse<Response> response2 = SectionStep.지하철구간_생성(이호선,종합운동장역,잠실역,선릉잠실구간거리/2-1,선릉잠실구간시간);
 
         //then
         assertThat(response1.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -95,12 +96,12 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createInvalidSectionNotExistsStation() {
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
         List<Long> stationIds = StationStep.지하철역_목록_전체조회().getList("id", Long.class);
         Long 존재하지_않는_역의_PK = stationIds.get(stationIds.size() - 1) + 1L;
 
         // when
-        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,역삼역,존재하지_않는_역의_PK,20L);
+        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,역삼역,존재하지_않는_역의_PK,20L,10L);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -118,11 +119,11 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     void createInvalidSectionDueToDistance() {
         //given
         Long 선릉잠실구간거리 = 20L;
-        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,선릉잠실구간거리);
+        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,선릉잠실구간거리,10L);
 
         // when
-        ExtractableResponse<Response> response1 = SectionStep.지하철구간_생성(이호선,선릉역,삼성역,선릉잠실구간거리+10L);
-        ExtractableResponse<Response> response2 = SectionStep.지하철구간_생성(이호선,종합운동장역,잠실역,선릉잠실구간거리);
+        ExtractableResponse<Response> response1 = SectionStep.지하철구간_생성(이호선,선릉역,삼성역,선릉잠실구간거리+10L,10L);
+        ExtractableResponse<Response> response2 = SectionStep.지하철구간_생성(이호선,종합운동장역,잠실역,선릉잠실구간거리,10L);
 
         //then
         assertThat(response1.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -139,10 +140,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createInvalidSectionDueToDownStation() {
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
 
         // when
-        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,역삼역,강남역,20L);
+        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,역삼역,강남역,20L,10L);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -157,10 +158,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void createInvalidSectionDueToUpStation() {
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
 
         // when
-        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,선릉역,삼성역,20L);
+        ExtractableResponse<Response> response = SectionStep.지하철구간_생성(이호선,선릉역,삼성역,20L,10L);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -176,9 +177,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteSectionEndStation() {
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
-        SectionStep.지하철구간_생성(이호선,역삼역,선릉역,20L);
-        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,20L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
+        SectionStep.지하철구간_생성(이호선,역삼역,선릉역,20L,10L);
+        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,20L,10L);
 
         // when
         ExtractableResponse<Response> upStationResponse = SectionStep.지하철구간_삭제(이호선, 강남역);
@@ -200,9 +201,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteSectionMiddleSection() {
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
-        SectionStep.지하철구간_생성(이호선,역삼역,선릉역,20L);
-        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,20L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
+        SectionStep.지하철구간_생성(이호선,역삼역,선릉역,20L,10L);
+        SectionStep.지하철구간_생성(이호선,선릉역,잠실역,20L,10L);
 
         // when
         ExtractableResponse<Response> upStationResponse = SectionStep.지하철구간_삭제(이호선, 역삼역);
@@ -226,7 +227,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     void InvalidDeleteSectionNotExistsStation() {
 
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
         List<Long> stationIds = StationStep.지하철역_목록_전체조회().getList("id", Long.class);
         Long 존재하지_않는_역의_PK = stationIds.get(stationIds.size() - 1) + 1L;
 
@@ -247,7 +248,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void invalidDeleteSectionOnlyOneSection() {
         //given
-        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L);
+        SectionStep.지하철구간_생성(이호선,강남역,역삼역,10L,10L);
 
         // when
         ExtractableResponse<Response> response = SectionStep.지하철구간_삭제(이호선, 강남역);

@@ -29,13 +29,15 @@ public class Section {
     private Station downStation;
 
     private Long distance;
+    private Long duration;
 
     @Builder
-    public Section( Line line, Station upStation, Station downStation, Long distance) {
+    public Section( Line line, Station upStation, Station downStation, Long distance,Long duration) {
         this.line = Objects.requireNonNull(line);
         this.upStation = Objects.requireNonNull(upStation);
         this.downStation = Objects.requireNonNull(downStation);
         this.distance = Objects.requireNonNull(distance);
+        this.duration =Objects.requireNonNull(duration);
     }
 
 }
