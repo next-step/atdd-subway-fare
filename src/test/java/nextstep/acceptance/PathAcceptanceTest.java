@@ -62,12 +62,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Given 지하철 노선과 구간을 생성하고
-     * When 지하철 경로를 조회하면
+     * When 거리 기준으로 지하철 경로를 조회하면
      * Then 출발역으로부터 도착역까지의 경로에 있는 역 목록과 조회한 경로 구간의 거리를 조회할 수 있다.
      */
-    @DisplayName("지하철 경로 조회")
+    @DisplayName("거리 기준 지하철 경로 조회")
     @Test
-    void getPath() {
+    void getPathByDistance() {
 
         // when
         ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역);
@@ -75,6 +75,23 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.jsonPath().getList("stations.name", String.class))
                 .containsExactly("교대역", "남부터미널역", "양재역");
+
+    }
+
+    /**
+     * Given 지하철 노선과 구간을 생성하고
+     * When 시간 기준으로 지하철 경로를 조회하면
+     * Then 출발역으로부터 도착역까지의 경로에 있는 역 목록과 조회한 경로 구간의 거리를 조회할 수 있다.
+     */
+    @DisplayName("시간 기준 지하철 경로 조회")
+    @Test
+    void getPathByTime() {
+
+        // when
+
+
+        // then
+
 
     }
 
