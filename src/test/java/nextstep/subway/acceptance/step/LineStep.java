@@ -31,13 +31,14 @@ public class LineStep {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선을_생성한다(Long upStationId, Long downStationId, String lineName, int distance) {
+    public static ExtractableResponse<Response> 지하철_노선을_생성한다(Long upStationId, Long downStationId, String lineName, int distance, int duration) {
         Map<String, Object> params = Map.of(
                 "name", lineName,
                 "color", "bg-red-600",
                 "upStationId", upStationId,
                 "downStationId", downStationId,
-                "distance", distance
+                "distance", distance,
+                "duration", duration
         );
 
         return RestAssured.given().log().all()

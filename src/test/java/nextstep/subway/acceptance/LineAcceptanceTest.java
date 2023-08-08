@@ -1,7 +1,10 @@
 package nextstep.subway.acceptance;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import nextstep.subway.acceptance.step.LineStep;
 import nextstep.subway.acceptance.step.SectionStep;
 import nextstep.subway.acceptance.step.StationStep;
@@ -9,10 +12,6 @@ import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 노선 관련 기능")
 public class LineAcceptanceTest extends AcceptanceTest {
@@ -85,7 +84,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         long 양재시민의숲역_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재시민의숲역"));
         long 양재역_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(강남역_Id, 양재시민의숲역_Id, "신분당선", 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(강남역_Id, 양재시민의숲역_Id, "신분당선", 10, 10));
 
         SectionStep.지하철_노선_구간을_등록한다(lineId, 강남역_Id, 양재역_Id, 5);
         SectionStep.지하철_노선_구간을_등록한다(lineId, 신논현역_Id, 강남역_Id, 10);

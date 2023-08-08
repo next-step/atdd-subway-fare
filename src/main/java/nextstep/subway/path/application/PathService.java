@@ -31,7 +31,7 @@ public class PathService {
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stationResponses, shortestPath.getDistance());
+        return new PathResponse(stationResponses, shortestPath.getDistance(), 10);  //TODO 죄악...
     }
 
     private ShortestPath createShortestPath(Long source, Long target) {
