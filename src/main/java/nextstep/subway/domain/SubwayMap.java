@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import static nextstep.subway.domain.FindPathType.DISTANCE;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -16,18 +17,31 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, FindPathType findPathType) {
+    public static Path findPath(String typeName, Station upStation, Station downStation, List<Line> lines) {
+        SubwayMap subwayMap = new SubwayMap(lines);
+        FindPathType findPathType = FindPathType.find(typeName);
+        return subwayMap.findPath(upStation, downStation, findPathType);
+    }
+
+    public static void findPath(Station upStation, Station downStation, List<Line> lines) {
+        findPath(DISTANCE.name(), upStation, downStation, lines);
+    }
+
+    private Path findPath(Station source, Station target, FindPathType findPathType) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
         registerStation(graph);
 
         // 지하철 역의 연결 정보(간선)을 등록
-        connectStationsWithDistance(graph, findPathType);
+        connectStationsWithWeight(graph, findPathType);
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+        if (result == null) {
+            throw new NoSuchElementException("경로가 존재하지 않습니다.");
+        }
 
         List<Section> sections = getSections(result);
 
@@ -42,7 +56,7 @@ public class SubwayMap {
                 .forEach(graph::addVertex);
     }
 
-    private void connectStationsWithDistance(SimpleDirectedWeightedGraph<Station, SectionEdge> graph,
+    private void connectStationsWithWeight(SimpleDirectedWeightedGraph<Station, SectionEdge> graph,
             FindPathType findPathType) {
         connectStationsInOrder(graph, findPathType);
         connectStationsInReverseOrder(graph, findPathType);

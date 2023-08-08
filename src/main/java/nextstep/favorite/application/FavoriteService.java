@@ -1,5 +1,11 @@
 package nextstep.favorite.application;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.dto.FavoriteResponse;
 import nextstep.favorite.domain.Favorite;
@@ -12,21 +18,16 @@ import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 @Service
 public class FavoriteService {
+
     private FavoriteRepository favoriteRepository;
     private MemberService memberService;
     private StationService stationService;
     private PathService pathService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService, PathService pathService) {
+    public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService,
+            StationService stationService, PathService pathService) {
         this.favoriteRepository = favoriteRepository;
         this.memberService = memberService;
         this.stationService = stationService;
@@ -34,7 +35,7 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        pathService.findPath(request.getSource(), request.getTarget(), "DISTANCE");
+        pathService.findPath(request.getSource(), request.getTarget());
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
