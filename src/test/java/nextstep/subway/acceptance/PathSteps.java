@@ -5,7 +5,10 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.domain.Station;
 import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.service.dto.StationPathResponse;
+import nextstep.subway.service.dto.StationRequest;
 import nextstep.subway.service.dto.StationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
@@ -52,17 +55,15 @@ public class PathSteps {
     }
 
     public static void 지하철_경로_조회됨(ExtractableResponse<Response> response, BigDecimal expectedDistance, BigDecimal expectedFee, Long expectedDuration, List<String> expectedStationNames) {
-        var jsonPath = response.jsonPath();
+        var pathResponse = response.as(StationPathResponse.class);
 
-        var distance = jsonPath.getObject("distance", BigDecimal.class);
-        var duration = jsonPath.getLong("duration");
-        var fee = jsonPath.getObject("fee", BigDecimal.class);
-        var pathStationNames = jsonPath.getList("stations.name", String.class);
-
-        Assertions.assertEquals(0, expectedDistance.compareTo(distance));
-        Assertions.assertEquals(expectedDuration, duration);
-        Assertions.assertEquals(0, expectedFee.compareTo(fee));
-        Assertions.assertArrayEquals(expectedStationNames.toArray(), pathStationNames.toArray());
+        Assertions.assertEquals(0, expectedDistance.compareTo(pathResponse.getDistance()));
+        Assertions.assertEquals(expectedDuration, pathResponse.getDuration());
+        Assertions.assertEquals(0, expectedFee.compareTo(pathResponse.getFee()));
+        Assertions.assertArrayEquals(expectedStationNames.toArray(), pathResponse.getStations()
+                .stream()
+                .map(StationResponse::getName)
+                .toArray());
     }
 
 }
