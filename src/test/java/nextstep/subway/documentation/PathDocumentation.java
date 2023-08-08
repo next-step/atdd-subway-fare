@@ -17,6 +17,7 @@ import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.utils.RestAssuredUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,15 +29,21 @@ public class PathDocumentation extends Documentation {
     @MockBean
     private PathService pathService;
 
-    @Test
-    void path() {
-        PathResponse pathResponse = new PathResponse(
+    PathResponse pathResponse;
+
+    @BeforeEach
+    void setUpData() {
+        pathResponse = new PathResponse(
                 List.of(new StationResponse(1L, "교대역"),
                         new StationResponse(4L, "남부터미널역"),
                         new StationResponse(3L, "양재역")),
+                10,
                 10
         );
-        
+    }
+
+    @Test
+    void path() {
         when(pathService.searchPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
         RestDocumentationFilter document = document("path",
@@ -44,16 +51,18 @@ public class PathDocumentation extends Documentation {
                 preprocessResponse(prettyPrint()),
                 requestParameters(
                         parameterWithName("source").description("출발역 ID"),
-                        parameterWithName("target").description("도착역 ID")
+                        parameterWithName("target").description("도착역 ID"),
+                        parameterWithName("type").description("경로 조회 타입(DISTANCE/DURATION)")
                 ),
                 responseFields(
-                        fieldWithPath("stations[]").type(JsonFieldType.ARRAY).description("최단경로 상에 존재하는 역"),
+                        fieldWithPath("stations[]").type(JsonFieldType.ARRAY).description("경로 상에 존재하는 역"),
                         fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("지하철역 ID"),
                         fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("지하철역 이름"),
-                        fieldWithPath("distance").type(JsonFieldType.NUMBER).description("최단경로의 총 길이")
+                        fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 총 길이"),
+                        fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로 소요 시간")
                 )
         );
 
-        경로_조회_요청(1, 2, RestAssuredUtils.given_절_생성(spec, document));
+        경로_조회_요청(1, 2, "DISTANCE", RestAssuredUtils.given_절_생성(spec, document));
     }
 }
