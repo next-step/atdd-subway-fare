@@ -50,28 +50,15 @@ class PathTest {
     }
 
     private Section firstSection() {
-        line = createLine("2호선", "green");
-        교대역 = createStation("교대역");
-        강남역 = createStation("강남역");
-        return createSection(line, 교대역, 강남역,  10, 10);
+        line = new Line("2호선", "green");
+        교대역 = new Station("교대역");
+        강남역 = new Station("강남역");
+        return new Section(line, 교대역, 강남역, 10, 10);
     }
 
     private Section secondSection() {
-        line = createLine("신분당선", "green");
-        양재역 = createStation("양재역");
-        return createSection(line, 강남역, 양재역,  10, 11);
+        line = new Line("신분당선", "green");
+        양재역 = new Station("양재역");
+        return new Section(line, 강남역, 양재역,  10, 11);
     }
-
-    private Section createSection(Line line, Station upStation, Station downStation, int distance, int duration) {
-        return new Section(line, upStation, downStation, distance, duration);
-    }
-
-    private Station createStation(String name) {
-        return new Station(name);
-    }
-
-    private Line createLine(String name, String color) {
-        return new Line(name, color);
-    }
-
 }
