@@ -1,6 +1,6 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_경로_조회를_요청;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.Mockito.when;
@@ -11,6 +11,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathFindType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,10 +28,10 @@ public class PathDocumentation extends Documentation {
             Lists.newArrayList(
                 new StationResponse(1L, "강남역"),
                 new StationResponse(2L, "역삼역")
-            ), 10
+            ), 10, 10
         );
 
-        when(pathService.findPath(1L, 2L)).thenReturn(pathResponse);
+        when(pathService.findPath(1L, 2L, PathFindType.DISTANCE)).thenReturn(pathResponse);
 
         var document = document("path",
             getDocumentRequest(),
@@ -39,9 +40,10 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로에 포함된 역 목록"),
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
-                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리")
+                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리"),
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요 시간")
             ));
 
-        두_역의_최단단_거리_경로_조회를_요청(1L, 2L, this.spec, document);
+        두_역의_최단_경로_조회를_요청(1L, 2L, PathFindType.DISTANCE, this.spec, document);
     }
 }
