@@ -3,11 +3,9 @@ package nextstep.subway.domain;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.math.BigDecimal;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DiscountByAgeTest {
+class DiscountFareByAgeTest {
 
 
     @ParameterizedTest
@@ -15,7 +13,7 @@ class DiscountByAgeTest {
     void get(int age, int fare, int expectedDiscountFare) {
 
         // when
-        int resultFare = new DiscountByAge(age, fare).getDiscountedFare();
+        int resultFare = new DiscountFareByAge(age).fare(fare);
 
         // then
         assertThat(resultFare).isEqualTo(expectedDiscountFare);

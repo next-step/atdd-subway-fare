@@ -54,7 +54,7 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(2L, "역삼역")
                 ), 10, 12, 1250);
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         경로_조회_요청(requestSpecification, 1L, 2L, "DISTANCE");
     }

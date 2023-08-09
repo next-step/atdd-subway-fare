@@ -5,11 +5,9 @@ import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PathService {
@@ -41,7 +39,7 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines, type);
         Path path = subwayMap.findPath(upStation, downStation);
 
-        int fare = new FareCalculator(path.extractDistance(), path.getAdditionalFare()).fare(member.getAge());
+        int fare = new FareCalculator(path.extractDistance(), path.getAdditionalFareByLine(), member.getAge()).fare();
 
         if (type != PathType.DISTANCE) {
             Path distancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
@@ -52,6 +50,6 @@ public class PathService {
     }
 
     private static int findFareByDistance(Path distancePath, Integer age) {
-        return new FareCalculator(distancePath.extractDistance(), distancePath.getAdditionalFare()).fare(age);
+        return new FareCalculator(distancePath.extractDistance(), distancePath.getAdditionalFareByLine(), age).fare();
     }
 }

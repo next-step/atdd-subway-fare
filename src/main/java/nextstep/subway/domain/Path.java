@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Path {
     private final Sections sections;
-    private final int additionalFare;
+    private final int additionalFareByLine;
 
     public Path(List<Line> lines, Sections sections) {
         this.sections = sections;
-        this.additionalFare = lines.stream().filter(sections::isInLine).map(Line::getAdditionalFare).reduce(0, Integer::max);
+        this.additionalFareByLine = lines.stream().filter(sections::isInLine).map(Line::getAdditionalFare).reduce(0, Integer::max);
     }
 
     public Sections getSections() {
@@ -27,7 +27,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public int getAdditionalFare() {
-        return additionalFare;
+    public int getAdditionalFareByLine() {
+        return additionalFareByLine;
     }
 }
