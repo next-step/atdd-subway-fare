@@ -65,6 +65,6 @@ public class PathService {
     }
 
     public void validatePathConnection(Long source, Long target) {
-        searchPath(source, target, "DISTANCE");  //TODO 죄악...
+        searchPath(source, target, "DISTANCE");
     }
 }
