@@ -54,7 +54,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22);
+        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22,100);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -64,6 +64,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 20, 15);
+        경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 20, 15,400);
     }
 }

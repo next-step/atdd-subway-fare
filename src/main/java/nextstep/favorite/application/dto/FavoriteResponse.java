@@ -1,7 +1,7 @@
 package nextstep.favorite.application.dto;
 
 import nextstep.favorite.domain.Favorite;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.application.dto.StationResponse;
 
 public class FavoriteResponse {
     private Long id;

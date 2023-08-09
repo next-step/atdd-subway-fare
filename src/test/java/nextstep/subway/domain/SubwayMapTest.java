@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.application.dto.StationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +19,7 @@ class SubwayMapTest {
     Line shinbundantLine;
     Line no3Line;
     SubwayMap subwayMap;
+    List<Line> lines;
 
     @BeforeEach
     void setUp() {
@@ -36,14 +37,14 @@ class SubwayMapTest {
         no3Line = new Line("3호선", "orange");
         no3Line.addSection(gyodaeStation, southTerminalStation, 2, 20);
         no3Line.addSection(southTerminalStation, yangjaeStation, 3, 2);
-        subwayMap = new SubwayMap(List.of(no3Line, no2Line, shinbundantLine));
+        lines = List.of(no3Line, no2Line, shinbundantLine);
     }
 
     @DisplayName("최단 거리 경로 조회")
     @Test
     void findPathByDistance() {
         // when
-        Path path = subwayMap.findPath(gyodaeStation, yangjaeStation, FindPathType.DISTANCE);
+        Path path = SubwayMap.findPath(FindPathType.DISTANCE.name(),gyodaeStation, yangjaeStation,lines);
 
         // then
         Assertions.assertAll(
@@ -61,7 +62,7 @@ class SubwayMapTest {
     @Test
     void findPathByDuration() {
         // when
-        Path path = subwayMap.findPath(gyodaeStation, yangjaeStation, FindPathType.DURATION);
+        Path path = SubwayMap.findPath(FindPathType.DURATION.name(),gyodaeStation, yangjaeStation,lines);
 
         // then
         Assertions.assertAll(
