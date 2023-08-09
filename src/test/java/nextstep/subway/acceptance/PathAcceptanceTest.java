@@ -1,5 +1,6 @@
 package nextstep.subway.acceptance;
 
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청_후_id_추출;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_타입에따른_경로_조회를_요청;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+
+    private static final int DEFAULT_FARE = 1250;
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -65,7 +69,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(50);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FARE);
 
     }
 
@@ -91,6 +95,42 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(40);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FARE + 200);
+    }
+
+
+    /**
+     * 교대역    --- *2호선*(10km) ---   강남역    ----4호선 (2km, 800원) --- 짱짱역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
+    @DisplayName("추가 요금이 있는 노선을 이용할 때 요금 조회")
+    @Test
+    void findPathForUsageFeeLine() {
+
+        //given
+        Long 짱짱역 = 지하철역_생성_요청("짱짱역").jsonPath().getLong("id");
+        지하철_노선_생성_요청("4호선", "blue", 강남역, 짱짱역, 2, 20, 800);
+
+        //when
+        var response = 두_역의_타입에따른_경로_조회를_요청(교대역, 짱짱역, PathType.DISTANCE.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 짱짱역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(12);
+
+        int distanceOverFare = 100;
+        int lineUsageOverFare = 800;
+
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FARE + distanceOverFare + lineUsageOverFare);
+    }
+
+
+    @DisplayName("경로 중 추가요금이 있는 노선을 환승 하여 이용 할 경우 가장 높은 금액의 추가 요금만 적용")
+    @Test
+    void findTransferFee() {
+
     }
 }
