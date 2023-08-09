@@ -1,8 +1,11 @@
 package nextstep.subway.path.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.path.domain.ShortestPath;
+import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.SubwayMap;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
 import nextstep.subway.station.domain.Station;
@@ -10,9 +13,6 @@ import nextstep.subway.station.domain.StationRepository;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.station.exception.StationNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PathService {
@@ -24,17 +24,7 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathResponse searchPath(Long source, Long target) {
-        ShortestPath shortestPath = createShortestPath(source, target);
-
-        List<StationResponse> stationResponses = shortestPath.getPath().stream()
-                .map(StationResponse::from)
-                .collect(Collectors.toList());
-
-        return new PathResponse(stationResponses, shortestPath.getDistance(), 10);  //TODO 죄악...
-    }
-
-    private ShortestPath createShortestPath(Long source, Long target) {
+    public PathResponse searchPath(Long source, Long target, String type) {
         validateSourceAndTargetId(source, target);
         validateExistenceOfStation(source, target);
 
@@ -42,8 +32,14 @@ public class PathService {
         Station targetStation = findStation(target);
 
         List<Line> lines = lineRepository.findAll();
+        SubwayMap subwayMap = new SubwayMap(lines, type);
+        Path path = subwayMap.findPath(sourceStation, targetStation);
 
-        return new ShortestPath(lines, sourceStation, targetStation);
+        List<StationResponse> stationResponses = path.getStations().stream()
+                .map(StationResponse::from)
+                .collect(Collectors.toList());
+
+        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration());  //TODO 죄악...
     }
 
     private void validateSourceAndTargetId(Long source, Long target) {
@@ -64,6 +60,6 @@ public class PathService {
     }
 
     public void validatePathConnection(Long source, Long target) {
-        createShortestPath(source, target);
+        searchPath(source, target, "DISTANCE");  //TODO 죄악...
     }
 }

@@ -31,10 +31,15 @@ public class Section {
     }
 
     public Section(Station upStation, Station downStation, Integer distance, Integer duration) {
+        this(null, upStation, downStation, distance, duration);
+    }
+
+    public Section(Line line, Station upStation, Station downStation, Integer distance, Integer duration) {
         validateStation(upStation, downStation);
         validateDistance(distance);
         validateDuration(duration);
 
+        this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;

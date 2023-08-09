@@ -42,11 +42,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = StationStep.지하철역을_생성한다("양재역").jsonPath().getLong("id");
         남부터미널역 = StationStep.지하철역을_생성한다("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = LineStep.지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 8).jsonPath().getLong("id");
-        신분당선 = LineStep.지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 10).jsonPath().getLong("id");
-        삼호선 = LineStep.지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 5).jsonPath().getLong("id");
+        이호선 = LineStep.지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 1).jsonPath().getLong("id");
+        신분당선 = LineStep.지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 1).jsonPath().getLong("id");
+        삼호선 = LineStep.지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 10).jsonPath().getLong("id");
 
-        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 6);
+        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 12);
     }
 
     /**
@@ -73,7 +73,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(stationNames).hasSize(3);
         assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
         assertThat(distance).isEqualTo(5);
-        assertThat(duration).isEqualTo(10);
+        assertThat(duration).isEqualTo(22);
     }
 
     private int 총_이동거리_추출(ExtractableResponse<Response> pathsResponse) {
@@ -106,8 +106,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
         int duration = 소요시간_추출(pathsResponse);
 
         assertThat(stationNames).hasSize(3);
-        assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
-        assertThat(distance).isEqualTo(5);
-        assertThat(duration).isEqualTo(10);
+        assertThat(stationNames).containsExactly("교대역", "강남역", "양재역");
+        assertThat(distance).isEqualTo(20);
+        assertThat(duration).isEqualTo(2);
     }
 }

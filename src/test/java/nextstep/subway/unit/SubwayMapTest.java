@@ -5,7 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.path.domain.ShortestPath;
+import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.SubwayMap;
 import nextstep.subway.path.exception.PathNotFoundException;
 import nextstep.subway.path.exception.StationNotInGivenLinesException;
 import nextstep.subway.section.domain.Section;
@@ -15,7 +16,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("최단경로 단위 테스트")
-class ShortestPathTest {
+class SubwayMapTest {
+    public static final String DISTANCE = "DISTANCE";
+    public static final String DURATION = "DURATION";
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -31,22 +34,37 @@ class ShortestPathTest {
         양재역 = new Station(3L, "양재역");
         남부터미널역 = new Station(4L, "남부터미널역");
 
-        이호선 = new Line("2호선", "green", new Section(교대역, 강남역, 10, 10));
-        신분당선 = new Line("신분당선", "red", new Section(강남역, 양재역, 10, 10));
+        이호선 = new Line("2호선", "green", new Section(교대역, 강남역, 10, 1));
+        신분당선 = new Line("신분당선", "red", new Section(강남역, 양재역, 10, 1));
         삼호선 = new Line("3호선", "orange", new Section(교대역, 남부터미널역, 2, 10));
 
-        삼호선.registerSection(new Section(남부터미널역, 양재역, 3, 10));
+        삼호선.registerSection(new Section(남부터미널역, 양재역, 3, 12));
     }
 
-    @DisplayName("ShortestPath를 생성하면 최단경로가 저장된다.")
+    @DisplayName("최단 거리 경로 조회")
     @Test
-    void constructSuccess() {
+    void findPathByDistance() {
         // when
-        ShortestPath shortestPath = new ShortestPath(List.of(이호선, 삼호선, 신분당선), 교대역, 양재역);
+        SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선), DISTANCE);
+        Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        assertThat(shortestPath.getPath()).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(shortestPath.getDistance()).isEqualTo(5);
+        assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(path.getTotalDistance()).isEqualTo(5);
+        assertThat(path.getTotalDuration()).isEqualTo(22);
+    }
+
+    @DisplayName("최소 시간 경로 조회")
+    @Test
+    void findPathByDuration() {
+        // when
+        SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선), DURATION);
+        Path path = subwayMap.findPath(교대역, 양재역);
+
+        // then
+        assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
+        assertThat(path.getTotalDistance()).isEqualTo(20);
+        assertThat(path.getTotalDuration()).isEqualTo(2);
     }
 
     @DisplayName("경로가 없을 경우 예외가 발생한다.")
@@ -58,8 +76,11 @@ class ShortestPathTest {
 
         Line 구호선 = new Line("9호선", "brown", new Section(증미역, 여의도역, 2, 10));
 
-        // when, then
-        assertThatThrownBy(() -> new ShortestPath(List.of(이호선, 삼호선, 신분당선, 구호선), 교대역, 여의도역))
+        // when
+        SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선, 구호선), DISTANCE);
+
+        // then
+        assertThatThrownBy(() -> subwayMap.findPath(교대역, 여의도역))
                 .isInstanceOf(PathNotFoundException.class);
     }
 
@@ -69,8 +90,11 @@ class ShortestPathTest {
         // given
         Station 노선에_없는_역 = new Station(6L, "노선에 없는 역");
 
-        // when, then
-        assertThatThrownBy(() -> new ShortestPath(List.of(이호선, 삼호선, 신분당선), 교대역, 노선에_없는_역))
+        // when
+        SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선), DISTANCE);
+
+        // then
+        assertThatThrownBy(() -> subwayMap.findPath(교대역, 노선에_없는_역))
                 .isInstanceOf(StationNotInGivenLinesException.class);
     }
 }

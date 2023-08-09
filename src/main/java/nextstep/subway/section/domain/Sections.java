@@ -1,5 +1,7 @@
 package nextstep.subway.section.domain;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import nextstep.subway.common.exception.BusinessException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.section.exception.*;
@@ -22,6 +24,13 @@ public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     protected Sections() {
+    }
+
+    public Sections(List<Section> sections) {
+        firstStationId = sections.get(0).getUpStationId();
+        lastStationId = sections.get(sections.size() - 1).getDownStationId();
+
+        this.sections = sections;
     }
 
     public Sections(Long firstStationId, Long lastStationId) {
@@ -189,5 +198,24 @@ public class Sections {
 
     public Long getLastStationId() {
         return lastStationId;
+    }
+
+    public List<Station> getStations() {
+        return sections.stream()
+                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public int getTotalDistance() {
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
+    }
+
+    public int getTotalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }
