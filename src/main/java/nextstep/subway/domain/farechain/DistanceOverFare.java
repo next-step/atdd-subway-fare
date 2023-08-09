@@ -9,7 +9,8 @@ public class DistanceOverFare extends OverFarePolicyHandler {
         super(nextHandler);
     }
 
-    public int chargeHandler(Path path, int fare) {
+    @Override
+    public int chargeOverFare(Path path, int fare) {
         fare += getOverDistanceFare(path.extractDistance());
         return super.chargeHandler(path, fare);
     }

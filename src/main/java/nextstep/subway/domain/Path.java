@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import java.util.List;
 import nextstep.subway.domain.farechain.DistanceOverFare;
+import nextstep.subway.domain.farechain.LineOverFare;
 import nextstep.subway.domain.farechain.OverFarePolicyHandler;
 
 public class Path {
@@ -30,7 +31,7 @@ public class Path {
 
     public int getFare() {
 
-        OverFarePolicyHandler chain = new DistanceOverFare(null);
+        OverFarePolicyHandler chain = new DistanceOverFare(new LineOverFare(null));
         Fare fare = new Fare(chain);
 
         return fare.charge(this);

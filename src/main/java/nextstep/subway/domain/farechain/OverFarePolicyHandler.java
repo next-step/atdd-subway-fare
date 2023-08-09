@@ -12,9 +12,11 @@ public abstract class OverFarePolicyHandler {
 
     public int chargeHandler(Path path, int fare) {
         if (nextHandler != null) {
-            fare += nextHandler.chargeHandler(path, fare);
+            fare += nextHandler.chargeOverFare(path, fare);
         }
 
         return fare;
     }
+
+    public abstract int chargeOverFare(Path path, int fare);
 }
