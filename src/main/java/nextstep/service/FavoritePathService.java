@@ -5,6 +5,7 @@ import nextstep.domain.FavoritePath;
 import nextstep.domain.Station;
 import nextstep.domain.member.Member;
 import nextstep.domain.member.MemberRepository;
+import nextstep.domain.subway.PathType;
 import nextstep.dto.FavoritePathRequest;
 import nextstep.dto.FavoritePathResponse;
 import nextstep.repository.FavoritePathRepository;
@@ -37,7 +38,7 @@ public class FavoritePathService {
         Station sourceStation = stationService.findStation(favoritePathRequest.getSource());
         Station targetStation = stationService.findStation(favoritePathRequest.getTarget());
 
-        pathService.validatePath(sourceStation.getId(), targetStation.getId());
+        pathService.validatePath(sourceStation.getId(), targetStation.getId(), PathType.DISTANCE.getType());
 
         FavoritePath favoritePath = favoritePathRepository.save(new FavoritePath(sourceStation, targetStation, member));
 

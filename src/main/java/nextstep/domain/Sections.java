@@ -4,6 +4,7 @@ package nextstep.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import nextstep.domain.subway.PathType;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -21,6 +23,72 @@ public class Sections {
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sectionList = new ArrayList<>();
 
+    public Sections(List<Section> sections) {
+        this.sectionList = sections;
+    }
+
+
+    public Stream<Section> stream() {
+        return sectionList.stream();
+    }
+
+    public Long totalDistance() {
+        return sectionList.stream().mapToLong(Section::getDistance).sum();
+    }
+
+    public Long totalDuration() {
+        return sectionList.stream().mapToLong(Section::getDuration).sum();
+    }
+
+    public List<Station> getStations() {
+        if (this.sectionList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Station upStation = findFirstUpStation();
+        List<Station> result = new ArrayList<>();
+        result.add(upStation);
+
+        while (true) {
+            Station finalUpStation = upStation;
+            Optional<Section> section = findSectionAsUpStation(finalUpStation);
+
+            if (!section.isPresent()) {
+                break;
+            }
+
+            upStation = section.get().getDownStation();
+            result.add(upStation);
+        }
+
+        return result;
+    }
+
+    private Station findFirstUpStation() {
+        List<Station> upStations = this.sectionList.stream()
+                .map(Section::getUpStation)
+                .collect(Collectors.toList());
+        List<Station> downStations = this.sectionList.stream()
+                .map(Section::getDownStation)
+                .collect(Collectors.toList());
+
+        return upStations.stream()
+                .filter(it -> !downStations.contains(it))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+    }
+
+    private Optional<Section> findSectionAsUpStation(Station finalUpStation) {
+        return this.sectionList.stream()
+                .filter(it -> it.isSameUpStation(finalUpStation))
+                .findFirst();
+    }
+
+    private Optional<Section> findSectionAsDownStation(Station station) {
+        return this.sectionList.stream()
+                .filter(it -> it.isSameDownStation(station))
+                .findFirst();
+    }
 
 
     public void addSection(Line line , Section newSection){

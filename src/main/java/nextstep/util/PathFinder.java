@@ -1,66 +1,71 @@
 package nextstep.util;
 
-import nextstep.domain.Line;
-import nextstep.domain.Station;
+import nextstep.domain.*;
+import nextstep.domain.subway.PathType;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 public class PathFinder {
-    private DijkstraShortestPath dijkstraShortestPath;
+    private List<Line> lines;
+    private String type;
 
-    public void init(List<Line> lineList) {
-        dijkstraShortestPath = new DijkstraShortestPath(buildGraph(lineList));
-    }
-
-    public List<Station> getPath(Station source, Station target) {
-
-        validateGraph(source, target, dijkstraShortestPath);
-
-        try{
-            return dijkstraShortestPath.getPath(source, target).getVertexList();
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
-        }
-
-
+    public PathFinder(List<Line> lines,String type) {
+        this.lines = lines;
+        this.type = type;
 
     }
 
-    public int getDistance(Station source, Station target) {
-        validateGraph(source, target, dijkstraShortestPath);
-        return (int) dijkstraShortestPath.getPathWeight(source, target);
+    public Path findPath(Station source, Station target) {
+        validateGraph(source, target);
+        SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
+
+        // 지하철 역(정점)을 등록
+        lines.stream()
+                .flatMap(it -> it.getOrderedStationList().stream())
+                .distinct()
+                .collect(Collectors.toList())
+                .forEach(graph::addVertex);
+
+        // 지하철 역의 연결 정보(간선)을 등록
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .forEach(it -> {
+                    addEdge(graph, it);
+                });
+
+        // 지하철 역의 연결 정보(간선)을 등록
+        lines.stream()
+                .flatMap(it -> it.getSections().stream())
+                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
+                .forEach(it -> {
+                    addEdge(graph, it);
+                });
+
+        // 다익스트라 최단 경로 찾기
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+
+        List<Section> sections = result.getEdgeList().stream()
+                .map(SectionEdge::getSection)
+                .collect(Collectors.toList());
+
+        return new Path(new Sections(sections));
     }
 
-    private WeightedMultigraph<Station, DefaultWeightedEdge> buildGraph(List<Line> lineList) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
-
-        addVertex(lineList, graph);
-        addEdge(lineList, graph);
-
-
-        return graph;
+    private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it) {
+        SectionEdge sectionEdge = SectionEdge.of(it);
+        graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
+        graph.setEdgeWeight(sectionEdge,it.getWeight(type));
     }
 
-    private void addEdge(List<Line> lineList, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        lineList.stream()
-                .flatMap(line -> line.getSections().getSectionList().stream())
-                .forEach(section -> graph.setEdgeWeight(
-                        graph.addEdge(section.getUpStation(), section.getDownStation())
-                        , section.getDistance()));
-    }
 
-    private void addVertex(List<Line> lineList, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        lineList.stream()
-                .flatMap(line -> line.getOrderedStationList().stream())
-                .forEach(station -> graph.addVertex(station));
-    }
-
-    private void validateGraph(Station source, Station target, DijkstraShortestPath dijkstraShortestPath) {
+    private void validateGraph(Station source, Station target) {
 
         if(source.getId()==target.getId()){
             throw new IllegalArgumentException("경로조회는 출발역과 도착역이 동일할 수 없음.");

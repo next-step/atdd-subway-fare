@@ -1,6 +1,7 @@
 package nextstep.service;
 
 import nextstep.domain.Line;
+import nextstep.domain.Path;
 import nextstep.domain.Station;
 import nextstep.dto.PathResponse;
 import nextstep.repository.LineRepository;
@@ -22,7 +23,7 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathResponse getPath(Long sourceId,Long targetId){
+    public PathResponse getPath(Long sourceId,Long targetId,String type){
 
         Station sourceStation = stationService.findStation(sourceId);
         Station targetStation = stationService.findStation(targetId);
@@ -30,19 +31,18 @@ public class PathService {
         List<Line> lineList = lineRepository.findAll();
 
 
-        PathFinder pathFinder = new PathFinder();
-        pathFinder.init(lineList);
+        PathFinder pathFinder = new PathFinder(lineList , type);
 
-        List<Station> path = pathFinder.getPath(sourceStation, targetStation);
-        int distance = pathFinder.getDistance(sourceStation, targetStation);
 
-        return PathResponse.createPathResponse(path, distance);
+        Path path = pathFinder.findPath(sourceStation, targetStation);
+
+        return PathResponse.createPathResponse(path);
 
     }
 
-    public void validatePath(Long sourceId,Long targetId){
+    public void validatePath(Long sourceId,Long targetId,String type){
         try {
-            getPath(sourceId,targetId);
+            getPath(sourceId,targetId, type);
         } catch (Exception e) {
             throw new IllegalArgumentException("존재하지 않는 경로입니다.");
         }

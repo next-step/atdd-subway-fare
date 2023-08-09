@@ -3,6 +3,7 @@ package nextstep.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import nextstep.domain.Path;
 import nextstep.domain.Station;
 
 import java.util.List;
@@ -12,12 +13,14 @@ import java.util.List;
 public class PathResponse {
 
     private List<Station> stations;
-    private int distance;
+    private Long distance;
+    private Long duration;
 
-    public static PathResponse createPathResponse(List<Station> path,int distance){
+    public static PathResponse createPathResponse(Path path){
         PathResponse pathResponse = new PathResponse();
-        pathResponse.stations = path;
-        pathResponse.distance = distance;
+        pathResponse.stations = path.getSections().getStations();
+        pathResponse.distance = path.extractDistance();
+        pathResponse.duration = path.extractDuration();
 
         return pathResponse;
     }

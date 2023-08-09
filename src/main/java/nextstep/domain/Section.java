@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import nextstep.domain.subway.PathType;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -38,6 +39,26 @@ public class Section {
         this.downStation = Objects.requireNonNull(downStation);
         this.distance = Objects.requireNonNull(distance);
         this.duration =Objects.requireNonNull(duration);
+    }
+
+    public Long getWeight(String type){
+        if(type.equals(PathType.DISTANCE.getType())){
+            return distance;
+        }
+        if(type.equals(PathType.DURATION.getType())){
+            return duration;
+        }
+        else{
+            throw new IllegalArgumentException("잘못된 경로조회 타입.");
+        }
+    }
+
+    public boolean isSameUpStation(Station station) {
+        return this.upStation == station;
+    }
+
+    public boolean isSameDownStation(Station station) {
+        return this.downStation == station;
     }
 
 }
