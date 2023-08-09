@@ -9,6 +9,7 @@ import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathFindType;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,8 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        pathService.findPath(request.getSource(), request.getTarget());
+        // 사용자들은 보통 빨리가고 싶어할 것이기 때문에 default PathFindType이 DURATION으로 결정
+        pathService.findPath(request.getSource(), request.getTarget(), PathFindType.DURATION);
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
