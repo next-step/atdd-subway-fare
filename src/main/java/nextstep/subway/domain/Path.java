@@ -1,9 +1,10 @@
 package nextstep.subway.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import nextstep.subway.domain.farechain.DistanceOverFare;
-import nextstep.subway.domain.farechain.LineOverFare;
 import nextstep.subway.domain.farechain.OverFarePolicyHandler;
+import nextstep.subway.domain.farechain.OverFarePolicyHandlerImpl;
 
 public class Path {
 
@@ -29,11 +30,19 @@ public class Path {
         return sections.getStations();
     }
 
+    public List<Line> getLines() {
+        return sections.getSections().stream().map(Section::getLine).collect(Collectors.toList());
+    }
+
     public int getFare() {
 
-        OverFarePolicyHandler chain = new DistanceOverFare(new LineOverFare(null));
+        OverFarePolicyHandler chain = new OverFarePolicyHandlerImpl(getHandlerChain());
         Fare fare = new Fare(chain);
 
         return fare.charge(this);
+    }
+
+    private OverFarePolicyHandler getHandlerChain() {
+        return new DistanceOverFare(null);
     }
 }
