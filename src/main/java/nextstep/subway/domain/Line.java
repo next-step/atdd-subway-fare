@@ -65,7 +65,7 @@ public class Line {
         sections.delete(station);
     }
 
-    public void updateExtraFare(int extraFare) {
+    public void updateExtraFare(long extraFare) {
         this.extraFare = extraFare;
     }
 

@@ -62,8 +62,8 @@ public class LineController {
     }
 
     @PostMapping(path = "/{lineId}",params = "type=fare")
-    public ResponseEntity<Void> addExtraFareToLine(@PathVariable Long lineId, @RequestBody String fare) {
-        lineService.updateFare(lineId, fare);
+    public ResponseEntity<Void> addExtraFareToLine(@PathVariable Long lineId, @RequestBody Long extraFare) {
+        lineService.updateExtraFare(lineId, extraFare);
         return ResponseEntity.ok().build();
     }
 }
