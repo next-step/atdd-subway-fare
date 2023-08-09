@@ -7,6 +7,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -49,7 +50,19 @@ public class PathFinder {
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
+        GraphPath<Station, SectionEdge> result;
+
+        try{
+            result = dijkstraShortestPath.getPath(source, target);
+        }
+        catch (Exception e){
+            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
+        }
+
+        if(Objects.equals(result,null)){
+            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
+        }
+
 
         List<Section> sections = result.getEdgeList().stream()
                 .map(SectionEdge::getSection)

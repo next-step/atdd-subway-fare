@@ -3,6 +3,7 @@ package nextstep.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.acceptance.commonStep.*;
+import nextstep.domain.subway.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,10 +59,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         남부터미널교대구간거리 = 5L;
         흑석동작구간거리 = 10L;
 
-        교대강남구간시간 = 10L;
-        강남양재구간시간 = 15L;
-        양재남부터미널구간시간 = 5L;
-        남부터미널교대구간시간 = 5L;
+        교대강남구간시간 = 5L;
+        강남양재구간시간 = 5L;
+        양재남부터미널구간시간 = 10L;
+        남부터미널교대구간시간 = 15L;
         흑석동작구간시간 = 10L;
 
         SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리,교대강남구간시간);
@@ -82,7 +83,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathByDistance() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역);
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DISTANCE.getType());
 
         // then
         assertThat(response.jsonPath().getList("stations.name", String.class))
@@ -100,10 +101,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathByTime() {
 
         // when
-
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DURATION.getType());
 
         // then
-
+        assertThat(response.jsonPath().getList("stations.name", String.class))
+                .containsExactly("교대역", "강남역", "양재역");
 
     }
 
@@ -117,7 +119,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathWithIdenticalSourceAndTarget() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,교대역);
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,교대역, PathType.DISTANCE.getType());
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -133,7 +135,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathNotConnected() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,동작역);
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,동작역, PathType.DISTANCE.getType());
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -150,8 +152,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathWithNotExistStation() {
 
         // when
-        ExtractableResponse<Response> responseNotExistSourse = PathStep.지하철_경로_조회(동작역+1,교대역);
-        ExtractableResponse<Response> responseNotExistTarget = PathStep.지하철_경로_조회(교대역,동작역+1);
+        ExtractableResponse<Response> responseNotExistSourse = PathStep.지하철_경로_조회(동작역+1,교대역, PathType.DISTANCE.getType());
+        ExtractableResponse<Response> responseNotExistTarget = PathStep.지하철_경로_조회(교대역,동작역+1, PathType.DISTANCE.getType());
 
         // then
         assertThat(responseNotExistSourse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

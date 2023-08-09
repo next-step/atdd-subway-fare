@@ -1,8 +1,10 @@
 package nextstep.unit;
 
 import nextstep.domain.Line;
+import nextstep.domain.Path;
 import nextstep.domain.Section;
 import nextstep.domain.Station;
+import nextstep.domain.subway.PathType;
 import nextstep.util.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -91,10 +93,10 @@ class PathTest {
         남부터미널교대구간거리 = 5L;
         흑석동작구간거리 = 10L;
 
-        교대강남구간시간 = 10L;
-        강남양재구간시간 = 15L;
-        양재남부터미널구간시간 = 5L;
-        남부터미널교대구간시간 = 5L;
+        교대강남구간시간 = 5L;
+        강남양재구간시간 = 5L;
+        양재남부터미널구간시간 = 15L;
+        남부터미널교대구간시간 = 15L;
         흑석동작구간시간 = 10L;
 
         교대강남구간 = new Section(이호선, 교대역, 강남역, 교대강남구간거리,교대강남구간시간);
@@ -109,36 +111,48 @@ class PathTest {
         삼호선.addSection(남부터미널교대구간);
         구호선.addSection(흑석동작구간);
 
-        pathFinder = new PathFinder();
-        pathFinder.init(List.of(이호선,삼호선,신분당선));
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE.getType());
     }
 
-    @DisplayName("지하철 경로 조회")
+    @DisplayName("거리 기준으로 지하철 경로 조회")
     @Test
-    void getPath() {
+    void getPathByDistance() {
         // when
-        List<Station> shortestPath = pathFinder.getPath(교대역, 양재역);
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE.getType());
+        Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
-        assertThat(shortestPath.stream().map(Station::getName))
+        assertThat(path.getSections().getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "남부터미널역", "양재역");
+        assertThat(path.extractDistance())
+                .isEqualTo(남부터미널교대구간거리+양재남부터미널구간거리);
+        assertThat(path.extractDuration())
+                .isEqualTo(남부터미널교대구간시간+양재남부터미널구간시간);
     }
 
-    @DisplayName("지하철 경로 총 거리 조회")
+    @DisplayName("시간 기준으로 지하철 경로 조회")
     @Test
-    void getDistance() {
+    void getPathByDuration() {
         // when
-        double distance= pathFinder.getDistance(교대역, 양재역);
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION.getType());
+        Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
-        assertThat(distance).isEqualTo(남부터미널교대구간거리+양재남부터미널구간거리);
+        assertThat(path.getSections().getStations().stream().map(Station::getName))
+                .containsExactly("교대역", "강남역", "양재역");
+        assertThat(path.extractDistance())
+                .isEqualTo(교대강남구간거리+강남양재구간거리);
+        assertThat(path.extractDuration())
+                .isEqualTo(교대강남구간시간+강남양재구간시간);
     }
+
+
 
     @DisplayName("출발역과 도착역이 동일한 경우 조회")
     @Test
     void getPath_source_and_target_is_identical() {
         // when, then
-        assertThatThrownBy(() ->  pathFinder.getDistance(교대역, 교대역))
+        assertThatThrownBy(() ->  pathFinder.findPath(교대역, 교대역))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("경로조회는 출발역과 도착역이 동일할 수 없음.");
     }
@@ -147,7 +161,7 @@ class PathTest {
     @Test
     void getPath_not_connected() {
         // when, then
-        assertThatThrownBy(() ->  pathFinder.getPath(교대역, 동작역))
+        assertThatThrownBy(() ->  pathFinder.findPath(교대역, 동작역))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("출발역과 도착역이 연결되어 있지 않음.");
     }

@@ -4,6 +4,7 @@ import nextstep.domain.FavoritePath;
 import nextstep.domain.Station;
 import nextstep.domain.member.Member;
 import nextstep.domain.member.MemberRepository;
+import nextstep.domain.subway.PathType;
 import nextstep.dto.FavoritePathRequest;
 import nextstep.repository.FavoritePathRepository;
 import nextstep.service.FavoritePathService;
@@ -63,8 +64,7 @@ class FavoritePathServiceTest {
 
         when(stationService.findStation(sourceStationId)).thenReturn(sourceStation);
         when(stationService.findStation(targetStationId)).thenReturn(targetStation);
-        doNothing().when(pathService).validatePath(any(),any());
-        when(memberRepository.findByEmail(email)).thenReturn(Optional.ofNullable(member));
+        doNothing().when(pathService).validatePath(sourceStation.getId(),targetStation.getId(), PathType.DISTANCE.getType());
         when(favoritePathRepository.save(any())).thenReturn(favoritePath);
 
         //when

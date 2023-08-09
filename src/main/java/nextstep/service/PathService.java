@@ -30,10 +30,7 @@ public class PathService {
 
         List<Line> lineList = lineRepository.findAll();
 
-
         PathFinder pathFinder = new PathFinder(lineList , type);
-
-
         Path path = pathFinder.findPath(sourceStation, targetStation);
 
         return PathResponse.createPathResponse(path);
