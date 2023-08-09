@@ -11,7 +11,7 @@ public class DistanceOverFare extends OverFarePolicyHandler {
 
     @Override
     public int chargeOverFare(Path path) {
-        return getOverDistanceFare(path.extractDistance());
+        return super.chargeHandler(path, getOverDistanceFare(path.extractDistance()));
     }
 
     public static int getOverDistanceFare(int distance) {

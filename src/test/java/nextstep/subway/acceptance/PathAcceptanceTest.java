@@ -128,9 +128,35 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
 
+    /**
+     * 교대역    --- *2호선*(10km) ---   강남역  --4호선 (2km, 800원) --- 짱짱역 -- 5호선(1km, 300원)-- 굿역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
+
     @DisplayName("경로 중 추가요금이 있는 노선을 환승 하여 이용 할 경우 가장 높은 금액의 추가 요금만 적용")
     @Test
     void findTransferFee() {
 
+        //given
+        Long 짱짱역 = 지하철역_생성_요청("짱짱역").jsonPath().getLong("id");
+        지하철_노선_생성_요청("4호선", "blue", 강남역, 짱짱역, 2, 20, 800);
+
+        Long 굿역 = 지하철역_생성_요청("굿역").jsonPath().getLong("id");
+        지하철_노선_생성_요청("5호선", "purple", 짱짱역, 굿역, 1, 10, 300);
+
+        //when
+        var response = 두_역의_타입에따른_경로_조회를_요청(교대역, 굿역, PathType.DISTANCE.name());
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 짱짱역, 굿역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(13);
+
+        int distanceOverFare = 100;
+        int lineUsageOverFare = 800;
+
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FARE + distanceOverFare + lineUsageOverFare);
     }
 }

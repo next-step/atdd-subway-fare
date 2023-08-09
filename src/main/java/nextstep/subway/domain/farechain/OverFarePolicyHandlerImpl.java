@@ -10,6 +10,6 @@ public class OverFarePolicyHandlerImpl extends OverFarePolicyHandler{
 
     @Override
     public int chargeOverFare(Path path) {
-        return 0;
+        return super.chargeHandler(path, 0);
     }
 }

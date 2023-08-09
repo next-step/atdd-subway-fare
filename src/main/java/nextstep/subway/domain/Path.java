@@ -3,6 +3,7 @@ package nextstep.subway.domain;
 import java.util.List;
 import java.util.stream.Collectors;
 import nextstep.subway.domain.farechain.DistanceOverFare;
+import nextstep.subway.domain.farechain.LineOverFare;
 import nextstep.subway.domain.farechain.OverFarePolicyHandler;
 import nextstep.subway.domain.farechain.OverFarePolicyHandlerImpl;
 
@@ -43,6 +44,6 @@ public class Path {
     }
 
     private OverFarePolicyHandler getHandlerChain() {
-        return new DistanceOverFare(null);
+        return new DistanceOverFare(new LineOverFare(null));
     }
 }
