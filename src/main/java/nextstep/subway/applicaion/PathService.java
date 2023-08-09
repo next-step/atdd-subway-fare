@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public class PathService {
-    private LineService lineService;
-    private StationService stationService;
-    private MemberService memberService;
+    private final LineService lineService;
+    private final StationService stationService;
+    private final MemberService memberService;
 
     public PathService(LineService lineService, StationService stationService, MemberService memberService) {
         this.lineService = lineService;
@@ -21,8 +21,8 @@ public class PathService {
         this.memberService = memberService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
-        return findPath(source, target, type, MemberResponse.noLoginResponse());
+    public void checkPath(Long source, Long target) {
+        findPath(source, target, PathType.DISTANCE, MemberResponse.noLoginResponse());
     }
 
     public PathResponse findPath(Long source, Long target, PathType type, UserPrincipal userPrincipal) {
@@ -36,20 +36,16 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
 
-        SubwayMap subwayMap = new SubwayMap(lines, type);
-        Path path = subwayMap.findPath(upStation, downStation);
+        Path resultPath = new SubwayMap(lines, type).findPath(upStation, downStation);
 
-        int fare = new FareCalculator(path.extractDistance(), path.getAdditionalFareByLine(), member.getAge()).fare();
-
-        if (type != PathType.DISTANCE) {
-            Path distancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
-            fare = findFareByDistance(distancePath, member.getAge());
+        if (type == PathType.DISTANCE) {
+            int fare = new FareCalculator(resultPath.extractDistance(), resultPath.getAdditionalFareByLine(), member.getAge()).fare();
+            return PathResponse.of(resultPath, fare);
         }
 
-        return PathResponse.of(path, fare);
-    }
+        Path tempDistancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
+        int fare =  new FareCalculator(tempDistancePath.extractDistance(), tempDistancePath.getAdditionalFareByLine(), member.getAge()).fare();
 
-    private static int findFareByDistance(Path distancePath, Integer age) {
-        return new FareCalculator(distancePath.extractDistance(), distancePath.getAdditionalFareByLine(), age).fare();
+        return PathResponse.of(resultPath, fare);
     }
 }
