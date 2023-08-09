@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 public enum AgeFeeType {
+    TODDLER(0, 5, fee -> 0),
     CHILDREN(6, 13, fee -> (int) ((fee - 350) * 0.5)),
     TEENAGER(13, 19, fee -> (int) ((fee - 350) * 0.8)),
     ADULT(19, Integer.MAX_VALUE, fee -> fee);
