@@ -1,6 +1,6 @@
 package nextstep.auth.principal;
 
-public class UserPrincipal {
+public class UserPrincipal implements LoginUserPrincipal {
     private String username;
     private String role;
 

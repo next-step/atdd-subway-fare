@@ -1,6 +1,7 @@
 package nextstep.subway.ui;
 
 import nextstep.auth.principal.AuthenticationPrincipal;
+import nextstep.auth.principal.LoginUserPrincipal;
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -22,7 +23,7 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source,
                                                  @RequestParam Long target,
                                                  @RequestParam SubwayMapType type,
-                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
+                                                 @AuthenticationPrincipal LoginUserPrincipal userPrincipal) {
         return ResponseEntity.ok(pathService.findPath(source, target, type, userPrincipal));
     }
 }

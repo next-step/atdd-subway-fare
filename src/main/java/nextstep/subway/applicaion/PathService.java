@@ -1,5 +1,7 @@
 package nextstep.subway.applicaion;
 
+import nextstep.auth.principal.LoginUserPrincipal;
+import nextstep.auth.principal.NullUserPrincipal;
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
@@ -21,14 +23,14 @@ public class PathService {
         this.memberRepository = memberRepository;
     }
 
-    public PathResponse findPath(Long source, Long target, SubwayMapType type, UserPrincipal userPrincipal) {
+    public PathResponse findPath(Long source, Long target, SubwayMapType type, LoginUserPrincipal userPrincipal) {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = type.getSubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation);
 
-        if (userPrincipal != null) {
+        if (userPrincipal instanceof UserPrincipal) {
             Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(IllegalAccessError::new);
             path.setMember(member);
         }
