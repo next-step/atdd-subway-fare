@@ -60,4 +60,10 @@ public class LineController {
         lineService.deleteSection(lineId, stationId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(path = "/{lineId}",params = "type=fare")
+    public ResponseEntity<Void> addExtraFareToLine(@PathVariable Long lineId, @RequestBody String fare) {
+        lineService.updateFare(lineId, fare);
+        return ResponseEntity.ok().build();
+    }
 }
