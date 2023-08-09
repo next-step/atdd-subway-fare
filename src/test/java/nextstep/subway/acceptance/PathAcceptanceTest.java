@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -122,6 +123,32 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getLong("distance")).isNotNull();
         assertThat(response.jsonPath().getLong("duration")).isNotNull();
         assertThat(response.jsonPath().getLong("fare")).isNotNull();
+    }
+
+    /**
+     * Given 지하철역이 등록되어있음
+     * And 지하철 노선이 등록되어있음
+     * And 지하철 노선에 지하철역이 등록되어있음
+     * When 10대인 유저의 토큰과 함께 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
+     * Then 최소 시간 기준 경로를 응답
+     * And 총 거리와 소요 시간을 함께 응답함
+     * And 지하철 이용 요금은 1950 = 1250 + 200(distance 20km) + 900(extra charge) - 400(youth discount)
+     */
+    @DisplayName("두 역의 최소 시간 경로를 조회한다.")
+    @Test
+    void findPathByDistanceWithCheckingFare() {
+        // given
+        String type = PathType.DURATION.name();
+        String youthToken = 베어러_인증_로그인_요청("email4@email.com", "password").jsonPath().getString("accessToken");
+
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(youthToken, 교대역, 양재역, type);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getLong("distance")).isNotNull();
+        assertThat(response.jsonPath().getLong("duration")).isNotNull();
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1950);
     }
 
     private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String type) {
