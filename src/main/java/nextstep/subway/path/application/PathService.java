@@ -28,18 +28,23 @@ public class PathService {
         validateSourceAndTargetId(source, target);
         validateExistenceOfStation(source, target);
 
-        Station sourceStation = findStation(source);
-        Station targetStation = findStation(target);
-
-        List<Line> lines = lineRepository.findAll();
-        SubwayMap subwayMap = new SubwayMap(lines, type);
-        Path path = subwayMap.findPath(sourceStation, targetStation);
+        Path path = findPath(source, target, type);
 
         List<StationResponse> stationResponses = path.getStations().stream()
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
 
         return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration());  //TODO 죄악...
+    }
+
+    private Path findPath(Long source, Long target, String type) {
+        Station sourceStation = findStation(source);
+        Station targetStation = findStation(target);
+
+        List<Line> lines = lineRepository.findAll();
+        SubwayMap subwayMap = new SubwayMap(lines, type);
+
+        return subwayMap.findPath(sourceStation, targetStation);
     }
 
     private void validateSourceAndTargetId(Long source, Long target) {
