@@ -92,4 +92,14 @@ public class PathSteps {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())));
     }
+
+    public static void 노선_추가_요금_등록한다(long lineId,long extraFare) {
+        Map<String, String> body = new HashMap<>();
+        body.put("fare", extraFare + "");
+        RestAssured.given().log().all()
+                .body(body)
+                .when().post("lines/{lineId}?type=fare", lineId)
+                .then().log().all()
+                .extract();
+    }
 }

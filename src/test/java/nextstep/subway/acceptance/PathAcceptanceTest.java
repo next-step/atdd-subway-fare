@@ -2,13 +2,17 @@ package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.경로_조회_검증;
+import static nextstep.subway.acceptance.PathSteps.노선_추가_요금_등록한다;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.세션_생성_파라미터_생성;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
+import io.restassured.RestAssured;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,4 +70,21 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 20, 15,400);
     }
+
+    /**
+     * Given 노선을 생성하고
+     * When 노선에 추가 요금을 등록하면
+     * Then 경로 조회시 추가된 요금된 조회된다
+     */
+    @DisplayName("노선에 추가 요금을 등록한다")
+    @Test
+    void addExtraFareToLine() {
+        // when
+        노선_추가_요금_등록한다(삼호선, 10);
+
+        // then
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
+        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22,110);
+    }
+
 }
