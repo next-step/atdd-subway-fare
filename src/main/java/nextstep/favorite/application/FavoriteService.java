@@ -9,7 +9,6 @@ import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.StationResponse;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +21,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
-    private FavoriteRepository favoriteRepository;
-    private MemberService memberService;
-    private StationService stationService;
-    private PathService pathService;
+    private final FavoriteRepository favoriteRepository;
+    private final MemberService memberService;
+    private final StationService stationService;
+    private final PathService pathService;
 
     public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService, PathService pathService) {
         this.favoriteRepository = favoriteRepository;
