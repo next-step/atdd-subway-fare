@@ -1,7 +1,7 @@
 package nextstep.subway.applicaion;
 
+import nextstep.auth.AuthenticationException;
 import nextstep.auth.principal.LoginUserPrincipal;
-import nextstep.auth.principal.NullUserPrincipal;
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
@@ -31,7 +31,7 @@ public class PathService {
         Path path = subwayMap.findPath(upStation, downStation);
 
         if (userPrincipal instanceof UserPrincipal) {
-            Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(IllegalAccessError::new);
+            Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
             path.setMember(member);
         }
         return PathResponse.of(path);
