@@ -111,14 +111,15 @@ class PathTest {
         삼호선.addSection(남부터미널교대구간);
         구호선.addSection(흑석동작구간);
 
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
+
     }
 
     @DisplayName("거리 기준으로 지하철 경로 조회")
     @Test
     void getPathByDistance() {
-        // when
+        //given
         pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
+        // when
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
@@ -133,8 +134,9 @@ class PathTest {
     @DisplayName("시간 기준으로 지하철 경로 조회")
     @Test
     void getPathByDuration() {
-        // when
+        //given
         pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION);
+        // when
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
@@ -151,6 +153,8 @@ class PathTest {
     @DisplayName("출발역과 도착역이 동일한 경우 조회")
     @Test
     void getPath_source_and_target_is_identical() {
+        //given
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
         // when, then
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 교대역))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -160,6 +164,8 @@ class PathTest {
     @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우를 조회")
     @Test
     void getPath_not_connected() {
+        // given
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선,구호선),PathType.DURATION);
         // when, then
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 동작역))
                 .isInstanceOf(IllegalArgumentException.class)

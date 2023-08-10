@@ -50,14 +50,7 @@ public class PathFinder {
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result;
-
-        try{
-            result = dijkstraShortestPath.getPath(source, target);
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
-        }
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         if(Objects.equals(result,null)){
             throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
