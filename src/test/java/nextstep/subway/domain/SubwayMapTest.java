@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -18,7 +19,6 @@ class SubwayMapTest {
     Line no2Line;
     Line shinbundantLine;
     Line no3Line;
-    SubwayMap subwayMap;
     List<Line> lines;
 
     @BeforeEach
@@ -67,6 +67,30 @@ class SubwayMapTest {
         // then
         Assertions.assertAll(
                 () -> assertThat(path.extractDuration()).isEqualTo(15),
+                () -> assertThat(path.getStations()).usingRecursiveComparison()
+                        .isEqualTo(
+                                List.of(StationResponse.of(gyodaeStation),
+                                        StationResponse.of(gangnameStation),
+                                        StationResponse.of(yangjaeStation))
+                        )
+        );
+    }
+
+    @DisplayName("경로 조회시 추가된 요금중 가장 높은 금액만 기본 요금에 합쳐서 조회된다")
+    @Test
+    void testOnlyHighestAdditionalFareIsAddedToBaseFare() {
+        // given
+        no2Line.updateExtraFare(20);
+        shinbundantLine.updateExtraFare(30);
+        no3Line.updateExtraFare(40);
+
+        // when
+        Path path = SubwayMap.findPath(FindPathType.DURATION.name(),gyodaeStation, yangjaeStation,lines);
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(path.extractDuration()).isEqualTo(15),
+                () -> assertThat(path.getFare()).isEqualTo(430),
                 () -> assertThat(path.getStations()).usingRecursiveComparison()
                         .isEqualTo(
                                 List.of(StationResponse.of(gyodaeStation),

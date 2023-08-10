@@ -89,7 +89,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * When 여러 노선에 추가 요금을 등록하면
      * Then 경로 조회시 추가된 요금중 가장 높은 금액만 기본 요금에 합쳐서 조회된다
      */
-    @DisplayName("노선에 추가 요금을 등록한다")
+    @DisplayName("경로 조회시 추가된 요금중 가장 높은 금액만 기본 요금에 합쳐서 조회된다")
     @Test
     void testOnlyHighestAdditionalFareIsAddedToBaseFare() {
         // when
