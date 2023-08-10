@@ -35,8 +35,7 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        // 사용자들은 보통 빨리가고 싶어할 것이기 때문에 default PathFindType이 DURATION으로 결정
-        pathService.findPath(request.getSource(), request.getTarget(), PathFindType.DURATION);
+        pathService.findPath(request.getSource(), request.getTarget(), request.getPathFindType());
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
