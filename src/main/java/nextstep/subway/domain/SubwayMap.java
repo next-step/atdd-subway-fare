@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import static nextstep.subway.domain.FareCalculator.getExtraFare;
 import static nextstep.subway.domain.FindPathType.DISTANCE;
 
 import java.util.List;
@@ -47,16 +48,6 @@ public class SubwayMap {
         Sections sections = new Sections(sectionList);
         long fare = FareCalculator.calculateByDistance(sections.totalDistance()) + getExtraFare(lines,sectionList);
         return new Path(sections, fare);
-    }
-
-    private long getExtraFare(List<Line> lines, List<Section> sections) {
-        return lines.stream()
-                .filter(line -> line.getSections().stream()
-                        .anyMatch(sections::contains)
-                )
-                .map(Line::getExtraFare)
-                .max(Long::compareTo)
-                .orElse(0L);
     }
 
     private void registerStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {

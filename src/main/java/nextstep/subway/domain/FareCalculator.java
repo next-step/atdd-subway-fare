@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import java.util.List;
+
 public class FareCalculator {
 
     private static final int FARE_PER_INTERVAL = 100;
@@ -25,5 +27,29 @@ public class FareCalculator {
 
     private static int calculateAdditionalCharge(int distance, int distanceIntervalKm) {
         return (distance % distanceIntervalKm) > 0 ? 1 : 0;
+    }
+
+    public static long getExtraFare(List<Line> lines, List<Section> sections) {
+        return lines.stream()
+                .filter(line -> line.getSections().stream()
+                        .anyMatch(sections::contains)
+                )
+                .map(Line::getExtraFare)
+                .max(Long::compareTo)
+                .orElse(0L);
+    }
+
+
+    public static float getAgeBasedDiscountPolicy(long age) {
+        if (age > 18){
+            return 0;
+        }
+        if (age > 12){
+            return 0.2f;
+        }
+        if (age > 5) {
+            return 0.5f;
+        }
+        return 1;
     }
 }
