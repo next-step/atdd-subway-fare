@@ -24,7 +24,7 @@ class AuthAcceptanceTest extends AcceptanceTest {
     @DisplayName("Github Auth")
     @Test
     void githubAuth() {
-        ExtractableResponse<Response> response = 깃허브_인증_로그인_요청(GithubResponses.사용자1.getCode());
+        ExtractableResponse<Response> response = 깃허브_인증_로그인_요청(GithubResponses.사용자_13세.getCode());
 
         assertThat(response.jsonPath().getString("accessToken")).isNotBlank();
     }
