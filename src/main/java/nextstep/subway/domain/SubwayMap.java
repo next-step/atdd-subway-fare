@@ -45,12 +45,15 @@ public class SubwayMap {
 
         List<Section> sectionList = getSections(result);
         Sections sections = new Sections(sectionList);
-        long fare = FareCalculator.calculateByDistance(sections.totalDistance())+getExtraFare(lines);
-        return new Path(sections,fare);
+        long fare = FareCalculator.calculateByDistance(sections.totalDistance()) + getExtraFare(lines,sectionList);
+        return new Path(sections, fare);
     }
 
-    private long getExtraFare(List<Line> lines) {
+    private long getExtraFare(List<Line> lines, List<Section> sections) {
         return lines.stream()
+                .filter(line -> line.getSections().stream()
+                        .anyMatch(sections::contains)
+                )
                 .map(Line::getExtraFare)
                 .max(Long::compareTo)
                 .orElse(0L);
