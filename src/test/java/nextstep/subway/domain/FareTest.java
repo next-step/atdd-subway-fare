@@ -76,4 +76,41 @@ class FareTest {
 
         assertThat(fare.charge()).isEqualTo(DEFAULT_FARE + 500);
     }
+
+    @Test
+    @DisplayName("청소년(13세 이상~19세 미만) 운임에서 350원을 공제한 금액의 20%할인")
+    void discountTeenager() {
+
+        fare = Fare.of(path, Optional.of(15));
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE - 180);
+    }
+
+    @Test
+    @DisplayName("어린이(6세 이상~ 13세 미만) 운임에서 350원을 공제한 금액의 50%할인")
+    void discountChild() {
+
+        fare = Fare.of(path, Optional.of(6));
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE - 450);
+    }
+
+    @Test
+    @DisplayName("어린이(6세 이상~ 13세 미만) 이가 60km를 갔고, 2번의 환승을 했을 때")
+    void complexRate() {
+
+        Line line1 = mock(Line.class);
+        Line line2 = mock(Line.class);
+        List<Line> lines = List.of(line1, line2);
+
+        when(path.getLines()).thenReturn(lines);
+        when(path.extractDistance()).thenReturn(60);
+
+        when(line1.getUsageFee()).thenReturn(500);
+        when(line2.getUsageFee()).thenReturn(300);
+
+        fare = Fare.of(path, Optional.of(6));
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE + 1000 + 500 - 1200);
+    }
 }
