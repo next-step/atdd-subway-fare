@@ -1,8 +1,10 @@
 package nextstep.domain.subway;
 
+import nextstep.domain.Section;
+
 public enum PathType {
-    DISTANCE("DISTANCE"),
-    DURATION("DURATION");
+    DISTANCE("DISTANCE") {public Long getWeight(Section section){return section.getDistance();}},
+    DURATION("DURATION") {public Long getWeight(Section section){return section.getDuration();}};
 
     private final String type;
 
@@ -14,4 +16,6 @@ public enum PathType {
         return type;
 
     }
+
+    public abstract Long getWeight(Section section);
 }

@@ -74,7 +74,7 @@ public class PathFinder {
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it) {
         SectionEdge sectionEdge = SectionEdge.of(it);
         graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-        graph.setEdgeWeight(sectionEdge,it.getWeight(type));
+        graph.setEdgeWeight( sectionEdge, type.getWeight(it));
     }
 
 
