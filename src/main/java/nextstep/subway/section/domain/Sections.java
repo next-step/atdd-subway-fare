@@ -1,5 +1,7 @@
 package nextstep.subway.section.domain;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import nextstep.subway.common.exception.BusinessException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.section.exception.*;
@@ -22,6 +24,13 @@ public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     protected Sections() {
+    }
+
+    public Sections(List<Section> sections) {
+        firstStationId = sections.get(0).getUpStationId();
+        lastStationId = sections.get(sections.size() - 1).getDownStationId();
+
+        this.sections = sections;
     }
 
     public Sections(Long firstStationId, Long lastStationId) {
@@ -72,17 +81,18 @@ public class Sections {
     private void registerSectionBetweenStations(Section newSection, Line line) {
         Section existingSection = findSectionForRegistration(newSection);
 
-        if (existingSection.hasSameOrLongerDistance(newSection)) {
-            throw new DistanceNotLongerThanExistingSectionException();
+        if (existingSection.hasSameOrLongerDistance(newSection) || existingSection.hasSameOrLongerDuration(newSection)) {
+            throw new DoesNotLongerThanExistingSectionException();
         }
 
         Section additionalSection;
         int additionalSectionDistance = existingSection.getDistance() - newSection.getDistance();
+        int additionalSectionDuration = existingSection.getDuration() - newSection.getDuration();
 
         if (existingSection.hasSameUpStation(newSection)) {
-            additionalSection = new Section(newSection.getDownStation(), existingSection.getDownStation(), additionalSectionDistance);
+            additionalSection = new Section(newSection.getDownStation(), existingSection.getDownStation(), additionalSectionDistance, additionalSectionDuration);
         } else {
-            additionalSection = new Section(existingSection.getUpStation(), newSection.getUpStation(), additionalSectionDistance);
+            additionalSection = new Section(existingSection.getUpStation(), newSection.getUpStation(), additionalSectionDistance, additionalSectionDuration);
         }
 
         sections.remove(existingSection);
@@ -166,7 +176,9 @@ public class Sections {
         sections.remove(prevSection);
         sections.remove(nextSection);
 
-        Section newSection = new Section(prevSection.getUpStation(), nextSection.getDownStation(), prevSection.getDistance() + nextSection.getDistance());
+        int newSectionDistance = prevSection.getDistance() + nextSection.getDistance();
+        int newSectionDuration = prevSection.getDuration() + nextSection.getDuration();
+        Section newSection = new Section(prevSection.getUpStation(), nextSection.getDownStation(), newSectionDistance, newSectionDuration);
         registerSection(newSection, line);
     }
 
@@ -186,5 +198,24 @@ public class Sections {
 
     public Long getLastStationId() {
         return lastStationId;
+    }
+
+    public List<Station> getStations() {
+        return sections.stream()
+                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public int getTotalDistance() {
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
+    }
+
+    public int getTotalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }

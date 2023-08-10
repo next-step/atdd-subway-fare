@@ -1,8 +1,16 @@
 package nextstep.subway.unit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.section.domain.Section;
-import nextstep.subway.section.exception.*;
+import nextstep.subway.section.exception.AlreadyRegisteredStationException;
+import nextstep.subway.section.exception.CanNotDeleteOnlyOneSectionException;
+import nextstep.subway.section.exception.DoesNotLongerThanExistingSectionException;
+import nextstep.subway.section.exception.InvalidSectionRegistrationException;
+import nextstep.subway.section.exception.SectionNotFoundException;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,11 +18,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("노선 단위 테스트")
 class LineTest {
@@ -27,7 +30,7 @@ class LineTest {
     void setUp() {
         노선_상행_역 = new Station(1L, "노선_상행_역");
         노선_하행_역 = new Station(2L, "노선_하행_역");
-        노선에_등록할_구간 = new Section(노선_상행_역, 노선_하행_역, 10);
+        노선에_등록할_구간 = new Section(노선_상행_역, 노선_하행_역, 10, 10);
         노선 = new Line("노선", "bg-red-600", 노선에_등록할_구간);
     }
 
@@ -42,7 +45,7 @@ class LineTest {
             void addSectionBetweenStations() {
                 // given
                 Station 가운데_추가될_역 = new Station(3L, "가운데_추가될_역");
-                Section newSection = new Section(노선_상행_역, 가운데_추가될_역, 4);
+                Section newSection = new Section(노선_상행_역, 가운데_추가될_역, 4, 6);
 
                 // when
                 노선.registerSection(newSection);
@@ -52,16 +55,10 @@ class LineTest {
                 assertThat(sections).hasSize(2);
 
                 Section firstSection = sections.get(0);
-                assertSection(firstSection, "노선_상행_역", "가운데_추가될_역", 4);
+                assertSection(firstSection, "노선_상행_역", "가운데_추가될_역", 4, 6);
 
                 Section secondSection = sections.get(1);
-                assertSection(secondSection, "가운데_추가될_역", "노선_하행_역", 6);
-            }
-
-            private void assertSection(Section target, String upStationName, String downStationName, int distance) {
-                assertThat(target.getUpStationName()).isEqualTo(upStationName);
-                assertThat(target.getDownStationName()).isEqualTo(downStationName);
-                assertThat(target.getDistance()).isEqualTo(distance);
+                assertSection(secondSection, "가운데_추가될_역", "노선_하행_역", 6, 4);
             }
 
             @DisplayName("상행역에 새로운 구간 추가")
@@ -69,7 +66,7 @@ class LineTest {
             void addSectionUpStation() {
                 // given
                 Station 상행종점에_추가될_역 = new Station(3L, "상행종점에_추가될_역");
-                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5);
+                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5, 10);
 
                 // when
                 노선.registerSection(newSection);
@@ -82,10 +79,10 @@ class LineTest {
                 assertThat(sections).hasSize(2);
 
                 Section firstSection = sections.get(0);
-                assertSection(firstSection, "상행종점에_추가될_역", "노선_상행_역", 5);
+                assertSection(firstSection, "상행종점에_추가될_역", "노선_상행_역", 5, 10);
 
                 Section secondSection = sections.get(1);
-                assertSection(secondSection, "노선_상행_역", "노선_하행_역", 10);
+                assertSection(secondSection, "노선_상행_역", "노선_하행_역", 10, 10);
             }
 
             @DisplayName("하행역에 새로운 구간 추가")
@@ -93,7 +90,7 @@ class LineTest {
             void addSectionDownStation() {
                 // given
                 Station 하행종점에_추가될_역 = new Station(3L, "하행종점에_추가될_역");
-                Section newSection = new Section(노선_하행_역, 하행종점에_추가될_역, 5);
+                Section newSection = new Section(노선_하행_역, 하행종점에_추가될_역, 5, 10);
 
                 // when
                 노선.registerSection(newSection);
@@ -106,10 +103,10 @@ class LineTest {
                 assertThat(sections).hasSize(2);
 
                 Section firstSection = sections.get(0);
-                assertSection(firstSection, "노선_상행_역", "노선_하행_역", 10);
+                assertSection(firstSection, "노선_상행_역", "노선_하행_역", 10, 10);
 
                 Section secondSection = sections.get(1);
-                assertSection(secondSection, "노선_하행_역", "하행종점에_추가될_역", 5);
+                assertSection(secondSection, "노선_하행_역", "하행종점에_추가될_역", 5, 10);
             }
         
         }
@@ -123,7 +120,7 @@ class LineTest {
                 // given
                 Station 여의도역 = new Station(3L, "여의도역");
                 Station 샛강역 = new Station(4L, "샛강역");
-                Section newSection = new Section(여의도역, 샛강역, 12);
+                Section newSection = new Section(여의도역, 샛강역, 12, 10);
 
                 // when, then
                 assertThatThrownBy(() -> 노선.registerSection(newSection))
@@ -134,7 +131,7 @@ class LineTest {
             @Test
             void registerSectionFailByAlreadyRegisteredSection() {
                 // given
-                Section sectionForLine = new Section(노선_상행_역, 노선_하행_역, 10);
+                Section sectionForLine = new Section(노선_상행_역, 노선_하행_역, 10, 10);
 
                 // when, then
                 assertThatThrownBy(() -> 노선.registerSection(sectionForLine))
@@ -142,16 +139,29 @@ class LineTest {
             }
 
             @DisplayName("역 사이에 새로운 구간을 추가할 때 거리가 같거나 긴 경우 예외 발생")
-            @ParameterizedTest(name = "입력한 distance = {0}")
+            @ParameterizedTest(name = "distance = {0}")
             @ValueSource(ints = {10, 15})
             void registerSectionFailByDistance(int newSectionDistance) {
                 // given
                 Station 가운데_추가될_역 = new Station(3L, "가운데_추가될_역");
-                Section newSection = new Section(노선_상행_역, 가운데_추가될_역, newSectionDistance);
+                Section newSection = new Section(노선_상행_역, 가운데_추가될_역, newSectionDistance, 10);
 
                 // when, then
                 assertThatThrownBy(() -> 노선.registerSection(newSection))
-                        .isInstanceOf(DistanceNotLongerThanExistingSectionException.class);
+                        .isInstanceOf(DoesNotLongerThanExistingSectionException.class);
+            }
+
+            @DisplayName("역 사이에 새로운 구간을 추가할 때 소요 시간이 같거나 긴 경우 예외 발생")
+            @ParameterizedTest(name = "duration = {0}")
+            @ValueSource(ints = {10, 15})
+            void registerSectionFailByDuration(int newSectionDuration) {
+                // given
+                Station 가운데_추가될_역 = new Station(3L, "가운데_추가될_역");
+                Section newSection = new Section(노선_상행_역, 가운데_추가될_역, 8, newSectionDuration);
+
+                // when, then
+                assertThatThrownBy(() -> 노선.registerSection(newSection))
+                        .isInstanceOf(DoesNotLongerThanExistingSectionException.class);
             }
         }
     }
@@ -161,7 +171,7 @@ class LineTest {
     void getSections() {
         // given
         Station 상행종점에_추가될_역 = new Station(3L, "상행종점에_추가될_역");
-        Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5);
+        Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5, 8);
         노선.registerSection(newSection);
 
         // when
@@ -183,7 +193,7 @@ class LineTest {
                 // given : 역1 -(거리)- 역2 ...
                 // 상행종점에_추가될_역 -(5)- 노선_상행_역 -(10)- 노선_하행_역
                 Station 상행종점에_추가될_역 = new Station(3L, "상행종점에_추가될_역");
-                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5);
+                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5, 10);
                 노선.registerSection(newSection);
 
                 // when
@@ -194,9 +204,7 @@ class LineTest {
                 assertThat(sections).hasSize(1);
 
                 Section remainSection = sections.get(0);
-                assertThat(remainSection.getUpStationName()).isEqualTo("노선_상행_역");
-                assertThat(remainSection.getDownStationName()).isEqualTo("노선_하행_역");
-                assertThat(remainSection.getDistance()).isEqualTo(10);
+                assertSection(remainSection, "노선_상행_역", "노선_하행_역", 10, 10);
             }
 
             @DisplayName("하행 종점 역 제거")
@@ -205,7 +213,7 @@ class LineTest {
                 // given : 역1 -(거리)- 역2 ...
                 // 상행종점에_추가될_역 -(5)- 노선_상행_역 -(10)- 노선_하행_역
                 Station 상행종점에_추가될_역 = new Station(3L, "상행종점에_추가될_역");
-                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5);
+                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5, 10);
                 노선.registerSection(newSection);
 
                 // when
@@ -216,9 +224,7 @@ class LineTest {
                 assertThat(sections).hasSize(1);
 
                 Section remainSection = sections.get(0);
-                assertThat(remainSection.getUpStationName()).isEqualTo("상행종점에_추가될_역");
-                assertThat(remainSection.getDownStationName()).isEqualTo("노선_상행_역");
-                assertThat(remainSection.getDistance()).isEqualTo(5);
+                assertSection(remainSection, "상행종점에_추가될_역", "노선_상행_역", 5, 10);
             }
 
             @DisplayName("가운데 역 제거")
@@ -227,7 +233,7 @@ class LineTest {
                 // given : 역1 -(거리)- 역2 ...
                 // 상행종점에_추가될_역 -(5)- 노선_상행_역 -(10)- 노선_하행_역
                 Station 상행종점에_추가될_역 = new Station(3L, "상행종점에_추가될_역");
-                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5);
+                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5, 10);
                 노선.registerSection(newSection);
 
                 // when
@@ -238,9 +244,7 @@ class LineTest {
                 assertThat(sections).hasSize(1);
 
                 Section remainSection = sections.get(0);
-                assertThat(remainSection.getUpStationName()).isEqualTo("상행종점에_추가될_역");
-                assertThat(remainSection.getDownStationName()).isEqualTo("노선_하행_역");
-                assertThat(remainSection.getDistance()).isEqualTo(15);
+                assertSection(remainSection, "상행종점에_추가될_역", "노선_하행_역", 15, 20);
             }
         }
 
@@ -260,7 +264,7 @@ class LineTest {
             void removeSectionNotInLine() {
                 // given
                 Station 상행종점에_추가될_역 = new Station(3L, "상행종점에_추가될_역");
-                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5);
+                Section newSection = new Section(상행종점에_추가될_역, 노선_상행_역, 5, 10);
                 노선.registerSection(newSection);
 
                 Station 노선에_없는_역 = new Station(4L, "노선에 없는 역");
@@ -270,5 +274,12 @@ class LineTest {
                         .isInstanceOf(SectionNotFoundException.class);
             }
         }
+    }
+
+    private void assertSection(Section target, String upStationName, String downStationName, int distance, int duration) {
+        assertThat(target.getUpStationName()).isEqualTo(upStationName);
+        assertThat(target.getDownStationName()).isEqualTo(downStationName);
+        assertThat(target.getDistance()).isEqualTo(distance);
+        assertThat(target.getDuration()).isEqualTo(duration);
     }
 }

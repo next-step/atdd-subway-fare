@@ -1,7 +1,20 @@
 package nextstep.favorite.acceptance;
 
+import static nextstep.auth.acceptance.step.TokenSteps.일반_로그인_요청;
+import static nextstep.auth.acceptance.step.TokenSteps.토큰_추출;
+import static nextstep.favorite.acceptance.step.FavoriteSteps.TokenType;
+import static nextstep.favorite.acceptance.step.FavoriteSteps.즐겨찾기_삭제_요청;
+import static nextstep.favorite.acceptance.step.FavoriteSteps.즐겨찾기_생성_요청;
+import static nextstep.favorite.acceptance.step.FavoriteSteps.즐겨찾기_조회_요청;
+import static nextstep.favorite.acceptance.step.FavoriteSteps.토큰_헤더_없이_즐겨찾기_생성_요청;
+import static nextstep.member.acceptance.step.MemberSteps.회원_생성_요청;
+import static nextstep.subway.acceptance.step.LineStep.지하철_노선을_생성한다;
+import static nextstep.subway.acceptance.step.StationStep.지하철역을_생성한다;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import nextstep.subway.acceptance.step.SectionStep;
 import nextstep.subway.common.exception.ErrorCode;
 import nextstep.utils.AcceptanceTest;
@@ -10,16 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.List;
-
-import static nextstep.auth.acceptance.step.TokenSteps.일반_로그인_요청;
-import static nextstep.auth.acceptance.step.TokenSteps.토큰_추출;
-import static nextstep.favorite.acceptance.step.FavoriteSteps.*;
-import static nextstep.member.acceptance.step.MemberSteps.회원_생성_요청;
-import static nextstep.subway.acceptance.step.LineStep.지하철_노선을_생성한다;
-import static nextstep.subway.acceptance.step.StationStep.지하철역을_생성한다;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("즐겨찾기 관련 기능")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
@@ -51,11 +54,11 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         양재역 = Id_추출(지하철역을_생성한다("양재역"));
         남부터미널역 = Id_추출(지하철역을_생성한다("남부터미널역"));
 
-        이호선 = Id_추출(지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10));
-        신분당선 = Id_추출(지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10));
-        삼호선 = Id_추출(지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2));
+        이호선 = Id_추출(지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 8));
+        신분당선 = Id_추출(지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 10));
+        삼호선 = Id_추출(지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 5));
 
-        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3);
+        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 6);
     }
 
     private Long Id_추출(ExtractableResponse<Response> response) {
@@ -207,7 +210,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         // given
         Long 증미역 = Id_추출(지하철역을_생성한다("증미역"));
         Long 등촌역 = Id_추출(지하철역을_생성한다("등촌역"));
-        Id_추출(지하철_노선을_생성한다("9호선", "brown", 증미역, 등촌역, 10));
+        Id_추출(지하철_노선을_생성한다("9호선", "brown", 증미역, 등촌역, 10, 6));
 
         회원_생성_요청(EMAIL, PASSWORD, AGE);
         String accessToken = 토큰_추출(일반_로그인_요청(EMAIL, PASSWORD));
