@@ -28,4 +28,7 @@ public enum AgeBasedDiscountPolicy {
         return discountRate;
     }
 
+    public int getMinAge() {
+        return minAge;
+    }
 }

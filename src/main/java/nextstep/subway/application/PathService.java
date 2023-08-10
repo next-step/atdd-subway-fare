@@ -4,6 +4,7 @@ import java.util.List;
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.application.MemberService;
 import nextstep.subway.application.dto.PathResponse;
+import nextstep.subway.domain.AgeBasedDiscountPolicy;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Station;
@@ -24,8 +25,8 @@ public class PathService {
     }
 
     public PathResponse findPath(Long source, Long target, String typeName, UserPrincipal userPrincipal) {
-        int age = 100;
-        if (userPrincipal != null) {
+        int age = AgeBasedDiscountPolicy.NO_DISCOUNT.getMinAge();
+        if (!userPrincipal.isAnonymous()) {
             String email = userPrincipal.getUsername();
             age = memberService.findMemberByEmail(email).getAge();
         }
