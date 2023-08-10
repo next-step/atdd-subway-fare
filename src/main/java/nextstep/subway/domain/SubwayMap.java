@@ -43,9 +43,17 @@ public class SubwayMap {
             throw new NoSuchElementException("경로가 존재하지 않습니다.");
         }
 
-        List<Section> sections = getSections(result);
+        List<Section> sectionList = getSections(result);
+        Sections sections = new Sections(sectionList);
+        long fare = FareCalculator.calculateByDistance(sections.totalDistance())+getExtraFare(lines);
+        return new Path(sections,fare);
+    }
 
-        return new Path(new Sections(sections));
+    private long getExtraFare(List<Line> lines) {
+        return lines.stream()
+                .map(Line::getExtraFare)
+                .max(Long::compareTo)
+                .orElse(0L);
     }
 
     private void registerStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {

@@ -99,9 +99,10 @@ public class PathSteps {
 
     public static ExtractableResponse<Response> 노선_추가_요금_등록한다(Long lineId, long extraFare, RequestSpecification spec) {
         Map<String, String> body = new HashMap<>();
-        body.put("fare", extraFare + "");
+        body.put("extraFare", extraFare + "");
         return RestAssured.given().log().all()
                 .spec(spec)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
                 .when().post("lines/{lineId}?type=fare", lineId)
                 .then().log().all()

@@ -9,10 +9,7 @@ import static nextstep.subway.acceptance.PathSteps.세션_생성_파라미터_�
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
-import io.restassured.RestAssured;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,7 +55,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22,100);
+        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22, 100);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -68,7 +65,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 20, 15,400);
+        경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 20, 15, 400);
     }
 
     /**
@@ -84,7 +81,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
-        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22,110);
+        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22, 110);
     }
 
 }

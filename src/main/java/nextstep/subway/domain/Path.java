@@ -5,9 +5,11 @@ import java.util.List;
 public class Path {
 
     private Sections sections;
+    private long fare;
 
-    public Path(Sections sections) {
+    public Path(Sections sections, long fare) {
         this.sections = sections;
+        this.fare = fare;
     }
 
     public int extractDistance() {
@@ -20,5 +22,9 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public long getFare() {
+        return fare;
     }
 }
