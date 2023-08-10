@@ -2,7 +2,6 @@ package nextstep.subway.documentation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -24,6 +23,13 @@ import org.springframework.http.MediaType;
 
 public class PathDocumentation extends Documentation {
 
+    public static final int FARE = 1350;
+    public static final int DURATION = 12;
+    public static final int DISTANCE = 10;
+    public static final long ID = 1L;
+    public static final long ID1 = 2L;
+    public static final String 강남역 = "강남역";
+    public static final String 역삼역 = "역삼역";
     @MockBean
     private PathService pathService;
 
@@ -31,11 +37,10 @@ public class PathDocumentation extends Documentation {
     void path() {
         PathResponse pathResponse = new PathResponse(
             Lists.newArrayList(
-                new StationResponse(1L, "강남역"),
-                new StationResponse(2L, "역삼역")
-            ), 10, 12
+                new StationResponse(ID, 강남역),
+                new StationResponse(ID1, 역삼역)
+            ), DISTANCE, DURATION, FARE
         );
-
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         RestAssured
@@ -46,20 +51,21 @@ public class PathDocumentation extends Documentation {
                 requestParameters(
                     parameterWithName("source").description("출발역 id"),
                     parameterWithName("target").description("도착역 id"),
-                    parameterWithName("type").description("경로 조회 타입 (DURATION, DISTANCE)")
-                ),
+                    parameterWithName("type").description("경로 조회 타입 (DURATION, DISTANCE)")),
                 responseFields(
                     fieldWithPath("stations[].id").description("조회 경로 역들의 id"),
                     fieldWithPath("stations[].name").description("조회 경로 역들의 이름"),
                     fieldWithPath("distance").description("조회 경로 거리"),
-                    fieldWithPath("duration").description("조회 경로 시간")
+                    fieldWithPath("duration").description("조회 경로 시간"),
+                    fieldWithPath("fare").description("조회 경로 금액")
                 )
             ))
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("source", 1L)
-            .queryParam("target", 2L)
+            .queryParam("source", ID)
+            .queryParam("target", ID1)
             .queryParam("type", "DURATION")
             .when().get("/paths")
             .then().log().all().extract();
+
     }
 }

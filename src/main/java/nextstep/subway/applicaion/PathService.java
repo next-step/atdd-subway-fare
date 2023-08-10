@@ -1,5 +1,6 @@
 package nextstep.subway.applicaion;
 
+import java.util.List;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
@@ -7,8 +8,6 @@ import nextstep.subway.domain.PathWeight;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PathService {
