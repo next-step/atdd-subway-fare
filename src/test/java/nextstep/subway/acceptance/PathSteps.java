@@ -18,7 +18,7 @@ public class PathSteps {
         return 두_역의_최단_경로_조회를_요청(source, target, type, null, null);
     }
 
-    private static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(
+    public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(
         Long source,
         Long target,
         PathFindType type,
