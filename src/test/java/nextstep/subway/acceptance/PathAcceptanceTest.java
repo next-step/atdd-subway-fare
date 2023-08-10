@@ -71,7 +71,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      * Given 노선을 생성하고
      * When 노선에 추가 요금을 등록하면
-     * Then 경로 조회시 추가된 요금된 조회된다
+     * Then 경로 조회시 추가된 요금이 기본 요금에 합쳐서 조회된다
      */
     @DisplayName("노선에 추가 요금을 등록한다")
     @Test
@@ -82,6 +82,24 @@ class PathAcceptanceTest extends AcceptanceTest {
         // then
         var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
         경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22, 110);
+    }
+
+    /**
+     * Given 노선을 생성하고
+     * When 여러 노선에 추가 요금을 등록하면
+     * Then 경로 조회시 추가된 요금중 가장 높은 금액만 기본 요금에 합쳐서 조회된다
+     */
+    @DisplayName("노선에 추가 요금을 등록한다")
+    @Test
+    void testOnlyHighestAdditionalFareIsAddedToBaseFare() {
+        // when
+        노선_추가_요금_등록한다(이호선, 20);
+        노선_추가_요금_등록한다(신분당선, 30);
+        노선_추가_요금_등록한다(삼호선, 40);
+
+        // then
+        var response = 두_역의_최소_시간_경로_조회를_요청(교대역, 양재역);
+        경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 20, 15, 430);
     }
 
 }
