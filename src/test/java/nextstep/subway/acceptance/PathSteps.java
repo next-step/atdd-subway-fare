@@ -25,11 +25,19 @@ public class PathSteps {
         RequestSpecification spec,
         RestDocumentationFilter filter
     ) {
-        return RestAssured
+        RequestSpecification request = RestAssured
             .given().log().all()
-            .params("source", source, "target", target, "type", type.name())
-            .spec(spec)
-            .filter(filter)
+            .params("source", source, "target", target, "type", type.name());
+
+        if (spec != null) {
+            request = request.spec(spec);
+        }
+
+        if (filter != null) {
+            request = request.filter(filter);
+        }
+
+        return request
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .when().get("/paths")
             .then().log().all().extract();
