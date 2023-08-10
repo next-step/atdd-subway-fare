@@ -13,9 +13,9 @@ public class LineOverFare extends OverFarePolicyHandler {
     }
 
     @Override
-    public int chargeOverFare() {
+    public int chargeOverFare(int fare) {
 
-        return super.chargeHandler(getMostExpensiveLineUsageFee());
+        return super.chargeHandler(fare + getMostExpensiveLineUsageFee());
     }
 
     private int getMostExpensiveLineUsageFee() {

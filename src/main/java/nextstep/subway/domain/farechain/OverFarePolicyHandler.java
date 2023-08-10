@@ -10,11 +10,11 @@ public abstract class OverFarePolicyHandler {
 
     public int chargeHandler(int fare) {
         if (nextHandler != null) {
-            fare += nextHandler.chargeOverFare();
+            fare = nextHandler.chargeOverFare(fare);
         }
 
         return fare;
     }
 
-    public abstract int chargeOverFare();
+    public abstract int chargeOverFare(int fare);
 }

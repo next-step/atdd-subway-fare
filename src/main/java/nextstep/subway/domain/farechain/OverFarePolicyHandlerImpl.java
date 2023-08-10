@@ -7,7 +7,7 @@ public class OverFarePolicyHandlerImpl extends OverFarePolicyHandler{
     }
 
     @Override
-    public int chargeOverFare() {
+    public int chargeOverFare(int fare) {
         return super.chargeHandler(0);
     }
 }

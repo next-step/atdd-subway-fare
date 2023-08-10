@@ -11,8 +11,8 @@ public class DistanceOverFare extends OverFarePolicyHandler {
     }
 
     @Override
-    public int chargeOverFare() {
-        return super.chargeHandler(getOverDistanceFare());
+    public int chargeOverFare(int fare) {
+        return super.chargeHandler(fare + getOverDistanceFare());
     }
 
     public int getOverDistanceFare() {
