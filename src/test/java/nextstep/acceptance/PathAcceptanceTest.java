@@ -9,6 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
+import static nextstep.acceptance.commonStep.PathStep.지하철_경로_조회;
+import static nextstep.acceptance.commonStep.PathStep.지하철_경로_조회_검증;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 조회 관련 기능")
@@ -83,11 +87,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathByDistance() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DISTANCE);
 
         // then
-        assertThat(response.jsonPath().getList("stations.name", String.class))
-                .containsExactly("교대역", "남부터미널역", "양재역");
+        지하철_경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 남부터미널교대구간거리 + 양재남부터미널구간거리, 남부터미널교대구간시간 + 양재남부터미널구간시간);
 
     }
 
@@ -101,11 +104,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathByTime() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DURATION);
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION);
 
         // then
-        assertThat(response.jsonPath().getList("stations.name", String.class))
-                .containsExactly("교대역", "강남역", "양재역");
+        지하철_경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 교대강남구간거리 + 강남양재구간거리, 교대강남구간시간 + 강남양재구간시간);
 
     }
 
@@ -119,7 +121,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathWithIdenticalSourceAndTarget() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,교대역, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,교대역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -135,7 +137,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathNotConnected() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,동작역, PathType.DISTANCE);
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,동작역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -152,8 +154,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathWithNotExistStation() {
 
         // when
-        ExtractableResponse<Response> responseNotExistSourse = PathStep.지하철_경로_조회(동작역+1,교대역, PathType.DISTANCE);
-        ExtractableResponse<Response> responseNotExistTarget = PathStep.지하철_경로_조회(교대역,동작역+1, PathType.DISTANCE);
+        ExtractableResponse<Response> responseNotExistSourse = 지하철_경로_조회(동작역+1,교대역, PathType.DISTANCE);
+        ExtractableResponse<Response> responseNotExistTarget = 지하철_경로_조회(교대역,동작역+1, PathType.DISTANCE);
 
         // then
         assertThat(responseNotExistSourse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
