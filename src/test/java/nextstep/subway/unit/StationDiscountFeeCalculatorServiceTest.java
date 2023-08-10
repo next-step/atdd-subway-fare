@@ -2,7 +2,8 @@ package nextstep.subway.unit;
 
 import nextstep.member.domain.Member;
 import nextstep.member.fixture.MemberSpec;
-import nextstep.subway.domain.service.*;
+import nextstep.subway.domain.service.fee.StationPathDiscountFeeContext;
+import nextstep.subway.domain.service.fee.UserAgeDiscountFeeCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

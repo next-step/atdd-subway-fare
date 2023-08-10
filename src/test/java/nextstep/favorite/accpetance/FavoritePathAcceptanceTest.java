@@ -1,7 +1,7 @@
 package nextstep.favorite.accpetance;
 
 import nextstep.subway.acceptance.StationLineSteps;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

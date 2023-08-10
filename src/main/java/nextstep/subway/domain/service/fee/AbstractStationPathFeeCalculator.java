@@ -1,4 +1,4 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.fee;
 
 import java.math.BigDecimal;
 import java.util.Objects;

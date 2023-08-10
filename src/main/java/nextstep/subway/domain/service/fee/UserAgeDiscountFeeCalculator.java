@@ -1,6 +1,7 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.fee;
 
 import nextstep.member.domain.Member;
+import nextstep.subway.domain.service.fee.StationPathDiscountFeeContext;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

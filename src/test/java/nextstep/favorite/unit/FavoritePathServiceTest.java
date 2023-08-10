@@ -11,10 +11,8 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.fixture.MemberSpec;
 import nextstep.subway.domain.StationRepository;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
-import nextstep.subway.service.dto.StationPathResponse;
-import nextstep.subway.service.dto.StationResponse;
 import nextstep.subway.unit.fixture.StationSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +23,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;

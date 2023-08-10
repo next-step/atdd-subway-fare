@@ -1,14 +1,11 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import nextstep.subway.domain.Station;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.service.dto.StationPathResponse;
-import nextstep.subway.service.dto.StationRequest;
 import nextstep.subway.service.dto.StationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;

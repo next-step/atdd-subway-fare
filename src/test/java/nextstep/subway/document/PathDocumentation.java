@@ -1,6 +1,6 @@
 package nextstep.subway.document;
 
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
 import nextstep.subway.service.dto.StationPathResponse;
 import nextstep.subway.service.dto.StationResponse;

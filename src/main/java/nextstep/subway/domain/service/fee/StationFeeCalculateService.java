@@ -1,8 +1,9 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.fee;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.StationLine;
 import nextstep.subway.domain.StationLineRepository;
+import nextstep.subway.domain.service.aggregation.StationPathAggregationService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

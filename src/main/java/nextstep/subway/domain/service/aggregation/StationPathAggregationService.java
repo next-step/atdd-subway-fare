@@ -1,7 +1,8 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.aggregation;
 
 import nextstep.subway.domain.StationLine;
 import nextstep.subway.domain.StationLineSection;
+import nextstep.subway.domain.service.aggregation.StationLineSectionMap;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

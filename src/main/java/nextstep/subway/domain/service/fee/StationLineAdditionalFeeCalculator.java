@@ -1,4 +1,4 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.fee;
 
 import lombok.Builder;
 import nextstep.subway.domain.StationLine;
