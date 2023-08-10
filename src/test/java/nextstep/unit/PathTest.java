@@ -122,7 +122,7 @@ class PathTest {
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getSections().getStations().stream().map(Station::getName))
+        assertThat(path.getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "남부터미널역", "양재역");
         assertThat(path.extractDistance())
                 .isEqualTo(남부터미널교대구간거리+양재남부터미널구간거리);
@@ -138,7 +138,7 @@ class PathTest {
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getSections().getStations().stream().map(Station::getName))
+        assertThat(path.getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "강남역", "양재역");
         assertThat(path.extractDistance())
                 .isEqualTo(교대강남구간거리+강남양재구간거리);

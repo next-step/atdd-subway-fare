@@ -18,7 +18,7 @@ public class PathResponse {
 
     public static PathResponse createPathResponse(Path path){
         PathResponse pathResponse = new PathResponse();
-        pathResponse.stations = path.getSections().getStations();
+        pathResponse.stations = path.getStations();
         pathResponse.distance = path.extractDistance();
         pathResponse.duration = path.extractDuration();
 

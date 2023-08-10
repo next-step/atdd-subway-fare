@@ -12,8 +12,8 @@ public class Path {
         this.sections = sections;
     }
 
-    public Sections getSections() {
-        return sections;
+    public List<Station> getStations() {
+        return sections.getStations();
     }
 
     public Long extractDistance() {
