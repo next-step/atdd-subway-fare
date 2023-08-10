@@ -1,7 +1,5 @@
 package nextstep.subway.domain.farechain;
 
-import nextstep.subway.domain.Path;
-
 public class OverFarePolicyHandlerImpl extends OverFarePolicyHandler{
 
     public OverFarePolicyHandlerImpl(OverFarePolicyHandler nextHandler) {
@@ -9,7 +7,7 @@ public class OverFarePolicyHandlerImpl extends OverFarePolicyHandler{
     }
 
     @Override
-    public int chargeOverFare(Path path) {
-        return super.chargeHandler(path, 0);
+    public int chargeOverFare() {
+        return super.chargeHandler(0);
     }
 }

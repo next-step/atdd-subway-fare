@@ -5,19 +5,20 @@ import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.when;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class PathTest {
+class FareTest {
 
     private static final int DEFAULT_FARE = 1250;
     private Path path;
+    private Fare fare;
 
     @BeforeEach
     void setUp() {
         path = mock(Path.class);
-        when(path.getFare()).thenCallRealMethod();
     }
 
     @Test
@@ -25,7 +26,10 @@ class PathTest {
     void getDefaultFare() {
 
         when(path.extractDistance()).thenReturn(10);
-        assertThat(path.getFare()).isEqualTo(DEFAULT_FARE);
+
+        fare = Fare.of(path, Optional.empty());
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE);
     }
 
     @Test
@@ -33,7 +37,9 @@ class PathTest {
     void getOverFare() {
 
         when(path.extractDistance()).thenReturn(15);
-        assertThat(path.getFare()).isEqualTo(DEFAULT_FARE + 100);
+        fare = Fare.of(path, Optional.empty());
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE + 100);
     }
 
     @Test
@@ -47,7 +53,9 @@ class PathTest {
         when(path.extractDistance()).thenReturn(8);
         when(line1.getUsageFee()).thenReturn(800);
 
-        assertThat(path.getFare()).isEqualTo(DEFAULT_FARE + 800);
+        fare = Fare.of(path, Optional.empty());
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE + 800);
     }
 
     @Test
@@ -64,6 +72,8 @@ class PathTest {
         when(line1.getUsageFee()).thenReturn(500);
         when(line2.getUsageFee()).thenReturn(300);
 
-        assertThat(path.getFare()).isEqualTo(DEFAULT_FARE + 500);
+        fare = Fare.of(path, Optional.empty());
+
+        assertThat(fare.charge()).isEqualTo(DEFAULT_FARE + 500);
     }
 }

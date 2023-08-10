@@ -1,7 +1,5 @@
 package nextstep.subway.domain.farechain;
 
-import nextstep.subway.domain.Path;
-
 public abstract class OverFarePolicyHandler {
 
     private final OverFarePolicyHandler nextHandler;
@@ -10,13 +8,13 @@ public abstract class OverFarePolicyHandler {
         this.nextHandler = nextHandler;
     }
 
-    public int chargeHandler(Path path, int fare) {
+    public int chargeHandler(int fare) {
         if (nextHandler != null) {
-            fare += nextHandler.chargeOverFare(path);
+            fare += nextHandler.chargeOverFare();
         }
 
         return fare;
     }
 
-    public abstract int chargeOverFare(Path path);
+    public abstract int chargeOverFare();
 }
