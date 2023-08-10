@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.snippet.Snippet;
 
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -30,6 +31,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
+        String accessToken = 베어러_인증_로그인_요청("email4@email.com", "password").jsonPath().getString("accessToken");
         PathResponse pathResponse = new PathResponse(
                 Lists.newArrayList(
                         new StationResponse(1L, "강남역"),
@@ -48,7 +50,7 @@ public class PathDocumentation extends Documentation {
                         createPathRequestParameters(),
                         createPathResponseFields()
                 ))
-                .header("Authorization", "bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE2OTE1MDYyMDIsImV4cCI6MTY5MTUwOTgwMiwicm9sZSI6IlJPTEVfQURNSU4ifQ.LAa4LlZt9xkMsbnmtkhMCreT75iYwGKLAUIRgMFLvOw")
+                .header("Authorization", "bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
