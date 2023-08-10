@@ -54,6 +54,22 @@ public class PathSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 지하철_경로_조회(String userToken, String startStation, String destinationStation, StationPathSearchRequestType type, HttpStatus status) {
+        final Map<String, Long> stationIdByName = getStations().getList("$", StationResponse.class)
+                .stream()
+                .collect(Collectors.toMap(StationResponse::getName, StationResponse::getId));
+
+        return RestAssured.given().log().all()
+                .auth().oauth2(userToken)
+                .queryParam("source", stationIdByName.get(startStation))
+                .queryParam("target", stationIdByName.get(destinationStation))
+                .queryParam("type", type)
+                .get("/paths")
+                .then().log().all()
+                .statusCode(status.value())
+                .extract();
+    }
+
     public static void 지하철_경로_조회됨(ExtractableResponse<Response> response, BigDecimal expectedDistance, BigDecimal expectedFee, Long expectedDuration, List<String> expectedStationNames) {
         var pathResponse = response.as(StationPathResponse.class);
 
