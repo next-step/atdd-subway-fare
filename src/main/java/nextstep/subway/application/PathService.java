@@ -17,7 +17,7 @@ public class PathService {
     private StationService stationService;
     private MemberService memberService;
 
-    public PathService(LineService lineService, StationService stationService,MemberService memberService) {
+    public PathService(LineService lineService, StationService stationService, MemberService memberService) {
         this.lineService = lineService;
         this.stationService = stationService;
         this.memberService = memberService;
@@ -32,7 +32,7 @@ public class PathService {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        Path path = SubwayMap.findPath(typeName, upStation, downStation, lines,age);
+        Path path = SubwayMap.findPath(typeName, upStation, downStation, lines, age);
         return PathResponse.of(path);
     }
 
