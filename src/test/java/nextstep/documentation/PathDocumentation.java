@@ -61,7 +61,7 @@ public class PathDocumentation extends Documentation {
     @Test
     void path() {
 
-        지하철_경로_조회(교대역,양재역, PathType.DISTANCE.getType(),createRequestSpecification("path"));
+        지하철_경로_조회(교대역,양재역, PathType.DISTANCE,createRequestSpecification("path"));
 
     }
 }

@@ -83,7 +83,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathByDistance() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DISTANCE.getType());
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DISTANCE);
 
         // then
         assertThat(response.jsonPath().getList("stations.name", String.class))
@@ -101,7 +101,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathByTime() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DURATION.getType());
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,양재역, PathType.DURATION);
 
         // then
         assertThat(response.jsonPath().getList("stations.name", String.class))
@@ -119,7 +119,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathWithIdenticalSourceAndTarget() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,교대역, PathType.DISTANCE.getType());
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,교대역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -135,7 +135,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathNotConnected() {
 
         // when
-        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,동작역, PathType.DISTANCE.getType());
+        ExtractableResponse<Response> response = PathStep.지하철_경로_조회(교대역,동작역, PathType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -152,8 +152,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void getPathWithNotExistStation() {
 
         // when
-        ExtractableResponse<Response> responseNotExistSourse = PathStep.지하철_경로_조회(동작역+1,교대역, PathType.DISTANCE.getType());
-        ExtractableResponse<Response> responseNotExistTarget = PathStep.지하철_경로_조회(교대역,동작역+1, PathType.DISTANCE.getType());
+        ExtractableResponse<Response> responseNotExistSourse = PathStep.지하철_경로_조회(동작역+1,교대역, PathType.DISTANCE);
+        ExtractableResponse<Response> responseNotExistTarget = PathStep.지하철_경로_조회(교대역,동작역+1, PathType.DISTANCE);
 
         // then
         assertThat(responseNotExistSourse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

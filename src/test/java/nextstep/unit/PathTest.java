@@ -111,14 +111,14 @@ class PathTest {
         삼호선.addSection(남부터미널교대구간);
         구호선.addSection(흑석동작구간);
 
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE.getType());
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
     }
 
     @DisplayName("거리 기준으로 지하철 경로 조회")
     @Test
     void getPathByDistance() {
         // when
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE.getType());
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
@@ -134,7 +134,7 @@ class PathTest {
     @Test
     void getPathByDuration() {
         // when
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION.getType());
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION);
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then

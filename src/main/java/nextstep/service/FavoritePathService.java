@@ -38,7 +38,7 @@ public class FavoritePathService {
         Station sourceStation = stationService.findStation(favoritePathRequest.getSource());
         Station targetStation = stationService.findStation(favoritePathRequest.getTarget());
 
-        pathService.validatePath(sourceStation.getId(), targetStation.getId(), PathType.DISTANCE.getType());
+        pathService.validatePath(sourceStation.getId(), targetStation.getId(), PathType.DISTANCE);
 
         FavoritePath favoritePath = favoritePathRepository.save(new FavoritePath(sourceStation, targetStation, member));
 

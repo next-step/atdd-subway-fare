@@ -4,10 +4,11 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import nextstep.domain.subway.PathType;
 
 public class PathStep {
 
-    public static ExtractableResponse<Response> 지하철_경로_조회(Long sourceStationId, Long targetStationId,String type, RequestSpecification restAssured){
+    public static ExtractableResponse<Response> 지하철_경로_조회(Long sourceStationId, Long targetStationId,PathType type, RequestSpecification restAssured){
 
         ExtractableResponse<Response> response =
                 restAssured.given()
@@ -19,7 +20,7 @@ public class PathStep {
         return response;
     }
 
-    public static ExtractableResponse<Response> 지하철_경로_조회(Long sourceStationId, Long targetStationId,String type){
+    public static ExtractableResponse<Response> 지하철_경로_조회(Long sourceStationId, Long targetStationId, PathType type){
 
         return 지하철_경로_조회(sourceStationId,targetStationId,type,RestAssured.given());
     }

@@ -64,7 +64,7 @@ class FavoritePathServiceTest {
 
         when(stationService.findStation(sourceStationId)).thenReturn(sourceStation);
         when(stationService.findStation(targetStationId)).thenReturn(targetStation);
-        doNothing().when(pathService).validatePath(sourceStation.getId(),targetStation.getId(), PathType.DISTANCE.getType());
+        doNothing().when(pathService).validatePath(sourceStation.getId(),targetStation.getId(), PathType.DISTANCE);
         when(favoritePathRepository.save(any())).thenReturn(favoritePath);
 
         //when

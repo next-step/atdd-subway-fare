@@ -41,11 +41,11 @@ public class Section {
         this.duration =Objects.requireNonNull(duration);
     }
 
-    public Long getWeight(String type){
-        if(type.equals(PathType.DISTANCE.getType())){
+    public Long getWeight(PathType type){
+        if(type.equals(PathType.DISTANCE)){
             return distance;
         }
-        if(type.equals(PathType.DURATION.getType())){
+        if(type.equals(PathType.DURATION)){
             return duration;
         }
         else{

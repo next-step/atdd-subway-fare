@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 public class PathFinder {
     private List<Line> lines;
-    private String type;
+    private PathType type;
 
-    public PathFinder(List<Line> lines,String type) {
+    public PathFinder(List<Line> lines,PathType type) {
         this.lines = lines;
         this.type = type;
 
