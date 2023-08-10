@@ -9,13 +9,6 @@ public class FareCalculator {
     private static final int DISTANCE_INTERVAL_8_KM = 8;
     private static final int DISTANCE_THRESHOLD_KM = 50;
     private static final int BASE_FARE_UP_TO_50_KM = 1000;
-    public static final int AGE_18 = 18;
-    public static final int AGE_12 = 12;
-    public static final int AGE_5 = 5;
-    public static final int NO_DISCOUNT = 0;
-    public static final float DISCOUNT_FOR_AGES_13_TO_18 = 0.2f;
-    public static final float DISCOUNT_FOR_AGES_6_TO_12 = 0.5f;
-    public static final int FREE = 1;
 
     private FareCalculator() {
         throw new IllegalStateException();
@@ -24,7 +17,7 @@ public class FareCalculator {
     public static int getFare(int distance, List<Line> lines, List<Section> sectionList, int age) {
         int defaultFare = FareCalculator.calculateByDistance(distance);
         int extraFare = FareCalculator.getExtraFare(lines, sectionList);
-        float discountRate = FareCalculator.getAgeBasedDiscountPolicy(age);
+        float discountRate = FareCalculator.getAgeBasedDiscountPolicyDiscountRate(age);
         return (int) ((defaultFare + extraFare) * (1 - discountRate));
     }
 
@@ -56,16 +49,7 @@ public class FareCalculator {
                 .orElse(0);
     }
 
-    public static float getAgeBasedDiscountPolicy(long age) {
-        if (age > AGE_18){
-            return NO_DISCOUNT;
-        }
-        if (age > AGE_12){
-            return DISCOUNT_FOR_AGES_13_TO_18;
-        }
-        if (age > AGE_5) {
-            return DISCOUNT_FOR_AGES_6_TO_12;
-        }
-        return FREE;
+    public static float getAgeBasedDiscountPolicyDiscountRate(int age) {
+        return AgeBasedDiscountPolicy.getPolicyByAge(age).getDiscountRate();
     }
 }

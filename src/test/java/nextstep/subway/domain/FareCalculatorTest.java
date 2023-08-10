@@ -39,7 +39,7 @@ class FareCalculatorTest {
         assertThat(fare).isEqualTo(expect);
     }
 
-    @DisplayName("연령별 요금 할인정책을 반환한다")
+    @DisplayName("연령별 요금 할인정책의 할인율을 반환한다")
     @ParameterizedTest
     @CsvSource({
             "5,1",
@@ -49,7 +49,7 @@ class FareCalculatorTest {
             "18,0.2",
             "19,0"
     })
-    void testReturnAgeBasedFareDiscountPolicy(long age, float expect) {
-        assertThat(FareCalculator.getAgeBasedDiscountPolicy(age)).isEqualTo(expect);
+    void testReturnAgeBasedFareDiscountPolicy(int age, float expect) {
+        assertThat(FareCalculator.getAgeBasedDiscountPolicyDiscountRate(age)).isEqualTo(expect);
     }
 }
