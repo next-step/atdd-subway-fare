@@ -63,29 +63,21 @@ class FavoritePathServiceTest {
     void createFavoritePathServiceTest() {
         //given
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
-
         final Long source = 1L;
         final Long target = 2L;
-        final List<StationResponse> stationResponses = StationSpec.of(List.of("source", "target")).stream()
-                .map(StationResponse::fromEntity)
-                .collect(Collectors.toList());
-        final StationPathResponse stationPathResponse = StationPathResponse.builder()
-                .stations(stationResponses)
-                .distance(BigDecimal.TEN)
-                .build();
 
         given(favoritePathRepository.save(any(FavoritePath.class))).willReturn(FavoritePathSpec.of(member, source, target));
-        given(stationPathService.searchStationPath(source, target, StationPathSearchRequestType.DISTANCE)).willReturn(stationPathResponse);
+        given(stationPathService.isExistPathBetween(source, target)).willReturn(true);
 
         //when
-        var request = new FavoritePathRequest(source,target,StationPathSearchRequestType.DISTANCE);
+        var request = new FavoritePathRequest(source, target, StationPathSearchRequestType.DISTANCE);
 
         favoritePathService.createFavoritePath(email, request);
 
         //then
         then(memberRepository).should(times(1)).findByEmail(email);
         then(favoritePathRepository).should(times(1)).save(any(FavoritePath.class));
-        then(stationPathService).should(times(1)).searchStationPath(source, target, StationPathSearchRequestType.DISTANCE);
+        then(stationPathService).should(times(1)).isExistPathBetween(source, target);
     }
 
     @DisplayName("정상적인 즐겨찾기 경로 목록 조회")

@@ -42,9 +42,7 @@ public class FavoritePathService {
         final Long sourceStationId = request.getSource();
         final Long targetStationId = request.getTarget();
 
-        try {
-            stationPathService.searchStationPath(sourceStationId, targetStationId, request.getType());
-        } catch (StationLineSearchFailException exception) {
+        if (!stationPathService.isExistPathBetween(sourceStationId, targetStationId)) {
             throw new StationFavoriteCreateFailException("station favorite create failed because path not exists");
         }
 

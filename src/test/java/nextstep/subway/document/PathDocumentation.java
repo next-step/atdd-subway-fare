@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
                 .fee(BigDecimal.TEN)
                 .distance(BigDecimal.TEN).build();
 
-        when(stationPathService.searchStationPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(stationPathService.searchStationPath(any(), anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         var doc = document("path",
                 preprocessRequest(prettyPrint()),

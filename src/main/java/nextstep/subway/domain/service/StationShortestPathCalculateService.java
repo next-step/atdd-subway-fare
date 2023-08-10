@@ -22,6 +22,15 @@ import java.util.stream.Collectors;
 public class StationShortestPathCalculateService {
     private final StationLineRepository stationLineRepository;
 
+    public Boolean isExistPathBetween(Station startStation, Station destinationStation) {
+        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(getTotalStationLineSection(), StationPathSearchRequestType.DISTANCE);
+
+        final DijkstraShortestPath<Long, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        final GraphPath<Long, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation.getId(), destinationStation.getId());
+
+        return Objects.nonNull(path);
+    }
+
     public List<Long> getShortestPathStations(Station startStation, Station destinationStation, StationPathSearchRequestType type) {
         final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(getTotalStationLineSection(), type);
 

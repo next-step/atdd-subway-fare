@@ -1,9 +1,12 @@
 package nextstep.subway.domain.service;
 
 import nextstep.member.domain.Member;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
+@Component
 public class UserAgeDiscountFeeCalculator {
     private static final BigDecimal DISCOUNT_RATE_OF_TEENAGER_USER = BigDecimal.valueOf(0.2);
     private static final BigDecimal DISCOUNT_RATE_OF_CHILDREN_USER = BigDecimal.valueOf(0.5);
@@ -11,6 +14,10 @@ public class UserAgeDiscountFeeCalculator {
 
     public BigDecimal calculateDiscountFee(BigDecimal totalFee, StationPathDiscountFeeContext context) {
         final Member member = context.getMember();
+
+        if(Objects.isNull(member)){
+            return BigDecimal.ZERO;
+        }
 
         if (member.isTeenager()) {
             return totalFee.subtract(DEDUCTION_PRICE).multiply(DISCOUNT_RATE_OF_TEENAGER_USER);

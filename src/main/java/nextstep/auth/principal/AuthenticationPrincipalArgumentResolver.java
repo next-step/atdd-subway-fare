@@ -3,6 +3,8 @@ package nextstep.auth.principal;
 import nextstep.auth.AuthenticationException;
 import nextstep.auth.token.JwtTokenProvider;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -21,10 +23,15 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        final AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         String authorization = webRequest.getHeader("Authorization");
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
+        if (authenticationPrincipal.required() && !"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
+        }
+
+        if (!StringUtils.hasText(authorization)) {
+            return null;
         }
         String token = authorization.split(" ")[1];
 
