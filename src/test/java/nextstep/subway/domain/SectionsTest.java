@@ -45,7 +45,7 @@ class SectionsTest {
 
     @DisplayName("총 거리가 50km 이내라면 10km 초과 ~ 50km 까지 5km 단위로 100원씩 추가된다")
     @ParameterizedTest
-    @CsvSource({"12", "1350", "14", "1350", "15", "1450", "18", "1450"})
+    @CsvSource({"12, 1350", "14, 1350", "15, 1350", "18, 1450"})
     void totalFare_under50km(int distance, int fare) {
         Sections sections = new Sections(
             new Section(null, new Station("강남역"), new Station("판교역"), distance, 15)
@@ -56,7 +56,7 @@ class SectionsTest {
 
     @DisplayName("총 거리가 50km 초과시 8km마다 100원씩 추가된다")
     @ParameterizedTest
-    @CsvSource({"50", "2050", "55", "2050", "58", "2150", "57", "2150"})
+    @CsvSource({"50, 2050", "55, 2150", "57, 2150", "58, 2150"})
     void totalFare_over50km(int distance, int fare) {
         Sections sections = new Sections(
             new Section(null, new Station("강남역"), new Station("판교역"), distance, 15)
