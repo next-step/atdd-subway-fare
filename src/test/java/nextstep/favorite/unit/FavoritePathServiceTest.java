@@ -10,7 +10,7 @@ import nextstep.favorite.unit.fixture.FavoritePathSpec;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.fixture.MemberSpec;
-import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.repository.StationRepository;
 import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
 import nextstep.subway.unit.fixture.StationSpec;

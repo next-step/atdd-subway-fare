@@ -2,7 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationLine;
-import nextstep.subway.domain.StationLineRepository;
+import nextstep.subway.domain.repository.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.domain.service.path.StationShortestPathCalculateService;

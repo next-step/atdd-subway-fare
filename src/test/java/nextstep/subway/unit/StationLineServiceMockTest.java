@@ -1,6 +1,8 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.repository.StationLineRepository;
+import nextstep.subway.domain.repository.StationRepository;
 import nextstep.subway.exception.EntityNotFoundException;
 import nextstep.subway.service.StationLineService;
 import nextstep.subway.service.dto.StationLineSectionCreateRequest;

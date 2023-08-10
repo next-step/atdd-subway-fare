@@ -2,6 +2,8 @@ package nextstep.subway.service;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.repository.StationLineRepository;
+import nextstep.subway.domain.repository.StationRepository;
 import nextstep.subway.exception.EntityNotFoundException;
 import nextstep.subway.service.dto.StationLineCreateRequest;
 import nextstep.subway.service.dto.StationLineResponse;

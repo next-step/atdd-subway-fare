@@ -2,6 +2,7 @@ package nextstep.subway.domain.service.path;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.repository.StationLineRepository;
 import nextstep.subway.domain.service.aggregation.StationPathAggregationService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

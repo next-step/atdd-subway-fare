@@ -3,7 +3,7 @@ package nextstep.subway.service;
 import lombok.RequiredArgsConstructor;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.repository.StationRepository;
 import nextstep.subway.domain.service.fee.StationFeeCalculateService;
 import nextstep.subway.domain.service.fee.StationPathDiscountFeeContext;
 import nextstep.subway.domain.service.fee.UserAgeDiscountFeeCalculator;
