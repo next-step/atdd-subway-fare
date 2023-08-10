@@ -3,6 +3,8 @@ package nextstep.subway.acceptance;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청_후_id_추출;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_타입에따른_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,6 +15,8 @@ import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -158,5 +162,27 @@ class PathAcceptanceTest extends AcceptanceTest {
         int lineUsageOverFare = 800;
 
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(DEFAULT_FARE + distanceOverFare + lineUsageOverFare);
+    }
+
+    @DisplayName("조회하는 멤버 유형별 할인 금액 조회 [어른, 어린이, 청소년] ")
+    @ParameterizedTest
+    @CsvSource(value = {"6,800", "13,1070", "27,1250"}, delimiter = ',')
+    void findPathForMemberDiscount(int age, int fare) {
+
+        String email = "email";
+        String password = "password";
+
+        var 회원 = 회원_생성_요청(email, password, age);
+        var accessToken = 베어러_인증_로그인_요청(email, password).jsonPath().getString("accessToken");
+
+        // when
+        var response = 두_역의_타입에따른_경로_조회를_요청(교대역, 양재역, PathType.DISTANCE.name(), accessToken);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역,
+            남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("duration")).isEqualTo(50);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
     }
 }
