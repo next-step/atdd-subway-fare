@@ -1,19 +1,12 @@
 package nextstep.subway.domain.service;
 
-import lombok.Builder;
-
 import java.math.BigDecimal;
 
-public class UserAgeDiscountFeeCalculator extends AbstractStationPathFeeCalculator {
+public class UserAgeDiscountFeeCalculator {
+    private static final BigDecimal DISCOUNT_RATE_OF_TEENAGER_USER = BigDecimal.valueOf(20);
+    private static final BigDecimal DISCOUNT_RATE_OF_CHILDREN_USER = BigDecimal.valueOf(50);
 
-    @Builder
-    public UserAgeDiscountFeeCalculator(AbstractStationPathFeeCalculator nextPathFeeCalculator) {
-        super(nextPathFeeCalculator);
-    }
-
-    @Override
-    public BigDecimal calculate(StationPathFeeContext context) {
-
+    public BigDecimal calculateDiscountFee(BigDecimal totalFee, StationPathDiscountFeeContext context) {
         return BigDecimal.ZERO;
     }
 }

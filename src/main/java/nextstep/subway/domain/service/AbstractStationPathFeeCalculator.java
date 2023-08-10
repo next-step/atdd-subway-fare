@@ -1,11 +1,8 @@
 package nextstep.subway.domain.service;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Slf4j
 public abstract class AbstractStationPathFeeCalculator {
     public AbstractStationPathFeeCalculator() {
     }
@@ -16,7 +13,7 @@ public abstract class AbstractStationPathFeeCalculator {
 
     private AbstractStationPathFeeCalculator nextPathFeeCalculator;
 
-    public abstract BigDecimal calculate(StationPathFeeContext context);
+    protected abstract BigDecimal calculate(StationPathFeeContext context);
 
     public BigDecimal calculateFee(BigDecimal baseFee, StationPathFeeContext context) {
         final BigDecimal resultFee = baseFee.add(calculate(context));

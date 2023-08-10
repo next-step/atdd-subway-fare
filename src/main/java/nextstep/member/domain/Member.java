@@ -60,4 +60,12 @@ public class Member {
     public boolean checkPassword(String password) {
         return Objects.equals(this.password, password);
     }
+
+    public boolean isTeenager() {
+        return 13 <= age && age < 19;
+    }
+
+    public boolean isChildren() {
+        return 6 <= age && age < 13;
+    }
 }

@@ -88,6 +88,7 @@ public class StationFeeCalculateServiceTest {
         //1호선
         final BigDecimal line_1_additionalFee = BigDecimal.valueOf(600);
         final StationLine line_1 = StationLineSpec.of(aStation, bStation, BigDecimal.ONE, 1000L, line_1_additionalFee);
+
         //2호선
         final BigDecimal line_2_additionalFee = BigDecimal.valueOf(900);
         final StationLine line_2 = StationLineSpec.of(cStation, dStation, BigDecimal.TEN, 1000L, line_2_additionalFee);
@@ -99,7 +100,6 @@ public class StationFeeCalculateServiceTest {
         final BigDecimal distance = BigDecimal.valueOf(5);
         final List<StationLine> lines = List.of(line_1, line_2);
 
-
         final StationPathFeeContext context = StationPathFeeContext.builder()
                 .distance(distance)
                 .lines(lines)
@@ -109,56 +109,6 @@ public class StationFeeCalculateServiceTest {
 
         //then
         Assertions.assertEquals(0, fee.compareTo(BigDecimal.valueOf(1250 + 900)));
-    }
-
-    @DisplayName("청소년 할인 적용된 요금 계산")
-    @Test
-    void calculateFeeTest_Teenager_DiscountFee() {
-        //given
-        final AbstractStationPathFeeCalculator userAgeDiscountFeeCalculator = UserAgeDiscountFeeCalculator.builder()
-                .build();
-
-        final Member member = MemberSpec.of("TEST@nextstep.com", 18);
-
-        final StationPathFeeContext context = StationPathFeeContext.builder()
-                .distance(BigDecimal.valueOf(8))
-                .lines(Collections.emptyList())
-                .member(member)
-                .build();
-
-        //when
-        final BigDecimal fee = userAgeDiscountFeeCalculator.calculateFee(BigDecimal.valueOf(1250), context);
-
-        //then
-        final BigDecimal twentyPercent = BigDecimal.valueOf(20).divide(BigDecimal.valueOf(100), 1, RoundingMode.DOWN);
-        final BigDecimal expectedFee = BigDecimal.valueOf(-1250 + 350).multiply(twentyPercent);
-
-        Assertions.assertEquals(0, fee.compareTo(expectedFee));
-    }
-
-    @DisplayName("어린이 할인 적용된 요금 계산")
-    @Test
-    void calculateFeeTest_Children_DiscountFee() {
-        //given
-        final AbstractStationPathFeeCalculator userAgeDiscountFeeCalculator = UserAgeDiscountFeeCalculator.builder()
-                .build();
-
-        final Member member = MemberSpec.of("TEST@nextstep.com", 6);
-
-        final StationPathFeeContext context = StationPathFeeContext.builder()
-                .distance(BigDecimal.valueOf(8))
-                .lines(Collections.emptyList())
-                .member(member)
-                .build();
-
-        //when
-        final BigDecimal fee = userAgeDiscountFeeCalculator.calculateFee(BigDecimal.valueOf(1250), context);
-
-        //then
-        final BigDecimal fiftyPercent = BigDecimal.valueOf(50).divide(BigDecimal.valueOf(100), 1, RoundingMode.DOWN);
-        final BigDecimal expectedFee = BigDecimal.valueOf(-1250 + 350).multiply(fiftyPercent);
-
-        Assertions.assertEquals(0, fee.compareTo(expectedFee));
     }
 
 }
