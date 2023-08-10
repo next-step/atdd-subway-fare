@@ -15,15 +15,10 @@ public class PathSteps {
         Long target,
         PathFindType type
     ) {
-        return RestAssured
-            .given().log().all()
-            .params("source", source, "target", target, "type", type.name())
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .when().get("/paths")
-            .then().log().all().extract();
+        return 두_역의_최단_경로_조회를_요청(source, target, type, null, null);
     }
 
-    public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(
+    private static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(
         Long source,
         Long target,
         PathFindType type,
