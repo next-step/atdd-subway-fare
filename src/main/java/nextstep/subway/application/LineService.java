@@ -81,7 +81,7 @@ public class LineService {
     }
 
     @Transactional
-    public void updateExtraFare(Long lineId, Long extraFare) {
+    public void updateExtraFare(Long lineId, Integer extraFare) {
         Line line = lineRepository.findById(lineId).orElseThrow();
         line.updateExtraFare(extraFare);
     }

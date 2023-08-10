@@ -1,6 +1,5 @@
 package nextstep.subway.domain;
 
-import static nextstep.subway.domain.FareCalculator.getExtraFare;
 import static nextstep.subway.domain.FindPathType.DISTANCE;
 
 import java.util.List;
@@ -19,16 +18,20 @@ public class SubwayMap {
     }
 
     public static Path findPath(String typeName, Station upStation, Station downStation, List<Line> lines) {
+        return findPath(typeName, upStation, downStation, lines, 100);
+    }
+
+    public static Path findPath(String typeName, Station upStation, Station downStation, List<Line> lines, int age) {
         SubwayMap subwayMap = new SubwayMap(lines);
         FindPathType findPathType = FindPathType.find(typeName);
-        return subwayMap.findPath(upStation, downStation, findPathType);
+        return subwayMap.findPath(upStation, downStation, findPathType, age);
     }
 
     public static void findPath(Station upStation, Station downStation, List<Line> lines) {
-        findPath(DISTANCE.name(), upStation, downStation, lines);
+        findPath(DISTANCE.name(), upStation, downStation, lines, 100);
     }
 
-    private Path findPath(Station source, Station target, FindPathType findPathType) {
+    private Path findPath(Station source, Station target, FindPathType findPathType, int age) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -46,7 +49,7 @@ public class SubwayMap {
 
         List<Section> sectionList = getSections(result);
         Sections sections = new Sections(sectionList);
-        long fare = FareCalculator.calculateByDistance(sections.totalDistance()) + getExtraFare(lines,sectionList);
+        int fare = FareCalculator.getFare(sections.totalDistance(),lines,sectionList,age);
         return new Path(sections, fare);
     }
 

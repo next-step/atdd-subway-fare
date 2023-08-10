@@ -2,12 +2,9 @@ package nextstep.subway.application.dto;
 
 public class ExtraFareRequest {
 
-    private Long extraFare;
+    private Integer extraFare;
 
-    public ExtraFareRequest() {
-    }
-
-    public Long getExtraFare() {
+    public Integer getExtraFare() {
         return extraFare;
     }
 }

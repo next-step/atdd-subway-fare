@@ -1,7 +1,6 @@
 package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.PathSteps.경로_조회_검증;
 import static nextstep.subway.acceptance.PathSteps.노선_추가_요금_등록한다;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
@@ -11,7 +10,6 @@ import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요�
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
 import java.util.List;
-import nextstep.subway.utils.GithubResponses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -116,12 +114,9 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void testQueryTransitPathWithAgeBasedFareForLoggedInUser() {
         // when
-        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역,사용자_12세);
+        var response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, 사용자_12세);
 
         // then
-        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22, 0);
+        경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 5, 22, 50);
     }
-
-
-
 }

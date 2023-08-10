@@ -5,9 +5,9 @@ import java.util.List;
 public class Path {
 
     private Sections sections;
-    private long fare;
+    private int fare;
 
-    public Path(Sections sections, long fare) {
+    public Path(Sections sections, int fare) {
         this.sections = sections;
         this.fare = fare;
     }
@@ -24,7 +24,7 @@ public class Path {
         return sections.getStations();
     }
 
-    public long getFare() {
+    public int getFare() {
         return fare;
     }
 }

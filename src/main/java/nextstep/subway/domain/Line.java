@@ -15,7 +15,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
-    private long extraFare;
+    private int extraFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -65,11 +65,11 @@ public class Line {
         sections.delete(station);
     }
 
-    public void updateExtraFare(long extraFare) {
+    public void updateExtraFare(int extraFare) {
         this.extraFare = extraFare;
     }
 
-    public long getExtraFare() {
+    public int getExtraFare() {
         return extraFare;
     }
 }

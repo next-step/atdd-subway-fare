@@ -71,7 +71,7 @@ class PathServiceTest {
         );
 
         // when
-        PathResponse pathResponse = pathService.findPath(1L, 2L, "DISTANCE");
+        PathResponse pathResponse = pathService.findPath(1L, 2L, "DISTANCE",null);
 
         // then
         Assertions.assertAll(
