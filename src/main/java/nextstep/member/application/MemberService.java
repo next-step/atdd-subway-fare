@@ -1,5 +1,6 @@
 package nextstep.member.application;
 
+import java.util.Optional;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;
@@ -38,4 +39,11 @@ public class MemberService {
                 .map(MemberResponse::of)
                 .orElseThrow(RuntimeException::new);
     }
+
+    public Optional<Integer> findAgeByEmail(String username) {
+
+        return memberRepository.findByEmail(username)
+            .map(Member::getAge);
+    }
+
 }
