@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class StationDiscountFeeCalculatorServiceTest {
     private UserAgeDiscountFeeCalculator userAgeDiscountFeeCalculator = new UserAgeDiscountFeeCalculator();
@@ -28,7 +27,7 @@ public class StationDiscountFeeCalculatorServiceTest {
         final BigDecimal discountFee = userAgeDiscountFeeCalculator.calculateDiscountFee(totalFee, context);
 
         //then
-        final BigDecimal twentyPercent = BigDecimal.valueOf(20).divide(BigDecimal.valueOf(100), 1, RoundingMode.DOWN);
+        final BigDecimal twentyPercent = BigDecimal.valueOf(0.2);
         final BigDecimal expectedDiscountFee = totalFee.subtract(BigDecimal.valueOf(250)).multiply(twentyPercent);
 
         Assertions.assertEquals(0, discountFee.compareTo(expectedDiscountFee));
@@ -49,9 +48,9 @@ public class StationDiscountFeeCalculatorServiceTest {
         final BigDecimal discountFee = userAgeDiscountFeeCalculator.calculateDiscountFee(totalFee, context);
 
         //then
-        final BigDecimal fiftyPercent = BigDecimal.valueOf(50).divide(BigDecimal.valueOf(100), 1, RoundingMode.DOWN);
-        final BigDecimal expectedFee = totalFee.subtract(BigDecimal.valueOf(250)).multiply(fiftyPercent);
+        final BigDecimal fiftyPercent = BigDecimal.valueOf(0.5);
+        final BigDecimal expectedDiscountFee = totalFee.subtract(BigDecimal.valueOf(250)).multiply(fiftyPercent);
 
-        Assertions.assertEquals(0, discountFee.compareTo(expectedFee));
+        Assertions.assertEquals(0, discountFee.compareTo(expectedDiscountFee));
     }
 }
