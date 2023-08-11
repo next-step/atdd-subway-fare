@@ -22,46 +22,31 @@ import static org.mockito.Mockito.when;
 
 public class PathDocumentation extends Documentation {
 
-    private Long 교대역;
-    private Long 강남역;
-    private Long 양재역;
+    @MockBean
+    private PathService pathService;
 
-    private Long 교대강남구간거리;
-    private Long 강남양재구간거리;
-    private Long 교대강남구간시간;
-    private Long 강남양재구간시간;
-
-    private Long 이호선;
-    private Long 삼호선;
-    private Long 신분당선;
 
     @BeforeEach
     public void setGivenData() {
 
-        교대역 =  StationStep.지하철역_생성("교대역").jsonPath().getLong("id");
-        강남역 =  StationStep.지하철역_생성("강남역").jsonPath().getLong("id");
-        양재역 =  StationStep.지하철역_생성("양재역").jsonPath().getLong("id");
-
-
-        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green").jsonPath().getLong("id");
-        삼호선 =  LineStep.지하철_노선_생성( "삼호선", "Orange").jsonPath().getLong("id");
-        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red").jsonPath().getLong("id");
-
-        교대강남구간거리 = 10L;
-        강남양재구간거리 = 15L;
-
-        교대강남구간시간 = 5L;
-        강남양재구간시간 = 5L;
-
-        SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리,교대강남구간시간);
-        SectionStep.지하철구간_생성(신분당선,강남역,양재역,강남양재구간거리,강남양재구간시간);
 
 
     }
     @Test
     void path() {
 
-        지하철_경로_조회(교대역,양재역, PathType.DISTANCE,createRequestSpecification("path"));
+        Station 교대역 = new Station(1L, "교대역");
+        Station 강남역 = new Station(2L, "강남역");
+
+        Long 교대강남구간거리 = 10L;
+        Long 교대강남구간시간 = 5L;
+        int 교대강남구간비용 = 1250;
+
+
+        final PathResponse pathResponse = new PathResponse(List.of(교대역, 강남역), 교대강남구간거리, 교대강남구간시간, 교대강남구간비용);
+        when(pathService.getPath(any(), any(), any())).thenReturn(pathResponse);
+
+        지하철_경로_조회(1L,2L, PathType.DISTANCE,createRequestSpecification("path"));
 
     }
 }
