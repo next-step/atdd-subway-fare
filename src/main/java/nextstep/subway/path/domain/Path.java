@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Path {
     private static final int BASIC_FEE = 1250;
+    private static final int BASIC_DISTANCE = 10;
+    private static final int LAST_DISTANCE = 50;
 
     private final Sections sections;
 
@@ -35,14 +37,14 @@ public class Path {
         int totalDistance = getTotalDistance();
         int result = BASIC_FEE;
 
-        if (10 < totalDistance && totalDistance <= 50) {
-            int remain = totalDistance - 10;
-            result += calculateOverFare(remain, 5);
+        if (BASIC_DISTANCE < totalDistance && totalDistance <= LAST_DISTANCE) {
+            int lastDistance = totalDistance - BASIC_DISTANCE;
+            result += calculateOverFare(lastDistance, 5);
         }
 
-        if (50 < totalDistance) {
-            int lastDistance = totalDistance - 50;
-            int middleDistance = totalDistance - lastDistance - 10;
+        if (LAST_DISTANCE < totalDistance) {
+            int lastDistance = totalDistance - LAST_DISTANCE;
+            int middleDistance = totalDistance - lastDistance - BASIC_DISTANCE;
 
             result += calculateOverFare(middleDistance, 5) + calculateOverFare(lastDistance, 8);
         }
