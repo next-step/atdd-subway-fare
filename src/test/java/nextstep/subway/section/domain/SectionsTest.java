@@ -1,9 +1,11 @@
 package nextstep.subway.section.domain;
 
 import nextstep.subway.station.domain.Station;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 
@@ -11,20 +13,54 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Sections 단위 테스트")
 class SectionsTest {
-    @DisplayName("10km 미만 거리에서는 기본요금 1,250원이 계산된다.")
-    @ParameterizedTest(name = "거리={0} + {1}")
-    @CsvSource({"1,2", "3,4", "4,5"})
-    void feeUnder10(int dist1, int dist2) {
-        Station 강남역 = new Station(1L, "강남역");
-        Station 남부터미널역 = new Station(2L, "남부터미널역");
-        Station 양재역 = new Station(3L, "양재역");
+    private Station 강남역;
+    private Station 양재역;
 
-        Section section1 = new Section(강남역, 남부터미널역, dist1, 5);
-        Section section2 = new Section(남부터미널역, 양재역, dist2, 5);
+    @BeforeEach
+    void setUp() {
+        강남역 = new Station(1L, "강남역");
+        양재역 = new Station(2L, "양재역");
+    }
 
-        Sections sections = new Sections(List.of(section1, section2));
+    @DisplayName("10km 이하 거리에서는 기본요금 1,250원이 계산된다.")
+    @ParameterizedTest(name = "거리={0}")
+    @ValueSource(ints = {1, 5, 10})
+    void feeUnder10(int distance) {
+        // given
+        Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
 
+        // when
         int fee = sections.calculateFee();
+
+        // then
         assertThat(fee).isEqualTo(1250);
+    }
+
+    @DisplayName("10km 초과 ~ 50km 이하 거리에서는 기본요금에 5km마다 추가 100원의 요금이 계산된다.")
+    @ParameterizedTest(name = "거리={0}")
+    @CsvSource({"15,1350", "20,1450", "50,2050"})
+    void feeOver10Under50(int distance, int expectedFee) {
+        // given
+        Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
+
+        // when
+        int actualFee = sections.calculateFee();
+
+        // then
+        assertThat(actualFee).isEqualTo(expectedFee);
+    }
+
+    @DisplayName("50km 초과 거리에서는 기본요금에 8km마다 추가 100원의 요금이 계산된다.")
+    @ParameterizedTest(name = "거리={0}")
+    @CsvSource({"51,2150", "58,2150", "66,2250"})
+    void feeOver50(int distance, int expectedFee) {
+        // given
+        Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
+
+        // when
+        int actualFee = sections.calculateFee();
+
+        // then
+        assertThat(actualFee).isEqualTo(expectedFee);
     }
 }
