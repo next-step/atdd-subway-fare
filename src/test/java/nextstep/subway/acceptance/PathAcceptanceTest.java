@@ -70,13 +70,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
         List<String> stationNames = 역_이름_목록_추출(pathsResponse);
         int distance = 총_이동거리_추출(pathsResponse);
         int duration = 소요시간_추출(pathsResponse);
-        int fee = 이용_요금_추출(pathsResponse);
+        int fare = 이용_요금_추출(pathsResponse);
 
         assertThat(stationNames).hasSize(3);
         assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
         assertThat(distance).isEqualTo(5);
         assertThat(duration).isEqualTo(22);
-        assertThat(fee).isEqualTo(1250);
+        assertThat(fare).isEqualTo(1250);
     }
 
     private List<String> 역_이름_목록_추출(ExtractableResponse<Response> pathsResponse) {
@@ -92,7 +92,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private int 이용_요금_추출(ExtractableResponse<Response> pathsResponse) {
-        return pathsResponse.jsonPath().getInt("fee");
+        return pathsResponse.jsonPath().getInt("fare");
     }
 
     /**
@@ -115,12 +115,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
         List<String> stationNames = 역_이름_목록_추출(pathsResponse);
         int distance = 총_이동거리_추출(pathsResponse);
         int duration = 소요시간_추출(pathsResponse);
-        int fee = 이용_요금_추출(pathsResponse);
+        int fare = 이용_요금_추출(pathsResponse);
 
         assertThat(stationNames).hasSize(3);
         assertThat(stationNames).containsExactly("교대역", "강남역", "양재역");
         assertThat(distance).isEqualTo(20);
         assertThat(duration).isEqualTo(2);
-        assertThat(fee).isEqualTo(1250 + 200);
+        assertThat(fare).isEqualTo(1250 + 200);
     }
 }

@@ -225,7 +225,7 @@ public class Sections {
      * 2. 10 초과 ~ 50 이하 : 기본요금 + 100원/5km
      * 3. 50 초과 : 기본요금 + 100원/5km (40) + 100원/8km
      */
-    public int calculateFee() {
+    public int calculateFare() {
         int totalDistance = getTotalDistance();
 
         if (totalDistance <= 10) {

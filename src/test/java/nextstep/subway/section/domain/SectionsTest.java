@@ -30,7 +30,7 @@ class SectionsTest {
         Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
 
         // when
-        int fee = sections.calculateFee();
+        int fee = sections.calculateFare();
 
         // then
         assertThat(fee).isEqualTo(1250);
@@ -44,7 +44,7 @@ class SectionsTest {
         Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
 
         // when
-        int actualFee = sections.calculateFee();
+        int actualFee = sections.calculateFare();
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);
@@ -58,7 +58,7 @@ class SectionsTest {
         Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
 
         // when
-        int actualFee = sections.calculateFee();
+        int actualFee = sections.calculateFare();
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);
