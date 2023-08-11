@@ -1,8 +1,9 @@
 package nextstep.subway.path.domain;
 
-import java.util.List;
 import nextstep.subway.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
+
+import java.util.List;
 
 public class Path {
     private final Sections sections;
@@ -21,5 +22,9 @@ public class Path {
 
     public int getTotalDuration() {
         return sections.getTotalDuration();
+    }
+
+    public int getFee() {
+        return sections.calculateFee();
     }
 }

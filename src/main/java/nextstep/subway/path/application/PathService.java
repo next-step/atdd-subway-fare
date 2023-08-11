@@ -34,7 +34,7 @@ public class PathService {
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration());
+        return PathResponse.of(stationResponses, path);
     }
 
     private Path findPath(Long source, Long target, String type) {

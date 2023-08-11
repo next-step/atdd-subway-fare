@@ -38,7 +38,8 @@ public class PathDocumentation extends Documentation {
                         new StationResponse(4L, "남부터미널역"),
                         new StationResponse(3L, "양재역")),
                 10,
-                10
+                10,
+                1250
         );
     }
 
