@@ -1,4 +1,4 @@
-package nextstep.subway.domain.farechain;
+package nextstep.subway.domain.farechain.overfare;
 
 public class DistanceOverFare extends OverFarePolicyHandler {
     private static final int DEFAULT_FARE_DISTANCE = 10;

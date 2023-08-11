@@ -1,4 +1,4 @@
-package nextstep.subway.domain.farechain;
+package nextstep.subway.domain.farechain.overfare;
 
 public abstract class OverFarePolicyHandler {
 
@@ -32,5 +32,5 @@ public abstract class OverFarePolicyHandler {
         return fare;
     }
 
-    public abstract int chargeOverFare(int fare);
+    protected abstract int chargeOverFare(int fare);
 }

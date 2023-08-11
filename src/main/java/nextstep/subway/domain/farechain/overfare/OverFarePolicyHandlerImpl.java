@@ -1,4 +1,4 @@
-package nextstep.subway.domain.farechain;
+package nextstep.subway.domain.farechain.overfare;
 
 public class OverFarePolicyHandlerImpl extends OverFarePolicyHandler{
 

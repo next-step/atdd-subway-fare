@@ -2,7 +2,7 @@ package nextstep.subway.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nextstep.subway.domain.farechain.DistanceOverFare;
+import nextstep.subway.domain.farechain.overfare.DistanceOverFare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

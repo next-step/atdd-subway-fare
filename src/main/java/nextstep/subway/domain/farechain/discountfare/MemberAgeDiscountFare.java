@@ -1,16 +1,21 @@
-package nextstep.subway.domain.farechain;
+package nextstep.subway.domain.farechain.discountfare;
 
-public class MemberAgeDiscountFare extends OverFarePolicyHandler {
+import java.util.Optional;
+
+public class MemberAgeDiscountFare extends DiscountFarePolicyHandler {
+
+    private static final int NORMAL_AGE = 30;
 
     private final int memberAge;
 
-    public MemberAgeDiscountFare(OverFarePolicyHandler nextHandler, int memberAge) {
-        super(nextHandler);
-        this.memberAge = memberAge;
+    public MemberAgeDiscountFare(Optional<Integer> memberAge) {
+        super(null);
+        this.memberAge = memberAge.orElse(NORMAL_AGE);
     }
 
+
     @Override
-    public int chargeOverFare(int fare) {
+    public int discountOverFare(int fare) {
 
         if (isTeenager()) {
             return super.chargeHandler(fare - (int) Math.ceil((fare - 350) * (0.2)));
