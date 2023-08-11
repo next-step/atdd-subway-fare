@@ -86,10 +86,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getPathByDistance() {
 
-        // when
+
         ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DISTANCE);
 
-        // then
+
         지하철_경로_조회_검증(response, List.of(교대역, 남부터미널역, 양재역), 남부터미널교대구간거리 + 양재남부터미널구간거리, 남부터미널교대구간시간 + 양재남부터미널구간시간);
 
     }
@@ -103,10 +103,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getPathByTime() {
 
-        // when
+
         ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION);
 
-        // then
+
         지하철_경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 교대강남구간거리 + 강남양재구간거리, 교대강남구간시간 + 강남양재구간시간);
 
     }

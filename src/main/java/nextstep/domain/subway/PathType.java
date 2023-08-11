@@ -2,20 +2,22 @@ package nextstep.domain.subway;
 
 import nextstep.domain.Section;
 
+import java.util.function.Function;
+
 public enum PathType {
-    DISTANCE("DISTANCE") {public Long getWeight(Section section){return section.getDistance();}},
-    DURATION("DURATION") {public Long getWeight(Section section){return section.getDuration();}};
+    DISTANCE("DISTANCE", Section::getDistance),
+    DURATION("DURATION", Section::getDuration);
 
     private final String type;
+    private final Function<Section, Long> weightFunction;
 
-    PathType(String type) {
+    PathType(String type,Function<Section, Long> weightFunction) {
         this.type = type;
+        this.weightFunction = weightFunction;
     }
 
-    public String getType(){
-        return type;
-
+    public Long getWeight(Section section) {
+        return weightFunction.apply(section);
     }
 
-    public abstract Long getWeight(Section section);
 }
