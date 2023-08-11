@@ -17,7 +17,7 @@ public class PathResponse {
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration(), path.getFare());
+        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration(), path.calculateFare());
     }
 
     public PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {

@@ -1,5 +1,6 @@
 package nextstep.subway.section.domain;
 
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +12,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Sections 단위 테스트")
-class SectionsTest {
+@DisplayName("Path 단위 테스트")
+class PathTest {
     private Station 강남역;
     private Station 양재역;
 
@@ -28,9 +29,10 @@ class SectionsTest {
     void feeUnder10(int distance) {
         // given
         Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
+        Path path = new Path(sections);
 
         // when
-        int fee = sections.calculateFare();
+        int fee = path.calculateFare();
 
         // then
         assertThat(fee).isEqualTo(1250);
@@ -42,9 +44,10 @@ class SectionsTest {
     void feeOver10Under50(int distance, int expectedFee) {
         // given
         Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
+        Path path = new Path(sections);
 
         // when
-        int actualFee = sections.calculateFare();
+        int actualFee = path.calculateFare();
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);
@@ -56,9 +59,10 @@ class SectionsTest {
     void feeOver50(int distance, int expectedFee) {
         // given
         Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
+        Path path = new Path(sections);
 
         // when
-        int actualFee = sections.calculateFare();
+        int actualFee = path.calculateFare();
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);
