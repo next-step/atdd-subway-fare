@@ -8,12 +8,10 @@ import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
-import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.station.exception.StationNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PathService {
@@ -29,12 +27,7 @@ public class PathService {
         validateSourceAndTargetId(source, target);
 
         Path path = findPath(source, target, type);
-
-        List<StationResponse> stationResponses = path.getStations().stream()
-                .map(StationResponse::from)
-                .collect(Collectors.toList());
-
-        return PathResponse.of(stationResponses, path);
+        return PathResponse.of(path);
     }
 
     private Path findPath(Long source, Long target, String type) {
