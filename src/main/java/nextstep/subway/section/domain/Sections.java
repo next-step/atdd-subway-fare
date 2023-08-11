@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 @Embeddable
 public class Sections {
+    public static final int BASIC_FEE = 1250;
     private Long firstStationId;
 
     private Long lastStationId;
@@ -219,19 +220,28 @@ public class Sections {
                 .sum();
     }
 
+    /**
+     * 1. 10 이하 : 기본요금
+     * 2. 10 초과 ~ 50 이하 : 기본요금 + 100원/5km
+     * 3. 50 초과 : 기본요금 + 100원/5km (40) + 100원/8km
+     */
     public int calculateFee() {
         int totalDistance = getTotalDistance();
 
         if (totalDistance <= 10) {
-            return 1250;
+            return BASIC_FEE;
         }
 
         if (totalDistance <= 50) {
             int remain = totalDistance - 10;
-            return 1250 + ((remain - 1) / 5 + 1) * 100;
+            return BASIC_FEE + calculateOverFee(remain, 5);
         }
 
         int remain = totalDistance - 50;
-        return 2050 + ((remain - 1) / 8 + 1) * 100;
+        return BASIC_FEE + calculateOverFee(40, 5) + calculateOverFee(remain, 8);
+    }
+
+    private int calculateOverFee(int distance, int additionalFeeDistance) {
+        return ((distance - 1) / additionalFeeDistance + 1) * 100;
     }
 }
