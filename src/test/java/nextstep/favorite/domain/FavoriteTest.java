@@ -30,10 +30,10 @@ public class FavoriteTest {
 
     @BeforeEach
     void setUp() {
-        shinbundangLine = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 2);
-        twoLine = new Line(TWO_LINE_NAME, TWO_LINE_COLOR, SEOLLEUNG_STATION, SUWON_STATION, 3);
-        threeLine = new Line(THREE_LINE_NAME, TRHEE_LINE_COLOR, GANGNAM_STATION, NOWON_STATION, 5);
-        threeLine.addSection(NOWON_STATION, SUWON_STATION, 3);
+        shinbundangLine = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 2, 4);
+        twoLine = new Line(TWO_LINE_NAME, TWO_LINE_COLOR, SEOLLEUNG_STATION, SUWON_STATION, 3, 4);
+        threeLine = new Line(THREE_LINE_NAME, TRHEE_LINE_COLOR, GANGNAM_STATION, NOWON_STATION, 5, 4);
+        threeLine.addSection(NOWON_STATION, SUWON_STATION, 3, 4);
         subwayMap = new SubwayMap(List.of(shinbundangLine, twoLine, threeLine));
     }
 

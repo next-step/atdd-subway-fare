@@ -15,94 +15,94 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LineTest {
 
-    private static final Station GANGNAM_STATION = new Station("강남역");
-    private static final Station SEOLLEUNG_STATION = new Station("선릉역");
-    private static final Station SUWON_STATION = new Station("수원역");
-    private static final Station NOWON_STATION = new Station("노원역");
-    private static final Station DEARIM_STATION = new Station("대림역");
+    private static final Station 강남역 = new Station("강남역");
+    private static final Station 선릉역 = new Station("선릉역");
+    private static final Station 수원역 = new Station("수원역");
+    private static final Station 노원역 = new Station("노원역");
+    private static final Station 대림역 = new Station("대림역");
 
     @DisplayName("지하철 노선에 구간을 추가하면 노선 역이름 조회시 추가되있어야 한다.")
     @Test
-    void addSection() {
+    void 구간추가() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
         // when
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 3);
-        line.addSection(DEARIM_STATION, GANGNAM_STATION, 3);
-        line.addSection(SEOLLEUNG_STATION, NOWON_STATION, 2);
+        line.addSection(선릉역, 수원역, 3,4);
+        line.addSection(대림역, 강남역, 3,4);
+        line.addSection(선릉역, 노원역, 2,4);
 
         // then
         assertThat(line.getStations())
-                .containsExactly(DEARIM_STATION, GANGNAM_STATION, SEOLLEUNG_STATION, NOWON_STATION, SUWON_STATION);
+                .containsExactly(대림역, 강남역, 선릉역, 노원역, 수원역);
     }
 
     @DisplayName("지하철 노선 추가 시 노선에 구간에 역이 둘다 존재할 경우 에러를 던진다.")
     @Test
-    void section_station_all_exist_add_fail() {
+    void 구간추가_노선에_추가역_모두존재() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
         // when then
-        assertThatThrownBy(() -> line.addSection(GANGNAM_STATION, SEOLLEUNG_STATION, 3))
+        assertThatThrownBy(() -> line.addSection(강남역, 선릉역, 3,4))
                 .isExactlyInstanceOf(SectionExistException.class)
                 .hasMessage("구간 상행역, 하행역이 이미 노선에 등록되어 있습니다.");
     }
 
     @DisplayName("지하철 노선 추가 시 노선에 구간에 역이 둘다 존재하지 않을경우 에러를 던진다.")
     @Test
-    void section_station_all_not_exist_add_fail() {
+    void 구간추가_노선에_추가역_모두미존재() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
         // when then
-        assertThatThrownBy(() -> line.addSection(NOWON_STATION, DEARIM_STATION, 3))
+        assertThatThrownBy(() -> line.addSection(노원역, 대림역, 3,4))
                 .isExactlyInstanceOf(SectionNotExistException.class)
                 .hasMessage("구간 상행역, 하행역이 노선에 하나도 포함되어있지 않습니다.");
     }
 
     @DisplayName("지하철 노선에 구간시 기존구간에 길이를 초과하면 에러를 던진다.")
     @Test
-    void section_distance_over_add_fail() {
+    void 구간추가_기존구간_길이초과() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 3);
-        line.addSection(DEARIM_STATION, GANGNAM_STATION, 3);
+        line.addSection(선릉역, 수원역, 3,4);
+        line.addSection(대림역, 강남역, 3,4);
 
         // when then
-        assertThatThrownBy(() -> line.addSection(NOWON_STATION, SEOLLEUNG_STATION, 14))
+        assertThatThrownBy(() -> line.addSection(노원역, 선릉역, 14,4))
                 .isExactlyInstanceOf(SectionDistanceOverException.class)
                 .hasMessage("구간길이를 초과했습니다.");
     }
 
     @DisplayName("지하철 노선에 등록된 역을 조회하면 지금까지 등록된 모든 역에 정보가 조회되야 한다.")
     @Test
-    void getStations() {
+    void 노선_역_조회() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 3);
-        line.addSection(DEARIM_STATION, GANGNAM_STATION, 3);
-        line.addSection(NOWON_STATION, SEOLLEUNG_STATION, 1);
+        line.addSection(선릉역, 수원역, 3,4);
+        line.addSection(대림역, 강남역, 3,4);
+        line.addSection(노원역, 선릉역, 1,4);
 
         // when
         List<Station> stations = line.getStations();
 
         // then
         assertThat(stations).hasSize(5);
-        assertThat(stations).containsExactly(DEARIM_STATION, GANGNAM_STATION, NOWON_STATION, SEOLLEUNG_STATION, SUWON_STATION);
+        assertThat(stations).containsExactly(대림역, 강남역, 노원역, 선릉역, 수원역);
     }
 
     @DisplayName("지하철 노선에 등록된 구간을 조회하면 지금까지 등록된 모든 구간에 정보가 조회되야 한다.")
     @Test
-    void getSections() {
+    void 노선_구간_조회() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
-        line.addSection(DEARIM_STATION, GANGNAM_STATION, 7);
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 5);
-        line.addSection(NOWON_STATION, SEOLLEUNG_STATION, 4);
+        line.addSection(대림역, 강남역, 7,4);
+        line.addSection(선릉역, 수원역, 5,4);
+        line.addSection(노원역, 선릉역, 4,4);
 
         // when
         List<Section> sections = line.getSections();
@@ -112,61 +112,61 @@ class LineTest {
                 .hasSize(4)
                 .extracting("upStation", "downStation", "distance")
                 .containsExactly(
-                        Tuple.tuple(DEARIM_STATION, GANGNAM_STATION, 7),
-                        Tuple.tuple(GANGNAM_STATION, NOWON_STATION, 6),
-                        Tuple.tuple(NOWON_STATION, SEOLLEUNG_STATION, 4),
-                        Tuple.tuple(SEOLLEUNG_STATION, SUWON_STATION, 5)
+                        Tuple.tuple(대림역, 강남역, 7),
+                        Tuple.tuple(강남역, 노원역, 6),
+                        Tuple.tuple(노원역, 선릉역, 4),
+                        Tuple.tuple(선릉역, 수원역, 5)
                 );
     }
 
     @DisplayName("지하철 노선에 구간을 삭제하면 노선 역이름 조회시 삭제한 역은 제외되야 한다.")
     @Test
-    void removeSection() {
+    void 구간삭제() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 3);
-        line.addSection(SUWON_STATION, NOWON_STATION, 4);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
+        line.addSection(선릉역, 수원역, 3,4);
+        line.addSection(수원역, 노원역, 4,4);
 
         // when
-        line.removeSection(NOWON_STATION);
+        line.removeSection(노원역);
 
         // then
-        assertThat(line.getStations()).containsExactly(GANGNAM_STATION, SEOLLEUNG_STATION, SUWON_STATION);
+        assertThat(line.getStations()).containsExactly(강남역, 선릉역, 수원역);
     }
 
     @DisplayName("지하철 노선 추가 후 구간 삭제시 구간정보가 1개이므로 삭제가 실패되어야 한다.")
     @Test
-    void min_section_removeSection_fail() {
+    void 구간삭제_구간최소갯수() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
 
         // when then
-        assertThatThrownBy(() -> line.removeSection(SEOLLEUNG_STATION))
+        assertThatThrownBy(() -> line.removeSection(선릉역))
                 .isExactlyInstanceOf(SectionDeleteMinSizeException.class)
                 .hasMessage("구간이 1개인 경우 삭제할 수 없습니다.");
     }
 
     @DisplayName("지하철 노선 추가 후 구간 삭제시 구간에 포함된 역이 아닌경우 삭제에 실패되어야 한다.")
     @Test
-    void not_exist_station_removeSection_fail() {
+    void 구간삭제_구간미포함_역() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 8);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
+        line.addSection(선릉역, 수원역, 8,4);
 
         // when then
-        assertThatThrownBy(() -> line.removeSection(NOWON_STATION))
+        assertThatThrownBy(() -> line.removeSection(노원역))
                 .isExactlyInstanceOf(SectionNotFoundException.class)
                 .hasMessage("구간정보를 찾을 수 없습니다.");
     }
 
     @DisplayName("지하철 노선 추가 및 삭제 후 지하철 노선에 등록된 구간을 조회하면 지금까지 등록된 모든 구간에 정보가 조회되야 한다.")
     @Test
-    void removeSection_then_getSections() {
+    void 구간삭제_후_노선구간_조회() {
         // given
-        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, GANGNAM_STATION, SEOLLEUNG_STATION, 10);
-        line.addSection(SEOLLEUNG_STATION, SUWON_STATION, 8);
-        line.addSection(NOWON_STATION, SUWON_STATION, 4);
-        line.removeSection(NOWON_STATION);
+        Line line = new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 10, 4);
+        line.addSection(선릉역, 수원역, 8,4);
+        line.addSection(노원역, 수원역, 4,4);
+        line.removeSection(노원역);
         // when
         List<Section> sections = line.getSections();
 
@@ -175,8 +175,8 @@ class LineTest {
                 .hasSize(2)
                 .extracting("upStation", "downStation", "distance")
                 .containsExactly(
-                        Tuple.tuple(GANGNAM_STATION, SEOLLEUNG_STATION, 10),
-                        Tuple.tuple(SEOLLEUNG_STATION, SUWON_STATION, 8)
+                        Tuple.tuple(강남역, 선릉역, 10),
+                        Tuple.tuple(선릉역, 수원역, 8)
                 );
     }
 }

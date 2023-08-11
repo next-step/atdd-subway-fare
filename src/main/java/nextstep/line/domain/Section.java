@@ -2,11 +2,12 @@ package nextstep.line.domain;
 
 import nextstep.exception.SectionDistanceOverException;
 import nextstep.station.domain.Station;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
 @Entity
-public class Section {
+public class Section extends DefaultWeightedEdge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package nextstep.line.domain;
+package nextstep.line.domain.path;
 
 public enum ShortPathType {
 

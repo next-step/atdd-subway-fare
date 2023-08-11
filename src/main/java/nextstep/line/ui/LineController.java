@@ -6,6 +6,7 @@ import nextstep.line.application.request.LineModifyRequest;
 import nextstep.line.application.request.SectionAddRequest;
 import nextstep.line.application.response.LineResponse;
 import nextstep.line.application.response.ShortPathResponse;
+import nextstep.line.domain.path.ShortPathType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,8 +64,10 @@ public class LineController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<ShortPathResponse> findShortPath(@RequestParam Long startStationId, @RequestParam Long endStationId) {
-        ShortPathResponse shortPath = lineService.findShortPath(startStationId, endStationId);
+    public ResponseEntity<ShortPathResponse> findShortPath(@RequestParam Long startStationId,
+                                                           @RequestParam Long endStationId,
+                                                           @RequestParam ShortPathType type) {
+        ShortPathResponse shortPath = lineService.findShortPath(type, startStationId, endStationId);
         return ResponseEntity.ok().body(shortPath);
     }
 

@@ -21,11 +21,6 @@ public class Line {
     protected Line() {
     }
 
-    public Line(String name, String color, Station upStation, Station downStation, int distance) {
-        this.lineDetail = new LineDetail(name, color);
-        this.lineStationDetail = new LineStationDetail(this, upStation, downStation, distance);
-    }
-
     public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
         this.lineDetail = new LineDetail(name, color);
         this.lineStationDetail = new LineStationDetail(this, upStation, downStation, distance, duration);
@@ -33,10 +28,6 @@ public class Line {
 
     public void modify(String name, String color) {
         lineDetail.modify(name, color);
-    }
-
-    public void addSection(Station upStation, Station downStation, int distance) {
-        lineStationDetail.addSection(new Section(this, upStation, downStation, distance));
     }
 
     public void addSection(Station upStation, Station downStation, int distance, int duration) {

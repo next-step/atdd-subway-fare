@@ -2,6 +2,7 @@ package nextstep.line.domain;
 
 import nextstep.exception.ShortPathSameStationException;
 import nextstep.exception.StationNotExistException;
+import nextstep.line.domain.path.ShortPath;
 import nextstep.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static nextstep.line.LineTestField.*;
-import static nextstep.line.domain.ShortPathType.DISTANCE;
-import static nextstep.line.domain.ShortPathType.DURATION;
+import static nextstep.line.domain.path.ShortPathType.DISTANCE;
+import static nextstep.line.domain.path.ShortPathType.DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -46,6 +47,7 @@ class SubwayMapTest {
         // then
         assertThat(shortPath.getStations()).hasSize(3).containsExactly(강남역, 선릉역, 수원역);
         assertThat(shortPath.getDistance()).isEqualTo(5);
+        assertThat(shortPath.getDuration()).isEqualTo(8);
     }
 
     @DisplayName("강남역에서 수원역으로 가는 경로조회시 소요시간이 가장 짧은 경로를 리턴해야한다.")
@@ -56,12 +58,13 @@ class SubwayMapTest {
 
         // then
         assertThat(shortPath.getStations()).hasSize(3).containsExactly(강남역, 노원역, 수원역);
-        assertThat(shortPath.getDistance()).isEqualTo(5);
+        assertThat(shortPath.getDuration()).isEqualTo(5);
+        assertThat(shortPath.getDistance()).isEqualTo(8);
     }
 
     @DisplayName("최단경로 조회 역중 노선에 포함되지 않은 역이 존재할 경우 에러를 던진다.")
     @Test
-    void not_exist_station_in_line() {
+    void 경로조회_미포함역() {
         // given when then
         assertThatThrownBy(() -> subwayMap.findShortPath(DISTANCE, 선릉역, 대림역))
                 .isExactlyInstanceOf(StationNotExistException.class)
@@ -70,7 +73,7 @@ class SubwayMapTest {
 
     @DisplayName("최단경로 조회 시작역, 종착역이 동일할 경우 에러를 던진다.")
     @Test
-    void shortpath_station_same() {
+    void 경로조회_시작역_종착역_동일() {
         // given when then
         assertThatThrownBy(() -> subwayMap.findShortPath(DISTANCE, 대림역, 대림역))
                 .isExactlyInstanceOf(ShortPathSameStationException.class)

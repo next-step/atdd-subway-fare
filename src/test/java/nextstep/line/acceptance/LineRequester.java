@@ -8,6 +8,7 @@ import io.restassured.specification.RequestSpecification;
 import nextstep.line.application.request.LineCreateRequest;
 import nextstep.line.application.request.LineModifyRequest;
 import nextstep.line.application.request.SectionAddRequest;
+import nextstep.line.domain.path.ShortPathType;
 import org.springframework.http.MediaType;
 
 import static nextstep.station.acceptance.StationRequester.createStationThenReturnId;
@@ -22,13 +23,13 @@ public class LineRequester {
         return findLinesRequest();
     }
 
-    public static Long createLineThenReturnId(String name, String color, String upStationName, String downStationName, int distance) {
-        return createLineRequest(name, color, createStationThenReturnId(upStationName), createStationThenReturnId(downStationName), distance)
+    public static Long createLineThenReturnId(String name, String color, String upStationName, String downStationName, int distance, int duration) {
+        return createLineRequest(name, color, createStationThenReturnId(upStationName), createStationThenReturnId(downStationName), distance, duration)
                 .jsonPath().getObject("id", Long.class);
     }
 
-    public static Long createLineThenReturnId(String name, String color, Long upStationId, Long downStationId, int distance) {
-        return createLineRequest(name, color, upStationId, downStationId, distance)
+    public static Long createLineThenReturnId(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+        return createLineRequest(name, color, upStationId, downStationId, distance, duration)
                 .jsonPath().getObject("id", Long.class);
     }
 
@@ -40,23 +41,24 @@ public class LineRequester {
         return deleteLineRequest(id);
     }
 
-    public static ExtractableResponse<Response> addSection(Long id, Long upStationId, Long downStationId, int distance) {
-        return addSectionRequest(id, upStationId, downStationId, distance);
+    public static ExtractableResponse<Response> addSection(Long id, Long upStationId, Long downStationId, int distance, int duration) {
+        return addSectionRequest(id, upStationId, downStationId, distance, duration);
     }
 
     public static ExtractableResponse<Response> deleteSection(Long id, Long stationId) {
         return deleteSectionRequest(id, stationId);
     }
 
-    public static ExtractableResponse<Response> findShortPath(Long startStationId, Long endStationId) {
-        return findShortPathRequest(startStationId, endStationId);
+    public static ExtractableResponse<Response> findShortPath(ShortPathType type, Long startStationId, Long endStationId) {
+        return findShortPathRequest(type, startStationId, endStationId);
     }
 
     public static ExtractableResponse<Response> findShortPathForDucument(RequestSpecification requestSpecification,
                                                                          Filter filter,
+                                                                         ShortPathType type,
                                                                          Long startStationId,
                                                                          Long endStationId) {
-        return findShortPathRequestForDocument(requestSpecification, filter, startStationId, endStationId);
+        return findShortPathRequestForDocument(requestSpecification, filter, type, startStationId, endStationId);
     }
 
     private static ExtractableResponse<Response> findLineRequest(Long id) {
@@ -74,9 +76,9 @@ public class LineRequester {
                 .extract();
     }
 
-    private static ExtractableResponse<Response> createLineRequest(String name, String color, Long upStationId, Long downStationId, int distance) {
+    private static ExtractableResponse<Response> createLineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         return RestAssured.given().log().all()
-                .body(new LineCreateRequest(name, color, upStationId, downStationId, distance))
+                .body(new LineCreateRequest(name, color, upStationId, downStationId, distance, duration))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all()
@@ -101,10 +103,10 @@ public class LineRequester {
                 .extract();
     }
 
-    private static ExtractableResponse<Response> addSectionRequest(Long id, Long upStationId, Long downStationId, int distance) {
+    private static ExtractableResponse<Response> addSectionRequest(Long id, Long upStationId, Long downStationId, int distance, int duration) {
         return RestAssured.given().log().all()
                 .pathParam("id", id)
-                .body(new SectionAddRequest(upStationId, downStationId, distance))
+                .body(new SectionAddRequest(upStationId, downStationId, distance, duration))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines/{id}/sections")
                 .then().log().all()
@@ -120,10 +122,11 @@ public class LineRequester {
                 .extract();
     }
 
-    private static ExtractableResponse<Response> findShortPathRequest(Long startStationId, Long endStationId) {
+    private static ExtractableResponse<Response> findShortPathRequest(ShortPathType type, Long startStationId, Long endStationId) {
         return RestAssured.given().log().all()
                 .param("startStationId", startStationId)
                 .param("endStationId", endStationId)
+                .param("type", type)
                 .when().get("/lines/paths")
                 .then().log().all()
                 .extract();
@@ -131,12 +134,14 @@ public class LineRequester {
 
     private static ExtractableResponse<Response> findShortPathRequestForDocument(RequestSpecification requestSpecification,
                                                                                  Filter filter,
+                                                                                 ShortPathType type,
                                                                                  Long startStationId,
                                                                                  Long endStationId) {
         return RestAssured.given(requestSpecification).log().all()
                 .filter(filter)
                 .param("startStationId", startStationId)
                 .param("endStationId", endStationId)
+                .param("type", type)
                 .when().get("/lines/paths")
                 .then().log().all()
                 .extract();
