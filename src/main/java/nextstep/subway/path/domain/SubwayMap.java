@@ -1,9 +1,5 @@
 package nextstep.subway.path.domain;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.exception.PathNotFoundException;
 import nextstep.subway.path.exception.StationNotInGivenLinesException;
@@ -13,6 +9,10 @@ import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SubwayMap {
     private final List<Line> lines;
@@ -35,7 +35,7 @@ public class SubwayMap {
         validateGraphPath(result);
 
         List<Section> sections = result.getEdgeList().stream()
-                .map(it -> it.getSection())
+                .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
         return new Path(new Sections(sections));
@@ -43,8 +43,7 @@ public class SubwayMap {
 
     private void validateStationsInLines(Station source, Station target) {
         Set<Station> stationsInLines = lines.stream()
-                .flatMap(line -> line.getSections().stream())
-                .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
+                .flatMap(line -> line.getStations().stream())
                 .collect(Collectors.toSet());
 
         if (!stationsInLines.contains(source) || !stationsInLines.contains(target)) {
@@ -68,7 +67,7 @@ public class SubwayMap {
                 .flatMap(it -> it.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
-                .forEach(it -> graph.addVertex(it));
+                .forEach(graph::addVertex);
     }
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
