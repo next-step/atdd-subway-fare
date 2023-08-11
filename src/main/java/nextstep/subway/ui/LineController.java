@@ -1,6 +1,7 @@
 package nextstep.subway.ui;
 
 import nextstep.subway.application.LineService;
+import nextstep.subway.application.dto.ExtraFareRequest;
 import nextstep.subway.application.dto.LineRequest;
 import nextstep.subway.application.dto.LineResponse;
 import nextstep.subway.application.dto.SectionRequest;
@@ -58,6 +59,12 @@ public class LineController {
     @DeleteMapping("/{lineId}/sections")
     public ResponseEntity<Void> deleteSection(@PathVariable Long lineId, @RequestParam Long stationId) {
         lineService.deleteSection(lineId, stationId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/{lineId}",params = "type=fare")
+    public ResponseEntity<Void> addExtraFareToLine(@PathVariable Long lineId, @RequestBody ExtraFareRequest extraFare) {
+        lineService.updateExtraFare(lineId, extraFare.getExtraFare());
         return ResponseEntity.ok().build();
     }
 }

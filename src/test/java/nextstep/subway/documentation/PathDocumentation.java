@@ -1,6 +1,8 @@
 package nextstep.subway.documentation;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.PathSteps.경로_조회_검증;
+import static nextstep.subway.acceptance.PathSteps.노선_추가_요금_등록한다;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.두_역의_최소_시간_경로_조회를_요청;
 import static nextstep.subway.acceptance.PathSteps.세션_생성_파라미터_생성;
@@ -8,6 +10,8 @@ import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요�
 import static nextstep.subway.acceptance.PathSteps.출력_필드_추가;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 
+import io.restassured.specification.RequestSpecification;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,5 +68,15 @@ class PathDocumentation extends Documentation {
 
         // when,then
         두_역의_최소_시간_경로_조회를_요청(교대역, 양재역, spec);
+    }
+
+    @DisplayName("노선에 추가 요금을 등록한다")
+    @Test
+    void addExtraFareToLine() {
+        // given
+        출력_필드_추가("addExtraFareToLine", spec);
+
+        // when, then
+        노선_추가_요금_등록한다(삼호선, 10,spec);
     }
 }

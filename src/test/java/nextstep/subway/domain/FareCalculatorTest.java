@@ -16,7 +16,7 @@ class FareCalculatorTest {
             "6,200",
             "10,200"
     })
-    void shouldAdd100WonForEach5KmWhenDistanceIsLessThanOrEqualTo50Km(int distance,int expect) {
+    void shouldAdd100WonForEach5KmWhenDistanceIsLessThanOrEqualTo50Km(int distance, int expect) {
         // when
         int fare = FareCalculator.calculateByDistance(distance);
 
@@ -31,11 +31,25 @@ class FareCalculatorTest {
             "58,1100",
             "59,1200"
     })
-    void shouldAdd100WonForEach8KmWhenDistanceIsGreaterThan50Km(int distance,int expect) {
+    void shouldAdd100WonForEach8KmWhenDistanceIsGreaterThan50Km(int distance, int expect) {
         // when
         int fare = FareCalculator.calculateByDistance(distance);
 
         // then
         assertThat(fare).isEqualTo(expect);
+    }
+
+    @DisplayName("연령별 요금 할인정책의 할인율을 반환한다")
+    @ParameterizedTest
+    @CsvSource({
+            "5,1",
+            "6,0.5",
+            "12,0.5",
+            "13,0.2",
+            "18,0.2",
+            "19,0"
+    })
+    void testReturnAgeBasedFareDiscountPolicy(int age, float expect) {
+        assertThat(FareCalculator.getAgeBasedDiscountPolicyDiscountRate(age)).isEqualTo(expect);
     }
 }

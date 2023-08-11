@@ -23,21 +23,25 @@ public class PathSteps {
     public static final String 최소시간 = "DURATION";
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리, new RequestSpecBuilder().build());
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리, new RequestSpecBuilder().build(),"");
     }
 
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target,
             RequestSpecification specification) {
-        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리, specification);
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리, specification,"");
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target, String accessToken) {
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최단거리,  new RequestSpecBuilder().build(),accessToken);
     }
 
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target) {
-        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, new RequestSpecBuilder().build());
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, new RequestSpecBuilder().build(),"");
     }
 
     public static ExtractableResponse<Response> 두_역의_최소_시간_경로_조회를_요청(Long source, Long target,
             RequestSpecification specification) {
-        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, specification);
+        return 타입_따라_두_역의_경로_조회를_요청(source, target, 최소시간, specification,"");
     }
 
     public static void 경로_조회_검증(ExtractableResponse<Response> response, List<Long> expectedIds, int distance,
@@ -55,10 +59,13 @@ public class PathSteps {
             Long source,
             Long target,
             String type,
-            RequestSpecification specification) {
+            RequestSpecification specification,
+            String accessToken
+    ) {
         return RestAssured
                 .given().log().all()
                 .spec(specification)
+                .auth().oauth2(accessToken)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
                 .then().log().all().extract();
@@ -91,5 +98,21 @@ public class PathSteps {
         요청_스펙.filter(document(출력_이름,
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())));
+    }
+
+    public static ExtractableResponse<Response> 노선_추가_요금_등록한다(long lineId,long extraFare) {
+        return 노선_추가_요금_등록한다(lineId, extraFare, new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 노선_추가_요금_등록한다(Long lineId, long extraFare, RequestSpecification spec) {
+        Map<String, String> body = new HashMap<>();
+        body.put("extraFare", extraFare + "");
+        return RestAssured.given().log().all()
+                .spec(spec)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when().post("lines/{lineId}?type=fare", lineId)
+                .then().log().all()
+                .extract();
     }
 }

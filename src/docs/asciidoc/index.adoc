@@ -22,3 +22,6 @@ operation::findPathByDuration[snippets='http-request,http-response']
 
 === 노선 생성
 operation::saveLine[snippets='http-request,http-response']
+
+=== 노선에 추가 요금 등록
+operation::addExtraFareToLine[snippets='http-request,http-response']

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Line;
@@ -71,7 +72,7 @@ class PathServiceTest {
         );
 
         // when
-        PathResponse pathResponse = pathService.findPath(1L, 2L, "DISTANCE");
+        PathResponse pathResponse = pathService.findPath(1L, 2L, "DISTANCE", UserPrincipal.createAnonymous());
 
         // then
         Assertions.assertAll(

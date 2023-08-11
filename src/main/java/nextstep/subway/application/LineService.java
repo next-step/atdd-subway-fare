@@ -1,21 +1,20 @@
 package nextstep.subway.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import nextstep.subway.application.dto.LineRequest;
 import nextstep.subway.application.dto.LineResponse;
 import nextstep.subway.application.dto.SectionRequest;
-import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Transactional(readOnly = true)
 public class LineService {
+
     private LineRepository lineRepository;
     private StationService stationService;
 
@@ -73,17 +72,17 @@ public class LineService {
         line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
     }
 
-    private List<StationResponse> createStationResponses(Line line) {
-        return line.getStations().stream()
-                .map(it -> stationService.createStationResponse(it))
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public void deleteSection(Long lineId, Long stationId) {
         Line line = findById(lineId);
         Station station = stationService.findById(stationId);
 
         line.deleteSection(station);
+    }
+
+    @Transactional
+    public void updateExtraFare(Long lineId, Integer extraFare) {
+        Line line = lineRepository.findById(lineId).orElseThrow();
+        line.updateExtraFare(extraFare);
     }
 }

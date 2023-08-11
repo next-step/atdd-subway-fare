@@ -18,16 +18,20 @@ public class SubwayMap {
     }
 
     public static Path findPath(String typeName, Station upStation, Station downStation, List<Line> lines) {
+        return findPath(typeName, upStation, downStation, lines, 100);
+    }
+
+    public static Path findPath(String typeName, Station upStation, Station downStation, List<Line> lines, int age) {
         SubwayMap subwayMap = new SubwayMap(lines);
         FindPathType findPathType = FindPathType.find(typeName);
-        return subwayMap.findPath(upStation, downStation, findPathType);
+        return subwayMap.findPath(upStation, downStation, findPathType, age);
     }
 
     public static void findPath(Station upStation, Station downStation, List<Line> lines) {
-        findPath(DISTANCE.name(), upStation, downStation, lines);
+        findPath(DISTANCE.name(), upStation, downStation, lines, 100);
     }
 
-    private Path findPath(Station source, Station target, FindPathType findPathType) {
+    private Path findPath(Station source, Station target, FindPathType findPathType, int age) {
         SimpleDirectedWeightedGraph<Station, SectionEdge> graph = new SimpleDirectedWeightedGraph<>(SectionEdge.class);
 
         // 지하철 역(정점)을 등록
@@ -43,9 +47,10 @@ public class SubwayMap {
             throw new NoSuchElementException("경로가 존재하지 않습니다.");
         }
 
-        List<Section> sections = getSections(result);
-
-        return new Path(new Sections(sections));
+        List<Section> sectionList = getSections(result);
+        Sections sections = new Sections(sectionList);
+        int fare = FareCalculator.getFare(sections.totalDistance(),lines,sectionList,age);
+        return new Path(sections, fare);
     }
 
     private void registerStation(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
