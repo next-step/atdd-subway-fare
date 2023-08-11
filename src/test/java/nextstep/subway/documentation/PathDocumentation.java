@@ -1,6 +1,6 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_경로_조회를_요청;
+import static nextstep.subway.acceptance.document.PathDocumentSteps.두_역의_최단_경로_조회를_요청;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.Mockito.when;
@@ -28,7 +28,7 @@ public class PathDocumentation extends Documentation {
             Lists.newArrayList(
                 new StationResponse(1L, "강남역"),
                 new StationResponse(2L, "역삼역")
-            ), 10, 10
+            ), 10, 10, 1250
         );
 
         when(pathService.findPath(1L, 2L, PathFindType.DISTANCE)).thenReturn(pathResponse);
@@ -41,7 +41,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 ID"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요 시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요 시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("총 요금")
             ));
 
         두_역의_최단_경로_조회를_요청(1L, 2L, PathFindType.DISTANCE, this.spec, document);

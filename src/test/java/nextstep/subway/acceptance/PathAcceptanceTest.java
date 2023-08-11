@@ -54,13 +54,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(20);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     /**
      * Given 지하철 노선에 역이 등록되어 있음
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청
      * Then 최소 시간 기준 경로를 응답
-     * And 총 거리와 소요 시간을 함께 응답함
+     * And 총 거리와 소요 시간을 함께 응답
+     * And 지하철 이용 요금도 함께 응답
      */
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
@@ -70,6 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(20);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
     }
 
     private Long 지하철_노선_생성_요청(

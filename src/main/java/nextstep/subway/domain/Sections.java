@@ -17,6 +17,10 @@ public class Sections {
     public Sections() {
     }
 
+    public Sections(Section section) {
+        this(new ArrayList<>(List.of(section)));
+    }
+
     public Sections(List<Section> sections) {
         this.sections = sections;
     }
@@ -166,5 +170,21 @@ public class Sections {
 
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public int totalFare() {
+        int distance = this.totalDistance();
+
+        if (this.totalDistance() >= 50) {
+            distance -= 50;
+            return 2050 + ((int) Math.ceil((double) distance / 8) * 100);
+        }
+
+        if (this.totalDistance() > 10) {
+            distance -= 10;
+            return 1250 + ((int) Math.ceil((double) distance / 5) * 100);
+        }
+
+        return 1250;
     }
 }
