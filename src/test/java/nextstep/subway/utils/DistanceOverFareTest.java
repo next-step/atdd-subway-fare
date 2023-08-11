@@ -15,7 +15,7 @@ class DistanceOverFareTest {
     @DisplayName("10km 까지는 거리에따른 추가요금이 없음")
     void defaultFare(int distance) {
 
-        DistanceOverFare distanceOverFare = new DistanceOverFare(null, distance);
+        DistanceOverFare distanceOverFare = new DistanceOverFare(distance);
         assertThat(distanceOverFare.getOverDistanceFare()).isZero();
     }
 
@@ -24,7 +24,7 @@ class DistanceOverFareTest {
     @DisplayName("10km 부터는 5km 당 100원 (1번 부과)")
     void calFareUnder50_1(int distance) {
 
-        DistanceOverFare distanceOverFare = new DistanceOverFare(null, distance);
+        DistanceOverFare distanceOverFare = new DistanceOverFare(distance);
         assertThat(distanceOverFare.getOverDistanceFare()).isEqualTo(100);
     }
 
@@ -33,7 +33,7 @@ class DistanceOverFareTest {
     @DisplayName("10km 부터는 5km 당 100원 (2번 부과)")
     void calFareUnder50_2(int distance) {
 
-        DistanceOverFare distanceOverFare = new DistanceOverFare(null, distance);
+        DistanceOverFare distanceOverFare = new DistanceOverFare(distance);
         assertThat(distanceOverFare.getOverDistanceFare()).isEqualTo(200);
     }
 
@@ -41,7 +41,7 @@ class DistanceOverFareTest {
     @DisplayName("50km 이면 8번 부과")
     void calFareWhen50km() {
 
-        DistanceOverFare distanceOverFare = new DistanceOverFare(null, 50);
+        DistanceOverFare distanceOverFare = new DistanceOverFare(50);
         assertThat(distanceOverFare.getOverDistanceFare()).isEqualTo(800);
     }
 
@@ -50,7 +50,7 @@ class DistanceOverFareTest {
     @DisplayName("50km 초과시 8km 마다 100원 (1번 부과)")
     void calFareWhen50km(int distance) {
 
-        DistanceOverFare distanceOverFare = new DistanceOverFare(null, distance);
+        DistanceOverFare distanceOverFare = new DistanceOverFare(distance);
         assertThat(distanceOverFare.getOverDistanceFare()).isEqualTo(800 + 100);
     }
 }

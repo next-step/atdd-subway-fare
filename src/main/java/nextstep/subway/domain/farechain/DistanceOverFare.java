@@ -5,10 +5,12 @@ public class DistanceOverFare extends OverFarePolicyHandler {
 
     private final int distance;
 
-    public DistanceOverFare(OverFarePolicyHandler nextHandler, int distance) {
-        super(nextHandler);
+    public DistanceOverFare(int distance) {
+        super(null);
         this.distance = distance;
     }
+
+
 
     @Override
     public int chargeOverFare(int fare) {

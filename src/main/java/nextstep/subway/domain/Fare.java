@@ -3,7 +3,6 @@ package nextstep.subway.domain;
 import java.util.Optional;
 import nextstep.subway.domain.farechain.DistanceOverFare;
 import nextstep.subway.domain.farechain.LineOverFare;
-import nextstep.subway.domain.farechain.MemberAgeDiscountFare;
 import nextstep.subway.domain.farechain.OverFarePolicyHandler;
 import nextstep.subway.domain.farechain.OverFarePolicyHandlerImpl;
 
@@ -19,29 +18,17 @@ public class Fare {
 
     public static Fare of(Path path, Optional<Integer> userAge) {
 
-        return userAge
-            .map(integer -> new Fare(getChain(path, integer)))
-            .orElseGet(() -> new Fare(getChainNonLoginUser(path)));
+        return new Fare(getChain(path, userAge.orElse(0)));
 
     }
 
     private static OverFarePolicyHandler getChain(Path path, int userAge) {
-        return new OverFarePolicyHandlerImpl(
-            new DistanceOverFare(
-                new LineOverFare(
-                    new MemberAgeDiscountFare(null, userAge), path.getLines()
-                )
-                , path.extractDistance()
-            )
-        );
-    }
+        OverFarePolicyHandlerImpl handler = new OverFarePolicyHandlerImpl();
 
-    private static OverFarePolicyHandler getChainNonLoginUser(Path path) {
-        return new OverFarePolicyHandlerImpl(
-            new DistanceOverFare(
-                new LineOverFare(null, path.getLines()), path.extractDistance()
-            )
-        );
+        return handler
+            .chain(new DistanceOverFare(path.extractDistance()))
+            .chain(new LineOverFare(path.getLines()));
+
     }
 
     public int charge() {

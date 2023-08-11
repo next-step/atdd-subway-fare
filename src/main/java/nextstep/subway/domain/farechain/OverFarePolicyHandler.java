@@ -2,10 +2,26 @@ package nextstep.subway.domain.farechain;
 
 public abstract class OverFarePolicyHandler {
 
-    private final OverFarePolicyHandler nextHandler;
+    private OverFarePolicyHandler nextHandler;
 
     protected OverFarePolicyHandler(OverFarePolicyHandler nextHandler) {
         this.nextHandler = nextHandler;
+    }
+
+    public OverFarePolicyHandler chain(OverFarePolicyHandler nextHandler) {
+
+        setNextHandler(nextHandler);
+        return this;
+    }
+
+    private void setNextHandler(OverFarePolicyHandler nextHandler) {
+
+        if (this.nextHandler == null) {
+            this.nextHandler = nextHandler;
+            return;
+        }
+
+        this.nextHandler.chain(nextHandler);
     }
 
     public int chargeHandler(int fare) {

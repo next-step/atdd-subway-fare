@@ -7,8 +7,8 @@ public class LineOverFare extends OverFarePolicyHandler {
 
     private final List<Line> lines;
 
-    public LineOverFare(OverFarePolicyHandler nextHandler, List<Line> lines) {
-        super(nextHandler);
+    public LineOverFare(List<Line> lines) {
+        super(null);
         this.lines = lines;
     }
 
