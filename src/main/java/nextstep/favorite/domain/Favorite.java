@@ -1,6 +1,6 @@
 package nextstep.favorite.domain;
 
-import nextstep.line.domain.PathFinder;
+import nextstep.line.domain.SubwayMap;
 import nextstep.member.domain.Member;
 import nextstep.station.domain.Station;
 
@@ -25,8 +25,8 @@ public class Favorite {
     protected Favorite() {
     }
 
-    public Favorite(Long memberId, Station source, Station target, PathFinder pathFinder) {
-        pathFinder.validateStation(source, target);
+    public Favorite(Long memberId, Station source, Station target, SubwayMap subwayMap) {
+        subwayMap.validateStation(source, target);
         this.memberId = memberId;
         this.source = source;
         this.target = target;

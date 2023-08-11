@@ -1,7 +1,6 @@
 package nextstep.line.application;
 
 import nextstep.exception.LineNotFoundException;
-import nextstep.exception.StationNotFoundException;
 import nextstep.line.application.request.LineCreateRequest;
 import nextstep.line.application.request.LineModifyRequest;
 import nextstep.line.application.request.SectionAddRequest;
@@ -9,7 +8,7 @@ import nextstep.line.application.response.LineResponse;
 import nextstep.line.application.response.ShortPathResponse;
 import nextstep.line.domain.Line;
 import nextstep.line.domain.LineRepository;
-import nextstep.line.domain.PathFinder;
+import nextstep.line.domain.SubwayMap;
 import nextstep.line.domain.ShortPath;
 import nextstep.station.domain.Station;
 import nextstep.station.domain.StationRepository;
@@ -68,8 +67,8 @@ public class LineService {
         Station startStation = stationRepository.findStation(startStationId);
         Station endStation = stationRepository.findStation(endStationId);
 
-        PathFinder pathFinder = new PathFinder(lineRepository.findAll());
-        ShortPath shortPath = pathFinder.findShortPath(startStation, endStation);
+        SubwayMap subwayMap = new SubwayMap(lineRepository.findAll());
+        ShortPath shortPath = subwayMap.findShortPath(startStation, endStation);
         return ShortPathResponse.of(shortPath);
     }
 

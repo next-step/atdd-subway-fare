@@ -31,6 +31,12 @@ public class LineStationDetail {
         this.sections = new Sections(line, upStation, downStation, distance);
     }
 
+    public LineStationDetail(Line line, Station upStation, Station downStation, int distance, int duration) {
+        this.startStation = upStation;
+        this.endStation = downStation;
+        this.sections = new Sections(line, upStation, downStation, distance, duration);
+    }
+
     public void addSection(Section section) {
         if (section.isUp(endStation)) {
             endStation = section.getDownStation();

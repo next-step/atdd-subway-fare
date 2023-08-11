@@ -13,17 +13,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PathFinder {
+public class SubwayMap {
 
     private List<Line> values;
+    private List<ShortPathFinder> shortPathFinders;
 
-    public PathFinder(List<Line> values) {
+    public SubwayMap(List<Line> values) {
         this.values = values;
+        this.shortPathFinders = List.of(new DistanceShortPathFinder(getStations(), getSections()), new DurationShortPathFinder(getStations(), getSections()));
     }
 
     public ShortPath findShortPath(Station startStation, Station endStation) {
         validateStation(startStation, endStation);
         return getShortPath(startStation, endStation);
+    }
+
+    public ShortPath findShortPath(ShortPathType type, Station startStation, Station endStation) {
+        validateStation(startStation, endStation);
+        return getShortPath(type, startStation, endStation);
     }
 
     public void validateStation(Station startStation, Station endStation) {
@@ -50,6 +57,14 @@ public class PathFinder {
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
         GraphPath graphPath = dijkstraShortestPath.getPath(startStation, endStation);
         return new ShortPath(graphPath.getVertexList(), graphPath.getWeight());
+    }
+
+    private ShortPath getShortPath(ShortPathType type, Station startStation, Station endStation) {
+        return shortPathFinders.stream()
+                .filter(shortPathFinder -> shortPathFinder.isSupport(type))
+                .findAny()
+                .map(shortPathFinder -> shortPathFinder.getShortPath(startStation, endStation))
+                .orElse(null);
     }
 
     private void setGraphVertex(WeightedMultigraph<Station, DefaultWeightedEdge> graph) {

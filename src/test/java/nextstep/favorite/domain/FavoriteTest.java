@@ -3,7 +3,7 @@ package nextstep.favorite.domain;
 import nextstep.exception.ShortPathSameStationException;
 import nextstep.exception.StationNotExistException;
 import nextstep.line.domain.Line;
-import nextstep.line.domain.PathFinder;
+import nextstep.line.domain.SubwayMap;
 import nextstep.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ public class FavoriteTest {
     private Line shinbundangLine;
     private Line twoLine;
     private Line threeLine;
-    private PathFinder pathFinder;
+    private SubwayMap subwayMap;
 
     @BeforeEach
     void setUp() {
@@ -34,14 +34,14 @@ public class FavoriteTest {
         twoLine = new Line(TWO_LINE_NAME, TWO_LINE_COLOR, SEOLLEUNG_STATION, SUWON_STATION, 3);
         threeLine = new Line(THREE_LINE_NAME, TRHEE_LINE_COLOR, GANGNAM_STATION, NOWON_STATION, 5);
         threeLine.addSection(NOWON_STATION, SUWON_STATION, 3);
-        pathFinder = new PathFinder(List.of(shinbundangLine, twoLine, threeLine));
+        subwayMap = new SubwayMap(List.of(shinbundangLine, twoLine, threeLine));
     }
 
     @DisplayName("경로가 정상일경우 즐겨찾기가 생성된다.")
     @Test
     void createFavorite() {
         // when
-        Favorite favorite = new Favorite(1L, GANGNAM_STATION, NOWON_STATION, pathFinder);
+        Favorite favorite = new Favorite(1L, GANGNAM_STATION, NOWON_STATION, subwayMap);
 
         // then
         assertThat(favorite.getSource()).isEqualTo(GANGNAM_STATION);
@@ -52,7 +52,7 @@ public class FavoriteTest {
     @Test
     void createFavorite_fail_not_exist_station_in_line() {
         // when then
-        assertThatThrownBy(() -> new Favorite(1L, GANGNAM_STATION, DEARIM_STATION, pathFinder))
+        assertThatThrownBy(() -> new Favorite(1L, GANGNAM_STATION, DEARIM_STATION, subwayMap))
                 .isExactlyInstanceOf(StationNotExistException.class)
                 .hasMessage("노선에 역이 존재하지 않습니다.");
     }
@@ -61,7 +61,7 @@ public class FavoriteTest {
     @Test
     void createFavorite_fail_source_target_same() {
         // when then
-        assertThatThrownBy(() -> new Favorite(1L, GANGNAM_STATION, GANGNAM_STATION, pathFinder))
+        assertThatThrownBy(() -> new Favorite(1L, GANGNAM_STATION, GANGNAM_STATION, subwayMap))
                 .isExactlyInstanceOf(ShortPathSameStationException.class)
                 .hasMessage("최단경로 시작역, 종착역이 동일할 수 없습니다.");
     }

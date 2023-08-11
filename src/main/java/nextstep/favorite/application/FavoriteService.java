@@ -2,13 +2,12 @@ package nextstep.favorite.application;
 
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.exception.AuthenticationException;
-import nextstep.exception.StationNotFoundException;
 import nextstep.favorite.application.request.FavoriteCreateRequest;
 import nextstep.favorite.application.response.FavoriteResponse;
 import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.line.domain.LineRepository;
-import nextstep.line.domain.PathFinder;
+import nextstep.line.domain.SubwayMap;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.station.domain.Station;
@@ -40,9 +39,9 @@ public class FavoriteService {
         Station source = stationRepository.findStation(favoriteCreateRequest.getSource());
         Station target = stationRepository.findStation(favoriteCreateRequest.getTarget());
         Member member = memberRepository.findMemberByEmail(userPrincipal.getEmail());
-        PathFinder pathFinder = new PathFinder(lineRepository.findAll());
+        SubwayMap subwayMap = new SubwayMap(lineRepository.findAll());
 
-        Favorite favorite = new Favorite(member.getId(), source, target, pathFinder);
+        Favorite favorite = new Favorite(member.getId(), source, target, subwayMap);
         return favoriteRepository.save(favorite);
     }
 
