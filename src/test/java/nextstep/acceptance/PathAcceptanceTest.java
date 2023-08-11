@@ -7,12 +7,15 @@ import nextstep.domain.subway.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static nextstep.acceptance.commonStep.PathStep.지하철_경로_조회;
-import static nextstep.acceptance.commonStep.PathStep.지하철_경로_조회_검증;
+import static nextstep.acceptance.commonStep.PathStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 조회 관련 기능")
@@ -22,25 +25,35 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
-    private Long 흑석역;
-    private Long 동작역;
+    private static Long 여의도역;
+    private static Long 노량진역;
+    private static Long 흑석역;
+    private static Long 동작역;
 
     private Long 교대강남구간거리;
     private Long 강남양재구간거리;
     private Long 양재남부터미널구간거리;
     private Long 남부터미널교대구간거리;
+    private Long 여의도노량진구간거리;
+    private Long 노량진흑석구간거리;
     private Long 흑석동작구간거리;
 
     private Long 교대강남구간시간;
     private Long 강남양재구간시간;
     private Long 양재남부터미널구간시간;
     private Long 남부터미널교대구간시간;
+    private Long 여의도노량진구간시간;
+    private Long 노량진흑석구간시간;
     private Long 흑석동작구간시간;
 
     private Long 이호선;
     private Long 삼호선;
     private Long 신분당선;
     private Long 구호선;
+
+    private static int 여의도노량진구간요금;
+    private static int 노량진흑석구간요금;
+    private static int 흑석동작구간요금;
 
     @BeforeEach
     public void setGivenData() {
@@ -49,6 +62,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
         강남역 =  StationStep.지하철역_생성("강남역").jsonPath().getLong("id");
         양재역 =  StationStep.지하철역_생성("양재역").jsonPath().getLong("id");
         남부터미널역 =  StationStep.지하철역_생성("남부터미널역").jsonPath().getLong("id");
+        여의도역 =  StationStep.지하철역_생성("여의도역").jsonPath().getLong("id");
+        노량진역 =  StationStep.지하철역_생성("노량진역").jsonPath().getLong("id");
         흑석역 =  StationStep.지하철역_생성("흑석역").jsonPath().getLong("id");
         동작역 =  StationStep.지하철역_생성("동작역").jsonPath().getLong("id");
 
@@ -61,20 +76,29 @@ public class PathAcceptanceTest extends AcceptanceTest {
         강남양재구간거리 = 15L;
         양재남부터미널구간거리 = 5L;
         남부터미널교대구간거리 = 5L;
-        흑석동작구간거리 = 10L;
+        여의도노량진구간거리 = 10L;
+        노량진흑석구간거리 = 16L;
+        흑석동작구간거리 = 60L;
 
         교대강남구간시간 = 5L;
         강남양재구간시간 = 5L;
         양재남부터미널구간시간 = 10L;
         남부터미널교대구간시간 = 15L;
+        여의도노량진구간시간 = 10L;
+        노량진흑석구간시간 = 10L;
         흑석동작구간시간 = 10L;
 
         SectionStep.지하철구간_생성(이호선,교대역,강남역,교대강남구간거리,교대강남구간시간);
         SectionStep.지하철구간_생성(신분당선,강남역,양재역,강남양재구간거리,강남양재구간시간);
         SectionStep.지하철구간_생성(삼호선,양재역,남부터미널역,양재남부터미널구간거리,양재남부터미널구간시간);
         SectionStep.지하철구간_생성(삼호선,남부터미널역,교대역,남부터미널교대구간거리,남부터미널교대구간시간);
+        SectionStep.지하철구간_생성(구호선,여의도역,노량진역,여의도노량진구간거리,여의도노량진구간시간);
+        SectionStep.지하철구간_생성(구호선,노량진역,흑석역,노량진흑석구간거리,노량진흑석구간시간);
         SectionStep.지하철구간_생성(구호선,흑석역,동작역,흑석동작구간거리,흑석동작구간시간);
 
+        여의도노량진구간요금 = 1250;
+        노량진흑석구간요금 = 1250+200;
+        흑석동작구간요금 = 1250+800+200;
     }
 
     /**
@@ -109,6 +133,38 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         지하철_경로_조회_검증(response, List.of(교대역, 강남역, 양재역), 교대강남구간거리 + 강남양재구간거리, 교대강남구간시간 + 강남양재구간시간);
 
+    }
+
+
+    /**
+     * 여의도역  --- *거리 : 10KM* --- 노량진역 --- *거리 : 16KM* --- 흑석역  --- *거리 : 60KM* --- 동작역
+     */
+
+    /**
+     * Given 지하철 노선과 구간을 생성하고
+     * When 거리 기준으로 지하철 경로를 조회하면
+     * Then 출발역으로부터 도착역까지의 최단경로의 요금을 알 수 있다.
+     */
+
+    @DisplayName("지하철 경로 최단거리 기준 요금 조회")
+    @ParameterizedTest
+    @MethodSource("provideSourceAndTarget")
+    void getPathAndPrice(Long source,Long target, int fare) {
+
+        //given
+        ExtractableResponse<Response> response = 지하철_경로_조회(source,target, PathType.DISTANCE);
+
+        //then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+
+    }
+
+    private static Stream<Arguments> provideSourceAndTarget() {
+        return Stream.of(
+                Arguments.of(여의도역,노량진역,여의도노량진구간요금),
+                Arguments.of(노량진역,흑석역,노량진흑석구간요금),
+                Arguments.of(흑석역,동작역,흑석동작구간요금)
+                );
     }
 
     /**
