@@ -7,7 +7,7 @@ public enum GithubResponses {
     사용자1("1", "access_token_1", "email1@email.com", 20),
     사용자2("2", "access_token_2", "email2@email.com", 20),
     사용자3("3", "access_token_3", "email3@email.com", 20),
-    사용자4("4", "access_token_4", "email4@email.com", 20);
+    사용자4("4", "access_token_4", "email4@email.com", 15);
 
     private String code;
     private String accessToken;

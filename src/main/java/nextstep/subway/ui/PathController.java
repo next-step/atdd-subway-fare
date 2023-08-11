@@ -1,5 +1,7 @@
 package nextstep.subway.ui;
 
+import nextstep.auth.principal.AuthenticationPrincipal;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.PathType;
@@ -21,5 +23,13 @@ public class PathController {
                                                  @RequestParam Long target,
                                                  @RequestParam(value = "type", defaultValue = "DISTANCE") PathType pathType) {
         return ResponseEntity.ok(pathService.findPath(source, target, pathType));
+    }
+
+    @GetMapping(value = "/paths", headers = {"Authorization"})
+    public ResponseEntity<PathResponse> findPathWithAuthentication(@RequestParam Long source,
+                                                 @RequestParam Long target,
+                                                 @RequestParam(value = "type", defaultValue = "DISTANCE") PathType pathType,
+                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(pathService.findPath(userPrincipal, source, target, pathType));
     }
 }

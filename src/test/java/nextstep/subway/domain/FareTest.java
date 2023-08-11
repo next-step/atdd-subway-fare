@@ -12,16 +12,48 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FareTest {
     @DisplayName("경로에 따른 요금을 계산한다.")
     @ParameterizedTest
-    @MethodSource("provideGetFareArguments")
-    void getFare(int distance, int expectedFare) {
+    @MethodSource("provideGetFareArgumentsWithDistance")
+    void getFareByDistance(int distance, int expectedFare) {
+        // given
+        Fare fare = Fare.of(DistanceFarePolicy.of(distance));
+
         // when
-        int fare = Fare.of(distance).get();
+        int fareValue = fare.get();
 
         // then
-        assertThat(fare).isEqualTo(expectedFare);
+        assertThat(fareValue).isEqualTo(expectedFare);
     }
 
-    public static Stream<Arguments> provideGetFareArguments() {
+    @DisplayName("추가 요금과 경로에 따른 요금을 계산한다.")
+    @ParameterizedTest
+    @MethodSource("provideGetFareArgumentsWithDistanceAndExtraCharge")
+    void getFareByDistanceAndExtraCharge(int distance, int extraCharge, int expectedFare) {
+        // given
+        Fare fare = Fare.of(DistanceFarePolicy.of(distance));
+        fare.add(ExtraChargeFarePolicy.of(extraCharge));
+
+        // when
+        int fareValue = fare.get();
+
+        // then
+        assertThat(fareValue).isEqualTo(expectedFare);
+    }
+
+    @DisplayName("나이에 따른 요금을 계산한다.")
+    @ParameterizedTest
+    @MethodSource("provideGetFareArgumentsWithAge")
+    void getFareByAge(int age, int expectedFare) {
+        // given
+        Fare fare = Fare.of(DiscountFarePolicy.of(age));
+
+        // when
+        int fareValue = fare.get();
+
+        // then
+        assertThat(fareValue).isEqualTo(expectedFare);
+    }
+
+    public static Stream<Arguments> provideGetFareArgumentsWithDistance() {
         return Stream.of(
                 Arguments.of(1, 1250),
                 Arguments.of(10, 1250),
@@ -50,4 +82,24 @@ public class FareTest {
         );
     }
 
+    public static Stream<Arguments> provideGetFareArgumentsWithDistanceAndExtraCharge() {
+        return Stream.of(
+                Arguments.of(1, 0, 1250),
+                Arguments.of(1, 100, 1350),
+                Arguments.of(1, 1000, 2250),
+                Arguments.of(10, 1000, 2250),
+                Arguments.of(11, 1000, 2350),
+                Arguments.of(50, 1000, 3050),
+                Arguments.of(74, 1000, 3350)
+        );
+    }
+
+    public static Stream<Arguments> provideGetFareArgumentsWithAge() {
+        return Stream.of(
+                Arguments.of(12, 800),
+                Arguments.of(13, 1070),
+                Arguments.of(18, 1070),
+                Arguments.of(19, 1250)
+        );
+    }
 }

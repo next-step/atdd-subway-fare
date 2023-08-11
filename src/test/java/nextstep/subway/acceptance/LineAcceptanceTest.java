@@ -34,6 +34,25 @@ class LineAcceptanceTest extends AcceptanceTest {
     }
 
     /**
+     * When 추가요금이 있는 지하철 노선을 생성하면
+     * Then 지하철 노선 목록 조회 시 생성한 노선을 찾을 수 있다
+     * Add 추가요긍믈 확인할 수 있다
+     */
+    @DisplayName("추가요금이 있는 지하철 노선 생성")
+    @Test
+    void createLineWithExtraCharge() {
+        // when
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("신분당선", "green", 900);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        ExtractableResponse<Response> listResponse = 지하철_노선_목록_조회_요청();
+
+        assertThat(listResponse.jsonPath().getList("name")).contains("신분당선");
+        assertThat(listResponse.jsonPath().getList("extraCharge")).contains(900);
+    }
+
+    /**
      * Given 2개의 지하철 노선을 생성하고
      * When 지하철 노선 목록을 조회하면
      * Then 지하철 노선 목록 조회 시 2개의 노선을 조회할 수 있다.
