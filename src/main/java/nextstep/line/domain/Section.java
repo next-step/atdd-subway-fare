@@ -2,11 +2,12 @@ package nextstep.line.domain;
 
 import nextstep.exception.SectionDistanceOverException;
 import nextstep.station.domain.Station;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
 
 @Entity
-public class Section {
+public class Section extends DefaultWeightedEdge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +25,9 @@ public class Section {
     @Column(nullable = false)
     private int distance;
 
+    @Column(nullable = false)
+    private int duration;
+
     protected Section() {
     }
 
@@ -32,6 +36,14 @@ public class Section {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+    }
+
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        this.line = line;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public boolean isUp(Station station) {
@@ -56,6 +68,10 @@ public class Section {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public void decreaseDistance(Section section) {

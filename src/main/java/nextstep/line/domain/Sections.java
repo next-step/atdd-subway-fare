@@ -28,6 +28,10 @@ public class Sections {
         values.add(new Section(line, upStation, downStation, distance));
     }
 
+    public Sections(Line line, Station upStation, Station downStation, int distance, int duration) {
+        values.add(new Section(line, upStation, downStation, distance, duration));
+    }
+
     public void add(Section addSection) {
         if (isExistedAllStation(addSection)) {
             throw new SectionExistException();

@@ -58,9 +58,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기등록() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
 
@@ -85,9 +85,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기등록_경로미존재() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
 
@@ -102,9 +102,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기등록_역동일() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
 
@@ -119,9 +119,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기조회() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
         즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
@@ -137,9 +137,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기조회_유효하지않은토큰() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
         즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
@@ -155,9 +155,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기삭제() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
         즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
@@ -174,9 +174,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기삭제_유효하지않은토큰() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
         즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
@@ -192,9 +192,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기삭제_다른사용자() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
 
         String accessToken = 로그인요청(member);
         String defferentMemberAccessToken = 로그인요청(defferentMember);
@@ -251,8 +251,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         return stationRepository.save(new Station(stationName));
     }
 
-    private Line 노선저장(String name, String color, Station upStation, Station downStation, int distance) {
-        return lineRepository.save(new Line(name, color, upStation, downStation, distance));
+    private Line 노선저장(String name, String color, Station upStation, Station downStation, int distance, int duration) {
+        return lineRepository.save(new Line(name, color, upStation, downStation, distance, duration));
     }
 
     private Member 회원저장(String email, String password, int age, String role) {

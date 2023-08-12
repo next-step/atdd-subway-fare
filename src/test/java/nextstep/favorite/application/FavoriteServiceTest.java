@@ -60,9 +60,9 @@ public class FavoriteServiceTest {
         dearimStation = saveStation(DEARIM_STATION_NAME);
         member = saveMember("email", "password", 15, "role");
         defferentMember = saveMember("email2", "password2", 20, "role");
-        saveLine(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2);
-        saveLine(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3);
-        saveLine(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5);
+        saveLine(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
+        saveLine(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
+        saveLine(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
     }
 
     @DisplayName("경로가 정상일경우 즐겨찾기가 등록된다.")
@@ -171,8 +171,8 @@ public class FavoriteServiceTest {
         return stationRepository.save(new Station(stationName));
     }
 
-    private Line saveLine(String name, String color, Station upStation, Station downStation, int distance) {
-        return lineRepository.save(new Line(name, color, upStation, downStation, distance));
+    private Line saveLine(String name, String color, Station upStation, Station downStation, int distance, int duration) {
+        return lineRepository.save(new Line(name, color, upStation, downStation, distance, duration));
     }
 
     private Member saveMember(String email, String password, int age, String role) {
