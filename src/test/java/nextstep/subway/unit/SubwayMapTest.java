@@ -47,7 +47,7 @@ public class SubwayMapTest {
     void findShortestDistancePath() {
         List<Section> expected = List.of(교대_남부터미널_구간, 남부터미널_양재_구간);
 
-        Path path = new SubwayMap(List.of(이호선, 삼호선, 신분당선)).findShortDistancePath(교대역, 양재역);
+        Path path = new SubwayMap(List.of(이호선, 삼호선, 신분당선), PathType.DISTANCE).findPath(교대역, 양재역);
 
         assertThat(path.getSections().getSections()).isEqualTo(expected);
     }
@@ -57,7 +57,7 @@ public class SubwayMapTest {
     void findShortestDurationPath() {
         List<Section> expected = List.of(교대_강남_구간, 강남_양재_구간);
 
-        Path path = new SubwayMap(List.of(이호선, 삼호선, 신분당선)).findShortDurationPath(교대역, 양재역);
+        Path path = new SubwayMap(List.of(이호선, 삼호선, 신분당선), PathType.DURATION).findPath(교대역, 양재역);
 
         assertThat(path.getSections().getSections()).isEqualTo(expected);
     }

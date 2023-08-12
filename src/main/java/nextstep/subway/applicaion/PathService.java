@@ -20,13 +20,8 @@ public class PathService {
         Station upStation = stationService.findById(source);
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
-        SubwayMap subwayMap = new SubwayMap(lines);
-        if (type == PathType.DISTANCE) {
-            Path path = subwayMap.findShortDistancePath(upStation, downStation);
-            return PathResponse.of(path);
-        } else {
-            Path path = subwayMap.findShortDurationPath(upStation, downStation);
-            return PathResponse.of(path);
-        }
+        SubwayMap subwayMap = new SubwayMap(lines, type);
+        Path path = subwayMap.findPath(upStation, downStation);
+        return PathResponse.of(path);
     }
 }
