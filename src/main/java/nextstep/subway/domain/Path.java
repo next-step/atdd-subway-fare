@@ -11,10 +11,6 @@ public class Path {
         this.additionalFareByLine = lines.stream().filter(sections::isInLine).map(Line::getAdditionalFare).reduce(0, Integer::max);
     }
 
-    public Sections getSections() {
-        return sections;
-    }
-
     public int extractDistance() {
         return sections.totalDistance();
     }
