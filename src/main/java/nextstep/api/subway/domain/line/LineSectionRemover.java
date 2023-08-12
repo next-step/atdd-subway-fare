@@ -44,7 +44,8 @@ public class LineSectionRemover {
         return new Section(
                 upSection.getUpStation(),
                 downSection.getDownStation(),
-                upSection.getDistance() + downSection.getDistance()
+                upSection.getDistance() + downSection.getDistance(),
+                upSection.getDuration() + downSection.getDuration()
         );
     }
 }

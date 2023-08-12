@@ -42,7 +42,7 @@ class LineServiceMockTest {
             @Test
             void 구간을_추가한다() {
                 final var lineId = 1L;
-                final var request = new SectionRequest(1L, 2L, 10);
+                final var request = new SectionRequest(1L, 2L, 10, 10);
                 final var line = LineFixture.makeLine(StationFixture.강남역, StationFixture.역삼역);
 
                 // given
@@ -51,7 +51,7 @@ class LineServiceMockTest {
                 given(stationRepository.getById(request.getDownStationId())).willReturn(StationFixture.선릉역);
 
                 // when
-                lineService.appendSection(1L, new SectionRequest(1L, 2L, 10));
+                lineService.appendSection(1L, new SectionRequest(1L, 2L, 10, 10));
 
                 // then
                 final var actual = line.getStations();
@@ -62,7 +62,7 @@ class LineServiceMockTest {
         @Nested
         class Fail {
             private final Long lineId = 1L;
-            private final SectionRequest request = new SectionRequest(1L, 2L, 10);
+            private final SectionRequest request = new SectionRequest(1L, 2L, 10, 10);
 
             @Test
             void 노선이_존재하지_않는_경우() {

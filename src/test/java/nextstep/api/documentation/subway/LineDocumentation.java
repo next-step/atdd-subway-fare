@@ -55,7 +55,7 @@ class LineDocumentation extends Documentation {
     void createLine() {
         when(lineService.saveLine(any())).thenReturn(response);
 
-        지하철노선_생성_요청(new LineCreateRequest(name, color, upStationId, downStationId, 10), makeRequestSpec("line-create"));
+        지하철노선_생성_요청(new LineCreateRequest(name, color, upStationId, downStationId, 10, 10), makeRequestSpec("line-create"));
     }
 
     @Test

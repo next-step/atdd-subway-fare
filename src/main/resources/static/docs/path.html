@@ -457,7 +457,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_경로_조회_http_request"><a class="link" href="#_경로_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /paths?source=1&amp;target=2&amp;type=DISTANCE HTTP/1.1
 Host: localhost</code></pre>
 </div>
 </div>
@@ -469,10 +469,10 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 05 Aug 2023 15:38:21 GMT
+Date: Sat, 12 Aug 2023 06:00:13 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 141
+Content-Length: 138
 
 {
   "stations" : [ {
@@ -482,7 +482,7 @@ Content-Length: 141
     "id" : 2,
     "name" : "삼성역"
   } ],
-  "distance" : 10
+  "total" : 10
 }</code></pre>
 </div>
 </div>
@@ -492,7 +492,7 @@ Content-Length: 141
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-05 19:46:28 +0900
+Last updated 2023-08-08 00:23:38 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

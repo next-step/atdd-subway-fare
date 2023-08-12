@@ -66,12 +66,9 @@ public class LineSectionAppender {
 
             final var upStation = newSection.getDownStation();
             final var downStation = originSection.getDownStation();
-            final var distance = subtractDistance(originSection.getDistance(), newSection.getDistance());
-            final var separatedSection = new Section(upStation, downStation, distance);
-
-            sections.remove(originSection);
-            sections.add(newSection);
-            sections.add(separatedSection);
+            final var separatedSection = new Section(upStation, downStation,
+                    subtractDistance(originSection, newSection), subtractDuration(originSection, newSection));
+            splitSections(originSection, newSection, separatedSection, sections);
             return;
         }
 
@@ -83,13 +80,17 @@ public class LineSectionAppender {
 
             final var upStation = originSection.getUpStation();
             final var downStation = newSection.getUpStation();
-            final var distance = subtractDistance(originSection.getDistance(), newSection.getDistance());
-            final var separatedSection = new Section(upStation, downStation, distance);
-
-            sections.remove(originSection);
-            sections.add(newSection);
-            sections.add(separatedSection);
+            final var separatedSection = new Section(upStation, downStation,
+                    subtractDistance(originSection, newSection), subtractDuration(originSection, newSection));
+            splitSections(originSection, newSection, separatedSection, sections);
         }
+    }
+
+    private void splitSections(final Section originSection, final Section newSection, final Section separatedSection,
+                               final List<Section> sections) {
+        sections.remove(originSection);
+        sections.add(newSection);
+        sections.add(separatedSection);
     }
 
     private boolean existsUpStationIn(final LineSections lineSections, final Section section) {
@@ -102,11 +103,19 @@ public class LineSectionAppender {
         return stations.contains(section.getDownStation());
     }
 
-    private int subtractDistance(final int origin, final int other) {
-        final int distance = origin - other;
+    private int subtractDistance(final Section origin, final Section other) {
+        final int distance = origin.getDistance() - other.getDistance();
         if (distance <= 0) {
             throw new LineAppendSectionException("기존 역 사이 길이보다 크거나 같습니다");
         }
         return distance;
+    }
+
+    private int subtractDuration(final Section origin, final Section other) {
+        final int duration = origin.getDuration() - other.getDuration();
+        if (duration <= 0) {
+            throw new LineAppendSectionException("기존 역 사이 소요시간보다 크거나 같습니다");
+        }
+        return duration;
     }
 }

@@ -31,8 +31,9 @@ public class SectionSteps {
         return 지하철구간_등록_요청(lineId, request, RestAssured.given());
     }
 
-    public static ValidatableResponse 지하철구간_등록_요청(final Long lineId, final Long upStationId, final Long downStationId, final int distance) {
-        return 지하철구간_등록_요청(lineId, new SectionRequest(upStationId, downStationId, distance), RestAssured.given());
+    public static ValidatableResponse 지하철구간_등록_요청(final Long lineId, final Long upStationId, final Long downStationId,
+                                                  final int distance, final int duration) {
+        return 지하철구간_등록_요청(lineId, new SectionRequest(upStationId, downStationId, distance, duration), RestAssured.given());
     }
 
     public static LineResponse 지하철구간_등록_성공(final Long lineId, final SectionRequest request) {

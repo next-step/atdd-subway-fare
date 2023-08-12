@@ -18,6 +18,7 @@ import nextstep.api.acceptance.subway.line.LineSteps;
 import nextstep.api.acceptance.subway.station.StationSteps;
 import nextstep.api.subway.applicaion.line.dto.request.SectionRequest;
 import nextstep.api.subway.applicaion.station.dto.StationResponse;
+import nextstep.api.subway.domain.path.PathSelection;
 
 @DisplayName("지하철 경로 관리 기능")
 class PathAcceptanceTest extends AcceptanceTest {
@@ -42,30 +43,51 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = StationSteps.지하철역_생성_성공("남부터미널역").getId();
         광교역 = StationSteps.지하철역_생성_성공("광교역").getId();
 
-        LineSteps.지하철노선_생성_성공(교대역, 강남역, 10);
-        LineSteps.지하철노선_생성_성공(강남역, 양재역, 5);
-        지하철구간_등록_성공(LineSteps.지하철노선_생성_성공(교대역, 남부터미널역, 5).getId(), new SectionRequest(남부터미널역, 양재역, 5));
+        LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10);
+        LineSteps.지하철노선_생성_성공(강남역, 양재역, 5, 5);
+        지하철구간_등록_성공(LineSteps.지하철노선_생성_성공(교대역, 남부터미널역, 5, 5).getId(), new SectionRequest(남부터미널역, 양재역, 5, 5));
     }
 
     @DisplayName("지하철 최단경로를 조회한다")
     @Nested
     class showShortestPath {
 
-        @Test
-        void success() {
-            // when
-            final var response = PathSteps.최단경로조회_성공(교대역, 양재역);
+        @Nested
+        class Success {
 
-            // then
-            final var distance = response.getDistance();
-            final var stations = response.getStations().stream()
-                    .map(StationResponse::getId)
-                    .collect(Collectors.toUnmodifiableList());
+            @Test
+            void 거리_기준_최단경로를_조회한다() {
+                // when
+                final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DISTANCE.name());
 
-            assertAll(
-                    () -> assertThat(distance).isEqualTo(10),
-                    () -> assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역)
-            );
+                // then
+                final var distance = response.getTotal();
+                final var stations = response.getStations().stream()
+                        .map(StationResponse::getId)
+                        .collect(Collectors.toUnmodifiableList());
+
+                assertAll(
+                        () -> assertThat(distance).isEqualTo(10),
+                        () -> assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역)
+                );
+            }
+
+            @Test
+            void 소요시간_기준_최단경로를_조회한다() {
+                // when
+                final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DURATION.name());
+
+                // then
+                final var duration = response.getTotal();
+                final var stations = response.getStations().stream()
+                        .map(StationResponse::getId)
+                        .collect(Collectors.toUnmodifiableList());
+
+                assertAll(
+                        () -> assertThat(duration).isEqualTo(10),
+                        () -> assertThat(stations).containsExactly(교대역, 남부터미널역, 양재역)
+                );
+            }
         }
 
         @Nested
@@ -73,22 +95,22 @@ class PathAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 출발역과_도착역이_같아선_안된다() {
-                PathSteps.최단경로조회_실패(강남역, 강남역, HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(강남역, 강남역, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
             }
 
             @Test
             void 출발역과_도착역이_연결되어_있어야_한다() {
-                PathSteps.최단경로조회_실패(강남역, 광교역, HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(강남역, 광교역, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
             }
 
             @Test
             void 존재하지_않는_역은_출발역이_될_수_없다() {
-                PathSteps.최단경로조회_실패(0L, 강남역, HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(0L, 강남역, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
             }
 
             @Test
             void 존재하지_않는_역은_도착역이_될_수_없다() {
-                PathSteps.최단경로조회_실패(강남역, 0L, HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(강남역, 0L, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
             }
         }
     }

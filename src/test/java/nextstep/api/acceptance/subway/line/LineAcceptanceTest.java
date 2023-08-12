@@ -25,6 +25,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 "bg-red-600",
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
+                10,
                 10
         );
 
@@ -44,6 +45,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                         "bg-red-600",
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("양재역").getId(),
+                        10,
                         10
                 ),
                 new LineCreateRequest(
@@ -51,6 +53,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                         "bg-green-600",
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("역삼역").getId(),
+                        10,
                         10
                 )
         );
@@ -73,6 +76,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 "bg-red-600",
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
+                10,
                 10
         );
 
@@ -100,6 +104,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                         "bg-red-600",
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("양재역").getId(),
+                        10,
                         10
                 );
                 final var updateRequest = new LineUpdateRequest("2호선", "bg-blue-123");
@@ -139,6 +144,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 "bg-red-600",
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
+                10,
                 10
         );
 

@@ -35,7 +35,7 @@ class SectionDocumentation extends Documentation {
     void appendSection() {
         when(lineService.appendSection(anyLong(), any())).thenReturn(response);
 
-        지하철구간_등록_요청(1L, new SectionRequest(upStationId, downStationId, 10), makeRequestSpec("section-create"));
+        지하철구간_등록_요청(1L, new SectionRequest(upStationId, downStationId, 10, 10), makeRequestSpec("section-create"));
     }
 
     @Test

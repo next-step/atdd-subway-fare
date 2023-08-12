@@ -480,9 +480,18 @@ Content-Length: 77
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Location: /members/1
-Date: Sat, 05 Aug 2023 15:38:19 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sat, 12 Aug 2023 06:00:11 GMT
 Keep-Alive: timeout=60
-Connection: keep-alive</code></pre>
+Connection: keep-alive
+Content-Length: 62
+
+{
+  "id" : 1,
+  "email" : "user@email.com",
+  "age" : 20
+}</code></pre>
 </div>
 </div>
 </div>
@@ -511,7 +520,7 @@ Content-Length: 77
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Date: Sat, 05 Aug 2023 15:38:19 GMT
+Date: Sat, 12 Aug 2023 06:00:10 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -534,7 +543,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
-Date: Sat, 05 Aug 2023 15:38:19 GMT
+Date: Sat, 12 Aug 2023 06:00:10 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -561,13 +570,13 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 05 Aug 2023 15:38:19 GMT
+Date: Sat, 12 Aug 2023 06:00:10 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 128
 
 {
-  "timestamp" : "2023-08-05T15:38:19.914+00:00",
+  "timestamp" : "2023-08-12T06:00:11.925+00:00",
   "status" : 401,
   "error" : "Unauthorized",
   "path" : "/members/me"
@@ -595,7 +604,7 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 05 Aug 2023 15:38:19 GMT
+Date: Sat, 12 Aug 2023 06:00:11 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 62
@@ -613,7 +622,7 @@ Content-Length: 62
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-05 22:53:52 +0900
+Last updated 2023-08-08 00:23:38 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

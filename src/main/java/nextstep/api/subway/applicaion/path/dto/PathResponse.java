@@ -11,10 +11,10 @@ import nextstep.api.subway.applicaion.station.dto.StationResponse;
 @Getter
 public class PathResponse {
     private List<StationResponse> stations;
-    private long distance;
+    private long total;
 
-    public PathResponse(final List<StationResponse> stations, final long distance) {
+    public PathResponse(final List<StationResponse> stations, final long total) {
         this.stations = stations;
-        this.distance = distance;
+        this.total = total;
     }
 }

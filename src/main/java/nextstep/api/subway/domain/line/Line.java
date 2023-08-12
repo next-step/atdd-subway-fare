@@ -29,11 +29,10 @@ public class Line {
     @Embedded
     private LineSections sections;
 
-    public Line(final String name, final String color, final Station upStation, final Station downStation,
-                final int distance) {
+    public Line(final String name, final String color, final Section section) {
         this.name = name;
         this.color = color;
-        this.sections = LineSections.init(new Section(upStation, downStation, distance));
+        this.sections = LineSections.init(section);
     }
 
     public void update(final String name, final String color) {

@@ -13,6 +13,7 @@ import nextstep.api.documentation.Documentation;
 import nextstep.api.subway.applicaion.path.PathService;
 import nextstep.api.subway.applicaion.path.dto.PathResponse;
 import nextstep.api.subway.applicaion.station.dto.StationResponse;
+import nextstep.api.subway.domain.path.PathSelection;
 
 class PathDocumentation extends Documentation {
     @MockBean
@@ -27,8 +28,8 @@ class PathDocumentation extends Documentation {
                 ), 10
         );
 
-        when(pathService.findShortestPath(1L, 2L)).thenReturn(response);
+        when(pathService.findShortestPath(1L, 2L, PathSelection.DISTANCE.name())).thenReturn(response);
 
-        최단경로조회_요청(1L, 2L, makeRequestSpec("path"));
+        최단경로조회_요청(1L, 2L, PathSelection.DISTANCE.name(), makeRequestSpec("path"));
     }
 }

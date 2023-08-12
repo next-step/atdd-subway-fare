@@ -14,6 +14,7 @@ import nextstep.api.subway.applicaion.line.dto.response.LineResponse;
 import nextstep.api.subway.domain.line.Line;
 import nextstep.api.subway.domain.line.LineRepository;
 import nextstep.api.subway.domain.line.Section;
+import nextstep.api.subway.domain.path.PathSelection;
 import nextstep.api.subway.domain.station.Station;
 import nextstep.api.subway.domain.station.StationRepository;
 import nextstep.api.subway.support.SubwayShortestPath;
@@ -38,9 +39,12 @@ public class LineService {
         return new Line(
                 request.getName(),
                 request.getColor(),
-                upStation,
-                downStation,
-                request.getDistance()
+                new Section(
+                        upStation,
+                        downStation,
+                        request.getDistance(),
+                        request.getDuration()
+                )
         );
     }
 
@@ -67,7 +71,7 @@ public class LineService {
         final var upStation = stationRepository.getById(request.getUpStationId());
         final var downStation = stationRepository.getById(request.getDownStationId());
 
-        return new Section(upStation, downStation, request.getDistance());
+        return new Section(upStation, downStation, request.getDistance(), request.getDuration());
     }
 
     @Transactional
@@ -97,7 +101,7 @@ public class LineService {
         final var shortestPath = SubwayShortestPath.builder(line.getStations(), line.getSections())
                 .source(line.getFirstStation())
                 .target(line.getLastStation())
-                .build();
+                .buildOf(PathSelection.DISTANCE);
 
         return shortestPath.getStation();
     }

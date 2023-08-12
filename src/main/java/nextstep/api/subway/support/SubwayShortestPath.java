@@ -9,6 +9,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 
 import nextstep.api.SubwayException;
 import nextstep.api.subway.domain.line.Section;
+import nextstep.api.subway.domain.path.PathSelection;
 import nextstep.api.subway.domain.station.Station;
 
 public class SubwayShortestPath {
@@ -28,7 +29,7 @@ public class SubwayShortestPath {
         return path.getVertexList();
     }
 
-    public long getDistance() {
+    public long getTotal() {
         return (long) path.getWeight();
     }
 
@@ -57,16 +58,17 @@ public class SubwayShortestPath {
             return this;
         }
 
-        public SubwayShortestPath build() {
-            return new SubwayShortestPath(makeGraph(stations, sections), source, target);
+        public SubwayShortestPath buildOf(final PathSelection type) {
+            return new SubwayShortestPath(makeGraph(stations, sections, type), source, target);
         }
 
         private DijkstraShortestPath<Station, DefaultWeightedEdge> makeGraph(final List<Station> stations,
-                                                                             final List<Section> sections) {
+                                                                             final List<Section> sections,
+                                                                             final PathSelection type) {
             final var graph = new WeightedMultigraph<Station, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 
             registerVertexes(graph, stations);
-            registerEdges(graph, sections);
+            registerEdges(graph, sections, type);
 
             return new DijkstraShortestPath<>(graph);
         }
@@ -79,11 +81,11 @@ public class SubwayShortestPath {
         }
 
         private void registerEdges(final WeightedMultigraph<Station, DefaultWeightedEdge> graph,
-                                   final List<Section> sections) {
+                                   final List<Section> sections, final PathSelection type) {
             for (final var section : sections) {
                 final var upStation = section.getUpStation();
                 final var downStation = section.getDownStation();
-                graph.setEdgeWeight(graph.addEdge(upStation, downStation), section.getDistance());
+                graph.setEdgeWeight(graph.addEdge(upStation, downStation), type.getValueOf(section));
             }
         }
     }

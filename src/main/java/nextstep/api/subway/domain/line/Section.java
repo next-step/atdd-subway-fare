@@ -34,10 +34,14 @@ public class Section {
     @Column(nullable = false)
     private int distance;
 
-    public Section(final Station upStation, final Station downStation, final int distance) {
+    @Column(nullable = false)
+    private int duration;
+
+    public Section(final Station upStation, final Station downStation, final int distance, final int duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public boolean contains(final Station station) {
