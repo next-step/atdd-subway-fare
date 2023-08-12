@@ -43,8 +43,8 @@ public class PathService {
             return PathResponse.of(resultPath, fare);
         }
 
-        Path tempDistancePath = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
-        int fare =  new FareCalculator(tempDistancePath.extractDistance(), tempDistancePath.getAdditionalFareByLine(), member.getAge()).fare();
+        Path pathByDistance = new SubwayMap(lines, PathType.DISTANCE).findPath(upStation, downStation);
+        int fare =  new FareCalculator(pathByDistance.extractDistance(), pathByDistance.getAdditionalFareByLine(), member.getAge()).fare();
 
         return PathResponse.of(resultPath, fare);
     }
