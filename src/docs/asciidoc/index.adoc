@@ -12,3 +12,6 @@
 === 경로 조회
 
 operation::path[snippets='http-request,http-response']
+
+=== 오류 케이스
+operation::pathTypeError[snippets='http-request,http-response']
