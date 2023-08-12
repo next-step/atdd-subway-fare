@@ -13,6 +13,7 @@ import static nextstep.subway.acceptance.PathSteps.역의_순서_검증;
 import static nextstep.subway.acceptance.PathSteps.지하철_노선_생성_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -122,9 +123,10 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        역의_순서_검증(response, 교대역, 남부터미널역, 양재역);
-        경로_조회_거리_검증(response, 5L);
-        경로_조회_요금_검증(response, 1250);
+        assertAll(() -> 역의_순서_검증(response, 교대역, 남부터미널역, 양재역),
+                () -> 경로_조회_거리_검증(response, 5L),
+                () -> 경로_조회_요금_검증(response, 1250)
+        );
     }
 
     // When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
