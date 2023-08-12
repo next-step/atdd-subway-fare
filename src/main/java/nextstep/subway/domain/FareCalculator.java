@@ -1,30 +1,26 @@
 package nextstep.subway.domain;
 
-import org.springframework.lang.Nullable;
-
 import java.util.Optional;
 
 public class FareCalculator {
 
     private static final int BASE_FARE = 1250;
 
-    private final AdditionalFareByDistance additionalFareByDistance;
-    private final AdditionalFareByLine additionalFareByLine;
-    private final DiscountFareByAge discountFareByAge;
+    private final FarePolicy farePolicy;
 
     public FareCalculator(int distance, int fareByLine, Optional<Integer> age) {
-        this.additionalFareByDistance = new AdditionalFareByDistance(distance);
-        this.additionalFareByLine = new AdditionalFareByLine(fareByLine);
-        this.discountFareByAge = new DiscountFareByAge(age);
+
+        FarePolicy farePolicy1 = new AdditionalFareByDistance(distance);
+        FarePolicy farePolicy2 = new AdditionalFareByLine(fareByLine);
+        FarePolicy farePolicy3 = new DiscountFareByAge(age);
+
+        farePolicy1.setNext(farePolicy2);
+        farePolicy2.setNext(farePolicy3);
+
+        this.farePolicy = farePolicy1;
     }
 
     public int fare() {
-
-        int fare = BASE_FARE;
-        fare = additionalFareByDistance.fare(fare);
-        fare = additionalFareByLine.fare(fare);
-        fare = discountFareByAge.fare(fare);
-
-        return fare;
+        return farePolicy.fare(BASE_FARE);
     }
 }
