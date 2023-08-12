@@ -28,6 +28,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
     private String 어린이;
     private String 청소년;
+    private String 성인;
 
     /**
      * 교대역    --- *2호선* (거리:10, 시간:2) ---   강남역
@@ -53,6 +54,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         어린이 = 베어러_인증_로그인_요청(GithubResponses.어린이.getEmail(), PASSWORD).jsonPath().getString("accessToken");
         청소년 = 베어러_인증_로그인_요청(GithubResponses.청소년.getEmail(), PASSWORD).jsonPath().getString("accessToken");
+        성인 = 베어러_인증_로그인_요청(GithubResponses.사용자1.getEmail(), PASSWORD).jsonPath().getString("accessToken");
     }
 
     /**
@@ -109,6 +111,20 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         verifyPathResponse(response, 5L, 52L, 1070L, 교대역, 남부터미널역, 양재역);
+    }
+
+    /**
+     * When: 성인 사용자가 교대-양재 최단거리와 요금을 조회하면
+     * Then: 거리는 5이고, 요금은 1070원이다.
+     */
+    @DisplayName("청소년 사용자가 두 역의 최소 최단경로 요금을 조회한다.")
+    @Test
+    void findPathByDistance_adult_fare() {
+        // when
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(성인, 교대역, 양재역, "DISTANCE");
+
+        // then
+        verifyPathResponse(response, 5L, 52L, 1250L, 교대역, 남부터미널역, 양재역);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFare) {

@@ -72,5 +72,5 @@ git rebase upstream/songteaheon
   - [ ] DiscountFareByAge 리팩토링
   - [ ] Null object pattern으로 구현
   - [X] PathAcceptanceTest 검증을 전반적으로 하도록 수정
-  - [ ] 어린이도 청소년도 아니지만 로그인은 되어있는 유저도 테스트케이스에 추가
+  - [X] 어린이도 청소년도 아니지만 로그인은 되어있는 유저도 테스트케이스에 추가
   - [X] @ParameterizedTest의 name을 활용
