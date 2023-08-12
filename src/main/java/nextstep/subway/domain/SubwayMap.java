@@ -7,7 +7,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 public class SubwayMap {
-    private List<Line> lines;
+    private final List<Line> lines;
     private final PathWeight pathWeight;
 
     public SubwayMap(List<Line> lines, PathWeight pathWeight) {

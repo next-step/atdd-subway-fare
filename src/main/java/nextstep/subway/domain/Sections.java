@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 @Embeddable
 public class Sections {
 
+    public static final int ZERO = 0;
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -156,5 +157,9 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
+    public int lineFare() {
+        return sections.stream().mapToInt(Section::getAddtionalFare).max()
+            .orElse(ZERO);
+    }
 
 }
