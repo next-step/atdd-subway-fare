@@ -1,6 +1,6 @@
 package nextstep.subway.domain.fare;
 
-import nextstep.subway.domain.fare.utils.OverFareCalculator;
+import nextstep.subway.domain.fare.distance.OverFareCalculator;
 
 public class DistanceFarePolicy extends FarePolicy {
 

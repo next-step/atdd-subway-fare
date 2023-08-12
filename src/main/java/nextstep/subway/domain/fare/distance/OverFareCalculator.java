@@ -1,4 +1,4 @@
-package nextstep.subway.domain.fare.utils;
+package nextstep.subway.domain.fare.distance;
 
 public class OverFareCalculator {
 
