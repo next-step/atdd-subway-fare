@@ -1,6 +1,6 @@
 package nextstep.service;
 
-import nextstep.domain.Station;
+import nextstep.domain.subway.Station;
 import nextstep.dto.StationRequest;
 import nextstep.dto.StationResponse;
 import nextstep.repository.StationRepository;

@@ -1,10 +1,10 @@
 package nextstep.unit;
 
-import nextstep.domain.Line;
-import nextstep.domain.Path;
-import nextstep.domain.Section;
-import nextstep.domain.Station;
-import nextstep.domain.FareCarculator;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Path;
+import nextstep.domain.subway.Section;
+import nextstep.domain.subway.Station;
+import nextstep.util.FareCarculator;
 import nextstep.domain.subway.PathType;
 import nextstep.util.PathFinder;
 import org.junit.jupiter.api.BeforeEach;

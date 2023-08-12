@@ -3,7 +3,7 @@ package nextstep.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.domain.Line;
+import nextstep.domain.subway.Line;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

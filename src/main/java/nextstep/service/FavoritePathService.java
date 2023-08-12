@@ -1,8 +1,8 @@
 package nextstep.service;
 
 import nextstep.auth.AuthenticationException;
-import nextstep.domain.FavoritePath;
-import nextstep.domain.Station;
+import nextstep.domain.subway.FavoritePath;
+import nextstep.domain.subway.Station;
 import nextstep.domain.member.Member;
 import nextstep.domain.member.MemberRepository;
 import nextstep.domain.subway.PathType;

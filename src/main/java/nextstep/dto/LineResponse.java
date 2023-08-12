@@ -1,8 +1,8 @@
 package nextstep.dto;
 
 import lombok.Getter;
-import nextstep.domain.Line;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Station;
 
 import java.util.List;
 

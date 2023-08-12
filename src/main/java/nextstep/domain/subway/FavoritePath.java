@@ -1,4 +1,4 @@
-package nextstep.domain;
+package nextstep.domain.subway;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,5 @@
 package nextstep.domain.subway;
 
-import nextstep.domain.Section;
-
 import java.util.function.Function;
 
 public enum PathType {

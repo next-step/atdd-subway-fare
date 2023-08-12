@@ -1,8 +1,8 @@
 package nextstep.unit;
 
-import nextstep.domain.Line;
-import nextstep.domain.Section;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Section;
+import nextstep.domain.subway.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

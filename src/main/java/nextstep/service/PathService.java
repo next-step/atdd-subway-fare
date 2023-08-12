@@ -1,8 +1,8 @@
 package nextstep.service;
 
-import nextstep.domain.Line;
-import nextstep.domain.Path;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Path;
+import nextstep.domain.subway.Station;
 import nextstep.domain.subway.PathType;
 import nextstep.dto.PathResponse;
 import nextstep.repository.LineRepository;

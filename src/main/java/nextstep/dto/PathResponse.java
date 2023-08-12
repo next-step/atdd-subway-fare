@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.domain.Path;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Path;
+import nextstep.domain.subway.Station;
 
 import java.util.List;
 

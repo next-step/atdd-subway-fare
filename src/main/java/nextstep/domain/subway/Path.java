@@ -1,4 +1,6 @@
-package nextstep.domain;
+package nextstep.domain.subway;
+
+import nextstep.util.FareCarculator;
 
 import java.util.List;
 

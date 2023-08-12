@@ -1,11 +1,6 @@
 package nextstep.documentation;
 
-import nextstep.acceptance.commonStep.LineStep;
-import nextstep.acceptance.commonStep.SectionStep;
-import nextstep.acceptance.commonStep.StationStep;
-import nextstep.domain.Path;
-import nextstep.domain.Sections;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Station;
 import nextstep.domain.subway.PathType;
 import nextstep.dto.PathResponse;
 import nextstep.service.PathService;
