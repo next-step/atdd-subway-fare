@@ -10,12 +10,10 @@ public class AdditionalFareByDistance {
     private static final int FIRST_OVER_FARE_SECTION_MAX_DISTANCE = 40;
     private static final int SECOND_OVER_FARE_SECTION_START = 50;
 
-    private int distanceBasic;
     private int distanceOver10km;
     private int distanceOver50km;
 
     public AdditionalFareByDistance(int distance) {
-        this.distanceBasic = Math.min(distance, FIRST_OVER_FARE_SECTION_START);
         this.distanceOver10km = Math.min(Math.max(distance - FIRST_OVER_FARE_SECTION_START, 0), FIRST_OVER_FARE_SECTION_MAX_DISTANCE);
         this.distanceOver50km = Math.max(distance - SECOND_OVER_FARE_SECTION_START, 0);
     }

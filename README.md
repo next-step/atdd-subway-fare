@@ -68,7 +68,7 @@ git rebase upstream/songteaheon
   - [X] 사용하지 않는 코드로 제거 (Path.java, getSections())
   - [X] temp라는 prefix 삭제
   - [ ] 책임 연쇄 패턴, 요금 정책 순서 관리, 가중치 혹은 순서 변수 적용
-  - [ ] 사용하지 않는 변수 제거
+  - [X] 사용하지 않는 변수 제거
   - [ ] DiscountFareByAge 리팩토링
   - [ ] Null object pattern으로 구현
   - [ ] PathAcceptanceTest 검증을 전반적으로 하도록 수정
