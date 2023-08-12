@@ -1,8 +1,7 @@
 package nextstep.subway.domain;
 
-import org.springframework.lang.Nullable;
-
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class DiscountFareByAge {
 
@@ -11,11 +10,11 @@ public class DiscountFareByAge {
     private static final int START_AGE_FOR_TEEN_FARE = 13;
     private static final int START_AGE_FOR_NORMAL_FARE = 19;
 
+    private final Optional<Integer> ageOptional;
 
-    private final Integer age;
 
-    public DiscountFareByAge(@Nullable Integer age) {
-        this.age = age;
+    public DiscountFareByAge(Optional<Integer> age) {
+        this.ageOptional = age;
     }
 
     /**
@@ -25,9 +24,11 @@ public class DiscountFareByAge {
      */
     public int fare(int prevFare) {
 
-        if (age == null) {
+        if (ageOptional.isEmpty()) {
             return prevFare;
         }
+
+        int age = ageOptional.get();
 
         BigDecimal fare = new BigDecimal(prevFare);
 

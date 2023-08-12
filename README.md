@@ -70,7 +70,7 @@ git rebase upstream/songteaheon
   - [ ] 책임 연쇄 패턴, 요금 정책 순서 관리, 가중치 혹은 순서 변수 적용
   - [X] 사용하지 않는 변수 제거
   - [ ] DiscountFareByAge 리팩토링
-  - [ ] Null object pattern으로 구현
+  - [X] Null object pattern으로 구현
   - [X] PathAcceptanceTest 검증을 전반적으로 하도록 수정
   - [X] 어린이도 청소년도 아니지만 로그인은 되어있는 유저도 테스트케이스에 추가
   - [X] @ParameterizedTest의 name을 활용

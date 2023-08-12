@@ -1,8 +1,12 @@
 package nextstep.auth.principal;
 
 public class UserPrincipal {
+
     private String username;
     private String role;
+
+    public UserPrincipal() {
+    }
 
     public UserPrincipal(String username, String role) {
         this.username = username;
@@ -15,5 +19,9 @@ public class UserPrincipal {
 
     public String getRole() {
         return role;
+    }
+
+    public boolean isLoginUser() {
+        return true;
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private static final NoLoginUserPrincipal NO_LOGIN_USER = new NoLoginUserPrincipal();
     private JwtTokenProvider jwtTokenProvider;
 
     public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
@@ -25,7 +27,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String authorization = webRequest.getHeader("Authorization");
 
         if (authorization == null && !parameter.getParameterAnnotation(AuthenticationPrincipal.class).required()) {
-            return null;
+            return NO_LOGIN_USER;
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
