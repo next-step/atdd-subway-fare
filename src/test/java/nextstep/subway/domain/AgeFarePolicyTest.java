@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.fare.AgeFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DiscountFareByAgeTest {
+class AgeFarePolicyTest {
 
 
     @DisplayName("나이에 따른 할인 요금을 확인")
@@ -17,7 +18,7 @@ class DiscountFareByAgeTest {
     void get(int age, int fare, int expectedDiscountFare) {
 
         // when
-        int resultFare = new DiscountFareByAge(Optional.of(age)).fare(fare);
+        int resultFare = new AgeFarePolicy(Optional.of(age)).fare(fare);
 
         // then
         assertThat(resultFare).isEqualTo(expectedDiscountFare);

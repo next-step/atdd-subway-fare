@@ -1,10 +1,12 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
-public class AdditionalFareByLine extends FarePolicy {
+import nextstep.subway.domain.fare.FarePolicy;
+
+public class LineFarePolicy extends FarePolicy {
 
     private final int fareByLine;
 
-    public AdditionalFareByLine(int fareByLine) {
+    public LineFarePolicy(int fareByLine) {
         this.fareByLine = fareByLine;
     }
 

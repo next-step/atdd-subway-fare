@@ -2,9 +2,9 @@ package nextstep.subway.applicaion;
 
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.application.MemberService;
-import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.domain.*;
+import nextstep.subway.domain.fare.FareCalculator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

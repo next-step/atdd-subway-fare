@@ -1,9 +1,9 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class DiscountFareByAge extends FarePolicy {
+public class AgeFarePolicy extends FarePolicy {
 
     private static final BigDecimal discountDeduction = new BigDecimal(350);
     private static final int START_AGE_FOR_CHILD_FARE = 6;
@@ -12,7 +12,7 @@ public class DiscountFareByAge extends FarePolicy {
 
     private final Optional<Integer> ageOptional;
 
-    public DiscountFareByAge(Optional<Integer> age) {
+    public AgeFarePolicy(Optional<Integer> age) {
         this.ageOptional = age;
     }
 

@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,9 +13,9 @@ public class FareCalculator {
 
     public FareCalculator(int distance, int fareByLine, Optional<Integer> age) {
 
-        FarePolicy farePolicy1 = new AdditionalFareByDistance(distance);
-        FarePolicy farePolicy2 = new AdditionalFareByLine(fareByLine);
-        FarePolicy farePolicy3 = new DiscountFareByAge(age);
+        FarePolicy farePolicy1 = new DistanceFarePolicy(distance);
+        FarePolicy farePolicy2 = new LineFarePolicy(fareByLine);
+        FarePolicy farePolicy3 = new AgeFarePolicy(age);
 
         farePolicy1.setPolicyOrder(1);
         farePolicy2.setPolicyOrder(2);

@@ -1,9 +1,9 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare.utils;
 
 public class OverFareCalculator {
 
-    private int overFareInterval;
-    private int overFarePerInterval;
+    private final int overFareInterval;
+    private final int overFarePerInterval;
 
     public OverFareCalculator(int overFareInterval, int overFarePerInterval) {
         this.overFareInterval = overFareInterval;

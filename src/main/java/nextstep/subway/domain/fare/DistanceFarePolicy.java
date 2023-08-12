@@ -1,6 +1,8 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
-public class AdditionalFareByDistance extends FarePolicy {
+import nextstep.subway.domain.fare.utils.OverFareCalculator;
+
+public class DistanceFarePolicy extends FarePolicy {
 
     private static final int OVER_FARE = 100;
     private static final int OVER_FARE_INTERVAL_UNTIL_50KM = 5;
@@ -13,7 +15,7 @@ public class AdditionalFareByDistance extends FarePolicy {
     private final int distanceOver10km;
     private final int distanceOver50km;
 
-    public AdditionalFareByDistance(int distance) {
+    public DistanceFarePolicy(int distance) {
         this.distanceOver10km = Math.min(Math.max(distance - FIRST_OVER_FARE_SECTION_START, 0), FIRST_OVER_FARE_SECTION_MAX_DISTANCE);
         this.distanceOver50km = Math.max(distance - SECOND_OVER_FARE_SECTION_START, 0);
     }
