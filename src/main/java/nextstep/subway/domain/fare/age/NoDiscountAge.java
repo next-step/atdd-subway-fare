@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 
 public class NoDiscountAge implements DiscountAge {
 
+    private static final int NO_DISCOUNT_START_AGE = 19;
+
     @Override
     public boolean isTarget(int age) {
-        return age >= 19;
+        return age >= NO_DISCOUNT_START_AGE;
     }
 
     @Override
