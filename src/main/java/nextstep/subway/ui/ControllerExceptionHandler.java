@@ -22,6 +22,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ExceptionResponse> handleIllegalArgsException(AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.from(e));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.from(e));
     }
 }
