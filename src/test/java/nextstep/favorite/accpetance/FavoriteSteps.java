@@ -4,7 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.favorite.service.dto.FavoritePathRequest;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

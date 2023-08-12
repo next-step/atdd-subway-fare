@@ -9,9 +9,8 @@ import nextstep.favorite.service.dto.FavoritePathResponse;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.repository.StationRepository;
 import nextstep.subway.exception.EntityNotFoundException;
-import nextstep.subway.exception.StationLineSearchFailException;
 import nextstep.subway.service.StationPathService;
 import nextstep.subway.service.dto.StationResponse;
 import org.springframework.stereotype.Service;
@@ -42,9 +41,7 @@ public class FavoritePathService {
         final Long sourceStationId = request.getSource();
         final Long targetStationId = request.getTarget();
 
-        try {
-            stationPathService.searchStationPath(sourceStationId, targetStationId, request.getType());
-        } catch (StationLineSearchFailException exception) {
+        if (!stationPathService.isExistPathBetween(sourceStationId, targetStationId)) {
             throw new StationFavoriteCreateFailException("station favorite create failed because path not exists");
         }
 

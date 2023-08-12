@@ -1,7 +1,7 @@
 package nextstep.subway.service;
 
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.StationRepository;
+import nextstep.subway.domain.repository.StationRepository;
 import nextstep.subway.service.dto.StationRequest;
 import nextstep.subway.service.dto.StationResponse;
 import org.springframework.stereotype.Service;

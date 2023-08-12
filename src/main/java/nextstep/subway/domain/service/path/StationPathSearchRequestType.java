@@ -1,4 +1,4 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.path;
 
 import lombok.AllArgsConstructor;
 import nextstep.subway.domain.StationLineSection;

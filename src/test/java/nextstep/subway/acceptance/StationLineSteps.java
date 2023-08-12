@@ -8,19 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 public class StationLineSteps {
     private StationLineSteps() {
     }
 
-    public static Long createStationLine(String name, String color, String upStationName, String downStationName, BigDecimal distance, Long duration, Map<String, Long> stationIdByName) {
-        return createStationLine(name, color, stationIdByName.get(upStationName), stationIdByName.get(downStationName), distance, duration);
+    public static Long createStationLine(String name, String color, String upStationName, String downStationName, BigDecimal distance, Long duration, BigDecimal additionalFee, Map<String, Long> stationIdByName) {
+        return createStationLine(name, color, stationIdByName.get(upStationName), stationIdByName.get(downStationName), distance, duration, additionalFee);
     }
 
-    public static Long createStationLine(String name, String color, Long upStationId, Long downStationId, BigDecimal distance, Long duration) {
-        var request = new StationLineCreateRequest(name, color, upStationId, downStationId, distance, duration);
+    public static Long createStationLine(String name, String color, Long upStationId, Long downStationId, BigDecimal distance, Long duration, BigDecimal additionalFee) {
+        var request = new StationLineCreateRequest(name, color, upStationId, downStationId, distance, duration, additionalFee);
 
         return RestAssured.given().log().all()
                 .body(request)
@@ -33,7 +32,7 @@ public class StationLineSteps {
     }
 
     public static void updateStationLine(Long lineId, String name, String color) {
-        var request = new StationLineUpdateRequest(name,color);
+        var request = new StationLineUpdateRequest(name, color);
 
         RestAssured.given().log().all()
                 .body(request)

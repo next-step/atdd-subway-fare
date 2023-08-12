@@ -14,4 +14,5 @@ public class StationLineCreateRequest {
 	private Long downStationId;
 	private BigDecimal distance;
 	private Long duration;
+	private BigDecimal additionalFee;
 }

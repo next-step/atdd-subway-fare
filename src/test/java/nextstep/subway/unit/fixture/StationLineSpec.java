@@ -10,18 +10,7 @@ public class StationLineSpec {
     private StationLineSpec() {
     }
 
-    @Deprecated
-    public static StationLine of(Station upStation, Station downStation, BigDecimal distance) {
-        return StationLine.builder()
-                .name("테스트 노선" + UUID.randomUUID())
-                .color("blue")
-                .upStation(upStation)
-                .downStation(downStation)
-                .distance(distance)
-                .build();
-    }
-
-    public static StationLine of(Station upStation, Station downStation, BigDecimal distance, Long duration) {
+    public static StationLine of(Station upStation, Station downStation, BigDecimal distance, Long duration, BigDecimal additionalFee) {
         return StationLine.builder()
                 .name("테스트 노선" + UUID.randomUUID())
                 .color("blue")
@@ -29,6 +18,7 @@ public class StationLineSpec {
                 .downStation(downStation)
                 .distance(distance)
                 .duration(duration)
+                .additionalFee(additionalFee)
                 .build();
     }
 }

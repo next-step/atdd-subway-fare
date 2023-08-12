@@ -10,11 +10,9 @@ import nextstep.favorite.unit.fixture.FavoritePathSpec;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.fixture.MemberSpec;
-import nextstep.subway.domain.StationRepository;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.repository.StationRepository;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
-import nextstep.subway.service.dto.StationPathResponse;
-import nextstep.subway.service.dto.StationResponse;
 import nextstep.subway.unit.fixture.StationSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +23,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -63,29 +59,21 @@ class FavoritePathServiceTest {
     void createFavoritePathServiceTest() {
         //given
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
-
         final Long source = 1L;
         final Long target = 2L;
-        final List<StationResponse> stationResponses = StationSpec.of(List.of("source", "target")).stream()
-                .map(StationResponse::fromEntity)
-                .collect(Collectors.toList());
-        final StationPathResponse stationPathResponse = StationPathResponse.builder()
-                .stations(stationResponses)
-                .distance(BigDecimal.TEN)
-                .build();
 
         given(favoritePathRepository.save(any(FavoritePath.class))).willReturn(FavoritePathSpec.of(member, source, target));
-        given(stationPathService.searchStationPath(source, target, StationPathSearchRequestType.DISTANCE)).willReturn(stationPathResponse);
+        given(stationPathService.isExistPathBetween(source, target)).willReturn(true);
 
         //when
-        var request = new FavoritePathRequest(source,target,StationPathSearchRequestType.DISTANCE);
+        var request = new FavoritePathRequest(source, target, StationPathSearchRequestType.DISTANCE);
 
         favoritePathService.createFavoritePath(email, request);
 
         //then
         then(memberRepository).should(times(1)).findByEmail(email);
         then(favoritePathRepository).should(times(1)).save(any(FavoritePath.class));
-        then(stationPathService).should(times(1)).searchStationPath(source, target, StationPathSearchRequestType.DISTANCE);
+        then(stationPathService).should(times(1)).isExistPathBetween(source, target);
     }
 
     @DisplayName("정상적인 즐겨찾기 경로 목록 조회")

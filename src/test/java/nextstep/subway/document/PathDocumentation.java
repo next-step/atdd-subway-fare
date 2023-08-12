@@ -1,6 +1,6 @@
 package nextstep.subway.document;
 
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.subway.service.StationPathService;
 import nextstep.subway.service.dto.StationPathResponse;
 import nextstep.subway.service.dto.StationResponse;
@@ -43,7 +43,7 @@ public class PathDocumentation extends Documentation {
                 .fee(BigDecimal.TEN)
                 .distance(BigDecimal.TEN).build();
 
-        when(stationPathService.searchStationPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(stationPathService.searchStationPath(any(), anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
         var doc = document("path",
                 preprocessRequest(prettyPrint()),

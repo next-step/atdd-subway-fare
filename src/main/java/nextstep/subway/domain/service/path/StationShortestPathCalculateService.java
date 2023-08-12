@@ -1,9 +1,9 @@
-package nextstep.subway.domain.service;
+package nextstep.subway.domain.service.path;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationLine;
-import nextstep.subway.domain.StationLineRepository;
+import nextstep.subway.domain.repository.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
 import nextstep.subway.exception.StationLineSearchFailException;
 import org.jgrapht.GraphPath;
@@ -21,6 +21,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StationShortestPathCalculateService {
     private final StationLineRepository stationLineRepository;
+
+    public Boolean isExistPathBetween(Station startStation, Station destinationStation) {
+        final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(getTotalStationLineSection(), StationPathSearchRequestType.DISTANCE);
+
+        final DijkstraShortestPath<Long, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        final GraphPath<Long, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation.getId(), destinationStation.getId());
+
+        return Objects.nonNull(path);
+    }
 
     public List<Long> getShortestPathStations(Station startStation, Station destinationStation, StationPathSearchRequestType type) {
         final WeightedMultigraph<Long, DefaultWeightedEdge> graph = makeGraphFrom(getTotalStationLineSection(), type);

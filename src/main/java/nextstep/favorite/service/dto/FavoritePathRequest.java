@@ -2,7 +2,7 @@ package nextstep.favorite.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 
 @Data
 @AllArgsConstructor

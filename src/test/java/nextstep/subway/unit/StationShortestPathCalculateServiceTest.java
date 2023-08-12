@@ -2,11 +2,10 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationLine;
-import nextstep.subway.domain.StationLineRepository;
+import nextstep.subway.domain.repository.StationLineRepository;
 import nextstep.subway.domain.StationLineSection;
-import nextstep.subway.domain.service.StationPathSearchRequestType;
-import nextstep.subway.domain.service.StationShortestPathCalculateService;
-import nextstep.subway.exception.StationLineSearchFailException;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
+import nextstep.subway.domain.service.path.StationShortestPathCalculateService;
 import nextstep.subway.unit.fixture.StationLineSpec;
 import nextstep.subway.unit.fixture.StationSpec;
 import org.junit.jupiter.api.Assertions;
@@ -51,24 +50,24 @@ public class StationShortestPathCalculateServiceTest {
                 .collect(Collectors.toMap(Station::getName, Function.identity()));
 
         //A,B,C
-        final StationLine line_1 = StationLineSpec.of(stationByName.get("A역"), stationByName.get("B역"), BigDecimal.valueOf(8L), ONE_MIN * 4);
+        final StationLine line_1 = StationLineSpec.of(stationByName.get("A역"), stationByName.get("B역"), BigDecimal.valueOf(8L), ONE_MIN * 4, BigDecimal.ZERO);
         line_1.createSection(stationByName.get("B역"), stationByName.get("C역"), BigDecimal.ONE, ONE_MIN * 2);
 
         //C,D,E
-        final StationLine line_2 = StationLineSpec.of(stationByName.get("C역"), stationByName.get("D역"), BigDecimal.valueOf(9L), ONE_MIN * 5);
+        final StationLine line_2 = StationLineSpec.of(stationByName.get("C역"), stationByName.get("D역"), BigDecimal.valueOf(9L), ONE_MIN * 5, BigDecimal.ZERO);
         line_2.createSection(stationByName.get("D역"), stationByName.get("E역"), BigDecimal.valueOf(7L), ONE_MIN * 3);
 
         //E,F,G
-        final StationLine line_3 = StationLineSpec.of(stationByName.get("E역"), stationByName.get("F역"), BigDecimal.valueOf(4L), ONE_MIN * 4);
+        final StationLine line_3 = StationLineSpec.of(stationByName.get("E역"), stationByName.get("F역"), BigDecimal.valueOf(4L), ONE_MIN * 4, BigDecimal.ZERO);
         line_3.createSection(stationByName.get("F역"), stationByName.get("G역"), BigDecimal.valueOf(3L), ONE_MIN * 4);
 
         //G,H,I,A
-        final StationLine line_4 = StationLineSpec.of(stationByName.get("G역"), stationByName.get("H역"), BigDecimal.ONE, ONE_MIN);
+        final StationLine line_4 = StationLineSpec.of(stationByName.get("G역"), stationByName.get("H역"), BigDecimal.ONE, ONE_MIN, BigDecimal.ZERO);
         line_4.createSection(stationByName.get("H역"), stationByName.get("I역"), BigDecimal.valueOf(7L), ONE_MIN * 5);
         line_4.createSection(stationByName.get("I역"), stationByName.get("A역"), BigDecimal.valueOf(2L), ONE_MIN * 6);
 
         //Y,Z
-        final StationLine line_5 = StationLineSpec.of(stationByName.get("Y역"), stationByName.get("Z역"), BigDecimal.valueOf(4L), ONE_MIN * 3);
+        final StationLine line_5 = StationLineSpec.of(stationByName.get("Y역"), stationByName.get("Z역"), BigDecimal.valueOf(4L), ONE_MIN * 3, BigDecimal.ZERO);
 
         stationLines = List.of(line_1, line_2, line_3, line_4, line_5);
         createEntityTestIds(stationLines, 1L);

@@ -14,4 +14,11 @@ public class MemberSpec {
 
         return member;
     }
+
+    public static Member of(String email, int age) {
+        final Member member = new Member(email, "password", age, "USER");
+        createEntityTestId(member, 1L);
+
+        return member;
+    }
 }

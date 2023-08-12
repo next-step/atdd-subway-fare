@@ -1,6 +1,7 @@
 package nextstep.favorite.accpetance;
 
-import nextstep.subway.domain.service.StationPathSearchRequestType;
+import nextstep.subway.acceptance.StationLineSteps;
+import nextstep.subway.domain.service.path.StationPathSearchRequestType;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,14 +28,14 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
         //given
         stationIdByName = createStationsAndGetStationMap(List.of("혜화", "동대문", "동대문역사문화공원", "종로3가", "종로5가", "동묘앞", "양산", "남양산"));
 
-        var line1 = createStationLine("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), 1000L, stationIdByName);
+        var line1 = StationLineSteps.createStationLine("1호선", "blue", "종로3가", "종로5가", BigDecimal.valueOf(3L), 1000L, BigDecimal.ZERO, stationIdByName);
         createStationLineSection(line1, "종로5가", "동대문", BigDecimal.valueOf(5L), 1000L, stationIdByName);
         createStationLineSection(line1, "동대문", "동묘앞", BigDecimal.valueOf(5L), 1000L, stationIdByName);
 
-        var line2 = createStationLine("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, 1000L, stationIdByName);
+        var line2 = StationLineSteps.createStationLine("4호선", "mint", "혜화", "동대문", BigDecimal.ONE, 1000L, BigDecimal.ZERO, stationIdByName);
         createStationLineSection(line2, "동대문", "동대문역사문화공원", BigDecimal.TEN, 1000L, stationIdByName);
 
-        createStationLine("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, 1000L, stationIdByName);
+        StationLineSteps.createStationLine("부산2호선", "red", "양산", "남양산", BigDecimal.TEN, 1000L, BigDecimal.ZERO, stationIdByName);
     }
 
     /**
