@@ -16,4 +16,6 @@ public class UserPrincipal {
     public String getRole() {
         return role;
     }
+
+    public boolean isLogin(){return true;}
 }
