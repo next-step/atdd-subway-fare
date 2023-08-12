@@ -66,10 +66,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, "DISTANCE");
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
-        assertThat(response.jsonPath().getLong("duration")).isEqualTo(52L);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1250);
+        verifyPathResponse(response, 5L, 52L, 1250L, 교대역, 남부터미널역, 양재역);
     }
 
     /**
@@ -83,14 +80,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역, "DURATION");
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getLong("distance")).isEqualTo(20L);
-        assertThat(response.jsonPath().getLong("duration")).isEqualTo(5L);
+        verifyPathResponse(response, 20L, 5L, 1250L, 교대역, 강남역, 양재역);
     }
 
     /**
      * When: 어린이 사용자가 교대-양재 최단거리와 요금을 조회하면
-     * Then: 거리는 5이고, 요금은 850원이다.
+     * Then: 거리는 5이고, 요금은 800원이다.
      */
     @DisplayName("어린이 사용자가 두 역의 최소 최단경로 요금을 조회한다.")
     @Test
@@ -99,14 +94,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(어린이, 교대역, 양재역, "DISTANCE");
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(800L);
+        verifyPathResponse(response, 5L, 52L, 800L, 교대역, 남부터미널역, 양재역);
     }
 
     /**
      * When: 청소년 사용자가 교대-양재 최단거리와 요금을 조회하면
-     * Then: 거리는 5이고, 요금은 1050원이다.
+     * Then: 거리는 5이고, 요금은 1070원이다.
      */
     @DisplayName("청소년 사용자가 두 역의 최소 최단경로 요금을 조회한다.")
     @Test
@@ -115,9 +108,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(청소년, 교대역, 양재역, "DISTANCE");
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getLong("distance")).isEqualTo(5L);
-        assertThat(response.jsonPath().getLong("fare")).isEqualTo(1070);
+        verifyPathResponse(response, 5L, 52L, 1070L, 교대역, 남부터미널역, 양재역);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFare) {
@@ -141,5 +132,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         params.put("distance", distance + "");
         params.put("duration", duration + "");
         return params;
+    }
+
+    private void verifyPathResponse(ExtractableResponse<Response> response, Long distance, Long duration, Long fare, Long... stations) {
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(distance);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getLong("fare")).isEqualTo(fare);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations);
     }
 }
