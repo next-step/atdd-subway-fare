@@ -43,7 +43,8 @@ public class FavoriteSteps {
     ) {
         return restAssured
                 .header("Authorization", "Bearer " + token)
-                .when().delete(BASE_URL + "/" + id)
+                .pathParams("id", id)
+                .when().delete(BASE_URL + "/{id}")
                 .then();
     }
 

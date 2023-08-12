@@ -65,7 +65,8 @@ public class StationSteps {
 
     public static ValidatableResponse 지하철역_제거_요청(final Long stationId, final RequestSpecification restAssured) {
         return restAssured
-                .when().delete(BASE_URL + "/" + stationId)
+                .pathParams("id", stationId)
+                .when().delete(BASE_URL + "/{id}")
                 .then();
     }
 

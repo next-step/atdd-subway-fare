@@ -1,6 +1,11 @@
 package nextstep.api.documentation.subway;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import static nextstep.api.acceptance.subway.path.PathSteps.최단경로조회_요청;
 
@@ -30,6 +35,18 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findShortestPath(1L, 2L, PathSelection.DISTANCE.name())).thenReturn(response);
 
-        최단경로조회_요청(1L, 2L, PathSelection.DISTANCE.name(), makeRequestSpec("path"));
+        최단경로조회_요청(1L, 2L, PathSelection.DISTANCE.name(), makeRequestSpec(
+                document("path",
+                        requestParameters(
+                                parameterWithName("source").description("출발역 id"),
+                                parameterWithName("target").description("도착역 id"),
+                                parameterWithName("type").description("경로조회타입")
+                        ),
+                        responseFields(
+                                fieldWithPath("stations[].id").description("역 id"),
+                                fieldWithPath("stations[].name").description("역 이름"),
+                                fieldWithPath("total").description("경로조회타입에 따른 결과"))
+                )
+        ));
     }
 }

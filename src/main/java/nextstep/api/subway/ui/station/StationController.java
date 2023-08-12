@@ -29,14 +29,14 @@ public class StationController {
                 .body(response);
     }
 
-    @GetMapping(value = "/stations")
-    public ResponseEntity<List<StationResponse>> showStations() {
-        return ResponseEntity.ok().body(stationService.findAllStations());
-    }
-
     @DeleteMapping("/stations/{id}")
     public ResponseEntity<Void> deleteStation(@PathVariable final Long id) {
         stationService.deleteStationById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/stations")
+    public ResponseEntity<List<StationResponse>> showStations() {
+        return ResponseEntity.ok().body(stationService.findAllStations());
     }
 }

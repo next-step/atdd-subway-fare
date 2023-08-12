@@ -77,7 +77,8 @@ public class LineSteps {
 
     public static ValidatableResponse 지하철노선_단일조회_요청(final Long id, final RequestSpecification restAssured) {
         return restAssured
-                .when().get(BASE_URL + "/" + id)
+                .pathParams("id", id)
+                .when().get(BASE_URL + "/{id}")
                 .then();
     }
 
@@ -95,8 +96,9 @@ public class LineSteps {
                                                   final RequestSpecification restAssured) {
         return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParams("id", id)
                 .body(request)
-                .when().put(BASE_URL + "/" + id)
+                .when().put(BASE_URL + "/{id}")
                 .then();
     }
 
@@ -117,7 +119,8 @@ public class LineSteps {
 
     public static ValidatableResponse 지하철노선_제거_요청(final Long id, final RequestSpecification restAssured) {
         return restAssured
-                .when().delete(BASE_URL + "/" + id)
+                .pathParams("id", id)
+                .when().delete(BASE_URL + "/{id}")
                 .then();
     }
 

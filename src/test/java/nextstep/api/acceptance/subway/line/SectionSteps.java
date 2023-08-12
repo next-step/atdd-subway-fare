@@ -22,8 +22,9 @@ public class SectionSteps {
             final Long lineId, final SectionRequest request, final RequestSpecification restAssured) {
         return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParams("lineId", lineId)
                 .body(request)
-                .when().post(BASE_URL + "/" + lineId + "/sections")
+                .when().post(BASE_URL + "/{lineId}/sections")
                 .then();
     }
 
@@ -51,8 +52,9 @@ public class SectionSteps {
     public static ValidatableResponse 지하철구간_제거_요청(final Long lineId, final Long stationId,
                                                   final RequestSpecification restAssured) {
         return restAssured
+                .pathParams("lineId", lineId)
                 .param("stationId", stationId)
-                .when().delete(BASE_URL + "/" + lineId + "/sections")
+                .when().delete(BASE_URL + "/{lineId}/sections")
                 .then();
     }
 

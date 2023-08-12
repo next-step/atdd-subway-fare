@@ -9,18 +9,18 @@
 == 노선 관리 API
 
 === 노선 생성
-operation::line-create[snippets='http-request,http-response']
+operation::line-create[snippets='http-request,request-fields,http-response,response-fields']
 
 === 노선 수정
-operation::line-update[snippets='http-request,http-response']
+operation::line-update[snippets='http-request,path-parameters,request-fields']
 
 === 노선 삭제
-operation::line-delete[snippets='http-request,http-response']
+operation::line-delete[snippets='http-request,path-parameters']
 
 == 노선 조회 API
 
 === 노선 전체 조회
-operation::line-show[snippets='http-request,http-response']
+operation::line-show[snippets='http-request,http-response,response-fields']
 
 === 노선 단일 조회
-operation::line-find[snippets='http-request,http-response']
+operation::line-find[snippets='http-request,path-parameters,http-response,response-fields']

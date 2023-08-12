@@ -489,6 +489,55 @@ Content-Length: 144
 </div>
 </div>
 <div class="sect3">
+<h4 id="_노선_생성_request_fields"><a class="link" href="#_노선_생성_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 색상</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>upStationId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상행 종점역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>downStationId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하행 종점역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 총 거리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 총 소요시간</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="_노선_생성_http_response"><a class="link" href="#_노선_생성_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
@@ -496,7 +545,7 @@ Content-Length: 144
 Location: /Lines/1
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 06:00:11 GMT
+Date: Sat, 12 Aug 2023 08:04:17 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 189
@@ -515,6 +564,50 @@ Content-Length: 189
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_노선_생성_response_fields"><a class="link" href="#_노선_생성_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 색상</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역 이름</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -536,14 +629,49 @@ Content-Length: 58
 </div>
 </div>
 <div class="sect3">
+<h4 id="_노선_수정_request_fields"><a class="link" href="#_노선_수정_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 색상</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="_노선_수정_http_response"><a class="link" href="#_노선_수정_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Date: Sat, 12 Aug 2023 06:00:11 GMT
+Date: Sat, 12 Aug 2023 08:04:17 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_노선_수정_response_fields"><a class="link" href="#_노선_수정_response_fields">Response fields</a></h4>
+<div class="paragraph">
+<p>Snippet response-fields not found for operation::line-update</p>
 </div>
 </div>
 </div>
@@ -559,14 +687,26 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_노선_삭제_request_fields"><a class="link" href="#_노선_삭제_request_fields">Request fields</a></h4>
+<div class="paragraph">
+<p>Snippet request-fields not found for operation::line-delete</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_노선_삭제_http_response"><a class="link" href="#_노선_삭제_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
-Date: Sat, 12 Aug 2023 06:00:11 GMT
+Date: Sat, 12 Aug 2023 08:04:17 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_노선_삭제_response_fields"><a class="link" href="#_노선_삭제_response_fields">Response fields</a></h4>
+<div class="paragraph">
+<p>Snippet response-fields not found for operation::line-delete</p>
 </div>
 </div>
 </div>
@@ -587,13 +727,19 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_노선_전체_조회_request_fields"><a class="link" href="#_노선_전체_조회_request_fields">Request fields</a></h4>
+<div class="paragraph">
+<p>Snippet request-fields not found for operation::line-show</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_노선_전체_조회_http_response"><a class="link" href="#_노선_전체_조회_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 06:00:11 GMT
+Date: Sat, 12 Aug 2023 08:04:17 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 193
@@ -613,6 +759,50 @@ Content-Length: 193
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_노선_전체_조회_response_fields"><a class="link" href="#_노선_전체_조회_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 색상</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].stations[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].stations[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_노선_단일_조회"><a class="link" href="#_노선_단일_조회">노선 단일 조회</a></h3>
@@ -626,13 +816,19 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_노선_단일_조회_request_fields"><a class="link" href="#_노선_단일_조회_request_fields">Request fields</a></h4>
+<div class="paragraph">
+<p>Snippet request-fields not found for operation::line-find</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_노선_단일_조회_http_response"><a class="link" href="#_노선_단일_조회_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 06:00:11 GMT
+Date: Sat, 12 Aug 2023 08:04:17 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 189
@@ -652,6 +848,50 @@ Content-Length: 189
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_노선_단일_조회_response_fields"><a class="link" href="#_노선_단일_조회_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 색상</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stations[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -659,7 +899,7 @@ Content-Length: 189
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-08 00:23:38 +0900
+Last updated 2023-08-12 16:40:27 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

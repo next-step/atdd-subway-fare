@@ -7,16 +7,16 @@
 :sectlinks:
 
 === 회원가입
-operation::member-create[snippets='http-request,http-response']
+operation::member-create[snippets='http-request,request-fields,http-response,response-fields']
 
 === 회원정보 수정
-operation::member-update[snippets='http-request,http-response']
+operation::member-update[snippets='http-request,path-parameters,request-fields']
 
 === 회원탈퇴
-operation::member-delete[snippets='http-request,http-response']
+operation::member-delete[snippets='http-request,path-parameters']
 
 === 내 정보 조회
-operation::member-find-me[snippets='http-request,http-response']
+operation::member-find-me[snippets='http-request,http-response,response-fields']
 
 === 회원정보 조회
-operation::member-find[snippets='http-request,http-response']
+operation::member-find[snippets='http-request,path-parameters,http-response,response-fields']
