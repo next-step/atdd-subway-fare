@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.favorite;
 
 import java.util.Objects;
 import javax.persistence.Column;
@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import nextstep.member.domain.Member;
+import nextstep.subway.domain.Station;
 
 @Entity
 public class Favorite {
