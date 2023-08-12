@@ -1,19 +1,31 @@
 package nextstep.subway.domain.fare;
 
+import nextstep.subway.domain.fare.age.*;
+
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 public class AgeFarePolicy extends FarePolicy {
 
-    private static final BigDecimal discountDeduction = new BigDecimal(350);
-    private static final int START_AGE_FOR_CHILD_FARE = 6;
-    private static final int START_AGE_FOR_TEEN_FARE = 13;
-    private static final int START_AGE_FOR_NORMAL_FARE = 19;
+    private static final BigDecimal DISCOUNT_DEDUCTION = new BigDecimal(350);
 
-    private final Optional<Integer> ageOptional;
+    private static final DiscountAge NO_DISCOUNT_AGE = new NoDiscountAge();
+    private static final DiscountAge TODDLER_DISCOUNT_AGE = new ToddlerDiscountAge();
+    private static final DiscountAge CHILD_DISCOUNT_AGE = new ChildDiscountAge(DISCOUNT_DEDUCTION);
+    private static final DiscountAge TEEN_DISCOUNT_AGE = new TeenDiscountAge(DISCOUNT_DEDUCTION);
+    private static final List<DiscountAge> DISCOUNT_AGE_LIST = List.of(NO_DISCOUNT_AGE, TODDLER_DISCOUNT_AGE, CHILD_DISCOUNT_AGE, TEEN_DISCOUNT_AGE);
+
+
+    private final DiscountAge discountAge;
 
     public AgeFarePolicy(Optional<Integer> age) {
-        this.ageOptional = age;
+
+        this.discountAge = age.map(integer -> DISCOUNT_AGE_LIST.stream()
+                                           .filter(discountAge -> discountAge.isTarget(integer))
+                                           .findFirst()
+                                           .orElse(NO_DISCOUNT_AGE)
+                ).orElse(NO_DISCOUNT_AGE);
     }
 
     /**
@@ -23,27 +35,6 @@ public class AgeFarePolicy extends FarePolicy {
      */
     @Override
     public int fare(int prevFare) {
-
-        if (ageOptional.isEmpty()) {
-            return prevFare;
-        }
-
-        int age = ageOptional.get();
-
-        BigDecimal fare = new BigDecimal(prevFare);
-
-        if (age < START_AGE_FOR_CHILD_FARE) {
-            return 0;
-        }
-
-        if (age < START_AGE_FOR_TEEN_FARE) {
-            return fare.subtract(discountDeduction).multiply(new BigDecimal("0.5")).add(discountDeduction).intValue();
-        }
-
-        if (age < START_AGE_FOR_NORMAL_FARE) {
-            return fare.subtract(discountDeduction).multiply(new BigDecimal("0.8")).add(discountDeduction).intValue();
-        }
-
-        return fare.intValue();
+        return discountAge.discount(prevFare);
     }
 }
