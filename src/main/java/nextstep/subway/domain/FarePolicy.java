@@ -1,7 +1,14 @@
 package nextstep.subway.domain;
 
-public interface FarePolicy {
+public abstract class FarePolicy {
 
-    void setNext(FarePolicy next);
-    int fare(int prevFare);
+    private int policyOrder = Integer.MAX_VALUE;
+
+    void setPolicyOrder(int policyOrder) {
+        this.policyOrder = policyOrder;
+    }
+    int getPolicyOrder() {
+        return policyOrder;
+    }
+    abstract int fare(int prevFare);
 }
