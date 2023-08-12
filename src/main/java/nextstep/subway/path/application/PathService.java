@@ -1,7 +1,5 @@
 package nextstep.subway.path.application;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.domain.Path;
@@ -10,9 +8,10 @@ import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
-import nextstep.subway.station.dto.StationResponse;
 import nextstep.subway.station.exception.StationNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PathService {
@@ -26,15 +25,9 @@ public class PathService {
 
     public PathResponse searchPath(Long source, Long target, String type) {
         validateSourceAndTargetId(source, target);
-        validateExistenceOfStation(source, target);
 
         Path path = findPath(source, target, type);
-
-        List<StationResponse> stationResponses = path.getStations().stream()
-                .map(StationResponse::from)
-                .collect(Collectors.toList());
-
-        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration());  //TODO 죄악...
+        return PathResponse.of(path);
     }
 
     private Path findPath(Long source, Long target, String type) {
@@ -50,12 +43,6 @@ public class PathService {
     private void validateSourceAndTargetId(Long source, Long target) {
         if (source.equals(target)) {
             throw new SameSourceAndTargetStationException();
-        }
-    }
-
-    private void validateExistenceOfStation(Long source, Long target) {
-        if (!stationRepository.existsById(source) || !stationRepository.existsById(target)) {
-            throw new StationNotFoundException();
         }
     }
 

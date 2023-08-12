@@ -1,10 +1,7 @@
 package nextstep.subway.acceptance;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.List;
 import nextstep.subway.acceptance.step.LineStep;
 import nextstep.subway.acceptance.step.PathStep;
 import nextstep.subway.acceptance.step.SectionStep;
@@ -15,6 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 관련 기능")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -66,14 +67,20 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        List<String> stationNames = pathsResponse.jsonPath().getList("stations.name", String.class);
+        List<String> stationNames = 역_이름_목록_추출(pathsResponse);
         int distance = 총_이동거리_추출(pathsResponse);
         int duration = 소요시간_추출(pathsResponse);
+        int fare = 이용_요금_추출(pathsResponse);
 
         assertThat(stationNames).hasSize(3);
         assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
         assertThat(distance).isEqualTo(5);
         assertThat(duration).isEqualTo(22);
+        assertThat(fare).isEqualTo(1250);
+    }
+
+    private List<String> 역_이름_목록_추출(ExtractableResponse<Response> pathsResponse) {
+        return pathsResponse.jsonPath().getList("stations.name", String.class);
     }
 
     private int 총_이동거리_추출(ExtractableResponse<Response> pathsResponse) {
@@ -82,6 +89,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     private int 소요시간_추출(ExtractableResponse<Response> pathsResponse) {
         return pathsResponse.jsonPath().getInt("duration");
+    }
+
+    private int 이용_요금_추출(ExtractableResponse<Response> pathsResponse) {
+        return pathsResponse.jsonPath().getInt("fare");
     }
 
     /**
@@ -101,13 +112,15 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        List<String> stationNames = pathsResponse.jsonPath().getList("stations.name", String.class);
+        List<String> stationNames = 역_이름_목록_추출(pathsResponse);
         int distance = 총_이동거리_추출(pathsResponse);
         int duration = 소요시간_추출(pathsResponse);
+        int fare = 이용_요금_추출(pathsResponse);
 
         assertThat(stationNames).hasSize(3);
         assertThat(stationNames).containsExactly("교대역", "강남역", "양재역");
         assertThat(distance).isEqualTo(20);
         assertThat(duration).isEqualTo(2);
+        assertThat(fare).isEqualTo(1250 + 200);
     }
 }

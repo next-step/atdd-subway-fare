@@ -1,7 +1,5 @@
 package nextstep.subway.section.domain;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import nextstep.subway.common.exception.BusinessException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.section.exception.*;
@@ -13,6 +11,8 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Embeddable
 public class Sections {
@@ -30,7 +30,7 @@ public class Sections {
         firstStationId = sections.get(0).getUpStationId();
         lastStationId = sections.get(sections.size() - 1).getDownStationId();
 
-        this.sections = sections;
+        this.sections.addAll(sections);
     }
 
     public Sections(Long firstStationId, Long lastStationId) {
@@ -207,13 +207,13 @@ public class Sections {
                 .collect(Collectors.toList());
     }
 
-    public int getTotalDistance() {
+    public int calculateTotalDistance() {
         return sections.stream()
                 .mapToInt(Section::getDistance)
                 .sum();
     }
 
-    public int getTotalDuration() {
+    public int calculateTotalDuration() {
         return sections.stream()
                 .mapToInt(Section::getDuration)
                 .sum();
