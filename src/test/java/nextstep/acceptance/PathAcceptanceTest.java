@@ -151,14 +151,18 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @MethodSource("provideSourceAndTarget")
     void getPathAndPrice(Long source,Long target, int fare) {
 
-        //given
-        ExtractableResponse<Response> response = 지하철_경로_조회(source,target, PathType.DISTANCE);
+        //when
+        ExtractableResponse<Response> 기본요금응답 = 지하철_경로_조회(여의도역,노량진역, PathType.DISTANCE);
+        ExtractableResponse<Response> 일차요금구간응답 = 지하철_경로_조회(노량진역,흑석역, PathType.DISTANCE);
+        ExtractableResponse<Response> 이차요금구간응답 = 지하철_경로_조회(흑석역,동작역, PathType.DISTANCE);
 
         //then
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(fare);
+        assertThat(기본요금응답.jsonPath().getInt("fare")).isEqualTo(여의도노량진구간요금);
+        assertThat(일차요금구간응답.jsonPath().getInt("fare")).isEqualTo(노량진흑석구간요금);
+        assertThat(이차요금구간응답.jsonPath().getInt("fare")).isEqualTo(흑석동작구간요금);
 
     }
-
+    //TODO : @beforeEach로 얻은 static 변수를 @ParameterizedTest에 사용하는 방법 조사하기. 지금은 null이 주입됨
     private static Stream<Arguments> provideSourceAndTarget() {
         return Stream.of(
                 Arguments.of(여의도역,노량진역,여의도노량진구간요금),

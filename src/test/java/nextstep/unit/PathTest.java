@@ -4,13 +4,18 @@ import nextstep.domain.Line;
 import nextstep.domain.Path;
 import nextstep.domain.Section;
 import nextstep.domain.Station;
+import nextstep.domain.FareCarculator;
 import nextstep.domain.subway.PathType;
 import nextstep.util.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -125,9 +130,9 @@ class PathTest {
         // then
         assertThat(path.getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "남부터미널역", "양재역");
-        assertThat(path.extractDistance())
+        assertThat(path.getDistance())
                 .isEqualTo(남부터미널교대구간거리+양재남부터미널구간거리);
-        assertThat(path.extractDuration())
+        assertThat(path.getDuration())
                 .isEqualTo(남부터미널교대구간시간+양재남부터미널구간시간);
     }
 
@@ -142,9 +147,9 @@ class PathTest {
         // then
         assertThat(path.getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "강남역", "양재역");
-        assertThat(path.extractDistance())
+        assertThat(path.getDistance())
                 .isEqualTo(교대강남구간거리+강남양재구간거리);
-        assertThat(path.extractDuration())
+        assertThat(path.getDuration())
                 .isEqualTo(교대강남구간시간+강남양재구간시간);
     }
 
@@ -170,6 +175,24 @@ class PathTest {
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 동작역))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("출발역과 도착역이 연결되어 있지 않음.");
+    }
+
+    @DisplayName("구간의 요금을 조회")
+    @ParameterizedTest
+    @MethodSource("provideDistanceAndFare")
+    void carculateFare(Long distance,int expectedFare){
+        int calculatedFare = FareCarculator.totalFare(distance);
+
+        assertThat(calculatedFare)
+                .isEqualTo(expectedFare);
+    }
+
+    private static Stream<Arguments> provideDistanceAndFare() {
+        return Stream.of(
+                Arguments.of(10L,1250),
+                Arguments.of(16L,1250+200),
+                Arguments.of(60L,1250+800+200)
+        );
     }
 
 
