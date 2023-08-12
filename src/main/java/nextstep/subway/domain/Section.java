@@ -1,9 +1,12 @@
 package nextstep.subway.domain;
 
+import lombok.Getter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import javax.persistence.*;
+import java.util.Objects;
 
+@Getter
 @Entity
 public class Section extends DefaultWeightedEdge {
     @Id
@@ -30,39 +33,12 @@ public class Section extends DefaultWeightedEdge {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
-        this.line = line;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-    }
-
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Line getLine() {
-        return line;
-    }
-
-    public Station getUpStation() {
-        return upStation;
-    }
-
-    public Station getDownStation() {
-        return downStation;
-    }
-
-    public int getDistance() {
-        return distance;
     }
 
     public boolean isSameUpStation(Station station) {
@@ -76,5 +52,18 @@ public class Section extends DefaultWeightedEdge {
     public boolean hasDuplicateSection(Station upStation, Station downStation) {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return distance == section.distance && duration == section.duration && Objects.equals(line, section.line) && Objects.equals(upStation, section.upStation) && Objects.equals(downStation, section.downStation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(line, upStation, downStation, distance, duration);
     }
 }
