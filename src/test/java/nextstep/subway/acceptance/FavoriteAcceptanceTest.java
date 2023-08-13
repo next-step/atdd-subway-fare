@@ -2,6 +2,8 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.favorite.application.dto.FavoriteResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +15,11 @@ import static nextstep.subway.acceptance.FavoriteSteps.*;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("즐겨찾기 관련 기능")
 public class FavoriteAcceptanceTest extends AcceptanceTest {
+
     public static final String EMAIL = "member@email.com";
     public static final String PASSWORD = "password";
 
@@ -30,11 +34,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     private String 사용자;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
-     * |                        |
-     * *3호선*                   *신분당선*
-     * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 교대역    --- *2호선* ---   강남역 |                        | *3호선*                   *신분당선* |
+     * | 남부터미널역  --- *3호선* ---   양재
      */
     @BeforeEach
     public void setUp() {
@@ -53,6 +54,22 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철_구간_생성_요청(관리자, 삼호선, createSectionCreateParams(남부터미널역, 양재역, 3));
 
         사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
+    }
+
+    @DisplayName("즐겨찾기를 생성한다.")
+    @Test
+    void createFavorite() {
+        // when
+        ExtractableResponse<Response> createResponse = 즐겨찾기_생성을_요청(사용자, 강남역, 남부터미널역);
+        // then
+        즐겨찾기_생성됨(createResponse);
+
+        // when
+        ExtractableResponse<Response> findResponse = 즐겨찾기_목록_조회_요청(사용자);
+        // then
+        var 즐겨찾기 = findResponse.jsonPath().getList(".", FavoriteResponse.class).get(0);
+        assertThat(즐겨찾기.getSource().getName()).isEqualTo("강남역");
+        assertThat(즐겨찾기.getTarget().getName()).isEqualTo("남부터미널역");
     }
 
     @DisplayName("즐겨찾기를 관리한다.")
@@ -83,7 +100,13 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         즐겨찾기_생성_실패함(createResponse);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
+    private Long 지하철_노선_생성_요청(
+        String name,
+        String color,
+        Long upStation,
+        Long downStation,
+        int distance
+    ) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -95,7 +118,11 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
+    private Map<String, String> createSectionCreateParams(
+        Long upStationId,
+        Long downStationId,
+        int distance
+    ) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
