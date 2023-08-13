@@ -1,7 +1,7 @@
 package nextstep.contoller;
 
 import nextstep.auth.principal.AuthenticationPrincipal;
-import nextstep.domain.FavoritePath;
+import nextstep.domain.subway.FavoritePath;
 import nextstep.domain.member.Member;
 import nextstep.dto.FavoritePathRequest;
 import nextstep.dto.FavoritePathResponse;

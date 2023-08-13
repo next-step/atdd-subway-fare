@@ -1,10 +1,9 @@
-package nextstep.domain;
+package nextstep.domain.subway;
 
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.domain.subway.PathType;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;

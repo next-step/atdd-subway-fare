@@ -1,7 +1,7 @@
 package nextstep.unit;
 
-import nextstep.domain.FavoritePath;
-import nextstep.domain.Station;
+import nextstep.domain.subway.FavoritePath;
+import nextstep.domain.subway.Station;
 import nextstep.domain.member.Member;
 import nextstep.domain.member.MemberRepository;
 import nextstep.domain.subway.PathType;
@@ -17,8 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,7 +62,7 @@ class FavoritePathServiceTest {
 
         when(stationService.findStation(sourceStationId)).thenReturn(sourceStation);
         when(stationService.findStation(targetStationId)).thenReturn(targetStation);
-        doNothing().when(pathService).validatePath(sourceStation.getId(),targetStation.getId(), PathType.DISTANCE.getType());
+        doNothing().when(pathService).validatePath(sourceStation.getId(),targetStation.getId(), PathType.DISTANCE);
         when(favoritePathRepository.save(any())).thenReturn(favoritePath);
 
         //when

@@ -1,5 +1,6 @@
 package nextstep.contoller;
 
+import nextstep.domain.subway.PathType;
 import nextstep.dto.PathResponse;
 import nextstep.service.PathService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PathController {
     }
 
     @GetMapping
-    public ResponseEntity<PathResponse> getPath(@RequestParam long source, @RequestParam long target, @RequestParam String type) {
+    public ResponseEntity<PathResponse> getPath(@RequestParam long source, @RequestParam long target, @RequestParam PathType type) {
 
         PathResponse path = pathService.getPath(source,target,type);
         return ResponseEntity.ok().body(path);

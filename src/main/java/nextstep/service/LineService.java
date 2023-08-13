@@ -1,8 +1,8 @@
 package nextstep.service;
 
-import nextstep.domain.Line;
-import nextstep.domain.Section;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Section;
+import nextstep.domain.subway.Station;
 import nextstep.dto.LineRequest;
 import nextstep.dto.LineResponse;
 import nextstep.dto.SectionRequest;

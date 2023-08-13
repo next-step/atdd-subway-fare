@@ -1,8 +1,9 @@
 package nextstep.service;
 
-import nextstep.domain.Line;
-import nextstep.domain.Path;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Path;
+import nextstep.domain.subway.Station;
+import nextstep.domain.subway.PathType;
 import nextstep.dto.PathResponse;
 import nextstep.repository.LineRepository;
 import nextstep.util.PathFinder;
@@ -23,7 +24,7 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathResponse getPath(Long sourceId,Long targetId,String type){
+    public PathResponse getPath(Long sourceId, Long targetId, PathType type){
 
         Station sourceStation = stationService.findStation(sourceId);
         Station targetStation = stationService.findStation(targetId);
@@ -37,7 +38,7 @@ public class PathService {
 
     }
 
-    public void validatePath(Long sourceId,Long targetId,String type){
+    public void validatePath(Long sourceId,Long targetId,PathType type){
         try {
             getPath(sourceId,targetId, type);
         } catch (Exception e) {

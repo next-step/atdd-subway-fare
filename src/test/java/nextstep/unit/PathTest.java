@@ -1,16 +1,21 @@
 package nextstep.unit;
 
-import nextstep.domain.Line;
-import nextstep.domain.Path;
-import nextstep.domain.Section;
-import nextstep.domain.Station;
+import nextstep.domain.subway.Line;
+import nextstep.domain.subway.Path;
+import nextstep.domain.subway.Section;
+import nextstep.domain.subway.Station;
+import nextstep.util.FareCarculator;
 import nextstep.domain.subway.PathType;
 import nextstep.util.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -111,38 +116,40 @@ class PathTest {
         삼호선.addSection(남부터미널교대구간);
         구호선.addSection(흑석동작구간);
 
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE.getType());
+
     }
 
     @DisplayName("거리 기준으로 지하철 경로 조회")
     @Test
     void getPathByDistance() {
+        //given
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
         // when
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE.getType());
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getSections().getStations().stream().map(Station::getName))
+        assertThat(path.getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "남부터미널역", "양재역");
-        assertThat(path.extractDistance())
+        assertThat(path.getDistance())
                 .isEqualTo(남부터미널교대구간거리+양재남부터미널구간거리);
-        assertThat(path.extractDuration())
+        assertThat(path.getDuration())
                 .isEqualTo(남부터미널교대구간시간+양재남부터미널구간시간);
     }
 
     @DisplayName("시간 기준으로 지하철 경로 조회")
     @Test
     void getPathByDuration() {
+        //given
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION);
         // when
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION.getType());
         Path path = pathFinder.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getSections().getStations().stream().map(Station::getName))
+        assertThat(path.getStations().stream().map(Station::getName))
                 .containsExactly("교대역", "강남역", "양재역");
-        assertThat(path.extractDistance())
+        assertThat(path.getDistance())
                 .isEqualTo(교대강남구간거리+강남양재구간거리);
-        assertThat(path.extractDuration())
+        assertThat(path.getDuration())
                 .isEqualTo(교대강남구간시간+강남양재구간시간);
     }
 
@@ -151,6 +158,8 @@ class PathTest {
     @DisplayName("출발역과 도착역이 동일한 경우 조회")
     @Test
     void getPath_source_and_target_is_identical() {
+        //given
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
         // when, then
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 교대역))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -160,10 +169,30 @@ class PathTest {
     @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우를 조회")
     @Test
     void getPath_not_connected() {
+        // given
+        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선,구호선),PathType.DURATION);
         // when, then
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 동작역))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("출발역과 도착역이 연결되어 있지 않음.");
+    }
+
+    @DisplayName("구간의 요금을 조회")
+    @ParameterizedTest
+    @MethodSource("provideDistanceAndFare")
+    void carculateFare(Long distance,int expectedFare){
+        int calculatedFare = FareCarculator.totalFare(distance);
+
+        assertThat(calculatedFare)
+                .isEqualTo(expectedFare);
+    }
+
+    private static Stream<Arguments> provideDistanceAndFare() {
+        return Stream.of(
+                Arguments.of(10L,1250),
+                Arguments.of(16L,1250+200),
+                Arguments.of(60L,1250+800+200)
+        );
     }
 
 

@@ -1,8 +1,8 @@
 package nextstep.service;
 
 import nextstep.auth.AuthenticationException;
-import nextstep.domain.FavoritePath;
-import nextstep.domain.Station;
+import nextstep.domain.subway.FavoritePath;
+import nextstep.domain.subway.Station;
 import nextstep.domain.member.Member;
 import nextstep.domain.member.MemberRepository;
 import nextstep.domain.subway.PathType;
@@ -38,7 +38,7 @@ public class FavoritePathService {
         Station sourceStation = stationService.findStation(favoritePathRequest.getSource());
         Station targetStation = stationService.findStation(favoritePathRequest.getTarget());
 
-        pathService.validatePath(sourceStation.getId(), targetStation.getId(), PathType.DISTANCE.getType());
+        pathService.validatePath(sourceStation.getId(), targetStation.getId(), PathType.DISTANCE);
 
         FavoritePath favoritePath = favoritePathRepository.save(new FavoritePath(sourceStation, targetStation, member));
 

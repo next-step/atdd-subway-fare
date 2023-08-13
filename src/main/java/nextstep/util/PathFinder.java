@@ -1,7 +1,6 @@
 package nextstep.util;
 
-import nextstep.domain.*;
-import nextstep.domain.subway.PathType;
+import nextstep.domain.subway.*;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -14,9 +13,9 @@ import java.util.stream.Collectors;
 
 public class PathFinder {
     private List<Line> lines;
-    private String type;
+    private PathType type;
 
-    public PathFinder(List<Line> lines,String type) {
+    public PathFinder(List<Line> lines,PathType type) {
         this.lines = lines;
         this.type = type;
 
@@ -50,14 +49,7 @@ public class PathFinder {
 
         // 다익스트라 최단 경로 찾기
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, SectionEdge> result;
-
-        try{
-            result = dijkstraShortestPath.getPath(source, target);
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
-        }
+        GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
 
         if(Objects.equals(result,null)){
             throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않음.");
@@ -74,7 +66,7 @@ public class PathFinder {
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it) {
         SectionEdge sectionEdge = SectionEdge.of(it);
         graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-        graph.setEdgeWeight(sectionEdge,it.getWeight(type));
+        graph.setEdgeWeight( sectionEdge, type.getWeight(it));
     }
 
 

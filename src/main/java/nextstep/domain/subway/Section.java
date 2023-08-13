@@ -1,10 +1,9 @@
-package nextstep.domain;
+package nextstep.domain.subway;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.domain.subway.PathType;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -41,17 +40,7 @@ public class Section {
         this.duration =Objects.requireNonNull(duration);
     }
 
-    public Long getWeight(String type){
-        if(type.equals(PathType.DISTANCE.getType())){
-            return distance;
-        }
-        if(type.equals(PathType.DURATION.getType())){
-            return duration;
-        }
-        else{
-            throw new IllegalArgumentException("잘못된 경로조회 타입.");
-        }
-    }
+
 
     public boolean isSameUpStation(Station station) {
         return this.upStation == station;

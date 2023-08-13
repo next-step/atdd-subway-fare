@@ -1,6 +1,6 @@
 package nextstep.repository;
 
-import nextstep.domain.FavoritePath;
+import nextstep.domain.subway.FavoritePath;
 import nextstep.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 

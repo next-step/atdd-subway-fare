@@ -3,8 +3,8 @@ package nextstep.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.domain.FavoritePath;
-import nextstep.domain.Station;
+import nextstep.domain.subway.FavoritePath;
+import nextstep.domain.subway.Station;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
