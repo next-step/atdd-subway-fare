@@ -154,7 +154,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
       ExtractableResponse deleteResponse = 즐겨찾기_삭제_요청(id, 액세스토큰2);
 
       // then
-      assertThat(deleteResponse.statusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
+      assertThat(deleteResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
   }
 

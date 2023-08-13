@@ -9,6 +9,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathWeight;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.farepolicy.Fare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,10 +73,11 @@ public class SubwayMapTest {
     SubwayMap finder = new SubwayMap(Arrays.asList(이호선,신분당선,삼호선,사호선,삼호선), PathWeight.DISTANCE);
     //Then
     Path path = finder.findPath(교대역, 양재역);
+    Fare fare = Fare.of(path);
     assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
     assertThat(path.extractDistance()).isEqualTo(5L);
     assertThat(path.extractDuration()).isEqualTo(16L);
-    assertThat(path.extractFare()).isEqualTo(1250);
+    assertThat(fare.calculateFare(0)).isEqualTo(1250);
   }
 
 
@@ -86,11 +88,12 @@ public class SubwayMapTest {
     SubwayMap finder = new SubwayMap(Arrays.asList(이호선,신분당선,삼호선,사호선,삼호선));
     //Then
     Path path = finder.findPath(교대역, 강남역);
+    Fare fare = Fare.of(path);
     assertThat(path.getStations()).containsExactly(교대역, 강남역);
 
     assertThat(path.extractDistance()).isEqualTo(12L);
     assertThat(path.extractDuration()).isEqualTo(2L);
-    assertThat(path.extractFare()).isEqualTo(1350);
+    assertThat(fare.calculateFare(0)).isEqualTo(1350);
   }
   @DisplayName("오류케이스: 출발역과 도착역이 연결되지 않았을 때, 제일 짧은 경로 조회가 실패합니다")
   @Test

@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import nextstep.subway.domain.Station;
 import org.springframework.http.MediaType;
 
@@ -19,6 +21,22 @@ public class PathSteps {
         .then().log().all().extract();
   }
 
+  public static ExtractableResponse<Response> 두_역의_최단_거리_경로_유저로_조회를_요청(Long source, Long target, String type, String accessToken, RequestSpecification... spec) {
+    if (Objects.nonNull(spec) && spec.length > 0){
+      return RestAssured
+          .given(spec[0]).log().all()
+          .auth().preemptive().oauth2(accessToken)
+          .accept(MediaType.APPLICATION_JSON_VALUE)
+          .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+          .then().log().all().extract();
+    }
+    return RestAssured
+            .given().log().all()
+            .auth().oauth2(accessToken)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when().get("/paths?source={sourceId}&target={targetId}&type={type}", source, target, type)
+            .then().log().all().extract();
+  }
   public static Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
     Map<String, String> lineCreateParams;
     lineCreateParams = new HashMap<>();
@@ -53,4 +71,6 @@ public class PathSteps {
   public static void 경로_조회_요금_검증(ExtractableResponse<Response> response, int fare) {
     assertThat(response.jsonPath().getLong("fare")).isEqualTo(fare);
   }
+
+
 }
