@@ -34,11 +34,18 @@ public class Section extends DefaultWeightedEdge {
     }
 
     public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
+        validate(distance, duration);
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    private void validate(int distance, int duration) {
+        if (distance == 0 || duration == 0) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public boolean isSameUpStation(Station station) {
