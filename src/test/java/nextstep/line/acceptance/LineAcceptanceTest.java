@@ -329,6 +329,30 @@ public class LineAcceptanceTest extends AcceptanceTest {
             // then
             최단경로_시작역_종착역_동일할경우_조회실패_응답값_검증(response);
         }
+
+        @DisplayName("최단경로 조회 시작역, 종착역이 동일할 경우 에러를 응답한다.")
+        @Test
+        void 강남역_수원역_최단경로_요금_검증() {
+            // given
+            Long 강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
+            Long 선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
+            Long 수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
+            Long 노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
+            Long 대림역 = 지하철역_추가_식별값_리턴(DEARIM_STATION_NAME);
+
+            Long 신분당선 = 지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+            Long 이호선 = 지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
+            Long 삼호선 = 지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 2, 3);
+
+            지하철노선_구간_추가(삼호선, 노원역, 수원역, 3, 4);
+
+            // when
+            ExtractableResponse<Response> response = 최단거리조회(DISTANCE, 강남역, 수원역);
+
+            // then
+            강남역_수원역_최단경로_요금_검증_응답값_검증(response);
+        }
+
     }
 
 
@@ -470,6 +494,14 @@ public class LineAcceptanceTest extends AcceptanceTest {
     private void 최단경로_시작역_종착역_동일할경우_조회실패_응답값_검증(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.asString()).isEqualTo("최단경로 시작역, 종착역이 동일할 수 없습니다.");
+    }
+
+    private void 강남역_수원역_최단경로_요금_검증_응답값_검증(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("stations.name", String.class)).containsExactly(GANGNAM_STATION_NAME, SEOLLEUNG_STATION_NAME, SUWON_STATION_NAME);
+        assertThat(response.jsonPath().getObject("distance", Integer.class)).isEqualTo(5);
+        assertThat(response.jsonPath().getObject("duration", Integer.class)).isEqualTo(9);
+        assertThat(response.jsonPath().getObject("fare", Integer.class)).isEqualTo(1250);
     }
 
 }
