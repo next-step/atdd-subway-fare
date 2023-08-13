@@ -1,9 +1,14 @@
 package nextstep.subway.acceptance;
 
+import static nextstep.subway.acceptance.step.PathStep.경로_응답_검증;
+import static nextstep.subway.acceptance.step.PathStep.경로_조회_요청;
+import static nextstep.subway.acceptance.step.PathStep.역_이름_목록_검증;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import nextstep.subway.acceptance.step.LineStep;
-import nextstep.subway.acceptance.step.PathStep;
 import nextstep.subway.acceptance.step.SectionStep;
 import nextstep.subway.acceptance.step.StationStep;
 import nextstep.utils.AcceptanceTest;
@@ -12,10 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 관련 기능")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -62,37 +63,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void searchShortestDistancePath() {
         // when
-        ExtractableResponse<Response> pathsResponse = PathStep.경로_조회_요청(1, 3, "DISTANCE", RestAssuredUtils.given_절_생성());
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, "DISTANCE", RestAssuredUtils.given_절_생성());
 
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
-
-        List<String> stationNames = 역_이름_목록_추출(pathsResponse);
-        int distance = 총_이동거리_추출(pathsResponse);
-        int duration = 소요시간_추출(pathsResponse);
-        int fare = 이용_요금_추출(pathsResponse);
-
-        assertThat(stationNames).hasSize(3);
-        assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역");
-        assertThat(distance).isEqualTo(5);
-        assertThat(duration).isEqualTo(22);
-        assertThat(fare).isEqualTo(1250);
-    }
-
-    private List<String> 역_이름_목록_추출(ExtractableResponse<Response> pathsResponse) {
-        return pathsResponse.jsonPath().getList("stations.name", String.class);
-    }
-
-    private int 총_이동거리_추출(ExtractableResponse<Response> pathsResponse) {
-        return pathsResponse.jsonPath().getInt("distance");
-    }
-
-    private int 소요시간_추출(ExtractableResponse<Response> pathsResponse) {
-        return pathsResponse.jsonPath().getInt("duration");
-    }
-
-    private int 이용_요금_추출(ExtractableResponse<Response> pathsResponse) {
-        return pathsResponse.jsonPath().getInt("fare");
+        역_이름_목록_검증(pathsResponse, 3, "교대역", "남부터미널역", "양재역");
+        경로_응답_검증(pathsResponse, 5, 22, 1250);
     }
 
     /**
@@ -107,20 +83,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void searchShortestDurationPath() {
         // when
-        ExtractableResponse<Response> pathsResponse = PathStep.경로_조회_요청(1, 3, "DURATION", RestAssuredUtils.given_절_생성());
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, "DURATION", RestAssuredUtils.given_절_생성());
 
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
-
-        List<String> stationNames = 역_이름_목록_추출(pathsResponse);
-        int distance = 총_이동거리_추출(pathsResponse);
-        int duration = 소요시간_추출(pathsResponse);
-        int fare = 이용_요금_추출(pathsResponse);
-
-        assertThat(stationNames).hasSize(3);
-        assertThat(stationNames).containsExactly("교대역", "강남역", "양재역");
-        assertThat(distance).isEqualTo(20);
-        assertThat(duration).isEqualTo(2);
-        assertThat(fare).isEqualTo(1250 + 200);
+        역_이름_목록_검증(pathsResponse, 3, "교대역", "강남역", "양재역");
+        경로_응답_검증(pathsResponse, 20, 2, 1450);
     }
 }
