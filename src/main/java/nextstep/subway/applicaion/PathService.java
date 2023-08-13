@@ -29,4 +29,14 @@ public class PathService {
 
         return PathResponse.of(path);
     }
+
+    public boolean isPathUnlinked(Long source, Long target) {
+        try {
+            findPath(source, target, PathFindType.DURATION);
+        } catch (IllegalArgumentException e) {
+            return true;
+        }
+
+        return false;
+    }
 }

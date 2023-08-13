@@ -22,12 +22,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
+
     private FavoriteRepository favoriteRepository;
     private MemberService memberService;
     private StationService stationService;
     private PathService pathService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, MemberService memberService, StationService stationService, PathService pathService) {
+    public FavoriteService(
+        FavoriteRepository favoriteRepository,
+        MemberService memberService,
+        StationService stationService,
+        PathService pathService
+    ) {
         this.favoriteRepository = favoriteRepository;
         this.memberService = memberService;
         this.stationService = stationService;
@@ -35,7 +41,14 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        pathService.findPath(request.getSource(), request.getTarget(), request.getPathFindType());
+        if (pathService.isPathUnlinked(request.getSource(), request.getTarget())) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "출발역과 도착역은 연결되어 있어야 합니다. 입력된 출발역id:%d, 도착역id:%d",
+                    request.getSource(),
+                    request.getTarget()
+                ));
+        }
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);
@@ -47,11 +60,11 @@ public class FavoriteService {
         Map<Long, Station> stations = extractStations(favorites);
 
         return favorites.stream()
-                .map(it -> FavoriteResponse.of(
-                        it,
-                        StationResponse.of(stations.get(it.getSourceStationId())),
-                        StationResponse.of(stations.get(it.getTargetStationId()))))
-                .collect(Collectors.toList());
+            .map(it -> FavoriteResponse.of(
+                it,
+                StationResponse.of(stations.get(it.getSourceStationId())),
+                StationResponse.of(stations.get(it.getTargetStationId()))))
+            .collect(Collectors.toList());
     }
 
     public void deleteFavorite(String email, Long id) {
@@ -66,7 +79,7 @@ public class FavoriteService {
     private Map<Long, Station> extractStations(List<Favorite> favorites) {
         Set<Long> stationIds = extractStationIds(favorites);
         return stationService.findAllStationsById(stationIds).stream()
-                .collect(Collectors.toMap(Station::getId, Function.identity()));
+            .collect(Collectors.toMap(Station::getId, Function.identity()));
     }
 
     private Set<Long> extractStationIds(List<Favorite> favorites) {
