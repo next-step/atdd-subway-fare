@@ -1,5 +1,9 @@
 package nextstep.subway.domain;
 
 public enum FindPathType {
-    DISTANCE, DURATION
+    DISTANCE, DURATION;
+
+    public boolean isDistanceType() {
+        return this.equals(DISTANCE);
+    }
 }

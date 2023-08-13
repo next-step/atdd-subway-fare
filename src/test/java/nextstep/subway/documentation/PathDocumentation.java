@@ -1,6 +1,6 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_경로_조회를_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -30,6 +30,6 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
 
-        두_역의_최단_거리_경로_조회를_요청(1L, 2L, FindPathType.DISTANCE, createSpec("path"));
+        두_역의_최단_경로_조회를_요청(1L, 2L, FindPathType.DISTANCE, createSpec("path"));
     }
 }
