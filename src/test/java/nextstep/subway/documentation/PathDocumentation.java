@@ -28,6 +28,6 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findPath(anyLong(), anyLong())).thenReturn(pathResponse);
 
-        두_역의_최단_거리_경로_조회를_요청(1L, 2L, createSpec("path"));
+        두_역의_최단_거리_경로_조회를_요청(1L, 2L, "DURATION", createSpec("path"));
     }
 }
