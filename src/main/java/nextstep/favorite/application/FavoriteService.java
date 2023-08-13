@@ -33,11 +33,11 @@ public class FavoriteService {
         this.pathService = pathService;
     }
 
-    public void createFavorite(String email, FavoriteRequest request) {
+    public Favorite createFavorite(String email, FavoriteRequest request) {
         pathService.findPath(request.getSource(), request.getTarget());
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
-        favoriteRepository.save(favorite);
+        return favoriteRepository.save(favorite);
     }
 
     public List<FavoriteResponse> findFavorites(String email) {
