@@ -10,16 +10,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps {
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int distance, int duration) {
-        return 지하철_노선_생성_요청(RestAssured.given().log().all(), name, color, distance, duration);
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, int distance, int duration, int additionalFare) {
+        return 지하철_노선_생성_요청(RestAssured.given().log().all(), name, color, distance, duration, additionalFare);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(RequestSpecification requestSpecification, String name, String color, int distance, int duration) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(RequestSpecification requestSpecification, String name, String color, int distance, int duration, int additionalFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("distance", distance + "");
         params.put("duration", duration + "");
+        params.put("additionalFare", additionalFare + "");
         return requestSpecification
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

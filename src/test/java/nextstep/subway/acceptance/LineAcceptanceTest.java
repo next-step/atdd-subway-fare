@@ -28,13 +28,33 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
         ExtractableResponse<Response> listResponse = 지하철_노선_목록_조회_요청();
 
         assertThat(listResponse.jsonPath().getList("name")).contains("2호선");
+    }
+
+    /**
+     * When 추가요금이 있는 지하철 노선을 생성하면
+     * Then 지하철 노선 목록 조회 시 생성한 노선의 추가요금을 확인할 수 있다.
+     */
+    @DisplayName("추가 요금이 있는 지하철 노선 생성")
+    @Test
+    void createLine_withAdditionalFare() {
+        // when
+        int additionalFare = 900;
+        ExtractableResponse<Response> response = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, additionalFare);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        ExtractableResponse<Response> listResponse = 지하철_노선_목록_조회_요청();
+
+        assertThat(listResponse.jsonPath().getList("id")).hasSize(1);
+        assertThat(listResponse.jsonPath().getList("name")).contains("2호선");
+        assertThat(listResponse.jsonPath().getList("additionalFare")).contains(additionalFare);
     }
 
     /**
@@ -46,8 +66,8 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
-        지하철_노선_생성_요청("3호선", "orange", DISTANCE, DURATION);
+        지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
+        지하철_노선_생성_요청("3호선", "orange", DISTANCE, DURATION, 0);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_목록_조회_요청();
@@ -66,7 +86,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(createResponse);
@@ -85,7 +105,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
         int afterDistance = 10;
         int afterDuration = 16;
 
@@ -116,7 +136,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION);
+        ExtractableResponse<Response> createResponse = 지하철_노선_생성_요청("2호선", "green", DISTANCE, DURATION, 0);
 
         // when
         ExtractableResponse<Response> response = RestAssured

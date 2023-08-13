@@ -1,8 +1,9 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
-public class FareCalculator {
+import nextstep.subway.domain.fare.distance.OverFareCalculator;
 
-    private static final int BASE_FARE = 1250;
+public class DistanceFarePolicy extends FarePolicy {
+
     private static final int OVER_FARE = 100;
     private static final int OVER_FARE_INTERVAL_UNTIL_50KM = 5;
     private static final int OVER_FARE_INTERVAL_AFTER_50KM = 8;
@@ -11,20 +12,17 @@ public class FareCalculator {
     private static final int FIRST_OVER_FARE_SECTION_MAX_DISTANCE = 40;
     private static final int SECOND_OVER_FARE_SECTION_START = 50;
 
+    private final int distanceOver10km;
+    private final int distanceOver50km;
 
-
-    private int distanceBasic;
-    private int distanceOver10km;
-    private int distanceOver50km;
-
-    public FareCalculator(int distance) {
-        this.distanceBasic = Math.min(distance, FIRST_OVER_FARE_SECTION_START);
+    public DistanceFarePolicy(int distance) {
         this.distanceOver10km = Math.min(Math.max(distance - FIRST_OVER_FARE_SECTION_START, 0), FIRST_OVER_FARE_SECTION_MAX_DISTANCE);
         this.distanceOver50km = Math.max(distance - SECOND_OVER_FARE_SECTION_START, 0);
     }
 
-    public int fare() {
-        return BASE_FARE + new OverFareCalculator(OVER_FARE_INTERVAL_UNTIL_50KM, OVER_FARE).calculateOverFare(this.distanceOver10km)
+    @Override
+    public int fare(int prevFare) {
+        return prevFare + new OverFareCalculator(OVER_FARE_INTERVAL_UNTIL_50KM, OVER_FARE).calculateOverFare(this.distanceOver10km)
                 + new OverFareCalculator(OVER_FARE_INTERVAL_AFTER_50KM, OVER_FARE).calculateOverFare(this.distanceOver50km);
     }
 }
