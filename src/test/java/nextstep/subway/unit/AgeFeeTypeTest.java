@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.AgeFeeType;
+import nextstep.subway.domain.fee.AgeFeeType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

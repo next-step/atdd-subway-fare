@@ -1,6 +1,10 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fee;
 
 public class MiddleDistanceFee extends DistanceFee {
+
+    public MiddleDistanceFee(int distance) {
+        super(distance);
+    }
 
     @Override
     protected int calculateOverFee(int distance) {

@@ -169,8 +169,7 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public int getLineSurcharge() {
-        return sections.stream().map(Section::getLine).collect(Collectors.toSet())
-                .stream().map(Line::getSurcharge).mapToInt(s -> s).max().orElse(0);
+    public List<Line> getLines() {
+        return sections.stream().map(Section::getLine).distinct().collect(Collectors.toList());
     }
 }

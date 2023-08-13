@@ -32,8 +32,8 @@ public class PathService {
 
         if (userPrincipal instanceof UserPrincipal) {
             Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
-            path.setMember(member);
+            return PathResponse.of(path, member);
         }
-        return PathResponse.of(path);
+        return PathResponse.of(path, null);
     }
 }
