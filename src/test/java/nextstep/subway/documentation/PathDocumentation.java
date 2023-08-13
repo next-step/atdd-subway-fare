@@ -34,7 +34,7 @@ public class PathDocumentation extends Documentation {
         // given
         ShortPathResponse shortPathResponse = new ShortPathResponse(
                 List.of(new StationResponse(1L, "강남역"), new StationResponse(2L, "선릉역")),
-                10, 10
+                10, 10, 1250
         );
 
         when(lineService.findShortPath(any(), any(), any())).thenReturn(shortPathResponse);
@@ -70,7 +70,8 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("stations[].id").type(JsonFieldType.NUMBER).description("역 id"),
                 fieldWithPath("stations[].name").type(JsonFieldType.STRING).description("역 이름"),
                 fieldWithPath("distance").type(JsonFieldType.NUMBER).description("총 거리"),
-                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요시간")
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("총 소요시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
         );
     }
 }
