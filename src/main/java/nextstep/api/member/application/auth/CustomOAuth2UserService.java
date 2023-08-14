@@ -1,6 +1,7 @@
 package nextstep.api.member.application.auth;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.api.auth.application.token.oauth2.OAuth2User;
@@ -11,9 +12,11 @@ import nextstep.api.member.domain.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CustomOAuth2UserService implements OAuth2UserService {
     private final MemberRepository memberRepository;
 
+    @Transactional
     @Override
     public OAuth2User loadUser(final OAuth2UserRequest oAuth2UserRequest) {
         final var member = memberRepository.findByEmail(oAuth2UserRequest.getUsername())

@@ -1,6 +1,7 @@
 package nextstep.api.auth.application.token;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.api.auth.AuthenticationException;
@@ -14,12 +15,14 @@ import nextstep.api.auth.support.JwtTokenProvider;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TokenService {
     private final UserDetailsService userDetailsService;
     private final OAuth2UserService oAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
     private final GithubClient githubClient;
 
+    @Transactional
     public TokenResponse createToken(final String email, final String password) {
         final var userDetails = loadUser(email, password);
         final var token = jwtTokenProvider.createToken(userDetails.getUsername(), userDetails.getRole());
@@ -34,6 +37,7 @@ public class TokenService {
         return userDetails;
     }
 
+    @Transactional
     public TokenResponse createTokenFromGithub(String code) {
         final var oAuth2User = loadUserFromGithub(code);
         final var token = jwtTokenProvider.createToken(oAuth2User.getUsername(), oAuth2User.getRole());
