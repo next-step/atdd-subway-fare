@@ -3,10 +3,12 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class Path {
-    private Sections sections;
+    private final Sections sections;
+    private final Price price;
 
-    public Path(Sections sections) {
+    public Path(Sections sections, Price price) {
         this.sections = sections;
+        this.price = price;
     }
 
     public Sections getSections() {
@@ -23,5 +25,9 @@ public class Path {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public int getPrice() {
+        return price.getPrice();
     }
 }

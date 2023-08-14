@@ -27,6 +27,6 @@ public class Price {
     }
 
     private static int getOverFareSecond(double distance) {
-        return (int) Math.ceil((distance - 50) / 8) * 100;
+        return (int) Math.ceil((double) (distance - 50) / 8) * 100;
     }
 }

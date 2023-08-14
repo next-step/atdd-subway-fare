@@ -82,7 +82,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertPathResponse(response, 20, 4, 1450, 교대역, 강남역, 양재역);
+        assertPathResponse(response, 20, 4, 1250, 교대역, 강남역, 양재역);
     }
 
 

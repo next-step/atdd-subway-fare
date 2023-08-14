@@ -27,7 +27,7 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int price = Price.calculate(distance).getPrice();
+        int price = path.getPrice();
         return new PathResponse(stations, distance, duration, price);
     }
 }
