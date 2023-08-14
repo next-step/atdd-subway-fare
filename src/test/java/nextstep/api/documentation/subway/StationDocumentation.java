@@ -18,9 +18,11 @@ import static nextstep.api.acceptance.subway.station.StationSteps.지하철역_�
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import nextstep.api.documentation.Documentation;
+import nextstep.api.member.domain.MemberRepository;
 import nextstep.api.subway.applicaion.station.StationService;
 import nextstep.api.subway.applicaion.station.dto.StationResponse;
 
@@ -28,6 +30,9 @@ class StationDocumentation extends Documentation {
     @MockBean
     private StationService stationService;
 
+
+    @Autowired
+    private MemberRepository memberRepository;
     @Test
     void createStation() {
         final var name = "강남역";

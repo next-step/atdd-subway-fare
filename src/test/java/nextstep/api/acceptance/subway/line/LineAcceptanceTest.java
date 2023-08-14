@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,12 @@ import nextstep.api.subway.applicaion.line.dto.request.LineUpdateRequest;
 
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
+
+    @BeforeEach
+    @Override
+    public void setUp() {
+        super.setUp();
+    }
 
     @DisplayName("지하철노선을 생성한다")
     @Test

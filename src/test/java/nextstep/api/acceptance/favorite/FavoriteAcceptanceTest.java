@@ -29,8 +29,8 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     private String token;
     private String invalidToken = "invalidToken";
 
-    @Override
     @BeforeEach
+    @Override
     public void setUp() {
         super.setUp();
 

@@ -26,6 +26,12 @@ class AuthAcceptanceTest extends AcceptanceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @BeforeEach
+    @Override
+    public void setUp() {
+        super.setUp();
+    }
+
     @DisplayName("이메일과 비밀번호로 로그인한다")
     @Nested
     class BearerAuth {

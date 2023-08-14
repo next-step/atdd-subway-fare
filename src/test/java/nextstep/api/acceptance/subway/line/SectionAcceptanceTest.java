@@ -24,7 +24,10 @@ class SectionAcceptanceTest extends AcceptanceTest {
     private Long 교대역, 강남역, 역삼역, 선릉역, 삼성역;
 
     @BeforeEach
+    @Override
     public void setUp() {
+        super.setUp();
+
         교대역 = StationSteps.지하철역_생성_성공("교대역").getId();
         강남역 = StationSteps.지하철역_생성_성공("강남역").getId();
         역삼역 = StationSteps.지하철역_생성_성공("역삼역").getId();
