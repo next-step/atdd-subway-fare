@@ -10,6 +10,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class PathSteps {
+    public static ExtractableResponse<Response> 로그인_후_두_역의_최단_거리_경로_조회를_요청(String accessToken, Long source, Long target) {
+        return RestAssured
+                .given().log().all()
+                .auth().oauth2(accessToken)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type=DISTANCE", source, target)
+                .then().log().all().extract();
+    }
+
     public static ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
         return RestAssured
                 .given().log().all()
