@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
+@DisplayName("최단 경로 조회 테스트")
 class PathServiceTest {
 
     @Autowired
@@ -161,6 +162,31 @@ class PathServiceTest {
                 .extracting("name").containsExactly("교대역", "강남역", "선릉", "도곡", "양재역");
         assertThat(path.getDistance()).isEqualTo(4);
         assertThat(path.getDuration()).isEqualTo(16);
+    }
+
+    /**
+     * <pre>
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     * </pre>
+     */
+    @DisplayName("최단 거리 경로 조회 및 기본 요금 응답 확인 - 교대, 남부터미널, 양재")
+    @Test
+    void findPathPathTypeDistanceReturnFare() {
+        // given : 선행조건 기술
+
+        // when : 기능 수행
+        PathResponse path = pathService.findPath(교대역.getId(), 양재역.getId(), FindPathType.DISTANCE);
+
+        // then : 결과 확인
+        assertThat(path.getStations()).hasSize(3)
+                .extracting("name").containsExactly("교대역", "남부터미널역", "양재역");
+        assertThat(path.getDistance()).isEqualTo(5);
+        assertThat(path.getDuration()).isEqualTo(25);
+        assertThat(path.getFare()).isEqualTo(1250);
     }
 
     private Section createSection(Line line, Station upStation, Station downStation, int distance, int duration) {

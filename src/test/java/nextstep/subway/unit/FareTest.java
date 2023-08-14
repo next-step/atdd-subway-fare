@@ -37,4 +37,17 @@ class FareTest {
         // then
         assertThat(fare.getFare()).isEqualTo(expectedFare);
     }
+
+    @DisplayName("50km초과 ~ 100km까지(8km마다 100원씩 추가) 테스트")
+    @ParameterizedTest
+    @CsvSource(value = {"51:2150","59:2250","66:2250","67:2350","75:2450","83:2550","90:2550","91:2650", "100:2750"}, delimiter = ':')
+    void additionalFare2(int distance, int expectedFare) {
+        // given
+
+        // when
+        Fare fare = new Fare(distance);
+
+        // then
+        assertThat(fare.getFare()).isEqualTo(expectedFare);
+    }
 }
