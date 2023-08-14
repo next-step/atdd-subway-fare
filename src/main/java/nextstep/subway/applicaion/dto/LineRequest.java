@@ -7,6 +7,7 @@ public class LineRequest {
     private Long downStationId;
     private int distance;
     private int duration;
+    private int surcharge;
 
     public int getDuration() {
         return duration;
@@ -30,5 +31,9 @@ public class LineRequest {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getSurcharge() {
+        return surcharge;
     }
 }

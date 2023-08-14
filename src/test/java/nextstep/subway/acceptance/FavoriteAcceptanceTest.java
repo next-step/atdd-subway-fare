@@ -85,7 +85,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
-        Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, 10);
+        Map<String, String> lineCreateParams = 노선_생성_요청값_생성(name, color, upStation, downStation, distance, 10, 0);
 
         return LineSteps.지하철_노선_생성_요청(관리자, lineCreateParams).jsonPath().getLong("id");
     }
