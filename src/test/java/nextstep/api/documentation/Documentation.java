@@ -8,10 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import io.restassured.RestAssured;
@@ -21,22 +22,28 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 
 @ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension.class)
-@DirtiesContext
 public class Documentation {
 
     private static final RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter();
     private static final ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter();
 
-    protected RequestSpecification spec;
+    @LocalServerPort
+    private Integer port;
+    private  RequestSpecification spec;
     @Value("${enabled.logging}")
     private boolean enableLogging;
 
     @BeforeEach
     public void setUp(final RestDocumentationContextProvider restDocumentation) {
+        initPort();
         logRestAssured();
         initSpec(restDocumentation);
+    }
+
+    private void initPort() {
+        RestAssured.port = port;
     }
 
     private void logRestAssured() {
