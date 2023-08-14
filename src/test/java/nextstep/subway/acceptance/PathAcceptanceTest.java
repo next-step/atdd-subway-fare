@@ -103,8 +103,12 @@ class PathAcceptanceTest extends AcceptanceTest {
         // given : 선행조건 기술
 
         // when : 기능 수행
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_및_소요시간_조회를_요청(교대역, 양재역, FindPathType.DISTANCE.getType());
 
         // then : 결과 확인
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
