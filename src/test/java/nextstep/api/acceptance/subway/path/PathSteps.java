@@ -36,7 +36,8 @@ public class PathSteps {
         return asResponse(response, PathResponse.class);
     }
 
-    public static ExceptionResponse 최단경로조회_실패(final Long sourceId, final Long targetId, final String type, final HttpStatus httpStatus) {
+    public static ExceptionResponse 최단경로조회_실패(final Long sourceId, final Long targetId, final String type,
+                                              final HttpStatus httpStatus) {
         final var response = 최단경로조회_요청(sourceId, targetId, type);
         statusCodeShouldBe(response, httpStatus);
         return asExceptionResponse(response);

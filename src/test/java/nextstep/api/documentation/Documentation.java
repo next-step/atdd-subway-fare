@@ -31,7 +31,7 @@ public class Documentation {
 
     @LocalServerPort
     private Integer port;
-    private  RequestSpecification spec;
+    private RequestSpecification spec;
     @Value("${enabled.logging}")
     private boolean enableLogging;
 

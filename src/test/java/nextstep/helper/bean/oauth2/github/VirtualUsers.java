@@ -42,7 +42,7 @@ public enum VirtualUsers {
         return getSatisfiedUserWith(user -> Objects.equals("token " + user.accessToken, accessToken));
     }
 
-    private static Optional<VirtualUsers> getSatisfiedUserWith(final Predicate<VirtualUsers>predicate) {
+    private static Optional<VirtualUsers> getSatisfiedUserWith(final Predicate<VirtualUsers> predicate) {
         return Arrays.stream(values())
                 .filter(predicate)
                 .findAny();

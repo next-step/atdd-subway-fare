@@ -35,10 +35,8 @@ import nextstep.api.unit.subway.LineFixture;
 public class PathServiceMockTest {
     @Mock
     private LineRepository lineRepository;
-
     @Mock
     private StationRepository stationRepository;
-
     @InjectMocks
     private PathService pathService;
 

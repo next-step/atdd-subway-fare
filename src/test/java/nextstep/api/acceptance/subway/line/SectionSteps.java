@@ -34,7 +34,8 @@ public class SectionSteps {
 
     public static ValidatableResponse 지하철구간_등록_요청(final Long lineId, final Long upStationId, final Long downStationId,
                                                   final int distance, final int duration) {
-        return 지하철구간_등록_요청(lineId, new SectionRequest(upStationId, downStationId, distance, duration), RestAssured.given());
+        final var request = new SectionRequest(upStationId, downStationId, distance, duration);
+        return 지하철구간_등록_요청(lineId, request, RestAssured.given());
     }
 
     public static LineResponse 지하철구간_등록_성공(final Long lineId, final SectionRequest request) {

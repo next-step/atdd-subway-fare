@@ -19,11 +19,11 @@ public class LineFixture {
             return line;
         }
 
-        line.appendSection(new Section(firstDownStation, downStations[0], DEFAULT_LINE_DISTANCE, DEFAULT_LINE_DURATION));
+        appendSection(line, firstDownStation, downStations[0], DEFAULT_LINE_DISTANCE, DEFAULT_LINE_DURATION);
 
         if (downStations.length > 1) {
             for (int i = 0; i < downStations.length - 1; i++) {
-                line.appendSection(new Section(downStations[i], downStations[i + 1], DEFAULT_LINE_DISTANCE, DEFAULT_LINE_DURATION));
+                appendSection(line, downStations[i], downStations[i + 1], DEFAULT_LINE_DISTANCE, DEFAULT_LINE_DURATION);
             }
         }
 

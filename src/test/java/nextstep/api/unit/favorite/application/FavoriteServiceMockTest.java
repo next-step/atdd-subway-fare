@@ -38,16 +38,12 @@ import nextstep.api.unit.subway.StationFixture;
 class FavoriteServiceMockTest {
     @Mock
     private PathService pathService;
-
     @Mock
     private FavoriteRepository favoriteRepository;
-
     @Mock
     private MemberRepository memberRepository;
-
     @Mock
     private StationRepository stationRepository;
-
     @InjectMocks
     private FavoriteService favoriteService;
 

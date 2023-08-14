@@ -142,7 +142,6 @@ class LineAcceptanceTest extends AcceptanceTest {
         }
     }
 
-
     @DisplayName("지하철노선을 삭제한다")
     @Test
     void deleteLine() {
