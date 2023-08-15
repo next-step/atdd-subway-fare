@@ -18,6 +18,7 @@ public enum SubwayError {
     COLOR_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "색정보가 유효하지 않습니다."),
     SHORTPATH_SAME_STATION(HttpStatus.BAD_REQUEST, "최단경로 시작역, 종착역이 동일할 수 없습니다."),
     AUTHENTICATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다."),
+    FARE_NOT_MATH_POLICY(HttpStatus.CONFLICT, "요금 산출에 실패했습니다."),
     ;
 
     SubwayError(HttpStatus status, String message) {

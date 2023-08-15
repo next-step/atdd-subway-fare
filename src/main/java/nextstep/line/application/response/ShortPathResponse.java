@@ -20,12 +20,12 @@ public class ShortPathResponse {
         this.fare = fare;
     }
 
-    public static ShortPathResponse of(ShortPath shortPath) {
+    public static ShortPathResponse of(ShortPath shortPath, int fare) {
         return new ShortPathResponse(
                 shortPath.getStations().stream().map(StationResponse::of).collect(Collectors.toList()),
                 shortPath.getDistance(),
                 shortPath.getDuration(),
-                1350
+                fare
         );
     }
 
