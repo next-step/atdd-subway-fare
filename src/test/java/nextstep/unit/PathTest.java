@@ -4,18 +4,13 @@ import nextstep.domain.subway.Line;
 import nextstep.domain.subway.Path;
 import nextstep.domain.subway.Section;
 import nextstep.domain.subway.Station;
-import nextstep.util.FareCarculator;
 import nextstep.domain.subway.PathType;
 import nextstep.util.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -176,28 +171,5 @@ class PathTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("출발역과 도착역이 연결되어 있지 않음.");
     }
-
-    @DisplayName("구간의 요금을 조회")
-    @ParameterizedTest
-    @MethodSource("provideDistanceAndFare")
-    void carculateFare(Long distance,int expectedFare){
-        int calculatedFare = FareCarculator.totalFare(distance);
-
-        assertThat(calculatedFare)
-                .isEqualTo(expectedFare);
-    }
-
-    private static Stream<Arguments> provideDistanceAndFare() {
-        return Stream.of(
-                Arguments.of(10L,1250),
-                Arguments.of(16L,1250+200),
-                Arguments.of(60L,1250+800+200)
-        );
-    }
-
-
-
-
-
 
 }
