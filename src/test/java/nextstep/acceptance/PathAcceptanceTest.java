@@ -8,11 +8,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.stream.Stream;
 
+import static nextstep.acceptance.commonStep.MemberSteps.회원_생성_요청;
 import static nextstep.acceptance.commonStep.PathStep.*;
+import static nextstep.acceptance.commonStep.TokenStep.로그인_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 조회 관련 기능")
@@ -180,6 +186,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     /**
      * 교대역    --- *2호선* ---   강남역  --- *신분당선 * ---   양재역
      */
+
+    /**
+     * Given 지하철 노선과 구간을 생성하고
+     * When 거리 기준으로 지하철 경로를 조회하면
+     * Then 출발역으로부터 도착역까지의 최단경로의 요금과 노선 별 추가요금을 알 수 있다.
+     */
     @DisplayName("노선별 추가요금 테스트")
     @Test
     void getPathAndPriceByLine() {
@@ -192,6 +204,35 @@ public class PathAcceptanceTest extends AcceptanceTest {
         //then
         assertThat(response.jsonPath().getInt("fare")).isEqualTo(교대강남양재거리기준요금+신분당선추가요금);
 
+    }
+
+    /**
+     * Given 지하철 노선과 구간을 생성하고
+     * When 로그인한 회원이 거리 기준으로 지하철 경로를 조회하면
+     * Then 출발역으로부터 도착역까지의 최단경로의 요금과 연령 별 할인요금을 알 수 있다.
+     */
+    @DisplayName("연령별 요금할인 테스트")
+    @ParameterizedTest
+    @MethodSource("provideMemberInfo")
+    void getPathAndPriceByAge(String email,String password,int age,int expectedFare) {
+        //given
+        회원_생성_요청(email, password, age);
+        String accessToken = 로그인_요청(email, password).jsonPath().getString("accessToken");
+
+        //when
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION,accessToken);
+
+        //then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(expectedFare);
+
+    }
+
+    private static Stream<Arguments> provideMemberInfo() {
+        return Stream.of(
+                Arguments.of("child@email.com","password",10,(2450-350)*0.5),
+                Arguments.of("teenager@email.com","password",15,(2450-350)*0.8),
+                Arguments.of("adult@email.com","password",30,2450)
+        );
     }
 
 
