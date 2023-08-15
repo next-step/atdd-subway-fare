@@ -17,55 +17,46 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.favorite.acceptance.FavoriteSteps.*;
 import static nextstep.line.LineTestField.*;
+import static nextstep.line.acceptance.LineRequester.createLineThenReturnId;
 import static nextstep.member.MemberTestField.*;
+import static nextstep.member.acceptance.MemberSteps.회원_생성_요청;
+import static nextstep.station.acceptance.StationRequester.createStationThenReturnId;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     private static final String NOT_AVAILABLE_TOKEN = "notAvailableToken";
 
-    private Station gangnamStation;
-    private Station seolleungStation;
-    private Station suwonStation;
-    private Station nowonStation;
-    private Station dearimStation;
-
-    private Member member;
-    private Member defferentMember;
-
-    @Autowired
-    private StationRepository stationRepository;
-
-    @Autowired
-    private LineRepository lineRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    private Long 강남역;
+    private Long 선릉역;
+    private Long 수원역;
+    private Long 노원역;
+    private Long 대림역;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
-        gangnamStation = 역저장(GANGNAM_STATION_NAME);
-        seolleungStation = 역저장(SEOLLEUNG_STATION_NAME);
-        suwonStation = 역저장(SUWON_STATION_NAME);
-        nowonStation = 역저장(NOWON_STATION_NAME);
-        dearimStation = 역저장(DEARIM_STATION_NAME);
-        member = 회원저장(EMAIL, PASSWORD, AGE, ROLE);
-        defferentMember = 회원저장(EMAIL2, PASSWORD, AGE, ROLE);
+        강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
+        선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
+        수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
+        노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
+        대림역 = 지하철역_추가_식별값_리턴(DEARIM_STATION_NAME);
+        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        회원_생성_요청(EMAIL2, PASSWORD, AGE);
     }
 
     @DisplayName("경로가 정상일경우 즐겨찾기가 등록된다.")
     @Test
     void 즐겨찾기등록() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
+        ExtractableResponse<Response> response = 즐겨찾기_등록(accessToken, 강남역, 선릉역);
 
         // then
         즐겨찾기등록_응답값_검증(response);
@@ -75,7 +66,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기등록_유효하지않은토큰() {
         // when
-        ExtractableResponse<Response> response = 즐겨찾기_등록(NOT_AVAILABLE_TOKEN, gangnamStation.getId(), seolleungStation.getId());
+        ExtractableResponse<Response> response = 즐겨찾기_등록(NOT_AVAILABLE_TOKEN, 강남역, 선릉역);
 
         // then
         즐겨찾기등록_유효하지않은토큰_응답값_검증(response);
@@ -85,14 +76,14 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기등록_경로미존재() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 즐겨찾기_등록(accessToken, gangnamStation.getId(), dearimStation.getId());
+        ExtractableResponse<Response> response = 즐겨찾기_등록(accessToken, 강남역, 대림역);
 
         // then
         즐겨찾기등록_경로미존재_응답값_검증(response);
@@ -102,14 +93,14 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기등록_역동일() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
 
         // when
-        ExtractableResponse<Response> response = 즐겨찾기_등록(accessToken, gangnamStation.getId(), gangnamStation.getId());
+        ExtractableResponse<Response> response = 즐겨찾기_등록(accessToken, 강남역, 강남역);
 
         // then
         즐겨찾기등록_역동일_응답값_검증(response);
@@ -119,12 +110,12 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기조회() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
-        즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
+        즐겨찾기_등록(accessToken, 강남역, 선릉역);
 
         // when
         ExtractableResponse<Response> response = 즐겨찾기_조회(accessToken);
@@ -137,12 +128,12 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기조회_유효하지않은토큰() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
-        즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
+        즐겨찾기_등록(accessToken, 강남역, 선릉역);
 
         // when
         ExtractableResponse<Response> response = 즐겨찾기_조회(NOT_AVAILABLE_TOKEN);
@@ -155,12 +146,12 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기삭제() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
-        즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
+        즐겨찾기_등록(accessToken, 강남역, 선릉역);
 
         // when
         즐겨찾기_삭제(accessToken, 즐겨찾기_ID_조회(accessToken));
@@ -174,12 +165,12 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기삭제_유효하지않은토큰() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
-        즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
+        즐겨찾기_등록(accessToken, 강남역, 선릉역);
 
         // when
         ExtractableResponse<Response> response = 즐겨찾기_삭제(NOT_AVAILABLE_TOKEN, 즐겨찾기_ID_조회(accessToken));
@@ -192,19 +183,27 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @Test
     void 즐겨찾기삭제_다른사용자() {
         // given
-        노선저장(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, gangnamStation, seolleungStation, 2, 4);
-        노선저장(TWO_LINE_NAME, TWO_LINE_COLOR, seolleungStation, suwonStation, 3, 4);
-        노선저장(THREE_LINE_NAME, TRHEE_LINE_COLOR, gangnamStation, nowonStation, 5, 4);
+        지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
+        지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 4);
+        지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 4);
 
-        String accessToken = 로그인요청(member);
-        String defferentMemberAccessToken = 로그인요청(defferentMember);
-        즐겨찾기_등록(accessToken, gangnamStation.getId(), seolleungStation.getId());
+        String accessToken = 로그인요청(EMAIL, PASSWORD);
+        String defferentMemberAccessToken = 로그인요청(EMAIL2, PASSWORD);
+        즐겨찾기_등록(accessToken, 강남역, 선릉역);
 
         // when
         ExtractableResponse<Response> response = 즐겨찾기_삭제(defferentMemberAccessToken, 즐겨찾기_ID_조회(accessToken));
 
         // then
         즐겨찾기삭제_다른사용자_응답값_검증(response);
+    }
+
+    private Long 지하철역_추가_식별값_리턴(String stationName) {
+        return createStationThenReturnId(stationName);
+    }
+
+    private Long 지하철노선_생성_후_식별값_리턴(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+        return createLineThenReturnId(name, color, upStationId, downStationId, distance, duration);
     }
 
     private void 즐겨찾기등록_응답값_검증(ExtractableResponse<Response> response) {
@@ -245,18 +244,6 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     private void 즐겨찾기삭제_다른사용자_응답값_검증(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-    }
-
-    private Station 역저장(String stationName) {
-        return stationRepository.save(new Station(stationName));
-    }
-
-    private Line 노선저장(String name, String color, Station upStation, Station downStation, int distance, int duration) {
-        return lineRepository.save(new Line(name, color, upStation, downStation, distance, duration));
-    }
-
-    private Member 회원저장(String email, String password, int age, String role) {
-        return memberRepository.save(new Member(email, password, age, role));
     }
 
 }

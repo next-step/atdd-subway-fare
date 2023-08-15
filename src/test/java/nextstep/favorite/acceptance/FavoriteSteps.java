@@ -13,11 +13,11 @@ public class FavoriteSteps {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_FORMAT = "Bearer %s";
 
-    public static String 로그인요청(Member member) {
+    public static String 로그인요청(String email, String password) {
         return RestAssured
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokenRequest(member.getEmail(), member.getPassword()))
+                .body(new TokenRequest(email, password))
                 .when().post("/login/token")
                 .then().log().all().extract()
                 .jsonPath().getObject("accessToken", String.class);
