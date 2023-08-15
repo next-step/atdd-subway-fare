@@ -104,7 +104,7 @@ public class FarePolicyTest {
         DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy(distance);
 
         //then
-        assertThat(distanceFarePolicy.getAdditionalFare())
+        assertThat(distanceFarePolicy.calculateFare(0))
                 .isEqualTo(expectedFare);
     }
 
@@ -123,7 +123,7 @@ public class FarePolicyTest {
         //when
         LineFarePolicy lineFarePolicy = new LineFarePolicy(List.of(이호선,신분당선 ));
 
-        assertThat(lineFarePolicy.getAdditionalFare())
+        assertThat(lineFarePolicy.calculateFare(0))
                 .isEqualTo(신분당선추가요금);
     }
 

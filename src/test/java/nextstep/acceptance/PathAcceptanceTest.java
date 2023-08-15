@@ -76,6 +76,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         흑석역 =  StationStep.지하철역_생성("흑석역").jsonPath().getLong("id");
         동작역 =  StationStep.지하철역_생성("동작역").jsonPath().getLong("id");
 
+        이호선추가요금 = 200;
+        삼호선추가요금 = 300;
+        신분당선추가요금 = 900;
+        구호선추가요금 = 0;
+
         이호선 =  LineStep.지하철_노선_생성( "2호선", "Green",이호선추가요금).jsonPath().getLong("id");
         삼호선 =  LineStep.지하철_노선_생성( "삼호선", "Orange",삼호선추가요금).jsonPath().getLong("id");
         신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red",신분당선추가요금).jsonPath().getLong("id");
@@ -109,10 +114,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         노량진흑석구간요금 = 1250+200;
         흑석동작구간요금 = 1250+800+200;
 
-        이호선추가요금 = 200;
-        삼호선추가요금 = 300;
-        신분당선추가요금 = 900;
-        구호선추가요금 = 0;
     }
 
     /**
@@ -183,7 +184,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getPathAndPriceByLine() {
         //given
-        int 교대강남양재거리기준요금 = 1650;
+        int 교대강남양재거리기준요금 = 1250+300;
 
         //when
         ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION);

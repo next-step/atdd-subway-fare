@@ -11,12 +11,14 @@ public class LineRequest {
 
     private String name;
     private String color;
+    private int surCharge;
 
 
     public Line toEntity() {
         return new Line(
                 this.name,
-                this.color
+                this.color,
+                this.surCharge
         );
     }
 

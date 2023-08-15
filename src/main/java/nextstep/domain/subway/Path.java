@@ -1,6 +1,6 @@
 package nextstep.domain.subway;
 
-import nextstep.util.FareCarculator;
+import nextstep.util.FareCalculator;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class Path {
         this.sections = sections;
         this.distance = sections.totalDistance();
         this.duration = sections.totalDuration();
-        this.fare = FareCarculator.totalFare(this.distance);
+        this.fare = FareCalculator.totalFare(this.distance,sections.getLines());
 
     }
 

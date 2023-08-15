@@ -38,6 +38,9 @@ public class Sections {
     public Long totalDuration() {
         return sectionList.stream().mapToLong(Section::getDuration).sum();
     }
+    public List<Line> getLines() {
+        return sectionList.stream().map(Section::getLine).distinct().collect(Collectors.toList());
+    }
 
     public List<Station> getStations() {
         if (this.sectionList.isEmpty()) {
