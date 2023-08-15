@@ -26,7 +26,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 역삼역;
 
     /**
-     * 교대역    --- *2호선* ---   강남역
+     * 교대역    --- *2호선* ---   강남역  --- *2호선* ---역삼역
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
