@@ -1,10 +1,10 @@
 package nextstep.api.subway.support;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import nextstep.api.SubwayException;
@@ -13,9 +13,9 @@ import nextstep.api.subway.domain.path.PathSelection;
 import nextstep.api.subway.domain.station.Station;
 
 public class SubwayShortestPath {
-    private final GraphPath<Station, DefaultWeightedEdge> path;
+    private final GraphPath<Station, SectionEdge> path;
 
-    private SubwayShortestPath(final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
+    private SubwayShortestPath(final DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath,
                                final Station source, final Station target) {
         this.path = dijkstraShortestPath.getPath(source, target);
 
@@ -29,8 +29,20 @@ public class SubwayShortestPath {
         return path.getVertexList();
     }
 
-    public long getTotal() {
-        return (long) path.getWeight();
+    public List<Section> getSections() {
+        return path.getEdgeList().stream()
+                .map(SectionEdge::getSection)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public long getTotalDistance() {
+        return getSections().stream()
+                .mapToLong(Section::getDistance)
+                .sum();
+    }
+
+    public long getTotalDuration() {
+        return getSections().stream().mapToLong(Section::getDistance).sum();
     }
 
     public static Builder builder(final List<Station> stations, final List<Section> sections) {
@@ -62,10 +74,10 @@ public class SubwayShortestPath {
             return new SubwayShortestPath(makeGraph(stations, sections, type), source, target);
         }
 
-        private DijkstraShortestPath<Station, DefaultWeightedEdge> makeGraph(final List<Station> stations,
-                                                                             final List<Section> sections,
-                                                                             final PathSelection type) {
-            final var graph = new WeightedMultigraph<Station, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        private DijkstraShortestPath<Station, SectionEdge> makeGraph(final List<Station> stations,
+                                                                     final List<Section> sections,
+                                                                     final PathSelection type) {
+            final var graph = new WeightedMultigraph<Station, SectionEdge>(SectionEdge.class);
 
             registerVertexes(graph, stations);
             registerEdges(graph, sections, type);
@@ -73,19 +85,22 @@ public class SubwayShortestPath {
             return new DijkstraShortestPath<>(graph);
         }
 
-        private void registerVertexes(final WeightedMultigraph<Station, DefaultWeightedEdge> graph,
+        private void registerVertexes(final WeightedMultigraph<Station, SectionEdge> graph,
                                       final List<Station> stations) {
             for (Station station : stations) {
                 graph.addVertex(station);
             }
         }
 
-        private void registerEdges(final WeightedMultigraph<Station, DefaultWeightedEdge> graph,
+        private void registerEdges(final WeightedMultigraph<Station, SectionEdge> graph,
                                    final List<Section> sections, final PathSelection type) {
             for (final var section : sections) {
                 final var upStation = section.getUpStation();
                 final var downStation = section.getDownStation();
-                graph.setEdgeWeight(graph.addEdge(upStation, downStation), type.getValueOf(section));
+                final var sectionEdge = SectionEdge.of(section);
+
+                graph.addEdge(upStation, downStation, sectionEdge);
+                graph.setEdgeWeight(sectionEdge, type.getValueOf(section));
             }
         }
     }

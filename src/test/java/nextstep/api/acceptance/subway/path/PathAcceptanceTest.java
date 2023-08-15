@@ -61,7 +61,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DISTANCE.name());
 
                 // then
-                final var distance = response.getTotal();
+                final var distance = response.getDistance();
                 final var stations = response.getStations().stream()
                         .map(StationResponse::getId)
                         .collect(Collectors.toUnmodifiableList());
@@ -78,7 +78,7 @@ class PathAcceptanceTest extends AcceptanceTest {
                 final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DURATION.name());
 
                 // then
-                final var duration = response.getTotal();
+                final var duration = response.getDuration();
                 final var stations = response.getStations().stream()
                         .map(StationResponse::getId)
                         .collect(Collectors.toUnmodifiableList());

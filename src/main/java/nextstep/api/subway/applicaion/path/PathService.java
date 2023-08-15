@@ -29,7 +29,8 @@ public class PathService {
 
         return new PathResponse(
                 StationResponse.toResponses(shortestPath.getStation()),
-                shortestPath.getTotal()
+                shortestPath.getTotalDistance(),
+                shortestPath.getTotalDuration()
         );
     }
 
