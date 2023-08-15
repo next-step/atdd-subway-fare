@@ -136,9 +136,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         assertThat(response.jsonPath().getList("stations.id", Long.class))
             .containsExactly(교대역, 강남역, 양재역);
-        // Math.round((1450 / (double)(50/100))) 적용 => 실제 프로젝트였으면 BigDecimal로 계산해야 함
+        // Math.round(((1450 - 350) * (double)(50/100))) 적용 => 실제 프로젝트였으면 BigDecimal로 계산해야 함
         // 여기서 1450은 20km이므로 기본 운임료 + 10km(추가요금 200원) 1250 + 200
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(725);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(550);
     }
 
     /**
@@ -151,9 +151,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         assertThat(response.jsonPath().getList("stations.id", Long.class))
             .containsExactly(교대역, 강남역, 양재역);
-        // Math.round((1450 / (double)(80/100))) 적용 => 실제 프로젝트였으면 BigDecimal로 계산해야 함
+        // Math.round(((1450 - 350) * (double)(80/100))) 적용 => 실제 프로젝트였으면 BigDecimal로 계산해야 함
         // 여기서 1450은 20km이므로 기본 운임료 + 10km(추가요금 200원) 1250 + 200
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1823);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(880);
     }
 
     private Long 지하철_노선_생성_요청(
