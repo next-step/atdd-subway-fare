@@ -30,7 +30,7 @@ class PathDocumentation extends Documentation {
                 List.of(
                         new StationResponse(1L, "강남역"),
                         new StationResponse(2L, "삼성역")
-                ), 10, 10
+                ), 10, 10, 1250
         );
 
         when(pathService.findShortestPath(1L, 2L, PathSelection.DISTANCE.name())).thenReturn(response);
@@ -46,7 +46,8 @@ class PathDocumentation extends Documentation {
                                 fieldWithPath("stations[].id").description("역 id"),
                                 fieldWithPath("stations[].name").description("역 이름"),
                                 fieldWithPath("distance").description("총 거리"),
-                                fieldWithPath("duration").description("총 소요시간"))
+                                fieldWithPath("duration").description("총 소요시간"),
+                                fieldWithPath("fare").description("이용 요금"))
                 )
         ));
     }
