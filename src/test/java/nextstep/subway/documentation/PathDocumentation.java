@@ -4,6 +4,8 @@ import static nextstep.subway.acceptance.document.PathDocumentSteps.두_역의_�
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentRequest;
 import static nextstep.subway.utils.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -38,6 +40,9 @@ public class PathDocumentation extends Documentation {
         var document = document("path",
             getDocumentRequest(),
             getDocumentResponse(),
+            requestHeaders(
+                headerWithName("Authorization").description("Bearer JWT 토큰값").optional()
+            ),
             requestParameters(
                 parameterWithName("source").description("출발하는 역 id"),
                 parameterWithName("target").description("도착하는 역 id"),
@@ -52,6 +57,6 @@ public class PathDocumentation extends Documentation {
                 fieldWithPath("fare").type(JsonFieldType.NUMBER).description("총 요금")
             ));
 
-        두_역의_최단_경로_조회를_요청(1L, 2L, PathFindType.DISTANCE, this.spec, document);
+        두_역의_최단_경로_조회를_요청(1L, 2L, PathFindType.DISTANCE, null, this.spec, document);
     }
 }
