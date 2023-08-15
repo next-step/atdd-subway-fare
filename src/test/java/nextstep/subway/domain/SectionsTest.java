@@ -32,6 +32,41 @@ class SectionsTest {
         assertThat(sections.totalFare()).isEqualTo(1350);
     }
 
+    /**
+     * 기존 동작을 유지하기 위해 변경된 요구사항에 대해 extraFare()를 분리할까? 아니면 totalFare()에 로직을 포함시킬까?
+     *
+     * extraFare()를 분리한 경우
+     * 장점 : 기존의 코드 / 테스트들에 대해 수정하지 않아도 됨
+     * 단점 : totalDiscount()를 호출하고, extraFare()에 대해 추가적으로 호출해야 하므로 호출하는 메서드 수가 많아져서 헷갈림
+     *
+     * extraFare()라는 메서드로 분리할까 생각했지만, totalFare()를 계산하기 위함이라는 점에서 같다고 생
+     * 장점 : 호출하는 입장에서 원하는 바가 뚜렷함
+     * 단점 : - 기존의 코드 / 테스트들을 일일이 수정해야 함
+     *       - 메서드의 분기가 많아져서 한 메서드 내에서 많은 일을 처리하게 되어 테스트하기 어려워짐
+     *       만약 모든 경우의 수에 대하여 테스트하고 싶은 경우, N(분기1의 가짓수) * M(분기2의 가짓수)...의 수에 대하여 테스트하게 되므로 단위테스트 크기가 커짐
+     *       (private 메서드는 public 메서드에 종속된다는 관점)
+     *
+     * 선택한 방향 : totalFare()에 합치기
+     * - 기존의 코드 / 테스트들을 수정하더라도 public 메서드 수가 적어져서 하는 일이 명확해지는 장점이 큼
+     * - 굳이 N * M 경우에 대하여 테스트할 필요는 없다고 판단. public 메서드 여럿에서 각각 단위테스트하는 것처럼 분기 별로 테스트해서 N + M 횟수만 테스트하면 되지 않나?
+     * 이렇게 하면 기존 테스트들은 손 대지 않아도 된다.
+     * 대신 이 경우 테스트 메서드 명에 분기하는 경우에 대해 상세히 명세하는 것이 좋겠다는 생각이 들었음
+     */
+    @DisplayName("구간들 중 추가요금이 있는 노선이 포함될 경우 추가요금이 가장 큰 노선의 추가요금을 포함한 금액을 반환한다")
+    @Test
+    void totalFare_withExtraFare() {
+        int baseFare = 1250;
+        int extraFare = 500;
+        Line sinbundang = new Line("신분당선", "bg-red-600", extraFare);
+        Line bundang = new Line("분당선", "bg-red-600", 300);
+        Sections sections = new Sections(
+            new Section(sinbundang, new Station("강남역"), new Station("양재역"), 5, 5),
+            new Section(bundang, new Station("양재역"), new Station("판교역"), 5, 5)
+        );
+
+        assertThat(sections.totalFare()).isEqualTo(baseFare + extraFare);
+    }
+
     @DisplayName("총 거리가 10km 이내라면 비용은 1250원으로 고정이다")
     @ParameterizedTest
     @ValueSource(ints = {1, 5, 10})
