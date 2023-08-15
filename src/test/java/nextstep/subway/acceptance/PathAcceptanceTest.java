@@ -84,7 +84,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("900원 추가요금이 있는 노선의 경로를 조회한다")
     @ParameterizedTest
-    @CsvSource(value = {"10,2350", "11,2450", "15,2450"})
+    @CsvSource(value = {"10,2150", "11,2250", "15,2250"})
     void findPathWithAdditionalFare(int distance, int fare) {
         var 도곡역 = 지하철역_생성_요청("도곡역").jsonPath().getLong("id");
         var 선릉역 = 지하철역_생성_요청("선릉역").jsonPath().getLong("id");
