@@ -7,13 +7,10 @@ import nextstep.domain.subway.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static nextstep.acceptance.commonStep.PathStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +52,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private static int 노량진흑석구간요금;
     private static int 흑석동작구간요금;
 
+    /**
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*   // 여의도역  --- *9호선* --- 노량진역 --- *9호선* --- 흑석역  --- *9호선* ---   동작역
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
     @BeforeEach
     public void setGivenData() {
 
@@ -147,9 +151,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
      */
 
     @DisplayName("지하철 경로 최단거리 기준 요금 조회")
-    @ParameterizedTest
-    @MethodSource("provideSourceAndTarget")
-    void getPathAndPrice(Long source,Long target, int fare) {
+    @Test
+    void getPathAndPrice() {
 
         //when
         ExtractableResponse<Response> 기본요금응답 = 지하철_경로_조회(여의도역,노량진역, PathType.DISTANCE);
@@ -162,14 +165,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(이차요금구간응답.jsonPath().getInt("fare")).isEqualTo(흑석동작구간요금);
 
     }
-    //TODO : @beforeEach로 얻은 static 변수를 @ParameterizedTest에 사용하는 방법 조사하기. 지금은 null이 주입됨
-    private static Stream<Arguments> provideSourceAndTarget() {
-        return Stream.of(
-                Arguments.of(여의도역,노량진역,여의도노량진구간요금),
-                Arguments.of(노량진역,흑석역,노량진흑석구간요금),
-                Arguments.of(흑석역,동작역,흑석동작구간요금)
-                );
-    }
+
 
     /**
      * Given 지하철 노선과 구간을 생성하고
