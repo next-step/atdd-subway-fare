@@ -104,14 +104,17 @@ class PathAcceptanceTest extends AcceptanceTest {
      * Then 최소 시간 기준 경로를 응답하고
      * And 비싼 추가요금이 적용된 지하철 이용 요금을 함께 응답한다
      * */
+    // 남부터미널역 - 도곡역 - 양재역
+    //             |
+    //            선릉역
     @DisplayName("환승 후 노선 경로 조회할 경우 추가 금액이 가장 높은 추가 요금을 적용한다")
     @ParameterizedTest
-    @CsvSource(value = {"7,2350", "8,2450", "12,2450"})
+    @CsvSource(value = {"9,2150", "10,2250", "14,2250"})
     void findPathWithLargestAdditionalFareWhenTransport(int distance, int fare) {
         var 도곡역 = 지하철역_생성_요청("도곡역").jsonPath().getLong("id");
         var 선릉역 = 지하철역_생성_요청("선릉역").jsonPath().getLong("id");
         지하철_노선_생성_요청("분당선", "yellow", 도곡역, 선릉역, distance, 3, 900);
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 도곡역, 3, 10));
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 도곡역, 2, 10));
 
         var response = 두_역의_최단_경로_조회를_요청(양재역, 선릉역, PathFindType.DURATION);
 
