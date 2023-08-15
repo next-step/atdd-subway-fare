@@ -7,7 +7,7 @@
 :sectlinks:
 
 === 일반 로그인
-operation::auth-login[snippets='http-request,http-response']
+operation::auth-login[snippets='http-request,request-fields,http-response,response-fields']
 
 === Github 로그인
-operation::auth-github-login[snippets='http-request,http-response']
+operation::auth-github-login[snippets='http-request,request-fields,http-response,response-fields']

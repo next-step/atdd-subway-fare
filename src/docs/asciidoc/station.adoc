@@ -9,12 +9,12 @@
 == 역 관리 API
 
 === 역 생성
-operation::station-create[snippets='http-request,http-response']
+operation::station-create[snippets='http-request,request-fields,http-response,response-fields']
 
 === 역 삭제
-operation::station-delete[snippets='http-request,http-response']
+operation::station-delete[snippets='http-request,path-parameters']
 
 == 역 조회 API
 
 === 역 전체 조회
-operation::station-show[snippets='http-request,http-response']
+operation::station-show[snippets='http-request,http-response,response-fields']

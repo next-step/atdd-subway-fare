@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,12 @@ import nextstep.api.subway.applicaion.line.dto.request.LineUpdateRequest;
 @DisplayName("지하철 노선 관리 기능")
 class LineAcceptanceTest extends AcceptanceTest {
 
+    @BeforeEach
+    @Override
+    public void setUp() {
+        super.setUp();
+    }
+
     @DisplayName("지하철노선을 생성한다")
     @Test
     void createLine() {
@@ -25,6 +32,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 "bg-red-600",
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
+                10,
                 10
         );
 
@@ -44,6 +52,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                         "bg-red-600",
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("양재역").getId(),
+                        10,
                         10
                 ),
                 new LineCreateRequest(
@@ -51,6 +60,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                         "bg-green-600",
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("역삼역").getId(),
+                        10,
                         10
                 )
         );
@@ -73,6 +83,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 "bg-red-600",
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
+                10,
                 10
         );
 
@@ -100,6 +111,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                         "bg-red-600",
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("양재역").getId(),
+                        10,
                         10
                 );
                 final var updateRequest = new LineUpdateRequest("2호선", "bg-blue-123");
@@ -130,7 +142,6 @@ class LineAcceptanceTest extends AcceptanceTest {
         }
     }
 
-
     @DisplayName("지하철노선을 삭제한다")
     @Test
     void deleteLine() {
@@ -139,6 +150,7 @@ class LineAcceptanceTest extends AcceptanceTest {
                 "bg-red-600",
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
+                10,
                 10
         );
 

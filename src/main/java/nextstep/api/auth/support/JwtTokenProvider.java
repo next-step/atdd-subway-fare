@@ -49,7 +49,7 @@ public class JwtTokenProvider {
         return new UserPrincipal(username, role);
     }
 
-    public boolean validateToken(final String token) {
+    private boolean validateToken(final String token) {
         try {
             final var claims = extractClaims(token);
             return !claims.getExpiration().before(new Date());

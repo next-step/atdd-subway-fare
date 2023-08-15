@@ -8,6 +8,7 @@ import static nextstep.api.acceptance.member.MemberSteps.회원_정보_수정_�
 import static nextstep.api.acceptance.member.MemberSteps.회원_정보_조회_성공;
 import static nextstep.api.acceptance.member.MemberSteps.회원_정보_조회됨;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,12 @@ class MemberAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
     public static final int AGE = 20;
+
+    @BeforeEach
+    @Override
+    public void setUp() {
+        super.setUp();
+    }
 
     @DisplayName("회원가입을 한다.")
     @Test

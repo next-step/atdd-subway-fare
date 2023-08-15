@@ -7,7 +7,7 @@
 :sectlinks:
 
 === 구간 등록
-operation::section-create[snippets='http-request,http-response']
+operation::section-create[snippets='http-request,path-parameters,request-fields,http-response,response-fields']
 
 === 구간 삭제
-operation::section-delete[snippets='http-request,http-response']
+operation::section-delete[snippets='http-request,path-parameters']

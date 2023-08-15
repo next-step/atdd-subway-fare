@@ -22,8 +22,9 @@ public class SectionSteps {
             final Long lineId, final SectionRequest request, final RequestSpecification restAssured) {
         return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParams("lineId", lineId)
                 .body(request)
-                .when().post(BASE_URL + "/" + lineId + "/sections")
+                .when().post(BASE_URL + "/{lineId}/sections")
                 .then();
     }
 
@@ -31,8 +32,10 @@ public class SectionSteps {
         return 지하철구간_등록_요청(lineId, request, RestAssured.given());
     }
 
-    public static ValidatableResponse 지하철구간_등록_요청(final Long lineId, final Long upStationId, final Long downStationId, final int distance) {
-        return 지하철구간_등록_요청(lineId, new SectionRequest(upStationId, downStationId, distance), RestAssured.given());
+    public static ValidatableResponse 지하철구간_등록_요청(final Long lineId, final Long upStationId, final Long downStationId,
+                                                  final int distance, final int duration) {
+        final var request = new SectionRequest(upStationId, downStationId, distance, duration);
+        return 지하철구간_등록_요청(lineId, request, RestAssured.given());
     }
 
     public static LineResponse 지하철구간_등록_성공(final Long lineId, final SectionRequest request) {
@@ -50,8 +53,9 @@ public class SectionSteps {
     public static ValidatableResponse 지하철구간_제거_요청(final Long lineId, final Long stationId,
                                                   final RequestSpecification restAssured) {
         return restAssured
+                .pathParams("lineId", lineId)
                 .param("stationId", stationId)
-                .when().delete(BASE_URL + "/" + lineId + "/sections")
+                .when().delete(BASE_URL + "/{lineId}/sections")
                 .then();
     }
 

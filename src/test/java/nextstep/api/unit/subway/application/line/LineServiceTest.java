@@ -68,21 +68,21 @@ class LineServiceTest {
 
             @Test
             void 노선이_존재하지_않는_경우() {
-                final var request = new SectionRequest(역삼역.getId(), 선릉역.getId(), 10);
+                final var request = new SectionRequest(역삼역.getId(), 선릉역.getId(), 10, 10);
                 assertThatThrownBy(() -> lineService.appendSection(0L, request))
                         .isInstanceOf(NoSuchLineException.class);
             }
 
             @Test
             void 상행역이_존재하지_않는_경우() {
-                final var request = new SectionRequest(0L, 선릉역.getId(), 10);
+                final var request = new SectionRequest(0L, 선릉역.getId(), 10, 10);
                 assertThatThrownBy(() -> lineService.appendSection(신분당선.getId(), request))
                         .isInstanceOf(NoSuchStationException.class);
             }
 
             @Test
             void 하행역이_존재하지_않는_경우() {
-                final var request = new SectionRequest(역삼역.getId(), 0L, 10);
+                final var request = new SectionRequest(역삼역.getId(), 0L, 10, 10);
                 assertThatThrownBy(() -> lineService.appendSection(신분당선.getId(), request))
                         .isInstanceOf(NoSuchStationException.class);
             }
@@ -125,6 +125,6 @@ class LineServiceTest {
     }
 
     private SectionRequest makeSectionRequest(final Station upStation, final Station downStation) {
-        return new SectionRequest(upStation.getId(), downStation.getId(), 10);
+        return new SectionRequest(upStation.getId(), downStation.getId(), 10, 10);
     }
 }

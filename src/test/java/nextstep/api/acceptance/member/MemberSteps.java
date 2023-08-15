@@ -41,7 +41,8 @@ public class MemberSteps {
     public static ValidatableResponse 회원_정보_조회_요청(final Long id, final RequestSpecification restAssured) {
         return restAssured
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/members/" + id)
+                .pathParams("id", id)
+                .when().get("/members/{id}")
                 .then();
     }
 
@@ -79,8 +80,9 @@ public class MemberSteps {
     ) {
         return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParams("id", id)
                 .body(new MemberRequest(email, password, age))
-                .when().put("members/" + id)
+                .when().put("/members/{id}")
                 .then();
     }
 
@@ -99,7 +101,8 @@ public class MemberSteps {
 
     public static ValidatableResponse 회원_삭제_요청(final Long id, final RequestSpecification restAssured) {
         return restAssured
-                .when().delete("members/" + id)
+                .pathParams("id", id)
+                .when().delete("members/{id}")
                 .then();
     }
 

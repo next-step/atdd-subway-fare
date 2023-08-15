@@ -16,27 +16,29 @@ public class PathSteps {
 
     public static final String BASE_URL = "/paths";
 
-    public static ValidatableResponse 최단경로조회_요청(final Long sourceId, final Long targetId,
+    public static ValidatableResponse 최단경로조회_요청(final Long sourceId, final Long targetId, final String type,
                                                 final RequestSpecification restAssured) {
         return restAssured
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
+                .queryParam("type", type)
                 .when().get(BASE_URL)
                 .then();
     }
 
-    public static ValidatableResponse 최단경로조회_요청(final Long sourceId, final Long targetId) {
-        return 최단경로조회_요청(sourceId, targetId, RestAssured.given());
+    public static ValidatableResponse 최단경로조회_요청(final Long sourceId, final Long targetId, final String type) {
+        return 최단경로조회_요청(sourceId, targetId, type, RestAssured.given());
     }
 
-    public static PathResponse 최단경로조회_성공(final Long sourceId, final Long targetId) {
-        final var response = 최단경로조회_요청(sourceId, targetId);
+    public static PathResponse 최단경로조회_성공(final Long sourceId, final Long targetId, final String type) {
+        final var response = 최단경로조회_요청(sourceId, targetId, type);
         statusCodeShouldBe(response, HttpStatus.OK);
         return asResponse(response, PathResponse.class);
     }
 
-    public static ExceptionResponse 최단경로조회_실패(final Long sourceId, final Long targetId, final HttpStatus httpStatus) {
-        final var response = 최단경로조회_요청(sourceId, targetId);
+    public static ExceptionResponse 최단경로조회_실패(final Long sourceId, final Long targetId, final String type,
+                                              final HttpStatus httpStatus) {
+        final var response = 최단경로조회_요청(sourceId, targetId, type);
         statusCodeShouldBe(response, httpStatus);
         return asExceptionResponse(response);
     }

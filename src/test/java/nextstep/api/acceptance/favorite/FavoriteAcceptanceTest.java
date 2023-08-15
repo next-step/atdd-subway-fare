@@ -29,8 +29,8 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     private String token;
     private String invalidToken = "invalidToken";
 
-    @Override
     @BeforeEach
+    @Override
     public void setUp() {
         super.setUp();
 
@@ -41,7 +41,7 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     private void prepareSubwayGraph() {
         정자역 = StationSteps.지하철역_생성_성공("정자역").getId();
         판교역 = StationSteps.지하철역_생성_성공("판교역").getId();
-        지하철노선_생성_성공(정자역, 판교역, 10);
+        지하철노선_생성_성공(정자역, 판교역, 10, 10);
 
         잠실역 = StationSteps.지하철역_생성_성공("잠실역").getId();
     }
