@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Path {
     private final Sections sections;
-    private final Price price;
+    private final Fare fare;
 
-    public Path(Sections sections, Price price) {
+    public Path(Sections sections, Fare fare) {
         this.sections = sections;
-        this.price = price;
+        this.fare = fare;
     }
 
     public Sections getSections() {
@@ -28,6 +28,6 @@ public class Path {
     }
 
     public int getPrice() {
-        return price.getPrice();
+        return fare.getFare();
     }
 }

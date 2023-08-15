@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-public enum PathPolicy {
+public enum DistanceFareSection {
     SECOND(50, 8, 100),
     FIRST(10, 5, 100);
 
@@ -8,7 +8,7 @@ public enum PathPolicy {
     private final int distance;
     private final int additionalFare;
 
-    PathPolicy(int limit, int distance, int additionalFare) {
+    DistanceFareSection(int limit, int distance, int additionalFare) {
         this.limit = limit;
         this.distance = distance;
         this.additionalFare = additionalFare;

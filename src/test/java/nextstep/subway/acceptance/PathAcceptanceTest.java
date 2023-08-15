@@ -73,7 +73,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertPathResponse(response, 5, 20, 1450, 교대역, 남부터미널역, 양재역);
+        assertPathResponse(response, 5, 20, 1750, 교대역, 남부터미널역, 양재역);
     }
 
     /**
@@ -88,7 +88,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertPathResponse(response, 20, 4, 1450, 교대역, 강남역, 양재역);
+        assertPathResponse(response, 20, 4, 1750, 교대역, 강남역, 양재역);
     }
 
     /**
@@ -98,14 +98,14 @@ class PathAcceptanceTest extends AcceptanceTest {
      * And  총 거리와 소요 시간과 요금을 함께 응답 한다.
      * (연령에 따라 지하철 이용 요금이 할인됨)
      */
-    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
+    @DisplayName("로그인 후 두 역의 최단 시간 경로를 조회한다.")
     @Test
     void findPathWithLogin() {
         // when
         ExtractableResponse<Response> response = 로그인_후_두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
-        assertPathResponse(response, 20, 4, 725, 교대역, 강남역, 양재역);
+        assertPathResponse(response, 20, 4, 875, 교대역, 강남역, 양재역);
     }
 
     private void assertPathResponse(ExtractableResponse<Response> response, int distance, int duration, int price, Long... stationIds) {
@@ -115,7 +115,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("price")).isEqualTo(price);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int price) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int fare) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -124,8 +124,8 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
         lineCreateParams.put("duration", duration + "");
-        if (price != 0) {
-            lineCreateParams.put("price", duration + "");
+        if (fare != 0) {
+            lineCreateParams.put("fare", fare + "");
         }
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");

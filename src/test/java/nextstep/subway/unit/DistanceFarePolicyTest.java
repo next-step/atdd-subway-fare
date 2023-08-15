@@ -1,15 +1,15 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.Price;
+import nextstep.subway.domain.DistanceFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PriceTest {
+public class DistanceFarePolicyTest {
     @ParameterizedTest(name = "거리: {0}, 가격: {1}")
-    @DisplayName("가격 계산 기능")
+    @DisplayName("거리별 추가 요금 계산")
     @CsvSource(value = {
             "9,1250",
             "10,1250",
@@ -21,7 +21,7 @@ public class PriceTest {
             "58,2150",
             "59,2250",
     })
-    void calculatePrice(int distance, int price) {
-        assertThat(Price.calculate(distance).getPrice()).isEqualTo(price);
+    void calculate(int distance, int price) {
+        assertThat(new DistanceFarePolicy(distance).calculate()).isEqualTo(price);
     }
 }

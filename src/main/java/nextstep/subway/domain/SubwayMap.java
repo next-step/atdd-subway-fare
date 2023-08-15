@@ -16,12 +16,12 @@ public class SubwayMap {
 
     public Path findPath(Station source, Station target, PathType type) {
         Sections shortestDistancePath = findShortestPath(source, target, PathType.DISTANCE);
-        Price price = Price.calculate(shortestDistancePath.totalDistance());
+        Fare fare = Fare.calculate(shortestDistancePath);
         if (type == PathType.DISTANCE) {
-            return new Path(shortestDistancePath, price);
+            return new Path(shortestDistancePath, fare);
         }
         Sections shortestDurationPath = findShortestPath(source, target, type);
-        return new Path(shortestDurationPath, price);
+        return new Path(shortestDurationPath, fare);
     }
 
     private Sections findShortestPath(Station source, Station target, PathType type) {
