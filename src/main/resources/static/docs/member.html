@@ -516,7 +516,7 @@ Content-Length: 77
 Location: /members/1
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 08:04:17 GMT
+Date: Tue, 15 Aug 2023 09:27:57 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 62
@@ -584,6 +584,28 @@ Content-Length: 77
 </div>
 </div>
 <div class="sect3">
+<h4 id="_회원정보_수정_path_parameters"><a class="link" href="#_회원정보_수정_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /members/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="_회원정보_수정_request_fields"><a class="link" href="#_회원정보_수정_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -617,23 +639,6 @@ Content-Length: 77
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_회원정보_수정_http_response"><a class="link" href="#_회원정보_수정_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Date: Sat, 12 Aug 2023 08:04:17 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_회원정보_수정_response_fields"><a class="link" href="#_회원정보_수정_response_fields">Response fields</a></h4>
-<div class="paragraph">
-<p>Snippet response-fields not found for operation::member-update</p>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_회원탈퇴"><a class="link" href="#_회원탈퇴">회원탈퇴</a></h3>
@@ -647,27 +652,26 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_회원탈퇴_request_fields"><a class="link" href="#_회원탈퇴_request_fields">Request fields</a></h4>
-<div class="paragraph">
-<p>Snippet request-fields not found for operation::member-delete</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_회원탈퇴_http_response"><a class="link" href="#_회원탈퇴_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
-Date: Sat, 12 Aug 2023 08:04:17 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_회원탈퇴_response_fields"><a class="link" href="#_회원탈퇴_response_fields">Response fields</a></h4>
-<div class="paragraph">
-<p>Snippet response-fields not found for operation::member-delete</p>
-</div>
+<h4 id="_회원탈퇴_path_parameters"><a class="link" href="#_회원탈퇴_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /members/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 id</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -684,17 +688,13 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_내_정보_조회_request_fields"><a class="link" href="#_내_정보_조회_request_fields">Request fields</a></h4>
-
-</div>
-<div class="sect3">
 <h4 id="_내_정보_조회_http_response"><a class="link" href="#_내_정보_조회_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 08:04:17 GMT
+Date: Tue, 15 Aug 2023 09:27:57 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 62
@@ -755,8 +755,26 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_회원정보_조회_request_fields"><a class="link" href="#_회원정보_조회_request_fields">Request fields</a></h4>
-
+<h4 id="_회원정보_조회_path_parameters"><a class="link" href="#_회원정보_조회_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /members/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 id</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_회원정보_조회_http_response"><a class="link" href="#_회원정보_조회_http_response">HTTP response</a></h4>
@@ -765,7 +783,7 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 08:04:17 GMT
+Date: Tue, 15 Aug 2023 09:27:57 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 62
@@ -817,7 +835,7 @@ Content-Length: 62
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-12 16:40:27 +0900
+Last updated 2023-08-15 08:37:48 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

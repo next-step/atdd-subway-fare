@@ -463,10 +463,33 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_경로_조회_request_fields"><a class="link" href="#_경로_조회_request_fields">Request fields</a></h4>
-<div class="paragraph">
-<p>Snippet request-fields not found for operation::path</p>
-</div>
+<h4 id="_경로_조회_request_parameters"><a class="link" href="#_경로_조회_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>source</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">출발역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>target</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도착역 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경로조회타입</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_경로_조회_http_response"><a class="link" href="#_경로_조회_http_response">HTTP response</a></h4>
@@ -475,10 +498,10 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sat, 12 Aug 2023 08:04:18 GMT
+Date: Tue, 15 Aug 2023 09:27:58 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 138
+Content-Length: 161
 
 {
   "stations" : [ {
@@ -488,7 +511,8 @@ Content-Length: 138
     "id" : 2,
     "name" : "삼성역"
   } ],
-  "total" : 10
+  "distance" : 10,
+  "duration" : 10
 }</code></pre>
 </div>
 </div>
@@ -520,9 +544,14 @@ Content-Length: 138
 <td class="tableblock halign-left valign-top"><p class="tableblock">역 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>total</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>distance</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">경로조회타입에 따른 결과</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">총 거리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">총 소요시간</p></td>
 </tr>
 </tbody>
 </table>
@@ -532,7 +561,7 @@ Content-Length: 138
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-12 16:40:27 +0900
+Last updated 2023-08-15 08:37:48 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
