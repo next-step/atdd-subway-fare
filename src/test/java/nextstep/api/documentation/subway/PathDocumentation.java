@@ -40,7 +40,8 @@ class PathDocumentation extends Documentation {
         최단경로조회_요청(1L, 2L, PathSelection.DISTANCE.name(), makeRequestSpec(
                 document("path",
                         requestHeaders(
-                                headerWithName("Authenticated").optional().description("사용자 나이별 할인정책 적용을 위함")
+                                headerWithName("Authenticated").optional()
+                                        .description("필수 헤더 X) 사용자 나이별 할인정책 적용을 위함")
                         ),
                         requestParameters(
                                 parameterWithName("source").description("출발역 id"),
