@@ -229,8 +229,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     private static Stream<Arguments> provideMemberInfo() {
         return Stream.of(
-                Arguments.of("child@email.com","password",10,(2450-350)*0.5),
-                Arguments.of("teenager@email.com","password",15,(2450-350)*0.8),
+                Arguments.of("toddler@email.com","password",2,0),
+                Arguments.of("child@email.com","password",10, (int)((2450 - 350) * 0.5)),
+                Arguments.of("teenager@email.com","password",15,(int)((2450 - 350) * 0.8)),
                 Arguments.of("adult@email.com","password",30,2450)
         );
     }

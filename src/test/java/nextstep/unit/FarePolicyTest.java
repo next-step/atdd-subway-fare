@@ -1,5 +1,6 @@
 package nextstep.unit;
 
+import nextstep.domain.subway.Fare.AgeFarePolicy;
 import nextstep.domain.subway.Fare.DistanceFarePolicy;
 import nextstep.domain.subway.Fare.LineFarePolicy;
 import nextstep.domain.subway.Line;
@@ -127,15 +128,40 @@ public class FarePolicyTest {
                 .isEqualTo(신분당선추가요금);
     }
 
-    @DisplayName("전체 추가요금을 조회(구간+노선)")
-    @Test
-    void calculateAdditionalFareByDistanceAndLine(){
+    @DisplayName("연령 기준 할인요금을 조회")
+    @ParameterizedTest
+    @MethodSource("provideAgeAndFare")
+    void calculateDiscountedFareByAge(int age ,int originalFare,int expectedFare){
 
         //when
-        int totalFare = FareCalculator.totalFare(교대강남구간거리 + 강남양재구간거리 + 양재남부터미널구간거리, List.of(이호선, 삼호선, 신분당선));
+        AgeFarePolicy ageFarePolicy = new AgeFarePolicy(age);
+
+        assertThat(ageFarePolicy.calculateFare(originalFare))
+                .isEqualTo(expectedFare);
+    }
+
+    private static Stream<Arguments> provideAgeAndFare() {
+        return Stream.of(
+                Arguments.of(2,1350,0),
+                Arguments.of(10,1350,500),
+                Arguments.of(15,1350,800),
+                Arguments.of(30,1350,1350)
+        );
+    }
+
+    @DisplayName("상황별 계산된 요금을 조회(구간+노선+나이)")
+    @Test
+    void calculateFareOfEveryFarePolicy(){
+
+        //when
+        int adultTotalFare = FareCalculator.totalFare(교대강남구간거리 + 강남양재구간거리 + 양재남부터미널구간거리, List.of(이호선, 삼호선, 신분당선), 30);
+        int childTotalFare = FareCalculator.totalFare(교대강남구간거리 + 강남양재구간거리 + 양재남부터미널구간거리, List.of(이호선, 삼호선, 신분당선), 10);
 
         //then
-        assertThat(totalFare)
+        assertThat(adultTotalFare)
                 .isEqualTo(1250+400+900);
+        assertThat(childTotalFare)
+                .isEqualTo((int)((1250+400+900-350)*0.5));
+
     }
 }
