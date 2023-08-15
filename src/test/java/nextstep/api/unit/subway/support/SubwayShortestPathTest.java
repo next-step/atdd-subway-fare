@@ -28,7 +28,7 @@ class SubwayShortestPathTest {
         LineFixture.appendSection(line, 선릉역, 삼성역, 20, 20);
         LineFixture.appendSection(line, 선릉역, 역삼역, 10, 10);
 
-        final var path = SubwayShortestPath.builder(line.getStations(), line.getSections())
+        final var path = SubwayShortestPath.builder(line.getStations(), List.of(line))
                 .source(line.getFirstStation())
                 .target(line.getLastStation())
                 .buildOf(PathSelection.DISTANCE);
@@ -45,7 +45,7 @@ class SubwayShortestPathTest {
         LineFixture.appendSection(line, 선릉역, 삼성역, 20, 20);
         LineFixture.appendSection(line, 선릉역, 역삼역, 10, 10);
 
-        final var path = SubwayShortestPath.builder(line.getStations(), line.getSections())
+        final var path = SubwayShortestPath.builder(line.getStations(), List.of(line))
                 .source(line.getFirstStation())
                 .target(line.getLastStation())
                 .buildOf(PathSelection.DURATION);
@@ -59,7 +59,7 @@ class SubwayShortestPathTest {
         final var line = LineFixture.makeLine(교대역, 삼성역, 40, 10);
 
         assertThatThrownBy(() ->
-                SubwayShortestPath.builder(List.of(교대역, 삼성역, 선릉역), line.getSections())
+                SubwayShortestPath.builder(List.of(교대역, 삼성역, 선릉역), List.of(line))
                         .source(교대역)
                         .target(선릉역)
                         .buildOf(PathSelection.DISTANCE)

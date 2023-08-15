@@ -1,7 +1,6 @@
 package nextstep.api.subway.applicaion.path;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,11 +58,9 @@ public class PathService {
     private SubwayShortestPath shortestPathOf(final Station source, final Station target,
                                               final PathSelection pathType) {
         final var stations = stationRepository.findAll();
-        final var sections = lineRepository.findAll().stream()
-                .flatMap(line -> line.getSections().stream())
-                .collect(Collectors.toUnmodifiableList());
+        final var lines = lineRepository.findAll();
 
-        return SubwayShortestPath.builder(stations, sections)
+        return SubwayShortestPath.builder(stations, lines)
                 .source(source)
                 .target(target)
                 .buildOf(pathType);

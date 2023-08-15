@@ -8,6 +8,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import nextstep.api.SubwayException;
+import nextstep.api.subway.domain.line.Line;
 import nextstep.api.subway.domain.line.Section;
 import nextstep.api.subway.domain.path.PathSelection;
 import nextstep.api.subway.domain.station.Station;
@@ -45,19 +46,21 @@ public class SubwayShortestPath {
         return getSections().stream().mapToLong(Section::getDistance).sum();
     }
 
-    public static Builder builder(final List<Station> stations, final List<Section> sections) {
-        return new Builder(stations, sections);
+    public static Builder builder(final List<Station> stations, final List<Line> lines) {
+        return new Builder(stations, lines);
     }
 
     public static class Builder {
+        private final WeightedMultigraph<Station, SectionEdge> graph;
         private final List<Station> stations;
-        private final List<Section> sections;
+        private final List<Line> lines;
         private Station source;
         private Station target;
 
-        public Builder(final List<Station> stations, final List<Section> sections) {
+        public Builder(final List<Station> stations, final List<Line> lines) {
+            this.graph = new WeightedMultigraph<>(SectionEdge.class);
             this.stations = stations;
-            this.sections = sections;
+            this.lines = lines;
         }
 
         public Builder source(final Station source) {
@@ -71,33 +74,33 @@ public class SubwayShortestPath {
         }
 
         public SubwayShortestPath buildOf(final PathSelection type) {
-            return new SubwayShortestPath(makeGraph(stations, sections, type), source, target);
+            return new SubwayShortestPath(makeGraph(type), source, target);
         }
 
-        private DijkstraShortestPath<Station, SectionEdge> makeGraph(final List<Station> stations,
-                                                                     final List<Section> sections,
-                                                                     final PathSelection type) {
-            final var graph = new WeightedMultigraph<Station, SectionEdge>(SectionEdge.class);
-
-            registerVertexes(graph, stations);
-            registerEdges(graph, sections, type);
+        private DijkstraShortestPath<Station, SectionEdge> makeGraph(final PathSelection type) {
+            registerVertexes();
+            registerEdges(type);
 
             return new DijkstraShortestPath<>(graph);
         }
 
-        private void registerVertexes(final WeightedMultigraph<Station, SectionEdge> graph,
-                                      final List<Station> stations) {
+        private void registerVertexes() {
             for (Station station : stations) {
                 graph.addVertex(station);
             }
         }
 
-        private void registerEdges(final WeightedMultigraph<Station, SectionEdge> graph,
-                                   final List<Section> sections, final PathSelection type) {
-            for (final var section : sections) {
+        private void registerEdges(final PathSelection type) {
+            for (final var line : lines) {
+                registerEdgePerLine(line, type);
+            }
+        }
+
+        private void registerEdgePerLine(final Line line, final PathSelection type) {
+            for (final var section : line.getSections()) {
                 final var upStation = section.getUpStation();
                 final var downStation = section.getDownStation();
-                final var sectionEdge = SectionEdge.of(section);
+                final var sectionEdge = SectionEdge.from(line, section);
 
                 graph.addEdge(upStation, downStation, sectionEdge);
                 graph.setEdgeWeight(sectionEdge, type.getValueOf(section));
