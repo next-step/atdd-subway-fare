@@ -1,10 +1,17 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.Member;
 import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,8 +35,28 @@ public class FareTest {
     }
 
     @Test
+    @DisplayName("추가 요금 계산")
     void calculate() {
         List<Section> sections = List.of(교대_남부터미널_구간, 남부터미널_양재_구간);
         assertThat(Fare.calculate(new Sections(sections)).getFare()).isEqualTo(1750);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "5,1350",
+            "6,500",
+            "12,500",
+            "13,800",
+            "18,800",
+            "19,1350"
+    })
+    @DisplayName("할인 요금 계산")
+    void discount(int age, int expected) {
+        Member member = new Member("test1", "1234", age);
+        Fare fare = new Fare(1350);
+
+        fare.discount(member);
+
+        assertThat(fare.getFare()).isEqualTo(expected);
     }
 }

@@ -105,7 +105,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 로그인_후_두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
-        assertPathResponse(response, 20, 4, 875, 교대역, 강남역, 양재역);
+        assertPathResponse(response, 5, 20, 700, 교대역, 남부터미널역, 양재역);
     }
 
     private void assertPathResponse(ExtractableResponse<Response> response, int distance, int duration, int price, Long... stationIds) {

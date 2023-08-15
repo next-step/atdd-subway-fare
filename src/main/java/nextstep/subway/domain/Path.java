@@ -1,5 +1,7 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
+
 import java.util.List;
 
 public class Path {
@@ -29,5 +31,9 @@ public class Path {
 
     public int getPrice() {
         return fare.getFare();
+    }
+
+    public void discountFare(Member member) {
+        fare.discount(member);
     }
 }

@@ -1,5 +1,7 @@
 package nextstep.member.application;
 
+import nextstep.auth.principal.UnknownUserPrincipal;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;
@@ -36,6 +38,11 @@ public class MemberService {
     public MemberResponse findMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .map(MemberResponse::of)
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public Member findMemberByUserPrincipal(UserPrincipal userPrincipal) {
+        return memberRepository.findByEmail(userPrincipal.getUsername())
                 .orElseThrow(RuntimeException::new);
     }
 }
