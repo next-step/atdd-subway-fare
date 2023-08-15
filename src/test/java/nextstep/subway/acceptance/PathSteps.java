@@ -15,19 +15,33 @@ public class PathSteps {
         Long target,
         PathFindType type
     ) {
-        return 두_역의_최단_경로_조회를_요청(source, target, type, null, null);
+        return 두_역의_최단_경로_조회를_요청(source, target, type, null, null, null);
     }
 
     public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(
         Long source,
         Long target,
         PathFindType type,
+        String token
+    ) {
+        return 두_역의_최단_경로_조회를_요청(source, target, type, token, null, null);
+    }
+
+    public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(
+        Long source,
+        Long target,
+        PathFindType type,
+        String token,
         RequestSpecification spec,
         RestDocumentationFilter filter
     ) {
         RequestSpecification request = RestAssured
             .given().log().all()
             .params("source", source, "target", target, "type", type.name());
+
+        if (token != null) {
+            request = request.auth().oauth2(token);
+        }
 
         if (spec != null) {
             request = request.spec(spec);
