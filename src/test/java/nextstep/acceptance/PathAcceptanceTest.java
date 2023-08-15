@@ -22,10 +22,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
-    private static Long 여의도역;
-    private static Long 노량진역;
-    private static Long 흑석역;
-    private static Long 동작역;
+    private Long 여의도역;
+    private Long 노량진역;
+    private Long 흑석역;
+    private Long 동작역;
 
     private Long 교대강남구간거리;
     private Long 강남양재구간거리;
@@ -48,9 +48,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 구호선;
 
-    private static int 여의도노량진구간요금;
-    private static int 노량진흑석구간요금;
-    private static int 흑석동작구간요금;
+    private int 여의도노량진구간요금;
+    private int 노량진흑석구간요금;
+    private int 흑석동작구간요금;
+
+    private int 이호선추가요금;
+    private int 삼호선추가요금;
+    private int 신분당선추가요금;
+    private int 구호선추가요금;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -71,10 +76,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         흑석역 =  StationStep.지하철역_생성("흑석역").jsonPath().getLong("id");
         동작역 =  StationStep.지하철역_생성("동작역").jsonPath().getLong("id");
 
-        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green").jsonPath().getLong("id");
-        삼호선 =  LineStep.지하철_노선_생성( "삼호선", "Orange").jsonPath().getLong("id");
-        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red").jsonPath().getLong("id");
-        구호선 =  LineStep.지하철_노선_생성( "구호선", "Gold").jsonPath().getLong("id");
+        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green",이호선추가요금).jsonPath().getLong("id");
+        삼호선 =  LineStep.지하철_노선_생성( "삼호선", "Orange",삼호선추가요금).jsonPath().getLong("id");
+        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red",신분당선추가요금).jsonPath().getLong("id");
+        구호선 =  LineStep.지하철_노선_생성( "구호선", "Gold",구호선추가요금).jsonPath().getLong("id");
 
         교대강남구간거리 = 10L;
         강남양재구간거리 = 15L;
@@ -103,6 +108,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         여의도노량진구간요금 = 1250;
         노량진흑석구간요금 = 1250+200;
         흑석동작구간요금 = 1250+800+200;
+
+        이호선추가요금 = 200;
+        삼호선추가요금 = 300;
+        신분당선추가요금 = 900;
+        구호선추가요금 = 0;
     }
 
     /**

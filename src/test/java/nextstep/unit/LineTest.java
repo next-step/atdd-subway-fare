@@ -47,7 +47,7 @@ class LineTest {
                 .name("잠실역")
                 .build();
 
-        이호선 = new Line("2호선","Green");
+        이호선 = new Line("2호선","Green",0);
         강남역삼구간거리 = 5L;
         역삼선릉구간거리 = 20L;
         선릉잠실구간거리 = 10L;

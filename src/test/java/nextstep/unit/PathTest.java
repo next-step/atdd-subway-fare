@@ -87,10 +87,10 @@ class PathTest {
                 .name("동작역")
                 .build();
 
-        이호선 = new Line("이호선","Green");
-        삼호선 = new Line("삼호선","Orange");
-        신분당선 = new Line("신분당선","Red");
-        구호선 = new Line("구호선","Gold");
+        이호선 = new Line("이호선","Green",0);
+        삼호선 = new Line("삼호선","Orange",0);
+        신분당선 = new Line("신분당선","Red",0);
+        구호선 = new Line("구호선","Gold",0);
 
         교대강남구간거리 = 10L;
         강남양재구간거리 = 15L;

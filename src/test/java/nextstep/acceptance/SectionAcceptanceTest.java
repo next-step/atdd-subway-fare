@@ -31,7 +31,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     public void setGivenData() {
 
-        이호선 =  LineStep.지하철_노선_생성( "2호선", "green").jsonPath().getLong("id");
+        이호선 =  LineStep.지하철_노선_생성( "2호선", "green",0).jsonPath().getLong("id");
 
         강남역 =  StationStep.지하철역_생성("강남역").jsonPath().getLong("id");
         역삼역 =  StationStep.지하철역_생성("역삼역").jsonPath().getLong("id");
