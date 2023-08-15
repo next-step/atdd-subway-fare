@@ -498,10 +498,10 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 15 Aug 2023 09:27:58 GMT
+Date: Tue, 15 Aug 2023 10:36:55 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 161
+Content-Length: 179
 
 {
   "stations" : [ {
@@ -512,7 +512,8 @@ Content-Length: 161
     "name" : "삼성역"
   } ],
   "distance" : 10,
-  "duration" : 10
+  "duration" : 10,
+  "fare" : 1250
 }</code></pre>
 </div>
 </div>
@@ -552,6 +553,11 @@ Content-Length: 161
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>duration</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">총 소요시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이용 요금</p></td>
 </tr>
 </tbody>
 </table>
