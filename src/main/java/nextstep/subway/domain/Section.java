@@ -74,4 +74,8 @@ public class Section extends DefaultWeightedEdge {
         return (this.upStation == upStation && this.downStation == downStation)
                 || (this.upStation == downStation && this.downStation == upStation);
     }
+
+    public int getExtraFare() {
+        return this.line.getExtraFare();
+    }
 }

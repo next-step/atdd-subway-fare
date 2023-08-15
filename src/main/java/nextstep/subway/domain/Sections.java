@@ -17,8 +17,8 @@ public class Sections {
     public Sections() {
     }
 
-    public Sections(Section section) {
-        this(new ArrayList<>(List.of(section)));
+    public Sections(Section... sections) {
+        this(new ArrayList<>(List.of(sections)));
     }
 
     public Sections(List<Section> sections) {
@@ -173,18 +173,30 @@ public class Sections {
     }
 
     public int totalFare() {
+        int extraFare = getExtraFare();
         int distance = this.totalDistance();
 
         if (this.totalDistance() >= 50) {
             distance -= 50;
-            return 2050 + ((int) Math.ceil((double) distance / 8) * 100);
+            return 2050 + ((int) Math.ceil((double) distance / 8) * 100) + extraFare;
         }
 
         if (this.totalDistance() > 10) {
             distance -= 10;
-            return 1250 + ((int) Math.ceil((double) distance / 5) * 100);
+            return 1250 + ((int) Math.ceil((double) distance / 5) * 100) + extraFare;
         }
 
-        return 1250;
+        return 1250 + extraFare;
+    }
+
+    private int getExtraFare() {
+        if (this.sections.isEmpty()) {
+            return 0;
+        }
+
+        return this.sections.stream()
+            .mapToInt(Section::getExtraFare)
+            .max()
+            .orElse(0);
     }
 }

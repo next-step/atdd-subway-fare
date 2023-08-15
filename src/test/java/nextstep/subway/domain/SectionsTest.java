@@ -15,11 +15,16 @@ class SectionsTest {
     @DisplayName("새로운 구간을 추가한다")
     @Test
     void insertSection() {
+        /**
+         * line에 대해서 컨트롤하기 어려워서 line에 null을 넣었는데,
+         * line의 상태에 대해서 읽어오는 로직이 추가되면서 (getExtraFare()) 테스트를 모두 수정해야 했다
+         * 애초에 (당시의) 관심사가 아니라서 null을 넣은 것이 잘못이였을까? 관심사가 아니라면 그냥 emty 객체를 넣어주는 편이 더 낫겠다
+         */
         Sections sections = new Sections(new ArrayList<>(List.of(
-            new Section(null, new Station("강남역"), new Station("판교역"), 10, 15)
+            new Section(new Line(), new Station("강남역"), new Station("판교역"), 10, 15)
         )));
 
-        sections.add(new Section(null, new Station("판교역"), new Station("양재역"), 2, 3));
+        sections.add(new Section(new Line(), new Station("판교역"), new Station("양재역"), 2, 3));
 
         assertThat(sections.getSections())
             .extracting(Section::getDistance)
@@ -72,7 +77,7 @@ class SectionsTest {
     @ValueSource(ints = {1, 5, 10})
     void totalFare_under10km(int distance) {
         Sections sections = new Sections(
-            new Section(null, new Station("강남역"), new Station("판교역"), distance, 15)
+            new Section(new Line(), new Station("강남역"), new Station("판교역"), distance, 15)
         );
 
         assertThat(sections.totalFare()).isEqualTo(1250);
@@ -83,7 +88,7 @@ class SectionsTest {
     @CsvSource({"12, 1350", "14, 1350", "15, 1350", "18, 1450"})
     void totalFare_under50km(int distance, int fare) {
         Sections sections = new Sections(
-            new Section(null, new Station("강남역"), new Station("판교역"), distance, 15)
+            new Section(new Line(), new Station("강남역"), new Station("판교역"), distance, 15)
         );
 
         assertThat(sections.totalFare()).isEqualTo(fare);
@@ -94,7 +99,7 @@ class SectionsTest {
     @CsvSource({"50, 2050", "55, 2150", "57, 2150", "58, 2150"})
     void totalFare_over50km(int distance, int fare) {
         Sections sections = new Sections(
-            new Section(null, new Station("강남역"), new Station("판교역"), distance, 15)
+            new Section(new Line(), new Station("강남역"), new Station("판교역"), distance, 15)
         );
 
         assertThat(sections.totalFare()).isEqualTo(fare);
