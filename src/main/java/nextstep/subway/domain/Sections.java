@@ -176,17 +176,7 @@ public class Sections {
         int extraFare = getExtraFare();
         int distance = this.totalDistance();
 
-        if (this.totalDistance() >= 50) {
-            distance -= 50;
-            return 2050 + ((int) Math.ceil((double) distance / 8) * 100) + extraFare;
-        }
-
-        if (this.totalDistance() > 10) {
-            distance -= 10;
-            return 1250 + ((int) Math.ceil((double) distance / 5) * 100) + extraFare;
-        }
-
-        return 1250 + extraFare;
+        return DistanceFarePolicy.calculateFare(distance) + extraFare;
     }
 
     private int getExtraFare() {
