@@ -42,4 +42,28 @@ public class PathSteps {
         statusCodeShouldBe(response, httpStatus);
         return asExceptionResponse(response);
     }
+
+    public static ValidatableResponse 최단경로조회_요청(final String token, final Long sourceId, final Long targetId,
+                                                final String type,
+                                                final RequestSpecification restAssured) {
+        return restAssured
+                .header("Authorization", "Bearer " + token)
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .queryParam("type", type)
+                .when().get(BASE_URL)
+                .then();
+    }
+
+    public static ValidatableResponse 최단경로조회_요청(final String token, final Long sourceId, final Long targetId,
+                                                final String type) {
+        return 최단경로조회_요청(token, sourceId, targetId, type, RestAssured.given());
+    }
+
+    public static PathResponse 최단경로조회_성공(final String token, final Long sourceId, final Long targetId,
+                                         final String type) {
+        final var response = 최단경로조회_요청(token, sourceId, targetId, type);
+        statusCodeShouldBe(response, HttpStatus.OK);
+        return asResponse(response, PathResponse.class);
+    }
 }

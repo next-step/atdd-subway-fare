@@ -2,6 +2,8 @@ package nextstep.api.acceptance.subway.path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static nextstep.api.acceptance.auth.AuthSteps.일반_로그인_성공;
+import static nextstep.api.acceptance.member.MemberSteps.회원_생성_성공;
 import static nextstep.api.acceptance.subway.line.SectionSteps.지하철구간_등록_성공;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +14,7 @@ import nextstep.api.acceptance.AcceptanceTest;
 import nextstep.api.acceptance.subway.line.LineSteps;
 import nextstep.api.acceptance.subway.station.StationSteps;
 import nextstep.api.subway.applicaion.line.dto.request.SectionRequest;
+import nextstep.api.subway.domain.path.FareDiscounts;
 import nextstep.api.subway.domain.path.FareSections;
 import nextstep.api.subway.domain.path.PathSelection;
 
@@ -51,6 +54,42 @@ class FareAcceptanceTest extends AcceptanceTest {
         // then
         final var lineAdditionalFare = 5;
         final var expectedTotalFare = FareSections.calculateTotalFare(response.getDistance()) + lineAdditionalFare;
+        assertThat(response.getFare()).isEqualTo(expectedTotalFare);
+    }
+
+    @Test
+    void 로그인_사용자가_청소년이라면_청소년_할인정책을_적용한다() {
+        final var age = 13;
+
+        // given
+        회원_생성_성공("user@email.com", "password", age);
+        final var token = 일반_로그인_성공("user@email.com", "password").getAccessToken();
+
+        // when
+        final var response = PathSteps.최단경로조회_성공(token, 교대역, 양재역, PathSelection.DISTANCE.name());
+
+        // then
+        final var lineAdditionalFare = 5;
+        final var expectedTotalFare = FareDiscounts.discountFareByAge(
+                FareSections.calculateTotalFare(response.getDistance()) + lineAdditionalFare, age);
+        assertThat(response.getFare()).isEqualTo(expectedTotalFare);
+    }
+
+    @Test
+    void 로그인_사용자가_어린이라면_청소년_할인정책을_적용한다() {
+        final var age = 6;
+
+        // given
+        회원_생성_성공("user@email.com", "password", age);
+        final var token = 일반_로그인_성공("user@email.com", "password").getAccessToken();
+
+        // when
+        final var response = PathSteps.최단경로조회_성공(token, 교대역, 양재역, PathSelection.DISTANCE.name());
+
+        // then
+        final var lineAdditionalFare = 5;
+        final var expectedTotalFare = FareDiscounts.discountFareByAge(
+                FareSections.calculateTotalFare(response.getDistance()) + lineAdditionalFare, age);
         assertThat(response.getFare()).isEqualTo(expectedTotalFare);
     }
 }

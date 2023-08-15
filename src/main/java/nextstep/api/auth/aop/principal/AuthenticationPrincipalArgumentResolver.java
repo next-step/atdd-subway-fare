@@ -14,6 +14,8 @@ import nextstep.api.auth.support.JwtTokenProvider;
 
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+    public static final String AUTHENTICATION_HEADER = "Authorization";
+
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -30,7 +32,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     private String getAuthorizationHeader(final NativeWebRequest webRequest) {
-        final var authorization = Optional.ofNullable(webRequest.getHeader("Authorization"));
+        final var authorization = Optional.ofNullable(webRequest.getHeader(AUTHENTICATION_HEADER));
         return authorization.orElseThrow(AuthenticationException::new);
     }
 

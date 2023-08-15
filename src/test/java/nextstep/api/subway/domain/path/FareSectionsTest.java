@@ -27,5 +27,4 @@ class FareSectionsTest {
         final var actualFare = FareSections.calculateTotalFare(distance);
         assertThat(actualFare).isEqualTo(expectedFare);
     }
-
 }
