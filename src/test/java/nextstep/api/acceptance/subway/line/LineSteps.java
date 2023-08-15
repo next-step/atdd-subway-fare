@@ -48,14 +48,14 @@ public class LineSteps {
 
     public static LineResponse 지하철노선_생성_성공(final String name, final String color,
                                            final Long upStationId, final Long downStationId,
-                                           final int distance, final int duration) {
-        final var request = new LineCreateRequest(name, color, upStationId, downStationId, distance, duration);
+                                           final int distance, final int duration, final int fare) {
+        final var request = new LineCreateRequest(name, color, upStationId, downStationId, distance, duration, fare);
         return 지하철노선_생성_성공(request);
     }
 
     public static LineResponse 지하철노선_생성_성공(final Long upStationId, final Long downStationId,
-                                           final int distance, final int duration) {
-        final var request = new LineCreateRequest("신분당선", "bg-red-600", upStationId, downStationId, distance, duration);
+                                           final int distance, final int duration, final int fare) {
+        final var request = new LineCreateRequest("신분당선", "bg-red-600", upStationId, downStationId, distance, duration, fare);
         return 지하철노선_생성_성공(request);
     }
 

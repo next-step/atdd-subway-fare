@@ -44,7 +44,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 노선_앞에_구간을_추가한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 10, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 10, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -59,7 +59,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 노선_뒤에_구간을_추가한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 10, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 10, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -78,7 +78,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
                 @Test
                 void 상행역이_동일한_구간을_추가한다() {
-                    final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 20);
+                    final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 20, 0);
 
                     // given
                     final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -93,7 +93,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
                 @Test
                 void 하행역이_동일한_구간을_추가한다() {
-                    final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 20);
+                    final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 20, 0);
 
                     // given
                     final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -113,7 +113,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 상행역과_하행역_모두_노선에_포함되어_있으면_안된다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -125,7 +125,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 상행역과_하행역_둘중_하나도_노선에_포함되어_있지_않으면_안된다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -138,7 +138,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
             @ParameterizedTest
             @ValueSource(ints = {DEFAULT_LINE_DISTANCE, DEFAULT_LINE_DISTANCE + 1})
             void 역_사이에_새로운_역을_등록할_경우_새로운_구간의_길이는_기존_역_사이_길이보다_크거나_같아선_안된다(final int length) {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, DEFAULT_LINE_DISTANCE, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, DEFAULT_LINE_DISTANCE, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -151,7 +151,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
             @ParameterizedTest
             @ValueSource(ints = {DEFAULT_LINE_DURATION, DEFAULT_LINE_DURATION + 1})
             void 역_사이에_새로운_역을_등록할_경우_새로운_구간의_소요시간은_기존_역_사이_소요시간보다_크거나_같아선_안된다(final int length) {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 10, DEFAULT_LINE_DURATION);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 10, DEFAULT_LINE_DURATION, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -168,7 +168,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 등록하고자_하는_구간의_상행역은_등록되어_있어야_한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -180,7 +180,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 등록하고자_하는_구간의_하행역은_등록되어_있어야_한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -201,7 +201,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 지하철_구간의_상행_종점역을_삭제한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -216,7 +216,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 지하철_구간의_중간_역을_삭제한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -231,7 +231,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 지하철_구간의_하행_종점역을_삭제한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -250,7 +250,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 노선에_등록되어_있지_않은_역이어야_한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -263,7 +263,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 노선_내_구간이_하나뿐이라면_삭제할_수_없어야_한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 역삼역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();
@@ -280,7 +280,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 삭제하고자_하는_역은_등록되어_있어야_한다() {
-                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10);
+                final var request = new LineCreateRequest("2호선", "bg-red-600", 강남역, 선릉역, 20, 10, 0);
 
                 // given
                 final var lineId = LineSteps.지하철노선_생성_성공(request).getId();

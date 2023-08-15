@@ -43,9 +43,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = StationSteps.지하철역_생성_성공("남부터미널역").getId();
         광교역 = StationSteps.지하철역_생성_성공("광교역").getId();
 
-        LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10);
-        LineSteps.지하철노선_생성_성공(강남역, 양재역, 5, 5);
-        지하철구간_등록_성공(LineSteps.지하철노선_생성_성공(교대역, 남부터미널역, 5, 5).getId(), new SectionRequest(남부터미널역, 양재역, 5, 5));
+        LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10, 0);
+        LineSteps.지하철노선_생성_성공(강남역, 양재역, 5, 5, 0);
+        지하철구간_등록_성공(LineSteps.지하철노선_생성_성공(교대역, 남부터미널역, 5, 5, 0).getId(), new SectionRequest(남부터미널역, 양재역, 5, 5));
     }
 
     @DisplayName("지하철 최단경로를 조회한다")

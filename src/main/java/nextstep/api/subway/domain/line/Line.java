@@ -29,10 +29,14 @@ public class Line {
     @Embedded
     private LineSections sections;
 
-    public Line(final String name, final String color, final Section section) {
+    @Column(nullable = false)
+    private Long fare = 0L;
+
+    public Line(final String name, final String color, final long fare, final Section section) {
         this.name = name;
         this.color = color;
         this.sections = LineSections.init(section);
+        this.fare = fare;
     }
 
     public void update(final String name, final String color) {

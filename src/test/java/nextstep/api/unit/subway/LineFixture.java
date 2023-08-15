@@ -10,9 +10,10 @@ public class LineFixture {
     public static final String DEFAULT_LINE_COLOR = "bg-red-600";
     public static final int DEFAULT_LINE_DISTANCE = 10;
     public static final int DEFAULT_LINE_DURATION = 10;
+    public static final int DEFAULT_LINE_FARE = 0;
 
     public static Line makeLine(final Station upStation, final Station firstDownStation, Station... downStations) {
-        final var line = new Line(DEFAULT_LINE_NAME, DEFAULT_LINE_COLOR,
+        final var line = new Line(DEFAULT_LINE_NAME, DEFAULT_LINE_COLOR, DEFAULT_LINE_FARE,
                 new Section(upStation, firstDownStation, DEFAULT_LINE_DISTANCE, DEFAULT_LINE_DURATION));
 
         if (downStations.length == 0) {
@@ -32,7 +33,7 @@ public class LineFixture {
 
     public static Line makeLine(final Station upStation, final Station downStation, final int distance,
                                 final int duration) {
-        return new Line(DEFAULT_LINE_NAME, DEFAULT_LINE_COLOR,
+        return new Line(DEFAULT_LINE_NAME, DEFAULT_LINE_COLOR, DEFAULT_LINE_FARE,
                 new Section(upStation, downStation, distance, duration));
     }
 

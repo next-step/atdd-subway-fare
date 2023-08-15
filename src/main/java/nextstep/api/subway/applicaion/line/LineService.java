@@ -39,6 +39,7 @@ public class LineService {
         return new Line(
                 request.getName(),
                 request.getColor(),
+                request.getFare(),
                 new Section(
                         upStation,
                         downStation,

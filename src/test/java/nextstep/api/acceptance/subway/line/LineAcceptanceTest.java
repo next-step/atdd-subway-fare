@@ -33,7 +33,8 @@ class LineAcceptanceTest extends AcceptanceTest {
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
                 10,
-                10
+                10,
+                0
         );
 
         // when
@@ -53,7 +54,8 @@ class LineAcceptanceTest extends AcceptanceTest {
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("양재역").getId(),
                         10,
-                        10
+                        10,
+                        0
                 ),
                 new LineCreateRequest(
                         "2호선",
@@ -61,7 +63,8 @@ class LineAcceptanceTest extends AcceptanceTest {
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("역삼역").getId(),
                         10,
-                        10
+                        10,
+                        0
                 )
         );
 
@@ -84,7 +87,8 @@ class LineAcceptanceTest extends AcceptanceTest {
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
                 10,
-                10
+                10,
+                0
         );
 
         // given
@@ -112,7 +116,8 @@ class LineAcceptanceTest extends AcceptanceTest {
                         StationSteps.지하철역_생성_성공("강남역").getId(),
                         StationSteps.지하철역_생성_성공("양재역").getId(),
                         10,
-                        10
+                        10,
+                        0
                 );
                 final var updateRequest = new LineUpdateRequest("2호선", "bg-blue-123");
 
@@ -151,7 +156,8 @@ class LineAcceptanceTest extends AcceptanceTest {
                 StationSteps.지하철역_생성_성공("강남역").getId(),
                 StationSteps.지하철역_생성_성공("양재역").getId(),
                 10,
-                10
+                10,
+                0
         );
 
         // given
