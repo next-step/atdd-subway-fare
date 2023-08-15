@@ -23,6 +23,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+    private Long 역삼역;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -39,12 +40,14 @@ class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_생성_요청("강남역").jsonPath().getLong("id");
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
+        역삼역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
         이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
+        지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 역삼역, 6, 3));
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -54,7 +57,30 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 양재역, 양재역);
+        assertThat(response.jsonPath().getList("fare", Integer.class)).containsExactly(1250);
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
+    @Test
+    void findPathByDistanceAdditionalFee() {
+        // when
+        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(남부터미널역, 강남역, FindPathType.DISTANCE);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 남부터미널역, 강남역);
+        assertThat(response.jsonPath().getList("fare", Integer.class)).containsExactly(1350);
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
+    @Test
+    void findPathByDistanceAdditionalFee1() {
+        // when
+        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 역삼역, FindPathType.DISTANCE);
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 역삼역);
+        assertThat(response.jsonPath().getList("fare", Integer.class)).containsExactly(1450);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
