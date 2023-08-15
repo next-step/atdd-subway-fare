@@ -9,6 +9,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
     private JwtTokenProvider jwtTokenProvider;
 
     public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
@@ -21,8 +22,18 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(
+        MethodParameter parameter,
+        ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest,
+        WebDataBinderFactory binderFactory
+    ) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
+
+        if (isUsableWithoutAuth(parameter, authorization)) {
+            return null;
+        }
+
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
@@ -32,5 +43,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String role = jwtTokenProvider.getRoles(token);
 
         return new UserPrincipal(username, role);
+    }
+
+    private boolean isUsableWithoutAuth(
+        MethodParameter parameter,
+        String authorization
+    ) {
+        AuthenticationPrincipal authenticationPrincipalAnnotation =
+            parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+
+        return authenticationPrincipalAnnotation != null
+            && !authenticationPrincipalAnnotation.required()
+            && authorization == null;
     }
 }
