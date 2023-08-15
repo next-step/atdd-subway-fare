@@ -6,7 +6,13 @@ public abstract class FarePolicy {
     public abstract int calculateFare(int fare);
 
     public final FarePolicy setNextFarePolicy(FarePolicy nextFarePolicy){
-        this.nextFarePolicy = nextFarePolicy;
+
+        FarePolicy farePolicy = this;
+        while (farePolicy.nextFarePolicy != null){
+            farePolicy = farePolicy.nextFarePolicy;
+        }
+        farePolicy.nextFarePolicy = nextFarePolicy;
+
         return this;
     }
 

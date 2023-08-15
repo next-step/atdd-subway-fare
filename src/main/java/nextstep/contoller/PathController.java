@@ -1,5 +1,8 @@
 package nextstep.contoller;
 
+import nextstep.auth.principal.AuthenticationPrincipal;
+import nextstep.domain.member.AbstractMember;
+import nextstep.domain.member.Member;
 import nextstep.domain.subway.PathType;
 import nextstep.dto.PathResponse;
 import nextstep.service.PathService;
@@ -20,9 +23,9 @@ public class PathController {
     }
 
     @GetMapping
-    public ResponseEntity<PathResponse> getPath(@RequestParam long source, @RequestParam long target, @RequestParam PathType type) {
+    public ResponseEntity<PathResponse> getPath(@RequestParam long source, @RequestParam long target, @RequestParam PathType type,@AuthenticationPrincipal AbstractMember member) {
 
-        PathResponse path = pathService.getPath(source,target,type);
+        PathResponse path = pathService.getPath(source,target,type,member);
         return ResponseEntity.ok().body(path);
     }
 }
