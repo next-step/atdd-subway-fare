@@ -35,21 +35,6 @@ public class Documentation {
 
         this.spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation))
-                .addFilter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("source").description("출발역 ID"),
-                                parameterWithName("target").description("도착역 ID"),
-                                parameterWithName("type").description("경로 조회 방식(DISTANCE: 최단 경로, DURATION: 최단 시간)")
-                        ),
-                        responseFields(
-                                fieldWithPath("stations.[].id").description("역 ID"),
-                                fieldWithPath("stations.[].name").description("역 이름"),
-                                fieldWithPath("distance").description("지나가는 거리 합"),
-                                fieldWithPath("duration").description("총 소요 시간")
-                        )
-                ))
                 .build();
     }
 }

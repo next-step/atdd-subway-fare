@@ -1,12 +1,10 @@
 package nextstep.subway.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +58,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     /**
      * When 출발역에서 도착역까지의 최단 거리 기준으로 경로 조회를 요청하면
      * Then 최단 거리 기준 경로를 응답 한다.
-     * And  총 거리와 소요 시간을 함께 응답 한다.
+     * And  총 거리와 소요 시간과 요금을 함께 응답 한다.
      * */
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
     @Test
@@ -69,13 +67,13 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_거리_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertPathResponse(response, 5, 20, 교대역, 남부터미널역, 양재역);
+        assertPathResponse(response, 5, 20, 1250, 교대역, 남부터미널역, 양재역);
     }
 
     /**
      * When 출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청하면
      * Then 최소 시간 기준 경로를 응답 한다.
-     * And  총 거리와 소요 시간을 함께 응답 한다.
+     * And  총 거리와 소요 시간과 요금을 함께 응답 한다.
      * */
     @DisplayName("두 역의 최단 시간 경로를 조회한다.")
     @Test
@@ -84,13 +82,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 두_역의_최단_시간_경로_조회를_요청(교대역, 양재역);
 
         // then
-        assertPathResponse(response, 20, 4, 교대역, 강남역, 양재역);
+        assertPathResponse(response, 20, 4, 1250, 교대역, 강남역, 양재역);
     }
 
-    private void assertPathResponse(ExtractableResponse<Response> response, int distance, int duration, Long... stationIds) {
+
+    private void assertPathResponse(ExtractableResponse<Response> response, int distance, int duration, int price, Long... stationIds) {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
+        assertThat(response.jsonPath().getInt("price")).isEqualTo(price);
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
