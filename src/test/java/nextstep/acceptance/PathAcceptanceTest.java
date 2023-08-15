@@ -162,7 +162,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("지하철 경로 최단거리 기준 요금 조회")
     @Test
-    void getPathAndPrice() {
+    void getPathAndPriceByDistance() {
 
         //when
         ExtractableResponse<Response> 기본요금응답 = 지하철_경로_조회(여의도역,노량진역, PathType.DISTANCE);
@@ -173,6 +173,23 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(기본요금응답.jsonPath().getInt("fare")).isEqualTo(여의도노량진구간요금);
         assertThat(일차요금구간응답.jsonPath().getInt("fare")).isEqualTo(노량진흑석구간요금);
         assertThat(이차요금구간응답.jsonPath().getInt("fare")).isEqualTo(흑석동작구간요금);
+
+    }
+
+    /**
+     * 교대역    --- *2호선* ---   강남역  --- *신분당선 * ---   양재역
+     */
+    @DisplayName("노선별 추가요금 테스트")
+    @Test
+    void getPathAndPriceByLine() {
+        //given
+        int 교대강남양재거리기준요금 = 1650;
+
+        //when
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION);
+
+        //then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(교대강남양재거리기준요금+신분당선추가요금);
 
     }
 
