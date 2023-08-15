@@ -10,6 +10,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import nextstep.api.SubwayException;
 import nextstep.api.subway.domain.line.Line;
 import nextstep.api.subway.domain.line.Section;
+import nextstep.api.subway.domain.path.FareSections;
 import nextstep.api.subway.domain.path.PathSelection;
 import nextstep.api.subway.domain.station.Station;
 
@@ -40,6 +41,20 @@ public class SubwayShortestPath {
         return getSections().stream()
                 .mapToLong(Section::getDistance)
                 .sum();
+    }
+
+    public long getTotalFare() {
+        final var lineAdditionalFare = getLineAdditionalFare();
+        final var termAdditionalFare = FareSections.calculateTotalFare(getTotalDistance());
+        return lineAdditionalFare + termAdditionalFare;
+    }
+
+    public long getLineAdditionalFare() {
+        return path.getEdgeList().stream()
+                .map(SectionEdge::getLine)
+                .mapToLong(Line::getFare)
+                .max()
+                .orElse(0);
     }
 
     public long getTotalDuration() {

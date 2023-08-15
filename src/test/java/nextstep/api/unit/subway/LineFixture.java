@@ -37,6 +37,12 @@ public class LineFixture {
                 new Section(upStation, downStation, distance, duration));
     }
 
+    public static Line makeLine(final Station upStation, final Station downStation, final int distance,
+                                final int duration, final int fare) {
+        return new Line(DEFAULT_LINE_NAME, DEFAULT_LINE_COLOR, fare,
+                new Section(upStation, downStation, distance, duration));
+    }
+
     public static void appendSection(final Line line, final Station upStation, final Station downStation,
                                      final int distance, final int duration) {
         line.appendSection(new Section(upStation, downStation, distance, duration));

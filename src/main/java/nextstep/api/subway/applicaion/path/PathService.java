@@ -10,7 +10,6 @@ import nextstep.api.SubwayException;
 import nextstep.api.subway.applicaion.path.dto.PathResponse;
 import nextstep.api.subway.applicaion.station.dto.StationResponse;
 import nextstep.api.subway.domain.line.LineRepository;
-import nextstep.api.subway.domain.path.FareSections;
 import nextstep.api.subway.domain.path.PathSelection;
 import nextstep.api.subway.domain.station.Station;
 import nextstep.api.subway.domain.station.StationRepository;
@@ -31,12 +30,11 @@ public class PathService {
     }
 
     private PathResponse asPathResponse(final SubwayShortestPath path) {
-        final long distance = path.getTotalDistance();
         return new PathResponse(
                 StationResponse.toResponses(path.getStation()),
-                distance,
+                path.getTotalDistance(),
                 path.getTotalDuration(),
-                FareSections.calculateTotalFare(distance)
+                path.getTotalFare()
         );
     }
 
