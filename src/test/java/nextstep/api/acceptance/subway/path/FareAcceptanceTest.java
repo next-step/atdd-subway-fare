@@ -88,41 +88,48 @@ class FareAcceptanceTest extends AcceptanceTest {
         assertThat(response.getFare()).isEqualTo(1260);
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = 13)
-    void 로그인_사용자가_청소년이라면_청소년_할인정책을_적용한다(final int age) {
-        assert (13 <= age && age < 19);
 
-        // given
-        LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10, 10);
+    @Nested
+    class 연령에_따른_할인정책을_적용한다 {
+        private final String email = "user@email.com";
+        private final String password = "password";
 
-        // given
-        회원_생성_성공("user@email.com", "password", age);
-        final var token = 일반_로그인_성공("user@email.com", "password").getAccessToken();
+        @ParameterizedTest
+        @ValueSource(ints = {13, 18})
+        void 로그인_사용자가_청소년인_경우(final int age) {
+            assert (13 <= age && age < 19);
 
-        // when
-        final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE.name());
+            // given
+            LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10, 0);
 
-        // then
-        assertThat(response.getFare()).isEqualTo(1078);
-    }
+            // given
+            회원_생성_성공(email, password, age);
+            final var token = 일반_로그인_성공(email, password).getAccessToken();
 
-    @ParameterizedTest
-    @ValueSource(ints = 6)
-    void 로그인_사용자가_어린이라면_어린이_할인정책을_적용한다(final int age) {
-        assert (6 <= age && age < 13);
+            // when
+            final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE.name());
 
-        // given
-        LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10, 10);
+            // then
+            assertThat(response.getFare()).isEqualTo(1070);
+        }
 
-        // given
-        회원_생성_성공("user@email.com", "password", age);
-        final var token = 일반_로그인_성공("user@email.com", "password").getAccessToken();
+        @ParameterizedTest
+        @ValueSource(ints = {6, 12})
+        void 로그인_사용자가_어린이인_경우(final int age) {
+            assert (6 <= age && age < 13);
 
-        // when
-        final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE.name());
+            // given
+            LineSteps.지하철노선_생성_성공(교대역, 강남역, 10, 10, 0);
 
-        // then
-        assertThat(response.getFare()).isEqualTo(805);
+            // given
+            회원_생성_성공(email, password, age);
+            final var token = 일반_로그인_성공(email, password).getAccessToken();
+
+            // when
+            final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE.name());
+
+            // then
+            assertThat(response.getFare()).isEqualTo(800);
+        }
     }
 }
