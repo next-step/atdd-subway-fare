@@ -13,7 +13,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
 
-    public String createToken(String principal, String role) {
+    public String createToken(String principal, String role, Integer age) {
         Claims claims = Jwts.claims().setSubject(principal);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -23,6 +23,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .claim("role", role)
+                .claim("age", age)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -33,6 +34,10 @@ public class JwtTokenProvider {
 
     public String getRoles(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("role", String.class);
+    }
+
+    public Integer getAge(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age", Integer.class);
     }
 
     public boolean validateToken(String token) {

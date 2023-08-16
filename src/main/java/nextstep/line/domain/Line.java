@@ -4,6 +4,7 @@ import nextstep.station.domain.Station;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Line {
@@ -15,6 +16,8 @@ public class Line {
     @Embedded
     private LineDetail lineDetail;
 
+    private Integer surcharge;
+
     @Embedded
     private LineStationDetail lineStationDetail;
 
@@ -23,6 +26,12 @@ public class Line {
 
     public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
         this.lineDetail = new LineDetail(name, color);
+        this.lineStationDetail = new LineStationDetail(this, upStation, downStation, distance, duration);
+    }
+
+    public Line(String name, String color, Integer surcharge, Station upStation, Station downStation, int distance, int duration) {
+        this.lineDetail = new LineDetail(name, color);
+        this.surcharge = surcharge;
         this.lineStationDetail = new LineStationDetail(this, upStation, downStation, distance, duration);
     }
 
@@ -36,6 +45,10 @@ public class Line {
 
     public void removeSection(Station station) {
         lineStationDetail.removeSection(station);
+    }
+
+    public boolean isSurcharge() {
+        return Objects.nonNull(surcharge);
     }
 
     public Long getId() {
@@ -58,4 +71,7 @@ public class Line {
         return lineStationDetail.getSections();
     }
 
+    public Integer getSurcharge() {
+        return surcharge;
+    }
 }

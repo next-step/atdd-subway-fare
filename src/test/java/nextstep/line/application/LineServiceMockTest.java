@@ -1,5 +1,6 @@
 package nextstep.line.application;
 
+import nextstep.auth.principal.AnonymousPrincipal;
 import nextstep.exception.*;
 import nextstep.line.application.request.SectionAddRequest;
 import nextstep.line.application.response.ShortPathResponse;
@@ -197,7 +198,7 @@ public class LineServiceMockTest {
             ));
 
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 1L, 2L);
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 1L, 2L, new AnonymousPrincipal());
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -223,7 +224,7 @@ public class LineServiceMockTest {
             ));
 
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DURATION, 1L, 2L);
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DURATION, 1L, 2L, new AnonymousPrincipal());
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -249,7 +250,7 @@ public class LineServiceMockTest {
             ));
 
             // when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 2L))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 2L, new AnonymousPrincipal()))
                     .isExactlyInstanceOf(StationNotExistException.class)
                     .hasMessage("노선에 역이 존재하지 않습니다.");
         }
@@ -268,7 +269,7 @@ public class LineServiceMockTest {
             ));
 
             // given when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 1L))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 1L, new AnonymousPrincipal()))
                     .isExactlyInstanceOf(ShortPathSameStationException.class)
                     .hasMessage("최단경로 시작역, 종착역이 동일할 수 없습니다.");
         }

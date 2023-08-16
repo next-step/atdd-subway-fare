@@ -1,5 +1,7 @@
 package nextstep.line.application;
 
+import nextstep.auth.principal.AnonymousPrincipal;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.exception.LineNotFoundException;
 import nextstep.line.application.request.LineCreateRequest;
 import nextstep.line.application.request.LineModifyRequest;
@@ -34,6 +36,7 @@ public class LineService {
 
         Line line = new Line(lineCreateRequest.getName(),
                 lineCreateRequest.getColor(),
+                lineCreateRequest.getSurcharge(),
                 stationRepository.findStation(lineCreateRequest.getUpStationId()),
                 stationRepository.findStation(lineCreateRequest.getDownStationId()),
                 lineCreateRequest.getDistance(),
@@ -63,12 +66,12 @@ public class LineService {
                 .orElseThrow(LineNotFoundException::new);
     }
 
-    public ShortPathResponse findShortPath(ShortPathType type, Long startStationId, Long endStationId) {
+    public ShortPathResponse findShortPath(ShortPathType type, Long startStationId, Long endStationId, UserPrincipal userPrincipal) {
         Station startStation = stationRepository.findStation(startStationId);
         Station endStation = stationRepository.findStation(endStationId);
 
         SubwayMap subwayMap = new SubwayMap(lineRepository.findAll());
-        ShortPath shortPath = subwayMap.findShortPath(type, startStation, endStation);
+        ShortPath shortPath = subwayMap.findShortPath(type, startStation, endStation, userPrincipal);
         return ShortPathResponse.of(shortPath);
     }
 

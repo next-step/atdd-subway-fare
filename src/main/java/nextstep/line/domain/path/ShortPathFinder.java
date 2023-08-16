@@ -1,7 +1,10 @@
 package nextstep.line.domain.path;
 
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.line.domain.Section;
+import nextstep.line.domain.Sections;
 import nextstep.line.domain.fare.DistanceFarePolicies;
+import nextstep.line.domain.fare.FareCalculator;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -14,25 +17,26 @@ public abstract class ShortPathFinder {
 
     protected final List<Station> stations;
     protected final List<Section> sections;
-    private final DistanceFarePolicies distanceFarePolicies;
+    private final FareCalculator fareCalculator;
 
     public ShortPathFinder(List<Station> stations, List<Section> sections) {
         this.stations = stations;
         this.sections = sections;
-        this.distanceFarePolicies = new DistanceFarePolicies();
+        this.fareCalculator = new FareCalculator();
     }
 
     public abstract boolean isSupport(ShortPathType type);
 
     abstract void setGraphEdgeWeight(WeightedMultigraph<Station, DefaultWeightedEdge> graph);
 
-    public ShortPath getShortPath(Station source, Station target) {
+    public ShortPath getShortPath(Station source, Station target, UserPrincipal userPrincipal) {
         GraphPath<Station, Section> graphPath = getPath(source, target);
-        List<Section> sections = graphPath.getEdgeList();
-        Integer distance = getDistance(sections);
-        Integer duration = getDuration(sections);
-        Integer fare = distanceFarePolicies.getFare(distance);
-        return new ShortPath(graphPath.getVertexList(), distance, duration, fare);
+        Sections sections = new Sections(graphPath.getEdgeList());
+        List<Station> stations = sections.getStations(graphPath.getStartVertex());
+        Integer distance = sections.getDistance();
+        Integer duration = sections.getDuration();
+        Integer fare = fareCalculator.getFare(sections, userPrincipal);
+        return new ShortPath(stations, distance, duration, fare);
     }
 
     private GraphPath<Station, Section> getPath(Station source, Station target) {
@@ -47,14 +51,6 @@ public abstract class ShortPathFinder {
         for (Station station : stations) {
             graph.addVertex(station);
         }
-    }
-
-    private Integer getDistance(List<Section> sections) {
-        return sections.stream().mapToInt(Section::getDistance).sum();
-    }
-
-    private Integer getDuration(List<Section> sections) {
-        return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
 }

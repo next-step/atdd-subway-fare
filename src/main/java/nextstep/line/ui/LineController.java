@@ -1,5 +1,7 @@
 package nextstep.line.ui;
 
+import nextstep.auth.principal.AuthenticationPrincipal;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.line.application.LineService;
 import nextstep.line.application.request.LineCreateRequest;
 import nextstep.line.application.request.LineModifyRequest;
@@ -66,8 +68,9 @@ public class LineController {
     @GetMapping("/paths")
     public ResponseEntity<ShortPathResponse> findShortPath(@RequestParam Long startStationId,
                                                            @RequestParam Long endStationId,
-                                                           @RequestParam ShortPathType type) {
-        ShortPathResponse shortPath = lineService.findShortPath(type, startStationId, endStationId);
+                                                           @RequestParam ShortPathType type,
+                                                           @AuthenticationPrincipal(required = false) UserPrincipal userPrincipal) {
+        ShortPathResponse shortPath = lineService.findShortPath(type, startStationId, endStationId, userPrincipal);
         return ResponseEntity.ok().body(shortPath);
     }
 

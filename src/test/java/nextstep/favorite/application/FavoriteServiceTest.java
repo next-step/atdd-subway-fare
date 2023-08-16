@@ -160,7 +160,7 @@ public class FavoriteServiceTest {
     }
 
     private UserPrincipal createUserPrinCipal(Member member) {
-        return new UserPrincipal(member.getEmail(), member.getRole());
+        return new UserPrincipal(member.getEmail(), member.getRole(), member.getAge());
     }
 
     private FavoriteCreateRequest createFavoriteCreateRequest(Station source, Station target) {

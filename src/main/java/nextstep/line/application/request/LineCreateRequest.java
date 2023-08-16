@@ -4,6 +4,7 @@ public class LineCreateRequest {
 
     private String name;
     private String color;
+    private Integer surcharge;
     private Long upStationId;
     private Long downStationId;
     private Integer distance;
@@ -15,6 +16,16 @@ public class LineCreateRequest {
     public LineCreateRequest(String name, String color, Long upStationId, Long downStationId, Integer distance, Integer duration) {
         this.name = name;
         this.color = color;
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
+        this.distance = distance;
+        this.duration = duration;
+    }
+
+    public LineCreateRequest(String name, String color, Integer surcharge, Long upStationId, Long downStationId, Integer distance, Integer duration) {
+        this.name = name;
+        this.color = color;
+        this.surcharge = surcharge;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
@@ -43,5 +54,9 @@ public class LineCreateRequest {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public Integer getSurcharge() {
+        return surcharge;
     }
 }
