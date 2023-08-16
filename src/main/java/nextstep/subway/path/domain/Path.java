@@ -35,21 +35,29 @@ public class Path {
      */
     public int calculateFare() {
         int totalDistance = getTotalDistance();
-        int result = BASIC_FEE;
 
-        if (BASIC_DISTANCE < totalDistance && totalDistance <= LAST_DISTANCE) {
-            int lastDistance = totalDistance - BASIC_DISTANCE;
-            result += calculateOverFare(lastDistance, 5);
+        if (totalDistance <= BASIC_DISTANCE) {
+            return BASIC_FEE;
         }
 
-        if (LAST_DISTANCE < totalDistance) {
-            int lastDistance = totalDistance - LAST_DISTANCE;
-            int middleDistance = totalDistance - lastDistance - BASIC_DISTANCE;
-
-            result += calculateOverFare(middleDistance, 5) + calculateOverFare(lastDistance, 8);
+        if (totalDistance <= LAST_DISTANCE) {
+            return calculateMiddleDistance(totalDistance);
         }
 
-        return result;
+        return calculateLongDistance(totalDistance);
+
+    }
+
+    private int calculateMiddleDistance(int totalDistance) {
+        int lastDistance = totalDistance - BASIC_DISTANCE;
+        return BASIC_FEE + calculateOverFare(lastDistance, 5);
+    }
+
+    private int calculateLongDistance(int totalDistance) {
+        int lastDistance = totalDistance - LAST_DISTANCE;
+        int middleDistance = totalDistance - lastDistance - BASIC_DISTANCE;
+
+        return BASIC_FEE + calculateOverFare(middleDistance, 5) + calculateOverFare(lastDistance, 8);
     }
 
     private int calculateOverFare(int distance, int additionalFeeDistance) {
