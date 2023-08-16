@@ -3,7 +3,7 @@ package nextstep.subway.domain.farechain.overfare;
 public class OverFarePolicyHandlerImpl extends OverFarePolicyHandler{
 
     public OverFarePolicyHandlerImpl() {
-        super(null);
+        super();
     }
 
     @Override

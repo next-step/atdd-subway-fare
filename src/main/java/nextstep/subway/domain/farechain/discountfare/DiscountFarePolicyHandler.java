@@ -4,7 +4,9 @@ public abstract class DiscountFarePolicyHandler {
 
     private DiscountFarePolicyHandler nextHandler;
 
-    public DiscountFarePolicyHandler(DiscountFarePolicyHandler nextHandler) {
+    protected DiscountFarePolicyHandler() {}
+
+    protected DiscountFarePolicyHandler(DiscountFarePolicyHandler nextHandler) {
         this.nextHandler = nextHandler;
     }
 

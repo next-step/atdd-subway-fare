@@ -4,6 +4,8 @@ public abstract class OverFarePolicyHandler {
 
     private OverFarePolicyHandler nextHandler;
 
+    protected OverFarePolicyHandler() {}
+
     protected OverFarePolicyHandler(OverFarePolicyHandler nextHandler) {
         this.nextHandler = nextHandler;
     }
