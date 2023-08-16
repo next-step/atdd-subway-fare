@@ -1,6 +1,5 @@
 package nextstep.subway.documentation;
 
-import nextstep.auth.principal.UnknownUserPrincipal;
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import static nextstep.subway.acceptance.PathSteps.두_역의_최단_시간_경로_조회를_요청;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -60,7 +58,7 @@ public class PathDocumentation extends Documentation {
                 ), 10, 10, 1250
         );
 
-        when(pathService.findPath(new UnknownUserPrincipal(), 1L, 2L, PathType.DURATION)).thenReturn(pathResponse);
+        when(pathService.findPath(UserPrincipal.createUnknownUser(), 1L, 2L, PathType.DURATION)).thenReturn(pathResponse);
 
         두_역의_최단_시간_경로_조회를_요청(spec, 1L, 2L);
     }

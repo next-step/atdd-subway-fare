@@ -3,12 +3,17 @@ package nextstep.auth.principal;
 import java.util.Objects;
 
 public class UserPrincipal {
+    private static final UserPrincipal UNKNOWN_USER = new UserPrincipal(null, null);
     private String username;
     private String role;
 
     public UserPrincipal(String username, String role) {
         this.username = username;
         this.role = role;
+    }
+
+    public static UserPrincipal createUnknownUser() {
+        return UNKNOWN_USER;
     }
 
     public String getUsername() {
@@ -30,5 +35,9 @@ public class UserPrincipal {
     @Override
     public int hashCode() {
         return Objects.hash(username, role);
+    }
+
+    public boolean isAuthenticated() {
+        return this.username != null && this.role != null;
     }
 }

@@ -1,6 +1,5 @@
 package nextstep.subway.applicaion;
 
-import nextstep.auth.principal.UnknownUserPrincipal;
 import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
@@ -28,7 +27,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
-        if (!(userPrincipal instanceof UnknownUserPrincipal)) {
+        if (userPrincipal.isAuthenticated()) {
             Member member = memberService.findMemberByUserPrincipal(userPrincipal);
             path.discountFare(member);
         }

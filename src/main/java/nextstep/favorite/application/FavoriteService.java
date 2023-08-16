@@ -1,6 +1,6 @@
 package nextstep.favorite.application;
 
-import nextstep.auth.principal.UnknownUserPrincipal;
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.dto.FavoriteResponse;
 import nextstep.favorite.domain.Favorite;
@@ -36,7 +36,7 @@ public class FavoriteService {
     }
 
     public void createFavorite(String email, FavoriteRequest request) {
-        pathService.findPath(new UnknownUserPrincipal(), request.getSource(), request.getTarget(), PathType.DISTANCE);
+        pathService.findPath(UserPrincipal.createUnknownUser(), request.getSource(), request.getTarget(), PathType.DISTANCE);
         MemberResponse member = memberService.findMemberByEmail(email);
         Favorite favorite = new Favorite(member.getId(), request.getSource(), request.getTarget());
         favoriteRepository.save(favorite);

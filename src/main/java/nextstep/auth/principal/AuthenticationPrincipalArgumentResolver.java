@@ -12,7 +12,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.List;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private static final List<String> IGNORE_URI = List.of("/paths");
     private JwtTokenProvider jwtTokenProvider;
 
     public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
@@ -25,12 +24,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String authorization = webRequest.getHeader("Authorization");
 
-        String requestURI = ((ServletWebRequest) webRequest).getRequest().getRequestURI();
-        if(authorization == null && IGNORE_URI.contains(requestURI)) {
-            return new UnknownUserPrincipal();
+        AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        if(!authenticationPrincipal.required() && authorization == null) {
+            return UserPrincipal.createUnknownUser();
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
