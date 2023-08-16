@@ -1,9 +1,11 @@
-package nextstep.api.subway.domain.path;
+package nextstep.api.unit.subway.domain.path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import nextstep.api.subway.domain.path.FareSections;
 
 class FareSectionsTest {
 
