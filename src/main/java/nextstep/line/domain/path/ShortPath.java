@@ -9,11 +9,13 @@ public class ShortPath {
     List<Station> stations;
     Integer distance;
     Integer duration;
+    Integer fare;
 
-    public ShortPath(List<Station> stations, Integer distance, Integer duration) {
+    public ShortPath(List<Station> stations, Integer distance, Integer duration, Integer fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 
     public List<Station> getStations() {
@@ -26,5 +28,9 @@ public class ShortPath {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public Integer getFare() {
+        return fare;
     }
 }

@@ -7,6 +7,9 @@ public class SectionAddRequest {
     private Integer distance;
     private Integer duration;
 
+    public SectionAddRequest() {
+    }
+
     public SectionAddRequest(Long upStationId, Long downStationId, Integer distance, Integer duration) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;

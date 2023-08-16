@@ -1,6 +1,7 @@
 package nextstep.line.domain.path;
 
 import nextstep.line.domain.Section;
+import nextstep.line.domain.fare.DistanceFarePolicies;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -11,12 +12,14 @@ import java.util.List;
 
 public abstract class ShortPathFinder {
 
-    protected List<Station> stations;
-    protected List<Section> sections;
+    protected final List<Station> stations;
+    protected final List<Section> sections;
+    private final DistanceFarePolicies distanceFarePolicies;
 
     public ShortPathFinder(List<Station> stations, List<Section> sections) {
         this.stations = stations;
         this.sections = sections;
+        this.distanceFarePolicies = new DistanceFarePolicies();
     }
 
     public abstract boolean isSupport(ShortPathType type);
@@ -24,13 +27,20 @@ public abstract class ShortPathFinder {
     abstract void setGraphEdgeWeight(WeightedMultigraph<Station, DefaultWeightedEdge> graph);
 
     public ShortPath getShortPath(Station source, Station target) {
+        GraphPath<Station, Section> graphPath = getPath(source, target);
+        List<Section> sections = graphPath.getEdgeList();
+        Integer distance = getDistance(sections);
+        Integer duration = getDuration(sections);
+        Integer fare = distanceFarePolicies.getFare(distance);
+        return new ShortPath(graphPath.getVertexList(), distance, duration, fare);
+    }
+
+    private GraphPath<Station, Section> getPath(Station source, Station target) {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(Section.class);
         setGraphVertex(graph);
         setGraphEdgeWeight(graph);
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-        GraphPath<Station, Section> graphPath = dijkstraShortestPath.getPath(source, target);
-        List<Section> sections = graphPath.getEdgeList();
-        return new ShortPath(graphPath.getVertexList(), getDistance(sections), getDuration(sections));
+        return dijkstraShortestPath.getPath(source, target);
     }
 
     private void setGraphVertex(WeightedMultigraph<Station, DefaultWeightedEdge> graph) {

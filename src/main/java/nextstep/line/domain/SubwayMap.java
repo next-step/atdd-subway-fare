@@ -15,21 +15,15 @@ public class SubwayMap {
 
     private List<Line> lines;
     private List<ShortPathFinder> shortPathFinders;
-    private DistanceFarePolicies distanceFarePolicies;
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
         this.shortPathFinders = List.of(new DistanceShortPathFinder(getStations(), getSections()), new DurationShortPathFinder(getStations(), getSections()));
-        this.distanceFarePolicies = new DistanceFarePolicies();
     }
 
     public ShortPath findShortPath(ShortPathType type, Station startStation, Station endStation) {
         validateStation(startStation, endStation);
         return getShortPath(type, startStation, endStation);
-    }
-
-    public int getFare(ShortPath shortPath) {
-        return distanceFarePolicies.getFare(shortPath.getDistance());
     }
 
     public void validateStation(Station startStation, Station endStation) {

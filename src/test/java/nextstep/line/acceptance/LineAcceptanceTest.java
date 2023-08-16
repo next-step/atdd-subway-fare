@@ -5,9 +5,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.line.domain.path.ShortPathType;
 import nextstep.utils.AcceptanceTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -240,15 +238,26 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
     @Nested
     class ShortPath {
+
+        private Long 강남역;
+        private Long 선릉역;
+        private Long 수원역;
+        private Long 노원역;
+        private Long 대림역;
+
+        @BeforeEach
+        void setUp() {
+            강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
+            선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
+            수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
+            노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
+            대림역 = 지하철역_추가_식별값_리턴(DEARIM_STATION_NAME);
+        }
+
         @DisplayName("강남역에서 수원역으로 가는 경로조회시 이동거리가 가장 짧은 경로를 리턴해야한다.")
         @Test
         void 강남역_수원역_이동거리_검증() {
             // given
-            Long 강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
-            Long 선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
-            Long 수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
-            Long 노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
-
             Long 신분당선 = 지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3);
             Long 이호선 = 지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
             Long 삼호선 = 지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 2, 1);
@@ -266,11 +275,6 @@ public class LineAcceptanceTest extends AcceptanceTest {
         @Test
         void 강남역_수원역_소요시간_검증() {
             // given
-            Long 강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
-            Long 선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
-            Long 수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
-            Long 노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
-
             Long 신분당선 = 지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3);
             Long 이호선 = 지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
             Long 삼호선 = 지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 1);
@@ -288,12 +292,6 @@ public class LineAcceptanceTest extends AcceptanceTest {
         @Test
         void 강남역_대림역_금액검증() {
             // given
-            Long 강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
-            Long 선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
-            Long 수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
-            Long 노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
-            Long 대림역 = 지하철역_추가_식별값_리턴(DEARIM_STATION_NAME);
-
             Long 신분당선 = 지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3);
             Long 이호선 = 지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
             Long 삼호선 = 지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 1);
@@ -312,12 +310,6 @@ public class LineAcceptanceTest extends AcceptanceTest {
         @Test
         void 최단경로_노선_미포함역_조회시_조회실패() {
             // given
-            Long 강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
-            Long 선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
-            Long 수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
-            Long 노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
-            Long 대림역 = 지하철역_추가_식별값_리턴(DEARIM_STATION_NAME);
-
             Long 신분당선 = 지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
             Long 이호선 = 지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
             Long 삼호선 = 지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 2, 4);
@@ -335,12 +327,6 @@ public class LineAcceptanceTest extends AcceptanceTest {
         @Test
         void 최단경로_시작역_종착역_동일할경우_조회실패() {
             // given
-            Long 강남역 = 지하철역_추가_식별값_리턴(GANGNAM_STATION_NAME);
-            Long 선릉역 = 지하철역_추가_식별값_리턴(SEOLLEUNG_STATION_NAME);
-            Long 수원역 = 지하철역_추가_식별값_리턴(SUWON_STATION_NAME);
-            Long 노원역 = 지하철역_추가_식별값_리턴(NOWON_STATION_NAME);
-            Long 대림역 = 지하철역_추가_식별값_리턴(DEARIM_STATION_NAME);
-
             Long 신분당선 = 지하철노선_생성_후_식별값_리턴(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4);
             Long 이호선 = 지하철노선_생성_후_식별값_리턴(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
             Long 삼호선 = 지하철노선_생성_후_식별값_리턴(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 2, 3);

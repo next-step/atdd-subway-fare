@@ -9,6 +9,9 @@ public class LineCreateRequest {
     private Integer distance;
     private Integer duration;
 
+    public LineCreateRequest() {
+    }
+
     public LineCreateRequest(String name, String color, Long upStationId, Long downStationId, Integer distance, Integer duration) {
         this.name = name;
         this.color = color;
