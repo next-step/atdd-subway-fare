@@ -2,12 +2,17 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.utils.GithubResponses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
@@ -17,10 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
-    public static final String EMAIL = "member@email.com";
-    public static final String PASSWORD = "password";
-    private String 사용자;
-
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -28,6 +29,7 @@ class PathAcceptanceTest extends AcceptanceTest {
     private Long 이호선;
     private Long 신분당선;
     private Long 삼호선;
+
 
     /**
      * Given 지하철역을 등록하고
@@ -56,8 +58,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10, 500);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 10));
-
-        사용자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
 
     /**
@@ -99,13 +99,25 @@ class PathAcceptanceTest extends AcceptanceTest {
      * (연령에 따라 지하철 이용 요금이 할인됨)
      */
     @DisplayName("로그인 후 두 역의 최단 시간 경로를 조회한다.")
-    @Test
-    void findPathWithLogin() {
+    @ParameterizedTest
+    @MethodSource("provideUsers")
+    void findPathWithLogin(String email, int expected) {
+        // given
+        String 사용자 = 베어러_인증_로그인_요청(email, "password").jsonPath().getString("accessToken");
         // when
         ExtractableResponse<Response> response = 로그인_후_두_역의_최단_거리_경로_조회를_요청(사용자, 교대역, 양재역);
 
         // then
-        assertPathResponse(response, 5, 20, 700, 교대역, 남부터미널역, 양재역);
+        assertPathResponse(response, 5, 20, expected, 교대역, 남부터미널역, 양재역);
+    }
+
+    public static Stream<Arguments> provideUsers() {
+        return Stream.of(
+                Arguments.of(GithubResponses.사용자1.getEmail(), 1750),
+                Arguments.of(GithubResponses.사용자2.getEmail(), 700),
+                Arguments.of(GithubResponses.사용자3.getEmail(), 1120),
+                Arguments.of(GithubResponses.사용자4.getEmail(), 1750)
+        );
     }
 
     private void assertPathResponse(ExtractableResponse<Response> response, int distance, int duration, int price, Long... stationIds) {
