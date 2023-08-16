@@ -172,11 +172,14 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public int totalFare() {
-        int extraFare = getExtraFare();
-        int distance = this.totalDistance();
+    public int totalFare(int age) {
+        FarePolicy distance = new DistanceFarePolicy(this.totalDistance());
+        FarePolicy extraFarePolicy = new ExtraFarePolicy(getExtraFare());
+        FarePolicy ageDiscountPolicy = new AgeDiscountPolicy(age);
 
-        return DistanceFarePolicy.calculateFare(distance) + extraFare;
+        distance.setNext(extraFarePolicy).setNext(ageDiscountPolicy);
+
+        return distance.run(0);
     }
 
     private int getExtraFare() {

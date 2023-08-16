@@ -1,49 +1,42 @@
 package nextstep.subway.domain;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
-public enum DistanceFarePolicy {
-    // 정책명이 BASIC, CLOSE, FAR 3개라지만 확장성이 약한 것 같음
-    // 그렇다고 OVER10, OVER50이면 수치가 변경됐을 때 반영하기 어려움
-    // 정책을 내부적으로 STEP1, STEP2 이런 식으로 정하기로 함
-    // BASIC을 분리할까도 생각했으나 too much 같아서 그냥 둠
-    BASIC(1250, 0, 10, 0), STEP1(1250, 11, 50, 5), STEP2(2050, 51, Integer.MAX_VALUE, 8);
+public class DistanceFarePolicy extends FarePolicy {
+    private static final int BASE_FARE = 1250;
+    private static final int SUBURBAN_FARE = 2050;
+    private int distance;
 
-    final int baseFare;
-    final int distanceUnderBound;
-    final int distanceUpperBound;
-    final int distanceFareBoundary;
-
-    DistanceFarePolicy(
-        int baseFare,
-        int distanceUnderBound,
-        int distanceUpperBound,
-        int distanceFareBoundary
-    ) {
-        this.baseFare = baseFare;
-        this.distanceUnderBound = distanceUnderBound;
-        this.distanceUpperBound = distanceUpperBound;
-        this.distanceFareBoundary = distanceFareBoundary;
+    public DistanceFarePolicy(int distance) {
+        this.distance = distance;
     }
 
-    public static int calculateFare(int distance) {
-        DistanceFarePolicy distanceFarePolicy = Arrays.stream(values())
-            .filter(policy -> policy.isInRange(distance))
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new);
+    @Override
+    protected int calculateFare(int dummyFare) {
+        return DistanceFare.calculate(distance);
+    }
 
-        if (distanceFarePolicy == BASIC) {
-            return distanceFarePolicy.baseFare;
+    private enum DistanceFare {
+        BASE(10, (distance) -> BASE_FARE),
+        SUBURBAN(50, (distance) -> BASE_FARE + ((int) Math.ceil((double) (distance - 10) / 5) * 100)),
+        URBAN(Integer.MAX_VALUE, (distance) -> SUBURBAN_FARE + ((int) Math.ceil((double) (distance - 50) / 8) * 100));
+
+        private final int range;
+        private final Function<Integer, Integer> calculator;
+
+        DistanceFare(int range, Function<Integer, Integer> calculator) {
+            this.range = range;
+            this.calculator = calculator;
         }
 
-        int distanceCondition = distance - (distanceFarePolicy.distanceUnderBound - 1);
-        return distanceFarePolicy.baseFare +
-            ((int) Math.ceil(
-                (double) distanceCondition / distanceFarePolicy.distanceFareBoundary) * 100
-            );
-    }
+        public static int calculate(int distance) {
+            DistanceFare distanceFare = Arrays.stream(values())
+                .filter(it -> it.range >= distance)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
 
-    private boolean isInRange(int distance) {
-        return distanceUnderBound <= distance && distance <= distanceUpperBound;
+            return distanceFare.calculator.apply(distance);
+        }
     }
 }

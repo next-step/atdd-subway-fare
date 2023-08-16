@@ -1,35 +1,59 @@
 package nextstep.subway.domain;
 
 import java.util.Arrays;
+import java.util.function.BiFunction;
 
-public enum AgeDiscountPolicy {
-    // open 범위(이상 / 이하)
-    CHILD(6, 12, 50), TEEN(13, 18, 20), ADULT(19, Integer.MAX_VALUE, 0);
+public class AgeDiscountPolicy extends FarePolicy {
+    private static final int BASE_DISCOUNT_FARE = 350;
 
-    private static final int BASE_DISCOUNT_AMOUNT = 350;
+    private final int age;
 
-    private final int underBoundAge;
-    private final int upperBoundAge;
-    private final int discountRate;
-
-    AgeDiscountPolicy(int underBoundAge, int upperBoundAge, int discountRate) {
-        this.underBoundAge = underBoundAge;
-        this.upperBoundAge = upperBoundAge;
-        this.discountRate = discountRate;
+    AgeDiscountPolicy(int age) {
+        this.age = age;
     }
 
-    public static int discountFromAge(int age, int price) {
-        AgeDiscountPolicy ageDiscountPolicy = Arrays.stream(values())
-            .filter(discountPolicy -> discountPolicy.isIn(age))
-            .findFirst()
-            .orElseThrow();
-
-        if (ageDiscountPolicy == ADULT) return price;
-
-        return (int) Math.round((price - BASE_DISCOUNT_AMOUNT) * ((double) (100 - ageDiscountPolicy.discountRate) / 100));
+    @Override
+    protected int calculateFare(int fare) {
+        return AgeDiscount.calculate(this.age, fare);
     }
 
-    private boolean isIn(int age) {
-        return this.underBoundAge <= age && age <= this.upperBoundAge;
+    private enum AgeDiscount {
+        ADULT(19, 0, AgeDiscountLogic.REMAIN),
+        YOUTH(13, 20, AgeDiscountLogic.DISCOUNT),
+        KID(6, 50, AgeDiscountLogic.DISCOUNT);
+
+        private final int minAge;
+        private final int discountRate;
+        private final AgeDiscountLogic logic;
+
+        AgeDiscount(int minAge, int discountRate, AgeDiscountLogic logic) {
+            this.minAge = minAge;
+            this.discountRate = discountRate;
+            this.logic = logic;
+        }
+
+        static int calculate(int age, int fare) {
+            AgeDiscount discount = Arrays.stream(values())
+                .filter(ageDiscount -> ageDiscount.minAge <= age)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+
+            return discount.logic.calculate(fare, discount.discountRate);
+        }
+    }
+
+    private enum AgeDiscountLogic {
+        DISCOUNT((fare, discountRate) -> (int) Math.round((fare - BASE_DISCOUNT_FARE) * ((double) (100 - discountRate) / 100))),
+        REMAIN((fare, discountRate) -> fare);
+
+        private final BiFunction<Integer, Integer, Integer> calculator;
+
+        AgeDiscountLogic(BiFunction<Integer, Integer, Integer> calculator) {
+            this.calculator = calculator;
+        }
+
+        private int calculate(int fare, int discountRate) {
+            return this.calculator.apply(fare, discountRate);
+        }
     }
 }

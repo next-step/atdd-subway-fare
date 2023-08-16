@@ -34,7 +34,7 @@ class SectionsTest {
             .extracting(Section::getDuration)
             .containsExactly(15, 3);
 
-        assertThat(sections.totalFare()).isEqualTo(1350);
+        assertThat(sections.totalFare(20)).isEqualTo(1350);
     }
 
     /**
@@ -69,7 +69,7 @@ class SectionsTest {
             new Section(bundang, new Station("양재역"), new Station("판교역"), 5, 5)
         );
 
-        assertThat(sections.totalFare()).isEqualTo(baseFare + extraFare);
+        assertThat(sections.totalFare(20)).isEqualTo(baseFare + extraFare);
     }
 
     @DisplayName("총 거리가 10km 이내라면 비용은 1250원으로 고정이다")
@@ -80,7 +80,7 @@ class SectionsTest {
             new Section(new Line(), new Station("강남역"), new Station("판교역"), distance, 15)
         );
 
-        assertThat(sections.totalFare()).isEqualTo(1250);
+        assertThat(sections.totalFare(20)).isEqualTo(1250);
     }
 
     @DisplayName("총 거리가 50km 이내라면 10km 초과 ~ 50km 까지 5km 단위로 100원씩 추가된다")
@@ -91,7 +91,7 @@ class SectionsTest {
             new Section(new Line(), new Station("강남역"), new Station("판교역"), distance, 15)
         );
 
-        assertThat(sections.totalFare()).isEqualTo(fare);
+        assertThat(sections.totalFare(20)).isEqualTo(fare);
     }
 
     @DisplayName("총 거리가 50km 초과시 8km마다 100원씩 추가된다")
@@ -102,6 +102,6 @@ class SectionsTest {
             new Section(new Line(), new Station("강남역"), new Station("판교역"), distance, 15)
         );
 
-        assertThat(sections.totalFare()).isEqualTo(fare);
+        assertThat(sections.totalFare(20)).isEqualTo(fare);
     }
 }
