@@ -25,7 +25,7 @@ public class PathController {
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source,
         @RequestParam Long target, @RequestParam PathType type,
-        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        @AuthenticationPrincipal(required = false) UserPrincipal userPrincipal) {
 
         Optional<Integer> userAge = memberService.findAgeByEmail(userPrincipal.getUsername());
         return ResponseEntity.ok(pathService.findPath(source, target, type, userAge));
