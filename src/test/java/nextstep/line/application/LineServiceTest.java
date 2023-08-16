@@ -33,6 +33,7 @@ public class LineServiceTest {
     private Station 수원역;
     private Station 노원역;
     private Station 대림역;
+    private Station 파람역;
 
     @Autowired
     private StationRepository stationRepository;
@@ -50,6 +51,7 @@ public class LineServiceTest {
         수원역 = saveStation(SUWON_STATION_NAME);
         노원역 = saveStation(NOWON_STATION_NAME);
         대림역 = saveStation(DEARIM_STATION_NAME);
+        파람역 = saveStation(PARAM_STATION_NAME);
     }
 
     @DisplayName("지하철 노선에 구간을 추가하면 노선 역이름 조회시 추가되있어야 한다.")
@@ -190,8 +192,10 @@ public class LineServiceTest {
         @BeforeEach
         void setUp() {
             saveLine(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3);
-            saveLine(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5);
-            saveLine(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 1).addSection(노원역, 수원역, 3, 4);
+            saveLine(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5)
+                    .addSection(수원역, 대림역, 48, 10);
+            saveLine(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 1)
+                    .addSection(노원역, 수원역, 9, 4);
         }
 
         @DisplayName("강남역에서 수원역으로 가는 경로조회시 이동거리가 가장 짧은 경로를 리턴해야한다.")
@@ -207,6 +211,7 @@ public class LineServiceTest {
                     .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName());
             assertThat(shortPathResponse.getDistance()).isEqualTo(5);
             assertThat(shortPathResponse.getDuration()).isEqualTo(8);
+            assertThat(shortPathResponse.getFare()).isEqualTo(1250);
         }
 
         @DisplayName("강남역에서 수원역으로 가는 경로조회시 소요시간이 가장 짧은 경로를 리턴해야한다.")
@@ -221,14 +226,31 @@ public class LineServiceTest {
                     .extracting("name")
                     .containsExactly(강남역.getName(), 노원역.getName(), 수원역.getName());
             assertThat(shortPathResponse.getDuration()).isEqualTo(5);
-            assertThat(shortPathResponse.getDistance()).isEqualTo(8);
+            assertThat(shortPathResponse.getDistance()).isEqualTo(14);
+            assertThat(shortPathResponse.getFare()).isEqualTo(1350);
+        }
+
+        @DisplayName("이동거리가 50KM 이상인 경우에 요금금액 검증")
+        @Test
+        void 강남역_대림역_금액검증() {
+            // when
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 대림역.getId());
+
+            // then
+            assertThat(shortPathResponse.getStations())
+                    .hasSize(4)
+                    .extracting("name")
+                    .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName(), 대림역.getName());
+            assertThat(shortPathResponse.getDuration()).isEqualTo(18);
+            assertThat(shortPathResponse.getDistance()).isEqualTo(53);
+            assertThat(shortPathResponse.getFare()).isEqualTo(2150);
         }
 
         @DisplayName("최단경로 조회 역중 노선에 포함되지 않은 역이 존재할 경우 에러를 던진다.")
         @Test
         void 경로조회_미포함역() {
             // when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 선릉역.getId(), 대림역.getId()))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 선릉역.getId(), 파람역.getId()))
                     .isExactlyInstanceOf(StationNotExistException.class)
                     .hasMessage("노선에 역이 존재하지 않습니다.");
         }

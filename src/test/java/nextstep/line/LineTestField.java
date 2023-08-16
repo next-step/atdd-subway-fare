@@ -7,6 +7,7 @@ public class LineTestField {
     public static final String SUWON_STATION_NAME = "수원역";
     public static final String NOWON_STATION_NAME = "노원역";
     public static final String DEARIM_STATION_NAME = "대림역";
+    public static final String PARAM_STATION_NAME = "파람역";
 
     public static final String SHINBUNDANG_LINE_NAME = "신분당선";
     public static final String SHINBUNDANG_LINE_COLOR = "bg-red-600";

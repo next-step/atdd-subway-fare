@@ -69,7 +69,8 @@ public class LineService {
 
         SubwayMap subwayMap = new SubwayMap(lineRepository.findAll());
         ShortPath shortPath = subwayMap.findShortPath(type, startStation, endStation);
-        return ShortPathResponse.of(shortPath);
+        int fare = subwayMap.getFare(shortPath);
+        return ShortPathResponse.of(shortPath, fare);
     }
 
     @Transactional

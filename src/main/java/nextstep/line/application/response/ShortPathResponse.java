@@ -11,18 +11,21 @@ public class ShortPathResponse {
     private List<StationResponse> stations;
     private Integer distance;
     private Integer duration;
+    private Integer fare;
 
-    public ShortPathResponse(List<StationResponse> stations, Integer distance, Integer duration) {
+    public ShortPathResponse(List<StationResponse> stations, Integer distance, Integer duration, Integer fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 
-    public static ShortPathResponse of(ShortPath shortPath) {
+    public static ShortPathResponse of(ShortPath shortPath, int fare) {
         return new ShortPathResponse(
                 shortPath.getStations().stream().map(StationResponse::of).collect(Collectors.toList()),
                 shortPath.getDistance(),
-                shortPath.getDuration()
+                shortPath.getDuration(),
+                fare
         );
     }
 
@@ -36,5 +39,9 @@ public class ShortPathResponse {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public Integer getFare() {
+        return fare;
     }
 }

@@ -2,6 +2,7 @@ package nextstep.line.domain;
 
 import nextstep.exception.ShortPathSameStationException;
 import nextstep.exception.StationNotExistException;
+import nextstep.line.domain.fare.DistanceFarePolicies;
 import nextstep.line.domain.path.*;
 import nextstep.station.domain.Station;
 
@@ -12,17 +13,23 @@ import java.util.Set;
 
 public class SubwayMap {
 
-    private List<Line> values;
+    private List<Line> lines;
     private List<ShortPathFinder> shortPathFinders;
+    private DistanceFarePolicies distanceFarePolicies;
 
-    public SubwayMap(List<Line> values) {
-        this.values = values;
+    public SubwayMap(List<Line> lines) {
+        this.lines = lines;
         this.shortPathFinders = List.of(new DistanceShortPathFinder(getStations(), getSections()), new DurationShortPathFinder(getStations(), getSections()));
+        this.distanceFarePolicies = new DistanceFarePolicies();
     }
 
     public ShortPath findShortPath(ShortPathType type, Station startStation, Station endStation) {
         validateStation(startStation, endStation);
         return getShortPath(type, startStation, endStation);
+    }
+
+    public int getFare(ShortPath shortPath) {
+        return distanceFarePolicies.getFare(shortPath.getDistance());
     }
 
     public void validateStation(Station startStation, Station endStation) {
@@ -52,7 +59,7 @@ public class SubwayMap {
 
     private List<Station> getStations() {
         Set<Station> stations = new HashSet<>();
-        for (Line line : values) {
+        for (Line line : lines) {
             stations.addAll(line.getStations());
         }
         return new ArrayList<>(stations);
@@ -60,7 +67,7 @@ public class SubwayMap {
 
     private List<Section> getSections() {
         List<Section> sections = new ArrayList<>();
-        for (Line line : values) {
+        for (Line line : lines) {
             sections.addAll(line.getSections());
         }
         return sections;
