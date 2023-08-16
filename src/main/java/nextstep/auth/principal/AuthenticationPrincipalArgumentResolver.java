@@ -49,11 +49,8 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         MethodParameter parameter,
         String authorization
     ) {
-        AuthenticationPrincipal authenticationPrincipalAnnotation =
-            parameter.getParameterAnnotation(AuthenticationPrincipal.class);
 
-        return authenticationPrincipalAnnotation != null
-            && !authenticationPrincipalAnnotation.required()
+        return this.supportsParameter(parameter)
             && authorization == null;
     }
 }
