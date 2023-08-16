@@ -7,8 +7,11 @@ import java.util.List;
 
 public class Path {
     private static final int BASIC_FEE = 1250;
-    private static final int BASIC_DISTANCE = 10;
-    private static final int LAST_DISTANCE = 50;
+    private static final int SHORT_DISTANCE_LIMIT = 10;
+    private static final int MIDDLE_DISTANCE_LIMIT = 50;
+    private static final int MIDDLE_DISTANCE_UNIT = 5;
+    private static final int LONG_DISTANCE_UNIT = 8;
+    private static final int OVER_FARE = 100;
 
     private final Sections sections;
 
@@ -36,11 +39,11 @@ public class Path {
     public int calculateFare() {
         int totalDistance = getTotalDistance();
 
-        if (totalDistance <= BASIC_DISTANCE) {
+        if (totalDistance <= SHORT_DISTANCE_LIMIT) {
             return BASIC_FEE;
         }
 
-        if (totalDistance <= LAST_DISTANCE) {
+        if (totalDistance <= MIDDLE_DISTANCE_LIMIT) {
             return calculateMiddleDistance(totalDistance);
         }
 
@@ -49,18 +52,18 @@ public class Path {
     }
 
     private int calculateMiddleDistance(int totalDistance) {
-        int lastDistance = totalDistance - BASIC_DISTANCE;
-        return BASIC_FEE + calculateOverFare(lastDistance, 5);
+        int lastDistance = totalDistance - SHORT_DISTANCE_LIMIT;
+        return BASIC_FEE + calculateOverFare(lastDistance, MIDDLE_DISTANCE_UNIT);
     }
 
     private int calculateLongDistance(int totalDistance) {
-        int lastDistance = totalDistance - LAST_DISTANCE;
-        int middleDistance = totalDistance - lastDistance - BASIC_DISTANCE;
+        int lastDistance = totalDistance - MIDDLE_DISTANCE_LIMIT;
+        int middleDistance = totalDistance - lastDistance - SHORT_DISTANCE_LIMIT;
 
-        return BASIC_FEE + calculateOverFare(middleDistance, 5) + calculateOverFare(lastDistance, 8);
+        return BASIC_FEE + calculateOverFare(middleDistance, MIDDLE_DISTANCE_UNIT) + calculateOverFare(lastDistance, LONG_DISTANCE_UNIT);
     }
 
-    private int calculateOverFare(int distance, int additionalFeeDistance) {
-        return ((distance - 1) / additionalFeeDistance + 1) * 100;
+    private int calculateOverFare(int distance, int distanceUnit) {
+        return ((distance - 1) / distanceUnit + 1) * OVER_FARE;
     }
 }
