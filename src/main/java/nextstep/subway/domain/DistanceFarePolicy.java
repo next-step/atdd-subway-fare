@@ -1,27 +1,24 @@
 package nextstep.subway.domain;
 
-import lombok.Getter;
-
-@Getter
-public class Price {
+public class DistanceFarePolicy implements FarePolicy {
     public static final int DEFAULT_PRICE = 1250;
-    private final int price;
+    private int total;
 
-    private Price(int price) {
-        this.price = price;
+    public DistanceFarePolicy(int total) {
+        this.total = total;
     }
 
-    public static Price calculate(int distance) {
+    @Override
+    public int calculate() {
         int price = DEFAULT_PRICE;
-        int total = distance;
 
-        for (PathPolicy policy : PathPolicy.values()) {
+        for (DistanceFareSection policy : DistanceFareSection.values()) {
             if(policy.inRange(total)) {
                 price += policy.calculateOverFare(total);
                 total = policy.remainDistance(total);
             }
         }
 
-        return new Price(price);
+        return price;
     }
 }

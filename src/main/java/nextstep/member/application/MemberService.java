@@ -1,10 +1,13 @@
 package nextstep.member.application;
 
+import nextstep.auth.principal.UserPrincipal;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -37,5 +40,12 @@ public class MemberService {
         return memberRepository.findByEmail(email)
                 .map(MemberResponse::of)
                 .orElseThrow(RuntimeException::new);
+    }
+
+    public Optional<Member> findMemberByUserPrincipal(UserPrincipal userPrincipal) {
+        if (userPrincipal.isAuthenticated()) {
+            return memberRepository.findByEmail(userPrincipal.getUsername());
+        }
+        return Optional.empty();
     }
 }

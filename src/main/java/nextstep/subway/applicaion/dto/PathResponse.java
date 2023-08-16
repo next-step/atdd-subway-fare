@@ -2,7 +2,6 @@ package nextstep.subway.applicaion.dto;
 
 import lombok.Getter;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.Price;
 
 import java.util.List;
 import java.util.stream.Collectors;
