@@ -6,6 +6,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
@@ -15,24 +16,17 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPathAndFare(Station source, Station target, PathType type) {
-        Sections shortestDistancePath = findShortestPath(source, target, PathType.DISTANCE);
-        Fare fare = Fare.calculate(shortestDistancePath);
-        if (type == PathType.DISTANCE) {
-            return new Path(shortestDistancePath, fare);
-        }
+    public Path findPathAndFare(Station source, Station target, PathType type, Optional<Member> member) {
+        Fare fare = calculateFare(source, target, member);
         Sections shortestDurationPath = findShortestPath(source, target, type);
         return new Path(shortestDurationPath, fare);
     }
 
-    public Path findPathAndFare(Station source, Station target, PathType type, Member member) {
+    private Fare calculateFare(Station source, Station target, Optional<Member> member) {
         Sections shortestDistancePath = findShortestPath(source, target, PathType.DISTANCE);
-        Fare fare = Fare.calculate(shortestDistancePath, member);
-        if (type == PathType.DISTANCE) {
-            return new Path(shortestDistancePath, fare);
-        }
-        Sections shortestDurationPath = findShortestPath(source, target, type);
-        return new Path(shortestDurationPath, fare);
+        return member
+                .map(value -> Fare.calculate(shortestDistancePath, value))
+                .orElseGet(() -> Fare.calculate(shortestDistancePath));
     }
 
     private Sections findShortestPath(Station source, Station target, PathType type) {

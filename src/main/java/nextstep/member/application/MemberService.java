@@ -7,6 +7,8 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class MemberService {
     private MemberRepository memberRepository;
@@ -40,8 +42,10 @@ public class MemberService {
                 .orElseThrow(RuntimeException::new);
     }
 
-    public Member findMemberByUserPrincipal(UserPrincipal userPrincipal) {
-        return memberRepository.findByEmail(userPrincipal.getUsername())
-                .orElseThrow(RuntimeException::new);
+    public Optional<Member> findMemberByUserPrincipal(UserPrincipal userPrincipal) {
+        if (userPrincipal.isAuthenticated()) {
+            return memberRepository.findByEmail(userPrincipal.getUsername());
+        }
+        return Optional.empty();
     }
 }
