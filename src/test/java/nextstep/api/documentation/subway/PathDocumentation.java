@@ -40,7 +40,7 @@ class PathDocumentation extends Documentation {
 
         when(pathService.findShortestPath(any(), anyLong(), anyLong(), anyString())).thenReturn(response);
 
-        최단경로조회_요청(1L, 2L, PathSelection.DISTANCE.name(), makeRequestSpec(
+        최단경로조회_요청(1L, 2L, PathSelection.DISTANCE, makeRequestSpec(
                 document("path",
                         requestHeaders(
                                 headerWithName("Authenticated").optional()

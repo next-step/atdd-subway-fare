@@ -42,7 +42,7 @@ class FareAcceptanceTest extends AcceptanceTest {
             LineSteps.지하철노선_생성_성공(교대역, 강남역, distance, 10, 0);
 
             // when
-            final var response = PathSteps.최단경로조회_성공(교대역, 강남역, PathSelection.DISTANCE.name());
+            final var response = PathSteps.최단경로조회_성공(교대역, 강남역, PathSelection.DISTANCE);
 
             // then
             assertThat(response.getFare()).isEqualTo(expectedFare);
@@ -55,7 +55,7 @@ class FareAcceptanceTest extends AcceptanceTest {
             LineSteps.지하철노선_생성_성공(교대역, 강남역, distance, 10, 0);
 
             // when
-            final var response = PathSteps.최단경로조회_성공(교대역, 강남역, PathSelection.DISTANCE.name());
+            final var response = PathSteps.최단경로조회_성공(교대역, 강남역, PathSelection.DISTANCE);
 
             // then
             assertThat(response.getFare()).isEqualTo(expectedFare);
@@ -68,7 +68,7 @@ class FareAcceptanceTest extends AcceptanceTest {
             LineSteps.지하철노선_생성_성공(교대역, 강남역, distance, 10, 0);
 
             // when
-            final var response = PathSteps.최단경로조회_성공(교대역, 강남역, PathSelection.DISTANCE.name());
+            final var response = PathSteps.최단경로조회_성공(교대역, 강남역, PathSelection.DISTANCE);
 
             // then
             assertThat(response.getFare()).isEqualTo(expectedFare);
@@ -82,7 +82,7 @@ class FareAcceptanceTest extends AcceptanceTest {
         LineSteps.지하철노선_생성_성공(강남역, 양재역, 5, 5, 5);
 
         // when
-        final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DISTANCE.name());
+        final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DISTANCE);
 
         // then
         assertThat(response.getFare()).isEqualTo(1260);
@@ -107,7 +107,7 @@ class FareAcceptanceTest extends AcceptanceTest {
             final var token = 일반_로그인_성공(email, password).getAccessToken();
 
             // when
-            final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE.name());
+            final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE);
 
             // then
             assertThat(response.getFare()).isEqualTo(1070);
@@ -126,7 +126,7 @@ class FareAcceptanceTest extends AcceptanceTest {
             final var token = 일반_로그인_성공(email, password).getAccessToken();
 
             // when
-            final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE.name());
+            final var response = PathSteps.최단경로조회_성공(token, 교대역, 강남역, PathSelection.DISTANCE);
 
             // then
             assertThat(response.getFare()).isEqualTo(800);

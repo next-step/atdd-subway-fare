@@ -58,7 +58,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void 거리_기준_최단경로를_조회한다() {
                 // when
-                final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DISTANCE.name());
+                final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DISTANCE);
 
                 // then
                 final var distance = response.getDistance();
@@ -75,7 +75,7 @@ class PathAcceptanceTest extends AcceptanceTest {
             @Test
             void 소요시간_기준_최단경로를_조회한다() {
                 // when
-                final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DURATION.name());
+                final var response = PathSteps.최단경로조회_성공(교대역, 양재역, PathSelection.DURATION);
 
                 // then
                 final var duration = response.getDuration();
@@ -95,22 +95,22 @@ class PathAcceptanceTest extends AcceptanceTest {
 
             @Test
             void 출발역과_도착역이_같아선_안된다() {
-                PathSteps.최단경로조회_실패(강남역, 강남역, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(강남역, 강남역, PathSelection.DURATION, HttpStatus.BAD_REQUEST);
             }
 
             @Test
             void 출발역과_도착역이_연결되어_있어야_한다() {
-                PathSteps.최단경로조회_실패(강남역, 광교역, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(강남역, 광교역, PathSelection.DURATION, HttpStatus.BAD_REQUEST);
             }
 
             @Test
             void 존재하지_않는_역은_출발역이_될_수_없다() {
-                PathSteps.최단경로조회_실패(0L, 강남역, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(0L, 강남역, PathSelection.DURATION, HttpStatus.BAD_REQUEST);
             }
 
             @Test
             void 존재하지_않는_역은_도착역이_될_수_없다() {
-                PathSteps.최단경로조회_실패(강남역, 0L, PathSelection.DURATION.name(), HttpStatus.BAD_REQUEST);
+                PathSteps.최단경로조회_실패(강남역, 0L, PathSelection.DURATION, HttpStatus.BAD_REQUEST);
             }
         }
     }
