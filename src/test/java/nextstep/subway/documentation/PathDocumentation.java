@@ -38,7 +38,7 @@ public class PathDocumentation extends Documentation {
                 1450
         );
 
-        when(pathService.findPath(anyLong(), anyLong(), any())).thenReturn(pathResponse);
+        when(pathService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(pathResponse);
 
         PathSteps.두_역의_경로_조회를_요청_docs(1L, 2L, PathType.DISTANCE.name(),
                 getSpec("path", getPathRequestParamSnippet(), getPathResponseFieldsSnippet())
