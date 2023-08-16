@@ -26,18 +26,20 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
                                   final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
-        final var authorizationHeader = getAuthorizationHeader(webRequest);
-        final var token = extractBearerToken(authorizationHeader);
+        final var annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        final var authorizationHeader = Optional.ofNullable(webRequest.getHeader(AUTHENTICATION_HEADER));
+
+        if (authorizationHeader.isEmpty() && !annotation.required()) {
+            return new AnonymousPrincipal();
+        }
+
+        final var bearerToken = authorizationHeader.orElseThrow(AuthenticationException::new);
+        final var token = extractBearerToken(bearerToken);
         return jwtTokenProvider.getUserPrincipal(token);
     }
 
-    private String getAuthorizationHeader(final NativeWebRequest webRequest) {
-        final var authorization = Optional.ofNullable(webRequest.getHeader(AUTHENTICATION_HEADER));
-        return authorization.orElseThrow(AuthenticationException::new);
-    }
-
-    private String extractBearerToken(final String authorizationHeader) {
-        final var parts = authorizationHeader.split(" ");
+    private String extractBearerToken(final String bearerToken) {
+        final var parts = bearerToken.split(" ");
         if (parts.length < 2 && !"bearer".equalsIgnoreCase(parts[0])) {
             throw new AuthenticationException();
         }

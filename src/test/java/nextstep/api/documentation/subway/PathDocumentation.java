@@ -1,5 +1,8 @@
 package nextstep.api.documentation.subway;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -35,7 +38,7 @@ class PathDocumentation extends Documentation {
                 ), 10, 10, 1250
         );
 
-        when(pathService.findShortestPath(1L, 2L, PathSelection.DISTANCE.name())).thenReturn(response);
+        when(pathService.findShortestPath(any(), anyLong(), anyLong(), anyString())).thenReturn(response);
 
         최단경로조회_요청(1L, 2L, PathSelection.DISTANCE.name(), makeRequestSpec(
                 document("path",

@@ -28,8 +28,6 @@ public class PathService {
 
     public PathResponse findShortestPath(final UserPrincipal userPrincipal, final Long sourceId, final Long targetId,
                                          final String type) {
-        final var member = memberRepository.getByEmail(userPrincipal.getUsername());
-
         final var pathType = PathSelection.from(type);
         final var shortestPath = shortestPathOf(sourceId, targetId, pathType);
 
@@ -37,20 +35,16 @@ public class PathService {
                 StationResponse.toResponses(shortestPath.getStation()),
                 shortestPath.getTotalDistance(),
                 shortestPath.getTotalDuration(),
-                FareDiscounts.discountFareByAge(shortestPath.getTotalFare(), member.getAge())
+                discountIfPossible(shortestPath.getTotalFare(), userPrincipal)
        );
     }
 
-    public PathResponse findShortestPath(final Long sourceId, final Long targetId, final String type) {
-        final var pathType = PathSelection.from(type);
-        final var shortestPath = shortestPathOf(sourceId, targetId, pathType);
-
-        return new PathResponse(
-                StationResponse.toResponses(shortestPath.getStation()),
-                shortestPath.getTotalDistance(),
-                shortestPath.getTotalDuration(),
-                shortestPath.getTotalFare()
-        );
+    private long discountIfPossible(final long fare, final UserPrincipal userPrincipal) {
+        if (userPrincipal.isAnonymous()) {
+            return fare;
+        }
+        final var member = memberRepository.getByEmail(userPrincipal.getUsername());
+        return FareDiscounts.discountFareByAge(fare, member.getAge());
     }
 
     public void validateConnected(final Station source, final Station target) {

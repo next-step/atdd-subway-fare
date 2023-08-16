@@ -51,7 +51,7 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal(required = true) final UserPrincipal userPrincipal) {
         final var response = memberService.findMember(userPrincipal.getUsername());
         return ResponseEntity.ok().body(response);
     }
