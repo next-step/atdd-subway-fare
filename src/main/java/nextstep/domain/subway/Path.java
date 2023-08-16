@@ -1,6 +1,7 @@
 package nextstep.domain.subway;
 
-import nextstep.util.FareCarculator;
+import nextstep.domain.member.Member;
+import nextstep.util.FareCalculator;
 
 import java.util.List;
 
@@ -8,14 +9,12 @@ public class Path {
     private Sections sections;
     private Long distance;
     private Long duration;
-    private int fare;
+
 
     public Path(Sections sections) {
         this.sections = sections;
         this.distance = sections.totalDistance();
         this.duration = sections.totalDuration();
-        this.fare = FareCarculator.totalFare(this.distance);
-
     }
 
     public List<Station> getStations() {
@@ -30,8 +29,8 @@ public class Path {
         return this.duration;
     }
 
-    public int getFare() {
-        return this.fare;
+    public int getFare(int age) {
+        return FareCalculator.totalFare(this.distance, sections.getLines(), age);
     }
 
 }

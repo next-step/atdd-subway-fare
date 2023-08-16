@@ -21,6 +21,8 @@ public class Line {
     @Column(length = 20, nullable = false)
     private String color;
 
+    private int surCharge;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "up_station_id")
     private Station firstUpStation;
@@ -32,9 +34,10 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
-    public Line(String name, String color) {
+    public Line(String name, String color,int surCharge) {
         this.name = name;
         this.color = color;
+        this.surCharge = surCharge;
     }
 
     public void updateInfo(String name, String color) {

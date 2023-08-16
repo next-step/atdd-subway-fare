@@ -4,7 +4,9 @@ import nextstep.auth.AuthenticationException;
 import nextstep.auth.token.JwtTokenProvider;
 import nextstep.domain.member.Member;
 import nextstep.domain.member.MemberRepository;
+import nextstep.domain.member.NullMember;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -27,6 +29,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
+        if (!StringUtils.hasText(authorization)) {
+            return new NullMember();
+        }
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }

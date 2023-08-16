@@ -12,12 +12,13 @@ import java.util.Map;
 
 public class LineStep {
 
-    public static ExtractableResponse<Response> 지하철_노선_생성(String lineName,String color){
+    public static ExtractableResponse<Response> 지하철_노선_생성(String lineName,String color,int surCharge){
 
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("name",lineName);
         params.put("color",color);
+        params.put("surCharge", surCharge);
 
 
         ExtractableResponse<Response> response =

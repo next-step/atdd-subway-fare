@@ -29,7 +29,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void createLine() {
 
         // when
-        LineStep.지하철_노선_생성( "2호선", "green");
+        LineStep.지하철_노선_생성( "2호선", "green",0);
 
         //then
         List<String> lineNames = LineStep.지하철노선_목록_전체조회();
@@ -45,8 +45,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLines() {
         //given
-        LineStep.지하철_노선_생성( "2호선", "green");
-        LineStep.지하철_노선_생성( "9호선", "brown");
+        LineStep.지하철_노선_생성( "2호선", "green",0);
+        LineStep.지하철_노선_생성( "9호선", "brown",0);
 
         //when
         List<String> lineNames = LineStep.지하철노선_목록_전체조회();
@@ -64,7 +64,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine(){
         //given
-        Long lineId =  LineStep.지하철_노선_생성( "2호선", "green").jsonPath().getLong("id");
+        Long lineId =  LineStep.지하철_노선_생성( "2호선", "green",0).jsonPath().getLong("id");
 
         //when
         JsonPath jsonPath = LineStep.지하철_노선_조회(lineId);
@@ -87,7 +87,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine(){
         //given
-        Long lineId =  LineStep.지하철_노선_생성( "2호선", "green").jsonPath().getLong("id");
+        Long lineId =  LineStep.지하철_노선_생성( "2호선", "green",0).jsonPath().getLong("id");
 
         //when
         Map<String, String> params = new HashMap<>();
@@ -116,7 +116,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine(){
         //given
-        Long lineId = LineStep.지하철_노선_생성( "2호선", "green").jsonPath().getLong("id");
+        Long lineId = LineStep.지하철_노선_생성( "2호선", "green",0).jsonPath().getLong("id");
 
         //when
         ExtractableResponse<Response> response =

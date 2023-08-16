@@ -39,7 +39,7 @@ public class PathDocumentation extends Documentation {
 
 
         final PathResponse pathResponse = new PathResponse(List.of(교대역, 강남역), 교대강남구간거리, 교대강남구간시간, 교대강남구간비용);
-        when(pathService.getPath(any(), any(), any())).thenReturn(pathResponse);
+        when(pathService.getPath(any(), any(), any(),any())).thenReturn(pathResponse);
 
         지하철_경로_조회(1L,2L, PathType.DISTANCE,createRequestSpecification("path"));
 

@@ -45,8 +45,8 @@ public class FavoritePathAcceptanceTest extends AcceptanceTest {
         양재역 =  StationStep.지하철역_생성("양재역").jsonPath().getLong("id");
         흑석역 =  StationStep.지하철역_생성("흑석역").jsonPath().getLong("id");
 
-        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green").jsonPath().getLong("id");
-        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red").jsonPath().getLong("id");
+        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green",0).jsonPath().getLong("id");
+        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red",0).jsonPath().getLong("id");
 
         교대강남구간거리 = 10L;
         강남양재구간거리 = 15L;

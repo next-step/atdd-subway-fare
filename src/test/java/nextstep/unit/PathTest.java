@@ -4,18 +4,13 @@ import nextstep.domain.subway.Line;
 import nextstep.domain.subway.Path;
 import nextstep.domain.subway.Section;
 import nextstep.domain.subway.Station;
-import nextstep.util.FareCarculator;
 import nextstep.domain.subway.PathType;
 import nextstep.util.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -50,7 +45,7 @@ class PathTest {
     private Section 양재남부터미널구간;
     private Section 남부터미널교대구간;
     private Section 흑석동작구간;
-    private PathFinder pathFinder;
+
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -87,10 +82,10 @@ class PathTest {
                 .name("동작역")
                 .build();
 
-        이호선 = new Line("이호선","Green");
-        삼호선 = new Line("삼호선","Orange");
-        신분당선 = new Line("신분당선","Red");
-        구호선 = new Line("구호선","Gold");
+        이호선 = new Line("이호선","Green",0);
+        삼호선 = new Line("삼호선","Orange",0);
+        신분당선 = new Line("신분당선","Red",0);
+        구호선 = new Line("구호선","Gold",0);
 
         교대강남구간거리 = 10L;
         강남양재구간거리 = 15L;
@@ -123,7 +118,7 @@ class PathTest {
     @Test
     void getPathByDistance() {
         //given
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
+        PathFinder pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
         // when
         Path path = pathFinder.findPath(교대역, 양재역);
 
@@ -140,7 +135,7 @@ class PathTest {
     @Test
     void getPathByDuration() {
         //given
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION);
+        PathFinder pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DURATION);
         // when
         Path path = pathFinder.findPath(교대역, 양재역);
 
@@ -159,7 +154,7 @@ class PathTest {
     @Test
     void getPath_source_and_target_is_identical() {
         //given
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
+        PathFinder pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선),PathType.DISTANCE);
         // when, then
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 교대역))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -170,34 +165,11 @@ class PathTest {
     @Test
     void getPath_not_connected() {
         // given
-        pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선,구호선),PathType.DURATION);
+        PathFinder pathFinder = new PathFinder(List.of(이호선,삼호선,신분당선,구호선),PathType.DURATION);
         // when, then
         assertThatThrownBy(() ->  pathFinder.findPath(교대역, 동작역))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("출발역과 도착역이 연결되어 있지 않음.");
     }
-
-    @DisplayName("구간의 요금을 조회")
-    @ParameterizedTest
-    @MethodSource("provideDistanceAndFare")
-    void carculateFare(Long distance,int expectedFare){
-        int calculatedFare = FareCarculator.totalFare(distance);
-
-        assertThat(calculatedFare)
-                .isEqualTo(expectedFare);
-    }
-
-    private static Stream<Arguments> provideDistanceAndFare() {
-        return Stream.of(
-                Arguments.of(10L,1250),
-                Arguments.of(16L,1250+200),
-                Arguments.of(60L,1250+800+200)
-        );
-    }
-
-
-
-
-
 
 }

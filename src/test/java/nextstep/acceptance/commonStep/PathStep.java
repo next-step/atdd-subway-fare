@@ -25,6 +25,19 @@ public class PathStep {
         return response;
     }
 
+    public static ExtractableResponse<Response> 지하철_경로_조회(Long sourceStationId, Long targetStationId,PathType type,String accessToken){
+
+        ExtractableResponse<Response> response =
+                RestAssured.given()
+                        .when()
+                        .auth().oauth2(accessToken)
+                        .get("/paths?source=" + sourceStationId + "&target=" + targetStationId+"&type="+type)
+                        .then().log().all()
+                        .extract();
+
+        return response;
+    }
+
     public static ExtractableResponse<Response> 지하철_경로_조회(Long sourceStationId, Long targetStationId, PathType type){
 
         return 지하철_경로_조회(sourceStationId,targetStationId,type,RestAssured.given());

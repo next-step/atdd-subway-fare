@@ -7,6 +7,7 @@ import nextstep.domain.subway.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static nextstep.acceptance.commonStep.MemberSteps.회원_생성_요청;
 import static nextstep.acceptance.commonStep.PathStep.*;
+import static nextstep.acceptance.commonStep.TokenStep.로그인_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("경로 조회 관련 기능")
@@ -25,10 +28,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 강남역;
     private Long 양재역;
     private Long 남부터미널역;
-    private static Long 여의도역;
-    private static Long 노량진역;
-    private static Long 흑석역;
-    private static Long 동작역;
+    private Long 여의도역;
+    private Long 노량진역;
+    private Long 흑석역;
+    private Long 동작역;
 
     private Long 교대강남구간거리;
     private Long 강남양재구간거리;
@@ -51,10 +54,22 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 구호선;
 
-    private static int 여의도노량진구간요금;
-    private static int 노량진흑석구간요금;
-    private static int 흑석동작구간요금;
+    private int 여의도노량진구간요금;
+    private int 노량진흑석구간요금;
+    private int 흑석동작구간요금;
 
+    private int 이호선추가요금;
+    private int 삼호선추가요금;
+    private int 신분당선추가요금;
+    private int 구호선추가요금;
+
+    /**
+     * 교대역    --- *2호선* ---   강남역
+     * |                        |
+     * *3호선*                   *신분당선*   // 여의도역  --- *9호선* --- 노량진역 --- *9호선* --- 흑석역  --- *9호선* ---   동작역
+     * |                        |
+     * 남부터미널역  --- *3호선* ---   양재
+     */
     @BeforeEach
     public void setGivenData() {
 
@@ -67,10 +82,15 @@ public class PathAcceptanceTest extends AcceptanceTest {
         흑석역 =  StationStep.지하철역_생성("흑석역").jsonPath().getLong("id");
         동작역 =  StationStep.지하철역_생성("동작역").jsonPath().getLong("id");
 
-        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green").jsonPath().getLong("id");
-        삼호선 =  LineStep.지하철_노선_생성( "삼호선", "Orange").jsonPath().getLong("id");
-        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red").jsonPath().getLong("id");
-        구호선 =  LineStep.지하철_노선_생성( "구호선", "Gold").jsonPath().getLong("id");
+        이호선추가요금 = 200;
+        삼호선추가요금 = 300;
+        신분당선추가요금 = 900;
+        구호선추가요금 = 0;
+
+        이호선 =  LineStep.지하철_노선_생성( "2호선", "Green",이호선추가요금).jsonPath().getLong("id");
+        삼호선 =  LineStep.지하철_노선_생성( "삼호선", "Orange",삼호선추가요금).jsonPath().getLong("id");
+        신분당선 =  LineStep.지하철_노선_생성( "신분당선", "Red",신분당선추가요금).jsonPath().getLong("id");
+        구호선 =  LineStep.지하철_노선_생성( "구호선", "Gold",구호선추가요금).jsonPath().getLong("id");
 
         교대강남구간거리 = 10L;
         강남양재구간거리 = 15L;
@@ -99,6 +119,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         여의도노량진구간요금 = 1250;
         노량진흑석구간요금 = 1250+200;
         흑석동작구간요금 = 1250+800+200;
+
     }
 
     /**
@@ -147,9 +168,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
      */
 
     @DisplayName("지하철 경로 최단거리 기준 요금 조회")
-    @ParameterizedTest
-    @MethodSource("provideSourceAndTarget")
-    void getPathAndPrice(Long source,Long target, int fare) {
+    @Test
+    void getPathAndPriceByDistance() {
 
         //when
         ExtractableResponse<Response> 기본요금응답 = 지하철_경로_조회(여의도역,노량진역, PathType.DISTANCE);
@@ -162,14 +182,60 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(이차요금구간응답.jsonPath().getInt("fare")).isEqualTo(흑석동작구간요금);
 
     }
-    //TODO : @beforeEach로 얻은 static 변수를 @ParameterizedTest에 사용하는 방법 조사하기. 지금은 null이 주입됨
-    private static Stream<Arguments> provideSourceAndTarget() {
-        return Stream.of(
-                Arguments.of(여의도역,노량진역,여의도노량진구간요금),
-                Arguments.of(노량진역,흑석역,노량진흑석구간요금),
-                Arguments.of(흑석역,동작역,흑석동작구간요금)
-                );
+
+    /**
+     * 교대역    --- *2호선* ---   강남역  --- *신분당선 * ---   양재역
+     */
+
+    /**
+     * Given 지하철 노선과 구간을 생성하고
+     * When 거리 기준으로 지하철 경로를 조회하면
+     * Then 출발역으로부터 도착역까지의 최단경로의 요금과 노선 별 추가요금을 알 수 있다.
+     */
+    @DisplayName("노선별 추가요금 테스트")
+    @Test
+    void getPathAndPriceByLine() {
+        //given
+        int 교대강남양재거리기준요금 = 1250+300;
+
+        //when
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION);
+
+        //then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(교대강남양재거리기준요금+신분당선추가요금);
+
     }
+
+    /**
+     * Given 지하철 노선과 구간을 생성하고
+     * When 로그인한 회원이 거리 기준으로 지하철 경로를 조회하면
+     * Then 출발역으로부터 도착역까지의 최단경로의 요금과 연령 별 할인요금을 알 수 있다.
+     */
+    @DisplayName("연령별 요금할인 테스트")
+    @ParameterizedTest
+    @MethodSource("provideMemberInfo")
+    void getPathAndPriceByAge(String email,String password,int age,int expectedFare) {
+        //given
+        회원_생성_요청(email, password, age);
+        String accessToken = 로그인_요청(email, password).jsonPath().getString("accessToken");
+
+        //when
+        ExtractableResponse<Response> response = 지하철_경로_조회(교대역,양재역, PathType.DURATION,accessToken);
+
+        //then
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(expectedFare);
+
+    }
+
+    private static Stream<Arguments> provideMemberInfo() {
+        return Stream.of(
+                Arguments.of("toddler@email.com","password",2,0),
+                Arguments.of("child@email.com","password",10, (int)((2450 - 350) * 0.5)),
+                Arguments.of("teenager@email.com","password",15,(int)((2450 - 350) * 0.8)),
+                Arguments.of("adult@email.com","password",30,2450)
+        );
+    }
+
 
     /**
      * Given 지하철 노선과 구간을 생성하고

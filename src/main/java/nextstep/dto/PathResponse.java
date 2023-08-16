@@ -19,12 +19,12 @@ public class PathResponse {
     private Long duration;
     private int fare;
 
-    public static PathResponse createPathResponse(Path path){
+    public static PathResponse createPathResponse(Path path,int age){
         PathResponse pathResponse = new PathResponse();
         pathResponse.stations = path.getStations();
         pathResponse.distance = path.getDistance();
         pathResponse.duration = path.getDuration();
-        pathResponse.fare = path.getFare();
+        pathResponse.fare = path.getFare(age);
 
         return pathResponse;
     }
