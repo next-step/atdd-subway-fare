@@ -1,59 +1,81 @@
 package nextstep.subway.documentation;
 
+import nextstep.auth.principal.AnonymousPrincipal;
 import nextstep.line.application.LineService;
 import nextstep.line.application.response.ShortPathResponse;
 import nextstep.station.application.response.StationResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
+import org.springframework.restdocs.snippet.Snippet;
 
 import java.util.List;
 
 import static nextstep.line.acceptance.LineRequester.findShortPathForDucument;
 import static nextstep.line.domain.path.ShortPathType.DISTANCE;
+import static nextstep.member.MemberTestField.*;
+import static nextstep.member.acceptance.MemberSteps.로그인_요청;
+import static nextstep.member.acceptance.MemberSteps.회원_생성_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.snippet.Attributes.key;
 
 public class PathDocumentation extends Documentation {
 
     @MockBean
     private LineService lineService;
 
+    private String 액세스토큰;
+
+    @BeforeEach
+    void setUp() {
+        회원_생성_요청(EMAIL, PASSWORD, AGE);
+        액세스토큰 = 로그인_요청(EMAIL, PASSWORD);
+    }
+
     @Test
     void path() {
-
         // given
         ShortPathResponse shortPathResponse = new ShortPathResponse(
                 List.of(new StationResponse(1L, "강남역"), new StationResponse(2L, "선릉역")),
                 10, 10, 1250
         );
 
-        when(lineService.findShortPath(any(), any(), any())).thenReturn(shortPathResponse);
+        when(lineService.findShortPath(any(), any(), any(), any())).thenReturn(shortPathResponse);
 
         // when then
         findShortPathForDucument(spec,
-                getFilter("/lines/paths", getLinePathsRequestField(), getLinePathsResponseField()),
+                getFilter("/lines/paths", authorizationHeader(), getLinePathsRequestField(), getLinePathsResponseField()),
+                액세스토큰,
                 DISTANCE,
                 1L,
                 2L);
     }
 
-    private RestDocumentationFilter getFilter(String documentPath, RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
+    private RestDocumentationFilter getFilter(String documentPath, Snippet authorizationHeader, RequestParametersSnippet requestParametersSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
         return document(documentPath,
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                authorizationHeader,
                 requestParametersSnippet,
                 responseFieldsSnippet
         );
+    }
+
+    private Snippet authorizationHeader() {
+        return requestHeaders(headerWithName("Authorization").description("액세스토큰").optional());
     }
 
     private RequestParametersSnippet getLinePathsRequestField() {
