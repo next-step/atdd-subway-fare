@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static nextstep.api.acceptance.AcceptanceHelper.asResponse;
 import static nextstep.api.acceptance.AcceptanceHelper.statusCodeShouldBe;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -58,7 +59,7 @@ public class MemberSteps {
 
     public static ValidatableResponse 내_정보_조회_요청(final String token, final RequestSpecification restAssured) {
         return restAssured
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/members/me")
                 .then();

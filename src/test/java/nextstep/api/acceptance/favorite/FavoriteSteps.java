@@ -5,6 +5,7 @@ import static nextstep.api.acceptance.AcceptanceHelper.statusCodeShouldBe;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -23,7 +24,7 @@ public class FavoriteSteps {
     ) {
         return restAssured
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .body(new FavoriteRequest(source, target))
                 .when().post(BASE_URL)
                 .then();
@@ -42,7 +43,7 @@ public class FavoriteSteps {
             final String token, final Long id, final RequestSpecification restAssured
     ) {
         return restAssured
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .pathParams("id", id)
                 .when().delete(BASE_URL + "/{id}")
                 .then();
@@ -61,7 +62,7 @@ public class FavoriteSteps {
             final String token, final RequestSpecification restAssured
     ) {
         return restAssured
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .when().get(BASE_URL)
                 .then();
     }

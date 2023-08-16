@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 
 import nextstep.api.auth.support.JwtTokenProvider;
 import nextstep.api.documentation.Documentation;
@@ -54,7 +55,7 @@ class FavoriteDocumentation extends Documentation {
         즐겨찾기_생성_요청(token, 1L, 2L, makeRequestSpec(
                 document("favorite-create",
                         requestHeaders(
-                                headerWithName("Authorization").description("bearer 토큰")
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("bearer 토큰")
                         )
                 )
         ));
@@ -70,7 +71,7 @@ class FavoriteDocumentation extends Documentation {
                                 parameterWithName("id").description("즐겨찾기 id")
                         ),
                         requestHeaders(
-                                headerWithName("Authorization").description("bearer 토큰")
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("bearer 토큰")
                         ),
                         pathParameters(
                                 parameterWithName("id").description("즐겨찾기 id")
@@ -86,7 +87,7 @@ class FavoriteDocumentation extends Documentation {
         즐겨찾기_전체조회_요청(token, makeRequestSpec(
                 document("favorite-show",
                         requestHeaders(
-                                headerWithName("Authorization").description("bearer 토큰")
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("bearer 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("[].id").description("즐겨찾기 id"),

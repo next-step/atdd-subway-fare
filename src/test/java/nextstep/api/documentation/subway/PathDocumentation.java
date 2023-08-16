@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 
 import nextstep.api.documentation.Documentation;
 import nextstep.api.subway.applicaion.path.PathService;
@@ -43,7 +44,7 @@ class PathDocumentation extends Documentation {
         최단경로조회_요청(1L, 2L, PathSelection.DISTANCE, makeRequestSpec(
                 document("path",
                         requestHeaders(
-                                headerWithName("Authenticated").optional()
+                                headerWithName(HttpHeaders.AUTHORIZATION).optional()
                                         .description("필수 헤더 X) 사용자 나이별 할인정책 적용을 위함")
                         ),
                         requestParameters(

@@ -3,6 +3,7 @@ package nextstep.api.auth.aop.principal;
 import java.util.Optional;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -14,8 +15,6 @@ import nextstep.api.auth.support.JwtTokenProvider;
 
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    public static final String AUTHENTICATION_HEADER = "Authorization";
-
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -27,7 +26,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
                                   final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         final var annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
-        final var authorizationHeader = Optional.ofNullable(webRequest.getHeader(AUTHENTICATION_HEADER));
+        final var authorizationHeader = Optional.ofNullable(webRequest.getHeader(HttpHeaders.AUTHORIZATION));
 
         if (authorizationHeader.isEmpty() && !annotation.required()) {
             return new AnonymousPrincipal();

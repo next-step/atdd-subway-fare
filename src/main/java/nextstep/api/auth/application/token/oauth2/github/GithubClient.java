@@ -63,7 +63,7 @@ public class GithubClient {
     }
 
     public GithubProfileResponse getGithubProfileFromGithub(final String accessToken) {
-        final var headers = makeHttpHeaders("Authorization", "token " + accessToken);
+        final var headers = makeHttpHeaders(HttpHeaders.AUTHORIZATION, "token " + accessToken);
         final var httpEntity = new HttpEntity<>(headers);
 
         return request(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class).getBody();

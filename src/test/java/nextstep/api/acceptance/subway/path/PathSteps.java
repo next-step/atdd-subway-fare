@@ -4,6 +4,7 @@ import static nextstep.api.acceptance.AcceptanceHelper.asExceptionResponse;
 import static nextstep.api.acceptance.AcceptanceHelper.asResponse;
 import static nextstep.api.acceptance.AcceptanceHelper.statusCodeShouldBe;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import io.restassured.RestAssured;
@@ -48,7 +49,7 @@ public class PathSteps {
                                                 final PathSelection type,
                                                 final RequestSpecification restAssured) {
         return restAssured
-                .header("Authorization", "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", type.name())

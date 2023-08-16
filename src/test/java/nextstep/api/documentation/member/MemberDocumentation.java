@@ -21,6 +21,7 @@ import static nextstep.api.acceptance.member.MemberSteps.회원_정보_조회_�
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 
 import nextstep.api.acceptance.member.MemberSteps;
 import nextstep.api.auth.aop.principal.UserPrincipal;
@@ -117,7 +118,7 @@ class MemberDocumentation extends Documentation {
         내_정보_조회_요청("token", makeRequestSpec(
                 document("member-find-me",
                         requestHeaders(
-                                headerWithName("Authorization").description("bearer 토큰")
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("bearer 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("회원 id"),

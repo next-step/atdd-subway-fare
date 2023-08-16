@@ -1,5 +1,6 @@
 package nextstep.helper.bean.oauth2.github;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class GithubTestController {
     }
 
     @GetMapping("/github/user")
-    public ResponseEntity<GithubProfileResponse> user(@RequestHeader("Authorization") final String accessToken) {
+    public ResponseEntity<GithubProfileResponse> user(@RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken) {
         final var user = VirtualUsers.toVirtualUser(accessToken);
 
         if (user.isEmpty()) {
