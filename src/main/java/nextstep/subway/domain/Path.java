@@ -32,8 +32,4 @@ public class Path {
     public int getPrice() {
         return fare.getFare();
     }
-
-    public void discountFare(Member member) {
-        fare.discount(member);
-    }
 }

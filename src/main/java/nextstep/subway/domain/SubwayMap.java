@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.member.domain.Member;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -14,9 +15,19 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Path findPath(Station source, Station target, PathType type) {
+    public Path findPathAndFare(Station source, Station target, PathType type) {
         Sections shortestDistancePath = findShortestPath(source, target, PathType.DISTANCE);
         Fare fare = Fare.calculate(shortestDistancePath);
+        if (type == PathType.DISTANCE) {
+            return new Path(shortestDistancePath, fare);
+        }
+        Sections shortestDurationPath = findShortestPath(source, target, type);
+        return new Path(shortestDurationPath, fare);
+    }
+
+    public Path findPathAndFare(Station source, Station target, PathType type, Member member) {
+        Sections shortestDistancePath = findShortestPath(source, target, PathType.DISTANCE);
+        Fare fare = Fare.calculate(shortestDistancePath, member);
         if (type == PathType.DISTANCE) {
             return new Path(shortestDistancePath, fare);
         }

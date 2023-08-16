@@ -26,11 +26,10 @@ public class PathService {
         Station downStation = stationService.findById(target);
         List<Line> lines = lineService.findLines();
         SubwayMap subwayMap = new SubwayMap(lines);
-        Path path = subwayMap.findPath(upStation, downStation, type);
         if (userPrincipal.isAuthenticated()) {
             Member member = memberService.findMemberByUserPrincipal(userPrincipal);
-            path.discountFare(member);
+            return PathResponse.of(subwayMap.findPathAndFare(upStation, downStation, type, member));
         }
-        return PathResponse.of(path);
+        return PathResponse.of(subwayMap.findPathAndFare(upStation, downStation, type));
     }
 }

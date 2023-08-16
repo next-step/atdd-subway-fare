@@ -27,7 +27,7 @@ public class FareTest {
 
     @BeforeEach
     void setUp() {
-        삼호선 = new Line("이호선", "orange", 500);
+        삼호선 = new Line("이호선", "orange", 100);
         교대_남부터미널_구간 = new Section(삼호선, 교대역, 남부터미널역, 2, 10);
         남부터미널_양재_구간 = new Section(삼호선, 남부터미널역, 양재역, 3, 10);
         삼호선.getSections().add(교대_남부터미널_구간);
@@ -38,7 +38,7 @@ public class FareTest {
     @DisplayName("추가 요금 계산")
     void calculate() {
         List<Section> sections = List.of(교대_남부터미널_구간, 남부터미널_양재_구간);
-        assertThat(Fare.calculate(new Sections(sections)).getFare()).isEqualTo(1750);
+        assertThat(Fare.calculate(new Sections(sections)).getFare()).isEqualTo(1350);
     }
 
     @ParameterizedTest
@@ -52,11 +52,9 @@ public class FareTest {
     })
     @DisplayName("할인 요금 계산")
     void discount(int age, int expected) {
+        List<Section> sections = List.of(교대_남부터미널_구간, 남부터미널_양재_구간);
         Member member = new Member("test1", "1234", age);
-        Fare fare = new Fare(1350);
 
-        fare.discount(member);
-
-        assertThat(fare.getFare()).isEqualTo(expected);
+        assertThat(Fare.calculate(new Sections(sections), member).getFare()).isEqualTo(expected);
     }
 }

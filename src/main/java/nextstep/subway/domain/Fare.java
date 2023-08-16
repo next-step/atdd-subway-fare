@@ -9,26 +9,34 @@ import java.util.Optional;
 @Getter
 public class Fare {
     public static final int DEFAULT_PRICE = 1250;
-    private int fare;
+    private final int fare;
 
     public Fare(int fare) {
         this.fare = fare;
     }
 
     public static Fare calculate(Sections sections) {
-        List<FarePolicy> farePolicies = List.of(
-                new DistanceFarePolicy(sections.totalDistance()),
-                new LineFarePolicy(sections.totalLine()));
-        int fare = farePolicies.stream()
-                .mapToInt(FarePolicy::calculate)
-                .sum();
+        int fare = additionalFare(sections);
         return new Fare(fare);
     }
 
-    public void discount(Member member) {
+    public static Fare calculate(Sections sections, Member member) {
+        int fare = additionalFare(sections);
+
         Optional<AgeDiscountSection> section = AgeDiscountSection.find(member.getAge());
-        section.ifPresent(ageDiscountSection -> {
-            fare = ageDiscountSection.calculate(fare);
-        });
+        if (section.isPresent()) {
+            fare = section.get().calculate(fare);
+        }
+        return new Fare(fare);
     }
+
+    private static int additionalFare(Sections sections) {
+        List<FarePolicy> farePolicies = List.of(
+                new DistanceFarePolicy(sections.totalDistance()),
+                new LineFarePolicy(sections.totalLine()));
+        return farePolicies.stream()
+                .mapToInt(FarePolicy::calculate)
+                .sum();
+    }
+
 }
