@@ -16,4 +16,5 @@ public class UserPrincipal {
     public String getRole() {
         return role;
     }
+
 }

@@ -15,6 +15,9 @@ import static nextstep.station.acceptance.StationRequester.createStationThenRetu
 
 public class LineRequester {
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_FORMAT = "Bearer %s";
+
     public static ExtractableResponse<Response> findLine(Long id) {
         return findLineRequest(id);
     }
@@ -30,6 +33,11 @@ public class LineRequester {
 
     public static Long createLineThenReturnId(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         return createLineRequest(name, color, upStationId, downStationId, distance, duration)
+                .jsonPath().getObject("id", Long.class);
+    }
+
+    public static Long createLineThenReturnId(String name, String color, Integer surcharge, Long upStationId, Long downStationId, int distance, int duration) {
+        return createLineRequest(name, color, surcharge, upStationId, downStationId, distance, duration)
                 .jsonPath().getObject("id", Long.class);
     }
 
@@ -53,12 +61,17 @@ public class LineRequester {
         return findShortPathRequest(type, startStationId, endStationId);
     }
 
+    public static ExtractableResponse<Response> findShortPath(String accessToken, ShortPathType type, Long startStationId, Long endStationId) {
+        return findShortPathRequest(accessToken, type, startStationId, endStationId);
+    }
+
     public static ExtractableResponse<Response> findShortPathForDucument(RequestSpecification requestSpecification,
                                                                          Filter filter,
+                                                                         String accessToken,
                                                                          ShortPathType type,
                                                                          Long startStationId,
                                                                          Long endStationId) {
-        return findShortPathRequestForDocument(requestSpecification, filter, type, startStationId, endStationId);
+        return findShortPathRequestForDocument(requestSpecification, filter, accessToken, type, startStationId, endStationId);
     }
 
     private static ExtractableResponse<Response> findLineRequest(Long id) {
@@ -79,6 +92,15 @@ public class LineRequester {
     private static ExtractableResponse<Response> createLineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         return RestAssured.given().log().all()
                 .body(new LineCreateRequest(name, color, upStationId, downStationId, distance, duration))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/lines")
+                .then().log().all()
+                .extract();
+    }
+
+    private static ExtractableResponse<Response> createLineRequest(String name, String color, Integer surcharge, Long upStationId, Long downStationId, int distance, int duration) {
+        return RestAssured.given().log().all()
+                .body(new LineCreateRequest(name, color, surcharge, upStationId, downStationId, distance, duration))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all()
@@ -132,13 +154,27 @@ public class LineRequester {
                 .extract();
     }
 
+    private static ExtractableResponse<Response> findShortPathRequest(String accessToken, ShortPathType type, Long startStationId, Long endStationId) {
+        return RestAssured.given().log().all()
+                .header(AUTHORIZATION_HEADER, String.format(BEARER_FORMAT, accessToken))
+                .param("startStationId", startStationId)
+                .param("endStationId", endStationId)
+                .param("type", type)
+                .when().get("/lines/paths")
+                .then().log().all()
+                .extract();
+    }
+
     private static ExtractableResponse<Response> findShortPathRequestForDocument(RequestSpecification requestSpecification,
                                                                                  Filter filter,
+                                                                                 String accessToken,
                                                                                  ShortPathType type,
                                                                                  Long startStationId,
                                                                                  Long endStationId) {
         return RestAssured.given(requestSpecification).log().all()
                 .filter(filter)
+                .header(AUTHORIZATION_HEADER, String.format(BEARER_FORMAT, accessToken))
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .param("startStationId", startStationId)
                 .param("endStationId", endStationId)
                 .param("type", type)

@@ -27,4 +27,5 @@ public class CustomUserDetails implements UserDetails {
     public String getRole() {
         return role;
     }
+
 }

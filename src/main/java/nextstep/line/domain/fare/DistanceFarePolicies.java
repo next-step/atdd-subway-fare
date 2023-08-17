@@ -12,7 +12,7 @@ public class DistanceFarePolicies {
         this.values = List.of(new DefaultDistancePolicy(), new OverTenDistancePolicy(), new OverFiftyDistancePolicy());
     }
 
-    public int getFare(int distance) {
+    public Integer getFare(int distance) {
         return this.values.stream()
                 .filter(distanceFarePolicy -> distanceFarePolicy.isIncluded(distance))
                 .map(distanceFarePolicy -> distanceFarePolicy.fare(distance))

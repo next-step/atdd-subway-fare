@@ -1,11 +1,14 @@
 package nextstep.line.application;
 
+import nextstep.auth.principal.AnonymousPrincipal;
 import nextstep.exception.*;
 import nextstep.line.application.request.SectionAddRequest;
 import nextstep.line.application.response.LineResponse;
 import nextstep.line.application.response.ShortPathResponse;
 import nextstep.line.domain.Line;
 import nextstep.line.domain.LineRepository;
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
 import nextstep.station.domain.Station;
 import nextstep.station.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +24,8 @@ import java.util.List;
 import static nextstep.line.LineTestField.*;
 import static nextstep.line.domain.path.ShortPathType.DISTANCE;
 import static nextstep.line.domain.path.ShortPathType.DURATION;
+import static nextstep.member.MemberTestField.*;
+import static nextstep.member.MemberTestUser.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,6 +45,9 @@ public class LineServiceTest {
 
     @Autowired
     private LineRepository lineRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     private LineService lineService;
@@ -191,18 +199,21 @@ public class LineServiceTest {
 
         @BeforeEach
         void setUp() {
-            saveLine(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3);
+            saveLine(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, SHINBUNDANG_LINE_SURCHARGE, 강남역, 선릉역, 2, 3);
             saveLine(TWO_LINE_NAME, TWO_LINE_COLOR, 선릉역, 수원역, 3, 5)
                     .addSection(수원역, 대림역, 48, 10);
             saveLine(THREE_LINE_NAME, TRHEE_LINE_COLOR, 강남역, 노원역, 5, 1)
                     .addSection(노원역, 수원역, 9, 4);
+            saveMember(어린이);
+            saveMember(청소년);
+            saveMember(성인);
         }
 
         @DisplayName("강남역에서 수원역으로 가는 경로조회시 이동거리가 가장 짧은 경로를 리턴해야한다.")
         @Test
         void 강남역_수원역_이동거리_검증() {
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 수원역.getId());
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 수원역.getId(), 비회원인증);
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -211,14 +222,81 @@ public class LineServiceTest {
                     .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName());
             assertThat(shortPathResponse.getDistance()).isEqualTo(5);
             assertThat(shortPathResponse.getDuration()).isEqualTo(8);
-            assertThat(shortPathResponse.getFare()).isEqualTo(1250);
+        }
+
+        @DisplayName("강남역에서 수원역으로 가는 경로조회시 최단경로는 신분당선과 이호선을 거쳐 이동하는 경로이며 " +
+                "신분당선 추가요금이 붙은 할인되지 않은 금액이 리턴되야한다.")
+        @Test
+        void 강남역_수원역_비회원_요금_검증() {
+            // when
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 수원역.getId(), 비회원인증);
+
+            // then
+            assertThat(shortPathResponse.getStations())
+                    .hasSize(3)
+                    .extracting("name")
+                    .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName());
+            assertThat(shortPathResponse.getDistance()).isEqualTo(5);
+            assertThat(shortPathResponse.getDuration()).isEqualTo(8);
+            assertThat(shortPathResponse.getFare()).isEqualTo(2150);
+        }
+
+        @DisplayName("강남역에서 수원역으로 가는 경로조회시 최단경로는 신분당선과 이호선을 거쳐 이동하는 경로이며 " +
+                "신분당선 추가요금이 붙은 할인되지 않은 금액이 리턴되야한다.")
+        @Test
+        void 강남역_수원역_성인_요금_검증() {
+            // when
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 수원역.getId(), 성인인증);
+
+            // then
+            assertThat(shortPathResponse.getStations())
+                    .hasSize(3)
+                    .extracting("name")
+                    .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName());
+            assertThat(shortPathResponse.getDistance()).isEqualTo(5);
+            assertThat(shortPathResponse.getDuration()).isEqualTo(8);
+            assertThat(shortPathResponse.getFare()).isEqualTo(2150);
+        }
+
+        @DisplayName("강남역에서 수원역으로 가는 경로조회시 최단경로는 신분당선과 이호선을 거쳐 이동하는 경로이며 " +
+                "신분당선 추가요금이 붙은 어린이 할인이 적용된 금액이 리턴되야한다.")
+        @Test
+        void 강남역_수원역_어린이_요금_검증() {
+            // when
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 수원역.getId(), 어린이인증);
+
+            // then
+            assertThat(shortPathResponse.getStations())
+                    .hasSize(3)
+                    .extracting("name")
+                    .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName());
+            assertThat(shortPathResponse.getDistance()).isEqualTo(5);
+            assertThat(shortPathResponse.getDuration()).isEqualTo(8);
+            assertThat(shortPathResponse.getFare()).isEqualTo(900);
+        }
+
+        @DisplayName("강남역에서 수원역으로 가는 경로조회시 최단경로는 신분당선과 이호선을 거쳐 이동하는 경로이며 " +
+                "신분당선 추가요금이 붙은 청소년 할인이 적용된 금액이 리턴되야한다.")
+        @Test
+        void 강남역_수원역_청소년_요금_검증() {
+            // when
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 수원역.getId(), 청소년인증);
+
+            // then
+            assertThat(shortPathResponse.getStations())
+                    .hasSize(3)
+                    .extracting("name")
+                    .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName());
+            assertThat(shortPathResponse.getDistance()).isEqualTo(5);
+            assertThat(shortPathResponse.getDuration()).isEqualTo(8);
+            assertThat(shortPathResponse.getFare()).isEqualTo(1440);
         }
 
         @DisplayName("강남역에서 수원역으로 가는 경로조회시 소요시간이 가장 짧은 경로를 리턴해야한다.")
         @Test
         void 강남역_수원역_소요시간_검증() {
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DURATION, 강남역.getId(), 수원역.getId());
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DURATION, 강남역.getId(), 수원역.getId(), new AnonymousPrincipal());
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -234,7 +312,7 @@ public class LineServiceTest {
         @Test
         void 강남역_대림역_금액검증() {
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 대림역.getId());
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 강남역.getId(), 대림역.getId(), 비회원인증);
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -243,14 +321,14 @@ public class LineServiceTest {
                     .containsExactly(강남역.getName(), 선릉역.getName(), 수원역.getName(), 대림역.getName());
             assertThat(shortPathResponse.getDuration()).isEqualTo(18);
             assertThat(shortPathResponse.getDistance()).isEqualTo(53);
-            assertThat(shortPathResponse.getFare()).isEqualTo(2150);
+            assertThat(shortPathResponse.getFare()).isEqualTo(3050);
         }
 
         @DisplayName("최단경로 조회 역중 노선에 포함되지 않은 역이 존재할 경우 에러를 던진다.")
         @Test
         void 경로조회_미포함역() {
             // when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 선릉역.getId(), 파람역.getId()))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 선릉역.getId(), 파람역.getId(), new AnonymousPrincipal()))
                     .isExactlyInstanceOf(StationNotExistException.class)
                     .hasMessage("노선에 역이 존재하지 않습니다.");
         }
@@ -259,7 +337,7 @@ public class LineServiceTest {
         @Test
         void 경로조회_시작역_종착역_동일() {
             // when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 대림역.getId(), 대림역.getId()))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 대림역.getId(), 대림역.getId(), new AnonymousPrincipal()))
                     .isExactlyInstanceOf(ShortPathSameStationException.class)
                     .hasMessage("최단경로 시작역, 종착역이 동일할 수 없습니다.");
         }
@@ -270,8 +348,16 @@ public class LineServiceTest {
         return stationRepository.save(new Station(stationName));
     }
 
+    private Line saveLine(String name, String color, Integer surcharge, Station upStation, Station downStation, int distance, int duration) {
+        return lineRepository.save(new Line(name, color, surcharge, upStation, downStation, distance, duration));
+    }
+
     private Line saveLine(String name, String color, Station upStation, Station downStation, int distance, int duration) {
         return lineRepository.save(new Line(name, color, upStation, downStation, distance, duration));
+    }
+
+    private Member saveMember(Member member) {
+        return memberRepository.save(member);
     }
 
 }

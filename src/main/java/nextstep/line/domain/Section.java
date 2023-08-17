@@ -85,16 +85,24 @@ public class Section extends DefaultWeightedEdge {
         this.distance += section.getDistance();
     }
 
-    private boolean isOverDistance(Section section) {
-        return distance <= section.getDistance();
-    }
-
     public void modifyUpStation(Station station) {
         this.upStation = station;
     }
 
     public void modifyDownStation(Station station) {
         this.downStation = station;
+    }
+
+    public boolean isSurcharge() {
+        return line.isSurcharge();
+    }
+
+    public Integer getSurcharge() {
+        return line.getSurcharge();
+    }
+
+    private boolean isOverDistance(Section section) {
+        return distance <= section.getDistance();
     }
 
 }

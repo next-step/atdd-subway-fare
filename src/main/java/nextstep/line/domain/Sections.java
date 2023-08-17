@@ -24,8 +24,8 @@ public class Sections {
     protected Sections() {
     }
 
-    public Sections(Line line, Station upStation, Station downStation, int distance) {
-        values.add(new Section(line, upStation, downStation, distance));
+    public Sections(List<Section> values) {
+        this.values = values;
     }
 
     public Sections(Line line, Station upStation, Station downStation, int distance, int duration) {
@@ -90,6 +90,22 @@ public class Sections {
 
     public int size() {
         return values.size();
+    }
+
+    public Integer getDistance() {
+        return values.stream().mapToInt(Section::getDistance).sum();
+    }
+
+    public Integer getDuration() {
+        return values.stream().mapToInt(Section::getDuration).sum();
+    }
+
+    public Integer getSurcharge() {
+        return values.stream()
+                .filter(Section::isSurcharge)
+                .mapToInt(Section::getSurcharge)
+                .max()
+                .orElse(0);
     }
 
     private boolean hasNext(Station station) {
