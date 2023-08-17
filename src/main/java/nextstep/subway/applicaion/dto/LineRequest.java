@@ -31,4 +31,15 @@ public class LineRequest {
     public int getDuration() {
         return duration;
     }
+
+    public LineRequest(String name, String color, Long upStationId, Long downStationId,
+        int distance,
+        int duration) {
+        this.name = name;
+        this.color = color;
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
+        this.distance = distance;
+        this.duration = duration;
+    }
 }
