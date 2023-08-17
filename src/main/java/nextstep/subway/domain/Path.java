@@ -21,6 +21,12 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public int getFare() {
+        Fare fare = new Fare();
+        fare.init(extractDistance());
+        return fare.getFare();
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }

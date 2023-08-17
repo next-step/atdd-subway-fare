@@ -84,6 +84,33 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(21);
     }
 
+    /**
+     * <pre>
+     * Feature: 지하철 경로 검색
+     *  Scenario: 두 역의 최단 거리 경로를 조회
+     *     Given 지하철역이 등록되어있음
+     *     And 지하철 노선이 등록되어있음
+     *     And 지하철 노선에 지하철역이 등록되어있음
+     *     When 출발역에서 도착역까지의 최단 거리 경로 조회를 요청
+     *     Then 최단 거리 경로를 응답
+     *     And 총 거리와 소요 시간을 함께 응답함
+     *     And 지하철 이용 요금도 함께 응답함
+     * </pre>
+     */
+    @DisplayName("두 역의 최소 거리 경로를 조회하고 이용 요금도 함께 응답한다.")
+    @Test
+    void findPathByDistanceReturnFare() {
+        // given : 선행조건 기술
+
+        // when : 기능 수행
+        ExtractableResponse<Response> response = 두_역의_최단_거리_경로_및_소요시간_조회를_요청(교대역, 양재역, FindPathType.DISTANCE.getType());
+
+        // then : 결과 확인
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.jsonPath().getInt("distance")).isEqualTo(5);
+        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+    }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();

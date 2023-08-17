@@ -1,22 +1,24 @@
 package nextstep.subway.constant;
 
+import nextstep.subway.domain.Section;
+
 public enum FindPathType {
-    DISTANCE("DISTANCE", "거리"),
-    DURATION("DURATION", "시간");
+    DISTANCE("DISTANCE", Section::getDistance),
+    DURATION("DURATION", Section::getDuration);
 
     private final String type;
-    private final String description;
+    private final EdgeWeightFunction<Section, Integer> edgeWeightFunction;
 
-    FindPathType(String type, String description) {
+    FindPathType(String type, EdgeWeightFunction<Section, Integer> edgeWeightFunction) {
         this.type = type;
-        this.description = description;
+        this.edgeWeightFunction = edgeWeightFunction;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getDescription() {
-        return description;
+    public Integer getEdgeWeight(Section section) {
+        return edgeWeightFunction.apply(section);
     }
 }
