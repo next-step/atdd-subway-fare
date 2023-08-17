@@ -17,8 +17,8 @@ public class Sections {
     public Sections() {
     }
 
-    public Sections(Section section) {
-        this(new ArrayList<>(List.of(section)));
+    public Sections(Section... sections) {
+        this(new ArrayList<>(List.of(sections)));
     }
 
     public Sections(List<Section> sections) {
@@ -172,19 +172,24 @@ public class Sections {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
 
-    public int totalFare() {
-        int distance = this.totalDistance();
+    public int totalFare(int age) {
+        FarePolicy distance = new DistanceFarePolicy(this.totalDistance());
+        FarePolicy extraFarePolicy = new ExtraFarePolicy(getExtraFare());
+        FarePolicy ageDiscountPolicy = new AgeDiscountPolicy(age);
 
-        if (this.totalDistance() >= 50) {
-            distance -= 50;
-            return 2050 + ((int) Math.ceil((double) distance / 8) * 100);
+        distance.setNext(extraFarePolicy).setNext(ageDiscountPolicy);
+
+        return distance.run(0);
+    }
+
+    private int getExtraFare() {
+        if (this.sections.isEmpty()) {
+            return 0;
         }
 
-        if (this.totalDistance() > 10) {
-            distance -= 10;
-            return 1250 + ((int) Math.ceil((double) distance / 5) * 100);
-        }
-
-        return 1250;
+        return this.sections.stream()
+            .mapToInt(Section::getExtraFare)
+            .max()
+            .orElse(0);
     }
 }

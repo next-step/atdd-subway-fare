@@ -12,9 +12,10 @@ public class PathDocumentSteps {
         Long source,
         Long target,
         PathFindType type,
+        String token,
         RequestSpecification spec,
         RestDocumentationFilter filter
     ) {
-        return PathSteps.두_역의_최단_경로_조회를_요청(source, target, type, spec, filter);
+        return PathSteps.두_역의_최단_경로_조회를_요청(source, target, type, token, spec, filter);
     }
 }

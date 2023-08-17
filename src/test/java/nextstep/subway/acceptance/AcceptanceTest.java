@@ -10,6 +10,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.utils.GithubResponses.사용자5;
+import static nextstep.subway.utils.GithubResponses.사용자6;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -26,6 +28,8 @@ public class AcceptanceTest {
     private int port;
 
     String 관리자;
+    String 청소년;
+    String 어린이;
 
     @BeforeEach
     public void setUp() {
@@ -34,5 +38,7 @@ public class AcceptanceTest {
         dataLoader.loadData();
 
         관리자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
+        청소년 = 베어러_인증_로그인_요청(사용자5.getEmail(), PASSWORD).jsonPath().getString("accessToken");
+        어린이 = 베어러_인증_로그인_요청(사용자6.getEmail(), PASSWORD).jsonPath().getString("accessToken");
     }
 }

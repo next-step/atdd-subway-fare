@@ -22,5 +22,7 @@ public class DataLoader {
         memberRepository.save(new Member(GithubResponses.사용자2.getEmail(), "password", 20, RoleType.ROLE_MEMBER.name()));
         memberRepository.save(new Member(GithubResponses.사용자3.getEmail(), "password", 20, RoleType.ROLE_MEMBER.name()));
         memberRepository.save(new Member(GithubResponses.사용자4.getEmail(), "password", 20, RoleType.ROLE_MEMBER.name()));
+        memberRepository.save(new Member(GithubResponses.사용자5.getEmail(), "password", 13, RoleType.ROLE_MEMBER.name()));
+        memberRepository.save(new Member(GithubResponses.사용자6.getEmail(), "password", 6, RoleType.ROLE_MEMBER.name()));
     }
 }

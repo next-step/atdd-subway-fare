@@ -25,7 +25,12 @@ public class Path {
         return sections.totalDuration();
     }
 
+    public int extractFare(int age) {
+        return sections.totalFare(age);
+    }
+
+    // default 값
     public int extractFare() {
-        return sections.totalFare();
+        return this.extractFare(20);
     }
 }

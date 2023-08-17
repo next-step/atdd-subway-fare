@@ -10,6 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int extraFare = 0;
 
     @Embedded
     private Sections sections = new Sections();
@@ -18,8 +19,13 @@ public class Line {
     }
 
     public Line(String name, String color) {
+        this(name, color, 0);
+    }
+
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public Long getId() {
@@ -38,12 +44,20 @@ public class Line {
         return sections.getSections();
     }
 
-    public void update(String name, String color) {
+    public int getExtraFare() {
+        return extraFare;
+    }
+
+    public void update(String name, String color, int extraFare) {
         if (name != null) {
             this.name = name;
         }
         if (color != null) {
             this.color = color;
+        }
+
+        if (this.extraFare != extraFare) {
+            this.extraFare = extraFare;
         }
     }
 
