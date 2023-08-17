@@ -4,6 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.fare.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.LongDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.MiddleDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.ShortDistanceFarePolicy;
 import nextstep.subway.section.domain.Section;
 import nextstep.subway.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
@@ -17,11 +21,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 class PathTest {
     private Station 강남역;
     private Station 양재역;
+    private DistanceFarePolicies distanceFarePolicies;
 
     @BeforeEach
     void setUp() {
         강남역 = new Station(1L, "강남역");
         양재역 = new Station(2L, "양재역");
+
+        distanceFarePolicies = new DistanceFarePolicies(
+                List.of(
+                        new ShortDistanceFarePolicy(),
+                        new MiddleDistanceFarePolicy(),
+                        new LongDistanceFarePolicy()
+                )
+        );
     }
 
     @DisplayName("10km 이하 거리에서는 기본요금 1,250원이 계산된다.")
@@ -33,7 +46,7 @@ class PathTest {
         Path path = new Path(sections);
 
         // when
-        int fee = path.calculateFare();
+        int fee = path.calculateFare(distanceFarePolicies);
 
         // then
         assertThat(fee).isEqualTo(1250);
@@ -48,7 +61,7 @@ class PathTest {
         Path path = new Path(sections);
 
         // when
-        int actualFee = path.calculateFare();
+        int actualFee = path.calculateFare(distanceFarePolicies);
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);
@@ -63,7 +76,7 @@ class PathTest {
         Path path = new Path(sections);
 
         // when
-        int actualFee = path.calculateFare();
+        int actualFee = path.calculateFare(distanceFarePolicies);
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);

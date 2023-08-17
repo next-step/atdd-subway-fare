@@ -1,6 +1,7 @@
 package nextstep.subway.common.exception;
 
 public enum ErrorCode {
+    // 400
     INVALID_SECTION_REGISTRATION(400, "새로운 구간을 등록할 조건을 만족하지 못했습니다. (상행역 또는 하행역이 기존 구간에 존재해야함)"),
     ALREADY_REGISTERED_STATION(400, "같은 구간을 중복하여 등록할 수 없습니다."),
     DOES_NOT_LONGER_THAN_EXISTING_SECTION(400, "역 사이에 새로운 구간을 등록할 때, 거리 혹은 소요시간이 기존 구간보다 짧아야 합니다."),
@@ -10,13 +11,20 @@ public enum ErrorCode {
     SAME_SOURCE_AND_TARGET_STATION(400, "경로검색 시 출발역과 도착역은 같을 수 없습니다."),
     STATION_NOT_IN_GIVEN_LINES(400, "경로검색 시 노선상에 존재하는 지하철 역만 검색할 수 있습니다."),
 
+    // 401
+    INVALID_TOKEN_EXCEPTION(401, "유효하지 않은 토큰입니다."),
+
+    // 404
     STATION_NOT_FOUND(404, "없는 지하철역입니다."),
     LINE_NOT_FOUND(404, "없는 지하철 노선입니다."),
     SECTION_NOT_FOUND(404, "없는 지하철 구간입니다."),
     PATH_NOT_FOUND(404, "지하철 경로를 탐색하지 못했습니다. (출발역과 도착역이 연결되어 있는지 확인)"),
     MEMBER_NOT_FOUND(404, "없는 회원입니다."),
     FAVORITE_NOT_FOUND(404, "없는 즐겨찾기 입니다."),
-    INVALID_TOKEN_EXCEPTION(401, "유효하지 않은 토큰입니다."),;
+
+    // 500
+    NOT_SUPPORTED_FARE_POLICY(500, "지원되지 않는 요금 정책입니다."),
+    ;
 
     private final int status;
     private final String message;

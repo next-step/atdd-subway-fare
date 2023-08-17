@@ -4,6 +4,7 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SubwayMap;
+import nextstep.subway.path.domain.fare.DistanceFarePolicies;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
 import nextstep.subway.station.domain.Station;
@@ -17,17 +18,19 @@ import java.util.List;
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
+    private final DistanceFarePolicies distanceFarePolicies;
 
-    public PathService(StationRepository stationRepository, LineRepository lineRepository) {
+    public PathService(StationRepository stationRepository, LineRepository lineRepository, DistanceFarePolicies distanceFarePolicies) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
+        this.distanceFarePolicies = distanceFarePolicies;
     }
 
     public PathResponse searchPath(Long source, Long target, String type) {
         validateSourceAndTargetId(source, target);
 
         Path path = findPath(source, target, type);
-        return PathResponse.of(path);
+        return PathResponse.of(path, distanceFarePolicies);
     }
 
     private Path findPath(Long source, Long target, String type) {
