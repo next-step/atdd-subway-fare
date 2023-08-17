@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.List;
 import nextstep.subway.acceptance.step.LineStep;
 import nextstep.subway.acceptance.step.SectionStep;
 import nextstep.subway.acceptance.step.StationStep;
@@ -54,8 +53,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     /**
      * Scenario : 두 역의 최단 거리 경로를 조회
      * Given : 지하철역을 4개 생성하고
-     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 구간을 생성하고
-     * And : 하나의 지하철역에 1개의 구간을 추가한 후
+     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
+     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
      * When : 최단 거리 경로 조회를 요청하면
      * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
@@ -74,8 +73,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
     /**
      * Scenario : 두 역의 최소 시간 경로를 조회
      * Given : 지하철역을 4개 생성하고
-     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 구간을 생성하고
-     * And : 하나의 지하철역에 1개의 구간을 추가한 후
+     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
+     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
      * When : 최소 시간 경로 조회를 요청하면
      * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
@@ -89,5 +88,21 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
         역_이름_목록_검증(pathsResponse, 3, "교대역", "강남역", "양재역");
         경로_응답_검증(pathsResponse, 20, 2, 1450);
+    }
+
+    /**
+     * Scenario : 추가 요금이 있는 노선 조회
+     * Given : 지하철역을 4개 생성하고
+     * And : 각각 0원, 500원, 900원의 추가요금이 있는 노선을 3개 생성하고
+     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
+     * When : 최소 시간 경로 조회를 요청하면
+     * Then : 900원의 요금이 추가된 지하철 요금을 응답한다.
+     */
+    @Test
+    void additionalFeePath() {
+        // when
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, "DISTANCE", RestAssuredUtils.given_절_생성());
+
+
     }
 }
