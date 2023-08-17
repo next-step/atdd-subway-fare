@@ -19,7 +19,8 @@ class FareTest {
         int distance = 10;
 
         // when
-        Fare fare = new Fare(distance);
+        Fare fare = new Fare();
+        fare.init(distance);
 
         // then
         assertThat(fare.getFare()).isEqualTo(1250);
@@ -32,7 +33,8 @@ class FareTest {
         // given
 
         // when
-        Fare fare = new Fare(distance);
+        Fare fare = new Fare();
+        fare.init(distance);
 
         // then
         assertThat(fare.getFare()).isEqualTo(expectedFare);
@@ -45,7 +47,8 @@ class FareTest {
         // given
 
         // when
-        Fare fare = new Fare(distance);
+        Fare fare = new Fare();
+        fare.init(distance);
 
         // then
         assertThat(fare.getFare()).isEqualTo(expectedFare);

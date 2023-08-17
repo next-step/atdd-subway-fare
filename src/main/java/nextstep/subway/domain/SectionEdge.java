@@ -5,22 +5,16 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class SectionEdge extends DefaultWeightedEdge {
     private Section section;
-    private EdgeWeight edgeWeight;
 
-    private SectionEdge(Section section, EdgeWeight edgeWeight) {
+    private SectionEdge(Section section) {
         this.section = section;
-        this.edgeWeight = edgeWeight;
     }
 
-    public static SectionEdge of(Section section, FindPathType type) {
-        return new SectionEdge(section, FindPathType.getEdgeWeight(type));
+    public static SectionEdge of(Section section) {
+        return new SectionEdge(section);
     }
 
     public Section getSection() {
         return section;
-    }
-
-    public int getEdgeWeight() {
-        return edgeWeight.getEdgeWeight(section);
     }
 }

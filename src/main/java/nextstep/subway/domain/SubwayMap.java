@@ -54,8 +54,8 @@ public class SubwayMap {
     }
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section it) {
-        SectionEdge sectionEdge = SectionEdge.of(it, type);
+        SectionEdge sectionEdge = SectionEdge.of(it);
         graph.addEdge(it.getUpStation(), it.getDownStation(), sectionEdge);
-        graph.setEdgeWeight(sectionEdge, sectionEdge.getEdgeWeight());
+        graph.setEdgeWeight(sectionEdge, type.getEdgeWeight(it));
     }
 }
