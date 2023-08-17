@@ -463,6 +463,27 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_경로_조회_request_headers"><a class="link" href="#_경로_조회_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수 헤더 X) 사용자 나이별 할인정책 적용을 위함</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="_경로_조회_request_parameters"><a class="link" href="#_경로_조회_request_parameters">Request parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -498,10 +519,10 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 15 Aug 2023 09:27:58 GMT
+Date: Wed, 16 Aug 2023 16:08:41 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 161
+Content-Length: 179
 
 {
   "stations" : [ {
@@ -512,7 +533,8 @@ Content-Length: 161
     "name" : "삼성역"
   } ],
   "distance" : 10,
-  "duration" : 10
+  "duration" : 10,
+  "fare" : 1250
 }</code></pre>
 </div>
 </div>
@@ -553,6 +575,11 @@ Content-Length: 161
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">총 소요시간</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이용 요금</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -561,7 +588,7 @@ Content-Length: 161
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-15 08:37:48 +0900
+Last updated 2023-08-15 23:49:22 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

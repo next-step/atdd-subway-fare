@@ -475,7 +475,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /lines HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 144
+Content-Length: 159
 
 {
   "name" : "신분당선",
@@ -483,7 +483,8 @@ Content-Length: 144
   "upStationId" : 1,
   "downStationId" : 2,
   "distance" : 10,
-  "duration" : 10
+  "duration" : 10,
+  "fare" : 0
 }</code></pre>
 </div>
 </div>
@@ -534,6 +535,11 @@ Content-Length: 144
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">노선 총 소요시간</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노선 추가 요금</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -545,7 +551,7 @@ Content-Length: 144
 Location: /Lines/1
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 15 Aug 2023 09:27:57 GMT
+Date: Wed, 16 Aug 2023 16:08:39 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 189
@@ -737,7 +743,7 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 15 Aug 2023 09:27:57 GMT
+Date: Wed, 16 Aug 2023 16:08:39 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 193
@@ -842,7 +848,7 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 15 Aug 2023 09:27:57 GMT
+Date: Wed, 16 Aug 2023 16:08:39 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 189
@@ -913,7 +919,7 @@ Content-Length: 189
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-15 08:37:48 +0900
+Last updated 2023-08-15 23:38:47 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

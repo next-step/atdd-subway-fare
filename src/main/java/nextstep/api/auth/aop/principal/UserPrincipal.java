@@ -11,4 +11,8 @@ public class UserPrincipal {
         this.username = username;
         this.role = role;
     }
+
+    public boolean isAnonymous() {
+        return false;
+    }
 }

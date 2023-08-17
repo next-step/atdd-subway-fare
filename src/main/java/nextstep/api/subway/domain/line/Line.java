@@ -26,12 +26,16 @@ public class Line {
     @Column(nullable = false)
     private String color;
 
+    @Column(nullable = false)
+    private Long fare = 0L;
+
     @Embedded
     private LineSections sections;
 
-    public Line(final String name, final String color, final Section section) {
+    public Line(final String name, final String color, final long fare, final Section section) {
         this.name = name;
         this.color = color;
+        this.fare = fare;
         this.sections = LineSections.init(section);
     }
 
@@ -58,6 +62,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public Long getFare() {
+        return fare;
     }
 
     public List<Section> getSections() {

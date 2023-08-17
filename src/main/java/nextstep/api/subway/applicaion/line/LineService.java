@@ -39,6 +39,7 @@ public class LineService {
         return new Line(
                 request.getName(),
                 request.getColor(),
+                request.getFare(),
                 new Section(
                         upStation,
                         downStation,
@@ -98,7 +99,7 @@ public class LineService {
     }
 
     private List<Station> orderedStationsOf(final Line line) {
-        final var shortestPath = SubwayShortestPath.builder(line.getStations(), line.getSections())
+        final var shortestPath = SubwayShortestPath.builder(line.getStations(), List.of(line))
                 .source(line.getFirstStation())
                 .target(line.getLastStation())
                 .buildOf(PathSelection.DISTANCE);

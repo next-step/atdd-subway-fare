@@ -13,14 +13,16 @@ public class LineCreateRequest {
     private Long downStationId;
     private int distance;
     private int duration;
+    private int fare;
 
     public LineCreateRequest(final String name, final String color, final Long upStationId, final Long downStationId,
-                             final int distance, final int duration) {
+                             final int distance, final int duration, final int fare) {
         this.name = name;
         this.color = color;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 }

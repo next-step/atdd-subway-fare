@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import nextstep.api.SubwayException;
+import nextstep.api.auth.aop.principal.AnonymousPrincipal;
 import nextstep.api.subway.applicaion.path.PathService;
 import nextstep.api.subway.applicaion.station.dto.StationResponse;
 import nextstep.api.subway.domain.line.LineRepository;
@@ -42,6 +43,7 @@ public class PathServiceMockTest {
 
     private static final Long SOURCE_ID = 1L;
     private static final Long TARGET_ID = 2L;
+    private static final AnonymousPrincipal anonymousPrincipal = new AnonymousPrincipal();
 
     @DisplayName("최단경로를 조회한다")
     @Nested
@@ -64,7 +66,7 @@ public class PathServiceMockTest {
                 ));
 
                 // when
-                final var response = pathService.findShortestPath(SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name());
+                final var response = pathService.findShortestPath(anonymousPrincipal, SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name());
 
                 //then
                 final var stations = response.getStations().stream()
@@ -86,7 +88,7 @@ public class PathServiceMockTest {
                 ));
 
                 // when
-                final var response = pathService.findShortestPath(SOURCE_ID, TARGET_ID, PathSelection.DURATION.name());
+                final var response = pathService.findShortestPath(anonymousPrincipal, SOURCE_ID, TARGET_ID, PathSelection.DURATION.name());
 
                 //then
                 final var stations = response.getStations().stream()
@@ -102,7 +104,7 @@ public class PathServiceMockTest {
 
             @Test
             void 출발역과_도착역이_동일한_경우() {
-                assertThatThrownBy(() -> pathService.findShortestPath(1L, 1L, PathSelection.DISTANCE.name()))
+                assertThatThrownBy(() -> pathService.findShortestPath(anonymousPrincipal, 1L, 1L, PathSelection.DISTANCE.name()))
                         .isInstanceOf(SubwayException.class);
             }
 
@@ -118,7 +120,7 @@ public class PathServiceMockTest {
 
                 // when
                 assertThatThrownBy(
-                        () -> pathService.findShortestPath(SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name()))
+                        () -> pathService.findShortestPath(anonymousPrincipal, SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name()))
                         .isInstanceOf(SubwayException.class);
             }
 
@@ -129,7 +131,7 @@ public class PathServiceMockTest {
 
                 // when
                 assertThatThrownBy(
-                        () -> pathService.findShortestPath(SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name()))
+                        () -> pathService.findShortestPath(anonymousPrincipal, SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name()))
                         .isInstanceOf(NoSuchStationException.class);
             }
 
@@ -141,7 +143,7 @@ public class PathServiceMockTest {
 
                 // when
                 assertThatThrownBy(
-                        () -> pathService.findShortestPath(SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name()))
+                        () -> pathService.findShortestPath(anonymousPrincipal, SOURCE_ID, TARGET_ID, PathSelection.DISTANCE.name()))
                         .isInstanceOf(NoSuchStationException.class);
             }
         }

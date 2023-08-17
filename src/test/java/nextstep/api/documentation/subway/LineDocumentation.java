@@ -47,7 +47,7 @@ class LineDocumentation extends Documentation {
     void createLine() {
         when(lineService.saveLine(any())).thenReturn(response);
 
-        지하철노선_생성_요청(new LineCreateRequest(name, color, upStationId, downStationId, 10, 10), makeRequestSpec(
+        지하철노선_생성_요청(new LineCreateRequest(name, color, upStationId, downStationId, 10, 10, 0), makeRequestSpec(
                 document("line-create",
                         requestFields(
                                 fieldWithPath("name").description("노선 이름"),
@@ -55,7 +55,8 @@ class LineDocumentation extends Documentation {
                                 fieldWithPath("upStationId").description("상행 종점역 id"),
                                 fieldWithPath("downStationId").description("하행 종점역 id"),
                                 fieldWithPath("distance").description("노선 총 거리"),
-                                fieldWithPath("duration").description("노선 총 소요시간")
+                                fieldWithPath("duration").description("노선 총 소요시간"),
+                                fieldWithPath("fare").description("노선 추가 요금")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("노선 id"),
