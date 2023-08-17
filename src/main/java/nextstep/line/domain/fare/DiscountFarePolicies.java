@@ -1,6 +1,7 @@
 package nextstep.line.domain.fare;
 
 import nextstep.auth.principal.UserPrincipal;
+import nextstep.member.domain.Member;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class DiscountFarePolicies {
                 new TeenagerDiscountPolicy());
     }
 
-    public Integer getDiscountFare(int fare, UserPrincipal userPrincipal) {
+    public Integer getDiscountFare(int fare, Member member) {
         return values.stream()
-                .filter(discountFarePolicy -> discountFarePolicy.isSupport(userPrincipal))
+                .filter(discountFarePolicy -> discountFarePolicy.isSupport(member))
                 .map(discountFarePolicy -> discountFarePolicy.getFare(fare))
                 .findAny()
                 .orElse(fare);

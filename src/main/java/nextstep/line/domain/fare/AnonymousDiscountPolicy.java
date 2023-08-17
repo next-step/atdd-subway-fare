@@ -1,13 +1,12 @@
 package nextstep.line.domain.fare;
 
-import nextstep.auth.principal.AnonymousPrincipal;
-import nextstep.auth.principal.UserPrincipal;
+import nextstep.member.domain.Member;
 
 public class AnonymousDiscountPolicy implements DiscountFarePolicy {
 
     @Override
-    public boolean isSupport(UserPrincipal userPrincipal) {
-        return userPrincipal instanceof AnonymousPrincipal;
+    public boolean isSupport(Member member) {
+        return member == null;
     }
 
     @Override

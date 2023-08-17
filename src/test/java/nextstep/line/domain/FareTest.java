@@ -3,7 +3,6 @@ package nextstep.line.domain;
 import nextstep.exception.FareNotMatchException;
 import nextstep.line.domain.fare.DiscountFarePolicies;
 import nextstep.line.domain.fare.DistanceFarePolicies;
-import nextstep.member.MemberTestUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

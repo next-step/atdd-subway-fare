@@ -6,13 +6,11 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     private String password;
     private String role;
-    private Integer age;
 
-    public CustomUserDetails(String email, String password, String role, Integer age) {
+    public CustomUserDetails(String email, String password, String role) {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.age = age;
     }
 
     @Override
@@ -30,8 +28,4 @@ public class CustomUserDetails implements UserDetails {
         return role;
     }
 
-    @Override
-    public Integer getAge() {
-        return age;
-    }
 }

@@ -11,6 +11,8 @@ import nextstep.line.application.response.ShortPathResponse;
 import nextstep.line.domain.*;
 import nextstep.line.domain.path.ShortPath;
 import nextstep.line.domain.path.ShortPathType;
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
 import nextstep.station.domain.Station;
 import nextstep.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,12 @@ public class LineService {
 
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
+    private final MemberRepository memberRepository;
 
-    public LineService(StationRepository stationRepository, LineRepository lineRepository) {
+    public LineService(StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Transactional
@@ -69,9 +73,10 @@ public class LineService {
     public ShortPathResponse findShortPath(ShortPathType type, Long startStationId, Long endStationId, UserPrincipal userPrincipal) {
         Station startStation = stationRepository.findStation(startStationId);
         Station endStation = stationRepository.findStation(endStationId);
+        Member member = memberRepository.findByEmail(userPrincipal.getEmail()).orElse(null);
 
         SubwayMap subwayMap = new SubwayMap(lineRepository.findAll());
-        ShortPath shortPath = subwayMap.findShortPath(type, startStation, endStation, userPrincipal);
+        ShortPath shortPath = subwayMap.findShortPath(type, startStation, endStation, member);
         return ShortPathResponse.of(shortPath);
     }
 

@@ -5,6 +5,7 @@ import nextstep.line.domain.Section;
 import nextstep.line.domain.Sections;
 import nextstep.line.domain.fare.DistanceFarePolicies;
 import nextstep.line.domain.fare.FareCalculator;
+import nextstep.member.domain.Member;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -29,13 +30,13 @@ public abstract class ShortPathFinder {
 
     abstract void setGraphEdgeWeight(WeightedMultigraph<Station, DefaultWeightedEdge> graph);
 
-    public ShortPath getShortPath(Station source, Station target, UserPrincipal userPrincipal) {
+    public ShortPath getShortPath(Station source, Station target, Member member) {
         GraphPath<Station, Section> graphPath = getPath(source, target);
         Sections sections = new Sections(graphPath.getEdgeList());
         List<Station> stations = sections.getStations(graphPath.getStartVertex());
         Integer distance = sections.getDistance();
         Integer duration = sections.getDuration();
-        Integer fare = fareCalculator.getFare(sections, userPrincipal);
+        Integer fare = fareCalculator.getFare(sections, member);
         return new ShortPath(stations, distance, duration, fare);
     }
 

@@ -42,9 +42,8 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
         String username = jwtTokenProvider.getPrincipal(token);
         String role = jwtTokenProvider.getRoles(token);
-        Integer age = jwtTokenProvider.getAge(token);
 
-        return new UserPrincipal(username, role, age);
+        return new UserPrincipal(username, role);
     }
 
     private void validateToken(String token) {

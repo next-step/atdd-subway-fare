@@ -6,6 +6,7 @@ import nextstep.line.application.request.SectionAddRequest;
 import nextstep.line.application.response.ShortPathResponse;
 import nextstep.line.domain.Line;
 import nextstep.line.domain.LineRepository;
+import nextstep.member.domain.MemberRepository;
 import nextstep.station.domain.Station;
 import nextstep.station.domain.StationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -22,8 +23,10 @@ import java.util.Optional;
 import static nextstep.line.LineTestField.*;
 import static nextstep.line.domain.path.ShortPathType.DISTANCE;
 import static nextstep.line.domain.path.ShortPathType.DURATION;
+import static nextstep.member.MemberTestUser.비회원인증;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +43,9 @@ public class LineServiceMockTest {
 
     @Mock
     private StationRepository stationRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     @InjectMocks
     private LineService lineService;
@@ -189,6 +195,7 @@ public class LineServiceMockTest {
             // given
             when(stationRepository.findStation(1L)).thenReturn(강남역);
             when(stationRepository.findStation(2L)).thenReturn(수원역);
+            when(memberRepository.findByEmail(any())).thenReturn(Optional.empty());
 
             when(lineRepository.findAll()).thenReturn(List.of(
                     new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3),
@@ -198,7 +205,7 @@ public class LineServiceMockTest {
             ));
 
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 1L, 2L, new AnonymousPrincipal());
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DISTANCE, 1L, 2L, 비회원인증);
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -215,6 +222,7 @@ public class LineServiceMockTest {
             // given
             when(stationRepository.findStation(1L)).thenReturn(강남역);
             when(stationRepository.findStation(2L)).thenReturn(수원역);
+            when(memberRepository.findByEmail(any())).thenReturn(Optional.empty());
 
             when(lineRepository.findAll()).thenReturn(List.of(
                     new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 3),
@@ -224,7 +232,7 @@ public class LineServiceMockTest {
             ));
 
             // when
-            ShortPathResponse shortPathResponse = lineService.findShortPath(DURATION, 1L, 2L, new AnonymousPrincipal());
+            ShortPathResponse shortPathResponse = lineService.findShortPath(DURATION, 1L, 2L, 비회원인증);
 
             // then
             assertThat(shortPathResponse.getStations())
@@ -241,6 +249,7 @@ public class LineServiceMockTest {
             // given
             when(stationRepository.findStation(1L)).thenReturn(선릉역);
             when(stationRepository.findStation(2L)).thenReturn(대림역);
+            when(memberRepository.findByEmail(any())).thenReturn(Optional.empty());
 
             when(lineRepository.findAll()).thenReturn(List.of(
                     new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4),
@@ -250,7 +259,7 @@ public class LineServiceMockTest {
             ));
 
             // when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 2L, new AnonymousPrincipal()))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 2L, 비회원인증))
                     .isExactlyInstanceOf(StationNotExistException.class)
                     .hasMessage("노선에 역이 존재하지 않습니다.");
         }
@@ -260,6 +269,7 @@ public class LineServiceMockTest {
         void 경로조회_시작역_종착역_동일() {
             // given
             when(stationRepository.findStation(1L)).thenReturn(대림역);
+            when(memberRepository.findByEmail(any())).thenReturn(Optional.empty());
 
             when(lineRepository.findAll()).thenReturn(List.of(
                     new Line(SHINBUNDANG_LINE_NAME, SHINBUNDANG_LINE_COLOR, 강남역, 선릉역, 2, 4),
@@ -269,7 +279,7 @@ public class LineServiceMockTest {
             ));
 
             // given when then
-            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 1L, new AnonymousPrincipal()))
+            assertThatThrownBy(() -> lineService.findShortPath(DISTANCE, 1L, 1L, 비회원인증))
                     .isExactlyInstanceOf(ShortPathSameStationException.class)
                     .hasMessage("최단경로 시작역, 종착역이 동일할 수 없습니다.");
         }

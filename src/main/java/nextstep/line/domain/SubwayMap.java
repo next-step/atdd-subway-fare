@@ -5,6 +5,7 @@ import nextstep.exception.ShortPathSameStationException;
 import nextstep.exception.StationNotExistException;
 import nextstep.line.domain.fare.DistanceFarePolicies;
 import nextstep.line.domain.path.*;
+import nextstep.member.domain.Member;
 import nextstep.station.domain.Station;
 
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ public class SubwayMap {
         this.shortPathFinders = List.of(new DistanceShortPathFinder(getStations(), getSections()), new DurationShortPathFinder(getStations(), getSections()));
     }
 
-    public ShortPath findShortPath(ShortPathType type, Station startStation, Station endStation, UserPrincipal userPrincipal) {
+    public ShortPath findShortPath(ShortPathType type, Station startStation, Station endStation, Member member) {
         validateStation(startStation, endStation);
-        return getShortPath(type, startStation, endStation, userPrincipal);
+        return getShortPath(type, startStation, endStation, member);
     }
 
     public void validateStation(Station startStation, Station endStation) {
@@ -44,11 +45,11 @@ public class SubwayMap {
         return !getStations().containsAll(List.of(startStation, endStation));
     }
 
-    private ShortPath getShortPath(ShortPathType type, Station startStation, Station endStation, UserPrincipal userPrincipal) {
+    private ShortPath getShortPath(ShortPathType type, Station startStation, Station endStation, Member member) {
         return shortPathFinders.stream()
                 .filter(shortPathFinder -> shortPathFinder.isSupport(type))
                 .findAny()
-                .map(shortPathFinder -> shortPathFinder.getShortPath(startStation, endStation, userPrincipal))
+                .map(shortPathFinder -> shortPathFinder.getShortPath(startStation, endStation, member))
                 .orElse(null);
     }
 

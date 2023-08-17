@@ -1,6 +1,5 @@
 package nextstep.line.domain;
 
-import nextstep.auth.principal.AnonymousPrincipal;
 import nextstep.exception.ShortPathSameStationException;
 import nextstep.exception.StationNotExistException;
 import nextstep.line.domain.path.ShortPath;

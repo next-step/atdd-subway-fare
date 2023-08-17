@@ -1,12 +1,12 @@
 package nextstep.line.domain.fare;
 
-import nextstep.auth.principal.UserPrincipal;
+import nextstep.member.domain.Member;
 
 public class TeenagerDiscountPolicy implements DiscountFarePolicy {
 
     @Override
-    public boolean isSupport(UserPrincipal userPrincipal) {
-        return userPrincipal instanceof UserPrincipal && userPrincipal.isTeenager();
+    public boolean isSupport(Member member) {
+        return member.isTeenager();
     }
 
     @Override
