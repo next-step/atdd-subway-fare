@@ -38,7 +38,11 @@ public class SubwayMap {
                 .map(SectionEdge::getSection)
                 .collect(Collectors.toList());
 
-        return new Path(new Sections(sections));
+        Set<Line> lines = result.getEdgeList().stream()
+                .map(SectionEdge::getLine)
+                .collect(Collectors.toSet());
+
+        return new Path(lines, new Sections(sections));
     }
 
     private void validateStationsInLines(Station source, Station target) {
@@ -64,7 +68,7 @@ public class SubwayMap {
     private void addVertex(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역(정점)을 등록
         lines.stream()
-                .flatMap(it -> it.getStations().stream())
+                .flatMap(line -> line.getStations().stream())
                 .distinct()
                 .collect(Collectors.toList())
                 .forEach(graph::addVertex);
@@ -72,21 +76,26 @@ public class SubwayMap {
 
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(line -> line.getSections().stream())
-                .forEach(section -> setUpGraph(graph, section));
+        lines.forEach(line -> registerEdge(graph, line));
+    }
+
+    private void registerEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Line line) {
+        line.getSections().forEach(section -> setUpGraph(graph, line, section));
     }
 
     private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
-        lines.stream()
-                .flatMap(line -> line.getSections().stream())
-                .map(section -> new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration()))
-                .forEach(section -> setUpGraph(graph, section));
+        lines.forEach(line -> registerOppositeEdge(graph, line));
     }
 
-    private void setUpGraph(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section) {
-        SectionEdge sectionEdge = SectionEdge.of(section);
+    private void registerOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Line line) {
+        line.getSections().stream()
+                .map(section -> new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration()))
+                .forEach(section -> setUpGraph(graph, line, section));
+    }
+
+    private void setUpGraph(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Line line, Section section) {
+        SectionEdge sectionEdge = SectionEdge.of(line, section);
         graph.addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
         graph.setEdgeWeight(
                 sectionEdge, pathType.getEdgeValue(section));

@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("최단경로 단위 테스트")
 class SubwayMapTest {
-    public static final String DISTANCE = "DISTANCE";
-    public static final String DURATION = "DURATION";
+    private static final String DISTANCE = "DISTANCE";
+    private static final String DURATION = "DURATION";
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -50,12 +50,7 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(path.getTotalDistance()).isEqualTo(5);
-        assertThat(path.getTotalDuration()).isEqualTo(22);
-
-        List<Line> lines = path.getLines();
-        assertThat(lines).containsExactly(이호선, 삼호선);
+        validatePath(path, 5, 22, new Station[]{교대역, 남부터미널역, 양재역}, new Line[]{삼호선});
     }
 
     @DisplayName("최소 시간 경로 조회")
@@ -65,14 +60,15 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선), DURATION);
         Path path = subwayMap.findPath(교대역, 양재역);
 
-
         // then
-        assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
-        assertThat(path.getTotalDistance()).isEqualTo(20);
-        assertThat(path.getTotalDuration()).isEqualTo(2);
+        validatePath(path, 20, 2, new Station[]{교대역, 강남역, 양재역}, new Line[]{이호선, 신분당선});
+    }
 
-        List<Line> lines = path.getLines();
-        assertThat(lines).containsExactly(이호선, 신분당선);
+    private void validatePath(Path path, int expectedDistance, int expectedDuration, Station[] expectedStations, Line[] expectedLines) {
+        assertThat(path.getTotalDistance()).isEqualTo(expectedDistance);
+        assertThat(path.getTotalDuration()).isEqualTo(expectedDuration);
+        assertThat(path.getStations()).containsExactly(expectedStations);
+        assertThat(path.getLines()).contains(expectedLines);
     }
 
     @DisplayName("경로가 없을 경우 예외가 발생한다.")
