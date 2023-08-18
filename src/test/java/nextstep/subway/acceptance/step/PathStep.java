@@ -1,18 +1,19 @@
 package nextstep.subway.acceptance.step;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStep {
     private PathStep() {
     }
 
-    public static ExtractableResponse<Response> 경로_조회_요청(int sourceStationId, int targetStationId, String type, RequestSpecification requestSpecification) {
+    public static ExtractableResponse<Response> 경로_조회_요청(long sourceStationId, long targetStationId, String type, RequestSpecification requestSpecification) {
         Map<String, Object> params = Map.of(
                 "source", sourceStationId,
                 "target", targetStationId,
