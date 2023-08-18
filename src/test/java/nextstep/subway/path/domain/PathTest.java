@@ -2,10 +2,12 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Lines;
-import nextstep.subway.path.domain.fare.DistanceFarePolicies;
-import nextstep.subway.path.domain.fare.LongDistanceFarePolicy;
-import nextstep.subway.path.domain.fare.MiddleDistanceFarePolicy;
-import nextstep.subway.path.domain.fare.ShortDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.distance.LongDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.distance.MiddleDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.distance.ShortDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.line.BasicLineFarePolicy;
+import nextstep.subway.path.domain.fare.line.LineFarePolicy;
 import nextstep.subway.section.domain.Section;
 import nextstep.subway.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
@@ -24,6 +26,7 @@ class PathTest {
 
     private Path path;
     private DistanceFarePolicies distanceFarePolicies;
+    private LineFarePolicy lineFarePolicy;
 
     @BeforeEach
     void setUp() {
@@ -42,13 +45,15 @@ class PathTest {
                         new LongDistanceFarePolicy()
                 )
         );
+
+        lineFarePolicy = new BasicLineFarePolicy();
     }
 
     @DisplayName("거리가 10km 미만이고, 추가 요금이 900원인 노선이 있을 때 기본요금에 900원이 더해진 값이 반환된다.")
     @Test
     void additionalFee() {
         // when
-        int fare = path.calculateFare(distanceFarePolicies);
+        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy);
 
         // then
         assertThat(fare).isEqualTo(BASIC_FARE + ADDITIONAL_FEE);

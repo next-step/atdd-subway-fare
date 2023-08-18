@@ -2,7 +2,8 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Lines;
-import nextstep.subway.path.domain.fare.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.line.LineFarePolicy;
 import nextstep.subway.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
 
@@ -34,10 +35,10 @@ public class Path {
         return sections.calculateTotalDuration();
     }
 
-    public int calculateFare(DistanceFarePolicies distanceFarePolicies) {
-        int totalDistance = getTotalDistance();
-        int maxAdditionalFee = lines.findMaxAdditionalFee();
+    public int calculateFare(DistanceFarePolicies distanceFarePolicies, LineFarePolicy lineFarePolicy) {
+        int fare = distanceFarePolicies.calculateFare(getTotalDistance());
+        int maxAdditionalFee = lineFarePolicy.calculateAdditionalFee(lines);
 
-        return distanceFarePolicies.calculateFare(totalDistance) + maxAdditionalFee;
+        return fare + maxAdditionalFee;
     }
 }

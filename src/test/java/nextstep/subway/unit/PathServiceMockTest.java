@@ -3,7 +3,8 @@ package nextstep.subway.unit;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.application.PathService;
-import nextstep.subway.path.domain.fare.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.line.LineFarePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.exception.PathNotFoundException;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
@@ -39,6 +40,9 @@ public class PathServiceMockTest {
 
     @Mock
     private DistanceFarePolicies distanceFarePolicies;
+
+    @Mock
+    private LineFarePolicy lineFarePolicy;
 
     @InjectMocks
     private PathService pathService;

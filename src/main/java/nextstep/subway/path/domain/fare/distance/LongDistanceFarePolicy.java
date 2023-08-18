@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain.fare;
+package nextstep.subway.path.domain.fare.distance;
 
 import org.springframework.stereotype.Component;
 

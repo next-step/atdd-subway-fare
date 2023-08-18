@@ -1,9 +1,9 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.path.domain.fare.DistanceFarePolicies;
-import nextstep.subway.path.domain.fare.LongDistanceFarePolicy;
-import nextstep.subway.path.domain.fare.MiddleDistanceFarePolicy;
-import nextstep.subway.path.domain.fare.ShortDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
+import nextstep.subway.path.domain.fare.distance.LongDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.distance.MiddleDistanceFarePolicy;
+import nextstep.subway.path.domain.fare.distance.ShortDistanceFarePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
