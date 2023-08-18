@@ -53,6 +53,9 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(path.getTotalDistance()).isEqualTo(5);
         assertThat(path.getTotalDuration()).isEqualTo(22);
+
+        List<Line> lines = path.getLines();
+        assertThat(lines).containsExactly(이호선, 삼호선);
     }
 
     @DisplayName("최소 시간 경로 조회")
@@ -67,6 +70,9 @@ class SubwayMapTest {
         assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
         assertThat(path.getTotalDistance()).isEqualTo(20);
         assertThat(path.getTotalDuration()).isEqualTo(2);
+
+        List<Line> lines = path.getLines();
+        assertThat(lines).containsExactly(이호선, 신분당선);
     }
 
     @DisplayName("경로가 없을 경우 예외가 발생한다.")
