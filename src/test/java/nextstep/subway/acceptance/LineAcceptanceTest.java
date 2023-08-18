@@ -1,11 +1,11 @@
 package nextstep.subway.acceptance;
 
-import static nextstep.subway.acceptance.step.LineStep.지하철_노선_목록을_조회한다;
-import static nextstep.subway.acceptance.step.LineStep.지하철_노선을_삭제한다;
-import static nextstep.subway.acceptance.step.LineStep.지하철_노선을_생성한다;
-import static nextstep.subway.acceptance.step.LineStep.지하철_노선을_수정한다;
-import static nextstep.subway.acceptance.step.LineStep.지하철_노선을_조회한다;
-import static nextstep.subway.acceptance.step.SectionStep.지하철_노선_구간을_등록한다;
+import static nextstep.subway.acceptance.step.LineSteps.지하철_노선_목록을_조회한다;
+import static nextstep.subway.acceptance.step.LineSteps.지하철_노선을_삭제한다;
+import static nextstep.subway.acceptance.step.LineSteps.지하철_노선을_생성한다;
+import static nextstep.subway.acceptance.step.LineSteps.지하철_노선을_수정한다;
+import static nextstep.subway.acceptance.step.LineSteps.지하철_노선을_조회한다;
+import static nextstep.subway.acceptance.step.SectionSteps.지하철_노선_구간을_등록한다;
 import static nextstep.subway.acceptance.step.StationStep.지하철역을_생성한다;
 import static org.assertj.core.api.Assertions.assertThat;
 

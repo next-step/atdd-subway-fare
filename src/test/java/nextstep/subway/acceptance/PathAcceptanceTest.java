@@ -1,14 +1,7 @@
 package nextstep.subway.acceptance;
 
-import static nextstep.subway.acceptance.step.PathStep.경로_응답_검증;
-import static nextstep.subway.acceptance.step.PathStep.경로_조회_요청;
-import static nextstep.subway.acceptance.step.PathStep.역_이름_목록_검증;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.acceptance.step.LineStep;
-import nextstep.subway.acceptance.step.SectionStep;
 import nextstep.subway.acceptance.step.StationStep;
 import nextstep.utils.AcceptanceTest;
 import nextstep.utils.RestAssuredUtils;
@@ -17,8 +10,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.acceptance.step.LineSteps.지하철_노선을_생성한다;
+import static nextstep.subway.acceptance.step.PathStep.*;
+import static nextstep.subway.acceptance.step.SectionSteps.지하철_노선_구간을_등록한다;
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("경로 관련 기능")
 public class PathAcceptanceTest extends AcceptanceTest {
+    private static final String DISTANCE = "DISTANCE";
+    private static final String DURATION = "DURATION";
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -43,11 +43,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = StationStep.지하철역을_생성한다("양재역").jsonPath().getLong("id");
         남부터미널역 = StationStep.지하철역을_생성한다("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = LineStep.지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 1).jsonPath().getLong("id");
-        신분당선 = LineStep.지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 1).jsonPath().getLong("id");
-        삼호선 = LineStep.지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 10).jsonPath().getLong("id");
+        이호선 = 지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 1, 0).jsonPath().getLong("id");
+        신분당선 = 지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 1, 0).jsonPath().getLong("id");
+        삼호선 = 지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 10, 0).jsonPath().getLong("id");
 
-        SectionStep.지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 12);
+        지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 12);
     }
 
     /**
@@ -62,7 +62,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void searchShortestDistancePath() {
         // when
-        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, "DISTANCE", RestAssuredUtils.given_절_생성());
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, DISTANCE, RestAssuredUtils.given_절_생성());
 
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -82,7 +82,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void searchShortestDurationPath() {
         // when
-        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, "DURATION", RestAssuredUtils.given_절_생성());
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, DURATION, RestAssuredUtils.given_절_생성());
 
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -100,9 +100,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
      */
     @Test
     void additionalFeePath() {
+        // given
+        이호선 = 지하철_노선을_생성한다("2호선", "green", 교대역, 강남역, 10, 1, 0).jsonPath().getLong("id");
+        신분당선 = 지하철_노선을_생성한다("신분당선", "red", 강남역, 양재역, 10, 1, 500).jsonPath().getLong("id");
+        삼호선 = 지하철_노선을_생성한다("3호선", "orange", 교대역, 남부터미널역, 2, 10, 900).jsonPath().getLong("id");
+
+        지하철_노선_구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 12);
+
         // when
-        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, "DISTANCE", RestAssuredUtils.given_절_생성());
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(1, 3, DISTANCE, RestAssuredUtils.given_절_생성());
 
-
+        // then
+        assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        역_이름_목록_검증(pathsResponse, 3, "교대역", "남부터미널역", "양재역");
+        경로_응답_검증(pathsResponse, 5, 22, 2150);
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
-public class SectionStep {
-    private SectionStep() {
+public class SectionSteps {
+    private SectionSteps() {
     }
 
     public static ExtractableResponse<Response> 지하철_노선_구간을_등록한다(long lineId, long upStationId, long downStationId, int distance, int duration) {
