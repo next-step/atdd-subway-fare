@@ -62,6 +62,7 @@ class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선), DURATION);
         Path path = subwayMap.findPath(교대역, 양재역);
 
+
         // then
         assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
         assertThat(path.getTotalDistance()).isEqualTo(20);

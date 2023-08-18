@@ -73,16 +73,16 @@ public class SubwayMap {
     private void addEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .forEach(it -> setUpGraph(graph, it));
+                .flatMap(line -> line.getSections().stream())
+                .forEach(section -> setUpGraph(graph, section));
     }
 
     private void addOppositeEdge(SimpleDirectedWeightedGraph<Station, SectionEdge> graph) {
         // 지하철 역의 연결 정보(간선)을 등록
         lines.stream()
-                .flatMap(it -> it.getSections().stream())
-                .map(it -> new Section(it.getLine(), it.getDownStation(), it.getUpStation(), it.getDistance(), it.getDuration()))
-                .forEach(it -> setUpGraph(graph, it));
+                .flatMap(line -> line.getSections().stream())
+                .map(section -> new Section(section.getLine(), section.getDownStation(), section.getUpStation(), section.getDistance(), section.getDuration()))
+                .forEach(section -> setUpGraph(graph, section));
     }
 
     private void setUpGraph(SimpleDirectedWeightedGraph<Station, SectionEdge> graph, Section section) {
