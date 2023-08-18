@@ -27,6 +27,7 @@ class DistanceFarePoliciesTest {
                 )
         );
     }
+
     @DisplayName("10km 이하 거리에서는 기본요금 1,250원이 계산된다.")
     @ParameterizedTest(name = "거리={0}")
     @ValueSource(ints = {1, 5, 10})
