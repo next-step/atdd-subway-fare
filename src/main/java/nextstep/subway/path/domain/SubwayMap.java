@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Lines;
 import nextstep.subway.path.exception.PathNotFoundException;
 import nextstep.subway.path.exception.StationNotInGivenLinesException;
 import nextstep.subway.section.domain.Section;
@@ -42,7 +43,7 @@ public class SubwayMap {
                 .map(SectionEdge::getLine)
                 .collect(Collectors.toSet());
 
-        return new Path(lines, new Sections(sections));
+        return new Path(new Lines(lines), new Sections(sections));
     }
 
     private void validateStationsInLines(Station source, Station target) {

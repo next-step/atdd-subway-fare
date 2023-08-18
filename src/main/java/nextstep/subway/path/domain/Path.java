@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Lines;
 import nextstep.subway.path.domain.fare.DistanceFarePolicies;
 import nextstep.subway.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
@@ -9,16 +10,16 @@ import java.util.List;
 import java.util.Set;
 
 public class Path {
-    private final Set<Line> lines;
+    private final Lines lines;
     private final Sections sections;
 
-    public Path(Set<Line> lines, Sections sections) {
+    public Path(Lines lines, Sections sections) {
         this.lines = lines;
         this.sections = sections;
     }
 
     public Set<Line> getLines() {
-        return lines;
+        return lines.getLines();
     }
 
     public List<Station> getStations() {
@@ -35,10 +36,7 @@ public class Path {
 
     public int calculateFare(DistanceFarePolicies distanceFarePolicies) {
         int totalDistance = getTotalDistance();
-        int maxAdditionalFee = lines.stream()
-                .mapToInt(Line::getAdditionalFee)
-                .max()
-                .orElse(0);
+        int maxAdditionalFee = lines.findMaxAdditionalFee();
 
         return distanceFarePolicies.calculateFare(totalDistance) + maxAdditionalFee;
     }

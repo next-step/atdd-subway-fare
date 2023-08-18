@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Lines;
 import nextstep.subway.path.domain.fare.DistanceFarePolicies;
 import nextstep.subway.path.domain.fare.LongDistanceFarePolicy;
 import nextstep.subway.path.domain.fare.MiddleDistanceFarePolicy;
@@ -32,7 +33,7 @@ class PathTest {
         Line 이호선 = new Line("2호선", "green", 0, 교대_강남_구간);
         Line 신분당선 = new Line("신분당선", "red", ADDITIONAL_FEE, 강남_양재_구간);
 
-        path = new Path(Set.of(이호선, 신분당선), new Sections(List.of(교대_강남_구간, 강남_양재_구간)));
+        path = new Path(new Lines(Set.of(이호선, 신분당선)), new Sections(List.of(교대_강남_구간, 강남_양재_구간)));
 
         distanceFarePolicies = new DistanceFarePolicies(
                 List.of(
