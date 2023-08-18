@@ -51,6 +51,10 @@ public class Line {
         return color;
     }
 
+    public Integer getAdditionalFee() {
+        return additionalFee;
+    }
+
     public List<Section> getSections() {
         return sections.getSections();
     }

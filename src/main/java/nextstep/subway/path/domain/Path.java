@@ -35,6 +35,11 @@ public class Path {
 
     public int calculateFare(DistanceFarePolicies distanceFarePolicies) {
         int totalDistance = getTotalDistance();
-        return distanceFarePolicies.calculateFare(totalDistance);
+        int maxAdditionalFee = lines.stream()
+                .mapToInt(Line::getAdditionalFee)
+                .max()
+                .orElse(0);
+
+        return distanceFarePolicies.calculateFare(totalDistance) + maxAdditionalFee;
     }
 }
