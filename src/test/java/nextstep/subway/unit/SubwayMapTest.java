@@ -1,9 +1,5 @@
 package nextstep.subway.unit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.util.List;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SubwayMap;
@@ -14,6 +10,11 @@ import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("최단경로 단위 테스트")
 class SubwayMapTest {
@@ -34,9 +35,9 @@ class SubwayMapTest {
         양재역 = new Station(3L, "양재역");
         남부터미널역 = new Station(4L, "남부터미널역");
 
-        이호선 = new Line("2호선", "green", new Section(교대역, 강남역, 10, 1));
-        신분당선 = new Line("신분당선", "red", new Section(강남역, 양재역, 10, 1));
-        삼호선 = new Line("3호선", "orange", new Section(교대역, 남부터미널역, 2, 10));
+        이호선 = new Line("2호선", "green", 0, new Section(교대역, 강남역, 10, 1));
+        신분당선 = new Line("신분당선", "red", 0, new Section(강남역, 양재역, 10, 1));
+        삼호선 = new Line("3호선", "orange", 0, new Section(교대역, 남부터미널역, 2, 10));
 
         삼호선.registerSection(new Section(남부터미널역, 양재역, 3, 12));
     }
@@ -74,7 +75,7 @@ class SubwayMapTest {
         Station 증미역 = new Station(5L, "증미역");
         Station 여의도역 = new Station(6L, "여의도역");
 
-        Line 구호선 = new Line("9호선", "brown", new Section(증미역, 여의도역, 2, 10));
+        Line 구호선 = new Line("9호선", "brown", 0, new Section(증미역, 여의도역, 2, 10));
 
         // when
         SubwayMap subwayMap = new SubwayMap(List.of(이호선, 삼호선, 신분당선, 구호선), DISTANCE);

@@ -98,6 +98,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * When : 최소 시간 경로 조회를 요청하면
      * Then : 900원의 요금이 추가된 지하철 요금을 응답한다.
      */
+    @DisplayName("추가 요금이 있는 노선의 경로 조회")
     @Test
     void additionalFeePath() {
         // given

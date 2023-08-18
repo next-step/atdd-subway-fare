@@ -58,9 +58,9 @@ public class PathServiceMockTest {
         양재역 = new Station(3L, "양재역");
         남부터미널역 = new Station(4L, "남부터미널역");
 
-        이호선 = new Line("2호선", "green", new Section(교대역, 강남역, 10, 1));
-        신분당선 = new Line("신분당선", "red", new Section(강남역, 양재역, 10, 1));
-        삼호선 = new Line("3호선", "orange", new Section(교대역, 남부터미널역, 2, 10));
+        이호선 = new Line("2호선", "green", 0, new Section(교대역, 강남역, 10, 1));
+        신분당선 = new Line("신분당선", "red", 0, new Section(강남역, 양재역, 10, 1));
+        삼호선 = new Line("3호선", "orange", 0, new Section(교대역, 남부터미널역, 2, 10));
 
         삼호선.registerSection(new Section(남부터미널역, 양재역, 3, 12));
     }
@@ -120,7 +120,7 @@ public class PathServiceMockTest {
         Station 증미역 = new Station(5L, "증미역");
         Station 여의도역 = new Station(6L, "여의도역");
 
-        Line 구호선 = new Line("9호선", "brown", new Section(증미역, 여의도역, 2, 10));
+        Line 구호선 = new Line("9호선", "brown", 0, new Section(증미역, 여의도역, 2, 10));
 
         when(stationRepository.findById(anyLong()))
                 .thenReturn(Optional.of(교대역))   // 출발역

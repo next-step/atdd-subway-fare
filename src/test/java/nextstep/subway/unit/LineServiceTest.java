@@ -37,7 +37,7 @@ public class LineServiceTest {
         Station 강남역 = stationRepository.save(new Station("강남역"));
         Station 양재역 = stationRepository.save(new Station("양재역"));
 
-        Line 신분당선 = lineRepository.save(new Line("신분당선", "bg-red-600", new Section(강남역, 양재역, 10, 10)));
+        Line 신분당선 = lineRepository.save(new Line("신분당선", "bg-red-600", 0, new Section(강남역, 양재역, 10, 10)));
 
         // when
         // lineService.addSection 호출
