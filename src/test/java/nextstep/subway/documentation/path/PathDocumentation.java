@@ -1,12 +1,12 @@
-package nextstep.subway.documentation;
+package nextstep.subway.documentation.path;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.documentation.Documentation;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 import org.assertj.core.api.Assertions;
@@ -16,12 +16,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.util.List;
 
+import static nextstep.subway.documentation.path.PathDocumentationSteps.경로_조회_문서_요청;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -35,11 +35,15 @@ public class PathDocumentation extends Documentation {
     private StationRepository stationRepository;
     private Station 강남역;
     private Station 양재역;
+    private Long 강남역_식별값;
+    private Long 양재역_식별값;
 
     @BeforeEach
     void setUpPathDocumentation() {
         강남역 = stationRepository.save(new Station("양재역"));
         양재역 = stationRepository.save(new Station("강남역"));
+        강남역_식별값 = 강남역.getId();
+        양재역_식별값 = 양재역.getId();
     }
 
     @Test
@@ -53,13 +57,7 @@ public class PathDocumentation extends Documentation {
                 .thenReturn(mockResponse);
 
         // when
-        ExtractableResponse<Response> response = RestAssured
-                .given(getPathSpec()).log().all()
-                    .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                    .get("/paths?source={sourceId}&target={targetId}", 강남역.getId(), 양재역.getId())
-                .then().log().all()
-                .extract();
+        ExtractableResponse<Response> response = 경로_조회_문서_요청(getPathSpec(), 강남역_식별값, 양재역_식별값);
 
         // then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

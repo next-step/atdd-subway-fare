@@ -1,5 +1,6 @@
-package nextstep.subway.utils;
+package nextstep.subway.utils.database;
 
+import nextstep.subway.utils.database.DataLoader;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,9 @@
-package nextstep.subway.utils;
+package nextstep.subway.utils.github;
 
 import nextstep.auth.token.oauth2.github.GithubAccessTokenRequest;
 import nextstep.auth.token.oauth2.github.GithubAccessTokenResponse;
 import nextstep.auth.token.oauth2.github.GithubProfileResponse;
+import nextstep.subway.utils.github.GithubResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package nextstep.subway.utils;
+package nextstep.subway.utils.github;
 
 import java.util.Arrays;
 import java.util.Objects;
