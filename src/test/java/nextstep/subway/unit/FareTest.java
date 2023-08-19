@@ -2,18 +2,30 @@ package nextstep.subway.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.fare.DefaultFareChain;
+import nextstep.subway.domain.fare.FareChain;
+import nextstep.subway.domain.fare.LongRangeFareChain;
+import nextstep.subway.domain.fare.MidRangeFareChain;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class FareTest {
 
-    private final Fare fare = new Fare();
+    private final FareChain fare = new DefaultFareChain();
+    private final FareChain midFare = new MidRangeFareChain();
+    private final FareChain longFare = new LongRangeFareChain();
+
+    @BeforeEach
+    void init() {
+        midFare.setNextChain(longFare);
+        fare.setNextChain(midFare);
+    }
 
     @Test
     void getFareByDistanceUnderMidRange() {
-        int expectedFare = fare.getFareByDistance(10);
-        int expectedFare1 = fare.getFareByDistance(12);
-        int expectedFare2 = fare.getFareByDistance(16);
+        int expectedFare = fare.calculateFare(10);
+        int expectedFare1 = fare.calculateFare(12);
+        int expectedFare2 = fare.calculateFare(16);
 
 
         assertThat(expectedFare).isEqualTo(1250);
@@ -23,10 +35,12 @@ class FareTest {
 
     @Test
     void getFareByDistanceOverMidRange() {
-        int expectedFare = fare.getFareByDistance(51);
-        int expectedFare1 = fare.getFareByDistance(50);
+        int expectedFare = fare.calculateFare(51);
+        int expectedFare1 = fare.calculateFare(50);
+        int expectedFare2 = fare.calculateFare(75);
 
         assertThat(expectedFare).isEqualTo(2150);
         assertThat(expectedFare1).isEqualTo(2050);
+        assertThat(expectedFare2).isEqualTo(2450);
     }
 }
