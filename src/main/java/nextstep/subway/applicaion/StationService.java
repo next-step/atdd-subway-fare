@@ -38,10 +38,7 @@ public class StationService {
     }
 
     public StationResponse createStationResponse(Station station) {
-        return new StationResponse(
-                station.getId(),
-                station.getName()
-        );
+        return new StationResponse(station);
     }
 
     public Station findById(Long id) {

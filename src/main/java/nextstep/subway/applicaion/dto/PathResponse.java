@@ -26,7 +26,6 @@ public class PathResponse {
     public List<StationResponse> getStations() {
         return stations;
     }
-
     public int getDistance() {
         return distance;
     }
