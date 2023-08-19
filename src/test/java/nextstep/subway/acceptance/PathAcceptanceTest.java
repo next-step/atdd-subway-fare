@@ -9,7 +9,9 @@ import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.Map;
 import nextstep.subway.applicaion.dto.LineRequest;
+import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
+import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.FindPathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,43 +57,43 @@ class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         // when
-        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE);
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE).as(PathResponse.class);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.getFare()).isEqualTo(1250);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
     @Test
     void findPathByDistanceAdditionalFee() {
         // when
-        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(남부터미널역, 강남역, FindPathType.DISTANCE);
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(남부터미널역, 강남역, FindPathType.DISTANCE).as(PathResponse.class);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(남부터미널역, 교대역, 강남역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1350);
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(남부터미널역, 교대역, 강남역);
+        assertThat(response.getFare()).isEqualTo(1350);
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
     @Test
     void findPathByDistanceAdditionalFee1() {
         // when
-        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 역삼역, FindPathType.DISTANCE);
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 역삼역, FindPathType.DISTANCE).as(PathResponse.class);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 역삼역);
-        assertThat(response.jsonPath().getInt("fare")).isEqualTo(1450);
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 역삼역);
+        assertThat(response.getFare()).isEqualTo(1450);
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
         // when
-        ExtractableResponse<Response> response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DURATION);
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DURATION).as(PathResponse.class);
 
         // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 양재역);
     }
 
 
