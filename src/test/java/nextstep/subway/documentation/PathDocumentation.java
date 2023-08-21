@@ -17,6 +17,8 @@ import static nextstep.subway.acceptance.step.PathStep.경로_조회_요청;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -45,11 +47,14 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.searchPath(anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.searchPath(anyString(), anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         RestDocumentationFilter document = document("path",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                        headerWithName("authorization").description("토큰").optional()
+                ),
                 requestParameters(
                         parameterWithName("source").description("출발역 ID"),
                         parameterWithName("target").description("도착역 ID"),
