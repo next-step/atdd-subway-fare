@@ -12,13 +12,6 @@ public class Lines {
         this.lines = lines;
     }
 
-    public int findMaxAdditionalFee() {
-        return lines.stream()
-                .mapToInt(Line::getAdditionalFee)
-                .max()
-                .orElse(0);
-    }
-
     public Set<Line> getLines() {
         return Collections.unmodifiableSet(lines);
     }
