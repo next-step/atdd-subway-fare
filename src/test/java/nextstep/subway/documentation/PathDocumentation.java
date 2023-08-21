@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.dto.UserDto;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.utils.RestAssuredUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,7 @@ import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 import java.util.List;
 
 import static nextstep.subway.acceptance.step.PathStep.경로_조회_요청;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -47,7 +47,7 @@ public class PathDocumentation extends Documentation {
 
     @Test
     void path() {
-        when(pathService.searchPath(anyString(), anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
+        when(pathService.searchPath(any(UserDto.class), anyLong(), anyLong(), anyString())).thenReturn(pathResponse);
 
         RestDocumentationFilter document = document("path",
                 preprocessRequest(prettyPrint()),

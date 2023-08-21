@@ -24,7 +24,8 @@ public enum ErrorCode {
 
     // 500
     NOT_SUPPORTED_FARE_POLICY(500, "지원되지 않는 요금 정책입니다."),
-    ;
+    NOT_SUPPORTED_ROLE_TYPE(500, "지원되지 않는 역할입니다."),
+    NOT_SUPPORTED_AGE_TYPE(500, "지원되지 않는 연령 구간입니다.");
 
     private final int status;
     private final String message;

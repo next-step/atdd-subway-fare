@@ -1,11 +1,14 @@
 package nextstep.subway.unit;
 
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
 import nextstep.subway.path.domain.fare.line.LineFarePolicy;
 import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.dto.UserDto;
 import nextstep.subway.path.exception.PathNotFoundException;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
 import nextstep.subway.section.domain.Section;
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -39,6 +43,9 @@ public class PathServiceMockTest {
     private LineRepository lineRepository;
 
     @Mock
+    private MemberRepository memberRepository;
+
+    @Mock
     private DistanceFarePolicies distanceFarePolicies;
 
     @Mock
@@ -47,6 +54,7 @@ public class PathServiceMockTest {
     @InjectMocks
     private PathService pathService;
 
+    private UserDto userDto;
     private Station 교대역;
     private Station 강남역;
     private Station 양재역;
@@ -57,6 +65,8 @@ public class PathServiceMockTest {
 
     @BeforeEach
     void setUp() {
+        userDto = new UserDto("email", "ROLE_MEMBER");
+
         교대역 = new Station(1L, "교대역");
         강남역 = new Station(2L, "강남역");
         양재역 = new Station(3L, "양재역");
@@ -87,8 +97,11 @@ public class PathServiceMockTest {
         when(lineRepository.findAll())
                 .thenReturn(List.of(이호선, 신분당선, 삼호선));
 
+        when(memberRepository.findByEmail(anyString()))
+                .thenReturn(Optional.of(new Member("email", "password", 20, "ROLE_MEMBER")));
+
         // when: 출발역 id와 도착역 id를 받으면 최단경로를 반환한다.
-        PathResponse pathResponse = pathService.searchPath(1L, 2L, "DISTANCE");
+        PathResponse pathResponse = pathService.searchPath(userDto, 1L, 2L, "DISTANCE");
         List<String> stationNames = pathResponse.getStations().stream()
                 .map(StationResponse::getName)
                 .collect(Collectors.toList());
@@ -113,7 +126,7 @@ public class PathServiceMockTest {
         String type = "DISTANCE";
 
         // when, then
-        assertThatThrownBy(() -> pathService.searchPath(source, target, type))
+        assertThatThrownBy(() -> pathService.searchPath(userDto, source, target, type))
                 .isInstanceOf(SameSourceAndTargetStationException.class);
     }
 
@@ -134,7 +147,7 @@ public class PathServiceMockTest {
                 .thenReturn(List.of(이호선, 신분당선, 삼호선, 구호선));
 
         // when, then
-        assertThatThrownBy(() -> pathService.searchPath(1L, 2L, "DISTANCE"))
+        assertThatThrownBy(() -> pathService.searchPath(userDto, 1L, 2L, "DISTANCE"))
                 .isInstanceOf(PathNotFoundException.class);
     }
 
@@ -142,7 +155,7 @@ public class PathServiceMockTest {
     @Test
     void searchPathFailByNotFoundStation() {
         // when, then
-        assertThatThrownBy(() -> pathService.searchPath(1L, 2L, "DISTANCE"))
+        assertThatThrownBy(() -> pathService.searchPath(userDto, 1L, 2L, "DISTANCE"))
                 .isInstanceOf(StationNotFoundException.class);
     }
 }

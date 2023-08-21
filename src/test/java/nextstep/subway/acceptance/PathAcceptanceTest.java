@@ -161,7 +161,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * And : 6세 이상 ~ 13세 미만의 어린이 계정을 생성하고
      * And : 로그인 요청을 한 후
      * When : 최단 거리 경로 조회를 요청하면
-     * Then : 350원을 제외한 나머지 금액의 50% 할인된 가격을 응답한다.
+     * Then : 350원에 350원을 제외한 나머지 금액의 50% 할인된 가격을 더한 요금을 응답한다.
      */
     @DisplayName("어린이가 경로를 조회")
     @Test
@@ -177,6 +177,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
         역_이름_목록_검증(pathsResponse, 3, "교대역", "남부터미널역", "양재역");
-        경로_응답_검증(pathsResponse, 5, 22, BASIC_FARE + (int) Math.ceil(900 * DISCOUNT_RATE_FOR_CHILDREN));
+        경로_응답_검증(pathsResponse, 5, 22, 800);
     }
 }

@@ -2,7 +2,9 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Lines;
-import nextstep.subway.path.domain.discount.DiscountPolicy;
+import nextstep.subway.path.domain.discount.age.ChildrenDiscountPolicy;
+import nextstep.subway.path.domain.discount.age.DefaultAgeDiscountPolicy;
+import nextstep.subway.path.domain.discount.age.TeenagerDiscountPolicy;
 import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
 import nextstep.subway.path.domain.fare.distance.LongDistanceFarePolicy;
 import nextstep.subway.path.domain.fare.distance.MiddleDistanceFarePolicy;
@@ -28,7 +30,6 @@ class PathTest {
     private Path path;
     private DistanceFarePolicies distanceFarePolicies;
     private LineFarePolicy lineFarePolicy;
-    private DiscountPolicy discountPolicy;
 
     @BeforeEach
     void setUp() {
@@ -55,7 +56,7 @@ class PathTest {
     @Test
     void additionalFare() {
         // when
-        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy, discountPolicy);
+        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy, new DefaultAgeDiscountPolicy());
 
         // then
         assertThat(fare).isEqualTo(BASIC_FARE + ADDITIONAL_FARE);
@@ -64,26 +65,22 @@ class PathTest {
     @DisplayName("요금 2150원에 청소년 할인 정책이 적용된 금액이 반환된다.")
     @Test
     void discountFareTeenager() {
-        // given
-        discountPolicy = totalFare -> (int) ((totalFare - 350) * 0.8);
-
         // when
-        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy, discountPolicy);
+        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy, new TeenagerDiscountPolicy());
 
         // then
-        assertThat(fare).isEqualTo((int) ((BASIC_FARE + ADDITIONAL_FARE - 350) * 0.8));
+        int totalFare = BASIC_FARE + ADDITIONAL_FARE;
+        assertThat(fare).isEqualTo((int) (350 + (totalFare - 350) * 0.8));
     }
 
     @DisplayName("요금 2150원에 어린이 할인 정책이 적용된 금액이 반환된다.")
     @Test
     void discountFareChildren() {
-        // given
-        discountPolicy = totalFare -> (int) ((totalFare - 350) * 0.5);
-
         // when
-        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy, discountPolicy);
+        int fare = path.calculateFare(distanceFarePolicies, lineFarePolicy, new ChildrenDiscountPolicy());
 
         // then
-        assertThat(fare).isEqualTo((int) ((BASIC_FARE + ADDITIONAL_FARE - 350) * 0.5));
+        int totalFare = BASIC_FARE + ADDITIONAL_FARE;
+        assertThat(fare).isEqualTo((int) (350 + (totalFare - 350) * 0.5));
     }
 }
