@@ -12,7 +12,15 @@ public enum AgeType {
 
     private final Predicate<Integer> ageStandard;
 
-    public static AgeType of(Integer age) {
+    public static boolean isTeenager(Integer age) {
+        return findAgeType(age) == TEENAGER;
+    }
+
+    public static boolean isChildren(Integer age) {
+        return findAgeType(age) == CHILDREN;
+    }
+
+    private static AgeType findAgeType(Integer age) {
         return Arrays.stream(values())
                 .filter(ageType -> ageType.ageStandard.test(age))
                 .findAny()

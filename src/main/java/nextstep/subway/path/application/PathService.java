@@ -79,11 +79,11 @@ public class PathService {
 
     private DiscountPolicy classifyDiscountPolicy(Integer age) {
         DiscountPolicy discountPolicy = new DefaultAgeDiscountPolicy();
-        if (AgeType.of(age) == AgeType.TEENAGER) {
+        if (AgeType.isTeenager(age)) {
             discountPolicy = new TeenagerDiscountPolicy();
         }
 
-        if (AgeType.of(age) == AgeType.CHILDREN) {
+        if (AgeType.isChildren(age)) {
             discountPolicy = new ChildrenDiscountPolicy();
         }
 
