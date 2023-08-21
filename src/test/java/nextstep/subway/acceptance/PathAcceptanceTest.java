@@ -9,6 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.auth.acceptance.step.TokenSteps.일반_로그인_요청;
+import static nextstep.auth.acceptance.step.TokenSteps.토큰_추출;
+import static nextstep.member.acceptance.step.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.step.LineSteps.지하철_노선을_생성한다;
 import static nextstep.subway.acceptance.step.PathStep.*;
 import static nextstep.subway.acceptance.step.SectionSteps.지하철_노선_구간을_등록한다;
@@ -19,6 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PathAcceptanceTest extends AcceptanceTest {
     private static final String DISTANCE = "DISTANCE";
     private static final String DURATION = "DURATION";
+    private static final String EMAIL = "email@email.com";
+    private static final String PASSWORD = "password";
+    public static final double DISCOUNT_RATE_FOR_TEENAGER = 0.8;
+    public static final double DISCOUNT_RATE_FOR_CHILDREN = 0.5;
+    public static final int BASIC_FARE = 350;
+
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -115,5 +124,59 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
         역_이름_목록_검증(pathsResponse, 3, "가양역", "마곡나루", "계양");
         경로_응답_검증(pathsResponse, 10, 2, 2150);
+    }
+
+    /**
+     * Scenario : 청소년이 경로 조회
+     * Given : 지하철역을 4개 생성하고
+     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
+     * And : 하나의 지하철 노선에 1개의 구간을 추가하고
+     * And : 13세 이상 ~ 19세 미만의 청소년 계정을 생성하고
+     * And : 로그인 요청을 한 후
+     * When : 토큰을 이용해 최단 거리 경로 조회를 요청하면
+     * Then : 350원을 제외한 나머지 금액의 20% 할인된 가격을 응답한다.
+     */
+    @DisplayName("청소년이 경로를 조회")
+    @Test
+    void searchPathByTeenager() {
+        // given
+        int age = 18;
+        회원_생성_요청(EMAIL, PASSWORD, age);
+        String accessToken = 토큰_추출(일반_로그인_요청(EMAIL, PASSWORD));
+
+        // when
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(accessToken, 1, 3, DISTANCE, RestAssuredUtils.given_절_생성());
+
+        // then
+        assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        역_이름_목록_검증(pathsResponse, 3, "교대역", "남부터미널역", "양재역");
+        경로_응답_검증(pathsResponse, 5, 22, BASIC_FARE + (int) Math.ceil(900 * DISCOUNT_RATE_FOR_TEENAGER));
+    }
+
+    /**
+     * Scenario : 어린이가 경로 조회
+     * Given : 지하철역을 4개 생성하고
+     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
+     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
+     * And : 6세 이상 ~ 13세 미만의 어린이 계정을 생성하고
+     * And : 로그인 요청을 한 후
+     * When : 최단 거리 경로 조회를 요청하면
+     * Then : 350원을 제외한 나머지 금액의 50% 할인된 가격을 응답한다.
+     */
+    @DisplayName("어린이가 경로를 조회")
+    @Test
+    void searchPathByChildren() {
+        // given
+        int age = 12;
+        회원_생성_요청(EMAIL, PASSWORD, age);
+        String accessToken = 토큰_추출(일반_로그인_요청(EMAIL, PASSWORD));
+
+        // when
+        ExtractableResponse<Response> pathsResponse = 경로_조회_요청(accessToken, 1, 3, DISTANCE, RestAssuredUtils.given_절_생성());
+
+        // then
+        assertThat(pathsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        역_이름_목록_검증(pathsResponse, 3, "교대역", "남부터미널역", "양재역");
+        경로_응답_검증(pathsResponse, 5, 22, BASIC_FARE + (int) Math.ceil(900 * DISCOUNT_RATE_FOR_CHILDREN));
     }
 }

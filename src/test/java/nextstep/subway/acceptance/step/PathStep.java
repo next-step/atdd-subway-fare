@@ -13,6 +13,13 @@ public class PathStep {
     private PathStep() {
     }
 
+    public static ExtractableResponse<Response> 경로_조회_요청(String accessToken, long sourceStationId, long targetStationId, String type, RequestSpecification requestSpecification) {
+        RequestSpecification requestSpecAddedHeader = requestSpecification
+                .header("authorization", "Bearer " + accessToken);
+
+        return 경로_조회_요청(sourceStationId, targetStationId, type, requestSpecAddedHeader);
+    }
+
     public static ExtractableResponse<Response> 경로_조회_요청(long sourceStationId, long targetStationId, String type, RequestSpecification requestSpecification) {
         Map<String, Object> params = Map.of(
                 "source", sourceStationId,
