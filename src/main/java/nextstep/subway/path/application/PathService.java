@@ -78,16 +78,15 @@ public class PathService {
     }
 
     private DiscountPolicy classifyDiscountPolicy(Integer age) {
-        DiscountPolicy discountPolicy = new DefaultAgeDiscountPolicy();
         if (AgeType.isTeenager(age)) {
-            discountPolicy = new TeenagerDiscountPolicy();
+            return new TeenagerDiscountPolicy();
         }
 
         if (AgeType.isChildren(age)) {
-            discountPolicy = new ChildrenDiscountPolicy();
+            return new ChildrenDiscountPolicy();
         }
 
-        return discountPolicy;
+        return new DefaultAgeDiscountPolicy();
     }
 
     private void validateSourceAndTargetId(Long source, Long target) {
