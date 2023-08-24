@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LongDistanceFarePolicy extends DefaultDistanceFarePolicy {
     @Override
-    public boolean satisfiesCondition(int totalDistance) {
+    public boolean isSatisfiedBy(int totalDistance) {
         return MIDDLE_DISTANCE_LIMIT < totalDistance;
     }
 

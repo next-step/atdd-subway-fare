@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShortDistanceFarePolicy extends DefaultDistanceFarePolicy {
     @Override
-    public boolean satisfiesCondition(int totalDistance) {
+    public boolean isSatisfiedBy(int totalDistance) {
         return totalDistance <= SHORT_DISTANCE_LIMIT;
     }
 

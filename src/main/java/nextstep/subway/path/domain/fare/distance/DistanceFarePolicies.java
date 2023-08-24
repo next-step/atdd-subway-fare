@@ -20,7 +20,7 @@ public class DistanceFarePolicies {
 
     private DistanceFarePolicy findDistanceFarePolicy(int totalDistance) {
         return distanceFarePolicies.stream()
-                .filter(distanceFarePolicy -> distanceFarePolicy.satisfiesCondition(totalDistance))
+                .filter(distanceFarePolicy -> distanceFarePolicy.isSatisfiedBy(totalDistance))
                 .findAny()
                 .orElseThrow(NotSupportedDistanceFarePolicy::new);
     }
