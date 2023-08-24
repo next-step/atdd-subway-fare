@@ -33,7 +33,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                 throw e;
             }
 
-            return UserPrincipal.createUnknown();
+            return new UnknownUserPrincipal();
         }
     }
 
@@ -47,6 +47,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String username = jwtTokenProvider.getPrincipal(token);
         String role = jwtTokenProvider.getRoles(token);
 
-        return new UserPrincipal(username, role);
+        return new LoggedInUserPrincipal(username, role);
     }
 }
