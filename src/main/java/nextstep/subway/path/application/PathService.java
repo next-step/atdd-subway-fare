@@ -1,8 +1,8 @@
 package nextstep.subway.path.application;
 
+import java.util.List;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
-import nextstep.member.domain.RoleType;
 import nextstep.member.exception.MemberNotFoundException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
@@ -23,8 +23,6 @@ import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.subway.station.exception.StationNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PathService {
@@ -47,7 +45,7 @@ public class PathService {
         Path path = findPath(source, target, type);
 
         // user의 role이 unknown이면 별다른 할인 정책이 적용되지 않는다.
-        if (RoleType.isUnknown(userDto.getRole())) {
+        if (userDto.isUnknown()) {
             return PathResponse.of(path, path.calculateFare(distanceFarePolicies, lineFarePolicy, new DefaultDiscountPolicy()));
         }
 
