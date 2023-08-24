@@ -28,10 +28,10 @@ public class Sections {
 
     public Sections(List<Section> sections) {
         int firstIdx = 0;
-        firstStationId = sections.get(firstIdx).getUpStationId();
+        this.firstStationId = sections.get(firstIdx).getUpStationId();
 
         int lastIdx = sections.size() - 1;
-        lastStationId = sections.get(lastIdx).getDownStationId();
+        this.lastStationId = sections.get(lastIdx).getDownStationId();
 
         this.sections.addAll(sections);
     }
