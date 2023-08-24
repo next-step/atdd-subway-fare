@@ -61,9 +61,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Scenario : 두 역의 최단 거리 경로를 조회
-     * Given : 지하철역을 4개 생성하고
-     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
-     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
+     * Given : 3개의 지하철 노선을 생성하고
      * When : 최단 거리 경로 조회를 요청하면
      * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
@@ -81,9 +79,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Scenario : 두 역의 최소 시간 경로를 조회
-     * Given : 지하철역을 4개 생성하고
-     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
-     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
+     * Given : 3개의 지하철 노선을 생성하고
      * When : 최소 시간 경로 조회를 요청하면
      * Then : 경로와 거리, 총 소요 시간을 응답한다.
      */
@@ -101,10 +97,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Scenario : 추가 요금이 있는 노선 조회
-     * Given : 지하철역을 4개 생성하고
-     * And : 각각 500원, 900원의 추가요금이 있는 노선을 2개 생성하고
+     * Given : 추가 요금이 있는 노선을 2개 생성하고
      * When : 최소 시간 경로 조회를 요청하면
-     * Then : 900원의 요금이 추가된 지하철 요금을 응답한다.
+     * Then : 더 큰 추가요금을 가진 노선의 추가 요금이 합산된 지하철 요금을 응답한다.
      */
     @DisplayName("추가 요금이 있는 노선의 경로 조회")
     @Test
@@ -128,13 +123,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Scenario : 청소년이 경로 조회
-     * Given : 지하철역을 4개 생성하고
-     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
-     * And : 하나의 지하철 노선에 1개의 구간을 추가하고
+     * Given : 3개의 지하철 노선을 생성하고
      * And : 13세 이상 ~ 19세 미만의 청소년 계정을 생성하고
      * And : 로그인 요청을 한 후
      * When : 토큰을 이용해 최단 거리 경로 조회를 요청하면
-     * Then : 350원을 제외한 나머지 금액의 20% 할인된 가격을 응답한다.
+     * Then : 청소년 할인 정책이 적용된 가격을 응답한다.
      */
     @DisplayName("청소년이 경로를 조회")
     @Test
@@ -155,13 +148,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     /**
      * Scenario : 어린이가 경로 조회
-     * Given : 지하철역을 4개 생성하고
-     * And : 4개의 지하철역을 각각 2개씩 포함하는 3개의 노선을 생성하고
-     * And : 하나의 지하철 노선에 1개의 구간을 추가한 후
+     * Given : 3개의 지하철 노선을 생성하고
      * And : 6세 이상 ~ 13세 미만의 어린이 계정을 생성하고
      * And : 로그인 요청을 한 후
      * When : 최단 거리 경로 조회를 요청하면
-     * Then : 350원에 350원을 제외한 나머지 금액의 50% 할인된 가격을 더한 요금을 응답한다.
+     * Then : 어린이 할인 정책이 적용된 요금을 응답한다.
      */
     @DisplayName("어린이가 경로를 조회")
     @Test
