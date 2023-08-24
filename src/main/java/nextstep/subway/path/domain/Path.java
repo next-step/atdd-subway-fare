@@ -38,9 +38,9 @@ public class Path {
 
     public int calculateFare(DistanceFarePolicies distanceFarePolicies, LineFarePolicy lineFarePolicy, DiscountPolicy discountPolicy) {
         int fare = distanceFarePolicies.calculateFare(getTotalDistance());
-        int maxAdditionalFare = lineFarePolicy.calculateAdditionalFare(lines);
+        int additionalFare = lineFarePolicy.calculateAdditionalFare(lines);
 
-        int totalFare = fare + maxAdditionalFare;
+        int totalFare = fare + additionalFare;
         return discountPolicy.discount(totalFare);
     }
 }
