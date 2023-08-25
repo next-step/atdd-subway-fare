@@ -1,9 +1,14 @@
 package nextstep.subway.documentation;
 
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Lines;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.dto.UserDto;
-import nextstep.subway.station.dto.StationResponse;
+import nextstep.subway.section.domain.Section;
+import nextstep.subway.section.domain.Sections;
+import nextstep.subway.station.domain.Station;
 import nextstep.utils.RestAssuredUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +18,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 import java.util.List;
+import java.util.Set;
 
 import static nextstep.subway.acceptance.step.PathStep.경로_조회_요청;
 import static org.mockito.ArgumentMatchers.*;
@@ -35,14 +41,17 @@ public class PathDocumentation extends Documentation {
 
     @BeforeEach
     void setUpData() {
-        pathResponse = new PathResponse(
-                List.of(new StationResponse(1L, "교대역"),
-                        new StationResponse(4L, "남부터미널역"),
-                        new StationResponse(3L, "양재역")),
-                10,
-                10,
-                1250
+        Station 교대역 = new Station(1L, "교대역");
+        Station 양재역 = new Station(3L, "양재역");
+
+        Section section = new Section(교대역, 양재역, 100, 10);
+        Lines 이호선 = new Lines(
+                Set.of(new Line("2호선", "green", 100, section))
         );
+
+        Sections sections = new Sections(List.of(section));
+
+        pathResponse = PathResponse.of(new Path(이호선, sections), 1250);
     }
 
     @Test
