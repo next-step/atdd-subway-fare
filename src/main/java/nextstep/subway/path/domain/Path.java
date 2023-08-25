@@ -43,4 +43,22 @@ public class Path {
         int totalFare = fare + additionalFare;
         return discountPolicy.discount(totalFare);
     }
+
+    /**
+     * # 책임 연쇄 패턴을 도입하기 위한 방안을 생각해보자.
+     * ## 요금 정책
+     * - 거리에 따른 요금 정책
+     * - 노선 추가 요금 정책
+     * ---
+     * ## 할인 정책
+     * - 할인 없음
+     * - 나이에 따른 할인 정책
+     * ---
+     * ## 참고
+     * - <a href="https://refactoring.guru/ko/design-patterns/chain-of-responsibility">책임연쇄패턴</a>
+     * - 오브젝트 11장 (ebook 기준 398쪽)
+     */
+    public int calculateFareVer2() {
+        return 0;
+    }
 }
