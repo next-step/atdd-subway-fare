@@ -11,14 +11,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.math.BigInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
 public class PathDocumentation extends Documentation {
 
@@ -40,17 +44,30 @@ public class PathDocumentation extends Documentation {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given(spec).log().all()
-                .filter(document("path",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())))
+                .given(getSpec("path", getRequestParameters(), getResponseFields())).log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("source", 1L)
                 .queryParam("target", 2L)
-                .when().get("/paths?source={sourceId}&target={targetId}", 1L, 2L)
+                .when().get("/paths")
                 .then().log().all().extract();
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    private RequestParametersSnippet getRequestParameters() {
+        return requestParameters(
+                parameterWithName("source").description("출발 역"),
+                parameterWithName("target").description("도착 역"));
+    }
+
+    private ResponseFieldsSnippet getResponseFields() {
+        // stations 내 정보는 StationResponse를 사용. 이에 PathResponse는 StationResponse에 종속적.
+        // StationResponse의 필드가 추가되면 PathResponse의 Restdocs에도 반영 필요 -> 유지보수 어려움.
+        // then how?
+        return responseFields(
+                fieldWithPath("stations[].id").description("지하철 역 아이디"),
+                fieldWithPath("stations[].name").description("지하철 역 이름"),
+                fieldWithPath("distance").description("총 소요 거리"));
     }
 }
