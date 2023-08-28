@@ -1,12 +1,15 @@
 package nextstep.subway.acceptance.path;
 
-import nextstep.subway.dto.PathResponse;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
+import static nextstep.common.CommonSteps.*;
 import static nextstep.subway.acceptance.line.LineTestUtils.*;
 import static nextstep.subway.acceptance.path.PathTestUtils.*;
 import static nextstep.subway.acceptance.station.StationTestUtils.*;
@@ -48,9 +51,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPath() {
         // when
-        PathResponse 경로_조회_응답 = 지하철_최단_경로_조회(교대역_URL, 강남역_URL);
+        ExtractableResponse<Response> 경로_조회_응답 = 지하철_최단_경로_조회(교대역_URL, 강남역_URL);
 
         // then
+        checkHttpResponseCode(경로_조회_응답, HttpStatus.OK);
         경로_조회_결과는_다음과_같다(경로_조회_응답, 교대역_URL, 남부터미널역_URL, 양재역_URL, 강남역_URL);
         최단_경로_길이는_다음과_같다(경로_조회_응답, 8);
     }
@@ -63,22 +67,39 @@ public class PathAcceptanceTest extends AcceptanceTest {
         @DisplayName("출발 역과 도착 역이 같은 경우")
         @Test
         void sourceAndTargetStationIsSame() {
-            지하철_최단_경로_조회_실패(교대역_URL, 교대역_URL);
+            // when
+            ExtractableResponse<Response> 경로_조회_응답 = 지하철_최단_경로_조회(교대역_URL, 교대역_URL);
+
+            // then
+            checkHttpResponseCode(경로_조회_응답, HttpStatus.BAD_REQUEST);
         }
 
         @DisplayName("출발 역과 도착 역이 연결되있지 않은 경우")
         @Test
         void sourceAndTargetStationIsNotConnected() {
+            // given
             익명역_URL = 지하철역_생성(익명역_정보);
-            지하철_최단_경로_조회_실패(교대역_URL, 익명역_URL);
+
+            // when
+            ExtractableResponse<Response> 경로_조회_응답 = 지하철_최단_경로_조회(교대역_URL, 익명역_URL);
+
+            // then
+            checkHttpResponseCode(경로_조회_응답, HttpStatus.BAD_REQUEST);
         }
 
         @DisplayName("존재하지 않은 출발역이나 도착역을 조회 할 경우")
         @Test
         void sourceOrTargetStationDoNotExist() {
+            // given
             익명역_URL = 지하철_URL_생성(999999L);
-            지하철_최단_경로_조회_실패(익명역_URL, 교대역_URL);
-            지하철_최단_경로_조회_실패(교대역_URL, 익명역_URL);
+
+            // when
+            ExtractableResponse<Response> 경로_조회_응답1 = 지하철_최단_경로_조회(익명역_URL, 교대역_URL);
+            ExtractableResponse<Response> 경로_조회_응답2 = 지하철_최단_경로_조회(교대역_URL, 익명역_URL);
+
+            // then
+            checkHttpResponseCode(경로_조회_응답1, HttpStatus.BAD_REQUEST);
+            checkHttpResponseCode(경로_조회_응답2, HttpStatus.BAD_REQUEST);
         }
     }
 }
