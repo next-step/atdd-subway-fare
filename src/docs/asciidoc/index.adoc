@@ -11,4 +11,4 @@
 
 === 경로 조회
 
-operation::path[snippets='http-request,http-response']
+operation::path[snippets='http-request,request-parameters,http-response,response-fields']
