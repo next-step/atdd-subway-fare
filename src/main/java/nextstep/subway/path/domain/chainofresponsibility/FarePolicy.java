@@ -1,4 +1,6 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.chainofresponsibility;
+
+import nextstep.subway.path.domain.Path;
 
 /**
  * 요금 정책

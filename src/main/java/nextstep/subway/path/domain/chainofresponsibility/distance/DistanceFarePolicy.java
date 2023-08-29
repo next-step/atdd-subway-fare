@@ -1,4 +1,7 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.chainofresponsibility.distance;
+
+import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.chainofresponsibility.FarePolicy;
 
 public abstract class DistanceFarePolicy implements FarePolicy {
     protected static final int BASIC_FEE = 1250;

@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.chainofresponsibility.distance;
 
 public class LongDistanceFarePolicy extends DistanceFarePolicy {
     @Override

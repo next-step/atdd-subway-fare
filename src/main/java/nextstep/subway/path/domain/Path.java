@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Lines;
+import nextstep.subway.path.domain.chainofresponsibility.FarePolicy;
 import nextstep.subway.path.domain.discount.DiscountPolicy;
 import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
 import nextstep.subway.path.domain.fare.line.LineFarePolicy;
@@ -60,5 +61,9 @@ public class Path {
          * 3. 할인 정책을 적용한다. 어린이, 청소년 정책이 존재하고, 정책이 적용되지 않거나 둘 중 하나의 정책이 적용된다.
          */
         return farePolicy.calculateFare(this);
+    }
+
+    public List<Integer> getAdditionalFees() {
+        return lines.getAdditionalFees();
     }
 }
