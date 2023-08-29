@@ -1,0 +1,19 @@
+package nextstep.subway.path.domain.chainofresponsibility;
+
+import nextstep.subway.path.domain.Path;
+
+public abstract class AdditionalFarePolicy implements FarePolicy {
+    private final FarePolicy next;
+
+    public AdditionalFarePolicy(FarePolicy next) {
+        this.next = next;
+    }
+
+    @Override
+    public int calculateFare(Path path) {
+        int fare = next.calculateFare(path);
+        return afterCalculated(fare);
+    }
+
+    abstract protected int afterCalculated(int fare);
+}
