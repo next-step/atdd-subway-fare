@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class BasicLineFarePolicy implements LineFarePolicy {
     @Override
     public int calculateAdditionalFare(Lines lines) {
-        return lines.getAdditionalFees().stream()
+        return lines.getAdditionalFares().stream()
                 .mapToInt(fee -> fee)
                 .max()
                 .orElse(0);

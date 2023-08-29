@@ -16,7 +16,7 @@ public class Lines {
         return Collections.unmodifiableSet(lines);
     }
 
-    public List<Integer> getAdditionalFees() {
+    public List<Integer> getAdditionalFares() {
         return lines.stream()
                 .map(Line::getAdditionalFee)
                 .collect(Collectors.toList());
