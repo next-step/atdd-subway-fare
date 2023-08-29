@@ -50,7 +50,7 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        validatePath(path, 5, 22, new Station[]{교대역, 남부터미널역, 양재역}, new Line[]{삼호선});
+        validatePath(path, 5, 22, 교대역, 남부터미널역, 양재역);
     }
 
     @DisplayName("최소 시간 경로 조회")
@@ -61,14 +61,13 @@ class SubwayMapTest {
         Path path = subwayMap.findPath(교대역, 양재역);
 
         // then
-        validatePath(path, 20, 2, new Station[]{교대역, 강남역, 양재역}, new Line[]{이호선, 신분당선});
+        validatePath(path, 20, 2, 교대역, 강남역, 양재역);
     }
 
-    private void validatePath(Path path, int expectedDistance, int expectedDuration, Station[] expectedStations, Line[] expectedLines) {
+    private void validatePath(Path path, int expectedDistance, int expectedDuration, Station... expectedStations) {
         assertThat(path.getTotalDistance()).isEqualTo(expectedDistance);
         assertThat(path.getTotalDuration()).isEqualTo(expectedDuration);
         assertThat(path.getStations()).containsExactly(expectedStations);
-        assertThat(path.getLines()).contains(expectedLines);
     }
 
     @DisplayName("경로가 없을 경우 예외가 발생한다.")
