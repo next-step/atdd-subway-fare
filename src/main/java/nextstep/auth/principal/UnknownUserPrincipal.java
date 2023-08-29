@@ -1,6 +1,8 @@
 package nextstep.auth.principal;
 
 public class UnknownUserPrincipal implements UserPrincipal {
+    private static final String EMPTY = "";
+
     @Override
     public boolean isUnknown() {
         return true;
@@ -8,11 +10,11 @@ public class UnknownUserPrincipal implements UserPrincipal {
 
     @Override
     public String getUsername() {
-        return null;
+        return EMPTY;
     }
 
     @Override
     public String getRole() {
-        return null;
+        return EMPTY;
     }
 }
