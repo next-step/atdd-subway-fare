@@ -11,7 +11,7 @@ public class UserDto {
         return new UserDto(userPrincipal.isUnknown(), userPrincipal.getUsername(), userPrincipal.getRole());
     }
 
-    public UserDto(boolean isUnknown, String email, String role) {
+    private UserDto(boolean isUnknown, String email, String role) {
         this.isUnknown = isUnknown;
         this.email = email;
         this.role = role;

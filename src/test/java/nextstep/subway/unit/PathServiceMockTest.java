@@ -1,14 +1,6 @@
 package nextstep.subway.unit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import nextstep.auth.principal.LoggedInUserPrincipal;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.line.domain.Line;
@@ -32,6 +24,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PathServiceMockTest {
@@ -64,7 +66,7 @@ public class PathServiceMockTest {
 
     @BeforeEach
     void setUp() {
-        userDto = new UserDto(false, "email", "ROLE_MEMBER");
+        userDto = UserDto.of(new LoggedInUserPrincipal("email", "ROLE_MEMBER"));
 
         교대역 = new Station(1L, "교대역");
         강남역 = new Station(2L, "강남역");
