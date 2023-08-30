@@ -39,22 +39,16 @@ public class PathService {
     }
 
     public PathResponse searchPath(UserDto userDto, Long source, Long target, String type) {
-        // 경로를 조회한다.
         Path path = findPath(source, target, type);
         int totalFare = path.calculateFare(farePolicy);
 
-        // user의 role이 unknown이면 별다른 할인 정책이 적용되지 않는다.
         if (userDto.isUnknown()) {
             DiscountPolicy defaultDiscountPolicy = new DefaultDiscountPolicy();
             return PathResponse.of(path, defaultDiscountPolicy.discount(totalFare));
         }
 
-        // 회원인 경우에는 age에 따른 할인 정책이 적용된다.
         Member member = findMember(userDto.getEmail());
-
-        // age 기준에 따라 할인 정책을 찾는다.
-        Integer age = member.getAge();
-        DiscountPolicy discountPolicy = classifyDiscountPolicy(age);
+        DiscountPolicy discountPolicy = classifyDiscountPolicy(member.getAge());
 
         return PathResponse.of(path, discountPolicy.discount(totalFare));
     }
