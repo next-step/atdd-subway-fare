@@ -13,19 +13,29 @@ public class DistanceFarePolicy implements FarePolicy {
     @Override
     public int calculateFare(Path path) {
         int totalDistance = path.getTotalDistance();
-        if (totalDistance <= SHORT_DISTANCE_LIMIT) {  // Rule로 추상화 해보자
+        if (totalDistance <= SHORT_DISTANCE_LIMIT) {
             return BASIC_FEE;
         }
 
         if (totalDistance <= MEDIUM_DISTANCE_LIMIT) {
-            int lastDistance = totalDistance - SHORT_DISTANCE_LIMIT;
-            return BASIC_FEE + calculateOverFare(lastDistance, MEDIUM_DISTANCE_UNIT);
+            return BASIC_FEE + calculateOverFare(getMiddleDistance(totalDistance), MEDIUM_DISTANCE_UNIT);
         }
 
-        int lastDistance = totalDistance - MEDIUM_DISTANCE_LIMIT;
-        int middleDistance = totalDistance - lastDistance - SHORT_DISTANCE_LIMIT;
-
+        int lastDistance = getLastDistance(totalDistance);
+        int middleDistance = getMiddleDistance(totalDistance);
         return BASIC_FEE + calculateOverFare(middleDistance, MEDIUM_DISTANCE_UNIT) + calculateOverFare(lastDistance, LONG_DISTANCE_UNIT);
+    }
+
+    private int getMiddleDistance(int totalDistance) {
+        if (totalDistance <= MEDIUM_DISTANCE_LIMIT) {
+            return totalDistance - SHORT_DISTANCE_LIMIT;
+        }
+
+        return MEDIUM_DISTANCE_LIMIT - SHORT_DISTANCE_LIMIT;
+    }
+
+    private int getLastDistance(int totalDistance) {
+        return totalDistance - MEDIUM_DISTANCE_LIMIT;
     }
 
     private int calculateOverFare(int distance, int distanceUnit) {
