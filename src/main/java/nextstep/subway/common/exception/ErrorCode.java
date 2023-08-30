@@ -23,7 +23,7 @@ public enum ErrorCode {
     FAVORITE_NOT_FOUND(404, "없는 즐겨찾기 입니다."),
 
     // 500
-    NOT_SUPPORTED_FARE_POLICY(500, "지원되지 않는 요금 정책입니다."),
+    NOT_SUPPORTED_FARE_RULE(500, "지원되지 않는 요금 규칙 입니다."),
     NOT_SUPPORTED_ROLE_TYPE(500, "지원되지 않는 역할입니다."),
     NOT_SUPPORTED_AGE_TYPE(500, "지원되지 않는 연령 구간입니다.");
 

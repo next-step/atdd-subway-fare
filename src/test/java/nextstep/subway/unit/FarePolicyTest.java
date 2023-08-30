@@ -1,13 +1,15 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.path.domain.Path;
-import nextstep.subway.path.domain.policy.fare.DistanceFarePolicy;
+import nextstep.subway.path.domain.policy.fare.*;
 import nextstep.subway.unit.mockobj.MockPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +18,13 @@ class FarePolicyTest {
 
     @BeforeEach
     void setUp() {
-        distanceFarePolicy = new DistanceFarePolicy();
+        List<DistanceFareRule> distanceFareRules = List.of(
+                new ShortDistanceFareRule(),
+                new MiddleDistanceFareRule(),
+                new LongDistanceFareRule()
+        );
+
+        distanceFarePolicy = new DistanceFarePolicy(distanceFareRules);
     }
 
     @DisplayName("10km 이하 거리에서는 기본요금 1,250원이 계산된다.")
