@@ -6,8 +6,7 @@ import nextstep.member.domain.MemberRepository;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.application.PathService;
-import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
-import nextstep.subway.path.domain.fare.line.LineFarePolicy;
+import nextstep.subway.path.domain.policy.fare.FarePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.dto.UserDto;
 import nextstep.subway.path.exception.PathNotFoundException;
@@ -47,10 +46,7 @@ public class PathServiceMockTest {
     private MemberRepository memberRepository;
 
     @Mock
-    private DistanceFarePolicies distanceFarePolicies;
-
-    @Mock
-    private LineFarePolicy lineFarePolicy;
+    private FarePolicy farePolicy;
 
     @InjectMocks
     private PathService pathService;
