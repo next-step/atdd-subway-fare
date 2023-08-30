@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain.chainofresponsibility.fare;
+package nextstep.subway.path.domain.policy.fare;
 
 import nextstep.subway.path.domain.Path;
 

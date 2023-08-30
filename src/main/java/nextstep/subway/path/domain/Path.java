@@ -2,7 +2,7 @@ package nextstep.subway.path.domain;
 
 import java.util.List;
 import nextstep.subway.line.domain.Lines;
-import nextstep.subway.path.domain.chainofresponsibility.fare.FarePolicy;
+import nextstep.subway.path.domain.policy.fare.FarePolicy;
 import nextstep.subway.path.domain.discount.DiscountPolicy;
 import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
 import nextstep.subway.path.domain.fare.line.LineFarePolicy;
