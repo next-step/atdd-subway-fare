@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain.discount.age;
+package nextstep.subway.path.domain.policy.discount;
 
 public class ChildrenDiscountPolicy extends AgeDiscountPolicy {
     @Override

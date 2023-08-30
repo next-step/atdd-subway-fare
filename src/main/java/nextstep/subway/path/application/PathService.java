@@ -1,6 +1,5 @@
 package nextstep.subway.path.application;
 
-import java.util.List;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.exception.MemberNotFoundException;
@@ -8,14 +7,13 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SubwayMap;
-import nextstep.subway.path.domain.discount.DefaultDiscountPolicy;
-import nextstep.subway.path.domain.discount.DiscountPolicy;
-import nextstep.subway.path.domain.discount.age.AgeType;
-import nextstep.subway.path.domain.discount.age.ChildrenDiscountPolicy;
-import nextstep.subway.path.domain.discount.age.DefaultAgeDiscountPolicy;
-import nextstep.subway.path.domain.discount.age.TeenagerDiscountPolicy;
-import nextstep.subway.path.domain.fare.distance.DistanceFarePolicies;
-import nextstep.subway.path.domain.fare.line.LineFarePolicy;
+import nextstep.subway.path.domain.policy.discount.DefaultDiscountPolicy;
+import nextstep.subway.path.domain.policy.discount.DiscountPolicy;
+import nextstep.subway.path.domain.policy.discount.AgeType;
+import nextstep.subway.path.domain.policy.discount.ChildrenDiscountPolicy;
+import nextstep.subway.path.domain.policy.discount.DefaultAgeDiscountPolicy;
+import nextstep.subway.path.domain.policy.discount.TeenagerDiscountPolicy;
+import nextstep.subway.path.domain.policy.fare.FarePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.dto.UserDto;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
@@ -24,20 +22,20 @@ import nextstep.subway.station.domain.StationRepository;
 import nextstep.subway.station.exception.StationNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
     private final MemberRepository memberRepository;
-    private final DistanceFarePolicies distanceFarePolicies;
-    private final LineFarePolicy lineFarePolicy;
+    private final FarePolicy farePolicy;
 
-    public PathService(StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository, DistanceFarePolicies distanceFarePolicies, LineFarePolicy lineFarePolicy) {
+    public PathService(StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository, FarePolicy farePolicy) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
         this.memberRepository = memberRepository;
-        this.distanceFarePolicies = distanceFarePolicies;
-        this.lineFarePolicy = lineFarePolicy;
+        this.farePolicy = farePolicy;
     }
 
     public PathResponse searchPath(UserDto userDto, Long source, Long target, String type) {
@@ -46,17 +44,20 @@ public class PathService {
 
         // user의 role이 unknown이면 별다른 할인 정책이 적용되지 않는다.
         if (userDto.isUnknown()) {
-            return PathResponse.of(path, path.calculateFare(distanceFarePolicies, lineFarePolicy, new DefaultDiscountPolicy()));
+            DiscountPolicy defaultDiscountPolicy = new DefaultDiscountPolicy();
+            return PathResponse.of(path, defaultDiscountPolicy.discount(path.calculateFare(farePolicy)));
         }
 
         // 회원인 경우에는 age에 따른 할인 정책이 적용된다.
         Member member = findMember(userDto.getEmail());
 
         // age 기준에 따라 할인 정책을 찾는다.
+        int totalFare = path.calculateFare(farePolicy);
+
         Integer age = member.getAge();
         DiscountPolicy discountPolicy = classifyDiscountPolicy(age);
 
-        return PathResponse.of(path, path.calculateFare(distanceFarePolicies, lineFarePolicy, discountPolicy));
+        return PathResponse.of(path, discountPolicy.discount(totalFare));
     }
 
     private Path findPath(Long source, Long target, String type) {

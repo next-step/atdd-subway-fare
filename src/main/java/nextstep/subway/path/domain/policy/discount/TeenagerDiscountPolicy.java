@@ -1,4 +1,4 @@
-package nextstep.subway.path.domain.discount.age;
+package nextstep.subway.path.domain.policy.discount;
 
 import org.springframework.stereotype.Component;
 
