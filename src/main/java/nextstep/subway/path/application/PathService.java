@@ -7,12 +7,7 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SubwayMap;
-import nextstep.subway.path.domain.policy.discount.DefaultDiscountPolicy;
-import nextstep.subway.path.domain.policy.discount.DiscountPolicy;
-import nextstep.subway.path.domain.policy.discount.AgeType;
-import nextstep.subway.path.domain.policy.discount.ChildrenDiscountPolicy;
-import nextstep.subway.path.domain.policy.discount.DefaultAgeDiscountPolicy;
-import nextstep.subway.path.domain.policy.discount.TeenagerDiscountPolicy;
+import nextstep.subway.path.domain.policy.discount.*;
 import nextstep.subway.path.domain.policy.fare.FarePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.dto.UserDto;
@@ -30,12 +25,14 @@ public class PathService {
     private final LineRepository lineRepository;
     private final MemberRepository memberRepository;
     private final FarePolicy farePolicy;
+    private final DiscountPolicyFactory discountPolicyFactory;
 
-    public PathService(StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository, FarePolicy farePolicy) {
+    public PathService(StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository, FarePolicy farePolicy, DiscountPolicyFactory discountPolicyFactory) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
         this.memberRepository = memberRepository;
         this.farePolicy = farePolicy;
+        this.discountPolicyFactory = discountPolicyFactory;
     }
 
     public PathResponse searchPath(UserDto userDto, Long source, Long target, String type) {
@@ -43,12 +40,12 @@ public class PathService {
         int totalFare = path.calculateFare(farePolicy);
 
         if (userDto.isUnknown()) {
-            DiscountPolicy defaultDiscountPolicy = new DefaultDiscountPolicy();
+            DiscountPolicy defaultDiscountPolicy = discountPolicyFactory.createDefaultDiscountPolicy();
             return PathResponse.of(path, defaultDiscountPolicy.discount(totalFare));
         }
 
         Member member = findMember(userDto.getEmail());
-        DiscountPolicy discountPolicy = classifyDiscountPolicy(member.getAge());
+        DiscountPolicy discountPolicy = discountPolicyFactory.createBy(member.getAge());
 
         return PathResponse.of(path, discountPolicy.discount(totalFare));
     }
@@ -79,7 +76,7 @@ public class PathService {
             return new ChildrenDiscountPolicy();
         }
 
-        return new DefaultAgeDiscountPolicy();
+        return new DefaultDiscountPolicy();
     }
 
     private void validateSourceAndTargetId(Long source, Long target) {

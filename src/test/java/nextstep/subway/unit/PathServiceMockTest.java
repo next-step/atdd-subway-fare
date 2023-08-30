@@ -6,6 +6,8 @@ import nextstep.member.domain.MemberRepository;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.domain.policy.discount.DefaultDiscountPolicy;
+import nextstep.subway.path.domain.policy.discount.DiscountPolicyFactory;
 import nextstep.subway.path.domain.policy.fare.FarePolicy;
 import nextstep.subway.path.dto.PathResponse;
 import nextstep.subway.path.dto.UserDto;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
@@ -47,6 +50,9 @@ public class PathServiceMockTest {
 
     @Mock
     private FarePolicy farePolicy;
+
+    @Mock
+    private DiscountPolicyFactory discountPolicyFactory;
 
     @InjectMocks
     private PathService pathService;
@@ -96,6 +102,9 @@ public class PathServiceMockTest {
 
         when(memberRepository.findByEmail(anyString()))
                 .thenReturn(Optional.of(new Member("email", "password", 20, "ROLE_MEMBER")));
+
+        when(discountPolicyFactory.createBy(anyInt()))
+                .thenReturn(new DefaultDiscountPolicy());
 
         // when: 출발역 id와 도착역 id를 받으면 최단경로를 반환한다.
         PathResponse pathResponse = pathService.searchPath(userDto, 1L, 2L, "DISTANCE");
