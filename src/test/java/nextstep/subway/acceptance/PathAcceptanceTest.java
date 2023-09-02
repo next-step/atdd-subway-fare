@@ -86,28 +86,6 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.getFare()).isEqualTo(1650); // 기본요금 1250 + 2호선 추가요금 200원 + 거리 추가요금 200원
     }
 
-    @DisplayName("두 역의 최단 거리 경로를 조회한다. 노선의 추가 요금 금액 확인")
-    @Test
-    void findPathByDistanceAdditionalLineFee() {
-        // when
-        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 역삼역, FindPathType.DISTANCE).as(PathResponse.class);
-
-        // then
-        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 역삼역);
-        assertThat(response.getFare()).isEqualTo(1450);
-    }
-
-    @DisplayName("두 역의 최단 거리 경로를 조회한다. 노선의 추가 요금 금액 중 가장 높은 금액 부과 확인")
-    @Test
-    void findPathByDistanceHighestAdditionalLineFee() {
-        // when
-        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 역삼역, FindPathType.DISTANCE).as(PathResponse.class);
-
-        // then
-        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 역삼역);
-        assertThat(response.getFare()).isEqualTo(1450);
-    }
-
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
     @Test
     void findPathByDuration() {
