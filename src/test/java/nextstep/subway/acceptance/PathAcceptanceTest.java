@@ -45,9 +45,9 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         역삼역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1, 200);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10, 300);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 역삼역, 6, 3));
@@ -61,7 +61,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.getFare()).isEqualTo(1250);
+        assertThat(response.getFare()).isEqualTo(1550); // 기본요금 1250 + 3호선 추가요금 300원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
@@ -72,7 +72,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(남부터미널역, 교대역, 강남역);
-        assertThat(response.getFare()).isEqualTo(1350);
+        assertThat(response.getFare()).isEqualTo(1650); // 기본요금 1250 + 3호선 추가요금 300원 + 거리 추가요금 100원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
@@ -83,7 +83,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 역삼역);
-        assertThat(response.getFare()).isEqualTo(1450);
+        assertThat(response.getFare()).isEqualTo(1650); // 기본요금 1250 + 2호선 추가요금 200원 + 거리 추가요금 200원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 노선의 추가 요금 금액 확인")
@@ -118,6 +118,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 양재역);
     }
 
+
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFee) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration);
+        return LineSteps.지하철_노선_생성_요청(lineRequest).jsonPath().getLong("id");
+    }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration);
