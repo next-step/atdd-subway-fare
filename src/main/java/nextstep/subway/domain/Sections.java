@@ -155,4 +155,10 @@ public class Sections {
     public int totalDuration() {
         return sections.stream().mapToInt(Section::getDuration).sum();
     }
+
+    public int getHighestAdditionalFee() {
+        return sections.stream().map(Section::getAdditionalFee)
+                .mapToInt(v -> v)
+                .max().orElse(0);
+    }
 }

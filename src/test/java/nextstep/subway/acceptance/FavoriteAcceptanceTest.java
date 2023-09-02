@@ -86,7 +86,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        LineRequest request = new LineRequest(name, color, upStation, downStation, distance, duration);
+        LineRequest request = new LineRequest(name, color, upStation, downStation, distance, duration, 0);
 
         return LineSteps.지하철_노선_생성_요청(관리자, request).jsonPath().getLong("id");
     }

@@ -120,12 +120,12 @@ class PathAcceptanceTest extends AcceptanceTest {
 
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFee) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration);
+        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration, additionalFee);
         return LineSteps.지하철_노선_생성_요청(lineRequest).jsonPath().getLong("id");
     }
 
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration);
+        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration, 0);
         return LineSteps.지하철_노선_생성_요청(lineRequest).jsonPath().getLong("id");
     }
 

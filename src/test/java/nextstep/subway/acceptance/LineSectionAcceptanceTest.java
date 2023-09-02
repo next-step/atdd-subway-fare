@@ -128,7 +128,7 @@ class LineSectionAcceptanceTest extends AcceptanceTest {
     }
 
     private LineRequest createLineCreateParams(Long upStationId, Long downStationId) {
-        return new LineRequest("신분당선", "bg-red-600", upStationId, downStationId, 10, 10);
+        return new LineRequest("신분당선", "bg-red-600", upStationId, downStationId, 10, 10, 0);
     }
 
     private SectionRequest createSectionCreateParams(Long upStationId, Long downStationId) {
