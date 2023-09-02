@@ -14,9 +14,9 @@ public class MidRangeFareChain implements FareChain{
     }
 
     @Override
-    public int calculateFare(int distance) {
+    public int calculateFare(int distance, int additionalFee, Integer age) {
         if (distance > MID_RANGE_END) {
-            return getFare(MID_RANGE_END) + longRangeFareChain.calculateFare(distance);
+            return getFare(MID_RANGE_END) + longRangeFareChain.calculateFare(distance, additionalFee, age);
         }
         return getFare(distance);
     }

@@ -30,6 +30,6 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines);
         Path path = subwayMap.findPath(upStation, downStation, type);
 
-        return PathResponse.of(path, fareChain);
+        return PathResponse.of(path, fareChain, null);
     }
 }

@@ -12,10 +12,10 @@ public class DefaultFareChain implements FareChain{
     }
 
     @Override
-    public int calculateFare(int distance) {
+    public int calculateFare(int distance, int additionalFee, Integer age) {
         if (distance > BASIC_DISTANCE) {
-            return DEFAULT_FARE + midRangeFare.calculateFare(distance);
+            return DEFAULT_FARE + midRangeFare.calculateFare(distance, additionalFee, age) + additionalFee;
         }
-        return DEFAULT_FARE;
+        return DEFAULT_FARE + additionalFee;
     }
 }

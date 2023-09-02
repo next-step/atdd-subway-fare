@@ -11,7 +11,7 @@ public class LongRangeFareChain implements FareChain {
     }
 
     @Override
-    public int calculateFare(int distance) {
+    public int calculateFare(int distance, int additionalFee, Integer age) {
         return (((distance - BIG_RANGE - 1) / BIG_RANGE_PER_DISTANCE) + 1) * ADDITIONAL_FEE_PER_DISTANCE;
     }
 }

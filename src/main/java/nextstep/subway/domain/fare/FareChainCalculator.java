@@ -8,11 +8,15 @@ public class FareChainCalculator {
 
     @Bean
     public FareChain defaultFareChain() {
+        FareChain kidFareChain = new KidFareChain();
+        FareChain teenFareChain = new TeenFareChain();
         FareChain defaultFareChain = new DefaultFareChain();
         FareChain midRangeFareChain = new MidRangeFareChain();
         FareChain longRangeFareChain = new LongRangeFareChain();
         midRangeFareChain.setNextChain(longRangeFareChain);
         defaultFareChain.setNextChain(midRangeFareChain);
-        return defaultFareChain;
+        teenFareChain.setNextChain(defaultFareChain);
+        kidFareChain.setNextChain(teenFareChain);
+        return kidFareChain;
     }
 }
