@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,6 +20,9 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+
+    private String 어린이사용자;
+    private String 청소년사용자;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -51,6 +55,9 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 역삼역, 6, 3));
+
+        어린이사용자 = 베어러_인증_로그인_요청(KID_EMAIL, PASSWORD).jsonPath().getString("accessToken");
+        청소년사용자 = 베어러_인증_로그인_요청(TEEN_EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -63,6 +70,29 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(response.getFare()).isEqualTo(1550); // 기본요금 1250 + 3호선 추가요금 300원
     }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. 어린이일 때에 할인 요금")
+    @Test
+    void findPathByDistanceWhenUserKid() {
+        // when
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE, 어린이사용자).as(PathResponse.class);
+
+        // then
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.getFare()).isEqualTo(950); // 기존 1550원에서 350원 공제하고 50%할인 금액(600원)을 할인 = 950원
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. 청소년일 때에 할인 요금")
+    @Test
+    void findPathByDistanceWhenUserTeenager() {
+        // when
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE, 청소년사용자).as(PathResponse.class);
+
+        // then
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.getFare()).isEqualTo(1310); // 기존 1550원에서 350원 공제하고 20%할인 금액(240원)을 할인 = 1310원
+    }
+
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
     @Test
