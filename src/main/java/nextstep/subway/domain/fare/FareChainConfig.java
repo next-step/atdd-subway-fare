@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class FareChainCalculator {
+public class FareChainConfig {
 
     @Bean
     public FareChain defaultFareChain() {
