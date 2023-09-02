@@ -38,7 +38,7 @@ public class PathSteps {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", type)
-                .when().get("/paths")
+                .when().get("/paths/me")
                 .then().log().all().extract();
     }
 }
