@@ -1,9 +1,8 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.path.domain.Path;
-import nextstep.subway.section.domain.Section;
-import nextstep.subway.section.domain.Sections;
-import nextstep.subway.station.domain.Station;
+import nextstep.subway.path.domain.policy.fare.*;
+import nextstep.subway.unit.mockobj.MockPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,15 +13,18 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Path 단위 테스트")
-class PathTest {
-    private Station 강남역;
-    private Station 양재역;
+class FarePolicyTest {
+    private DistanceFarePolicy distanceFarePolicy;
 
     @BeforeEach
     void setUp() {
-        강남역 = new Station(1L, "강남역");
-        양재역 = new Station(2L, "양재역");
+        List<DistanceFareRule> distanceFareRules = List.of(
+                new ShortDistanceFareRule(),
+                new MiddleDistanceFareRule(),
+                new LongDistanceFareRule()
+        );
+
+        distanceFarePolicy = new DistanceFarePolicy(distanceFareRules);
     }
 
     @DisplayName("10km 이하 거리에서는 기본요금 1,250원이 계산된다.")
@@ -30,11 +32,10 @@ class PathTest {
     @ValueSource(ints = {1, 5, 10})
     void feeUnder10(int distance) {
         // given
-        Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
-        Path path = new Path(sections);
+        Path path = new MockPath(distance);
 
         // when
-        int fee = path.calculateFare();
+        int fee = distanceFarePolicy.calculateFare(path);
 
         // then
         assertThat(fee).isEqualTo(1250);
@@ -42,14 +43,13 @@ class PathTest {
 
     @DisplayName("10km 초과 ~ 50km 이하 거리에서는 기본요금에 5km마다 추가 100원의 요금이 계산된다.")
     @ParameterizedTest(name = "거리={0}")
-    @CsvSource({"15,1350", "20,1450", "50,2050"})
+    @CsvSource({"14,1350", "16,1450", "19,1450", "21,1550", "50,2050"})
     void feeOver10Under50(int distance, int expectedFee) {
         // given
-        Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
-        Path path = new Path(sections);
+        Path path = new MockPath(distance);
 
         // when
-        int actualFee = path.calculateFare();
+        int actualFee = distanceFarePolicy.calculateFare(path);
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);
@@ -57,14 +57,13 @@ class PathTest {
 
     @DisplayName("50km 초과 거리에서는 기본요금에 8km마다 추가 100원의 요금이 계산된다.")
     @ParameterizedTest(name = "거리={0}")
-    @CsvSource({"51,2150", "58,2150", "66,2250"})
+    @CsvSource({"51,2150", "58,2150", "59,2250", "66,2250"})
     void feeOver50(int distance, int expectedFee) {
         // given
-        Sections sections = new Sections(List.of(new Section(강남역, 양재역, distance, 5)));
-        Path path = new Path(sections);
+        Path path = new MockPath(distance);
 
         // when
-        int actualFee = path.calculateFare();
+        int actualFee = distanceFarePolicy.calculateFare(path);
 
         // then
         assertThat(actualFee).isEqualTo(expectedFee);

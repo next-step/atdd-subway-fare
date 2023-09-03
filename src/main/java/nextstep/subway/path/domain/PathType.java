@@ -1,10 +1,11 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.section.domain.Section;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import nextstep.subway.section.domain.Section;
 
 public enum PathType {
     DISTANCE(Section::getDistance),
@@ -16,7 +17,7 @@ public enum PathType {
         this.sectionMethod = sectionMethod;
     }
 
-    private static Map<String, PathType> NAME_TO_PATH_TYPE = Arrays.stream(values())
+    private static final Map<String, PathType> NAME_TO_PATH_TYPE = Arrays.stream(values())
             .collect(Collectors.toUnmodifiableMap(Enum::name, pathType -> pathType));
 
     public static PathType of(String type) {

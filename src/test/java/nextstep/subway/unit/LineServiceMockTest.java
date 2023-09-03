@@ -1,11 +1,5 @@
 package nextstep.subway.unit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
 import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
@@ -17,6 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class LineServiceMockTest {
@@ -36,7 +37,7 @@ public class LineServiceMockTest {
                 .thenReturn(Optional.of(강남역))
                 .thenReturn(Optional.of(양재역));
 
-        Line 신분당선 = new Line("신분당선", "bg-red-600", new Section(양재역, new Station(4L, "역2"), 10, 10));
+        Line 신분당선 = new Line("신분당선", "bg-red-600", 0, new Section(양재역, new Station(4L, "역2"), 10, 10));
         when(lineRepository.findById(anyLong())).thenReturn(Optional.of(신분당선));
 
         // when

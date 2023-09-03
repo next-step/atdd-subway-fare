@@ -7,20 +7,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PathResponse {
-    private List<StationResponse> stations;
-    private int distance;
-    private int duration;
-    private int fare;
+    private final List<StationResponse> stations;
+    private final int distance;
+    private final int duration;
+    private final int fare;
 
-    public static PathResponse of(Path path) {
+    public static PathResponse of(Path path, int fare) {
         List<StationResponse> stationResponses = path.getStations().stream()
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration(), path.calculateFare());
+        return new PathResponse(stationResponses, path.getTotalDistance(), path.getTotalDuration(), fare);
     }
 
-    public PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {
+    private PathResponse(List<StationResponse> stations, int distance, int duration, int fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;

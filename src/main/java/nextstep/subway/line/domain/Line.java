@@ -1,14 +1,11 @@
 package nextstep.subway.line.domain;
 
-import java.util.List;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import nextstep.subway.section.domain.Section;
 import nextstep.subway.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Line {
@@ -20,15 +17,18 @@ public class Line {
 
     private String color;
 
+    private Integer additionalFee;
+
     @Embedded
     private Sections sections;
 
     protected Line() {
     }
 
-    public Line(String name, String color, Section section) {
+    public Line(String name, String color, Integer additionalFee, Section section) {
         this.name = name;
         this.color = color;
+        this.additionalFee = additionalFee;
         sections = new Sections(section.getUpStationId(), section.getDownStationId());
 
         sections.registerSection(section, this);
@@ -49,6 +49,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public Integer getAdditionalFee() {
+        return additionalFee;
     }
 
     public List<Section> getSections() {

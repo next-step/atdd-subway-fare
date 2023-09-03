@@ -13,9 +13,9 @@ import static nextstep.member.acceptance.step.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberAcceptanceTest extends AcceptanceTest {
-    public static final String EMAIL = "email@email.com";
-    public static final String PASSWORD = "password";
-    public static final int AGE = 20;
+    private static final String EMAIL = "email@email.com";
+    private static final String PASSWORD = "password";
+    private static final int AGE = 20;
 
     @DisplayName("회원가입을 한다.")
     @Test

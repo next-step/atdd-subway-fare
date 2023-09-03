@@ -1,13 +1,13 @@
 package nextstep.subway.acceptance;
 
-import static nextstep.subway.acceptance.step.SectionStep.지하철_구간을_삭제한다;
-import static nextstep.subway.acceptance.step.SectionStep.지하철_노선_구간을_등록한다;
+import static nextstep.subway.acceptance.step.SectionSteps.지하철_구간을_삭제한다;
+import static nextstep.subway.acceptance.step.SectionSteps.지하철_노선_구간을_등록한다;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
-import nextstep.subway.acceptance.step.LineStep;
+import nextstep.subway.acceptance.step.LineSteps;
 import nextstep.subway.acceptance.step.StationStep;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 노선_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재시민의숲역"));
         long 구간_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
 
         // when
         ExtractableResponse<Response> createSectionResponse = 지하철_노선_구간을_등록한다(lineId, 노선_상행_Id, 구간_하행_Id, 5, 5);
@@ -38,7 +38,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(createSectionResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        ExtractableResponse<Response> showLineResponse = LineStep.지하철_노선을_조회한다(lineId);
+        ExtractableResponse<Response> showLineResponse = LineSteps.지하철_노선을_조회한다(lineId);
         List<String> 상행역_이름_목록 = 지하철_구간_목록의_상행역_이름을_추출한다(showLineResponse);
 
         assertThat(상행역_이름_목록).hasSize(2);
@@ -60,7 +60,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 노선_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
         long 구간_상행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("신논현역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
 
         // when
         ExtractableResponse<Response> createSectionResponse = 지하철_노선_구간을_등록한다(lineId, 구간_상행_Id, 노선_상행_Id, 5, 10);
@@ -68,7 +68,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(createSectionResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        ExtractableResponse<Response> showLineResponse = LineStep.지하철_노선을_조회한다(lineId);
+        ExtractableResponse<Response> showLineResponse = LineSteps.지하철_노선을_조회한다(lineId);
         List<String> 상행역_이름_목록 = 지하철_구간_목록의_상행역_이름을_추출한다(showLineResponse);
 
         assertThat(상행역_이름_목록).hasSize(2);
@@ -90,7 +90,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 노선_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
         long 구간_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재시민의숲역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
 
         // when
         ExtractableResponse<Response> createSectionResponse = 지하철_노선_구간을_등록한다(lineId, 노선_하행_Id, 구간_하행_Id, 5, 10);
@@ -98,7 +98,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(createSectionResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        ExtractableResponse<Response> showLineResponse = LineStep.지하철_노선을_조회한다(lineId);
+        ExtractableResponse<Response> showLineResponse = LineSteps.지하철_노선을_조회한다(lineId);
         List<String> 하행역_이름_목록 = 지하철_구간_목록의_하행역_이름을_추출한다(showLineResponse);
 
         assertThat(하행역_이름_목록).hasSize(2);
@@ -133,7 +133,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 중간역_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
         long 하행종점_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재시민의숲역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(상행종점_Id, 중간역_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(상행종점_Id, 중간역_Id, "신분당선", 10, 10));
 
         지하철_노선_구간을_등록한다(lineId, 중간역_Id, 하행종점_Id, 5, 10);
 
@@ -143,7 +143,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(deleteSectionResponse.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
 
-        ExtractableResponse<Response> showLineResponse = LineStep.지하철_노선을_조회한다(lineId);
+        ExtractableResponse<Response> showLineResponse = LineSteps.지하철_노선을_조회한다(lineId);
         List<String> 상행역_이름_목록 = 지하철_구간_목록의_상행역_이름을_추출한다(showLineResponse);
         List<String> 하행역_이름_목록 = 지하철_구간_목록의_하행역_이름을_추출한다(showLineResponse);
 
@@ -167,7 +167,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 중간역_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
         long 하행종점_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재시민의숲역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(상행종점_Id, 중간역_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(상행종점_Id, 중간역_Id, "신분당선", 10, 10));
 
         지하철_노선_구간을_등록한다(lineId, 중간역_Id, 하행종점_Id, 5, 10);
 
@@ -177,7 +177,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(deleteSectionResponse.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
 
-        ExtractableResponse<Response> showLineResponse = LineStep.지하철_노선을_조회한다(lineId);
+        ExtractableResponse<Response> showLineResponse = LineSteps.지하철_노선을_조회한다(lineId);
         List<String> 상행역_이름_목록 = 지하철_구간_목록의_상행역_이름을_추출한다(showLineResponse);
         List<String> 하행역_이름_목록 = 지하철_구간_목록의_하행역_이름을_추출한다(showLineResponse);
 
@@ -201,7 +201,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 중간역_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
         long 하행종점_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재시민의숲역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(상행종점_Id, 중간역_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(상행종점_Id, 중간역_Id, "신분당선", 10, 10));
 
         지하철_노선_구간을_등록한다(lineId, 중간역_Id, 하행종점_Id, 5, 10);
 
@@ -211,7 +211,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(deleteSectionResponse.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
 
-        ExtractableResponse<Response> showLineResponse = LineStep.지하철_노선을_조회한다(lineId);
+        ExtractableResponse<Response> showLineResponse = LineSteps.지하철_노선을_조회한다(lineId);
         List<String> 상행역_이름_목록 = 지하철_구간_목록의_상행역_이름을_추출한다(showLineResponse);
         List<String> 하행역_이름_목록 = 지하철_구간_목록의_하행역_이름을_추출한다(showLineResponse);
 
@@ -233,7 +233,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 노선_상행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("강남역"));
         long 노선_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
 
         // when
         ExtractableResponse<Response> deleteSectionResponse = 지하철_구간을_삭제한다(lineId, 노선_하행_Id);
@@ -256,7 +256,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long 노선_하행_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("양재역"));
         long 노선에_없는_역_Id = 응답_결과에서_Id를_추출한다(StationStep.지하철역을_생성한다("없는역"));
 
-        long lineId = 응답_결과에서_Id를_추출한다(LineStep.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
+        long lineId = 응답_결과에서_Id를_추출한다(LineSteps.지하철_노선을_생성한다(노선_상행_Id, 노선_하행_Id, "신분당선", 10, 10));
 
         // when
         ExtractableResponse<Response> deleteSectionResponse = 지하철_구간을_삭제한다(lineId, 노선에_없는_역_Id);

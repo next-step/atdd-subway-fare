@@ -7,23 +7,24 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
-public class LineStep {
-    private LineStep() {
+public class LineSteps {
+    private LineSteps() {
     }
 
     public static ExtractableResponse<Response> 지하철_노선을_생성한다(Long upStationId, Long downStationId, String lineName, int distance, int duration) {
-        return 지하철_노선을_생성한다(lineName, "bg-red-600", upStationId, downStationId, distance, duration);
+        return 지하철_노선을_생성한다(lineName, "bg-red-600", upStationId, downStationId, distance, duration, 0);
     }
 
 
-    public static ExtractableResponse<Response> 지하철_노선을_생성한다(String lineName, String color, Long upStationId, Long downStationId, int distance, int duration) {
+    public static ExtractableResponse<Response> 지하철_노선을_생성한다(String lineName, String color, Long upStationId, Long downStationId, int distance, int duration, int additionalFee) {
         Map<String, Object> params = Map.of(
                 "name", lineName,
                 "color", color,
                 "upStationId", upStationId,
                 "downStationId", downStationId,
                 "distance", distance,
-                "duration", duration
+                "duration", duration,
+                "additionalFee", additionalFee
         );
 
         return RestAssured.given().log().all()

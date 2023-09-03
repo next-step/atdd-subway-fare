@@ -1,10 +1,16 @@
 package nextstep.subway.path.application;
 
+import nextstep.member.domain.Member;
+import nextstep.member.domain.MemberRepository;
+import nextstep.member.exception.MemberNotFoundException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SubwayMap;
+import nextstep.subway.path.domain.policy.discount.*;
+import nextstep.subway.path.domain.policy.fare.FarePolicy;
 import nextstep.subway.path.dto.PathResponse;
+import nextstep.subway.path.dto.UserDto;
 import nextstep.subway.path.exception.SameSourceAndTargetStationException;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
@@ -17,20 +23,36 @@ import java.util.List;
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
+    private final MemberRepository memberRepository;
+    private final FarePolicy farePolicy;
+    private final DiscountPolicyFactory discountPolicyFactory;
 
-    public PathService(StationRepository stationRepository, LineRepository lineRepository) {
+    public PathService(StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository, FarePolicy farePolicy, DiscountPolicyFactory discountPolicyFactory) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
+        this.memberRepository = memberRepository;
+        this.farePolicy = farePolicy;
+        this.discountPolicyFactory = discountPolicyFactory;
     }
 
-    public PathResponse searchPath(Long source, Long target, String type) {
-        validateSourceAndTargetId(source, target);
-
+    public PathResponse searchPath(UserDto userDto, Long source, Long target, String type) {
         Path path = findPath(source, target, type);
-        return PathResponse.of(path);
+        int totalFare = path.calculateFare(farePolicy);
+
+        if (userDto.isUnknown()) {
+            DiscountPolicy defaultDiscountPolicy = discountPolicyFactory.createDefaultDiscountPolicy();
+            return PathResponse.of(path, defaultDiscountPolicy.discount(totalFare));
+        }
+
+        Member member = findMember(userDto.getEmail());
+        DiscountPolicy discountPolicy = discountPolicyFactory.createBy(member.getAge());
+
+        return PathResponse.of(path, discountPolicy.discount(totalFare));
     }
 
     private Path findPath(Long source, Long target, String type) {
+        validateSourceAndTargetId(source, target);
+
         Station sourceStation = findStation(source);
         Station targetStation = findStation(target);
 
@@ -38,6 +60,23 @@ public class PathService {
         SubwayMap subwayMap = new SubwayMap(lines, type);
 
         return subwayMap.findPath(sourceStation, targetStation);
+    }
+
+    private Member findMember(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    private DiscountPolicy classifyDiscountPolicy(Integer age) {
+        if (AgeType.isTeenager(age)) {
+            return new TeenagerDiscountPolicy();
+        }
+
+        if (AgeType.isChildren(age)) {
+            return new ChildrenDiscountPolicy();
+        }
+
+        return new DefaultDiscountPolicy();
     }
 
     private void validateSourceAndTargetId(Long source, Long target) {
@@ -52,6 +91,6 @@ public class PathService {
     }
 
     public void validatePathConnection(Long source, Long target) {
-        searchPath(source, target, "DISTANCE");
+        findPath(source, target, "DISTANCE");
     }
 }

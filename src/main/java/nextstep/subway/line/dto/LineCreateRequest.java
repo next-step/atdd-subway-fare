@@ -7,6 +7,7 @@ public class LineCreateRequest {
     private Long downStationId;
     private Integer distance;
     private Integer duration;
+    private Integer additionalFee;
 
     public String getName() {
         return name;
@@ -30,5 +31,9 @@ public class LineCreateRequest {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public Integer getAdditionalFee() {
+        return additionalFee;
     }
 }

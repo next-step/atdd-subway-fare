@@ -29,6 +29,6 @@ public class MemberRequest {
     }
 
     public Member toMember() {
-        return new Member(email, password, age);
+        return new Member(email, password, age, "ROLE_MEMBER");
     }
 }

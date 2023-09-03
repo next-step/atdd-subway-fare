@@ -35,7 +35,7 @@ public class LineService {
         Station downStation = getStation(lineCreateRequest.getDownStationId());
 
         Section section = new Section(upStation, downStation, lineCreateRequest.getDistance(), lineCreateRequest.getDuration());
-        Line line = new Line(lineCreateRequest.getName(), lineCreateRequest.getColor(), section);
+        Line line = new Line(lineCreateRequest.getName(), lineCreateRequest.getColor(), lineCreateRequest.getAdditionalFee(), section);
         lineRepository.save(line);
 
         return LineResponse.of(line);

@@ -27,8 +27,11 @@ public class Sections {
     }
 
     public Sections(List<Section> sections) {
-        firstStationId = sections.get(0).getUpStationId();
-        lastStationId = sections.get(sections.size() - 1).getDownStationId();
+        int firstIdx = 0;
+        this.firstStationId = sections.get(firstIdx).getUpStationId();
+
+        int lastIdx = sections.size() - 1;
+        this.lastStationId = sections.get(lastIdx).getDownStationId();
 
         this.sections.addAll(sections);
     }

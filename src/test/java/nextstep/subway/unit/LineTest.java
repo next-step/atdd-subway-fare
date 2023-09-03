@@ -31,7 +31,7 @@ class LineTest {
         노선_상행_역 = new Station(1L, "노선_상행_역");
         노선_하행_역 = new Station(2L, "노선_하행_역");
         노선에_등록할_구간 = new Section(노선_상행_역, 노선_하행_역, 10, 10);
-        노선 = new Line("노선", "bg-red-600", 노선에_등록할_구간);
+        노선 = new Line("노선", "bg-red-600", 0, 노선에_등록할_구간);
     }
 
     @DisplayName("구간 추가 기능 테스트")
