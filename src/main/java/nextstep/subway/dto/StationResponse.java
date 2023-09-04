@@ -10,7 +10,7 @@ import nextstep.subway.domain.Station;
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class StationResponse {
     private Long id;
     private String name;
