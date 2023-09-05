@@ -2,6 +2,7 @@ package nextstep.subway.documentation;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +21,7 @@ public class Documentation {
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         this.spec = new RequestSpecBuilder()
-                .addFilter(documentationConfiguration(restDocumentation))
-                .build();
+            .addFilter(documentationConfiguration(restDocumentation))
+            .build();
     }
 }
