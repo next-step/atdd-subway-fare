@@ -3,7 +3,17 @@ package nextstep.subway.documentation;
 import static nextstep.subway.acceptance.utils.SubwayClient.구간_생성_요청;
 import static nextstep.subway.acceptance.utils.SubwayClient.노선_생성_요청;
 import static nextstep.subway.acceptance.utils.SubwayClient.지하철역_생성_요청;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
+import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.dto.LineRequest;
 import nextstep.subway.dto.LineResponse;
 import nextstep.subway.dto.SectionRequest;

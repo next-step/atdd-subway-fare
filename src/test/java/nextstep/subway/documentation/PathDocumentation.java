@@ -46,21 +46,22 @@ public class PathDocumentation extends Documentation {
             .thenReturn(ResponseEntity.ok(경로_조회_응답));
 
         // When
+        spec.filter(document("path",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            requestParameters(
+                parameterWithName("source").description("경로 출발역"),
+                parameterWithName("target").description("경로 도착역")
+            ),
+            responseFields(
+                fieldWithPath("stations").description("경로의 지하철역 리스트"),
+                fieldWithPath("stations.[].id").description("아이디"),
+                fieldWithPath("stations.[].name").description("이름"),
+                fieldWithPath("distance").description("경로의 총 거리")
+            )));
+
         RestAssured
-            .given(spec).log().all()
-            .filter(document("path",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                    requestParameters(
-                        parameterWithName("source").description("경로 출발역"),
-                        parameterWithName("target").description("경로 도착역")
-                        ),
-                    responseFields(
-                        fieldWithPath("stations").description("경로의 지하철역 리스트"),
-                        fieldWithPath("stations.[].id").description("아이디"),
-                        fieldWithPath("stations.[].name").description("이름"),
-                        fieldWithPath("distance").description("경로의 총 거리")
-                    )))
+            .given(spec)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParam("source", 교대역)
             .queryParam("target", 양재역)
