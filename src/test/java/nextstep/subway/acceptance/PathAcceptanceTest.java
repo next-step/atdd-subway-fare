@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_노선에_지하철_구간_생성_요청;
+import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,6 +20,9 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("지하철 경로 검색")
 class PathAcceptanceTest extends AcceptanceTest {
+
+    private String 어린이사용자;
+    private String 청소년사용자;
     private Long 교대역;
     private Long 강남역;
     private Long 양재역;
@@ -33,7 +37,7 @@ class PathAcceptanceTest extends AcceptanceTest {
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
-     * 남부터미널역  --- *3호선* ---   양재
+     * 남부터미널역  --- *3호선* --- 양재
      */
     @BeforeEach
     public void setUp() {
@@ -45,12 +49,15 @@ class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
         역삼역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 10, 1, 200);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10, 300);
         신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 10, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 2, 10);
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 3, 3));
         지하철_노선에_지하철_구간_생성_요청(이호선, createSectionCreateParams(강남역, 역삼역, 6, 3));
+
+        어린이사용자 = 베어러_인증_로그인_요청(KID_EMAIL, PASSWORD).jsonPath().getString("accessToken");
+        청소년사용자 = 베어러_인증_로그인_요청(TEEN_EMAIL, PASSWORD).jsonPath().getString("accessToken");
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다.")
@@ -61,8 +68,31 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.getFare()).isEqualTo(1250);
+        assertThat(response.getFare()).isEqualTo(1550); // 기본요금 1250 + 3호선 추가요금 300원
     }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. 어린이일 때에 할인 요금")
+    @Test
+    void findPathByDistanceWhenUserKid() {
+        // when
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE, 어린이사용자).as(PathResponse.class);
+
+        // then
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.getFare()).isEqualTo(950); // 기존 1550원에서 350원 공제하고 50%할인 금액(600원)을 할인 = 950원
+    }
+
+    @DisplayName("두 역의 최단 거리 경로를 조회한다. 청소년일 때에 할인 요금")
+    @Test
+    void findPathByDistanceWhenUserTeenager() {
+        // when
+        var response = PathSteps.두_역의_최단_경로_조회를_요청(교대역, 양재역, FindPathType.DISTANCE, 청소년사용자).as(PathResponse.class);
+
+        // then
+        assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(response.getFare()).isEqualTo(1310); // 기존 1550원에서 350원 공제하고 20%할인 금액(240원)을 할인 = 1310원
+    }
+
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
     @Test
@@ -72,7 +102,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(남부터미널역, 교대역, 강남역);
-        assertThat(response.getFare()).isEqualTo(1350);
+        assertThat(response.getFare()).isEqualTo(1650); // 기본요금 1250 + 3호선 추가요금 300원 + 거리 추가요금 100원
     }
 
     @DisplayName("두 역의 최단 거리 경로를 조회한다. 추가요금 확인")
@@ -83,7 +113,7 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.getStations().stream().map(StationResponse::getId)).containsExactly(교대역, 강남역, 역삼역);
-        assertThat(response.getFare()).isEqualTo(1450);
+        assertThat(response.getFare()).isEqualTo(1650); // 기본요금 1250 + 2호선 추가요금 200원 + 거리 추가요금 200원
     }
 
     @DisplayName("두 역의 최소 시간 경로를 조회한다.")
@@ -97,8 +127,13 @@ class PathAcceptanceTest extends AcceptanceTest {
     }
 
 
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration, int additionalFee) {
+        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration, additionalFee);
+        return LineSteps.지하철_노선_생성_요청(lineRequest).jsonPath().getLong("id");
+    }
+
     private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
-        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration);
+        LineRequest lineRequest = new LineRequest(name, color, upStation, downStation, distance, duration, 0);
         return LineSteps.지하철_노선_생성_요청(lineRequest).jsonPath().getLong("id");
     }
 

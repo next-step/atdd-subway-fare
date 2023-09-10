@@ -10,6 +10,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private Integer additionalFee;
 
     @Embedded
     private Sections sections = new Sections();
@@ -20,7 +21,15 @@ public class Line {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+        this.additionalFee = 0;
     }
+
+    public Line(String name, String color, int additionalFee) {
+        this.name = name;
+        this.color = color;
+        this.additionalFee = additionalFee;
+    }
+
 
     public Long getId() {
         return id;
@@ -57,5 +66,8 @@ public class Line {
 
     public void deleteSection(Station station) {
         sections.delete(station);
+    }
+    public int getAdditionalFee() {
+        return additionalFee;
     }
 }

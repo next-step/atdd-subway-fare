@@ -29,4 +29,16 @@ public class PathSteps {
                 .when().get("/paths")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 두_역의_최단_경로_조회를_요청(Long sourceId, Long targetId, FindPathType type, String accessToken) {
+        return RestAssured
+                .given()
+                .auth().oauth2(accessToken)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .queryParam("type", type)
+                .when().get("/paths/me")
+                .then().log().all().extract();
+    }
 }

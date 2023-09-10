@@ -17,8 +17,9 @@ class SectionsTest {
     private final Station c = new Station("c");
     private final Station d = new Station("d");
 
-    private final Line line = new Line("line", "bg");
-    private final Section section = new Section(line, a, b, 5, 5);
+    private final Line lineA = new Line("line", "bg");
+    private final Line lineB = new Line("lineB", "bg", 100);
+    private final Section section = new Section(lineA, a, b, 5, 5);
     
     private final Sections sections = new Sections();
     
@@ -29,7 +30,7 @@ class SectionsTest {
 
     @Test
     void addSectionInterStationWhenHasSameUpwardStation() {
-        Section newSection = new Section(line, a, c, 4, 4);
+        Section newSection = new Section(lineA, a, c, 4, 4);
         sections.add(newSection);
 
         List<Section> addedSection = sections.getSections();
@@ -40,7 +41,7 @@ class SectionsTest {
 
     @Test
     void addSectionInterStationWhenHasSameDownwardStation() {
-        Section newSection = new Section(line, d, b, 4, 4);
+        Section newSection = new Section(lineA, d, b, 4, 4);
 
         sections.add(newSection);
 
@@ -52,7 +53,7 @@ class SectionsTest {
 
     @Test
     void addSectionWhenLastDownwardStation() {
-        Section newSection = new Section(line, b, c, 4, 4);
+        Section newSection = new Section(lineA, b, c, 4, 4);
 
         sections.add(newSection);
 
@@ -64,7 +65,7 @@ class SectionsTest {
 
     @Test
     void addSectionWhenLastUpwardStation() {
-        Section newSection = new Section(line, c, a, 4, 4);
+        Section newSection = new Section(lineA, c, a, 4, 4);
 
         sections.add(newSection);
 
@@ -76,7 +77,7 @@ class SectionsTest {
 
     @Test
     void removeSection() {
-        Section newSection = new Section(line, b, c, 4, 4);
+        Section newSection = new Section(lineA, b, c, 4, 4);
         sections.add(newSection);
 
         sections.delete(b);
@@ -91,7 +92,7 @@ class SectionsTest {
 
     @Test
     void removeSectionUpLastStation() {
-        Section newSection = new Section(line, b, c, 4, 4);
+        Section newSection = new Section(lineA, b, c, 4, 4);
         sections.add(newSection);
 
         sections.delete(a);
@@ -106,7 +107,7 @@ class SectionsTest {
 
     @Test
     void removeSectionDownLastStation() {
-        Section newSection = new Section(line, b, c, 4, 4);
+        Section newSection = new Section(lineA, b, c, 4, 4);
         sections.add(newSection);
 
         sections.delete(c);
@@ -121,12 +122,24 @@ class SectionsTest {
 
     @Test
     void getStationsByOrder() {
-        Section newSection = new Section(line, c, a, 4, 4);
+        Section newSection = new Section(lineA, c, a, 4, 4);
         sections.add(newSection);
-        Section newSection1 = new Section(line, a, d, 1, 1);
+        Section newSection1 = new Section(lineA, a, d, 1, 1);
         sections.add(newSection1);
 
         List<Station> stations = sections.getStations();
         assertThat(stations).containsExactly(c, a, d, b);
+    }
+
+    @Test
+    void getHighestAdditionalFee() {
+        Section newSection = new Section(lineA, c, a, 4, 4);
+        sections.add(newSection);
+        Section newSection1 = new Section(lineB, a, d, 1, 1);
+        sections.add(newSection1);
+
+        List<Station> stations = sections.getStations();
+        assertThat(stations).containsExactly(c, a, d, b);
+        assertThat(sections.getHighestAdditionalFee()).isEqualTo(100);
     }
 }

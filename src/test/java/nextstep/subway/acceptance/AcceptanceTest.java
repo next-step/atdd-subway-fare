@@ -10,12 +10,15 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.MemberSteps.회원_생성_요청;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class AcceptanceTest {
     public static final String EMAIL = "admin@email.com";
     public static final String PASSWORD = "password";
+    public static final String KID_EMAIL = "kid@email.com";
+    public static final String TEEN_EMAIL = "teen@email.com";
 
     @Autowired
     private DatabaseCleanup databaseCleanup;
@@ -34,5 +37,7 @@ public class AcceptanceTest {
         dataLoader.loadData();
 
         관리자 = 베어러_인증_로그인_요청(EMAIL, PASSWORD).jsonPath().getString("accessToken");
+        회원_생성_요청(KID_EMAIL, PASSWORD, 6);
+        회원_생성_요청(TEEN_EMAIL, PASSWORD, 13);
     }
 }

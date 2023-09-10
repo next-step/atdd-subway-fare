@@ -4,7 +4,6 @@ import static nextstep.subway.acceptance.PathSteps.두_역의_최단_경로_조�
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathResponse;

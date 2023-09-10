@@ -19,13 +19,13 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(Path path, FareChain fareCalculator) {
+    public static PathResponse of(Path path, FareChain fareCalculator, Integer age) {
         List<StationResponse> stations = path.getStations().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        int fare = fareCalculator.calculateFare(distance);
+        int fare = fareCalculator.calculateFare(distance, path.getAdditionalFee(), age);
 
         return new PathResponse(stations, distance, duration, fare);
     }
