@@ -43,7 +43,7 @@ public class Sections {
     }
 
     private void addBetween(Section section, Section connectedSection) {
-        if (section.hasLoggerDistance(connectedSection) || section.hasLoggerDuration(connectedSection)) {
+        if (section.hasLoggerDistance(connectedSection)) {
             throw new CannotCreateSectionException();
         }
 
