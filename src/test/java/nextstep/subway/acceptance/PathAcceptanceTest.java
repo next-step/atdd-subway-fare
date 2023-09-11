@@ -42,6 +42,12 @@ import nextstep.subway.exception.error.SubwayErrorCode;
 @DisplayName("경로 조회 기능")
 public class PathAcceptanceTest extends AcceptanceTest {
 
+    /**
+     * Given: 지하철역이 등록되어있다.
+     * And: 노선이 등록되어있다.
+     * And: 구간이 등록되어있다.
+     */
+
     Long 신논현역;
     Long 옥수역;
     Long 논현역;
@@ -70,8 +76,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given: 5개의 지하철역이 등록되어 있다.
-     * And: 3개의 노선이 등록되어 있다.
      * When: 경로를 조회한다.
      * Then: 성공(200 OK) 응답을 받는다.
      * And: 지하철역 목록을 검증한다.
@@ -89,8 +93,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
 
     /**
-     * Given: 5개의 지하철역이 등록되어 있다.
-     * And: 3개의 노선이 등록되어 있다.
      * When: 경로를 조회한다.
      * Then: 실패(400 Bad Request) 응답을 받는다.
      * And: '지하철 경로를 조회할 수 없습니다.' 메시지를 응답받는다.
@@ -107,8 +109,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
 
     /**
-     * Given: 5개의 지하철역이 등록되어 있다.
-     * And: 3개의 노선이 등록되어 있다.
      * When: 출발역과 도착역이 연결이 되어 있지 않은 경로를 조회한다.
      * Then: 실패(400 Bad Request) 응답을 받는다.
      * And: '지하철 경로를 조회할 수 없습니다.' 메시지를 응답받는다.
@@ -126,8 +126,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
 
     /**
-     * Given: 5개의 지하철역이 등록되어 있다.
-     * And: 3개의 노선이 등록되어 있다.
      * When: 존재하지 않는 출발역이나 도착역을 조회한다.
      * Then: 실패(400 Bad Request) 응답을 받는다.
      * And: '지하철역을 찾을 수 없습니다.' 메시지를 응답받는다.
