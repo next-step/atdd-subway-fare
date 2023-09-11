@@ -18,12 +18,15 @@ public class PathResponse {
 
     Long distance;
 
+    Integer duration;
+
     public static PathResponse from(Path path) {
         return PathResponse.builder()
             .stations(path.getSections().getStations().stream()
                 .map(StationResponse::from)
                 .collect(Collectors.toList()))
             .distance(path.getSections().getTotalDistance())
+            .duration(path.getSections().getTotalDuration())
             .build();
     }
 
