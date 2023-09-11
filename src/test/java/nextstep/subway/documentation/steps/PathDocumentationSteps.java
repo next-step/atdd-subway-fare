@@ -25,7 +25,7 @@ public class PathDocumentationSteps {
             .as(LineResponse.class).getId();
         구간_생성_요청(삼호선, new SectionRequest(남부터미널역, 양재역, 10L, 10));
 
-        return new PathInformation(남부터미널역, 양재역);
+        return new PathInformation(교대역, 양재역);
     }
 
     public static class PathInformation {
