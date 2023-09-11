@@ -60,13 +60,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
         사평역 = 지하철역_생성_요청(new StationRequest("사평역")).jsonPath().getLong("id");
         고속터미널역 = 지하철역_생성_요청(new StationRequest("고속터미널역")).jsonPath().getLong("id");
 
-        노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 신논현역, 논현역, 2L, 5));
+        노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 신논현역, 논현역, 2L, 2));
         노선_생성_요청(new LineRequest("삼호선", "bg-orange-600", 압구정역, 옥수역, 2L, 7));
         Long 칠호선 = 노선_생성_요청(new LineRequest("칠호선", "bg-green-600", 논현역, 반포역, 1L, 9)).jsonPath().getLong("id");
-        Long 구호선 = 노선_생성_요청(new LineRequest("구호선", "bg-brown-600", 사평역, 신논현역, 5L, 11)).jsonPath().getLong("id");
+        Long 구호선 = 노선_생성_요청(new LineRequest("구호선", "bg-brown-600", 사평역, 신논현역, 5L, 2)).jsonPath().getLong("id");
 
         구간_생성_요청(칠호선, new SectionRequest(반포역, 고속터미널역, 4L, 6));
-        구간_생성_요청(구호선, new SectionRequest(고속터미널역, 사평역, 2L, 4));
+        구간_생성_요청(구호선, new SectionRequest(고속터미널역, 사평역, 2L, 1));
     }
 
     /**
@@ -170,4 +170,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // Then
         경로_조회_실패_검증(경로_조회_응답, HttpStatus.BAD_REQUEST, ServerErrorCode.BAD_PARAMETER.getMessage());
     }
+
+
 }
