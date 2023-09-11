@@ -169,5 +169,19 @@ public class PathAcceptanceTest extends AcceptanceTest {
         경로_조회_실패_검증(경로_조회_응답, HttpStatus.BAD_REQUEST, ServerErrorCode.BAD_PARAMETER.getMessage());
     }
 
+    /**
+     * When: 출발역에서 도착역까지 최소 시간 기준으로 경로 조회를 요청한다.
+     * Then: 성공(200 OK) 응답을 받는다.
+     * And: 경로 소요 시간을 검증한다.
+     */
+    @Test
+    @DisplayName("[성공] 두 역의 최소 시간 경로를 조회한다.")
+    void 두_역의_최소_시간_경로를_조회한다() {
+        // When
+        ExtractableResponse<Response> 경로_조회_응답 = 경로_조회_요청(고속터미널역, 논현역, PathType.DURATION);
+
+        // Then
+        경로_조회_성공_검증(경로_조회_응답, HttpStatus.OK, 9L, 5, List.of("고속터미널역", "사평역", "신논현역", "논현역"));
+    }
 
 }
