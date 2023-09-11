@@ -12,6 +12,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import nextstep.subway.documentation.steps.PathDocumentationSteps.PathInformation;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -30,16 +31,18 @@ public class PathDocumentation extends Documentation {
             preprocessResponse(prettyPrint()),
             requestParameters(
                 parameterWithName("source").description("경로 출발역"),
-                parameterWithName("target").description("경로 도착역")
+                parameterWithName("target").description("경로 도착역"),
+                parameterWithName("type").description("경로 조회 타입")
             ),
             responseFields(
                 fieldWithPath("stations").description("경로의 지하철역 리스트"),
                 fieldWithPath("stations.[].id").description("아이디"),
                 fieldWithPath("stations.[].name").description("이름"),
-                fieldWithPath("distance").description("경로의 총 거리")
+                fieldWithPath("distance").description("경로의 총 거리"),
+                fieldWithPath("duration").description("경로의 총 소요시간")
             )));
 
-        경로_조회_요청(spec, 경로.출발역, 경로.도착역);
+        경로_조회_요청(spec, 경로.출발역, 경로.도착역, PathType.DISTANCE);
     }
 
 }
