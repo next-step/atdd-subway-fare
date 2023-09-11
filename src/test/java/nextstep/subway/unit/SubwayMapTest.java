@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ public class SubwayMapTest {
             .distance(1L)
             .build();
 
-        this.지하철_지도 = new SubwayMap(List.of(신분당선, 칠호선, 구호선, 삼호선));
+        this.지하철_지도 = new SubwayMap(List.of(신분당선, 칠호선, 구호선, 삼호선), PathType.DISTANCE);
     }
 
 

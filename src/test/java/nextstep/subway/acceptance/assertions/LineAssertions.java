@@ -32,11 +32,12 @@ public class LineAssertions {
     }
 
     public static void 노선_응답_성공_검증(ExtractableResponse<Response> response, HttpStatus httpStatus,
-        Long distance, List<Long> stationIds) {
+        Long distance, Integer duration, List<Long> stationIds) {
         assertThat(response.statusCode()).isEqualTo(httpStatus.value());
 
         LineResponse 구간_응답 = response.as(LineResponse.class);
         assertThat(구간_응답.getDistance()).isEqualTo(distance);
+        assertThat(구간_응답.getDuration()).isEqualTo(duration);
 
         List<StationResponse> 지하철역_목록 = 구간_응답.getStations();
         for (int i = 0; i < 지하철역_목록.size(); i++) {

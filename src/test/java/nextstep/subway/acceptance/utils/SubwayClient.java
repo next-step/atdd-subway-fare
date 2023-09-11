@@ -3,6 +3,7 @@ package nextstep.subway.acceptance.utils;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 import nextstep.subway.dto.LineRequest;
 import nextstep.subway.dto.SectionRequest;
@@ -75,9 +76,9 @@ public class SubwayClient {
             .extract();
     }
 
-    public static ExtractableResponse<Response> 경로_조회_요청(Long source, Long target) {
+    public static ExtractableResponse<Response> 경로_조회_요청(Long source, Long target, PathType type) {
         return RestAssured.given().log().all()
-            .when().get("/paths?source=" + source + "&target=" + target)
+            .when().get("/paths?source=" + source + "&target=" + target + "&type=" + type)
             .then().log().all()
             .extract();
     }

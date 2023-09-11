@@ -35,11 +35,11 @@ class LineAcceptanceTest extends AcceptanceTest {
         Long 광교역 = 지하철역_생성_요청(new StationRequest("광교역")).jsonPath().getLong("id");
 
         // When
-        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L)).jsonPath().getLong("id");
+        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L, 5)).jsonPath().getLong("id");
 
         // Then
         ExtractableResponse<Response> 노선_조회_응답 = 노선_조회_요청(신분당선);
-        노선_응답_성공_검증(노선_조회_응답, HttpStatus.OK, 30L, List.of(강남역, 광교역));
+        노선_응답_성공_검증(노선_조회_응답, HttpStatus.OK, 30L, 5, List.of(강남역, 광교역));
     }
 
     /**
@@ -57,8 +57,8 @@ class LineAcceptanceTest extends AcceptanceTest {
         Long 판교역 = 지하철역_생성_요청(new StationRequest("판교역")).jsonPath().getLong("id");
         Long 이매역 = 지하철역_생성_요청(new StationRequest("이매역")).jsonPath().getLong("id");
 
-        노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L)).jsonPath().getLong("id");
-        노선_생성_요청(new LineRequest("경강선", "bg-blue-600", 판교역, 이매역, 10L)).jsonPath().getLong("id");
+        노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L, 5)).jsonPath().getLong("id");
+        노선_생성_요청(new LineRequest("경강선", "bg-blue-600", 판교역, 이매역, 10L, 7)).jsonPath().getLong("id");
 
         // When
         ExtractableResponse<Response> 노선_조회_응답 = 노선_조회_요청();
@@ -80,11 +80,11 @@ class LineAcceptanceTest extends AcceptanceTest {
         Long 광교역 = 지하철역_생성_요청(new StationRequest("광교역")).jsonPath().getLong("id");
 
         // When
-        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L)).jsonPath().getLong("id");
+        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L, 5)).jsonPath().getLong("id");
 
         // Then
         ExtractableResponse<Response> 노선_조회_응답 = 노선_조회_요청(신분당선);
-        노선_응답_성공_검증(노선_조회_응답, HttpStatus.OK, 30L, List.of(강남역, 광교역));
+        노선_응답_성공_검증(노선_조회_응답, HttpStatus.OK, 30L, 5, List.of(강남역, 광교역));
     }
 
     /**
@@ -99,10 +99,10 @@ class LineAcceptanceTest extends AcceptanceTest {
         Long 강남역 = 지하철역_생성_요청(new StationRequest("강남역")).jsonPath().getLong("id");
         Long 광교역 = 지하철역_생성_요청(new StationRequest("광교역")).jsonPath().getLong("id");
 
-        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L)).jsonPath().getLong("id");
+        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L, 5)).jsonPath().getLong("id");
 
         // When
-        ExtractableResponse<Response> 노선_수정_응답 = 노선_수정_요청(신분당선, new LineRequest("수인분당선", "bg-yellow-600", null, null, null));
+        ExtractableResponse<Response> 노선_수정_응답 = 노선_수정_요청(신분당선, new LineRequest("수인분당선", "bg-yellow-600", null, null, null, null));
 
         // then
         assertThat(노선_수정_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -124,7 +124,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         Long 강남역 = 지하철역_생성_요청(new StationRequest("강남역")).jsonPath().getLong("id");
         Long 광교역 = 지하철역_생성_요청(new StationRequest("광교역")).jsonPath().getLong("id");
 
-        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L)).jsonPath().getLong("id");
+        Long 신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 강남역, 광교역, 30L, 5)).jsonPath().getLong("id");
 
 
         // When
