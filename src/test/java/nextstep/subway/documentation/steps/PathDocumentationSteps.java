@@ -1,24 +1,17 @@
-package nextstep.subway.documentation;
+package nextstep.subway.documentation.steps;
 
-import static nextstep.subway.acceptance.utils.SubwayClient.구간_생성_요청;
-import static nextstep.subway.acceptance.utils.SubwayClient.노선_생성_요청;
-import static nextstep.subway.acceptance.utils.SubwayClient.지하철역_생성_요청;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static nextstep.subway.acceptance.utils.SubwayClient.*;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.subway.dto.LineRequest;
 import nextstep.subway.dto.LineResponse;
 import nextstep.subway.dto.SectionRequest;
 import nextstep.subway.dto.StationRequest;
 import nextstep.subway.dto.StationResponse;
+import org.springframework.http.MediaType;
 
 public class PathDocumentationSteps {
 
@@ -35,12 +28,23 @@ public class PathDocumentationSteps {
     }
 
     public static class PathInformation {
-        Long 출발역;
-        Long 도착역;
+        public Long 출발역;
+        public Long 도착역;
 
         public PathInformation(Long 출발역, Long 도착역) {
             this.출발역 = 출발역;
             this.도착역 = 도착역;
         }
     }
+
+    public static ExtractableResponse<Response> 경로_조회_요청(RequestSpecification spec, Long source, Long target) {
+        return RestAssured
+            .given(spec).log().all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("source", source)
+            .queryParam("target", target)
+            .when().get("/paths")
+            .then().log().all().extract();
+    }
+
 }

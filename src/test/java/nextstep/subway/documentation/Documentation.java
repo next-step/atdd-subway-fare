@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ExtendWith(RestDocumentationExtension.class)
-public class Documentation {
+public abstract class Documentation {
     protected RequestSpecification spec;
 
     @BeforeEach
