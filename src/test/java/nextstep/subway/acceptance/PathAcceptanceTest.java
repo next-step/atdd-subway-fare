@@ -88,7 +88,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 경로_조회_응답 = 경로_조회_요청(고속터미널역, 논현역, PathType.DISTANCE);
 
         // Then
-        경로_조회_성공_검증(경로_조회_응답, HttpStatus.OK, 5L, List.of("고속터미널역", "반포역", "논현역"));
+        경로_조회_성공_검증(경로_조회_응답, HttpStatus.OK, 5L, 15, List.of("고속터미널역", "반포역", "논현역"));
     }
 
 

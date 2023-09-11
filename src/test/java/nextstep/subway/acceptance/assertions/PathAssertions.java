@@ -14,11 +14,12 @@ import nextstep.subway.exception.dto.ErrorResponse;
 public class PathAssertions {
 
     public static void 경로_조회_성공_검증(ExtractableResponse<Response> response, HttpStatus httpStatus,
-        Long distance, List<String> stationNames) {
+        Long distance, Integer duration, List<String> stationNames) {
         assertThat(response.statusCode()).isEqualTo(httpStatus.value());
 
         LineResponse 조회한_경로_응답 = response.as(LineResponse.class);
         assertThat(조회한_경로_응답.getDistance()).isEqualTo(distance);
+        assertThat(조회한_경로_응답.getDuration()).isEqualTo(duration);
         assertThat(조회한_경로_응답.getStations().stream()
             .map(StationResponse::getName)
             .collect(Collectors.toList()))
