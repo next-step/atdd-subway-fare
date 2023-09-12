@@ -20,6 +20,8 @@ public class PathResponse {
 
     Integer duration;
 
+    Integer fare;
+
     public static PathResponse from(Path path) {
         return PathResponse.builder()
             .stations(path.getSections().getStations().stream()
@@ -27,6 +29,7 @@ public class PathResponse {
                 .collect(Collectors.toList()))
             .distance(path.getSections().getTotalDistance())
             .duration(path.getSections().getTotalDuration())
+            .fare(path.getFare())
             .build();
     }
 
