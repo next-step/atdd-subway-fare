@@ -33,4 +33,10 @@ public class PathAssertions {
         assertThat(경로_오류_응답.getMessage()).isEqualTo(message);
     }
 
+    public static void 경로_요금_검증(ExtractableResponse<Response> response, HttpStatus httpStatus, Integer fare) {
+        assertThat(response.statusCode()).isEqualTo(httpStatus.value());
+
+        Integer actual = response.jsonPath().getInt("fare");
+        assertThat(actual).isEqualTo(fare);
+    }
 }
