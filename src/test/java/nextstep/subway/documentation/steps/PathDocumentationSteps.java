@@ -1,18 +1,14 @@
 package nextstep.subway.documentation.steps;
 
-import static nextstep.subway.acceptance.utils.SubwayClient.*;
+import static nextstep.subway.acceptance.utils.SubwayClient.구간_생성_요청;
+import static nextstep.subway.acceptance.utils.SubwayClient.노선_생성_요청;
+import static nextstep.subway.acceptance.utils.SubwayClient.지하철역_생성_요청;
 
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.dto.LineRequest;
 import nextstep.subway.dto.LineResponse;
 import nextstep.subway.dto.SectionRequest;
 import nextstep.subway.dto.StationRequest;
 import nextstep.subway.dto.StationResponse;
-import org.springframework.http.MediaType;
 
 public class PathDocumentationSteps {
 
@@ -36,17 +32,6 @@ public class PathDocumentationSteps {
             this.출발역 = 출발역;
             this.도착역 = 도착역;
         }
-    }
-
-    public static ExtractableResponse<Response> 경로_조회_요청(RequestSpecification spec, Long source, Long target, PathType type) {
-        return RestAssured
-            .given(spec).log().all()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("source", source)
-            .queryParam("target", target)
-            .queryParam("type", type)
-            .when().get("/paths")
-            .then().log().all().extract();
     }
 
 }

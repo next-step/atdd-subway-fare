@@ -1,6 +1,6 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.documentation.steps.PathDocumentationSteps.경로_조회_요청;
+import static nextstep.subway.acceptance.utils.SubwayClient.경로_조회_요청;
 import static nextstep.subway.documentation.steps.PathDocumentationSteps.경로_조회_요청_문서_데이터_생성;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
