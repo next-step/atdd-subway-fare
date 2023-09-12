@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class PathFareCalculator {
 
-    private final int BASE_FARE = 1250;
+    private static final int BASE_FARE = 1250;
 
-    public Integer calculate(long distance) {
+    public static Integer calculate(long distance) {
 
         if (distance > 10 && distance <= 50) {
             return BASE_FARE + calculateOver10KmFare(distance - 10);
@@ -21,11 +21,11 @@ public class PathFareCalculator {
         return BASE_FARE;
     }
 
-    private Integer calculateOver10KmFare(long distance) {
+    private static Integer calculateOver10KmFare(long distance) {
         return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
     }
 
-    private Integer calculateOver50KmFare(long distance) {
+    private static Integer calculateOver50KmFare(long distance) {
         return (int) ((Math.ceil((distance - 1) / 8) + 1) * 100);
     }
 }

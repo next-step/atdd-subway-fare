@@ -1,12 +1,17 @@
 package nextstep.subway.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import nextstep.subway.utils.path.PathFareCalculator;
 
-@AllArgsConstructor
 @Getter
 public class Path {
 
     private Sections sections;
+    private Integer fare;
+
+    public Path(Sections sections) {
+        this.sections = sections;
+        this.fare = PathFareCalculator.calculate(sections.getTotalDistance());
+    }
 
 }
