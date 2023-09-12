@@ -31,21 +31,26 @@ public class Line {
     private String color;
 
     private Long distance;
+    
+    private Integer duration;
 
     @Embedded
     private Sections sections;
 
     @Builder
-    public Line(String name, String color, Long distance, Station upStation, Station downStation) {
+    public Line(String name, String color, Long distance, Integer duration, 
+        Station upStation, Station downStation) {
         this.name = name;
         this.color = color;
         this.distance = distance;
+        this.duration = duration;
         this.sections = new Sections(
             List.of(Section.builder()
                 .line(this)
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(distance)
+                .duration(duration)
                 .build())
         );
     }
@@ -63,10 +68,12 @@ public class Line {
     public void addSection(Section section) {
         this.sections.add(section);
         this.distance = this.sections.getTotalDistance();
+        this.duration = this.sections.getTotalDuration();
     }
 
     public void removeSection(Station station) {
         this.sections.remove(station);
         this.distance = this.sections.getTotalDistance();
+        this.duration = this.sections.getTotalDuration();
     }
 }

@@ -17,7 +17,7 @@ public class PathService {
     public Path findPath(PathRequest request) {
         Station source = stationService.findStationById(request.getSource());
         Station target = stationService.findStationById(request.getTarget());
-        SubwayMap subwayMap = new SubwayMap(lineService.findAllLines());
+        SubwayMap subwayMap = new SubwayMap(lineService.findAllLines(), request.getType());
 
         return subwayMap.findPath(source, target);
     }

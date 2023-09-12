@@ -39,13 +39,17 @@ public class Section {
 
     @Column(nullable = false)
     private Long distance;
+    
+    @Column(nullable = false)
+    private Integer duration;
 
     @Builder
-    public Section(Line line, Station upStation, Station downStation, Long distance) {
+    public Section(Line line, Station upStation, Station downStation, Long distance, Integer duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     @Override
@@ -59,12 +63,13 @@ public class Section {
         Section section = (Section) o;
         return Objects.equals(id, section.id) && Objects.equals(line, section.line)
             && Objects.equals(upStation, section.upStation) && Objects.equals(
-            downStation, section.downStation) && Objects.equals(distance, section.distance);
+            downStation, section.downStation) && Objects.equals(distance, section.distance)
+            && Objects.equals(duration, section.duration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, line, upStation, downStation, distance);
+        return Objects.hash(id, line, upStation, downStation, distance, duration);
     }
 
     public boolean isSameUpStation(Station station) {
@@ -87,6 +92,10 @@ public class Section {
 
     public boolean hasLoggerDistance(Section section) {
         return (this.distance >= section.distance);
+    }
+
+    public boolean hasLoggerDuration(Section section) {
+        return (this.duration >= section.duration);
     }
 
     public boolean isInsertedBetween(Section section) {

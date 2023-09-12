@@ -40,7 +40,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         논현역 = 지하철역_생성_요청(new StationRequest("논현역")).jsonPath().getLong("id");
         신논현역 = 지하철역_생성_요청(new StationRequest("신논현역")).jsonPath().getLong("id");
 
-        신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 광교역, 논현역, 30L)).jsonPath().getLong("id");
+        신분당선 = 노선_생성_요청(new LineRequest("신분당선", "bg-red-600", 광교역, 논현역, 30L, 10)).jsonPath().getLong("id");
     }
 
     /**
@@ -55,10 +55,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[성공] 새로운 구간을 등록한다.")
     void 새로운_구간_등록() {
         // When
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(논현역, 신논현역, 20L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(논현역, 신논현역, 20L, 5));
 
         // Then
-        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 50L, List.of(광교역, 논현역, 신논현역));
+        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 50L, 15, List.of(광교역, 논현역, 신논현역));
     }
 
 
@@ -76,10 +76,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // When
         // 노선은 상행(광교역) 하행(논현역) 으로 종점이 등록되어있는 상태이며,
         // 새로운 지하철역(양재역)을 (*광교역-*양재역-논현역) 으로 등록하고자 함
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 7L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 7L, 5));
 
         // Then
-        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 30L, List.of(광교역, 양재역, 논현역));
+        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 30L, 10, List.of(광교역, 양재역, 논현역));
     }
 
 
@@ -97,10 +97,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // When
         // 노선은 상행(광교역) 하행(논현역) 으로 종점이 등록되어있는 상태이며,
         // 새로운 지하철역(양재역)을 (광교역-*양재역-*논현역) 으로 등록하고자 함
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(양재역, 논현역, 7L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(양재역, 논현역, 7L, 5));
 
         // Then
-        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 30L, List.of(광교역, 양재역, 논현역));
+        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 30L, 10, List.of(광교역, 양재역, 논현역));
     }
 
 
@@ -116,10 +116,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[성공] 새로운 역을 상행종점역으로 등록한다.")
     void 새로운_역을_상행종점역으로_등록() {
         // When
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(강남역, 광교역, 7L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(강남역, 광교역, 7L, 10));
 
         // Then
-        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 37L, List.of(강남역, 광교역, 논현역));
+        노선_응답_성공_검증(구간_생성_응답, HttpStatus.CREATED, 37L, 20, List.of(강남역, 광교역, 논현역));
     }
 
     /**
@@ -133,7 +133,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[실패] 기존 역 사이의 길이보다 큰 새로운 역을 등록한다.")
     void 기존_역_사이의_길이보다_큰_새로운_역을_등록() {
         // When
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 40L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 40L, 5));
 
         // Then
         노선_응답_실패_검증(구간_생성_응답, SubwayErrorCode.CANNOT_CREATE_SECTION);
@@ -151,7 +151,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[실패] 기존 역 사이의 길이와 같은 새로운 역을 등록한다.")
     void 기존_역_사이의_길이와_같은_새로운_역을_등록() {
         // When
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 30L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 30L, 10));
 
         // Then
         노선_응답_실패_검증(구간_생성_응답, SubwayErrorCode.CANNOT_CREATE_SECTION);
@@ -169,7 +169,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[실패] 상하행종점역 둘 다 이미 등록된 역을 등록한다.")
     void 상하행종점역_둘_다_이미_등록된_역을_등록() {
         // When
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 논현역, 30L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(광교역, 논현역, 30L, 5));
 
         // Then
         노선_응답_실패_검증(구간_생성_응답, SubwayErrorCode.CANNOT_CREATE_SECTION);
@@ -188,7 +188,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[실패] 상하행종점역 둘 중 하나도 포함되어 있지 않은 역을 등록한다.")
     void 상하행종점역_둘_중_하나도_포함되어_있지_않은_역_등록() {
         // When
-        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(0L, 100L, 30L));
+        ExtractableResponse<Response> 구간_생성_응답 = 구간_생성_요청(신분당선, new SectionRequest(0L, 100L, 30L, 5));
 
         // Then
         노선_응답_실패_검증(구간_생성_응답, SubwayErrorCode.STATION_NOT_FOUND);
@@ -207,15 +207,15 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[성공] 구간을 조회한다.")
     public void 구간을_조회() {
         // Given
-        구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 7L));
-        구간_생성_요청(신분당선, new SectionRequest(강남역, 광교역, 10L));
-        구간_생성_요청(신분당선, new SectionRequest(논현역, 신논현역, 10L));
+        구간_생성_요청(신분당선, new SectionRequest(광교역, 양재역, 7L, 2));
+        구간_생성_요청(신분당선, new SectionRequest(강남역, 광교역, 10L, 5));
+        구간_생성_요청(신분당선, new SectionRequest(논현역, 신논현역, 10L, 5));
 
         // When
         ExtractableResponse<Response> 구간_조회_응답 = 노선_조회_요청(신분당선);
 
         // Then
-        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 50L, List.of(강남역, 광교역, 양재역, 논현역, 신논현역));
+        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 50L, 20, List.of(강남역, 광교역, 양재역, 논현역, 신논현역));
     }
 
 
@@ -234,14 +234,14 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[성공] 중간 구간을 제거한다.")
     void 중간_구간을_제거() {
         // Given
-        구간_생성_요청(신분당선, new SectionRequest(양재역, 논현역, 20L));
+        구간_생성_요청(신분당선, new SectionRequest(양재역, 논현역, 20L, 5));
 
         // When
         구간_삭제_요청(신분당선, 양재역);
 
         // Then
         ExtractableResponse<Response> 구간_조회_응답 = 노선_조회_요청(신분당선);
-        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 30L, List.of(광교역, 논현역));
+        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 30L, 10, List.of(광교역, 논현역));
     }
 
     /**
@@ -259,14 +259,14 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[성공] 첫 번째 구간을 삭제한다.")
     void 첫_번째_구간을_삭제() {
         // Given
-        구간_생성_요청(신분당선, new SectionRequest(양재역, 논현역, 20L));
+        구간_생성_요청(신분당선, new SectionRequest(양재역, 논현역, 20L, 5));
 
         // When
         구간_삭제_요청(신분당선, 광교역);
 
         // Then
         ExtractableResponse<Response> 구간_조회_응답 = 노선_조회_요청(신분당선);
-        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 20L, List.of(양재역, 논현역));
+        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 20L, 5, List.of(양재역, 논현역));
     }
 
     /**
@@ -284,14 +284,14 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("[성공] 마지막 구간을 삭제한다.")
     void 마지막_구간을_삭제() {
         // Given
-        구간_생성_요청(신분당선, new SectionRequest(논현역, 신논현역, 20L));
+        구간_생성_요청(신분당선, new SectionRequest(논현역, 신논현역, 20L, 5));
 
         // When
         구간_삭제_요청(신분당선, 신논현역);
 
         // Then
         ExtractableResponse<Response> 구간_조회_응답 = 노선_조회_요청(신분당선);
-        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 30L, List.of(광교역, 논현역));
+        노선_응답_성공_검증(구간_조회_응답, HttpStatus.OK, 30L, 10, List.of(광교역, 논현역));
     }
 
     /**

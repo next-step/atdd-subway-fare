@@ -69,6 +69,7 @@ public class Sections {
     private Section getDividedSection(Section connectedSection, Section newSection) {
         Line line = newSection.getLine();
         Long distance = connectedSection.getDistance() - newSection.getDistance();
+        Integer duration = connectedSection.getDuration() - newSection.getDuration();
 
         return newSection.isSameUpStation(connectedSection) ?
             Section.builder()
@@ -76,12 +77,14 @@ public class Sections {
                 .upStation(newSection.getDownStation())
                 .downStation(connectedSection.getDownStation())
                 .distance(distance)
+                .duration(duration)
                 .build()
             : Section.builder()
                 .line(line)
                 .upStation(connectedSection.getUpStation())
                 .downStation(newSection.getUpStation())
                 .distance(distance)
+                .duration(duration)
                 .build();
     }
 
@@ -133,6 +136,10 @@ public class Sections {
         return sections.stream().mapToLong(Section::getDistance).sum();
     }
 
+    public Integer getTotalDuration() {
+        return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
     public void remove(Station station) {
         if (hasSingleSection() || isNotContains(station)) {
             throw new CannotDeleteSectionException();
@@ -170,6 +177,7 @@ public class Sections {
                 .upStation(firstSection.getUpStation())
                 .downStation(secondSection.getDownStation())
                 .distance(firstSection.getDistance() + secondSection.getDistance())
+                .duration(firstSection.getDuration() + secondSection.getDuration())
                 .build();
             sections.add(section);
         }

@@ -20,12 +20,15 @@ public class LineRequest {
     private Long downStationId;
 
     private Long distance;
+    
+    private Integer duration;
 
     public Line toLine(Station upStation, Station downStation) {
         return Line.builder()
             .name(this.name)
             .color(this.color)
             .distance(this.distance)
+            .duration(this.duration)
             .upStation(upStation)
             .downStation(downStation)
             .build();

@@ -15,6 +15,7 @@ public class SectionRequest {
     private Long upStationId;
     private Long downStationId;
     private Long distance;
+    private Integer duration;
 
     public Section toSection(Line line, Station upStation, Station downStation) {
         return Section.builder()
@@ -22,6 +23,7 @@ public class SectionRequest {
             .upStation(upStation)
             .downStation(downStation)
             .distance(this.distance)
+            .duration(this.duration)
             .build();
     }
 
