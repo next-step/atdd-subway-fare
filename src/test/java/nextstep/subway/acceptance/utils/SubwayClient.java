@@ -1,8 +1,10 @@
 package nextstep.subway.acceptance.utils;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 import nextstep.subway.dto.LineRequest;
@@ -77,7 +79,11 @@ public class SubwayClient {
     }
 
     public static ExtractableResponse<Response> 경로_조회_요청(Long source, Long target, PathType type) {
-        return RestAssured.given().log().all()
+        return 경로_조회_요청(new RequestSpecBuilder().build(), source, target, type);
+    }
+
+    public static ExtractableResponse<Response> 경로_조회_요청(RequestSpecification spec, Long source, Long target, PathType type) {
+        return RestAssured.given(spec).log().all()
             .when().get("/paths?source=" + source + "&target=" + target + "&type=" + type)
             .then().log().all()
             .extract();

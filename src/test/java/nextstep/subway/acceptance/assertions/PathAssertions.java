@@ -6,6 +6,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import java.util.stream.Collectors;
+import nextstep.subway.dto.PathResponse;
 import org.springframework.http.HttpStatus;
 import nextstep.subway.dto.LineResponse;
 import nextstep.subway.dto.StationResponse;
@@ -17,7 +18,7 @@ public class PathAssertions {
         Long distance, Integer duration, List<String> stationNames) {
         assertThat(response.statusCode()).isEqualTo(httpStatus.value());
 
-        LineResponse 조회한_경로_응답 = response.as(LineResponse.class);
+        PathResponse 조회한_경로_응답 = response.as(PathResponse.class);
         assertThat(조회한_경로_응답.getDistance()).isEqualTo(distance);
         assertThat(조회한_경로_응답.getDuration()).isEqualTo(duration);
         assertThat(조회한_경로_응답.getStations().stream()
@@ -33,4 +34,10 @@ public class PathAssertions {
         assertThat(경로_오류_응답.getMessage()).isEqualTo(message);
     }
 
+    public static void 경로_요금_검증(ExtractableResponse<Response> response, HttpStatus httpStatus, Integer fare) {
+        assertThat(response.statusCode()).isEqualTo(httpStatus.value());
+
+        Integer actual = response.jsonPath().getInt("fare");
+        assertThat(actual).isEqualTo(fare);
+    }
 }

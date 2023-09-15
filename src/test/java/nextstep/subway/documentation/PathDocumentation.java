@@ -1,6 +1,6 @@
 package nextstep.subway.documentation;
 
-import static nextstep.subway.documentation.steps.PathDocumentationSteps.경로_조회_요청;
+import static nextstep.subway.acceptance.utils.SubwayClient.경로_조회_요청;
 import static nextstep.subway.documentation.steps.PathDocumentationSteps.경로_조회_요청_문서_데이터_생성;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -15,6 +15,7 @@ import nextstep.subway.documentation.steps.PathDocumentationSteps.PathInformatio
 import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @DisplayName("경로 조회 API 문서")
 public class PathDocumentation extends Documentation {
@@ -35,11 +36,12 @@ public class PathDocumentation extends Documentation {
                 parameterWithName("type").description("경로 조회 타입")
             ),
             responseFields(
-                fieldWithPath("stations").description("경로의 지하철역 리스트"),
-                fieldWithPath("stations.[].id").description("아이디"),
-                fieldWithPath("stations.[].name").description("이름"),
-                fieldWithPath("distance").description("경로의 총 거리"),
-                fieldWithPath("duration").description("경로의 총 소요시간")
+                fieldWithPath("stations").type(JsonFieldType.ARRAY).description("경로의 지하철역 리스트"),
+                fieldWithPath("stations.[].id").type(JsonFieldType.NUMBER).description("아이디"),
+                fieldWithPath("stations.[].name").type(JsonFieldType.STRING).description("이름"),
+                fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로의 총 거리"),
+                fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로의 총 소요시간"),
+                fieldWithPath("fare").type(JsonFieldType.NUMBER).description("경로의 운임요금")
             )));
 
         경로_조회_요청(spec, 경로.출발역, 경로.도착역, PathType.DISTANCE);
