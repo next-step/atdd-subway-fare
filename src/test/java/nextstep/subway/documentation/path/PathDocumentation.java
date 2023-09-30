@@ -11,6 +11,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.util.List;
 
-import static nextstep.subway.documentation.path.PathDocumentationSteps.경로_조회_문서_요청;
+import static nextstep.subway.documentation.path.PathDocumentationSteps.경로_조회_요청_문서화;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -46,6 +47,7 @@ public class PathDocumentation extends Documentation {
         양재역_식별값 = 양재역.getId();
     }
 
+    @DisplayName("지하철 경로 조회 API 문서화")
     @Test
     void path() {
         // given
@@ -57,7 +59,7 @@ public class PathDocumentation extends Documentation {
                 .thenReturn(mockResponse);
 
         // when
-        ExtractableResponse<Response> response = 경로_조회_문서_요청(getPathSpec(), 강남역_식별값, 양재역_식별값);
+        ExtractableResponse<Response> response = 경로_조회_요청_문서화(getPathSpec(), 강남역_식별값, 양재역_식별값);
 
         // then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

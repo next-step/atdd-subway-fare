@@ -6,11 +6,11 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
 
-public class PathDocumentationSteps{
+public class PathDocumentationSteps {
 
     private PathDocumentationSteps() {}
 
-    public static ExtractableResponse<Response> 경로_조회_문서_요청(RequestSpecification getPathSpec,
+    public static ExtractableResponse<Response> 경로_조회_요청_문서화(RequestSpecification getPathSpec,
                                                             Long sourceId,
                                                             Long targetId) {
         return RestAssured
