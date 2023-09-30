@@ -10,18 +10,6 @@ public class PathDocumentationSteps {
 
     private PathDocumentationSteps() {}
 
-    public static ExtractableResponse<Response> 경로_조회_요청_문서화(RequestSpecification getPathSpec,
-                                                            Long sourceId,
-                                                            Long targetId) {
-        return RestAssured
-                .given(getPathSpec).log().all()
-                    .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                    .get("/paths?source={sourceId}&target={targetId}", sourceId, targetId)
-                .then().log().all()
-                .extract();
-    }
-
     public static ExtractableResponse<Response> 최단시간_경로_조회_요청_문서화(RequestSpecification getPathSpec,
                                                              Long sourceId,
                                                              Long targetId,

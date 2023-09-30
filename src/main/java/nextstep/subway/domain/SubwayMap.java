@@ -15,6 +15,7 @@ public class SubwayMap {
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
+        this.findType = "DISTANCE";
         initPath();
     }
 
@@ -24,7 +25,6 @@ public class SubwayMap {
         initPath();
     }
 
-
     public Path findPath(Station source, Station target) {
         DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         GraphPath<Station, SectionEdge> result = dijkstraShortestPath.getPath(source, target);
@@ -32,9 +32,6 @@ public class SubwayMap {
         List<Section> sections = result.getEdgeList().stream()
                 .map(it -> it.getSection())
                 .collect(Collectors.toList());
-        for (Section section : sections) {
-            System.out.println("[SubwayMap] sectionName : " + section.getUpStation().getName());
-        }
 
         return new Path(new Sections(sections));
     }

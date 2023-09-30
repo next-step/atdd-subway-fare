@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.subway.LineSteps.지하철_노선에_지하철_구간_생성_요청;
-import static nextstep.subway.acceptance.subway.PathSteps.경로_조회_요청;
 import static nextstep.subway.acceptance.subway.PathSteps.최단시간_경로_조회_요청;
 import static nextstep.subway.acceptance.subway.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,24 +41,11 @@ class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성_요청("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 1);
-        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 2);
-        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 1);
+        이호선 = 지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 1, 2);
+        신분당선 = 지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 2, 4);
+        삼호선 = 지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 1, 2);
 
-        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 1));
-    }
-
-    /**
-     * 기존 테스트 케이스
-     */
-    @DisplayName("두 역의 경로를 조회한다.")
-    @Test
-    void findPath() {
-        // when
-        ExtractableResponse<Response> response = 경로_조회_요청(교대역, 양재역);
-
-        // then
-        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
+        지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 1, 2));
     }
 
     /**
@@ -79,7 +65,7 @@ class PathAcceptanceTest extends AcceptanceTest {
         assertThat(response.jsonPath().getInt("duration")).isEqualTo(4);
     }
 
-    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance) {
+    private Long 지하철_노선_생성_요청(String name, String color, Long upStation, Long downStation, int distance, int duration) {
         Map<String, String> lineCreateParams;
         lineCreateParams = new HashMap<>();
         lineCreateParams.put("name", name);
@@ -87,15 +73,18 @@ class PathAcceptanceTest extends AcceptanceTest {
         lineCreateParams.put("upStationId", upStation + "");
         lineCreateParams.put("downStationId", downStation + "");
         lineCreateParams.put("distance", distance + "");
+        lineCreateParams.put("duration", duration + "");
 
         return LineSteps.지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
     }
 
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance) {
+    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
+        params.put("duration", duration + "");
+
         return params;
     }
 }

@@ -22,7 +22,6 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.util.List;
 
-import static nextstep.subway.documentation.path.PathDocumentationSteps.경로_조회_요청_문서화;
 import static nextstep.subway.documentation.path.PathDocumentationSteps.최단시간_경로_조회_요청_문서화;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -48,24 +47,6 @@ public class PathDocumentation extends Documentation {
         양재역_식별값 = 양재역.getId();
     }
 
-    @DisplayName("지하철 경로 조회 API 문서화")
-    @Test
-    void path() {
-        // given
-        PathResponse mockResponse = new PathResponse(List.of(
-                new StationResponse(강남역),
-                new StationResponse(양재역)),
-                10);
-        Mockito.when(pathService.findPath(Mockito.anyLong(), Mockito.anyLong()))
-                .thenReturn(mockResponse);
-
-        // when
-        ExtractableResponse<Response> response = 경로_조회_요청_문서화(getPathSpec(), 강남역_식별값, 양재역_식별값);
-
-        // then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    }
-
     @DisplayName("지하철 최단 경로 조회 API 문서화")
     @Test
     void shortestPath() {
@@ -75,8 +56,9 @@ public class PathDocumentation extends Documentation {
                 new StationResponse(강남역),
                 new StationResponse(양재역),
                 new StationResponse(남부터미널역)),
-                2);
-        Mockito.when(pathService.findPath(Mockito.anyLong(), Mockito.anyLong()))
+                2,
+                4);
+        Mockito.when(pathService.findShortestPath(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString()))
                 .thenReturn(mockResponse);
 
         // when
@@ -87,28 +69,6 @@ public class PathDocumentation extends Documentation {
 
         // then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    }
-
-    private RequestSpecification getPathSpec() {
-        return getSpec(
-                "path",
-                getPathsRequestField(),
-                getPathsResponseField());
-    }
-
-    private RequestParametersSnippet getPathsRequestField() {
-        return requestParameters(
-                parameterWithName("source").description("출발 역"),
-                parameterWithName("target").description("종점 역"));
-    }
-
-    private ResponseFieldsSnippet getPathsResponseField() {
-        return responseFields(
-                fieldWithPath("stations[].id").description("지하철 역 id"),
-                fieldWithPath("stations[].name").description("지하철 역 이름"),
-                fieldWithPath("stations[].createdTime").description("지하철 역 생성 시간"),
-                fieldWithPath("stations[].modifiedTime").description("지하철 역 변경 시간"),
-                fieldWithPath("distance").description("지하철 구간 거리"));
     }
 
     private RequestSpecification getShortestPathSpec() {

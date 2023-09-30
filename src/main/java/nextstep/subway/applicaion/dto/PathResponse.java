@@ -27,7 +27,6 @@ public class PathResponse {
                 .collect(Collectors.toList());
         int distance = path.extractDistance();
         int duration = path.extractDuration();
-        System.out.println("[PathResponse] duration : " + duration);
 
         return new PathResponse(stations, distance, duration);
     }
