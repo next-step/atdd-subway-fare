@@ -11,12 +11,11 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
+
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
-    public Sections() {
-    }
-
+    public Sections() { }
     public Sections(List<Section> sections) {
         this.sections = sections;
     }
@@ -149,5 +148,9 @@ public class Sections {
 
     public int totalDistance() {
         return sections.stream().mapToInt(Section::getDistance).sum();
+    }
+
+    public int totalDuration() {
+        return sections.stream().mapToInt(Section::getDuration).sum();
     }
 }
