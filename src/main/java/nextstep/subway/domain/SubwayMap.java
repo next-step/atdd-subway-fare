@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.common.constant.PathType;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -15,7 +16,7 @@ public class SubwayMap {
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
-        this.findType = "DISTANCE";
+        this.findType = PathType.DISTANCE.getName();
         initPath();
     }
 
@@ -74,7 +75,7 @@ public class SubwayMap {
     }
 
     private int getWeightByFindType(Section section) {
-        if (findType.equals("DURATION")) { return section.getDuration(); }
+        if (findType.equals(PathType.DURATION.getName())) { return section.getDuration(); }
         return section.getDistance();
     }
 }
