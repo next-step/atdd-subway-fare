@@ -11,6 +11,7 @@ import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.restdocs.request.RequestParametersSnippet;
 
 import java.util.List;
 
-import static nextstep.subway.documentation.path.PathDocumentationSteps.경로_조회_문서_요청;
+import static nextstep.subway.documentation.path.PathDocumentationSteps.최단시간_경로_조회_요청_문서화;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -46,42 +47,51 @@ public class PathDocumentation extends Documentation {
         양재역_식별값 = 양재역.getId();
     }
 
+    @DisplayName("지하철 최단 경로 조회 API 문서화")
     @Test
-    void path() {
+    void shortestPath() {
         // given
+        Station 남부터미널역 = stationRepository.save(new Station("남부터미널역"));
         PathResponse mockResponse = new PathResponse(List.of(
                 new StationResponse(강남역),
-                new StationResponse(양재역)),
-                10);
-        Mockito.when(pathService.findPath(Mockito.anyLong(), Mockito.anyLong()))
+                new StationResponse(양재역),
+                new StationResponse(남부터미널역)),
+                2,
+                4);
+        Mockito.when(pathService.findShortestPath(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString()))
                 .thenReturn(mockResponse);
 
         // when
-        ExtractableResponse<Response> response = 경로_조회_문서_요청(getPathSpec(), 강남역_식별값, 양재역_식별값);
+        ExtractableResponse<Response> response = 최단시간_경로_조회_요청_문서화(getShortestPathSpec(),
+                남부터미널역.getId(),
+                양재역_식별값,
+                "DURATION");
 
         // then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private RequestSpecification getPathSpec() {
+    private RequestSpecification getShortestPathSpec() {
         return getSpec(
                 "path",
-                getPathsRequestField(),
-                getPathsResponseField());
+                getShortestPathsRequestField(),
+                getShortestPathsResponseField());
     }
 
-    private RequestParametersSnippet getPathsRequestField() {
+    private RequestParametersSnippet getShortestPathsRequestField() {
         return requestParameters(
                 parameterWithName("source").description("출발 역"),
-                parameterWithName("target").description("종점 역"));
+                parameterWithName("target").description("종점 역"),
+                parameterWithName("type").description("경로 조회 유형"));
     }
 
-    private ResponseFieldsSnippet getPathsResponseField() {
+    private ResponseFieldsSnippet getShortestPathsResponseField() {
         return responseFields(
                 fieldWithPath("stations[].id").description("지하철 역 id"),
                 fieldWithPath("stations[].name").description("지하철 역 이름"),
                 fieldWithPath("stations[].createdTime").description("지하철 역 생성 시간"),
                 fieldWithPath("stations[].modifiedTime").description("지하철 역 변경 시간"),
-                fieldWithPath("distance").description("지하철 구간 거리"));
+                fieldWithPath("distance").description("지하철 경로 최단 거리"),
+                fieldWithPath("duration").description("지하철 경로 소요 시간"));
     }
 }

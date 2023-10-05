@@ -12,12 +12,11 @@ public class Path {
     public Sections getSections() {
         return sections;
     }
-
-    public int extractDistance() {
-        return sections.totalDistance();
-    }
-
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    public int extractDistance() { return sections.totalDistance(); }
+    public int extractDuration() { return sections.totalDuration(); }
+
 }
