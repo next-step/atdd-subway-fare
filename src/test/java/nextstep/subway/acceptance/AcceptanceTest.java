@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import static nextstep.subway.acceptance.MemberSteps.베어러_인증_로그인_요청;
+import static nextstep.subway.acceptance.member.MemberSteps.베어러_인증_로그인_요청;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -25,7 +25,7 @@ public class AcceptanceTest {
     @LocalServerPort
     private int port;
 
-    String 관리자;
+    public String 관리자;
 
     @BeforeEach
     public void setUp() {
