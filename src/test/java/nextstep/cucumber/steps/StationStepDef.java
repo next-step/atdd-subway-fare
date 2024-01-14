@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 public class StationStepDef implements En {
     ExtractableResponse<Response> response;
 
@@ -41,6 +42,7 @@ public class StationStepDef implements En {
                             .extract().jsonPath().getList("name", String.class);
             assertThat(stationNames).containsAnyOf("강남역");
         });
+
     }
 
 }
