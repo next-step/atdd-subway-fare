@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.PathSteps.두_역의_최단_거리_경로_조회를_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,13 +55,5 @@ class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-    }
-
-    private ExtractableResponse<Response> 두_역의_최단_거리_경로_조회를_요청(Long source, Long target) {
-        return RestAssured
-                .given().log().all()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
-                .then().log().all().extract();
     }
 }
