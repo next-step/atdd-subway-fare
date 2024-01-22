@@ -23,7 +23,5 @@ Feature: 경로 조회 기능
       | duration    | 3      |
     When '교대역'에서 '양재역'까지 최단 경로 조회 요청하면
     Then 최단 경로 응답와 총 거리, 소요 시간, 요금정보를 조회한다
-      | stations | 교대역,남부터미널역,양재역 |
-      | distance | 5              |
-      | duration | 5              |
-      | fare     | 1250           |
+      | stations       | distance | duration | fare |
+      | 교대역,남부터미널역,양재역 | 5        | 5        | 1250 |

@@ -20,6 +20,7 @@ import java.util.Map;
 import nextstep.subway.acceptance.LineSteps;
 import nextstep.subway.cucumber.AcceptanceContext;
 import nextstep.subway.cucumber.CucumberTest;
+import nextstep.subway.cucumber.steps.dto.PathStepResponse;
 import nextstep.subway.domain.PathType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -64,13 +65,18 @@ public class PathStepDef extends CucumberTest implements En {
             response = 두_역의_경로_조회를_요청(given(), sourceId, targetId, PathType.DISTANCE);
         });
 
-        Then("^최단 경로 응답와 총 거리, 소요 시간, 요금정보를 조회한다$", (final DataTable dataTable) -> {
-            final Map<String, String> pathResponse = dataTable.asMap();
+        DataTableType((final Map<String, String> pathStepResponse) -> new PathStepResponse(
+            pathStepResponse.get("stations").split(","),
+            Integer.parseInt(pathStepResponse.get("distance")),
+            Integer.parseInt(pathStepResponse.get("duration")),
+            Integer.parseInt(pathStepResponse.get("fare"))
+        ));
 
-            경로_역_목록_조회됨(response, pathResponse.get("stations").split(","));
-            경로_전체_거리_조회됨(response, Integer.parseInt(pathResponse.get("distance")));
-            경로_전체_시간_조회됨(response, Integer.parseInt(pathResponse.get("duration")));
-            경로_전체_요금_조회됨(response, Integer.parseInt(pathResponse.get("fare")));
+        Then("^최단 경로 응답와 총 거리, 소요 시간, 요금정보를 조회한다$", (final PathStepResponse pathStepResponse) -> {
+            경로_역_목록_조회됨(response, pathStepResponse.getStations());
+            경로_전체_거리_조회됨(response, pathStepResponse.getDistance());
+            경로_전체_시간_조회됨(response, pathStepResponse.getDuration());
+            경로_전체_요금_조회됨(response, pathStepResponse.getFare());
         });
     }
 
