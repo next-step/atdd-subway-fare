@@ -81,6 +81,10 @@ public class LineSteps {
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(idsOfStations);
     }
 
+    public static void 경로_역_목록_조회됨(ExtractableResponse<Response> response, String[] stationNames) {
+        assertThat(response.jsonPath().getList("stations.name", String.class)).containsExactly(stationNames);
+    }
+
     public static void 경로_전체_거리_조회됨(ExtractableResponse<Response> response, int distance) {
         assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
     }
