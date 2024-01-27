@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static nextstep.subway.acceptance.LineSteps.*;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
@@ -63,8 +64,15 @@ public class PathStepDef implements En {
                     .then().log().all().extract();
         });
 
-        Then("최단 거리 경로를 응답 받는다", () -> {
-            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stations.get("교대역"), stations.get("남부터미널역"), stations.get("양재역"));
+        Then("최단 거리 경로를 응답 받는다", (DataTable table) -> {
+            List<List<String>> rows = table.asLists(String.class);
+
+            List<Long> expected = rows.stream()
+                    .map(it -> it.get(0))
+                    .map(it -> stations.get(it))
+                    .collect(Collectors.toList());
+
+            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
         });
     }
 
