@@ -13,4 +13,9 @@ import java.util.Map;
 public class AcceptanceContext {
     public Map<String, Object> store = new HashMap<>();
     public ExtractableResponse<Response> response;
+
+    public void clear() {
+        store.clear();
+        response = null;
+    }
 }
