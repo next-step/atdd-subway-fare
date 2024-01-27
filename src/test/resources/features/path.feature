@@ -14,5 +14,5 @@ Feature: 지하철 경로 검색
     Given 지하철 노선에 지하철 구간 생성 요청하고
       | name   | upStationName | downStationName | distance |
       | 3호선   |    남부터미널역   |      양재역       |     3    |
-    When 두 역의 최단 거리 경로를 조회하면
+    When "교대역"과 "양재역"의 최단 거리 경로를 조회하면
     Then 최단 거리 경로를 응답 받는다

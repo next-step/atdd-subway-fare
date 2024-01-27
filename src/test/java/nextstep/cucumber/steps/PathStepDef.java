@@ -55,11 +55,11 @@ public class PathStepDef implements En {
             }
         });
 
-        When("두 역의 최단 거리 경로를 조회하면", () -> {
+        When("{string}과 {string}의 최단 거리 경로를 조회하면", (String source, String target) -> {
             response = RestAssured
                     .given().log().all()
                     .accept(MediaType.APPLICATION_JSON_VALUE)
-                    .when().get("/paths?source={sourceId}&target={targetId}", stations.get("교대역"), stations.get("양재역"))
+                    .when().get("/paths?source={sourceId}&target={targetId}", stations.get(source), stations.get(target))
                     .then().log().all().extract();
         });
 
