@@ -3,11 +3,10 @@ package nextstep.cucumber.steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import nextstep.cucumber.AcceptanceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,9 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
 
-    private Map<String, Long> stations = new HashMap<>();
-    private Map<String, Long> lines = new HashMap<>();
-    ExtractableResponse<Response> response;
+    @Autowired
+    private AcceptanceContext acceptanceContext;
 
     public PathStepDef() {
         Given("지하철 역들을 생성 요청하고", (DataTable table) -> {
@@ -28,7 +26,7 @@ public class PathStepDef implements En {
             for (Map<String, String> map : maps) {
                 String name = map.get("name");
                 Long stationId = 지하철역_생성_요청(name).jsonPath().getLong("id");
-                stations.put(name, stationId);
+                acceptanceContext.store.put(name, stationId);
             }
         });
 
@@ -40,8 +38,8 @@ public class PathStepDef implements En {
                 String downStationName = map.get("downStationName");
                 int distance = Integer.parseInt(map.get("distance"));
 
-                Long lineId = 지하철_노선_생성_요청(name, color, stations.get(upStationName), stations.get(downStationName), distance);
-                lines.put(name, lineId);
+                Long lineId = 지하철_노선_생성_요청(name, color, (Long) acceptanceContext.store.get(upStationName), (Long) acceptanceContext.store.get(downStationName), distance);
+                acceptanceContext.store.put(name, lineId);
             }
         });
 
@@ -52,15 +50,15 @@ public class PathStepDef implements En {
                 String downStationName = map.get("downStationName");
                 int distance = Integer.parseInt(map.get("distance"));
 
-                지하철_노선에_지하철_구간_생성_요청(lines.get(name), createSectionCreateParams(stations.get(upStationName), stations.get(downStationName), distance));
+                지하철_노선에_지하철_구간_생성_요청((Long) acceptanceContext.store.get(name), createSectionCreateParams((Long) acceptanceContext.store.get(upStationName), (Long) acceptanceContext.store.get(downStationName), distance));
             }
         });
 
         When("{string}과 {string}의 최단 거리 경로를 조회하면", (String source, String target) -> {
-            response = RestAssured
+            acceptanceContext.response = RestAssured
                     .given().log().all()
                     .accept(MediaType.APPLICATION_JSON_VALUE)
-                    .when().get("/paths?source={sourceId}&target={targetId}", stations.get(source), stations.get(target))
+                    .when().get("/paths?source={sourceId}&target={targetId}", acceptanceContext.store.get(source), acceptanceContext.store.get(target))
                     .then().log().all().extract();
         });
 
@@ -69,10 +67,10 @@ public class PathStepDef implements En {
 
             List<Long> expected = rows.stream()
                     .map(it -> it.get(0))
-                    .map(it -> stations.get(it))
+                    .map(it -> (Long) acceptanceContext.store.get(it))
                     .collect(Collectors.toList());
 
-            assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
+            assertThat(acceptanceContext.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
         });
     }
 
