@@ -7,12 +7,9 @@ import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Profile("test")
 public class AcceptanceContext {
-    public Map<String, Object> store = new HashMap<>();
+    public CucumberStore store = new CucumberStore();
     public ExtractableResponse<Response> response;
 
     @Value("${local.server.port}")

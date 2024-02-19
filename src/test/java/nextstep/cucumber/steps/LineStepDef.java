@@ -24,8 +24,8 @@ public class LineStepDef implements En {
             maps.forEach(data -> {
                 final String lineName = data.get("name");
                 final String lineColor = data.get("color");
-                final StationResponse upStation = ((StationResponse) context.store.get(data.get("upStation")));
-                final StationResponse downStation = ((StationResponse) context.store.get(data.get("downStation")));
+                final StationResponse upStation = context.store.get(data.get("upStation"), StationResponse.class);
+                final StationResponse downStation = context.store.get(data.get("downStation"), StationResponse.class);
                 final int distance = Integer.parseInt(data.get("distance"));
                 final ExtractableResponse<Response> response = LineApiHelper.createLine(lineName, lineColor, upStation.getId(), downStation.getId(), distance);
                 context.store.put(lineName, response.as(LineResponse.class));
@@ -35,10 +35,10 @@ public class LineStepDef implements En {
             final List<Map<String, String>> maps = table.asMaps();
             maps.forEach(data -> {
                 final String lineName = data.get("lineName");
-                final StationResponse upStation = ((StationResponse) context.store.get(data.get("upStation")));
-                final StationResponse downStation = ((StationResponse) context.store.get(data.get("downStation")));
+                final StationResponse upStation = context.store.get(data.get("upStation"), StationResponse.class);
+                final StationResponse downStation = context.store.get(data.get("downStation"), StationResponse.class);
                 final int distance = Integer.parseInt(data.get("distance"));
-                final LineResponse line = (LineResponse) context.store.get(lineName);
+                final LineResponse line = context.store.get(lineName, LineResponse.class);
                 SectionApiHelper.createSection(line.getId(), upStation.getId(), downStation.getId(), distance);
             });
         });
