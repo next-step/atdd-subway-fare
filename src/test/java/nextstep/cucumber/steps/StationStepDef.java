@@ -29,13 +29,11 @@ public class StationStepDef implements En {
             });
         });
 
-        When("지하철역을 생성하면", () -> {
-            context.response = StationApiHelper.createStation("강남역");
-        });
+        When("지하철역을 생성하면",
+                () -> context.response = StationApiHelper.createStation("강남역"));
 
-        Then("지하철역이 생성된다", () -> {
-            assertThat(context.response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        });
+        Then("지하철역이 생성된다",
+                () -> assertThat(context.response.statusCode()).isEqualTo(HttpStatus.CREATED.value()));
 
         Then("지하철역 목록 조회 시 생성한 역을 찾을 수 있다", () -> {
             final ExtractableResponse<Response> response = StationApiHelper.fetchStations();
