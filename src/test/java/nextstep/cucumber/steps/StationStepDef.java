@@ -25,7 +25,7 @@ public class StationStepDef implements En {
             maps.forEach(params -> {
                 final String stationName = params.get("name");
                 final ExtractableResponse<Response> response = StationApiHelper.createStation(stationName);
-                context.store.put(stationName, context.objectMapper.convertValue(response.jsonPath().get(), StationResponse.class));
+                context.store.put(stationName, response.as(StationResponse.class));
             });
         });
 

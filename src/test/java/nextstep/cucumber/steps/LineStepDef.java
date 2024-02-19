@@ -28,7 +28,7 @@ public class LineStepDef implements En {
                 final StationResponse downStation = ((StationResponse) context.store.get(data.get("downStation")));
                 final int distance = Integer.parseInt(data.get("distance"));
                 final ExtractableResponse<Response> response = LineApiHelper.createLine(lineName, lineColor, upStation.getId(), downStation.getId(), distance);
-                context.store.put(lineName, context.objectMapper.convertValue(response.jsonPath().get(), LineResponse.class));
+                context.store.put(lineName, response.as(LineResponse.class));
             });
         });
         Given("지하철 구간을 등록 요청하고", (final DataTable table) -> {
