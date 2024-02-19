@@ -22,8 +22,10 @@ public class PathStepDef implements En {
         });
         Then("{string} 경로와 거리 {int}이 조회된다", (final String pathString, final Integer distance) -> {
             final List<String> split = List.of(pathString.split(","));
-            assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));
-            assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
+            assertSoftly(softly -> {
+                softly.assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));
+                softly.assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
+            });
         });
     }
 }
