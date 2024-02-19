@@ -1,6 +1,5 @@
 package nextstep.favorite.application;
 
-import nextstep.auth.ui.UserPrincipal;
 import nextstep.common.fixture.StationFactory;
 import nextstep.core.DatabaseCleaner;
 import nextstep.core.TestConfig;
@@ -37,7 +36,7 @@ class FavoriteServiceTest {
     @Autowired
     private FavoriteService favoriteService;
 
-    private UserPrincipal userPrincipal;
+    private final Long memberId = 1L;
     private Station 강남역;
     private Station 선릉역;
     private Station 서울역;
@@ -45,7 +44,6 @@ class FavoriteServiceTest {
 
     @BeforeEach
     void setUp() {
-        userPrincipal = new UserPrincipal(1L, "test@test.com");
         강남역 = stationRepository.save(StationFactory.createStation("강남역"));
         선릉역 = stationRepository.save(StationFactory.createStation("선릉역"));
         서울역 = stationRepository.save(StationFactory.createStation("서울역"));
@@ -64,7 +62,7 @@ class FavoriteServiceTest {
     void createFavoriteTest() {
         final FavoriteRequest request = new FavoriteRequest(강남역.getId(), 선릉역.getId());
 
-        final FavoriteResponse actual = favoriteService.createFavorite(userPrincipal, request);
+        final FavoriteResponse actual = favoriteService.createFavorite(memberId, request);
 
         final FavoriteResponse expected = new FavoriteResponse(actual.getId(), StationResponse.from(강남역), StationResponse.from(선릉역));
         assertThat(actual).isEqualTo(expected);
@@ -75,7 +73,7 @@ class FavoriteServiceTest {
     void favoriteTargetSourceSameTest() {
         final FavoriteRequest request = new FavoriteRequest(강남역.getId(), 강남역.getId());
 
-        assertThatThrownBy(() -> favoriteService.createFavorite(userPrincipal, request))
+        assertThatThrownBy(() -> favoriteService.createFavorite(memberId, request))
                 .isInstanceOf(FavoriteSaveException.class)
                 .hasMessageContaining("출발역과 도착역이 같은 경로는 즐겨찾기에 추가할 수 없습니다.");
     }
@@ -85,7 +83,7 @@ class FavoriteServiceTest {
     void favoritePathNotValidTest() {
         final FavoriteRequest request = new FavoriteRequest(강남역.getId(), 서울역.getId());
 
-        assertThatThrownBy(() -> favoriteService.createFavorite(userPrincipal, request))
+        assertThatThrownBy(() -> favoriteService.createFavorite(memberId, request))
                 .isInstanceOf(FavoriteSaveException.class)
                 .hasMessageContaining("존재하지 않는 경로는 즐겨찾기에 추가할 수 없습니다.");
     }
@@ -94,9 +92,9 @@ class FavoriteServiceTest {
     @DisplayName("이미 등록한 즐겨찾기 경로는 다시 등록할 수 없다")
     void favoritePathDuplicateTest() {
         final FavoriteRequest request = new FavoriteRequest(강남역.getId(), 선릉역.getId());
-        favoriteService.createFavorite(userPrincipal, request);
+        favoriteService.createFavorite(memberId, request);
 
-        assertThatThrownBy(() -> favoriteService.createFavorite(userPrincipal, request))
+        assertThatThrownBy(() -> favoriteService.createFavorite(memberId, request))
                 .isInstanceOf(FavoriteSaveException.class)
                 .hasMessageContaining("이미 등록된 즐겨찾기 경로입니다.");
     }
@@ -105,9 +103,9 @@ class FavoriteServiceTest {
     @DisplayName("즐겨찾기를 삭제할 수 있다")
     void deleteFavoriteTest() {
         final FavoriteRequest request = new FavoriteRequest(강남역.getId(), 선릉역.getId());
-        final FavoriteResponse favoriteResponse = favoriteService.createFavorite(userPrincipal, request);
+        final FavoriteResponse favoriteResponse = favoriteService.createFavorite(memberId, request);
 
-        assertDoesNotThrow(() -> favoriteService.deleteFavorite(userPrincipal, favoriteResponse.getId()));
+        assertDoesNotThrow(() -> favoriteService.deleteFavorite(memberId, favoriteResponse.getId()));
     }
 
     @Test
@@ -115,7 +113,7 @@ class FavoriteServiceTest {
     void deleteFavoriteNotExistTest() {
         final Long favoriteId = 1L;
 
-        assertThatThrownBy(() -> favoriteService.deleteFavorite(userPrincipal, favoriteId))
+        assertThatThrownBy(() -> favoriteService.deleteFavorite(memberId, favoriteId))
                 .isInstanceOf(FavoriteNotExistException.class);
     }
 }

@@ -22,7 +22,7 @@ public class FavoriteController {
     @PostMapping("/favorites")
     public ResponseEntity<FavoriteResponse> createFavorite(@AuthenticationPrincipal final UserPrincipal userPrincipal, @RequestBody final FavoriteRequest request) {
         request.validate();
-        final FavoriteResponse response = favoriteService.createFavorite(userPrincipal, request);
+        final FavoriteResponse response = favoriteService.createFavorite(userPrincipal.getId(), request);
         return ResponseEntity
                 .created(URI.create("/favorites/" + response.getId()))
                 .build();
@@ -30,13 +30,13 @@ public class FavoriteController {
 
     @GetMapping("/favorites")
     public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
-        final List<FavoriteResponse> favorites = favoriteService.findFavorites(userPrincipal);
+        final List<FavoriteResponse> favorites = favoriteService.findFavorites(userPrincipal.getId());
         return ResponseEntity.ok().body(favorites);
     }
 
     @DeleteMapping("/favorites/{id}")
     public ResponseEntity<Void> deleteFavorite(@PathVariable final Long id, @AuthenticationPrincipal final UserPrincipal userPrincipal) {
-        favoriteService.deleteFavorite(userPrincipal, id);
+        favoriteService.deleteFavorite(userPrincipal.getId(), id);
         return ResponseEntity.noContent().build();
     }
 }
