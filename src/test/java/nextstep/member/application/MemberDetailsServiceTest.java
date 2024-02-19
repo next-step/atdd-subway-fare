@@ -39,7 +39,7 @@ class MemberDetailsServiceTest {
     }
 
     @Test
-    @DisplayName("loadUserByEmail 시 member 가 이미 존재한다면 생성하지 않고 기존 멤버 정보를 불러온다.")
+    @DisplayName("member 가 이미 존재한다면 생성하지 않고 기존 멤버 정보를 불러온다.")
     void loadUserByEmailWhenMemberExist() {
         final MemberResponse memberResponse = memberService.createMember(new MemberRequest(EMAIL, "", AGE));
 
@@ -49,14 +49,14 @@ class MemberDetailsServiceTest {
     }
 
     @Test
-    @DisplayName("loadUserByEmail 시 member 가 존재하지 않는다면 MemberNotFoundException 이 던져진다.")
+    @DisplayName("member 가 존재하지 않는다면 MemberNotFoundException 이 던져진다.")
     void loadUserByEmailWhenMemberNotExist() {
         assertThatThrownBy(() -> memberDetailsService.loadUserByEmail(EMAIL))
                 .isInstanceOf(MemberNotFoundException.class);
     }
 
     @Test
-    @DisplayName("loadOrCreateUser 시 존재하지 않는다면 새로 만든 뒤 반환 받고 존재한다면 UserDetail 정보를 반환 받을 수 있다.")
+    @DisplayName("member 가 존재하지 않는다면 새로 만든 뒤 반환 받고 존재한다면 UserDetail 정보를 반환 받을 수 있다.")
     void loadOrCreateUserTest() {
         final UserDetail userDetail = memberDetailsService.loadOrCreateUser(new OAuth2Response(EMAIL, AGE));
         final UserDetail userDetailSecond = memberDetailsService.loadOrCreateUser(new OAuth2Response(EMAIL, AGE));
