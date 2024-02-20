@@ -36,8 +36,8 @@ class SectionsTest {
         잠실역 = StationFactory.createStation(5L, "잠실역");
         강남역_선릉역_구간_길이 = 10;
         선릉역_역삼역_구간_길이 = 20;
-        강남역_선릉역_구간 = SectionFactory.createSection(1L, 강남역, 선릉역, 강남역_선릉역_구간_길이);
-        선릉역_역삼역_구간 = SectionFactory.createSection(2L, 선릉역, 역삼역, 선릉역_역삼역_구간_길이);
+        강남역_선릉역_구간 = SectionFactory.createSection(1L, 강남역, 선릉역, 강남역_선릉역_구간_길이, 0);
+        선릉역_역삼역_구간 = SectionFactory.createSection(2L, 선릉역, 역삼역, 선릉역_역삼역_구간_길이, 0);
         sections = new Sections();
         sections.connect(강남역_선릉역_구간);
         sections.connect(선릉역_역삼역_구간);
@@ -70,7 +70,7 @@ class SectionsTest {
         @Test
         @DisplayName("Section 을 가운데에 추가할 수 있다.")
         void canConnectSectionAtMiddle() {
-            final Section 강남역_교대역_구간 = SectionFactory.createSection(3L, 강남역, 교대역, 10);
+            final Section 강남역_교대역_구간 = SectionFactory.createSection(3L, 강남역, 교대역, 10, 0);
             sections.connect(강남역_교대역_구간);
 
             assertSoftly(softly -> {
@@ -82,7 +82,7 @@ class SectionsTest {
         @Test
         @DisplayName("Section 을 처음에 추가할 수 있다.")
         void canConnectSectionAtFirst() {
-            final Section 교대역_강남역_구간 = SectionFactory.createSection(3L, 교대역, 강남역, 10);
+            final Section 교대역_강남역_구간 = SectionFactory.createSection(3L, 교대역, 강남역, 10, 0);
             sections.connect(교대역_강남역_구간);
 
             assertSoftly(softly -> {
@@ -94,7 +94,7 @@ class SectionsTest {
         @Test
         @DisplayName("추가할 Section 의 상행역, 하행역 모두 이미 등록되어있으면 SectionConnectException 이 던져진다.")
         void connectFailsWhenSectionsAlreadyHasDownStation() {
-            final Section 역삼역_강남역_구간 = SectionFactory.createSection(3L, 역삼역, 강남역, 10);
+            final Section 역삼역_강남역_구간 = SectionFactory.createSection(3L, 역삼역, 강남역, 10, 0);
 
             assertThatThrownBy(() -> sections.connect(역삼역_강남역_구간))
                     .isInstanceOf(SectionConnectException.class)
@@ -104,7 +104,7 @@ class SectionsTest {
         @Test
         @DisplayName("추가할 Section 의 상행역, 하행역 모두 현재 Sections 에 포함되어 있지 않다면 SectionConnectException 이 던져진다.")
         void connectFailsWhenSectionsNotContainsUpStationOfSection() {
-            final Section 교대역_잠실역_구간 = SectionFactory.createSection(3L, 교대역, 잠실역, 10);
+            final Section 교대역_잠실역_구간 = SectionFactory.createSection(3L, 교대역, 잠실역, 10, 0);
 
             assertThatThrownBy(() -> sections.connect(교대역_잠실역_구간))
                     .isInstanceOf(SectionConnectException.class)
@@ -114,7 +114,7 @@ class SectionsTest {
         @Test
         @DisplayName("추가할 Section 이 Sections 가운데인데, 길이가 현재 Sections 의 총 길이보다 길거나 길다면 SectionConnectException 이 던져진다.")
         void connectFailsWhenSectionsDistanceLoeThanNewMiddleSection() {
-            final Section 강남역_교대역_구간 = SectionFactory.createSection(3L, 강남역, 교대역, 강남역_선릉역_구간_길이 + 선릉역_역삼역_구간_길이);
+            final Section 강남역_교대역_구간 = SectionFactory.createSection(3L, 강남역, 교대역, 강남역_선릉역_구간_길이 + 선릉역_역삼역_구간_길이, 0);
 
             assertThatThrownBy(() -> sections.connect(강남역_교대역_구간))
                     .isInstanceOf(SectionConnectException.class)

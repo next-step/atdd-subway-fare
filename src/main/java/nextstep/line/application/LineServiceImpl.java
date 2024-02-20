@@ -92,7 +92,7 @@ public class LineServiceImpl implements LineService, LineProvider {
     private Section createSection(final SectionCreateRequest sectionCreateRequest) {
         final Station upStation = stationProvider.findById(sectionCreateRequest.getUpStationId());
         final Station downStation = stationProvider.findById(sectionCreateRequest.getDownStationId());
-        return new Section(upStation, downStation, sectionCreateRequest.getDistance());
+        return new Section(upStation, downStation, sectionCreateRequest.getDistance(), 0);
     }
 
     private Line findByIdWithSections(final Long id) {

@@ -22,13 +22,17 @@ public class Section implements Comparable<Section> {
     @Column(nullable = false)
     private int distance;
 
+    @Column(nullable = false)
+    private int duration;
+
     protected Section() {
     }
 
-    public Section(final Station upStation, final Station downStation, final int distance) {
+    public Section(final Station upStation, final Station downStation, final int distance, final int duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -45,6 +49,10 @@ public class Section implements Comparable<Section> {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public boolean contains(final Station station) {
@@ -78,10 +86,12 @@ public class Section implements Comparable<Section> {
     public void shorten(final Section section) {
         this.upStation = section.downStation;
         this.distance -= section.distance;
+        this.duration -= section.duration;
     }
 
     public void extend(final Section section) {
         this.upStation = section.upStation;
         this.distance += section.distance;
+        this.duration += section.duration;
     }
 }

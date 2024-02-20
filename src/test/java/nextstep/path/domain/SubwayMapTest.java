@@ -42,10 +42,10 @@ class SubwayMapTest {
         양재역 = StationFactory.createStation(양재역_Id, "양재역");
         남부터미널역 = StationFactory.createStation(남부터미널역_Id, "남부터미널역");
         서울역 = StationFactory.createStation(서울역_Id, "남부터미널역");
-        final Section 교대역_강남역_구간 = SectionFactory.createSection(1L, 교대역, 강남역, 교대역_강남역_distance);
-        final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance);
-        final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance);
-        final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance);
+        final Section 교대역_강남역_구간 = SectionFactory.createSection(1L, 교대역, 강남역, 교대역_강남역_distance, 0);
+        final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance, 0);
+        final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance, 0);
+        final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance, 0);
         final Line 이호선 = LineFactory.createLine(1L, "1호선", "green", 교대역_강남역_구간);
         final Line 신분당선 = LineFactory.createLine(2L, "신분당선", "red", 강남역_양재역_구간);
         final Line 삼호선 = LineFactory.createLine(3L, "2호선", "orange", 교대역_남부터미널_구간);

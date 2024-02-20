@@ -61,7 +61,7 @@ class PathServiceMockTest {
 
         final PathResponse response = pathService.findShortestPath(searchRequest);
 
-        assertSoftly(softly->{
+        assertSoftly(softly -> {
             softly.assertThat(response.getDistance()).isEqualTo(교대역_강남역_distance + 교대역_남부터미널_distance);
             softly.assertThat(response.getStations()).extracting("id")
                     .containsExactly(강남역_Id, 교대역_Id, 남부터미널역_Id);
@@ -86,7 +86,7 @@ class PathServiceMockTest {
 
         given(lineProvider.getAllLines()).willReturn(createLines());
 
-        assertSoftly(softly->{
+        assertSoftly(softly -> {
             softly.assertThatThrownBy(() -> pathService.findShortestPath(notExistSourceRequest))
                     .isInstanceOf(StationNotExistException.class);
             softly.assertThatThrownBy(() -> pathService.findShortestPath(notExistTargetRequest))
@@ -113,7 +113,7 @@ class PathServiceMockTest {
         final PathSearchRequest validSearchRequest = new PathSearchRequest(강남역_Id, 남부터미널역_Id);
         final PathSearchRequest invalidSearchRequest = new PathSearchRequest(강남역_Id, 서울역_Id);
 
-        assertSoftly(softly->{
+        assertSoftly(softly -> {
             softly.assertThat(pathService.isInvalidPath(validSearchRequest)).isFalse();
             softly.assertThat(pathService.isInvalidPath(invalidSearchRequest)).isTrue();
         });
@@ -124,10 +124,10 @@ class PathServiceMockTest {
         final Station 강남역 = StationFactory.createStation(강남역_Id, "강남역");
         final Station 양재역 = StationFactory.createStation(양재역_Id, "양재역");
         final Station 남부터미널역 = StationFactory.createStation(남부터미널역_Id, "남부터미널역");
-        final Section 교대역_강남역_구간 = SectionFactory.createSection(1L, 교대역, 강남역, 교대역_강남역_distance);
-        final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance);
-        final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance);
-        final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance);
+        final Section 교대역_강남역_구간 = SectionFactory.createSection(1L, 교대역, 강남역, 교대역_강남역_distance, 0);
+        final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance, 0);
+        final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance, 0);
+        final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance, 0);
         final Line 이호선 = LineFactory.createLine(이호선_Id, "1호선", "green", 교대역_강남역_구간);
         final Line 신분당선 = LineFactory.createLine(신분당선_Id, "1호선", "red", 강남역_양재역_구간);
         final Line 삼호선 = LineFactory.createLine(삼호선_Id, "2호선", "orange", 교대역_남부터미널_구간);
@@ -138,7 +138,7 @@ class PathServiceMockTest {
     private List<Line> createLinesWithExtra() {
         final Station 서울역 = StationFactory.createStation(서울역_Id, "서울역");
         final Station 사당역 = StationFactory.createStation(사당역_Id, "사당역");
-        final Section 서울역_사당역_구간 = SectionFactory.createSection(5L, 서울역, 사당역, 10);
+        final Section 서울역_사당역_구간 = SectionFactory.createSection(5L, 서울역, 사당역, 10, 0);
         final Line 사호선 = LineFactory.createLine(사호선_Id, "4호선", "skyblue", 서울역_사당역_구간);
         final List<Line> lines = new ArrayList<>(createLines());
         lines.add(사호선);
