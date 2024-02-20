@@ -39,6 +39,10 @@ public class Sections implements Iterable<Section> {
         return sections.stream().mapToInt(Section::getDistance).sum();
     }
 
+    public int getDuration() {
+        return sections.stream().mapToInt(Section::getDuration).sum();
+    }
+
     public List<Station> getStations() {
         return sections.stream()
                 .sorted()
