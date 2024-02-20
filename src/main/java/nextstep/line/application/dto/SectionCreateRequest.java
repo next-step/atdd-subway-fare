@@ -49,5 +49,8 @@ public class SectionCreateRequest {
         if (distance <= 0) {
             throw new CreateRequestNotValidException("distance must be greater than 0");
         }
+        if (duration <= 0) {
+            throw new CreateRequestNotValidException("duration must be greater than 0");
+        }
     }
 }
