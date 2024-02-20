@@ -65,6 +65,6 @@ public class LineCreateRequest {
     }
 
     public SectionCreateRequest toSectionCreateRequest() {
-        return new SectionCreateRequest(this.upStationId, this.downStationId, this.distance);
+        return new SectionCreateRequest(this.upStationId, this.downStationId, this.distance, 0);
     }
 }

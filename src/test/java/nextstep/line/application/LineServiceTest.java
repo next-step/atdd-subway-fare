@@ -49,7 +49,7 @@ public class LineServiceTest {
         강남역_선릉역_구간_길이 = 10;
         선릉역_역삼역_구간_길이 = 20;
         line = lineRepository.save(LineFactory.createLine("이호선", "연두색", SectionFactory.createSection(강남역, 선릉역, 강남역_선릉역_구간_길이, 0)));
-        sectionCreateRequest = new SectionCreateRequest(선릉역.getId(), 역삼역.getId(), 선릉역_역삼역_구간_길이);
+        sectionCreateRequest = new SectionCreateRequest(선릉역.getId(), 역삼역.getId(), 선릉역_역삼역_구간_길이, 0);
     }
 
     @Nested
