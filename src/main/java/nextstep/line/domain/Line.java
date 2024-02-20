@@ -51,6 +51,10 @@ public class Line {
         return sections.getDistance();
     }
 
+    public int getDuration() {
+        return sections.getDuration();
+    }
+
     public void changeName(final String name) {
         this.name = name;
     }
@@ -70,4 +74,5 @@ public class Line {
     public Sections getSections() {
         return sections;
     }
+
 }

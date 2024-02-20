@@ -26,8 +26,8 @@ class LineTest {
         강남역 = StationFactory.createStation(1L, "강남역");
         선릉역 = StationFactory.createStation(2L, "선릉역");
         역삼역 = StationFactory.createStation(3L, "역삼역");
-        강남역_선릉역_구간 = SectionFactory.createSection(1L, 강남역, 선릉역, 10, 0);
-        선릉역_역삼역_구간 = SectionFactory.createSection(2L, 선릉역, 역삼역, 20, 0);
+        강남역_선릉역_구간 = SectionFactory.createSection(1L, 강남역, 선릉역, 10, 2);
+        선릉역_역삼역_구간 = SectionFactory.createSection(2L, 선릉역, 역삼역, 20, 3);
         line = LineFactory.createLine(LINE_ID, LINE_NAME, LINE_COLOR, 강남역_선릉역_구간);
     }
 
@@ -39,6 +39,7 @@ class LineTest {
             softly.assertThat(line.getName()).isEqualTo(LINE_NAME);
             softly.assertThat(line.getColor()).isEqualTo(LINE_COLOR);
             softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간.getDistance());
+            softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_구간.getDuration());
             softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역);
         });
     }
@@ -50,6 +51,7 @@ class LineTest {
 
         assertSoftly(softly -> {
             softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간.getDistance() + 선릉역_역삼역_구간.getDistance());
+            softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_구간.getDuration() + 선릉역_역삼역_구간.getDuration());
             softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역, 역삼역);
         });
     }
@@ -63,6 +65,7 @@ class LineTest {
 
         assertSoftly(softly -> {
             softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간.getDistance());
+            softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_구간.getDuration());
             softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역);
         });
     }
