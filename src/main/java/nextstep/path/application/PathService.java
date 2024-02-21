@@ -28,16 +28,16 @@ public class PathService {
         this.lineProvider = lineProvider;
     }
 
-    public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
-        final Path shortestPath = getPath(searchRequest).orElseThrow(PathNotFoundException::new);
+    public PathResponse findShortestDistancePath(final PathSearchRequest searchRequest) {
+        final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
         return PathResponse.from(shortestPath);
     }
 
     public boolean isInvalidPath(final PathSearchRequest searchRequest) {
-        return getPath(searchRequest).isEmpty();
+        return getShortestDistancePath(searchRequest).isEmpty();
     }
 
-    private Optional<Path> getPath(final PathSearchRequest searchRequest) {
+    private Optional<Path> getShortestDistancePath(final PathSearchRequest searchRequest) {
         searchRequest.validate();
 
         final List<Line> allLines = lineProvider.getAllLines();
@@ -46,7 +46,7 @@ public class PathService {
         final Station targetStation = stationMap.computeIfAbsent(searchRequest.getTarget(), throwStationNotFoundException());
 
         final SubwayMap subwayMap = new SubwayMap(allLines);
-        return subwayMap.findShortestPath(sourceStation, targetStation);
+        return subwayMap.findShortestDistancePath(sourceStation, targetStation);
     }
 
     private Map<Long, Station> createStationMapFrom(final List<Line> allLines) {

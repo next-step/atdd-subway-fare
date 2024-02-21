@@ -18,14 +18,14 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Optional<Path> findShortestPath(final Station sourceStation, final Station targetStation) {
-        final DijkstraShortestPath<Station, DefaultWeightedEdge> path = getShortestPath(sourceStation, targetStation);
+    public Optional<Path> findShortestDistancePath(final Station sourceStation, final Station targetStation) {
+        final DijkstraShortestPath<Station, DefaultWeightedEdge> path = getShortestDistancePath(sourceStation, targetStation);
 
         return Optional.ofNullable(path.getPath(sourceStation, targetStation))
                 .map(shortestPath -> new Path(shortestPath.getVertexList(), (int) shortestPath.getWeight()));
     }
 
-    private DijkstraShortestPath<Station, DefaultWeightedEdge> getShortestPath(final Station sourceStation, final Station targetStation) {
+    private DijkstraShortestPath<Station, DefaultWeightedEdge> getShortestDistancePath(final Station sourceStation, final Station targetStation) {
         final WeightedMultigraph<Station, DefaultWeightedEdge> graph = buildGraph();
 
         if (!(graph.containsVertex(sourceStation) && graph.containsVertex(targetStation))) {

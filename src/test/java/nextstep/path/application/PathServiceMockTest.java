@@ -59,7 +59,7 @@ class PathServiceMockTest {
         final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 남부터미널역_Id);
         given(lineProvider.getAllLines()).willReturn(createLines());
 
-        final PathResponse response = pathService.findShortestPath(searchRequest);
+        final PathResponse response = pathService.findShortestDistancePath(searchRequest);
 
         assertSoftly(softly -> {
             softly.assertThat(response.getDistance()).isEqualTo(교대역_강남역_distance + 교대역_남부터미널_distance);
@@ -73,7 +73,7 @@ class PathServiceMockTest {
     void targetIsTheSameWithSourceTest() {
         final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 강남역_Id);
 
-        assertThatThrownBy(() -> pathService.findShortestPath(searchRequest))
+        assertThatThrownBy(() -> pathService.findShortestDistancePath(searchRequest))
                 .isInstanceOf(PathSearchNotValidException.class)
                 .hasMessageContaining("target can not be the same with source");
     }
@@ -87,9 +87,9 @@ class PathServiceMockTest {
         given(lineProvider.getAllLines()).willReturn(createLines());
 
         assertSoftly(softly -> {
-            softly.assertThatThrownBy(() -> pathService.findShortestPath(notExistSourceRequest))
+            softly.assertThatThrownBy(() -> pathService.findShortestDistancePath(notExistSourceRequest))
                     .isInstanceOf(StationNotExistException.class);
-            softly.assertThatThrownBy(() -> pathService.findShortestPath(notExistTargetRequest))
+            softly.assertThatThrownBy(() -> pathService.findShortestDistancePath(notExistTargetRequest))
                     .isInstanceOf(StationNotExistException.class);
         });
     }
@@ -101,7 +101,7 @@ class PathServiceMockTest {
 
         final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 서울역_Id);
 
-        assertThatThrownBy(() -> pathService.findShortestPath(searchRequest))
+        assertThatThrownBy(() -> pathService.findShortestDistancePath(searchRequest))
                 .isInstanceOf(PathNotFoundException.class);
     }
 
