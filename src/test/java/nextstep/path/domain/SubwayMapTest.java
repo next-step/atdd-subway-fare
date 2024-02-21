@@ -58,8 +58,8 @@ class SubwayMapTest {
     }
 
     @Test
-    @DisplayName("findShortestPath 를 통해 최단거리 경로를 반환 받을 수 있다.")
-    void findShortestPathTest() {
+    @DisplayName("최단거리 경로를 반환 받을 수 있다.")
+    void findShortestDistancePathTest() {
         final Optional<Path> shortestPathOptional = subwayMap.findShortestPath(강남역, 남부터미널역);
 
         assertSoftly(softly -> {
@@ -73,7 +73,7 @@ class SubwayMapTest {
     }
 
     @Test
-    @DisplayName("findShortestPath 를 통해 도달할 수 없는 경로를 탐색하면 PathNotFoundException 을 던진다.")
+    @DisplayName("도달할 수 없는 경로를 탐색하면 PathNotFoundException 을 던진다.")
     void findShortestPathNotFoundTest() {
         assertThatThrownBy(() -> subwayMap.findShortestPath(강남역, 서울역))
                 .isInstanceOf(PathNotFoundException.class);
