@@ -78,4 +78,19 @@ class SubwayMapTest {
         assertThatThrownBy(() -> subwayMap.findShortestDistancePath(강남역, 서울역))
                 .isInstanceOf(PathNotFoundException.class);
     }
+
+    @Test
+    @DisplayName("최단시간 경로를 반환 받을 수 있다.")
+    void findShortestDurationPathTest() {
+        final Optional<Path> shortestPathOptional = subwayMap.findShortestDurationPath(강남역, 남부터미널역);
+
+        assertSoftly(softly -> {
+            softly.assertThat(shortestPathOptional).isNotEmpty();
+            final Path shortestPath = shortestPathOptional.get();
+            softly.assertThat(shortestPath.getDistance()).isEqualTo(강남역_양재역_distance + 남부터미널_양재역_distance);
+            softly.assertThat(shortestPath.getDuration()).isEqualTo(강남역_양재역_duration + 남부터미널_양재역_duration);
+            softly.assertThat(shortestPath.getStations()).extracting("id")
+                    .containsExactly(강남역_Id, 양재역_Id, 남부터미널역_Id);
+        });
+    }
 }
