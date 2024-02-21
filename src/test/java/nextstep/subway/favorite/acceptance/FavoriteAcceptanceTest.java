@@ -43,7 +43,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         오이도역_ID = stationFixture.get오이도역_ID();
 
         LineFixture lineFixture = new LineFixture(stationFixture);
-        lineFixture.라인_목록_생성(stationFixture);
+        lineFixture.라인_목록_생성();
 
         MemberFixture memberFixture = new MemberFixture();
         accessToken = memberFixture.getAccessToken();

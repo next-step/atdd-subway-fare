@@ -43,7 +43,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         서초역_ID = stationFixture.get서초역_ID();
 
         LineFixture lineFixture = new LineFixture(stationFixture);
-        lineFixture.라인_목록_생성(stationFixture);
+        lineFixture.라인_목록_생성();
     }
 
     /**
