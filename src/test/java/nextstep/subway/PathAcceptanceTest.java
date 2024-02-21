@@ -183,10 +183,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * 강남역    --- *3호선*(10) ---    선릉역
      * <p>
      * WHEN 경로 조회시 출발역과 도착역이 연결되어 있는 경우
-     * Then 경로 조회를 할 수 없다
+     * Then 경로 조회를 할 수 있다
      */
     @Test
-    void 성공_경로_조회시_출발역과_도착역이_연결되어_있을_경우_경로를_조회할_수_없다() {
+    void 성공_경로_조회시_출발역과_도착역이_연결되어_있을_경우_경로를_조회할_수_있다() {
         // given
         Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 역삼역_ID.toString());
 
