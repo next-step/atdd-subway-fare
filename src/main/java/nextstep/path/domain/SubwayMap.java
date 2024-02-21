@@ -22,7 +22,7 @@ public class SubwayMap {
         final DijkstraShortestPath<Station, DefaultWeightedEdge> path = getShortestDistancePath(sourceStation, targetStation);
 
         return Optional.ofNullable(path.getPath(sourceStation, targetStation))
-                .map(shortestPath -> new Path(shortestPath.getVertexList(), (int) shortestPath.getWeight()));
+                .map(shortestPath -> new Path(shortestPath.getVertexList(), (int) shortestPath.getWeight(), 7));
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> getShortestDistancePath(final Station sourceStation, final Station targetStation) {

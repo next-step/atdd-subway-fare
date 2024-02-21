@@ -66,7 +66,7 @@ class SubwayMapTest {
             softly.assertThat(shortestPathOptional).isNotEmpty();
             final Path shortestPath = shortestPathOptional.get();
             softly.assertThat(shortestPath.getDistance()).isEqualTo(교대역_강남역_distance + 교대역_남부터미널_distance);
-            softly.assertThat(shortestPath.getDistance()).isEqualTo(교대역_강남역_duration + 교대역_남부터미널_duration);
+            softly.assertThat(shortestPath.getDuration()).isEqualTo(교대역_강남역_duration + 교대역_남부터미널_duration);
             softly.assertThat(shortestPath.getStations()).extracting("id")
                     .containsExactly(강남역_Id, 교대역_Id, 남부터미널역_Id);
         });
