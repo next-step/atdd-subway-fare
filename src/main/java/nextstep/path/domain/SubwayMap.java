@@ -25,6 +25,39 @@ public class SubwayMap {
                 .map(shortestPath -> new Path(shortestPath.getVertexList(), (int) shortestPath.getWeight(), 7));
     }
 
+    public Optional<Path> findShortestDurationPath(final Station sourceStation, final Station targetStation) {
+        final DijkstraShortestPath<Station, DefaultWeightedEdge> path = getShortestDurationPath(sourceStation, targetStation);
+
+        return Optional.ofNullable(path.getPath(sourceStation, targetStation))
+                .map(shortestPath -> new Path(shortestPath.getVertexList(),13,  (int) shortestPath.getWeight()));
+    }
+
+    private DijkstraShortestPath<Station, DefaultWeightedEdge> getShortestDurationPath(final Station sourceStation, final Station targetStation) {
+        final WeightedMultigraph<Station, DefaultWeightedEdge> graph = buildGraphForDuration();
+
+        if (!(graph.containsVertex(sourceStation) && graph.containsVertex(targetStation))) {
+            throw new PathNotFoundException();
+        }
+
+        return new DijkstraShortestPath<>(graph);
+    }
+
+    private WeightedMultigraph<Station, DefaultWeightedEdge> buildGraphForDuration() {
+        final WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        lines.stream()
+                .flatMap(line -> line.getSections().stream())
+                .forEach(section -> initGraphForDuration(section, graph));
+        return graph;
+    }
+
+    private void initGraphForDuration(final Section section, final WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+        final Station upStation = section.getUpStation();
+        final Station downStation = section.getDownStation();
+        graph.addVertex(upStation);
+        graph.addVertex(downStation);
+        graph.setEdgeWeight(graph.addEdge(upStation, downStation), section.getDuration());
+    }
+
     private DijkstraShortestPath<Station, DefaultWeightedEdge> getShortestDistancePath(final Station sourceStation, final Station targetStation) {
         final WeightedMultigraph<Station, DefaultWeightedEdge> graph = buildGraph();
 
