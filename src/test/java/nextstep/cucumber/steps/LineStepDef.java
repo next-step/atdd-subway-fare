@@ -27,7 +27,7 @@ public class LineStepDef implements En {
                 final StationResponse upStation = context.store.get(data.get("upStation"), StationResponse.class);
                 final StationResponse downStation = context.store.get(data.get("downStation"), StationResponse.class);
                 final int distance = Integer.parseInt(data.get("distance"));
-                final ExtractableResponse<Response> response = LineApiHelper.createLine(lineName, lineColor, upStation.getId(), downStation.getId(), distance);
+                final ExtractableResponse<Response> response = LineApiHelper.createLine(lineName, lineColor, upStation.getId(), downStation.getId(), distance, 1);
                 context.store.put(lineName, response.as(LineResponse.class));
             });
         });
@@ -39,7 +39,7 @@ public class LineStepDef implements En {
                 final StationResponse downStation = context.store.get(data.get("downStation"), StationResponse.class);
                 final int distance = Integer.parseInt(data.get("distance"));
                 final LineResponse line = context.store.get(lineName, LineResponse.class);
-                SectionApiHelper.createSection(line.getId(), upStation.getId(), downStation.getId(), distance);
+                SectionApiHelper.createSection(line.getId(), upStation.getId(), downStation.getId(), distance, 1);
             });
         });
     }

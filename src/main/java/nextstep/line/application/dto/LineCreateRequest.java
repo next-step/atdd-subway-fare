@@ -11,16 +11,18 @@ public class LineCreateRequest {
     private Long upStationId;
     private Long downStationId;
     private int distance;
+    private int duration;
 
     private LineCreateRequest() {
     }
 
-    public LineCreateRequest(final String name, final String color, final Long upStationId, final Long downStationId, final int distance) {
+    public LineCreateRequest(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
         this.name = name;
         this.color = color;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public String getName() {
@@ -42,6 +44,9 @@ public class LineCreateRequest {
     public int getDistance() {
         return distance;
     }
+    public int getDuration() {
+        return duration;
+    }
 
     public void validate() {
         if(!StringUtils.hasLength(name)) {
@@ -62,9 +67,12 @@ public class LineCreateRequest {
         if(distance <= 0) {
             throw new CreateRequestNotValidException("distance must be greater than 0");
         }
+        if(duration <= 0) {
+            throw new CreateRequestNotValidException("duration must be greater than 0");
+        }
     }
 
     public SectionCreateRequest toSectionCreateRequest() {
-        return new SectionCreateRequest(this.upStationId, this.downStationId, this.distance, 0);
+        return new SectionCreateRequest(this.upStationId, this.downStationId, this.distance, this.duration);
     }
 }

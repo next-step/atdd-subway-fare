@@ -32,7 +32,9 @@ public class SectionAcceptanceTest {
     private final String 신분당선 = "신분당선";
     private final String 신분당선_color = "bg-red-600";
     private final int 신분당선_distance = 10;
+    private final int 신분당선_duration = 2;
     private final int 구간_distance = 5;
+    private final int 구간_duration = 3;
 
 
     @BeforeEach
@@ -43,7 +45,7 @@ public class SectionAcceptanceTest {
         또다른지하철역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("또다른지하철역"));
         없는지하철역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("없는지하철역"));
         존재하지않는지하철역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("존재하지않는지하철역"));
-        신분당선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance)));
+        신분당선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance, 신분당선_duration)));
     }
 
     @Nested
@@ -57,7 +59,7 @@ public class SectionAcceptanceTest {
         @Test
         void 구간_생성_마지막에_추가_성공_테스트() {
             // when
-            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance);
+            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance, 구간_duration);
 
             // then
             지하철_노선_조회시_생성된_구간정보가_마지막에_포함되어있다(response);
@@ -71,7 +73,7 @@ public class SectionAcceptanceTest {
         @Test
         void 구간_생성_가운데에_추가_성공_테스트() {
             // when
-            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 지하철역_Id, 또다른지하철역_Id, 구간_distance);
+            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 지하철역_Id, 또다른지하철역_Id, 구간_distance, 구간_duration);
 
             // then
             지하철_노선_조회시_생성된_구간정보가_가운데에_포함되어있다(response);
@@ -85,7 +87,7 @@ public class SectionAcceptanceTest {
         @Test
         void 구간_생성_처음에_추가_성공_테스트() {
             // when
-            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 또다른지하철역_Id, 지하철역_Id, 구간_distance);
+            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 또다른지하철역_Id, 지하철역_Id, 구간_distance, 구간_duration);
 
             // then
             지하철_노선_조회시_생성된_구간정보가_처음에_포함되어있다(response);
@@ -100,7 +102,7 @@ public class SectionAcceptanceTest {
         @Test
         void 구간_생성_실패_구간_상행역_하행역_모두_해당_노선에_이미_등록되어_있을경우_테스트() {
             // when
-            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 지하철역_Id, 구간_distance);
+            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 지하철역_Id, 구간_distance, 구간_duration);
 
             // then
             지하철_구간이_변경되지_않는다(response);
@@ -115,7 +117,7 @@ public class SectionAcceptanceTest {
         @Test
         void 구간_생성_실패_구간_상행역_하행역_모두_해당에_포함되어_있지_않을_경우_테스트() {
             // when
-            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 없는지하철역_Id, 존재하지않는지하철역_Id, 구간_distance);
+            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 없는지하철역_Id, 존재하지않는지하철역_Id, 구간_distance, 구간_duration);
 
             // then
             지하철_구간이_변경되지_않는다(response);
@@ -130,7 +132,7 @@ public class SectionAcceptanceTest {
         @Test
         void 구간_생성_실패_가운데_구간_길이가_기존_지하철_노선의_길이보다_길거나_같을_경우_테스트() {
             // when
-            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 지하철역_Id, 또다른지하철역_Id, 신분당선_distance);
+            final ExtractableResponse<Response> response = 구간_생성_요청(신분당선_Id, 지하철역_Id, 또다른지하철역_Id, 신분당선_distance, 구간_duration);
 
             // then
             지하철_구간이_변경되지_않는다(response);
@@ -144,6 +146,7 @@ public class SectionAcceptanceTest {
                         softly.assertThat(sectionResponse.getUpStation().getId()).isEqualTo(새로운지하철역_Id);
                         softly.assertThat(sectionResponse.getDownStation().getId()).isEqualTo(또다른지하철역_Id);
                         softly.assertThat(sectionResponse.getDistance()).isEqualTo(구간_distance);
+                        softly.assertThat(sectionResponse.getDuration()).isEqualTo(구간_duration);
                     }),
                     SectionAcceptanceTest.this::assertSectionAddedAtLast
             );
@@ -157,6 +160,7 @@ public class SectionAcceptanceTest {
                         softly.assertThat(sectionResponse.getUpStation().getId()).isEqualTo(지하철역_Id);
                         softly.assertThat(sectionResponse.getDownStation().getId()).isEqualTo(또다른지하철역_Id);
                         softly.assertThat(sectionResponse.getDistance()).isEqualTo(구간_distance);
+                        softly.assertThat(sectionResponse.getDuration()).isEqualTo(구간_duration);
                     }),
                     SectionAcceptanceTest.this::assertSectionAddedAtMiddle
             );
@@ -170,6 +174,7 @@ public class SectionAcceptanceTest {
                         softly.assertThat(sectionResponse.getUpStation().getId()).isEqualTo(또다른지하철역_Id);
                         softly.assertThat(sectionResponse.getDownStation().getId()).isEqualTo(지하철역_Id);
                         softly.assertThat(sectionResponse.getDistance()).isEqualTo(구간_distance);
+                        softly.assertThat(sectionResponse.getDuration()).isEqualTo(구간_duration);
                     }),
                     SectionAcceptanceTest.this::assertSectionAddedAtFirst
             );
@@ -198,7 +203,7 @@ public class SectionAcceptanceTest {
         @Test
         void 마지막_구간_제거_테스트() {
             // given
-            구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance);
+            구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance, 구간_duration);
 
             // when
             final ExtractableResponse<Response> response = 구간_제거_요청(신분당선_Id, 또다른지하철역_Id);
@@ -216,7 +221,7 @@ public class SectionAcceptanceTest {
         @Test
         void 가운데_구간_제거_테스트() {
             // given
-            구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance);
+            구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance, 구간_duration);
 
             // when
             final ExtractableResponse<Response> response = 구간_제거_요청(신분당선_Id, 새로운지하철역_Id);
@@ -234,7 +239,7 @@ public class SectionAcceptanceTest {
         @Test
         void 상행종점역_구간_제거_테스트() {
             // given
-            구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance);
+            구간_생성_요청(신분당선_Id, 새로운지하철역_Id, 또다른지하철역_Id, 구간_distance, 구간_duration);
 
             // when
             final ExtractableResponse<Response> response = 구간_제거_요청(신분당선_Id, 지하철역_Id);
@@ -309,14 +314,15 @@ public class SectionAcceptanceTest {
 
     }
 
-    private static ExtractableResponse<Response> 구간_생성_요청(final Long 신분당선_id, final Long 새로운지하철역_id, final Long 또다른지하철역_id, final int 구간_distance1) {
-        return SectionApiHelper.createSection(신분당선_id, 새로운지하철역_id, 또다른지하철역_id, 구간_distance1);
+    private static ExtractableResponse<Response> 구간_생성_요청(final Long lineId, final Long upStationId, final Long downStationId, final int distance, final int duration) {
+        return SectionApiHelper.createSection(lineId, upStationId, downStationId, distance, duration);
     }
 
     private void assertSectionAddedAtLast() {
         assertSoftly(softly -> {
             final LineResponse lineResponse = LineApiHelper.fetchLineById(신분당선_Id).as(LineResponse.class);
             softly.assertThat(lineResponse.getDistance()).isEqualTo(신분당선_distance + 구간_distance);
+            softly.assertThat(lineResponse.getDuration()).isEqualTo(신분당선_duration + 구간_duration);
             softly.assertThat(lineResponse.getStations())
                     .extracting("id").containsExactly(지하철역_Id, 새로운지하철역_Id, 또다른지하철역_Id);
         });
@@ -326,6 +332,7 @@ public class SectionAcceptanceTest {
         assertSoftly(softly -> {
             final LineResponse lineResponse = LineApiHelper.fetchLineById(신분당선_Id).as(LineResponse.class);
             softly.assertThat(lineResponse.getDistance()).isEqualTo(신분당선_distance);
+            softly.assertThat(lineResponse.getDuration()).isEqualTo(신분당선_duration);
             softly.assertThat(lineResponse.getStations())
                     .extracting("id").containsExactly(지하철역_Id, 또다른지하철역_Id, 새로운지하철역_Id);
         });
@@ -336,6 +343,7 @@ public class SectionAcceptanceTest {
         assertSoftly(softly -> {
             final LineResponse lineResponse = LineApiHelper.fetchLineById(신분당선_Id).as(LineResponse.class);
             softly.assertThat(lineResponse.getDistance()).isEqualTo(신분당선_distance + 구간_distance);
+            softly.assertThat(lineResponse.getDuration()).isEqualTo(신분당선_duration + 구간_duration);
             softly.assertThat(lineResponse.getStations())
                     .extracting("id").containsExactly(또다른지하철역_Id, 지하철역_Id, 새로운지하철역_Id);
         });
@@ -345,6 +353,7 @@ public class SectionAcceptanceTest {
         assertSoftly(softly -> {
             final LineResponse lineResponse = LineApiHelper.fetchLineById(신분당선_Id).as(LineResponse.class);
             softly.assertThat(lineResponse.getDistance()).isEqualTo(신분당선_distance);
+            softly.assertThat(lineResponse.getDuration()).isEqualTo(신분당선_duration);
             softly.assertThat(lineResponse.getStations())
                     .extracting("id").containsExactly(지하철역_Id, 새로운지하철역_Id);
         });
@@ -354,6 +363,7 @@ public class SectionAcceptanceTest {
         assertSoftly(softly -> {
             final LineResponse lineResponse = LineApiHelper.fetchLineById(신분당선_Id).as(LineResponse.class);
             softly.assertThat(lineResponse.getDistance()).isEqualTo(신분당선_distance + 구간_distance);
+            softly.assertThat(lineResponse.getDuration()).isEqualTo(신분당선_duration + 구간_duration);
             softly.assertThat(lineResponse.getStations())
                     .extracting("id").containsExactly(지하철역_Id, 또다른지하철역_Id);
         });
@@ -363,6 +373,7 @@ public class SectionAcceptanceTest {
         assertSoftly(softly -> {
             final LineResponse lineResponse = LineApiHelper.fetchLineById(신분당선_Id).as(LineResponse.class);
             softly.assertThat(lineResponse.getDistance()).isEqualTo(구간_distance);
+            softly.assertThat(lineResponse.getDuration()).isEqualTo(구간_duration);
             softly.assertThat(lineResponse.getStations())
                     .extracting("id").containsExactly(새로운지하철역_Id, 또다른지하철역_Id);
         });
