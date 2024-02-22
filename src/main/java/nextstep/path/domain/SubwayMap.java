@@ -16,22 +16,15 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public Optional<Path> findShortestDistancePath(final Station sourceStation, final Station targetStation) {
-        final DijkstraShortestPath<Station, PathSection> path = getShortestDistancePath(sourceStation, targetStation);
+    public Optional<Path> findShortestPath(final Station sourceStation, final Station targetStation, final PathType pathType) {
+        final DijkstraShortestPath<Station, PathSection> path = getShortestPath(sourceStation, targetStation, pathType);
 
         return Optional.ofNullable(path.getPath(sourceStation, targetStation))
                 .map(shortestPath -> new Path(shortestPath.getVertexList(), shortestPath.getEdgeList()));
     }
 
-    public Optional<Path> findShortestDurationPath(final Station sourceStation, final Station targetStation) {
-        final DijkstraShortestPath<Station, PathSection> path = getShortestDurationPath(sourceStation, targetStation);
-
-        return Optional.ofNullable(path.getPath(sourceStation, targetStation))
-                .map(shortestPath -> new Path(shortestPath.getVertexList(), shortestPath.getEdgeList()));
-    }
-
-    private DijkstraShortestPath<Station, PathSection> getShortestDurationPath(final Station sourceStation, final Station targetStation) {
-        final WeightedMultigraph<Station, PathSection> graph = buildGraphForDuration();
+    private DijkstraShortestPath<Station, PathSection> getShortestPath(final Station sourceStation, final Station targetStation, final PathType pathType) {
+        final WeightedMultigraph<Station, PathSection> graph = buildGraph(pathType);
 
         if (!(graph.containsVertex(sourceStation) && graph.containsVertex(targetStation))) {
             throw new PathNotFoundException();
@@ -40,49 +33,21 @@ public class SubwayMap {
         return new DijkstraShortestPath<>(graph);
     }
 
-    private WeightedMultigraph<Station, PathSection> buildGraphForDuration() {
+    private WeightedMultigraph<Station, PathSection> buildGraph(final PathType pathType) {
         final WeightedMultigraph<Station, PathSection> graph = new WeightedMultigraph<>(PathSection.class);
         lines.stream()
                 .flatMap(line -> line.getSections().stream())
                 .map(PathSection::from)
-                .forEach(pathSection -> initGraphForDuration(pathSection, graph));
+                .forEach(pathSection -> initGraph(pathSection, pathType, graph));
         return graph;
     }
 
-    private void initGraphForDuration(final PathSection pathSection, final WeightedMultigraph<Station, PathSection> graph) {
+    private void initGraph(final PathSection pathSection, final PathType pathType, final WeightedMultigraph<Station, PathSection> graph) {
         final Station upStation = pathSection.getUpStation();
         final Station downStation = pathSection.getDownStation();
         graph.addVertex(upStation);
         graph.addVertex(downStation);
         graph.addEdge(upStation, downStation, pathSection);
-        graph.setEdgeWeight(pathSection, pathSection.getDuration());
-    }
-
-    private DijkstraShortestPath<Station, PathSection> getShortestDistancePath(final Station sourceStation, final Station targetStation) {
-        final WeightedMultigraph<Station, PathSection> graph = buildGraph();
-
-        if (!(graph.containsVertex(sourceStation) && graph.containsVertex(targetStation))) {
-            throw new PathNotFoundException();
-        }
-
-        return new DijkstraShortestPath<>(graph);
-    }
-
-    private WeightedMultigraph<Station, PathSection> buildGraph() {
-        final WeightedMultigraph<Station, PathSection> graph = new WeightedMultigraph<>(PathSection.class);
-        lines.stream()
-                .flatMap(line -> line.getSections().stream())
-                .map(PathSection::from)
-                .forEach(pathSection -> initGraph(pathSection, graph));
-        return graph;
-    }
-
-    private void initGraph(final PathSection pathSection, final WeightedMultigraph<Station, PathSection> graph) {
-        final Station upStation = pathSection.getUpStation();
-        final Station downStation = pathSection.getDownStation();
-        graph.addVertex(upStation);
-        graph.addVertex(downStation);
-        graph.addEdge(upStation, downStation, pathSection);
-        graph.setEdgeWeight(pathSection, pathSection.getDistance());
+        graph.setEdgeWeight(pathSection, pathType.calculateWeight(pathSection));
     }
 }

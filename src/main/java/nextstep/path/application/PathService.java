@@ -46,7 +46,7 @@ public class PathService {
         final Station targetStation = stationMap.computeIfAbsent(searchRequest.getTarget(), throwStationNotFoundException());
 
         final SubwayMap subwayMap = new SubwayMap(allLines);
-        return subwayMap.findShortestDistancePath(sourceStation, targetStation);
+        return subwayMap.findShortestPath(sourceStation, targetStation, PathType.DISTANCE);
     }
 
     private Map<Long, Station> createStationMapFrom(final List<Line> allLines) {
