@@ -8,6 +8,7 @@ import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
 import nextstep.path.application.dto.PathResponse;
 import nextstep.path.application.dto.PathSearchRequest;
+import nextstep.path.domain.PathType;
 import nextstep.path.exception.PathNotFoundException;
 import nextstep.path.exception.PathSearchNotValidException;
 import nextstep.station.domain.Station;
@@ -35,9 +36,13 @@ class PathServiceMockTest {
     private final Long 서울역_Id = 5L;
     private final Long 사당역_Id = 6L;
     private final int 교대역_강남역_distance = 5;
+    private final int 교대역_강남역_duration = 4;
     private final int 강남역_양재역_distance = 10;
+    private final int 강남역_양재역_duration = 4;
     private final int 교대역_남부터미널_distance = 2;
+    private final int 교대역_남부터미널_duration = 3;
     private final int 남부터미널_양재역_distance = 3;
+    private final int 남부터미널_양재역_duration = 2;
     private static final long 이호선_Id = 2L;
     private static final long 신분당선_Id = 4L;
     private static final long 삼호선_Id = 3L;
@@ -54,32 +59,49 @@ class PathServiceMockTest {
     }
 
     @Test
-    @DisplayName("findShortestPath 를 통해 최단경로를 반환받을 수 있다.")
-    void findShortestPathTest() {
-        final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 남부터미널역_Id);
+    @DisplayName("최단 거리 경로를 반환받을 수 있다.")
+    void findShortestDistancePathTest() {
+        final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 남부터미널역_Id, PathType.DISTANCE);
         given(lineProvider.getAllLines()).willReturn(createLines());
 
-        final PathResponse response = pathService.findShortestDistancePath(searchRequest);
+        final PathResponse response = pathService.findShortestPath(searchRequest);
 
         assertSoftly(softly -> {
             softly.assertThat(response.getDistance()).isEqualTo(교대역_강남역_distance + 교대역_남부터미널_distance);
+            softly.assertThat(response.getDuration()).isEqualTo(교대역_강남역_duration + 교대역_남부터미널_duration);
             softly.assertThat(response.getStations()).extracting("id")
                     .containsExactly(강남역_Id, 교대역_Id, 남부터미널역_Id);
         });
     }
 
     @Test
-    @DisplayName("findShortestPath 시 출발역과 도착역이 같다면 ValidationError 가 던져진다.")
+    @DisplayName("최단 시간 경로를 반환받을 수 있다.")
+    void findShortestDurationPathTest() {
+        final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 남부터미널역_Id, PathType.DURATION);
+        given(lineProvider.getAllLines()).willReturn(createLines());
+
+        final PathResponse response = pathService.findShortestPath(searchRequest);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.getDistance()).isEqualTo(강남역_양재역_distance + 남부터미널_양재역_distance);
+            softly.assertThat(response.getDuration()).isEqualTo(강남역_양재역_duration + 남부터미널_양재역_duration);
+            softly.assertThat(response.getStations()).extracting("id")
+                    .containsExactly(강남역_Id, 양재역_Id, 남부터미널역_Id);
+        });
+    }
+
+    @Test
+    @DisplayName("출발역과 도착역이 같다면 ValidationError 가 던져진다.")
     void targetIsTheSameWithSourceTest() {
         final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 강남역_Id);
 
-        assertThatThrownBy(() -> pathService.findShortestDistancePath(searchRequest))
+        assertThatThrownBy(() -> pathService.findShortestPath(searchRequest))
                 .isInstanceOf(PathSearchNotValidException.class)
                 .hasMessageContaining("target can not be the same with source");
     }
 
     @Test
-    @DisplayName("findShortestPath 시 존재하지 않는 역을 출발역이나 도착역으로 지정할 시 StationNotFoundException 이 던져진다.")
+    @DisplayName("존재하지 않는 역을 출발역이나 도착역으로 지정할 시 StationNotFoundException 이 던져진다.")
     void sourceStationNotExistTest() {
         final PathSearchRequest notExistSourceRequest = new PathSearchRequest(서울역_Id, 강남역_Id);
         final PathSearchRequest notExistTargetRequest = new PathSearchRequest(강남역_Id, 서울역_Id);
@@ -87,26 +109,26 @@ class PathServiceMockTest {
         given(lineProvider.getAllLines()).willReturn(createLines());
 
         assertSoftly(softly -> {
-            softly.assertThatThrownBy(() -> pathService.findShortestDistancePath(notExistSourceRequest))
+            softly.assertThatThrownBy(() -> pathService.findShortestPath(notExistSourceRequest))
                     .isInstanceOf(StationNotExistException.class);
-            softly.assertThatThrownBy(() -> pathService.findShortestDistancePath(notExistTargetRequest))
+            softly.assertThatThrownBy(() -> pathService.findShortestPath(notExistTargetRequest))
                     .isInstanceOf(StationNotExistException.class);
         });
     }
 
     @Test
-    @DisplayName("findShortestPath 시 연결되지 않은 역이라면 PathNotFoundException 이 던져진다.")
+    @DisplayName("연결되지 않은 역이라면 PathNotFoundException 이 던져진다.")
     void pathNotExistTest() {
         given(lineProvider.getAllLines()).willReturn(createLinesWithExtra());
 
         final PathSearchRequest searchRequest = new PathSearchRequest(강남역_Id, 서울역_Id);
 
-        assertThatThrownBy(() -> pathService.findShortestDistancePath(searchRequest))
+        assertThatThrownBy(() -> pathService.findShortestPath(searchRequest))
                 .isInstanceOf(PathNotFoundException.class);
     }
 
     @Test
-    @DisplayName("isInvalidPath 를 통해 유효한 path 인지 여부를 반환받을 수 있다.")
+    @DisplayName("유효한 path 인지 여부를 반환받을 수 있다.")
     void isInvalidPathTest() {
         given(lineProvider.getAllLines()).willReturn(createLinesWithExtra());
 
@@ -124,10 +146,10 @@ class PathServiceMockTest {
         final Station 강남역 = StationFactory.createStation(강남역_Id, "강남역");
         final Station 양재역 = StationFactory.createStation(양재역_Id, "양재역");
         final Station 남부터미널역 = StationFactory.createStation(남부터미널역_Id, "남부터미널역");
-        final Section 교대역_강남역_구간 = SectionFactory.createSection(1L, 교대역, 강남역, 교대역_강남역_distance, 0);
-        final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance, 0);
-        final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance, 0);
-        final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance, 0);
+        final Section 교대역_강남역_구간 = SectionFactory.createSection(1L, 교대역, 강남역, 교대역_강남역_distance, 교대역_강남역_duration);
+        final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance, 강남역_양재역_duration);
+        final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance, 교대역_남부터미널_duration);
+        final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance, 남부터미널_양재역_duration);
         final Line 이호선 = LineFactory.createLine(이호선_Id, "1호선", "green", 교대역_강남역_구간);
         final Line 신분당선 = LineFactory.createLine(신분당선_Id, "1호선", "red", 강남역_양재역_구간);
         final Line 삼호선 = LineFactory.createLine(삼호선_Id, "2호선", "orange", 교대역_남부터미널_구간);
