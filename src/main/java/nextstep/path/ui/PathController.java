@@ -19,7 +19,7 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findPath(final PathSearchRequest searchRequest) {
-        final PathResponse pathResponse = pathService.findShortestDistancePath(searchRequest);
+        final PathResponse pathResponse = pathService.findShortestPath(searchRequest);
         return ResponseEntity.ok().body(pathResponse);
     }
 }

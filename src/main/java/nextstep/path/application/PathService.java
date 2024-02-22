@@ -28,7 +28,7 @@ public class PathService {
         this.lineProvider = lineProvider;
     }
 
-    public PathResponse findShortestDistancePath(final PathSearchRequest searchRequest) {
+    public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
         return PathResponse.from(shortestPath);
     }
@@ -46,7 +46,7 @@ public class PathService {
         final Station targetStation = stationMap.computeIfAbsent(searchRequest.getTarget(), throwStationNotFoundException());
 
         final SubwayMap subwayMap = new SubwayMap(allLines);
-        return subwayMap.findShortestPath(sourceStation, targetStation, PathType.DISTANCE);
+        return subwayMap.findShortestPath(sourceStation, targetStation, searchRequest.getPathType());
     }
 
     private Map<Long, Station> createStationMapFrom(final List<Line> allLines) {
