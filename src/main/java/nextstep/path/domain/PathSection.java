@@ -16,11 +16,6 @@ public class PathSection extends DefaultWeightedEdge {
         return new PathSection(section);
     }
 
-    @Override
-    protected double getWeight() {
-        return section.getDistance();
-    }
-
     public Station getUpStation() {
         return section.getUpStation();
     }
@@ -31,5 +26,9 @@ public class PathSection extends DefaultWeightedEdge {
 
     public int getDuration() {
         return section.getDuration();
+    }
+
+    public int getDistance() {
+        return section.getDistance();
     }
 }

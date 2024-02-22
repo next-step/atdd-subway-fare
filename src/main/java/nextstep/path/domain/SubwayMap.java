@@ -20,14 +20,14 @@ public class SubwayMap {
         final DijkstraShortestPath<Station, PathSection> path = getShortestDistancePath(sourceStation, targetStation);
 
         return Optional.ofNullable(path.getPath(sourceStation, targetStation))
-                .map(shortestPath -> new Path(shortestPath.getVertexList(), shortestPath.getEdgeList(), (int) shortestPath.getWeight()));
+                .map(shortestPath -> new Path(shortestPath.getVertexList(), shortestPath.getEdgeList()));
     }
 
     public Optional<Path> findShortestDurationPath(final Station sourceStation, final Station targetStation) {
         final DijkstraShortestPath<Station, PathSection> path = getShortestDurationPath(sourceStation, targetStation);
 
         return Optional.ofNullable(path.getPath(sourceStation, targetStation))
-                .map(shortestPath -> new Path(shortestPath.getVertexList(), shortestPath.getEdgeList(), (int) shortestPath.getWeight()));
+                .map(shortestPath -> new Path(shortestPath.getVertexList(), shortestPath.getEdgeList()));
     }
 
     private DijkstraShortestPath<Station, PathSection> getShortestDurationPath(final Station sourceStation, final Station targetStation) {
@@ -55,7 +55,7 @@ public class SubwayMap {
         graph.addVertex(upStation);
         graph.addVertex(downStation);
         graph.addEdge(upStation, downStation, pathSection);
-        graph.setEdgeWeight(pathSection, pathSection.getWeight());
+        graph.setEdgeWeight(pathSection, pathSection.getDuration());
     }
 
     private DijkstraShortestPath<Station, PathSection> getShortestDistancePath(final Station sourceStation, final Station targetStation) {
@@ -83,6 +83,6 @@ public class SubwayMap {
         graph.addVertex(upStation);
         graph.addVertex(downStation);
         graph.addEdge(upStation, downStation, pathSection);
-        graph.setEdgeWeight(pathSection, pathSection.getWeight());
+        graph.setEdgeWeight(pathSection, pathSection.getDistance());
     }
 }

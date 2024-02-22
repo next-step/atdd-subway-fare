@@ -9,9 +9,9 @@ public class Path {
     private final int distance;
     private final int duration;
 
-    public Path(final List<Station> stations, final List<PathSection> pathSections, final int distance) {
+    public Path(final List<Station> stations, final List<PathSection> pathSections) {
         this.stations = stations;
-        this.distance = distance;
+        this.distance = pathSections.stream().mapToInt(PathSection::getDistance).sum();
         this.duration = pathSections.stream().mapToInt(PathSection::getDuration).sum();
     }
 
