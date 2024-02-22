@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StationSteps {
-    public static StationResponse 역_생성_요창(String name) {
+    public static StationResponse 역_생성_요청(String name) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
 

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineSteps {
-    public static LineResponse 노선_생성_요청(String name, Long upstationId, Long downstationId, int distance) {
+    public static ExtractableResponse<Response> 노선_생성_요청(String name, Long upstationId, Long downstationId, int distance) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("upstationId", upstationId.toString());
@@ -23,7 +23,7 @@ public class LineSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/lines")
                 .then().log().all()
-                .extract().as(LineResponse.class);
+                .extract();
     }
 
     public static ExtractableResponse<Response> 노선_조회(Long id) {
