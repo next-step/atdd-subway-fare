@@ -51,20 +51,16 @@ public class PathSearchRequest {
     }
 
     public void validate() {
-        if(Objects.isNull(source)) {
+        if (Objects.isNull(source)) {
             throw new PathSearchNotValidException("source can not be null");
         }
 
-        if(Objects.isNull(target)) {
+        if (Objects.isNull(target)) {
             throw new PathSearchNotValidException("target can not be null");
         }
 
-        if(Objects.isNull(pathType)) {
+        if (Objects.isNull(pathType)) {
             throw new PathSearchNotValidException("pathType can not be null");
-        }
-
-        if (Objects.equals(source, target)) {
-            throw new PathSearchNotValidException("target can not be the same with source");
         }
     }
 }

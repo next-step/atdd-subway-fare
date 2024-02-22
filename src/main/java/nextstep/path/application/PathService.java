@@ -7,6 +7,7 @@ import nextstep.path.application.dto.PathSearchRequest;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.SubwayMap;
 import nextstep.path.exception.PathNotFoundException;
+import nextstep.path.exception.PathSearchNotValidException;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotExistException;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,6 +31,10 @@ public class PathService {
     }
 
     public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
+        if (Objects.equals(searchRequest.getSource(), searchRequest.getTarget())) {
+            throw new PathSearchNotValidException("target can not be the same with source");
+        }
+
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
         return PathResponse.from(shortestPath);
     }
@@ -38,7 +44,6 @@ public class PathService {
     }
 
     private Optional<Path> getShortestDistancePath(final PathSearchRequest searchRequest) {
-        searchRequest.validate();
 
         final List<Line> allLines = lineProvider.getAllLines();
         final Map<Long, Station> stationMap = createStationMapFrom(allLines);
