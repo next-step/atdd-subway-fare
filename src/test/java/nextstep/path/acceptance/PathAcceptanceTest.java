@@ -9,6 +9,7 @@ import nextstep.common.api.StationApiHelper;
 import nextstep.core.AcceptanceTest;
 import nextstep.core.RestAssuredHelper;
 import nextstep.path.application.dto.PathResponse;
+import nextstep.path.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -148,11 +149,11 @@ public class PathAcceptanceTest {
     }
 
     private ExtractableResponse<Response> 최소_길이_경로_조회_요청(final Long startStationId, final Long endStationId) {
-        return PathApiHelper.findPath(startStationId, endStationId);
+        return PathApiHelper.findPath(startStationId, endStationId, PathType.DISTANCE);
     }
 
     private ExtractableResponse<Response> 최소_시간_경로_조회_요청(final Long startStationId, final Long endStationId) {
-        return PathApiHelper.findPath(startStationId, endStationId);
+        return PathApiHelper.findPath(startStationId, endStationId, PathType.DURATION);
     }
 
     private void 경로찾기에_실패_한다(final ExtractableResponse<Response> response) {
