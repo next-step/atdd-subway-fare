@@ -1,13 +1,21 @@
 package nextstep.cucumber.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.RestAssured;
 import nextstep.cucumber.AcceptanceContext;
+import nextstep.subway.application.dto.LineResponse;
+import nextstep.subway.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static nextstep.subway.acceptance.LineSteps.노선이_생성되어_있다;
+import static nextstep.subway.acceptance.SectionSteps.구간을_등록한다;
+import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
@@ -17,6 +25,45 @@ public class PathStepDef implements En {
     private AcceptanceContext context;
 
     public PathStepDef() {
+
+        Given("지하철역들을 생성 요청하고", (DataTable table)-> {
+            List<Map<String, String>> maps = table.asMaps();
+            maps.stream()
+                    .forEach(m -> {
+                        final String name = m.get("name");
+                        final Long stationId = 지하철역_생성_요청(name)
+                                .as(StationResponse.class).getId();
+                        context.store.put(name, stationId);
+                    });
+        });
+
+        Given("노선들을 생성 요청하고", (DataTable table)-> {
+            List<Map<String, String>> maps = table.asMaps();
+            for (Map<String, String> map : maps) {
+                final String name = map.get("name");
+                final String color = map.get("color");
+                final Long upStationId = (Long) context.store.get(map.get("upStation"));
+                final Long downStationId = (Long) context.store.get(map.get("downStation"));
+                final int distance = Integer.parseInt(map.get("distance"));
+
+                final Long lineId = 노선이_생성되어_있다(name, color, upStationId, downStationId, distance)
+                        .as(LineResponse.class).getId();
+                context.store.put(name, lineId);
+            }
+        });
+
+        Given("구간을 등록하고", (DataTable table)-> {
+            List<Map<String, String>> maps = table.asMaps();
+            for (Map<String, String> map : maps) {
+                final Long lineId = (Long) context.store.get(map.get("lineName"));
+                final Long upStationId = (Long) context.store.get(map.get("upStation"));
+                final Long downStationId = (Long) context.store.get(map.get("downStation"));
+                final int distance = Integer.parseInt(map.get("distance"));
+
+                context.response = 구간을_등록한다(lineId, upStationId, downStationId, distance);
+            }
+        });
+
         Given("{string}과 {string} 사이의 경로 조회를 요청하면", (String source, String target) -> {
             Long sourceId = (Long) context.store.get(source);
             Long targetId = (Long) context.store.get(target);
