@@ -229,7 +229,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-                () -> assertThat(pathResponse.getDuration()).isEqualTo(0L),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(60L),
                 () -> assertThat(pathResponse.getStations()).hasSize(2)
                         .extracting("id", "name")
                         .containsExactly(

@@ -50,7 +50,8 @@ public class PathStepDef implements En {
                         columns.get("color"),
                         (long) context.store.get(columns.get("upStation")),
                         (long) context.store.get(columns.get("downStation")),
-                        Long.parseLong(columns.get("distance"))
+                        Long.parseLong(columns.get("distance")),
+                        Long.parseLong(columns.get("duration"))
                 );
                 Long lineId = RestAssured.given().log().all()
                         .body(lineCreateRequest)
@@ -159,7 +160,7 @@ public class PathStepDef implements En {
         Then("경로간 소요시간을 조회 할 수 있다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getDuration()).isEqualTo(0),
+                    () -> assertThat(pathResponse.getDuration()).isEqualTo(60l),
                     () -> assertThat(pathResponse.getStations()).hasSize(2)
                             .extracting("id", "name")
                             .containsExactly(
