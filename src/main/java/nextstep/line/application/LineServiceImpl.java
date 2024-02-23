@@ -72,7 +72,6 @@ public class LineServiceImpl implements LineService, LineProvider {
     @Override
     @Transactional
     public SectionResponse addSection(final Long lineId, final SectionCreateRequest createRequest) {
-        createRequest.validate();
         final Section savedSection = sectionRepository.save(createSection(createRequest));
 
         final Line line = findByIdWithSections(lineId);
@@ -92,7 +91,7 @@ public class LineServiceImpl implements LineService, LineProvider {
     private Section createSection(final SectionCreateRequest sectionCreateRequest) {
         final Station upStation = stationProvider.findById(sectionCreateRequest.getUpStationId());
         final Station downStation = stationProvider.findById(sectionCreateRequest.getDownStationId());
-        return new Section(upStation, downStation, sectionCreateRequest.getDistance());
+        return new Section(upStation, downStation, sectionCreateRequest.getDistance(), sectionCreateRequest.getDuration());
     }
 
     private Line findByIdWithSections(final Long id) {

@@ -16,6 +16,7 @@ class SectionTest {
     private Station 선릉역;
     private Station 역삼역;
     private int 강남역_선릉역_구간_길이;
+    private int 강남역_선릉역_구간_시간;
     private Section 강남역_선릉역_구간;
 
     @BeforeEach
@@ -24,7 +25,8 @@ class SectionTest {
         선릉역 = StationFactory.createStation(2L, "선릉역");
         역삼역 = StationFactory.createStation(3L, "역삼역");
         강남역_선릉역_구간_길이 = 10;
-        강남역_선릉역_구간 = SectionFactory.createSection(SECTION_ID, 강남역, 선릉역, 강남역_선릉역_구간_길이);
+        강남역_선릉역_구간_시간 = 5;
+        강남역_선릉역_구간 = SectionFactory.createSection(SECTION_ID, 강남역, 선릉역, 강남역_선릉역_구간_길이, 강남역_선릉역_구간_시간);
     }
 
     @Test
@@ -35,13 +37,14 @@ class SectionTest {
             softly.assertThat(강남역_선릉역_구간.getUpStation()).isEqualTo(강남역);
             softly.assertThat(강남역_선릉역_구간.getDownStation()).isEqualTo(선릉역);
             softly.assertThat(강남역_선릉역_구간.getDistance()).isEqualTo(강남역_선릉역_구간_길이);
+            softly.assertThat(강남역_선릉역_구간.getDuration()).isEqualTo(강남역_선릉역_구간_시간);
         });
     }
 
     @Test
     @DisplayName("Section 클래스의 id 가 같다면 동등한 객체이다.")
     void sectionEqualsTest() {
-        final Section newSection = SectionFactory.createSection(SECTION_ID, 강남역, 선릉역, 강남역_선릉역_구간_길이);
+        final Section newSection = SectionFactory.createSection(SECTION_ID, 강남역, 선릉역, 강남역_선릉역_구간_길이, 강남역_선릉역_구간_시간);
 
         assertThat(강남역_선릉역_구간).isEqualTo(newSection);
     }
@@ -61,24 +64,26 @@ class SectionTest {
     @Test
     @DisplayName("Section 의 shorten 메서드를 통해 upStation 과 distance 를 수정할 수 있다.")
     void shortenTest() {
-        final Section 강남역_역삼역_구간 = SectionFactory.createSection(SECTION_ID, 강남역, 역삼역, 5);
+        final Section 강남역_역삼역_구간 = SectionFactory.createSection(SECTION_ID, 강남역, 역삼역, 5, 2);
         강남역_선릉역_구간.shorten(강남역_역삼역_구간);
 
         assertSoftly(softly -> {
             softly.assertThat(강남역_선릉역_구간.getUpStation()).isEqualTo(역삼역);
             softly.assertThat(강남역_선릉역_구간.getDistance()).isEqualTo(강남역_선릉역_구간_길이 - 강남역_역삼역_구간.getDistance());
+            softly.assertThat(강남역_선릉역_구간.getDuration()).isEqualTo(강남역_선릉역_구간_시간 - 강남역_역삼역_구간.getDuration());
         });
     }
 
     @Test
     @DisplayName("Section 의 extend 메서드를 통해 upStation 과 distance 를 수정할 수 있다.")
     void extendTest() {
-        final Section 강남역_역삼역_구간 = SectionFactory.createSection(SECTION_ID, 강남역, 역삼역, 5);
+        final Section 강남역_역삼역_구간 = SectionFactory.createSection(SECTION_ID, 강남역, 역삼역, 5, 2);
         강남역_선릉역_구간.extend(강남역_역삼역_구간);
 
         assertSoftly(softly -> {
             softly.assertThat(강남역_선릉역_구간.getUpStation()).isEqualTo(강남역);
             softly.assertThat(강남역_선릉역_구간.getDistance()).isEqualTo(강남역_선릉역_구간_길이 + 강남역_역삼역_구간.getDistance());
+            softly.assertThat(강남역_선릉역_구간.getDuration()).isEqualTo(강남역_선릉역_구간_시간 + 강남역_역삼역_구간.getDuration());
         });
     }
 }

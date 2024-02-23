@@ -27,9 +27,11 @@ public class LineAcceptanceTest {
     private final String 신분당선 = "신분당선";
     private final String 신분당선_color = "bg-red-600";
     private final int 신분당선_distance = 10;
+    private final int 신분당선_duration = 2;
     private final String 분당선 = "분당선";
     private final String 분당선_color = "bg-green-600";
     private final int 분당선_distance = 15;
+    private final int 분당선_duration = 3;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +49,7 @@ public class LineAcceptanceTest {
     @Test
     void 노선_생성_테스트() {
         // when
-        final ExtractableResponse<Response> response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance);
+        final ExtractableResponse<Response> response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance, 신분당선_duration);
 
         // then
         노선이_정상_생성된다(response);
@@ -65,8 +67,8 @@ public class LineAcceptanceTest {
     @Test
     void 노선_목록_조회_테스트() {
         // given
-        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance);
-        final ExtractableResponse<Response> 분당선_response = 노선_생성_요청(분당선, 분당선_color, 지하철역_Id, 또다른지하철역_Id, 분당선_distance);
+        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance, 신분당선_duration);
+        final ExtractableResponse<Response> 분당선_response = 노선_생성_요청(분당선, 분당선_color, 지하철역_Id, 또다른지하철역_Id, 분당선_distance, 신분당선_duration);
 
         // when
         final ExtractableResponse<Response> response = 노선_목록_조회_요청();
@@ -84,7 +86,7 @@ public class LineAcceptanceTest {
     @Test
     void 노선_조회_테스트() {
         // given
-        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance);
+        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance, 신분당선_duration);
         final Long 신분당선_id = RestAssuredHelper.getIdFromBody(신분당선_response);
 
         // when
@@ -103,7 +105,7 @@ public class LineAcceptanceTest {
     @Test
     void 노선_수정_테스트() {
         // given
-        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance);
+        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance, 신분당선_duration);
         final Long 신분당선_id = RestAssuredHelper.getIdFromBody(신분당선_response);
 
         // when
@@ -123,8 +125,8 @@ public class LineAcceptanceTest {
     @Test
     void 노선_삭제_테스트() {
         // given
-        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance);
-        final ExtractableResponse<Response> 분당선_response = 노선_생성_요청(분당선, 분당선_color, 지하철역_Id, 또다른지하철역_Id, 분당선_distance);
+        final ExtractableResponse<Response> 신분당선_response = 노선_생성_요청(신분당선, 신분당선_color, 지하철역_Id, 새로운지하철역_Id, 신분당선_distance, 신분당선_duration);
+        final ExtractableResponse<Response> 분당선_response = 노선_생성_요청(분당선, 분당선_color, 지하철역_Id, 또다른지하철역_Id, 분당선_distance, 신분당선_duration);
         final Long 신분당선_id = RestAssuredHelper.getIdFromBody(신분당선_response);
 
         // when
@@ -181,8 +183,8 @@ public class LineAcceptanceTest {
         return LineApiHelper.fetchLines();
     }
 
-    private static ExtractableResponse<Response> 노선_생성_요청(final String 신분당선1, final String 신분당선_color1, final Long 지하철역_id, final Long 새로운지하철역_id, final int 신분당선_distance1) {
-        return LineApiHelper.createLine(신분당선1, 신분당선_color1, 지하철역_id, 새로운지하철역_id, 신분당선_distance1);
+    private static ExtractableResponse<Response> 노선_생성_요청(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
+        return LineApiHelper.createLine(name, color, upStationId, downStationId, distance, duration);
     }
 
     private void 노선_목록_조회_시_생성한_노선을_찾을_수_있다() {

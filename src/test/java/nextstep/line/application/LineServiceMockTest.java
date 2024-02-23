@@ -33,8 +33,10 @@ public class LineServiceMockTest {
     private static final long 강남역_ID = 1L;
     private static final long 선릉역_ID = 2L;
     private static final long 역삼역_ID = 3L;
-    private static final int 첫번째구간_길이 = 10;
-    private static final int 두번째구간_길이 = 20;
+    private static final int 강남역_선릉역_길이 = 10;
+    private static final int 강남역_선릉역_시간 = 2;
+    private static final int 선릉역_역삼역_길이 = 20;
+    private static final int 선릉역_역삼역_시간 = 3;
     private static final long LINE_ID = 1L;
     private static final String LINE_NAME = "2호선";
     private static final String LINE_COLOR = "연두색";
@@ -59,8 +61,8 @@ public class LineServiceMockTest {
         강남역 = StationFactory.createStation(강남역_ID, "강남역");
         선릉역 = StationFactory.createStation(선릉역_ID, "선릉역");
         역삼역 = StationFactory.createStation(역삼역_ID, "선릉역");
-        강남역_선릉역_구간 = SectionFactory.createSection(첫번째구간_ID, 강남역, 선릉역, 첫번째구간_길이);
-        선릉역_역삼역_구간 = SectionFactory.createSection(두번째구간_ID, 선릉역, 역삼역, 두번째구간_길이);
+        강남역_선릉역_구간 = SectionFactory.createSection(첫번째구간_ID, 강남역, 선릉역, 강남역_선릉역_길이, 강남역_선릉역_시간);
+        선릉역_역삼역_구간 = SectionFactory.createSection(두번째구간_ID, 선릉역, 역삼역, 선릉역_역삼역_길이, 선릉역_역삼역_시간);
         line = LineFactory.createLine(LINE_ID, LINE_NAME, LINE_COLOR, 강남역_선릉역_구간);
 
         lineService = new LineServiceImpl(lineRepository, sectionRepository, stationProvider);
@@ -73,7 +75,7 @@ public class LineServiceMockTest {
 
         @BeforeEach
         void setUp() {
-            sectionCreateRequest = new SectionCreateRequest(선릉역_ID, 역삼역_ID, 첫번째구간_길이);
+            sectionCreateRequest = new SectionCreateRequest(선릉역_ID, 역삼역_ID, 강남역_선릉역_길이, 강남역_선릉역_시간);
             given(stationProvider.findById(선릉역_ID)).willReturn(선릉역);
             given(stationProvider.findById(역삼역_ID)).willReturn(역삼역);
             given(sectionRepository.save(any())).willReturn(선릉역_역삼역_구간);
@@ -90,7 +92,8 @@ public class LineServiceMockTest {
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간.getDistance() + 선릉역_역삼역_구간.getDistance());
+                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_길이 + 선릉역_역삼역_길이);
+                softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_시간 + 선릉역_역삼역_시간);
                 softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역, 역삼역);
             });
         }
@@ -128,7 +131,8 @@ public class LineServiceMockTest {
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간.getDistance());
+                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_길이);
+                softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_시간);
                 softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역);
             });
         }

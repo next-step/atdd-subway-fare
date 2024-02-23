@@ -33,11 +33,13 @@ public class LineServiceTest {
     @Autowired
     private LineService lineService;
 
+    private static final int 강남역_선릉역_길이 = 10;
+    private static final int 강남역_선릉역_시간 = 2;
+    private static final int 선릉역_역삼역_길이 = 20;
+    private static final int 선릉역_역삼역_시간 = 3;
     private Station 강남역;
     private Station 선릉역;
     private Station 역삼역;
-    private int 강남역_선릉역_구간_길이;
-    private int 선릉역_역삼역_구간_길이;
     private Line line;
     private SectionCreateRequest sectionCreateRequest;
 
@@ -46,10 +48,8 @@ public class LineServiceTest {
         강남역 = stationRepository.save(StationFactory.createStation("강남역"));
         선릉역 = stationRepository.save(StationFactory.createStation("선릉역"));
         역삼역 = stationRepository.save(StationFactory.createStation("역삼역"));
-        강남역_선릉역_구간_길이 = 10;
-        선릉역_역삼역_구간_길이 = 20;
-        line = lineRepository.save(LineFactory.createLine("이호선", "연두색", SectionFactory.createSection(강남역, 선릉역, 강남역_선릉역_구간_길이)));
-        sectionCreateRequest = new SectionCreateRequest(선릉역.getId(), 역삼역.getId(), 선릉역_역삼역_구간_길이);
+        line = lineRepository.save(LineFactory.createLine("이호선", "연두색", SectionFactory.createSection(강남역, 선릉역, 강남역_선릉역_길이, 강남역_선릉역_시간)));
+        sectionCreateRequest = new SectionCreateRequest(선릉역.getId(), 역삼역.getId(), 선릉역_역삼역_길이, 선릉역_역삼역_시간);
     }
 
     @Nested
@@ -63,7 +63,8 @@ public class LineServiceTest {
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간_길이 + 선릉역_역삼역_구간_길이);
+                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_길이 + 선릉역_역삼역_길이);
+                softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_시간 + 선릉역_역삼역_시간);
                 softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역, 역삼역);
             });
         }
@@ -94,7 +95,8 @@ public class LineServiceTest {
 
             // then
             assertSoftly(softly -> {
-                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간_길이);
+                softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_길이);
+                softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_시간);
                 softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역);
             });
         }

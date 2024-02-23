@@ -11,15 +11,17 @@ public class SectionResponse {
     private StationResponse downStation;
 
     private int distance;
+    private int duration;
 
     public SectionResponse() {
     }
 
-    public SectionResponse(final Long id, final StationResponse upStation, final StationResponse downStation, final int distance) {
+    public SectionResponse(final Long id, final StationResponse upStation, final StationResponse downStation, final int distance, final int duration) {
         this.id = id;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public static SectionResponse from(final Section savedSection) {
@@ -27,7 +29,8 @@ public class SectionResponse {
                 savedSection.getId(),
                 StationResponse.from(savedSection.getUpStation()),
                 StationResponse.from(savedSection.getDownStation()),
-                savedSection.getDistance()
+                savedSection.getDistance(),
+                savedSection.getDuration()
         );
     }
 
@@ -45,5 +48,9 @@ public class SectionResponse {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

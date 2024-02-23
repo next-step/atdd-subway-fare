@@ -7,6 +7,7 @@ import nextstep.path.application.dto.PathSearchRequest;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.SubwayMap;
 import nextstep.path.exception.PathNotFoundException;
+import nextstep.path.exception.PathSearchNotValidException;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotExistException;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,16 +31,19 @@ public class PathService {
     }
 
     public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
-        final Path shortestPath = getPath(searchRequest).orElseThrow(PathNotFoundException::new);
+        if (Objects.equals(searchRequest.getSource(), searchRequest.getTarget())) {
+            throw new PathSearchNotValidException("target can not be the same with source");
+        }
+
+        final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
         return PathResponse.from(shortestPath);
     }
 
     public boolean isInvalidPath(final PathSearchRequest searchRequest) {
-        return getPath(searchRequest).isEmpty();
+        return getShortestDistancePath(searchRequest).isEmpty();
     }
 
-    private Optional<Path> getPath(final PathSearchRequest searchRequest) {
-        searchRequest.validate();
+    private Optional<Path> getShortestDistancePath(final PathSearchRequest searchRequest) {
 
         final List<Line> allLines = lineProvider.getAllLines();
         final Map<Long, Station> stationMap = createStationMapFrom(allLines);
@@ -46,7 +51,7 @@ public class PathService {
         final Station targetStation = stationMap.computeIfAbsent(searchRequest.getTarget(), throwStationNotFoundException());
 
         final SubwayMap subwayMap = new SubwayMap(allLines);
-        return subwayMap.findShortestPath(sourceStation, targetStation);
+        return subwayMap.findShortestPath(sourceStation, targetStation, searchRequest.getPathType());
     }
 
     private Map<Long, Station> createStationMapFrom(final List<Line> allLines) {

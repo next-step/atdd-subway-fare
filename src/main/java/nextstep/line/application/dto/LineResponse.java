@@ -11,16 +11,18 @@ public class LineResponse {
     private String name;
     private String color;
     private int distance;
+    private int duration;
     private List<StationResponse> stations;
 
     private LineResponse() {
     }
 
-    private LineResponse(final Long id, final String name, final String color, final int distance, final List<StationResponse> stations) {
+    private LineResponse(final Long id, final String name, final String color, final int distance, final int duration, final List<StationResponse> stations) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.distance = distance;
+        this.duration = duration;
         this.stations = stations;
     }
 
@@ -30,6 +32,7 @@ public class LineResponse {
                 , line.getName()
                 , line.getColor()
                 , line.getDistance()
+                , line.getDuration()
                 , line.getStations()
                 .stream()
                 .map(StationResponse::from)
@@ -55,5 +58,9 @@ public class LineResponse {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

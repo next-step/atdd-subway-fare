@@ -1,5 +1,6 @@
 package nextstep.path.application.dto;
 
+import nextstep.path.domain.PathType;
 import nextstep.path.exception.PathSearchNotValidException;
 
 import java.util.Objects;
@@ -8,6 +9,7 @@ public class PathSearchRequest {
 
     private Long source;
     private Long target;
+    private PathType pathType;
 
     public PathSearchRequest() {
     }
@@ -15,6 +17,13 @@ public class PathSearchRequest {
     public PathSearchRequest(final Long source, final Long target) {
         this.source = source;
         this.target = target;
+        this.pathType = PathType.DISTANCE;
+    }
+
+
+    public PathSearchRequest(final Long source, final Long target, final PathType pathType) {
+        this(source, target);
+        this.pathType = pathType;
     }
 
     public Long getSource() {
@@ -25,6 +34,10 @@ public class PathSearchRequest {
         return target;
     }
 
+    public PathType getPathType() {
+        return pathType;
+    }
+
     public void setSource(final Long source) {
         this.source = source;
     }
@@ -33,17 +46,21 @@ public class PathSearchRequest {
         this.target = target;
     }
 
+    public void setPathType(final PathType pathType) {
+        this.pathType = pathType;
+    }
+
     public void validate() {
-        if(Objects.isNull(source)) {
+        if (Objects.isNull(source)) {
             throw new PathSearchNotValidException("source can not be null");
         }
 
-        if(Objects.isNull(target)) {
+        if (Objects.isNull(target)) {
             throw new PathSearchNotValidException("target can not be null");
         }
 
-        if (Objects.equals(source, target)) {
-            throw new PathSearchNotValidException("target can not be the same with source");
+        if (Objects.isNull(pathType)) {
+            throw new PathSearchNotValidException("pathType can not be null");
         }
     }
 }

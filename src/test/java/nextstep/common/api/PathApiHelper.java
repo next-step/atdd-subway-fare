@@ -3,6 +3,7 @@ package nextstep.common.api;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.core.RestAssuredHelper;
+import nextstep.path.domain.PathType;
 
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class PathApiHelper {
     private PathApiHelper() {
     }
 
-    public static ExtractableResponse<Response> findPath(final Long startStationId, final Long endStationId) {
-        return RestAssuredHelper.get(PATH_API_PATH, Map.of("source", startStationId, "target", endStationId));
+    public static ExtractableResponse<Response> findPath(final Long startStationId, final Long endStationId, final PathType pathType) {
+        return RestAssuredHelper.get(PATH_API_PATH, Map.of("source", startStationId, "target", endStationId, "pathType", pathType));
     }
 }
