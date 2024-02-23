@@ -31,7 +31,7 @@ public class SectionService {
 
         sections.addSectionInMiddle(upStation, downStation, request.getDistance());
         Section section = sectionRepository.save(
-                new Section(line, upStation, downStation, request.getDistance())
+                new Section(line, upStation, downStation, request.getDistance(), request.getDuration())
         );
 
         return section.id();
@@ -61,7 +61,8 @@ public class SectionService {
                         line,
                         prevSection.upStation(),
                         nextSection.downStation(),
-                        prevSection.distance() + nextSection.distance()
+                        prevSection.distance() + nextSection.distance(),
+                        prevSection.duration() + nextSection.duration()
                 )
         );
     }

@@ -66,11 +66,11 @@ public class PathTest {
         이호선 = TWO_LINE.toLine(4L);
         삼호선 = TWO_LINE.toLine(5L);
 
-        강남역_선릉역_구간 = new Section(신분당선, 강남역, 선릉역, 10L);
-        선릉역_양재역_구간 = new Section(분당선, 선릉역, 양재역, 10L);
-        양재역_역삼역_구간 = new Section(일호선, 양재역, 역삼역, 10L);
-        역삼역_강남역_구간 = new Section(일호선, 역삼역, 강남역, 5L);
-        신대방역_신림역_구간 = new Section(삼호선, 신대방역, 신림역, 5L);
+        강남역_선릉역_구간 = new Section(신분당선, 강남역, 선릉역, 10L, 60L);
+        선릉역_양재역_구간 = new Section(분당선, 선릉역, 양재역, 10L, 60L);
+        양재역_역삼역_구간 = new Section(일호선, 양재역, 역삼역, 10L, 60L);
+        역삼역_강남역_구간 = new Section(일호선, 역삼역, 강남역, 5L, 60L);
+        신대방역_신림역_구간 = new Section(삼호선, 신대방역, 신림역, 5L, 60L);
 
         path = new Path(new Dijkstra(List.of(
                 강남역_선릉역_구간,

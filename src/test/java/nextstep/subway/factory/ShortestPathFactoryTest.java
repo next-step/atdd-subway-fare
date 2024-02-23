@@ -53,7 +53,8 @@ class ShortestPathFactoryTest {
                 신분당선,
                 강남역,
                 선릉역,
-                10L
+                10L,
+                60L
         );
         return 강남역_선릉역_구간;
     }

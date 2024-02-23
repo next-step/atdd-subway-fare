@@ -1,8 +1,11 @@
 package nextstep.subway.controller.dto;
 
+import lombok.Getter;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Getter
 public class LineCreateRequest {
     private String name;
     private String color;
@@ -11,6 +14,7 @@ public class LineCreateRequest {
     @NotNull
     private Long downStationId;
     private long distance;
+    private long duration;
 
     public LineCreateRequest() {
     }
@@ -27,23 +31,4 @@ public class LineCreateRequest {
         return List.of(upStationId, downStationId);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public Long getUpStationId() {
-        return upStationId;
-    }
-
-    public Long getDownStationId() {
-        return downStationId;
-    }
-
-    public long getDistance() {
-        return distance;
-    }
 }

@@ -25,22 +25,26 @@ public class Section {
     @JoinColumn(name = "down_station_id", nullable = false)
     private Station downStation;
 
-    @Column(nullable = false)
+    @Column
     private Long distance;
+
+    @Column
+    private Long duration;
 
     protected Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, Long distance) {
-        this(0L, line, upStation, downStation, distance);
+    public Section(Line line, Station upStation, Station downStation, Long distance, Long duration) {
+        this(0L, line, upStation, downStation, distance, duration);
     }
 
-    public Section(Long id, Line line, Station upStation, Station downStation, Long distance) {
+    public Section(Long id, Line line, Station upStation, Station downStation, Long distance, Long duration) {
         this.id = id;
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public boolean isSameLine(Line line) {
@@ -94,4 +98,7 @@ public class Section {
         return distance;
     }
 
+    public Long duration() {
+        return duration;
+    }
 }
