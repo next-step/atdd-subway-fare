@@ -38,13 +38,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * GIVEN 지하철 역을 생성하고
      * GIVEN 생성한 지하철역이 모두 연결된 노선을 생성한다
      *
-     * 역삼역    --- *1호선*(10) ---   양재역
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
      * |                        |
-     * *2호선*(10)                   *분당선*(10)
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
      * |                        |
-     * 강남역    --- *신분당호선*(10) ---    선릉역
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
      * <p>
-     * 강남역    --- *3호선*(10) ---    선릉역
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
      */
     @BeforeEach
     void setFixture() {
@@ -74,13 +74,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 역삼역    --- *1호선*(10) ---   양재역
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
      * |                        |
-     * *2호선*(10)                   *분당선*(10)
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
      * |                        |
-     * 강남역    --- *신분당호선*(10) ---    선릉역
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
      * <p>
-     * 강남역    --- *3호선*(10) ---    선릉역
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
      * <p>
      * WHEN 경로 조회시 출발역과 도착역이 같은 경우
      * Then 경로 조회를 할 수 없다
@@ -88,7 +88,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 실패_경로_조회시_출발역과_도착역이_같은_경우_경로를_조회할_수_없다() {
         // given
-        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 강남역_ID.toString());
+        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 강남역_ID.toString(), "type", "DISTANCE");
 
         // when
         String message = get("/paths", OK.value(), params)
@@ -99,13 +99,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 역삼역    --- *1호선*(10) ---   양재역
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
      * |                        |
-     * *2호선*(10)                   *분당선*(10)
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
      * |                        |
-     * 강남역    --- *신분당호선*(10) ---    선릉역
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
      * <p>
-     * 강남역    --- *3호선*(10) ---    선릉역
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
      * <p>
      * WHEN 경로 조회시 출발역과 도착역이 연결되어 있지 않은 경우
      * Then 경로 조회를 할 수 없다
@@ -113,7 +113,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 실패_경로_조회시_출발역과_도착역이_연결되어_있지_않은_경우_경로를_조회할_수_없다() {
         // given
-        Map<String, String> params = Map.of("source",  강남역_ID.toString(), "target", 신대방역_ID.toString());
+        Map<String, String> params = Map.of("source",  강남역_ID.toString(), "target", 신대방역_ID.toString(), "type", "DISTANCE");
 
         // when
         String message = get("/paths", OK.value(), params)
@@ -124,13 +124,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 역삼역    --- *1호선*(10) ---   양재역
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
      * |                        |
-     * *2호선*(10)                   *분당선*(10)
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
      * |                        |
-     * 강남역    --- *신분당호선*(10) ---    선릉역
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
      * <p>
-     * 강남역    --- *3호선*(10) ---    선릉역
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
      * <p>
      * WHEN 경로 조회시 존재하지 않는 출발역일 경우
      * Then 경로 조회를 할 수 없다
@@ -138,7 +138,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 실패_경로_조회시_노선에_존재하지_않는_출발역일_경우_경로를_조회할_수_없다() {
         // given
-        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 봉천역_ID.toString());
+        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 봉천역_ID.toString(), "type", "DISTANCE");
 
         // when
         String message = get("/paths", OK.value(), params)
@@ -149,13 +149,13 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 역삼역    --- *1호선*(10) ---   양재역
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
      * |                        |
-     * *2호선*(10)                   *분당선*(10)
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
      * |                        |
-     * 강남역    --- *신분당호선*(10) ---    선릉역
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
      * <p>
-     * 강남역    --- *3호선*(10) ---    선릉역
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
      * <p>
      * WHEN 경로 조회시 존재하지 않는 도착역일 경우
      * Then 경로 조회를 할 수 없다
@@ -163,7 +163,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 실패_경로_조회시_노선에_존재하지_않는_도착역일_경우_경로를_조회할_수_없다() {
         // given
-        Map<String, String> params = Map.of("source", 봉천역_ID.toString(),"target", 강남역_ID.toString());
+        Map<String, String> params = Map.of("source", 봉천역_ID.toString(),"target", 강남역_ID.toString(), "type", "DISTANCE");
 
         // when
         String message = get("/paths", OK.value(), params)
@@ -174,21 +174,21 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * 역삼역    --- *1호선*(10) ---   양재역
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
      * |                        |
-     * *2호선*(10)                   *분당선*(10)
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
      * |                        |
-     * 강남역    --- *신분당호선*(10) ---    선릉역
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
      * <p>
-     * 강남역    --- *3호선*(10) ---    선릉역
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
      * <p>
      * WHEN 경로 조회시 출발역과 도착역이 연결되어 있는 경우
-     * Then 경로 조회를 할 수 있다
+     * Then 경로간 거리를 조회 할 수 있다
      */
     @Test
-    void 성공_경로_조회시_출발역과_도착역이_연결되어_있을_경우_경로를_조회할_수_있다() {
+    void 성공_경로_조회시_출발역과_도착역이_연결되어_있을_경우_경로간_거리를_조회할_수_있다() {
         // given
-        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 역삼역_ID.toString());
+        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 역삼역_ID.toString(), "type", "DISTANCE");
 
         // when
         PathResponse pathResponse = get("/paths", OK.value(), params)
@@ -197,6 +197,39 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
                 () -> assertThat(pathResponse.getDistance()).isEqualTo(10L),
+                () -> assertThat(pathResponse.getStations()).hasSize(2)
+                        .extracting("id", "name")
+                        .containsExactly(
+                                tuple(1L, "강남역"),
+                                tuple(4L, "역삼역")
+                        )
+        );
+    }
+
+    /**
+     * 역삼역    --- *1호선*(10D, 60T) ---   양재역
+     * |                        |
+     * *2호선*(10D, 60T)                   *분당선*(10D, 60T)
+     * |                        |
+     * 강남역    --- *신분당호선*(10D, 60T) ---    선릉역
+     * <p>
+     * 강남역    --- *3호선*(10D, 60T) ---    선릉역
+     * <p>
+     * WHEN 경로 조회시 출발역과 도착역이 연결되어 있는 경우
+     * Then 경로간 소요시간을 조회 할 수 있다
+     */
+    @Test
+    void 성공_경로_조회시_출발역과_도착역이_연결되어_있을_경우_경로간_소요시간을_조회할_수_있다() {
+        // given
+        Map<String, String> params = Map.of("source", 강남역_ID.toString(), "target", 역삼역_ID.toString(), "type", "DURATION");
+
+        // when
+        PathResponse pathResponse = get("/paths", OK.value(), params)
+                .as(PathResponse.class);
+
+        // then
+        assertAll(
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(0L),
                 () -> assertThat(pathResponse.getStations()).hasSize(2)
                         .extracting("id", "name")
                         .containsExactly(

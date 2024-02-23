@@ -29,7 +29,7 @@ public class PathService {
         List<Station> stations = path.findShortestPath(source, target);
         int distance = path.findShortestDistance(source, target);
 
-        return new PathResponse(StationResponse.listOf(stations), distance);
+        return new PathResponse(StationResponse.listOf(stations), distance, 0);
     }
 
 }
