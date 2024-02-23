@@ -24,8 +24,8 @@ public class Path {
         }
     }
 
-    public int findShortestDistance(Station source, Station target) {
-        return shortestPathStrategy.findShortestDistance(source, target);
+    public int findShortestValue(Station source, Station target) {
+        return shortestPathStrategy.findShortestValue(source, target);
     }
 
 }

@@ -1,5 +1,6 @@
 package nextstep.subway.controller.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class SectionCreateRequest {
 
     @NotNull
@@ -20,15 +22,7 @@ public class SectionCreateRequest {
     @Min(1)
     private long duration;
 
-
     public SectionCreateRequest() {
-    }
-
-    public SectionCreateRequest(Long downStationId, Long upStationId, long distance, long duration) {
-        this.downStationId = downStationId;
-        this.upStationId = upStationId;
-        this.distance = distance;
-        this.duration = duration;
     }
 
     public List<Long> stationIds(){

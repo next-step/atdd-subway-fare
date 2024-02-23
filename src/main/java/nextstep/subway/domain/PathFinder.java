@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import nextstep.subway.factory.ShortestPathFactory;
 import nextstep.subway.repository.SectionRepository;
+import nextstep.subway.strategy.PathType;
 import nextstep.subway.strategy.ShortestPathStrategy;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,17 @@ public class PathFinder {
     }
 
     public Path findPath() {
-        List<Section> sections = sectionRepository.findAll();
-        ShortestPathStrategy shortestPathStrategy = new ShortestPathFactory().generateStrategy(ShortestPathType.DIJKSTRA, sections);
+        return findPathBy(PathType.DISTANCE);
+    }
 
+    public Path findPath(PathType pathType) {
+        return findPathBy(pathType);
+    }
+
+    private Path findPathBy(PathType pathType) {
+        List<Section> sections = sectionRepository.findAll();
+        var factory = new ShortestPathFactory();
+        ShortestPathStrategy shortestPathStrategy = factory.generateStrategy(ShortestPathType.DIJKSTRA, sections, pathType);
         return new Path(shortestPathStrategy);
     }
 }

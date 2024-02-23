@@ -6,6 +6,7 @@ import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Station;
 import nextstep.subway.repository.StationRepository;
+import nextstep.subway.strategy.PathType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,15 +22,14 @@ public class PathService {
         this.pathFinder = pathFinder;
     }
 
-    public PathResponse findPaths(Long sourceId, Long targetId) {
+    public PathResponse findPaths(Long sourceId, Long targetId, PathType pathType) {
         Station source = stationRepository.getBy(sourceId);
         Station target = stationRepository.getBy(targetId);
 
-        Path path = pathFinder.findPath();
+        Path path = pathFinder.findPath(pathType);
         List<Station> stations = path.findShortestPath(source, target);
-        int distance = path.findShortestDistance(source, target);
-
-        return new PathResponse(StationResponse.listOf(stations), distance, 0);
+        int value = path.findShortestValue(source, target);
+        return pathType.getResponse().apply(stations, value);
     }
 
 }
