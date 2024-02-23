@@ -66,7 +66,7 @@ public class PathStepDef implements En {
 
         When("경로 조회시 출발역과 도착역이 같은 경우", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
-            Map<String, String> params = Map.of("source", 강남역_ID, "target", 강남역_ID);
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 강남역_ID, "type", "DISTANCE");
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
@@ -81,7 +81,7 @@ public class PathStepDef implements En {
         When("경로 조회시 출발역과 도착역이 연결되어 있지 않은 경우", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 신대방역_ID = String.valueOf(context.store.get("신대방역"));
-            Map<String, String> params = Map.of("source", 강남역_ID, "target", 신대방역_ID);
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 신대방역_ID, "type", "DISTANCE");
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
@@ -96,7 +96,7 @@ public class PathStepDef implements En {
         When("경로 조회시 존재하지 않는 출발역일 경우", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 봉천역_ID = String.valueOf(context.store.get("봉천역"));
-            Map<String, String> params = Map.of("source", 강남역_ID, "target", 봉천역_ID);
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 봉천역_ID, "type", "DISTANCE");
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
@@ -111,7 +111,7 @@ public class PathStepDef implements En {
         When("경로 조회시 존재하지 않는 도착역일 경우", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 봉천역_ID = String.valueOf(context.store.get("봉천역"));
-            Map<String, String> params = Map.of("source", 강남역_ID, "target", 봉천역_ID);
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 봉천역_ID, "type", "DISTANCE");
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
@@ -123,21 +123,43 @@ public class PathStepDef implements En {
             assertThat(context.message).isEqualTo("노선에 존재하지 않는 지하철역입니다.");
         });
 
-
-        When("경로 조회시 출발역과 도착역이 연결되어 있는 경우", () -> {
+        When("경로 조회시 출발역과 도착역이 연결되어 최소 거리 기준으로 경로 조회를 요청 하는 경우", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 역삼역_ID = String.valueOf(context.store.get("역삼역"));
-            Map<String, String> params = Map.of("source", 강남역_ID, "target", 역삼역_ID);
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 역삼역_ID, "type", "DISTANCE");
 
             context.response = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
                     .경로_조회_요청을_보낸다(params);
         });
 
-        Then("경로 조회를 할 수 있다", () -> {
+        Then("경로간 거리를 조회 할 수 있다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
                     () -> assertThat(pathResponse.getDistance()).isEqualTo(10L),
+                    () -> assertThat(pathResponse.getStations()).hasSize(2)
+                            .extracting("id", "name")
+                            .containsExactly(
+                                    tuple(1L, "강남역"),
+                                    tuple(4L, "역삼역")
+                            )
+            );
+        });
+
+        When("경로 조회시 출발역과 도착역이 연결되어 최소 소요시간 기준으로 경로 조회를 요청 하는 경우", () -> {
+            String 강남역_ID = String.valueOf(context.store.get("강남역"));
+            String 역삼역_ID = String.valueOf(context.store.get("역삼역"));
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 역삼역_ID, "type", "DURATION");
+
+            context.response = PathSteps.경로_요청을_구성한다()
+                    .Response_HTTP_상태_코드(OK.value())
+                    .경로_조회_요청을_보낸다(params);
+        });
+
+        Then("경로간 소요시간을 조회 할 수 있다", () -> {
+            PathResponse pathResponse = context.response.as(PathResponse.class);
+            assertAll(
+                    () -> assertThat(pathResponse.getDuration()).isEqualTo(0),
                     () -> assertThat(pathResponse.getStations()).hasSize(2)
                             .extracting("id", "name")
                             .containsExactly(
