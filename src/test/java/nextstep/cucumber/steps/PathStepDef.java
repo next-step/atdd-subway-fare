@@ -45,8 +45,9 @@ public class PathStepDef implements En {
                 final Long upStationId = (Long) context.store.get(map.get("upStation"));
                 final Long downStationId = (Long) context.store.get(map.get("downStation"));
                 final int distance = Integer.parseInt(map.get("distance"));
+                final int duration = Integer.parseInt(map.get("duration"));
 
-                final Long lineId = 노선이_생성되어_있다(name, color, upStationId, downStationId, distance)
+                final Long lineId = 노선이_생성되어_있다(name, color, upStationId, downStationId, distance, duration)
                         .as(LineResponse.class).getId();
                 context.store.put(name, lineId);
             }

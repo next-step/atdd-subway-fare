@@ -46,7 +46,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기를 등록한다.")
     @Test
     void createFavorite() {
-        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10);
+        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10, 3);
         회원_생성_요청(EMAIL, "1234", 30);
 
         final ExtractableResponse<Response> response = 즐겨찾기를_등록한다(EMAIL, 강남역Id, 역삼역Id);
@@ -63,7 +63,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기를 등록 할 때, 인증되지 않은 사용자의 요청은 401코드를 리턴한다.")
     @Test
     void createFavorite_invalid_jwt() {
-        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10);
+        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10, 3);
 
         final ExtractableResponse<Response> response = 토근_없이_즐겨찾기를_등록한다(강남역Id, 역삼역Id);
 
@@ -97,7 +97,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기를 조회한다.")
     @Test
     void getFavorites() {
-        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10);
+        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10, 3);
         회원_생성_요청(EMAIL, "1234", 30);
         즐겨찾기가_등록되어_있다(EMAIL, 강남역Id, 역삼역Id);
 
@@ -117,7 +117,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     @DisplayName("즐겨찾기를 삭제한다.")
     @Test
     void removeFavorites() {
-        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10);
+        노선이_생성되어_있다("이호선", "red", 강남역Id, 역삼역Id, 10, 3);
         회원_생성_요청(EMAIL, "1234", 30);
         final String locationUrl = 즐겨찾기가_등록되어_있다(EMAIL, 강남역Id, 역삼역Id);
 

@@ -17,8 +17,8 @@ public class LineSteps {
     private LineSteps() {
     }
 
-    public static ExtractableResponse<Response> 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId, final int distance) {
-        Map<String, String> params = createLineRequestPixture(name, color, upStationId, downStationId, distance);
+    public static ExtractableResponse<Response> 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
+        Map<String, String> params = createLineRequestPixture(name, color, upStationId, downStationId, distance, duration);
         return RestAssured
                 .given().log().all().body(params).contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post(LINES_URL)
@@ -64,13 +64,14 @@ public class LineSteps {
     }
 
     public static Map<String, String> createLineRequestPixture(final String name, final String color,
-                                                               final Long upStationId, final Long downStationId, final int distance) {
+                                                               final Long upStationId, final Long downStationId, final int distance, final int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("upStationId", String.valueOf(upStationId));
         params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
         return params;
     }
 
