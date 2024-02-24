@@ -8,9 +8,11 @@ import java.util.List;
 public class Path {
 
     private ShortestPathStrategy shortestPathStrategy;
+    private PathType pathType;
 
-    public Path(ShortestPathStrategy shortestPathStrategy) {
+    public Path(ShortestPathStrategy shortestPathStrategy, PathType pathType) {
         this.shortestPathStrategy = shortestPathStrategy;
+        this.pathType = pathType;
     }
 
     public List<Station> findShortestPath(Station source, Station target) {
