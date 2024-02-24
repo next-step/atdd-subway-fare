@@ -34,5 +34,10 @@ public class PathStepDef implements En {
             List<String> split = List.of(pathString.split(","));
             assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));
         });
+
+        And("총 거리 {string}와 소요 시간 {string}을 함께 응답함", (String distance, String duration) -> {
+            assertThat(context.response.jsonPath().getObject("distance", String.class)).isEqualTo(distance);
+            assertThat(context.response.jsonPath().getObject("duration", String.class)).isEqualTo(duration);
+        });
     }
 }
