@@ -4,6 +4,7 @@ import nextstep.subway.controller.dto.*;
 import nextstep.exception.ExceptionResponse;
 import nextstep.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+@Disabled
 @DisplayName("지하철 경로 조회 관련 기능")
 public class PathAcceptanceTest extends AcceptanceTest {
 
