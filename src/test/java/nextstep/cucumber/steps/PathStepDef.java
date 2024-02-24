@@ -5,6 +5,7 @@ import io.cucumber.java8.En;
 import io.restassured.RestAssured;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.application.dto.LineResponse;
+import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,22 +67,46 @@ public class PathStepDef implements En {
             }
         });
 
-        Given("{string}과 {string} 사이의 경로 조회를 요청하면", (String source, String target) -> {
+        When("{string}과 {string} 사이의 최소거리 경로 조회를 요청하면", (String source, String target) -> {
             Long sourceId = (Long) context.store.get(source);
             Long targetId = (Long) context.store.get(target);
 
             context.response = RestAssured.given().log().all()
                     .queryParam("source", sourceId)
                     .queryParam("target", targetId)
+                    .queryParam("type", "DISTANCE")
                     .when().get(PATHS)
                     .then().log().all()
                     .statusCode(HttpStatus.OK.value())
                     .extract();
         });
 
-        When("{string} 지하철역을_리턴한다", (String pathString) -> {
+        When("{string}과 {string} 사이의 최소시간 경로 조회를 요청하면", (String source, String target) -> {
+            Long sourceId = (Long) context.store.get(source);
+            Long targetId = (Long) context.store.get(target);
+
+            context.response = RestAssured.given().log().all()
+                    .queryParam("source", sourceId)
+                    .queryParam("target", targetId)
+                    .queryParam("type", "DURATION")
+                    .when().get(PATHS)
+                    .then().log().all()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract();
+        });
+
+        Then("{string} 지하철역을_리턴한다", (String pathString) -> {
             List<String> split = List.of(pathString.split(","));
             assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));
+        });
+
+        Then("총 거리 {string}와 총 소요 시간 {string}를 리턴한다", (String distance, String duration) -> {
+            final PathResponse pathResponse = context.response.as(PathResponse.class);
+            final double expectDistance = pathResponse.getDistance();
+            final double expectDuration = pathResponse.getDuration();
+
+            assertThat(expectDistance).isEqualTo(distance);
+            assertThat(expectDuration).isEqualTo(duration);
         });
     }
 

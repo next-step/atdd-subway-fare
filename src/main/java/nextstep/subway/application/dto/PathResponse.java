@@ -9,6 +9,7 @@ public class PathResponse {
     private List<StationResponse> stations;
 
     private double distance;
+    private int duration;
 
     public PathResponse(final List<Station> stations, final double distance) {
         this.stations = stations.stream().map(this::createStationResponse).collect(Collectors.toList());
@@ -21,6 +22,10 @@ public class PathResponse {
 
     public double getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     private StationResponse createStationResponse(Station station) {
