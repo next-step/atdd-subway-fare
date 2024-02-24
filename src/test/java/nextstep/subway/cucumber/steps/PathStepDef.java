@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import nextstep.subway.cucumber.AcceptanceContext;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.testhelper.JsonPathHelper;
 import nextstep.subway.testhelper.apicaller.PathApiCaller;
@@ -24,10 +25,10 @@ public class PathStepDef implements En {
     private AcceptanceContext context;
 
     public PathStepDef() {
-        Given("{string}과 {string}의 경로를 조회하면", (String source, String target) -> {
+        Given("{string}과 {string}의 {string}경로를 조회하면", (String source, String target, String type) -> {
             Long sourceId = ((StationResponse) context.store.get(source)).getId();
             Long targetId = ((StationResponse) context.store.get(target)).getId();
-            context.response = PathApiCaller.경로_조회(new PathRequest(sourceId, targetId));
+            context.response = PathApiCaller.경로_조회(new PathRequest(sourceId, targetId, PathType.valueOf(type).toString()));
         });
 
         Then("{string} 경로가 조회된다", (String pathString) -> {
