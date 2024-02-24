@@ -25,9 +25,11 @@ import java.util.stream.Collectors;
 public class PathService {
 
     private final LineProvider lineProvider;
+    private final PathFareCalculator pathFareCalculator;
 
     public PathService(final LineProvider lineProvider) {
         this.lineProvider = lineProvider;
+        this.pathFareCalculator = new PathFareCalculator();
     }
 
     public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
@@ -36,7 +38,10 @@ public class PathService {
         }
 
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
-        return PathResponse.from(shortestPath);
+
+        final long fare = pathFareCalculator.calculate(shortestPath.getDistance());
+
+        return PathResponse.from(shortestPath, fare);
     }
 
     public boolean isInvalidPath(final PathSearchRequest searchRequest) {
