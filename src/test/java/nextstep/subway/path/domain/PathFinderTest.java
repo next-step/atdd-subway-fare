@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ShortestDistancePathFinderTest {
+class PathFinderTest {
     private PathFinder pathFinder;
     private Line 일호선;
     private Line 이호선;
@@ -34,14 +34,14 @@ class ShortestDistancePathFinderTest {
                 3L,
                 3L);
         삼호선.addSection(addSection);
-        pathFinder = new JGraphShortestDistancePathFinder();
+        pathFinder = new JGraphPathFinder();
         lines = Lines.from(List.of(일호선, 이호선, 삼호선, 사호선));
     }
 
     @Test
     @DisplayName("Path에서 최단거리의 구간을 찾을 수 있다.")
-    void findPath1() {
-        Path path = pathFinder.shortcut(lines, StationFixture.잠실역, StationFixture.삼성역);
+    void findShortestDistancePath() {
+        Path path = pathFinder.shortcut(lines, StationFixture.잠실역, StationFixture.삼성역, PathType.DISTANCE);
 
         List<Station> actualSections = path.getStations();
         List<Station> expectedSections = List.of(StationFixture.잠실역, StationFixture.선릉역, StationFixture.삼성역);
@@ -53,24 +53,38 @@ class ShortestDistancePathFinderTest {
     }
 
     @Test
+    @DisplayName("Path에서 최소시간의 구간을 찾을 수 있다.")
+    void findShortestDurationPath1() {
+        Path path = pathFinder.shortcut(lines, StationFixture.잠실역, StationFixture.삼성역, PathType.DURATION);
+
+        List<Station> actualSections = path.getStations();
+        List<Station> expectedSections = List.of(StationFixture.잠실역, StationFixture.선릉역, StationFixture.삼성역);
+        assertThat(actualSections).isEqualTo(expectedSections);
+
+        Long actualDistance = path.getDuration();
+        Long expectedDistance = 5L;
+        assertThat(actualDistance).isEqualTo(expectedDistance);
+    }
+
+    @Test
     @DisplayName("Path에서 출발역과 도착역이 같을 수 없다")
     void findPath2() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> pathFinder.shortcut(lines, StationFixture.잠실역, StationFixture.잠실역));
+                () -> pathFinder.shortcut(lines, StationFixture.잠실역, StationFixture.잠실역, PathType.DISTANCE));
     }
 
     @Test
     @DisplayName("Path에서 출발역과 도착역을 포함하는 라인을 찾지 못했을 경우 에러 발생")
     void findPath3() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> pathFinder.shortcut(lines, StationFixture.강남역, StationFixture.서초역));
+                () -> pathFinder.shortcut(lines, StationFixture.강남역, StationFixture.서초역, PathType.DISTANCE));
     }
 
     @Test
     @DisplayName("Line에서 역을 찾지 못했을 경우 에러 발생")
     void findPath4() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> pathFinder.shortcut(lines, StationFixture.강남역, StationFixture.오이도역));
+                () -> pathFinder.shortcut(lines, StationFixture.강남역, StationFixture.오이도역, PathType.DISTANCE));
     }
 
 }

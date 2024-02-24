@@ -7,9 +7,10 @@ import org.jgrapht.GraphPath;
 public interface PathFinder {
     Path shortcut(Lines lines,
                   Station source,
-                  Station target);
+                  Station target,
+                  PathType type);
 
-    GraphPath validCorrect(Lines lines,
+    void validCorrect(Lines lines,
                            Station source,
                            Station target);
 }

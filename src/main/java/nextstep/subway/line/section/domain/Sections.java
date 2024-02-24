@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -150,6 +151,10 @@ public class Sections {
 
     public List<Section> getAll() {
         return this.sectionList;
+    }
+
+    public void forEach(Consumer<Section> action) {
+        sectionList.forEach(action);
     }
 
     @Override

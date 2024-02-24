@@ -4,7 +4,7 @@ import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Lines;
 import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.member.domain.Member;
-import nextstep.subway.path.domain.JGraphShortestDistancePathFinder;
+import nextstep.subway.path.domain.JGraphPathFinder;
 import nextstep.subway.path.domain.PathFinder;
 import nextstep.subway.testhelper.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ class FavoriteTest {
                 3L,
                 3L);
         삼호선.addSection(addSection);
-        pathFinder = new JGraphShortestDistancePathFinder();
+        pathFinder = new JGraphPathFinder();
         lines = Lines.from(List.of(일호선, 이호선, 삼호선, 사호선));
     }
 

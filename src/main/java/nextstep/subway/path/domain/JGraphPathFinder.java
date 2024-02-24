@@ -16,19 +16,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class JGraphShortestDistancePathFinder implements PathFinder {
+public class JGraphPathFinder implements PathFinder {
     @Override
     public Path shortcut(Lines lines,
                          Station source,
-                         Station target) {
-        GraphPath path = validCorrect(lines, source, target);
+                         Station target,
+                         PathType type) {
+        validCorrect(lines, source, target);
+        GraphPath path = createShortestPath(lines, source, target, type);
         List<Station> shortestPath = path.getVertexList();
         Double shorestDistance = path.getWeight();
         return new Path(shortestPath, shorestDistance);
     }
 
     @Override
-    public GraphPath validCorrect(Lines lines,
+    public void validCorrect(Lines lines,
                                   Station source,
                                   Station target) {
         if (source.equals(target)) {
@@ -38,26 +40,30 @@ public class JGraphShortestDistancePathFinder implements PathFinder {
         if (!lines.existStation(source) || !lines.existStation(target)) {
             throw new IllegalArgumentException("입력한 역을 찾을 수 없습니다.");
         }
-
-        DijkstraShortestPath dijkstraShortestPath = createShortestPath(lines);
-        return Optional.ofNullable(dijkstraShortestPath.getPath(source, target)).orElseThrow(() -> new IllegalArgumentException("출발역과 도착역은 연결되어 있어야 합니다."));
+        createShortestPath(lines, source, target, PathType.DISTANCE);
     }
 
-    private DijkstraShortestPath<Station, DefaultWeightedEdge> createShortestPath(Lines lines) {
+    private GraphPath createShortestPath(Lines lines,
+                                         Station source,
+                                         Station target,
+                                         PathType type) {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
-        lines.forEach(line -> createPath(graph, line.getSections(), line.getStations()));
-        return new DijkstraShortestPath<>(graph);
+        lines.forEach(line -> createPath(graph, line.getSections(), line.getStations(), type));
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        return Optional.ofNullable(dijkstraShortestPath.getPath(source, target)).orElseThrow(() -> new IllegalArgumentException("출발역과 도착역은 연결되어 있어야 합니다."));
     }
 
     private void createPath(WeightedGraph graph,
                             Sections sections,
-                            Stations stations) {
+                            Stations stations,
+                            PathType type) {
         stations.forEach(graph::addVertex);
-        sections.getAll().forEach(section -> setEdge(graph, section));
+        sections.forEach(section -> setEdge(graph, section, type));
     }
 
     private static void setEdge(WeightedGraph graph,
-                                Section section) {
-        graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.distance());
+                                Section section,
+                                PathType type) {
+        graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), type.findBy(section));
     }
 }
