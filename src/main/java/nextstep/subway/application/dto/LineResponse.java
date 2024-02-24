@@ -11,6 +11,7 @@ public class LineResponse {
     private String name;
     private String color;
     private int distance;
+    private int duration;
     private List<StationResponse> stations;
 
     public LineResponse() {

@@ -42,6 +42,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         final ExtractableResponse<Response> extract = 노선목록을_조회한다();
         assertThat(extract.jsonPath().getList("name")).contains("이호선");
         assertThat(extract.jsonPath().getList("color")).contains("bg-red-600");
+        assertThat(extract.jsonPath().getList("distance")).contains(10);
+        assertThat(extract.jsonPath().getList("duration")).contains(10);
     }
 
     /**
