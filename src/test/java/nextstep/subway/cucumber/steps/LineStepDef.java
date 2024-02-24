@@ -32,6 +32,7 @@ public class LineStepDef implements En {
                         params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                         params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                         params.put("distance", it.get("distance"));
+                        params.put("duration", it.get("duration"));
                         ExtractableResponse<Response> response = LineApiCaller.지하철_노선_생성(params);
                         context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
                     });

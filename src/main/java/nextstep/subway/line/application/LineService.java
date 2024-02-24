@@ -86,7 +86,8 @@ public class LineService {
                 lineRequest.getColor(),
                 getStation(lineRequest.getUpStationId()),
                 getStation(lineRequest.getDownStationId()),
-                lineRequest.getDistance());
+                lineRequest.getDistance(),
+                lineRequest.getDuration());
     }
 
     private Line getLine(Long id) {

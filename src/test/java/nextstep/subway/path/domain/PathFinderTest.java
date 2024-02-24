@@ -24,10 +24,10 @@ class PathFinderTest {
 
     @BeforeEach
     void setUp() {
-        일호선 = new Line("일호선", "blue", StationFixture.잠실역, StationFixture.강남역, 10L);
-        이호선 = new Line("이호선", "green", StationFixture.강남역, StationFixture.삼성역, 10L);
-        삼호선 = new Line("삼호선", "orange", StationFixture.잠실역, StationFixture.선릉역, 2L);
-        사호선 = new Line("삼호선", "orange", StationFixture.교대역, StationFixture.서초역, 5L);
+        일호선 = new Line("일호선", "blue", StationFixture.잠실역, StationFixture.강남역, 10L, 10L);
+        이호선 = new Line("이호선", "green", StationFixture.강남역, StationFixture.삼성역, 10L, 10L);
+        삼호선 = new Line("삼호선", "orange", StationFixture.잠실역, StationFixture.선릉역, 2L, 10L);
+        사호선 = new Line("삼호선", "orange", StationFixture.교대역, StationFixture.서초역, 5L, 10L);
         Section addSection = new Section(
                 StationFixture.선릉역,
                 StationFixture.삼성역,

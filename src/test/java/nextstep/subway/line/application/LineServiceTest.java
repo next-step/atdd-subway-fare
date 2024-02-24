@@ -33,6 +33,7 @@ public class LineServiceTest {
                 "bg-red-600",
                 강남역,
                 선릉역,
+                10L,
                 10L);
         Line 신분당선 = lineRepository.save(line);
 
