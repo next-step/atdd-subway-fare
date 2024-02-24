@@ -12,11 +12,12 @@ public class Section {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     private Station upStation;
-
     @OneToOne(fetch = FetchType.LAZY)
     private Station downStation;
-
+    @Column(nullable = false)
     private Long distance;
+    @Column(nullable = false)
+    private Long duration;
 
     protected Section() {
     }
@@ -27,6 +28,16 @@ public class Section {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+    }
+
+    public Section(Station upStation,
+                   Station downStation,
+                   Long distance,
+                   Long duration) {
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public Station getUpStation() {

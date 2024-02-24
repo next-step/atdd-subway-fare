@@ -51,7 +51,7 @@ public class Line {
         this.name = name;
         this.color = color;
         List<Section> list = new ArrayList<>();
-        list.add(new Section(upStation, downStation, distance));
+        list.add(new Section(upStation, downStation, distance, duration));
         this.sections = Sections.from(list);
         this.distance = distance;
         this.duration = duration;
@@ -75,6 +75,10 @@ public class Line {
 
     public Long getDistance() {
         return distance;
+    }
+
+    public Long getDuration() {
+        return duration;
     }
 
     public void update(String name,

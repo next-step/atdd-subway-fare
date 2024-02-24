@@ -53,6 +53,7 @@ public class LineServiceMockTest {
                 Sections.from(new ArrayList<>(List.of(new Section(
                         강남역,
                         선릉역,
+                        10L,
                         10L)))),
                 10L);
         when(lineRepository.findById(any())).thenReturn(Optional.of(line));
@@ -60,7 +61,7 @@ public class LineServiceMockTest {
         when(stationRepository.findById(교대역.getId())).thenReturn(Optional.of(교대역));
 
         // when
-        SectionsUpdateRequest 선릉역_부터_교대역 = new SectionsUpdateRequest(3L, 2L, 10L);
+        SectionsUpdateRequest 선릉역_부터_교대역 = new SectionsUpdateRequest(3L, 2L, 10L, 10L);
         LineResponse actual = lineService.addSection(1L, 선릉역_부터_교대역);
 
         // then

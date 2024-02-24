@@ -38,7 +38,7 @@ public class LineServiceTest {
         Line 신분당선 = lineRepository.save(line);
 
         // when
-        SectionsUpdateRequest 선릉역_부터_교대역 = new SectionsUpdateRequest(교대역.getId(), 선릉역.getId(), 10L);
+        SectionsUpdateRequest 선릉역_부터_교대역 = new SectionsUpdateRequest(교대역.getId(), 선릉역.getId(), 10L, 10L);
         lineService.addSection(신분당선.getId(), 선릉역_부터_교대역);
 
         // then

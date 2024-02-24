@@ -30,6 +30,7 @@ class FavoriteTest {
         Section addSection = new Section(
                 StationFixture.선릉역,
                 StationFixture.삼성역,
+                3L,
                 3L);
         삼호선.addSection(addSection);
         pathFinder = new JGraphPathFinder();
