@@ -26,4 +26,8 @@ public class Path {
     public Long getDistance() {
         return distance;
     }
+
+    public Long getDuration() {
+        return null;
+    }
 }

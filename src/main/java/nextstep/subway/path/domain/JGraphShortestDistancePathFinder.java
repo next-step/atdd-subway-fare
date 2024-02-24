@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class JGraphPathFinder implements PathFinder {
+public class JGraphShortestDistancePathFinder implements PathFinder {
     @Override
     public Path shortcut(Lines lines,
                          Station source,

@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PathFinderTest {
+class ShortestDistancePathFinderTest {
     private PathFinder pathFinder;
     private Line 일호선;
     private Line 이호선;
@@ -34,7 +34,7 @@ class PathFinderTest {
                 3L,
                 3L);
         삼호선.addSection(addSection);
-        pathFinder = new JGraphPathFinder();
+        pathFinder = new JGraphShortestDistancePathFinder();
         lines = Lines.from(List.of(일호선, 이호선, 삼호선, 사호선));
     }
 
