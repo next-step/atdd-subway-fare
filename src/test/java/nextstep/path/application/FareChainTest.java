@@ -15,11 +15,12 @@ class FareChainTest {
      * 20~   5 마다 100
      * 일 경우 30 거리 기준
      * 5 1250
-     * 7 1350
-     * 9 1450
-     * 20 1550
-     * 25 1650
-     * 30 1750
+     * 6 1350
+     * 8 1450
+     * 10 1550
+     * 20 1650
+     * 25 1750
+     * 30 1850
      */
     @Test
     @DisplayName("요금 정책을 추가해 거리에 따라 요금을 반환받을 수 있다")
@@ -31,7 +32,7 @@ class FareChainTest {
 
         final long calculated = fareChain.calculate(30);
 
-        assertThat(calculated).isEqualTo(1750);
+        assertThat(calculated).isEqualTo(1850);
     }
 
     @Test

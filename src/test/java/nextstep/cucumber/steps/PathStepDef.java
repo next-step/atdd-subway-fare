@@ -7,7 +7,6 @@ import nextstep.path.domain.PathType;
 import nextstep.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;

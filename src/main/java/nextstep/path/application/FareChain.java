@@ -81,7 +81,7 @@ public class FareChain {
 
 
         private int calculateOverFare(final int distance) {
-            return (int) ((Math.floor((double) (distance) / fareInterval)) * EXTRA_FARE_BASE);
+            return (int) ((Math.floor((double) (distance - 1) / fareInterval + 1)) * EXTRA_FARE_BASE);
         }
 
 
