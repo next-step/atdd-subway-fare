@@ -14,7 +14,7 @@ Feature: 지하철 경로 조회 기능
     And 다음 구간이 추가되어 있다:
       | lineId | upStationId | downStationId | distance |
       | 2      | 1           | 4             | 2        |
-    When 교대역에서 양재역까지의 최단 경로를 조회하면
+    When 역ID 1에서 역ID 3까지의 최단 경로를 조회하면
     Then 최단 경로가 정확하게 반환된다:
       | stationNames          | distance |
       | 교대역, 남부터미널역, 양재역 | 5        |
