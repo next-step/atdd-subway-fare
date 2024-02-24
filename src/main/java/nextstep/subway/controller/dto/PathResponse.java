@@ -9,13 +9,13 @@ import java.util.List;
 @Builder
 public class PathResponse {
     private List<StationResponse> stations;
-    private Integer distance;
-    private Integer duration;
+    private long distance;
+    private long duration;
 
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, Integer distance, Integer duration) {
+    public PathResponse(List<StationResponse> stations, long distance, long duration) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
