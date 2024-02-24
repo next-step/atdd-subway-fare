@@ -33,6 +33,7 @@ public class MemberStepDef implements En {
         });
 
         Then("회원이 조회된다", () -> {
+            response = MemberSteps.회원_정보_조회_요청(response);
             MemberSteps.회원_정보_조회됨(response, EMAIL, AGE);
         });
 

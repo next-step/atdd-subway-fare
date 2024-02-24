@@ -28,9 +28,9 @@ public class PathStepDef implements En {
 
         // Background 스텝 정의
         Given("\"교대역\", \"강남역\", \"양재역\", \"남부터미널역\" 지하철 역이 생성되어 있다", (DataTable table) -> {
-            List<Map<String, String>> maps = table.asMaps();
+            List<Map<String, String>> stationInput = table.asMaps();
 
-            maps.forEach(row -> {
+            stationInput.forEach(row -> {
                 String stationName = row.get("name");
                 Long stationId = Long.parseLong(row.get("id"));
                 stations.put(stationName, stationId);
@@ -40,10 +40,10 @@ public class PathStepDef implements En {
         });
 
         And("노선에 역이 연결되어 있다", (DataTable table) -> {
-            List<Map<String, String>> maps = table.asMaps();
+            List<Map<String, String>> lineSections = table.asMaps();
             Map<String, Boolean> isFirstSectionForLine = new HashMap<>();
 
-            maps.forEach(row -> {
+            lineSections.forEach(row -> {
                 String line = row.get("line");
                 Long lineId = Long.parseLong(row.get("lineId"));
                 String upstation = row.get("upstation");
@@ -71,9 +71,9 @@ public class PathStepDef implements En {
             assertThat(stationNames).containsExactlyElementsOf(expectedStationNames);
         });
 
-        Then("총 거리는 5이어야 한다", () -> {
+        Then("총 거리는 {int}이어야 한다", (Integer expectedDistance) -> {
             int distance = PathSteps.parseDistance(response);
-            assertThat(distance).isEqualTo(5);
+            assertThat(distance).isEqualTo(expectedDistance);
         });
 
         When("사용자가 출발지와 도착지 모두를 {string}으로 설정하여 최단 경로를 조회하면", (String name) -> {
