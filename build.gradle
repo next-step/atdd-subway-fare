@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'nextstep'
@@ -55,3 +56,16 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    dependsOn test // Make sure tests are run before generating the report
+    reports {
+        html.destination file("${buildDir}/jacocoHtml") // HTML report will be generated here
+    }
+}
+
+test.finalizedBy jacocoTestReport // Generates the report after tests are run
