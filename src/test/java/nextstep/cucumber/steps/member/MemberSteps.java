@@ -1,4 +1,4 @@
-package nextstep.cucumber.steps;
+package nextstep.cucumber.steps.member;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

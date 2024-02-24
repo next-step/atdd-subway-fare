@@ -1,7 +1,8 @@
-package nextstep.cucumber.steps;
+package nextstep.cucumber.steps.line;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.cucumber.steps.station.StationSteps;
 import nextstep.utils.DatabaseCleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

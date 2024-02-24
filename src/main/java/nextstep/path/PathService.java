@@ -25,14 +25,8 @@ public class PathService {
         stationRepository.findById(sourceId).orElseThrow(EntityNotFoundException::new);
         stationRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
 
-        PathInfo pathInfo;
-        if (type.equals("DISTANCE")) {
-            pathInfo = pathFinder.findShortestPath(Long.toString(sourceId), Long.toString(targetId));
-        } else if (type.equals("DURATION")) {
-            pathInfo = pathFinder.findFastestPath(Long.toString(sourceId), Long.toString(targetId));
-        } else {
-            throw new InvalidInputException("올바른 타입을 입력해주세요.");
-        }
+        SearchType searchType = SearchType.from(type);
+        PathInfo pathInfo = searchType.findPath(pathFinder, Long.toString(sourceId), Long.toString(targetId));
 
         List<StationResponse> stations = pathInfo.getStationIds().stream()
                 .map(Long::parseLong)

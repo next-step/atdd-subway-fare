@@ -1,9 +1,12 @@
-package nextstep.cucumber.steps;
+package nextstep.cucumber.steps.path;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.cucumber.steps.station.StationSteps;
+import nextstep.cucumber.steps.line.LineSteps;
+import nextstep.cucumber.steps.line.SectionSteps;
 import nextstep.utils.DatabaseCleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,8 +75,10 @@ public class PathStepDef implements En {
             assertThat(stationNames).containsExactlyElementsOf(expectedStationNames);
         });
 
-        Then("총 거리는 {int}이어야 한다", (Integer expectedDistance) -> {
+        Then("최단 경로에 대한 총 거리는 {int}, 총 소요 시간은 {int}이어야 한다", (Integer expectedDistance, Integer expectedDuration) -> {
             int distance = PathSteps.parseDistance(response);
+            int duration = PathSteps.parseDuration(response);
+            assertThat(duration).isEqualTo(expectedDuration);
             assertThat(distance).isEqualTo(expectedDistance);
         });
 
@@ -100,9 +105,11 @@ public class PathStepDef implements En {
             assertThat(stationNames).containsExactlyElementsOf(expectedStationNames);
         });
 
-        Then("총 소요 시간은 {int}이어야 한다", (Integer expectedDuration) -> {
+        Then("최소 시간 경로에 대한 총 거리는 {int}, 총 소요 시간은 {int}이어야 한다", (Integer expectedDistance, Integer expectedDuration) -> {
+            int distance = PathSteps.parseDistance(response);
             int duration = PathSteps.parseDuration(response);
             assertThat(duration).isEqualTo(expectedDuration);
+            assertThat(distance).isEqualTo(expectedDistance);
         });
     }
 }
