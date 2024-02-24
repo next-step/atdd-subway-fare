@@ -8,19 +8,20 @@ import java.util.stream.Collectors;
 public class PathResponse {
     private List<StationResponse> stations;
 
-    private double distance;
+    private int distance;
     private int duration;
 
-    public PathResponse(final List<Station> stations, final double distance) {
+    public PathResponse(final List<Station> stations, final int distance, final int duration) {
         this.stations = stations.stream().map(this::createStationResponse).collect(Collectors.toList());
         this.distance = distance;
+        this.duration = duration;
     }
 
     public List<StationResponse> getStations() {
         return stations;
     }
 
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 

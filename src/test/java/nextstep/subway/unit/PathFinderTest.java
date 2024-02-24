@@ -2,10 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.Section;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +42,7 @@ class PathFinderTest {
     @DisplayName("경로 조회를 성공한다.")
     @Test
     void pathFinder() {
-        final PathFinder pathFinder = new PathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder();
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
@@ -60,7 +57,7 @@ class PathFinderTest {
     @DisplayName("경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
     @Test
     void pathFinder_invalid_source_target_same() {
-        final PathFinder pathFinder = new PathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder();
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
         assertThatThrownBy(() -> { pathFinder.findPath(sections, 교대역, 교대역); })
                 .isInstanceOf(ResponseStatusException.class)
@@ -70,7 +67,7 @@ class PathFinderTest {
     @DisplayName("경로 조회시, 출발역과 도착역이 연결되어 있지 않으면 예외가 발생한다.")
     @Test
     void pathFinder_invalid_source_target_disconnect() {
-        final PathFinder pathFinder = new PathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder();
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
         assertThatThrownBy(() -> { pathFinder.findPath(sections, 교대역, 부천역); })
                 .isInstanceOf(IllegalArgumentException.class)

@@ -6,10 +6,7 @@ import nextstep.subway.application.PathService;
 import nextstep.subway.application.StationService;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
-import nextstep.subway.domain.Line;
-import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.Section;
-import nextstep.subway.domain.Station;
+import nextstep.subway.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,8 +33,6 @@ public class PathServiceMockTest {
     @Mock
     private LineService lineService;
     @Mock
-    private PathFinder pathFinder;
-    @Mock
     private StationService stationService;
 
     @BeforeEach
@@ -59,17 +54,15 @@ public class PathServiceMockTest {
         final Long source = 교대역.getId();
         final Long target = 양재역.getId();
         final List<Line> lines = Arrays.asList(이호선, 신분당선, 삼호선);
-        final List<Section> sections = getSections(lines);
         when(lineService.findAllLine()).thenReturn(lines);
-        when(pathFinder.findPath(sections, 교대역, 양재역))
-                .thenReturn(new PathResponse(Arrays.asList(교대역, 남부터미널역, 양재역), 5));
         when(stationService.findStationById(source)).thenReturn(교대역);
         when(stationService.findStationById(target)).thenReturn(양재역);
 
-        final PathService pathService = new PathService(lineService, pathFinder, stationService);
+        final PathService pathService = new PathService(lineService, List.of(new ShortestDistancePathFinder()),
+                stationService);
 
         // When
-        final PathResponse pathResponse = pathService.findPath(source, target);
+        final PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
 
         // Then
         final List<StationResponse> stations = pathResponse.getStations();

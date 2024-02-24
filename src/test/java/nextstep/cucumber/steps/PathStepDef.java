@@ -102,11 +102,11 @@ public class PathStepDef implements En {
 
         Then("총 거리 {string}와 총 소요 시간 {string}를 리턴한다", (String distance, String duration) -> {
             final PathResponse pathResponse = context.response.as(PathResponse.class);
-            final double expectDistance = pathResponse.getDistance();
-            final double expectDuration = pathResponse.getDuration();
+            final int expectDistance = pathResponse.getDistance();
+            final int expectDuration = pathResponse.getDuration();
 
-            assertThat(expectDistance).isEqualTo(distance);
-            assertThat(expectDuration).isEqualTo(duration);
+            assertThat(expectDistance).isEqualTo(Integer.valueOf(distance));
+            assertThat(expectDuration).isEqualTo(Integer.valueOf(duration));
         });
     }
 

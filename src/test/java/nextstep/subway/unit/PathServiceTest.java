@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 
 import nextstep.subway.application.PathService;
+import nextstep.subway.domain.PathType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class PathServiceTest {
         Long invalidTarget = 99L;
 
         // When
-        assertThatThrownBy(() -> { pathService.findPath(invalidSource, invalidTarget); })
+        assertThatThrownBy(() -> { pathService.findPath(invalidSource, invalidTarget, PathType.DISTANCE); })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("존재 하지 않는 지하철역 입니다.");
     }
