@@ -32,8 +32,8 @@ public class PathService {
         Path path = pathFinder.shortcut(Lines.from(lineRepository.findAllFetchJoin()),
                 getStation(pathRequest.getSource()),
                 getStation(pathRequest.getTarget()),
-                PathType.DISTANCE);
-        return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance());
+                PathType.valueOf(pathRequest.getType()));
+        return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance(), path.getDuration());
     }
 
     private Station getStation(Long stationId) {
