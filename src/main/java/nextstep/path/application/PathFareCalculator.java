@@ -2,15 +2,15 @@ package nextstep.path.application;
 
 public class PathFareCalculator {
 
-    private final PathFareHandler pathFareCalculator;
+    private final FareChain fareChain;
 
     public PathFareCalculator() {
-        this.pathFareCalculator = new BaseFareHandler()
-                .next(new FirstExtraFareHandler())
-                .next(new SecondExtraFareHandler());
+        this.fareChain = new FareChain()
+                .nextRange(10, 5)
+                .nextRange(50, 8);
     }
 
     public long calculate(final int distance) {
-        return pathFareCalculator.calculate(distance);
+        return fareChain.calculate(distance);
     }
 }
