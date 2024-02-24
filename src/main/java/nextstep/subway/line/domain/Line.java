@@ -24,6 +24,8 @@ public class Line {
     private Sections sections;
     @Column(nullable = false)
     private Long distance;
+    @Column(nullable = false)
+    private Long duration;
 
     protected Line() {
     }
@@ -51,6 +53,21 @@ public class Line {
         list.add(new Section(upStation, downStation, distance));
         this.sections = Sections.from(list);
         this.distance = distance;
+    }
+
+    public Line(String name,
+                String color,
+                Station upStation,
+                Station downStation,
+                Long distance,
+                Long duration) {
+        this.name = name;
+        this.color = color;
+        List<Section> list = new ArrayList<>();
+        list.add(new Section(upStation, downStation, distance));
+        this.sections = Sections.from(list);
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {

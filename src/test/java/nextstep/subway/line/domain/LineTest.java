@@ -32,6 +32,7 @@ class LineTest {
                 "bg-red-600",
                 StationFixture.강남역,
                 StationFixture.선릉역,
+                10L,
                 10L);
 
         inputSection = new Section(
