@@ -22,19 +22,30 @@ public class Path {
                 Long value,
                 PathType type) {
         this.stations = shortestPath;
-        Long distance = 0L;
-        Long duration = 0L;
-        if(type == PathType.DURATION) {
-            distance = value;
-            duration = Math.round(shortestValue);
+        this.distance = getDistance(shortestValue, value, type);
+        this.duration = getDuration(shortestValue, value, type);
+    }
+
+    private Long getDistance(Double shortestValue,
+                             Long value,
+                             PathType type) {
+        if (type == PathType.DISTANCE) {
+            return Math.round(shortestValue);
         }
 
-        if(type == PathType.DISTANCE) {
-            distance = Math.round(shortestValue);
-            duration = value;
+        return value;
+
+    }
+
+    private Long getDuration(Double shortestValue,
+                             Long value,
+                             PathType type) {
+        if (type == PathType.DURATION) {
+            return Math.round(shortestValue);
         }
-        this.distance = distance;
-        this.duration = duration;
+
+        return value;
+
     }
 
     public List<Station> getStations() {
