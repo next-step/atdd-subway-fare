@@ -8,7 +8,7 @@ import nextstep.subway.domain.ShortestPathType;
 import java.util.List;
 import java.util.Objects;
 
-public class ShortestPathFactory {
+public class ShortestPathStrategies {
 
     public ShortestPathStrategy generateStrategy(ShortestPathType shortestPathType, List<Section> sections, PathType pathType) {
         if (sections.isEmpty()) {

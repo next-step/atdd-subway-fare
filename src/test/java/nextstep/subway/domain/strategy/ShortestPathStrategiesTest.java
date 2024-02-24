@@ -1,11 +1,10 @@
-package nextstep.subway.factory;
+package nextstep.subway.domain.strategy;
 
 import nextstep.exception.ApplicationException;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.strategy.ShortestPathFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +18,13 @@ import static nextstep.subway.fixture.StationFixture.GANGNAM_STATION;
 import static nextstep.subway.fixture.StationFixture.SEOLLEUNG_STATION;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ShortestPathFactoryTest {
+class ShortestPathStrategiesTest {
 
-    private ShortestPathFactory 최단거리;
+    private ShortestPathStrategies 최단거리;
 
     @BeforeEach
     void setUp() {
-        최단거리 = new ShortestPathFactory();
+        최단거리 = new ShortestPathStrategies();
     }
 
     @Test
