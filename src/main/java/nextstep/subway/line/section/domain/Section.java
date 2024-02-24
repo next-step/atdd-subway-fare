@@ -119,6 +119,7 @@ public class Section {
     public Long distance() {
         return this.distance;
     }
+
     public Long duration() {
         return this.duration;
     }

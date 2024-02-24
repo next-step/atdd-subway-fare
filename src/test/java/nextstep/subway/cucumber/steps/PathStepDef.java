@@ -1,23 +1,15 @@
 package nextstep.subway.cucumber.steps;
 
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import nextstep.subway.cucumber.AcceptanceContext;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.application.dto.StationResponse;
-import nextstep.subway.testhelper.JsonPathHelper;
 import nextstep.subway.testhelper.apicaller.PathApiCaller;
-import nextstep.subway.testhelper.fixture.LineFixture;
-import nextstep.subway.testhelper.fixture.StationFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
