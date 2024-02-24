@@ -44,10 +44,10 @@ public class Dijkstra implements ShortestPathStrategy {
     }
 
     @Override
-    public int findShortestValue(Station source, Station target) {
+    public long findShortestValue(Station source, Station target) {
         GraphPath shortestPath = getPath(source, target);
         validateExistPath(shortestPath);
-        return (int) shortestPath.getWeight();
+        return (long) shortestPath.getWeight();
     }
 
     private GraphPath getPath(Station source, Station target) {

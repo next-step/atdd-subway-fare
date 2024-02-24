@@ -26,8 +26,12 @@ public class Path {
         }
     }
 
-    public int findShortestValue(Station source, Station target) {
+    public long findShortestValue(Station source, Station target) {
         return shortestPathStrategy.findShortestValue(source, target);
+    }
+
+    public boolean isSamePathType(PathType pathType) {
+        return this.pathType == pathType;
     }
 
 }

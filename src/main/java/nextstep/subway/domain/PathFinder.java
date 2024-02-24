@@ -21,10 +21,6 @@ public class PathFinder {
         return findPathBy(PathType.of(""));
     }
 
-    public Path findPath(String pathType) {
-        return findPathBy(PathType.of(pathType));
-    }
-
     public List<Path> findPaths() {
         return PathType.listOf().stream()
                 .map(this::findPathBy)
