@@ -28,4 +28,6 @@ public class LineCreateRequest {
 	private Long downStationId;
 	@Description(value = "10")
 	private Long distance;
+
+	private int duration;
 }

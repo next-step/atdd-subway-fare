@@ -13,7 +13,6 @@ import static nextstep.utils.resthelper.StationRequestExecutor.*;
  */
 public class SubwayScenarioFixtureCreator {
 
-
 	public static long createStation(String name) {
 		return parseId(executeCreateStationRequest(name));
 	}
@@ -22,7 +21,15 @@ public class SubwayScenarioFixtureCreator {
 		return parseId(executeCreateLineRequest(createLineCreateRequest(name, upStationId, downStationId, distance)));
 	}
 
+	public static long createLineWithDuration(String name, long upStationId, long downStationId, long distance, int duration) {
+		return parseId(executeCreateLineRequest(createLineCreateRequest(name, upStationId, downStationId, distance, duration)));
+	}
+
 	public static void createSection(long lineId, long upStationId, long downStationId, long distance) {
 		executeCreateSectionRequest(lineId, createSectionCreateRequestWithUpAndDownAndDistance(upStationId, downStationId, distance));
+	}
+
+	public static void createSectionWithDuration(long lineId, long upStationId, long downStationId, long distance, int duration) {
+		executeCreateSectionRequest(lineId, createSectionCreateRequestWithUpAndDownAndDistance(upStationId, downStationId, distance, duration));
 	}
 }

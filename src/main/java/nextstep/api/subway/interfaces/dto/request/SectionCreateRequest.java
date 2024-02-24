@@ -20,5 +20,6 @@ public class SectionCreateRequest {
 	private Long downStationId;
 	private Long upStationId;
 	private Long distance;
+	private int duration;
 
 }

@@ -49,6 +49,17 @@ public class LineFixtureCreator {
 			.build();
 	}
 
+	public static LineCreateRequest createLineCreateRequest(String name, Long upStationId, Long downStationId, Long distance, int duration) {
+		return LineCreateRequest.builder()
+			.name(name)
+			.color("bg-red-600")
+			.upStationId(upStationId)
+			.downStationId(downStationId)
+			.distance(distance)
+			.duration(duration)
+			.build();
+	}
+
 
 	public static LineUpdateRequest createStationLineUpdateDefaultRequest(String name, String color) {
 		return LineUpdateRequest.builder()

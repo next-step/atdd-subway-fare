@@ -27,6 +27,15 @@ public class SectionFixtureCreator {
 			.build();
 	}
 
+	public static SectionCreateRequest createSectionCreateRequestWithUpAndDownAndDistance(Long upStationId, Long downStationId, Long distance, int duration) {
+		return SectionCreateRequest.builder()
+			.upStationId(upStationId)
+			.downStationId(downStationId)
+			.distance(distance)
+			.duration(duration)
+			.build();
+	}
+
 	public static Section createSectionWithIdRandom(Station upStation, Station downStation, Long distance) {
 		return new Section(Math.abs(new Random().nextLong()), upStation, downStation, distance);
 	}
