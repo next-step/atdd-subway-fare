@@ -104,7 +104,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
 
         구간이_정상_등록된다(response, HttpStatus.CREATED);
 
-        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 선릉역, 삼성역), 10, 5);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 선릉역, 삼성역), 10, 3);
     }
 
     /**
@@ -140,7 +140,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
 
         구간이_정상_제거된다(response, HttpStatus.NO_CONTENT);
 
-        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 역삼역), 10, 1);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 역삼역), 10, 3);
     }
 
     /**
@@ -150,7 +150,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
      * Then 정상 응답 처리된다.
      * And 노선을 조회하면 역삼역 - 선릉역이 조회된다.
      */
-    @DisplayName("노선의 끝의 구간을 제거한다.")
+    @DisplayName("노선의 맨 앞의 구간을 제거한다.")
     @Test
     public void 노선의_맨_앞_구간제거_정상() {
         final Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
@@ -161,7 +161,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
 
         구간이_정상_제거된다(response, HttpStatus.NO_CONTENT);
 
-        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(역삼역, 선릉역), 10, 1);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(역삼역, 선릉역), 10, 2);
     }
 
     /**
@@ -182,7 +182,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
 
         구간이_정상_제거된다(response, HttpStatus.NO_CONTENT);
 
-        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 선릉역), 20, 1);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 선릉역), 20, 5);
     }
 
     public Long 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId,
@@ -207,7 +207,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         final ExtractableResponse<Response> response = 노선을_조회한다(lineId);
         final LineResponse lineResponse = response.as(LineResponse.class);
         final int distance = lineResponse.getDistance();
-        final int duration = lineResponse.getDistance();
+        final int duration = lineResponse.getDuration();
         final List<String> stationNames = response.jsonPath().getList("stations.name");
 
         assertThat(stationNames).containsExactlyElementsOf(stations);

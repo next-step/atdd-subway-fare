@@ -22,20 +22,20 @@ public class Line {
     protected Line() {
     }
 
-    public Line(String name, String color, Station upStation, Station downStation, int distance) {
+    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
         this.name = name;
         this.color = color;
 
-        Section section = new Section(upStation, downStation, distance, this);
+        Section section = new Section(upStation, downStation, distance, duration, this);
         this.sections.add(section);
     }
 
-    public Line(Long id ,String name, String color, Station upStation, Station downStation, int distance) {
+    public Line(Long id ,String name, String color, Station upStation, Station downStation, int distance, int duration) {
         this.id = id;
         this.name = name;
         this.color = color;
 
-        Section section = new Section(upStation, downStation, distance, this);
+        Section section = new Section(upStation, downStation, distance, duration, this);
         this.sections.add(section);
     }
 
@@ -67,12 +67,13 @@ public class Line {
         this.color = color;
     }
 
-    public void addSection(final Station upStation, final Station downStation, final int distance) {
+    public void addSection(final Station upStation, final Station downStation, final int distance,
+                           final int duration) {
         if (distance < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "거리는 1 이하 일 수 없습니다.");
         }
 
-        this.sections.addSection(upStation, downStation, distance, this);
+        this.sections.addSection(upStation, downStation, distance, duration, this);
     }
 
     public void removeSection(final Station station) {

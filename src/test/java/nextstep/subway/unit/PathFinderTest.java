@@ -34,10 +34,10 @@ class PathFinderTest {
         양재역 = new Station(3L, "양재역");
         남부터미널역 = new Station(4L, "남부터미널역");
 
-        이호선 = new Line(1L, "2호선", "green", 교대역, 강남역, 10);
-        신분당선 = new Line(2L, "신분당선", "red", 강남역, 양재역, 10);
-        삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 2);
-        삼호선.addSection(남부터미널역, 양재역, 3);
+        이호선 = new Line(1L, "2호선", "green", 교대역, 강남역, 10, 3);
+        신분당선 = new Line(2L, "신분당선", "red", 강남역, 양재역, 10, 3);
+        삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 2, 3);
+        삼호선.addSection(남부터미널역, 양재역, 3, 3);
 
         부천역 = new Station(5L, "부천역");
     }

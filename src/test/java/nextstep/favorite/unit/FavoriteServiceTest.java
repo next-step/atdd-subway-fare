@@ -49,7 +49,7 @@ public class FavoriteServiceTest {
         강남역 = new Station("강남역");
         선릉역 = new Station("선릉역");
         삼성역 = new Station("삼성역");
-        강남_선릉_노선 = new Line("노선", "red", 강남역, 선릉역, 10);
+        강남_선릉_노선 = new Line("노선", "red", 강남역, 선릉역, 10, 3);
         사용자 = new Member("apvmffkdls@gmail.com", "1234", 30);
 
         강남역Id = stationRepository.save(강남역).getId();

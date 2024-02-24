@@ -48,6 +48,10 @@ public class LineResponse {
         return distance;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     private StationResponse createStationResponse(Station station) {
         return new StationResponse(station.getId(), station.getName());
     }

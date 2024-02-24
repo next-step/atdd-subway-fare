@@ -51,6 +51,7 @@ public class Sections {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "지하철역이 존재 하지 않습니다."));
 
         downSection.plusDistance(upSection.getDistance());
+        downSection.plusDuration(upSection.getDuration());
         downSection.changeUpStation(upSection.getUpStation());
         removeSection(upSection);
     }
@@ -96,7 +97,8 @@ public class Sections {
                 .sum();
     }
 
-    public void addSection(final Station upStation, final Station downStation, final int distance, final Line line) {
+    public void addSection(final Station upStation, final Station downStation, final int distance, final int duration,
+                           final Line line) {
         final List<Station> sortedStations = getStations();
         Station lineDownStation = sortedStations.get(sortedStations.size() - 1);
         Station lineUpStation = sortedStations.get(0);
@@ -107,14 +109,14 @@ public class Sections {
         }
 
         if (lineDownStation.isSame(upStation) || lineUpStation.isSame(downStation)) {
-            this.sections.add(new Section(upStation, downStation, distance, line));
+            this.sections.add(new Section(upStation, downStation, distance, duration, line));
             return;
         }
 
-        addMiddle(upStation, downStation, distance, line);
+        addMiddle(upStation, downStation, distance, duration, line);
     }
 
-    private void addMiddle(Station upStation, Station downStation, int distance, Line line) {
+    private void addMiddle(Station upStation, Station downStation, int distance, int duration, Line line) {
         if (containsLineStations(downStation)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 등록되어 있는 지하철역 입니다.");
         }
@@ -126,8 +128,9 @@ public class Sections {
 
         upSection.changeUpStation(downStation);
         upSection.reduceDistance(distance);
+        upSection.reduceDuration(duration);
 
-        this.sections.add(new Section(upStation, downStation, distance, line));
+        this.sections.add(new Section(upStation, downStation, distance, duration, line));
     }
 
     private boolean containsLineStations(final Station station) {

@@ -31,10 +31,11 @@ public class Section implements Comparable<Section> {
     public Section() {
     }
 
-    public Section(Station upStation, Station downStation, int distance, Line line) {
+    public Section(Station upStation, Station downStation, int distance, int duration , Line line) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
         this.line = line;
     }
 
@@ -84,6 +85,18 @@ public class Section implements Comparable<Section> {
 
     public void plusDistance(int distance) {
         this.distance = this.distance + distance;
+    }
+
+    public void reduceDuration(final int duration) {
+        if (this.duration <= duration) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중간에 추가되는 소요시간이 상행역의 소요시간 크거나 같을 수 없습니다.");
+        }
+
+        this.duration = this.duration - duration;
+    }
+
+    public void plusDuration(final int duration) {
+        this.duration = this.duration + duration;
     }
 
     public Station[] getStations() {

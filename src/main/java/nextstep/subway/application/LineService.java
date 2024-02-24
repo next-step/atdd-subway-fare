@@ -33,7 +33,7 @@ public class LineService {
         final Station upStation = stationService.findStationById(lineRequest.getUpStationId());
         final Station downStation = stationService.findStationById(lineRequest.getDownStationId());
 
-        final Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance());
+        final Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
         final Line savedLine = lineRepository.save(line);
 
         return new LineResponse(savedLine);
@@ -81,7 +81,7 @@ public class LineService {
         final Station upStation = stationService.findStationById(sectionRequest.getUpStationId());
         final Station downStation = stationService.findStationById(sectionRequest.getDownStationId());
 
-        line.addSection(upStation, downStation, sectionRequest.getDistance());
+        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
     }
 
     @Transactional
