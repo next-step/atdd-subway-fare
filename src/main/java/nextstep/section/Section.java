@@ -32,12 +32,16 @@ public class Section {
     @Setter
     private int distance;
 
-    public static Section initSection(Line line, Station upstation, Station downstation, int distance) {
+    @Setter
+    private int duration;
+
+    public static Section initSection(Line line, Station upstation, Station downstation, int distance, int duration) {
         return Section.builder()
                 .line(line)
                 .upstation(upstation)
                 .downstation(downstation)
                 .distance(distance)
+                .duration(duration)
                 .build();
     }
 

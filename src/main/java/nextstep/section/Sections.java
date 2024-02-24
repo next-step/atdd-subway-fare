@@ -42,6 +42,12 @@ public class Sections implements Iterable<Section> {
                 .sum();
     }
 
+    public int getTotalDuration() {
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
+
     public void initSection(Section section) {
         sections.add(section);
     }
@@ -111,8 +117,15 @@ public class Sections implements Iterable<Section> {
                         throw new InvalidInputException("유효하지 않은 거리입니다.");
                     }
 
+                    int newDuration = currentSection.getDuration() - newSection.getDuration();
+                    if (newDuration <= 0) {
+                        throw new InvalidInputException("유효하지 않은 소요시간입니다.");
+                    }
+
                     currentSection.setUpstation(newSection.getDownstation());
                     currentSection.setDistance(newDistance);
+                    currentSection.setDuration(newDuration);
+
                     sections.add(i, newSection);
                     return;
                 }
@@ -127,8 +140,15 @@ public class Sections implements Iterable<Section> {
                         throw new InvalidInputException("유효하지 않은 거리입니다.");
                     }
 
+                    int newDuration = currentSection.getDuration() - newSection.getDuration();
+                    if (newDuration <= 0) {
+                        throw new InvalidInputException("유효하지 않은 소요시간입니다.");
+                    }
+
                     currentSection.setDownstation(newSection.getUpstation());
                     currentSection.setDistance(newDistance);
+                    currentSection.setDuration(newDuration);
+
                     sections.add(i + 1, newSection);
                     return;
                 }

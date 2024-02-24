@@ -10,11 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SectionSteps {
-    public static ExtractableResponse<Response> 구간_추가_요청(Long lineId, Long upstationId, Long downstationId, int distance) {
+    public static ExtractableResponse<Response> 구간_추가_요청(Long lineId, Long upstationId, Long downstationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upstationId", upstationId.toString());
         params.put("downstationId", downstationId.toString());
         params.put("distance", Integer.toString(distance));
+        params.put("duration", Integer.toString(duration));
 
         return RestAssured.given().log().all()
                 .pathParam("id", lineId)
