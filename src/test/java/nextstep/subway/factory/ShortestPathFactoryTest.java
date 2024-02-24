@@ -1,10 +1,11 @@
 package nextstep.subway.factory;
 
+import nextstep.exception.ApplicationException;
 import nextstep.subway.domain.Line;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.exception.ApplicationException;
-import nextstep.subway.strategy.PathType;
+import nextstep.subway.domain.strategy.ShortestPathFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,11 +1,9 @@
-package nextstep.subway.factory;
+package nextstep.subway.domain.strategy;
 
+import nextstep.exception.ApplicationException;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.ShortestPathType;
-import nextstep.exception.ApplicationException;
-import nextstep.subway.strategy.Dijkstra;
-import nextstep.subway.strategy.PathType;
-import nextstep.subway.strategy.ShortestPathStrategy;
 
 import java.util.List;
 import java.util.Objects;

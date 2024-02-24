@@ -1,7 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.exception.ApplicationException;
-import nextstep.subway.strategy.ShortestPathStrategy;
+import nextstep.subway.domain.strategy.ShortestPathStrategy;
 
 import java.util.List;
 

@@ -1,12 +1,10 @@
 package nextstep.subway.service;
 
 import nextstep.subway.controller.dto.PathResponse;
-import nextstep.subway.controller.dto.StationResponse;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Station;
 import nextstep.subway.repository.StationRepository;
-import nextstep.subway.strategy.PathType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,14 +20,14 @@ public class PathService {
         this.pathFinder = pathFinder;
     }
 
-    public PathResponse findPaths(Long sourceId, Long targetId, PathType pathType) {
+    public PathResponse findPaths(Long sourceId, Long targetId, String pathType) {
         Station source = stationRepository.getBy(sourceId);
         Station target = stationRepository.getBy(targetId);
 
         Path path = pathFinder.findPath(pathType);
         List<Station> stations = path.findShortestPath(source, target);
         int value = path.findShortestValue(source, target);
-        return pathType.getResponse().apply(stations, value);
+        return new PathResponse();
     }
 
 }

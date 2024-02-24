@@ -1,8 +1,7 @@
 package nextstep.subway.domain;
 
 import nextstep.exception.ApplicationException;
-import nextstep.subway.strategy.Dijkstra;
-import nextstep.subway.strategy.PathType;
+import nextstep.subway.domain.strategy.Dijkstra;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

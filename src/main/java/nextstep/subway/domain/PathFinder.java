@@ -1,9 +1,8 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.factory.ShortestPathFactory;
+import nextstep.subway.domain.strategy.ShortestPathFactory;
+import nextstep.subway.domain.strategy.ShortestPathStrategy;
 import nextstep.subway.repository.SectionRepository;
-import nextstep.subway.strategy.PathType;
-import nextstep.subway.strategy.ShortestPathStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,11 +17,11 @@ public class PathFinder {
     }
 
     public Path findPath() {
-        return findPathBy(PathType.DISTANCE);
+        return findPathBy(PathType.of(""));
     }
 
-    public Path findPath(PathType pathType) {
-        return findPathBy(pathType);
+    public Path findPath(String pathType) {
+        return findPathBy(PathType.of(pathType));
     }
 
     private Path findPathBy(PathType pathType) {

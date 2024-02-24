@@ -1,8 +1,9 @@
-package nextstep.subway.strategy;
+package nextstep.subway.domain.strategy;
 
+import nextstep.exception.ApplicationException;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.exception.ApplicationException;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
