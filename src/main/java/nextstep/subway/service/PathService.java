@@ -1,15 +1,19 @@
 package nextstep.subway.service;
 
 import nextstep.subway.controller.dto.PathResponse;
-import nextstep.subway.domain.Path;
+import nextstep.subway.controller.dto.StationResponse;
 import nextstep.subway.domain.PathFinder;
+import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Paths;
 import nextstep.subway.domain.Station;
 import nextstep.subway.repository.StationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class PathService {
 
     private final StationRepository stationRepository;
@@ -24,10 +28,12 @@ public class PathService {
         Station source = stationRepository.getBy(sourceId);
         Station target = stationRepository.getBy(targetId);
 
-        Path path = pathFinder.findPath(pathType);
-        List<Station> stations = path.findShortestPath(source, target);
-        int value = path.findShortestValue(source, target);
-        return new PathResponse();
+        Paths paths = new Paths(pathFinder.findPaths());
+        List<Station> stations = paths.findShortestPath(source, target, PathType.of(pathType));
+        long distance = paths.findShortestValue(source, target, PathType.DISTANCE);
+        long duration = paths.findShortestValue(source, target, PathType.DURATION);
+
+        return new PathResponse(StationResponse.listOf(stations), distance, duration);
     }
 
 }
