@@ -22,6 +22,7 @@ public class LineResponse {
         this.name = savedLine.getName();
         this.color = savedLine.getColor();
         this.distance = savedLine.totalDistance();
+        this.duration = savedLine.totalDuration();
         this.stations =  savedLine.getStations().stream()
                 .map(this::createStationResponse)
                 .collect(Collectors.toList());

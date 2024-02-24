@@ -90,6 +90,12 @@ public class Sections {
                 .sum();
     }
 
+    public int totalDuration() {
+        return this.sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
+
     public void addSection(final Station upStation, final Station downStation, final int distance, final Line line) {
         final List<Station> sortedStations = getStations();
         Station lineDownStation = sortedStations.get(sortedStations.size() - 1);

@@ -60,8 +60,9 @@ public class PathStepDef implements En {
                 final Long upStationId = (Long) context.store.get(map.get("upStation"));
                 final Long downStationId = (Long) context.store.get(map.get("downStation"));
                 final int distance = Integer.parseInt(map.get("distance"));
+                final int duration = Integer.parseInt(map.get("duration"));
 
-                context.response = 구간을_등록한다(lineId, upStationId, downStationId, distance);
+                context.response = 구간을_등록한다(lineId, upStationId, downStationId, distance, duration);
             }
         });
 

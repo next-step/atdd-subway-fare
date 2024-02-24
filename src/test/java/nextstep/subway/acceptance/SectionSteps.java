@@ -25,8 +25,8 @@ public class SectionSteps {
     }
 
     public static ExtractableResponse<Response> 구간을_등록한다(final Long lineId, final Long upStationId,
-                                                   final Long downStationId, final int distance) {
-        final Map<String, String> params = registerSectionRequestPixture(upStationId, downStationId, distance);
+                                                   final Long downStationId, final int distance, final int duration) {
+        final Map<String, String> params = registerSectionRequestPixture(upStationId, downStationId, distance, duration);
         return RestAssured.given().log().all()
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -35,11 +35,13 @@ public class SectionSteps {
                 .extract();
     }
 
-    private static Map<String, String> registerSectionRequestPixture(final Long upStationId, final Long downStationId, final int distance) {
+    private static Map<String, String> registerSectionRequestPixture(final Long upStationId, final Long downStationId,
+                                                                     final int distance, final int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", String.valueOf(upStationId));
         params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", String.valueOf(distance));
+        params.put("duration", String.valueOf(duration));
         return params;
     }
 }

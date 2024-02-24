@@ -48,7 +48,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 이미_등록되어_있는_지하철역_일_때() {
         final Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
-        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 역삼역Id, 강남역Id, 10);
+        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 역삼역Id, 강남역Id, 10, 2);
 
         예외가_발생한다(response, HttpStatus.BAD_REQUEST);
     }
@@ -64,11 +64,11 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 노선의_끝_구간등록_정상처리() {
         final Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
-        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10);
+        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10, 2);
 
         구간이_정상_등록된다(response, HttpStatus.CREATED);
 
-        노선을_조회하여_지하철역과_길이를_확인한다(lineId, Arrays.asList(강남역, 역삼역, 선릉역), 20);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 역삼역, 선릉역), 20, 5);
     }
 
     /**
@@ -82,11 +82,11 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 노선의_맨_앞_구간등록_정상처리() {
         final Long lineId = 노선이_생성되어_있다("이호선", "bg-red-600", 역삼역Id, 선릉역Id, 10, 3);
 
-        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 강남역Id, 역삼역Id, 5);
+        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 강남역Id, 역삼역Id, 5, 2);
 
         구간이_정상_등록된다(response, HttpStatus.CREATED);
 
-        노선을_조회하여_지하철역과_길이를_확인한다(lineId, Arrays.asList(강남역, 역삼역, 선릉역), 15);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 역삼역, 선릉역), 15, 5);
     }
 
     /**
@@ -100,11 +100,11 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 노선의_중간_구간등록_정상처리() {
         final Long lineId = 노선이_생성되어_있다("이호선", "bg-red-600", 강남역Id, 삼성역Id, 10, 3);
 
-        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 강남역Id, 선릉역Id, 5);
+        final ExtractableResponse<Response> response = 구간을_등록한다(lineId, 강남역Id, 선릉역Id, 5, 2);
 
         구간이_정상_등록된다(response, HttpStatus.CREATED);
 
-        노선을_조회하여_지하철역과_길이를_확인한다(lineId, Arrays.asList(강남역, 선릉역, 삼성역), 10);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 선릉역, 삼성역), 10, 5);
     }
 
     /**
@@ -134,13 +134,13 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 노선의끝_구간제거_정상() {
         final Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
-        구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10);
+        구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10, 2);
 
         final ExtractableResponse<Response> response = 구간을_제거한다(lineId, 선릉역Id);
 
         구간이_정상_제거된다(response, HttpStatus.NO_CONTENT);
 
-        노선을_조회하여_지하철역과_길이를_확인한다(lineId, Arrays.asList(강남역, 역삼역), 10);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 역삼역), 10, 1);
     }
 
     /**
@@ -155,13 +155,13 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 노선의_맨_앞_구간제거_정상() {
         final Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
-        구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10);
+        구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10, 2);
 
         final ExtractableResponse<Response> response = 구간을_제거한다(lineId, 강남역Id);
 
         구간이_정상_제거된다(response, HttpStatus.NO_CONTENT);
 
-        노선을_조회하여_지하철역과_길이를_확인한다(lineId, Arrays.asList(역삼역, 선릉역), 10);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(역삼역, 선릉역), 10, 1);
     }
 
     /**
@@ -176,13 +176,13 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     public void 노선의_중간_구간제거_정상() {
         final Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
-        구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10);
+        구간을_등록한다(lineId, 역삼역Id, 선릉역Id, 10, 2);
 
         final ExtractableResponse<Response> response = 구간을_제거한다(lineId, 역삼역Id);
 
         구간이_정상_제거된다(response, HttpStatus.NO_CONTENT);
 
-        노선을_조회하여_지하철역과_길이를_확인한다(lineId, Arrays.asList(강남역, 선릉역), 20);
+        노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(lineId, Arrays.asList(강남역, 선릉역), 20, 1);
     }
 
     public Long 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId,
@@ -202,12 +202,16 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(httpStatus.value());
     }
 
-    private void 노선을_조회하여_지하철역과_길이를_확인한다(Long lineId, List<String> stations, int totalDistance) {
+    private void 노선을_조회하여_지하철역과_길이와_총소요시간을_확인한다(Long lineId, List<String> stations,
+                                                int totalDistance, int totalDuration) {
         final ExtractableResponse<Response> response = 노선을_조회한다(lineId);
-        final int distance = response.as(LineResponse.class).getDistance();
+        final LineResponse lineResponse = response.as(LineResponse.class);
+        final int distance = lineResponse.getDistance();
+        final int duration = lineResponse.getDistance();
         final List<String> stationNames = response.jsonPath().getList("stations.name");
 
         assertThat(stationNames).containsExactlyElementsOf(stations);
         assertThat(distance).isEqualTo(totalDistance);
+        assertThat(duration).isEqualTo(totalDuration);
     }
 }

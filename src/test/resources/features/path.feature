@@ -18,8 +18,8 @@ Feature: 경로조회 관련 기능
       | 신분당선    | red   | 강남역   | 양재역   | 10   | 3   |
       | 3호선    | orange   | 교대역   | 남부터미널역   | 2   | 2   |
     And 구간을 등록하고
-      | lineName | upStation | downStation | distance |
-      | 3호선      | 남부터미널역    | 양재역         | 3        |
+      | lineName | upStation | downStation | distance | duration   |
+      | 3호선      | 남부터미널역    | 양재역         | 3        | 2   |
 
   Scenario: 최단 경로를 조회한다.
     When "교대역"과 "양재역" 사이의 경로 조회를 요청하면

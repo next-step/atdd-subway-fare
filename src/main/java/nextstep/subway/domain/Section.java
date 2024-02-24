@@ -25,6 +25,8 @@ public class Section implements Comparable<Section> {
     private Station downStation;
     @Column(nullable = false)
     private int distance;
+    @Column(nullable = false)
+    private int duration;
 
     public Section() {
     }
@@ -46,6 +48,10 @@ public class Section implements Comparable<Section> {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return this.duration;
     }
 
     public Station getUpStation() {
