@@ -3,6 +3,7 @@ package nextstep.subway.line.domain;
 import nextstep.subway.line.section.domain.ApplyValues;
 import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.line.section.domain.Sections;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
@@ -108,6 +109,12 @@ public class Line {
         return this.sections.stations();
     }
 
+    public Long calculateValue(Station source,
+                               Station target,
+                               PathType type) {
+        return sections.calculateValue(source, target, type);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,5 +127,4 @@ public class Line {
     public int hashCode() {
         return Objects.hash(id, name, color, sections, distance);
     }
-
 }

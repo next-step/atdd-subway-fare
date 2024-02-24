@@ -1,5 +1,6 @@
 package nextstep.subway.line.section.domain;
 
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
@@ -168,5 +169,14 @@ public class Sections {
     @Override
     public int hashCode() {
         return Objects.hash(sectionList);
+    }
+
+    public Long calculateValue(Station source,
+                               Station target,
+                               PathType type) {
+        return this.sectionList.stream()
+                .filter(section -> section.isSameUpStation(source) && section.isSameDownStation(target))
+                .map(type::findBy)
+                .reduce(0L, Long::sum);
     }
 }

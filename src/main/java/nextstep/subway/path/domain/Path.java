@@ -7,16 +7,34 @@ import java.util.List;
 public class Path {
     private final List<Station> stations;
     private final Long distance;
+    private final Long duration;
 
     public Path(List<Station> stations,
-                Long distance) {
+                Long distance,
+                Long duration) {
         this.stations = stations;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public Path(List<Station> stations,
-                Double distance) {
-        this(stations, Math.round(distance));
+    public Path(List<Station> shortestPath,
+                Double shortestValue,
+                Long value,
+                PathType type) {
+        this.stations = shortestPath;
+        Long distance = 0L;
+        Long duration = 0L;
+        if(type == PathType.DURATION) {
+            distance = value;
+            duration = Math.round(shortestValue);
+        }
+
+        if(type == PathType.DISTANCE) {
+            distance = Math.round(shortestValue);
+            duration = value;
+        }
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public List<Station> getStations() {
@@ -28,6 +46,6 @@ public class Path {
     }
 
     public Long getDuration() {
-        return null;
+        return this.duration;
     }
 }

@@ -25,8 +25,9 @@ public class JGraphPathFinder implements PathFinder {
         validCorrect(lines, source, target);
         GraphPath path = createShortestPath(lines, source, target, type);
         List<Station> shortestPath = path.getVertexList();
-        Double shorestDistance = path.getWeight();
-        return new Path(shortestPath, shorestDistance);
+        Double shortestValue = path.getWeight();
+        Long value = lines.calculateValue(shortestPath, type);
+        return new Path(shortestPath, shortestValue, value, type);
     }
 
     @Override
