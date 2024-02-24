@@ -27,4 +27,8 @@ public class SectionsUpdateRequest {
     public Long getDistance() {
         return distance;
     }
+
+    public Long getDuration() {
+        return duration;
+    }
 }

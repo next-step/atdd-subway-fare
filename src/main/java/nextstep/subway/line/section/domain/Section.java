@@ -119,6 +119,9 @@ public class Section {
     public Long distance() {
         return this.distance;
     }
+    public Long duration() {
+        return this.duration;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -132,4 +135,5 @@ public class Section {
     public int hashCode() {
         return Objects.hash(id, upStation, downStation, distance);
     }
+
 }

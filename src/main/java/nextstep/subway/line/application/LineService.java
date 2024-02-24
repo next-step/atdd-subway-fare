@@ -78,7 +78,8 @@ public class LineService {
     private Section createSection(SectionsUpdateRequest sectionsUpdateRequest) {
         return new Section(getStation(sectionsUpdateRequest.getUpStationId()),
                 getStation(sectionsUpdateRequest.getDownStationId()),
-                sectionsUpdateRequest.getDistance());
+                sectionsUpdateRequest.getDistance(),
+                sectionsUpdateRequest.getDuration());
     }
 
     private Line createLine(LineRequest lineRequest) {

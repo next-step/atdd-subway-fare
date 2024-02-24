@@ -1,6 +1,6 @@
 package nextstep.subway.line.domain;
 
-import nextstep.subway.line.section.domain.ApplyDistance;
+import nextstep.subway.line.section.domain.ApplyValues;
 import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.line.section.domain.Sections;
 import nextstep.subway.station.domain.Station;
@@ -88,14 +88,16 @@ public class Line {
     }
 
     public void addSection(Section section) {
-        ApplyDistance applyDistance = this.sections.add(section);
-        applyDistance.validAdd(this.distance, section.distance());
-        this.distance += applyDistance.applyValue();
+        ApplyValues applyValues = this.sections.add(section);
+        applyValues.validAdd(this.distance, section.distance());
+        this.distance += applyValues.applyDistance();
+        this.duration += applyValues.applyDuration();
     }
 
     public void deleteSection(Station station) {
-        ApplyDistance applyDistance = this.sections.delete(station);
-        this.distance -= applyDistance.applyValue();
+        ApplyValues applyValues = this.sections.delete(station);
+        this.distance -= applyValues.applyDistance();
+        this.duration -= applyValues.applyDuration();
     }
 
     public boolean existStation(Station station) {

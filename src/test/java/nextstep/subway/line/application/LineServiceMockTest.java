@@ -3,8 +3,6 @@ package nextstep.subway.line.application;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.line.section.domain.Section;
-import nextstep.subway.line.section.domain.Sections;
 import nextstep.subway.line.section.dto.SectionsUpdateRequest;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
@@ -15,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,14 +43,11 @@ public class LineServiceMockTest {
     void addSection() {
         // given
         Line line = new Line(
-                1L,
                 "신분당선",
                 "bg-red-600",
-                Sections.from(new ArrayList<>(List.of(new Section(
-                        강남역,
-                        선릉역,
-                        10L,
-                        10L)))),
+                강남역,
+                선릉역,
+                10L,
                 10L);
         when(lineRepository.findById(any())).thenReturn(Optional.of(line));
         when(stationRepository.findById(선릉역.getId())).thenReturn(Optional.of(선릉역));
