@@ -22,7 +22,6 @@ import nextstep.common.mapper.ModelMapperBasedObjectMapper;
 public class PathResponse {
 	private List<StationResponse> stations;
 	private Long distance;
-
 	private Long duration;
 
 	public static PathResponse from(Path path) {

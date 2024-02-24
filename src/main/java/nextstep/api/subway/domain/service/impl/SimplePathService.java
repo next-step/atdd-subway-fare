@@ -11,9 +11,10 @@ import nextstep.api.subway.domain.model.entity.Line;
 import nextstep.api.subway.domain.model.entity.Section;
 import nextstep.api.subway.domain.model.entity.Station;
 import nextstep.api.subway.domain.operators.LineResolver;
-import nextstep.api.subway.domain.operators.PathFinder;
 import nextstep.api.subway.domain.operators.StationResolver;
 import nextstep.api.subway.domain.service.PathService;
+import nextstep.api.subway.infrastructure.operators.DijkstraBaseMinimunDurationPathFinder;
+import nextstep.api.subway.infrastructure.operators.DijkstraBasedShortestPathFinder;
 import nextstep.api.subway.interfaces.dto.response.PathResponse;
 import nextstep.common.exception.subway.PathNotValidException;
 
@@ -26,7 +27,8 @@ import nextstep.common.exception.subway.PathNotValidException;
 @Transactional(readOnly = true)
 public class SimplePathService implements PathService {
 	private final StationResolver stationResolver;
-	private final PathFinder pathFinder;
+	private final DijkstraBasedShortestPathFinder dijkstraBasedShortestPathFinder;
+	private final DijkstraBaseMinimunDurationPathFinder dijkstraBaseMinimunDurationPathFinder;
 
 	private final LineResolver lineResolver;
 
@@ -61,7 +63,27 @@ public class SimplePathService implements PathService {
 			.flatMap(java.util.Collection::stream)
 			.collect(Collectors.toList());
 
-		return PathResponse.from(pathFinder.findShortestPath(sourceStation, targetStation, sections));
+		return PathResponse.from(dijkstraBasedShortestPathFinder.findShortestPath(sourceStation, targetStation, sections));
+	}
+
+	@Override
+	public PathResponse findMinimumDurationPath(Long source, Long target) {
+		if (source.equals(target)) {
+			throw new PathNotValidException("Source and target stations cannot be the same.");
+		}
+
+		Station sourceStation = stationResolver.fetchOptional(source).orElseThrow(PathNotValidException::new);
+		Station targetStation = stationResolver.fetchOptional(target).orElseThrow(PathNotValidException::new);
+
+		List<Line> lines = lineResolver.fetchAll();
+
+		List<Section> sections = lines.stream()
+			.filter(line -> line.isContainsAnyStation(source, target))
+			.map(Line::parseSections)
+			.flatMap(java.util.Collection::stream)
+			.collect(Collectors.toList());
+
+		return PathResponse.from(dijkstraBaseMinimunDurationPathFinder.findShortestPath(sourceStation, targetStation, sections));
 	}
 
 }

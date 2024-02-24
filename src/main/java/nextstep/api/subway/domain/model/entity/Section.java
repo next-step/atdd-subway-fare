@@ -44,6 +44,8 @@ public class Section implements Comparable<Section> {
 	@Column(nullable = false)
 	private Long distance;
 
+	private int duration;
+
 	/**
 	 * Section의 동등성은 상행, 하행, 거리로 판단합니다.
 	 * 상행역, 하행역, 거리가 모두 같을 경우 해당 Section은 같은 객체로 평가합니다.
@@ -79,6 +81,15 @@ public class Section implements Comparable<Section> {
 			.upStation(upStation)
 			.downStation(downStation)
 			.distance(distance)
+			.build();
+	}
+
+	public static Section of(Station upStation, Station downStation, Long distance, int duration) {
+		return Section.builder()
+			.upStation(upStation)
+			.downStation(downStation)
+			.distance(distance)
+			.duration(duration)
 			.build();
 	}
 
@@ -145,6 +156,7 @@ public class Section implements Comparable<Section> {
 			.upStation(newSection.getDownStation())
 			.downStation(this.getDownStation())
 			.distance(calculateInsertionDistance(newSection))
+			.duration(calculateInsertionDuration(newSection))
 			.build();
 	}
 
@@ -153,11 +165,16 @@ public class Section implements Comparable<Section> {
 			.upStation(this.getUpStation())
 			.downStation(newSection.getUpStation())
 			.distance(calculateInsertionDistance(newSection))
+			.duration(calculateInsertionDuration(newSection))
 			.build();
 	}
 
 	private long calculateInsertionDistance(Section newSection) {
 		return this.getDistance() - newSection.getDistance();
+	}
+
+	private int calculateInsertionDuration(Section newSection) {
+		return this.getDuration() - newSection.getDuration();
 	}
 
 	public boolean isDistanceNotExist() {

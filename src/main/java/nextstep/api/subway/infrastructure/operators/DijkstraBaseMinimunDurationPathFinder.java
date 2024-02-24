@@ -23,7 +23,7 @@ import nextstep.common.exception.subway.PathNotValidException;
  */
 
 @Component
-public class DijkstraBasedShortestPathFinder implements PathFinder {
+public class DijkstraBaseMinimunDurationPathFinder implements PathFinder {
 
 	@Override
 	public Path findShortestPath(Station sourceStation, Station targetStation, List<Section> sections) {
@@ -32,7 +32,7 @@ public class DijkstraBasedShortestPathFinder implements PathFinder {
 		GraphPath<Station, DefaultWeightedEdge> shortestPath = calculateShortestPath(sourceStation, targetStation, graph).orElseThrow(
 			() -> new PathNotValidException("No path exists between the source and target stations."));
 
-		return Path.of(fetchStationsInPath(shortestPath), calculateTotalDistance(graph, shortestPath),  calculateTotalDuration(graph, shortestPath));
+		return Path.of(fetchStationsInPath(shortestPath), calculateTotalDistance(graph, shortestPath, sections), calculateTotalDuration(graph, shortestPath));
 	}
 
 	private static Optional<GraphPath<Station, DefaultWeightedEdge>> calculateShortestPath(Station sourceStation, Station targetStation, Graph<Station, DefaultWeightedEdge> graph) {
@@ -48,15 +48,27 @@ public class DijkstraBasedShortestPathFinder implements PathFinder {
 		sections.forEach(section -> {
 			graph.addVertex(section.getUpStation());
 			graph.addVertex(section.getDownStation());
-			Graphs.addEdgeWithVertices(graph, section.getUpStation(), section.getDownStation(), section.getDistance());
+			Graphs.addEdgeWithVertices(graph, section.getUpStation(), section.getDownStation(), section.getDuration());
 		});
 		return graph;
 	}
 
-	private long calculateTotalDistance(Graph<Station, DefaultWeightedEdge> graph, GraphPath<Station, DefaultWeightedEdge> shortestPath) {
-		return (long)shortestPath.getEdgeList().stream()
-			.mapToDouble(graph::getEdgeWeight)
+	private long calculateTotalDistance(Graph<Station, DefaultWeightedEdge> graph, GraphPath<Station, DefaultWeightedEdge> shortestPath, List<Section> sections) {
+		return shortestPath.getEdgeList().stream()
+			.mapToLong(edge -> {
+				Station source = graph.getEdgeSource(edge);
+				Station target = graph.getEdgeTarget(edge);
+				return findSectionDistance(source, target, sections);
+			})
 			.sum();
+	}
+
+	private long findSectionDistance(Station source, Station target, List<Section> sections) {
+		return sections.stream()
+			.filter(section -> section.isSameUpStation(source) && section.isSameDownStation(target))
+			.findFirst()
+			.map(Section::getDistance)
+			.orElse(0L);
 	}
 
 	private long calculateTotalDuration(Graph<Station, DefaultWeightedEdge> graph, GraphPath<Station, DefaultWeightedEdge> shortestPath) {
@@ -64,8 +76,6 @@ public class DijkstraBasedShortestPathFinder implements PathFinder {
 			.mapToDouble(graph::getEdgeWeight)
 			.sum();
 	}
-
-
 
 	private List<Station> fetchStationsInPath(GraphPath<Station, DefaultWeightedEdge> shortestPath) {
 		return shortestPath.getVertexList();

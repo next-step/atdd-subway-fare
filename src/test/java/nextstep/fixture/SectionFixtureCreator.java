@@ -37,7 +37,7 @@ public class SectionFixtureCreator {
 	}
 
 	public static Section createSectionWithIdRandom(Station upStation, Station downStation, Long distance) {
-		return new Section(Math.abs(new Random().nextLong()), upStation, downStation, distance);
+		return new Section(Math.abs(new Random().nextLong()), upStation, downStation, distance, 0);
 	}
 
 }

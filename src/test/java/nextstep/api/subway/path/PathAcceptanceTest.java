@@ -44,20 +44,21 @@ public class PathAcceptanceTest extends CommonAcceptanceTest {
 		long stationId3 = createStation("양재역");
 		long stationId4 = createStation("남부터미널역");
 
-		long lineId1 = createLine("2호선", stationId1, stationId2, 10L);
+		long lineId1 = createLineWithDuration("2호선", stationId1, stationId2, 10L, 10);
 
-		long lineId2 = createLine("3호선", stationId1, stationId3, 5L);
-		createSection(lineId2, stationId1, stationId4, 2L);
+		long lineId2 = createLineWithDuration("3호선", stationId1, stationId3, 5L, 5);
+		createSectionWithDuration(lineId2, stationId1, stationId4, 2L, 2);
 
-		long lineId3 = createLine("신분당선", stationId2, stationId3, 10L);
+		long lineId3 = createLineWithDuration("신분당선", stationId2, stationId3, 10L, 20);
 
 		// when
-		ExtractableResponse<Response> findPathResponse = executeFindPathRequest(stationId1, stationId3);
+		ExtractableResponse<Response> findPathResponse = executeFindPathRequest(stationId1, stationId3, "DURATION");
 
 		// then
 		assertThat(findPathResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(parseStations(findPathResponse)).extracting("name").containsExactly("교대역", "남부터미널역", "양재역");
 		assertThat(parseDistance(findPathResponse)).isEqualTo(5);
+		assertThat(parseDuration(findPathResponse)).isEqualTo(5);
 	}
 
 	/**
@@ -91,16 +92,16 @@ public class PathAcceptanceTest extends CommonAcceptanceTest {
 		long stationId5 = createStation("디지털미디어시티역");
 		long stationId6 = createStation("공덕역");
 
-		long lineId1 = createLine("1호선", stationId1, stationId2, 10L);
+		long lineId1 = createLineWithDuration("1호선", stationId1, stationId2, 10L, 10);
 
-		long lineId2 = createLine("2호선", stationId2, stationId4, 15L);
-		createSection(lineId2, stationId4, stationId6, 20L);
+		long lineId2 = createLineWithDuration("2호선", stationId2, stationId4, 15L, 15);
+		createSectionWithDuration(lineId2, stationId4, stationId6, 20L, 20);
 
-		long lineId3 = createLine("경의중앙선", stationId1, stationId3, 5L);
-		createSection(lineId3, stationId3, stationId4, 20L);
+		long lineId3 = createLineWithDuration("경의중앙선", stationId1, stationId3, 5L, 5);
+		createSectionWithDuration(lineId3, stationId3, stationId4, 20L, 20);
 
-		long lineId4 = createLine("공항철도", stationId3, stationId6, 5L);
-		createSection(lineId4, stationId3, stationId5, 2L);
+		long lineId4 = createLineWithDuration("공항철도", stationId3, stationId6, 5L, 5);
+		createSectionWithDuration(lineId4, stationId3, stationId5, 2L, 2);
 
 		// when
 		ExtractableResponse<Response> findPathResponse = executeFindPathRequest(stationId1, stationId6);
@@ -109,6 +110,7 @@ public class PathAcceptanceTest extends CommonAcceptanceTest {
 		assertThat(findPathResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(parseStations(findPathResponse)).extracting("name").containsExactly("서울역", "홍대입구역", "디지털미디어시티역", "공덕역");
 		assertThat(parseDistance(findPathResponse)).isEqualTo(10);
+		assertThat(parseDuration(findPathResponse)).isEqualTo(10);
 	}
 
 	@Test

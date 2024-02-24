@@ -26,7 +26,7 @@ class SectionsTest {
 		// given
 		Station upStation = new Station(1L, "강남역");
 		Station downStation = new Station(2L, "역삼역");
-		Section section = new Section(1L, upStation, downStation, 10L);
+		Section section = new Section(1L, upStation, downStation, 10L,0);
 		Sections sections = new Sections();
 
 		// when
@@ -42,7 +42,7 @@ class SectionsTest {
 		// given
 		Station upStation = new Station(1L, "강남역");
 		Station downStation = new Station(2L, "역삼역");
-		Section section = new Section(1L, upStation, downStation, 10L);
+		Section section = new Section(1L, upStation, downStation, 10L,0);
 		Sections sections = new Sections();
 		sections.addSection(section);
 
@@ -61,8 +61,8 @@ class SectionsTest {
 		Station station2 = new Station(2L, "선릉역");
 		Station station3 = new Station(3L, "서초역");
 		Station station4 = new Station(4L, "잠실역");
-		Section firstSection = new Section(1L, station1, station2, 10L);
-		Section secondSection = new Section(2L, station3, station4, 5L);
+		Section firstSection = new Section(1L, station1, station2, 10L,0);
+		Section secondSection = new Section(2L, station3, station4, 5L,0);
 		Sections sections = new Sections();
 		sections.addSection(firstSection);
 
@@ -80,7 +80,7 @@ class SectionsTest {
 		// given
 		Station upStation = new Station(1L, "강남역");
 		Station downStation = new Station(2L, "역삼역");
-		Section section = new Section(1L, upStation, downStation, 10L);
+		Section section = new Section(1L, upStation, downStation, 10L,0);
 		Sections sections = new Sections();
 		sections.addSection(section);
 
@@ -97,7 +97,7 @@ class SectionsTest {
 		// given
 		Station upStation = new Station(1L, "강남역");
 		Station downStation = new Station(2L, "역삼역");
-		Section section = new Section(1L, upStation, downStation, 10L);
+		Section section = new Section(1L, upStation, downStation, 10L,0);
 		Sections sections = new Sections();
 		sections.addSection(section);
 
@@ -115,8 +115,8 @@ class SectionsTest {
 		Station upStation = new Station(1L, "강남역");
 		Station middleStation = new Station(3L, "선릉역");
 		Station downStation = new Station(2L, "역삼역");
-		Section firstSection = new Section(1L, upStation, middleStation, 5L);
-		Section secondSection = new Section(2L, middleStation, downStation, 7L);
+		Section firstSection = new Section(1L, upStation, middleStation, 5L,0);
+		Section secondSection = new Section(2L, middleStation, downStation, 7L,0);
 		Sections sections = new Sections();
 		sections.addSection(firstSection);
 		sections.addSection(secondSection);
@@ -137,8 +137,8 @@ class SectionsTest {
 		Station upStation = new Station(1L, "강남역");
 		Station middleStation = new Station(3L, "선릉역");
 		Station downStation = new Station(2L, "역삼역");
-		Section firstSection = new Section(1L, upStation, middleStation, 5L);
-		Section secondSection = new Section(2L, middleStation, downStation, 7L);
+		Section firstSection = new Section(1L, upStation, middleStation, 5L,0);
+		Section secondSection = new Section(2L, middleStation, downStation, 7L,0);
 		Sections sections = new Sections();
 		sections.addSection(firstSection);
 		sections.addSection(secondSection);
@@ -159,7 +159,7 @@ class SectionsTest {
 		Station upStation = new Station(1L, "상행역");
 		Station downStation = new Station(2L, "하행역");
 		Long distance = 10L;
-		Section section = new Section(1L, upStation, downStation, distance);
+		Section section = new Section(1L, upStation, downStation, distance,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section)));
 
 		// When & then
@@ -216,10 +216,10 @@ class SectionsTest {
 		Station newUpStation = new Station(0L, "신규 상행역");
 		Station existingUpStation = new Station(1L, "기존 상행역");
 		Station downStation = new Station(2L, "하행역");
-		Section existingSection = new Section(1L, existingUpStation, downStation, 10L);
+		Section existingSection = new Section(1L, existingUpStation, downStation, 10L,0);
 		Sections sections = new Sections();
 		sections.addSection(existingSection);
-		Section newSection = new Section(null, newUpStation, existingUpStation, 5L);
+		Section newSection = new Section(null, newUpStation, existingUpStation, 5L,0);
 
 		// when
 		sections.insertSection(newSection);
@@ -235,10 +235,10 @@ class SectionsTest {
 		Station upStation = new Station(1L, "상행역");
 		Station existingDownStation = new Station(2L, "기존 하행역");
 		Station newDownStation = new Station(3L, "신규 하행역");
-		Section existingSection = new Section(1L, upStation, existingDownStation, 10L);
+		Section existingSection = new Section(1L, upStation, existingDownStation, 10L,0);
 		Sections sections = new Sections();
 		sections.addSection(existingSection);
-		Section newSection = new Section(null, existingDownStation, newDownStation, 5L);
+		Section newSection = new Section(null, existingDownStation, newDownStation, 5L,0);
 
 		// when
 		sections.insertSection(newSection);
@@ -254,8 +254,8 @@ class SectionsTest {
 		Station upStation = new Station(1L, "강남역");
 		Station middleStation = new Station(2L, "선릉역");
 		Station downStation = new Station(3L, "역삼역");
-		Section firstSection = new Section(1L, upStation, middleStation, 5L);
-		Section secondSection = new Section(2L, middleStation, downStation, 7L);
+		Section firstSection = new Section(1L, upStation, middleStation, 5L,0);
+		Section secondSection = new Section(2L, middleStation, downStation, 7L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(firstSection, secondSection)));
 
 		// when
@@ -272,8 +272,8 @@ class SectionsTest {
 		Station upStation = new Station(1L, "강남역");
 		Station middleStation = new Station(2L, "선릉역");
 		Station downStation = new Station(3L, "역삼역");
-		Section firstSection = new Section(1L, upStation, middleStation, 5L);
-		Section secondSection = new Section(2L, middleStation, downStation, 7L);
+		Section firstSection = new Section(1L, upStation, middleStation, 5L,0);
+		Section secondSection = new Section(2L, middleStation, downStation, 7L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(firstSection, secondSection)));
 
 		// when
@@ -290,12 +290,12 @@ class SectionsTest {
 		Station upStation = new Station(1L, "강남역");
 		Station middleStation = new Station(3L, "선릉역");
 		Station downStation = new Station(4L, "역삼역");
-		Section firstSection = new Section(1L, upStation, middleStation, 5L);
-		Section secondSection = new Section(2L, middleStation, downStation, 7L);
+		Section firstSection = new Section(1L, upStation, middleStation, 5L,0);
+		Section secondSection = new Section(2L, middleStation, downStation, 7L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(firstSection, secondSection)));
 
 		Station newMiddleStation = new Station(2L, "새 중간역");
-		Section newSection = new Section(3L, upStation, newMiddleStation, 3L);
+		Section newSection = new Section(3L, upStation, newMiddleStation, 3L,0);
 
 		// when
 		sections.insertSection(newSection);
@@ -313,8 +313,8 @@ class SectionsTest {
 		Station upStation = new Station(1L, "1");
 		Station middleStation = new Station(2L, "2");
 		Station downStation = new Station(3L, "3");
-		Section section1 = new Section(1L, upStation, middleStation, 10L);
-		Section section2 = new Section(2L, middleStation, downStation, 15L);
+		Section section1 = new Section(1L, upStation, middleStation, 10L,0);
+		Section section2 = new Section(2L, middleStation, downStation, 15L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section1, section2)));
 
 		// when
@@ -333,10 +333,10 @@ class SectionsTest {
 		Station thirdStation = new Station(3L, "3");
 		Station fourthStation = new Station(4L, "4");
 		Station downStation = new Station(5L, "5");
-		Section section1 = new Section(1L, upStation, secondStation, 10L);
-		Section section2 = new Section(2L, secondStation, thirdStation, 15L);
-		Section section3 = new Section(3L, thirdStation, fourthStation, 20L);
-		Section section4 = new Section(4L, fourthStation, downStation, 25L);
+		Section section1 = new Section(1L, upStation, secondStation, 10L,0);
+		Section section2 = new Section(2L, secondStation, thirdStation, 15L,0);
+		Section section3 = new Section(3L, thirdStation, fourthStation, 20L,0);
+		Section section4 = new Section(4L, fourthStation, downStation, 25L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section1, section2, section3, section4)));
 
 		// when
@@ -354,8 +354,8 @@ class SectionsTest {
 		Station middleStation = new Station(2L, "2");
 		Station downStation = new Station(3L, "3");
 		Station anotherStation = new Station(4L, "4");
-		Section section1 = new Section(1L, upStation, middleStation, 10L);
-		Section section2 = new Section(2L, middleStation, downStation, 15L);
+		Section section1 = new Section(1L, upStation, middleStation, 10L,0);
+		Section section2 = new Section(2L, middleStation, downStation, 15L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section1, section2)));
 
 		// when
@@ -371,7 +371,7 @@ class SectionsTest {
 		// given
 		Station station1 = new Station(1L, "1");
 		Station station2 = new Station(2L, "2");
-		Section section1 = new Section(1L, station1, station2, 10L);
+		Section section1 = new Section(1L, station1, station2, 10L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section1)));
 
 		// when
@@ -389,9 +389,9 @@ class SectionsTest {
 		Station station2 = new Station(2L, "2");
 		Station station3 = new Station(3L, "3");
 		Station station4 = new Station(4L, "4");
-		Section section1 = new Section(1L, station1, station2, 10L);
-		Section section2 = new Section(2L, station2, station3, 15L);
-		Section section3 = new Section(3L, station3, station4, 20L);
+		Section section1 = new Section(1L, station1, station2, 10L,0);
+		Section section2 = new Section(2L, station2, station3, 15L,0);
+		Section section3 = new Section(3L, station3, station4, 20L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section1, section2, section3)));
 		sections.removeStation(station2.getId());
 
@@ -411,10 +411,10 @@ class SectionsTest {
 		Station stationC = new Station(3L, "C");
 		Station stationD = new Station(4L, "D");
 		Station stationE = new Station(5L, "E");
-		Section section1 = new Section(1L, stationA, stationB, 10L);
-		Section section2 = new Section(2L, stationB, stationC, 15L);
-		Section section3 = new Section(3L, stationD, stationE, 20L);
-		Section section4 = new Section(4L, stationC, stationD, 25L);
+		Section section1 = new Section(1L, stationA, stationB, 10L,0);
+		Section section2 = new Section(2L, stationB, stationC, 15L,0);
+		Section section3 = new Section(3L, stationD, stationE, 20L,0);
+		Section section4 = new Section(4L, stationC, stationD, 25L,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section2, section1, section4, section3)));
 
 		// when

@@ -17,6 +17,8 @@ public class Path {
 
 	Long distance;
 
+	Long duration;
+
 	public int size() {
 		return stations.size();
 	}

@@ -37,26 +37,22 @@ public class PathStepDef implements En {
 		And("총 거리와 소요 시간을 함께 응답함", this::verifyTotalDistanceWithTotalDuration);
 	}
 
-	private void verifyTotalDistanceWithTotalDuration(ExtractableResponse<Response> response, DataTable expectedPathTable) {
+	private void verifyTotalDistanceWithTotalDuration(DataTable expectedPathTable) {
 		List<Map<String, String>> expectedPath = expectedPathTable.asMaps(String.class, String.class);
 		long expectedTotalDistance = Long.parseLong(expectedPath.get(0).get("distance"));
 		long expectedTotalDuration = Long.parseLong(expectedPath.get(0).get("duration"));
 
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-		assertThat(parseTotalDistance(response)).isEqualTo(expectedTotalDistance);
-		assertThat(parseTotalDuration(response)).isEqualTo(expectedTotalDuration);
+		assertThat(parseDistance(response)).isEqualTo(expectedTotalDistance);
+		assertThat(parseDuration(response)).isEqualTo(expectedTotalDuration);
 	}
 
-	private void verifyMinimumTimePath(ExtractableResponse<Response> response, DataTable expectedPathTable) {
+	private void verifyMinimumTimePath(DataTable expectedPathTable) {
 		List<Map<String, String>> expectedPath = expectedPathTable.asMaps(String.class, String.class);
 		List<String> expectedStationNames = Arrays.asList(expectedPath.get(0).get("stationNames").split(", "));
-		long expectedDistance = Long.parseLong(expectedPath.get(0).get("distance"));
-		long expectedDuration = Long.parseLong(expectedPath.get(0).get("duration"));
 
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(parseStations(response)).extracting("name").containsExactlyElementsOf(expectedStationNames);
-		assertThat(parseDistance(response)).isEqualTo(expectedDistance);
-		assertThat(parseDuration(response)).isEqualTo(expectedDuration);
 	}
 
 	private void createLinesWithDuration(DataTable linesTable) {
@@ -76,8 +72,6 @@ public class PathStepDef implements En {
 		stations.forEach(station -> createStation(station.get("name")));
 	}
 
-
-
 	private void createSectionsWithDuration(DataTable sectionsTable) {
 		List<Map<String, Long>> sections = sectionsTable.asMaps(String.class, Long.class);
 		sections.forEach(section -> {
@@ -90,41 +84,5 @@ public class PathStepDef implements En {
 			createSectionWithDuration(lineId, upStationId, downStationId, distance, duration);
 		});
 	}
-
-
-	private void createLines(DataTable linesTable) {
-		List<Map<String, String>> lines = linesTable.asMaps(String.class, String.class);
-		lines.forEach(line -> {
-			String name = line.get("line");
-			long upStationId = Long.parseLong(line.get("upStationId"));
-			long downStationId = Long.parseLong(line.get("downStationId"));
-			long distance = Long.parseLong(line.get("distance"));
-			createLine(name, upStationId, downStationId, distance);
-		});
-	}
-
-
-	private void createSections(DataTable sectionsTable) {
-		List<Map<String, Long>> sections = sectionsTable.asMaps(String.class, Long.class);
-		sections.forEach(section -> {
-			Long lineId = section.get("lineId");
-			Long upStationId = section.get("upStationId");
-			Long downStationId = section.get("downStationId");
-			Long distance = section.get("distance");
-
-			createSection(lineId, upStationId, downStationId, distance);
-		});
-	}
-
-	private void verifyShortestPath(ExtractableResponse<Response> response, DataTable expectedPathTable) {
-		List<Map<String, String>> expectedPath = expectedPathTable.asMaps(String.class, String.class);
-		List<String> expectedStationNames = Arrays.asList(expectedPath.get(0).get("stationNames").split(", "));
-		long expectedDistance = Long.parseLong(expectedPath.get(0).get("distance"));
-
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-		assertThat(parseStations(response)).extracting("name").containsExactlyElementsOf(expectedStationNames);
-		assertThat(parseDistance(response)).isEqualTo(expectedDistance);
-	}
-
 
 }
