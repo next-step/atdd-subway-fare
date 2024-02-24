@@ -1,7 +1,8 @@
-package nextstep.cucumber.steps;
+package nextstep.cucumber.steps.line;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.cucumber.steps.station.StationSteps;
 import nextstep.utils.DatabaseCleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class LineStepDef implements En {
         });
 
         When("지하철 노선을 생성하면", () -> {
-            response = LineSteps.노선_생성_요청("5호선", upstationId, downstationId, 5);
+            response = LineSteps.노선_생성_요청("5호선", upstationId, downstationId, 5, 5);
         });
 
         Then("지하철 노선이 생성된다", () -> {

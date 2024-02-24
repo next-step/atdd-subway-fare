@@ -18,23 +18,26 @@ public class PathService {
     private final PathFinder pathFinder;
     private final StationRepository stationRepository;
 
-    public PathResponse showShortestPath(Long sourceId, Long targetId) {
+    public PathResponse showShortestPath(Long sourceId, Long targetId, String type) {
         if (sourceId.equals(targetId)) {
             throw new InvalidInputException("출발역과 도착역이 동일합니다.");
         }
         stationRepository.findById(sourceId).orElseThrow(EntityNotFoundException::new);
         stationRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
 
-        Pair<List<String>, Integer> pair = pathFinder.findShortestPath(Long.toString(sourceId), Long.toString(targetId));
-        List<StationResponse> stations = pair.getFirst().stream()
+        SearchType searchType = SearchType.from(type);
+        PathInfo pathInfo = searchType.findPath(pathFinder, Long.toString(sourceId), Long.toString(targetId));
+
+        List<StationResponse> stations = pathInfo.getStationIds().stream()
                 .map(Long::parseLong)
                 .map(stationRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
-        int distance = pair.getSecond();
+        int distance = pathInfo.getDistance();
+        int duration = pathInfo.getDuration();
 
-        return new PathResponse(stations, distance);
+        return new PathResponse(stations, distance, duration);
     }
 }

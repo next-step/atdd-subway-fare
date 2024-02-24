@@ -1,4 +1,4 @@
-package nextstep.cucumber.steps;
+package nextstep.cucumber.steps.auth;
 
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;

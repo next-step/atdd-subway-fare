@@ -43,8 +43,8 @@ public class Line {
         return sections.getTotalDistance();
     }
 
-    public Section initSection(Station upstation, Station downstation, int distance) {
-        Section section = Section.initSection(this, upstation, downstation, distance);
+    public Section initSection(Station upstation, Station downstation, int distance, int duration) {
+        Section section = Section.initSection(this, upstation, downstation, distance, duration);
         sections.initSection(section);
         return section;
     }
