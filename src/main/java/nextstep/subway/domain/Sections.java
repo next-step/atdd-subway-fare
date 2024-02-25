@@ -31,14 +31,18 @@ public class Sections {
 
         if (lineUpSection.isSameUpStation(deleteStation)) {
             removeSection(lineUpSection);
-        } else if (lineDownSection.isSameDownStation(deleteStation)) {
-            removeSection(lineDownSection);
-        } else {
-            removeMiddle(sortedSections, deleteStation);
+            return;
         }
+
+        if (lineDownSection.isSameDownStation(deleteStation)) {
+            removeSection(lineDownSection);
+            return;
+        }
+
+        removeMiddleSection(sortedSections, deleteStation);
     }
 
-    private void removeMiddle(final List<Section> sortedSections, final Station deleteStation) {
+    private void removeMiddleSection(final List<Section> sortedSections, final Station deleteStation) {
         final Section upSection = sortedSections
                 .stream()
                 .filter(s -> s.isSameDownStation(deleteStation))
