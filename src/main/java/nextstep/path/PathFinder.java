@@ -41,43 +41,31 @@ public class PathFinder {
     }
 
     public PathInfo findFastestPath(String sourceId, String targetId) {
-        WeightedMultigraph<String, CustomWeightedEdge> graph = init(section -> section.getDuration());
-        DijkstraShortestPath<String, CustomWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<String, CustomWeightedEdge> path = dijkstraShortestPath.getPath(sourceId, targetId);
-
-        if (path == null) {
-            throw new PathNotFoundException("가능한 경로가 존재하지 않습니다.");
-        }
-
-        List<String> shortestPath = path.getVertexList();
-        int totalDuration = (int) path.getEdgeList().stream()
-                .mapToDouble(edge -> graph.getEdgeWeight(edge))
-                .sum();
-        int totalDistance = (int) path.getEdgeList().stream()
-                .mapToDouble(edge -> edge.getDistance())
-                .sum();
-
-        return new PathInfo(shortestPath, totalDistance, totalDuration);
+        return findPath(sourceId, targetId, Section::getDuration);
     }
 
     public PathInfo findShortestPath(String sourceId, String targetId) {
-        WeightedMultigraph<String, CustomWeightedEdge> graph = init(section -> section.getDistance());
-        DijkstraShortestPath<String, CustomWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<String, CustomWeightedEdge> path = dijkstraShortestPath.getPath(sourceId, targetId);
+        return findPath(sourceId, targetId, Section::getDistance);
+    }
+
+    private PathInfo findPath(String sourceId, String targetId, Function<Section, Integer> weightExtractor) {
+        WeightedMultigraph<String, CustomWeightedEdge> graph = init(weightExtractor);
+        DijkstraShortestPath<String, CustomWeightedEdge> dijkstra = new DijkstraShortestPath<>(graph);
+        GraphPath<String, CustomWeightedEdge> path = dijkstra.getPath(sourceId, targetId);
 
         if (path == null) {
             throw new PathNotFoundException("가능한 경로가 존재하지 않습니다.");
         }
 
-        List<String> shortestPath = path.getVertexList();
-        int totalDistance = (int) path.getEdgeList().stream()
-                .mapToDouble(edge -> graph.getEdgeWeight(edge))
+        List<String> pathVertices = path.getVertexList();
+        int totalDistance = path.getEdgeList().stream()
+                .mapToInt(CustomWeightedEdge::getDistance)
                 .sum();
-        int totalDuration = (int) path.getEdgeList().stream()
-                .mapToDouble(edge -> edge.getDuration())
+        int totalDuration = path.getEdgeList().stream()
+                .mapToInt(CustomWeightedEdge::getDuration)
                 .sum();
 
-        return new PathInfo(shortestPath, totalDistance, totalDuration);
+        return new PathInfo(pathVertices, totalDistance, totalDuration);
     }
 
     public boolean pathExists(String sourceId, String targetId) {
