@@ -78,9 +78,9 @@ class LineTest {
     @DisplayName("노선의 중간에 구간을 추가할 때 기존구간의 소요시간보다 추가되는 소요시간이 같거나 크면 오류가 발생한다.")
     @Test
     void addSection_middle_invalid_duration() {
-        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 10, 3); })
+        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 5, 3); })
                 .isInstanceOf(ResponseStatusException.class)
-                .hasMessageContaining("중간에 추가되는 길이가 상행역의 길이보다 크거나 같을 수 없습니다.");
+                .hasMessageContaining("중간에 추가되는 소요시간이 상행역의 소요시간보다 크거나 같을 수 없습니다.");
     }
 
     @DisplayName("노선의 끝에 구간을 추가한다.")

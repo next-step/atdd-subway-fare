@@ -89,7 +89,7 @@ public class Section implements Comparable<Section> {
 
     public void reduceDuration(final int duration) {
         if (this.duration <= duration) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중간에 추가되는 소요시간이 상행역의 소요시간 크거나 같을 수 없습니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중간에 추가되는 소요시간이 상행역의 소요시간보다 크거나 같을 수 없습니다.");
         }
 
         this.duration = this.duration - duration;
