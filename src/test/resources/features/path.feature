@@ -22,7 +22,7 @@ Feature: 지하철 경로 조회 기능
       | distance | duration |
       | 5        | 5        |
 
-  Scenario: 서울역에서 공덕역까지의 최단 경로 조회
+  Scenario: 서울역에서 공덕역까지의 최소 시간 경로 조회
     Given 지하철역이 등록되어있음
       | name             |
       | 서울역              |
