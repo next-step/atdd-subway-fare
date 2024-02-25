@@ -40,4 +40,3 @@ frontend/node_modules
 
 ### Secret ###
 **/resources/application.properties
-**/resources/application*
