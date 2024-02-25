@@ -13,7 +13,11 @@ public abstract class PathFareHandler {
         this.nextHandler.next(nextHandler);
     }
 
-    protected abstract long calculate(int distance);
+    public long calculate(final int distance) {
+        return calculateFare(distance) + calculateNext(distance);
+    }
+
+    protected abstract long calculateFare(int distance);
 
     protected abstract int getStandardDistance();
 

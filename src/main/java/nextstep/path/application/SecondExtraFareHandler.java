@@ -4,7 +4,7 @@ public class SecondExtraFareHandler extends PathFareHandler {
     private static final long EXTRA_FARE_BASE = 100L;
 
     @Override
-    public long calculate(final int distance) {
+    public long calculateFare(final int distance) {
         final int targetDistance = getTargetDistance(distance);
 
         int extraFare = 0;
@@ -12,7 +12,7 @@ public class SecondExtraFareHandler extends PathFareHandler {
             extraFare += calculateOverFare(targetDistance - getStandardDistance());
         }
 
-        return extraFare + calculateNext(distance);
+        return extraFare;
     }
 
     private int calculateOverFare(final int distance) {

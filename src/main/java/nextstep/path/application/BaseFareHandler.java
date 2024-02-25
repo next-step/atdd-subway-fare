@@ -4,8 +4,8 @@ public class BaseFareHandler extends PathFareHandler {
     private static final long BASE_FARE = 1250L;
 
     @Override
-    public long calculate(final int distance) {
-        return BASE_FARE + calculateNext(distance);
+    public long calculateFare(final int distance) {
+        return BASE_FARE;
     }
 
     @Override

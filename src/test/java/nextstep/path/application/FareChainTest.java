@@ -56,7 +56,7 @@ class FareChainTest {
     private static class ZeroFareInterval extends PathFareHandler {
 
         @Override
-        protected long calculate(final int distance) {
+        protected long calculateFare(final int distance) {
             return 0;
         }
 
@@ -83,7 +83,7 @@ class FareChainTest {
     private static class ZeroStandardDistance extends PathFareHandler {
 
         @Override
-        protected long calculate(final int distance) {
+        protected long calculateFare(final int distance) {
             return 0;
         }
 
