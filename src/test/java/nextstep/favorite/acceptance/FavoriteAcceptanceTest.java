@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-import static nextstep.favorite.acceptance.FavoriteSteps.*;
+import static nextstep.favorite.acceptance.FavoriteSteps.즐겨찾기를_등록한다;
+import static nextstep.favorite.acceptance.FavoriteSteps.즐겨찾기를_삭제한다;
+import static nextstep.favorite.acceptance.FavoriteSteps.즐겨찾기를_조회한다;
+import static nextstep.favorite.acceptance.FavoriteSteps.토근_없이_즐겨찾기를_등록한다;
 import static nextstep.member.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.노선이_생성되어_있다;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -135,7 +138,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     public static String 즐겨찾기가_등록되어_있다(final String email, final Long source, final Long target) {
-        return FavoriteSteps.즐겨찾기를_등록한다(email, source, target).header("location");
+        return 즐겨찾기를_등록한다(email, source, target).header("location");
     }
 
     private static Long 지하철역_생성_요청(final String name) {

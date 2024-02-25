@@ -8,12 +8,10 @@ import nextstep.subway.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
-@Transactional(readOnly = true)
 public class ShortestDurationPathFinder extends PathFinder {
     @Override
     public boolean isType(final PathType pathType) {

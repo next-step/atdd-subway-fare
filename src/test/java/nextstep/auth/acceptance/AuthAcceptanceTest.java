@@ -1,8 +1,5 @@
 package nextstep.auth.acceptance;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.auth.application.dto.TokenResponse;
@@ -14,10 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import java.util.Date;
-
-import static nextstep.auth.acceptance.AuthSteps.*;
-import static nextstep.member.acceptance.MemberSteps.*;
+import static nextstep.auth.acceptance.AuthSteps.createToken;
+import static nextstep.auth.acceptance.AuthSteps.이메일_패스워드로_로그인을_요청한다;
+import static nextstep.auth.acceptance.AuthSteps.코드로_깃허브를_통한_로그인을_요청한다;
+import static nextstep.member.acceptance.MemberSteps.JWT없이_개인정보_요청;
+import static nextstep.member.acceptance.MemberSteps.개인정보_요청;
+import static nextstep.member.acceptance.MemberSteps.만료된_JWT로_개인정보_요청;
+import static nextstep.member.acceptance.MemberSteps.토큰으로_회원_정보_조회_요청;
+import static nextstep.member.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.utils.GithubResponses.사용자1;
 import static org.assertj.core.api.Assertions.assertThat;
 
