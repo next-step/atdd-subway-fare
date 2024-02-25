@@ -4,13 +4,16 @@ public class SectionsUpdateRequest {
     private Long downStationId;
     private Long upStationId;
     private Long distance;
+    private Long duration;
 
     public SectionsUpdateRequest(Long downStationId,
                                  Long upStationId,
-                                 Long distance) {
+                                 Long distance,
+                                 Long duration) {
         this.downStationId = downStationId;
         this.upStationId = upStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getDownStationId() {
@@ -23,5 +26,9 @@ public class SectionsUpdateRequest {
 
     public Long getDistance() {
         return distance;
+    }
+
+    public Long getDuration() {
+        return duration;
     }
 }

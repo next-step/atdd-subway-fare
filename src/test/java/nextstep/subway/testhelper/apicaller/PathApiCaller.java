@@ -13,6 +13,7 @@ public class PathApiCaller {
         return given().log().all()
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())
+                .queryParam("type", pathRequest.getType())
                 .when().get("/paths")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())

@@ -1,5 +1,6 @@
 package nextstep.subway.line.section.domain;
 
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,26 +54,26 @@ public class Sections {
         return this.sectionList.size() - 1;
     }
 
-    public ApplyDistance add(Section section) {
+    public ApplyValues add(Section section) {
         if (isAlreadyAdded(section)) {
             throw new IllegalArgumentException("이미 추가된 구간입니다.");
         }
         return addTarget(section);
     }
 
-    private ApplyDistance addTarget(Section section) {
+    private ApplyValues addTarget(Section section) {
         if (canAddFirst(section)) {
             this.sectionList.add(FIRST_INDEX, section);
-            return ApplyDistance.applyAddFirst(section.distance());
+            return ApplyValues.applyAddFirst(section.distance(), section.duration());
         }
 
         if (canAddLast(section)) {
             this.sectionList.add(section);
-            return ApplyDistance.applyAddLast(section.distance());
+            return ApplyValues.applyAddLast(section.distance(), section.duration());
         }
 
         addMiddle(section);
-        return ApplyDistance.applyAddMiddle();
+        return ApplyValues.applyAddMiddle();
     }
 
     private boolean isAlreadyAdded(Section section) {
@@ -94,7 +96,7 @@ public class Sections {
         return lastSection().isSameDownStationInputUpStation(section);
     }
 
-    public ApplyDistance delete(Station station) {
+    public ApplyValues delete(Station station) {
         if (this.sectionList.size() == 1) {
             throw new IllegalArgumentException("구간이 하나 일 때는 삭제를 할 수 없습니다.");
         }
@@ -106,23 +108,23 @@ public class Sections {
                 .anyMatch(section -> section.anyMatchUpStationAndDownStation(station));
     }
 
-    private ApplyDistance deleteTarget(Station station) {
+    private ApplyValues deleteTarget(Station station) {
         Section targetSection;
 
         if (canDeleteFirst(station)) {
             targetSection = firstSection();
             this.sectionList.remove(targetSection);
-            return ApplyDistance.applyDeleteFirst(targetSection.distance());
+            return ApplyValues.applyDeleteFirst(targetSection.distance(), targetSection.duration());
         }
 
         if (canDeleteLast(station)) {
             targetSection = lastSection();
             this.sectionList.remove(targetSection);
-            return ApplyDistance.applyDeleteLast(targetSection.distance());
+            return ApplyValues.applyDeleteLast(targetSection.distance(), targetSection.duration());
         }
 
         deleteMiddle(station);
-        return ApplyDistance.applyDeleteMiddle();
+        return ApplyValues.applyDeleteMiddle();
     }
 
     private Section deleteMiddle(Station station) {
@@ -152,6 +154,10 @@ public class Sections {
         return this.sectionList;
     }
 
+    public void forEach(Consumer<Section> action) {
+        sectionList.forEach(action);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -163,5 +169,14 @@ public class Sections {
     @Override
     public int hashCode() {
         return Objects.hash(sectionList);
+    }
+
+    public Long calculateValue(Station source,
+                               Station target,
+                               PathType type) {
+        return this.sectionList.stream()
+                .filter(section -> section.isSameUpStation(source) && section.isSameDownStation(target))
+                .map(type::findBy)
+                .reduce(0L, Long::sum);
     }
 }

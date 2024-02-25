@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.testhelper.AcceptanceTest;
 import nextstep.subway.testhelper.JsonPathHelper;
@@ -56,7 +57,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void findPath1() {
         // given
         // when
-        PathResponse pathResponse = JsonPathHelper.getObject(PathApiCaller.경로_조회(new PathRequest(잠실역_ID, 삼성역_ID)), ".",
+        PathResponse pathResponse = JsonPathHelper.getObject(PathApiCaller.경로_조회(new PathRequest(잠실역_ID, 삼성역_ID, PathType.DISTANCE.toString())), ".",
                 PathResponse.class);
 
         // then
@@ -81,7 +82,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void findPath2() {
         // given
         // when
-        PathRequest pathRequest = new PathRequest(잠실역_ID, 잠실역_ID);
+        PathRequest pathRequest = new PathRequest(잠실역_ID, 잠실역_ID, PathType.DISTANCE.toString());
         ExtractableResponse<Response> response = given().log().all()
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())
@@ -109,7 +110,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void findPath3() {
         // given
         // when
-        PathRequest pathRequest = new PathRequest(강남역_ID, 서초역_ID);
+        PathRequest pathRequest = new PathRequest(강남역_ID, 서초역_ID, PathType.DISTANCE.toString());
         ExtractableResponse<Response> response = given().log().all()
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())
@@ -137,7 +138,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void findPath4() {
         // given
         // when
-        PathRequest pathRequest = new PathRequest(stationFixture.get강남역_ID(), stationFixture.get오이도역_ID());
+        PathRequest pathRequest = new PathRequest(stationFixture.get강남역_ID(), stationFixture.get오이도역_ID(), PathType.DISTANCE.toString());
         ExtractableResponse<Response> response = given().log().all()
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())

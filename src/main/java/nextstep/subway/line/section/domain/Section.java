@@ -12,11 +12,12 @@ public class Section {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     private Station upStation;
-
     @OneToOne(fetch = FetchType.LAZY)
     private Station downStation;
-
+    @Column(nullable = false)
     private Long distance;
+    @Column(nullable = false)
+    private Long duration;
 
     protected Section() {
     }
@@ -27,6 +28,16 @@ public class Section {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+    }
+
+    public Section(Station upStation,
+                   Station downStation,
+                   Long distance,
+                   Long duration) {
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public Station getUpStation() {
@@ -109,6 +120,10 @@ public class Section {
         return this.distance;
     }
 
+    public Long duration() {
+        return this.duration;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,4 +136,5 @@ public class Section {
     public int hashCode() {
         return Objects.hash(id, upStation, downStation, distance);
     }
+
 }

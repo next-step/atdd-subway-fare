@@ -26,17 +26,20 @@ class LineTest {
     void setUp() {
         createdSection = new Section(StationFixture.강남역,
                 StationFixture.선릉역,
+                10L,
                 10L);
 
         line = new Line(LineFixture.신분당선,
                 "bg-red-600",
                 StationFixture.강남역,
                 StationFixture.선릉역,
+                10L,
                 10L);
 
         inputSection = new Section(
                 StationFixture.선릉역,
                 StationFixture.교대역,
+                5L,
                 5L);
     }
 
@@ -46,6 +49,7 @@ class LineTest {
         Section newSection = new Section(
                 StationFixture.교대역,
                 StationFixture.강남역,
+                5L,
                 5L);
         line.addSection(newSection);
 
@@ -58,6 +62,10 @@ class LineTest {
         Long actualDistance = line.getDistance();
         Long expectedDistance = 15L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 15L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test
@@ -66,6 +74,7 @@ class LineTest {
         Section newSection = new Section(
                 StationFixture.선릉역,
                 StationFixture.교대역,
+                5L,
                 5L);
         line.addSection(newSection);
 
@@ -78,6 +87,10 @@ class LineTest {
         Long actualDistance = line.getDistance();
         Long expectedDistance = 15L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 15L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test
@@ -86,6 +99,7 @@ class LineTest {
         Section newSection = new Section(
                 StationFixture.강남역,
                 StationFixture.교대역,
+                5L,
                 5L);
         line.addSection(newSection);
 
@@ -93,15 +107,21 @@ class LineTest {
         Sections expected = Sections.from(
                 List.of(new Section(StationFixture.강남역,
                                 StationFixture.교대역,
+                                5L,
                                 5L),
                         new Section(StationFixture.교대역,
                                 StationFixture.선릉역,
+                                5L,
                                 5L)));
         assertThat(actual).isEqualTo(expected);
 
         Long actualDistance = line.getDistance();
         Long expectedDistance = 10L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 10L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test
@@ -110,6 +130,7 @@ class LineTest {
         Section newSection = new Section(
                 StationFixture.교대역,
                 StationFixture.선릉역,
+                5L,
                 5L);
         line.addSection(newSection);
 
@@ -117,15 +138,21 @@ class LineTest {
         Sections expected = Sections.from(
                 List.of(new Section(StationFixture.강남역,
                                 StationFixture.교대역,
+                                5L,
                                 5L),
                         new Section(StationFixture.교대역,
                                 StationFixture.선릉역,
+                                5L,
                                 5L)));
         assertThat(actual).isEqualTo(expected);
 
         Long actualDistance = line.getDistance();
         Long expectedDistance = 10L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 10L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test
@@ -140,6 +167,7 @@ class LineTest {
         Section newSection = new Section(
                 StationFixture.강남역,
                 StationFixture.교대역,
+                10L,
                 10L);
         assertThrows(IllegalArgumentException.class, () -> line.addSection(newSection));
     }
@@ -154,12 +182,17 @@ class LineTest {
         Sections expected = Sections.from(
                 List.of(new Section(StationFixture.선릉역,
                         StationFixture.교대역,
+                        5L,
                         5L)));
         assertThat(actual).isEqualTo(expected);
 
         Long actualDistance = line.getDistance();
         Long expectedDistance = 5L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 5L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test
@@ -172,12 +205,17 @@ class LineTest {
         Sections expected = Sections.from(
                 List.of(new Section(StationFixture.강남역,
                         StationFixture.선릉역,
+                        10L,
                         10L)));
         assertThat(actual).isEqualTo(expected);
 
         Long actualDistance = line.getDistance();
         Long expectedDistance = 10L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 10L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test
@@ -190,12 +228,17 @@ class LineTest {
         Sections expected = Sections.from(
                 List.of(new Section(StationFixture.강남역,
                         StationFixture.교대역,
+                        15L,
                         15L)));
         assertThat(actual).isEqualTo(expected);
 
         Long actualDistance = line.getDistance();
         Long expectedDistance = 15L;
         assertThat(actualDistance).isEqualTo(expectedDistance);
+
+        Long actualDuration = line.getDuration();
+        Long expectedDuration = 15L;
+        assertThat(actualDuration).isEqualTo(expectedDuration);
     }
 
     @Test

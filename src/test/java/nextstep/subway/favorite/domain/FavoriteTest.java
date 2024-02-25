@@ -23,13 +23,14 @@ class FavoriteTest {
 
     @BeforeEach
     void setUp() {
-        Line 일호선 = new Line("일호선", "blue", StationFixture.잠실역, StationFixture.강남역, 10L);
-        Line 이호선 = new Line("이호선", "green", StationFixture.강남역, StationFixture.삼성역, 10L);
-        Line 삼호선 = new Line("삼호선", "orange", StationFixture.잠실역, StationFixture.선릉역, 2L);
-        Line 사호선 = new Line("삼호선", "orange", StationFixture.교대역, StationFixture.서초역, 5L);
+        Line 일호선 = new Line("일호선", "blue", StationFixture.잠실역, StationFixture.강남역, 10L, 10L);
+        Line 이호선 = new Line("이호선", "green", StationFixture.강남역, StationFixture.삼성역, 10L, 10L);
+        Line 삼호선 = new Line("삼호선", "orange", StationFixture.잠실역, StationFixture.선릉역, 2L, 10L);
+        Line 사호선 = new Line("삼호선", "orange", StationFixture.교대역, StationFixture.서초역, 5L, 10L);
         Section addSection = new Section(
                 StationFixture.선릉역,
                 StationFixture.삼성역,
+                3L,
                 3L);
         삼호선.addSection(addSection);
         pathFinder = new JGraphPathFinder();

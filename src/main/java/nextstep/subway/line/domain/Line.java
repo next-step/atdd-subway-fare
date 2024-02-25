@@ -1,8 +1,9 @@
 package nextstep.subway.line.domain;
 
-import nextstep.subway.line.section.domain.ApplyDistance;
+import nextstep.subway.line.section.domain.ApplyValues;
 import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.line.section.domain.Sections;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.Stations;
 
@@ -24,6 +25,8 @@ public class Line {
     private Sections sections;
     @Column(nullable = false)
     private Long distance;
+    @Column(nullable = false)
+    private Long duration;
 
     protected Line() {
     }
@@ -44,13 +47,15 @@ public class Line {
                 String color,
                 Station upStation,
                 Station downStation,
-                Long distance) {
+                Long distance,
+                Long duration) {
         this.name = name;
         this.color = color;
         List<Section> list = new ArrayList<>();
-        list.add(new Section(upStation, downStation, distance));
+        list.add(new Section(upStation, downStation, distance, duration));
         this.sections = Sections.from(list);
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -73,6 +78,10 @@ public class Line {
         return distance;
     }
 
+    public Long getDuration() {
+        return duration;
+    }
+
     public void update(String name,
                        String color) {
         this.name = name;
@@ -80,14 +89,16 @@ public class Line {
     }
 
     public void addSection(Section section) {
-        ApplyDistance applyDistance = this.sections.add(section);
-        applyDistance.validAdd(this.distance, section.distance());
-        this.distance += applyDistance.applyValue();
+        ApplyValues applyValues = this.sections.add(section);
+        applyValues.validAdd(this.distance, section.distance());
+        this.distance += applyValues.applyDistance();
+        this.duration += applyValues.applyDuration();
     }
 
     public void deleteSection(Station station) {
-        ApplyDistance applyDistance = this.sections.delete(station);
-        this.distance -= applyDistance.applyValue();
+        ApplyValues applyValues = this.sections.delete(station);
+        this.distance -= applyValues.applyDistance();
+        this.duration -= applyValues.applyDuration();
     }
 
     public boolean existStation(Station station) {
@@ -96,6 +107,12 @@ public class Line {
 
     public Stations getStations() {
         return this.sections.stations();
+    }
+
+    public Long calculateValue(Station source,
+                               Station target,
+                               PathType type) {
+        return sections.calculateValue(source, target, type);
     }
 
     @Override
@@ -110,5 +127,4 @@ public class Line {
     public int hashCode() {
         return Objects.hash(id, name, color, sections, distance);
     }
-
 }

@@ -6,6 +6,7 @@ import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathFinder;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.application.dto.StationResponseFactory;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
@@ -30,8 +31,9 @@ public class PathService {
     public PathResponse findShortCut(PathRequest pathRequest) {
         Path path = pathFinder.shortcut(Lines.from(lineRepository.findAllFetchJoin()),
                 getStation(pathRequest.getSource()),
-                getStation(pathRequest.getTarget()));
-        return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance());
+                getStation(pathRequest.getTarget()),
+                PathType.valueOf(pathRequest.getType()));
+        return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance(), path.getDuration());
     }
 
     private Station getStation(Long stationId) {

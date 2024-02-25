@@ -13,7 +13,7 @@ class UserDetailTest {
     @Test
     @DisplayName("UserDetail 을 생성한다")
     void createUserDetail() {
-        assertDoesNotThrow(() ->new UserDetail(MemberFixture.EMAIL, MemberFixture.PASSWORD,
+        assertDoesNotThrow(() -> new UserDetail(MemberFixture.EMAIL, MemberFixture.PASSWORD,
                 MemberFixture.AGE));
     }
 

@@ -3,7 +3,6 @@ package nextstep.subway.cucumber.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.cucumber.AcceptanceContext;
@@ -11,7 +10,6 @@ import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.testhelper.apicaller.LineApiCaller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +30,7 @@ public class LineStepDef implements En {
                         params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                         params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                         params.put("distance", it.get("distance"));
+                        params.put("duration", it.get("duration"));
                         ExtractableResponse<Response> response = LineApiCaller.지하철_노선_생성(params);
                         context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
                     });
@@ -46,6 +45,7 @@ public class LineStepDef implements En {
                         params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                         params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                         params.put("distance", it.get("distance"));
+                        params.put("duration", it.get("duration"));
                         LineResponse line = (LineResponse) context.store.get(lineName);
                         LineApiCaller.지하철_노선에_구간_추가(params, "/lines/" + line.getId());
                     });

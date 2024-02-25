@@ -18,12 +18,12 @@ public class LineFixture {
     private final StationFixture stationFixture;
 
     public LineFixture(StationFixture stationFixture) {
-        신분당선_강남역_부터_삼성역_params = createParams(신분당선, "bg-red-600", stationFixture.get강남역_ID(), stationFixture.get삼성역_ID(), 10L);
-        영호선_강남역_부터_삼성역_params = createParams(영호선, "bg-red-100", stationFixture.get강남역_ID(), stationFixture.get선릉역_ID(), 10L);
-        일호선_잠실역_부터_강남역_params = createParams("일호선", "blue", stationFixture.get잠실역_ID(), stationFixture.get강남역_ID(), 10L);
-        이호선_강남역_부터_삼성역_params = createParams("이호선", "green", stationFixture.get강남역_ID(), stationFixture.get삼성역_ID(), 10L);
-        삼호선_잠실역_부터_선릉역_params = createParams("삼호선", "orange", stationFixture.get잠실역_ID(), stationFixture.get선릉역_ID(), 2L);
-        사호선_교대역_부터_서초역_params = createParams("사호선", "skyBlue", stationFixture.get교대역_ID(), stationFixture.get서초역_ID(), 5L);
+        신분당선_강남역_부터_삼성역_params = createParams(신분당선, "bg-red-600", stationFixture.get강남역_ID(), stationFixture.get삼성역_ID(), 10L, 10L);
+        영호선_강남역_부터_삼성역_params = createParams(영호선, "bg-red-100", stationFixture.get강남역_ID(), stationFixture.get선릉역_ID(), 10L, 10L);
+        일호선_잠실역_부터_강남역_params = createParams("일호선", "blue", stationFixture.get잠실역_ID(), stationFixture.get강남역_ID(), 10L, 10L);
+        이호선_강남역_부터_삼성역_params = createParams("이호선", "green", stationFixture.get강남역_ID(), stationFixture.get삼성역_ID(), 10L, 10L);
+        삼호선_잠실역_부터_선릉역_params = createParams("삼호선", "orange", stationFixture.get잠실역_ID(), stationFixture.get선릉역_ID(), 2L, 2L);
+        사호선_교대역_부터_서초역_params = createParams("사호선", "skyBlue", stationFixture.get교대역_ID(), stationFixture.get서초역_ID(), 5L, 5L);
         this.stationFixture = stationFixture;
     }
 
@@ -31,13 +31,15 @@ public class LineFixture {
                                                    String color,
                                                    Long upStationId,
                                                    Long downStationId,
-                                                   Long distance) {
+                                                   Long distance,
+                                                   Long duration) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("upStationId", upStationId.toString());
         params.put("downStationId", downStationId.toString());
         params.put("distance", distance.toString());
+        params.put("duration", duration.toString());
 
         return params;
     }
