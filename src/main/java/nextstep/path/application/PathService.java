@@ -26,8 +26,13 @@ public class PathService {
 
     private final LineProvider lineProvider;
 
+    private final FareChain fareChain;
+
     public PathService(final LineProvider lineProvider) {
         this.lineProvider = lineProvider;
+        this.fareChain = new FareChain()
+                .addNext(new FirstExtraFareHandler())
+                .addNext(new SecondExtraFareHandler());
     }
 
     public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
@@ -36,7 +41,10 @@ public class PathService {
         }
 
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
-        return PathResponse.from(shortestPath);
+
+        final long fare = fareChain.calculate(shortestPath.getDistance());
+
+        return PathResponse.from(shortestPath, fare);
     }
 
     public boolean isInvalidPath(final PathSearchRequest searchRequest) {
