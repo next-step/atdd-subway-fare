@@ -5,6 +5,7 @@ import nextstep.subway.station.domain.Station;
 import java.util.List;
 
 public class Path {
+    private static final long DEFAULT_FARE = 1250L;
     private final List<Station> stations;
     private final Long distance;
     private final Long duration;
@@ -47,7 +48,7 @@ public class Path {
     }
 
     public Long fare() {
-        return 0L;
+        return DEFAULT_FARE;
     }
 
     public List<Station> getStations() {
