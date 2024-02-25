@@ -33,7 +33,8 @@ public class PathService {
                 getStation(pathRequest.getSource()),
                 getStation(pathRequest.getTarget()),
                 PathType.valueOf(pathRequest.getType()));
-        return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance(), path.getDuration());
+        return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance(),
+                path.getDuration(), path.fare());
     }
 
     private Station getStation(Long stationId) {
