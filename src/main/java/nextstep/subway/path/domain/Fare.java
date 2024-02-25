@@ -11,7 +11,10 @@ public enum Fare {
     private final int distanceUnit;
     private final int unitFare;
 
-    Fare(int startDistance, int endDistance, int distanceUnit, int unitFare) {
+    Fare(int startDistance,
+         int endDistance,
+         int distanceUnit,
+         int unitFare) {
         this.startDistance = startDistance;
         this.endDistance = endDistance;
         this.distanceUnit = distanceUnit;
