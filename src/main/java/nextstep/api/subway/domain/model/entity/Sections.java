@@ -202,20 +202,10 @@ public class Sections implements Iterable<Section> {
 
 	private void processMatchingSection(Section existingSection, Section newSection) {
 		if (existingSection.isSameUpStation(newSection.getUpStation())) {
-			insertSectionAdjustUpMatch(existingSection, newSection);
+			adjustSectionWithRemovalAndAdd(existingSection, newSection, existingSection.adjustForUpMatch(newSection));
 		} else {
-			insertSectionAdjustDownMatch(existingSection, newSection);
+			adjustSectionWithRemovalAndAdd(existingSection, newSection,  existingSection.adjustForDownMatch(newSection));
 		}
-	}
-
-	private void insertSectionAdjustUpMatch(Section existingSection, Section newSection) {
-		Section adjustedSection = existingSection.adjustForUpMatch(newSection);
-		adjustSectionWithRemovalAndAdd(existingSection, newSection, adjustedSection);
-	}
-
-	private void insertSectionAdjustDownMatch(Section existingSection, Section newSection) {
-		Section adjustedSection = existingSection.adjustForDownMatch(newSection);
-		adjustSectionWithRemovalAndAdd(existingSection, newSection, adjustedSection);
 	}
 
 	private void adjustSectionWithRemovalAndAdd(Section existingSection, Section newSection, Section adjustedSection) {
@@ -238,15 +228,23 @@ public class Sections implements Iterable<Section> {
 
 		this.sections.remove(firstSection);
 		this.sections.remove(secondSection);
-		addSection(createSection(newUpStation, newDownStation, calculateDeletionDistance(firstSection, secondSection)));
+		addSection(createSection(newUpStation, newDownStation, calculateDeletionDistance(firstSection, secondSection), calculateDeletionDuration(firstSection,secondSection)));
 	}
 
 	private Section createSection(Station newUpStation, Station newDownStation, Long newDistance) {
 		return Section.builder().upStation(newUpStation).downStation(newDownStation).distance(newDistance).build();
 	}
 
+	private Section createSection(Station newUpStation, Station newDownStation, Long newDistance, int duration) {
+		return Section.builder().upStation(newUpStation).downStation(newDownStation).distance(newDistance).duration(duration).build();
+	}
+
 	private long calculateDeletionDistance(Section section1, Section section2) {
 		return section1.getDistance() + section2.getDistance();
+	}
+
+	private int calculateDeletionDuration(Section section1, Section section2) {
+		return section1.getDuration() + section2.getDuration();
 	}
 
 	/**

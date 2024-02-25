@@ -8,4 +8,5 @@ import nextstep.api.subway.interfaces.dto.response.PathResponse;
  */
 public interface PathService {
 	PathResponse findShortestPath(Long source, Long target);
+	PathResponse findMinimumDurationPath(Long source, Long target);
 }

@@ -95,7 +95,7 @@ class SectionTest {
 		Station upStation = new Station(1L, "상행역");
 		Station downStation = new Station(2L, "하행역");
 		Long distance = 10L;
-		Section section = new Section(1L, upStation, downStation, distance);
+		Section section = new Section(1L, upStation, downStation, distance,0);
 		Sections sections = new Sections(new TreeSet<>(Set.of(section)));
 
 		// When
@@ -149,11 +149,11 @@ class SectionTest {
 		// Given
 		Station existingUpStation = new Station(1L, "강남역");
 		Station existingDownStation = new Station(2L, "서초역");
-		Section existingSection = new Section(1L, existingUpStation, existingDownStation, 10L); // 강남 - 서초
+		Section existingSection = new Section(1L, existingUpStation, existingDownStation, 10L, 0); // 강남 - 서초
 
 		Station newUpStation = new Station(3L, "신촌역");
 		Station newDownStation = existingDownStation;
-		Section newSection = new Section(2L, newUpStation, newDownStation, 5L); // 신촌 - 서초
+		Section newSection = new Section(2L, newUpStation, newDownStation, 5L, 0); // 신촌 - 서초
 
 		// When
 		boolean result = existingSection.canInsertBetween(newSection);
@@ -168,11 +168,11 @@ class SectionTest {
 		// Given
 		Station existingUpStation = new Station(1L, "강남역");
 		Station existingDownStation = new Station(2L, "서초역");
-		Section existingSection = new Section(1L, existingUpStation, existingDownStation, 10L); // 강남 - 서초
+		Section existingSection = new Section(1L, existingUpStation, existingDownStation, 10L,0); // 강남 - 서초
 
 		Station newUpStation = new Station(3L, "신촌역");
 		Station newDownStation = new Station(4L, "홍대입구역");
-		Section newSection = new Section(2L, newUpStation, newDownStation, 5L); // 신촌 - 홍대입구
+		Section newSection = new Section(2L, newUpStation, newDownStation, 5L,0); // 신촌 - 홍대입구
 
 		// When
 		boolean result = existingSection.canInsertBetween(newSection);
@@ -189,8 +189,8 @@ class SectionTest {
 		Station downStation = new Station(2L, "하행역");
 		Station newDownStation = new Station(3L, "새 하행역");
 		Long distance = 10L;
-		Section existingSection = new Section(1L, upStation, downStation, distance);
-		Section newSection = new Section(2L, upStation, newDownStation, 5L);
+		Section existingSection = new Section(1L, upStation, downStation, distance,0);
+		Section newSection = new Section(2L, upStation, newDownStation, 5L,0);
 
 		// When
 		Section adjustedSection = existingSection.adjustForUpMatch(newSection);
@@ -209,8 +209,8 @@ class SectionTest {
 		Station downStation = new Station(2L, "하행역");
 		Station newUpStation = new Station(3L, "새 상행역");
 		Long distance = 10L;
-		Section existingSection = new Section(1L, upStation, downStation, distance);
-		Section newSection = new Section(2L, newUpStation, downStation, 5L);
+		Section existingSection = new Section(1L, upStation, downStation, distance,0);
+		Section newSection = new Section(2L, newUpStation, downStation, 5L,0);
 
 		// When
 		Section adjustedSection = existingSection.adjustForDownMatch(newSection);
@@ -294,7 +294,7 @@ class SectionTest {
 		Station newUpStation = new Station(3L, "새 상행역");
 		Station downStation = new Station(2L, "하행역");
 		Long distance = 10L;
-		Section section = new Section(1L, upStation, downStation, distance);
+		Section section = new Section(1L, upStation, downStation, distance,0);
 
 		// When
 		section.setUpStation(newUpStation);
@@ -311,7 +311,7 @@ class SectionTest {
 		Station downStation = new Station(2L, "기존 하행역");
 		Station newDownStation = new Station(3L, "새 하행역");
 		Long distance = 10L;
-		Section section = new Section(1L, upStation, downStation, distance);
+		Section section = new Section(1L, upStation, downStation, distance,0);
 
 		// When
 		section.setDownStation(newDownStation);
@@ -327,7 +327,7 @@ class SectionTest {
 		Station upStation = new Station(1L, "상행역");
 		Station downStation = new Station(2L, "하행역");
 		Long originalDistance = 10L;
-		Section section = new Section(1L, upStation, downStation, originalDistance);
+		Section section = new Section(1L, upStation, downStation, originalDistance,0);
 		Long adjustedDistance = 15L;
 
 		// When

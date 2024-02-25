@@ -24,7 +24,7 @@ public class SimpleSectionFactory implements SectionFactory {
 
 	@Override
 	public Section createSection(SectionCreateCommand command, Station upStation, Station downStation) {
-		Section section = Section.of(upStation, downStation, command.getDistance());
+		Section section = Section.of(upStation, downStation, command.getDistance(), command.getDuration());
 		return sectionRepository.save(section);
 	}
 
@@ -32,7 +32,7 @@ public class SimpleSectionFactory implements SectionFactory {
 	public Section createSection(LineCreateCommand createCommand) {
 		Station upStation = stationRepository.findById(createCommand.getUpStationId()).orElseThrow();
 		Station downStation = stationRepository.findById(createCommand.getDownStationId()).orElseThrow();
-		return sectionRepository.save(Section.of(upStation, downStation, createCommand.getDistance()));
+		return sectionRepository.save(Section.of(upStation, downStation, createCommand.getDistance(), createCommand.getDuration()));
 	}
 
 	@Override

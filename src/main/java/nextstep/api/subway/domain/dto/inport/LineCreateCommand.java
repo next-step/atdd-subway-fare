@@ -31,6 +31,8 @@ public class LineCreateCommand {
 	@Description(value = "10")
 	private Long distance;
 
+	private int duration;
+
 	public static LineCreateCommand from(LineCreateRequest createRequest) {
 		return ModelMapperBasedObjectMapper.convert(createRequest, LineCreateCommand.class);
 	}

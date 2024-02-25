@@ -23,6 +23,8 @@ public class SectionCreateCommand {
 	private Long upStationId;
 	private Long distance;
 
+	private int duration;
+
 	public static SectionCreateCommand from(SectionCreateRequest createRequest){
 		return ModelMapperBasedObjectMapper.convert(createRequest, SectionCreateCommand.class);
 	}

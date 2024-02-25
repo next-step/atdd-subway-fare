@@ -1,17 +1,18 @@
 package nextstep.cucumber.steps;
 
-import io.cucumber.java8.En;
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+
+import io.cucumber.java8.En;
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 
 public class StationStepDef implements En {
     ExtractableResponse<Response> response;
