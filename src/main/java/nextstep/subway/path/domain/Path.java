@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Path {
     private static final long DEFAULT_FARE = 1250L;
+    public static final int DEFAULT_FARE_DISTANCE = 10;
     private final List<Station> stations;
     private final Long distance;
     private final Long duration;
@@ -26,8 +27,8 @@ public class Path {
     }
 
     private static Long getDistance(Double shortestValue,
-                             Long value,
-                             PathType type) {
+                                    Long value,
+                                    PathType type) {
         if (type == PathType.DISTANCE) {
             return Math.round(shortestValue);
         }
@@ -37,8 +38,8 @@ public class Path {
     }
 
     private static Long getDuration(Double shortestValue,
-                             Long value,
-                             PathType type) {
+                                    Long value,
+                                    PathType type) {
         if (type == PathType.DURATION) {
             return Math.round(shortestValue);
         }
@@ -48,7 +49,15 @@ public class Path {
     }
 
     public Long fare() {
-        return DEFAULT_FARE;
+        return DEFAULT_FARE + calculateOverFare();
+    }
+
+    private int calculateOverFare() {
+        if (distance <= DEFAULT_FARE_DISTANCE) {
+            return 0;
+        }
+
+        return (int) (Math.ceil((double)(distance - 10) / 5) * 100);
     }
 
     public List<Station> getStations() {
