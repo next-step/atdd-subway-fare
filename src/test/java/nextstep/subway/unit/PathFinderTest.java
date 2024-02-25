@@ -1,5 +1,7 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.application.dto.PathResponse;
+import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -7,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathFinderTest {
     protected Station 교대역;
@@ -37,5 +41,16 @@ public class PathFinderTest {
                 .flatMap(l -> l.getSections().stream())
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    protected void verifyPathResponse(final PathResponse pathResponse, String startStation, String middleStation, String endStation,
+                                      int distance, int duration, int fare) {
+        final List<StationResponse> stations = pathResponse.getStations();
+        assertThat(stations.get(0).getName()).isEqualTo(startStation);
+        assertThat(stations.get(1).getName()).isEqualTo(middleStation);
+        assertThat(stations.get(2).getName()).isEqualTo(endStation);
+        assertThat(pathResponse.getDistance()).isEqualTo(distance);
+        assertThat(pathResponse.getDuration()).isEqualTo(duration);
+        assertThat(pathResponse.getFare()).isEqualTo(fare);
     }
 }

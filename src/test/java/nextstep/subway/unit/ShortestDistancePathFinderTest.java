@@ -1,7 +1,6 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.application.dto.PathResponse;
-import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.pathfinder.PathFinder;
@@ -13,26 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShortestDistancePathFinderTest extends PathFinderTest {
-
-    @DisplayName("최단 거리 경로를 조회하면 교대역 - 남부터미널역 - 양재역을 리턴한다.")
-    @Test
-    void pathFinder() {
-        final PathFinder pathFinder = new ShortestDistancePathFinder();
-        final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
-
-        final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
-
-        final List<StationResponse> stations = pathResponse.getStations();
-        assertThat(stations.get(0).getName()).isEqualTo("교대역");
-        assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
-        assertThat(stations.get(2).getName()).isEqualTo("양재역");
-        assertThat(pathResponse.getDistance()).isEqualTo(5);
-        assertThat(pathResponse.getDuration()).isEqualTo(20);
-    }
 
     @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 이하면 1250원을 리턴한다.")
     @Test
@@ -44,13 +26,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        final List<StationResponse> stations = pathResponse.getStations();
-        assertThat(stations.get(0).getName()).isEqualTo("교대역");
-        assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
-        assertThat(stations.get(2).getName()).isEqualTo("양재역");
-        assertThat(pathResponse.getDistance()).isEqualTo(10);
-        assertThat(pathResponse.getDuration()).isEqualTo(20);
-        assertThat(pathResponse.getFare()).isEqualTo(1250);
+        verifyPathResponse(pathResponse, "교대역", "남부터미널역", "양재역", 10, 20, 1250);
     }
 
     @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 초과하면 1250원을 리턴한다.")
@@ -63,13 +39,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        final List<StationResponse> stations = pathResponse.getStations();
-        assertThat(stations.get(0).getName()).isEqualTo("교대역");
-        assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
-        assertThat(stations.get(2).getName()).isEqualTo("양재역");
-        assertThat(pathResponse.getDistance()).isEqualTo(11);
-        assertThat(pathResponse.getDuration()).isEqualTo(20);
-        assertThat(pathResponse.getFare()).isEqualTo(1350);
+        verifyPathResponse(pathResponse, "교대역", "남부터미널역", "양재역", 11, 20, 1350);
     }
 
     @DisplayName("최단 거리 경로를 조회 하였을 때, 50km 초과하면 1250원을 리턴한다.")
@@ -85,13 +55,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        final List<StationResponse> stations = pathResponse.getStations();
-        assertThat(stations.get(0).getName()).isEqualTo("교대역");
-        assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
-        assertThat(stations.get(2).getName()).isEqualTo("양재역");
-        assertThat(pathResponse.getDistance()).isEqualTo(51);
-        assertThat(pathResponse.getDuration()).isEqualTo(20);
-        assertThat(pathResponse.getFare()).isEqualTo(2150);
+        verifyPathResponse(pathResponse, "교대역", "남부터미널역", "양재역", 51, 20, 2150);
     }
 
     @DisplayName("최단 거리 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")

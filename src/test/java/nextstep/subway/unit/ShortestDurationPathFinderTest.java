@@ -1,7 +1,6 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.application.dto.PathResponse;
-import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.pathfinder.PathFinder;
 import nextstep.subway.domain.pathfinder.ShortestDurationPathFinder;
@@ -12,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShortestDurationPathFinderTest extends PathFinderTest {
@@ -25,12 +23,7 @@ class ShortestDurationPathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        final List<StationResponse> stations = pathResponse.getStations();
-        assertThat(stations.get(0).getName()).isEqualTo("교대역");
-        assertThat(stations.get(1).getName()).isEqualTo("강남역");
-        assertThat(stations.get(2).getName()).isEqualTo("양재역");
-        assertThat(pathResponse.getDistance()).isEqualTo(20);
-        assertThat(pathResponse.getDuration()).isEqualTo(4);
+        verifyPathResponse(pathResponse, "교대역", "강남역", "양재역", 20, 4, 1450);
     }
 
     @DisplayName("최소 시간 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
