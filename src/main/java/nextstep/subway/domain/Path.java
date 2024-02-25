@@ -1,16 +1,18 @@
 package nextstep.subway.domain;
 
 import nextstep.exception.ApplicationException;
-import nextstep.subway.strategy.ShortestPathStrategy;
+import nextstep.subway.domain.strategy.ShortestPathStrategy;
 
 import java.util.List;
 
 public class Path {
 
     private ShortestPathStrategy shortestPathStrategy;
+    private PathType pathType;
 
-    public Path(ShortestPathStrategy shortestPathStrategy) {
+    public Path(ShortestPathStrategy shortestPathStrategy, PathType pathType) {
         this.shortestPathStrategy = shortestPathStrategy;
+        this.pathType = pathType;
     }
 
     public List<Station> findShortestPath(Station source, Station target) {
@@ -24,8 +26,12 @@ public class Path {
         }
     }
 
-    public int findShortestDistance(Station source, Station target) {
-        return shortestPathStrategy.findShortestDistance(source, target);
+    public long findShortestValue(Station source, Station target) {
+        return shortestPathStrategy.findShortestValue(source, target);
+    }
+
+    public boolean isSamePathType(PathType pathType) {
+        return this.pathType == pathType;
     }
 
 }

@@ -34,7 +34,8 @@ public class SectionTest {
                 신분당선,
                 강남역,
                 선릉역,
-                10L
+                10L,
+                60L
         );
     }
 
@@ -122,7 +123,8 @@ public class SectionTest {
                 신분당선,
                 강남역,
                 선릉역,
-                10L
+                10L,
+                60L
         );
         구간.changeUpStation(양재역, 5L);
         assertAll(
@@ -143,7 +145,8 @@ public class SectionTest {
                 신분당선,
                 강남역,
                 선릉역,
-                10L
+                10L,
+                60L
         );
         구간.changeDownStation(양재역, 5L);
         assertAll(

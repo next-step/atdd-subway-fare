@@ -1,24 +1,24 @@
 package nextstep.subway.controller.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
+@Builder
 public class PathResponse {
     private List<StationResponse> stations;
-    private int distance;
+    private long distance;
+    private long duration;
 
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int distance) {
+    public PathResponse(List<StationResponse> stations, long distance, long duration) {
         this.stations = stations;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public List<StationResponse> getStations() {
-        return stations;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
 }

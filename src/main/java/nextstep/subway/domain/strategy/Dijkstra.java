@@ -1,8 +1,9 @@
-package nextstep.subway.strategy;
+package nextstep.subway.domain.strategy;
 
+import nextstep.exception.ApplicationException;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.exception.ApplicationException;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -15,10 +16,10 @@ public class Dijkstra implements ShortestPathStrategy {
 
     private final DijkstraShortestPath dijkstraShortestPath;
 
-    public Dijkstra(List<Section> sections) {
+    public Dijkstra(List<Section> sections, PathType pathType) {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         addVertexes(sections, graph);
-        addEdges(sections, graph);
+        addEdges(sections, graph, pathType);
         dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
@@ -29,9 +30,9 @@ public class Dijkstra implements ShortestPathStrategy {
         }
     }
 
-    private void addEdges(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+    private void addEdges(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph, PathType pathType) {
         for (Section section : sections) {
-            graph.setEdgeWeight(graph.addEdge(section.upStation(), section.downStation()), section.distance());
+            graph.setEdgeWeight(graph.addEdge(section.upStation(), section.downStation()), pathType.getType().apply(section));
         }
     }
 
@@ -43,10 +44,10 @@ public class Dijkstra implements ShortestPathStrategy {
     }
 
     @Override
-    public int findShortestDistance(Station source, Station target) {
+    public long findShortestValue(Station source, Station target) {
         GraphPath shortestPath = getPath(source, target);
         validateExistPath(shortestPath);
-        return (int) shortestPath.getWeight();
+        return (long) shortestPath.getWeight();
     }
 
     private GraphPath getPath(Station source, Station target) {

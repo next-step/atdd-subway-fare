@@ -96,7 +96,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 실패_새로운_구간_생성시_기존_구간의_상행역과_하행역이_일치하면_구간을_생성할_수_없다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(강남역_ID, 선릉역_ID, 10);
+        SectionCreateRequest request = sectionCreateRequest(강남역_ID, 선릉역_ID, 10, 60L);
 
         // when
         String message = 구간_생성_요청(request, OK.value())
@@ -117,7 +117,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 실패_새로운_구간_생성시_기존_구간의_상행역과_하행역을_포함하면_구간을_생성할_수_없다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 강남역_ID, 10);
+        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 강남역_ID, 10L, 60L);
 
         // when
         String message = 구간_생성_요청(request, OK.value())
@@ -138,7 +138,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_새로운_지하철_구간_생성시_노선의_처음에_생성할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(양재역_ID, 강남역_ID, 10);
+        SectionCreateRequest request = sectionCreateRequest(양재역_ID, 강남역_ID, 10, 60L);
 
         // when
         구간_생성_요청(request, CREATED.value());
@@ -165,7 +165,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_새로운_지하철_구간_생성시_상행역을_기준으로_노선의_가운데에_생성할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(강남역_ID, 양재역_ID, 3);
+        SectionCreateRequest request = sectionCreateRequest(강남역_ID, 양재역_ID, 3, 60L);
 
         // when
         구간_생성_요청(request, CREATED.value());
@@ -192,7 +192,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_새로운_지하철_구간_생성시_하행역을_기준으로_노선의_가운데에_생성할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(양재역_ID, 선릉역_ID, 3);
+        SectionCreateRequest request = sectionCreateRequest(양재역_ID, 선릉역_ID, 3, 60L);
 
         // when
         구간_생성_요청(request, CREATED.value());
@@ -219,7 +219,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_새로운_지하철_구간_생성시_노선의_마지막에_생성할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13);
+        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13, 60);
 
         // when
         구간_생성_요청(request, CREATED.value());
@@ -235,11 +235,12 @@ public class SectionAcceptanceTest extends AcceptanceTest {
                 );
     }
 
-    private SectionCreateRequest sectionCreateRequest(long upStationId, long downStationId, int distance) {
+    private SectionCreateRequest sectionCreateRequest(long upStationId, long downStationId, long distance, long duration) {
         return SectionCreateRequest.builder()
                 .upStationId(upStationId)
                 .downStationId(downStationId)
                 .distance(distance)
+                .duration(duration)
                 .build();
     }
 
@@ -277,7 +278,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_지하철_노선의_중간역을_노선에서_제거할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13);
+        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13, 60L);
         post("/lines/{lineId}/sections", request, CREATED.value(), 이호선_ID);
 
         // when
@@ -305,7 +306,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_지하철_노선의_상행_종점역을_노선에서_제거할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13);
+        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13, 60L);
         post("/lines/{lineId}/sections", request, CREATED.value(), 이호선_ID);
 
         // when
@@ -333,7 +334,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void 성공_지하철_노선의_하행_종점역을_노선에서_제거할_수_있다() {
         // given
-        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13);
+        SectionCreateRequest request = sectionCreateRequest(선릉역_ID, 양재역_ID, 13, 60L);
         post("/lines/{lineId}/sections", request, CREATED.value(), 이호선_ID);
 
         // when

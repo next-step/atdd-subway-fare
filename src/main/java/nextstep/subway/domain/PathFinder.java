@@ -1,11 +1,12 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.factory.ShortestPathFactory;
+import nextstep.subway.domain.strategy.ShortestPathStrategies;
+import nextstep.subway.domain.strategy.ShortestPathStrategy;
 import nextstep.subway.repository.SectionRepository;
-import nextstep.subway.strategy.ShortestPathStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PathFinder {
@@ -17,9 +18,19 @@ public class PathFinder {
     }
 
     public Path findPath() {
-        List<Section> sections = sectionRepository.findAll();
-        ShortestPathStrategy shortestPathStrategy = new ShortestPathFactory().generateStrategy(ShortestPathType.DIJKSTRA, sections);
+        return findPathBy(PathType.of(""));
+    }
 
-        return new Path(shortestPathStrategy);
+    public List<Path> findPaths() {
+        return PathType.listOf().stream()
+                .map(this::findPathBy)
+                .collect(Collectors.toList());
+    }
+
+    private Path findPathBy(PathType pathType) {
+        List<Section> sections = sectionRepository.findAll();
+        var factory = new ShortestPathStrategies();
+        ShortestPathStrategy shortestPathStrategy = factory.generateStrategy(ShortestPathType.DIJKSTRA, sections, pathType);
+        return new Path(shortestPathStrategy, pathType);
     }
 }

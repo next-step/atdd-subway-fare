@@ -1,9 +1,10 @@
-package nextstep.subway.factory;
+package nextstep.subway.domain.strategy;
 
+import nextstep.exception.ApplicationException;
 import nextstep.subway.domain.Line;
+import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.exception.ApplicationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,32 +18,32 @@ import static nextstep.subway.fixture.StationFixture.GANGNAM_STATION;
 import static nextstep.subway.fixture.StationFixture.SEOLLEUNG_STATION;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ShortestPathFactoryTest {
+class ShortestPathStrategiesTest {
 
-    private ShortestPathFactory 최단거리;
+    private ShortestPathStrategies 최단거리;
 
     @BeforeEach
     void setUp() {
-        최단거리 = new ShortestPathFactory();
+        최단거리 = new ShortestPathStrategies();
     }
 
     @Test
     void 실패_구간_정보가_없을경우_최단거리_전략을__구할_수_없다(){
-        assertThatThrownBy(() -> 최단거리.generateStrategy(DIJKSTRA, new ArrayList<>()))
+        assertThatThrownBy(() -> 최단거리.generateStrategy(DIJKSTRA, new ArrayList<>(), PathType.DISTANCE))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessage("지하철 구간이 존재하지 않습니다.");
     }
 
     @Test
     void 실패_존재하지_않는_최단거리_전략일_경우_최단거리_전략을_구할_수_없다(){
-        assertThatThrownBy(() -> 최단거리.generateStrategy(FLOYD, List.of(강남역_선릉역_구간())))
+        assertThatThrownBy(() -> 최단거리.generateStrategy(FLOYD, List.of(강남역_선릉역_구간()), PathType.DISTANCE))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessage("존재하지 않는 알고리즘 최단 전략 입니다.");
     }
 
     @Test
     void 성공_최단거리를_구할_수_없다(){
-        최단거리.generateStrategy(DIJKSTRA, List.of(강남역_선릉역_구간()));
+        최단거리.generateStrategy(DIJKSTRA, List.of(강남역_선릉역_구간()), PathType.DISTANCE);
     }
 
     private static Section 강남역_선릉역_구간() {
@@ -53,7 +54,8 @@ class ShortestPathFactoryTest {
                 신분당선,
                 강남역,
                 선릉역,
-                10L
+                10L,
+                60L
         );
         return 강남역_선릉역_구간;
     }

@@ -42,7 +42,8 @@ public class LineService {
                 line,
                 upStation,
                 downStation,
-                request.getDistance()
+                request.getDistance(),
+                request.getDuration()
         ));
         return LineResponse.ofWithStations(line, List.of(upStation, downStation));
     }

@@ -1,43 +1,35 @@
 package nextstep.subway.controller.dto;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Getter
 @Builder
+@NoArgsConstructor
 public class SectionCreateRequest {
-
-    @NotNull
-    private Long downStationId;
     @NotNull
     private Long upStationId;
+    @NotNull
+    private Long downStationId;
     @Min(1)
-    private long distance;
+    private Long distance;
+    @Min(1)
+    private Long duration;
 
-    public SectionCreateRequest() {
-    }
-
-    public SectionCreateRequest(Long downStationId, Long upStationId, long distance) {
-        this.downStationId = downStationId;
+    public SectionCreateRequest(Long upStationId, Long downStationId, Long distance, Long duration) {
         this.upStationId = upStationId;
+        this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public List<Long> stationIds(){
         return List.of(upStationId, downStationId);
     }
 
-    public Long getDownStationId() {
-        return downStationId;
-    }
-
-    public Long getUpStationId() {
-        return upStationId;
-    }
-
-    public long getDistance() {
-        return distance;
-    }
 }
