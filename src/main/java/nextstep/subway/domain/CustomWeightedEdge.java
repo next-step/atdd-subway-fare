@@ -3,13 +3,13 @@ package nextstep.subway.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class CustomWeightedEdge extends DefaultWeightedEdge {
-    private double distance;
+    private int distance;
     private int duration;
 
     public CustomWeightedEdge() {
     }
 
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 
@@ -17,7 +17,7 @@ public class CustomWeightedEdge extends DefaultWeightedEdge {
         return duration;
     }
 
-    public void setDistance(final double distance) {
+    public void setDistance(final int distance) {
         this.distance = distance;
     }
 
