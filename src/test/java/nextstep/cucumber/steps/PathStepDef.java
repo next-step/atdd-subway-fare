@@ -110,7 +110,7 @@ public class PathStepDef implements En {
 
         Then("지하철 이용 요금 {string}를 리턴한다", (String fee) -> {
             final PathResponse pathResponse = context.response.as(PathResponse.class);
-            final int expectDistance = pathResponse.getFee();
+            final int expectDistance = pathResponse.getFare();
 
             assertThat(expectDistance).isEqualTo(Integer.valueOf(fee));
         });

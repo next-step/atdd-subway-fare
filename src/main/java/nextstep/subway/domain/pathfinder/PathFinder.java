@@ -53,4 +53,8 @@ public abstract class PathFinder {
     private boolean isNotContainsGraph(final Station sourceStation, final WeightedMultigraph<Station, CustomWeightedEdge> graph) {
         return !graph.containsVertex(sourceStation);
     }
+
+    protected int calculateFare(int distance) {
+        return new Fare(distance).value();
+    }
 }

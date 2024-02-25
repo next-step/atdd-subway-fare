@@ -51,7 +51,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
         assertThat(stations.get(2).getName()).isEqualTo("양재역");
         assertThat(pathResponse.getDistance()).isEqualTo(9);
         assertThat(pathResponse.getDuration()).isEqualTo(20);
-        assertThat(pathResponse.getFee()).isEqualTo(1250);
+        assertThat(pathResponse.getFare()).isEqualTo(1250);
     }
 
     @DisplayName("최단 거리 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
