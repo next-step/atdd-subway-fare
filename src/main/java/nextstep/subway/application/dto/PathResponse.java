@@ -10,6 +10,7 @@ public class PathResponse {
 
     private int distance;
     private int duration;
+    private int fee;
 
     public PathResponse(final List<Station> stations, final int distance, final int duration) {
         this.stations = stations.stream().map(this::createStationResponse).collect(Collectors.toList());
@@ -34,6 +35,6 @@ public class PathResponse {
     }
 
     public int getFee() {
-        throw new UnsupportedOperationException("Unsupported getFee");
+        return this.fee;
     }
 }
