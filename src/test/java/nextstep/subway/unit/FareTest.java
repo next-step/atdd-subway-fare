@@ -12,9 +12,9 @@ class FareTest {
     @DisplayName("요금 계산을 위한 거리가 음수 일 수 없습니다")
     @Test
     void fare_invalid_distance() {
-        assertThatThrownBy(() -> {new Fare(-10);})
+        assertThatThrownBy(() -> {new Fare(-1);})
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("요금 계산을 위한 거리가 음수 일 수 없습니다 : -10");
+                .hasMessageContaining("요금 계산을 위한 거리가 음수 일 수 없습니다 : -1");
     }
 
     @DisplayName("거리가 10km 미만이면 요금이 1250원이 계산된다.")

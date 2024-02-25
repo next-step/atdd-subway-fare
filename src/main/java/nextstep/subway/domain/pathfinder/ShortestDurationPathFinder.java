@@ -40,6 +40,6 @@ public class ShortestDurationPathFinder extends PathFinder {
         final int distance = path.getEdgeList().stream()
                 .mapToInt(CustomWeightedEdge::getDistance)
                 .sum();
-        return new PathResponse(path.getVertexList(), distance, (int) path.getWeight(), 0);
+        return new PathResponse(path.getVertexList(), distance, (int) path.getWeight(), calculateFare(distance));
     }
 }
