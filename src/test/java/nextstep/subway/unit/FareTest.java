@@ -3,6 +3,8 @@ package nextstep.subway.unit;
 import nextstep.subway.domain.pathfinder.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,23 +28,20 @@ class FareTest {
     }
 
     @DisplayName("거리가 10km 초과면 5km마다 100원의 추가요금이 청구된다.")
-    @Test
-    void fee_distance_10km_over() {
-        final Fare fare = new Fare(11);
-        final Fare fare1 = new Fare(16);
+    @ParameterizedTest
+    @CsvSource({ "11, 1350", "16, 1450"})
+    void fee_distance_10km_over(int distance, int expectedFare) {
+        final Fare fare = new Fare(distance);
 
-        assertThat(fare.value()).isEqualTo(1350);
-        assertThat(fare1.value()).isEqualTo(1450);
+        assertThat(fare.value()).isEqualTo(expectedFare);
     }
 
     @DisplayName("거리가 50km 초과면 8km마다 100원의 추가요금이 청구된다.")
-    @Test
-    void fee_distance_50km_over() {
-        final Fare fare = new Fare(51);
-        final Fare fare1 = new Fare(59);
+    @ParameterizedTest
+    @CsvSource({ "51, 2150", "59, 2250"})
+    void fee_distance_50km_over(int distance, int expectedFare) {
+        final Fare fare = new Fare(distance);
 
-        assertThat(fare.value()).isEqualTo(2150);
-        assertThat(fare1.value()).isEqualTo(2250);
+        assertThat(fare.value()).isEqualTo(expectedFare);
     }
-
 }
