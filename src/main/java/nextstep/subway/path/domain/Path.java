@@ -46,6 +46,10 @@ public class Path {
 
     }
 
+    public Long fare() {
+        return 0L;
+    }
+
     public List<Station> getStations() {
         return stations;
     }
