@@ -27,4 +27,13 @@ class PathTest {
         assertThat(actual).isEqualTo(fare);
     }
 
+    @CsvSource({"50, 2050", "51, 2150", "56, 2150", "59, 2250"})
+    @ParameterizedTest(name = "50km 초과 시 8km 마다 추가운임(100원) 부과된다. (거리: {0}, 요금: {1} )")
+    void calculate50OverFare(Long distance, Long fare) {
+        Path path = new Path(Collections.emptyList(), distance, 1L);
+
+        Long actual = path.fare();
+        assertThat(actual).isEqualTo(fare);
+    }
+
 }

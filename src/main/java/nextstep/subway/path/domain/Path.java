@@ -57,7 +57,7 @@ public class Path {
             return 0;
         }
 
-        return (int) (Math.ceil((double)(distance - 10) / 5) * 100);
+        return (int) (Math.ceil((double)(distance - DEFAULT_FARE_DISTANCE) / 5) * 100);
     }
 
     public List<Station> getStations() {
