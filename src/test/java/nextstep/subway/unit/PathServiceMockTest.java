@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -71,12 +70,5 @@ public class PathServiceMockTest {
         assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
         assertThat(stations.get(2).getName()).isEqualTo("양재역");
         assertThat(pathResponse.getDistance()).isEqualTo(5);
-    }
-
-    private List<Section> getSections(final List<Line> lines) {
-        return lines.stream()
-                .flatMap(l -> l.getSections().stream())
-                .distinct()
-                .collect(Collectors.toList());
     }
 }

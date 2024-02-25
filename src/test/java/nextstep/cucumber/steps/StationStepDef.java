@@ -1,22 +1,17 @@
 package nextstep.cucumber.steps;
 
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
 import nextstep.cucumber.AcceptanceContext;
-import nextstep.subway.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Map;
 
 import static nextstep.subway.acceptance.StationSteps.지하철역_목록_조회;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StationStepDef implements En {
-    public static final String STATIONS_URL = "/stations";
 
     @Autowired
     private AcceptanceContext context;
