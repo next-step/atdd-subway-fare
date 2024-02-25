@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.api.subway.application.PathFacade;
-import nextstep.api.subway.common.type.PathType;
+import nextstep.api.subway.common.type.PathRequestType;
 import nextstep.api.subway.interfaces.dto.response.PathResponse;
 
 /**
@@ -24,7 +24,7 @@ public class PathController {
 
 
 	@GetMapping
-	public ResponseEntity<PathResponse> findShortestPath(@RequestParam Long source, @RequestParam Long target, @RequestParam(required = false) PathType type) {
+	public ResponseEntity<PathResponse> findShortestPath(@RequestParam Long source, @RequestParam Long target, @RequestParam(required = false) PathRequestType type) {
 		PathResponse pathResponse = pathFacade.findPath(source, target, type);
 		return ResponseEntity.ok(pathResponse);
 	}

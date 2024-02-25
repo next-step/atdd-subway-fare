@@ -3,7 +3,7 @@ package nextstep.api.subway.application;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.api.subway.common.type.PathType;
+import nextstep.api.subway.common.type.PathRequestType;
 import nextstep.api.subway.domain.service.PathService;
 import nextstep.api.subway.interfaces.dto.response.PathResponse;
 
@@ -16,9 +16,9 @@ import nextstep.api.subway.interfaces.dto.response.PathResponse;
 public class PathFacade {
 	private final PathService pathService;
 
-	public PathResponse findPath(Long source, Long target, PathType type) {
+	public PathResponse findPath(Long source, Long target, PathRequestType type) {
 
-		if(PathType.isDistance(type)){
+		if(PathRequestType.isDistance(type)){
 			return pathService.findShortestPath(source, target);
 		}
 		return pathService.findMinimumDurationPath(source,target);

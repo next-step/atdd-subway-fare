@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum PathType {
+public enum PathRequestType {
 	DISTANCE("거리"),
 	DURATION("소요 시간");
 
 	private final String description;
 
-	public static boolean isDistance(PathType type) {
-		return type!=null && DISTANCE.name().equals(type.name());
+	public static boolean isDistance(PathRequestType type) {
+		return type == DISTANCE;
 	}
 }
