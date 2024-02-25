@@ -34,10 +34,10 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
         assertThat(pathResponse.getDuration()).isEqualTo(20);
     }
 
-    @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 미만이면 1250원을 리턴한다.")
+    @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 이하면 1250원을 리턴한다.")
     @Test
     void pathFinder_fee() {
-        삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 4, 10);
+        삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 5, 10);
         삼호선.addSection(남부터미널역, 양재역, 5, 10);
 
         final PathFinder pathFinder = new ShortestDistancePathFinder();
@@ -49,9 +49,29 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
         assertThat(stations.get(0).getName()).isEqualTo("교대역");
         assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
         assertThat(stations.get(2).getName()).isEqualTo("양재역");
-        assertThat(pathResponse.getDistance()).isEqualTo(9);
+        assertThat(pathResponse.getDistance()).isEqualTo(10);
         assertThat(pathResponse.getDuration()).isEqualTo(20);
         assertThat(pathResponse.getFare()).isEqualTo(1250);
+    }
+
+    @DisplayName("최단 거리 경로를 조회 하였을 때, 11km 초과하면 1250원을 리턴한다.")
+    @Test
+    void pathFinder_fee_over_10Km() {
+        삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 6, 10);
+        삼호선.addSection(남부터미널역, 양재역, 5, 10);
+
+        final PathFinder pathFinder = new ShortestDistancePathFinder();
+        final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
+
+        final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
+
+        final List<StationResponse> stations = pathResponse.getStations();
+        assertThat(stations.get(0).getName()).isEqualTo("교대역");
+        assertThat(stations.get(1).getName()).isEqualTo("남부터미널역");
+        assertThat(stations.get(2).getName()).isEqualTo("양재역");
+        assertThat(pathResponse.getDistance()).isEqualTo(11);
+        assertThat(pathResponse.getDuration()).isEqualTo(20);
+        assertThat(pathResponse.getFare()).isEqualTo(1350);
     }
 
     @DisplayName("최단 거리 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
