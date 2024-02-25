@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
-import static nextstep.subway.acceptance.LineSteps.*;
+import static nextstep.subway.acceptance.LineSteps.노선목록을_조회한다;
+import static nextstep.subway.acceptance.LineSteps.노선을_삭제한다;
+import static nextstep.subway.acceptance.LineSteps.노선을_수정한다;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -14,7 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 public abstract class PathFinder {
+
     abstract public boolean isType(PathType pathType);
+
     public PathResponse findPath(final List<Section> sections, final Station sourceStation, final Station targetStation) {
         checkSameStation(sourceStation, targetStation);
 
@@ -28,9 +30,9 @@ public abstract class PathFinder {
         return createPathResponse(path);
     }
 
-    abstract protected WeightedMultigraph<Station, CustomWeightedEdge> createGraph(final List<Section> sections);
+    protected abstract WeightedMultigraph<Station, CustomWeightedEdge> createGraph(final List<Section> sections);
 
-    abstract protected PathResponse createPathResponse(final GraphPath<Station, CustomWeightedEdge> path);
+    protected abstract PathResponse createPathResponse(final GraphPath<Station, CustomWeightedEdge> path);
 
     private void checkSameStation(final Station sourceStation, final Station targetStation) {
         if (sourceStation.isSame(targetStation)) {
@@ -39,12 +41,20 @@ public abstract class PathFinder {
     }
 
     private void checkStationContainsGraph(final Station sourceStation, final Station targetStation, final WeightedMultigraph<Station, CustomWeightedEdge> graph) {
-        if (isNotContainsGraph(sourceStation, graph) || isNotContainsGraph(targetStation, graph)) {
-            throw new IllegalArgumentException("그래프에 존재하지 않는 정점입니다.");
+        if (isNotContainsGraph(sourceStation, graph)) {
+            throw new IllegalArgumentException("구간에 포함되지 않은 지하철역: " + sourceStation.getName());
+        }
+
+        if (isNotContainsGraph(targetStation, graph)) {
+            throw new IllegalArgumentException("구간에 포함되지 않은 지하철역: " + targetStation.getName());
         }
     }
 
     private boolean isNotContainsGraph(final Station sourceStation, final WeightedMultigraph<Station, CustomWeightedEdge> graph) {
         return !graph.containsVertex(sourceStation);
+    }
+
+    protected int calculateFare(int distance) {
+        return new Fare(distance).value();
     }
 }

@@ -85,7 +85,7 @@ public class FavoriteServiceTest {
         // then
         assertThatThrownBy(() -> { favoriteService.createFavorite(loginMember, favoriteRequest); })
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("그래프에 존재하지 않는 정점입니다.");
+                .hasMessageContaining("구간에 포함되지 않은 지하철역: " + 강남역.getName());
     }
 
     @DisplayName("즐겨찾기를 등록한다.")

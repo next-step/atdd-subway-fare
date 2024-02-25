@@ -8,12 +8,10 @@ import nextstep.subway.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
-@Transactional(readOnly = true)
 public class ShortestDurationPathFinder extends PathFinder {
     @Override
     public boolean isType(final PathType pathType) {
@@ -42,6 +40,6 @@ public class ShortestDurationPathFinder extends PathFinder {
         final int distance = path.getEdgeList().stream()
                 .mapToInt(CustomWeightedEdge::getDistance)
                 .sum();
-        return new PathResponse(path.getVertexList(), distance, (int) path.getWeight());
+        return new PathResponse(path.getVertexList(), distance, (int) path.getWeight(), calculateFare(distance));
     }
 }
