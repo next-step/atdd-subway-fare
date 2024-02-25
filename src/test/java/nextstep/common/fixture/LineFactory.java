@@ -9,12 +9,12 @@ public class LineFactory {
 
     }
 
-    public static Line createLine(final String name, final String color, final Section section) {
-        return new Line(name, color, section);
+    public static Line createLine(final String name, final String color, final long extraFare, final Section section) {
+        return new Line(name, color, extraFare, section);
     }
 
-    public static Line createLine(final Long id, final String name, final String color, final Section section) {
-        final Line line = createLine(name, color, section);
+    public static Line createLine(final Long id, final String name, final String color, final long extraFare, final Section section) {
+        final Line line = createLine(name, color, extraFare, section);
         ReflectionUtils.injectIdField(line, id);
         return line;
     }

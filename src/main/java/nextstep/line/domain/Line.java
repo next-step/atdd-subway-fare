@@ -22,12 +22,16 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
+    @Column(nullable = false)
+    private long extraFare;
+
     protected Line() {
     }
 
-    public Line(final String name, final String color, final Section section) {
+    public Line(final String name, final String color, final long extraFare, final Section section) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
         addSection(section);
     }
 
@@ -75,4 +79,7 @@ public class Line {
         return sections;
     }
 
+    public long getExtraFare() {
+        return extraFare;
+    }
 }

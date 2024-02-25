@@ -48,7 +48,7 @@ public class LineServiceTest {
         강남역 = stationRepository.save(StationFactory.createStation("강남역"));
         선릉역 = stationRepository.save(StationFactory.createStation("선릉역"));
         역삼역 = stationRepository.save(StationFactory.createStation("역삼역"));
-        line = lineRepository.save(LineFactory.createLine("이호선", "연두색", SectionFactory.createSection(강남역, 선릉역, 강남역_선릉역_길이, 강남역_선릉역_시간)));
+        line = lineRepository.save(LineFactory.createLine("이호선", "연두색", 10L, SectionFactory.createSection(강남역, 선릉역, 강남역_선릉역_길이, 강남역_선릉역_시간)));
         sectionCreateRequest = new SectionCreateRequest(선릉역.getId(), 역삼역.getId(), 선릉역_역삼역_길이, 선릉역_역삼역_시간);
     }
 

@@ -14,6 +14,7 @@ class LineTest {
     private static final long LINE_ID = 1L;
     private static final String LINE_NAME = "2호선";
     private static final String LINE_COLOR = "연두색";
+    private static final long LINE_EXTRA_FARE = 10L;
     private Station 강남역;
     private Station 선릉역;
     private Station 역삼역;
@@ -28,7 +29,7 @@ class LineTest {
         역삼역 = StationFactory.createStation(3L, "역삼역");
         강남역_선릉역_구간 = SectionFactory.createSection(1L, 강남역, 선릉역, 10, 2);
         선릉역_역삼역_구간 = SectionFactory.createSection(2L, 선릉역, 역삼역, 20, 3);
-        line = LineFactory.createLine(LINE_ID, LINE_NAME, LINE_COLOR, 강남역_선릉역_구간);
+        line = LineFactory.createLine(LINE_ID, LINE_NAME, LINE_COLOR, LINE_EXTRA_FARE, 강남역_선릉역_구간);
     }
 
     @Test
@@ -38,6 +39,7 @@ class LineTest {
             softly.assertThat(line.getId()).isEqualTo(LINE_ID);
             softly.assertThat(line.getName()).isEqualTo(LINE_NAME);
             softly.assertThat(line.getColor()).isEqualTo(LINE_COLOR);
+            softly.assertThat(line.getExtraFare()).isEqualTo(LINE_EXTRA_FARE);
             softly.assertThat(line.getDistance()).isEqualTo(강남역_선릉역_구간.getDistance());
             softly.assertThat(line.getDuration()).isEqualTo(강남역_선릉역_구간.getDuration());
             softly.assertThat(line.getStations()).containsExactly(강남역, 선릉역);
