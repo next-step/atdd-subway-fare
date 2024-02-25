@@ -25,14 +25,17 @@ public class Section implements Comparable<Section> {
     private Station downStation;
     @Column(nullable = false)
     private int distance;
+    @Column(nullable = false)
+    private int duration;
 
     public Section() {
     }
 
-    public Section(Station upStation, Station downStation, int distance, Line line) {
+    public Section(Station upStation, Station downStation, int distance, int duration , Line line) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
         this.line = line;
     }
 
@@ -46,6 +49,10 @@ public class Section implements Comparable<Section> {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return this.duration;
     }
 
     public Station getUpStation() {
@@ -80,6 +87,18 @@ public class Section implements Comparable<Section> {
         this.distance = this.distance + distance;
     }
 
+    public void reduceDuration(final int duration) {
+        if (this.duration <= duration) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중간에 추가되는 소요시간이 상행역의 소요시간보다 크거나 같을 수 없습니다.");
+        }
+
+        this.duration = this.duration - duration;
+    }
+
+    public void plusDuration(final int duration) {
+        this.duration = this.duration + duration;
+    }
+
     public Station[] getStations() {
         return new Station[]{this.upStation, this.downStation};
     }
@@ -94,11 +113,11 @@ public class Section implements Comparable<Section> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Section section = (Section) o;
-        return distance == section.distance && Objects.equals(upStation.getId(), section.upStation.getId()) && Objects.equals(downStation.getId(), section.downStation.getId());
+        return distance == section.distance && duration == section.duration && Objects.equals(id, section.id) && Objects.equals(line, section.line) && Objects.equals(upStation, section.upStation) && Objects.equals(downStation, section.downStation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(upStation.getId(), downStation.getId(), distance);
+        return Objects.hash(id, line, upStation, downStation, distance, duration);
     }
 }

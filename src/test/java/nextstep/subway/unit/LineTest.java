@@ -28,22 +28,23 @@ class LineTest {
         선릉역 = new Station(3L, "선릉역");
         삼성역 = new Station(4L, "삼성역");
         봉은사역 = new Station(5L, "봉은사역");
-        이호선 = new Line(1L, "노선", "red", 역삼역, 삼성역, 10);
+        이호선 = new Line(1L, "노선", "red", 역삼역, 삼성역, 10, 3);
     }
 
     @DisplayName("노선에 맨앞에 구간을 추가한다.")
     @Test
     void addSection_first() {
-        이호선.addSection(강남역, 역삼역, 10);
+        이호선.addSection(강남역, 역삼역, 10, 3);
 
         assertThat(이호선.getStations()).containsExactlyElementsOf(Arrays.asList(강남역, 역삼역, 삼성역));
         assertThat(이호선.totalDistance()).isEqualTo(20);
+        assertThat(이호선.totalDuration()).isEqualTo(6);
     }
 
     @DisplayName("노선에 맨앞에 구간을 추가할 때, 추가구간의 상행선이 기존에 포함되면 오류가 발생한다.")
     @Test
     void addSection_first_duplicate() {
-        assertThatThrownBy(() -> { 이호선.addSection(삼성역, 역삼역, 10); })
+        assertThatThrownBy(() -> { 이호선.addSection(삼성역, 역삼역, 10, 3); })
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("이미 등록되어 있는 지하철역 입니다.");
     }
@@ -51,16 +52,17 @@ class LineTest {
     @DisplayName("노선의 중간에 구간을 추가한다.")
     @Test
     void addSection_middle() {
-        이호선.addSection(역삼역, 선릉역, 5);
+        이호선.addSection(역삼역, 선릉역, 5, 2);
 
         assertThat(이호선.getStations()).containsExactlyElementsOf(Arrays.asList(역삼역, 선릉역, 삼성역));
         assertThat(이호선.totalDistance()).isEqualTo(10);
+        assertThat(이호선.totalDuration()).isEqualTo(3);
     }
 
     @DisplayName("노선의 중간에 구간을 추가할 때 추가구간의 하행선이 기존에 포함되면 오류가 발생한다.")
     @Test
     void addSection_middle_duplicate() {
-        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 삼성역, 10); })
+        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 삼성역, 10, 3); })
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("이미 등록되어 있는 지하철역 입니다.");
     }
@@ -68,23 +70,32 @@ class LineTest {
     @DisplayName("노선의 중간에 구간을 추가할 때 기존구간의 길이보다 추가되는 길이가 같거나 크면 오류가 발생한다.")
     @Test
     void addSection_middle_invalid_distance() {
-        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 10); })
+        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 10, 3); })
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("중간에 추가되는 길이가 상행역의 길이보다 크거나 같을 수 없습니다.");
+    }
+
+    @DisplayName("노선의 중간에 구간을 추가할 때 기존구간의 소요시간보다 추가되는 소요시간이 같거나 크면 오류가 발생한다.")
+    @Test
+    void addSection_middle_invalid_duration() {
+        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 5, 3); })
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("중간에 추가되는 소요시간이 상행역의 소요시간보다 크거나 같을 수 없습니다.");
     }
 
     @DisplayName("노선의 끝에 구간을 추가한다.")
     @Test
     void addSection_last() {
-        이호선.addSection(삼성역, 선릉역, 5);
+        이호선.addSection(삼성역, 선릉역, 5, 3);
 
         assertThat(이호선.getStations()).containsExactlyElementsOf(Arrays.asList(역삼역, 삼성역, 선릉역));
         assertThat(이호선.totalDistance()).isEqualTo(15);
+        assertThat(이호선.totalDuration()).isEqualTo(6);
     }
     @DisplayName("노선에 끝에 구간을 추가할 때, 추가구간의 하행선이 기존에 포함되면 오류가 발생한다.")
     @Test
     void addSection_last_duplicate() {
-        assertThatThrownBy(() -> { 이호선.addSection(삼성역, 역삼역, 10); })
+        assertThatThrownBy(() -> { 이호선.addSection(삼성역, 역삼역, 10, 3); })
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("이미 등록되어 있는 지하철역 입니다.");
     }
@@ -92,7 +103,7 @@ class LineTest {
     @DisplayName("노선에 구간을 추가할 때, 추가하는 구간의 길이가 1미만 일 수 없다.")
     @Test
     void addSection_distance_min() {
-        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 0); })
+        assertThatThrownBy(() -> { 이호선.addSection(역삼역, 선릉역, 0, 3); })
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("거리는 1 이하 일 수 없습니다.");
     }
@@ -116,7 +127,7 @@ class LineTest {
     @DisplayName("노선의 끝의 구간을 제거한다.")
     @Test
     void removeSection_last() {
-        이호선.addSection(삼성역, 봉은사역, 10);
+        이호선.addSection(삼성역, 봉은사역, 10, 3);
 
         이호선.removeSection(봉은사역);
 
@@ -127,7 +138,7 @@ class LineTest {
     @DisplayName("노선의 맨 앞의 구간을 제거한다.")
     @Test
     void removeSection_first() {
-        이호선.addSection(삼성역, 봉은사역, 10);
+        이호선.addSection(삼성역, 봉은사역, 10, 3);
 
         이호선.removeSection(역삼역);
 
@@ -138,7 +149,7 @@ class LineTest {
     @DisplayName("노선의 중간 구간을 제거한다.")
     @Test
     void removeSection_middle() {
-        이호선.addSection(삼성역, 봉은사역, 10);
+        이호선.addSection(삼성역, 봉은사역, 10, 3);
 
         이호선.removeSection(삼성역);
 
@@ -149,7 +160,7 @@ class LineTest {
     @DisplayName("노선의 중간 구간을 제거 할 때, 지하철역이 노선에 포함되어 있지 않으면 오류가 발생한다.")
     @Test
     void removeSection_middle_invalid() {
-        이호선.addSection(삼성역, 봉은사역, 10);
+        이호선.addSection(삼성역, 봉은사역, 10, 3);
         assertThatThrownBy(() -> { 이호선.removeSection(강남역); })
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("지하철역이 존재 하지 않습니다.");

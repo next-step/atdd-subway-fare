@@ -9,6 +9,7 @@ import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.subway.application.PathService;
 import nextstep.subway.application.dto.PathResponse;
+import nextstep.subway.domain.PathType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class FavoriteService {
         final Member member = memberService.findMemberEntityByEmail(loginMember.getEmail());
         final Long sourceId = request.getSource();
         final Long targetId = request.getTarget();
-        final PathResponse pathResponse = pathService.findPath(sourceId, targetId);
+        final PathResponse pathResponse = pathService.findPath(sourceId, targetId, PathType.DISTANCE);
 
         Favorite favorite = new Favorite(member.getId(), sourceId, targetId);
         final Favorite savedFavorite = favoriteRepository.save(favorite);

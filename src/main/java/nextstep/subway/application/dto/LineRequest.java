@@ -7,6 +7,7 @@ public class LineRequest {
     private Long upStationId;
     private Long downStationId;
     private int distance;
+    private int duration;
 
     public Long getId() {
         return id;
@@ -30,5 +31,9 @@ public class LineRequest {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

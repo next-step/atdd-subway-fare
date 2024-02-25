@@ -42,11 +42,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성_요청("양재역");
         남부터미널역= 지하철역_생성_요청("남부터미널역");
 
-        이호선 = 노선이_생성되어_있다("2호선", "green", 교대역, 강남역, 10);
-        신분당선 = 노선이_생성되어_있다("신분당선", "red", 강남역, 양재역, 10);
-        삼호선 = 노선이_생성되어_있다("3호선", "orange", 교대역, 남부터미널역, 2);
+        이호선 = 노선이_생성되어_있다("2호선", "green", 교대역, 강남역, 10, 3);
+        신분당선 = 노선이_생성되어_있다("신분당선", "red", 강남역, 양재역, 10, 3);
+        삼호선 = 노선이_생성되어_있다("3호선", "orange", 교대역, 남부터미널역, 2, 3);
 
-        구간을_등록한다(삼호선, 남부터미널역, 양재역, 3);
+        구간을_등록한다(삼호선, 남부터미널역, 양재역, 3, 2);
     }
     /**
      *  Given 지하철역과 2호선 3호선이 등록되어 있다.
@@ -80,7 +80,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     private static Long 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId,
-                                   final int distance) {
-        return LineSteps.노선이_생성되어_있다(name, color, upStationId, downStationId, distance).as(LineResponse.class).getId();
+                                   final int distance, final int duration) {
+        return LineSteps.노선이_생성되어_있다(name, color, upStationId, downStationId, distance, duration).as(LineResponse.class).getId();
     }
 }

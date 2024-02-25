@@ -36,12 +36,14 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void apiCreateLine() {
         // when
-        노선이_생성되어_있다("이호선", "bg-red-600", 강남역Id, 역삼역Id, 10);
+        노선이_생성되어_있다("이호선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
         // then
         final ExtractableResponse<Response> extract = 노선목록을_조회한다();
         assertThat(extract.jsonPath().getList("name")).contains("이호선");
         assertThat(extract.jsonPath().getList("color")).contains("bg-red-600");
+        assertThat(extract.jsonPath().getList("distance")).contains(10);
+        assertThat(extract.jsonPath().getList("duration")).contains(3);
     }
 
     /**
@@ -53,8 +55,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10);
-        노선이_생성되어_있다("분당선", "bg-green-600", 강남역Id, 선릉역Id, 10);
+        노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
+        노선이_생성되어_있다("분당선", "bg-green-600", 강남역Id, 선릉역Id, 10, 3);
 
         // when
         final ExtractableResponse<Response> extract = 노선목록을_조회한다();
@@ -75,7 +77,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void apiGetLine() {
         // given
-        Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10);
+        Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
         // when
         final ExtractableResponse<Response> extract = LineSteps.노선을_조회한다(lineId);
@@ -96,7 +98,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void modifyLine() {
         // given
-        Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10);
+        Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
         // when
         노선을_수정한다(lineId, "다른분당선", "bg-red-900");
@@ -116,7 +118,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10);
+        Long lineId = 노선이_생성되어_있다("신분당선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3);
 
         // when
         노선을_삭제한다(lineId);
@@ -132,8 +134,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
 
     public static Long 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId,
-                                   final int distance) {
-        return LineSteps.노선이_생성되어_있다(name, color, upStationId, downStationId, distance).as(LineResponse.class).getId();
+                                   final int distance, final int duration) {
+        return LineSteps.노선이_생성되어_있다(name, color, upStationId, downStationId, distance, duration).as(LineResponse.class).getId();
     }
 
     private static LineResponse 노선을_조회한다(final Long lineId) {

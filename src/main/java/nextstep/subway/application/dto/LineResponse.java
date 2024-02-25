@@ -11,6 +11,7 @@ public class LineResponse {
     private String name;
     private String color;
     private int distance;
+    private int duration;
     private List<StationResponse> stations;
 
     public LineResponse() {
@@ -21,6 +22,7 @@ public class LineResponse {
         this.name = savedLine.getName();
         this.color = savedLine.getColor();
         this.distance = savedLine.totalDistance();
+        this.duration = savedLine.totalDuration();
         this.stations =  savedLine.getStations().stream()
                 .map(this::createStationResponse)
                 .collect(Collectors.toList());
@@ -44,6 +46,10 @@ public class LineResponse {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     private StationResponse createStationResponse(Station station) {

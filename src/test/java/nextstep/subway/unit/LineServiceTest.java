@@ -35,7 +35,7 @@ public class LineServiceTest {
         강남역 = new Station( "강남역");
         선릉역 = new Station("선릉역");
         삼성역 = new Station("삼성역");
-        강남_선릉_노선 = new Line("노선", "red", 강남역, 선릉역, 10);
+        강남_선릉_노선 = new Line("노선", "red", 강남역, 선릉역, 10, 3);
     }
 
     @Test
@@ -45,12 +45,12 @@ public class LineServiceTest {
         stationRepository.save(강남역);
         stationRepository.save(선릉역);
         stationRepository.save(삼성역);
-        final Line line = new Line( "노선", "red", 강남역, 선릉역, 10);
+        final Line line = new Line( "노선", "red", 강남역, 선릉역, 10, 3);
         lineRepository.save(line);
 
         // when
         // lineService.addSection 호출
-        lineService.addSection(line.getId(), new SectionRequest(선릉역.getId(), 삼성역.getId(), 10));
+        lineService.addSection(line.getId(), new SectionRequest(선릉역.getId(), 삼성역.getId(), 10, 3));
 
         // then
         // line.getSections 메서드를 통해 검증
