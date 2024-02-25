@@ -25,11 +25,14 @@ import java.util.stream.Collectors;
 public class PathService {
 
     private final LineProvider lineProvider;
-    private final PathFareCalculator pathFareCalculator;
+
+    private final FareChain fareChain;
 
     public PathService(final LineProvider lineProvider) {
         this.lineProvider = lineProvider;
-        this.pathFareCalculator = new PathFareCalculator();
+        this.fareChain = new FareChain()
+                .addNext(new FirstExtraFareHandler())
+                .addNext(new SecondExtraFareHandler());
     }
 
     public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
@@ -39,7 +42,7 @@ public class PathService {
 
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
 
-        final long fare = pathFareCalculator.calculate(shortestPath.getDistance());
+        final long fare = fareChain.calculate(shortestPath.getDistance());
 
         return PathResponse.from(shortestPath, fare);
     }
