@@ -2,12 +2,9 @@ package nextstep.subway.unit;
 
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
-import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
-import nextstep.subway.domain.Station;
 import nextstep.subway.domain.pathfinder.PathFinder;
 import nextstep.subway.domain.pathfinder.ShortestDurationPathFinder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
