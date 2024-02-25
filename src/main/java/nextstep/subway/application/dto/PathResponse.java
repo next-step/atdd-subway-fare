@@ -32,4 +32,8 @@ public class PathResponse {
     private StationResponse createStationResponse(Station station) {
         return new StationResponse(station.getId(), station.getName());
     }
+
+    public int getFee() {
+        throw new UnsupportedOperationException("Unsupported getFee");
+    }
 }
