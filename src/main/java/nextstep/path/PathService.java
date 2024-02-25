@@ -37,7 +37,8 @@ public class PathService {
                 .collect(Collectors.toList());
         int distance = pathInfo.getDistance();
         int duration = pathInfo.getDuration();
+        int fare = FareCalculator.calculateOverFare(distance);
 
-        return new PathResponse(stations, distance, duration);
+        return new PathResponse(stations, distance, duration, fare);
     }
 }

@@ -31,4 +31,8 @@ public class PathSteps {
     public static int parseDuration(ExtractableResponse<Response> response) {
         return response.jsonPath().getInt("duration");
     }
+
+    public static int parseFare(ExtractableResponse<Response> response) {
+        return response.jsonPath().getInt("fare");
+    }
 }

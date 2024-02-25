@@ -82,6 +82,11 @@ public class PathStepDef implements En {
             assertThat(distance).isEqualTo(expectedDistance);
         });
 
+        And("최단 경로에 대한 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
+            int fare = PathSteps.parseFare(response);
+            assertThat(fare).isEqualTo(expectedFare);
+        });
+
         When("사용자가 출발지와 도착지 모두를 {string}으로 설정하여 최단 경로를 조회하면", (String name) -> {
             Long id = stations.get(name);
             response = PathSteps.경로_조회_요청(id, id, "DISTANCE");
@@ -110,6 +115,11 @@ public class PathStepDef implements En {
             int duration = PathSteps.parseDuration(response);
             assertThat(duration).isEqualTo(expectedDuration);
             assertThat(distance).isEqualTo(expectedDistance);
+        });
+
+        And("최소 시간 경로에 대한 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
+            int fare = PathSteps.parseFare(response);
+            assertThat(fare).isEqualTo(expectedFare);
         });
     }
 }
