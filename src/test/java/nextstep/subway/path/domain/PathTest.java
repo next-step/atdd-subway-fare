@@ -59,4 +59,18 @@ class PathTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    @DisplayName("추가 요금 노선들을 지나가면 최대 요금이 부과 된다")
+    void maxSurcharge() {
+        Line 이호선 = new Line("이호선", "green", StationFixture.교대역, StationFixture.강남역, 10L, 10L, 200L);
+        Line 분당선 = new Line("분당선", "red", StationFixture.강남역, StationFixture.양재역, 10L, 10L, 500L);
+        Lines lines = Lines.from(List.of(이호선, 분당선));
+        PathFinder pathFinder = new JGraphPathFinder();
+        Path path = pathFinder.shortcut(lines, StationFixture.강남역, StationFixture.양재역, PathType.DISTANCE);
+
+        Long actual = path.fare(lines);
+        Long expected = 1750L;
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }
