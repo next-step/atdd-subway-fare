@@ -2,9 +2,11 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.station.domain.Station;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class Path {
+    private static final long DEFAULT_FARE = 1250L;
     private final List<Station> stations;
     private final Long distance;
     private final Long duration;
@@ -47,7 +49,20 @@ public class Path {
     }
 
     public Long fare() {
-        return FarePolicy.calculate(this.distance);
+        return calculate();
+    }
+
+    private Long calculate() {
+        return FarePolicy.DEFAULT_FARE + EnumSet.allOf(Fare.class).stream()
+                .filter(fare -> this.distance > fare.getStartDistance())
+                .mapToInt(fare -> calculate(this.distance, fare))
+                .sum();
+    }
+
+    private int calculate(Long distance,
+                                 Fare fare) {
+        long applicableDistance = Math.min(distance, fare.getEndDistance()) - fare.getStartDistance();
+        return (int) ((Math.ceil((double) applicableDistance / fare.getDistanceUnit())) * fare.getUnitFare());
     }
 
     public List<Station> getStations() {
