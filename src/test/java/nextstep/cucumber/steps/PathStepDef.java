@@ -69,6 +69,14 @@ public class PathStepDef implements En {
             );
         });
 
+        When("{string}에서 {string}까지의 최소 시간 기준으로 경로 조회를 요청", (String from, String to) -> {
+            context.response = 지하철_경로_조회(
+                Long.parseLong(context.store.get(from).toString()),
+                Long.parseLong(context.store.get(to).toString()),
+                PathSearchType.Duration
+            );
+        });
+
         Then("{string} 과 {string} 간 경로가 조회 된다.", (String from, String to) -> {
             final List<Station> stations = context.response.jsonPath().getList("stations", Station.class);
 
@@ -80,6 +88,10 @@ public class PathStepDef implements En {
 
         Then("거리는 {int}이다.", (Integer distance) -> {
            assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
+        });
+
+        Then("시간은 {int}이다.", (Integer duration) -> {
+            assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
         });
 
         Then("경로가 조회가 실패한다.", () -> {
