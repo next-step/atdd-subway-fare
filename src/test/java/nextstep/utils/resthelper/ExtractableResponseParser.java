@@ -58,4 +58,8 @@ public class ExtractableResponseParser {
 		return response.jsonPath().getString("email");
 	}
 
+	public static int parseFare(ExtractableResponse<Response> response) {
+		return response.jsonPath().getInt("fare");
+	}
+
 }

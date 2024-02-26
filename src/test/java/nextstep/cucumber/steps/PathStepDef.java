@@ -12,7 +12,6 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.Scenario;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -34,13 +33,21 @@ public class PathStepDef implements En {
 
 		When("역ID {long}에서 역ID {long}까지의 최소 시간 경로를 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequest(sourceId, targetId, "DURATION"));
 		When("역ID {long}에서 역ID {long}까지의 최단 거리 경로를 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequest(sourceId, targetId, "DISTANCE"));
+		When("역ID {long}에서 역ID {long}까지의 최단 거리 경로 요금을 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequest(sourceId, targetId, "DISTANCE"));
 
+
+		Then("요금은 {int}원이다", this::verifyFareAmountOnly);
 		Then("최소 시간 기준 경로를 응답", this::verifyMinimumTimePath);
 		Then("최단 거리 기준 경로를 응답", this::verifyMinimumDistancePath);
 		And("총 거리와 소요 시간을 함께 응답함", this::verifyTotalDistanceWithTotalDuration);
+		And("지하철 이용 요금도 함께 응답함", this::verifyFareAmount);
 
 	}
 
+	private void verifyFareAmountOnly(Integer expectedFare) {
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+		assertThat(parseFare(response)).isEqualTo(expectedFare);
+	}
 
 	private void verifyTotalDistanceWithTotalDuration(DataTable expectedPathTable) {
 		List<Map<String, String>> expectedPath = expectedPathTable.asMaps(String.class, String.class);
@@ -97,5 +104,15 @@ public class PathStepDef implements En {
 			createSectionWithDuration(lineId, upStationId, downStationId, distance, duration);
 		});
 	}
+
+	private void verifyFareAmount(DataTable expectedFareTable) {
+		List<Map<String, String>> expectedFare = expectedFareTable.asMaps(String.class, String.class);
+		int expectedFareAmount = Integer.parseInt(expectedFare.get(0).get("fare"));
+
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+		assertThat(parseFare(response)).isEqualTo(expectedFareAmount);
+	}
+
+
 
 }
