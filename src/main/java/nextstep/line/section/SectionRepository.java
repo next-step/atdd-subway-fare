@@ -1,4 +1,4 @@
-package nextstep.section;
+package nextstep.line.section;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,8 @@
 package nextstep.line;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.section.SectionAddRequest;
-import nextstep.section.SectionResponse;
+import nextstep.line.section.SectionAddRequest;
+import nextstep.line.section.SectionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

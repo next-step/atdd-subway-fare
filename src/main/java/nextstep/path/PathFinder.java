@@ -3,7 +3,7 @@ package nextstep.path;
 import lombok.RequiredArgsConstructor;
 import nextstep.exception.PathNotFoundException;
 import nextstep.line.LineRepository;
-import nextstep.section.Section;
+import nextstep.line.section.Section;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
