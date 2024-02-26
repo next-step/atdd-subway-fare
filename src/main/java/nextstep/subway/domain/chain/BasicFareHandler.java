@@ -19,13 +19,7 @@ public class BasicFareHandler implements FareHandler {
         if (distance <= BASIC_DISTANCE) {
             return BASIC_FARE;
         }
-        return BASIC_FARE + nextCalculate(distance);
+        return BASIC_FARE + nextCalculate(nextHandler, distance);
     }
 
-    private long nextCalculate(long distance) {
-        if (nextHandler != null) {
-            return nextHandler.calculate(distance);
-        }
-        return 0L;
-    }
 }

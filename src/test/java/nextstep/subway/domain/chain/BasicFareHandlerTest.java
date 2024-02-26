@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static nextstep.subway.domain.chain.BasicFareHandler.BASIC_FARE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @SpringBootTest
 class BasicFareHandlerTest {
@@ -21,7 +21,7 @@ class BasicFareHandlerTest {
         long fare = basicFareHandler.calculate(distance);
 
         // then
-        assertEquals(BASIC_FARE, fare);
+        assertThat(fare).isEqualTo(BASIC_FARE);
     }
 
 }

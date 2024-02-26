@@ -1,11 +1,9 @@
 package nextstep.subway.domain.chain;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
-@Order(1)
-@Component
-public class SecondPalicyFareHandler implements FareHandler {
+@Order(2)
+public class Over50kmFareHandler implements FareHandler {
 
     private FareHandler nextHandler;
 
@@ -15,7 +13,7 @@ public class SecondPalicyFareHandler implements FareHandler {
     }
 
     @Override
-    public long calculate(long duration) {
+    public long calculate(long distance) {
         return 0;
     }
 }
