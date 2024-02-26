@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BasicFareHandler implements FareHandler {
+    public static final long BASIC_DISTANCE = 10;
+    public static final long BASIC_FARE = 1250;
 
     private FareHandler nextHandler;
 
@@ -14,6 +16,16 @@ public class BasicFareHandler implements FareHandler {
 
     @Override
     public long calculate(long distance) {
-        return 0;
+        if (distance <= BASIC_DISTANCE) {
+            return BASIC_FARE;
+        }
+        return BASIC_FARE + nextCalculate(distance);
+    }
+
+    private long nextCalculate(long distance) {
+        if (nextHandler != null) {
+            return nextHandler.calculate(distance);
+        }
+        return 0L;
     }
 }
