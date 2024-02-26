@@ -16,26 +16,36 @@ public class JGraphTPathFinderImpl extends PathFinder {
     @Override
     protected PathResponse getPath(PathRequest pathRequest, List<Line> lines) {
         final Set<Section> sections = getAllSectionsInLines(lines);
-        final WeightedMultigraph<String, DefaultWeightedEdge> sectionGraph = getWightedGraphWithSection(sections);
+        final WeightedMultigraph<String, DefaultWeightedEdge> sectionGraph = getWightedGraphWithSection(sections, pathRequest.getType());
 
         final DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(sectionGraph);
 
-        final GraphPath<String, DefaultWeightedEdge> graphPath = dijkstraShortestPath.getPath(pathRequest.getSource().toString(), pathRequest.getTarget().toString());
+        final GraphPath<String, DefaultWeightedEdge> graphPath = dijkstraShortestPath.getPath(
+            pathRequest.getSource().toString(), pathRequest.getTarget().toString());
 
         if (graphPath == null) {
             throw new IllegalArgumentException("경로가 존재하지 않습니다.");
         }
 
-        return getPathResponse(sections, graphPath.getVertexList(), (int) graphPath.getWeight());
+        return getPathResponse(sections, Set.copyOf(graphPath.getVertexList()));
     }
 
-    private PathResponse getPathResponse(Set<Section> sections, List<String> stationPath, int distance) {
+    private PathResponse getPathResponse(Set<Section> sections, Set<String> stationIds) {
         final Map<String, Station> stationMap = getIdToStationMap(sections);
+        final List<Section> edgeSection = getSectionsComposingEdges(sections, stationIds);
 
         return new PathResponse(
-            stationPath.stream().map(stationMap::get).collect(Collectors.toList())
-            , distance
+            stationIds.stream().map(stationMap::get).collect(Collectors.toList()),
+            edgeSection.stream().map(Section::getDistance).reduce(0, Integer::sum),
+            edgeSection.stream().map(Section::getDuration).reduce(0, Integer::sum)
         );
+    }
+
+    private static List<Section> getSectionsComposingEdges(Set<Section> sections, Set<String> stationIds) {
+        return sections.stream().filter(section ->
+            stationIds.contains(section.getUpStation().getId().toString())
+                && stationIds.contains(section.getDownStation().getId().toString()
+            )).collect(Collectors.toList());
     }
 
     private Map<String, Station> getIdToStationMap(Set<Section> sections) {
@@ -49,7 +59,10 @@ public class JGraphTPathFinderImpl extends PathFinder {
         return stationMap;
     }
 
-    private static WeightedMultigraph<String, DefaultWeightedEdge> getWightedGraphWithSection(Set<Section> sections) {
+    private static WeightedMultigraph<String, DefaultWeightedEdge> getWightedGraphWithSection(
+        Set<Section> sections,
+        PathSearchType type
+    ) {
         final WeightedMultigraph<String, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
 
         sections.forEach(section -> {
@@ -60,7 +73,8 @@ public class JGraphTPathFinderImpl extends PathFinder {
             graph.addVertex(downStationId);
 
             DefaultWeightedEdge edge = graph.addEdge(upStationId, downStationId);
-            graph.setEdgeWeight(edge, section.getDistance());
+
+            graph.setEdgeWeight(edge, section.getWeight(type));
         });
 
         return graph;
