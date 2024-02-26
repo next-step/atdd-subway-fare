@@ -153,7 +153,7 @@ public class PathStepDef implements En {
                     .extract();
         });
 
-        Given("{string}과 {string}의 새로운 신분당선 구간을 5D, 5T로 생성한다", (String sourceStationName, String targetStationName) -> {
+        Given("최소 시간 경로 테스트를 위한 {string}과 {string}의 새로운 신분당선 구간을 5D, 5T로 생성한다", (String sourceStationName, String targetStationName) -> {
             SectionCreateRequest sectionCreateRequest = new SectionCreateRequest(
                     (long) context.store.get(("선릉역")),
                     (long) context.store.get(("잠실역")),
@@ -192,7 +192,7 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("총 거리 15, 소요 시간 15를 함께 응답한다", () -> {
+        Then("최소 시간 기준 총 거리 15, 소요 시간 15를 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
                     () -> assertThat(pathResponse.getDistance()).isEqualTo(15L),
@@ -229,7 +229,7 @@ public class PathStepDef implements En {
                     .extract();
         });
 
-        Given("{string}과 {string}의 새로운 신분당선 구간을 100D, 100T로 생성한다", (String sourceStationName, String targetStationName) -> {
+        Given("최소 거리 경로 테스트를 위한 {string}과 {string}의 새로운 신분당선 구간을 100D, 100T로 생성한다", (String sourceStationName, String targetStationName) -> {
             SectionCreateRequest sectionCreateRequest = new SectionCreateRequest(
                     (long) context.store.get(("선릉역")),
                     (long) context.store.get(("잠실역")),
@@ -269,7 +269,7 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("총 거리 60, 소요 시간 60을 함께 응답한다", () -> {
+        Then("최소 거리 기준 총 거리 60, 소요 시간 60을 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
                     () -> assertThat(pathResponse.getDistance()).isEqualTo(60L),
