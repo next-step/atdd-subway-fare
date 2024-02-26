@@ -58,7 +58,8 @@ public class PathStepDef implements En {
                      createSectionCreateParams(
                          context.store.get(it.get("upStation")).toString(),
                          context.store.get(it.get("downStation")).toString(),
-                         it.get("distance")
+                         it.get("distance"),
+                         it.get("duration")
                      ));
              });
          });
@@ -102,12 +103,13 @@ public class PathStepDef implements En {
     }
 
 
-    private Map<String, String> createSectionCreateParams(String upStationId, String downStationId, String distance) {
+    private Map<String, String> createSectionCreateParams(String upStationId, String downStationId, String distance, String duration) {
         final Map<String, String> params = new HashMap<>();
 
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
 
         return params;
     }
