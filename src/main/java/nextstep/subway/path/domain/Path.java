@@ -1,12 +1,12 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Lines;
 import nextstep.subway.station.domain.Station;
 
 import java.util.EnumSet;
 import java.util.List;
 
 public class Path {
-    private static final long DEFAULT_FARE = 1250L;
     private final List<Station> stations;
     private final Long distance;
     private final Long duration;
@@ -48,8 +48,15 @@ public class Path {
 
     }
 
-    public Long fare() {
-        return calculate();
+    public Long fare(Lines lines) {
+        return calculate() + findSurcharge(lines);
+    }
+
+    private Long findSurcharge(Lines lines) {
+        List<Long> surcharges = lines.findSurcharges(this.stations);
+        return surcharges.stream()
+                .max(Long::compareTo)
+                .orElse(0L);
     }
 
     private Long calculate() {

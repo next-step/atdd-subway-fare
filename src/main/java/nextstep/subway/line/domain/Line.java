@@ -28,19 +28,25 @@ public class Line {
     @Column(nullable = false)
     private Long duration;
 
+    @Column(nullable = false)
+    private Long surcharge;
+
     protected Line() {
     }
 
-    public Line(Long id,
-                String name,
+    public Line(String name,
                 String color,
-                Sections sections,
-                Long distance) {
-        this.id = id;
+                Station upStation,
+                Station downStation,
+                Long distance,
+                Long duration,
+                Long surcharge) {
         this.name = name;
         this.color = color;
-        this.sections = sections;
+        this.sections = createSections(upStation, downStation, distance, duration);
         this.distance = distance;
+        this.duration = duration;
+        this.surcharge = surcharge;
     }
 
     public Line(String name,
@@ -49,13 +55,16 @@ public class Line {
                 Station downStation,
                 Long distance,
                 Long duration) {
-        this.name = name;
-        this.color = color;
+        this(name, color, upStation, downStation, distance, duration, 0L);
+    }
+
+    private static Sections createSections(Station upStation,
+                                           Station downStation,
+                                           Long distance,
+                                           Long duration) {
         List<Section> list = new ArrayList<>();
         list.add(new Section(upStation, downStation, distance, duration));
-        this.sections = Sections.from(list);
-        this.distance = distance;
-        this.duration = duration;
+        return Sections.from(list);
     }
 
     public Long getId() {
@@ -80,6 +89,10 @@ public class Line {
 
     public Long getDuration() {
         return duration;
+    }
+
+    public Long getSurcharge() {
+        return surcharge;
     }
 
     public void update(String name,
@@ -113,6 +126,11 @@ public class Line {
                                Station target,
                                PathType type) {
         return sections.calculateValue(source, target, type);
+    }
+
+    public boolean existSection(Station source,
+                                Station target) {
+        return sections.existSection(source, target);
     }
 
     @Override

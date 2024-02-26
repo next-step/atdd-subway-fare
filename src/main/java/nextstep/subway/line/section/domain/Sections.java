@@ -150,6 +150,12 @@ public class Sections {
                 .collect(Collectors.toList()));
     }
 
+    public boolean existSection(Station source,
+                                Station target) {
+        return this.sectionList.stream()
+                .anyMatch(section -> section.isSameUpStation(source) && section.isSameDownStation(target));
+    }
+
     public List<Section> getAll() {
         return this.sectionList;
     }

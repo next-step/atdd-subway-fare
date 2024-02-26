@@ -29,12 +29,14 @@ public class PathService {
     }
 
     public PathResponse findShortCut(PathRequest pathRequest) {
-        Path path = pathFinder.shortcut(Lines.from(lineRepository.findAllFetchJoin()),
+        Lines lines = Lines.from(lineRepository.findAllFetchJoin());
+        Path path = pathFinder.shortcut(lines,
                 getStation(pathRequest.getSource()),
                 getStation(pathRequest.getTarget()),
                 PathType.valueOf(pathRequest.getType()));
+
         return new PathResponse(StationResponseFactory.create(path.getStations()), path.getDistance(),
-                path.getDuration(), path.fare());
+                path.getDuration(), path.fare(lines));
     }
 
     private Station getStation(Long stationId) {
