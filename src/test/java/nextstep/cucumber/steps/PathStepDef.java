@@ -138,7 +138,7 @@ public class PathStepDef implements En {
         Then("최소 거리와 기본 요금 테스트를 위한 최소 시간 기준 경로인 강남역, 선릉역을 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getStations()).hasSize(3)
+                    () -> assertThat(pathResponse.getStations()).hasSize(2)
                             .extracting("id", "name")
                             .containsExactly(
                                     tuple(1L, "강남역"),
@@ -323,10 +323,10 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("최소 거리 기준 지하철 이용 요금인 2150원을 함께 응답한다", () -> {
+        Then("최소 거리 기준 지하철 이용 요금인 2250원을 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getFare()).isEqualTo(2150)
+                    () -> assertThat(pathResponse.getFare()).isEqualTo(2250)
             );
         });
     }
