@@ -1,9 +1,16 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Lines;
+import nextstep.subway.testhelper.fixture.StationFixture;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,6 +44,20 @@ class PathTest {
 
         Long actual = path.fare();
         assertThat(actual).isEqualTo(fare);
+    }
+
+    @Test
+    @DisplayName("추가 요금 노선을 지나면 요금이 부과 된다")
+    void surcharge() {
+        Line 이호선 = new Line("이호선", "green", StationFixture.교대역, StationFixture.강남역, 10L, 10L);
+        Line 분당선 = new Line("분당선", "red", StationFixture.강남역, StationFixture.양재역, 10L, 10L);
+        Lines lines = Lines.from(List.of(이호선, 분당선));
+        PathFinder pathFinder = new JGraphPathFinder();
+        Path path = pathFinder.shortcut(lines, StationFixture.강남역, StationFixture.양재역, PathType.DISTANCE);
+
+        Long actual = path.fare();
+        Long expected = 2150L;
+        assertThat(actual).isEqualTo(expected);
     }
 
 }
