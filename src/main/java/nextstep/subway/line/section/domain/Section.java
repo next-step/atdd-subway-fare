@@ -64,6 +64,11 @@ public class Section {
         return Math.abs(distance - this.distance);
     }
 
+    public boolean isSameSection(Station source,
+                                 Station target) {
+        return isSameUpStation(source) && isSameDownStation(target);
+    }
+
     public boolean isSameUpStation(Station station) {
         return this.upStation.equals(station);
     }
