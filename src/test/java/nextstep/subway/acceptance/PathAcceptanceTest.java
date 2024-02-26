@@ -12,6 +12,7 @@ import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +64,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 단일_노선_내_역_간의_경로를_찾을_수_있다(){
         // when
-        final ExtractableResponse<Response> response = 지하철_경로_조회(양재역, 남부터미널역);
+        final ExtractableResponse<Response> response = 지하철_경로_조회(양재역, 남부터미널역, PathSearchType.DISTANCE);
 
         // then
         final List<Station> stations = response.jsonPath().getList("stations", Station.class);
@@ -81,7 +82,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 두_노선에_걸친_역_간의_경로를_찾을_수_있다() {
         // when
-        final ExtractableResponse<Response> response = 지하철_경로_조회(교대역, 양재역);
+        final ExtractableResponse<Response> response = 지하철_경로_조회(교대역, 양재역, PathSearchType.DISTANCE);
 
         // then
         final List<Station> stations = response.jsonPath().getList("stations", Station.class);
@@ -105,7 +106,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         응답에서_id_조회(지하철_노선_생성_요청("4호선", "cyan", 강남역, 선릉역, 강남_선릉_거리, 10));
 
         // when
-        final ExtractableResponse<Response> response = 지하철_경로_조회(남부터미널역, 선릉역);
+        final ExtractableResponse<Response> response = 지하철_경로_조회(남부터미널역, 선릉역, PathSearchType.DISTANCE);
 
         // then
         final List<Station> stations = response.jsonPath().getList("stations", Station.class);
@@ -130,7 +131,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         응답에서_id_조회(지하철_노선_생성_요청("가상선", "yellow", 가상의역_1, 가상의역_2, 10, 10));
 
         // when
-        final ExtractableResponse<Response> response = 지하철_경로_조회(교대역, 가상의역_2);
+        final ExtractableResponse<Response> response = 지하철_경로_조회(교대역, 가상의역_2, PathSearchType.DISTANCE);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

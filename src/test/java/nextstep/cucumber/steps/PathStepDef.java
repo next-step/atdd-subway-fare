@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.AcceptanceContext;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Station;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +66,8 @@ public class PathStepDef implements En {
         When("{string} 과 {string} 경로를 조회하면,", (String from, String to) -> {
             context.response = 지하철_경로_조회(
                 Long.parseLong(context.store.get(from).toString()),
-                Long.parseLong(context.store.get(to).toString())
+                Long.parseLong(context.store.get(to).toString()),
+                PathSearchType.DISTANCE
             );
         });
 
@@ -73,7 +75,7 @@ public class PathStepDef implements En {
             context.response = 지하철_경로_조회(
                 Long.parseLong(context.store.get(from).toString()),
                 Long.parseLong(context.store.get(to).toString()),
-                PathSearchType.Duration
+                PathSearchType.DURATION
             );
         });
 
