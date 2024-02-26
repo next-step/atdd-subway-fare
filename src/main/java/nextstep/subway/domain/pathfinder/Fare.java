@@ -2,9 +2,9 @@ package nextstep.subway.domain.pathfinder;
 
 public class Fare {
 
-    private final int NEGATIVE_NUMBER = 0;
-    private final int DEFAULT_FARE = 1250;
-    private int value;
+    private static final int MINIMUM_VALUE = 0;
+    private static final int DEFAULT_FARE = 1250;
+    private final int value;
 
     public Fare(final int distance) {
         validationCheck(distance);
@@ -16,7 +16,7 @@ public class Fare {
     }
 
     private void validationCheck(final int distance) {
-        if (distance < NEGATIVE_NUMBER) {
+        if (distance < MINIMUM_VALUE) {
             throw new IllegalArgumentException("요금 계산을 위한 거리가 음수 일 수 없습니다 : " + distance);
         }
     }
