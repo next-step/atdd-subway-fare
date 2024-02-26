@@ -99,21 +99,20 @@ public class PathStepDef implements En {
             assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));
         });
 
-        Then("총 거리 {string}와 총 소요 시간 {string}를 리턴한다", (String distance, String duration) -> {
+        Then("총 거리 {int}km와 총 소요 시간 {int}을 리턴한다", (Integer distance, Integer duration) -> {
             final PathResponse pathResponse = context.response.as(PathResponse.class);
             final int expectDistance = pathResponse.getDistance();
             final int expectDuration = pathResponse.getDuration();
 
-            assertThat(expectDistance).isEqualTo(Integer.valueOf(distance));
-            assertThat(expectDuration).isEqualTo(Integer.valueOf(duration));
+            assertThat(expectDistance).isEqualTo(distance);
+            assertThat(expectDuration).isEqualTo(duration);
         });
 
-        Then("지하철 이용 요금 {string}를 리턴한다", (String fee) -> {
+        Then("지하철 이용 요금 {int}원을 리턴한다", (Integer fee) -> {
             final PathResponse pathResponse = context.response.as(PathResponse.class);
             final int expectDistance = pathResponse.getFare();
 
-            assertThat(expectDistance).isEqualTo(Integer.valueOf(fee));
+            assertThat(expectDistance).isEqualTo(fee);
         });
     }
-
 }
