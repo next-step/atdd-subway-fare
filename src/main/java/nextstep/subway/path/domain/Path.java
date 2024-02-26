@@ -21,14 +21,12 @@ public class Path {
                 Double shortestValue,
                 Long value,
                 PathType type) {
-        this.stations = shortestPath;
-        this.distance = getDistance(shortestValue, value, type);
-        this.duration = getDuration(shortestValue, value, type);
+        this(shortestPath, getDistance(shortestValue, value, type), getDuration(shortestValue, value, type));
     }
 
-    private Long getDistance(Double shortestValue,
-                             Long value,
-                             PathType type) {
+    private static Long getDistance(Double shortestValue,
+                                    Long value,
+                                    PathType type) {
         if (type == PathType.DISTANCE) {
             return Math.round(shortestValue);
         }
@@ -37,15 +35,19 @@ public class Path {
 
     }
 
-    private Long getDuration(Double shortestValue,
-                             Long value,
-                             PathType type) {
+    private static Long getDuration(Double shortestValue,
+                                    Long value,
+                                    PathType type) {
         if (type == PathType.DURATION) {
             return Math.round(shortestValue);
         }
 
         return value;
 
+    }
+
+    public Long fare() {
+        return FarePolicy.calculate(this.distance);
     }
 
     public List<Station> getStations() {
