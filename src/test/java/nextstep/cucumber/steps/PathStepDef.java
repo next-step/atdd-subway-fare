@@ -42,7 +42,8 @@ public class PathStepDef implements En {
                          it.get("color"),
                          Long.parseLong(context.store.get(it.get("upStation")).toString()),
                          Long.parseLong(context.store.get(it.get("downStation")).toString()),
-                         Integer.parseInt(it.get("distance"))
+                         Integer.parseInt(it.get("distance")),
+                         Integer.parseInt(it.get("duration"))
                      )
                  )
              ));
