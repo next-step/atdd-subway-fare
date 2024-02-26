@@ -21,6 +21,9 @@ Feature: 지하철 경로 조회 기능
     And 총 거리와 소요 시간을 함께 응답함
       | distance | duration |
       | 5        | 5        |
+    And 지하철 이용 요금도 함께 응답함
+      | fare |
+      | 1250    |
 
   Scenario: 서울역에서 공덕역까지의 최소 시간 경로 조회
     Given 지하철역이 등록되어있음
@@ -49,6 +52,9 @@ Feature: 지하철 경로 조회 기능
     And 총 거리와 소요 시간을 함께 응답함
       | distance | duration |
       | 10       | 10       |
+    And 지하철 이용 요금도 함께 응답함
+      | fare |
+      | 1250    |
 
 
   Scenario: 교대역에서 양재역까지의 최단 거리 경로 조회
@@ -73,6 +79,9 @@ Feature: 지하철 경로 조회 기능
     And 총 거리와 소요 시간을 함께 응답함
       | distance | duration |
       | 5        | 5        |
+    And 지하철 이용 요금도 함께 응답함
+      | fare |
+      | 1250   |
 
   Scenario: 서울역에서 공덕역까지의 최단 거리 경로 조회
     Given 지하철역이 등록되어있음
@@ -101,3 +110,69 @@ Feature: 지하철 경로 조회 기능
     And 총 거리와 소요 시간을 함께 응답함
       | distance | duration |
       | 10       | 10       |
+    And 지하철 이용 요금도 함께 응답함
+      | fare |
+      | 1250    |
+
+
+
+  Scenario: 다양한 거리에 대한 지하철 이용 요금 계산
+    Given 지하철역이 등록되어있음
+      | name   |
+      | 역A    |
+      | 역B    |
+      | 역C    |
+    And 지하철 노선이 등록되어있음
+      | line | upStationId | downStationId | distance | duration |
+      | 1호선  | 1           | 2             | 9        | 10       |
+      | 2호선  | 2           | 3             | 12       | 15       |
+      | 3호선  | 1           | 3             | 16       | 20       |
+    When 역ID 1에서 역ID 2까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 1250원이다
+    When 역ID 2에서 역ID 3까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 1350원이다
+    When 역ID 1에서 역ID 3까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 1450원이다
+
+  Scenario: 10km를 초과하고 50km 이내의 거리에 대한 지하철 이용 요금 계산
+    Given 지하철역이 등록되어있음
+      | name |
+      | 역A   |
+      | 역B   |
+      | 역C   |
+      | 역D   |
+      | 역E   |
+    And 지하철 노선이 등록되어있음
+      | line | upStationId | downStationId | distance | duration |
+      | 4호선  | 1           | 2             | 20       | 20       |
+      | 5호선  | 2           | 3             | 24       | 30       |
+      | 6호선  | 2           | 4             | 29       | 5        |
+      | 7호선  | 2           | 5             | 30       | 1        |
+    When 역ID 1에서 역ID 2까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 1450원이다
+    When 역ID 2에서 역ID 3까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 1550원이다
+    When 역ID 1에서 역ID 4까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 2050원이다
+    When 역ID 1에서 역ID 5까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 2050원이다
+
+
+  Scenario: 50km를 초과하는 거리에 대한 지하철 이용 요금 계산
+    Given 지하철역이 등록되어있음
+      | name |
+      | 역A   |
+      | 역B   |
+      | 역C   |
+      | 역D   |
+    And 지하철 노선이 등록되어있음
+      | line | upStationId | downStationId | distance | duration |
+      | 1호선  | 1           | 2             | 51       | 25       |
+      | 2호선  | 2           | 3             | 7        | 30       |
+      | 3호선  | 2           | 4             | 8        | 35       |
+    When 역ID 1에서 역ID 2까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 2150원이다
+    When 역ID 1에서 역ID 3까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 2150원이다
+    When 역ID 1에서 역ID 4까지의 최단 거리 경로 요금을 조회하면
+    Then 요금은 2250원이다
