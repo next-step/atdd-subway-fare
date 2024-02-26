@@ -6,6 +6,7 @@ import nextstep.subway.applicaion.LineService;
 import nextstep.subway.applicaion.dto.SectionRequest;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
+import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.StationRepository;
 import org.junit.jupiter.api.Test;
@@ -32,15 +33,15 @@ public class LineServiceTest {
         Station 역삼역 = stationRepository.save(new Station("역삼역"));
         Station 선릉역 = stationRepository.save(new Station("선릉역"));
 
-        Line line = lineRepository.save(new Line("2호선", "green", 강남역, 역삼역, 10));
+        Line line = lineRepository.save(new Line("2호선", "green", 강남역, 역삼역, 10, 3));
 
         // when
         // lineService.addSection 호출
-        lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), 10));
-
+        lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), 10, 10));
 
         // then
         // line.getSections 메서드를 통해 검증
         assertThat(line.getSections()).hasSize(2);
+        assertThat(line.getSections().stream().map(Section::getDuration).reduce(0, Integer::sum)).isEqualTo(13);
     }
 }

@@ -25,10 +25,10 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
 
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
 
         // when
-        line.addSection(역삼역, 선릉역, 10);
+        line.addSection(역삼역, 선릉역, 10, 10);
 
         // then
         assertThat(line.getSections()).hasSize(2);
@@ -44,7 +44,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
 
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
 
         // then
         assertThat(line.getStations()).hasSize(2);
@@ -62,8 +62,8 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
 
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
-        line.addSection(역삼역, 선릉역, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        line.addSection(역삼역, 선릉역, 10, 10);
 
         // when
         line.removeSection(역삼역, 선릉역);
@@ -78,6 +78,7 @@ class LineTest {
      * Then 다시 조회한 노선의 역은 3개이다.
      * Then 구간은 2개다.
      * Then 역의 거리는 나뉘어져 있다.
+     * Then 역의 시간은 나뉘어져 있다.
      */
     @Test
     void 노선에_역_추가시_노선_가운데_추가할_수_있다() {
@@ -86,10 +87,10 @@ class LineTest {
         final Station 역삼역 = new Station("역삼역");
         final Station 선릉역 = new Station("선릉역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 3);
 
         // when
-        line.addSection(강남역, 선릉역, 3);
+        line.addSection(강남역, 선릉역, 3, 2);
 
         // then
         assertThat(line.getStations()).hasSize(3);
@@ -104,7 +105,9 @@ class LineTest {
             EntityNotFoundException::new
         );
         assertThat(addedSection.getDistance()).isEqualTo(3);
+        assertThat(addedSection.getDuration()).isEqualTo(2);
         assertThat(splitedSection.getDistance()).isEqualTo(7);
+        assertThat(splitedSection.getDuration()).isEqualTo(1);
     }
 
     /**
@@ -118,11 +121,11 @@ class LineTest {
         final Station 강남역 = new Station("강남역");
         final Station 역삼역 = new Station("역삼역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
 
         // when
         // then
-        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 3))
+        assertThatThrownBy(() -> line.addSection(강남역, 역삼역, 3, 10))
             .isInstanceOf(IllegalArgumentException.class);
     }
     /**
@@ -138,11 +141,11 @@ class LineTest {
         final Station 선릉역 = new Station("선릉역");
         final Station 삼성역 = new Station("삼성역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
 
         // when
         // then
-        assertThatThrownBy(() -> line.addSection(선릉역, 삼성역, 3))
+        assertThatThrownBy(() -> line.addSection(선릉역, 삼성역, 3, 10))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -160,8 +163,8 @@ class LineTest {
         final Station 역삼역 = new Station("역삼역");
         final Station 선릉역 = new Station("선릉역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
-        line.addSection(역삼역, 선릉역, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        line.addSection(역삼역, 선릉역, 10, 10);
 
         // when
         line.removeStation(강남역);
@@ -190,9 +193,9 @@ class LineTest {
         final Station 선릉역 = new Station("선릉역");
         final Station 삼성역 = new Station("삼성역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
-        line.addSection(역삼역, 선릉역, 10);
-        line.addSection(선릉역, 삼성역, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        line.addSection(역삼역, 선릉역, 10, 10);
+        line.addSection(선릉역, 삼성역, 10, 10);
 
         // when
         line.removeStation(역삼역);
@@ -221,9 +224,9 @@ class LineTest {
         final Station 선릉역 = new Station("선릉역");
         final Station 삼성역 = new Station("삼성역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
-        line.addSection(역삼역, 선릉역, 10);
-        line.addSection(선릉역, 삼성역, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        line.addSection(역삼역, 선릉역, 10, 10);
+        line.addSection(선릉역, 삼성역, 10, 10);
 
         // when
         line.removeStation(삼성역);

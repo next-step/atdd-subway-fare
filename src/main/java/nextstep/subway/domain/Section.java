@@ -28,15 +28,18 @@ public class Section {
 
     private int distance;
 
+    private int duration;
+
     public Section() {
 
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -59,13 +62,19 @@ public class Section {
         return distance;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public void shorten(Section section) {
         upStation = section.downStation;
         distance -= section.distance;
+        duration -= section.duration;
     }
 
     public void extend(Section section) {
         upStation = section.upStation;
         distance += section.distance;
+        duration += section.duration;
     }
 }
