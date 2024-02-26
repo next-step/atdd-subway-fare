@@ -34,7 +34,7 @@ public class LineServiceMockTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
 
         when(stationService.findById(역삼역_id)).thenReturn(역삼역);
         when(stationService.findById(선릉역_id)).thenReturn(선릉역);
@@ -43,7 +43,7 @@ public class LineServiceMockTest {
         final LineService lineService = new LineService(lineRepository, stationService);
         // when
         // lineService.addSection 호출
-        lineService.addSection(line_id, new SectionRequest(역삼역_id, 선릉역_id, 10));
+        lineService.addSection(line_id, new SectionRequest(역삼역_id, 선릉역_id, 10, 10));
 
         // then
         // lineService.findLineById 메서드를 통해 검증

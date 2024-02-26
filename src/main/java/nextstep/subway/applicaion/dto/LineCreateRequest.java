@@ -15,6 +15,8 @@ public class LineCreateRequest {
     @Min(1)
     private int distance;
 
+    private int duration;
+
     public String getName() {
         return name;
     }
@@ -33,5 +35,9 @@ public class LineCreateRequest {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

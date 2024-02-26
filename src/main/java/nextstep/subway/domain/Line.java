@@ -21,10 +21,10 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color, Station upStation, Station downStation, int distance) {
+    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
         this.name = name;
         this.color = color;
-        sections.add(new Section(this, upStation, downStation, distance));
+        sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
     public Line(String name, String color) {
@@ -60,8 +60,8 @@ public class Line {
         return sections.getSections();
     }
 
-    public void addSection(Station upStation, Station downStation, int distance) {
-        sections.add(new Section(this, upStation, downStation, distance));
+    public void addSection(Station upStation, Station downStation, int distance, int duration) {
+        sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
 

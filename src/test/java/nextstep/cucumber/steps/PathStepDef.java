@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.AcceptanceContext;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Station;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,8 @@ public class PathStepDef implements En {
                          it.get("color"),
                          Long.parseLong(context.store.get(it.get("upStation")).toString()),
                          Long.parseLong(context.store.get(it.get("downStation")).toString()),
-                         Integer.parseInt(it.get("distance"))
+                         Integer.parseInt(it.get("distance")),
+                         Integer.parseInt(it.get("duration"))
                      )
                  )
              ));
@@ -56,7 +58,8 @@ public class PathStepDef implements En {
                      createSectionCreateParams(
                          context.store.get(it.get("upStation")).toString(),
                          context.store.get(it.get("downStation")).toString(),
-                         it.get("distance")
+                         it.get("distance"),
+                         it.get("duration")
                      ));
              });
          });
@@ -64,7 +67,16 @@ public class PathStepDef implements En {
         When("{string} 과 {string} 경로를 조회하면,", (String from, String to) -> {
             context.response = 지하철_경로_조회(
                 Long.parseLong(context.store.get(from).toString()),
-                Long.parseLong(context.store.get(to).toString())
+                Long.parseLong(context.store.get(to).toString()),
+                PathSearchType.DISTANCE
+            );
+        });
+
+        When("{string}에서 {string}까지의 최소 시간 기준으로 경로 조회를 요청", (String from, String to) -> {
+            context.response = 지하철_경로_조회(
+                Long.parseLong(context.store.get(from).toString()),
+                Long.parseLong(context.store.get(to).toString()),
+                PathSearchType.DURATION
             );
         });
 
@@ -81,18 +93,23 @@ public class PathStepDef implements En {
            assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
         });
 
+        Then("시간은 {int}이다.", (Integer duration) -> {
+            assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
+        });
+
         Then("경로가 조회가 실패한다.", () -> {
             assertThat(context.response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         });
     }
 
 
-    private Map<String, String> createSectionCreateParams(String upStationId, String downStationId, String distance) {
+    private Map<String, String> createSectionCreateParams(String upStationId, String downStationId, String distance, String duration) {
         final Map<String, String> params = new HashMap<>();
 
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
 
         return params;
     }

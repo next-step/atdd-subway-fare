@@ -20,13 +20,15 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("upStationId", upStationId.toString());
         params.put("downStationId", downStationId.toString());
         params.put("distance", Integer.toString(distance));
+        params.put("duration", Integer.toString(duration));
+
         return RestAssured
             .given().log().all()
             .body(params)
