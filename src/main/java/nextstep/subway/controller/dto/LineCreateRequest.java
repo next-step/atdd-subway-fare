@@ -11,6 +11,7 @@ import java.util.List;
 public class LineCreateRequest {
     private String name;
     private String color;
+    private long extraFare;
     @NotNull
     private Long upStationId;
     @NotNull

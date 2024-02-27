@@ -31,7 +31,8 @@ public class LineService {
     public LineResponse saveLine(LineCreateRequest request) {
         Line line = lineRepository.save(new Line(
                 request.getName(),
-                request.getColor()
+                request.getColor(),
+                request.getExtraFare()
         ));
         Stations stations = new Stations(stationRepository.findByIdIn(request.stationIds()));
 

@@ -17,6 +17,9 @@ public class Line {
     @Column(length = 20, nullable = false)
     private String color;
 
+    @Column(nullable = false)
+    private Long extraFare;
+
     protected Line() {
     }
 
@@ -29,9 +32,18 @@ public class Line {
     }
 
     public Line(Long id, String name, String color) {
+        this(id, name, color, 0L);
+    }
+
+    public Line(String name, String color, Long extraFare) {
+        this(0L, name, color, extraFare);
+    }
+
+    public Line(Long id, String name, String color, Long extraFare) {
         this.id = id;
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public void update(String name, String color){
