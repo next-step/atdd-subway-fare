@@ -15,13 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class PathService {
 
     private final LineRepository lineRepository;
+    private final PathFinder pathFinder;
 
-    public PathService(LineRepository lineRepository) {
+    public PathService(LineRepository lineRepository, PathFinder pathFinder) {
         this.lineRepository = lineRepository;
+        this.pathFinder = pathFinder;
     }
 
     public PathResponse getPath(PathRequest request) {
-        final PathFinder pathFinder = new JGraphTPathFinderImpl();
         final List<Line> lines = lineRepository.findAll();
 
         return pathFinder.findPath(request, lines);

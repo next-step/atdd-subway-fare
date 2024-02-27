@@ -10,6 +10,9 @@ import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.FareCalculator;
+import nextstep.subway.domain.FareCalculatorImpl;
+import nextstep.subway.domain.JGraphTPathFinderImpl;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Station;
@@ -27,6 +30,7 @@ public class PathServiceTest {
     @Mock
     private LineRepository lineRepository;
 
+
     private PathService pathService;
 
     @BeforeEach
@@ -39,7 +43,10 @@ public class PathServiceTest {
         이호선.addSection(역삼역, 선릉역, 10, 10);
 
         when(lineRepository.findAll()).thenReturn(List.of(이호선));
-        pathService = new PathService(lineRepository);
+
+        FareCalculator fareCalculator = new FareCalculatorImpl();
+        JGraphTPathFinderImpl jGraphTPathFinder = new JGraphTPathFinderImpl(fareCalculator);
+        pathService = new PathService(lineRepository, jGraphTPathFinder);
     }
 
     @Test
