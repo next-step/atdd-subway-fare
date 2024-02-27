@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.UNDEFINED_PORT;
-import static nextstep.DataSaver.MEMBER_EMAIL;
-import static nextstep.DataSaver.MEMBER_PASSWORD;
+import static nextstep.DataSaver.MEMBER_ADULT_EMAIL;
+import static nextstep.DataSaver.MEMBER_ADULT_PASSWORD;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -43,13 +43,13 @@ public class AcceptanceTest {
             RestAssured.port = port;
         }
         databaseCleaner.clear();
-        dataSaver.saveData();
+        dataSaver.saveAdultMember();
     }
 
     @BeforeEach
     void setup() {
         if(accessToken == null || accessToken.isEmpty()) {
-            accessToken = AuthSteps.로그인_요청(MEMBER_EMAIL, MEMBER_PASSWORD)
+            accessToken = AuthSteps.로그인_요청(MEMBER_ADULT_EMAIL, MEMBER_ADULT_PASSWORD)
                     .as(TokenResponse.class).getAccessToken();
         }
     }
