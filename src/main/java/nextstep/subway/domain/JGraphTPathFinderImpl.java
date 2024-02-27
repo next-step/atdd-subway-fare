@@ -11,9 +11,10 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class JGraphTPathFinderImpl extends PathFinder {
 
     public JGraphTPathFinderImpl(FareCalculator fareCalculator) {
