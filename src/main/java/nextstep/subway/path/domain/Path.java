@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Lines;
+import nextstep.subway.member.domain.AgeRange;
 import nextstep.subway.member.domain.Member;
 import nextstep.subway.station.domain.Station;
 
@@ -60,11 +61,14 @@ public class Path {
 
     public Long fare(Lines lines,
                      Member member) {
-        return calculateMemberFare(fare(lines));
+        return calculateMemberFare(fare(lines), member);
     }
 
-    private Long calculateMemberFare(Long fare) {
-        return Math.round((fare - 350L) * 0.8);
+    private Long calculateMemberFare(Long fare,
+                                     Member member) {
+        AgeRange ageRange = member.range();
+        AgeRangeFare ageRangeFare = AgeRangeFare.from(ageRange);
+        return ageRangeFare.calculateFare(fare);
     }
 
     public Long fare(Lines lines) {
@@ -72,16 +76,16 @@ public class Path {
     }
 
     private Long calculateFare() {
-        return DEFAULT_FARE + EnumSet.allOf(Fare.class).stream()
-                .filter(fare -> this.distance > fare.getStartDistance())
-                .mapToInt(fare -> calculateFare(this.distance, fare))
+        return DEFAULT_FARE + EnumSet.allOf(DistanceFare.class).stream()
+                .filter(distanceFare -> this.distance > distanceFare.getStartDistance())
+                .mapToInt(distanceFare -> calculateFare(this.distance, distanceFare))
                 .sum();
     }
 
     private int calculateFare(Long distance,
-                              Fare fare) {
-        long applicableDistance = Math.min(distance, fare.getEndDistance()) - fare.getStartDistance();
-        return (int) ((Math.ceil((double) applicableDistance / fare.getDistanceUnit())) * fare.getUnitFare());
+                              DistanceFare distanceFare) {
+        long applicableDistance = Math.min(distance, distanceFare.getEndDistance()) - distanceFare.getStartDistance();
+        return (int) ((Math.ceil((double) applicableDistance / distanceFare.getDistanceUnit())) * distanceFare.getUnitFare());
     }
 
     private Long calculateSurcharge(Lines lines) {

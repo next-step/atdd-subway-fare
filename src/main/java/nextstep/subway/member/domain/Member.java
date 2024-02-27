@@ -63,4 +63,8 @@ public class Member {
             throw new AuthenticationException("본인의 정보만 수정 할 수 있습니다.");
         }
     }
+
+    public AgeRange range() {
+        return AgeRange.findBy(this.age);
+    }
 }
