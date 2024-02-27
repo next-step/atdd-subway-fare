@@ -28,17 +28,6 @@ public class PathService {
         SearchType searchType = SearchType.from(type);
         PathInfo pathInfo = searchType.findPath(pathFinder, Long.toString(sourceId), Long.toString(targetId));
 
-        List<StationResponse> stations = pathInfo.getStationIds().stream()
-                .map(Long::parseLong)
-                .map(stationRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(StationResponse::from)
-                .collect(Collectors.toList());
-        int distance = pathInfo.getDistance();
-        int duration = pathInfo.getDuration();
-        int fare = FareCalculator.calculateOverFare(distance);
-
-        return new PathResponse(stations, distance, duration, fare);
+        return pathInfo.toResponse(stationRepository);
     }
 }
