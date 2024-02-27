@@ -1,7 +1,6 @@
 package nextstep.subway.domain.chain;
 
 import nextstep.exception.ApplicationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Objects;
 public class FareHandlerFactory {
     private final List<FareHandler> fareHandlers;
 
-    @Autowired
     public FareHandlerFactory(List<FareHandler> fareHandlers) {
         this.fareHandlers = fareHandlers;
         initializeChain(fareHandlers);

@@ -1,13 +1,16 @@
 package nextstep.subway.domain.chain;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@Import({Over10kmFareHandler.class})
 class Over10kmFareHandlerTest {
 
     @Autowired

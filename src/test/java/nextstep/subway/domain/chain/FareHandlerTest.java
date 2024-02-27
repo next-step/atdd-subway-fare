@@ -1,16 +1,19 @@
 package nextstep.subway.domain.chain;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@Import({BasicFareHandler.class, Over10kmFareHandler.class, Over50kmFareHandler.class})
 class FareHandlerTest {
 
     @Autowired

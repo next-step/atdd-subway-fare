@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Over50kmFareHandler implements FareHandler {
     private static final long START_DISTANCE = 50;
+    private static final int OVER_50_FARE_UNIT = 8;
 
     private FareHandler nextHandler;
 
@@ -33,6 +34,6 @@ public class Over50kmFareHandler implements FareHandler {
     }
 
     private long calculateOverFare(long distance) {
-        return (long) ((Math.ceil((distance - 1) / 8) + 1) * 100);
+        return (long) ((Math.ceil((distance - 1) / OVER_50_FARE_UNIT) + 1) * 100);
     }
 }
