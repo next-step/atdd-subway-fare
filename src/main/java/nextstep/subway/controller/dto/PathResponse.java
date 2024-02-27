@@ -11,14 +11,16 @@ public class PathResponse {
     private List<StationResponse> stations;
     private long distance;
     private long duration;
+    private long fare;
 
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, long distance, long duration) {
+    public PathResponse(List<StationResponse> stations, long distance, long duration, long fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 
 }

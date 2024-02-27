@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static nextstep.subway.domain.PathType.DISTANCE;
+
 @Component
 public class PathFinder {
 
@@ -18,7 +20,7 @@ public class PathFinder {
     }
 
     public Path findPath() {
-        return findPathBy(PathType.of(""));
+        return findPathBy(DISTANCE);
     }
 
     public List<Path> findPaths() {
