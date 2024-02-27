@@ -27,6 +27,9 @@ public class Line {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private int extraFare;
+
     @Embedded
     private Sections sections = new Sections();
 
@@ -93,10 +96,11 @@ public class Line {
     }
 
     @Builder
-    public Line(Long id, String color, String name, Sections sections) {
+    public Line(Long id, String color, String name, int extraFare, Sections sections) {
         this.id = id;
         this.color = color;
         this.name = name;
+        this.extraFare = extraFare;
         this.sections = sections != null ? sections : new Sections();
     }
 }

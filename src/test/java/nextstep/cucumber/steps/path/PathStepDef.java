@@ -53,10 +53,11 @@ public class PathStepDef implements En {
                 String downstation = row.get("downstation");
                 int distance = Integer.parseInt(row.get("distance"));
                 int duration = Integer.parseInt(row.get("duration"));
+                int extraFare = Integer.parseInt(row.get("extraFare"));
 
                 isFirstSectionForLine.putIfAbsent(line, true);
                 if (Boolean.TRUE.equals(isFirstSectionForLine.get(line))) {
-                    LineSteps.노선_생성_요청(line, stations.get(upstation), stations.get(downstation), distance, duration);
+                    LineSteps.노선_생성_요청(line, stations.get(upstation), stations.get(downstation), distance, duration, extraFare);
                     isFirstSectionForLine.put(line, false);
                 } else {
                     SectionSteps.구간_추가_요청(lineId, stations.get(upstation), stations.get(downstation), distance, duration);

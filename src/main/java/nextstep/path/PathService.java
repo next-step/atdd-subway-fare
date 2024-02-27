@@ -2,6 +2,7 @@ package nextstep.path;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.exception.InvalidInputException;
+import nextstep.line.LineRepository;
 import nextstep.station.StationRepository;
 import nextstep.station.StationResponse;
 import org.jgrapht.alg.util.Pair;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class PathService {
     private final PathFinder pathFinder;
     private final StationRepository stationRepository;
+    private final LineRepository lineRepository;
 
     public PathResponse showShortestPath(Long sourceId, Long targetId, String type) {
         if (sourceId.equals(targetId)) {
@@ -28,6 +30,6 @@ public class PathService {
         SearchType searchType = SearchType.from(type);
         PathInfo pathInfo = searchType.findPath(pathFinder, Long.toString(sourceId), Long.toString(targetId));
 
-        return pathInfo.toResponse(stationRepository);
+        return pathInfo.toResponse(stationRepository, lineRepository);
     }
 }

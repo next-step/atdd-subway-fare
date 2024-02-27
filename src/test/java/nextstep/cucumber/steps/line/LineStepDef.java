@@ -29,7 +29,7 @@ public class LineStepDef implements En {
         });
 
         When("지하철 노선을 생성하면", () -> {
-            response = LineSteps.노선_생성_요청("5호선", upstationId, downstationId, 5, 5);
+            response = LineSteps.노선_생성_요청("5호선", upstationId, downstationId, 5, 5, 0);
         });
 
         Then("지하철 노선이 생성된다", () -> {

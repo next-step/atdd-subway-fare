@@ -8,6 +8,7 @@ import lombok.Getter;
 public class LineCreateRequest {
     private String name;
     private String color;
+    private int extraFare;
     private int distance;
     private int duration;
     private Long upstationId;
@@ -17,6 +18,7 @@ public class LineCreateRequest {
         return Line.builder()
                 .name(request.getName())
                 .color(request.getColor())
+                .extraFare(request.getExtraFare())
                 .build();
     }
 }
