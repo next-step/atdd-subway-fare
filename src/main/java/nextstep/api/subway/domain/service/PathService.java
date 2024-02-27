@@ -1,5 +1,6 @@
 package nextstep.api.subway.domain.service;
 
+import nextstep.api.subway.domain.dto.outport.PathInfo;
 import nextstep.api.subway.interfaces.dto.response.PathResponse;
 
 /**
@@ -7,6 +8,6 @@ import nextstep.api.subway.interfaces.dto.response.PathResponse;
  * @since : 2024/02/09
  */
 public interface PathService {
-	PathResponse findShortestPath(Long source, Long target);
-	PathResponse findMinimumDurationPath(Long source, Long target);
+	PathInfo findShortestPath(Long source, Long target);
+	PathInfo findMinimumDurationPath(Long source, Long target);
 }

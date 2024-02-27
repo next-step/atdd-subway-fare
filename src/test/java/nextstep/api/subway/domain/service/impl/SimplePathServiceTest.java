@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import nextstep.api.subway.domain.dto.outport.PathInfo;
 import nextstep.api.subway.domain.model.entity.Station;
 import nextstep.api.subway.domain.model.vo.Path;
 import nextstep.api.subway.domain.operators.LineResolver;
@@ -55,7 +56,7 @@ class SimplePathServiceTest {
 		given(pathFinder.findShortestPath(eq(sourceStation), eq(targetStation), anyList())).willReturn(Path.of(Arrays.asList(sourceStation, targetStation), 10L, null) );
 
 		// when
-		PathResponse result = simplePathService.findShortestPath(1L, 2L);
+		PathInfo result = simplePathService.findShortestPath(1L, 2L);
 
 		// then
 		assertThat(result.getStations()).hasSize(2);

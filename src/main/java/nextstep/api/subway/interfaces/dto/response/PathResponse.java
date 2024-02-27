@@ -7,8 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nextstep.api.subway.domain.dto.outport.FareInfo;
+import nextstep.api.subway.domain.dto.outport.PathInfo;
 import nextstep.api.subway.domain.model.vo.Path;
-import nextstep.api.subway.util.FareCalculator;
+import nextstep.api.subway.domain.operators.FareCalculator;
 import nextstep.common.mapper.ModelMapperBasedObjectMapper;
 
 /**
@@ -24,11 +26,12 @@ public class PathResponse {
 	private List<StationResponse> stations;
 	private Long distance;
 	private Long duration;
-	private int fare; // won
+	private int fareAmount; // won
 
-	public static PathResponse from(Path path) {
-		PathResponse pathResponse = ModelMapperBasedObjectMapper.convert(path, PathResponse.class);
-		pathResponse.setFare(FareCalculator.calculateFare(pathResponse.getDistance()));
+
+	public static PathResponse of(PathInfo pathInfo, FareInfo fareInfo) {
+		PathResponse pathResponse = ModelMapperBasedObjectMapper.convert(pathInfo, PathResponse.class);
+		pathResponse.setFareAmount(fareInfo.getFareAmount());
 		return pathResponse;
 	}
 }

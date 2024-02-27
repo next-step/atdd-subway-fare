@@ -22,7 +22,7 @@ Feature: 지하철 경로 조회 기능
       | distance | duration |
       | 5        | 5        |
     And 지하철 이용 요금도 함께 응답함
-      | fare |
+      | fareAmount |
       | 1250    |
 
   Scenario: 서울역에서 공덕역까지의 최소 시간 경로 조회
@@ -53,8 +53,8 @@ Feature: 지하철 경로 조회 기능
       | distance | duration |
       | 10       | 10       |
     And 지하철 이용 요금도 함께 응답함
-      | fare |
-      | 1250    |
+      | fareAmount |
+      | 1250       |
 
 
   Scenario: 교대역에서 양재역까지의 최단 거리 경로 조회
@@ -80,7 +80,7 @@ Feature: 지하철 경로 조회 기능
       | distance | duration |
       | 5        | 5        |
     And 지하철 이용 요금도 함께 응답함
-      | fare |
+      | fareAmount |
       | 1250   |
 
   Scenario: 서울역에서 공덕역까지의 최단 거리 경로 조회
@@ -111,7 +111,7 @@ Feature: 지하철 경로 조회 기능
       | distance | duration |
       | 10       | 10       |
     And 지하철 이용 요금도 함께 응답함
-      | fare |
+      | fareAmount |
       | 1250    |
 
 

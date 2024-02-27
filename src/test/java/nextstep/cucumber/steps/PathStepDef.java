@@ -107,7 +107,7 @@ public class PathStepDef implements En {
 
 	private void verifyFareAmount(DataTable expectedFareTable) {
 		List<Map<String, String>> expectedFare = expectedFareTable.asMaps(String.class, String.class);
-		int expectedFareAmount = Integer.parseInt(expectedFare.get(0).get("fare"));
+		int expectedFareAmount = Integer.parseInt(expectedFare.get(0).get("fareAmount"));
 
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(parseFare(response)).isEqualTo(expectedFareAmount);
