@@ -37,7 +37,8 @@ public class JGraphTPathFinderImpl extends PathFinder {
         return new PathResponse(
             stationIds.stream().map(stationMap::get).collect(Collectors.toList()),
             edgeSection.stream().map(Section::getDistance).reduce(0, Integer::sum),
-            edgeSection.stream().map(Section::getDuration).reduce(0, Integer::sum)
+            edgeSection.stream().map(Section::getDuration).reduce(0, Integer::sum),
+            0
         );
     }
 

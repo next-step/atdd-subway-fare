@@ -31,7 +31,7 @@ public class PathFinderTest {
 
         @Test
         public void 경로_조회_기능() {
-            assertThat(pathFinder.findPath(pathRequest, lines)).hasOnlyFields("distance", "stations", "duration");
+            assertThat(pathFinder.findPath(pathRequest, lines)).hasOnlyFields("distance", "stations", "duration", "fare");
         }
 }
 
