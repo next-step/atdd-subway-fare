@@ -97,6 +97,10 @@ public class PathStepDef implements En {
             assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
         });
 
+        Then("요금은 {int}원이다.",(Integer fare) -> {
+            assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(fare);
+        });
+
         Then("경로가 조회가 실패한다.", () -> {
             assertThat(context.response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         });
