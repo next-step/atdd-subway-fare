@@ -17,7 +17,6 @@ public class FareCalculatorImpl implements FareCalculator {
 
     public FareCalculatorImpl() {
         this(List.of(
-            Map.of(DISTANCE_OVER, 0, DISTANCE_UNDER, 10, STEP, 10, FARE, 0),
             Map.of(DISTANCE_OVER, 10, DISTANCE_UNDER, 50, STEP, 5, FARE, 100),
             Map.of( DISTANCE_OVER, 50, DISTANCE_UNDER, Integer.MAX_VALUE, STEP, 8, FARE, 100)
         ));
