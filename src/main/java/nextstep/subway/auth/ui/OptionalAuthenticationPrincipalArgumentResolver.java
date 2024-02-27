@@ -1,6 +1,5 @@
 package nextstep.subway.auth.ui;
 
-import nextstep.subway.auth.AuthenticationException;
 import nextstep.subway.auth.application.AuthManager;
 import nextstep.subway.auth.application.provider.TokenType;
 import nextstep.subway.auth.domain.LoginMember;

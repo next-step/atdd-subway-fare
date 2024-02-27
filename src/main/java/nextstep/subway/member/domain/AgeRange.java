@@ -12,7 +12,8 @@ public enum AgeRange {
     private final int minAge;
     private final int maxAge;
 
-    AgeRange(int minAge, int maxAge) {
+    AgeRange(int minAge,
+             int maxAge) {
         this.minAge = minAge;
         this.maxAge = maxAge;
     }

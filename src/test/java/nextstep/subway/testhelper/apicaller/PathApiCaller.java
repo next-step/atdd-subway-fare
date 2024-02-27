@@ -20,7 +20,8 @@ public class PathApiCaller {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 경로_조회(String token, PathRequest pathRequest) {
+    public static ExtractableResponse<Response> 경로_조회(String token,
+                                                      PathRequest pathRequest) {
         return given().log().all()
                 .auth().oauth2(token)
                 .queryParam("source", pathRequest.getSource())

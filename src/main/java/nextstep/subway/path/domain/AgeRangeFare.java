@@ -15,7 +15,9 @@ public enum AgeRangeFare {
     private final double discountRate;
     private final int deduction;
 
-    AgeRangeFare(AgeRange ageRange, double discountRate, int deduction) {
+    AgeRangeFare(AgeRange ageRange,
+                 double discountRate,
+                 int deduction) {
         this.ageRange = ageRange;
         this.discountRate = discountRate;
         this.deduction = deduction;

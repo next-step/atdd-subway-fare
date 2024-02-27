@@ -3,17 +3,11 @@ package nextstep.subway.cucumber.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.cucumber.AcceptanceContext;
-import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.station.application.dto.StationResponse;
-import nextstep.subway.testhelper.apicaller.LineApiCaller;
 import nextstep.subway.testhelper.apicaller.MemberApiCaller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.List;

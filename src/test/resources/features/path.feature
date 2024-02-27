@@ -7,9 +7,9 @@ Feature: 지하철역 경로 찾기 기능
 #     남부터미널역  --- *3호선* ---   양재
   Background: 지하철 노선도 준비
     Given 회원가입 요청을 한다
-      | email | password  | age |
-      | age15@test.com  | password  | 15       |
-      | age7@test.com | password    | 7       |
+      | email          | password | age |
+      | age15@test.com | password | 15  |
+      | age7@test.com  | password | 7   |
     Given 지하철역들을 생성 요청하고
       | name   |
       | 교대역    |
@@ -18,9 +18,9 @@ Feature: 지하철역 경로 찾기 기능
       | 남부터미널역 |
     And 지하철 노선들을 생성 요청하고
       | name | color  | upStation | downStation | distance | duration | surcharge |
-      | 2호선  | green  | 교대역       | 강남역         | 10       | 10       | 0       |
+      | 2호선  | green  | 교대역       | 강남역         | 10       | 10       | 0         |
       | 신분당선 | red    | 강남역       | 양재역         | 10       | 10       | 900       |
-      | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 2        | 0       |
+      | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 2        | 0         |
     And 지하철 구간을 등록 요청하고
       | lineName | upStation | downStation | distance | duration |
       | 3호선      | 남부터미널역    | 양재역         | 3        | 3        |
