@@ -58,7 +58,7 @@ public class Path {
     }
 
     public Long fare(Lines lines) {
-        return calculateFare() + findSurcharge(lines);
+        return calculateFare() + calculateSurcharge(lines);
     }
 
     private Long calculateFare() {
@@ -74,7 +74,7 @@ public class Path {
         return (int) ((Math.ceil((double) applicableDistance / fare.getDistanceUnit())) * fare.getUnitFare());
     }
 
-    private Long findSurcharge(Lines lines) {
+    private Long calculateSurcharge(Lines lines) {
         List<Long> surcharges = lines.findSurcharges(this.stations);
         return surcharges.stream()
                 .max(Long::compareTo)
