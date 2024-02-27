@@ -74,7 +74,7 @@ public class JGraphTPathFinderImpl extends PathFinder {
 
             DefaultWeightedEdge edge = graph.addEdge(upStationId, downStationId);
 
-            graph.setEdgeWeight(edge, section.getWeight(type));
+            graph.setEdgeWeight(edge, type.getWeight(section));
         });
 
         return graph;
