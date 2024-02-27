@@ -31,6 +31,7 @@ out/
 ### VS Code ###
 .vscode/
 frontend/node_modules
+/.jqwik-database
 
 ### OS ###
 .DS_Store
