@@ -34,11 +34,13 @@ public class MemberStepDef implements En {
                     });
         });
 
-        Given("{string}세의 {string}아이디로 사용자가 로그인을 한다", (DataTable table) -> {
+        Given("{string}세의 {string}아이디로 사용자가 로그인을 한다", (String age, String email) -> {
             Map<String, String> params = new HashMap<>();
+            params.put("email", email);
+            params.put("password", "password");
             ExtractableResponse<Response> response = MemberApiCaller.회원_로그인_요청(params);
-            context.store.put(params.get("token"), (new ObjectMapper()).convertValue(response.jsonPath().getString(
-                    "accessToken"), String.class));
+            context.store.put("token", (new ObjectMapper()).convertValue(response.jsonPath().getString("accessToken"),
+                    String.class));
         });
     }
 }

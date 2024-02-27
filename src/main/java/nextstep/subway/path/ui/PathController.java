@@ -1,5 +1,7 @@
 package nextstep.subway.path.ui;
 
+import nextstep.subway.auth.domain.LoginMember;
+import nextstep.subway.auth.ui.OptionalAuthenticationPrincipal;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
@@ -18,7 +20,8 @@ public class PathController {
     }
 
     @GetMapping(value = "/paths")
-    public ResponseEntity<PathResponse> findShortCut(@ModelAttribute PathRequest pathRequest) {
-        return ResponseEntity.ok().body(pathService.findShortCut(pathRequest));
+    public ResponseEntity<PathResponse> findShortCut(@OptionalAuthenticationPrincipal LoginMember loginMember,
+                                                     @ModelAttribute PathRequest pathRequest) {
+        return ResponseEntity.ok().body(pathService.findShortCut(loginMember, pathRequest));
     }
 }

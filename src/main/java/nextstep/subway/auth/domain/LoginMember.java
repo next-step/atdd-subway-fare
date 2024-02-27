@@ -7,6 +7,10 @@ public class LoginMember {
         this.email = email;
     }
 
+    public LoginMember() {
+
+    }
+
     public String getEmail() {
         return email;
     }

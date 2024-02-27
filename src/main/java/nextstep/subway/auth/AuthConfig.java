@@ -2,6 +2,7 @@ package nextstep.subway.auth;
 
 import nextstep.subway.auth.application.AuthManager;
 import nextstep.subway.auth.ui.AuthenticationPrincipalArgumentResolver;
+import nextstep.subway.auth.ui.OptionalAuthenticationPrincipalArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,5 +19,6 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
         argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(authManager));
+        argumentResolvers.add(new OptionalAuthenticationPrincipalArgumentResolver(authManager));
     }
 }
