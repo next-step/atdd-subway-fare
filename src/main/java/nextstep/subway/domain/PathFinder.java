@@ -6,6 +6,12 @@ import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 
 public abstract class PathFinder {
+    protected FareCalculator fareCalculator;
+
+    public PathFinder(FareCalculator fareCalculator) {
+        this.fareCalculator = fareCalculator;
+    }
+
     public PathResponse findPath(PathRequest pathRequest, List<Line> lines) {
         validateRequest(pathRequest, lines);
 

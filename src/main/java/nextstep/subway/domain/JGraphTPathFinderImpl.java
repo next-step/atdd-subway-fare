@@ -11,8 +11,15 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.springframework.stereotype.Service;
 
+@Service
 public class JGraphTPathFinderImpl extends PathFinder {
+
+    public JGraphTPathFinderImpl(FareCalculator fareCalculator) {
+        super(fareCalculator);
+    }
+
     @Override
     protected PathResponse getPath(PathRequest pathRequest, List<Line> lines) {
         final Set<Section> sections = getAllSectionsInLines(lines);
