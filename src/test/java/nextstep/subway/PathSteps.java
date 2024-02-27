@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.Map;
 
+import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 public class PathSteps {
@@ -19,17 +20,25 @@ public class PathSteps {
 
     public class PatahRequestBuilder {
         private RequestSpecification spec;
+        private String accessToken;
         private int statusCode = OK.value();
 
         public PatahRequestBuilder() {
             this.spec = RestAssured.given().log().all();
         }
 
+        public PathSteps.PatahRequestBuilder 로그인을_한다(String accessToken) {
+            this.accessToken = accessToken;
+            return this;
+        }
+
         public PathSteps.PatahRequestBuilder Response_HTTP_상태_코드(int statusCode) {
             this.statusCode = statusCode;
             return this;
         }
+
         public ExtractableResponse<Response> 경로_조회_요청을_보낸다(Map<String, ?> queryParams) {
+            setAuthorization();
             RequestSpecification requestSpecification = RestAssured.given().log().all();
 
             if (queryParams != null && !queryParams.isEmpty()) {
@@ -41,6 +50,11 @@ public class PathSteps {
                     .then().log().all()
                     .statusCode(statusCode)
                     .extract();
+        }
+        private void setAuthorization() {
+            if (this.accessToken != null && !this.accessToken.isEmpty()) {
+                this.spec.header(AUTHORIZATION, "Bearer " + this.accessToken);
+            }
         }
     }
 }
