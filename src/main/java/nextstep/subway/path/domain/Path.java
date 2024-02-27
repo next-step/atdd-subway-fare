@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Lines;
+import nextstep.subway.member.domain.Member;
 import nextstep.subway.station.domain.Station;
 
 import java.util.EnumSet;
@@ -55,6 +56,15 @@ public class Path {
 
     public Long getDuration() {
         return this.duration;
+    }
+
+    public Long fare(Lines lines,
+                     Member member) {
+        return calculateMemberFare(fare(lines));
+    }
+
+    private Long calculateMemberFare(Long fare) {
+        return Math.round((fare - 350L) * 0.8);
     }
 
     public Long fare(Lines lines) {

@@ -2,6 +2,7 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Lines;
+import nextstep.subway.member.domain.Member;
 import nextstep.subway.testhelper.fixture.StationFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,8 +78,9 @@ class PathTest {
     @DisplayName("사용자의 나이가 13세 이상~19세 미만 이면 운임에서 350원을 공제한 금액의 20%할인 된다 (요금: 720)")
     void teenagerFare() {
         Path path = new Path(Collections.emptyList(), 10L, 1L);
+        Member member = new Member("age15@test.com", "password", 15);
 
-        Long actual = path.fare(Lines.from(Collections.emptyList()));
+        Long actual = path.fare(Lines.from(Collections.emptyList()), member);
         Long expected = 720L;
         assertThat(actual).isEqualTo(expected);
     }
