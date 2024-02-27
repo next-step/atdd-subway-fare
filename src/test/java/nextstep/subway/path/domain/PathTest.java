@@ -85,4 +85,15 @@ class PathTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    @DisplayName("사용자의 나이가 6세 이상~ 13세 미만 이면 운임에서 350원을 공제한 금액의 50%할인 된다 (요금: 450)")
+    void childrenFare() {
+        Path path = new Path(Collections.emptyList(), 10L, 1L);
+        Member member = new Member("age7@test.com", "password", 7);
+
+        Long actual = path.fare(Lines.from(Collections.emptyList()), member);
+        Long expected = 450L;
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }
