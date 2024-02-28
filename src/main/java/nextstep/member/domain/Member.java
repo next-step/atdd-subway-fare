@@ -1,7 +1,8 @@
 package nextstep.member.domain;
 
+import nextstep.subway.domain.FareAgeGroup;
+
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class Member {
@@ -46,6 +47,11 @@ public class Member {
         this.email = member.email;
         this.password = member.password;
         this.age = member.age;
+    }
+
+    public long discountExtraFare(long fare) {
+        FareAgeGroup fareAgeGroup = FareAgeGroup.of(age);
+        return fareAgeGroup.calculateFare(fare);
     }
 
 }
