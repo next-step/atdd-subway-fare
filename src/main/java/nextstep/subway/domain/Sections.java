@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class Sections {
@@ -51,6 +52,14 @@ public class Sections {
             return;
         }
         matchingSection.changeDownStation(upStation, distance);
+    }
+
+    public List<Line> findLinesBy(List<Station> stations) {
+        return stations.stream()
+                .map(this::findMatchingSection)
+                .map(Section::line)
+                .distinct()
+                .collect(toList());
     }
 
     public Section findMatchingSection(Station station) {
@@ -164,13 +173,13 @@ public class Sections {
     private List<Station> upStations() {
         return sections.stream()
                 .map(Section::upStation)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private List<Station> downStations() {
         return sections.stream()
                 .map(Section::downStation)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<Station> sortedStations() {

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static nextstep.subway.fixture.LineFixture.BUNDANG_LINE;
 import static nextstep.subway.fixture.LineFixture.SHINBUNDANG_LINE;
 import static nextstep.subway.fixture.StationFixture.*;
 import static org.assertj.core.api.Assertions.*;
@@ -22,6 +23,7 @@ class SectionsTest {
     private Station 양재역;
     private Station 역삼역;
     private Line 신분당선;
+    private Line 분당선;
 
     @BeforeEach
     void setUp() {
@@ -30,6 +32,7 @@ class SectionsTest {
         양재역 = YANGJAE_STATION.toStation(3L);
         역삼역 = YEOKSAM_STATION.toStation(4L);
         신분당선 = SHINBUNDANG_LINE.toLine(1L);
+        분당선 = BUNDANG_LINE.toLine(2L);
         강남역_선릉역_구간 = new Section(
                 신분당선,
                 강남역,
@@ -113,6 +116,23 @@ class SectionsTest {
     void 성공_노선의_구간에서_신규_구간의_상행역이_기존_구간의_상행역과_일치하는_구간을_찾는다() {
         Section matchingSection = 구간.findMatchingSection(강남역);
         assertThat(matchingSection).isEqualTo(강남역_선릉역_구간);
+    }
+
+    /**
+     * 지하철역: 강남역, 선릉역, 양재역, 역삼역
+     * 노선: 강남 --(신분당선)-- 선릉 (10) --(신분당선)-- 양재 (10) --(분당선)-- 역삼 (10)
+     * total distance: 30
+     */
+    @Test
+    void 성공_지하철이_속해있는_구간의_노선_정보를_찾는다() {
+        List<Station> stations = List.of(강남역, 선릉역, 양재역, 역삼역);
+        List<Line> lines = 노선_2개_구간_3개_등록().findLinesBy(stations);
+        assertThat(lines).hasSize(2)
+                .extracting("id", "name")
+                .containsExactly(
+                        tuple(1L, "신분당선"),
+                        tuple(2L, "분당선")
+                );
     }
 
     /**
@@ -241,6 +261,33 @@ class SectionsTest {
                 ),
                 new Section(
                         신분당선,
+                        양재역,
+                        역삼역,
+                        10L,
+                        60L
+                )
+        )
+        );
+    }
+
+    private Sections 노선_2개_구간_3개_등록() {
+        return new Sections(List.of(
+                new Section(
+                        신분당선,
+                        강남역,
+                        선릉역,
+                        10L,
+                        60L
+                ),
+                new Section(
+                        신분당선,
+                        선릉역,
+                        양재역,
+                        10L,
+                        60L
+                ),
+                new Section(
+                        분당선,
                         양재역,
                         역삼역,
                         10L,
