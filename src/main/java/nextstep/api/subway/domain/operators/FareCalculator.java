@@ -35,8 +35,6 @@ public class FareCalculator {
 	 */
 	private static final Map<Long, Integer> LINE_ADDITIONAL_FARES = new HashMap<>();
 
-	// todo -> 로그인 사용자에 대한 조건을 설정하는 하드코딩 구현
-
 	static {
 		LINE_ADDITIONAL_FARES.put(1L, 200);
 		LINE_ADDITIONAL_FARES.put(2L, 500);
@@ -94,5 +92,4 @@ public class FareCalculator {
 		}
 		return fare;
 	}
-
 }
