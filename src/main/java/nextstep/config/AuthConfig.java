@@ -7,15 +7,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.api.auth.domain.operators.JwtTokenProvider;
+import nextstep.api.auth.domain.service.UserDetailsService;
 import nextstep.api.auth.interfaces.argumentresolver.AuthenticationPrincipalArgumentResolver;
 
 @Configuration
 @RequiredArgsConstructor
 public class AuthConfig implements WebMvcConfigurer {
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
-        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(jwtTokenProvider));
+        argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(jwtTokenProvider, userDetailsService));
     }
 }

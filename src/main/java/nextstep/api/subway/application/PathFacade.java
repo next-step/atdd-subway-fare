@@ -3,6 +3,7 @@ package nextstep.api.subway.application;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.api.auth.domain.dto.UserPrincipal;
 import nextstep.api.subway.common.type.PathRequestType;
 import nextstep.api.subway.domain.dto.outport.FareInfo;
 import nextstep.api.subway.domain.dto.outport.PathInfo;
@@ -23,6 +24,12 @@ public class PathFacade {
 	public PathResponse findPath(Long source, Long target, PathRequestType type) {
 		PathInfo pathInfo = getPathInfo(source, target, type);
 		FareInfo fareInfo = fareCalculationService.calculate(pathInfo);
+		return PathResponse.of(pathInfo, fareInfo);
+	}
+
+	public PathResponse findPath(Long source, Long target, PathRequestType type, UserPrincipal userPrincipal) {
+		PathInfo pathInfo = getPathInfo(source, target, type);
+		FareInfo fareInfo = fareCalculationService.calculate(pathInfo, userPrincipal);
 		return PathResponse.of(pathInfo, fareInfo);
 	}
 

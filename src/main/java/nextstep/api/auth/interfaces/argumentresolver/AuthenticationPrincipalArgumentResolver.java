@@ -9,7 +9,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import lombok.RequiredArgsConstructor;
 import nextstep.api.auth.domain.operators.JwtTokenProvider;
 import nextstep.api.auth.domain.service.UserDetailsService;
-import nextstep.api.member.application.SimpleUserDetailsService;
 import nextstep.common.annotation.AuthenticationPrincipal;
 import nextstep.common.exception.auth.AuthenticationException;
 

@@ -1,5 +1,6 @@
 package nextstep.api.subway.domain.service;
 
+import nextstep.api.auth.domain.dto.UserPrincipal;
 import nextstep.api.subway.domain.dto.outport.FareInfo;
 import nextstep.api.subway.domain.dto.outport.PathInfo;
 
@@ -9,4 +10,5 @@ import nextstep.api.subway.domain.dto.outport.PathInfo;
  */
 public interface FareCalculationService {
 	FareInfo calculate(PathInfo pathInfo);
+	FareInfo calculate(PathInfo pathInfo, UserPrincipal userPrincipal);
 }
