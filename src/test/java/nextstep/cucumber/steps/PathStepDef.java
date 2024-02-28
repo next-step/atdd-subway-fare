@@ -131,8 +131,6 @@ public class PathStepDef implements En {
             assertThat(context.message).isEqualTo("노선에 존재하지 않는 지하철역입니다.");
         });
 
-        // ============================
-
         When("최소 거리와 기본 요금 및 어린이 할인 요금 테스트를 위한 강남역에서 선릉역까지 최소 시간 기준으로 경로 조회를 요청한다", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 선릉역_ID = String.valueOf(context.store.get("선릉역"));
@@ -164,10 +162,10 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("최소 거리와 기본 요금 및 어린이 할인 요금 테스트 결과 지하철 이용 요금인 1250원에서 어린이 할인 요금인 350원 공제 후 남은 금액의 50% 할인을 받아 450원을 함께 응답한다", () -> {
+        Then("최소 시간 기준 결과 지하철 이용 요금인 1250원에서 추가 노선 요금인 100원을 더하고 청소년 할인 요금인 350원 공제 후 남은 금액의 20% 할인을 받아 900원을 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getFare()).isEqualTo(450)
+                    () -> assertThat(pathResponse.getFare()).isEqualTo(900)
             );
         });
 
@@ -248,10 +246,10 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("최소 시간 기준 결과 지하철 이용 요금인 1350원에서 청소년 할인 요금인 350원 공제 후 남은 금액의 20% 할인을 받아 800원을 함께 응답한다", () -> {
+        Then("최소 시간 기준 결과 지하철 이용 요금인 1350원에서 지하철 추가 요금인 100원을 추가하고 청소년 할인 요금인 350원 공제 후 남은 금액의 20% 할인을 받아 1150원을 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getFare()).isEqualTo(800)
+                    () -> assertThat(pathResponse.getFare()).isEqualTo(1250)
             );
         });
 
@@ -333,14 +331,14 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("최소 거리 기준 지하철 이용 요금인 2250원을 함께 응답한다", () -> {
+        Then("최소 거리 기준 지하철 이용 요금인 2250원에서 가장 높은 금액의 노선 추가 요금인 1000원을 더해 3250원을 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getFare()).isEqualTo(2250)
+                    () -> assertThat(pathResponse.getFare()).isEqualTo(3250)
             );
         });
 
-        When(" 노선별 추가 요금 경로가 한개일 경우 강남역에서 선릉역까지 최소 거리 기준으로 경로 조회를 요청한다", () -> {
+        When("노선별 추가 요금 경로가 한개일 경우 강남역에서 선릉역까지 최소 거리 기준으로 경로 조회를 요청한다", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 선릉역_ID = String.valueOf(context.store.get("선릉역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 선릉역_ID, "type", "DISTANCE");
@@ -354,7 +352,7 @@ public class PathStepDef implements En {
         Then("노선별 추가 요금 경로가 한개일 경우 테스트를 위한 최소 거리 기준 경로인 강남역, 선릉역을 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getStations()).hasSize(4)
+                    () -> assertThat(pathResponse.getStations()).hasSize(2)
                             .extracting("id", "name")
                             .containsExactly(
                                     tuple(1L, "강남역"),
@@ -378,7 +376,7 @@ public class PathStepDef implements En {
             );
         });
 
-        When(" 노선별 추가 요금 경로가 두개일 경우 강남역에서 양재역까지 최소 거리 기준으로 경로 조회를 요청한다", () -> {
+        When("노선별 추가 요금 경로가 두개일 경우 강남역에서 양재역까지 최소 거리 기준으로 경로 조회를 요청한다", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 양재역_ID = String.valueOf(context.store.get("양재역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 양재역_ID, "type", "DISTANCE");
@@ -392,7 +390,7 @@ public class PathStepDef implements En {
         Then("노선별 추가 요금 경로가 두개일 경우 테스트를 위한 최소 거리 기준 경로인 강남역, 선릉역, 양재역을 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getStations()).hasSize(4)
+                    () -> assertThat(pathResponse.getStations()).hasSize(3)
                             .extracting("id", "name")
                             .containsExactly(
                                     tuple(1L, "강남역"),
@@ -410,10 +408,10 @@ public class PathStepDef implements En {
             );
         });
 
-        Then("노선별 추가 요금 경로가 두개일 경우 테스트를 위한 최소 거리 기준 지하철 이용 요금인 1650원에서 가장 높은 금액의 추가 노선 요금인 1000원을 더해 1650원을 함께 응답한다", () -> {
+        Then("노선별 추가 요금 경로가 두개일 경우 테스트를 위한 최소 거리 기준 지하철 이용 요금인 1650원에서 가장 높은 금액의 추가 노선 요금인 1000원을 더해 2650원을 함께 응답한다", () -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
             assertAll(
-                    () -> assertThat(pathResponse.getFare()).isEqualTo(1650)
+                    () -> assertThat(pathResponse.getFare()).isEqualTo(2650)
             );
         });
 
