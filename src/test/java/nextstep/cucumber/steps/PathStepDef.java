@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import nextstep.cucumber.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class PathStepDef implements En {
@@ -90,7 +91,7 @@ public class PathStepDef implements En {
 
       List<Long> expected = rows.stream()
           .map(it -> it.get(0))
-          .map(it -> (Long) context.store.get(it))
+          .map(it -> context.getLong(it))
           .collect(Collectors.toList());
 
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
@@ -117,10 +118,31 @@ public class PathStepDef implements En {
 
       List<Long> expected = rows.stream()
           .map(it -> it.get(0))
-          .map(it -> (Long) context.store.get(it))
+          .map(it -> context.getLong(it))
           .collect(Collectors.toList());
 
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
+    });
+
+    /**
+     * 경로 조회 실패 - 두 역 사이 경로가 존재하지 않음
+     */
+    When("{string}과 {string}의 경로를 조회하면", (String source, String target) -> {
+      context.response = RestAssured
+          .given().log().all()
+          .accept(MediaType.APPLICATION_JSON_VALUE)
+          .when().get(
+              "/paths?source={sourceId}&target={targetId}&type={type}",
+              context.store.get(source),
+              context.store.get(target),
+              "DURATION"  // TODO enum
+          )
+          .then().log().all().extract();
+    });
+
+    Then("에러가 발생한다.", (DataTable table) -> {
+      assertThat(context.response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+      assertThat(context.response.body().asString()).isEqualTo("경로를 찾을 수 없습니다.");
     });
   }
 }
