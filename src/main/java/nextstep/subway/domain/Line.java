@@ -63,5 +63,8 @@ public class Line {
         return color;
     }
 
+    public Long getExtraFare() {
+        return extraFare;
+    }
 }
 

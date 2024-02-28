@@ -5,10 +5,10 @@ import nextstep.subway.domain.Line;
 
 public enum LineFixture {
     SHINBUNDANG_LINE("신분당선", "bg-red-600", 1L, 2L, 10L, 60L, 500L),
-    BUNDANG_LINE("분당선", "bg-green-600", 1L, 2L, 10L, 60L, 500L),
-    ONE_LINE("일호선", "bg-yellow-600", 1L, 2L, 10L, 60L, 500L),
-    TWO_LINE("이호선", "bg-blue-600", 1L, 2L, 10L, 60L, 500L),
-    THREE_LINE("삼호선", "bg-black-600", 1L, 2L, 10L, 60L, 500L);
+    BUNDANG_LINE("분당선", "bg-green-600", 1L, 2L, 10L, 60L, 0L),
+    ONE_LINE("일호선", "bg-yellow-600", 1L, 2L, 10L, 60L, 100L),
+    TWO_LINE("이호선", "bg-blue-600", 1L, 2L, 10L, 60L, 0L),
+    THREE_LINE("삼호선", "bg-black-600", 1L, 2L, 10L, 60L, 1500L);
 
     private final String lineName;
     private final String lineColor;
@@ -33,6 +33,6 @@ public enum LineFixture {
     }
 
     public Line toLine(long id) {
-        return new Line(id, lineName, lineColor);
+        return new Line(id, lineName, lineColor, extraFare);
     }
 }
