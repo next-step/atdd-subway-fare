@@ -140,7 +140,7 @@ public class PathStepDef implements En {
           .then().log().all().extract();
     });
 
-    Then("에러가 발생한다.", (DataTable table) -> {
+    Then("에러가 발생한다.", () -> {
       assertThat(context.response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
       assertThat(context.response.body().asString()).isEqualTo("경로를 찾을 수 없습니다.");
     });
