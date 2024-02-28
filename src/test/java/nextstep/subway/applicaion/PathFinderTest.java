@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class DijkstraPathFinderTest {
+class ShortestDistancePathFinderTest {
 
   static Station 강남역;
   static Station 역삼역;
@@ -30,7 +30,7 @@ class DijkstraPathFinderTest {
   static Station 서면역;
   static List<Section> 구간_목록;
 
-  static DijkstraPathFinder pathFinder;
+  static ShortestDistancePathFinder pathFinder;
 
   @BeforeEach
   public void setUp() {
@@ -76,7 +76,7 @@ class DijkstraPathFinderTest {
   @Test
   void 최단_경로_조회_성공() {
     // given
-    pathFinder = new DijkstraPathFinder(구간_목록, PathSearchType.DISTANCE);
+    pathFinder = new ShortestDistancePathFinder(구간_목록);
 
     // when
     final var result = pathFinder.find(매봉역, 역삼역);
@@ -101,7 +101,7 @@ class DijkstraPathFinderTest {
   @Test
   void 연결할_수_없는_경로() {
     // given
-    pathFinder = new DijkstraPathFinder(구간_목록, PathSearchType.DISTANCE);
+    pathFinder = new ShortestDistancePathFinder(구간_목록);
 
     // when
     final var result = pathFinder.find(강남역, 서면역);

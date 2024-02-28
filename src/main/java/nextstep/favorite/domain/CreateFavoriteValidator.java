@@ -1,7 +1,7 @@
 package nextstep.favorite.domain;
 
 import java.util.Collection;
-import nextstep.subway.applicaion.DijkstraPathFinder;
+import nextstep.subway.applicaion.ShortestDistancePathFinder;
 import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -18,7 +18,7 @@ public class CreateFavoriteValidator {
       throw new BusinessException("출발역과 도착역을 다르게 설정해주세요.");
     }
 
-    final var pathFinder = new DijkstraPathFinder(sections, PathSearchType.DISTANCE);
+    final var pathFinder = new ShortestDistancePathFinder(sections);
     if (!pathFinder.isPathExists(source, target)) {
       throw new BusinessException("이어지지 않는 경로입니다.");
     }

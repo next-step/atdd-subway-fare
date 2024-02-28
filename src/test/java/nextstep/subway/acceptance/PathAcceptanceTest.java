@@ -10,6 +10,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathSearchType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -139,6 +140,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .queryParam("source", source)
         .queryParam("target", target)
+        .queryParam("type", PathSearchType.DISTANCE.name())
         .when().get("/paths")
         .then().log().all().extract();
   }

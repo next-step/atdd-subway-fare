@@ -26,10 +26,7 @@ public class PathService {
         .orElseThrow(() -> new BusinessException("도착역 정보를 찾을 수 없습니다."));
 
     final var sections = sectionService.findAll();
-
-    final var pathFinder = new DijkstraPathFinder(sections, type);
-    final var path = pathFinder.find(sourceStation, targetStation)
-        .orElseThrow(() -> new BusinessException("경로를 찾을 수 없습니다."));
+    final var path = PathFinderComposite.find(sections, type, sourceStation, targetStation);
 
     return new FindPathResponse(path.getVertices(), path.getDistance());
   }
