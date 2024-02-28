@@ -30,6 +30,7 @@ public class PathStepDef implements En {
                 String stationName = columns.get("name");
                 StationCreateRequest request = new StationCreateRequest(stationName);
                 Long id = RestAssured.given().log().all()
+                        .header("Authorization", "Bearer " + context.store.get("adminAccessToken"))
                         .body(request)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .when()
@@ -55,6 +56,7 @@ public class PathStepDef implements En {
                         Long.parseLong(columns.get("extraFare"))
                 );
                 Long lineId = RestAssured.given().log().all()
+                        .header("Authorization", "Bearer " + context.store.get("adminAccessToken"))
                         .body(lineCreateRequest)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .when()
@@ -72,6 +74,7 @@ public class PathStepDef implements En {
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
+                    .로그인을_한다((String) context.store.get("adultAccessToken"))
                     .경로_조회_요청을_보낸다(params)
                     .as(ExceptionResponse.class).getMessage();
         });
@@ -87,6 +90,7 @@ public class PathStepDef implements En {
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
+                    .로그인을_한다((String) context.store.get("adultAccessToken"))
                     .경로_조회_요청을_보낸다(params)
                     .as(ExceptionResponse.class).getMessage();
         });
@@ -102,6 +106,7 @@ public class PathStepDef implements En {
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
+                    .로그인을_한다((String) context.store.get("adultAccessToken"))
                     .경로_조회_요청을_보낸다(params)
                     .as(ExceptionResponse.class).getMessage();
         });
@@ -117,6 +122,7 @@ public class PathStepDef implements En {
 
             context.message = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())
+                    .로그인을_한다((String) context.store.get("adultAccessToken"))
                     .경로_조회_요청을_보낸다(params)
                     .as(ExceptionResponse.class).getMessage();
         });
@@ -125,10 +131,12 @@ public class PathStepDef implements En {
             assertThat(context.message).isEqualTo("노선에 존재하지 않는 지하철역입니다.");
         });
 
+        // ============================
+
         When("최소 거리와 기본 요금 및 어린이 할인 요금 테스트를 위한 강남역에서 선릉역까지 최소 시간 기준으로 경로 조회를 요청한다", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 선릉역_ID = String.valueOf(context.store.get("선릉역"));
-            Map<String, String> params = Map.of("source", 강남역_ID, "target", 선릉역_ID, "type", "DISTANCE");
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 선릉역_ID, "type", "DURATION");
 
             context.response = PathSteps.경로_요청을_구성한다()
                     .Response_HTTP_상태_코드(OK.value())

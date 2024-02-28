@@ -39,18 +39,17 @@ public class PathSteps {
 
         public ExtractableResponse<Response> 경로_조회_요청을_보낸다(Map<String, ?> queryParams) {
             setAuthorization();
-            RequestSpecification requestSpecification = RestAssured.given().log().all();
-
             if (queryParams != null && !queryParams.isEmpty()) {
-                queryParams.forEach(requestSpecification::queryParam);
+                queryParams.forEach(spec::queryParam);
             }
 
-            return requestSpecification
+            return spec
                     .when().get(PREFIX_PATH)
                     .then().log().all()
                     .statusCode(statusCode)
                     .extract();
         }
+
         private void setAuthorization() {
             if (this.accessToken != null && !this.accessToken.isEmpty()) {
                 this.spec.header(AUTHORIZATION, "Bearer " + this.accessToken);
