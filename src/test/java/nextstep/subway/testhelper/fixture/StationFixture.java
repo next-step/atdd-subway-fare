@@ -15,6 +15,7 @@ public class StationFixture {
     public static final Station 교대역 = new Station(5L, "교대역");
     public static final Station 서초역 = new Station(6L, "서초역");
     public static final Station 오이도역 = new Station(7L, "오이도역");
+    public static final Station 양재역 = new Station(8L, "양재역");
     private Map<String, String> 잠실역_params;
     private Map<String, String> 강남역_params;
     private Map<String, String> 삼성역_params;

@@ -88,7 +88,8 @@ public class LineService {
                 getStation(lineRequest.getUpStationId()),
                 getStation(lineRequest.getDownStationId()),
                 lineRequest.getDistance(),
-                lineRequest.getDuration());
+                lineRequest.getDuration(),
+                lineRequest.getSurcharge());
     }
 
     private Line getLine(Long id) {

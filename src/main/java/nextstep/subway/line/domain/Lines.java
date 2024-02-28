@@ -5,6 +5,7 @@ import nextstep.subway.station.domain.Station;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Lines {
@@ -42,5 +43,23 @@ public class Lines {
         return this.lineList.stream()
                 .mapToLong(line -> line.calculateValue(source, target, type))
                 .sum();
+    }
+
+    public List<Long> findSurcharges(List<Station> shortestPath) {
+        return IntStream.range(0, shortestPath.size() - 1)
+                .mapToLong(i -> findSurcharge(shortestPath, i))
+                .boxed()
+                .collect(Collectors.toList());
+    }
+
+    private long findSurcharge(List<Station> shortestPath,
+                               int index) {
+        Station source = shortestPath.get(index);
+        Station target = shortestPath.get(index + 1);
+        return this.lineList.stream()
+                .filter(line -> line.existSection(source, target))
+                .map(Line::getSurcharge)
+                .findFirst()
+                .orElse(0L);
     }
 }

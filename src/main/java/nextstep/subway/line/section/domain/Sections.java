@@ -150,6 +150,21 @@ public class Sections {
                 .collect(Collectors.toList()));
     }
 
+    public Long calculateValue(Station source,
+                               Station target,
+                               PathType type) {
+        return this.sectionList.stream()
+                .filter(section -> section.isSameSection(source, target))
+                .map(type::findBy)
+                .reduce(0L, Long::sum);
+    }
+
+    public boolean existSection(Station source,
+                                Station target) {
+        return this.sectionList.stream()
+                .anyMatch(section -> section.isSameSection(source, target));
+    }
+
     public List<Section> getAll() {
         return this.sectionList;
     }
@@ -171,12 +186,4 @@ public class Sections {
         return Objects.hash(sectionList);
     }
 
-    public Long calculateValue(Station source,
-                               Station target,
-                               PathType type) {
-        return this.sectionList.stream()
-                .filter(section -> section.isSameUpStation(source) && section.isSameDownStation(target))
-                .map(type::findBy)
-                .reduce(0L, Long::sum);
-    }
 }

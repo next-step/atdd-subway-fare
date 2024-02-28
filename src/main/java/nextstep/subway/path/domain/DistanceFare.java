@@ -1,6 +1,6 @@
 package nextstep.subway.path.domain;
 
-public enum Fare {
+public enum DistanceFare {
 
     UP_TO_10(0, 10, 0, 0),
     FROM_10_TO_50(10, 50, 5, 100),
@@ -11,10 +11,10 @@ public enum Fare {
     private final int distanceUnit;
     private final int unitFare;
 
-    Fare(int startDistance,
-         int endDistance,
-         int distanceUnit,
-         int unitFare) {
+    DistanceFare(int startDistance,
+                 int endDistance,
+                 int distanceUnit,
+                 int unitFare) {
         this.startDistance = startDistance;
         this.endDistance = endDistance;
         this.distanceUnit = distanceUnit;

@@ -23,6 +23,14 @@ public class PathStepDef implements En {
             context.response = PathApiCaller.경로_조회(new PathRequest(sourceId, targetId, PathType.valueOf(type).toString()));
         });
 
+        Given("로그인 후 {string}과 {string}의 {string}경로를 조회하면", (String source, String target, String type) -> {
+            Long sourceId = ((StationResponse) context.store.get(source)).getId();
+            Long targetId = ((StationResponse) context.store.get(target)).getId();
+            String token = (String) context.store.get("token");
+            context.response = PathApiCaller.경로_조회(token, new PathRequest(sourceId, targetId,
+                    PathType.valueOf(type).toString()));
+        });
+
         Then("{string} 경로가 조회된다", (String pathString) -> {
             List<String> split = List.of(pathString.split(","));
             assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));
