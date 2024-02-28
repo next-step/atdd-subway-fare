@@ -30,7 +30,7 @@ public class PathStepDef implements En {
       }
     });
 
-    Given("지하철 노선을 생성하고", (DataTable table) -> {
+    And("지하철 노선을 생성하고", (DataTable table) -> {
       for (Map<String, String> map : table.asMaps()) {
         String name = map.get("name");
         String color = map.get("color");
@@ -51,7 +51,7 @@ public class PathStepDef implements En {
       }
     });
 
-    Given("지하철 노선의 구간들을 생성하고", (DataTable table) -> {
+    And("지하철 노선의 구간들을 생성한다", (DataTable table) -> {
       for (Map<String, String> map : table.asMaps()) {
         String name = map.get("name");
         String upStationName = map.get("upStationName");
@@ -69,15 +69,50 @@ public class PathStepDef implements En {
       }
     });
 
-    When("{string}과 {string}의 최단 거 경로를 조회하면", (String source, String target) -> {
+    /**
+     * 최단 거리 경로 조회 성공
+     */
+    When("{string}과 {string}의 최단 거리 경로를 조회하면", (String source, String target) -> {
       context.response = RestAssured
           .given().log().all()
           .accept(MediaType.APPLICATION_JSON_VALUE)
-          .when().get("/paths?source={sourceId}&target={targetId}", context.store.get(source), context.store.get(target))
+          .when().get(
+              "/paths?source={sourceId}&target={targetId}&type={type}",
+              context.store.get(source),
+              context.store.get(target),
+              "DISTANCE"  // TODO enum
+          )
           .then().log().all().extract();
     });
 
     Then("두 역을 잇는 경로 중 거리가 가장 짧은 경로를 반환한다.", (DataTable table) -> {
+      List<List<String>> rows = table.asLists(String.class);
+
+      List<Long> expected = rows.stream()
+          .map(it -> it.get(0))
+          .map(it -> (Long) context.store.get(it))
+          .collect(Collectors.toList());
+
+      assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
+    });
+
+    /**
+     * 최단 시간 경로 조회 성공
+     */
+    When("{string}과 {string}의 최단 시간 경로를 조회하면", (String source, String target) -> {
+      context.response = RestAssured
+          .given().log().all()
+          .accept(MediaType.APPLICATION_JSON_VALUE)
+          .when().get(
+              "/paths?source={sourceId}&target={targetId}&type={type}",
+              context.store.get(source),
+              context.store.get(target),
+              "DURATION"  // TODO enum
+          )
+          .then().log().all().extract();
+    });
+
+    Then("두 역을 잇는 경로 중 소요시간이 가장 짧은 경로를 반환한다.", (DataTable table) -> {
       List<List<String>> rows = table.asLists(String.class);
 
       List<Long> expected = rows.stream()
