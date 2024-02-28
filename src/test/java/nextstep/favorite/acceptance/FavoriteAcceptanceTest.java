@@ -39,7 +39,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
   public void setUp() {
     강남역 = StationSteps.지하철역_생성("강남역");
     양재역 = StationSteps.지하철역_생성("양재역");
-    LineSteps.지하철_노선_생성("신분당선", "빨강", 강남역.getId(), 양재역.getId(), 10);
+    LineSteps.지하철_노선_생성("신분당선", "빨강", 강남역.getId(), 양재역.getId(), 10, 10);
 
 
     회원_생성_요청(EMAIL, PASSWORD, 10);

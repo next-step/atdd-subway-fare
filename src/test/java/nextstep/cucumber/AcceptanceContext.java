@@ -14,6 +14,10 @@ public class AcceptanceContext {
   public Map<String, Object> store = new HashMap<>();
   public ExtractableResponse<Response> response;
 
+  public Long getLong(final String key) {
+    return (Long) store.get(key);
+  }
+
   public void clear() {
     store.clear();
     response = null;

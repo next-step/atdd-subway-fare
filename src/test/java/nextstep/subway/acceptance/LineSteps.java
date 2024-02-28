@@ -14,7 +14,8 @@ public class LineSteps {
         final String color,
         final Long upStationId,
         final Long downStationId,
-        final int distance
+        final int distance,
+        final int duration
     ) {
         final var params = new HashMap<>();
         params.put("name", name);
@@ -22,6 +23,7 @@ public class LineSteps {
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
         return RestAssured
             .given()
             .body(params)
@@ -61,11 +63,12 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance) {
+    public static ExtractableResponse<Response> 지하철_구간_생성_요청(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
         Map<String, String> params = new HashMap<>();
         params.put("upStationId", upStationId + "");
         params.put("downStationId", downStationId + "");
         params.put("distance", distance + "");
+        params.put("duration", duration + "");
         return RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(params)

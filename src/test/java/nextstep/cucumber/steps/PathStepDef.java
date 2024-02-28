@@ -37,8 +37,16 @@ public class PathStepDef implements En {
         String upStationName = map.get("upStationName");
         String downStationName = map.get("downStationName");
         int distance = Integer.parseInt(map.get("distance"));
+        int duration = Integer.parseInt(map.get("duration"));
 
-        Long lineId = 지하철_노선_생성(name, color, (Long) context.store.get(upStationName), (Long) context.store.get(downStationName), distance).getId();
+        Long lineId = 지하철_노선_생성(
+            name,
+            color,
+            context.getLong(upStationName),
+            context.getLong(downStationName),
+            distance,
+            duration
+        ).getId();
         context.store.put(name, lineId);
       }
     });
@@ -49,12 +57,19 @@ public class PathStepDef implements En {
         String upStationName = map.get("upStationName");
         String downStationName = map.get("downStationName");
         int distance = Integer.parseInt(map.get("distance"));
+        int duration = Integer.parseInt(map.get("duration"));
 
-        지하철_구간_생성_요청((Long) context.store.get(name), (Long) context.store.get(upStationName), (Long) context.store.get(downStationName), distance);
+        지하철_구간_생성_요청(
+            context.getLong(name),
+            context.getLong(upStationName),
+            context.getLong(downStationName),
+            distance,
+            duration
+        );
       }
     });
 
-    When("{string}과 {string}의 경로를 조회하면", (String source, String target) -> {
+    When("{string}과 {string}의 최단 거 경로를 조회하면", (String source, String target) -> {
       context.response = RestAssured
           .given().log().all()
           .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -62,7 +77,7 @@ public class PathStepDef implements En {
           .then().log().all().extract();
     });
 
-    Then("두 역을 잇는 가장 짧은 경로를 반환한다.", (DataTable table) -> {
+    Then("두 역을 잇는 경로 중 거리가 가장 짧은 경로를 반환한다.", (DataTable table) -> {
       List<List<String>> rows = table.asLists(String.class);
 
       List<Long> expected = rows.stream()
