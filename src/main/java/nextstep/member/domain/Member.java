@@ -51,7 +51,7 @@ public class Member {
 
     public long discountExtraFare(long fare) {
         FareAgeGroup fareAgeGroup = FareAgeGroup.of(age);
-        return fareAgeGroup.calculateFare(fare);
+        return fareAgeGroup.calculateDiscountFare(fare);
     }
 
 }

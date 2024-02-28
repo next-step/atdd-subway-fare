@@ -11,13 +11,13 @@ import java.util.List;
 public class LineCreateRequest {
     private String name;
     private String color;
-    private long extraFare;
     @NotNull
     private Long upStationId;
     @NotNull
     private Long downStationId;
     private long distance;
     private long duration;
+    private long extraFare;
 
     public LineCreateRequest() {
     }
