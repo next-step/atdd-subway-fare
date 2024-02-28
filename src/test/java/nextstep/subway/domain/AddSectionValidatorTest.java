@@ -16,13 +16,13 @@ class AddSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 3);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // when
     final var throwable = catchThrowable(() ->
         AddSectionValidator.validate(
             sections,
-            new Section(null, stations.get(1), stations.get(2), 5))
+            new Section(null, stations.get(1), stations.get(2), 5, 5))
     );
 
     // then
@@ -35,13 +35,13 @@ class AddSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 2);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // when
     final var throwable = catchThrowable(() ->
         AddSectionValidator.validate(
             sections,
-            new Section(null, stations.get(0), stations.get(1), 3))
+            new Section(null, stations.get(0), stations.get(1), 3, 5))
     );
 
     // then
@@ -55,13 +55,13 @@ class AddSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // when
     final var throwable = catchThrowable(() ->
         AddSectionValidator.validate(
             sections,
-            new Section(null, stations.get(2), stations.get(3), 5)
+            new Section(null, stations.get(2), stations.get(3), 5, 5)
         )
     );
 
@@ -76,14 +76,14 @@ class AddSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
-    sections.addSection(new Section(null, stations.get(1), stations.get(3), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
+    sections.addSection(new Section(null, stations.get(1), stations.get(3), 5, 5));
 
     // when
     final var throwable = catchThrowable(() ->
         AddSectionValidator.validate(
             sections,
-            new Section(null, stations.get(1), stations.get(2), 6)
+            new Section(null, stations.get(1), stations.get(2), 6, 6)
         )
     );
 

@@ -73,8 +73,8 @@ class FavoriteServiceTest {
     서면역 = 역_생성("서면역");
     남포역 = 역_생성("남포역");
     구간목록 = List.of(
-      구간_생성(신분당선, 강남역, 양재역, 10),
-      구간_생성(부산1호선, 서면역, 남포역, 5)
+      구간_생성(신분당선, 강남역, 양재역, 10, 10),
+      구간_생성(부산1호선, 서면역, 남포역, 5, 5)
     );
 
     멤버 = 멤버_생성();
@@ -218,8 +218,8 @@ class FavoriteServiceTest {
     return stationRepository.save(new Station(name));
   }
 
-  private Section 구간_생성(Line line, Station upStation, Station downStation, int distance) {
-    return sectionRepository.save(new Section(line, upStation, downStation, distance));
+  private Section 구간_생성(Line line, Station upStation, Station downStation, int distance, int duration) {
+    return sectionRepository.save(new Section(line, upStation, downStation, distance, duration));
   }
 
   private Line 노선_생성(String name, String color) {

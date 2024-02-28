@@ -47,8 +47,8 @@ class PathServiceTest {
     서면역 = FixtureUtil.getFixture(Station.class);
     남포역 = FixtureUtil.getFixture(Station.class);
     구간_목록 = List.of(
-        구간을_생성(강남역, 역삼역, 10),
-        구간을_생성(서면역, 남포역, 5)
+        구간을_생성(강남역, 역삼역, 10, 10),
+        구간을_생성(서면역, 남포역, 5, 5)
     );
     경로 = FixtureUtil.getFixture(Path.class);
   }
@@ -129,7 +129,7 @@ class PathServiceTest {
         .hasMessageContaining( "출발역과 도착역이 같습니다.");
   }
 
-  private static Section 구간을_생성(Station upStation, Station downStation, int distance) {
-    return new Section(null, upStation, downStation, distance);
+  private static Section 구간을_생성(Station upStation, Station downStation, int distance, int duration) {
+    return new Section(null, upStation, downStation, distance, duration);
   }
 }

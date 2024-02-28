@@ -16,7 +16,7 @@ class SectionsTest {
     final var sections = new Sections();
 
     // when
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // then
     assertThat(sections.size()).isEqualTo(1);
@@ -31,11 +31,11 @@ class SectionsTest {
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
     for (int i = 2; i < stations.size(); i++) {
-      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5));
+      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5, 5));
     }
 
     // when
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // then
     assertThat(sections.size()).isEqualTo(stations.size() - 1);
@@ -51,12 +51,12 @@ class SectionsTest {
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
 
-    sections.addSection(new Section(null, stations.get(0), stations.get(2), 5));
-    sections.addSection(new Section(null, stations.get(2), stations.get(3), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(2), 5, 5));
+    sections.addSection(new Section(null, stations.get(2), stations.get(3), 5, 5));
 
 
     // when
-    sections.addSection(new Section(null, stations.get(1), stations.get(2), 3));
+    sections.addSection(new Section(null, stations.get(1), stations.get(2), 3, 3));
 
     // then
     assertThat(sections.size()).isEqualTo(stations.size() - 1);
@@ -72,11 +72,11 @@ class SectionsTest {
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
     for (int i = 1; i < stations.size() - 1; i++) {
-      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5));
+      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5, 5));
     }
 
     // when
-    sections.addSection(new Section(null, stations.get(stations.size() - 2), stations.get(stations.size() - 1), 5));
+    sections.addSection(new Section(null, stations.get(stations.size() - 2), stations.get(stations.size() - 1), 5, 5));
 
     // then
     assertThat(sections.size()).isEqualTo(stations.size() - 1);
@@ -92,7 +92,7 @@ class SectionsTest {
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
     for (int i = 1; i < stations.size(); i++) {
-      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5));
+      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5, 5));
     }
 
     // when
@@ -112,7 +112,7 @@ class SectionsTest {
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
     for (int i = 1; i < stations.size(); i++) {
-      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5));
+      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5, 5));
     }
 
     // when
@@ -131,7 +131,7 @@ class SectionsTest {
     final var stations = FixtureUtil.getFixtures(Station.class, 4);
     final var sections = new Sections();
     for (int i = 1; i < stations.size(); i++) {
-      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5));
+      sections.addSection(new Section(null, stations.get(i - 1), stations.get(i), 5, 5));
     }
 
     // when

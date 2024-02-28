@@ -41,11 +41,15 @@ public class Section implements Comparable<Section> {
     @Column(nullable = false)
     private int distance;
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    @Column(nullable = false)
+    private int duration;
+
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     /**
