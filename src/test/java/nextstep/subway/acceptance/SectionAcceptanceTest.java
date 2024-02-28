@@ -2,7 +2,7 @@ package nextstep.subway.acceptance;
 
 import static nextstep.subway.acceptance.LineSteps.지하철_구간_생성_요청;
 import static nextstep.subway.acceptance.LineSteps.지하철_구간_제거_요청;
-import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성_요청;
+import static nextstep.subway.acceptance.LineSteps.지하철_노선_생성;
 import static nextstep.subway.acceptance.LineSteps.지하철_노선_조회_요청;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,9 +34,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
         강남역 = 지하철역_생성("강남역").getId();
         양재역 = 지하철역_생성("양재역").getId();
-
-        Map<String, String> lineCreateParams = createLineCreateParams(강남역, 양재역, 10, 10);
-        신분당선 = 지하철_노선_생성_요청(lineCreateParams).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성("신분당선", "bg-red-600", 강남역, 양재역, 10, 10).getId();
     }
 
     /**
@@ -48,7 +46,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void 지하철_노선에_구간_추가_노선의_맨_뒤에_새로운_구간_추가() {
         // when
         final var 정자역 = 지하철역_생성("정자역").getId();
-        final var response = 지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 정자역, 5, 5));
+        final var response = 지하철_구간_생성_요청(신분당선, 양재역, 정자역, 5, 5);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -66,7 +64,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void 지하철_노선에_구간_추가_노선의_중간에_새로운_구간_추가() {
         // when
         final var  정자역 = 지하철역_생성("정자역").getId();
-        final var response = 지하철_구간_생성_요청(신분당선, createSectionCreateParams(정자역, 양재역, 5, 5));
+        final var response = 지하철_구간_생성_요청(신분당선, 정자역, 양재역, 5, 5);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -87,7 +85,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         final var 첫번째역 = StationSteps.지하철역_생성("강남역");
         final var 두번째역 = StationSteps.지하철역_생성("논현역");
 
-        final var 노선 = LineSteps.지하철_노선_생성("신분당선", "빨강", 첫번째역.getId(), 두번째역.getId(), 10, 10);
+        final var 노선 = 지하철_노선_생성("신분당선", "빨강", 첫번째역.getId(), 두번째역.getId(), 10, 10);
 
         // when
         final var params = Map.of(
@@ -119,7 +117,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         final var 첫번째역 = StationSteps.지하철역_생성("강남역");
         final var 두번째역 = StationSteps.지하철역_생성("논현역");
 
-        final var 노선 = LineSteps.지하철_노선_생성("신분당선", "빨강", 첫번째역.getId(), 두번째역.getId(), 10, 10);
+        final var 노선 = 지하철_노선_생성("신분당선", "빨강", 첫번째역.getId(), 두번째역.getId(), 10, 10);
 
         final var 세번째역 = StationSteps.지하철역_생성("정자역");
         final var 네번째역 = StationSteps.지하철역_생성("판교역");
@@ -153,7 +151,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         final var 정자역 = 지하철역_생성("정자역").getId();
 
         // when
-        final var response = 지하철_구간_생성_요청(신분당선, createSectionCreateParams(정자역, 양재역, 10, 10));
+        final var response = 지하철_구간_생성_요청(신분당선, 정자역, 양재역, 10, 10);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -170,7 +168,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
     void 지하철_노선에_구간_제거_마지막_구간_제거() {
         // given
         Long 정자역 = 지하철역_생성("정자역").getId();
-        지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 정자역, 5, 5));
+        지하철_구간_생성_요청(신분당선, 양재역, 정자역, 5, 5);
 
         // when
         final var response = 지하철_구간_제거_요청(신분당선, 정자역);
@@ -193,8 +191,8 @@ class SectionAcceptanceTest extends AcceptanceTest {
         // given
         Long 정자역 = 지하철역_생성("정자역").getId();
         Long 광교역 = 지하철역_생성("광교역").getId();
-        지하철_구간_생성_요청(신분당선, createSectionCreateParams(양재역, 정자역, 10, 10));
-        지하철_구간_생성_요청(신분당선, createSectionCreateParams(정자역, 광교역, 10, 10));
+        지하철_구간_생성_요청(신분당선, 양재역, 정자역, 10, 10);
+        지하철_구간_생성_요청(신분당선, 정자역, 광교역, 10, 10);
 
         // when
         final var response = 지하철_구간_제거_요청(신분당선, 양재역);
@@ -244,26 +242,5 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
         final var result = 지하철_노선_조회_요청(신분당선);
         assertThat(result.jsonPath().getList("stations.id", Long.class)).containsExactly(강남역, 양재역);
-    }
-
-    private Map<String, String> createLineCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> lineCreateParams;
-        lineCreateParams = new HashMap<>();
-        lineCreateParams.put("name", "신분당선");
-        lineCreateParams.put("color", "bg-red-600");
-        lineCreateParams.put("upStationId", upStationId + "");
-        lineCreateParams.put("downStationId", downStationId + "");
-        lineCreateParams.put("distance", distance + "");
-        lineCreateParams.put("duration", duration + "");
-        return lineCreateParams;
-    }
-
-    private Map<String, String> createSectionCreateParams(Long upStationId, Long downStationId, int distance, int duration) {
-        Map<String, String> params = new HashMap<>();
-        params.put("upStationId", upStationId + "");
-        params.put("downStationId", downStationId + "");
-        params.put("distance", distance + "");
-        params.put("duration", duration + "");
-        return params;
     }
 }
