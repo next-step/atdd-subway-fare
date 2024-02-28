@@ -26,10 +26,6 @@ public class PathService {
     private final PathFinder pathFinder;
     private final FareHandlerFactory fareHandlerFactory;
 
-    /**
-     * TODO: 노선 정보 어떻게 찾지..?
-     * Sections 사용하면 될듯
-     */
     public PathResponse findPaths(LoginMember loginMember, Long sourceId, Long targetId, String pathType) {
         Station source = stationRepository.getBy(sourceId);
         Station target = stationRepository.getBy(targetId);
