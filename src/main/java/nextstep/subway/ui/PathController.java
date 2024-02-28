@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.FindPathResponse;
+import nextstep.subway.domain.PathSearchType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +22,10 @@ public class PathController {
   @GetMapping
   public ResponseEntity<FindPathResponse> findPath(
       @NotNull(message = "출발역 정보를 입력해주세요.") Long source,
-      @NotNull(message = "도착역 정보를 입력해주세요.") Long target
+      @NotNull(message = "도착역 정보를 입력해주세요.") Long target,
+      PathSearchType type
   ) {
-    return ResponseEntity.ok().body(pathService.findPath(source, target));
+    return ResponseEntity.ok().body(pathService.findPath(source, target, type));
   }
 
 }

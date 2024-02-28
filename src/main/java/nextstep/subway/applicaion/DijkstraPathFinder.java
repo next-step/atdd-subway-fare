@@ -3,6 +3,7 @@ package nextstep.subway.applicaion;
 import java.util.Collection;
 import java.util.Optional;
 import nextstep.subway.domain.PathFinder;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.vo.Path;
@@ -14,12 +15,12 @@ public class DijkstraPathFinder implements PathFinder {
 
   private final WeightedMultigraph<Station, DefaultWeightedEdge> graph;
 
-  public DijkstraPathFinder(Collection<Section> sections) {
-    graph = buildGraph(sections);
+  public DijkstraPathFinder(final Collection<Section> sections, final PathSearchType type) {
+    graph = buildGraph(sections, type);
   }
 
   @Override
-  public Optional<Path> find(Station source, Station target) {
+  public Optional<Path> find(final Station source, final Station target) {
     verifyRequiredArguments(source, target);
 
     final var path = new DijkstraShortestPath<>(graph).getPath(source, target);
@@ -45,7 +46,8 @@ public class DijkstraPathFinder implements PathFinder {
   }
 
   private static WeightedMultigraph<Station, DefaultWeightedEdge> buildGraph(
-      final Collection<Section> sections
+      final Collection<Section> sections,
+      final PathSearchType type
   ) {
     if (sections == null) {
       throw new IllegalArgumentException("구간 정보가 없습니다.");
@@ -60,7 +62,13 @@ public class DijkstraPathFinder implements PathFinder {
 
       // add edge
       final var edge = graph.addEdge(section.getUpStation(), section.getDownStation());
-      graph.setEdgeWeight(edge, section.getDistance());
+
+      if (PathSearchType.DISTANCE.equals(type)) {
+        graph.setEdgeWeight(edge, section.getDistance());
+      } else {
+        graph.setEdgeWeight(edge, section.getDuration());
+      }
+
     });
 
     return graph;

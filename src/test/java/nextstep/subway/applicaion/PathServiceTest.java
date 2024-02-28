@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.vo.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -62,7 +63,7 @@ class PathServiceTest {
     when(sectionService.findAll()).thenReturn(구간_목록);
 
     // when
-    final var result = pathService.findPath(강남역.getId(), 역삼역.getId());
+    final var result = pathService.findPath(강남역.getId(), 역삼역.getId(), PathSearchType.DISTANCE);
 
     // then
     assertThat(
@@ -82,7 +83,7 @@ class PathServiceTest {
     when(sectionService.findAll()).thenReturn(구간_목록);
 
     // when
-    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 서면역.getId()));
+    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 서면역.getId(), PathSearchType.DISTANCE));
 
     // then
     assertThat(throwable).isInstanceOf(BusinessException.class)
@@ -96,7 +97,7 @@ class PathServiceTest {
     when(stationService.getStation(강남역.getId())).thenReturn(Optional.empty());
 
     // when
-    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 역삼역.getId()));
+    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 역삼역.getId(), PathSearchType.DISTANCE));
 
     // then
     assertThat(throwable).isInstanceOf(BusinessException.class)
@@ -111,7 +112,7 @@ class PathServiceTest {
     when(stationService.getStation(역삼역.getId())).thenReturn(Optional.empty());
 
     // when
-    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 역삼역.getId()));
+    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 역삼역.getId(), PathSearchType.DISTANCE));
 
     // then
     assertThat(throwable).isInstanceOf(BusinessException.class)
@@ -122,7 +123,7 @@ class PathServiceTest {
   @Test
   void 출발역과_도착역이_같음() {
     // when
-    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 강남역.getId()));
+    final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 강남역.getId(), PathSearchType.DISTANCE));
 
     // then
     assertThat(throwable).isInstanceOf(BusinessException.class)

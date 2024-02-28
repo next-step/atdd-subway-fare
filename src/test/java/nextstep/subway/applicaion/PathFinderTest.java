@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.stream.Collectors;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.utils.FixtureUtil;
@@ -69,13 +70,14 @@ class DijkstraPathFinderTest {
         지하철_구간_생성(매봉역, 도곡역, 1),
         지하철_구간_생성(남포역, 서면역, 5)
     );
-
-    pathFinder = new DijkstraPathFinder(구간_목록);
   }
 
   @DisplayName("최단 경로 조회 성공")
   @Test
   void 최단_경로_조회_성공() {
+    // given
+    pathFinder = new DijkstraPathFinder(구간_목록, PathSearchType.DISTANCE);
+
     // when
     final var result = pathFinder.find(매봉역, 역삼역);
 
@@ -98,6 +100,9 @@ class DijkstraPathFinderTest {
   @DisplayName("연결할 수 없는 경로")
   @Test
   void 연결할_수_없는_경로() {
+    // given
+    pathFinder = new DijkstraPathFinder(구간_목록, PathSearchType.DISTANCE);
+
     // when
     final var result = pathFinder.find(강남역, 서면역);
 

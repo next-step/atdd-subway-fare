@@ -2,6 +2,7 @@ package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.applicaion.dto.FindPathResponse;
+import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.ui.BusinessException;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,11 @@ public class PathService {
   private final SectionService sectionService;
   private final StationService stationService;
 
-  public FindPathResponse findPath(Long source, Long target) {
+  public FindPathResponse findPath(
+      final Long source,
+      final Long target,
+      final PathSearchType type
+  ) {
     verifySourceIsSameToTarget(source, target);
 
     final var sourceStation = stationService.getStation(source)
@@ -22,7 +27,7 @@ public class PathService {
 
     final var sections = sectionService.findAll();
 
-    final var pathFinder = new DijkstraPathFinder(sections);
+    final var pathFinder = new DijkstraPathFinder(sections, type);
     final var path = pathFinder.find(sourceStation, targetStation)
         .orElseThrow(() -> new BusinessException("경로를 찾을 수 없습니다."));
 
