@@ -21,14 +21,15 @@ public class PathFacade {
 	private final FareCalculationService fareCalculationService;
 
 	public PathResponse findPath(Long source, Long target, PathRequestType type) {
+		PathInfo pathInfo = getPathInfo(source, target, type);
+		FareInfo fareInfo = fareCalculationService.calculate(pathInfo);
+		return PathResponse.of(pathInfo, fareInfo);
+	}
 
-		if(PathRequestType.isDistance(type)){
-			PathInfo shortestPath = pathService.findShortestPath(source, target);
-			FareInfo fareInfo = fareCalculationService.calculate(shortestPath.getDistance());
-			return PathResponse.of(shortestPath, fareInfo);
+	private PathInfo getPathInfo(Long source, Long target, PathRequestType type) {
+		if (PathRequestType.isDistance(type)) {
+			return pathService.findShortestPath(source, target);
 		}
-		PathInfo minimumDurationPath = pathService.findMinimumDurationPath(source, target);
-		FareInfo fareInfo = fareCalculationService.calculate(minimumDurationPath.getDistance());
-		return PathResponse.of(minimumDurationPath, fareInfo);
+		return pathService.findMinimumDurationPath(source, target);
 	}
 }

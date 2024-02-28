@@ -20,7 +20,6 @@ import nextstep.api.subway.domain.model.vo.Path;
 import nextstep.api.subway.domain.operators.LineResolver;
 import nextstep.api.subway.domain.operators.StationResolver;
 import nextstep.api.subway.infrastructure.operators.DijkstraBasedShortestPathFinder;
-import nextstep.api.subway.interfaces.dto.response.PathResponse;
 import nextstep.common.exception.subway.PathNotValidException;
 
 /**
@@ -53,7 +52,7 @@ class SimplePathServiceTest {
 		given(stationResolver.fetchOptional(1L)).willReturn(Optional.of(sourceStation));
 		given(stationResolver.fetchOptional(2L)).willReturn(Optional.of(targetStation));
 		given(lineResolver.fetchAll()).willReturn(new ArrayList<>());
-		given(pathFinder.findShortestPath(eq(sourceStation), eq(targetStation), anyList())).willReturn(Path.of(Arrays.asList(sourceStation, targetStation), 10L, null) );
+		given(pathFinder.findShortestPathByLines(eq(sourceStation), eq(targetStation), anyList())).willReturn(Path.of(Arrays.asList(sourceStation, targetStation), null,10L, null) );
 
 		// when
 		PathInfo result = simplePathService.findShortestPath(1L, 2L);

@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nextstep.api.subway.domain.dto.outport.FareInfo;
 import nextstep.api.subway.domain.dto.outport.PathInfo;
-import nextstep.api.subway.domain.model.vo.Path;
-import nextstep.api.subway.domain.operators.FareCalculator;
 import nextstep.common.mapper.ModelMapperBasedObjectMapper;
 
 /**

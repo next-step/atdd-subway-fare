@@ -1,6 +1,7 @@
 package nextstep.api.subway.domain.operators;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -19,12 +20,22 @@ public class FareCalculator {
 	private static final int SECOND_INCREMENT = 8; // km
 	private static final int ADDITIONAL_FARE = 100; // won
 
-	// 노선별 추가 요금을 관리하는 맵 (임시 하드코딩)
+	/**
+	 * 노선별 추가 요금을 관리하는 맵 -> 하드코딩으로 구현
+	 */
 	private static final Map<Long, Integer> LINE_ADDITIONAL_FARES = new HashMap<>();
 
 	static {
-		LINE_ADDITIONAL_FARES.put(1L, 900);
-		// 다른 노선에 대한 추가 요금도 이곳에 추가...
+		LINE_ADDITIONAL_FARES.put(1L, 200);
+		LINE_ADDITIONAL_FARES.put(2L, 500);
+		LINE_ADDITIONAL_FARES.put(3L, 900);
+		LINE_ADDITIONAL_FARES.put(4L, 1200);
+	}
+
+	public int calculateFareWithLineCharges(long distance, List<Long> lineIds) {
+		int fare = calculateFare(distance);
+		int highestAdditionalFare = findHighestAdditionalFare(lineIds);
+		return fare + highestAdditionalFare;
 	}
 
 	public  int calculateFare(long distance) {
@@ -43,8 +54,15 @@ public class FareCalculator {
 		return (int) ((Math.ceil((double) distance / increment)) * ADDITIONAL_FARE);
 	}
 
-	// 노선별 추가 요금 계산
+	private int findHighestAdditionalFare(List<Long> lineIds) {
+		return lineIds.stream()
+			.mapToInt(this::calculateAdditionalLineFare)
+			.max()
+			.orElse(0);
+	}
+
 	private int calculateAdditionalLineFare(Long lineId) {
 		return LINE_ADDITIONAL_FARES.getOrDefault(lineId, 0);
 	}
+
 }

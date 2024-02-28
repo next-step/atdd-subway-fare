@@ -1,7 +1,6 @@
 package nextstep.api.subway.domain.service;
 
 import nextstep.api.subway.domain.dto.outport.PathInfo;
-import nextstep.api.subway.interfaces.dto.response.PathResponse;
 
 /**
  * @author : Rene Choi

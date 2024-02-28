@@ -1,7 +1,6 @@
 package nextstep.api.subway.domain.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,14 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import nextstep.api.subway.domain.dto.outport.PathInfo;
 import nextstep.api.subway.domain.model.entity.Line;
-import nextstep.api.subway.domain.model.entity.Section;
 import nextstep.api.subway.domain.model.entity.Station;
 import nextstep.api.subway.domain.operators.LineResolver;
 import nextstep.api.subway.domain.operators.StationResolver;
 import nextstep.api.subway.domain.service.PathService;
 import nextstep.api.subway.infrastructure.operators.DijkstraBaseMinimunDurationPathFinder;
 import nextstep.api.subway.infrastructure.operators.DijkstraBasedShortestPathFinder;
-import nextstep.api.subway.interfaces.dto.response.PathResponse;
 import nextstep.common.exception.subway.PathNotValidException;
 
 /**
@@ -58,13 +55,7 @@ public class SimplePathService implements PathService {
 
 		List<Line> lines = lineResolver.fetchAll();
 
-		List<Section> sections = lines.stream()
-			.filter(line -> line.isContainsAnyStation(source, target))
-			.map(Line::parseSections)
-			.flatMap(java.util.Collection::stream)
-			.collect(Collectors.toList());
-
-		return PathInfo.from(dijkstraBasedShortestPathFinder.findShortestPath(sourceStation, targetStation, sections));
+		return PathInfo.from(dijkstraBasedShortestPathFinder.findShortestPathByLines(sourceStation, targetStation, lines));
 	}
 
 	@Override
@@ -78,13 +69,8 @@ public class SimplePathService implements PathService {
 
 		List<Line> lines = lineResolver.fetchAll();
 
-		List<Section> sections = lines.stream()
-			.filter(line -> line.isContainsAnyStation(source, target))
-			.map(Line::parseSections)
-			.flatMap(java.util.Collection::stream)
-			.collect(Collectors.toList());
-
-		return PathInfo.from(dijkstraBaseMinimunDurationPathFinder.findShortestPath(sourceStation, targetStation, sections));
+		return PathInfo.from(dijkstraBaseMinimunDurationPathFinder.findShortestPathByLines(sourceStation, targetStation, lines));
 	}
+
 
 }

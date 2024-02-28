@@ -41,7 +41,7 @@ class DijkstraBasedShortestPathFinderTest {
 		List<Section> sections = Arrays.asList(section1, section2);
 
 		// When
-		Path result = dijkstraBasedShortestPathFinder.findShortestPath(station1, station3, sections);
+		Path result = dijkstraBasedShortestPathFinder.findShortestPathBySections(station1, station3, sections);
 
 		// Then
 		assertNotNull(result);
@@ -76,7 +76,7 @@ class DijkstraBasedShortestPathFinderTest {
 		List<Section> sections = Arrays.asList(section1, section2, section3, section4, section5);
 
 		// When
-		Path result = dijkstraBasedShortestPathFinder.findShortestPath(station1, station4, sections);
+		Path result = dijkstraBasedShortestPathFinder.findShortestPathBySections(station1, station4, sections);
 
 		// Then
 		assertNotNull(result);
@@ -119,7 +119,7 @@ class DijkstraBasedShortestPathFinderTest {
 		List<Section> sections = Arrays.asList(section1, section2, section3, section4, section5, section6, section7);
 
 		// When
-		Path result = dijkstraBasedShortestPathFinder.findShortestPath(station1, station5, sections);
+		Path result = dijkstraBasedShortestPathFinder.findShortestPathBySections(station1, station5, sections);
 
 		// Then
 		assertNotNull(result);
@@ -139,7 +139,7 @@ class DijkstraBasedShortestPathFinderTest {
 
 		// When & Then
 		assertDoesNotThrow(() -> {
-			Path result = dijkstraBasedShortestPathFinder.findShortestPath(station1, station2, sections);
+			Path result = dijkstraBasedShortestPathFinder.findShortestPathBySections(station1, station2, sections);
 			assertNotNull(result);
 			assertTrue(result.getStations().containsAll(Arrays.asList(station1, station2)));
 		}, "두 역 사이에 경로가 존재해야 한다.");
@@ -158,7 +158,7 @@ class DijkstraBasedShortestPathFinderTest {
 
 		// When & Then
 		assertThrows(PathNotValidException.class, () -> {
-			dijkstraBasedShortestPathFinder.findShortestPath(station1, station3, sections);
+			dijkstraBasedShortestPathFinder.findShortestPathBySections(station1, station3, sections);
 		}, "두 역 사이에 경로가 존재하지 않으면 PathNotValidException 예외가 발생해야 한다.");
 	}
 

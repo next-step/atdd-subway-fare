@@ -8,13 +8,15 @@ import lombok.Setter;
 
 /**
  * @author : Rene Choi
- * @since : 2024/02/27
+ * @since : 2024/02/28
  */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
-public class FareInfo {
-	int fareAmount;
+public class LineInfo {
+	private Long id;
+	private String name;
+	private String color;
 }

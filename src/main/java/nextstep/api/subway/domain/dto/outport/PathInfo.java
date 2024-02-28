@@ -1,6 +1,7 @@
 package nextstep.api.subway.domain.dto.outport;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +23,17 @@ import nextstep.common.mapper.ModelMapperBasedObjectMapper;
 public class PathInfo {
 
 	private List<StationInfo> stations;
+	private List<LineInfo> lines;
 	private Long distance;
 	private Long duration;
 
 	public static PathInfo from(Path path) {
 		return ModelMapperBasedObjectMapper.convert(path, PathInfo.class);
+	}
+
+	public List<Long> getLineIds(){
+		return this.lines.stream()
+			.map(LineInfo::getId)
+			.collect(Collectors.toList());
 	}
 }
