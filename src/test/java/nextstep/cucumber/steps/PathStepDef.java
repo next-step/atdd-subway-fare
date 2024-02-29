@@ -24,22 +24,20 @@ public class PathStepDef implements En {
 
   public PathStepDef() {
     Given("지하철 역을 생성하고", (DataTable table) -> {
-      List<Map<String, String>> maps = table.asMaps();
-      for (Map<String, String> map : maps) {
-        String name = map.get("name");
-        Long stationId = 지하철역_생성(name).getId();
-        context.store.put(name, stationId);
-      }
+      table.asList().forEach(stationName -> {
+        Long stationId = 지하철역_생성(stationName).getId();
+        context.store.put(stationName, stationId);
+      });
     });
 
     And("지하철 노선을 생성하고", (DataTable table) -> {
-      for (Map<String, String> map : table.asMaps()) {
-        String name = map.get("name");
-        String color = map.get("color");
-        String upStationName = map.get("upStationName");
-        String downStationName = map.get("downStationName");
-        int distance = Integer.parseInt(map.get("distance"));
-        int duration = Integer.parseInt(map.get("duration"));
+      for (Map<String, String> arguments : table.asMaps()) {
+        String name = arguments.get("name");
+        String color = arguments.get("color");
+        String upStationName = arguments.get("upStationName");
+        String downStationName = arguments.get("downStationName");
+        int distance = Integer.parseInt(arguments.get("distance"));
+        int duration = Integer.parseInt(arguments.get("duration"));
 
         Long lineId = 지하철_노선_생성(
             name,
@@ -54,12 +52,12 @@ public class PathStepDef implements En {
     });
 
     And("지하철 노선의 구간들을 생성한다", (DataTable table) -> {
-      for (Map<String, String> map : table.asMaps()) {
-        String name = map.get("name");
-        String upStationName = map.get("upStationName");
-        String downStationName = map.get("downStationName");
-        int distance = Integer.parseInt(map.get("distance"));
-        int duration = Integer.parseInt(map.get("duration"));
+      for (Map<String, String> arguments : table.asMaps()) {
+        String name = arguments.get("name");
+        String upStationName = arguments.get("upStationName");
+        String downStationName = arguments.get("downStationName");
+        int distance = Integer.parseInt(arguments.get("distance"));
+        int duration = Integer.parseInt(arguments.get("duration"));
 
         지하철_구간_생성_요청(
             context.getLong(name),
@@ -88,9 +86,7 @@ public class PathStepDef implements En {
     });
 
     Then("두 역을 잇는 경로 중 거리가 가장 짧은 경로를 반환한다.", (DataTable table) -> {
-      List<List<String>> rows = table.asLists(String.class);
-
-      List<Long> expected = rows.stream()
+      List<Long> expected = table.asLists(String.class).stream()
           .map(it -> it.get(0))
           .map(it -> context.getLong(it))
           .collect(Collectors.toList());
@@ -120,9 +116,7 @@ public class PathStepDef implements En {
     });
 
     Then("두 역을 잇는 경로 중 소요시간이 가장 짧은 경로를 반환한다.", (DataTable table) -> {
-      List<List<String>> rows = table.asLists(String.class);
-
-      List<Long> expected = rows.stream()
+      List<Long> expected = table.asLists(String.class).stream()
           .map(it -> it.get(0))
           .map(it -> context.getLong(it))
           .collect(Collectors.toList());
