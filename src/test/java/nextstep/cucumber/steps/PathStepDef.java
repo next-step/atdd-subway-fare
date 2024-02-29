@@ -98,9 +98,9 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
     });
 
-    And("총 이동거리는 4km 소요시간은 6분이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(4);
-      assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(6);
+    And("거리가 가장 짧은 경로의 이동거리는 {int}km 소요시간은 {int}분이다.", (Integer distance, Integer duration) -> {
+      assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
+      assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
 
     /**
@@ -130,7 +130,7 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
     });
 
-    And("총 이동거리는 5km 소요시간은 3분이다.", () -> {
+    Then("시간이 제일 적게 소요되는 경로의 이동거리는 {int}km 소요시간은 {int}분이다.", (Integer distance, Integer duration) -> {
       assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(5);
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(3);
     });
