@@ -1,6 +1,8 @@
 package nextstep.path;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.auth.principal.AuthenticationPrincipal;
+import nextstep.auth.principal.LoginMember;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +19,9 @@ public class PathController {
     public ResponseEntity<PathResponse> showShortestPath(
             @RequestParam("source") Long sourceId,
             @RequestParam("target") Long targetId,
-            @RequestParam("type") String type
-    ) {
-        return ResponseEntity.ok().body(pathService.showShortestPath(sourceId, targetId, type));
+            @RequestParam("type") String type,
+            @AuthenticationPrincipal LoginMember loginMember
+            ) {
+        return ResponseEntity.ok().body(pathService.showShortestPath(sourceId, targetId, type, loginMember));
     }
 }

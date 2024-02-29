@@ -2,9 +2,12 @@ package nextstep.path;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import nextstep.auth.principal.LoginMember;
+import nextstep.auth.userdetails.UserDetails;
 import nextstep.line.Line;
 import nextstep.line.LineRepository;
 import nextstep.line.section.Section;
+import nextstep.member.domain.AgeRange;
 import nextstep.path.fare.FareCalculator;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
@@ -18,12 +21,12 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public class PathInfo {
+public class Path {
     private List<String> stationIds;
     private int distance;
     private int duration;
 
-    public PathResponse toResponse(StationRepository stationRepository, LineRepository lineRepository) {
+    public PathResponse toResponse(StationRepository stationRepository, LineRepository lineRepository, LoginMember loginMember) {
         List<Station> stationEntitys = stationIds.stream()
                 .map(Long::parseLong)
                 .map(stationRepository::findById)
@@ -37,7 +40,8 @@ public class PathInfo {
 
         List<Line> lines = lineRepository.findAll();
         Set<Line> linesInPath = findLinesInPath(stationEntitys, lines);
-        FareCalculator fareCalculator = new FareCalculator(distance, linesInPath);
+        AgeRange ageRange = AgeRange.findByAge(loginMember.getAge());
+        FareCalculator fareCalculator = new FareCalculator(distance, linesInPath, ageRange);
         int fare = fareCalculator.calculate();
 
         return new PathResponse(stations, distance, duration, fare);

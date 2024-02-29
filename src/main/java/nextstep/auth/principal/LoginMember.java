@@ -4,9 +4,12 @@ public class LoginMember {
     private Long id;
     private String email;
 
-    public LoginMember(Long id, String email) {
+    private int age;
+
+    public LoginMember(Long id, String email, int age) {
         this.id = id;
         this.email = email;
+        this.age = age;
     }
 
     public Long getId() {
@@ -14,5 +17,9 @@ public class LoginMember {
     }
     public String getEmail() {
         return email;
+    }
+
+    public int getAge() {
+        return age;
     }
 }

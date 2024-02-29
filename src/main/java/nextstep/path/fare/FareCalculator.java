@@ -1,32 +1,40 @@
 package nextstep.path.fare;
 
 import nextstep.line.Line;
+import nextstep.member.domain.AgeRange;
+import nextstep.path.fare.age.AgeFare;
+import nextstep.path.fare.distance.BaseDistanceFare;
+import nextstep.path.fare.distance.DistanceFare;
+import nextstep.path.fare.distance.LongDistanceFare;
+import nextstep.path.fare.distance.MediumDistanceFare;
 
-import java.util.List;
 import java.util.Set;
 
 public class FareCalculator {
-    private Fare fare;
+    private DistanceFare distanceFare;
     private int distance;
-
     private int maxExtraFare;
 
-    public FareCalculator(int distance, Set<Line> lines) {
+    private AgeRange ageRange;
+
+    public FareCalculator(int distance, Set<Line> lines, AgeRange ageRange) {
         this.distance = distance;
+        this.ageRange = ageRange;
 
         if (distance <= 10) {
-            fare = new BaseFare();
+            distanceFare = new BaseDistanceFare();
         } else if (distance <= 50) {
-            fare = new MediumFare();
+            distanceFare = new MediumDistanceFare();
         } else {
-            fare = new LongFare();
+            distanceFare = new LongDistanceFare();
         }
 
         maxExtraFare = findMaxExtraFare(lines);
     }
 
     public int calculate() {
-        return fare.calculate(distance) + maxExtraFare;
+        AgeFare ageFare = AgeFare.from(ageRange);
+        return ageFare.calculate(distanceFare.calculate(distance) + maxExtraFare);
     }
 
     private int findMaxExtraFare(Set<Line> lines) {

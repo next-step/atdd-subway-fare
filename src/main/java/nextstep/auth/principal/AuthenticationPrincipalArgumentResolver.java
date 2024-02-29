@@ -3,6 +3,7 @@ package nextstep.auth.principal;
 import lombok.extern.slf4j.Slf4j;
 import nextstep.auth.AuthenticationException;
 import nextstep.auth.token.JwtTokenProvider;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jgrapht.alg.util.Pair;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -31,10 +32,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         }
         String token = authorization.split(" ")[1];
 
-        Pair<Long, String> tokenBody = jwtTokenProvider.getPrincipal(token);
-        Long id = tokenBody.getFirst();
-        String email = tokenBody.getSecond();
+        Triple<Long, String, Integer> tokenBody = jwtTokenProvider.getPrincipal(token);
+        Long id = tokenBody.getLeft();
+        String email = tokenBody.getMiddle();
+        int age = tokenBody.getRight();
 
-        return new LoginMember(id, email);
+        return new LoginMember(id, email, age);
     }
 }

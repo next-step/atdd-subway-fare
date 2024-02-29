@@ -5,5 +5,7 @@ public interface UserDetails {
 
     String getUsername();
 
+    Integer getAge();
+
     String getPassword();
 }

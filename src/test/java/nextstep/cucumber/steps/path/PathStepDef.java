@@ -4,6 +4,8 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.cucumber.steps.auth.AuthSteps;
+import nextstep.cucumber.steps.member.MemberSteps;
 import nextstep.cucumber.steps.station.StationSteps;
 import nextstep.cucumber.steps.line.LineSteps;
 import nextstep.cucumber.steps.line.SectionSteps;
@@ -21,6 +23,8 @@ public class PathStepDef implements En {
     @Autowired
     DatabaseCleanup databaseCleanup;
     ExtractableResponse<Response> response;
+
+    String accessToken;
 
     Map<String, Long> stations = new HashMap<>();
 
@@ -122,5 +126,12 @@ public class PathStepDef implements En {
             int fare = PathSteps.parseFare(response);
             assertThat(fare).isEqualTo(expectedFare);
         });
+
+        Given("로그인한 사용자는 어린이의 나이로 설정되어 있다", () -> {
+            MemberSteps.회원_생성_요청("test@test.com", "password", 5);
+            accessToken = AuthSteps.로그인_요청("test@test.com", "password");
+        });
+
+
     }
 }

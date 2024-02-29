@@ -40,15 +40,15 @@ public class PathFinder {
         return graph;
     }
 
-    public PathInfo findFastestPath(String sourceId, String targetId) {
+    public Path findFastestPath(String sourceId, String targetId) {
         return findPath(sourceId, targetId, Section::getDuration);
     }
 
-    public PathInfo findShortestPath(String sourceId, String targetId) {
+    public Path findShortestPath(String sourceId, String targetId) {
         return findPath(sourceId, targetId, Section::getDistance);
     }
 
-    private PathInfo findPath(String sourceId, String targetId, Function<Section, Integer> weightExtractor) {
+    private Path findPath(String sourceId, String targetId, Function<Section, Integer> weightExtractor) {
         WeightedMultigraph<String, CustomWeightedEdge> graph = init(weightExtractor);
         DijkstraShortestPath<String, CustomWeightedEdge> dijkstra = new DijkstraShortestPath<>(graph);
         GraphPath<String, CustomWeightedEdge> path = dijkstra.getPath(sourceId, targetId);
@@ -65,7 +65,7 @@ public class PathFinder {
                 .mapToInt(CustomWeightedEdge::getDuration)
                 .sum();
 
-        return new PathInfo(pathVertices, totalDistance, totalDuration);
+        return new Path(pathVertices, totalDistance, totalDuration);
     }
 
     public boolean pathExists(String sourceId, String targetId) {
