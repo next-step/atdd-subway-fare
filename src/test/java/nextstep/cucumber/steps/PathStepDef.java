@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import nextstep.cucumber.AcceptanceContext;
+import nextstep.subway.domain.PathSearchType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -81,7 +82,7 @@ public class PathStepDef implements En {
               "/paths?source={sourceId}&target={targetId}&type={type}",
               context.store.get(source),
               context.store.get(target),
-              "DISTANCE"  // TODO enum
+              PathSearchType.DISTANCE.name()
           )
           .then().log().all().extract();
     });
@@ -97,6 +98,11 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
     });
 
+    And("총 이동거리는 4km 소요시간은 6분이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(4);
+      assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(6);
+    });
+
     /**
      * 최단 시간 경로 조회 성공
      */
@@ -108,7 +114,7 @@ public class PathStepDef implements En {
               "/paths?source={sourceId}&target={targetId}&type={type}",
               context.store.get(source),
               context.store.get(target),
-              "DURATION"  // TODO enum
+              PathSearchType.DURATION.name()
           )
           .then().log().all().extract();
     });
@@ -122,6 +128,11 @@ public class PathStepDef implements En {
           .collect(Collectors.toList());
 
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
+    });
+
+    And("총 이동거리는 5km 소요시간은 3분이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(5);
+      assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(3);
     });
 
     /**
