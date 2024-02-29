@@ -13,13 +13,15 @@ public class Path {
 
   private List<StationResponse> vertices;
   private int distance;
+  private int duration;
 
-  public static Path from(List<Station> vertices, int distance) {
+  public static Path from(List<Station> vertices, int distance, int duration) {
     return new Path(
         vertices.stream()
             .map(StationResponse::from)
             .collect(Collectors.toList()),
-        distance
+        distance,
+        duration
     );
   }
 }

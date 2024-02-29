@@ -6,13 +6,13 @@ import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.vo.Path;
+import nextstep.subway.ui.BusinessException;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
 public class ShortestDurationPathFinder implements PathFinder {
 
-  private final WeightedMultigraph<Station, DefaultWeightedEdge> graph;
+  private final WeightedMultigraph<Station, PathWeightedEdge> graph;
 
   public ShortestDurationPathFinder(final Collection<Section> sections) {
     graph = buildGraph(sections);
@@ -24,8 +24,20 @@ public class ShortestDurationPathFinder implements PathFinder {
 
     final var path = new DijkstraShortestPath<>(graph).getPath(source, target);
 
+    if (path == null) {
+      throw new BusinessException("경로를 찾을 수 없습니다.");
+    }
+
+    final int distance = path.getEdgeList().stream()
+        .mapToInt(PathWeightedEdge::getDistance)
+        .sum();
+
+    final int duration = path.getEdgeList().stream()
+        .mapToInt(PathWeightedEdge::getDuration)
+        .sum();
+
     return Optional.ofNullable(path)
-        .map(it -> Path.from(it.getVertexList(), Double.valueOf(it.getWeight()).intValue()));
+        .map(it -> Path.from(it.getVertexList(), distance, duration));
   }
 
   @Override
@@ -44,12 +56,12 @@ public class ShortestDurationPathFinder implements PathFinder {
     }
   }
 
-  private static WeightedMultigraph<Station, DefaultWeightedEdge> buildGraph(final Collection<Section> sections) {
+  private static WeightedMultigraph<Station, PathWeightedEdge> buildGraph(final Collection<Section> sections) {
     if (sections == null) {
       throw new IllegalArgumentException("구간 정보가 없습니다.");
     }
 
-    final var graph = WeightedMultigraph.<Station, DefaultWeightedEdge>builder(DefaultWeightedEdge.class).build();
+    final var graph = WeightedMultigraph.<Station, PathWeightedEdge>builder(PathWeightedEdge.class).build();
 
     sections.forEach(section -> {
       // add station ID
@@ -57,9 +69,14 @@ public class ShortestDurationPathFinder implements PathFinder {
       graph.addVertex(section.getDownStation());
 
       // add edge
-      final var edge = graph.addEdge(section.getUpStation(), section.getDownStation());
+      final var edge = new PathWeightedEdge(section.getDistance(), section.getDuration());
+      graph.addEdge(
+          section.getUpStation(),
+          section.getDownStation(),
+          edge
+      );
 
-      graph.setEdgeWeight(edge, section.getDuration());
+      graph.setEdgeWeight(edge, edge.getDuration());
     });
 
     return graph;

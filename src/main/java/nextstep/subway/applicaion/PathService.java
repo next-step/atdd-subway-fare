@@ -28,7 +28,7 @@ public class PathService {
     final var sections = sectionService.findAll();
     final var path = PathFinderComposite.find(sections, type, sourceStation, targetStation);
 
-    return new FindPathResponse(path.getVertices(), path.getDistance());
+    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration());
   }
 
   private void verifySourceIsSameToTarget(Long source, Long target) {
