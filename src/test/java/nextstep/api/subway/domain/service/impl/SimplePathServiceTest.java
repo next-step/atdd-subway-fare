@@ -14,12 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import nextstep.api.subway.domain.dto.outport.PathInfo;
 import nextstep.api.subway.domain.model.entity.Station;
 import nextstep.api.subway.domain.model.vo.Path;
 import nextstep.api.subway.domain.operators.LineResolver;
 import nextstep.api.subway.domain.operators.StationResolver;
 import nextstep.api.subway.infrastructure.operators.DijkstraBasedShortestPathFinder;
-import nextstep.api.subway.interfaces.dto.response.PathResponse;
 import nextstep.common.exception.subway.PathNotValidException;
 
 /**
@@ -52,10 +52,10 @@ class SimplePathServiceTest {
 		given(stationResolver.fetchOptional(1L)).willReturn(Optional.of(sourceStation));
 		given(stationResolver.fetchOptional(2L)).willReturn(Optional.of(targetStation));
 		given(lineResolver.fetchAll()).willReturn(new ArrayList<>());
-		given(pathFinder.findShortestPath(eq(sourceStation), eq(targetStation), anyList())).willReturn(Path.of(Arrays.asList(sourceStation, targetStation), 10L, null) );
+		given(pathFinder.findShortestPathByLines(eq(sourceStation), eq(targetStation), anyList())).willReturn(Path.of(Arrays.asList(sourceStation, targetStation), null,10L, null) );
 
 		// when
-		PathResponse result = simplePathService.findShortestPath(1L, 2L);
+		PathInfo result = simplePathService.findShortestPath(1L, 2L);
 
 		// then
 		assertThat(result.getStations()).hasSize(2);

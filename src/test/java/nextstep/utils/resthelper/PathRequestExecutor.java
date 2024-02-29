@@ -27,4 +27,11 @@ public class PathRequestExecutor extends AbstractRequestExecutor {
 		return doGet(getRequestSpecification().queryParam("source", source).queryParam("target", target).queryParam("type", type), LINE_URL_PATH);
 	}
 
+	public static ExtractableResponse<Response> executeFindPathRequestWithAuthUser(String authorizationToken, Long source, Long target, String type) {
+		return doGet(getRequestSpecification().header("Authorization", authorizationToken).queryParam("source", source).queryParam("target", target).queryParam("type", type), LINE_URL_PATH+"/auth");
+	}
+
+
+
+
 }

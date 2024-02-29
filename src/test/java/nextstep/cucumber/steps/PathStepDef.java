@@ -1,8 +1,12 @@
 package nextstep.cucumber.steps;
 
+import static nextstep.fixture.MemberFixtureCreator.*;
 import static nextstep.fixture.SubwayScenarioFixtureCreator.*;
+import static nextstep.fixture.TokenFixtureCreator.*;
 import static nextstep.utils.resthelper.ExtractableResponseParser.*;
+import static nextstep.utils.resthelper.MemberRequestExecutor.*;
 import static nextstep.utils.resthelper.PathRequestExecutor.*;
+import static nextstep.utils.resthelper.TokenRequestExecutor.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
@@ -23,9 +27,13 @@ import io.restassured.response.Response;
 public class PathStepDef implements En {
 
 	private ExtractableResponse<Response> response;
+	private String authorizationToken;
 
 	public PathStepDef() {
 		Given("지하철역이 등록되어있음", this::createStations);
+
+		Given("청소년 사용자가 로그인되어 있음", this::setUpYouthUserLogin);
+		Given("어린이 사용자가 로그인되어 있음", this::setUpChildUserLogin);
 
 		And("지하철 노선이 등록되어있음", this::createLinesWithDuration);
 
@@ -34,7 +42,7 @@ public class PathStepDef implements En {
 		When("역ID {long}에서 역ID {long}까지의 최소 시간 경로를 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequest(sourceId, targetId, "DURATION"));
 		When("역ID {long}에서 역ID {long}까지의 최단 거리 경로를 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequest(sourceId, targetId, "DISTANCE"));
 		When("역ID {long}에서 역ID {long}까지의 최단 거리 경로 요금을 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequest(sourceId, targetId, "DISTANCE"));
-
+		When("로그인 사용자가 역ID {long}에서 역ID {long}까지의 최단 거리 경로 요금을 조회하면", (Long sourceId, Long targetId) -> response = executeFindPathRequestWithAuthUser(authorizationToken, sourceId, targetId, "DISTANCE"));
 
 		Then("요금은 {int}원이다", this::verifyFareAmountOnly);
 		Then("최소 시간 기준 경로를 응답", this::verifyMinimumTimePath);
@@ -42,6 +50,20 @@ public class PathStepDef implements En {
 		And("총 거리와 소요 시간을 함께 응답함", this::verifyTotalDistanceWithTotalDuration);
 		And("지하철 이용 요금도 함께 응답함", this::verifyFareAmount);
 
+	}
+
+	private void setUpYouthUserLogin() {
+		String email = "user@example.com";
+		String password = "password";
+		createMember(createMemberRequest(email, password, createYouthUserRandomAge()));
+		authorizationToken = parseAsAccessTokenWithBearer(loginAndCreateAuthorizationToken(createTokenRequest(email, password)));
+	}
+
+	private void setUpChildUserLogin() {
+		String email = "user@example.com";
+		String password = "password";
+		createMember(createMemberRequest(email, password, createChildUserRandomAge()));
+		authorizationToken = parseAsAccessTokenWithBearer(loginAndCreateAuthorizationToken(createTokenRequest(email, password)));
 	}
 
 	private void verifyFareAmountOnly(Integer expectedFare) {
@@ -107,12 +129,10 @@ public class PathStepDef implements En {
 
 	private void verifyFareAmount(DataTable expectedFareTable) {
 		List<Map<String, String>> expectedFare = expectedFareTable.asMaps(String.class, String.class);
-		int expectedFareAmount = Integer.parseInt(expectedFare.get(0).get("fare"));
+		int expectedFareAmount = Integer.parseInt(expectedFare.get(0).get("fareAmount"));
 
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(parseFare(response)).isEqualTo(expectedFareAmount);
 	}
-
-
 
 }

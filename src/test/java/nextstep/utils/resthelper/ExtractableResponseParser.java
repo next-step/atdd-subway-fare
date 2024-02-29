@@ -59,7 +59,7 @@ public class ExtractableResponseParser {
 	}
 
 	public static int parseFare(ExtractableResponse<Response> response) {
-		return response.jsonPath().getInt("fare");
+		return response.jsonPath().getInt("fareAmount");
 	}
 
 }

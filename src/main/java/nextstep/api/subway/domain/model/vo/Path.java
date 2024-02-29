@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import nextstep.api.subway.domain.model.entity.Line;
 import nextstep.api.subway.domain.model.entity.Station;
 
 /**
@@ -14,6 +15,7 @@ import nextstep.api.subway.domain.model.entity.Station;
 @AllArgsConstructor(staticName = "of")
 public class Path {
 	List<Station> stations;
+	List<Line> lines;
 
 	Long distance;
 

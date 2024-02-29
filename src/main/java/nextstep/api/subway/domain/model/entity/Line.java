@@ -104,4 +104,8 @@ public class Line {
 	public boolean isProperSectionExist(Long sourceStationId, Long targetStationId) {
 		return sectionCollection.isContainsBothAsValid(sourceStationId, targetStationId);
 	}
+
+	public boolean isContainsAnySections(List<Section> sections) {
+		return parseSections().stream().anyMatch(sections::contains);
+	}
 }

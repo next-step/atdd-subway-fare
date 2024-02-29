@@ -7,14 +7,15 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.api.auth.domain.dto.UserPrincipal;
 import nextstep.api.auth.domain.operators.JwtTokenProvider;
+import nextstep.api.auth.domain.service.UserDetailsService;
 import nextstep.common.annotation.AuthenticationPrincipal;
 import nextstep.common.exception.auth.AuthenticationException;
 
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 	private final JwtTokenProvider jwtTokenProvider;
+	private final UserDetailsService userDetailsService;
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
@@ -29,7 +30,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 			throw new AuthenticationException("Invalid or expired JWT token");
 		}
 
-		return UserPrincipal.of(jwtTokenProvider.getPrincipal(token));
+		return userDetailsService.loadUserByEmail(jwtTokenProvider.getPrincipal(token));
 	}
 
 	private String parseToken(NativeWebRequest webRequest) {
