@@ -5,14 +5,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FareCalculatorImpl implements FareCalculator {
+
     private static final int DEFAULT_FARE = 1_250;
 
     private final List<FareCalculateOption> fareCalculateOptions;
 
     public FareCalculatorImpl() {
         this(List.of(
-            new FareCalculateOption(10, 50, 5, 100),
-            new FareCalculateOption(50, Integer.MAX_VALUE, 8, 100)
+            new FareCalculateOption()
+                .setDistanceOver(10)
+                .setDistanceUnder(50)
+                .setChargingUnitDistance(5)
+                .setFare(100)
+                .build(),
+            new FareCalculateOption()
+                .setDistanceOver(50)
+                .setDistanceUnder(Integer.MAX_VALUE)
+                .setChargingUnitDistance(8)
+                .setFare(100)
+                .build()
         ));
     }
 
@@ -23,8 +34,8 @@ public class FareCalculatorImpl implements FareCalculator {
     public int calculateFare(int distance) {
         int fare = DEFAULT_FARE;
 
-        for (FareCalculateOption calculateOption: fareCalculateOptions) {
-            if(!calculateOption.isCalculateTarget(distance)) {
+        for (FareCalculateOption calculateOption : fareCalculateOptions) {
+            if (!calculateOption.isCalculateTarget(distance)) {
                 continue;
             }
 

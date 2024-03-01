@@ -1,15 +1,18 @@
 package nextstep.subway.domain;
 
 public class FareCalculateOption {
-    private final int distanceOver;
-    private final int distanceUnder;
-    private final int chargingUnitDistance;
-    private final int fare;
+    private int distanceOver;
+    private int distanceUnder;
+    private int chargingUnitDistance;
+    private int fare;
 
-    public FareCalculateOption(int distanceOver, int distanceUnder, int step, int fare) {
+    public FareCalculateOption() {
+    }
+
+    public FareCalculateOption(int distanceOver, int distanceUnder, int chargingUnitDistance, int fare) {
         this.distanceOver = distanceOver;
         this.distanceUnder = distanceUnder;
-        this.chargingUnitDistance = step;
+        this.chargingUnitDistance = chargingUnitDistance;
         this.fare = fare;
     }
 
@@ -31,6 +34,30 @@ public class FareCalculateOption {
         }
 
         return distance - distanceOver;
+    }
+
+    public FareCalculateOption setDistanceOver(int distanceOver) {
+        this.distanceOver = distanceOver;
+        return this;
+    }
+
+    public FareCalculateOption setDistanceUnder(int distanceUnder) {
+        this.distanceUnder = distanceUnder;
+        return this;
+    }
+
+    public FareCalculateOption setChargingUnitDistance(int chargingUnitDistance) {
+        this.chargingUnitDistance = chargingUnitDistance;
+        return this;
+    }
+
+    public FareCalculateOption setFare(int fare) {
+        this.fare = fare;
+        return this;
+    }
+
+    public FareCalculateOption build() {
+        return this;
     }
 
     private boolean isUpperboundValue(int distance) {
