@@ -1,4 +1,4 @@
-package nextstep.acceptance;
+package nextstep.favorite.fixture;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -6,7 +6,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import nextstep.favorite.application.dto.FavoriteResponse;
-import nextstep.member.acceptance.MemberSteps;
+import nextstep.member.fixture.MemberSteps;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 

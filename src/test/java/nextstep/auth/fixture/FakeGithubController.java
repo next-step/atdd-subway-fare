@@ -1,4 +1,4 @@
-package nextstep.auth;
+package nextstep.auth.fixture;
 
 import nextstep.auth.fixture.GithubResponses;
 import nextstep.auth.infra.dto.GithubAccessTokenRequest;

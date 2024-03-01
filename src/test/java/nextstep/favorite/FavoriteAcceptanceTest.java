@@ -1,13 +1,14 @@
-package nextstep.acceptance;
+package nextstep.favorite;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import nextstep.favorite.application.dto.FavoriteResponse;
+import nextstep.favorite.fixture.FavoriteSteps;
 import nextstep.line.domain.Color;
 import nextstep.line.presentation.LineRequest;
 import nextstep.line.presentation.SectionRequest;
-import nextstep.member.acceptance.MemberSteps;
+import nextstep.member.fixture.MemberSteps;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;

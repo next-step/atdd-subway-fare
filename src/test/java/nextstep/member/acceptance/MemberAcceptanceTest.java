@@ -9,7 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import static nextstep.member.acceptance.MemberSteps.*;
+import static nextstep.member.fixture.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AcceptanceTest

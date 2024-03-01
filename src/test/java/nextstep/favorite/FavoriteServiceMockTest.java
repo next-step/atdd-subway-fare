@@ -1,4 +1,4 @@
-package nextstep.acceptance;
+package nextstep.favorite;
 
 import nextstep.auth.presentation.dto.LoginMember;
 import nextstep.favorite.application.FavoriteService;
