@@ -1,8 +1,7 @@
-package nextstep.subway.domain.pathfinder;
+package nextstep.subway.domain.path;
 
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.CustomWeightedEdge;
-import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.jgrapht.GraphPath;

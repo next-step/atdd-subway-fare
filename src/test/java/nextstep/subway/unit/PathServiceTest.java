@@ -2,7 +2,7 @@ package nextstep.subway.unit;
 
 
 import nextstep.subway.application.PathService;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.PathType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

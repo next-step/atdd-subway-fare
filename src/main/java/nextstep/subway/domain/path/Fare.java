@@ -1,4 +1,4 @@
-package nextstep.subway.domain.pathfinder;
+package nextstep.subway.domain.path;
 
 public class Fare {
 

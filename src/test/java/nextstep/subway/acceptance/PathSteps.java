@@ -3,7 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.PathType;
 import org.springframework.http.HttpStatus;
 
 public class PathSteps {
