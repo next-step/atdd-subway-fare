@@ -23,7 +23,8 @@ class ShortestDurationPathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        verifyPathResponse(pathResponse, "교대역", "강남역", "양재역", 20, 4, 1450);
+        final PathResponse expectedPathResponse = new PathResponse(List.of(교대역, 강남역, 양재역), 20, 4, 1450);
+        verifyPathResponse(pathResponse, expectedPathResponse);
     }
 
     @DisplayName("최소 시간 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")

@@ -43,14 +43,7 @@ public class PathFinderTest {
                 .collect(Collectors.toList());
     }
 
-    protected void verifyPathResponse(final PathResponse pathResponse, String startStation, String middleStation, String endStation,
-                                      int distance, int duration, int fare) {
-        final List<StationResponse> stations = pathResponse.getStations();
-        assertThat(stations.get(0).getName()).isEqualTo(startStation);
-        assertThat(stations.get(1).getName()).isEqualTo(middleStation);
-        assertThat(stations.get(2).getName()).isEqualTo(endStation);
-        assertThat(pathResponse.getDistance()).isEqualTo(distance);
-        assertThat(pathResponse.getDuration()).isEqualTo(duration);
-        assertThat(pathResponse.getFare()).isEqualTo(fare);
+    protected void verifyPathResponse(final PathResponse actualPathResponse, PathResponse expectedPathResponse) {
+        assertThat(actualPathResponse).isEqualTo(expectedPathResponse);
     }
 }

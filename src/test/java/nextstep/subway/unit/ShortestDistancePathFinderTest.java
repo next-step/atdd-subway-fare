@@ -26,7 +26,8 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        verifyPathResponse(pathResponse, "교대역", "남부터미널역", "양재역", 10, 20, 1250);
+        final PathResponse expectedPathResponse = new PathResponse(List.of(교대역, 남부터미널역, 양재역), 10, 20, 1250);
+        verifyPathResponse(pathResponse, expectedPathResponse);
     }
 
     @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 초과하면 1250원을 리턴한다.")
@@ -39,7 +40,8 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        verifyPathResponse(pathResponse, "교대역", "남부터미널역", "양재역", 11, 20, 1350);
+        final PathResponse expectedPathResponse = new PathResponse(List.of(교대역, 남부터미널역, 양재역), 11, 20, 1350);
+        verifyPathResponse(pathResponse, expectedPathResponse);
     }
 
     @DisplayName("최단 거리 경로를 조회 하였을 때, 50km 초과하면 1250원을 리턴한다.")
@@ -55,7 +57,8 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
 
-        verifyPathResponse(pathResponse, "교대역", "남부터미널역", "양재역", 51, 20, 2150);
+        final PathResponse expectedPathResponse = new PathResponse(List.of(교대역, 남부터미널역, 양재역), 51, 20, 2150);
+        verifyPathResponse(pathResponse, expectedPathResponse);
     }
 
     @DisplayName("최단 거리 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
