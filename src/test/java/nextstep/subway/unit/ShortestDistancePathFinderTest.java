@@ -3,6 +3,8 @@ package nextstep.subway.unit;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
+import nextstep.subway.domain.path.CalculateHandler;
+import nextstep.subway.domain.path.DistanceCalculateHandler;
 import nextstep.subway.domain.path.PathFinder;
 import nextstep.subway.domain.path.ShortestDistancePathFinder;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +23,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
     void pathFinder_fee() {
         삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 5, 10);
         삼호선.addSection(남부터미널역, 양재역, 5, 10);
-        final PathFinder pathFinder = new ShortestDistancePathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
@@ -35,7 +37,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
     void pathFinder_fee_over_10Km() {
         삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 6, 10);
         삼호선.addSection(남부터미널역, 양재역, 5, 10);
-        final PathFinder pathFinder = new ShortestDistancePathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
@@ -52,7 +54,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
         삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 25, 10);
         삼호선.addSection(남부터미널역, 양재역, 26, 10);
 
-        final PathFinder pathFinder = new ShortestDistancePathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
@@ -64,7 +66,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
     @DisplayName("최단 거리 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
     @Test
     void pathFinder_invalid_source_target_same() {
-        final PathFinder pathFinder = new ShortestDistancePathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         assertThatThrownBy(() -> { pathFinder.findPath(sections, 교대역, 교대역); })
@@ -75,7 +77,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
     @DisplayName("최단 거리 경로 조회시, 출발역과 도착역이 연결되어 있지 않으면 예외가 발생한다.")
     @Test
     void pathFinder_invalid_source_target_disconnect() {
-        final PathFinder pathFinder = new ShortestDistancePathFinder();
+        final PathFinder pathFinder = new ShortestDistancePathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         assertThatThrownBy(() -> { pathFinder.findPath(sections, 교대역, 부천역); })

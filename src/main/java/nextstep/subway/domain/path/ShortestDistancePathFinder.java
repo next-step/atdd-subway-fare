@@ -6,15 +6,13 @@ import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.WeightedMultigraph;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class ShortestDistancePathFinder extends PathFinder {
-    @Override
-    public boolean isType(final PathType pathType) {
-        return PathType.DISTANCE == pathType;
+
+    public ShortestDistancePathFinder(final CalculateHandler calculateHandler) {
+        super(calculateHandler);
     }
 
     @Override

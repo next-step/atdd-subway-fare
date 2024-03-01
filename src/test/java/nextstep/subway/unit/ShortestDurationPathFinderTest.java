@@ -2,6 +2,7 @@ package nextstep.subway.unit;
 
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.Section;
+import nextstep.subway.domain.path.DistanceCalculateHandler;
 import nextstep.subway.domain.path.PathFinder;
 import nextstep.subway.domain.path.ShortestDurationPathFinder;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,7 @@ class ShortestDurationPathFinderTest extends PathFinderTest {
     @DisplayName("최소 시간 경로를 조회하면 교대역 - 강남역 - 양재역을 리턴한다.")
     @Test
     void pathFinder() {
-        final PathFinder pathFinder = new ShortestDurationPathFinder();
+        final PathFinder pathFinder = new ShortestDurationPathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         final PathResponse pathResponse = pathFinder.findPath(sections, 교대역, 양재역);
@@ -30,7 +31,7 @@ class ShortestDurationPathFinderTest extends PathFinderTest {
     @DisplayName("최소 시간 경로 조회시, 출발역과 도착역이 동일하면 예외가 발생한다.")
     @Test
     void pathFinder_invalid_source_target_same() {
-        final PathFinder pathFinder = new ShortestDurationPathFinder();
+        final PathFinder pathFinder = new ShortestDurationPathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         assertThatThrownBy(() -> { pathFinder.findPath(sections, 교대역, 교대역); })
@@ -41,7 +42,7 @@ class ShortestDurationPathFinderTest extends PathFinderTest {
     @DisplayName("최소 시간 경로 조회시, 출발역과 도착역이 연결되어 있지 않으면 예외가 발생한다.")
     @Test
     void pathFinder_invalid_source_target_disconnect() {
-        final PathFinder pathFinder = new ShortestDurationPathFinder();
+        final PathFinder pathFinder = new ShortestDurationPathFinder(new DistanceCalculateHandler(null));
         final List<Section> sections = getSections(Arrays.asList(이호선, 신분당선, 삼호선));
 
         assertThatThrownBy(() -> { pathFinder.findPath(sections, 교대역, 부천역); })

@@ -14,7 +14,11 @@ import java.util.List;
 
 public abstract class PathFinder {
 
-    abstract public boolean isType(PathType pathType);
+    private CalculateHandler calculateHandler;
+
+    public PathFinder(final CalculateHandler calculateHandler) {
+        this.calculateHandler = calculateHandler;
+    }
 
     public PathResponse findPath(final List<Section> sections, final Station sourceStation, final Station targetStation) {
         checkSameStation(sourceStation, targetStation);
@@ -54,6 +58,7 @@ public abstract class PathFinder {
     }
 
     protected int calculateFare(int distance) {
-        return new Fare(distance).value();
+        calculateHandler.handle(new Distance(distance));
+        return calculateHandler.getFare().value();
     }
 }

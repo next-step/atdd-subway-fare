@@ -2,6 +2,7 @@ package nextstep.subway.application;
 
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.path.PathFinder;
+import nextstep.subway.domain.path.PathFinderFactory;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -14,12 +15,10 @@ import java.util.stream.Collectors;
 @Service
 public class PathService {
     private final LineService lineService;
-    private final List<PathFinder> pathFinders;
     private final StationService stationService;
 
-    public PathService(final LineService lineService, final List<PathFinder> pathFinders, final StationService stationService) {
+    public PathService(final LineService lineService, final StationService stationService) {
         this.lineService = lineService;
-        this.pathFinders = pathFinders;
         this.stationService = stationService;
     }
 
@@ -32,15 +31,7 @@ public class PathService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        PathFinder pathFinder = findPathFinder(pathFinders, type);
+        PathFinder pathFinder = PathFinderFactory.create(type);
         return pathFinder.findPath(sections, sourceStation, targetStation);
-    }
-
-    private PathFinder findPathFinder(final List<PathFinder> pathFinders, final PathType type) {
-        return pathFinders.stream()
-                .filter(p -> p.isType(type))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
     }
 }
