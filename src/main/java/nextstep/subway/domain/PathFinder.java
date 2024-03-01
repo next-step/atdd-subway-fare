@@ -8,7 +8,7 @@ import nextstep.subway.applicaion.dto.PathResponse;
 public abstract class PathFinder {
     private final FareCalculator fareCalculator;
 
-    public PathFinder(FareCalculator fareCalculator) {
+    protected PathFinder(FareCalculator fareCalculator) {
         this.fareCalculator = fareCalculator;
     }
 
