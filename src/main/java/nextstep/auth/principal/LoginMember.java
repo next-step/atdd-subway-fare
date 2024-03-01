@@ -6,7 +6,7 @@ public class LoginMember {
 
     private int age;
 
-    public LoginMember(Long id, String email, int age) {
+    public LoginMember(Long id, String email, Integer age) {
         this.id = id;
         this.email = email;
         this.age = age;

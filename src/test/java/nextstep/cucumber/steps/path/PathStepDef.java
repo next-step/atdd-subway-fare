@@ -128,10 +128,31 @@ public class PathStepDef implements En {
         });
 
         Given("로그인한 사용자는 어린이의 나이로 설정되어 있다", () -> {
-            MemberSteps.회원_생성_요청("test@test.com", "password", 5);
+            MemberSteps.회원_생성_요청("test@test.com", "password", 7);
             accessToken = AuthSteps.로그인_요청("test@test.com", "password");
         });
 
+        When("로그인한 어린이 사용자가 {string}에서 {string}까지의 최단 경로를 조회하면", (String source, String target) -> {
+            response = PathSteps.경로_조회_요청_with_로그인(stations.get(source), stations.get(target), "DISTANCE", accessToken);
+        });
 
+        Then("어린이 사용자의 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
+            int fare = PathSteps.parseFare(response);
+            assertThat(fare).isEqualTo(expectedFare);
+        });
+
+        Given("로그인한 사용자는 청소년의 나이로 설정되어 있다", () -> {
+            MemberSteps.회원_생성_요청("test@test.com", "password", 13);
+            accessToken = AuthSteps.로그인_요청("test@test.com", "password");
+        });
+
+        When("로그인한 청소년 사용자가 {string}에서 {string}까지의 최단 경로를 조회하면", (String source, String target) -> {
+            response = PathSteps.경로_조회_요청_with_로그인(stations.get(source), stations.get(target), "DISTANCE", accessToken);
+        });
+
+        Then("청소년 사용자의 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
+            int fare = PathSteps.parseFare(response);
+            assertThat(fare).isEqualTo(expectedFare);
+        });
     }
 }

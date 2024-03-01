@@ -20,7 +20,7 @@ public class PathController {
             @RequestParam("source") Long sourceId,
             @RequestParam("target") Long targetId,
             @RequestParam("type") String type,
-            @AuthenticationPrincipal LoginMember loginMember
+            @AuthenticationPrincipal(required = false) LoginMember loginMember
             ) {
         return ResponseEntity.ok().body(pathService.showShortestPath(sourceId, targetId, type, loginMember));
     }

@@ -8,6 +8,8 @@ public class CustomOAuth2User implements OAuth2User {
     private Long id;
     private String email;
 
+    private int age;
+
     @Override
     public Long getId() {
         return null;
@@ -17,4 +19,7 @@ public class CustomOAuth2User implements OAuth2User {
     public String getUsername() {
         return email;
     }
+
+    @Override
+    public int getAge() { return age; }
 }
