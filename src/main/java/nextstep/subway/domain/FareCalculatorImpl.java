@@ -32,20 +32,12 @@ public class FareCalculatorImpl implements FareCalculator {
     }
 
     public int calculateFare(int distance) {
-        int fare = DEFAULT_FARE;
-
-        for (FareCalculateOption calculateOption : fareCalculateOptions) {
-            if (!calculateOption.isCalculateTarget(distance)) {
-                continue;
-            }
-
-            fare += calculateOverFare(
+        return fareCalculateOptions.stream()
+            .filter(calculateOption -> calculateOption.isCalculateTarget(distance))
+            .mapToInt(calculateOption -> calculateOverFare(
                 calculateOption.getOverDistance(distance),
                 calculateOption.getChargingUnitDistance(),
                 calculateOption.getFare()
-            );
-        }
-
-        return fare;
+            )).reduce(DEFAULT_FARE, Integer::sum);
     }
 }
