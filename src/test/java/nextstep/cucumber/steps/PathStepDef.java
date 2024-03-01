@@ -21,17 +21,26 @@ public class PathStepDef implements En {
     long 이호선;
 
     public PathStepDef() {
-        Given("{string} 노선을 생성하고", (String lineName) -> {
+        Given("지하철역이 등록되어있음", () -> {
             성수역 = StationSteps.createStation("성수역").getId();
             강변역 = StationSteps.createStation("강변역").getId();
-            이호선 = LineSteps.노선_생성(new LineRequest(lineName, Color.GREEN, 성수역, 강변역, 10)).getId();
+            이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 성수역, 강변역, 10)).getId();
         });
-        When("노선 출발과 도착역의 경로를 요청하면", () -> {
+        And("지하철 노선이 등록되어있음", () -> {
+
+        });
+        And("지하철 노선에 지하철역이 등록되어있음", () -> {
+
+        });
+        When("출발역에서 도착역까지의 최소 시간 기준으로 경로 조회를 요청", () -> {
             response = PathSteps.getPath(성수역, 강변역);
         });
-        Then("출발역으로부터 도착역까지의 경로에 있는 역 목록이 조회된다", () -> {
+        Then("최소 시간 기준 경로를 응답", () -> {
             List<Long> actual = response.getStationDtoList().stream().map(StationDto::getId).collect(Collectors.toList());
             assertThat(actual).containsExactly(성수역, 강변역);
+        });
+        And("총 거리와 소요 시간을 함께 응답함", () -> {
+
         });
     }
 
