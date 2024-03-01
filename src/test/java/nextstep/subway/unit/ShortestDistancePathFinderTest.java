@@ -30,7 +30,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
         verifyPathResponse(pathResponse, expectedPathResponse);
     }
 
-    @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 초과하면 1250원을 리턴한다.")
+    @DisplayName("최단 거리 경로를 조회 하였을 때, 10km 초과하면 1350원을 리턴한다.")
     @Test
     void pathFinder_fee_over_10Km() {
         삼호선 = new Line(3L, "3호선", "orange", 교대역, 남부터미널역, 6, 10);
@@ -44,7 +44,7 @@ class ShortestDistancePathFinderTest extends PathFinderTest {
         verifyPathResponse(pathResponse, expectedPathResponse);
     }
 
-    @DisplayName("최단 거리 경로를 조회 하였을 때, 50km 초과하면 1250원을 리턴한다.")
+    @DisplayName("최단 거리 경로를 조회 하였을 때, 50km 초과하면 2150원을 리턴한다.")
     @Test
     void pathFinder_fee_over_50Km() {
         이호선 = new Line(1L, "2호선", "green", 교대역, 강남역, 1000, 2);
