@@ -6,7 +6,6 @@ import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.domain.vo.Path;
-import nextstep.subway.ui.BusinessException;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
@@ -15,7 +14,33 @@ public class ShortestDistancePathFinder implements PathFinder {
   private final WeightedMultigraph<Station, PathWeightedEdge> graph;
 
   public ShortestDistancePathFinder(final Collection<Section> sections) {
-    this.graph = buildGraph(sections);
+    graph = buildGraph(sections);
+  }
+
+  private WeightedMultigraph<Station, PathWeightedEdge> buildGraph(final Collection<Section> sections) {
+    if (sections == null) {
+      throw new IllegalArgumentException("구간 정보가 없습니다.");
+    }
+
+    final var graph = WeightedMultigraph.<Station, PathWeightedEdge>builder(PathWeightedEdge.class).build();
+
+    sections.forEach(section -> {
+      // add station ID
+      graph.addVertex(section.getUpStation());
+      graph.addVertex(section.getDownStation());
+
+      // add edge
+      final var edge = new PathWeightedEdge(section.getDistance(), section.getDuration());
+      graph.addEdge(
+          section.getUpStation(),
+          section.getDownStation(),
+          edge
+      );
+
+      graph.setEdgeWeight(edge, edge.getDistance());
+    });
+
+    return graph;
   }
 
   @Override
@@ -54,31 +79,5 @@ public class ShortestDistancePathFinder implements PathFinder {
     if (target == null) {
       throw new IllegalArgumentException("도착역 정보가 없습니다.");
     }
-  }
-
-  private static WeightedMultigraph<Station, PathWeightedEdge> buildGraph(final Collection<Section> sections) {
-    if (sections == null) {
-      throw new IllegalArgumentException("구간 정보가 없습니다.");
-    }
-
-    final var graph = WeightedMultigraph.<Station, PathWeightedEdge>builder(PathWeightedEdge.class).build();
-
-    sections.forEach(section -> {
-      // add station ID
-      graph.addVertex(section.getUpStation());
-      graph.addVertex(section.getDownStation());
-
-      // add edge
-      final var edge = new PathWeightedEdge(section.getDistance(), section.getDuration());
-      graph.addEdge(
-          section.getUpStation(),
-          section.getDownStation(),
-          edge
-      );
-
-      graph.setEdgeWeight(edge, edge.getDistance());
-    });
-
-    return graph;
   }
 }
