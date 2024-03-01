@@ -99,6 +99,10 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
 
+    And("운임은 1250원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1250);
+    });
+
     /**
      * 최단 시간 경로 조회 성공
      */
@@ -124,9 +128,33 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(expected.toArray(new Long[0]));
     });
 
-    Then("시간이 제일 적게 소요되는 경로의 이동거리는 {int}km 소요시간은 {int}분이다.", (Integer distance, Integer duration) -> {
-      assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(5);
-      assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(3);
+    And("시간이 제일 적게 소요되는 경로의 이동거리는 {int}km 소요시간은 {int}분이다.", (Integer distance, Integer duration) -> {
+      assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
+      assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
+    });
+
+    And("운임은 1450원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1450);
+    });
+
+    /**
+     * 거리가 50km를 초과하는 구간의 경로 조회
+     */
+    When("거리가 50km를 초과하는 {string}과 {string}의 경로를 조회하면", (String source, String target) -> {
+      context.response = RestAssured
+          .given().log().all()
+          .accept(MediaType.APPLICATION_JSON_VALUE)
+          .when().get(
+              "/paths?source={sourceId}&target={targetId}&type={type}",
+              context.store.get(source),
+              context.store.get(target),
+              PathSearchType.DURATION.name()
+          )
+          .then().log().all().extract();
+    });
+
+    And("운임은 2150원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(2150);
     });
 
     /**
