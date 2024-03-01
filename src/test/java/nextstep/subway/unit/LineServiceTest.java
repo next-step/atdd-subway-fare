@@ -207,13 +207,13 @@ public class LineServiceTest {
         final var 강남역 = 역_생성("강남역");
         final var 양재역 = 역_생성("양재역");
         final var 신분당선 = 노선_생성("신분당선", "빨강");
-        final var 첫구간 = new Section(신분당선, 강남역, 양재역, 10);
+        final var 첫구간 = new Section(신분당선, 강남역, 양재역, 10, 10);
         신분당선.addSection(첫구간);
 
         final var 청계산입구역 = 역_생성("청계산입구역");
 
         // when
-        lineService.addSection(신분당선.getId(), 양재역.getId(), 청계산입구역.getId(), 5);
+        lineService.addSection(신분당선.getId(), 양재역.getId(), 청계산입구역.getId(), 5, 5);
 
         // then
         assertThat(신분당선.getStations()).containsExactly(강남역, 양재역, 청계산입구역);
@@ -226,13 +226,13 @@ public class LineServiceTest {
         final var 강남역 = 역_생성("강남역");
         final var 양재역 = 역_생성("양재역");
         final var 신분당선 = 노선_생성("신분당선", "빨강");
-        final var 첫구간 = new Section(신분당선, 강남역, 양재역, 10);
+        final var 첫구간 = new Section(신분당선, 강남역, 양재역, 10, 10);
         신분당선.addSection(첫구간);
 
         final var 청계산입구역 = 역_생성("청계산입구역");
 
         // when
-        lineService.addSection(신분당선.getId(), 양재역.getId(), 청계산입구역.getId(), 5);
+        lineService.addSection(신분당선.getId(), 양재역.getId(), 청계산입구역.getId(), 5, 5);
 
         // then
         assertThat(신분당선.getStations()).containsExactly(강남역, 양재역, 청계산입구역);
@@ -245,13 +245,13 @@ public class LineServiceTest {
         final var 강남역 = 역_생성("강남역");
         final var 양재역 = 역_생성("양재역");
         final var 신분당선 = 노선_생성("신분당선", "빨강");
-        final var 첫구간 = new Section(신분당선, 강남역, 양재역, 10);
+        final var 첫구간 = new Section(신분당선, 강남역, 양재역, 10, 10);
         신분당선.addSection(첫구간);
 
         final var 청계산입구역 = 역_생성("청계산입구역");
 
         // when
-        lineService.addSection(신분당선.getId(), 양재역.getId(), 청계산입구역.getId(), 5);
+        lineService.addSection(신분당선.getId(), 양재역.getId(), 청계산입구역.getId(), 5, 5);
 
         // then
         assertThat(신분당선.getStations()).containsExactly(강남역, 양재역, 청계산입구역);

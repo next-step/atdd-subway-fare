@@ -28,7 +28,7 @@ public class LineService {
         Station downStation = stationService.findById(request.getDownStationId());
         Line line = lineRepository.save(request.to());
 
-        this.addSection(line.getId(), upStation.getId(), downStation.getId(), request.getDistance());
+        this.addSection(line.getId(), upStation.getId(), downStation.getId(), request.getDistance(), request.getDuration());
 
         return LineResponse.from(
             line,
@@ -75,14 +75,14 @@ public class LineService {
     }
 
     @Transactional
-    public void addSection(Long lineId, Long upStationId, Long downStationId, int distance) {
+    public void addSection(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
         Station upStation = stationService.findById(upStationId);
         Station downStation = stationService.findById(downStationId);
 
         Line line = lineRepository.findById(lineId)
             .orElseThrow(() -> new BusinessException("노선 정보를 찾을 수 없습니다."));
 
-        line.addSection(new Section(line, upStation, downStation, distance));
+        line.addSection(new Section(line, upStation, downStation, distance, duration));
     }
 
     @Transactional

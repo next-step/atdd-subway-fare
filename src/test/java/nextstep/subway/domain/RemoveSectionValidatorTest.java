@@ -16,8 +16,8 @@ class RemoveSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 3);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
-    sections.addSection(new Section(null, stations.get(1), stations.get(2), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
+    sections.addSection(new Section(null, stations.get(1), stations.get(2), 5, 5));
 
     // when
     final var throwable = catchThrowable(() -> RemoveSectionValidator.validate(sections, stations.get(0)));
@@ -32,7 +32,7 @@ class RemoveSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 3);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // when
     final var throwable = catchThrowable(() -> RemoveSectionValidator.validate(sections, stations.get(2)));
@@ -48,7 +48,7 @@ class RemoveSectionValidatorTest {
     // given
     final var stations = FixtureUtil.getFixtures(Station.class, 2);
     final var sections = new Sections();
-    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5));
+    sections.addSection(new Section(null, stations.get(0), stations.get(1), 5, 5));
 
     // when
     final var throwable = catchThrowable(() -> RemoveSectionValidator.validate(sections, stations.get(0)));

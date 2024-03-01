@@ -26,7 +26,7 @@ class LineTest {
         final var 첫번째역 = FixtureUtil.getFixture(Station.class);
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
 
-        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10);
+        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10, 10);
 
         // when
         노선.addSection(구간);
@@ -48,7 +48,7 @@ class LineTest {
 
         final var 첫번째역 = FixtureUtil.getFixture(Station.class);
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
-        final var 구간 = new Section(노선, 첫번째역, 두번째역,  5);
+        final var 구간 = new Section(노선, 첫번째역, 두번째역,  5, 5);
         노선.addSection(구간);
 
         // when
@@ -71,14 +71,14 @@ class LineTest {
 
         final var 첫번째역 = FixtureUtil.getFixture(Station.class);
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
-        final var 첫번째구간 = new Section(노선, 첫번째역, 두번째역, 10);
+        final var 첫번째구간 = new Section(노선, 첫번째역, 두번째역, 10, 10);
         노선.addSection(첫번째구간);
 
         final var 세번째역 = FixtureUtil.getFixture(Station.class);
         final var 네번째역 = FixtureUtil.getFixture(Station.class);
 
         // when
-        final var throwable = catchThrowable(() -> 노선.addSection(new Section(노선, 세번째역, 네번째역, 10)));
+        final var throwable = catchThrowable(() -> 노선.addSection(new Section(노선, 세번째역, 네번째역, 10, 10)));
 
         // then
         assertThat(throwable).isInstanceOf(BusinessException.class)
@@ -99,8 +99,8 @@ class LineTest {
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
         final var 세번째역 = FixtureUtil.getFixture(Station.class);
 
-        final var 첫번째구간 = new Section(노선, 첫번째역, 두번째역, 10);
-        final var 두번째구간 = new Section(노선, 두번째역, 세번째역, 10);
+        final var 첫번째구간 = new Section(노선, 첫번째역, 두번째역, 10, 10);
+        final var 두번째구간 = new Section(노선, 두번째역, 세번째역, 10, 10);
 
         노선.addSection(첫번째구간);
         노선.addSection(두번째구간);
@@ -127,8 +127,8 @@ class LineTest {
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
         final var 세번째역 = FixtureUtil.getFixture(Station.class);
 
-        노선.addSection(new Section(노선, 첫번째역, 두번째역, 10));
-        final var 두번째구간 = new Section(노선, 두번째역, 세번째역, 10);
+        노선.addSection(new Section(노선, 첫번째역, 두번째역, 10, 10));
+        final var 두번째구간 = new Section(노선, 두번째역, 세번째역, 10, 10);
         노선.addSection(두번째구간);
 
         // when

@@ -163,7 +163,7 @@ public class LineServiceMockTest {
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
         final var 세번째역 = FixtureUtil.getFixture(Station.class);
 
-        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10);
+        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10, 10);
         노선.addSection(구간);
 
         when(lineRepository.findById(노선.getId())).thenReturn(Optional.of(노선));
@@ -171,7 +171,7 @@ public class LineServiceMockTest {
         when(stationService.findById(세번째역.getId())).thenReturn(세번째역);
 
         // when
-        lineService.addSection(노선.getId(), 두번째역.getId(), 세번째역.getId(), 5);
+        lineService.addSection(노선.getId(), 두번째역.getId(), 세번째역.getId(), 5, 5);
 
         // then
         assertThat(노선.getStations()).containsExactly(첫번째역, 두번째역, 세번째역);
@@ -189,7 +189,7 @@ public class LineServiceMockTest {
         final var 첫번째역 = FixtureUtil.getFixture(Station.class);
         final var 두번째역 = FixtureUtil.getFixture(Station.class);
 
-        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10);
+        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10, 10);
         노선.addSection(구간);
 
         when(lineRepository.findById(노선.getId())).thenReturn(Optional.of(노선));
@@ -197,7 +197,7 @@ public class LineServiceMockTest {
         when(stationService.findById(두번째역.getId())).thenReturn(두번째역);
 
         // when
-        final var throwable = catchThrowable(() -> lineService.addSection(노선.getId(), 첫번째역.getId(), 두번째역.getId(), 5));
+        final var throwable = catchThrowable(() -> lineService.addSection(노선.getId(), 첫번째역.getId(), 두번째역.getId(), 5, 5));
 
         // then
         assertThat(throwable).isInstanceOf(BusinessException.class)
@@ -218,7 +218,7 @@ public class LineServiceMockTest {
         final var 세번째역 = FixtureUtil.getFixture(Station.class);
         final var 네번째역 = FixtureUtil.getFixture(Station.class);
 
-        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10);
+        final var 구간 = new Section(노선, 첫번째역, 두번째역, 10, 10);
         노선.addSection(구간);
 
         when(lineRepository.findById(노선.getId())).thenReturn(Optional.of(노선));
@@ -226,7 +226,7 @@ public class LineServiceMockTest {
         when(stationService.findById(네번째역.getId())).thenReturn(네번째역);
 
         // when
-        final var throwable = catchThrowable(() -> lineService.addSection(노선.getId(), 세번째역.getId(), 네번째역.getId(), 5));
+        final var throwable = catchThrowable(() -> lineService.addSection(노선.getId(), 세번째역.getId(), 네번째역.getId(), 5, 5));
 
         // then
         assertThat(throwable).isInstanceOf(BusinessException.class)
