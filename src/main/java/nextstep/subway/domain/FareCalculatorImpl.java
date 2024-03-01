@@ -5,11 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FareCalculatorImpl implements FareCalculator {
-    private static final String DISTANCE_OVER = "distanceOver";
-    private static final String DISTANCE_UNDER = "distanceUnder";
-    private static final String FARE = "fare";
-    private static final String STEP = "step";
-
     private static final int DEFAULT_FARE = 1250;
 
     private final List<FareCalculateOption> fareCalculateOptions;
