@@ -10,6 +10,8 @@ public class PathResponse {
     private int distance;
     private int duration;
 
+    private int fare;
+
     public PathResponse() {
     }
 
@@ -29,5 +31,13 @@ public class PathResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getFare() {
+        return fare;
+    }
+
+    public void updateFare(int fare) {
+        this.fare = fare;
     }
 }

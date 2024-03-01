@@ -11,8 +11,16 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Component
 public class JGraphTPathFinderImpl extends PathFinder {
+
+    public JGraphTPathFinderImpl(FareCalculator fareCalculator) {
+        super(fareCalculator);
+    }
+
     @Override
     protected PathResponse getPath(PathRequest pathRequest, List<Line> lines) {
         final Set<Section> sections = getAllSectionsInLines(lines);
@@ -34,10 +42,13 @@ public class JGraphTPathFinderImpl extends PathFinder {
         final Map<String, Station> stationMap = getIdToStationMap(sections);
         final List<Section> edgeSection = getSectionsComposingEdges(sections, stationIds);
 
+        final int distance = edgeSection.stream().map(Section::getDistance).reduce(0, Integer::sum);
+        final int duration = edgeSection.stream().map(Section::getDuration).reduce(0, Integer::sum);
+
         return new PathResponse(
             stationIds.stream().map(stationMap::get).collect(Collectors.toList()),
-            edgeSection.stream().map(Section::getDistance).reduce(0, Integer::sum),
-            edgeSection.stream().map(Section::getDuration).reduce(0, Integer::sum)
+            distance,
+            duration
         );
     }
 
@@ -74,7 +85,7 @@ public class JGraphTPathFinderImpl extends PathFinder {
 
             DefaultWeightedEdge edge = graph.addEdge(upStationId, downStationId);
 
-            graph.setEdgeWeight(edge, section.getWeight(type));
+            graph.setEdgeWeight(edge, type.getWeight(section));
         });
 
         return graph;

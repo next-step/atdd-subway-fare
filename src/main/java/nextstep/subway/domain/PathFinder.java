@@ -6,10 +6,19 @@ import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 
 public abstract class PathFinder {
+    private final FareCalculator fareCalculator;
+
+    protected PathFinder(FareCalculator fareCalculator) {
+        this.fareCalculator = fareCalculator;
+    }
+
     public PathResponse findPath(PathRequest pathRequest, List<Line> lines) {
         validateRequest(pathRequest, lines);
 
-        return getPath(pathRequest, lines);
+        PathResponse pathResponse = getPath(pathRequest, lines);
+
+        pathResponse.updateFare(fareCalculator.calculateFare(pathResponse.getDistance()));
+        return pathResponse;
     }
 
     protected void validateRequest(PathRequest request, List<Line> lines) {

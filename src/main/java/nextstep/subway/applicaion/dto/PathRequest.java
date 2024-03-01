@@ -16,9 +16,7 @@ public class PathRequest {
     }
 
     public PathRequest(Long source, Long target) {
-        this.source = source;
-        this.target = target;
-        type = PathSearchType.DISTANCE;
+        this(source, target, PathSearchType.DISTANCE);
     }
 
     public PathRequest(Long source, Long target, PathSearchType type) {

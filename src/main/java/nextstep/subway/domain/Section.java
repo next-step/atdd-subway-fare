@@ -77,12 +77,4 @@ public class Section {
         distance += section.distance;
         duration += section.duration;
     }
-
-    public int getWeight(PathSearchType type) {
-        if(type == PathSearchType.DURATION) {
-            return duration;
-        }
-
-        return distance;
-    }
 }
