@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FareCalculatorImpl implements FareCalculator {
-    private static final int DEFAULT_FARE = 1250;
+    private static final int DEFAULT_FARE = 1_250;
 
     private final List<FareCalculateOption> fareCalculateOptions;
 
