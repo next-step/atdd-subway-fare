@@ -20,7 +20,7 @@ public class PathAcceptanceContext {
     List<String> 이호선_역;
     String 이호선 = "이호선";
 
-    List<String> 오호선_역 = List.of("충정로", "서대문", "광화문", "종로3가", "을지로4가", "동대문역사문화공원", "청구", "신금호", "행당", "왕십리", "마장");
+    List<String> 오호선_역;
     String 오호선 = "오호선";
 
     public void setUpLine() {
@@ -62,7 +62,7 @@ public class PathAcceptanceContext {
     public void setUpSection(Map<String, Integer> durationByLine) {
         for (int i = 0; i < 이호선_역.size() - 2; i++) {
             int next = i + 1;
-            SectionResponse response = SectionSteps.라인에_구간을_추가한다(lineStore.get(이호선), new SectionRequest(
+            SectionSteps.라인에_구간을_추가한다(lineStore.get(이호선), new SectionRequest(
                     stationStore.get(이호선_역.get(i)),
                     stationStore.get(이호선_역.get(next)),
                     5,
