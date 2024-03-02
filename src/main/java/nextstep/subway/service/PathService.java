@@ -32,18 +32,16 @@ public class PathService {
 
         long distance = paths.findShortestValue(source, target, PathType.DISTANCE);
         long duration = paths.findShortestValue(source, target, PathType.DURATION);
-        long fareByDistance = fareHandlerFactory.calculateFare(distance);
+        long basicFare = fareHandlerFactory.calculateFare(distance);
 
         Member member = memberRepository.getBy(email);
         FareAgeGroup fareAgeGroup = FareAgeGroup.of(member.getAge());
 
         Sections sections = new Sections(paths.findEdges(source, target, getPathType(pathType)));
         Lines lines = new Lines(sections.findLines());
-        long plusExtraFare = lines.calculatePlusExtraFare(fareAgeGroup);
 
-        long discountExtraFare = fareAgeGroup.calculateDiscountFare(fareByDistance);
-
-        long totalFare = fareByDistance + plusExtraFare - discountExtraFare;
+        Fare fare = new Fare(lines, fareAgeGroup, basicFare);
+        long totalFare = fare.calculateTotalFare(basicFare);
 
         return new PathResponse(StationResponse.listOf(stations), distance, duration, totalFare);
     }
