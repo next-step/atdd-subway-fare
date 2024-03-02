@@ -4,10 +4,10 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.exception.ExceptionResponse;
-import nextstep.subway.LineSteps;
-import nextstep.subway.PathSteps;
-import nextstep.subway.StationSteps;
 import nextstep.subway.controller.dto.*;
+import nextstep.subway.steps.LineSteps;
+import nextstep.subway.steps.PathSteps;
+import nextstep.subway.steps.StationSteps;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

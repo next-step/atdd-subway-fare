@@ -3,11 +3,10 @@ package nextstep.favorite.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import nextstep.RestAssuredRequestBuilder;
 import nextstep.favorite.application.dto.FavoriteCreateRequest;
 import org.springframework.http.MediaType;
 
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 public class FavoriteSteps {
@@ -18,9 +17,7 @@ public class FavoriteSteps {
         return new FavoriteSteps().new FavoriteRequestBuilder();
     }
 
-    public class FavoriteRequestBuilder {
-        private RequestSpecification spec;
-        private String accessToken;
+    public class FavoriteRequestBuilder extends RestAssuredRequestBuilder {
         private FavoriteCreateRequest body;
         private int statusCode = OK.value();
 
@@ -71,10 +68,5 @@ public class FavoriteSteps {
                     .extract();
         }
 
-        private void setAuthorization() {
-            if (this.accessToken != null && !this.accessToken.isEmpty()) {
-                this.spec.header(AUTHORIZATION, "Bearer " + this.accessToken);
-            }
-        }
     }
 }

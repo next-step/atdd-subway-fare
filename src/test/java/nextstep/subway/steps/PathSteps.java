@@ -1,13 +1,12 @@
-package nextstep.subway;
+package nextstep.subway.steps;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import nextstep.RestAssuredRequestBuilder;
 
 import java.util.Map;
 
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 public class PathSteps {
@@ -18,9 +17,7 @@ public class PathSteps {
         return new PathSteps().new PatahRequestBuilder();
     }
 
-    public class PatahRequestBuilder {
-        private RequestSpecification spec;
-        private String accessToken;
+    public class PatahRequestBuilder extends RestAssuredRequestBuilder {
         private int statusCode = OK.value();
 
         public PatahRequestBuilder() {
@@ -50,10 +47,5 @@ public class PathSteps {
                     .extract();
         }
 
-        private void setAuthorization() {
-            if (this.accessToken != null && !this.accessToken.isEmpty()) {
-                this.spec.header(AUTHORIZATION, "Bearer " + this.accessToken);
-            }
-        }
     }
 }

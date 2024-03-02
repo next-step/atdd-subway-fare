@@ -1,14 +1,13 @@
-package nextstep.subway;
+package nextstep.subway.steps;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import nextstep.RestAssuredRequestBuilder;
 import nextstep.subway.controller.dto.LineCreateRequest;
 import nextstep.subway.controller.dto.SectionCreateRequest;
 import org.springframework.http.MediaType;
 
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 public class LineSteps {
@@ -19,9 +18,7 @@ public class LineSteps {
         return new LineSteps().new LineRequestBuilder();
     }
 
-    public class LineRequestBuilder {
-        private RequestSpecification spec;
-        private String accessToken;
+    public class LineRequestBuilder extends RestAssuredRequestBuilder {
         private LineCreateRequest lineCreateRequest;
         private SectionCreateRequest sectionCreateRequest;
         private int statusCode = OK.value();
@@ -71,10 +68,5 @@ public class LineSteps {
                     .extract();
         }
 
-        private void setAuthorization() {
-            if (this.accessToken != null && !this.accessToken.isEmpty()) {
-                this.spec.header(AUTHORIZATION, "Bearer " + this.accessToken);
-            }
-        }
     }
 }

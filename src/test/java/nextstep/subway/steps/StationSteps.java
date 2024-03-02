@@ -1,13 +1,12 @@
-package nextstep.subway;
+package nextstep.subway.steps;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import nextstep.RestAssuredRequestBuilder;
 import nextstep.subway.controller.dto.StationCreateRequest;
 import org.springframework.http.MediaType;
 
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 public class StationSteps {
@@ -18,9 +17,7 @@ public class StationSteps {
         return new StationSteps().new StationRequestBuilder();
     }
 
-    public class StationRequestBuilder {
-        private RequestSpecification spec;
-        private String accessToken;
+    public class StationRequestBuilder extends RestAssuredRequestBuilder {
         private StationCreateRequest body;
         private int statusCode = OK.value();
 
@@ -53,10 +50,5 @@ public class StationSteps {
                     .extract();
         }
 
-        private void setAuthorization() {
-            if (this.accessToken != null && !this.accessToken.isEmpty()) {
-                this.spec.header(AUTHORIZATION, "Bearer " + this.accessToken);
-            }
-        }
     }
 }
