@@ -20,6 +20,11 @@ public class Paths {
         return path.findShortestValue(source, target);
     }
 
+    public List<Section> findEdges(Station source, Station target, PathType pathType) {
+        Path path = findPathBy(pathType);
+        return path.findEdges(source, target);
+    }
+
     private Path findPathBy(PathType pathType) {
         return paths.stream()
                 .filter(path -> path.isSamePathType(pathType))
