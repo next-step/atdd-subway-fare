@@ -37,7 +37,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         교대역 = StationFixture.지하철역_생성_요청("교대역").as(StationResponse.class).getId();
         강남역 = StationFixture.지하철역_생성_요청("강남역").as(StationResponse.class).getId();
 
-        LineFixture.노선_생성_요청("2호선", "green", 10, 교대역, 강남역).as(LineResponse.class).getId();
+        LineFixture.노선_생성_요청("2호선", "green", 10, 교대역, 강남역, 1).as(LineResponse.class).getId();
 
         MemberSteps.회원_생성_요청(EMAIL, PASSWORD, AGE);
         accessToken = MemberSteps.회원_로그인(EMAIL, PASSWORD).as(TokenResponse.class).getAccessToken();

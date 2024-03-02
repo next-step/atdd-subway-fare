@@ -21,7 +21,7 @@ class LineTest {
         역삼역 = new Station("역삼역");
         선릉역 = new Station("선릉역");
         이호선 = new Line("2호선", "green");
-        구간 = new Section(이호선, 강남역, 역삼역, 10);
+        구간 = new Section(이호선, 강남역, 역삼역, 10, 1);
     }
 
     @Test
@@ -47,7 +47,7 @@ class LineTest {
         // given
         이호선.addSection(구간);
 
-        Section 신규구간 = new Section(이호선, 역삼역, 선릉역, 15);
+        Section 신규구간 = new Section(이호선, 역삼역, 선릉역, 15, 1);
         이호선.addSection(신규구간);
 
         // when

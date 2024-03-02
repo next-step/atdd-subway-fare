@@ -40,14 +40,14 @@ public class PathFinderTest {
     void getShortestPath() {
         // given
         이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         신분당선 = new Line("신분당선", "red");
-        신분당선.addSection(new Section(신분당선, 강남역, 양재역, 10));
+        신분당선.addSection(new Section(신분당선, 강남역, 양재역, 10, 2));
 
         삼호선 = new Line("3호선", "orange");
-        삼호선.addSection(new Section(삼호선, 교대역, 남부터미널역, 2));
-        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3));
+        삼호선.addSection(new Section(삼호선, 교대역, 남부터미널역, 2, 3));
+        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3, 4));
 
         List<Sections> sectionsList = List.of(이호선, 신분당선, 삼호선).stream()
             .map(Line::getSections)
@@ -71,10 +71,10 @@ public class PathFinderTest {
     void isNotConnectedStations() {
         // given
         이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         신분당선 = new Line("신분당선", "red");
-        신분당선.addSection(new Section(신분당선, 남부터미널역, 양재역, 10));
+        신분당선.addSection(new Section(신분당선, 남부터미널역, 양재역, 10, 2));
 
         List<Sections> sectionsList = List.of(이호선, 신분당선).stream()
             .map(Line::getSections)

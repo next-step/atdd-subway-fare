@@ -45,20 +45,20 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = StationFixture.지하철역_생성_요청("양재역").as(StationResponse.class).getId();
         남부터미널역 = StationFixture.지하철역_생성_요청("남부터미널역").as(StationResponse.class).getId();
 
-        이호선 = LineFixture.노선_생성_요청("2호선", "green", 10, 교대역, 강남역).as(LineResponse.class).getId();
-        신분당선 = LineFixture.노선_생성_요청("신분당선", "red", 10, 강남역, 양재역).as(LineResponse.class).getId();
-        삼호선 = LineFixture.노선_생성_요청("3호선", "orange", 2,  교대역, 남부터미널역).as(LineResponse.class).getId();
+        이호선 = LineFixture.노선_생성_요청("2호선", "green", 10, 교대역, 강남역, 4).as(LineResponse.class).getId();
+        신분당선 = LineFixture.노선_생성_요청("신분당선", "red", 10, 강남역, 양재역, 3).as(LineResponse.class).getId();
+        삼호선 = LineFixture.노선_생성_요청("3호선", "orange", 2,  교대역, 남부터미널역, 2).as(LineResponse.class).getId();
 
-        LineFixture.구간_생성_요청(삼호선, 양재역, 남부터미널역, 3);
+        LineFixture.구간_생성_요청(삼호선, 양재역, 남부터미널역, 3, 1);
     }
 
     /**
-     * When 노선의 경로를 조회하면
+     * When 출발역과 도착역의 최단거리 경로를 조회하면
      * Then 출발역과 도착역 사이의 역 목록과 구간의 거리가 조회된다.
      */
-    @DisplayName("경로를 조회한다.")
+    @DisplayName("최단거리 경로를 조회한다.")
     @Test
-    void 경로_조회_성공() {
+    void 최단거리_경로_조회_성공() {
         // when
         ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역);
 
@@ -70,6 +70,26 @@ public class PathAcceptanceTest extends AcceptanceTest {
             .collect(Collectors.toList());
         assertThat(최단구간_역_목록).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(경로_조회_응답.as(PathResponse.class).getDistance()).isEqualTo(5);
+    }
+
+    /**
+     * When 노선의 최소시간 경로를 조회하면
+     * Then 출발역과 도착역 사이의 역 목록과 구간의 소요시간이 조회된다.
+     */
+    @DisplayName("최소시간 경로를 조회한다.")
+    @Test
+    void 최소시간_경로_조회_성공() {
+        // when
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역);
+
+        // then
+        assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> 최단구간_역_목록 = 경로_조회_응답.as(PathResponse.class).getStations().stream()
+            .map(StationResponse::getId)
+            .collect(Collectors.toList());
+        assertThat(최단구간_역_목록).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(경로_조회_응답.as(PathResponse.class).getDuration()).isEqualTo(3);
     }
 
     /**

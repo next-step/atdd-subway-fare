@@ -25,7 +25,7 @@ public class FavoriteTest {
         Station 강남역 = new Station("강남역");
 
         Line 이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         // when
         Favorite 즐겨찾기 = new Favorite(사용자, 교대역, 강남역, List.of(이호선.getSections()));
