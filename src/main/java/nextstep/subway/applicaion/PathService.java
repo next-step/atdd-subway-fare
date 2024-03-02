@@ -6,7 +6,6 @@ import nextstep.subway.domain.BaseFareCalculator;
 import nextstep.subway.domain.Over10kmSurchargeCalculator;
 import nextstep.subway.domain.Over50kmSurchargeCalculator;
 import nextstep.subway.domain.PathSearchType;
-import nextstep.subway.domain.vo.Path;
 import nextstep.subway.ui.BusinessException;
 import org.springframework.stereotype.Service;
 
@@ -32,19 +31,19 @@ public class PathService {
     final var sections = sectionService.findAll();
     final var path = PathFinderComposite.find(sections, type, sourceStation, targetStation);
 
-    final var fare = calculateFare(path);
+    final var fare = calculateFare(path.getDistance());
 
     return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration(), fare);
   }
 
-  private int calculateFare(Path path) {
+  private int calculateFare(final int distance) {
     final var basicCalculator = new BaseFareCalculator();
     final var over10kmSurchargeCalculator = new Over10kmSurchargeCalculator();
     final var over50kmSurchargeCalculator = new Over50kmSurchargeCalculator();
 
     return basicCalculator.calculate()
-        + over10kmSurchargeCalculator.calculate(path.getDistance())
-        + over50kmSurchargeCalculator.calculate(path.getDistance());
+        + over10kmSurchargeCalculator.calculate(distance)
+        + over50kmSurchargeCalculator.calculate(distance);
   }
 
   private void verifySourceIsSameToTarget(Long source, Long target) {
