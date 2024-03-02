@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 public class PathResponse {
     private List<StationResponse> stations = new ArrayList<>();
     private Integer distance;
+    private Integer duration;
 
     protected PathResponse() {}
 
-    public PathResponse(List<Station> stations, Integer distance) {
+    public PathResponse(List<Station> stations, Integer distance, Integer duration) {
+        this.duration = duration;
         this.stations.addAll(
             createStationResponses(stations)
         );
@@ -32,5 +34,9 @@ public class PathResponse {
 
     public double getDistance() {
         return distance;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

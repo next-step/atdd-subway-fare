@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.dto.path.PathResponse;
+import nextstep.subway.dto.path.PathType;
 import nextstep.subway.dto.station.StationResponse;
 import nextstep.subway.entity.Line;
 import nextstep.subway.entity.Section;
@@ -63,7 +64,7 @@ public class PathServiceTest {
     @Test
     void getPath() {
         // when
-        PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId());
+        PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
         List<Long> 최단구간_역_목록 = 경로_조회_응답.getStations().stream()
@@ -77,7 +78,7 @@ public class PathServiceTest {
     @DisplayName("출발역과 도착역이 동일한 경우 예외가 발생한다.")
     @Test
     void 동일한_도착역과_출발역() {
-        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 교대역.getId()))
+        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 교대역.getId(), PathType.DISTANCE))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("출발역과 도착역은 동일할 수 없다.");
     }
@@ -87,7 +88,7 @@ public class PathServiceTest {
     void 존재하지_않는_역() {
         Long 존재하지_않는_역 = -9999L;
 
-        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 존재하지_않는_역))
+        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 존재하지_않는_역, PathType.DISTANCE))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }

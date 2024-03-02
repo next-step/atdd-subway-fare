@@ -28,7 +28,7 @@ public class PathFinder {
             List<Station> shortestPath = path.getVertexList();
             Integer distance = (int) path.getWeight();
 
-            return new PathResponse(shortestPath, distance);
+            return new PathResponse(shortestPath, distance, 3);
         } catch (Exception e) {
             throw new IllegalArgumentException("출발역과 도착역이 연결되어 있어야 한다.");
         }

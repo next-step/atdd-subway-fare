@@ -1,6 +1,7 @@
 package nextstep.subway.service;
 
 import nextstep.subway.dto.path.PathResponse;
+import nextstep.subway.dto.path.PathType;
 import nextstep.subway.entity.Sections;
 import nextstep.subway.entity.Station;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class PathService {
     }
 
     /** 경로 조회 */
-    public PathResponse getPaths(Long source, Long target) {
+    public PathResponse getPaths(Long source, Long target, PathType type) {
         if(Objects.equals(source, target)) {
             throw new IllegalArgumentException("출발역과 도착역은 동일할 수 없다.");
         }

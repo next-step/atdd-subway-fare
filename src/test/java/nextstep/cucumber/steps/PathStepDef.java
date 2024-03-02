@@ -28,6 +28,10 @@ public class PathStepDef implements En {
                 .extract();
         });
 
+        Then("최단 거리 기준 경로를 응답", () -> {
+            assertThat(context.response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        });
+
         Then("최소 시간 기준 경로를 응답", () -> {
             assertThat(context.response.statusCode()).isEqualTo(HttpStatus.OK.value());
         });

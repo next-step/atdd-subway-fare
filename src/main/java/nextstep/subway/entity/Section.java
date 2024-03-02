@@ -34,14 +34,17 @@ public class Section implements Comparable<Section> {
 
     @Column(nullable = false)
     private Integer distance;
+    @Column(nullable = false)
+    private Integer duration;
 
     protected Section() {}
 
-    public Section(Line line, Station upStation, Station downStation, Integer distance) {
+    public Section(Line line, Station upStation, Station downStation, Integer distance, Integer duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public void updateNextSection(Station upStation, Integer distance) {
@@ -77,5 +80,9 @@ public class Section implements Comparable<Section> {
 
     public Integer getDistance() {
         return distance;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

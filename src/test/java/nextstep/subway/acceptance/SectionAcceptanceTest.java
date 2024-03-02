@@ -257,11 +257,11 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> createSection(
-        Long lineId, Long downStationId, Long upStationId, Integer distance
+        Long lineId, Long downStationId, Long upStationId, Integer distance, Integer duration
     ) {
         return RestAssured
             .given().log().all()
-            .body(new SectionRequest(downStationId, upStationId, distance))
+            .body(new SectionRequest(downStationId, upStationId, distance, duration))
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when().post("/lines/{id}/sections", lineId)
             .then().log().all()
