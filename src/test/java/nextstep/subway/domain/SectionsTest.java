@@ -125,12 +125,12 @@ class SectionsTest {
      */
     @Test
     void 성공_지하철이_속해있는_구간의_노선_정보를_중복없이_찾는다() {
-        List<Station> stations = List.of(강남역, 선릉역, 양재역);
-        List<Line> lines = 노선_2개_구간_3개_등록().findLinesBy(stations);
-        assertThat(lines).hasSize(1)
+        List<Line> lines = 노선_2개_구간_3개_등록().findLines();
+        assertThat(lines).hasSize(2)
                 .extracting("id", "name")
                 .containsExactly(
-                        tuple(1L, "신분당선")
+                        tuple(1L, "신분당선"),
+                        tuple(2L, "분당선")
                 );
     }
 

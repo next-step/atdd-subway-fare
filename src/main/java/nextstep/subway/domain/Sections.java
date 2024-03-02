@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -55,22 +54,11 @@ public class Sections {
         matchingSection.changeDownStation(upStation, distance);
     }
 
-    public List<Line> findLinesBy(List<Station> stations) {
-        return IntStream.range(0, stations.size() - 1)
-                .mapToObj(o -> {
-                    Station upStation = stations.get(o);
-                    Station downStation = stations.get(o + 1);
-                    return findMatchingSection(upStation, downStation).line();
-                })
+    public List<Line> findLines() {
+        return sections.stream()
+                .map(Section::line)
                 .distinct()
                 .collect(toList());
-    }
-
-    private Section findMatchingSection(Station upStation, Station downStation) {
-        return sections.stream()
-                .filter(section -> section.isUpStation(upStation) && section.isDownStation(downStation))
-                .findFirst()
-                .orElseThrow(() -> new ApplicationException("지하철이 속해있는 구간의 노선 정보를 찾을 수 없습니다."));
     }
 
     public Section findMatchingSection(Station station) {
@@ -99,7 +87,6 @@ public class Sections {
             throw new ApplicationException("구간이 한개만 있을 경우 구간을 제거할 수 없습니다.");
         }
     }
-
 
     public Optional<Section> findDeleteSectionAtTerminal(Station station) {
         Section firstSection = findFirstSection();

@@ -7,7 +7,6 @@ import nextstep.subway.controller.dto.PathResponse;
 import nextstep.subway.controller.dto.StationResponse;
 import nextstep.subway.domain.*;
 import nextstep.subway.domain.chain.FareHandlerFactory;
-import nextstep.subway.repository.SectionRepository;
 import nextstep.subway.repository.StationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ public class PathService {
 
     private final MemberRepository memberRepository;
     private final StationRepository stationRepository;
-    private final SectionRepository sectionRepository;
     private final PathFinder pathFinder;
     private final FareHandlerFactory fareHandlerFactory;
 
@@ -30,7 +28,7 @@ public class PathService {
         Station target = stationRepository.getBy(targetId);
 
         Paths paths = new Paths(pathFinder.findPaths());
-        List<Station> stations = paths.findShortestPath(source, target, PathType.of(pathType));
+        List<Station> stations = paths.findShortestPath(source, target, getPathType(pathType));
 
         long distance = paths.findShortestValue(source, target, PathType.DISTANCE);
         long duration = paths.findShortestValue(source, target, PathType.DURATION);
@@ -39,8 +37,8 @@ public class PathService {
         Member member = memberRepository.getBy(email);
         FareAgeGroup fareAgeGroup = FareAgeGroup.of(member.getAge());
 
-        Sections sections = new Sections(sectionRepository.findAll());
-        Lines lines = lines(sections, stations);
+        Sections sections = new Sections(paths.findEdges(source, target, getPathType(pathType)));
+        Lines lines = new Lines(sections.findLines());
         long plusExtraFare = lines.calculatePlusExtraFare(fareAgeGroup);
 
         long discountExtraFare = fareAgeGroup.calculateDiscountFare(fareByDistance);
@@ -50,9 +48,8 @@ public class PathService {
         return new PathResponse(StationResponse.listOf(stations), distance, duration, totalFare);
     }
 
-    private Lines lines(Sections sections, List<Station> stations) {
-        List<Line> lines = sections.findLinesBy(stations);
-        return new Lines(lines);
+    private PathType getPathType(String pathType) {
+        return PathType.of(pathType);
     }
 
 }
