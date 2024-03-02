@@ -13,10 +13,12 @@ Feature: 경로조회 관련 기능
       | 양재역    |
       | 남부터미널역    |
     And 노선들을 생성 요청하고
+      | name   | color   | upStation   | downStation   | distance   | duration   |
+      | 2호선    | green   | 교대역   | 강남역   | 10   | 2   |
+      | 신분당선    | red   | 강남역   | 양재역   | 10   | 2   |
+    And 추가요금이 있는 노선들을 생성 요청하고
       | name   | color   | upStation   | downStation   | distance   | duration   | additionalFee   |
-      | 2호선    | green   | 교대역   | 강남역   | 10   | 2   | 0   |
-      | 신분당선    | red   | 강남역   | 양재역   | 10   | 2   | 800   |
-      | 3호선    | orange   | 교대역   | 남부터미널역   | 2   | 10   | 0   |
+      | 3호선    | orange   | 교대역   | 남부터미널역   | 2   | 10   | 800   |
     And 구간을 등록하고
       | lineName | upStation | downStation | distance | duration   |
       | 3호선      | 남부터미널역    | 양재역         | 3        | 10   |

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static nextstep.subway.acceptance.LineSteps.노선이_생성되어_있다;
+import static nextstep.subway.acceptance.LineSteps.추가요금이_있는_노선이_생성되어_있다;
 import static nextstep.subway.acceptance.SectionSteps.구간을_등록한다;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,6 +49,23 @@ public class PathStepDef implements En {
                 final int duration = Integer.parseInt(map.get("duration"));
 
                 final Long lineId = 노선이_생성되어_있다(name, color, upStationId, downStationId, distance, duration)
+                        .as(LineResponse.class).getId();
+                context.store.put(name, lineId);
+            }
+        });
+
+        Given("추가요금이 있는 노선들을 생성 요청하고", (DataTable table)-> {
+            List<Map<String, String>> maps = table.asMaps();
+            for (Map<String, String> map : maps) {
+                final String name = map.get("name");
+                final String color = map.get("color");
+                final Long upStationId = (Long) context.store.get(map.get("upStation"));
+                final Long downStationId = (Long) context.store.get(map.get("downStation"));
+                final int distance = Integer.parseInt(map.get("distance"));
+                final int duration = Integer.parseInt(map.get("duration"));
+                final int additionalFee = Integer.parseInt(map.get("additionalFee"));
+
+                final Long lineId = 추가요금이_있는_노선이_생성되어_있다(name, color, upStationId, downStationId, distance, duration, additionalFee)
                         .as(LineResponse.class).getId();
                 context.store.put(name, lineId);
             }
