@@ -21,7 +21,7 @@ public abstract class PathFinder {
 
     protected final WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
 
-    public PathFinder(List<Line> lines) {
+    protected PathFinder(List<Line> lines) {
         for (Line line : lines) {
             line.getStations()
                     .stream()
@@ -33,12 +33,6 @@ public abstract class PathFinder {
         }
     }
 
-
-    public void addVertex(Station station) {
-        graph.addVertex(station);
-    }
-
-    public abstract void addEdge(Section section);
 
     public PathsDto findPath(Station start, Station end) {
         if (start.equals(end)) {
@@ -52,22 +46,6 @@ public abstract class PathFinder {
         return new PathsDto(distance, duration, dijkstraShortestPath.getPath(start, end).getVertexList());
     }
 
-    private static int getDistance(GraphPath<Station, SectionEdge> path) {
-        return path.getEdgeList()
-                .stream()
-                .map(SectionEdge.class::cast)
-                .mapToInt(SectionEdge::getDistance)
-                .sum();
-    }
-
-    private static int getDuration(GraphPath<Station, SectionEdge> path) {
-        return path.getEdgeList()
-                .stream()
-                .map(SectionEdge.class::cast)
-                .mapToInt(SectionEdge::getDuration)
-                .sum();
-    }
-
     public boolean isConnected(Station start, Station end) {
         if (start.equals(end)) {
             throw new IllegalStateException("시작과 끝이 같은 역입니다");
@@ -78,6 +56,28 @@ public abstract class PathFinder {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    private void addVertex(Station station) {
+        graph.addVertex(station);
+    }
+
+    protected abstract void addEdge(Section section);
+
+    private int getDistance(GraphPath<Station, SectionEdge> path) {
+        return path.getEdgeList()
+                .stream()
+                .map(SectionEdge.class::cast)
+                .mapToInt(SectionEdge::getDistance)
+                .sum();
+    }
+
+    private int getDuration(GraphPath<Station, SectionEdge> path) {
+        return path.getEdgeList()
+                .stream()
+                .map(SectionEdge.class::cast)
+                .mapToInt(SectionEdge::getDuration)
+                .sum();
     }
 
 }
