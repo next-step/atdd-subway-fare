@@ -10,7 +10,6 @@ import nextstep.subway.steps.PathSteps;
 import nextstep.subway.steps.StationSteps;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,54 +24,18 @@ public class PathStepDef implements En {
 
     public PathStepDef() {
         Given("지하철역들을 생성 요청하고", (DataTable table) -> {
-            List<Map<String, String>> rows = table.asMaps();
-
-            for (Map<String, String> columns : rows) {
-                String stationName = columns.get("name");
-
-                Long id = StationSteps.지하철_요청을_구성한다()
-                        .Response_HTTP_상태_코드(CREATED.value())
-                        .로그인을_한다((String) context.store.get("adminAccessToken"))
-                        .지하철_생성_정보를_설정한다(stationName)
-                        .지하철_생성_요청을_보낸다()
-                        .as(StationResponse.class).getId();
-                context.store.put(stationName, id);
-            }
+            table.asMaps().forEach(row -> 지하철역_생성(row.get("name")));
         });
 
         And("지하철 노선들을 생성 요청하고", (DataTable table) -> {
-            List<Map<String, String>> rows = table.asMaps();
-
-            for (Map<String, String> columns : rows) {
-                LineCreateRequest lineCreateRequest = new LineCreateRequest(
-                        columns.get("name"),
-                        columns.get("color"),
-                        (long) context.store.get(columns.get("upStation")),
-                        (long) context.store.get(columns.get("downStation")),
-                        Long.parseLong(columns.get("distance")),
-                        Long.parseLong(columns.get("duration")),
-                        Long.parseLong(columns.get("extraFare"))
-                );
-
-                Long lineId = LineSteps.노선_요청을_구성한다()
-                        .Response_HTTP_상태_코드(CREATED.value())
-                        .로그인을_한다((String) context.store.get("adminAccessToken"))
-                        .노선_생성_정보를_설정한다(lineCreateRequest)
-                        .노선_생성_요청을_보낸다()
-                        .as(LineResponse.class).getId();
-                context.store.put(columns.get("name"), lineId);
-            }
+            table.asMaps().forEach(this::기본_노선_생성);
         });
 
         When("경로 조회시 출발역과 도착역이 같은 경우", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 강남역_ID, "type", "DISTANCE");
 
-            context.message = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params)
-                    .as(ExceptionResponse.class).getMessage();
+            경로_조회_실패_예외메시지(params);
         });
 
         Then("출발역과 도착역이 같아 경로 조회를 할 수 없다", () -> {
@@ -84,11 +47,7 @@ public class PathStepDef implements En {
             String 신대방역_ID = String.valueOf(context.store.get("신대방역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 신대방역_ID, "type", "DISTANCE");
 
-            context.message = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params)
-                    .as(ExceptionResponse.class).getMessage();
+            경로_조회_실패_예외메시지(params);
         });
 
         Then("출발역과 도착역이 연결되어 있지 않아 경로 조회를 할 수 없다", () -> {
@@ -100,11 +59,7 @@ public class PathStepDef implements En {
             String 봉천역_ID = String.valueOf(context.store.get("봉천역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 봉천역_ID, "type", "DISTANCE");
 
-            context.message = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params)
-                    .as(ExceptionResponse.class).getMessage();
+            경로_조회_실패_예외메시지(params);
         });
 
         Then("노선에 존재하지 않는 출발역이여서 경로 조회를 할 수 없다", () -> {
@@ -116,11 +71,7 @@ public class PathStepDef implements En {
             String 봉천역_ID = String.valueOf(context.store.get("봉천역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 봉천역_ID, "type", "DISTANCE");
 
-            context.message = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params)
-                    .as(ExceptionResponse.class).getMessage();
+            경로_조회_실패_예외메시지(params);
         });
 
         Then("노선에 존재하지 않는 도착역이여서 경로 조회를 할 수 없다", () -> {
@@ -132,10 +83,7 @@ public class PathStepDef implements En {
             String 선릉역_ID = String.valueOf(context.store.get("선릉역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 선릉역_ID, "type", "DURATION");
 
-            context.response = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("childAccessToken"))
-                    .경로_조회_요청을_보낸다(params);
+            경로_조회_요청("childAccessToken", params);
         });
 
         Then("최소 거리와 기본 요금 및 어린이 할인 요금 테스트를 위한 최소 시간 기준 경로인 강남역, 선릉역을 응답한다", () -> {
@@ -159,14 +107,7 @@ public class PathStepDef implements En {
         });
 
         Given("최소 시간 경로 및 청소년 할인 요금 테스트를 위한 {string}을 생성한다", (String stationName) -> {
-            StationCreateRequest request = new StationCreateRequest(stationName);
-            Long id = StationSteps.지하철_요청을_구성한다()
-                    .Response_HTTP_상태_코드(CREATED.value())
-                    .로그인을_한다((String) context.store.get("adminAccessToken"))
-                    .지하철_생성_정보를_설정한다(stationName)
-                    .지하철_생성_요청을_보낸다()
-                    .as(StationResponse.class).getId();
-            context.store.put(stationName, id);
+            지하철역_생성(stationName);
         });
 
         Given("최소 시간 경로 및 청소년 할인 요금 테스트를 위한 {string}과 {string}의 새로운 1호선 구간을 30D, 30T로 생성한다", (String sourceStationName, String targetStationName) -> {
@@ -176,11 +117,7 @@ public class PathStepDef implements En {
                     30L,
                     30L
             );
-            LineSteps.노선_요청을_구성한다()
-                    .Response_HTTP_상태_코드(CREATED.value())
-                    .로그인을_한다((String) context.store.get("adminAccessToken"))
-                    .구간_생성_정보를_설정한다(sectionCreateRequest)
-                    .구간_생성_요청을_보낸다(String.valueOf(context.store.get("일호선")));
+            구간_생성(sectionCreateRequest, "일호선");
         });
 
         Given("최소 시간 경로 및 청소년 할인 요금 테스트를 위한 {string}과 {string}의 새로운 신분당선 구간을 5D, 5T로 생성한다", (String sourceStationName, String targetStationName) -> {
@@ -190,11 +127,7 @@ public class PathStepDef implements En {
                     5L,
                     5L
             );
-            LineSteps.노선_요청을_구성한다()
-                    .Response_HTTP_상태_코드(CREATED.value())
-                    .로그인을_한다((String) context.store.get("adminAccessToken"))
-                    .구간_생성_정보를_설정한다(sectionCreateRequest)
-                    .구간_생성_요청을_보낸다(String.valueOf(context.store.get("신분당선")));
+            구간_생성(sectionCreateRequest, "신분당선");
         });
 
         When("최소 시간 경로 및 청소년 할인 요금 테스트를 위한 강남역에서 잠실역까지 최소 시간 기준으로 경로 조회를 요청한다", () -> {
@@ -202,10 +135,7 @@ public class PathStepDef implements En {
             String 잠실역_ID = String.valueOf(context.store.get("잠실역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 잠실역_ID, "type", "DURATION");
 
-            context.response = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("teenagerAccessToken"))
-                    .경로_조회_요청을_보낸다(params);
+            경로_조회_요청("teenagerAccessToken", params);
         });
 
         Then("최소 시간 기준 경로인 강남역, 선릉역, 잠실역을 응답한다", () -> {
@@ -230,14 +160,7 @@ public class PathStepDef implements En {
         });
 
         Given("최소 거리 경로 테스트를 위한 {string}을 생성한다", (String stationName) -> {
-            StationCreateRequest request = new StationCreateRequest(stationName);
-            Long id = StationSteps.지하철_요청을_구성한다()
-                    .Response_HTTP_상태_코드(CREATED.value())
-                    .로그인을_한다((String) context.store.get("adminAccessToken"))
-                    .지하철_생성_정보를_설정한다(stationName)
-                    .지하철_생성_요청을_보낸다()
-                    .as(StationResponse.class).getId();
-            context.store.put(stationName, id);
+            지하철역_생성(stationName);
         });
 
         Given("최소 거리 경로 테스트를 위한 {string}과 {string}의 새로운 1호선 구간을 30D, 30T로 생성한다", (String sourceStationName, String targetStationName) -> {
@@ -248,11 +171,7 @@ public class PathStepDef implements En {
                     30L
             );
 
-            LineSteps.노선_요청을_구성한다()
-                    .Response_HTTP_상태_코드(CREATED.value())
-                    .로그인을_한다((String) context.store.get("adminAccessToken"))
-                    .구간_생성_정보를_설정한다(sectionCreateRequest)
-                    .구간_생성_요청을_보낸다(String.valueOf(context.store.get("일호선")));
+            구간_생성(sectionCreateRequest, "일호선");
         });
 
         Given("최소 거리 경로 테스트를 위한 {string}과 {string}의 새로운 신분당선 구간을 100D, 100T로 생성한다", (String sourceStationName, String targetStationName) -> {
@@ -262,11 +181,7 @@ public class PathStepDef implements En {
                     100L,
                     100L
             );
-            LineSteps.노선_요청을_구성한다()
-                    .Response_HTTP_상태_코드(CREATED.value())
-                    .로그인을_한다((String) context.store.get("adminAccessToken"))
-                    .구간_생성_정보를_설정한다(sectionCreateRequest)
-                    .구간_생성_요청을_보낸다(String.valueOf(context.store.get("신분당선")));
+            구간_생성(sectionCreateRequest, "신분당선");
         });
 
         When("강남역에서 잠실역까지 최소 거리 기준으로 경로 조회를 요청한다", () -> {
@@ -274,10 +189,7 @@ public class PathStepDef implements En {
             String 잠실역_ID = String.valueOf(context.store.get("잠실역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 잠실역_ID, "type", "DISTANCE");
 
-            context.response = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params);
+            경로_조회_요청("adultAccessToken", params);
         });
 
         Then("최소 거리 기준 경로인 강남역, 선릉역, 양재역, 잠실역을 응답한다", () -> {
@@ -307,10 +219,7 @@ public class PathStepDef implements En {
             String 선릉역_ID = String.valueOf(context.store.get("선릉역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 선릉역_ID, "type", "DISTANCE");
 
-            context.response = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params);
+            경로_조회_요청("adultAccessToken", params);
         });
 
         Then("노선별 추가 요금 경로가 한개일 경우 테스트를 위한 최소 거리 기준 경로인 강남역, 선릉역을 응답한다", () -> {
@@ -338,10 +247,7 @@ public class PathStepDef implements En {
             String 양재역_ID = String.valueOf(context.store.get("양재역"));
             Map<String, String> params = Map.of("source", 강남역_ID, "target", 양재역_ID, "type", "DISTANCE");
 
-            context.response = PathSteps.경로_요청을_구성한다()
-                    .Response_HTTP_상태_코드(OK.value())
-                    .로그인을_한다((String) context.store.get("adultAccessToken"))
-                    .경로_조회_요청을_보낸다(params);
+            경로_조회_요청("adultAccessToken", params);
         });
 
         Then("노선별 추가 요금 경로가 두개일 경우 테스트를 위한 최소 거리 기준 경로인 강남역, 선릉역, 양재역을 응답한다", () -> {
@@ -366,6 +272,64 @@ public class PathStepDef implements En {
         });
     }
 
+    private void 경로_조회_요청(String accesssToken, Map<String, String> params) {
+        context.response = PathSteps.경로_요청을_구성한다()
+                .Response_HTTP_상태_코드(OK.value())
+                .로그인을_한다((String) context.store.get(accesssToken))
+                .경로_조회_요청을_보낸다(params);
+    }
+
+    private void 구간_생성(SectionCreateRequest sectionCreateRequest, String 호선) {
+        LineSteps.노선_요청을_구성한다()
+                .Response_HTTP_상태_코드(CREATED.value())
+                .로그인을_한다((String) context.store.get("adminAccessToken"))
+                .구간_생성_정보를_설정한다(sectionCreateRequest)
+                .구간_생성_요청을_보낸다(String.valueOf(context.store.get(호선)));
+    }
+
+    private void 기본_노선_생성(Map<String, String> columns) {
+        LineCreateRequest lineCreateRequest = new LineCreateRequest(
+                columns.get("name"),
+                columns.get("color"),
+                (long) context.store.get(columns.get("upStation")),
+                (long) context.store.get(columns.get("downStation")),
+                Long.parseLong(columns.get("distance")),
+                Long.parseLong(columns.get("duration")),
+                Long.parseLong(columns.get("extraFare"))
+        );
+
+        Long lineId = 노선_생성(lineCreateRequest);
+        context.store.put(columns.get("name"), lineId);
+    }
+
+    private Long 노선_생성(LineCreateRequest lineCreateRequest) {
+        return LineSteps.노선_요청을_구성한다()
+                .Response_HTTP_상태_코드(CREATED.value())
+                .로그인을_한다((String) context.store.get("adminAccessToken"))
+                .노선_생성_정보를_설정한다(lineCreateRequest)
+                .노선_생성_요청을_보낸다()
+                .as(LineResponse.class).getId();
+    }
+
+    private void 지하철역_생성(String stationName) {
+        Long id = StationSteps.지하철_요청을_구성한다()
+                .Response_HTTP_상태_코드(CREATED.value())
+                .로그인을_한다((String) context.store.get("adminAccessToken"))
+                .지하철_생성_정보를_설정한다(stationName)
+                .지하철_생성_요청을_보낸다()
+                .as(StationResponse.class).getId();
+        context.store.put(stationName, id);
+    }
+
+    private void 경로_조회_실패_예외메시지(Map<String, String> params) {
+        context.message = PathSteps.경로_요청을_구성한다()
+                .Response_HTTP_상태_코드(OK.value())
+                .로그인을_한다((String) context.store.get("adultAccessToken"))
+                .경로_조회_요청을_보낸다(params)
+                .as(ExceptionResponse.class).getMessage();
+    }
+
+
     private void assertDistanceAndDuration(long distance, long duration) {
         PathResponse pathResponse = context.response.as(PathResponse.class);
         assertAll(
@@ -380,5 +344,6 @@ public class PathStepDef implements En {
                 () -> assertThat(pathResponse.getFare()).isEqualTo(fare)
         );
     }
+
 }
 
