@@ -11,4 +11,5 @@ public class FindPathResponse {
   List<StationResponse> stations;
   int distance;
   int duration;
+  int fare;
 }

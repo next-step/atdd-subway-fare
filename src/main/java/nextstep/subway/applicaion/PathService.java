@@ -2,7 +2,11 @@ package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.applicaion.dto.FindPathResponse;
+import nextstep.subway.domain.BaseFareCalculator;
+import nextstep.subway.domain.Over10kmSurchargeCalculator;
+import nextstep.subway.domain.Over50kmSurchargeCalculator;
 import nextstep.subway.domain.PathSearchType;
+import nextstep.subway.domain.vo.Path;
 import nextstep.subway.ui.BusinessException;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +32,19 @@ public class PathService {
     final var sections = sectionService.findAll();
     final var path = PathFinderComposite.find(sections, type, sourceStation, targetStation);
 
-    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration());
+    final var fare = calculateFare(path);
+
+    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration(), fare);
+  }
+
+  private int calculateFare(Path path) {
+    final var basicCalculator = new BaseFareCalculator();
+    final var over10kmSurchargeCalculator = new Over10kmSurchargeCalculator();
+    final var over50kmSurchargeCalculator = new Over50kmSurchargeCalculator();
+
+    return basicCalculator.calculate()
+        + over10kmSurchargeCalculator.calculate(path.getDistance())
+        + over50kmSurchargeCalculator.calculate(path.getDistance());
   }
 
   private void verifySourceIsSameToTarget(Long source, Long target) {
