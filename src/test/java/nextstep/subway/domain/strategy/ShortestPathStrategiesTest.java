@@ -28,7 +28,7 @@ class ShortestPathStrategiesTest {
     }
 
     @Test
-    void 실패_구간_정보가_없을경우_최단거리_전략을__구할_수_없다(){
+    void 실패_구간_정보가_없을경우_최단거리_전략을_구할_수_없다(){
         assertThatThrownBy(() -> 최단거리.generateStrategy(DIJKSTRA, new ArrayList<>(), PathType.DISTANCE))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessage("지하철 구간이 존재하지 않습니다.");
@@ -42,7 +42,7 @@ class ShortestPathStrategiesTest {
     }
 
     @Test
-    void 성공_최단거리를_구할_수_없다(){
+    void 성공_최단거리를_구할_수_있다(){
         최단거리.generateStrategy(DIJKSTRA, List.of(강남역_선릉역_구간()), PathType.DISTANCE);
     }
 
