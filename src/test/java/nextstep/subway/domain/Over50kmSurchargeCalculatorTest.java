@@ -47,4 +47,15 @@ class Over50kmSurchargeCalculatorTest {
     // then
     assertThat(surcharge).isEqualTo(200);
   }
+
+  @DisplayName("힌트로 주어진 메소드 테스트")
+  @Test
+  void 힌트로_주어진_메소드_테스트() {
+    for (int distance = -5; distance < 15; distance++) {
+      int result1 = (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+      int result2 = (((distance - 1) / 5) + 1) * 100;
+
+      assertThat(result1).isEqualTo(result2);
+    }
+  }
 }
