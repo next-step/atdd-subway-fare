@@ -9,15 +9,15 @@ import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.stream.Collectors.*;
 
 @Component
 public class PathAcceptanceContext {
     public Map<String, Long> stationStore = new HashMap<>();
     public Map<String, Long> lineStore = new HashMap<>();
-    List<String> 이호선_역 = List.of("시청", "을지로입구", "을지로3가", "을지로4가", "동대문역사문화공원", "신당", "상왕십리", "왕십리", "한양대", "뚝섬", "성수");
+    List<String> 이호선_역;
     String 이호선 = "이호선";
 
     List<String> 오호선_역 = List.of("충정로", "서대문", "광화문", "종로3가", "을지로4가", "동대문역사문화공원", "청구", "신금호", "행당", "왕십리", "마장");
@@ -35,7 +35,15 @@ public class PathAcceptanceContext {
         lineStore.put(오호선, lineId);
     }
 
-    public void setUpStation() {
+    public void setUpStation(List<Map<String, String>> rows) {
+        Map<String, List<String>> staionMap = rows.stream()
+                .flatMap(map -> map.entrySet().stream())
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .collect(groupingBy(Map.Entry::getKey,
+                        mapping(Map.Entry::getValue, toList())));
+        이호선_역 = staionMap.get("이호선");
+        오호선_역 = staionMap.get("오호선");
+
         for (String station : 이호선_역) {
             if(!stationStore.containsKey(station)){
                 Long id = StationSteps.createStation(station).getId();
@@ -51,14 +59,14 @@ public class PathAcceptanceContext {
         }
     }
 
-    public void setUpSection() {
+    public void setUpSection(Map<String, Integer> durationByLine) {
         for (int i = 0; i < 이호선_역.size() - 2; i++) {
             int next = i + 1;
             SectionResponse response = SectionSteps.라인에_구간을_추가한다(lineStore.get(이호선), new SectionRequest(
                     stationStore.get(이호선_역.get(i)),
                     stationStore.get(이호선_역.get(next)),
                     5,
-                    1
+                    durationByLine.get("이호선")
             ));
         }
 
@@ -68,7 +76,7 @@ public class PathAcceptanceContext {
                     stationStore.get(오호선_역.get(i)),
                     stationStore.get(오호선_역.get(next)),
                     (5 + 2),
-                    1
+                    durationByLine.get("오호선")
             ));
         }
     }

@@ -1,16 +1,20 @@
 package nextstep.cucumber.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import nextstep.path.domain.dto.StationDto;
 import nextstep.path.ui.PathType;
 import nextstep.path.ui.PathsResponse;
 import nextstep.subway.fixture.PathSteps;
+import org.apache.groovy.util.Maps;
 import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
@@ -19,14 +23,16 @@ public class PathStepDef implements En {
     private PathAcceptanceContext cxt;
 
     public PathStepDef() {
-        Given("지하철역이 등록되어있음", () -> {
-            cxt.setUpStation();
+        Given("지하철역이 등록되어있음", (DataTable table) -> {
+            List<Map<String, String>> maps = table.asMaps();
+            cxt.setUpStation(maps);
         });
         And("지하철 노선이 등록되어있음", () -> {
             cxt.setUpLine();
         });
         And("지하철 노선에 지하철역이 등록되어있음", () -> {
-            cxt.setUpSection();
+            Map<String, Integer> durationByLine = Maps.of("이호선", 1, "오호선", 2);
+            cxt.setUpSection(durationByLine);
         });
         When("{string}에서 {string}까지의 최소 시간 기준으로 경로 조회를 요청", (String start, String end) -> {
             response = PathSteps.getPath(cxt.stationStore.get(start), cxt.stationStore.get(end), PathType.DURATION);
@@ -34,6 +40,7 @@ public class PathStepDef implements En {
         Then("최소 시간 기준 경로를 응답", () -> {
             List<StationDto> stationsOnPath = response.getStationDtoList();
             List<String> names = stationsOnPath.stream().map(StationDto::getName).collect(Collectors.toList());
+
             Assertions.assertThat(names).containsExactly(
                     "을지로4가", "동대문역사문화공원", "신당", "상왕십리", "왕십리");
         });
