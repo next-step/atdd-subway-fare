@@ -46,7 +46,7 @@ public class Dijkstra implements ShortestPathStrategy {
     }
 
     @Override
-    public List<Section> findEdges(Station source, Station target) {
+    public List<Section> findShortestEdges(Station source, Station target) {
         GraphPath shortestPath = getPath(source, target);
         validateExistPath(shortestPath);
         List<SectionProxy> edges = shortestPath.getEdgeList();

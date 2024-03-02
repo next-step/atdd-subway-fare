@@ -22,7 +22,7 @@ public class Paths {
 
     public List<Section> findEdges(Station source, Station target, PathType pathType) {
         Path path = findPathBy(pathType);
-        return path.findEdges(source, target);
+        return path.findShortestEdges(source, target);
     }
 
     private Path findPathBy(PathType pathType) {
