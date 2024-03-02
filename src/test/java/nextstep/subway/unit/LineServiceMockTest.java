@@ -4,9 +4,9 @@ import nextstep.line.application.LineService;
 import nextstep.line.domain.Color;
 import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
-import nextstep.line.presentation.LineResponse;
+import nextstep.line.ui.LineResponse;
 import nextstep.station.domain.Station;
-import nextstep.station.presentation.StationResponse;
+import nextstep.station.ui.StationResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,8 +33,8 @@ public class LineServiceMockTest {
         Station 구의역 = new Station("구의역");
         Station 강변역 = new Station("강변역");
 
-        Line line = new Line("2호선", Color.GREEN, 건대입구역, 구의역, 6);
-        Section section = new Section(구의역, 강변역, 4, line);
+        Line line = new Line("2호선", Color.GREEN, 건대입구역, 구의역, 6, 10);
+        Section section = new Section(구의역, 강변역, 4, 10, line);
 
         // when
         // lineService.addSection 호출

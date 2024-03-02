@@ -1,4 +1,4 @@
-package nextstep.station.presentation;
+package nextstep.station.ui;
 
 public class StationRequest {
     private String name;

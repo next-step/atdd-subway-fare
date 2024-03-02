@@ -1,30 +1,20 @@
-package nextstep.line.presentation;
+package nextstep.line.ui;
 
+public class SectionResponse {
 
-import nextstep.line.domain.Color;
-
-public class LineRequest {
-
-    private String name;
-    private Color color;
     private long upStationId;
     private long downStationId;
     private int distance;
+    private int duration;
 
-    public LineRequest(String name, Color color, long upStationId, long downStationId, int distance) {
-        this.name = name;
-        this.color = color;
+    public SectionResponse(long upStationId, long downStationId, int distance, int duration) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Color getColor() {
-        return color;
+    protected SectionResponse() {
     }
 
     public long getUpStationId() {
@@ -37,5 +27,9 @@ public class LineRequest {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

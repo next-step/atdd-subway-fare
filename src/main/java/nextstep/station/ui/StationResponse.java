@@ -1,4 +1,4 @@
-package nextstep.station.presentation;
+package nextstep.station.ui;
 
 import java.util.Objects;
 

@@ -4,8 +4,8 @@ import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
 import nextstep.line.exception.LineNotFoundException;
 import nextstep.line.persistance.LineRepository;
-import nextstep.line.presentation.SectionRequest;
-import nextstep.line.presentation.SectionResponse;
+import nextstep.line.ui.SectionRequest;
+import nextstep.line.ui.SectionResponse;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotFoundException;
 import nextstep.station.persistance.StationRepository;
@@ -28,13 +28,12 @@ public class SectionService {
         Line line = getLine(lineId);
         Station downStation = getStation(sectionRequest.getDownStationId());
         Station upStation = getStation(sectionRequest.getUpStationId());
-        Section section = new Section(upStation, downStation, sectionRequest.getDistance(), line);
+        Section section = new Section(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration(), line);
         line.addSection(section);
         Line saved = lineRepository.save(line);
 
-        return new SectionResponse(saved.getFirstStation().getId(), saved.getLastStation().getId(), saved.getDistance());
+        return new SectionResponse(saved.getFirstStation().getId(), saved.getLastStation().getId(), saved.getDistance(), saved.getDuration());
     }
-
     public void deleteSection(long lineId, long stationId) {
 
         Line line = getLine(lineId);
@@ -52,4 +51,6 @@ public class SectionService {
         return stationRepository.findById(stationId)
                 .orElseThrow(() -> new StationNotFoundException(Long.toString(stationId)));
     }
+
+
 }

@@ -1,30 +1,28 @@
 package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
+import nextstep.AcceptanceTest;
 import nextstep.line.domain.Line;
 import nextstep.line.persistance.LineRepository;
-import nextstep.line.presentation.LineResponse;
-import nextstep.line.presentation.SectionRequest;
-import nextstep.station.presentation.StationResponse;
+import nextstep.line.ui.LineResponse;
+import nextstep.line.ui.SectionRequest;
+import nextstep.station.ui.StationResponse;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;
-import nextstep.utils.AcceptanceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AcceptanceTest
-@Transactional
-public class SectionAcceptanceTest {
+
+public class SectionAcceptanceTest extends AcceptanceTest {
 
     @LocalServerPort
     private int port;
@@ -39,6 +37,8 @@ public class SectionAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        cleaner.cleanUp();
+
         건대입구역 = StationSteps.createStation("건대입구역");
         구의역 = StationSteps.createStation("구의역");
         강변역 = StationSteps.createStation("강변역");
@@ -51,7 +51,7 @@ public class SectionAcceptanceTest {
         이호선 = LineSteps.이호선_생성(건대입구역.getId(), 강변역.getId());
 
         // when
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7, 5));
 
         // then
         LineResponse lineResponse = LineSteps.노선을_조회한다(이호선.getId());
@@ -67,7 +67,7 @@ public class SectionAcceptanceTest {
         LineResponse 이호선 = LineSteps.이호선_생성(건대입구역.getId(), 강변역.getId(), distance);
 
         // when
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7, 5));
 
         // then
         Line line = lineRepository.findById(이호선.getId()).get();
@@ -81,7 +81,7 @@ public class SectionAcceptanceTest {
     public void addSectionInMiddleFail() {
         // when
         Assertions.assertThatThrownBy(
-            () -> SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 강변역.getId(), 20))
+            () -> SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 강변역.getId(), 20, 5))
         );
     }
 
@@ -91,7 +91,7 @@ public class SectionAcceptanceTest {
     public void shouldDeleteMidSection() {
 
         이호선 = LineSteps.이호선_생성(건대입구역.getId(), 구의역.getId());
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7, 5));
 
         // when
         SectionSteps.라인의_구간을_삭제한다(이호선.getId(), 구의역.getId());
@@ -106,7 +106,7 @@ public class SectionAcceptanceTest {
     public void shouldDeleteFirstSection() {
 
         이호선 = LineSteps.이호선_생성(건대입구역.getId(), 구의역.getId());
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7, 5));
 
         // when
         SectionSteps.라인의_구간을_삭제한다(이호선.getId(), 건대입구역.getId());

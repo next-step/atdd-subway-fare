@@ -1,17 +1,17 @@
-package nextstep.acceptance;
+package nextstep.favorite;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import nextstep.favorite.application.dto.FavoriteResponse;
+import nextstep.favorite.fixture.FavoriteSteps;
 import nextstep.line.domain.Color;
-import nextstep.line.presentation.LineRequest;
-import nextstep.line.presentation.SectionRequest;
-import nextstep.member.acceptance.MemberSteps;
+import nextstep.line.ui.LineRequest;
+import nextstep.line.ui.SectionRequest;
+import nextstep.member.fixture.MemberSteps;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;
-import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +28,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("즐겨찾기 관련 기능")
-@AcceptanceTest
-@Transactional
-public class FavoriteAcceptanceTest {
+public class FavoriteAcceptanceTest extends nextstep.AcceptanceTest {
 
     @LocalServerPort
     private int port;
@@ -44,13 +41,15 @@ public class FavoriteAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        cleaner.cleanUp();
+
         강변역 = StationSteps.createStation("강변역").getId();
         구의역 = StationSteps.createStation("구의역").getId();
         건대입구역 = StationSteps.createStation("건대입구역").getId();
         잠실역 = StationSteps.createStation("잠실역").getId();
-        long 이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 강변역, 구의역, 19)).getId();
-        SectionSteps.라인에_구간을_추가한다(이호선, new SectionRequest(구의역, 건대입구역, 4));
-        SectionSteps.라인에_구간을_추가한다(이호선, new SectionRequest(건대입구역, 잠실역, 4));
+        long 이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 강변역, 구의역, 19, 20)).getId();
+        SectionSteps.라인에_구간을_추가한다(이호선, new SectionRequest(구의역, 건대입구역, 4, 5));
+        SectionSteps.라인에_구간을_추가한다(이호선, new SectionRequest(건대입구역, 잠실역, 4, 5));
     }
 
     @Test

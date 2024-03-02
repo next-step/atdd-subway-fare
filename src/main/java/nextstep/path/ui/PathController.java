@@ -1,4 +1,4 @@
-package nextstep.path.presentation;
+package nextstep.path.ui;
 
 import nextstep.path.service.PathService;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class PathController {
 
     @GetMapping("paths")
     public ResponseEntity<PathsResponse> getPaths(
-            @RequestParam int source, @RequestParam int target) {
-        return ResponseEntity.ok(pathService.searchPath(source, target));
+            @RequestParam int source, @RequestParam int target, @RequestParam PathType type) {
+        return ResponseEntity.ok(pathService.searchPath(source, target, type));
     }
 }

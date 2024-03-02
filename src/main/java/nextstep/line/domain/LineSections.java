@@ -27,14 +27,14 @@ public class LineSections {
 
     public void add(Section newSection) {
 
-        if (iaAppend(newSection)) {
+        if (isAppend(newSection)) {
             this.sections.add(newSection);
             return;
         }
         insertSection(newSection);
     }
 
-    private boolean iaAppend(Section newSection) {
+    private boolean isAppend(Section newSection) {
         return isEmptySection() || isAppendToLast(newSection);
     }
 
@@ -43,7 +43,7 @@ public class LineSections {
             throw new DuplicateSectionException(newSection.toString());
         }
 
-        Section asis = findDivideTarget(newSection);
+        Section asis = findDivideSection(newSection);
         int pos = this.sections.indexOf(asis);
         this.sections.remove(pos);
         sections.addAll(pos, asis.divide(newSection));
@@ -69,11 +69,11 @@ public class LineSections {
     }
 
 
-    private Section findDivideTarget(Section newSection) {
+    private Section findDivideSection(Section newSection) {
         return this.sections.stream()
                 .filter(section -> section.getUpStation().equals(newSection.getUpStation()))
                 .findFirst()
-                .orElseThrow(() -> new StationNotFoundException(newSection.getUpStation().toString()));
+                .orElseThrow(() -> new StationNotFoundException("상행역 미존재 : " + newSection.getUpStation().toString()));
     }
 
 
@@ -117,5 +117,19 @@ public class LineSections {
 
     public List<Section> getSections() {
         return Collections.unmodifiableList(sections);
+    }
+
+    public int getSumDistance() {
+        return this.sections
+                .stream()
+                .mapToInt(Section::getDistance)
+                .sum();
+    }
+
+    public Integer getSumDuration() {
+        return this.sections
+                .stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }

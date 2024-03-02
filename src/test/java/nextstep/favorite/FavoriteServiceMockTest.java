@@ -1,6 +1,6 @@
-package nextstep.acceptance;
+package nextstep.favorite;
 
-import nextstep.auth.presentation.dto.LoginMember;
+import nextstep.auth.ui.dto.LoginMember;
 import nextstep.favorite.application.FavoriteService;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.exceptions.CannotFavoriteStationException;
@@ -50,7 +50,7 @@ public class FavoriteServiceMockTest {
         FavoriteRequest request = new FavoriteRequest(1L, 100L);
         when(memberRepository.findByEmail(any())).thenReturn(Optional.of(new Member("email", "pw", 12)));
         when(stationDao.findStation(anyLong())).thenReturn(new Station("강"));
-        when(pathService.isConnectedPath(any(), any())).thenReturn(false);
+        when(pathService.isConnectedPath(any(), any(), any())).thenReturn(false);
 
         // when & then
         Assertions.assertThrows(CannotFavoriteStationException.class,

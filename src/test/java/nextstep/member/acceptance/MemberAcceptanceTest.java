@@ -1,20 +1,17 @@
 package nextstep.member.acceptance;
 
 import io.restassured.RestAssured;
-import nextstep.utils.AcceptanceTest;
+import nextstep.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 
-import static nextstep.member.acceptance.MemberSteps.*;
+import static nextstep.member.fixture.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AcceptanceTest
-@Transactional
-class MemberAcceptanceTest {
+class MemberAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
     public static final int AGE = 20;
@@ -25,6 +22,7 @@ class MemberAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        cleaner.cleanUp();
     }
 
     @DisplayName("회원가입을 한다.")

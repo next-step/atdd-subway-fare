@@ -2,20 +2,19 @@ package nextstep.subway.acceptance;
 
 import io.restassured.RestAssured;
 import nextstep.line.domain.Color;
-import nextstep.line.presentation.LineRequest;
-import nextstep.line.presentation.SectionRequest;
+import nextstep.line.ui.LineRequest;
+import nextstep.line.ui.SectionRequest;
 import nextstep.path.domain.dto.StationDto;
-import nextstep.path.presentation.PathsResponse;
+import nextstep.path.ui.PathType;
+import nextstep.path.ui.PathsResponse;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.PathSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;
-import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 외부 라이브러리를 활용한 로직을 검증할 때는 가급적 실제 객체를 활용
  * Happy 케이스에 대한 부분만 구현( Side 케이스에 대한 구현은 다음 단계에서 진행)
  */
-@AcceptanceTest
-@Transactional
-public class PathAcceptanceTest {
+public class PathAcceptanceTest extends nextstep.AcceptanceTest {
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -55,6 +52,7 @@ public class PathAcceptanceTest {
 
     @BeforeEach
     void setUp() {
+        cleaner.cleanUp();
         RestAssured.port = port;
 
         교대역 = StationSteps.createStation("교대역").getId();
@@ -62,10 +60,10 @@ public class PathAcceptanceTest {
         양재역 = StationSteps.createStation("양재역").getId();
         남부터미널역 = StationSteps.createStation("남부터미널역").getId();
 
-        이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 교대역, 강남역, 10)).getId();
-        신분당선 = LineSteps.노선_생성(new LineRequest("신분당선", Color.RED, 강남역, 양재역, 10)).getId();
-        삼호선 = LineSteps.노선_생성(new LineRequest("삼호선", Color.ORANGE, 교대역, 남부터미널역, 10)).getId();
-        SectionSteps.라인에_구간을_추가한다(삼호선, new SectionRequest(남부터미널역, 양재역, 1));
+        이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 교대역, 강남역, 10, 20)).getId();
+        신분당선 = LineSteps.노선_생성(new LineRequest("신분당선", Color.RED, 강남역, 양재역, 10, 20)).getId();
+        삼호선 = LineSteps.노선_생성(new LineRequest("삼호선", Color.ORANGE, 교대역, 남부터미널역, 1, 20)).getId();
+        SectionSteps.라인에_구간을_추가한다(삼호선, new SectionRequest(남부터미널역, 양재역, 1, 5));
     }
 
     @DisplayName("출발역으로부터 도착역까지의 경로에 있는 역 목록이 조회된다")
@@ -73,7 +71,7 @@ public class PathAcceptanceTest {
     void searchPath() {
 
         // given & when
-        PathsResponse pathsResponse = PathSteps.getPath(교대역, 양재역);
+        PathsResponse pathsResponse = PathSteps.getPath(교대역, 양재역, PathType.DISTANCE);
 
         // then
         List<Long> stationIds = pathsResponse.getStationDtoList().stream().map(StationDto::getId).collect(Collectors.toList());

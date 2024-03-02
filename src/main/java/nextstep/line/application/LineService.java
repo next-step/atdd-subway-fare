@@ -4,12 +4,12 @@ import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
 import nextstep.line.exception.LineNotFoundException;
 import nextstep.line.persistance.LineRepository;
-import nextstep.line.presentation.LineRequest;
-import nextstep.line.presentation.LineResponse;
+import nextstep.line.ui.LineRequest;
+import nextstep.line.ui.LineResponse;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotFoundException;
 import nextstep.station.persistance.StationRepository;
-import nextstep.station.presentation.StationResponse;
+import nextstep.station.ui.StationResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ public class LineService {
         Station upStation = getStation(lineRequest.getUpStationId());
         Station downStation = getStation(lineRequest.getDownStationId());
 
-        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance()));
+        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration()));
 
         List<StationResponse> stationResponses = line.getStations().stream()
                 .map(station -> new StationResponse(station.getId(), station.getName()))

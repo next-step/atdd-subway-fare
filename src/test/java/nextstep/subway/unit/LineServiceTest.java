@@ -5,24 +5,19 @@ import nextstep.line.domain.Color;
 import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
 import nextstep.line.persistance.LineRepository;
-import nextstep.line.presentation.LineResponse;
+import nextstep.line.ui.LineResponse;
 import nextstep.station.domain.Station;
 import nextstep.station.persistance.StationRepository;
-import nextstep.station.presentation.StationResponse;
-import nextstep.utils.AcceptanceTest;
+import nextstep.station.ui.StationResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AcceptanceTest
-@SpringBootTest
-@Transactional
-public class LineServiceTest {
+public class LineServiceTest extends nextstep.AcceptanceTest {
     @Autowired
     private StationRepository stationRepository;
     @Autowired
@@ -30,6 +25,11 @@ public class LineServiceTest {
 
     @Autowired
     private LineService lineService;
+
+    @BeforeEach
+    void setUp() {
+        cleaner.cleanUp();
+    }
 
     @Test
     void addSection() {
@@ -41,7 +41,7 @@ public class LineServiceTest {
 
         // when
         // lineService.addSection 호출
-        lineService.addSection(line, new Section(구의역, 강변역, 4, line));
+        lineService.addSection(line, new Section(구의역, 강변역, 4, 10, line));
 
         // then
         // lineService.findLineById 메서드를 통해 검증
@@ -51,7 +51,7 @@ public class LineServiceTest {
     }
 
     private Line createLine(Station 건대입구역, Station 구의역) {
-        return lineRepository.save(new Line("2호선", Color.GREEN, 건대입구역, 구의역, 6));
+        return lineRepository.save(new Line("2호선", Color.GREEN, 건대입구역, 구의역, 6, 10));
     }
 
     private Station createStation(Station 건대입구역) {
