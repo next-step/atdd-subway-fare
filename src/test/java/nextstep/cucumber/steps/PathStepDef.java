@@ -133,8 +133,8 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
 
-    And("운임은 1450원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1450);
+    And("운임은 1350원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1350);
     });
 
     /**
