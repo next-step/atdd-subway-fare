@@ -12,6 +12,7 @@ import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.exceptions.MemberNotFoundException;
+import nextstep.path.presentation.PathType;
 import nextstep.path.service.PathService;
 import nextstep.station.domain.Station;
 import nextstep.station.presentation.StationResponse;
@@ -47,7 +48,7 @@ public class FavoriteService {
         Station source = stationDao.findStation(request.getSource());
         Station target = stationDao.findStation(request.getTarget());
 
-        if (!pathService.isConnectedPath(source, target)) {
+        if (!pathService.isConnectedPath(source, target, PathType.DISTANCE)) {
             throw new CannotFavoriteStationException("연결된 역이 아닙니다");
         }
 

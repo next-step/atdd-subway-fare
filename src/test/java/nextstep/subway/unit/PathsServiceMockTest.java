@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.path.domain.dto.StationDto;
+import nextstep.path.presentation.PathType;
 import nextstep.path.presentation.PathsResponse;
 import nextstep.path.service.CannotFindPathException;
 import nextstep.path.service.PathService;
@@ -34,11 +35,11 @@ public class PathsServiceMockTest {
         StationDto 을지로4가 = new StationDto(3, "을지로4가");
         PathsResponse pathsResponse = new PathsResponse(15, List.of(시청, 을지로입구, 을지로4가));
         // when
-        when(pathService.searchPath(1, 3))
+        when(pathService.searchPath(1, 3, PathType.DISTANCE))
                 .thenReturn(pathsResponse);
 
         // then
-        assertThat(pathService.searchPath(1, 3).getStationDtoList())
+        assertThat(pathService.searchPath(1, 3, PathType.DISTANCE).getStationDtoList())
                 .containsExactly(시청, 을지로입구, 을지로4가);
     }
 
@@ -47,11 +48,11 @@ public class PathsServiceMockTest {
     public void shouldFailIfCannotFindPath() {
 
         // when
-        when(pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE))
+        when(pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE))
                 .thenThrow(CannotFindPathException.class);
 
         // then
-        assertThrows(CannotFindPathException.class, () -> pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        assertThrows(CannotFindPathException.class, () -> pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE));
     }
 
 }

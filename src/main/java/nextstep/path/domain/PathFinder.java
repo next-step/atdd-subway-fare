@@ -4,18 +4,22 @@ import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
 import nextstep.path.domain.dto.PathsDto;
 import nextstep.station.domain.Station;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
-public class PathFinder {
+public abstract class PathFinder {
 
-    private final WeightedMultigraph<Station, DefaultWeightedEdge> graph
-            = new WeightedMultigraph(DefaultWeightedEdge.class);
+    protected final WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
 
     public PathFinder(List<Line> lines) {
         for (Line line : lines) {
@@ -34,17 +38,34 @@ public class PathFinder {
         graph.addVertex(station);
     }
 
-    public void addEdge(Section section) {
-        graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance());
-    }
+    public abstract void addEdge(Section section);
 
     public PathsDto findPath(Station start, Station end) {
         if (start.equals(end)) {
             throw new IllegalStateException("시작과 끝이 같은 역입니다");
         }
-        DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
                 = new DijkstraShortestPath<>(graph);
-        return new PathsDto(dijkstraShortestPath.getPathWeight(start, end), dijkstraShortestPath.getPath(start, end).getVertexList());
+        GraphPath<Station, SectionEdge> path = dijkstraShortestPath.getPath(start, end);
+        int duration = getDuration(path);
+        int distance = getDistance(path);
+        return new PathsDto(distance, duration, dijkstraShortestPath.getPath(start, end).getVertexList());
+    }
+
+    private static int getDistance(GraphPath<Station, SectionEdge> path) {
+        return path.getEdgeList()
+                .stream()
+                .map(SectionEdge.class::cast)
+                .mapToInt(SectionEdge::getDistance)
+                .sum();
+    }
+
+    private static int getDuration(GraphPath<Station, SectionEdge> path) {
+        return path.getEdgeList()
+                .stream()
+                .map(SectionEdge.class::cast)
+                .mapToInt(SectionEdge::getDuration)
+                .sum();
     }
 
     public boolean isConnected(Station start, Station end) {

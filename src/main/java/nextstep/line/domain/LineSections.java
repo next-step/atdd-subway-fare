@@ -43,7 +43,7 @@ public class LineSections {
             throw new DuplicateSectionException(newSection.toString());
         }
 
-        Section asis = findDivideTarget(newSection);
+        Section asis = findDivideSection(newSection);
         int pos = this.sections.indexOf(asis);
         this.sections.remove(pos);
         sections.addAll(pos, asis.divide(newSection));
@@ -69,7 +69,7 @@ public class LineSections {
     }
 
 
-    private Section findDivideTarget(Section newSection) {
+    private Section findDivideSection(Section newSection) {
         return this.sections.stream()
                 .filter(section -> section.getUpStation().equals(newSection.getUpStation()))
                 .findFirst()

@@ -1,14 +1,10 @@
 package nextstep.cucumber.steps;
 
 import io.cucumber.java8.En;
-import nextstep.line.domain.Color;
-import nextstep.line.presentation.LineRequest;
 import nextstep.path.domain.dto.StationDto;
 import nextstep.path.presentation.PathType;
 import nextstep.path.presentation.PathsResponse;
-import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.PathSteps;
-import nextstep.subway.fixture.StationSteps;
 import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PathStepDef implements En {
     PathsResponse response;
     @Autowired
-    private AcceptanceContext cxt;
+    private PathAcceptanceContext cxt;
 
     public PathStepDef() {
         Given("지하철역이 등록되어있음", () -> {
@@ -44,7 +40,7 @@ public class PathStepDef implements En {
         And("총 거리와 소요 시간을 함께 응답함", () -> {
             int duration = response.getDuration();
             int distance = response.getDistance();
-            Assertions.assertThat(duration).isEqualTo(10);
+            Assertions.assertThat(duration).isEqualTo(4);
             Assertions.assertThat(distance).isEqualTo(20);
         });
     }

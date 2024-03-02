@@ -11,6 +11,8 @@ import nextstep.station.exception.StationNotFoundException;
 import nextstep.station.persistance.StationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SectionService {
 
@@ -34,7 +36,6 @@ public class SectionService {
 
         return new SectionResponse(saved.getFirstStation().getId(), saved.getLastStation().getId(), saved.getDistance(), saved.getDuration());
     }
-
     public void deleteSection(long lineId, long stationId) {
 
         Line line = getLine(lineId);
@@ -52,4 +53,6 @@ public class SectionService {
         return stationRepository.findById(stationId)
                 .orElseThrow(() -> new StationNotFoundException(Long.toString(stationId)));
     }
+
+
 }

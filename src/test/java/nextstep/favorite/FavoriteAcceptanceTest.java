@@ -30,9 +30,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("즐겨찾기 관련 기능")
-@AcceptanceTest
-@Transactional
-public class FavoriteAcceptanceTest {
+public class FavoriteAcceptanceTest extends nextstep.AcceptanceTest {
 
     @LocalServerPort
     private int port;
@@ -45,11 +43,13 @@ public class FavoriteAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        cleaner.cleanUp();
+
         강변역 = StationSteps.createStation("강변역").getId();
         구의역 = StationSteps.createStation("구의역").getId();
         건대입구역 = StationSteps.createStation("건대입구역").getId();
         잠실역 = StationSteps.createStation("잠실역").getId();
-        long 이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 강변역, 구의역, 19)).getId();
+        long 이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 강변역, 구의역, 19, 20)).getId();
         SectionSteps.라인에_구간을_추가한다(이호선, new SectionRequest(구의역, 건대입구역, 4, 5));
         SectionSteps.라인에_구간을_추가한다(이호선, new SectionRequest(건대입구역, 잠실역, 4, 5));
     }

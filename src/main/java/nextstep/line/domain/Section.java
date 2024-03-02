@@ -25,6 +25,8 @@ public class Section {
     @ManyToOne
     private Line line;
 
+    public Section() {
+    }
 
     public Section(Station upStation, Station downStation, Integer distance, Integer duration, Line line) {
         this.upStation = upStation;
@@ -34,8 +36,6 @@ public class Section {
         this.line = line;
     }
 
-    public Section() {
-    }
 
     public Station getUpStation() {
         return upStation;
@@ -48,9 +48,10 @@ public class Section {
 
 
     public List<Section> divide(Section newSection) {
-        Section next = new Section(newSection.getDownStation(), this.downStation, this.distance - newSection.distance, newSection.getDuration(), line);
+        Section next = new Section(newSection.getDownStation(), this.downStation, this.distance - newSection.distance, this.duration - newSection.getDuration(), line);
         this.downStation = newSection.getDownStation();
         this.distance = newSection.getDistance();
+        this.duration = newSection.getDuration();
         return new LinkedList<>(List.of(this, next));
     }
 
@@ -80,6 +81,7 @@ public class Section {
                 ", upStation=" + upStation +
                 ", downStation=" + downStation +
                 ", distance=" + distance +
+                ", duration=" + duration +
                 '}';
     }
 
@@ -100,4 +102,5 @@ public class Section {
     public Integer getDuration() {
         return duration;
     }
+
 }

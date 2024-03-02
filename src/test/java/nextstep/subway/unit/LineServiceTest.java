@@ -10,19 +10,15 @@ import nextstep.station.domain.Station;
 import nextstep.station.persistance.StationRepository;
 import nextstep.station.presentation.StationResponse;
 import nextstep.utils.AcceptanceTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AcceptanceTest
-@SpringBootTest
-@Transactional
-public class LineServiceTest {
+public class LineServiceTest extends nextstep.AcceptanceTest {
     @Autowired
     private StationRepository stationRepository;
     @Autowired
@@ -30,6 +26,11 @@ public class LineServiceTest {
 
     @Autowired
     private LineService lineService;
+
+    @BeforeEach
+    void setUp() {
+        cleaner.cleanUp();
+    }
 
     @Test
     void addSection() {

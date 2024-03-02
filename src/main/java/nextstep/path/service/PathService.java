@@ -1,16 +1,19 @@
 package nextstep.path.service;
 
+import nextstep.line.domain.Line;
 import nextstep.line.persistance.LineRepository;
+import nextstep.path.domain.DistancePathFinder;
+import nextstep.path.domain.DurationPathFinder;
 import nextstep.path.domain.PathFinder;
 import nextstep.path.domain.dto.PathsDto;
-import nextstep.path.domain.dto.StationDto;
+import nextstep.path.presentation.PathType;
 import nextstep.path.presentation.PathsResponse;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotFoundException;
 import nextstep.station.persistance.StationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 
 @Service
@@ -23,16 +26,11 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathsResponse searchPath(long source, long target) {
+    public PathsResponse searchPath(long source, long target, PathType pathType) {
         try {
-            PathFinder pathFinder = new PathFinder(lineRepository.findAll());
+            PathFinder pathFinder = createPathFinder(lineRepository.findAll(), pathType);
             PathsDto pathsDto = pathFinder.findPath(getStation(source), getStation(target));
-            return new PathsResponse(pathsDto.getDistance(), 10,
-                    pathsDto.getPaths()
-                            .stream()
-                            .map(it -> new StationDto(it.getId(), it.getName()))
-                            .collect(Collectors.toList())
-            );
+            return PathsResponse.from(pathsDto);
         } catch (IllegalArgumentException e) {
             CannotFindPathException ex = new CannotFindPathException("경로 탐색이 불가합니다");
             ex.initCause(e);
@@ -41,8 +39,8 @@ public class PathService {
     }
 
 
-    public boolean isConnectedPath(Station source, Station target) {
-        PathFinder pathFinder = new PathFinder(lineRepository.findAll());
+    public boolean isConnectedPath(Station source, Station target, PathType pathType) {
+        PathFinder pathFinder = createPathFinder(lineRepository.findAll(), pathType);
         return pathFinder.isConnected(getStation(source.getId()), getStation(target.getId()));
     }
 
@@ -52,4 +50,11 @@ public class PathService {
                 .orElseThrow(() -> new StationNotFoundException(Long.toString(stationId)));
     }
 
+
+    private PathFinder createPathFinder(List<Line> lineList, PathType pathType) {
+        if (PathType.DISTANCE == pathType) {
+            return new DistancePathFinder(lineList);
+        }
+        return new DurationPathFinder(lineList);
+    }
 }

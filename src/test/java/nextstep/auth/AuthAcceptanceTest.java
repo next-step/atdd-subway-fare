@@ -3,25 +3,23 @@ package nextstep.auth;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.AcceptanceTest;
 import nextstep.auth.fixture.GithubResponses;
 import nextstep.member.fixture.MemberSteps;
-import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AcceptanceTest
-@Transactional
-class AuthAcceptanceTest {
+
+class AuthAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "admin@email.com";
     public static final String PASSWORD = "password";
     public static final Integer AGE = 20;
@@ -31,6 +29,7 @@ class AuthAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        cleaner.cleanUp();
     }
 
 

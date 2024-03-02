@@ -1,9 +1,7 @@
 package nextstep.cucumber.steps;
 
-import nextstep.line.application.SectionService;
 import nextstep.line.domain.Color;
 import nextstep.line.presentation.LineRequest;
-import nextstep.line.presentation.LineResponse;
 import nextstep.line.presentation.SectionRequest;
 import nextstep.line.presentation.SectionResponse;
 import nextstep.subway.fixture.LineSteps;
@@ -14,10 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
-public class AcceptanceContext {
+public class PathAcceptanceContext {
     public Map<String, Long> stationStore = new HashMap<>();
     public Map<String, Long> lineStore = new HashMap<>();
     List<String> 이호선_역 = List.of("시청", "을지로입구", "을지로3가", "을지로4가", "동대문역사문화공원", "신당", "상왕십리", "왕십리", "한양대", "뚝섬", "성수");

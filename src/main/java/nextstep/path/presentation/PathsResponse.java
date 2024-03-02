@@ -1,9 +1,11 @@
 package nextstep.path.presentation;
 
 
+import nextstep.path.domain.dto.PathsDto;
 import nextstep.path.domain.dto.StationDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PathsResponse {
 
@@ -35,5 +37,16 @@ public class PathsResponse {
 
     public int getDuration() {
         return duration;
+    }
+
+    public static PathsResponse from(PathsDto pathsDto) {
+        return new PathsResponse(
+                pathsDto.getDistance(),
+                pathsDto.getDuration(),
+                pathsDto.getPaths()
+                .stream()
+                .map(it -> new StationDto(it.getId(), it.getName()))
+                .collect(Collectors.toList())
+        );
     }
 }
