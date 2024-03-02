@@ -41,7 +41,7 @@ public class LineServiceTest {
 
         // when
         // lineService.addSection 호출
-        lineService.addSection(line, new Section(구의역, 강변역, 4, line));
+        lineService.addSection(line, new Section(구의역, 강변역, 4, 10, line));
 
         // then
         // lineService.findLineById 메서드를 통해 검증
@@ -51,7 +51,7 @@ public class LineServiceTest {
     }
 
     private Line createLine(Station 건대입구역, Station 구의역) {
-        return lineRepository.save(new Line("2호선", Color.GREEN, 건대입구역, 구의역, 6));
+        return lineRepository.save(new Line("2호선", Color.GREEN, 건대입구역, 구의역, 6, 10));
     }
 
     private Station createStation(Station 건대입구역) {

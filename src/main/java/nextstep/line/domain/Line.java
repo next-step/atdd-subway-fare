@@ -25,15 +25,18 @@ public class Line {
 
     @Column(nullable = false)
     private Integer distance;
+    @Column(nullable = false)
+    private Integer duration;
 
     protected Line() {}
 
 
-    public Line(String name, Color color, Station upStation, Station downStation, int distance) {
+    public Line(String name, Color color, Station upStation, Station downStation, int distance, int duration) {
         this.name = name;
         this.color = color;
         this.distance = distance;
-        lineSections.add(new Section(upStation, downStation, distance, this));
+        this.duration = duration;
+        lineSections.add(new Section(upStation, downStation, distance, duration, this));
     }
 
     public void update(String name, Color color) {
@@ -43,6 +46,8 @@ public class Line {
 
     public void addSection(Section section) {
         lineSections.add(section);
+        this.distance = lineSections.getSumDistance();
+        this.duration = lineSections.getSumDuration();
     }
 
 
@@ -91,4 +96,7 @@ public class Line {
         return lineSections.getSections();
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
 }

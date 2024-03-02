@@ -27,7 +27,7 @@ public class PathService {
         try {
             PathFinder pathFinder = new PathFinder(lineRepository.findAll());
             PathsDto pathsDto = pathFinder.findPath(getStation(source), getStation(target));
-            return new PathsResponse(pathsDto.getDistance(),
+            return new PathsResponse(pathsDto.getDistance(), 10,
                     pathsDto.getPaths()
                             .stream()
                             .map(it -> new StationDto(it.getId(), it.getName()))

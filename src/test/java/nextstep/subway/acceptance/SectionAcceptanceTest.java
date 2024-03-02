@@ -51,7 +51,7 @@ public class SectionAcceptanceTest {
         이호선 = LineSteps.이호선_생성(건대입구역.getId(), 강변역.getId());
 
         // when
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7, 5));
 
         // then
         LineResponse lineResponse = LineSteps.노선을_조회한다(이호선.getId());
@@ -67,7 +67,7 @@ public class SectionAcceptanceTest {
         LineResponse 이호선 = LineSteps.이호선_생성(건대입구역.getId(), 강변역.getId(), distance);
 
         // when
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 구의역.getId(), 7, 5));
 
         // then
         Line line = lineRepository.findById(이호선.getId()).get();
@@ -81,7 +81,7 @@ public class SectionAcceptanceTest {
     public void addSectionInMiddleFail() {
         // when
         Assertions.assertThatThrownBy(
-            () -> SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 강변역.getId(), 20))
+            () -> SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(건대입구역.getId(), 강변역.getId(), 20, 5))
         );
     }
 
@@ -91,7 +91,7 @@ public class SectionAcceptanceTest {
     public void shouldDeleteMidSection() {
 
         이호선 = LineSteps.이호선_생성(건대입구역.getId(), 구의역.getId());
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7, 5));
 
         // when
         SectionSteps.라인의_구간을_삭제한다(이호선.getId(), 구의역.getId());
@@ -106,7 +106,7 @@ public class SectionAcceptanceTest {
     public void shouldDeleteFirstSection() {
 
         이호선 = LineSteps.이호선_생성(건대입구역.getId(), 구의역.getId());
-        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7));
+        SectionSteps.라인에_구간을_추가한다(이호선.getId(), new SectionRequest(구의역.getId(), 강변역.getId(), 7, 5));
 
         // when
         SectionSteps.라인의_구간을_삭제한다(이호선.getId(), 건대입구역.getId());

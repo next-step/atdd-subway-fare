@@ -33,7 +33,7 @@ public class LineService {
         Station upStation = getStation(lineRequest.getUpStationId());
         Station downStation = getStation(lineRequest.getDownStationId());
 
-        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance()));
+        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration()));
 
         List<StationResponse> stationResponses = line.getStations().stream()
                 .map(station -> new StationResponse(station.getId(), station.getName()))

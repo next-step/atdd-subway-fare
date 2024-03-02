@@ -40,10 +40,10 @@ public class PathFinderTest {
         양재역 = new Station("양재역");
         남부터미널역 = new Station("남부터미널역");
 
-        이호선 = new Line("2호선", Color.ORANGE, 교대역, 강남역, 1000000);
-        신분당선 = new Line("신분당선", Color.ORANGE, 강남역, 양재역, 19999);
-        삼호선 = new Line("3호선", Color.ORANGE, 교대역, 남부터미널역, 1);
-        삼호선.addSection(new Section(남부터미널역, 양재역, 1, 삼호선));
+        이호선 = new Line("2호선", Color.ORANGE, 교대역, 강남역, 1000000, 10);
+        신분당선 = new Line("신분당선", Color.ORANGE, 강남역, 양재역, 19999, 10);
+        삼호선 = new Line("3호선", Color.ORANGE, 교대역, 남부터미널역, 1, 10);
+        삼호선.addSection(new Section(남부터미널역, 양재역, 1, 10, 삼호선));
     }
 
 
@@ -116,8 +116,8 @@ public class PathFinderTest {
     @DisplayName("두 역이 연결되어있지 않으면 FALSE를 반환한다")
     public void isConnectedShouldReturnFalse_IfStationsAreConnected() {
 
-        신분당선 = new Line("신분당선", Color.ORANGE, 강남역, 양재역, 19999);
-        삼호선 = new Line("3호선", Color.ORANGE, 교대역, 남부터미널역, 1);
+        신분당선 = new Line("신분당선", Color.ORANGE, 강남역, 양재역, 19999, 10);
+        삼호선 = new Line("3호선", Color.ORANGE, 교대역, 남부터미널역, 1, 10);
 
         PathFinder pathFinder = new PathFinder(List.of(신분당선, 삼호선));
 

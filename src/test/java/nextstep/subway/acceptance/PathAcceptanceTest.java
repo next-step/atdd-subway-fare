@@ -65,7 +65,7 @@ public class PathAcceptanceTest {
         이호선 = LineSteps.노선_생성(new LineRequest("이호선", Color.GREEN, 교대역, 강남역, 10)).getId();
         신분당선 = LineSteps.노선_생성(new LineRequest("신분당선", Color.RED, 강남역, 양재역, 10)).getId();
         삼호선 = LineSteps.노선_생성(new LineRequest("삼호선", Color.ORANGE, 교대역, 남부터미널역, 10)).getId();
-        SectionSteps.라인에_구간을_추가한다(삼호선, new SectionRequest(남부터미널역, 양재역, 1));
+        SectionSteps.라인에_구간을_추가한다(삼호선, new SectionRequest(남부터미널역, 양재역, 1, 5));
     }
 
     @DisplayName("출발역으로부터 도착역까지의 경로에 있는 역 목록이 조회된다")

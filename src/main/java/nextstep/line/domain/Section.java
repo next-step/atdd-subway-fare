@@ -20,17 +20,19 @@ public class Section {
     @OneToOne(fetch = FetchType.LAZY)
     private Station downStation;
     private Integer distance;
+    private Integer duration;
 
     @ManyToOne
     private Line line;
 
-    public Section(Station upStation, Station downStation, int distance, Line line) {
+
+    public Section(Station upStation, Station downStation, Integer distance, Integer duration, Line line) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
         this.line = line;
     }
-
 
     public Section() {
     }
@@ -46,8 +48,9 @@ public class Section {
 
 
     public List<Section> divide(Section newSection) {
-        Section next = new Section(newSection.getDownStation(), this.downStation, this.distance - newSection.distance, line);
+        Section next = new Section(newSection.getDownStation(), this.downStation, this.distance - newSection.distance, newSection.getDuration(), line);
         this.downStation = newSection.getDownStation();
+        this.distance = newSection.getDistance();
         return new LinkedList<>(List.of(this, next));
     }
 
@@ -57,12 +60,17 @@ public class Section {
         if (this == o) return true;
         if (!(o instanceof Section)) return false;
         Section section = (Section) o;
-        return Objects.equals(id, section.id) && Objects.equals(upStation, section.upStation) && Objects.equals(downStation, section.downStation) && Objects.equals(distance, section.distance) && Objects.equals(line, section.line);
+        return Objects.equals(id, section.id)
+                && Objects.equals(upStation, section.upStation)
+                && Objects.equals(downStation, section.downStation)
+                && Objects.equals(distance, section.distance)
+                && Objects.equals(line, section.line)
+                && Objects.equals(duration, section.duration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, upStation, downStation, distance, line);
+        return Objects.hash(id, upStation, downStation, distance, line, duration);
     }
 
     @Override
@@ -87,5 +95,9 @@ public class Section {
 
     public Integer getDistance() {
         return distance;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

@@ -8,10 +8,20 @@ import java.util.List;
 public class PathsResponse {
 
     private int distance;
+    private int duration;
     private List<StationDto> stationDtoList;
+
+    public PathsResponse() {
+    }
 
     public PathsResponse(int distance, List<StationDto> stationDtoList) {
         this.distance = distance;
+        this.stationDtoList = stationDtoList;
+    }
+
+    public PathsResponse(int distance, int duration, List<StationDto> stationDtoList) {
+        this.distance = distance;
+        this.duration = duration;
         this.stationDtoList = stationDtoList;
     }
 
@@ -21,5 +31,9 @@ public class PathsResponse {
 
     public List<StationDto> getStationDtoList() {
         return stationDtoList;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

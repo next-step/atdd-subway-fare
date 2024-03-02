@@ -28,11 +28,11 @@ public class SectionService {
         Line line = getLine(lineId);
         Station downStation = getStation(sectionRequest.getDownStationId());
         Station upStation = getStation(sectionRequest.getUpStationId());
-        Section section = new Section(upStation, downStation, sectionRequest.getDistance(), line);
+        Section section = new Section(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration(), line);
         line.addSection(section);
         Line saved = lineRepository.save(line);
 
-        return new SectionResponse(saved.getFirstStation().getId(), saved.getLastStation().getId(), saved.getDistance());
+        return new SectionResponse(saved.getFirstStation().getId(), saved.getLastStation().getId(), saved.getDistance(), saved.getDuration());
     }
 
     public void deleteSection(long lineId, long stationId) {
