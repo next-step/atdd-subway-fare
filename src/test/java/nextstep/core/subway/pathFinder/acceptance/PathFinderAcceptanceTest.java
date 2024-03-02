@@ -1,7 +1,5 @@
 package nextstep.core.subway.pathFinder.acceptance;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import nextstep.common.annotation.AcceptanceTest;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +14,6 @@ import static nextstep.core.subway.pathFinder.step.PathFinderSteps.*;
 import static nextstep.core.subway.section.fixture.SectionFixture.지하철_구간;
 import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하철_구간_추가요청;
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @AcceptanceTest
 @DisplayName("경로 조회")
@@ -163,13 +160,5 @@ public class PathFinderAcceptanceTest {
 
             }
         }
-    }
-
-    private void 경로에_포함된_역_목록_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, Long... 역_번호_목록) {
-        assertThat(convertToStationIds(성공하는_경로_조회_응답)).containsExactly(역_번호_목록);
-    }
-
-    private void 경로에_포함된_최단거리_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, int 예상_최단거리) {
-        assertThat(convertToDistance(성공하는_경로_조회_응답)).isEqualTo(예상_최단거리);
     }
 }
