@@ -1,4 +1,4 @@
-package nextstep.station.presentation;
+package nextstep.station.ui;
 
 import com.sun.istack.NotNull;
 import nextstep.station.application.StationService;

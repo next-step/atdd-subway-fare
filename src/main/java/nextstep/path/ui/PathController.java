@@ -1,4 +1,4 @@
-package nextstep.path.presentation;
+package nextstep.path.ui;
 
 import nextstep.path.service.PathService;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package nextstep.path.presentation;
+package nextstep.path.ui;
 
 
 public enum PathType {

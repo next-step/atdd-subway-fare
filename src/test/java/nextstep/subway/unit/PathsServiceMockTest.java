@@ -1,8 +1,8 @@
 package nextstep.subway.unit;
 
 import nextstep.path.domain.dto.StationDto;
-import nextstep.path.presentation.PathType;
-import nextstep.path.presentation.PathsResponse;
+import nextstep.path.ui.PathType;
+import nextstep.path.ui.PathsResponse;
 import nextstep.path.service.CannotFindPathException;
 import nextstep.path.service.PathService;
 import org.junit.jupiter.api.DisplayName;

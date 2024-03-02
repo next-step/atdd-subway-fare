@@ -4,14 +4,12 @@ import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
 import nextstep.line.exception.LineNotFoundException;
 import nextstep.line.persistance.LineRepository;
-import nextstep.line.presentation.SectionRequest;
-import nextstep.line.presentation.SectionResponse;
+import nextstep.line.ui.SectionRequest;
+import nextstep.line.ui.SectionResponse;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotFoundException;
 import nextstep.station.persistance.StationRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class SectionService {

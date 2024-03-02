@@ -1,6 +1,6 @@
 package nextstep.member.application;
 
-import nextstep.auth.presentation.dto.LoginMember;
+import nextstep.auth.ui.dto.LoginMember;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
 import nextstep.member.domain.Member;

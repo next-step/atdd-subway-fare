@@ -1,8 +1,8 @@
-package nextstep.line.presentation;
+package nextstep.line.ui;
 
 
 import nextstep.line.domain.Color;
-import nextstep.station.presentation.StationResponse;
+import nextstep.station.ui.StationResponse;
 
 import java.util.List;
 import java.util.Objects;

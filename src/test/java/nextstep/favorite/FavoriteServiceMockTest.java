@@ -1,6 +1,6 @@
 package nextstep.favorite;
 
-import nextstep.auth.presentation.dto.LoginMember;
+import nextstep.auth.ui.dto.LoginMember;
 import nextstep.favorite.application.FavoriteService;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.exceptions.CannotFavoriteStationException;

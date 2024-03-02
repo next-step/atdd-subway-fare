@@ -1,4 +1,4 @@
-package nextstep.line.presentation;
+package nextstep.line.ui;
 
 
 public class SectionRequest {

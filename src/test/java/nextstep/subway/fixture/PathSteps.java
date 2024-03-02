@@ -1,8 +1,8 @@
 package nextstep.subway.fixture;
 
 import io.restassured.RestAssured;
-import nextstep.path.presentation.PathType;
-import nextstep.path.presentation.PathsResponse;
+import nextstep.path.ui.PathType;
+import nextstep.path.ui.PathsResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 

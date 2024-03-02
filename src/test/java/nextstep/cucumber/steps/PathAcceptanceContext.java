@@ -1,9 +1,9 @@
 package nextstep.cucumber.steps;
 
 import nextstep.line.domain.Color;
-import nextstep.line.presentation.LineRequest;
-import nextstep.line.presentation.SectionRequest;
-import nextstep.line.presentation.SectionResponse;
+import nextstep.line.ui.LineRequest;
+import nextstep.line.ui.SectionRequest;
+import nextstep.line.ui.SectionResponse;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;

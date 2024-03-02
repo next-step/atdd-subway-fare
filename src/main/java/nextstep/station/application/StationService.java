@@ -3,8 +3,8 @@ package nextstep.station.application;
 import nextstep.station.domain.Station;
 import nextstep.station.exception.StationNotFoundException;
 import nextstep.station.persistance.StationRepository;
-import nextstep.station.presentation.StationRequest;
-import nextstep.station.presentation.StationResponse;
+import nextstep.station.ui.StationRequest;
+import nextstep.station.ui.StationResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

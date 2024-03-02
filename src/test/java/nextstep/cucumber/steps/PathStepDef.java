@@ -2,8 +2,8 @@ package nextstep.cucumber.steps;
 
 import io.cucumber.java8.En;
 import nextstep.path.domain.dto.StationDto;
-import nextstep.path.presentation.PathType;
-import nextstep.path.presentation.PathsResponse;
+import nextstep.path.ui.PathType;
+import nextstep.path.ui.PathsResponse;
 import nextstep.subway.fixture.PathSteps;
 import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;

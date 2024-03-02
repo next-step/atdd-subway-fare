@@ -1,23 +1,20 @@
 package nextstep.subway.acceptance;
 
-import io.cucumber.java8.Pa;
 import io.restassured.RestAssured;
 import nextstep.line.domain.Color;
-import nextstep.line.presentation.LineRequest;
-import nextstep.line.presentation.SectionRequest;
+import nextstep.line.ui.LineRequest;
+import nextstep.line.ui.SectionRequest;
 import nextstep.path.domain.dto.StationDto;
-import nextstep.path.presentation.PathType;
-import nextstep.path.presentation.PathsResponse;
+import nextstep.path.ui.PathType;
+import nextstep.path.ui.PathsResponse;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.PathSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;
-import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;

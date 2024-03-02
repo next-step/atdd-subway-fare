@@ -1,4 +1,4 @@
-package nextstep.line.presentation;
+package nextstep.line.ui;
 
 import nextstep.line.application.LineService;
 import nextstep.line.exception.LineNotFoundException;

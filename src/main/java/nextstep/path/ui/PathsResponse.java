@@ -1,4 +1,4 @@
-package nextstep.path.presentation;
+package nextstep.path.ui;
 
 
 import nextstep.path.domain.dto.PathsDto;
