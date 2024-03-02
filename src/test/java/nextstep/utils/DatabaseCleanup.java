@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Profile("test")
 @Service
 public class DatabaseCleanup implements InitializingBean {
     @PersistenceContext
