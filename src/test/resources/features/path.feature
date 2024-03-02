@@ -13,10 +13,10 @@ Feature: 경로조회 관련 기능
       | 양재역    |
       | 남부터미널역    |
     And 노선들을 생성 요청하고
-      | name   | color   | upStation   | downStation   | distance   | duration   |
-      | 2호선    | green   | 교대역   | 강남역   | 10   | 2   |
-      | 신분당선    | red   | 강남역   | 양재역   | 10   | 2   |
-      | 3호선    | orange   | 교대역   | 남부터미널역   | 2   | 10   |
+      | name   | color   | upStation   | downStation   | distance   | duration   | additionalFee   |
+      | 2호선    | green   | 교대역   | 강남역   | 10   | 2   | 0   |
+      | 신분당선    | red   | 강남역   | 양재역   | 10   | 2   | 800   |
+      | 3호선    | orange   | 교대역   | 남부터미널역   | 2   | 10   | 0   |
     And 구간을 등록하고
       | lineName | upStation | downStation | distance | duration   |
       | 3호선      | 남부터미널역    | 양재역         | 3        | 10   |
@@ -31,4 +31,4 @@ Feature: 경로조회 관련 기능
     When "교대역"과 "양재역" 사이의 최소시간 경로 조회를 요청하면
     Then "교대역,강남역,양재역" 지하철역을_리턴한다
     And 총 거리 20km와 총 소요 시간 4을 리턴한다
-    And 지하철 이용 요금 1450원을 리턴한다
+    And 지하철 이용 요금 2250원을 리턴한다
