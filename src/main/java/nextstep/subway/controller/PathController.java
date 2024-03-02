@@ -24,7 +24,7 @@ public class PathController {
             @RequestParam("target") Long targetId,
             @RequestParam("type") String pathType
     ) {
-        PathResponse pathResponse = pathService.findPaths(loginMember, sourceId, targetId, pathType);
+        PathResponse pathResponse = pathService.findPaths(loginMember.getEmail(), sourceId, targetId, pathType);
         return ResponseEntity.ok().body(pathResponse);
     }
 }

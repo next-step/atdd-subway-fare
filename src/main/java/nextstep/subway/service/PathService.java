@@ -1,7 +1,6 @@
 package nextstep.subway.service;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.auth.ui.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.controller.dto.PathResponse;
@@ -26,7 +25,7 @@ public class PathService {
     private final PathFinder pathFinder;
     private final FareHandlerFactory fareHandlerFactory;
 
-    public PathResponse findPaths(LoginMember loginMember, Long sourceId, Long targetId, String pathType) {
+    public PathResponse findPaths(String email, Long sourceId, Long targetId, String pathType) {
         Station source = stationRepository.getBy(sourceId);
         Station target = stationRepository.getBy(targetId);
 
@@ -41,8 +40,10 @@ public class PathService {
         Lines lines = lines(sections, stations);
         long plusExtraFare = lines.calculatePlusExtraFare();
 
-        Member member = memberRepository.getBy(loginMember.getEmail());
-        long discountExtraFare = member.discountExtraFare(fare);
+        Member member = memberRepository.getBy(email);
+
+        FareAgeGroup fareAgeGroup = FareAgeGroup.of(member.getAge());
+        long discountExtraFare = fareAgeGroup.calculateDiscountFare(fare);
 
         long totalFare = fare + plusExtraFare - discountExtraFare;
 
