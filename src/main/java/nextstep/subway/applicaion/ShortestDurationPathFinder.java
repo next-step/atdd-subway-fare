@@ -11,13 +11,13 @@ import org.jgrapht.graph.WeightedMultigraph;
 
 public class ShortestDurationPathFinder implements PathFinder {
 
-  private final WeightedMultigraph<Station, PathWeightedEdge> graph;
+  private final DijkstraShortestPath<Station, PathWeightedEdge> path;
 
   public ShortestDurationPathFinder(final Collection<Section> sections) {
-    graph = buildGraph(sections);
+    path = buildPath(sections);
   }
 
-  private WeightedMultigraph<Station, PathWeightedEdge> buildGraph(final Collection<Section> sections) {
+  private DijkstraShortestPath<Station, PathWeightedEdge> buildPath(final Collection<Section> sections) {
     if (sections == null) {
       throw new IllegalArgumentException("구간 정보가 없습니다.");
     }
@@ -40,14 +40,14 @@ public class ShortestDurationPathFinder implements PathFinder {
       graph.setEdgeWeight(edge, edge.getDuration());
     });
 
-    return graph;
+    return new DijkstraShortestPath<>(graph);
   }
 
   @Override
   public Optional<Path> find(final Station source, final Station target) {
     verifyRequiredArguments(source, target);
 
-    final var path = new DijkstraShortestPath<>(graph).getPath(source, target);
+    final var path = this.path.getPath(source, target);
 
     if (path == null) {
       return Optional.empty();
@@ -67,8 +67,7 @@ public class ShortestDurationPathFinder implements PathFinder {
 
   @Override
   public boolean isPathExists(Station source, Station target) {
-    final var path = new DijkstraShortestPath<>(graph).getPath(source, target);
-    return path != null;
+    return path.getPath(source, target) != null;
   }
 
   private void verifyRequiredArguments(Station source, Station target) {
