@@ -78,6 +78,34 @@ public class PathStepDef implements En {
             assertThat(context.message).isEqualTo("노선에 존재하지 않는 지하철역입니다.");
         });
 
+        When("5세 이하 0원 요금 테스트를 위한 강남역에서 선릉역까지 최소 시간 기준으로 경로 조회를 요청한다", () -> {
+            String 강남역_ID = String.valueOf(context.store.get("강남역"));
+            String 선릉역_ID = String.valueOf(context.store.get("선릉역"));
+            Map<String, String> params = Map.of("source", 강남역_ID, "target", 선릉역_ID, "type", "DURATION");
+
+            경로_조회_요청("preschoolersAccessToken", params);
+        });
+
+        Then("5세 이하 0원 요금 테스트를 위한 최소 시간 기준 경로인 강남역, 선릉역을 응답한다", () -> {
+            PathResponse pathResponse = context.response.as(PathResponse.class);
+            assertAll(
+                    () -> assertThat(pathResponse.getStations()).hasSize(2)
+                            .extracting("id", "name")
+                            .containsExactly(
+                                    tuple(1L, "강남역"),
+                                    tuple(2L, "선릉역")
+                            )
+            );
+        });
+
+        Then("5세 이하 0원 요금 테스트 결과 최소 시간 기준 총 거리 10, 소요 시간 10를 함께 응답한다", () -> {
+            assertDistanceAndDuration(10L, 10L);
+        });
+
+        Then("5세 이하 0원 요금 테스트의 최소 시간 기준 결과 지하철 이용 요금은 0원을 함께 응답한다", () -> {
+            assertFare(0L);
+        });
+
         When("최소 거리와 기본 요금 및 어린이 할인 요금 테스트를 위한 강남역에서 선릉역까지 최소 시간 기준으로 경로 조회를 요청한다", () -> {
             String 강남역_ID = String.valueOf(context.store.get("강남역"));
             String 선릉역_ID = String.valueOf(context.store.get("선릉역"));

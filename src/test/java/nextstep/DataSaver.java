@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataSaver {
+    public static final String MEMBER_PRESCHOOLERS_EMAIL = "preschoolers_email";
+    public static final String MEMBER_PRESCHOOLERS_PASSWORD = "preschoolers_password";
+    public static final Integer MEMBER_PRESCHOOLERS_AGE = 5;
+
     public static final String MEMBER_CHILD_EMAIL = "child_email";
     public static final String MEMBER_CHILD_PASSWORD = "child_password";
     public static final Integer MEMBER_CHILD_AGE = 12;
@@ -21,6 +25,10 @@ public class DataSaver {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    public void savePreschoolersMember() {
+        memberRepository.save(new Member(MEMBER_PRESCHOOLERS_EMAIL, MEMBER_PRESCHOOLERS_PASSWORD, MEMBER_PRESCHOOLERS_AGE));
+    }
 
     public void saveChildMember() {
         memberRepository.save(new Member(MEMBER_CHILD_EMAIL, MEMBER_CHILD_PASSWORD, MEMBER_CHILD_AGE));

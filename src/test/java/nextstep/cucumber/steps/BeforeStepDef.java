@@ -32,9 +32,14 @@ public class BeforeStepDef implements En {
                 RestAssured.port = port;
             }
             databaseCleaner.clear();
+            dataSaver.savePreschoolersMember();
             dataSaver.saveChildMember();
             dataSaver.saveTeenagerMember();
             dataSaver.saveAdultMember();
+
+            String preschoolersAccessToken = AuthSteps.로그인_요청(MEMBER_PRESCHOOLERS_EMAIL, MEMBER_PRESCHOOLERS_PASSWORD)
+                    .as(TokenResponse.class).getAccessToken();
+            context.store.put("preschoolersAccessToken", preschoolersAccessToken);
 
             String childAccessToken = AuthSteps.로그인_요청(MEMBER_CHILD_EMAIL, MEMBER_CHILD_PASSWORD)
                     .as(TokenResponse.class).getAccessToken();
