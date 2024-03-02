@@ -9,6 +9,7 @@ import java.util.function.Function;
 @Getter
 @AllArgsConstructor
 public enum FareAgeGroup {
+    PRESCHOOLERS(Integer.MIN_VALUE, 5, fare -> fare),
     CHILD(6, 12,  fare -> ((fare - 350) * 50 / 100)),
     TEENAGER(13, 18,  fare -> ((fare - 350) * 20 / 100)),
     ADULT(19, Integer.MAX_VALUE, fare -> 0L);
@@ -27,4 +28,9 @@ public enum FareAgeGroup {
     public long calculateDiscountFare(long fare) {
         return this.discountFareCalculator.apply(fare);
     }
+
+    public boolean isLineExtraFareFree() {
+        return this == PRESCHOOLERS;
+    }
+
 }
