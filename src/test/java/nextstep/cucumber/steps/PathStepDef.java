@@ -50,6 +50,9 @@ public class PathStepDef implements En {
             Assertions.assertThat(duration).isEqualTo(4);
             Assertions.assertThat(distance).isEqualTo(20);
         });
+        And("지하철 이용 요금도 함께 응답함", () -> {
+            Assertions.assertThat(response.getFare()).isEqualTo(1200);
+        });
     }
 
 }

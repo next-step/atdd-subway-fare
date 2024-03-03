@@ -6,15 +6,10 @@ import nextstep.path.domain.dto.PathsDto;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 public abstract class PathFinder {
@@ -43,7 +38,7 @@ public abstract class PathFinder {
         GraphPath<Station, SectionEdge> path = dijkstraShortestPath.getPath(start, end);
         int duration = getDuration(path);
         int distance = getDistance(path);
-        return new PathsDto(distance, duration, dijkstraShortestPath.getPath(start, end).getVertexList());
+        return new PathsDto(distance, duration, 0, dijkstraShortestPath.getPath(start, end).getVertexList());
     }
 
     public boolean isConnected(Station start, Station end) {

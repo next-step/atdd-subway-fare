@@ -57,6 +57,6 @@ public class PathsServiceMockTest {
 
 
     private PathsResponse expectPathsResponse(List<StationDto> expectedPath) {
-        return new PathsResponse(10, 10, expectedPath);
+        return new PathsResponse(10, 10, 10, expectedPath);
     }
 }

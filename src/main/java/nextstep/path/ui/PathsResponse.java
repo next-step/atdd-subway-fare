@@ -11,15 +11,17 @@ public class PathsResponse {
 
     private int distance;
     private int duration;
+    private int fare;
     private List<StationDto> stationDtoList;
 
     public PathsResponse() {
     }
 
 
-    public PathsResponse(int distance, int duration, List<StationDto> stationDtoList) {
+    public PathsResponse(int distance, int duration, int fare, List<StationDto> stationDtoList) {
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
         this.stationDtoList = stationDtoList;
     }
 
@@ -35,14 +37,18 @@ public class PathsResponse {
         return duration;
     }
 
+    public int getFare() {
+        return fare;
+    }
+
     public static PathsResponse from(PathsDto pathsDto) {
         return new PathsResponse(
                 pathsDto.getDistance(),
                 pathsDto.getDuration(),
+                pathsDto.getFare(),
                 pathsDto.getPaths()
                 .stream()
                 .map(it -> new StationDto(it.getId(), it.getName()))
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList()));
     }
 }

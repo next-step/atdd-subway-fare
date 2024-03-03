@@ -9,11 +9,13 @@ public class PathsDto {
 
     private final int distance;
     private final int duration;
+    private final int fare;
     private final List<Station> paths;
 
-    public PathsDto(int distance, int duration, List<Station> paths) {
+    public PathsDto(int distance, int duration, int fare, List<Station> paths) {
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
         this.paths = paths;
     }
 
@@ -27,5 +29,9 @@ public class PathsDto {
 
     public List<Station> getPaths() {
         return paths;
+    }
+
+    public int getFare() {
+        return 0;
     }
 }
