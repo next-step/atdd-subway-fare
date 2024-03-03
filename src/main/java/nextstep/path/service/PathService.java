@@ -20,16 +20,23 @@ import java.util.List;
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
+    private final FareService fareService;
 
-    public PathService(StationRepository stationRepository, LineRepository lineRepository) {
+
+    public PathService(
+            StationRepository stationRepository,
+            LineRepository lineRepository,
+            FareService fareService) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
+        this.fareService = fareService;
     }
 
     public PathsResponse searchPath(long source, long target, PathType pathType) {
         try {
             PathFinder pathFinder = createPathFinder(lineRepository.findAll(), pathType);
             PathsDto pathsDto = pathFinder.findPath(getStation(source), getStation(target));
+            pathsDto.setFare(fareService.calculate(pathsDto.getDistance()));
             return PathsResponse.from(pathsDto);
         } catch (IllegalArgumentException e) {
             CannotFindPathException ex = new CannotFindPathException("경로 탐색이 불가합니다");
