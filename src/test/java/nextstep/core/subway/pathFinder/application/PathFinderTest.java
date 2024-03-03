@@ -87,11 +87,11 @@ public class PathFinderTest {
          */
         @BeforeEach
         void 사전_노선_설정() {
-            이호선.addSection(new Section(교대, 강남, 10, 10, 이호선));
+            이호선.addSection(new Section(교대, 강남, 10, 5, 이호선));
             신분당선.addSection(new Section(강남, 양재, 10, 10, 신분당선));
-            삼호선.addSection(new Section(교대, 남부터미널, 2, 2, 삼호선));
-            삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
-            사호선.addSection(new Section(정왕, 오이도, 10, 10, 사호선));
+            삼호선.addSection(new Section(교대, 남부터미널, 2, 7, 삼호선));
+            삼호선.addSection(new Section(남부터미널, 양재, 3, 10, 삼호선));
+            사호선.addSection(new Section(정왕, 오이도, 10, 5, 사호선));
         }
 
         @Nested
@@ -124,7 +124,7 @@ public class PathFinderTest {
 
                 //
                 assertThat(경로_조회_결과).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5));
+                        .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 17));
             }
 
         }
