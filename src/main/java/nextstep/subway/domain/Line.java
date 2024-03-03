@@ -64,10 +64,13 @@ public class Line {
         return sections.getSections();
     }
 
+    public int getExtraFare() {
+        return extraFare;
+    }
+
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
         sections.add(new Section(this, upStation, downStation, distance, duration));
     }
-
 
     public List<Station> getStations() {
         return sections.getStations();

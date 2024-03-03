@@ -17,7 +17,7 @@ public abstract class PathFinder {
 
         PathResponse pathResponse = getPath(pathRequest, lines);
 
-        pathResponse.updateFare(fareCalculator.calculateFare(pathResponse.getDistance()));
+        pathResponse.updateFare(fareCalculator.calculateFare(pathResponse.getDistance(), pathResponse.getLines()));
         return pathResponse;
     }
 
