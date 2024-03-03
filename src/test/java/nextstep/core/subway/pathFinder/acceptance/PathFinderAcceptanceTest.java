@@ -1,6 +1,6 @@
 package nextstep.core.subway.pathFinder.acceptance;
 
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +15,8 @@ import static nextstep.core.subway.section.fixture.SectionFixture.지하철_구�
 import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하철_구간_추가요청;
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
 
-@AcceptanceTest
 @DisplayName("경로 조회")
-public class PathFinderAcceptanceTest {
+public class PathFinderAcceptanceTest extends AcceptanceTest {
 
     Long 교대역;
     Long 강남역;

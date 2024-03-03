@@ -2,7 +2,7 @@ package nextstep.core.subway.section.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,8 +22,7 @@ import static nextstep.core.subway.station.fixture.StationFixture.역_10개;
 import static nextstep.core.subway.station.step.StationSteps.*;
 
 @DisplayName("지하철 구간 관리")
-@AcceptanceTest
-public class SectionAcceptanceTest {
+public class SectionAcceptanceTest extends AcceptanceTest {
 
     Long 가산디지털단지역_번호;
     Long 구로디지털단지역_번호;

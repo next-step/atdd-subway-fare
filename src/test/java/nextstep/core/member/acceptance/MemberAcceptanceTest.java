@@ -1,6 +1,6 @@
 package nextstep.core.member.acceptance;
 
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,8 +12,7 @@ import static nextstep.core.member.fixture.MemberFixture.*;
 import static nextstep.core.member.step.MemberSteps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AcceptanceTest
-class MemberAcceptanceTest {
+class MemberAcceptanceTest extends AcceptanceTest {
     public static final String EMAIL = "email@email.com";
     public static final String PASSWORD = "password";
     public static final int AGE = 20;

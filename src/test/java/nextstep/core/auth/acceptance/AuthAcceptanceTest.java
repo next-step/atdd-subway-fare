@@ -1,6 +1,6 @@
 package nextstep.core.auth.acceptance;
 
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,8 +16,7 @@ import static nextstep.core.member.fixture.MemberFixture.존슨;
 import static nextstep.core.member.step.MemberSteps.회원_생성_요청;
 
 @DisplayName("인증 인수 테스트")
-@AcceptanceTest
-class AuthAcceptanceTest {
+class AuthAcceptanceTest extends AcceptanceTest {
 
     @Nested
     class 토큰_발급 {
@@ -141,6 +140,7 @@ class AuthAcceptanceTest {
 
         @Nested
         class 실패 {
+
             /**
              * When  깃허브로 로그인 요청할 때
              * When     임시로 발급된 코드를 전달하지 않은 경우

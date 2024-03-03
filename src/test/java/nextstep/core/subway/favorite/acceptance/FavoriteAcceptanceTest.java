@@ -1,6 +1,6 @@
 package nextstep.core.subway.favorite.acceptance;
 
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +20,7 @@ import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
 
 @DisplayName("즐겨찾기 관련 인수 테스트")
-@AcceptanceTest
-public class FavoriteAcceptanceTest {
+public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     final Long 존재하지_않는_즐겨찾기_번호 = 999L;
     final Long 존재하지_않는_역 = 999L;
