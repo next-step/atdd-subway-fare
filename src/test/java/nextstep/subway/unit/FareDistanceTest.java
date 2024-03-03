@@ -2,12 +2,20 @@ package nextstep.subway.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+import nextstep.subway.domain.Fare10KmTo50KmOption;
+import nextstep.subway.domain.Fare50KmOverOption;
 import nextstep.subway.domain.FareCalculator;
 import nextstep.subway.domain.FareCalculatorImpl;
 import org.junit.jupiter.api.Test;
 
-public class FareTest {
-    private static FareCalculator fareCalculator = new FareCalculatorImpl();
+public class FareDistanceTest {
+    private static FareCalculator fareCalculator = new FareCalculatorImpl(
+        List.of(
+            new Fare10KmTo50KmOption(),
+            new Fare50KmOverOption()
+        )
+    );
 
 
     @Test
@@ -33,4 +41,6 @@ public class FareTest {
 
         assertThat(fare).isEqualTo(2_750);
     }
+
+
 }
