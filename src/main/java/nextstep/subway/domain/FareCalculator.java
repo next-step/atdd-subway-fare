@@ -1,13 +1,8 @@
 package nextstep.subway.domain;
 
+import java.util.Set;
+import nextstep.subway.applicaion.dto.LineResponse;
+
 public interface FareCalculator {
-    int calculateFare(int distance);
-
-    default int calculateOverFare(int distance, int chargingUnitDistance, int fare) {
-        if (distance < 1) {
-            return 0;
-        }
-
-        return (int) Math.ceil((double) distance / chargingUnitDistance) * fare;
-    }
+    int calculateFare(int distance, Set<LineResponse> lines);
 }
