@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fareOption;
 
 public class FareCalculateOption {
     private int distanceOver;

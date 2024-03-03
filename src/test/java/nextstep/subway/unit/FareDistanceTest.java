@@ -3,8 +3,8 @@ package nextstep.subway.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import nextstep.subway.domain.Fare10KmTo50KmOption;
-import nextstep.subway.domain.Fare50KmOverOption;
+import nextstep.subway.domain.fareOption.Fare10KmTo50KmOption;
+import nextstep.subway.domain.fareOption.Fare50KmOverOption;
 import nextstep.subway.domain.FareCalculator;
 import nextstep.subway.domain.FareCalculatorImpl;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,9 @@
 package nextstep.subway.domain;
 
 import java.util.List;
+import nextstep.subway.domain.fareOption.Fare10KmTo50KmOption;
+import nextstep.subway.domain.fareOption.Fare50KmOverOption;
+import nextstep.subway.domain.fareOption.FareCalculateOption;
 import org.springframework.stereotype.Component;
 
 @Component

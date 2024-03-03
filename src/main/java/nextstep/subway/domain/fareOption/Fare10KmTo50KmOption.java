@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fareOption;
 
 public class Fare10KmTo50KmOption extends FareCalculateOption {
     private static final int DISTANCE_OVER = 10;
