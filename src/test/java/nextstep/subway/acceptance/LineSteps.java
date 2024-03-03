@@ -20,7 +20,7 @@ public class LineSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int extraFare) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -28,6 +28,7 @@ public class LineSteps {
         params.put("downStationId", downStationId.toString());
         params.put("distance", Integer.toString(distance));
         params.put("duration", Integer.toString(duration));
+        params.put("extraFare", Integer.toString(extraFare));
 
         return RestAssured
             .given().log().all()

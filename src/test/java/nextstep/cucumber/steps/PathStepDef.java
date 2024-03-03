@@ -44,7 +44,8 @@ public class PathStepDef implements En {
                          Long.parseLong(context.store.get(it.get("upStation")).toString()),
                          Long.parseLong(context.store.get(it.get("downStation")).toString()),
                          Integer.parseInt(it.get("distance")),
-                         Integer.parseInt(it.get("duration"))
+                         Integer.parseInt(it.get("duration")),
+                         Integer.parseInt(it.get("extraFare"))
                      )
                  )
              ));

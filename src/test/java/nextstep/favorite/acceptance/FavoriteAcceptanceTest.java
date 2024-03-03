@@ -36,7 +36,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         강남역 = StationSteps.지하철역_생성_요청("강남역").jsonPath().getObject("id", Long.class);
         역삼역 = StationSteps.지하철역_생성_요청("역삼역").jsonPath().getObject("id", Long.class);
 
-        LineSteps.지하철_노선_생성_요청("2호선", "green", 강남역, 역삼역, 10, 10);
+        LineSteps.지하철_노선_생성_요청("2호선", "green", 강남역, 역삼역, 10, 10, 0);
 
         MemberSteps.회원_생성_요청(email, password, 20);
 

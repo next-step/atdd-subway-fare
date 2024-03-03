@@ -23,7 +23,7 @@ public class PathFinderTest {
         public void setUp() {
             final Station station1 = new Station(1L, "강남역");
             final Station station2 = new Station(2L, "역삼역");
-            final Line line = new Line("2호선", "green", station1, station2, 10, 10);
+            final Line line = new Line("2호선", "green", station1, station2, 10, 10, 0);
             lines = List.of(line);
 
             pathRequest = new PathRequest(1L, 2L);

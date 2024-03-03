@@ -25,7 +25,7 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
 
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
 
         // when
         line.addSection(역삼역, 선릉역, 10, 10);
@@ -44,7 +44,7 @@ class LineTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
 
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
 
         // then
         assertThat(line.getStations()).hasSize(2);
@@ -62,7 +62,7 @@ class LineTest {
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
 
-        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
         line.addSection(역삼역, 선릉역, 10, 10);
 
         // when
@@ -87,7 +87,7 @@ class LineTest {
         final Station 역삼역 = new Station("역삼역");
         final Station 선릉역 = new Station("선릉역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 3);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 3, 0);
 
         // when
         line.addSection(강남역, 선릉역, 3, 2);
@@ -121,7 +121,7 @@ class LineTest {
         final Station 강남역 = new Station("강남역");
         final Station 역삼역 = new Station("역삼역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
 
         // when
         // then
@@ -141,7 +141,7 @@ class LineTest {
         final Station 선릉역 = new Station("선릉역");
         final Station 삼성역 = new Station("삼성역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
 
         // when
         // then
@@ -163,7 +163,7 @@ class LineTest {
         final Station 역삼역 = new Station("역삼역");
         final Station 선릉역 = new Station("선릉역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
         line.addSection(역삼역, 선릉역, 10, 10);
 
         // when
@@ -193,7 +193,7 @@ class LineTest {
         final Station 선릉역 = new Station("선릉역");
         final Station 삼성역 = new Station("삼성역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
         line.addSection(역삼역, 선릉역, 10, 10);
         line.addSection(선릉역, 삼성역, 10, 10);
 
@@ -224,7 +224,7 @@ class LineTest {
         final Station 선릉역 = new Station("선릉역");
         final Station 삼성역 = new Station("삼성역");
 
-        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        final Line line = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
         line.addSection(역삼역, 선릉역, 10, 10);
         line.addSection(선릉역, 삼성역, 10, 10);
 

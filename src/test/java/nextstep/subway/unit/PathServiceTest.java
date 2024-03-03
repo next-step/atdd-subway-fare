@@ -38,7 +38,7 @@ public class PathServiceTest {
         강남역 = new Station(1L, "강남역");
         역삼역 = new Station(2L, "역삼역");
         선릉역 = new Station(3L, "선릉역");
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 10);
+        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 10, 0);
 
         이호선.addSection(역삼역, 선릉역, 10, 10);
 

@@ -33,7 +33,7 @@ public class LineServiceTest {
         Station 역삼역 = stationRepository.save(new Station("역삼역"));
         Station 선릉역 = stationRepository.save(new Station("선릉역"));
 
-        Line line = lineRepository.save(new Line("2호선", "green", 강남역, 역삼역, 10, 3));
+        Line line = lineRepository.save(new Line("2호선", "green", 강남역, 역삼역, 10, 3, 0));
 
         // when
         // lineService.addSection 호출

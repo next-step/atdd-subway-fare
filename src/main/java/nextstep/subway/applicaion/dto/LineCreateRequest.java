@@ -11,6 +11,8 @@ public class LineCreateRequest {
     @NotNull
     private Long downStationId;
 
+    private int extraFare;
+
 
     @Min(1)
     private int distance;
@@ -39,5 +41,9 @@ public class LineCreateRequest {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 }
