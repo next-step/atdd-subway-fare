@@ -116,14 +116,14 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(강남역_번호)).thenReturn(강남);
                 when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.calculateShortestPath(모든_노선_목록, 강남, 남부터미널)).thenReturn(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12));
+                when(pathFinder.calculateShortestPath(모든_노선_목록, 강남, 남부터미널)).thenReturn(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12));
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findShortestPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호));
 
                 // then
                 assertThat(경로_조회_응답).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12));
+                        .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
             }
 
             /**
@@ -137,14 +137,14 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(교대역_번호)).thenReturn(교대);
                 when(lineService.findStation(양재역_번호)).thenReturn(양재);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.calculateShortestPath(모든_노선_목록, 교대, 양재)).thenReturn(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5));
+                when(pathFinder.calculateShortestPath(모든_노선_목록, 교대, 양재)).thenReturn(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5));
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findShortestPath(new PathFinderRequest(교대역_번호, 양재역_번호));
 
                 // then
                 assertThat(경로_조회_응답).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5));
+                        .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 3));
             }
         }
 

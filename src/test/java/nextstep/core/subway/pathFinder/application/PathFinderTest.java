@@ -109,7 +109,7 @@ public class PathFinderTest {
 
                 // then
                 assertThat(경로_조회_결과).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12));
+                        .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12));
             }
 
             /**
@@ -124,7 +124,7 @@ public class PathFinderTest {
 
                 //
                 assertThat(경로_조회_결과).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5));
+                        .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5));
             }
 
         }

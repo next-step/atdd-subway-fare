@@ -87,7 +87,7 @@ public class PathFinder {
     }
 
     private PathFinderResult generatePathResult(GraphPath<Station, DefaultWeightedEdge> path) {
-        return new PathFinderResult(path.getVertexList(), (int) path.getWeight());
+        return new PathFinderResult(path.getVertexList(), (int) path.getWeight(), (int) path.getWeight()); // TODO: 소요 시간 계산 필요
     }
 
     private GraphPath<Station, DefaultWeightedEdge> findShortestPath(Station departureStation,
