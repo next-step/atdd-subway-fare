@@ -8,22 +8,26 @@ public class SectionRequest {
 
     private int distance;
 
-    private Long stationLineId;
+    private Long lineId;
+
+    private int duration;
 
     public SectionRequest() {
     }
 
-    public SectionRequest(Long upStationId, Long downStationId, int distance) {
+    public SectionRequest(Long upStationId, Long downStationId, int distance, int duration, Long lineId) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
+        this.lineId = lineId;
     }
 
-    public SectionRequest(Long upStationId, Long downStationId, int distance, Long stationLineId) {
+    public SectionRequest(Long upStationId, Long downStationId, int distance, int duration) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
-        this.stationLineId = stationLineId;
+        this.duration = duration;
     }
 
     public static SectionRequest mergeForCreateLine(Long stationLineId, SectionRequest request) {
@@ -31,6 +35,7 @@ public class SectionRequest {
                 request.getUpStationId(),
                 request.getDownStationId(),
                 request.getDistance(),
+                request.getDuration(),
                 stationLineId
         );
     }
@@ -48,6 +53,10 @@ public class SectionRequest {
     }
 
     public Long getLineId() {
-        return stationLineId;
+        return lineId;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }
