@@ -117,6 +117,7 @@ public class Sections {
                 commonSection.getUpStation(),
                 nextSectionBasedOnCommonSection.getDownStation(),
                 commonSection.getDistance() + nextSectionBasedOnCommonSection.getDistance(),
+                commonSection.getDuration() + nextSectionBasedOnCommonSection.getDuration(),
                 commonSection.getLine());
     }
 
@@ -239,6 +240,7 @@ public class Sections {
                 sectionOfIndex.getUpStation(),
                 sectionToInsert.getUpStation(),
                 sectionOfIndex.getDistance() - sectionToInsert.getDistance(),
+                sectionOfIndex.getDuration() - sectionToInsert.getDuration(),
                 sectionToInsert.getLine());
     }
 
@@ -247,6 +249,7 @@ public class Sections {
                 sectionToInsert.getDownStation(),
                 sectionOfIndex.getDownStation(),
                 sectionOfIndex.getDistance() - sectionToInsert.getDistance(),
+                sectionOfIndex.getDuration() - sectionToInsert.getDuration(),
                 sectionToInsert.getLine());
     }
 

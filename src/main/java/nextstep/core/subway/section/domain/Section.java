@@ -23,16 +23,19 @@ public class Section {
 
     private int distance;
 
+    private int duration;
+
     @ManyToOne
     private Line line;
 
     protected Section() {
     }
 
-    public Section(Station upStation, Station downStation, int distance, Line line) {
+    public Section(Station upStation, Station downStation, int distance, int duration, Line line) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = validateDistance(distance);
+        this.duration = duration;
         this.line = line;
     }
 
@@ -88,6 +91,10 @@ public class Section {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public Line getLine() {
