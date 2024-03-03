@@ -3,6 +3,7 @@ package nextstep.favorite.domain;
 import nextstep.member.domain.Member;
 import nextstep.subway.entity.Sections;
 import nextstep.subway.entity.Station;
+import nextstep.subway.service.DistancePathFinder;
 import nextstep.subway.service.PathFinder;
 
 import javax.persistence.*;
@@ -29,27 +30,18 @@ public class Favorite {
     protected Favorite() {}
 
     public Favorite(Member member, Station sourceStation, Station targetStation, List<Sections> sectionsList) {
-        verifyCreateFavorite(sourceStation, targetStation, sectionsList);
+        verifyConnectedStation(sourceStation, targetStation, sectionsList);
 
         this.member = member;
         this.sourceStation = sourceStation;
         this.targetStation = targetStation;
     }
 
-    private void verifyCreateFavorite(Station sourceStation, Station targetStation, List<Sections> sectionsList) {
-        verifySameStation(sourceStation, targetStation);
-        verifyConnectedStation(sectionsList, sourceStation, targetStation);
-    }
-
-    private void verifySameStation(Station sourceStation, Station targetStation) {
-        if(sourceStation == targetStation) {
-            throw new IllegalArgumentException("출발역과 도착역은 동일할 수 없다");
+    private void verifyConnectedStation(Station sourceStation, Station targetStation, List<Sections> sectionsList) {
+        PathFinder pathFinder = new DistancePathFinder(sectionsList);
+        if(!pathFinder.isConnectedStation(sourceStation, targetStation)) {
+            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있어야 한다");
         }
-    }
-
-    private void verifyConnectedStation(List<Sections> sectionsList, Station sourceStation, Station targetStation) {
-        PathFinder pathFinder = new PathFinder(sectionsList);
-        pathFinder.getShortestPath(sourceStation, targetStation);
     }
 
     public Long getId() {

@@ -21,15 +21,16 @@ public class PathService {
 
     /** 경로 조회 */
     public PathResponse getPaths(Long source, Long target, PathType type) {
-        if(Objects.equals(source, target)) {
-            throw new IllegalArgumentException("출발역과 도착역은 동일할 수 없다.");
-        }
-
         Station sourceStation = stationService.findStation(source);
         Station targetStation = stationService.findStation(target);
         List<Sections> sectionsList = lineService.findSectionsList();
 
-        PathFinder pathFinder = new PathFinder(sectionsList);
+        PathFinder pathFinder = createPathFinder(type, sectionsList);
         return pathFinder.getShortestPath(sourceStation, targetStation);
+    }
+
+    private PathFinder createPathFinder(PathType type, List<Sections> sectionsList) {
+        return type == PathType.DISTANCE ?
+            new DistancePathFinder(sectionsList) : new DurationPathFinder(sectionsList);
     }
 }

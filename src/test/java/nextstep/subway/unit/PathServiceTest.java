@@ -62,17 +62,32 @@ public class PathServiceTest {
 
     @DisplayName("출발역과 도착역을 통해 최단 경로를 조회한다.")
     @Test
-    void getPath() {
+    void getPathByDistance() {
         // when
         PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
-        List<Long> 최단구간_역_목록 = 경로_조회_응답.getStations().stream()
+        List<Long> 최단경로_역_목록 = 경로_조회_응답.getStations().stream()
             .map(StationResponse::getId)
             .collect(Collectors.toList());
 
-        assertThat(최단구간_역_목록).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId());
+        assertThat(최단경로_역_목록).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId());
         assertThat(경로_조회_응답.getDistance()).isEqualTo(5);
+    }
+
+    @DisplayName("출발역과 도착역을 통해 최소시간 경로를 조회한다.")
+    @Test
+    void getPathByDuration() {
+        // when
+        PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId(), PathType.DURATION);
+
+        // then
+        List<Long> 최소시간_역_목록 = 경로_조회_응답.getStations().stream()
+            .map(StationResponse::getId)
+            .collect(Collectors.toList());
+
+        assertThat(최소시간_역_목록).containsExactly(교대역.getId(), 강남역.getId(), 양재역.getId());
+        assertThat(경로_조회_응답.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("출발역과 도착역이 동일한 경우 예외가 발생한다.")

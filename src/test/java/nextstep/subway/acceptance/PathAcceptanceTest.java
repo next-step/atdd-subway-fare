@@ -7,6 +7,7 @@ import nextstep.subway.acceptance.fixture.LineFixture;
 import nextstep.subway.acceptance.fixture.StationFixture;
 import nextstep.subway.dto.line.LineResponse;
 import nextstep.subway.dto.path.PathResponse;
+import nextstep.subway.dto.path.PathType;
 import nextstep.subway.dto.station.StationResponse;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +61,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 최단거리_경로_조회_성공() {
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -80,7 +81,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 최소시간_경로_조회_성공() {
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역, PathType.DURATION);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -100,7 +101,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 출발역_도착역_동일_경로_조회_실패() {
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 교대역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 교대역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -117,7 +118,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         Long 역삼역 = StationFixture.지하철역_생성_요청("역삼역").as(StationResponse.class).getId();
 
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 역삼역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 역삼역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -134,17 +135,18 @@ public class PathAcceptanceTest extends AcceptanceTest {
         Long 존재하지_않는_역 = -9999L;
 
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 존재하지_않는_역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 존재하지_않는_역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
-    private ExtractableResponse<Response> getPaths(Long source, Long target) {
+    private ExtractableResponse<Response> getPaths(Long source, Long target, PathType type) {
         return RestAssured
             .given()
             .queryParam("source", source)
             .queryParam("target", target)
+            .queryParam("type", type)
             .when()
             .get("/paths")
             .then()

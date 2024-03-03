@@ -15,11 +15,11 @@ public class PathResponse {
     protected PathResponse() {}
 
     public PathResponse(List<Station> stations, Integer distance, Integer duration) {
-        this.duration = duration;
         this.stations.addAll(
             createStationResponses(stations)
         );
         this.distance = distance;
+        this.duration = duration;
     }
 
     private List<StationResponse> createStationResponses(List<Station> stations) {
@@ -32,7 +32,7 @@ public class PathResponse {
         return stations;
     }
 
-    public double getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
