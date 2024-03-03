@@ -16,10 +16,6 @@ public class PathsResponse {
     public PathsResponse() {
     }
 
-    public PathsResponse(int distance, List<StationDto> stationDtoList) {
-        this.distance = distance;
-        this.stationDtoList = stationDtoList;
-    }
 
     public PathsResponse(int distance, int duration, List<StationDto> stationDtoList) {
         this.distance = distance;

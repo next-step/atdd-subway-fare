@@ -33,14 +33,14 @@ public class PathsServiceMockTest {
         StationDto 시청 = new StationDto(1, "시청");
         StationDto 을지로입구 = new StationDto(2, "을지로입구");
         StationDto 을지로4가 = new StationDto(3, "을지로4가");
-        PathsResponse pathsResponse = new PathsResponse(15, List.of(시청, 을지로입구, 을지로4가));
+        PathsResponse expectPathsResponse = expectPathsResponse(List.of(시청, 을지로입구, 을지로4가));
         // when
         when(pathService.searchPath(1, 3, PathType.DISTANCE))
-                .thenReturn(pathsResponse);
+                .thenReturn(expectPathsResponse);
 
         // then
         assertThat(pathService.searchPath(1, 3, PathType.DISTANCE).getStationDtoList())
-                .containsExactly(시청, 을지로입구, 을지로4가);
+                .isEqualTo(expectPathsResponse.getStationDtoList());
     }
 
     @Test
@@ -55,4 +55,8 @@ public class PathsServiceMockTest {
         assertThrows(CannotFindPathException.class, () -> pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE));
     }
 
+
+    private PathsResponse expectPathsResponse(List<StationDto> expectedPath) {
+        return new PathsResponse(10, 10, expectedPath);
+    }
 }
