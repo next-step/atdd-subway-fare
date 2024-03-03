@@ -13,18 +13,8 @@ public class FareCalculatorImpl implements FareCalculator {
 
     public FareCalculatorImpl() {
         this(List.of(
-            new FareCalculateOption()
-                .setDistanceOver(10)
-                .setDistanceUnder(50)
-                .setChargingUnitDistance(5)
-                .setFare(100)
-                .build(),
-            new FareCalculateOption()
-                .setDistanceOver(50)
-                .setDistanceUnder(Integer.MAX_VALUE)
-                .setChargingUnitDistance(8)
-                .setFare(100)
-                .build()
+            new Fare10KmTo50KmOption(),
+            new Fare50KmOverOption()
         ));
     }
 
