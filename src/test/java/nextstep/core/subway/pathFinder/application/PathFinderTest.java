@@ -87,11 +87,11 @@ public class PathFinderTest {
          */
         @BeforeEach
         void 사전_노선_설정() {
-            이호선.addSection(new Section(교대, 강남, 10, 이호선));
-            신분당선.addSection(new Section(강남, 양재, 10, 신분당선));
-            삼호선.addSection(new Section(교대, 남부터미널, 2, 삼호선));
-            삼호선.addSection(new Section(남부터미널, 양재, 3, 삼호선));
-            사호선.addSection(new Section(정왕, 오이도, 10, 사호선));
+            이호선.addSection(new Section(교대, 강남, 10, 10, 이호선));
+            신분당선.addSection(new Section(강남, 양재, 10, 10, 신분당선));
+            삼호선.addSection(new Section(교대, 남부터미널, 2, 2, 삼호선));
+            삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
+            사호선.addSection(new Section(정왕, 오이도, 10, 10, 사호선));
         }
 
         @Nested
@@ -222,11 +222,11 @@ public class PathFinderTest {
          */
         @BeforeEach
         void 사전_노선_설정() {
-            이호선.addSection(new Section(교대, 강남, 10, 이호선));
-            신분당선.addSection(new Section(강남, 양재, 10, 신분당선));
-            삼호선.addSection(new Section(교대, 남부터미널, 2, 삼호선));
-            삼호선.addSection(new Section(남부터미널, 양재, 3, 삼호선));
-            사호선.addSection(new Section(정왕, 오이도, 10, 사호선));
+            이호선.addSection(new Section(교대, 강남, 10, 10, 이호선));
+            신분당선.addSection(new Section(강남, 양재, 10, 10, 신분당선));
+            삼호선.addSection(new Section(교대, 남부터미널, 2, 2, 삼호선));
+            삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
+            사호선.addSection(new Section(정왕, 오이도, 10, 10, 사호선));
         }
 
         @Nested

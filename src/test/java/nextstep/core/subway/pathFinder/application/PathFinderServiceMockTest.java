@@ -95,11 +95,11 @@ public class PathFinderServiceMockTest {
             오이도 = StationFixture.오이도;
             ReflectionTestUtils.setField(오이도, "id", 오이도역_번호);
 
-            이호선.addSection(new Section(교대, 강남, 10, 이호선));
-            신분당선.addSection(new Section(강남, 양재, 10, 신분당선));
-            삼호선.addSection(new Section(교대, 남부터미널, 2, 삼호선));
-            삼호선.addSection(new Section(남부터미널, 양재, 3, 삼호선));
-            사호선.addSection(new Section(정왕, 오이도, 10, 사호선));
+            이호선.addSection(new Section(교대, 강남, 10, 10, 이호선));
+            신분당선.addSection(new Section(강남, 양재, 10, 10, 신분당선));
+            삼호선.addSection(new Section(교대, 남부터미널, 2, 2, 삼호선));
+            삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
+            사호선.addSection(new Section(정왕, 오이도, 10, 10, 사호선));
         }
 
         @Nested

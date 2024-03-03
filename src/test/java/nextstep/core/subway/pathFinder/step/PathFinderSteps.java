@@ -17,6 +17,7 @@ public class PathFinderSteps {
         return given()
                 .param("source", pathFinderRequest.getDepartureStationId())
                 .param("target", pathFinderRequest.getArrivalStationId())
+                .param("type", pathFinderRequest.getPathFinderType())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get("/paths")
