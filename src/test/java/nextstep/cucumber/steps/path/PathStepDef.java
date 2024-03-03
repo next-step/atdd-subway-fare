@@ -4,6 +4,8 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.cucumber.steps.auth.AuthSteps;
+import nextstep.cucumber.steps.member.MemberSteps;
 import nextstep.cucumber.steps.station.StationSteps;
 import nextstep.cucumber.steps.line.LineSteps;
 import nextstep.cucumber.steps.line.SectionSteps;
@@ -21,6 +23,8 @@ public class PathStepDef implements En {
     @Autowired
     DatabaseCleanup databaseCleanup;
     ExtractableResponse<Response> response;
+
+    String accessToken;
 
     Map<String, Long> stations = new HashMap<>();
 
@@ -53,10 +57,11 @@ public class PathStepDef implements En {
                 String downstation = row.get("downstation");
                 int distance = Integer.parseInt(row.get("distance"));
                 int duration = Integer.parseInt(row.get("duration"));
+                int extraFare = Integer.parseInt(row.get("extraFare"));
 
                 isFirstSectionForLine.putIfAbsent(line, true);
                 if (Boolean.TRUE.equals(isFirstSectionForLine.get(line))) {
-                    LineSteps.노선_생성_요청(line, stations.get(upstation), stations.get(downstation), distance, duration);
+                    LineSteps.노선_생성_요청(line, stations.get(upstation), stations.get(downstation), distance, duration, extraFare);
                     isFirstSectionForLine.put(line, false);
                 } else {
                     SectionSteps.구간_추가_요청(lineId, stations.get(upstation), stations.get(downstation), distance, duration);
@@ -118,6 +123,34 @@ public class PathStepDef implements En {
         });
 
         And("최소 시간 경로에 대한 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
+            int fare = PathSteps.parseFare(response);
+            assertThat(fare).isEqualTo(expectedFare);
+        });
+
+        Given("로그인한 사용자는 어린이의 나이로 설정되어 있다", () -> {
+            MemberSteps.회원_생성_요청("test@test.com", "password", 7);
+            accessToken = AuthSteps.로그인_요청("test@test.com", "password");
+        });
+
+        When("로그인한 어린이 사용자가 {string}에서 {string}까지의 최단 경로를 조회하면", (String source, String target) -> {
+            response = PathSteps.경로_조회_요청_with_로그인(stations.get(source), stations.get(target), "DISTANCE", accessToken);
+        });
+
+        Then("어린이 사용자의 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
+            int fare = PathSteps.parseFare(response);
+            assertThat(fare).isEqualTo(expectedFare);
+        });
+
+        Given("로그인한 사용자는 청소년의 나이로 설정되어 있다", () -> {
+            MemberSteps.회원_생성_요청("test@test.com", "password", 13);
+            accessToken = AuthSteps.로그인_요청("test@test.com", "password");
+        });
+
+        When("로그인한 청소년 사용자가 {string}에서 {string}까지의 최단 경로를 조회하면", (String source, String target) -> {
+            response = PathSteps.경로_조회_요청_with_로그인(stations.get(source), stations.get(target), "DISTANCE", accessToken);
+        });
+
+        Then("청소년 사용자의 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
             int fare = PathSteps.parseFare(response);
             assertThat(fare).isEqualTo(expectedFare);
         });

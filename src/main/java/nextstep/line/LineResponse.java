@@ -16,6 +16,7 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
+    private int extraFare;
     private int distance;
     private List<StationResponse> stations;
 
@@ -30,6 +31,7 @@ public class LineResponse {
                 .id(line.getId())
                 .name(line.getName())
                 .color(line.getColor())
+                .extraFare(line.getExtraFare())
                 .distance(line.getSections().getTotalDistance())
                 .stations(stations)
                 .build();

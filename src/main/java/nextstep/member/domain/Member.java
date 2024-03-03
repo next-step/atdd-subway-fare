@@ -70,4 +70,8 @@ public class Member {
     public boolean checkPassword(String password) {
         return Objects.equals(this.password, password);
     }
+
+    public AgeRange getAgeRange() {
+        return AgeRange.findByAge(age);
+    }
 }

@@ -2,12 +2,11 @@ package nextstep.line;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.path.PathFinder;
-import nextstep.section.Section;
-import nextstep.section.SectionAddRequest;
-import nextstep.section.SectionResponse;
+import nextstep.line.section.Section;
+import nextstep.line.section.SectionAddRequest;
+import nextstep.line.section.SectionResponse;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
-import org.jgrapht.alg.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

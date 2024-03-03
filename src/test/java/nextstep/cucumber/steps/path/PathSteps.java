@@ -20,6 +20,19 @@ public class PathSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 경로_조회_요청_with_로그인(Long sourceId, Long targetId, String type, String accessToken) {
+        return RestAssured.given().log().all()
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .queryParam("type", type)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .when().get("/paths")
+                .then().log().all()
+                .extract();
+    }
+
     public static List<String> parseStationNames(ExtractableResponse<Response> response) {
         return response.jsonPath().getList("stations.name", String.class);
     }

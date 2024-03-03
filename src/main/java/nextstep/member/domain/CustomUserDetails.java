@@ -8,6 +8,7 @@ public class CustomUserDetails implements UserDetails {
     private Long id;
     private String email;
     private String password;
+    private Integer age;
 
 
     @Override
@@ -23,5 +24,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public Integer getAge() {
+        return age;
     }
 }

@@ -7,4 +7,6 @@ import nextstep.member.domain.Member;
 public interface OAuth2User {
     Long getId();
     String getUsername();
+
+    int getAge();
 }

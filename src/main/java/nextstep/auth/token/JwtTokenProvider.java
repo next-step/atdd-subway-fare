@@ -1,6 +1,7 @@
 package nextstep.auth.token;
 
 import io.jsonwebtoken.*;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jgrapht.alg.util.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,9 +15,10 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
 
-    public String createToken(Long id, String email) {
+    public String createToken(Long id, String email, int age) {
         Claims claims = Jwts.claims().setSubject(id + "");
         claims.put("email", email);
+        claims.put("age", age);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -28,9 +30,9 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Pair<Long, String> getPrincipal(String token) {
+    public Triple<Long, String, Integer> getPrincipal(String token) {
         Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return Pair.of(Long.parseLong(body.getSubject()), body.get("email", String.class));
+        return Triple.of(Long.parseLong(body.getSubject()), body.get("email", String.class), body.get("age", Integer.class));
     }
 
     public boolean validateToken(String token) {

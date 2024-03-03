@@ -28,7 +28,7 @@ public class TokenService {
             throw new AuthenticationException();
         }
 
-        String token = jwtTokenProvider.createToken(userDetails.getId(), userDetails.getUsername());
+        String token = jwtTokenProvider.createToken(userDetails.getId(), userDetails.getUsername(), userDetails.getAge());
 
         return new TokenResponse(token);
     }
@@ -39,7 +39,7 @@ public class TokenService {
 
         OAuth2User oAuth2User = oAuth2UserService.loadUserByOAuth2User(githubProfile);
 
-        String token = jwtTokenProvider.createToken(oAuth2User.getId(), oAuth2User.getUsername());
+        String token = jwtTokenProvider.createToken(oAuth2User.getId(), oAuth2User.getUsername(), oAuth2User.getAge());
 
         return new TokenResponse(token);
     }

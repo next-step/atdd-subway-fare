@@ -1,6 +1,7 @@
-package nextstep.section;
+package nextstep.line.section;
 
 import lombok.*;
+import nextstep.exception.InvalidInputException;
 import nextstep.line.Line;
 import nextstep.station.Station;
 
@@ -74,5 +75,25 @@ public class Section {
     @Override
     public int hashCode() {
         return Objects.hash(id != null ? id : upstation, downstation);
+    }
+
+    public void shorten(Section newSection) {
+        int newDistance = distance - newSection.getDistance();
+        if (newDistance <= 0) {
+            throw new InvalidInputException("유효하지 않은 거리입니다.");
+        }
+
+        int newDuration = duration - newSection.getDuration();
+        if (newDuration <= 0) {
+            throw new InvalidInputException("유효하지 않은 소요시간입니다.");
+        }
+
+        distance = newDistance;
+        duration = newDuration;
+    }
+
+    public void extend(Section removedSection) {
+        distance = distance + removedSection.getDistance();
+        duration = duration + removedSection.getDuration();
     }
 }

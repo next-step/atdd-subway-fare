@@ -1,4 +1,4 @@
-package nextstep.section;
+package nextstep.line.section;
 
 import lombok.Builder;
 import lombok.Getter;

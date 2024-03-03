@@ -1,14 +1,14 @@
 package nextstep.line;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nextstep.exception.InvalidInputException;
-import nextstep.section.Section;
-import nextstep.section.Sections;
+import nextstep.line.section.Section;
+import nextstep.line.section.Sections;
 import nextstep.station.Station;
-import org.jgrapht.alg.util.Pair;
 
 import javax.persistence.*;
 
@@ -27,6 +27,9 @@ public class Line {
 
     @Column(nullable = false)
     private String name;
+
+    @Column
+    private int extraFare;
 
     @Embedded
     private Sections sections = new Sections();
@@ -94,10 +97,11 @@ public class Line {
     }
 
     @Builder
-    public Line(Long id, String color, String name, Sections sections) {
+    public Line(Long id, String color, String name, int extraFare, Sections sections) {
         this.id = id;
         this.color = color;
         this.name = name;
+        this.extraFare = extraFare;
         this.sections = sections != null ? sections : new Sections();
     }
 }
