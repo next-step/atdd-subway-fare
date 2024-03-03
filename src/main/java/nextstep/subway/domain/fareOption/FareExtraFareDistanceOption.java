@@ -8,7 +8,7 @@ public class FareExtraFareDistanceOption implements FareCalculateOption {
 
     @Override
     public boolean isCalculateTarget(int distance, Set<LineResponse> line) {
-        return false;
+        return true;
     }
 
     @Override
