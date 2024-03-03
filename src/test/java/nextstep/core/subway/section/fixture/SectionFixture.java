@@ -34,8 +34,8 @@ public class SectionFixture {
         return new Section(StationFixture.역삼, StationFixture.삼성, 10, line);
     }
 
-    public static SectionRequest 지하철_구간(Long upStationId, Long downStationId, int distance) {
-        return new SectionRequest(upStationId, downStationId, distance);
+    public static SectionRequest 지하철_구간(Long upStationId, Long downStationId, int distance, int duration) {
+        return new SectionRequest(upStationId, downStationId, distance, duration);
     }
 
 }
