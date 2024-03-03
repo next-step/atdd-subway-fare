@@ -2,9 +2,6 @@ package nextstep.core.subway.favorite.application.dto;
 
 import nextstep.core.subway.station.application.dto.StationResponse;
 
-/**
- * TODO: StationResponse를 포함하는 클래스로 만듭니다.
- */
 public class FavoriteResponse {
 
     public Long id;
