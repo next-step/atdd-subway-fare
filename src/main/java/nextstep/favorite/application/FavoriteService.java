@@ -25,12 +25,11 @@ public class FavoriteService {
     private final PathFinder pathFinder;
 
     public Long createFavorite(FavoriteRequest request, Long memberId) {
-        if (!pathFinder.pathExists(request.getSource() + "", request.getTarget() + "")) {
-            throw new CannotFavoriteNonexistentPathException();
-        }
-
         Station sourceStation = stationRepository.findById(request.getSource()).orElseThrow(EntityNotFoundException::new);
         Station targetStation = stationRepository.findById(request.getTarget()).orElseThrow(EntityNotFoundException::new);
+        if (!pathFinder.pathExists(sourceStation, targetStation)) {
+            throw new CannotFavoriteNonexistentPathException();
+        }
 
         Favorite favorite = Favorite.of(sourceStation, targetStation, memberId);
         return favoriteRepository.save(favorite).getId();

@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import nextstep.auth.principal.LoginMember;
 import nextstep.exception.InvalidInputException;
 import nextstep.line.LineRepository;
+import nextstep.line.Lines;
+import nextstep.station.Station;
 import nextstep.station.StationRepository;
+import nextstep.station.StationResponse;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +24,23 @@ public class PathService {
         if (sourceId.equals(targetId)) {
             throw new InvalidInputException("출발역과 도착역이 동일합니다.");
         }
-        stationRepository.findById(sourceId).orElseThrow(EntityNotFoundException::new);
-        stationRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
+        Station source = stationRepository.findById(sourceId).orElseThrow(EntityNotFoundException::new);
+        Station target = stationRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
 
         SearchType searchType = SearchType.from(type);
-        Path pathInfo = searchType.findPath(pathFinder, Long.toString(sourceId), Long.toString(targetId));
+        Path path = searchType.findPath(pathFinder, source, target);
 
-        return pathInfo.toResponse(stationRepository, lineRepository, loginMember);
+        Lines lines = Lines.from(lineRepository.findAll());
+
+        return new PathResponse(
+            path.getStations().stream()
+                    .map(StationResponse::from)
+                    .collect(Collectors.toList()),
+            path.getDistance(),
+            path.getDuration(),
+            path.getFare(lines, loginMember)
+        );
     }
+
+
 }

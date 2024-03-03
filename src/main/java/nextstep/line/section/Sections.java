@@ -68,19 +68,6 @@ public class Sections implements Iterable<Section> {
         return sections.get(sections.size() - 1).getDownstation();
     }
 
-    public Section getNextSection(Section currentSection) {
-        boolean next = false;
-        for (Section section : sections) {
-            if (next) {
-                return section;
-            }
-            if (section.equals(currentSection)) {
-                next = true;
-            }
-        }
-        return null;
-    }
-
     public void addFirstSection(Section newSection) {
         if (sections.stream().anyMatch(section ->
                 section.isInSection(newSection))) {
@@ -102,68 +89,39 @@ public class Sections implements Iterable<Section> {
                         section.isDownstation(newSection.getDownstation()));
     }
 
-    private Section addAndConnectSection(boolean upstationExists, boolean downstationExists, Section newSection) {
+    private void connectSection(boolean upstationExists, Section newSection, Section connectableSection) {
         if (upstationExists) {
-            sections.stream()
+            connectableSection.setUpstation(newSection.getDownstation());
+            sections.add(sections.indexOf(connectableSection), newSection);
+        } else {
+            connectableSection.setDownstation(newSection.getUpstation());
+            sections.add(sections.indexOf(connectableSection) + 1, newSection);
+        }
+    }
+
+    private Section findConnectableSection(boolean upstationExists, Section newSection) {
+        if (upstationExists) {
+            return sections.stream()
                     .filter(section -> section.isUpstation(newSection.getUpstation()))
                     .findFirst()
-                    .map(section -> {
-                        section.setUpstation(newSection.getDownstation());
-                        sections.add(sections.indexOf(section), newSection);
-
-                        return section;
-                    });
-        } else {
-            sections.stream()
-                    .filter(section -> section.isDownstation(newSection.getDownstation()))
-                    .findFirst()
-                    .map(section -> {
-                        section.setDownstation(newSection.getUpstation());
-                        sections.add(sections.indexOf(section) + 1, newSection);
-
-                        return section;
-                    });
+                    .orElseThrow();
         }
-        return null;
-    }
 
-    private Pair<Section, Section> removeAndDisconnectSection(Station stationToDelete) {
-        sections.stream()
-                .filter(section -> section.isDownstation(stationToDelete))
+        return sections.stream()
+                .filter(section -> section.isDownstation(newSection.getDownstation()))
                 .findFirst()
-                .map(section -> {
-                    Section nextSection = sections.get(sections.indexOf(section) + 1);
-                    section.setDownstation(nextSection.getDownstation());
-                    sections.remove(nextSection);
-                    nextSection.setLine(null);
-
-                    return Pair.of(section, nextSection);
-                });
-        return null;
-    }
-
-    private void updateDistanceAndDurationWhenAdd(Section newSection, Section nextSection) {
-        int newDistance = nextSection.getDistance() - newSection.getDistance();
-        if (newDistance <= 0) {
-            throw new InvalidInputException("유효하지 않은 거리입니다.");
-        }
-
-        int newDuration = nextSection.getDuration() - newSection.getDuration();
-        if (newDuration <= 0) {
-            throw new InvalidInputException("유효하지 않은 소요시간입니다.");
-        }
-
-        nextSection.setDistance(newDistance);
-        nextSection.setDuration(newDuration);
-    }
-
-    private void updateDistanceAndDurationWhenRemove(Section reconnectedSection, Section removedSection) {
-        reconnectedSection.setDistance(reconnectedSection.getDistance() + removedSection.getDistance());
-        reconnectedSection.setDuration(reconnectedSection.getDuration() + removedSection.getDuration());
+                .orElseThrow();
     }
 
     public void addSection(Section newSection) {
-        // newSection의 upstation, downstation 둘 다 노선에 등록되어있는 거면 안 됨
+        boolean upstationExists = validateWhenAdd(newSection);
+
+        Section connectableSection = findConnectableSection(upstationExists, newSection);
+        connectSection(upstationExists, newSection, connectableSection);
+        connectableSection.shorten(newSection);
+    }
+
+    private boolean validateWhenAdd(Section newSection) {
         boolean upstationExists = isUpstationExistsInLine(newSection);
         boolean downstationExists = isDownstationExistsInLine(newSection);
 
@@ -175,8 +133,7 @@ public class Sections implements Iterable<Section> {
             throw new InvalidInputException("새로운 구간은 기존 노선의 역과 최소 하나 이상 연결되어야 합니다.");
         }
 
-        Section nextSection = addAndConnectSection(upstationExists, downstationExists, newSection);
-        updateDistanceAndDurationWhenAdd(newSection, nextSection);
+        return upstationExists;
     }
 
     public void addLastSection(Section newSection) {
@@ -202,16 +159,27 @@ public class Sections implements Iterable<Section> {
         return removedSection;
     }
 
-    public Section removeSection(Station stationToDelete) {
+    public void removeSection(Station stationToDelete) {
 
-        Pair<Section, Section> pair = removeAndDisconnectSection(stationToDelete);
+        Section disconnectableSection = findDisconnectableSection(stationToDelete);
+        Section removedSection = disconnectSection(disconnectableSection);
 
-        Section reconnectedSection = pair.getFirst();
-        Section removedSection = pair.getSecond();
+        disconnectableSection.extend(removedSection);
+    }
 
-        updateDistanceAndDurationWhenRemove(reconnectedSection, removedSection);
+    private Section findDisconnectableSection(Station stationToDelete) {
+        return sections.stream()
+                .filter(section -> section.isDownstation(stationToDelete))
+                .findFirst().orElseThrow();
+    }
 
-        return null;
+    private Section disconnectSection(Section disconnectableSection) {
+        Section removedSection = sections.get(sections.indexOf(disconnectableSection) + 1);
+        disconnectableSection.setDownstation(removedSection.getDownstation());
+        sections.remove(removedSection);
+        removedSection.setLine(null);
+
+        return removedSection;
     }
 
 }

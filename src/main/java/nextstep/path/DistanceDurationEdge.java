@@ -6,7 +6,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Getter
 @Setter
-public class CustomWeightedEdge extends DefaultWeightedEdge {
+public class DistanceDurationEdge extends DefaultWeightedEdge {
     private int distance;
     private int duration;
 }
