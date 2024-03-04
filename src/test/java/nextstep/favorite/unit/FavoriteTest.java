@@ -25,7 +25,7 @@ public class FavoriteTest {
         Station 강남역 = new Station("강남역");
 
         Line 이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         // when
         Favorite 즐겨찾기 = new Favorite(사용자, 교대역, 강남역, List.of(이호선.getSections()));
@@ -45,7 +45,7 @@ public class FavoriteTest {
         Station 강남역 = new Station("강남역");
 
         Line 이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         // then
         assertThatThrownBy(() -> new Favorite(사용자, 교대역, 교대역, List.of(이호선.getSections())))
@@ -53,7 +53,7 @@ public class FavoriteTest {
             .hasMessageContaining("출발역과 도착역은 동일할 수 없다");
     }
 
-    @DisplayName("연결되지 않은 경인 경우 즐겨찾기 등록 시 에러가 발생한다.")
+    @DisplayName("연결되지 않은 역인 경우 즐겨찾기 등록 시 에러가 발생한다.")
     @Test
     void 연결되지_않은_역_즐겨찾기_등록_실패() {
         // given
@@ -63,13 +63,13 @@ public class FavoriteTest {
         Station 강남역 = new Station("강남역");
 
         Line 이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         Station 연결되지_않은_역 = new Station("연결되지 않은 역");
 
         // then
         assertThatThrownBy(() -> new Favorite(사용자, 교대역, 연결되지_않은_역, List.of(이호선.getSections())))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("출발역과 도착역이 연결되어 있어야 한다.");
+            .hasMessageContaining("출발역과 도착역이 연결되어 있어야 한다");
     }
 }

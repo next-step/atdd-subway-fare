@@ -1,6 +1,7 @@
 package nextstep.subway.service;
 
 import nextstep.subway.dto.path.PathResponse;
+import nextstep.subway.dto.path.PathType;
 import nextstep.subway.entity.Sections;
 import nextstep.subway.entity.Station;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,17 @@ public class PathService {
     }
 
     /** 경로 조회 */
-    public PathResponse getPaths(Long source, Long target) {
-        if(Objects.equals(source, target)) {
-            throw new IllegalArgumentException("출발역과 도착역은 동일할 수 없다.");
-        }
-
+    public PathResponse getPaths(Long source, Long target, PathType type) {
         Station sourceStation = stationService.findStation(source);
         Station targetStation = stationService.findStation(target);
         List<Sections> sectionsList = lineService.findSectionsList();
 
-        PathFinder pathFinder = new PathFinder(sectionsList);
+        PathFinder pathFinder = createPathFinder(type, sectionsList);
         return pathFinder.getShortestPath(sourceStation, targetStation);
+    }
+
+    private PathFinder createPathFinder(PathType type, List<Sections> sectionsList) {
+        return type == PathType.DISTANCE ?
+            new DistancePathFinder(sectionsList) : new DurationPathFinder(sectionsList);
     }
 }

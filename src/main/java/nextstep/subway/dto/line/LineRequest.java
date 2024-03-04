@@ -8,6 +8,8 @@ public class LineRequest {
     private Long upStationId;
     private Long downStationId;
 
+    private Integer duration;
+
     protected LineRequest() {}
 
     public LineRequest(
@@ -15,11 +17,13 @@ public class LineRequest {
         String color,
         Integer distance,
         Long upStationId,
-        Long downStationId
+        Long downStationId,
+        Integer duration
     ) {
         this.name = name;
         this.color = color;
         this.distance = distance;
+        this.duration = duration;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
     }
@@ -42,5 +46,9 @@ public class LineRequest {
 
     public Long getDownStationId() {
         return downStationId;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

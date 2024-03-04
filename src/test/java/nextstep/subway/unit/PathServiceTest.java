@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.dto.path.PathResponse;
+import nextstep.subway.dto.path.PathType;
 import nextstep.subway.dto.station.StationResponse;
 import nextstep.subway.entity.Line;
 import nextstep.subway.entity.Section;
@@ -48,36 +49,51 @@ public class PathServiceTest {
         stationRepository.saveAll(List.of(교대역, 강남역, 양재역, 남부터미널역));
 
         이호선 = new Line("2호선", "green");
-        이호선.addSection(new Section(이호선, 교대역, 강남역, 10));
+        이호선.addSection(new Section(이호선, 교대역, 강남역, 10, 1));
 
         신분당선 = new Line("신분당선", "red");
-        신분당선.addSection(new Section(신분당선, 강남역, 양재역, 10));
+        신분당선.addSection(new Section(신분당선, 강남역, 양재역, 10, 2));
 
         삼호선 = new Line("3호선", "orange");
-        삼호선.addSection(new Section(삼호선, 교대역, 남부터미널역, 2));
-        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3));
+        삼호선.addSection(new Section(삼호선, 교대역, 남부터미널역, 2, 3));
+        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3, 4));
         lineRepository.saveAll(List.of(이호선, 신분당선, 삼호선));
     }
 
     @DisplayName("출발역과 도착역을 통해 최단 경로를 조회한다.")
     @Test
-    void getPath() {
+    void getPathByDistance() {
         // when
-        PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId());
+        PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         // then
-        List<Long> 최단구간_역_목록 = 경로_조회_응답.getStations().stream()
+        List<Long> 최단경로_역_목록 = 경로_조회_응답.getStations().stream()
             .map(StationResponse::getId)
             .collect(Collectors.toList());
 
-        assertThat(최단구간_역_목록).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId());
+        assertThat(최단경로_역_목록).containsExactly(교대역.getId(), 남부터미널역.getId(), 양재역.getId());
         assertThat(경로_조회_응답.getDistance()).isEqualTo(5);
+    }
+
+    @DisplayName("출발역과 도착역을 통해 최소시간 경로를 조회한다.")
+    @Test
+    void getPathByDuration() {
+        // when
+        PathResponse 경로_조회_응답 = pathService.getPaths(교대역.getId(), 양재역.getId(), PathType.DURATION);
+
+        // then
+        List<Long> 최소시간_역_목록 = 경로_조회_응답.getStations().stream()
+            .map(StationResponse::getId)
+            .collect(Collectors.toList());
+
+        assertThat(최소시간_역_목록).containsExactly(교대역.getId(), 강남역.getId(), 양재역.getId());
+        assertThat(경로_조회_응답.getDuration()).isEqualTo(3);
     }
 
     @DisplayName("출발역과 도착역이 동일한 경우 예외가 발생한다.")
     @Test
     void 동일한_도착역과_출발역() {
-        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 교대역.getId()))
+        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 교대역.getId(), PathType.DISTANCE))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("출발역과 도착역은 동일할 수 없다.");
     }
@@ -87,7 +103,7 @@ public class PathServiceTest {
     void 존재하지_않는_역() {
         Long 존재하지_않는_역 = -9999L;
 
-        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 존재하지_않는_역))
+        assertThatThrownBy(() -> pathService.getPaths(교대역.getId(), 존재하지_않는_역, PathType.DISTANCE))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }

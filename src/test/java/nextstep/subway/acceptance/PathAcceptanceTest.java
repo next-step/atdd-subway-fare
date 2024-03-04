@@ -7,6 +7,7 @@ import nextstep.subway.acceptance.fixture.LineFixture;
 import nextstep.subway.acceptance.fixture.StationFixture;
 import nextstep.subway.dto.line.LineResponse;
 import nextstep.subway.dto.path.PathResponse;
+import nextstep.subway.dto.path.PathType;
 import nextstep.subway.dto.station.StationResponse;
 import nextstep.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,22 +46,22 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = StationFixture.지하철역_생성_요청("양재역").as(StationResponse.class).getId();
         남부터미널역 = StationFixture.지하철역_생성_요청("남부터미널역").as(StationResponse.class).getId();
 
-        이호선 = LineFixture.노선_생성_요청("2호선", "green", 10, 교대역, 강남역).as(LineResponse.class).getId();
-        신분당선 = LineFixture.노선_생성_요청("신분당선", "red", 10, 강남역, 양재역).as(LineResponse.class).getId();
-        삼호선 = LineFixture.노선_생성_요청("3호선", "orange", 2,  교대역, 남부터미널역).as(LineResponse.class).getId();
+        이호선 = LineFixture.노선_생성_요청("2호선", "green", 10, 교대역, 강남역, 4).as(LineResponse.class).getId();
+        신분당선 = LineFixture.노선_생성_요청("신분당선", "red", 10, 강남역, 양재역, 3).as(LineResponse.class).getId();
+        삼호선 = LineFixture.노선_생성_요청("3호선", "orange", 2,  교대역, 남부터미널역, 2).as(LineResponse.class).getId();
 
-        LineFixture.구간_생성_요청(삼호선, 양재역, 남부터미널역, 3);
+        LineFixture.구간_생성_요청(삼호선, 양재역, 남부터미널역, 3, 1);
     }
 
     /**
-     * When 노선의 경로를 조회하면
+     * When 출발역과 도착역의 최단거리 경로를 조회하면
      * Then 출발역과 도착역 사이의 역 목록과 구간의 거리가 조회된다.
      */
-    @DisplayName("경로를 조회한다.")
+    @DisplayName("최단거리 경로를 조회한다.")
     @Test
-    void 경로_조회_성공() {
+    void 최단거리_경로_조회_성공() {
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -73,6 +74,26 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
+     * When 노선의 최소시간 경로를 조회하면
+     * Then 출발역과 도착역 사이의 역 목록과 구간의 소요시간이 조회된다.
+     */
+    @DisplayName("최소시간 경로를 조회한다.")
+    @Test
+    void 최소시간_경로_조회_성공() {
+        // when
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 양재역, PathType.DURATION);
+
+        // then
+        assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> 최단구간_역_목록 = 경로_조회_응답.as(PathResponse.class).getStations().stream()
+            .map(StationResponse::getId)
+            .collect(Collectors.toList());
+        assertThat(최단구간_역_목록).containsExactly(교대역, 남부터미널역, 양재역);
+        assertThat(경로_조회_응답.as(PathResponse.class).getDuration()).isEqualTo(3);
+    }
+
+    /**
      * When 노선의 경로를 조회하면
      * Then 출발역과 도착역이 같은 경우 에러가 발생한다.
      */
@@ -80,7 +101,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void 출발역_도착역_동일_경로_조회_실패() {
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 교대역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 교대역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -97,7 +118,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         Long 역삼역 = StationFixture.지하철역_생성_요청("역삼역").as(StationResponse.class).getId();
 
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 역삼역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 역삼역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -114,17 +135,18 @@ public class PathAcceptanceTest extends AcceptanceTest {
         Long 존재하지_않는_역 = -9999L;
 
         // when
-        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 존재하지_않는_역);
+        ExtractableResponse<Response> 경로_조회_응답 = getPaths(교대역, 존재하지_않는_역, PathType.DISTANCE);
 
         // then
         assertThat(경로_조회_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
-    private ExtractableResponse<Response> getPaths(Long source, Long target) {
+    private ExtractableResponse<Response> getPaths(Long source, Long target, PathType type) {
         return RestAssured
             .given()
             .queryParam("source", source)
             .queryParam("target", target)
+            .queryParam("type", type)
             .when()
             .get("/paths")
             .then()

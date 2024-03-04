@@ -9,11 +9,11 @@ import org.springframework.http.MediaType;
 
 public class LineFixture {
     public static ExtractableResponse<Response> 노선_생성_요청(
-        String name, String color, Integer distance, Long upStationId, Long downStationId
+        String name, String color, Integer distance, Long upStationId, Long downStationId, Integer duration
     ) {
         return RestAssured
             .given()
-            .body(new LineRequest(name, color, distance, upStationId, downStationId))
+            .body(new LineRequest(name, color, distance, upStationId, downStationId, duration))
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when()
             .post("/lines")
@@ -40,11 +40,11 @@ public class LineFixture {
     }
 
     public static ExtractableResponse<Response> 구간_생성_요청(
-        Long lineId, Long downStationId, Long upStationId, Integer distance
+        Long lineId, Long downStationId, Long upStationId, Integer distance, Integer duration
     ) {
         return RestAssured
             .given().log().all()
-            .body(new SectionRequest(downStationId, upStationId, distance))
+            .body(new SectionRequest(downStationId, upStationId, distance, duration))
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when().post("/lines/{id}/sections", lineId)
             .then().log().all()

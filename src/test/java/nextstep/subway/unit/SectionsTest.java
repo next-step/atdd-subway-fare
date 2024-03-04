@@ -23,7 +23,7 @@ public class SectionsTest {
         강남역 = new Station("강남역");
         역삼역 = new Station("역삼역");
         이호선 = new Line("2호선", "green");
-        강남_역삼_구간 = new Section(이호선, 강남역, 역삼역, 10);
+        강남_역삼_구간 = new Section(이호선, 강남역, 역삼역, 10, 1);
         이호선.addSection(강남_역삼_구간);
     }
 
@@ -32,7 +32,7 @@ public class SectionsTest {
     void addDownSection() {
         // given
         Station 선릉역 = new Station("선릉역");
-        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 10);
+        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 10, 1);
 
         // when
         이호선.addSection(역삼_선릉_구간);
@@ -47,7 +47,7 @@ public class SectionsTest {
     void addUpSection() {
         // given
         Station 서초역 = new Station("서초역");
-        Section 서초_강남_구간 = new Section(이호선, 서초역, 강남역, 10);
+        Section 서초_강남_구간 = new Section(이호선, 서초역, 강남역, 10, 1);
 
         // when
         이호선.addSection(서초_강남_구간);
@@ -62,7 +62,7 @@ public class SectionsTest {
     void addMiddleSection() {
         // given
         Station 신규역 = new Station("신규역");
-        Section 강남_신규_구간 = new Section(이호선, 강남역, 신규역, 5);
+        Section 강남_신규_구간 = new Section(이호선, 강남역, 신규역, 5, 1);
 
         // when
         이호선.addSection(강남_신규_구간);
@@ -78,7 +78,7 @@ public class SectionsTest {
         // given
         Station 서초역 = new Station("서초역");
         Station 선릉역 = new Station("선릉역");
-        Section 서초_선릉_구간 = new Section(이호선, 서초역, 선릉역, 10);
+        Section 서초_선릉_구간 = new Section(이호선, 서초역, 선릉역, 10, 1);
 
         // then
         assertThatThrownBy(() -> 이호선.addSection(서초_선릉_구간))
@@ -90,7 +90,7 @@ public class SectionsTest {
     @Test
     void verifyDuplicationStation() {
         // given
-        Section 역삼_강남_구간 =  new Section(이호선, 역삼역, 강남역, 10);
+        Section 역삼_강남_구간 =  new Section(이호선, 역삼역, 강남역, 10, 1);
 
         // then
         assertThatThrownBy(() -> 이호선.addSection(역삼_강남_구간))
@@ -113,7 +113,7 @@ public class SectionsTest {
     void getSectionList() {
         // given
         Station 서초역 = new Station("서초역");
-        Section 서초_강남_구간 = new Section(이호선, 서초역, 강남역, 10);
+        Section 서초_강남_구간 = new Section(이호선, 서초역, 강남역, 10, 1);
 
         이호선.addSection(서초_강남_구간);
 
@@ -129,7 +129,7 @@ public class SectionsTest {
     void removeDownSection() {
         // given
         Station 선릉역 = new Station("선릉역");
-        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 15);
+        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 15, 1);
         이호선.addSection(역삼_선릉_구간);
 
         // when
@@ -144,7 +144,7 @@ public class SectionsTest {
     void removeUpSection() {
         // given
         Station 선릉역 = new Station("선릉역");
-        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 15);
+        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 15, 1);
         이호선.addSection(역삼_선릉_구간);
 
         // when
@@ -161,7 +161,7 @@ public class SectionsTest {
         Integer 강남_역삼_길이 = 강남_역삼_구간.getDistance();
 
         Station 선릉역 = new Station("선릉역");
-        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 15);
+        Section 역삼_선릉_구간 = new Section(이호선, 역삼역, 선릉역, 15, 1);
         이호선.addSection(역삼_선릉_구간);
 
         // when

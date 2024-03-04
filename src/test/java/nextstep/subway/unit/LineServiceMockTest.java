@@ -46,7 +46,7 @@ public class LineServiceMockTest {
         when(stationService.findStation(2L)).thenReturn(역삼역);
         when(lineRepository.findById(이호선.getId())).thenReturn(Optional.of(이호선));
 
-        SectionRequest request = new SectionRequest(2L, 1L, 10);
+        SectionRequest request = new SectionRequest(2L, 1L, 10, 1);
 
         // when
         lineService.createSection(이호선.getId(), request);

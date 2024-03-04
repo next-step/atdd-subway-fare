@@ -44,7 +44,7 @@ public class LineServiceTest {
         stationRepository.saveAll(List.of(강남역, 역삼역));
         lineRepository.save(이호선);
 
-        SectionRequest request = new SectionRequest(역삼역.getId(), 강남역.getId(), 10);
+        SectionRequest request = new SectionRequest(역삼역.getId(), 강남역.getId(), 10, 1);
 
         // when
         lineService.createSection(이호선.getId(), request);

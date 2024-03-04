@@ -39,7 +39,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        LineRequest request = new LineRequest("신분당선", "bg-red-600", 10, 1L, 2L);
+        LineRequest request = new LineRequest("신분당선", "bg-red-600", 10, 1L, 2L, 1);
         ExtractableResponse<Response> response = requestCreateLine(request);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -61,8 +61,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        LineRequest createLineRequest1 = new LineRequest("신분당선", "bg-red-600", 10, 1L, 2L);
-        LineRequest createLineRequest2 = new LineRequest("분당선", "bg-green-600", 10, 1L, 3L);
+        LineRequest createLineRequest1 = new LineRequest("신분당선", "bg-red-600", 10, 1L, 2L, 1);
+        LineRequest createLineRequest2 = new LineRequest("분당선", "bg-green-600", 10, 1L, 3L, 2);
         requestCreateLine(createLineRequest1);
         requestCreateLine(createLineRequest2);
 
@@ -88,7 +88,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        LineRequest createLineRequest = new LineRequest("신분당선", "bg-red-600", 10, 1L, 2L);
+        LineRequest createLineRequest = new LineRequest("신분당선", "bg-red-600", 10, 1L, 2L, 1);
         ExtractableResponse<Response> createLineResponse = requestCreateLine(createLineRequest);
 
         // when
@@ -110,7 +110,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void modifyLine() {
         // given
-        LineRequest createLineRequest = new LineRequest("신분당선", "bg-blue-600", 10, 1L, 2L);
+        LineRequest createLineRequest = new LineRequest("신분당선", "bg-blue-600", 10, 1L, 2L, 1);
         ExtractableResponse<Response> createLineResponse = requestCreateLine(createLineRequest);
 
         // when
@@ -146,7 +146,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        LineRequest createLineRequest = new LineRequest("신분당선", "bg-blue-600", 10, 1L, 2L);
+        LineRequest createLineRequest = new LineRequest("신분당선", "bg-blue-600", 10, 1L, 2L, 1);
         ExtractableResponse<Response> createLineResponse = requestCreateLine(createLineRequest);
 
         // when

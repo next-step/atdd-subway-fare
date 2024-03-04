@@ -38,7 +38,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         강남역_ID = StationFixture.지하철역_생성_요청("강남역").as(StationResponse.class).getId();
         역삼역_ID = StationFixture.지하철역_생성_요청("역삼역").as(StationResponse.class).getId();
         선릉역_ID = StationFixture.지하철역_생성_요청("선릉역").as(StationResponse.class).getId();
-        이호선_ID = LineFixture.노선_생성_요청("2호선", "green", 10, 강남역_ID, 역삼역_ID)
+        이호선_ID = LineFixture.노선_생성_요청("2호선", "green", 10, 강남역_ID, 역삼역_ID, 1)
             .as(LineResponse.class).getId();
     }
 
@@ -52,7 +52,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 하행_구간_등록_성공() {
             // when
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 5);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 5, 1);
 
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -73,7 +73,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 상행_구간_등록_성공() {
             // when
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 강남역_ID, 5);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 강남역_ID, 5, 1);
 
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -94,7 +94,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 중간_구간_등록_성공() {
             // when
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 강남역_ID, 5);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 강남역_ID, 5, 1);
 
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -118,7 +118,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
             Long 삼성역_ID = StationFixture.지하철역_생성_요청("삼성역").as(StationResponse.class).getId();
 
             // when
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 삼성역_ID, 선릉역_ID, 15);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 삼성역_ID, 선릉역_ID, 15, 1);
 
             // then
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -132,7 +132,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 동일한_역_구간_등록_실패() {
             // when
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 역삼역_ID, 강남역_ID, 15);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 역삼역_ID, 강남역_ID, 15, 1);
 
             // then
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -151,7 +151,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 하행_구간_삭제_성공() {
             // given
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 15);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 15, 1);
 
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -178,7 +178,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 상행_구간_삭제_성공() {
             // given
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 15);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 15, 1);
 
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -205,7 +205,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         @Test
         void 중간_구간_삭제_성공() {
             // given
-            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 15);
+            ExtractableResponse<Response> 구간_생성_응답 = createSection(이호선_ID, 선릉역_ID, 역삼역_ID, 15, 1);
 
             assertThat(구간_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
@@ -257,11 +257,11 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> createSection(
-        Long lineId, Long downStationId, Long upStationId, Integer distance
+        Long lineId, Long downStationId, Long upStationId, Integer distance, Integer duration
     ) {
         return RestAssured
             .given().log().all()
-            .body(new SectionRequest(downStationId, upStationId, distance))
+            .body(new SectionRequest(downStationId, upStationId, distance, duration))
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when().post("/lines/{id}/sections", lineId)
             .then().log().all()
