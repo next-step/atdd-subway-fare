@@ -1,5 +1,9 @@
-package nextstep.path.application;
+package nextstep.path.application.fare.extra.distance;
 
+import nextstep.path.application.fare.extra.distance.FareChain;
+import nextstep.path.application.fare.extra.distance.FirstExtraFareHandler;
+import nextstep.path.application.fare.extra.distance.PathFareHandler;
+import nextstep.path.application.fare.extra.distance.SecondExtraFareHandler;
 import nextstep.path.exception.FareApplyingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

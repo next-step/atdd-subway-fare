@@ -1,4 +1,4 @@
-package nextstep.path.application;
+package nextstep.path.application.fare.extra.distance;
 
 import java.util.Objects;
 

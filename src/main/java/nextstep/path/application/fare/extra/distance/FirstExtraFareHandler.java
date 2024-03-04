@@ -1,6 +1,6 @@
-package nextstep.path.application;
+package nextstep.path.application.fare.extra.distance;
 
-public class SecondExtraFareHandler extends PathFareHandler {
+public class FirstExtraFareHandler extends PathFareHandler {
     private static final long EXTRA_FARE_BASE = 100L;
 
     @Override
@@ -21,11 +21,12 @@ public class SecondExtraFareHandler extends PathFareHandler {
 
     @Override
     protected int getStandardDistance() {
-        return 50;
+        return 10;
     }
 
     @Override
     protected int getFareInterval() {
-        return 8;
+        return 5;
     }
+
 }

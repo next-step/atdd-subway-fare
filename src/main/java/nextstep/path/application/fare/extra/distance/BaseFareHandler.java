@@ -1,4 +1,4 @@
-package nextstep.path.application;
+package nextstep.path.application.fare.extra.distance;
 
 public class BaseFareHandler extends PathFareHandler {
     private static final long BASE_FARE = 1250L;
