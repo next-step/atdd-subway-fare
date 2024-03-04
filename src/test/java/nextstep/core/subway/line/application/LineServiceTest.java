@@ -73,7 +73,7 @@ public class LineServiceTest {
                 // given
                 SectionRequest 선릉_삼성_구간_요청 = SectionRequest.mergeForCreateLine(
                         이호선_아이디,
-                        SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10));
+                        SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10, 10));
 
                 lineService.addSection(선릉_삼성_구간_요청);
 
@@ -97,7 +97,7 @@ public class LineServiceTest {
                 // given
                 SectionRequest 선릉_삼성_구간_요청 = SectionRequest.mergeForCreateLine(
                         존재하지_않는_삼호선_아이디,
-                        SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10));
+                        SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10, 10));
 
                 // then
                 assertThatExceptionOfType(EntityNotFoundException.class)
@@ -118,7 +118,7 @@ public class LineServiceTest {
                 // given
                 SectionRequest 강남_삼성_구간_요청 = SectionRequest.mergeForCreateLine(
                         이호선_아이디,
-                        SectionFixture.지하철_구간(존재하지_않는_강남역_번호, 삼성역_번호, 10));
+                        SectionFixture.지하철_구간(존재하지_않는_강남역_번호, 삼성역_번호, 10, 10));
 
                 // then
                 assertThatExceptionOfType(EntityNotFoundException.class)
@@ -139,7 +139,7 @@ public class LineServiceTest {
                 // given
                 SectionRequest 선릉_강남_구간_요청 = SectionRequest.mergeForCreateLine(
                         이호선_아이디,
-                        SectionFixture.지하철_구간(선릉역_번호, 존재하지_않는_강남역_번호, 10));
+                        SectionFixture.지하철_구간(선릉역_번호, 존재하지_않는_강남역_번호, 10, 10));
 
                 // then
                 assertThatExceptionOfType(EntityNotFoundException.class)
@@ -161,10 +161,10 @@ public class LineServiceTest {
         // given
         SectionRequest 선릉_삼성_구간_요청 = SectionRequest.mergeForCreateLine(
                 이호선_아이디,
-                SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10));
+                SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10, 10));
         SectionRequest 삼성_신천_구간_요청 = SectionRequest.mergeForCreateLine(
                 이호선_아이디,
-                SectionFixture.지하철_구간(삼성역_번호, 신천역_번호, 10));
+                SectionFixture.지하철_구간(삼성역_번호, 신천역_번호, 10, 10));
 
         lineService.addSection(선릉_삼성_구간_요청);
         lineService.addSection(삼성_신천_구간_요청);

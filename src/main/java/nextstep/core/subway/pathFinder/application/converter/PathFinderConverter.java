@@ -9,7 +9,7 @@ import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 public class PathFinderConverter {
 
     public static PathFinderResponse convertToResponse(PathFinderResult pathFinderResult) {
-        return new PathFinderResponse(pathFinderResult.getStations(), pathFinderResult.getDistance());
+        return new PathFinderResponse(pathFinderResult.getStations(), pathFinderResult.getDistance(), pathFinderResult.getDuration());
     }
 
     public static PathFinderRequest convertToRequest(FavoriteRequest request) {

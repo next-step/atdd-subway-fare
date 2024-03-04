@@ -1,6 +1,8 @@
 package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.domain.Line;
+import nextstep.core.subway.pathFinder.application.dto.PathCompositeWeightEdge;
+import nextstep.core.subway.pathFinder.domain.PathFinderType;
 import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
@@ -14,17 +16,80 @@ import java.util.List;
 
 @Component
 public class PathFinder {
-    public PathFinderResult calculateShortestPath(List<Line> lines, Station departureStation, Station arrivalStation) {
-        GraphPath<Station, DefaultWeightedEdge> path = findShortestPath(lines, departureStation, arrivalStation);
+    public PathFinderResult findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
+        validateLines(lines, departureStation, arrivalStation);
 
-        if (!hasFoundPath(path)) {
-            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않습니다.");
-        }
-        return generatePathResult(path);
+        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFormLines(lines, type);
+
+        return createPathFinderResult(findOptimalPath(departureStation, arrivalStation, pathGraph));
     }
 
     public boolean existPathBetweenStations(List<Line> lines, Station departureStation, Station arrivalStation) {
         return hasFoundPath(findShortestPath(lines, departureStation, arrivalStation));
+    }
+
+    private GraphPath<Station, PathCompositeWeightEdge> findOptimalPath(Station departure,
+                                                                        Station arrival,
+                                                                        WeightedMultigraph<Station, PathCompositeWeightEdge> graph) {
+        return new DijkstraShortestPath<>(graph).getPath(departure, arrival);
+    }
+
+    private WeightedMultigraph<Station, PathCompositeWeightEdge> buildPathFormLines(List<Line> lines, PathFinderType type) {
+        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = new WeightedMultigraph<>(PathCompositeWeightEdge.class);
+
+        lines.forEach(line -> line.getSortedAllSections().forEach(section -> {
+            buildPathFormSection(type, section, pathGraph);
+        }));
+
+        return pathGraph;
+    }
+
+    private void buildPathFormSection(PathFinderType type, Section section, WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph) {
+        Station upStation = section.getUpStation();
+        Station downStation = section.getDownStation();
+
+        pathGraph.addVertex(upStation);
+        pathGraph.addVertex(downStation);
+
+        PathCompositeWeightEdge weightEdge = new PathCompositeWeightEdge(section.getDistance(), section.getDuration());
+        pathGraph.addEdge(upStation, downStation, weightEdge);
+
+        if (PathFinderType.DISTANCE == type) {
+            pathGraph.setEdgeWeight(weightEdge, section.getDistance());
+        }
+        if (PathFinderType.DURATION == type) {
+            pathGraph.setEdgeWeight(weightEdge, section.getDuration());
+        }
+    }
+
+    private PathFinderResult createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path) {
+        validatePath(path);
+
+        return new PathFinderResult(path.getVertexList(), calculateDistance(path), calculateDuration(path));
+    }
+
+    private Integer calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {
+        int distance = 0;
+        for (PathCompositeWeightEdge edge : path.getEdgeList()) {
+            distance += edge.getDistance();
+        }
+
+        return distance;
+    }
+
+    private Integer calculateDuration(GraphPath<Station, PathCompositeWeightEdge> path) {
+        int duration = 0;
+        for (PathCompositeWeightEdge edge : path.getEdgeList()) {
+            duration += edge.getDuration();
+        }
+
+        return duration;
+    }
+
+    private void validatePath(GraphPath<Station, PathCompositeWeightEdge> path) {
+        if (path == null) {
+            throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않습니다.");
+        }
     }
 
     private GraphPath<Station, DefaultWeightedEdge> findShortestPath(List<Line> lines, Station departureStation, Station arrivalStation) {
@@ -33,7 +98,7 @@ public class PathFinder {
         return findShortestPath(
                 departureStation,
                 arrivalStation,
-                buildPathFromLines(lines, new WeightedMultigraph<Station, DefaultWeightedEdge>(DefaultWeightedEdge.class)));
+                buildPathFromLines(lines, new WeightedMultigraph<>(DefaultWeightedEdge.class)));
     }
 
     private void validateLines(List<Line> lines, Station departureStation, Station arrivalStation) {
@@ -78,16 +143,13 @@ public class PathFinder {
 
             path.addVertex(upStation);
             path.addVertex(downStation);
+
             path.setEdgeWeight(path.addEdge(upStation, downStation), section.getDistance());
         });
     }
 
     private boolean hasFoundPath(GraphPath<Station, DefaultWeightedEdge> path) {
         return path != null;
-    }
-
-    private PathFinderResult generatePathResult(GraphPath<Station, DefaultWeightedEdge> path) {
-        return new PathFinderResult(path.getVertexList(), (int) path.getWeight());
     }
 
     private GraphPath<Station, DefaultWeightedEdge> findShortestPath(Station departureStation,

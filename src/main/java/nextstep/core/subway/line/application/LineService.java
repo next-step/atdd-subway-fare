@@ -101,6 +101,7 @@ public class LineService {
                 findStation(request.getUpStationId()),
                 findStation(request.getDownStationId()),
                 request.getDistance(),
+                request.getDuration(),
                 line);
     }
 
@@ -109,6 +110,7 @@ public class LineService {
                 findStation(request.getUpStationId()),
                 findStation(request.getDownStationId()),
                 request.getDistance(),
+                request.getDuration(),
                 line
         );
     }

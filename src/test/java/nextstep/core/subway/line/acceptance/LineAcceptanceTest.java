@@ -1,10 +1,9 @@
 package nextstep.core.subway.line.acceptance;
 
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static nextstep.core.subway.line.fixture.LineFixture.*;
 import static nextstep.core.subway.line.step.LineSteps.*;
@@ -13,9 +12,7 @@ import static nextstep.core.subway.station.step.StationSteps.*;
 
 
 @DisplayName("지하철 노선 관련 기능")
-@AcceptanceTest
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class LineAcceptanceTest {
+public class LineAcceptanceTest extends AcceptanceTest {
 
     Long 가산디지털단지역_번호;
     Long 구로디지털단지역_번호;

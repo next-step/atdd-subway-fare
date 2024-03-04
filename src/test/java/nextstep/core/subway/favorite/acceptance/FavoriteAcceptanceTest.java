@@ -1,6 +1,6 @@
 package nextstep.core.subway.favorite.acceptance;
 
-import nextstep.common.annotation.AcceptanceTest;
+import nextstep.common.utils.AcceptanceTest;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +20,7 @@ import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
 
 @DisplayName("즐겨찾기 관련 인수 테스트")
-@AcceptanceTest
-public class FavoriteAcceptanceTest {
+public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     final Long 존재하지_않는_즐겨찾기_번호 = 999L;
     final Long 존재하지_않는_역 = 999L;
@@ -61,12 +60,12 @@ public class FavoriteAcceptanceTest {
         정왕역 = 지하철_역_생성(StationFixture.정왕역);
         오이도역 = 지하철_역_생성(StationFixture.오이도역);
 
-        이호선 = 지하철_노선_생성(이호선(교대역, 강남역, 10));
-        신분당선 = 지하철_노선_생성(신분당선(강남역, 양재역, 10));
-        삼호선 = 지하철_노선_생성(삼호선(교대역, 남부터미널역, 2));
-        사호선 = 지하철_노선_생성(사호선(정왕역, 오이도역, 10));
+        이호선 = 지하철_노선_생성(이호선(교대역, 강남역, 10, 10));
+        신분당선 = 지하철_노선_생성(신분당선(강남역, 양재역, 10, 10));
+        삼호선 = 지하철_노선_생성(삼호선(교대역, 남부터미널역, 2, 2));
+        사호선 = 지하철_노선_생성(사호선(정왕역, 오이도역, 10, 10));
 
-        성공하는_지하철_구간_추가요청(삼호선, 지하철_구간(남부터미널역, 양재역, 3));
+        성공하는_지하철_구간_추가요청(삼호선, 지하철_구간(남부터미널역, 양재역, 3, 3));
     }
 
     @BeforeEach

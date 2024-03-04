@@ -122,11 +122,11 @@ public class FavoriteServiceTest {
         삼호선 = lineRepository.save(new Line("삼호선", "orange"));
         사호선 = lineRepository.save(new Line("사호선", "blue"));
 
-        sectionRepository.save(new Section(교대, 강남, 10, 이호선));
-        sectionRepository.save(new Section(강남, 양재, 10, 신분당선));
-        sectionRepository.save(new Section(교대, 남부터미널, 2, 삼호선));
-        sectionRepository.save(new Section(남부터미널, 양재, 3, 삼호선));
-        sectionRepository.save(new Section(정왕, 오이도, 3, 사호선));
+        sectionRepository.save(new Section(교대, 강남, 10, 10, 이호선));
+        sectionRepository.save(new Section(강남, 양재, 10, 10, 신분당선));
+        sectionRepository.save(new Section(교대, 남부터미널, 2, 2, 삼호선));
+        sectionRepository.save(new Section(남부터미널, 양재, 3, 3, 삼호선));
+        sectionRepository.save(new Section(정왕, 오이도, 3, 3, 사호선));
 
         존재하지_않는_상행역_번호 = 999L;
         존재하지_않는_하행역_번호 = 998L;

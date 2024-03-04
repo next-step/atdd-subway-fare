@@ -80,7 +80,7 @@ public class LineServiceMockTest {
         void 지하철_구간_추가() {
             // given
             SectionRequest 선릉_삼성_구간 = SectionRequest.mergeForCreateLine(
-                    이호선_번호, SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10));
+                    이호선_번호, SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10, 10));
 
             // when
             lineService.addSection(선릉_삼성_구간);
@@ -99,9 +99,9 @@ public class LineServiceMockTest {
         void 지하철_구간_삭제() {
             // given
             SectionRequest 선릉_삼성_구간 = SectionRequest.mergeForCreateLine(
-                    이호선_번호, SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10));
+                    이호선_번호, SectionFixture.지하철_구간(선릉역_번호, 삼성역_번호, 10, 10));
             SectionRequest 삼성_신천_구간 = SectionRequest.mergeForCreateLine(
-                    이호선_번호, SectionFixture.지하철_구간(삼성역_번호, 신천역_번호, 10));
+                    이호선_번호, SectionFixture.지하철_구간(삼성역_번호, 신천역_번호, 10, 10));
 
             when(stationRepository.findById(신천역_번호)).thenReturn(Optional.of(신천역));
 

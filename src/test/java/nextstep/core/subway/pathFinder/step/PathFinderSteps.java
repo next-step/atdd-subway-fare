@@ -17,6 +17,7 @@ public class PathFinderSteps {
         return given()
                 .param("source", pathFinderRequest.getDepartureStationId())
                 .param("target", pathFinderRequest.getArrivalStationId())
+                .param("type", pathFinderRequest.getPathFinderType())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get("/paths")
@@ -41,6 +42,10 @@ public class PathFinderSteps {
         return 성공하는_경로_조회_응답.jsonPath().getInt("distance");
     }
 
+    public static int convertToDuration(ExtractableResponse<Response> 성공하는_경로_조회_응답) {
+        return 성공하는_경로_조회_응답.jsonPath().getInt("duration");
+    }
+
     public static List<Long> convertToStationIds(ExtractableResponse<Response> 성공하는_경로_조회_응답) {
         return 성공하는_경로_조회_응답.jsonPath().getList("stations.id", Long.class);
     }
@@ -51,5 +56,9 @@ public class PathFinderSteps {
 
     public static void 경로에_포함된_최단거리_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, int 예상_최단거리) {
         assertThat(convertToDistance(성공하는_경로_조회_응답)).isEqualTo(예상_최단거리);
+    }
+
+    public static void 경로에_포함된_소요_시간_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, int 예상_소요_시간) {
+        assertThat(convertToDuration(성공하는_경로_조회_응답)).isEqualTo(예상_소요_시간);
     }
 }
