@@ -11,8 +11,8 @@ public class LineExtraFare implements FarePolicy {
     }
 
     @Override
-    public long getFare() {
-        return lines.calculatePlusExtraFare();
+    public long calculateFare(long baseFare) {
+        return baseFare + lines.calculatePlusExtraFare();
     }
 
 }

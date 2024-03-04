@@ -1,5 +1,5 @@
 package nextstep.subway.domain.farepolicy;
 
 public interface FarePolicy {
-    long getFare();
+    long calculateFare(long baseFare);
 }

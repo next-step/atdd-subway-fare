@@ -6,7 +6,6 @@ import nextstep.member.domain.MemberRepository;
 import nextstep.subway.controller.dto.PathResponse;
 import nextstep.subway.controller.dto.StationResponse;
 import nextstep.subway.domain.*;
-import nextstep.subway.domain.chain.FareHandlerFactory;
 import nextstep.subway.repository.StationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ public class PathService {
     private final MemberRepository memberRepository;
     private final StationRepository stationRepository;
     private final PathFinder pathFinder;
-    private final FareHandlerFactory fareHandlerFactory;
 
     public PathResponse findPaths(String email, Long sourceId, Long targetId, String pathType) {
         Station source = stationRepository.getBy(sourceId);
@@ -32,7 +30,6 @@ public class PathService {
 
         long distance = paths.findShortestValue(source, target, PathType.DISTANCE);
         long duration = paths.findShortestValue(source, target, PathType.DURATION);
-        long basicFare = fareHandlerFactory.calculateFare(distance);
 
         Member member = memberRepository.getBy(email);
         FareAgeGroup fareAgeGroup = FareAgeGroup.of(member.getAge());
@@ -40,8 +37,8 @@ public class PathService {
         Sections sections = new Sections(paths.findEdges(source, target, getPathType(pathType)));
         Lines lines = new Lines(sections.findLines());
 
-        Fare fare = new Fare(lines, fareAgeGroup, basicFare);
-        long totalFare = fare.calculateTotalFare(basicFare);
+        Fare fare = new Fare(lines, fareAgeGroup);
+        long totalFare = fare.calculateTotalFare(fareAgeGroup, distance);
 
         return new PathResponse(StationResponse.listOf(stations), distance, duration, totalFare);
     }

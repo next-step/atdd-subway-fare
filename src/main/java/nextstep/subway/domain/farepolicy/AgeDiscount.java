@@ -5,15 +5,14 @@ import nextstep.subway.domain.FareAgeGroup;
 public class AgeDiscount implements FarePolicy {
 
     private final FareAgeGroup fareAgeGroup;
-    private final long basicFare;
 
-    public AgeDiscount(FareAgeGroup fareAgeGroup, long basicFare) {
+    public AgeDiscount(FareAgeGroup fareAgeGroup) {
         this.fareAgeGroup = fareAgeGroup;
-        this.basicFare = basicFare;
     }
 
     @Override
-    public long getFare() {
-        return -fareAgeGroup.calculateDiscountFare(basicFare);
+    public long calculateFare(long basicFare) {
+        return basicFare - fareAgeGroup.calculateDiscountFare(basicFare);
     }
+
 }
