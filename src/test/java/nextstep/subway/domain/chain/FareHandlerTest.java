@@ -4,11 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -16,24 +13,11 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @Import({BasicFareHandler.class, Over10kmFareHandler.class, Over50kmFareHandler.class})
 class FareHandlerTest {
 
-    @Autowired
-    private BasicFareHandler basicFareHandler;
-
-    @Autowired
-    private Over10kmFareHandler over10kmFareHandler;
-
-    @Autowired
-    private Over50kmFareHandler over50kmFareHandler;
-
     private FareHandlerFactory fareHandlerFactory;
 
     @BeforeEach
     void setUp() {
-        basicFareHandler.setNextHandler(over10kmFareHandler);
-        over10kmFareHandler.setNextHandler(over50kmFareHandler);
-        over50kmFareHandler.setNextHandler(null);
-
-        fareHandlerFactory = new FareHandlerFactory(List.of(basicFareHandler, over10kmFareHandler, over50kmFareHandler));
+        fareHandlerFactory = new FareHandlerFactory();
     }
 
     @ParameterizedTest

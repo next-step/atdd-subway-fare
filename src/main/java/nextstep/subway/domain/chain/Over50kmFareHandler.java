@@ -1,10 +1,5 @@
 package nextstep.subway.domain.chain;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Order(2)
-@Component
 public class Over50kmFareHandler implements FareHandler {
     private static final long START_DISTANCE = 50;
     private static final int OVER_50_FARE_UNIT = 8;
@@ -12,8 +7,9 @@ public class Over50kmFareHandler implements FareHandler {
     private FareHandler nextHandler;
 
     @Override
-    public void setNextHandler(FareHandler fareHandler) {
+    public FareHandler setNextHandler(FareHandler fareHandler) {
         this.nextHandler = fareHandler;
+        return this;
     }
 
     @Override

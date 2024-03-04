@@ -1,30 +1,20 @@
 package nextstep.subway.domain.chain;
 
-import nextstep.exception.ApplicationException;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Objects;
-
-@Component
 public class FareHandlerFactory {
-    private final List<FareHandler> fareHandlers;
+    private final FareHandler fareHandler;
 
-    public FareHandlerFactory(List<FareHandler> fareHandlers) {
-        this.fareHandlers = fareHandlers;
-        initializeChain(fareHandlers);
-    }
+    public FareHandlerFactory() {
+        BasicFareHandler basicFareHandler = new BasicFareHandler();
+        Over10kmFareHandler over10kmFareHandler = new Over10kmFareHandler();
+        Over50kmFareHandler over50kmFareHandler = new Over50kmFareHandler();
 
-    private void initializeChain(List<FareHandler> fareHandlers) {
-        for (int i = 0; i < fareHandlers.size() - 1; i++) {
-            fareHandlers.get(i).setNextHandler(fareHandlers.get(i + 1));
-        }
+        basicFareHandler.setNextHandler(over10kmFareHandler);
+        over10kmFareHandler.setNextHandler(over50kmFareHandler);
+
+        this.fareHandler = basicFareHandler;
     }
 
     public long calculateFare(long distance) {
-        if (Objects.isNull(fareHandlers.get(0))) {
-            throw new ApplicationException("FareHandler가 존재하지 않습니다.");
-        }
-        return fareHandlers.get(0).calculate(distance);
+        return fareHandler.calculate(distance);
     }
 }

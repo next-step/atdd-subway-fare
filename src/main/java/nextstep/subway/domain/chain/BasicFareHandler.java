@@ -10,8 +10,9 @@ public class BasicFareHandler implements FareHandler {
     private FareHandler nextHandler;
 
     @Override
-    public void setNextHandler(FareHandler fareHandler) {
+    public FareHandler setNextHandler(FareHandler fareHandler) {
         this.nextHandler = fareHandler;
+        return this;
     }
 
     @Override
