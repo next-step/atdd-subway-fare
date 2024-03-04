@@ -5,6 +5,8 @@
 
 ## 요구사항
 - [ ] 경로 조회 인수 테스트 cucumber 전환하기
+  - [x] features 작성 (DataTable / 파라미터 / 공유 객체 활용)
+  - [ ] cucumber 환경에서의 데이터 초기화 설정
 ```
 PathAcceptanceTest의 경로 조회 인수 테스트를 cucumber 기반으로 작성합니다.
 station.feature를 참고하여 진행하세요.
