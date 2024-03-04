@@ -2,8 +2,6 @@ package nextstep.subway.domain;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.List;
 
@@ -33,22 +31,14 @@ class LinesTest {
     }
 
     @Test
-    void 육세이하일경우_추가요금을_받지않아_0원을_반환한다() {
-        long extraFare = 추가요금이_있는_라인.calculatePlusExtraFare(FareAgeGroup.PRESCHOOLERS);
-        assertThat(extraFare).isEqualTo(0L);
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = FareAgeGroup.class, names = {"CHILD", "TEENAGER", "ADULT"})
-    void 추가요금이_없는_노선일_경우_0원을_반환한다(FareAgeGroup fareAgeGroup) {
-        long extraFare = 추가요금이_없는_라인.calculatePlusExtraFare(fareAgeGroup);
+    void 추가요금이_없는_노선일_경우_0원을_반환한다() {
+        long extraFare = 추가요금이_없는_라인.calculatePlusExtraFare();
         assertThat(extraFare).isEqualTo(0L);
     }
 
     @Test
-    @EnumSource(value = FareAgeGroup.class, names = {"CHILD", "TEENAGER", "ADULT"})
     void 추가요금이_있는_노선일_경우_가장_큰_금액의_추가요금을_반환한다() {
-        long extraFare = 추가요금이_있는_라인.calculatePlusExtraFare(FareAgeGroup.ADULT);
+        long extraFare = 추가요금이_있는_라인.calculatePlusExtraFare();
         assertThat(extraFare).isEqualTo(1500L);
     }
 

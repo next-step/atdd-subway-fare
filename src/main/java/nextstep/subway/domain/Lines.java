@@ -10,10 +10,7 @@ public class Lines {
         this.lines = new ArrayList<>(lines);
     }
 
-    public long calculatePlusExtraFare(FareAgeGroup fareAgeGroup) {
-        if (fareAgeGroup.isLineExtraFareFree()) {
-            return 0;
-        }
+    public long calculatePlusExtraFare() {
         return this.lines.stream()
                 .mapToLong(Line::getExtraFare)
                 .max()

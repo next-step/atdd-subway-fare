@@ -13,11 +13,6 @@ public class AgeDiscount implements FarePolicy {
     }
 
     @Override
-    public boolean isSupported() {
-        return true;
-    }
-
-    @Override
     public long getFare() {
         return -fareAgeGroup.calculateDiscountFare(basicFare);
     }
