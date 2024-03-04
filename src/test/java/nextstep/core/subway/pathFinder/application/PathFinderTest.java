@@ -206,7 +206,7 @@ public class PathFinderTest {
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 13, 6));
+                                .isEqualTo(new PathFinderResult(List.of(강남, 양재, 남부터미널), 13, 6));
                     }
 
                     /**
@@ -221,7 +221,7 @@ public class PathFinderTest {
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 20, 8));
+                                .isEqualTo(new PathFinderResult(List.of(교대, 강남, 양재), 20, 8));
                     }
 
                 }
@@ -322,22 +322,21 @@ public class PathFinderTest {
     class isFoundPath {
 
         /**
-         * 교대역    --- *2호선* ---   강남역
-         * |                        |
-         * *3호선*                   *신분당선*
-         * |                        |
-         * 남부터미널역  --- *3호선* ---   양재역
-         * <p>
+         * 교대역    --- *2호선*(10km, 5min) ---   강남역
+         * |                                       |
+         * *3호선* (2km, 7min)                  *신분당선*(10km, 3min)
+         * |                                       |
+         * 남부터미널역  --- *3호선*(3km, 3min) ---양재역
          * <p>
          * 오이도역 --- *4호선* --- 정왕역
          */
         @BeforeEach
         void 사전_노선_설정() {
-            이호선.addSection(new Section(교대, 강남, 10, 10, 이호선));
-            신분당선.addSection(new Section(강남, 양재, 10, 10, 신분당선));
-            삼호선.addSection(new Section(교대, 남부터미널, 2, 2, 삼호선));
+            이호선.addSection(new Section(교대, 강남, 10, 5, 이호선));
+            신분당선.addSection(new Section(강남, 양재, 10, 3, 신분당선));
+            삼호선.addSection(new Section(교대, 남부터미널, 2, 7, 삼호선));
             삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
-            사호선.addSection(new Section(정왕, 오이도, 10, 10, 사호선));
+            사호선.addSection(new Section(정왕, 오이도, 10, 5, 사호선));
         }
 
         @Nested
