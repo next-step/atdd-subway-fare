@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import static nextstep.subway.acceptance.LineSteps.노선목록을_조회한다;
 import static nextstep.subway.acceptance.LineSteps.노선을_삭제한다;
 import static nextstep.subway.acceptance.LineSteps.노선을_수정한다;
+import static nextstep.subway.acceptance.LineSteps.추가요금이_있는_노선이_생성되어_있다;
 import static nextstep.subway.acceptance.StationSteps.지하철역_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,6 +47,25 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertThat(extract.jsonPath().getList("color")).contains("bg-red-600");
         assertThat(extract.jsonPath().getList("distance")).contains(10);
         assertThat(extract.jsonPath().getList("duration")).contains(3);
+    }
+
+    /**
+     * When 추가요금이 있는 지하철 노선을 생성하면
+     * Then 지하철 노선 목록 조회 시 생성한 노선을 찾을 수 있다
+     */
+    @DisplayName("추가요금이 있는 노선을 생성한다.")
+    @Test
+    void apiCreateLine_additionalFee() {
+        // when
+        추가요금이_있는_노선이_생성되어_있다("이호선", "bg-red-600", 강남역Id, 역삼역Id, 10, 3, 800);
+
+        // then
+        final ExtractableResponse<Response> extract = 노선목록을_조회한다();
+        assertThat(extract.jsonPath().getList("name")).contains("이호선");
+        assertThat(extract.jsonPath().getList("color")).contains("bg-red-600");
+        assertThat(extract.jsonPath().getList("distance")).contains(10);
+        assertThat(extract.jsonPath().getList("duration")).contains(3);
+        assertThat(extract.jsonPath().getList("addtionalFee")).contains(800);
     }
 
     /**
