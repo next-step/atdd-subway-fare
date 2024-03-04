@@ -3,16 +3,20 @@ package nextstep.cucumber.steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.application.dto.LineResponse;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.Map;
 
+import static nextstep.auth.acceptance.AuthSteps.createToken;
 import static nextstep.subway.acceptance.LineSteps.노선이_생성되어_있다;
 import static nextstep.subway.acceptance.LineSteps.추가요금이_있는_노선이_생성되어_있다;
 import static nextstep.subway.acceptance.SectionSteps.구간을_등록한다;
@@ -112,11 +116,14 @@ public class PathStepDef implements En {
                     .extract();
         });
 
-        When("청소년 사용자가 {string}과 {string} 사이의 최소거리 경로 조회를 요청하면", (String source, String target) -> {
+        When("{string}사용자가 {string}과 {string} 사이의 최소거리 경로 조회를 요청하면", (String email, String source, String target) -> {
             Long sourceId = (Long) context.store.get(source);
             Long targetId = (Long) context.store.get(target);
 
+            final String jwtToken = createToken(email);
+
             context.response = RestAssured.given().log().all()
+                    .auth().oauth2(jwtToken)
                     .queryParam("source", sourceId)
                     .queryParam("target", targetId)
                     .queryParam("type", "DURATION")
