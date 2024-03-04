@@ -16,10 +16,9 @@ public abstract class RestAssuredRequestBuilder {
         this.spec = RestAssured.given().log().all();
     }
 
-    public RestAssuredRequestBuilder setAuthorization() {
+    public void setAuthorization() {
         if (accessToken != null && !accessToken.isEmpty()) {
             this.spec.header(AUTHORIZATION, BEARER + accessToken);
         }
-        return this;
     }
 }
