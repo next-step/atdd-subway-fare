@@ -25,9 +25,9 @@ class LineExtraHandlerTest {
     @Test
     @DisplayName("가장 높은 금액의 노선요금이 추가된 요금이 반환된다.")
     void lineFareHandlerTest() {
-        final LineExtraHandler lineFareHandler = new LineExtraHandler(List.of(무료_노선, 오백원_노선, 천원_노선));
+        final LineExtraHandler lineFareHandler = new LineExtraHandler();
 
-        final long calculated = lineFareHandler.calculate();
+        final long calculated = lineFareHandler.calculate(List.of(무료_노선, 오백원_노선, 천원_노선));
 
         assertThat(calculated).isEqualTo(천원_노선.getExtraFare());
     }
