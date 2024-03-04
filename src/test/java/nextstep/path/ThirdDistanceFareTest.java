@@ -14,10 +14,10 @@ class ThirdDistanceFareTest {
 
         // given
         int distance = 50;
-        ThirdDistanceFare sut = new ThirdDistanceFare(distance);
+        ThirdDistanceFare sut = new ThirdDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isZero();
@@ -29,10 +29,10 @@ class ThirdDistanceFareTest {
 
         // given
         int distance = 51;
-        ThirdDistanceFare sut = new ThirdDistanceFare(distance);
+        ThirdDistanceFare sut = new ThirdDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(100);
@@ -45,10 +45,10 @@ class ThirdDistanceFareTest {
 
         // given
         int distance = 58;
-        ThirdDistanceFare sut = new ThirdDistanceFare(distance);
+        ThirdDistanceFare sut = new ThirdDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(100);
@@ -61,10 +61,10 @@ class ThirdDistanceFareTest {
 
         // given
         int distance = 59;
-        ThirdDistanceFare sut = new ThirdDistanceFare(distance);
+        ThirdDistanceFare sut = new ThirdDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(200);
@@ -77,10 +77,10 @@ class ThirdDistanceFareTest {
 
         // given
         int distance = 66;
-        ThirdDistanceFare sut = new ThirdDistanceFare(distance);
+        ThirdDistanceFare sut = new ThirdDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(200);
@@ -91,10 +91,10 @@ class ThirdDistanceFareTest {
     void overcharge_case6() {
         // given
         int distance = 67;
-        ThirdDistanceFare sut = new ThirdDistanceFare(distance);
+        ThirdDistanceFare sut = new ThirdDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(300);

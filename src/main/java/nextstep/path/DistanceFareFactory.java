@@ -8,10 +8,10 @@ import java.util.List;
 @Component
 public class DistanceFareFactory {
 
-    public static List<DistanceFare> createDistanceFare(int distance) {
+    public static List<DistanceFare> createDistanceFare() {
         return List.of(
-                new BasicDistanceFare(distance),
-                new SecondDistanceFare(distance),
-                new ThirdDistanceFare(distance));
+                new BasicDistanceFare(),
+                new SecondDistanceFare(),
+                new ThirdDistanceFare());
     }
 }

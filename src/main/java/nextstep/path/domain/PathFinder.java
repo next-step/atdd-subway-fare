@@ -2,6 +2,7 @@ package nextstep.path.domain;
 
 import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
+import nextstep.path.DistanceFare;
 import nextstep.path.domain.dto.PathsDto;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
@@ -74,5 +75,4 @@ public abstract class PathFinder {
                 .mapToInt(SectionEdge::getDuration)
                 .sum();
     }
-
 }

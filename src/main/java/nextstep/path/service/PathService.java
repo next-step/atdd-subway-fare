@@ -2,8 +2,10 @@ package nextstep.path.service;
 
 import nextstep.line.domain.Line;
 import nextstep.line.persistance.LineRepository;
+import nextstep.path.DistanceFareFactory;
 import nextstep.path.domain.DistancePathFinder;
 import nextstep.path.domain.DurationPathFinder;
+import nextstep.path.domain.Fare;
 import nextstep.path.domain.PathFinder;
 import nextstep.path.domain.dto.PathsDto;
 import nextstep.path.ui.PathType;
@@ -20,24 +22,22 @@ import java.util.List;
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
-    private final FareService fareService;
 
 
     public PathService(
             StationRepository stationRepository,
-            LineRepository lineRepository,
-            FareService fareService) {
+            LineRepository lineRepository) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
-        this.fareService = fareService;
     }
 
     public PathsResponse searchPath(long source, long target, PathType pathType) {
         try {
             PathFinder pathFinder = createPathFinder(lineRepository.findAll(), pathType);
             PathsDto pathsDto = pathFinder.findPath(getStation(source), getStation(target));
-            pathsDto.setFare(fareService.calculate(pathsDto.getDistance()));
-            return PathsResponse.from(pathsDto);
+            Fare fare = new Fare();
+            fare.calculateFare(pathsDto.getDistance(), DistanceFareFactory.createDistanceFare());
+            return PathsResponse.of(pathsDto, fare.getFare());
         } catch (IllegalArgumentException e) {
             CannotFindPathException ex = new CannotFindPathException("경로 탐색이 불가합니다");
             ex.initCause(e);

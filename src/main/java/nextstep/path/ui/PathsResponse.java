@@ -25,6 +25,7 @@ public class PathsResponse {
         this.stationDtoList = stationDtoList;
     }
 
+
     public int getDistance() {
         return distance;
     }
@@ -41,11 +42,11 @@ public class PathsResponse {
         return fare;
     }
 
-    public static PathsResponse from(PathsDto pathsDto) {
+    public static PathsResponse of(PathsDto pathsDto, int fare) {
         return new PathsResponse(
                 pathsDto.getDistance(),
                 pathsDto.getDuration(),
-                pathsDto.getFare(),
+                fare,
                 pathsDto.getPaths()
                 .stream()
                 .map(it -> new StationDto(it.getId(), it.getName()))

@@ -14,10 +14,10 @@ class SecondDistanceFareTest {
 
         // given
         int distance = 10;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isZero();
@@ -29,10 +29,10 @@ class SecondDistanceFareTest {
 
         // given
         int distance = 11;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(100);
@@ -45,10 +45,10 @@ class SecondDistanceFareTest {
 
         // given
         int distance = 11;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(100);
@@ -61,10 +61,10 @@ class SecondDistanceFareTest {
 
         // given
         int distance = 16;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(200);
@@ -77,10 +77,10 @@ class SecondDistanceFareTest {
 
         // given
         int distance = 20;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(200);
@@ -92,10 +92,10 @@ class SecondDistanceFareTest {
         // 40 * 20  = 800원
         // given
         int distance = 50;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(800);
@@ -107,10 +107,10 @@ class SecondDistanceFareTest {
         // 40 * 20  = 800원
         // given
         int distance = 50;
-        SecondDistanceFare sut = new SecondDistanceFare(distance);
+        SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare();
+        int fare = sut.calculateFare(distance);
 
         // then
         assertThat(fare).isEqualTo(800);

@@ -1,13 +1,12 @@
 package nextstep.path;
 
-public class BasicDistanceFare extends DistanceFare {
+import org.springframework.stereotype.Component;
 
-    public BasicDistanceFare(int distance) {
-        super(distance);
-    }
+@Component
+public class BasicDistanceFare implements DistanceFare {
 
     @Override
-    public int calculateFare() {
+    public int calculateFare(int distance) {
         return 1_250;
     }
 

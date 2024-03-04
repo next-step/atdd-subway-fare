@@ -15,12 +15,12 @@ class DistanceFareTest {
     void DistanceFareTest_case0() {
 
         // given
-        List<DistanceFare> distanceFare = DistanceFareFactory.createDistanceFare(9);
+        List<DistanceFare> distanceFare = DistanceFareFactory.createDistanceFare();
 
         // when
         int sum = 0;
         for (DistanceFare fare : distanceFare) {
-            sum += fare.calculateFare();
+            sum += fare.calculateFare(9);
         }
 
         // then
@@ -33,12 +33,12 @@ class DistanceFareTest {
     void DistanceFareTest_case1() {
 
         // given
-        List<DistanceFare> distanceFare = DistanceFareFactory.createDistanceFare(12);
+        List<DistanceFare> distanceFare = DistanceFareFactory.createDistanceFare();
 
         // when
         int sum = 0;
         for (DistanceFare fare : distanceFare) {
-            sum += fare.calculateFare();
+            sum += fare.calculateFare(12);
         }
 
         // then
@@ -51,12 +51,12 @@ class DistanceFareTest {
     void DistanceFareTest() {
 
         // given
-        List<DistanceFare> distanceFare = DistanceFareFactory.createDistanceFare(16);
+        List<DistanceFare> distanceFare = DistanceFareFactory.createDistanceFare();
 
         // when
         int sum = 0;
         for (DistanceFare fare : distanceFare) {
-            sum += fare.calculateFare();
+            sum += fare.calculateFare(16);
         }
 
         assertThat(sum).isEqualTo(1450);

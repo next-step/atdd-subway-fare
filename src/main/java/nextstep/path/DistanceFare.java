@@ -1,12 +1,7 @@
 package nextstep.path;
 
-public abstract class DistanceFare {
-    protected final int distance;
+public interface DistanceFare {
 
-    protected DistanceFare(int distance) {
-        this.distance = distance;
-    }
-
-    public abstract int calculateFare();
+    int calculateFare(int distance);
 
 }
