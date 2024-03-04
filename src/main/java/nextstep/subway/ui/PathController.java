@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PathController {
+
     private final PathService pathService;
 
     public PathController(final PathService pathService) {

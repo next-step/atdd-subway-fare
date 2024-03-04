@@ -1,4 +1,4 @@
-package nextstep.subway.domain.path;
+package nextstep.subway.domain.path.fee;
 
 import java.util.Arrays;
 import java.util.function.Predicate;

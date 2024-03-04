@@ -1,14 +1,9 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.application.dto.PathResponse;
-import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,13 +29,6 @@ public class PathFinderTest {
         삼호선.addSection(남부터미널역, 양재역, 3, 10);
 
         부천역 = new Station(5L, "부천역");
-    }
-
-    protected List<Section> getSections(final List<Line> lines) {
-        return lines.stream()
-                .flatMap(l -> l.getSections().stream())
-                .distinct()
-                .collect(Collectors.toList());
     }
 
     protected void verifyPathResponse(final PathResponse actualPathResponse, PathResponse expectedPathResponse) {

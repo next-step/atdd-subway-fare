@@ -1,4 +1,4 @@
-package nextstep.subway.domain.path;
+package nextstep.subway.domain.path.fee;
 
 public class DistanceCalculateHandler extends CalculateHandler {
 
@@ -7,10 +7,11 @@ public class DistanceCalculateHandler extends CalculateHandler {
     }
 
     @Override
-    public void handle(final Distance distance) {
+    public void handle(FeeInfo pathInfo) {
+        final Distance distance = pathInfo.distance();
         final DistanceRange distanceRange = DistanceRange.fromDistance(distance);
 
-        super.fare = super.fare.add(distanceRange.calculate(distance));
-        super.handle(distance);
+        super.fare = distanceRange.calculate(distance);
+        super.handle(pathInfo);
     }
 }

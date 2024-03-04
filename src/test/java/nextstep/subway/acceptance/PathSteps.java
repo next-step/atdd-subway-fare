@@ -14,7 +14,7 @@ public class PathSteps {
         return RestAssured.given().log().all()
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", PathType.DISTANCE)
+                .queryParam("type", "DISTANCE")
                 .when().get("/paths")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())

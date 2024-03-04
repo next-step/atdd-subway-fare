@@ -1,6 +1,8 @@
 package nextstep.subway.domain.path;
 
-import nextstep.subway.domain.path.Fare;
+import nextstep.subway.domain.path.fee.Distance;
+import nextstep.subway.domain.path.fee.DistanceRange;
+import nextstep.subway.domain.path.fee.Fare;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

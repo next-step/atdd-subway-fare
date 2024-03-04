@@ -1,14 +1,11 @@
 package nextstep.subway.domain.path;
 
+import nextstep.subway.domain.path.fee.AdditionalFeeHandler;
+import nextstep.subway.domain.path.fee.DistanceCalculateHandler;
+
 public class PathFinderFactory {
 
     public static PathFinder create(PathType pathType) {
-        if (PathType.DISTANCE.equals(pathType)) {
-            return new ShortestDistancePathFinder(new DistanceCalculateHandler(null));
-        } else if (PathType.DURATION.equals(pathType)) {
-            return new ShortestDurationPathFinder(new DistanceCalculateHandler(null));
-        }
-
-        throw new IllegalArgumentException();
+        return pathType.createPathFinder(new DistanceCalculateHandler(new AdditionalFeeHandler(null)));
     }
 }
