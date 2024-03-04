@@ -1,6 +1,8 @@
 package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.domain.Line;
+import nextstep.core.subway.pathFinder.application.dto.PathCompositeWeightEdge;
+import nextstep.core.subway.pathFinder.domain.PathFinderType;
 import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
@@ -14,14 +16,57 @@ import java.util.List;
 
 @Component
 public class PathFinder {
-    public PathFinderResult calculateShortestPath(List<Line> lines, Station departureStation, Station arrivalStation) {
-        GraphPath<Station, DefaultWeightedEdge> path = findShortestPath(lines, departureStation, arrivalStation);
+    public PathFinderResult findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
+        validateLines(lines, departureStation, arrivalStation);
 
-        if (!hasFoundPath(path)) {
+        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = new WeightedMultigraph<>(PathCompositeWeightEdge.class);
+
+        if(PathFinderType.DISTANCE == type) {
+            lines.forEach(line -> line.getSortedAllSections().forEach(section -> {
+                Station upStation = section.getUpStation();
+                Station downStation = section.getDownStation();
+
+                pathGraph.addVertex(upStation);
+                pathGraph.addVertex(downStation);
+
+                PathCompositeWeightEdge weightEdge = new PathCompositeWeightEdge(section.getDistance(), section.getDuration());
+
+                pathGraph.addEdge(upStation, downStation, weightEdge);
+                pathGraph.setEdgeWeight(weightEdge, section.getDistance());
+            }));
+        }
+
+        if(PathFinderType.DURATION == type) {
+            lines.forEach(line -> line.getSortedAllSections().forEach(section -> {
+                Station upStation = section.getUpStation();
+                Station downStation = section.getDownStation();
+
+                pathGraph.addVertex(upStation);
+                pathGraph.addVertex(downStation);
+
+                PathCompositeWeightEdge weightEdge = new PathCompositeWeightEdge(section.getDistance(), section.getDuration());
+
+                pathGraph.addEdge(upStation, downStation, weightEdge);
+                pathGraph.setEdgeWeight(weightEdge, section.getDuration());
+            }));
+        }
+
+
+        GraphPath<Station, PathCompositeWeightEdge> path = new DijkstraShortestPath<>(pathGraph).getPath(departureStation, arrivalStation);
+
+        if (path == null) {
             throw new IllegalArgumentException("출발역과 도착역이 연결되어 있지 않습니다.");
         }
-        return generatePathResult(path);
+
+        double distance = 0;
+        double duration = 0;
+        for (PathCompositeWeightEdge edge : path.getEdgeList()) {
+            distance += edge.getDistance();
+            duration += edge.getDuration();
+        }
+        return new PathFinderResult(path.getVertexList(), (int) distance, (int) duration);
     }
+
 
     public boolean existPathBetweenStations(List<Line> lines, Station departureStation, Station arrivalStation) {
         return hasFoundPath(findShortestPath(lines, departureStation, arrivalStation));
@@ -78,6 +123,7 @@ public class PathFinder {
 
             path.addVertex(upStation);
             path.addVertex(downStation);
+
             path.setEdgeWeight(path.addEdge(upStation, downStation), section.getDistance());
         });
     }
@@ -86,7 +132,7 @@ public class PathFinder {
         return path != null;
     }
 
-    private PathFinderResult generatePathResult(GraphPath<Station, DefaultWeightedEdge> path) {
+    private PathFinderResult generatePathResult(GraphPath<Station, PathCompositeWeightEdge> path) {
         return new PathFinderResult(path.getVertexList(), (int) path.getWeight(), (int) path.getWeight()); // TODO: 소요 시간 계산 필요
     }
 
