@@ -1,6 +1,7 @@
 package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.domain.Line;
+import nextstep.core.subway.pathFinder.domain.PathFinderType;
 import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
@@ -73,117 +74,211 @@ public class PathFinderTest {
     }
 
     @Nested
-    class 사전_노선_설정됨 {
-
-        /**
-         * 교대역    --- *2호선* ---   강남역
-         * |                        |
-         * *3호선*                   *신분당선*
-         * |                        |
-         * 남부터미널역  --- *3호선* ---   양재역
-         * <p>
-         * <p>
-         * 오이도역 --- *4호선* --- 정왕역
-         */
-        @BeforeEach
-        void 사전_노선_설정() {
-            이호선.addSection(new Section(교대, 강남, 10, 5, 이호선));
-            신분당선.addSection(new Section(강남, 양재, 10, 10, 신분당선));
-            삼호선.addSection(new Section(교대, 남부터미널, 2, 7, 삼호선));
-            삼호선.addSection(new Section(남부터미널, 양재, 3, 10, 삼호선));
-            사호선.addSection(new Section(정왕, 오이도, 10, 5, 사호선));
-        }
+    class findOptimalPath {
 
         @Nested
-        class 성공 {
+        class 사전_노선_설정됨 {
 
             /**
-             * Given 지하철 노선 목록이 생성된다.
-             * When  출발역과 도착역을 통해 경로를 조회할 경우
-             * Then  최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
+             * 교대역    --- *2호선*(10km, 5min) ---   강남역
+             * |                                       |
+             * *3호선* (2km, 7min)                  *신분당선*(10km, 3min)
+             * |                                       |
+             * 남부터미널역  --- *3호선*(3km, 3min) ---양재역
+             * <p>
+             * 오이도역 --- *4호선* --- 정왕역
              */
-            @Test
-            void 강남역에서_남부터미널역까지_경로_조회() {
-                // when
-                PathFinderResult 경로_조회_결과 = pathFinder.calculateShortestPath(모든_노선_목록, 강남, 남부터미널);
-
-                // then
-                assertThat(경로_조회_결과).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12));
+            @BeforeEach
+            void 사전_노선_설정() {
+                이호선.addSection(new Section(교대, 강남, 10, 5, 이호선));
+                신분당선.addSection(new Section(강남, 양재, 10, 3, 신분당선));
+                삼호선.addSection(new Section(교대, 남부터미널, 2, 7, 삼호선));
+                삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
+                사호선.addSection(new Section(정왕, 오이도, 10, 5, 사호선));
             }
 
-            /**
-             * Given 지하철 노선 목록이 생성된다.
-             * When  출발역과 도착역을 통해 경로를 조회할 경우
-             * Then  최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
-             */
-            @Test
-            void 교대역에서_양재역까지_경로_조회() {
-                // when
-                PathFinderResult 경로_조회_결과 = pathFinder.calculateShortestPath(모든_노선_목록, 교대, 양재);
+            @Nested
+            class 최단거리_기준 {
 
-                //
-                assertThat(경로_조회_결과).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 17));
+                @Nested
+                class 성공 {
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
+                     * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     */
+                    @Test
+                    void 강남역에서_남부터미널역까지_경로_조회() {
+                        // when
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.DISTANCE);
+
+                        // then
+                        assertThat(경로_조회_결과).usingRecursiveComparison()
+                                .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12));
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
+                     * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     */
+                    @Test
+                    void 교대역에서_양재역까지_경로_조회() {
+                        // when
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.DISTANCE);
+
+                        //
+                        assertThat(경로_조회_결과).usingRecursiveComparison()
+                                .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 10));
+                    }
+
+                }
+
+                @Nested
+                class 실패 {
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
+                     * When     출발역과 도착역이 연결되어 있지 않을 경우
+                     * Then  확인할 수 없다.
+                     */
+                    @Test
+                    void 강남역에서_오이도역까지_경로_조회() {
+                        // when, then
+                        assertThatExceptionOfType(IllegalArgumentException.class)
+                                .isThrownBy(() -> {
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DISTANCE);
+                                })
+                                .withMessageMatching("출발역과 도착역이 연결되어 있지 않습니다.");
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
+                     * When    출발역이 노선에 등록되어 있지 않을 경우
+                     * Then  확인할 수 없다.
+                     */
+                    @Test
+                    void 강남역에서_가산디지털단지역까지_경로_조회() {
+                        // when, then
+                        assertThatExceptionOfType(IllegalArgumentException.class)
+                                .isThrownBy(() -> {
+                                    pathFinder.findOptimalPath(모든_노선_목록, 가산디지털단지, 강남, PathFinderType.DISTANCE);
+                                })
+                                .withMessageMatching("노선에 연결된 출발역이 아닙니다.");
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
+                     * When    도착역이 노선에 등록되어 있지 않을 경우
+                     * Then  확인할 수 없다.
+                     */
+                    @Test
+                    void 가산디지털단지역에서_강남역까지_경로_조회() {
+                        // when, then
+                        assertThatExceptionOfType(IllegalArgumentException.class)
+                                .isThrownBy(() -> {
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 가산디지털단지, PathFinderType.DISTANCE);
+                                })
+                                .withMessageMatching("노선에 연결된 도착역이 아닙니다.");
+                    }
+                }
             }
 
+            @Nested
+            class 최소_소요시간_기준 {
+
+                @Nested
+                class 성공 {
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최소 소요시간 기준으로 경로를 조회할 경우
+                     * Then  최소 소요시간 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     */
+                    @Test
+                    void 강남역에서_남부터미널역까지_경로_조회() {
+                        // when
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.DURATION);
+
+                        // then
+                        assertThat(경로_조회_결과).usingRecursiveComparison()
+                                .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 13, 6));
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최소 소요시간 기준으로 경로를 조회할 경우
+                     * Then  최소 소요시간 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     */
+                    @Test
+                    void 교대역에서_양재역까지_경로_조회() {
+                        // when
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.DURATION);
+
+                        //
+                        assertThat(경로_조회_결과).usingRecursiveComparison()
+                                .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 20, 8));
+                    }
+
+                }
+
+                @Nested
+                class 실패 {
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최소 소요시간 기준으로 경로를 조회할 때,
+                     * When     출발역과 도착역이 연결되어 있지 않을 경우
+                     * Then  확인할 수 없다.
+                     */
+                    @Test
+                    void 강남역에서_오이도역까지_경로_조회() {
+                        // when, then
+                        assertThatExceptionOfType(IllegalArgumentException.class)
+                                .isThrownBy(() -> {
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DURATION);
+                                })
+                                .withMessageMatching("출발역과 도착역이 연결되어 있지 않습니다.");
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
+                     * When    출발역이 노선에 등록되어 있지 않을 경우
+                     * Then  확인할 수 없다.
+                     */
+                    @Test
+                    void 강남역에서_가산디지털단지역까지_경로_조회() {
+                        // when, then
+                        assertThatExceptionOfType(IllegalArgumentException.class)
+                                .isThrownBy(() -> {
+                                    pathFinder.findOptimalPath(모든_노선_목록, 가산디지털단지, 강남, PathFinderType.DURATION);
+                                })
+                                .withMessageMatching("노선에 연결된 출발역이 아닙니다.");
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
+                     * When    도착역이 노선에 등록되어 있지 않을 경우
+                     * Then  확인할 수 없다.
+                     */
+                    @Test
+                    void 가산디지털단지역에서_강남역까지_경로_조회() {
+                        // when, then
+                        assertThatExceptionOfType(IllegalArgumentException.class)
+                                .isThrownBy(() -> {
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 가산디지털단지, PathFinderType.DURATION);
+                                })
+                                .withMessageMatching("노선에 연결된 도착역이 아닙니다.");
+                    }
+                }
+            }
         }
-
-        @Nested
-        class 실패 {
-
-            /**
-             * Given 지하철 노선 목록이 생성된다.
-             * When  출발역과 도착역을 통해 경로를 조회할 때,
-             * When  출발역과 도착역이 연결되어 있지 않을 경우
-             * Then   최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
-             */
-            @Test
-            void 강남역에서_오이도역까지_경로_조회() {
-                // when, then
-                assertThatExceptionOfType(IllegalArgumentException.class)
-                        .isThrownBy(() -> {
-                            pathFinder.calculateShortestPath(모든_노선_목록, 강남, 오이도);
-                        })
-                        .withMessageMatching("출발역과 도착역이 연결되어 있지 않습니다.");
-            }
-
-            /**
-             * Given 지하철 노선 목록이 생성된다.
-             * When  출발역과 도착역을 통해 경로를 조회할 때,
-             * When    출발역이 노선에 등록되어 있지 않을 경우
-             * Then  최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
-             */
-            @Test
-            void 강남역에서_가산디지털단지역까지_경로_조회() {
-                // when, then
-                assertThatExceptionOfType(IllegalArgumentException.class)
-                        .isThrownBy(() -> {
-                            pathFinder.calculateShortestPath(모든_노선_목록, 가산디지털단지, 강남);
-                        })
-                        .withMessageMatching("노선에 연결된 출발역이 아닙니다.");
-            }
-
-            /**
-             * Given 지하철 노선 목록이 생성된다.
-             * When  출발역과 도착역을 통해 경로를 조회할 때,
-             * When    도착역이 노선에 등록되어 있지 않을 경우
-             * Then  최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
-             */
-            @Test
-            void 가산디지털단지역에서_강남역까지_경로_조회() {
-                // when, then
-                assertThatExceptionOfType(IllegalArgumentException.class)
-                        .isThrownBy(() -> {
-                            pathFinder.calculateShortestPath(모든_노선_목록, 강남, 가산디지털단지);
-                        })
-                        .withMessageMatching("노선에 연결된 도착역이 아닙니다.");
-            }
-        }
-    }
-
-    @Nested
-    class findShortestPath {
 
 
         @Nested
@@ -191,16 +286,32 @@ public class PathFinderTest {
 
             /**
              * Given 지하철 노선 목록이 생성된다.
-             * When  출발역과 도착역을 통해 경로를 조회할 때,
+             * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
              * When     출발역과 도착역이 연결되어 있지 않을 경우
              * Then  최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
              */
             @Test
-            void 강남역에서_남부터미널역까지_경로_조회() {
+            void 최단거리_기준_강남역에서_남부터미널역까지_경로_조회() {
                 // when, then
                 assertThatExceptionOfType(IllegalArgumentException.class)
                         .isThrownBy(() -> {
-                            pathFinder.calculateShortestPath(모든_노선_목록, 강남, 오이도);
+                            pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DISTANCE);
+                        })
+                        .withMessageMatching("노선에 연결된 구간이 하나라도 존재해야 합니다.");
+            }
+
+            /**
+             * Given 지하철 노선 목록이 생성된다.
+             * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 때,
+             * When     출발역과 도착역이 연결되어 있지 않을 경우
+             * Then  최단거리의 존재하는 역 목록과 최단거리 값을 확인할 수 있다.
+             */
+            @Test
+            void 최소_소요시간_기준_강남역에서_남부터미널역까지_경로_조회() {
+                // when, then
+                assertThatExceptionOfType(IllegalArgumentException.class)
+                        .isThrownBy(() -> {
+                            pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DURATION);
                         })
                         .withMessageMatching("노선에 연결된 구간이 하나라도 존재해야 합니다.");
             }
