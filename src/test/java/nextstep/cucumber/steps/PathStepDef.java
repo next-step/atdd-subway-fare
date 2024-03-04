@@ -130,8 +130,8 @@ public class PathStepDef implements En {
             assertDistanceAndDuration(10L, 10L);
         });
 
-        Then("최소 시간 기준 결과 지하철 이용 요금인 1250원에서 추가 노선 요금인 100원을 더하고 어린이 할인 요금인 350원 공제 후 남은 금액의 20% 할인을 받아 900원을 함께 응답한다", () -> {
-            assertFare(900L);
+        Then("최소 시간 기준 결과 지하철 이용 요금인 1250원에서 추가 노선 요금인 100원을 더한 총 요금에서 어린이 할인 요금인 350원 공제 후 남은 금액의 50% 할인을 받아 850원을 함께 응답한다", () -> {
+            assertFare(850L);
         });
 
         Given("최소 시간 경로 및 청소년 할인 요금 테스트를 위한 {string}을 생성한다", (String stationName) -> {
@@ -183,8 +183,8 @@ public class PathStepDef implements En {
             assertDistanceAndDuration(15L, 15L);
         });
 
-        Then("최소 시간 기준 결과 지하철 이용 요금인 1350원에서 지하철 추가 요금인 100원을 추가하고 청소년 할인 요금인 350원 공제 후 남은 금액의 20% 할인을 받아 1150원을 함께 응답한다", () -> {
-            assertFare(1250L);
+        Then("최소 시간 기준 결과 지하철 이용 요금인 1350원에서 지하철 추가 요금인 100원을 추가한 총 요금에서 청소년 할인 요금인 350원 공제 후 남은 금액의 20% 할인을 받아 1230원을 함께 응답한다", () -> {
+            assertFare(1230L);
         });
 
         Given("최소 거리 경로 테스트를 위한 {string}을 생성한다", (String stationName) -> {
