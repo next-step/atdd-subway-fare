@@ -14,9 +14,9 @@ public abstract class CalculateHandler {
         }
     }
 
-    public Fare value() {
+    public Fare fare() {
         if (nextCalculateHandler != null) {
-            return this.fare.add(nextCalculateHandler.value());
+            return this.fare.add(nextCalculateHandler.fare());
         }
 
         return this.fare;

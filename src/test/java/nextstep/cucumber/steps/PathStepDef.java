@@ -112,6 +112,34 @@ public class PathStepDef implements En {
                     .extract();
         });
 
+        When("청소년 사용자가 {string}과 {string} 사이의 최소거리 경로 조회를 요청하면", (String source, String target) -> {
+            Long sourceId = (Long) context.store.get(source);
+            Long targetId = (Long) context.store.get(target);
+
+            context.response = RestAssured.given().log().all()
+                    .queryParam("source", sourceId)
+                    .queryParam("target", targetId)
+                    .queryParam("type", "DURATION")
+                    .when().get(PATHS)
+                    .then().log().all()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract();
+        });
+
+        When("어린이 사용자가 {string}과 {string} 사이의 최소거리 경로 조회를 요청하면", (String source, String target) -> {
+            Long sourceId = (Long) context.store.get(source);
+            Long targetId = (Long) context.store.get(target);
+
+            context.response = RestAssured.given().log().all()
+                    .queryParam("source", sourceId)
+                    .queryParam("target", targetId)
+                    .queryParam("type", "DURATION")
+                    .when().get(PATHS)
+                    .then().log().all()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract();
+        });
+
         Then("{string} 지하철역을_리턴한다", (String pathString) -> {
             List<String> split = List.of(pathString.split(","));
             assertThat(context.response.jsonPath().getList("stations.name", String.class)).containsExactly(split.toArray(new String[0]));

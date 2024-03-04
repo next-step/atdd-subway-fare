@@ -63,6 +63,6 @@ public abstract class PathFinder {
     protected int calculateFare(int distance, List<Integer> additionalFees) {
         final FeeInfo feeInfo = FeeInfo.of(new Distance(distance), additionalFees);
         calculateHandler.handle(feeInfo);
-        return calculateHandler.value().value();
+        return calculateHandler.fare().value();
     }
 }
