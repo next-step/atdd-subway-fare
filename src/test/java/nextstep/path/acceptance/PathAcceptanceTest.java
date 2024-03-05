@@ -149,11 +149,11 @@ public class PathAcceptanceTest {
     }
 
     private ExtractableResponse<Response> 최소_길이_경로_조회_요청(final Long startStationId, final Long endStationId) {
-        return PathApiHelper.findPath(startStationId, endStationId, PathType.DISTANCE);
+        return PathApiHelper.findPath(startStationId, endStationId, PathType.DISTANCE, "");
     }
 
     private ExtractableResponse<Response> 최소_시간_경로_조회_요청(final Long startStationId, final Long endStationId) {
-        return PathApiHelper.findPath(startStationId, endStationId, PathType.DURATION);
+        return PathApiHelper.findPath(startStationId, endStationId, PathType.DURATION, "");
     }
 
     private void 경로찾기에_실패_한다(final ExtractableResponse<Response> response) {

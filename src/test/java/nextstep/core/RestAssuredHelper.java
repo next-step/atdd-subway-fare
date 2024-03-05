@@ -34,6 +34,15 @@ public class RestAssuredHelper {
                 .then().extract();
     }
 
+    public static ExtractableResponse<Response> getWithAuth(final String path, final String accessToken, final Map<String, ?> parametersMap) {
+        return RestAssured
+                .given()
+                .auth().oauth2(accessToken)
+                .queryParams(parametersMap)
+                .when().get(path)
+                .then().extract();
+    }
+
     public static ExtractableResponse<Response> getById(final String path, final Long id) {
         return RestAssured
                 .given().pathParam("id", id)

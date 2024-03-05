@@ -19,12 +19,14 @@ public class PathStepDef implements En {
         Given("{string}과 {string}의 최단 거리 경로를 조회하면", (final String source, final String target) -> {
             final Long sourceId = context.store.get(source, StationResponse.class).getId();
             final Long targetId = context.store.get(target, StationResponse.class).getId();
-            context.response = PathApiHelper.findPath(sourceId, targetId, PathType.DISTANCE);
+            final String accessToken = context.store.getOrDefault("accessToken", String.class, "");
+            context.response = PathApiHelper.findPath(sourceId, targetId, PathType.DISTANCE, accessToken);
         });
         Given("{string}과 {string}의 최단 시간 경로를 조회하면", (final String source, final String target) -> {
             final Long sourceId = context.store.get(source, StationResponse.class).getId();
             final Long targetId = context.store.get(target, StationResponse.class).getId();
-            context.response = PathApiHelper.findPath(sourceId, targetId, PathType.DURATION);
+            final String accessToken = context.store.getOrDefault("accessToken", String.class, "");
+            context.response = PathApiHelper.findPath(sourceId, targetId, PathType.DURATION, accessToken);
         });
         Then("{string} 경로와 거리 {int}, 소요시간 {int}, 요금 {long}원이 조회된다",
                 (final String pathString,
