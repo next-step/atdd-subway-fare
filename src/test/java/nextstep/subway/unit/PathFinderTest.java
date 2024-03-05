@@ -3,7 +3,9 @@ package nextstep.subway.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -35,7 +37,7 @@ public class PathFinderTest {
 
         @Test
         public void 경로_조회_기능() {
-            assertThat(pathFinder.findPath(pathRequest, lines)).hasOnlyFields("distance", "lines", "stations", "duration", "fare");
+            assertThat(pathFinder.findPath(pathRequest, lines, null)).hasOnlyFields("distance", "lines", "stations", "duration", "fare");
         }
 }
 
@@ -53,7 +55,7 @@ class PathFinderMock extends PathFinder {
 
 class FareCalculatorMock implements FareCalculator {
     @Override
-    public int calculateFare(int distance, Set<LineResponse> lines) {
+    public int calculateFare(int distance, Set<LineResponse> lines, Optional<Member> member) {
         return 0;
     }
 }

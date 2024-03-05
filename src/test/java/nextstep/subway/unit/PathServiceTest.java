@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import nextstep.auth.domain.LoginMember;
 import nextstep.subway.applicaion.PathService;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
@@ -46,13 +47,13 @@ public class PathServiceTest {
 
         FareCalculator fareCalculator = new FareCalculatorImpl();
         JGraphTPathFinderImpl jGraphTPathFinder = new JGraphTPathFinderImpl(fareCalculator);
-        pathService = new PathService(lineRepository, jGraphTPathFinder);
+        pathService = new PathService(lineRepository, jGraphTPathFinder, null);
     }
 
     @Test
     void 경로_조회_기능() {
         final PathResponse response = pathService.getPath(
-            new PathRequest(강남역.getId(), 선릉역.getId()));
+            new PathRequest(강남역.getId(), 선릉역.getId()), null);
 
         assertThat(response.getDistance()).isEqualTo(20);
         assertThat(response.getStations().stream().map(StationResponse::getId).collect(Collectors.toList()))
@@ -61,19 +62,20 @@ public class PathServiceTest {
 
     @Test
     void 출발지와_도착지가_같으면_익셉션을_던진다() {
-        assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 강남역.getId())))
+        assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 강남역.getId()),
+            null))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 출발지_역이_없으면_익셉션을_던진다() {
-        assertThatThrownBy(() -> pathService.getPath(new PathRequest(4L, 선릉역.getId())))
+        assertThatThrownBy(() -> pathService.getPath(new PathRequest(4L, 선릉역.getId()), null))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 도착지_역이_없으면_익셉션을_던진다() {
-        assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 4L)))
+        assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 4L), null))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }

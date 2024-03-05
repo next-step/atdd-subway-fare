@@ -59,6 +59,6 @@ public class FavoriteService {
     }
 
     private void validatePathExist(FavoriteRequest request) {
-        pathService.getPath(new PathRequest(request.getSource(), request.getTarget()));
+        pathService.getPath(new PathRequest(request.getSource(), request.getTarget()), null);
     }
 }

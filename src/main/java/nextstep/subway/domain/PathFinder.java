@@ -1,7 +1,9 @@
 package nextstep.subway.domain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.PathRequest;
 import nextstep.subway.applicaion.dto.PathResponse;
 
@@ -12,12 +14,12 @@ public abstract class PathFinder {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathResponse findPath(PathRequest pathRequest, List<Line> lines) {
+    public PathResponse findPath(PathRequest pathRequest, List<Line> lines, Optional<Member> member) {
         validateRequest(pathRequest, lines);
 
         PathResponse pathResponse = getPath(pathRequest, lines);
 
-        pathResponse.updateFare(fareCalculator.calculateFare(pathResponse.getDistance(), pathResponse.getLines()));
+        pathResponse.updateFare(fareCalculator.calculateFare(pathResponse.getDistance(), pathResponse.getLines(), member));
         return pathResponse;
     }
 
