@@ -2,7 +2,7 @@ package nextstep.subway.domain.path.fee;
 
 public abstract class CalculateHandler {
 
-    private CalculateHandler nextCalculateHandler;
+    private final CalculateHandler nextCalculateHandler;
 
     public CalculateHandler(final CalculateHandler calculateHandler) {
         this.nextCalculateHandler = calculateHandler;

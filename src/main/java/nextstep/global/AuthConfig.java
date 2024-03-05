@@ -9,8 +9,8 @@ import java.util.List;
 
 @Configuration
 public class AuthConfig implements WebMvcConfigurer {
-    private JwtTokenProvider jwtTokenProvider;
-    private UserDetailService userDetailService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailService userDetailService;
 
     public AuthConfig(final JwtTokenProvider jwtTokenProvider, final UserDetailService userDetailService) {
         this.jwtTokenProvider = jwtTokenProvider;

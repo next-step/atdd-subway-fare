@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TokenService {
-    private UserDetailService userDetailService;
-    private JwtTokenProvider jwtTokenProvider;
+    private final UserDetailService userDetailService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public TokenService(UserDetailService userDetailService, JwtTokenProvider jwtTokenProvider) {
         this.userDetailService = userDetailService;
