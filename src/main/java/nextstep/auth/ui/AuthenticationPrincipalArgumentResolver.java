@@ -10,6 +10,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Optional;
+
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     public static final String AUTH_PREFIX = "Bearer ";
     private final JwtTokenProvider jwtTokenProvider;
@@ -25,17 +27,26 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
-        final String token = extractTokenFrom(webRequest);
-        final TokenInfo tokenInfo = jwtTokenProvider.getPrincipal(token);
-        return new UserPrincipal(tokenInfo.getId(), tokenInfo.getEmail());
-    }
-
-    private String extractTokenFrom(final NativeWebRequest webRequest) {
         final String authorization = webRequest.getHeader("Authorization");
-        if (!StringUtils.hasLength(authorization) || !authorization.startsWith(AUTH_PREFIX)) {
+
+        if (StringUtils.hasLength(authorization) && authorization.startsWith(AUTH_PREFIX)) {
+            final String token = authorization.substring(AUTH_PREFIX.length());
+            final TokenInfo tokenInfo = jwtTokenProvider.getPrincipal(token);
+            return new UserPrincipal(tokenInfo.getId(), tokenInfo.getEmail());
+        }
+
+        if (isAuthRequired(parameter)) {
             throw new AuthenticationException();
         }
 
-        return authorization.substring(AUTH_PREFIX.length());
+        return new UserPrincipal(null, null);
     }
+
+    private boolean isAuthRequired(final MethodParameter parameter) {
+        final AuthenticationPrincipal annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        return Optional.ofNullable(annotation)
+                .map(AuthenticationPrincipal::required)
+                .orElse(true);
+    }
+
 }
