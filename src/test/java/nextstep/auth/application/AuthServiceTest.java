@@ -7,8 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 @DirtiesContext
+@Import(AuthServiceTest.AuthTestConfiguration.class)
 class AuthServiceTest {
 
     @Autowired
@@ -26,7 +27,6 @@ class AuthServiceTest {
     private static final String USER_EMAIL = "email@email.com";
     private static final String USER_PASSWORD = "password";
 
-    @TestConfiguration
     static class AuthTestConfiguration {
 
         @Bean
