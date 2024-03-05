@@ -1,12 +1,10 @@
 package nextstep.path.application.fare.extra;
 
-import nextstep.line.domain.Line;
 import nextstep.path.application.fare.extra.distance.DistanceExtraFareChain;
 import nextstep.path.application.fare.extra.distance.FirstDistanceExtraFareHandler;
 import nextstep.path.application.fare.extra.distance.SecondDistanceExtraFareHandler;
 import nextstep.path.application.fare.extra.line.LineExtraHandler;
-
-import java.util.List;
+import nextstep.path.domain.Path;
 
 public class ExtraFares {
 
@@ -20,9 +18,9 @@ public class ExtraFares {
         this.lineExtraHandler = new LineExtraHandler();
     }
 
-    public long calculateExtra(final List<Line> usedLines, final int distance) {
-        final long calculateByDistance = distanceExtraFareChain.calculate(distance);
-        final long calculateByLines = lineExtraHandler.calculate(usedLines);
+    public long calculateExtra(final Path path) {
+        final long calculateByDistance = distanceExtraFareChain.calculate(path.getDistance());
+        final long calculateByLines = lineExtraHandler.calculate(path.getUsedLine());
         return calculateByDistance + calculateByLines;
     }
 }

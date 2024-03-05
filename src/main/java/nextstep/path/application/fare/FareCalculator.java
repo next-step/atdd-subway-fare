@@ -1,10 +1,8 @@
 package nextstep.path.application.fare;
 
-import nextstep.line.domain.Line;
 import nextstep.path.application.fare.discount.DiscountFares;
 import nextstep.path.application.fare.extra.ExtraFares;
-
-import java.util.List;
+import nextstep.path.domain.Path;
 
 public class FareCalculator {
     private final ExtraFares extraFares;
@@ -15,7 +13,7 @@ public class FareCalculator {
         this.discountFares = new DiscountFares();
     }
 
-    public long calculate(final List<Line> usedLines, final int distance, final int age) {
-        return discountFares.discount(extraFares.calculateExtra(usedLines, distance), age);
+    public long calculate(final Path path, final int age) {
+        return discountFares.discount(extraFares.calculateExtra(path), age);
     }
 }
