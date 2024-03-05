@@ -107,6 +107,16 @@ public class PathFinderStepDef implements En {
                     컨텍스트.저장소_숫자_가져오기(third));
         });
 
+        Then("최단거리의 존재하는 역은 {string}, {string}, {string}, {string}이다.", (
+                String first, String second,
+                String third, String fourth) -> {
+            경로에_포함된_역_목록_검증(컨텍스트.저장된_응답,
+                    컨텍스트.저장소_숫자_가져오기(first),
+                    컨텍스트.저장소_숫자_가져오기(second),
+                    컨텍스트.저장소_숫자_가져오기(third),
+                    컨텍스트.저장소_숫자_가져오기(fourth));
+        });
+
         Then("최단거리는 {int}km 이다.", (Integer 예상하는_거리) -> {
             경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, 예상하는_거리);
         });
