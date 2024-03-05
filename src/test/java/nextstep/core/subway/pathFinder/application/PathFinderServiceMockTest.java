@@ -122,7 +122,7 @@ public class PathFinderServiceMockTest {
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
                 when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.valueOf(경로_조회_최단거리_타입)))
                         .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
-                when(fareCalculator.calculateOverFare(anyInt())).thenReturn(1350);
+                when(fareCalculator.calculateFare(anyInt())).thenReturn(1350);
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입));
@@ -144,7 +144,7 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(양재역_번호)).thenReturn(양재);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
                 when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5));
-                when(fareCalculator.calculateOverFare(anyInt())).thenReturn(1250);
+                when(fareCalculator.calculateFare(anyInt())).thenReturn(1250);
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입));

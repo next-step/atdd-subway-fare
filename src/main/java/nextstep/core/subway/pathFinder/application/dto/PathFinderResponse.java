@@ -44,4 +44,8 @@ public class PathFinderResponse {
     public int getDuration() {
         return duration;
     }
+
+    public int getFare() {
+        return fare;
+    }
 }

@@ -30,7 +30,7 @@ public class PathFinderService {
                 lineService.findStation(pathFinderRequest.getArrivalStationId()),
                 PathFinderType.findType(pathFinderRequest.getPathFinderType()));
 
-        int fare = fareCalculator.calculateOverFare(optimalPath.getDistance());
+        int fare = fareCalculator.calculateFare(optimalPath.getDistance());
         return PathFinderResponse.setFareInResponse(fare, optimalPath);
     }
 
