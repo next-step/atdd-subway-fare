@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class Sections {
@@ -53,6 +54,13 @@ public class Sections {
         matchingSection.changeDownStation(upStation, distance);
     }
 
+    public List<Line> findLines() {
+        return sections.stream()
+                .map(Section::line)
+                .distinct()
+                .collect(toList());
+    }
+
     public Section findMatchingSection(Station station) {
         return sections.stream()
                 .filter(section -> section.isUpStation(station))
@@ -79,7 +87,6 @@ public class Sections {
             throw new ApplicationException("구간이 한개만 있을 경우 구간을 제거할 수 없습니다.");
         }
     }
-
 
     public Optional<Section> findDeleteSectionAtTerminal(Station station) {
         Section firstSection = findFirstSection();
@@ -164,13 +171,13 @@ public class Sections {
     private List<Station> upStations() {
         return sections.stream()
                 .map(Section::upStation)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private List<Station> downStations() {
         return sections.stream()
                 .map(Section::downStation)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<Station> sortedStations() {

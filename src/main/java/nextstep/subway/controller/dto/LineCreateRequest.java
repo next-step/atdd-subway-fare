@@ -17,6 +17,7 @@ public class LineCreateRequest {
     private Long downStationId;
     private long distance;
     private long duration;
+    private long extraFare;
 
     public LineCreateRequest() {
     }

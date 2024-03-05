@@ -116,6 +116,18 @@ public class PathTest {
     }
 
     @Test
+    void 성공_출발역과_도착역이_연결되어_있을_경우_최단_경로에_속하는_구간을_조회할_수_있다() {
+        Path path = createPathBy(PathType.DISTANCE);
+        List<Section> sections = path.findShortestEdges(강남역, 양재역);
+        assertThat(sections).hasSize(2)
+                .extracting("line", "upStation", "downStation")
+                .containsExactly(
+                        tuple(신분당선, 강남역, 선릉역),
+                        tuple(분당선, 선릉역, 양재역)
+                );
+    }
+
+    @Test
     void 성공_출발역과_도착역이_연결되어_있을_경우_최단_경로의_거리를_조회할_수_있다() {
         Path path = createPathBy(PathType.DISTANCE);
         assertThat(path.findShortestValue(강남역, 역삼역)).isEqualTo(40);
@@ -124,6 +136,7 @@ public class PathTest {
     @Test
     void 성공_출발역과_도착역이_연결되어_있을_경우_최단_경로의_소요시간을_조회할_수_있다() {
         Path path = createPathBy(PathType.DURATION);
+        path.findShortestEdges(강남역, 역삼역);
         assertThat(path.findShortestValue(강남역, 역삼역)).isEqualTo(40);
     }
 

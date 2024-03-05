@@ -26,6 +26,10 @@ public class Path {
         }
     }
 
+    public List<Section> findShortestEdges(Station source, Station target) {
+        return shortestPathStrategy.findShortestEdges(source, target);
+    }
+
     public long findShortestValue(Station source, Station target) {
         return shortestPathStrategy.findShortestValue(source, target);
     }

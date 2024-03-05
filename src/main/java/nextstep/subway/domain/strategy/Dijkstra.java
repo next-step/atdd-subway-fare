@@ -11,28 +11,30 @@ import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Dijkstra implements ShortestPathStrategy {
 
     private final DijkstraShortestPath dijkstraShortestPath;
 
     public Dijkstra(List<Section> sections, PathType pathType) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        WeightedMultigraph<Station, SectionProxy> graph = new WeightedMultigraph<>(SectionProxy.class);
         addVertexes(sections, graph);
         addEdges(sections, graph, pathType);
         dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
-    private void addVertexes(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+    private void addVertexes(List<Section> sections, WeightedMultigraph<Station, SectionProxy> graph) {
         for (Section section : sections) {
             graph.addVertex(section.upStation());
             graph.addVertex(section.downStation());
         }
     }
 
-    private void addEdges(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph, PathType pathType) {
+    private void addEdges(List<Section> sections, WeightedMultigraph<Station, SectionProxy> graph, PathType pathType) {
         for (Section section : sections) {
-            graph.setEdgeWeight(graph.addEdge(section.upStation(), section.downStation()), pathType.getType().apply(section));
+            SectionProxy sectionProxy = new SectionProxy(section, pathType.getType().apply(section));
+            graph.addEdge(sectionProxy.getSourceVertex(), sectionProxy.getTargetVertex(), sectionProxy);
         }
     }
 
@@ -41,6 +43,16 @@ public class Dijkstra implements ShortestPathStrategy {
         GraphPath shortestPath = getPath(source, target);
         validateExistPath(shortestPath);
         return shortestPath.getVertexList();
+    }
+
+    @Override
+    public List<Section> findShortestEdges(Station source, Station target) {
+        GraphPath shortestPath = getPath(source, target);
+        validateExistPath(shortestPath);
+        List<SectionProxy> edges = shortestPath.getEdgeList();
+        return edges.stream()
+                .map(SectionProxy::toSection)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,18 +1,20 @@
 package nextstep.subway.domain.chain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static nextstep.subway.domain.chain.BasicFareHandler.BASIC_FARE;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@SpringBootTest
 class BasicFareHandlerTest {
 
-    @Autowired
     private BasicFareHandler basicFareHandler;
+
+    @BeforeEach
+    void setUp(){
+        basicFareHandler = new BasicFareHandler();
+    }
 
     @ParameterizedTest
     @ValueSource(longs = {1, 10})

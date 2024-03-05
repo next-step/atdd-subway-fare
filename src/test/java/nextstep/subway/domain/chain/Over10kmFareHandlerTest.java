@@ -1,17 +1,19 @@
 package nextstep.subway.domain.chain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
 class Over10kmFareHandlerTest {
 
-    @Autowired
     private Over10kmFareHandler over10kmFareHandler;
+
+    @BeforeEach
+    void setUp(){
+        over10kmFareHandler = new Over10kmFareHandler();
+    }
 
     @ParameterizedTest
     @CsvSource({"11, 100", "16, 200", "21, 300", "26, 400", "31, 500", "36, 600", "41, 700", "46, 800", "50, 800"})
