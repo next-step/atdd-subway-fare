@@ -2,7 +2,7 @@ package nextstep.path.application.fare.discount.age;
 
 public class KidDiscountHandler extends AgeDiscountHandler {
     @Override
-    protected boolean isInRange(final int age) {
+    protected boolean isInRange(final Integer age) {
         return 6 <= age && age < 13;
     }
 

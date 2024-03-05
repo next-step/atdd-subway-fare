@@ -1,13 +1,15 @@
 package nextstep.path.application.fare.discount.age;
 
-public class TeenDiscountHandler extends AgeDiscountHandler {
+import java.util.Objects;
+
+public class NoneDiscountHandler extends AgeDiscountHandler {
     @Override
     protected boolean isInRange(final Integer age) {
-        return 13 <= age && age < 19;
+        return Objects.isNull(age);
     }
 
     @Override
     protected long discountFare(final long fare) {
-        return fare - (int) Math.ceil((fare - 350) * (0.2));
+        return fare;
     }
 }

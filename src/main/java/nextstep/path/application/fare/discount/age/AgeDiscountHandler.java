@@ -14,11 +14,11 @@ public abstract class AgeDiscountHandler {
         return this;
     }
 
-    protected abstract boolean isInRange(int age);
+    protected abstract boolean isInRange(Integer age);
 
     protected abstract long discountFare(long fare);
 
-    public long discount(final long fare, final int age) {
+    public long discount(final long fare, final Integer age) {
         if (isInRange(age)) {
             return discountFare(fare);
         }

@@ -13,7 +13,7 @@ public class FareCalculator {
         this.discountFares = new DiscountFares();
     }
 
-    public long calculate(final Path path, final int age) {
+    public long calculate(final Path path, final Integer age) {
         return discountFares.discount(extraFares.calculateExtra(path), age);
     }
 }
