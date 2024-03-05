@@ -4,9 +4,9 @@ import nextstep.line.application.LineProvider;
 import nextstep.line.domain.Line;
 import nextstep.path.application.dto.PathResponse;
 import nextstep.path.application.dto.PathSearchRequest;
-import nextstep.path.application.fare.extra.distance.FareChain;
-import nextstep.path.application.fare.extra.distance.FirstExtraFareHandler;
-import nextstep.path.application.fare.extra.distance.SecondExtraFareHandler;
+import nextstep.path.application.fare.extra.distance.DistanceExtraFareChain;
+import nextstep.path.application.fare.extra.distance.FirstDistanceExtraFareHandler;
+import nextstep.path.application.fare.extra.distance.SecondDistanceExtraFareHandler;
 import nextstep.path.domain.Path;
 import nextstep.path.domain.SubwayMap;
 import nextstep.path.exception.PathNotFoundException;
@@ -29,13 +29,13 @@ public class PathService {
 
     private final LineProvider lineProvider;
 
-    private final FareChain fareChain;
+    private final DistanceExtraFareChain distanceExtraFareChain;
 
     public PathService(final LineProvider lineProvider) {
         this.lineProvider = lineProvider;
-        this.fareChain = new FareChain()
-                .addNext(new FirstExtraFareHandler())
-                .addNext(new SecondExtraFareHandler());
+        this.distanceExtraFareChain = new DistanceExtraFareChain()
+                .addNext(new FirstDistanceExtraFareHandler())
+                .addNext(new SecondDistanceExtraFareHandler());
     }
 
     public PathResponse findShortestPath(final PathSearchRequest searchRequest) {
@@ -45,7 +45,7 @@ public class PathService {
 
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
 
-        final long fare = fareChain.calculate(shortestPath.getDistance());
+        final long fare = distanceExtraFareChain.calculate(shortestPath.getDistance());
 
         return PathResponse.from(shortestPath, fare);
     }

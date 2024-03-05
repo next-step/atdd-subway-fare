@@ -1,6 +1,6 @@
 package nextstep.path.application.fare.extra.distance;
 
-public class SecondExtraFareHandler extends PathFareHandler {
+public class SecondDistanceExtraFareHandler extends DistanceExtraFareHandler {
     private static final long EXTRA_FARE_BASE = 100L;
 
     @Override

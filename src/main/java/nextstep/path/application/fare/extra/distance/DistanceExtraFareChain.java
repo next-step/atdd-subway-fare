@@ -2,29 +2,29 @@ package nextstep.path.application.fare.extra.distance;
 
 import nextstep.path.exception.FareApplyingException;
 
-public class FareChain {
-    private final BaseFareHandler basePathFareHandler;
+public class DistanceExtraFareChain {
+    private final BaseDistanceExtraFareHandler basePathFareHandler;
 
-    public FareChain() {
-        basePathFareHandler = new BaseFareHandler();
+    public DistanceExtraFareChain() {
+        basePathFareHandler = new BaseDistanceExtraFareHandler();
     }
 
-    public FareChain addNext(final PathFareHandler pathFareHandler) {
-        validate(pathFareHandler);
-        basePathFareHandler.next(pathFareHandler);
+    public DistanceExtraFareChain addNext(final DistanceExtraFareHandler distanceExtraFareHandler) {
+        validate(distanceExtraFareHandler);
+        basePathFareHandler.next(distanceExtraFareHandler);
         return this;
     }
 
-    private void validate(final PathFareHandler pathFareHandler) {
-        final int standardDistance = pathFareHandler.getStandardDistance();
-        final int fareInterval = pathFareHandler.getFareInterval();
+    private void validate(final DistanceExtraFareHandler distanceExtraFareHandler) {
+        final int standardDistance = distanceExtraFareHandler.getStandardDistance();
+        final int fareInterval = distanceExtraFareHandler.getFareInterval();
         if (fareInterval < 1) {
             throw new FareApplyingException("fareInterval must be grater than 0");
         }
         if (standardDistance < 1) {
             throw new FareApplyingException("standardDistance must be grater than 0");
         }
-        final PathFareHandler tail = basePathFareHandler.getTail();
+        final DistanceExtraFareHandler tail = basePathFareHandler.getTail();
         if (!tail.equals(basePathFareHandler) && tail.getStandardDistance() > standardDistance) {
             throw new FareApplyingException(String.format("standardDistance must be grater than previous standardDistance %d", standardDistance));
         }

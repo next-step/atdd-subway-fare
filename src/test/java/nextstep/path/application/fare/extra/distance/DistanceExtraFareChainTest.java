@@ -1,9 +1,5 @@
 package nextstep.path.application.fare.extra.distance;
 
-import nextstep.path.application.fare.extra.distance.FareChain;
-import nextstep.path.application.fare.extra.distance.FirstExtraFareHandler;
-import nextstep.path.application.fare.extra.distance.PathFareHandler;
-import nextstep.path.application.fare.extra.distance.SecondExtraFareHandler;
 import nextstep.path.exception.FareApplyingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class FareChainTest {
+class DistanceExtraFareChainTest {
 
     @ParameterizedTest
     @CsvSource(value =
@@ -29,11 +25,11 @@ class FareChainTest {
             }, delimiterString = ",")
     @DisplayName("요금 정책을 추가해 거리에 따라 요금을 반환받을 수 있다")
     void fareChainTest(final int distance, final long expected) {
-        final FareChain fareChain = new FareChain()
-                .addNext(new FirstExtraFareHandler())
-                .addNext(new SecondExtraFareHandler());
+        final DistanceExtraFareChain distanceExtraFareChain = new DistanceExtraFareChain()
+                .addNext(new FirstDistanceExtraFareHandler())
+                .addNext(new SecondDistanceExtraFareHandler());
 
-        final long calculated = fareChain.calculate(distance);
+        final long calculated = distanceExtraFareChain.calculate(distance);
 
         assertThat(calculated).isEqualTo(expected);
     }
@@ -41,9 +37,9 @@ class FareChainTest {
     @Test
     @DisplayName("두번째 범위 시작점이 첫번째 범위 시작점보다 작을 수 없다")
     void standardDistanceLtPrevTest() {
-        assertThatThrownBy(() -> new FareChain()
-                .addNext(new SecondExtraFareHandler())
-                .addNext(new FirstExtraFareHandler()))
+        assertThatThrownBy(() -> new DistanceExtraFareChain()
+                .addNext(new SecondDistanceExtraFareHandler())
+                .addNext(new FirstDistanceExtraFareHandler()))
                 .isInstanceOf(FareApplyingException.class)
                 .hasMessageContaining("standardDistance must be grater than previous standardDistance");
     }
@@ -51,13 +47,13 @@ class FareChainTest {
     @Test
     @DisplayName("구간 요금 반복 범위가 1 보다 작을 수 없다")
     void fareIntervalLtOneDistance() {
-        assertThatThrownBy(() -> new FareChain()
-                .addNext(new ZeroFareInterval()))
+        assertThatThrownBy(() -> new DistanceExtraFareChain()
+                .addNext(new ZeroExtraFareInterval()))
                 .isInstanceOf(FareApplyingException.class)
                 .hasMessageContaining("fareInterval must be grater than");
     }
 
-    private static class ZeroFareInterval extends PathFareHandler {
+    private static class ZeroExtraFareInterval extends DistanceExtraFareHandler {
 
         @Override
         protected long calculateFare(final int distance) {
@@ -78,13 +74,13 @@ class FareChainTest {
     @Test
     @DisplayName("범위 시작점이 1 보다 작을 수 없다")
     void standardDistanceLtOneDistance() {
-        assertThatThrownBy(() -> new FareChain()
-                .addNext(new ZeroStandardDistance()))
+        assertThatThrownBy(() -> new DistanceExtraFareChain()
+                .addNext(new ZeroStandardDistanceExtra()))
                 .isInstanceOf(FareApplyingException.class)
                 .hasMessageContaining("standardDistance must be grater than");
     }
 
-    private static class ZeroStandardDistance extends PathFareHandler {
+    private static class ZeroStandardDistanceExtra extends DistanceExtraFareHandler {
 
         @Override
         protected long calculateFare(final int distance) {
