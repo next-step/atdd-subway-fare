@@ -10,6 +10,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private static final String EMAIL_KEY = "email";
+    private static final String AGE_KEY = "age";
     private final String secretKey;
     private final long validityInMilliseconds;
 
@@ -20,9 +21,10 @@ public class JwtTokenProvider {
         this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    public String createToken(final Long id, final String email) {
+    public String createToken(final Long id, final String email, final Integer age) {
         final Claims claims = Jwts.claims().setSubject(String.valueOf(id));
         claims.put(EMAIL_KEY, email);
+        claims.put(AGE_KEY, age);
         final Date now = new Date();
         final Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -36,7 +38,7 @@ public class JwtTokenProvider {
 
     public TokenInfo getPrincipal(final String token) {
         final Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return new TokenInfo(Long.parseLong(body.getSubject()), body.get(EMAIL_KEY, String.class));
+        return new TokenInfo(Long.parseLong(body.getSubject()), body.get(EMAIL_KEY, String.class), body.get(AGE_KEY, Integer.class));
     }
 
     public boolean validateToken(final String token) {

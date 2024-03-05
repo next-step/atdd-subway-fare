@@ -28,7 +28,7 @@ public class AuthService {
             throw new UnauthorizedException("아이디와 비밀번호를 확인해주세요.");
         }
 
-        final String token = jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail());
+        final String token = jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail(), userDetail.getAge());
 
         return new AuthResponse(token);
     }
@@ -38,7 +38,7 @@ public class AuthService {
         final OAuth2Response oAuth2Response = githubOAuth2Client.requestGithubProfile(githubToken);
         final UserDetail userDetail = userDetailsService.loadOrCreateUser(oAuth2Response);
 
-        final String token = jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail());
+        final String token = jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail(), userDetail.getAge());
 
         return new AuthResponse(token);
     }

@@ -32,14 +32,14 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         if (StringUtils.hasLength(authorization) && authorization.startsWith(AUTH_PREFIX)) {
             final String token = authorization.substring(AUTH_PREFIX.length());
             final TokenInfo tokenInfo = jwtTokenProvider.getPrincipal(token);
-            return new UserPrincipal(tokenInfo.getId(), tokenInfo.getEmail());
+            return new UserPrincipal(tokenInfo.getId(), tokenInfo.getEmail(), tokenInfo.getAge());
         }
 
         if (isAuthRequired(parameter)) {
             throw new AuthenticationException();
         }
 
-        return new UserPrincipal(null, null);
+        return new UserPrincipal(null, null, null);
     }
 
     private boolean isAuthRequired(final MethodParameter parameter) {
