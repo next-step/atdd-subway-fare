@@ -28,4 +28,5 @@ public class PathsDto {
     public List<Station> getPaths() {
         return paths;
     }
+
 }

@@ -80,4 +80,11 @@ public class PathAcceptanceContext {
             ));
         }
     }
+
+    public void cleanUp() {
+        stationStore = new HashMap<>();
+        lineStore = new HashMap<>();
+        이호선_역 = new ArrayList<>();
+        오호선_역 = new ArrayList<>();
+    }
 }

@@ -2,19 +2,15 @@ package nextstep.path.domain;
 
 import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
+import nextstep.path.DistanceFare;
 import nextstep.path.domain.dto.PathsDto;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 public abstract class PathFinder {
@@ -79,5 +75,4 @@ public abstract class PathFinder {
                 .mapToInt(SectionEdge::getDuration)
                 .sum();
     }
-
 }
