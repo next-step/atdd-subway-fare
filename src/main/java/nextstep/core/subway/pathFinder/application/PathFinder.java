@@ -38,13 +38,13 @@ public class PathFinder {
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = new WeightedMultigraph<>(PathCompositeWeightEdge.class);
 
         lines.forEach(line -> line.getSortedAllSections().forEach(section -> {
-            buildPathFormSection(type, section, pathGraph);
+            buildPathFromSection(type, section, pathGraph);
         }));
 
         return pathGraph;
     }
 
-    private void buildPathFormSection(PathFinderType type, Section section, WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph) {
+    private void buildPathFromSection(PathFinderType type, Section section, WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph) {
         Station upStation = section.getUpStation();
         Station downStation = section.getDownStation();
 
