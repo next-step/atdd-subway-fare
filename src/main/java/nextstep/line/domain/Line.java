@@ -6,6 +6,7 @@ import nextstep.station.domain.Station;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Line {
@@ -81,5 +82,18 @@ public class Line {
 
     public long getExtraFare() {
         return extraFare;
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        final Line line = (Line) object;
+        return Objects.equals(id, line.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

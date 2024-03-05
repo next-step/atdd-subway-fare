@@ -38,6 +38,9 @@ class SubwayMapTest {
     private Station 서울역;
     private Station 남부터미널역;
     private SubwayMap subwayMap;
+    private Line 이호선;
+    private Line 신분당선;
+    private Line 삼호선;
 
     @BeforeEach
     void setUp() {
@@ -50,9 +53,9 @@ class SubwayMapTest {
         final Section 강남역_양재역_구간 = SectionFactory.createSection(2L, 강남역, 양재역, 강남역_양재역_distance, 강남역_양재역_duration);
         final Section 교대역_남부터미널_구간 = SectionFactory.createSection(3L, 교대역, 남부터미널역, 교대역_남부터미널_distance, 교대역_남부터미널_duration);
         final Section 남부터미널_양재역_구간 = SectionFactory.createSection(4L, 남부터미널역, 양재역, 남부터미널_양재역_distance, 남부터미널_양재역_duration);
-        final Line 이호선 = LineFactory.createLine(1L, "1호선", "green", 0L, 교대역_강남역_구간);
-        final Line 신분당선 = LineFactory.createLine(2L, "신분당선", "red", 0L, 강남역_양재역_구간);
-        final Line 삼호선 = LineFactory.createLine(3L, "2호선", "orange", 0L, 교대역_남부터미널_구간);
+        이호선 = LineFactory.createLine(1L, "1호선", "green", 0L, 교대역_강남역_구간);
+        신분당선 = LineFactory.createLine(2L, "신분당선", "red", 0L, 강남역_양재역_구간);
+        삼호선 = LineFactory.createLine(3L, "2호선", "orange", 0L, 교대역_남부터미널_구간);
         삼호선.addSection(남부터미널_양재역_구간);
         subwayMap = new SubwayMap(List.of(이호선, 신분당선, 삼호선));
     }
@@ -69,6 +72,7 @@ class SubwayMapTest {
             softly.assertThat(shortestPath.getDuration()).isEqualTo(교대역_강남역_duration + 교대역_남부터미널_duration);
             softly.assertThat(shortestPath.getStations()).extracting("id")
                     .containsExactly(강남역_Id, 교대역_Id, 남부터미널역_Id);
+            softly.assertThat(shortestPath.getUsedLine()).containsExactlyInAnyOrder(이호선, 삼호선);
         });
     }
 
@@ -91,6 +95,7 @@ class SubwayMapTest {
             softly.assertThat(shortestPath.getDuration()).isEqualTo(강남역_양재역_duration + 남부터미널_양재역_duration);
             softly.assertThat(shortestPath.getStations()).extracting("id")
                     .containsExactly(강남역_Id, 양재역_Id, 남부터미널역_Id);
+            softly.assertThat(shortestPath.getUsedLine()).containsExactlyInAnyOrder(신분당선, 삼호선);
         });
     }
 }
