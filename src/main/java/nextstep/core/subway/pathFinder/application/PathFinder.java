@@ -68,7 +68,7 @@ public class PathFinder {
         return new PathFinderResult(path.getVertexList(), calculateDistance(path), calculateDuration(path));
     }
 
-    private Integer calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {
+    private int calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {
         int distance = 0;
         for (PathCompositeWeightEdge edge : path.getEdgeList()) {
             distance += edge.getDistance();
@@ -77,7 +77,7 @@ public class PathFinder {
         return distance;
     }
 
-    private Integer calculateDuration(GraphPath<Station, PathCompositeWeightEdge> path) {
+    private int calculateDuration(GraphPath<Station, PathCompositeWeightEdge> path) {
         int duration = 0;
         for (PathCompositeWeightEdge edge : path.getEdgeList()) {
             duration += edge.getDuration();
