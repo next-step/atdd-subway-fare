@@ -1,11 +1,9 @@
 package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.application.LineService;
-import nextstep.core.subway.pathFinder.application.converter.PathFinderConverter;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import nextstep.core.subway.pathFinder.domain.PathFinderType;
-import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,13 +21,11 @@ public class PathFinderService {
     public PathFinderResponse findOptimalPath(PathFinderRequest pathFinderRequest) {
         validatePathRequest(pathFinderRequest);
 
-        PathFinderResult result = pathFinder.findOptimalPath(
+        return pathFinder.findOptimalPath(
                 lineService.findAllLines(),
                 lineService.findStation(pathFinderRequest.getDepartureStationId()),
                 lineService.findStation(pathFinderRequest.getArrivalStationId()),
                 PathFinderType.findType(pathFinderRequest.getPathFinderType()));
-
-        return PathFinderConverter.convertToResponse(result);
     }
 
     public boolean isValidPath(PathFinderRequest pathFinderRequest) {

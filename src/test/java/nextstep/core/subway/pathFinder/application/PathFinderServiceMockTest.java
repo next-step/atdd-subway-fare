@@ -5,7 +5,6 @@ import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import nextstep.core.subway.pathFinder.domain.PathFinderType;
-import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
@@ -118,7 +117,7 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(강남역_번호)).thenReturn(강남);
                 when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12));
+                when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입));
@@ -139,7 +138,7 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(교대역_번호)).thenReturn(교대);
                 when(lineService.findStation(양재역_번호)).thenReturn(양재);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5));
+                when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5));
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입));

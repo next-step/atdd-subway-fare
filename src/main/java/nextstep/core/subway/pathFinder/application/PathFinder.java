@@ -2,8 +2,8 @@ package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.pathFinder.application.dto.PathCompositeWeightEdge;
+import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import nextstep.core.subway.pathFinder.domain.PathFinderType;
-import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 public class PathFinder {
-    public PathFinderResult findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
+    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
         validateLines(lines, departureStation, arrivalStation);
 
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFormLines(lines, type);
@@ -62,10 +62,10 @@ public class PathFinder {
         }
     }
 
-    private PathFinderResult createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path) {
+    private PathFinderResponse createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path) {
         validatePath(path);
 
-        return new PathFinderResult(path.getVertexList(), calculateDistance(path), calculateDuration(path));
+        return new PathFinderResponse(path.getVertexList(), calculateDistance(path), calculateDuration(path));
     }
 
     private int calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {
