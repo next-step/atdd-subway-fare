@@ -1,5 +1,7 @@
 package nextstep.path.ui;
 
+import nextstep.auth.ui.AuthenticationPrincipal;
+import nextstep.auth.ui.UserPrincipal;
 import nextstep.path.application.PathService;
 import nextstep.path.application.dto.PathResponse;
 import nextstep.path.application.dto.PathSearchRequest;
@@ -18,8 +20,11 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findPath(final PathSearchRequest searchRequest) {
+    public ResponseEntity<PathResponse> findPath(final PathSearchRequest searchRequest,
+                                                 @AuthenticationPrincipal(required = false) final UserPrincipal userPrincipal
+    ) {
         searchRequest.validate();
+        searchRequest.setAge(userPrincipal.getAge());
         final PathResponse pathResponse = pathService.findShortestPath(searchRequest);
         return ResponseEntity.ok().body(pathResponse);
     }

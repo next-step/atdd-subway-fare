@@ -40,7 +40,7 @@ public class PathService {
 
         final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
 
-        final long fare = fareCalculator.calculate(shortestPath, 21);
+        final long fare = fareCalculator.calculate(shortestPath, searchRequest.getAge());
 
         return PathResponse.from(shortestPath, fare);
     }
