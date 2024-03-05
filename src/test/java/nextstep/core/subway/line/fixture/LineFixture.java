@@ -42,6 +42,14 @@ public class LineFixture {
         return new LineRequest("호남선", "bg-blue-100", upStationId, downStationId, distance, duration);
     }
 
+    public static LineRequest 별내선(Long upStationId, Long downStationId, Integer distance, Integer duration) {
+        return new LineRequest("별내선", "bg-pink-100", upStationId, downStationId, distance, duration);
+    }
+
+    public static LineRequest 일호선(Long upStationId, Long downStationId, Integer distance, Integer duration) {
+        return new LineRequest("일호선", "bg-blue-999", upStationId, downStationId, distance, duration);
+    }
+
     public static Line 이호선_생성() {
         return new Line("이호선", "그린");
     }

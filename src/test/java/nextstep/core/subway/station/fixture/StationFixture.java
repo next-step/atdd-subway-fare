@@ -36,6 +36,8 @@ public class StationFixture {
     public static final StationRequest 남부터미널역 = new StationRequest("남부터미널");
     public static final StationRequest 정왕역 = new StationRequest("정왕");
     public static final StationRequest 오이도역 = new StationRequest("오이도");
+    public static final StationRequest 천호역 = new StationRequest("천호");
+    public static final StationRequest 신설동역 = new StationRequest("신설동");
 
     public static final List<StationRequest> 역_10개 =
             List.of(가산디지털단지역, 구로디지털단지역, 독산역, 신도림역, 홍대입구역, 종각역, 신림역, 잠실역, 교대역, 서울역);

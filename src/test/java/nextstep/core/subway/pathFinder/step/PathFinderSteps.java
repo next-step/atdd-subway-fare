@@ -46,6 +46,10 @@ public class PathFinderSteps {
         return 성공하는_경로_조회_응답.jsonPath().getInt("duration");
     }
 
+    public static int convertToFare(ExtractableResponse<Response> 성공하는_경로_조회_응답) {
+        return 성공하는_경로_조회_응답.jsonPath().getInt("fare");
+    }
+
     public static List<Long> convertToStationIds(ExtractableResponse<Response> 성공하는_경로_조회_응답) {
         return 성공하는_경로_조회_응답.jsonPath().getList("stations.id", Long.class);
     }
@@ -60,5 +64,9 @@ public class PathFinderSteps {
 
     public static void 경로에_포함된_소요_시간_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, int 예상_소요_시간) {
         assertThat(convertToDuration(성공하는_경로_조회_응답)).isEqualTo(예상_소요_시간);
+    }
+
+    public static void 경로에_포함된_이용_요금_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, int 예상하는_금액) {
+        assertThat(convertToFare(성공하는_경로_조회_응답)).isEqualTo(예상하는_금액);
     }
 }
