@@ -3,15 +3,12 @@ package nextstep.cucumber.steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.application.dto.LineResponse;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.Map;
@@ -126,7 +123,7 @@ public class PathStepDef implements En {
                     .auth().oauth2(jwtToken)
                     .queryParam("source", sourceId)
                     .queryParam("target", targetId)
-                    .queryParam("type", "DURATION")
+                    .queryParam("type", "DISTANCE")
                     .when().get(PATHS)
                     .then().log().all()
                     .statusCode(HttpStatus.OK.value())
@@ -140,7 +137,7 @@ public class PathStepDef implements En {
             context.response = RestAssured.given().log().all()
                     .queryParam("source", sourceId)
                     .queryParam("target", targetId)
-                    .queryParam("type", "DURATION")
+                    .queryParam("type", "DISTANCE")
                     .when().get(PATHS)
                     .then().log().all()
                     .statusCode(HttpStatus.OK.value())

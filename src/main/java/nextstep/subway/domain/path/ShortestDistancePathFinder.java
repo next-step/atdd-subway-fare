@@ -5,6 +5,7 @@ import nextstep.subway.domain.CustomWeightedEdge;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.fee.AgeType;
 import nextstep.subway.domain.path.fee.CalculateHandler;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -46,7 +47,7 @@ public class ShortestDistancePathFinder extends PathFinder {
     }
 
     @Override
-    protected PathResponse createPathResponse(final GraphPath<Station, CustomWeightedEdge> path) {
+    protected PathResponse createPathResponse(final GraphPath<Station, CustomWeightedEdge> path, AgeType ageType) {
         final int duration = path.getEdgeList().stream()
                 .mapToInt(CustomWeightedEdge::getDuration)
                 .sum();
@@ -57,7 +58,7 @@ public class ShortestDistancePathFinder extends PathFinder {
                 .map(CustomWeightedEdge::getAdditionalFee)
                 .collect(Collectors.toList());
 
-        return new PathResponse(path.getVertexList(), weight, duration, calculateFare(weight, feeList));
+        return new PathResponse(path.getVertexList(), weight, duration, calculateFare(weight, feeList, ageType));
     }
 }
 

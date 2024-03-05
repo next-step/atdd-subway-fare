@@ -9,14 +9,14 @@ public class AdditionalFeeHandler extends CalculateHandler {
     }
 
     @Override
-    public void handle(FeeInfo pathInfo) {
+    public Fare handle(FeeInfo pathInfo, Fare beforeFare) {
         final List<Integer> fees = pathInfo.additionalFees();
         final int maxFee = fees.stream()
                 .mapToInt(x -> x)
                 .max()
                 .orElse(0);
 
-        super.fare = new Fare(maxFee);
-        super.handle(pathInfo);
+        Fare fare = new Fare(maxFee);
+        return super.handle(pathInfo, beforeFare.add(fare));
     }
 }

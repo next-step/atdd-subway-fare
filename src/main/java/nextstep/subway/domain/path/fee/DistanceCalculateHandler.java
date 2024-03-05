@@ -7,11 +7,11 @@ public class DistanceCalculateHandler extends CalculateHandler {
     }
 
     @Override
-    public void handle(FeeInfo pathInfo) {
+    public Fare handle(FeeInfo pathInfo, Fare beforeFare) {
         final Distance distance = pathInfo.distance();
         final DistanceRange distanceRange = DistanceRange.fromDistance(distance);
 
-        super.fare = distanceRange.calculate(distance);
-        super.handle(pathInfo);
+        final Fare fare = distanceRange.calculate(distance);
+        return super.handle(pathInfo, beforeFare.add(fare));
     }
 }

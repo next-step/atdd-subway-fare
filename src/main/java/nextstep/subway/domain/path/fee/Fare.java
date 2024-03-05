@@ -4,10 +4,15 @@ import java.util.Objects;
 
 public class Fare {
 
+    public static final int DEDUCTION_AMOUNT = 350;
     private final int value;
 
     public Fare(final int amount) {
         this.value = amount;
+    }
+
+    public static Fare deduction() {
+        return new Fare(DEDUCTION_AMOUNT);
     }
 
     public int value() {
@@ -16,6 +21,23 @@ public class Fare {
 
     public Fare add(final Fare fare) {
         return new Fare(this.value + fare.value);
+    }
+
+    public Fare minus(final Fare fare) {
+        return new Fare(this.value - fare.value);
+    }
+
+    public Fare discount(double percent) {
+        System.out.println("percent");
+        System.out.println(percent);
+        final Fare discountFare = new Fare((int) (this.value * (percent / 100)));
+        System.out.println("discountFare");
+        System.out.println(discountFare);
+        System.out.println("this.value ");
+        System.out.println(this.value );
+        System.out.println("(this.value * (percent / 100))");
+        System.out.println((this.value * (percent / 100)) );
+        return new Fare(this.value - discountFare.value);
     }
 
     @Override

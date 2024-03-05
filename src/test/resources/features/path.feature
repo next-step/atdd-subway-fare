@@ -25,7 +25,7 @@ Feature: 경로조회 관련 기능
     And 회원을 등록하고
       | email | password | age |
       | qwe@gmail.com      | 1234    | 17        |
-      | zxc@naver.com      | 5678    | 5        |
+      | zxc@naver.com      | 5678    | 8        |
 
 
   Scenario: 요금 정보를 포함한 최단 경로를 조회한다.

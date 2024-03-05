@@ -56,6 +56,19 @@ public class Member implements UserDetails {
     }
 
     @Override
+    public boolean isAnonymous() {
+        return false;
+    }
+
+    public boolean isChildren() {
+        return this.age >= 6 && this.age < 13;
+    }
+
+    public boolean isYouth() {
+        return this.age >= 13 && this.age < 19;
+    }
+
+    @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

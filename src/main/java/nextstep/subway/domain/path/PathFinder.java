@@ -4,8 +4,10 @@ import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.CustomWeightedEdge;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.fee.AgeType;
 import nextstep.subway.domain.path.fee.CalculateHandler;
 import nextstep.subway.domain.path.fee.Distance;
+import nextstep.subway.domain.path.fee.Fare;
 import nextstep.subway.domain.path.fee.FeeInfo;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -23,7 +25,7 @@ public abstract class PathFinder {
         this.calculateHandler = calculateHandler;
     }
 
-    public PathResponse findPath(final List<Line> lines, final Station sourceStation, final Station targetStation) {
+    public PathResponse findPath(final List<Line> lines, final Station sourceStation, final Station targetStation, AgeType ageType) {
         checkSameStation(sourceStation, targetStation);
 
         WeightedMultigraph<Station, CustomWeightedEdge> graph = createGraph(lines);
@@ -33,12 +35,12 @@ public abstract class PathFinder {
         DijkstraShortestPath<Station, CustomWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
         final GraphPath<Station, CustomWeightedEdge> path = dijkstraShortestPath.getPath(sourceStation, targetStation);
 
-        return createPathResponse(path);
+        return createPathResponse(path, ageType);
     }
 
     protected abstract WeightedMultigraph<Station, CustomWeightedEdge> createGraph(final List<Line> lines);
 
-    protected abstract PathResponse createPathResponse(final GraphPath<Station, CustomWeightedEdge> path);
+    protected abstract PathResponse createPathResponse(final GraphPath<Station, CustomWeightedEdge> path, AgeType ageType);
 
     private void checkSameStation(final Station sourceStation, final Station targetStation) {
         if (sourceStation.isSame(targetStation)) {
@@ -60,9 +62,9 @@ public abstract class PathFinder {
         return !graph.containsVertex(sourceStation);
     }
 
-    protected int calculateFare(int distance, List<Integer> additionalFees) {
-        final FeeInfo feeInfo = FeeInfo.of(new Distance(distance), additionalFees);
-        calculateHandler.handle(feeInfo);
-        return calculateHandler.fare().value();
+    protected int calculateFare(int distance, List<Integer> additionalFees, AgeType ageType) {
+        final FeeInfo feeInfo = FeeInfo.of(new Distance(distance), additionalFees, ageType);
+
+        return calculateHandler.handle(feeInfo, new Fare(0)).value();
     }
 }
