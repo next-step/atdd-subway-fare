@@ -35,6 +35,6 @@ public class PathService {
            member = memberService.findMemberByEmail(loginMember.getEmail());
         }
 
-        return pathFinder.findPath(request, lines, Optional.of(member));
+        return pathFinder.findPath(request, lines, Optional.ofNullable(member));
     }
 }
