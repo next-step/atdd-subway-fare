@@ -1,6 +1,7 @@
 package nextstep.favorite.application;
 
 import java.util.stream.Collectors;
+import nextstep.auth.AuthenticationException;
 import nextstep.exception.NotFoundException;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.dto.FavoriteResponse;
@@ -32,7 +33,7 @@ public class FavoriteService {
     }
 
     public void createFavorite(FavoriteRequest request, LoginMember loginMember) {
-        validatePathExist(request);
+        validatePathExist(request, loginMember);
 
         final Station sourceStation = stationRepository.findById(request.getSource()).orElseGet(null);
         final Station targetStation = stationRepository.findById(request.getTarget()).orElseGet(null);
@@ -58,7 +59,11 @@ public class FavoriteService {
         favoriteRepository.deleteById(id);
     }
 
-    private void validatePathExist(FavoriteRequest request) {
+    private void validatePathExist(FavoriteRequest request, LoginMember loginMember) {
+        if(loginMember == null) {
+            throw new AuthenticationException();
+        }
+
         pathService.getPath(new PathRequest(request.getSource(), request.getTarget()), null);
     }
 }
