@@ -89,7 +89,8 @@ public class PathStepDef implements En {
                 cxt.stationStore.get(entry.get("upStation")),
                 cxt.stationStore.get(entry.get("downStation")),
                 Integer.parseInt(entry.get("distance")),
-                Integer.parseInt(entry.get("duration"))
+                Integer.parseInt(entry.get("duration")),
+                Integer.parseInt(entry.get("extraFare"))
         );
     }
 
