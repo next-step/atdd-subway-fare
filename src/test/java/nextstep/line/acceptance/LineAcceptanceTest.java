@@ -184,7 +184,7 @@ public class LineAcceptanceTest {
     }
 
     private static ExtractableResponse<Response> 노선_생성_요청(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
-        return LineApiHelper.createLine(name, color, upStationId, downStationId, distance, duration);
+        return LineApiHelper.createLine(name, color, upStationId, downStationId, distance, duration, 0L);
     }
 
     private void 노선_목록_조회_시_생성한_노선을_찾을_수_있다() {

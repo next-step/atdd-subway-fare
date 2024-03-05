@@ -77,8 +77,8 @@ public class LineCreateRequest {
         if (duration <= 0) {
             throw new CreateRequestNotValidException("duration must be greater than 0");
         }
-        if (extraFare <= 0) {
-            throw new CreateRequestNotValidException("duration must be greater than 0");
+        if (extraFare < 0) {
+            throw new CreateRequestNotValidException("extraFare must be greater or equal than 0");
         }
     }
 

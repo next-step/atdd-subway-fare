@@ -28,7 +28,8 @@ public class LineStepDef implements En {
                 final StationResponse downStation = context.store.get(data.get("downStation"), StationResponse.class);
                 final int distance = Integer.parseInt(data.get("distance"));
                 final int duration = Integer.parseInt(data.get("duration"));
-                final ExtractableResponse<Response> response = LineApiHelper.createLine(lineName, lineColor, upStation.getId(), downStation.getId(), distance, duration);
+                final long extraFare = Long.parseLong(data.get("extraFare"));
+                final ExtractableResponse<Response> response = LineApiHelper.createLine(lineName, lineColor, upStation.getId(), downStation.getId(), distance, duration, extraFare);
                 context.store.put(lineName, response.as(LineResponse.class));
             });
         });
