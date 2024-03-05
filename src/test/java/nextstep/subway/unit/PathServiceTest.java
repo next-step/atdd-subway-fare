@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 
+import nextstep.member.domain.AnonymousMember;
 import nextstep.subway.application.PathService;
 import nextstep.subway.domain.path.PathType;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ public class PathServiceTest {
         Long invalidTarget = 99L;
 
         // When
-        assertThatThrownBy(() -> { pathService.findPath(invalidSource, invalidTarget, PathType.DISTANCE); })
+        assertThatThrownBy(() -> { pathService.findPath(invalidSource, invalidTarget, PathType.DISTANCE, new AnonymousMember()); })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("존재 하지 않는 지하철역 입니다.");
     }

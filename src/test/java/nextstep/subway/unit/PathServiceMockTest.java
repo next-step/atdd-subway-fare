@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 
+import nextstep.member.domain.AnonymousMember;
 import nextstep.subway.application.LineService;
 import nextstep.subway.application.PathService;
 import nextstep.subway.application.StationService;
@@ -62,7 +63,7 @@ public class PathServiceMockTest {
         final PathService pathService = new PathService(lineService, stationService);
 
         // When
-        final PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE);
+        final PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE, new AnonymousMember());
 
         // Then
         final List<StationResponse> stations = pathResponse.getStations();
