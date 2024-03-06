@@ -35,7 +35,7 @@ public class AuthServiceMockTest {
     @BeforeEach
     void setUp() {
         authService = new AuthService(userDetailsService, jwtTokenProvider, githubOAuth2Client);
-        userDetail = new UserDetail(1L, EMAIL, PASSWORD);
+        userDetail = new UserDetail(1L, EMAIL, PASSWORD, 20);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class AuthServiceMockTest {
         final String accessToken = "access_token";
 
         given(userDetailsService.loadUserByEmail(EMAIL)).willReturn(userDetail);
-        given(jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail())).willReturn(accessToken);
+        given(jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail(), userDetail.getAge())).willReturn(accessToken);
 
         final AuthResponse authResponse = authService.login(EMAIL, PASSWORD);
 
@@ -81,7 +81,7 @@ public class AuthServiceMockTest {
         given(githubOAuth2Client.requestGithubToken(githubResponses.getCode())).willReturn(githubResponses.getAccessToken());
         given(githubOAuth2Client.requestGithubProfile(githubResponses.getAccessToken())).willReturn(oAuth2Response);
         given(userDetailsService.loadOrCreateUser(oAuth2Response)).willReturn(userDetail);
-        given(jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail())).willReturn(accessToken);
+        given(jwtTokenProvider.createToken(userDetail.getId(), userDetail.getEmail(), userDetail.getAge())).willReturn(accessToken);
 
         final AuthResponse authResponse = authService.loginGithub(githubResponses.getCode());
 

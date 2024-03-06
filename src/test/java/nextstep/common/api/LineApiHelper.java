@@ -13,8 +13,8 @@ public class LineApiHelper {
     private LineApiHelper() {
     }
 
-    public static ExtractableResponse<Response> createLine(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
-        final Map<String, Object> createLineRequest = createLineRequestFixture(name, color, upStationId, downStationId, distance, duration);
+    public static ExtractableResponse<Response> createLine(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration, final long extraFare) {
+        final Map<String, Object> createLineRequest = createLineRequestFixture(name, color, upStationId, downStationId, distance, duration, extraFare);
         return RestAssuredHelper.post(LINE_API_PATH, createLineRequest);
     }
 
@@ -34,7 +34,7 @@ public class LineApiHelper {
         return RestAssuredHelper.put(LINE_API_PATH, id, createLineUpdateRequestFixture(name, color));
     }
 
-    private static Map<String, Object> createLineRequestFixture(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
+    private static Map<String, Object> createLineRequestFixture(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration, final long extraFare) {
         return Map.of(
                 "name", name
                 , "color", color
@@ -42,6 +42,7 @@ public class LineApiHelper {
                 , "downStationId", downStationId
                 , "distance", distance
                 , "duration", duration
+                , "extraFare", extraFare
         );
     }
 

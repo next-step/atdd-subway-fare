@@ -59,9 +59,9 @@ public class PathAcceptanceTest {
         남부터미널역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("남부터미널역_Id"));
         서울역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("서울역"));
         사당역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("사당역"));
-        이호선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("2호선", "green", 교대역_Id, 강남역_Id, 교대역_강남역_distance, 교대역_강남역_duration)));
-        신분당선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("신분당선", "red", 강남역_Id, 양재역_Id, 강남역_양재역_distance, 강남역_양재역_duration)));
-        삼호선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("3호선", "orange", 교대역_Id, 남부터미널역_Id, 교대역_남부터미널_distance, 교대역_남부터미널_duration)));
+        이호선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("2호선", "green", 교대역_Id, 강남역_Id, 교대역_강남역_distance, 교대역_강남역_duration, 0L)));
+        신분당선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("신분당선", "red", 강남역_Id, 양재역_Id, 강남역_양재역_distance, 강남역_양재역_duration, 0L)));
+        삼호선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("3호선", "orange", 교대역_Id, 남부터미널역_Id, 교대역_남부터미널_distance, 교대역_남부터미널_duration, 0L)));
         SectionApiHelper.createSection(삼호선_Id, 남부터미널역_Id, 양재역_Id, 남부터미널_양재역_distance, 남부터미널_양재역_duration);
     }
 
@@ -149,11 +149,11 @@ public class PathAcceptanceTest {
     }
 
     private ExtractableResponse<Response> 최소_길이_경로_조회_요청(final Long startStationId, final Long endStationId) {
-        return PathApiHelper.findPath(startStationId, endStationId, PathType.DISTANCE);
+        return PathApiHelper.findPath(startStationId, endStationId, PathType.DISTANCE, "");
     }
 
     private ExtractableResponse<Response> 최소_시간_경로_조회_요청(final Long startStationId, final Long endStationId) {
-        return PathApiHelper.findPath(startStationId, endStationId, PathType.DURATION);
+        return PathApiHelper.findPath(startStationId, endStationId, PathType.DURATION, "");
     }
 
     private void 경로찾기에_실패_한다(final ExtractableResponse<Response> response) {

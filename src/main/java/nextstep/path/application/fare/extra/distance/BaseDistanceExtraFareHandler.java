@@ -1,11 +1,11 @@
-package nextstep.path.application;
+package nextstep.path.application.fare.extra.distance;
 
-public class BaseFareHandler extends PathFareHandler {
+public class BaseDistanceExtraFareHandler extends DistanceExtraFareHandler {
     private static final long BASE_FARE = 1250L;
 
     @Override
-    public long calculate(final int distance) {
-        return BASE_FARE + calculateNext(distance);
+    public long calculateFare(final int distance) {
+        return BASE_FARE;
     }
 
     @Override

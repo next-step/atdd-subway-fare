@@ -26,20 +26,20 @@ public class SubwayMap {
 
     private WeightedMultigraph<Station, PathSection> buildGraph(final PathType pathType) {
         final WeightedMultigraph<Station, PathSection> graph = new WeightedMultigraph<>(PathSection.class);
-        lines.stream()
-                .flatMap(line -> line.getSections().stream())
-                .map(PathSection::from)
-                .forEach(pathSection -> initGraph(pathSection, pathType, graph));
+        lines.forEach(line -> initGraph(line, pathType, graph));
         return graph;
     }
 
-    private void initGraph(final PathSection pathSection, final PathType pathType, final WeightedMultigraph<Station, PathSection> graph) {
-        final Station upStation = pathSection.getUpStation();
-        final Station downStation = pathSection.getDownStation();
-        graph.addVertex(upStation);
-        graph.addVertex(downStation);
-        graph.addEdge(upStation, downStation, pathSection);
-        graph.setEdgeWeight(pathSection, pathType.calculateWeight(pathSection));
+    private void initGraph(final Line line, final PathType pathType, final WeightedMultigraph<Station, PathSection> graph) {
+        line.getSections().forEach(section -> {
+            final PathSection pathSection = PathSection.from(line, section);
+            final Station upStation = pathSection.getUpStation();
+            final Station downStation = pathSection.getDownStation();
+            graph.addVertex(upStation);
+            graph.addVertex(downStation);
+            graph.addEdge(upStation, downStation, pathSection);
+            graph.setEdgeWeight(pathSection, pathType.calculateWeight(pathSection));
+        });
     }
 
     public Optional<Path> findShortestPath(final Station sourceStation, final Station targetStation, final PathType pathType) {

@@ -10,13 +10,14 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 class JwtTokenProviderTest {
     private static final long TOKEN_ID = 1L;
     private static final String TOKEN_EMAIL = "test@test.com";
+    private static final Integer TOKEN_AGE = 20;
     private JwtTokenProvider jwtTokenProvider;
     private String token;
 
     @BeforeEach
     void setUp() {
         jwtTokenProvider = new JwtTokenProvider("testSecretKey", 1000 * 10);
-        token = jwtTokenProvider.createToken(TOKEN_ID, TOKEN_EMAIL);
+        token = jwtTokenProvider.createToken(TOKEN_ID, TOKEN_EMAIL, TOKEN_AGE);
     }
 
     @Test
@@ -27,7 +28,7 @@ class JwtTokenProviderTest {
     @Test
     void getPrincipalTest() {
         final TokenInfo actual = jwtTokenProvider.getPrincipal(token);
-        final TokenInfo expected = new TokenInfo(TOKEN_ID, TOKEN_EMAIL);
+        final TokenInfo expected = new TokenInfo(TOKEN_ID, TOKEN_EMAIL, TOKEN_AGE);
 
         assertThat(actual).isEqualTo(expected);
 

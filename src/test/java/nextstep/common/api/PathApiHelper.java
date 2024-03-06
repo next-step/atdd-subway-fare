@@ -14,7 +14,11 @@ public class PathApiHelper {
     private PathApiHelper() {
     }
 
-    public static ExtractableResponse<Response> findPath(final Long startStationId, final Long endStationId, final PathType pathType) {
-        return RestAssuredHelper.get(PATH_API_PATH, Map.of("source", startStationId, "target", endStationId, "pathType", pathType));
+    public static ExtractableResponse<Response> findPath(final Long startStationId, final Long endStationId, final PathType pathType, final String accessToken) {
+        return RestAssuredHelper.getWithAuth(PATH_API_PATH, accessToken, Map.of(
+                "source", startStationId,
+                "target", endStationId,
+                "pathType", pathType
+        ));
     }
 }

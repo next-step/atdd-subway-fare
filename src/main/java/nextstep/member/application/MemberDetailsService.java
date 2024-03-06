@@ -22,13 +22,13 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetail loadUserByEmail(final String email) {
         final Member member = memberRepository.findByEmail(email).orElseThrow(() -> new MemberNotFoundException(email));
-        return new UserDetail(member.getId(), member.getEmail(), member.getPassword());
+        return new UserDetail(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
     }
 
     @Override
     public UserDetail loadOrCreateUser(final OAuth2Response oAuth2Response) {
         final Member member = memberRepository.findByEmail(oAuth2Response.getEmail())
                 .orElseGet(() -> memberRepository.save(new Member(oAuth2Response.getEmail(), UUID.randomUUID().toString(), oAuth2Response.getAge())));
-        return new UserDetail(member.getId(), member.getEmail(), member.getPassword());
+        return new UserDetail(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
     }
 }

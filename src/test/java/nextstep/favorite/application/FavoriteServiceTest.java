@@ -48,8 +48,8 @@ class FavoriteServiceTest {
         선릉역 = stationRepository.save(StationFactory.createStation("선릉역"));
         서울역 = stationRepository.save(StationFactory.createStation("서울역"));
         사당역 = stationRepository.save(StationFactory.createStation("사당역"));
-        lineService.saveLine(new LineCreateRequest("이호선", "연두색", 강남역.getId(), 선릉역.getId(), 10, 2));
-        lineService.saveLine(new LineCreateRequest("사호선", "하늘색", 서울역.getId(), 사당역.getId(), 20, 3));
+        lineService.saveLine(new LineCreateRequest("이호선", "연두색", 강남역.getId(), 선릉역.getId(), 10, 2, 0L));
+        lineService.saveLine(new LineCreateRequest("사호선", "하늘색", 서울역.getId(), 사당역.getId(), 20, 3, 0L));
     }
 
     @AfterEach

@@ -40,6 +40,7 @@ public class LineServiceMockTest {
     private static final long LINE_ID = 1L;
     private static final String LINE_NAME = "2호선";
     private static final String LINE_COLOR = "연두색";
+    private static final long LINE_EXTRA_FARE = 10L;
     private Station 강남역;
     private Station 선릉역;
     private Station 역삼역;
@@ -63,7 +64,7 @@ public class LineServiceMockTest {
         역삼역 = StationFactory.createStation(역삼역_ID, "선릉역");
         강남역_선릉역_구간 = SectionFactory.createSection(첫번째구간_ID, 강남역, 선릉역, 강남역_선릉역_길이, 강남역_선릉역_시간);
         선릉역_역삼역_구간 = SectionFactory.createSection(두번째구간_ID, 선릉역, 역삼역, 선릉역_역삼역_길이, 선릉역_역삼역_시간);
-        line = LineFactory.createLine(LINE_ID, LINE_NAME, LINE_COLOR, 강남역_선릉역_구간);
+        line = LineFactory.createLine(LINE_ID, LINE_NAME, LINE_COLOR, LINE_EXTRA_FARE, 강남역_선릉역_구간);
 
         lineService = new LineServiceImpl(lineRepository, sectionRepository, stationProvider);
     }

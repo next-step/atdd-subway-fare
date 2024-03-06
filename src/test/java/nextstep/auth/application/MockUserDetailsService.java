@@ -10,10 +10,10 @@ public class MockUserDetailsService implements UserDetailsService {
     }
 
     public UserDetail loadUserByEmail(final String email) {
-        return new UserDetail(1L, email, userPassword);
+        return new UserDetail(1L, email, userPassword, 20);
     }
 
     public UserDetail loadOrCreateUser(final OAuth2Response oAuth2Response) {
-        return new UserDetail(1L, oAuth2Response.getEmail(), userPassword);
+        return new UserDetail(1L, oAuth2Response.getEmail(), userPassword, 20);
     }
 }

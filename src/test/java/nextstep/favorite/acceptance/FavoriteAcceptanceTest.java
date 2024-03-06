@@ -42,10 +42,10 @@ public class FavoriteAcceptanceTest extends AcceptanceTestAuthBase {
         남부터미널역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("남부터미널역"));
         서울역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("서울역"));
         사당역_Id = RestAssuredHelper.getIdFromBody(StationApiHelper.createStation("사당역"));
-        RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("2호선", "green", 교대역_Id, 강남역_Id, 5, 2)));
-        RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("신분당선", "red", 강남역_Id, 양재역_Id, 10, 3)));
-        final Long 삼호선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("3호선", "orange", 교대역_Id, 남부터미널역_Id, 2, 3)));
-        RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("4호선", "red", 서울역_Id, 사당역_Id, 10, 4)));
+        RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("2호선", "green", 교대역_Id, 강남역_Id, 5, 2, 0L)));
+        RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("신분당선", "red", 강남역_Id, 양재역_Id, 10, 3, 0L)));
+        final Long 삼호선_Id = RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("3호선", "orange", 교대역_Id, 남부터미널역_Id, 2, 3, 0L)));
+        RestAssuredHelper.getIdFromBody((LineApiHelper.createLine("4호선", "red", 서울역_Id, 사당역_Id, 10, 4, 0L)));
         SectionApiHelper.createSection(삼호선_Id, 남부터미널역_Id, 양재역_Id, 3, 5);
     }
 

@@ -35,6 +35,7 @@ public class LineServiceImpl implements LineService, LineProvider {
         final Line line = lineRepository.save(
                 new Line(lineCreateRequest.getName()
                         , lineCreateRequest.getColor()
+                        , lineCreateRequest.getExtraFare()
                         , createSection(lineCreateRequest.toSectionCreateRequest())
                 ));
 

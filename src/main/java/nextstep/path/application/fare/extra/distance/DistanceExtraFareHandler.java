@@ -1,11 +1,11 @@
-package nextstep.path.application;
+package nextstep.path.application.fare.extra.distance;
 
 import java.util.Objects;
 
-public abstract class PathFareHandler {
-    protected PathFareHandler nextHandler;
+public abstract class DistanceExtraFareHandler {
+    protected DistanceExtraFareHandler nextHandler;
 
-    protected void next(final PathFareHandler nextHandler) {
+    protected void next(final DistanceExtraFareHandler nextHandler) {
         if (Objects.isNull(this.nextHandler)) {
             this.nextHandler = nextHandler;
             return;
@@ -13,7 +13,11 @@ public abstract class PathFareHandler {
         this.nextHandler.next(nextHandler);
     }
 
-    protected abstract long calculate(int distance);
+    public long calculate(final int distance) {
+        return calculateFare(distance) + calculateNext(distance);
+    }
+
+    protected abstract long calculateFare(int distance);
 
     protected abstract int getStandardDistance();
 
@@ -37,7 +41,7 @@ public abstract class PathFareHandler {
         return Math.min(distance, getNextStandardDistance());
     }
 
-    protected PathFareHandler getTail() {
+    protected DistanceExtraFareHandler getTail() {
         if (isTail()) {
             return this;
         }
@@ -52,7 +56,7 @@ public abstract class PathFareHandler {
     public boolean equals(final Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        final PathFareHandler that = (PathFareHandler) object;
+        final DistanceExtraFareHandler that = (DistanceExtraFareHandler) object;
         return Objects.equals(nextHandler, that.nextHandler);
     }
 

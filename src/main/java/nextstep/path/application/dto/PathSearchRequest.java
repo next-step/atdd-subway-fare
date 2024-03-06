@@ -10,6 +10,7 @@ public class PathSearchRequest {
     private Long source;
     private Long target;
     private PathType pathType;
+    private Integer age;
 
     public PathSearchRequest() {
     }
@@ -48,6 +49,14 @@ public class PathSearchRequest {
 
     public void setPathType(final PathType pathType) {
         this.pathType = pathType;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(final Integer age) {
+        this.age = age;
     }
 
     public void validate() {
