@@ -12,8 +12,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private JwtTokenProvider jwtTokenProvider;
-    private UserDetailService userDetailService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailService userDetailService;
 
     public AuthenticationPrincipalArgumentResolver(final JwtTokenProvider jwtTokenProvider, final UserDetailService userDetailService) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -26,7 +26,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public LoginMember resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public LoginMember resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         try {
             String authorization = webRequest.getHeader("Authorization");
 

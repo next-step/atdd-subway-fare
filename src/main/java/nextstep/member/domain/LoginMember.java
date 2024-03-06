@@ -1,7 +1,7 @@
 package nextstep.member.domain;
 
 public class LoginMember {
-    private String email;
+    private final String email;
     private Integer age;
 
     public LoginMember(final String email) {

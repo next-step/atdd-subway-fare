@@ -1,6 +1,5 @@
 package nextstep.favorite.ui;
 
-import nextstep.auth.application.UserDetails;
 import nextstep.favorite.application.FavoriteService;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.dto.FavoriteResponse;
