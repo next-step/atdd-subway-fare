@@ -26,7 +26,7 @@ public class FareCalculator {
         return fare;
     }
 
-    private int calculateOverFare(int fare, int rate) {
-        return (int) (((double) ((fare - 1) / rate) + 1) * 100);
+    private int calculateOverFare(int distance, int rate) {
+        return (int) (((double) ((distance - 1) / rate) + 1) * 100);
     }
 }
