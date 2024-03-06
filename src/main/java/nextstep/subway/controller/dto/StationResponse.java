@@ -13,6 +13,9 @@ public class StationResponse {
     private Long id;
     private String name;
 
+    public StationResponse() {
+    }
+
     @Builder
     public StationResponse(Long id, String name) {
         this.id = id;

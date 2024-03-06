@@ -15,6 +15,9 @@ public class LineResponse {
     private String color;
     private List<StationResponse> stations;
 
+    public LineResponse() {
+    }
+
     @Builder
     public LineResponse(Long id, String name, String color, List<StationResponse> stations) {
         this.id = id;
