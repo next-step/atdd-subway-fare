@@ -45,9 +45,7 @@ public class StationStepDef implements En {
                     .extract();
         });
 
-        Then("지하철역이 생성된다", () -> {
-            assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        });
+        Then("지하철역이 생성된다", () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value()));
 
         Then("지하철역 목록 조회 시 생성한 역을 찾을 수 있다", () -> {
             List<String> stationNames =
