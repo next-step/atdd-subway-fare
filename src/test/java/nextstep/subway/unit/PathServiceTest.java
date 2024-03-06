@@ -53,7 +53,7 @@ public class PathServiceTest {
     @Test
     void 경로_조회_기능() {
         final PathResponse response = pathService.getPath(
-            new PathRequest(강남역.getId(), 선릉역.getId()), null);
+            new PathRequest(강남역.getId(), 선릉역.getId()), new LoginMember());
 
         assertThat(response.getDistance()).isEqualTo(20);
         assertThat(response.getStations().stream().map(StationResponse::getId).collect(Collectors.toList()))
@@ -63,19 +63,19 @@ public class PathServiceTest {
     @Test
     void 출발지와_도착지가_같으면_익셉션을_던진다() {
         assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 강남역.getId()),
-            null))
+            new LoginMember()))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 출발지_역이_없으면_익셉션을_던진다() {
-        assertThatThrownBy(() -> pathService.getPath(new PathRequest(4L, 선릉역.getId()), null))
+        assertThatThrownBy(() -> pathService.getPath(new PathRequest(4L, 선릉역.getId()), new LoginMember()))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 도착지_역이_없으면_익셉션을_던진다() {
-        assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 4L), null))
+        assertThatThrownBy(() -> pathService.getPath(new PathRequest(강남역.getId(), 4L), new LoginMember()))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }
