@@ -1,19 +1,22 @@
 package nextstep.subway.applicaion;
 
 import nextstep.member.domain.Member;
+import nextstep.subway.domain.DistanceBasedSurchargePolicy;
 import nextstep.subway.domain.Fare;
 import nextstep.subway.domain.vo.Path;
 
-@Component
 public class FareCalculator {
 
   public Fare calculate(final Path path, final Member member) {
-    return Fare.baseFare();
+    final var fare = Fare.baseFare();
+    fare.addSurcharge(getDistanceSurcharge(path.getDistance()));
+
+    return fare;
   }
 
-  public int calculate(final int distance) {
-    return basicCalculator.calculate()
-        + over10kmSurchargeCalculator.calculate(distance)
-        + over50kmSurchargeCalculator.calculate(distance);
+  private int getDistanceSurcharge(final int distance) {
+    return DistanceBasedSurchargePolicy.getApplicablePolicies(distance).stream()
+        .mapToInt(it -> it.calculate(distance))
+        .sum();
   }
 }
