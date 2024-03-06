@@ -28,15 +28,7 @@ public class Fare {
     }
 
     public Fare discount(double percent) {
-        System.out.println("percent");
-        System.out.println(percent);
         final Fare discountFare = new Fare((int) (this.value * (percent / 100)));
-        System.out.println("discountFare");
-        System.out.println(discountFare);
-        System.out.println("this.value ");
-        System.out.println(this.value );
-        System.out.println("(this.value * (percent / 100))");
-        System.out.println((this.value * (percent / 100)) );
         return new Fare(this.value - discountFare.value);
     }
 
