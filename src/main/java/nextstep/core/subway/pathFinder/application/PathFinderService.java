@@ -1,11 +1,9 @@
 package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.application.LineService;
-import nextstep.core.subway.pathFinder.application.converter.PathFinderConverter;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import nextstep.core.subway.pathFinder.domain.PathFinderType;
-import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,21 +13,25 @@ public class PathFinderService {
 
     private final PathFinder pathFinder;
 
-    public PathFinderService(LineService lineService, PathFinder pathFinder) {
+    private final FareCalculator fareCalculator;
+
+    public PathFinderService(LineService lineService, PathFinder pathFinder, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.pathFinder = pathFinder;
+        this.fareCalculator = fareCalculator;
     }
 
     public PathFinderResponse findOptimalPath(PathFinderRequest pathFinderRequest) {
         validatePathRequest(pathFinderRequest);
 
-        PathFinderResult result = pathFinder.findOptimalPath(
+        PathFinderResponse optimalPath = pathFinder.findOptimalPath(
                 lineService.findAllLines(),
                 lineService.findStation(pathFinderRequest.getDepartureStationId()),
                 lineService.findStation(pathFinderRequest.getArrivalStationId()),
                 PathFinderType.findType(pathFinderRequest.getPathFinderType()));
 
-        return PathFinderConverter.convertToResponse(result);
+        int fare = fareCalculator.calculateFare(optimalPath.getDistance());
+        return PathFinderResponse.setFareInResponse(fare, optimalPath);
     }
 
     public boolean isValidPath(PathFinderRequest pathFinderRequest) {

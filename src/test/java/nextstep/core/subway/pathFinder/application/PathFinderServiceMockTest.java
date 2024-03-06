@@ -5,7 +5,6 @@ import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import nextstep.core.subway.pathFinder.domain.PathFinderType;
-import nextstep.core.subway.pathFinder.domain.dto.PathFinderResult;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
@@ -34,9 +33,12 @@ public class PathFinderServiceMockTest {
     @Mock
     PathFinder pathFinder;
 
+    @Mock
+    FareCalculator fareCalculator;
+
     @BeforeEach
     void 서비스_객체_생성() {
-        pathFinderService = new PathFinderService(lineService, pathFinder);
+        pathFinderService = new PathFinderService(lineService, pathFinder, fareCalculator);
     }
 
     @Nested
@@ -105,12 +107,12 @@ public class PathFinderServiceMockTest {
         }
 
         @Nested
-        class findShortestPath {
+        class findOptimalPath {
 
             /**
              * Given 지하철 노선을 생성하고, 구간을 추가한다.
              * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
-             * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+             * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간, 요금 정보를 확인할 수 있다.
              */
             @Test
             void 강남역에서_남부터미널역까지_경로_조회() {
@@ -118,20 +120,22 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(강남역_번호)).thenReturn(강남);
                 when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12));
+                when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.valueOf(경로_조회_최단거리_타입)))
+                        .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
+                when(fareCalculator.calculateFare(anyInt())).thenReturn(1350);
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입));
 
                 // then
                 assertThat(경로_조회_응답).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
+                        .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
             }
 
             /**
              * Given 지하철 노선을 생성하고, 구간을 추가한다.
              * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
-             * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+             * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간, 요금 정보를 확인할 수 있다.
              */
             @Test
             void 교대역에서_양재역까지_경로_조회() {
@@ -139,14 +143,15 @@ public class PathFinderServiceMockTest {
                 when(lineService.findStation(교대역_번호)).thenReturn(교대);
                 when(lineService.findStation(양재역_번호)).thenReturn(양재);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5));
+                when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5));
+                when(fareCalculator.calculateFare(anyInt())).thenReturn(1250);
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입));
 
                 // then
                 assertThat(경로_조회_응답).usingRecursiveComparison()
-                        .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5));
+                        .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
             }
         }
 
