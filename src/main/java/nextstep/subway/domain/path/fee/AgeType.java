@@ -1,45 +1,36 @@
 package nextstep.subway.domain.path.fee;
 
-import nextstep.auth.application.UserDetails;
-import nextstep.member.domain.Member;
+import java.util.function.Function;
 
 public enum AgeType {
-    YOUTH {
-        @Override
-        public Fare calculate(final Fare fare) {
-            return fare.minus(Fare.deduction()).discount(20);
-        }
-    },
-    CHILDREN {
-        @Override
-        public Fare calculate(final Fare fare) {
-            return fare.minus(Fare.deduction()).discount(50);
-        }
-    },
-    ANONYMOUS {
-        @Override
-        public Fare calculate(final Fare fare) {
-            return fare;
-        }
-    };
+    YOUTH (fare -> fare.minus(Fare.deduction()).discount(20)),
+    CHILDREN (fare -> fare.minus(Fare.deduction()).discount(50)),
+    ANONYMOUS (fare -> fare);
 
-    public static AgeType of(UserDetails userDetails) {
-        if (userDetails.isAnonymous()) {
+    private final Function<Fare, Fare> function;
+
+    AgeType(final Function<Fare, Fare> function) {
+        this.function = function;
+    }
+
+    public static AgeType of(Integer age) {
+        if (age == null) {
             return ANONYMOUS;
         }
 
-        final Member member = (Member) userDetails;
-
-        if (member.isChildren()) {
+        if (age >= 6 && age < 13) {
             return CHILDREN;
         }
 
-        if (member.isYouth()) {
+        if (age >= 13 && age < 19) {
             return YOUTH;
         }
 
         return ANONYMOUS;
     }
 
-    public abstract Fare calculate(final Fare beforeFare);
+
+    public Fare calculate(final Fare fare) {
+        return this.function.apply(fare);
+    }
 }
