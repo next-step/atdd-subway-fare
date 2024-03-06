@@ -1,6 +1,7 @@
 package nextstep.line.domain;
 
 
+import nextstep.path.domain.LineFare;
 import nextstep.station.domain.Station;
 
 import javax.persistence.*;
@@ -21,7 +22,6 @@ public class Section {
     private Station downStation;
     private Integer distance;
     private Integer duration;
-
     @ManyToOne
     private Line line;
 
@@ -103,4 +103,7 @@ public class Section {
         return duration;
     }
 
+    public LineFare getLineFare() {
+        return new LineFare(line.getId(), line.getExtraFare());
+    }
 }

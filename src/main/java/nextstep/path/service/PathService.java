@@ -3,10 +3,7 @@ package nextstep.path.service;
 import nextstep.line.domain.Line;
 import nextstep.line.persistance.LineRepository;
 import nextstep.path.DistanceFareFactory;
-import nextstep.path.domain.DistancePathFinder;
-import nextstep.path.domain.DurationPathFinder;
-import nextstep.path.domain.Fare;
-import nextstep.path.domain.PathFinder;
+import nextstep.path.domain.*;
 import nextstep.path.domain.dto.PathsDto;
 import nextstep.path.ui.PathType;
 import nextstep.path.ui.PathsResponse;
@@ -16,27 +13,37 @@ import nextstep.station.persistance.StationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 
 @Service
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
+    private final LineFareService lineFareService;
 
 
     public PathService(
             StationRepository stationRepository,
-            LineRepository lineRepository) {
+            LineRepository lineRepository,
+            LineFareService lineFareService) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
+        this.lineFareService = lineFareService;
     }
 
     public PathsResponse searchPath(long source, long target, PathType pathType) {
         try {
             PathFinder pathFinder = createPathFinder(lineRepository.findAll(), pathType);
             PathsDto pathsDto = pathFinder.findPath(getStation(source), getStation(target));
-            Fare fare = new Fare();
-            fare.calculateFare(pathsDto.getDistance(), DistanceFareFactory.createDistanceFare());
+            List<SectionEdge> sectionEdges = pathsDto.getSectionEdges();
+            List<LineFare> lineFares = sectionEdges.stream().map(SectionEdge::getLineFare).collect(Collectors.toList());
+
+            Fare fare = new Fare(lineFares, pathsDto.getDistance());
+            fare.calculateFare(DistanceFareFactory.createDistanceFare());
+
             return PathsResponse.of(pathsDto, fare.getFare());
         } catch (IllegalArgumentException e) {
             CannotFindPathException ex = new CannotFindPathException("경로 탐색이 불가합니다");

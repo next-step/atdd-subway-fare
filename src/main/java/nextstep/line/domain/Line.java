@@ -28,7 +28,19 @@ public class Line {
     @Column(nullable = false)
     private Integer duration;
 
-    protected Line() {}
+    private Integer extraFare;
+
+    public Line() {
+    }
+
+    public Line(String name, Color color, Station upStation, Station downStation, int distance, int duration, int extraFare) {
+        this.name = name;
+        this.color = color;
+        this.distance = distance;
+        this.duration = duration;
+        this.extraFare = extraFare;
+        lineSections.add(new Section(upStation, downStation, distance, duration, this));
+    }
 
 
     public Line(String name, Color color, Station upStation, Station downStation, int distance, int duration) {
@@ -98,5 +110,9 @@ public class Line {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public Integer getExtraFare() {
+        return extraFare;
     }
 }

@@ -13,5 +13,6 @@ public class DistanceFareFactory {
                 new BasicDistanceFare(),
                 new SecondDistanceFare(),
                 new ThirdDistanceFare());
+
     }
 }

@@ -1,8 +1,12 @@
 package nextstep.path;
 
+import nextstep.path.domain.Fare;
+import nextstep.path.fixture.FareSteps;
+import nextstep.subway.fixture.PathSteps;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,8 +23,8 @@ class DistanceFareTest {
 
         // when
         int sum = 0;
-        for (DistanceFare fare : distanceFare) {
-            sum += fare.calculateFare(9);
+        for (DistanceFare sut : distanceFare) {
+            sum += sut.calculateFare(FareSteps.buildFare(9));
         }
 
         // then
@@ -37,8 +41,8 @@ class DistanceFareTest {
 
         // when
         int sum = 0;
-        for (DistanceFare fare : distanceFare) {
-            sum += fare.calculateFare(12);
+        for (DistanceFare sut : distanceFare) {
+            sum += sut.calculateFare(FareSteps.buildFare(9));
         }
 
         // then
@@ -55,10 +59,11 @@ class DistanceFareTest {
 
         // when
         int sum = 0;
-        for (DistanceFare fare : distanceFare) {
-            sum += fare.calculateFare(16);
+        for (DistanceFare sut : distanceFare) {
+            sum += sut.calculateFare(FareSteps.buildFare(9));
         }
 
         assertThat(sum).isEqualTo(1450);
     }
+
 }

@@ -13,6 +13,9 @@ public class LineRequest {
     private int duration;
     private int extraFare;
 
+    protected LineRequest() {
+    }
+
     public LineRequest(String name, Color color, Long upStationId, Long downStationId, int distance, int duration, int extraFare) {
         this.name = name;
         this.color = color;
@@ -49,5 +52,9 @@ public class LineRequest {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 }

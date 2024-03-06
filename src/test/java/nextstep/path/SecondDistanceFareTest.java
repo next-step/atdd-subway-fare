@@ -1,5 +1,6 @@
 package nextstep.path;
 
+import nextstep.path.fixture.FareSteps;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isZero();
@@ -32,7 +33,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isEqualTo(100);
@@ -48,7 +49,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isEqualTo(100);
@@ -64,7 +65,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isEqualTo(200);
@@ -80,7 +81,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isEqualTo(200);
@@ -95,7 +96,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isEqualTo(800);
@@ -110,7 +111,7 @@ class SecondDistanceFareTest {
         SecondDistanceFare sut = new SecondDistanceFare();
 
         // when
-        int fare = sut.calculateFare(distance);
+        int fare = sut.calculateFare(FareSteps.buildFare(distance));
 
         // then
         assertThat(fare).isEqualTo(800);
