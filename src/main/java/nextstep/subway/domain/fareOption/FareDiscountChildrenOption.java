@@ -3,7 +3,7 @@ package nextstep.subway.domain.fareOption;
 import nextstep.member.domain.Member;
 
 public class FareDiscountChildrenOption implements FareDiscountOption {
-    private final int DEDUCTIONS = 350;
+    private static final int DEDUCTIONS = 350;
 
     @Override
     public boolean isDiscountTarget(Member member) {
