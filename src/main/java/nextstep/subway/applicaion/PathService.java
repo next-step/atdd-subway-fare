@@ -1,6 +1,8 @@
 package nextstep.subway.applicaion;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.auth.AuthenticationException;
+import nextstep.member.application.MemberService;
 import nextstep.subway.applicaion.dto.FindPathResponse;
 import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.ui.BusinessException;
@@ -12,12 +14,15 @@ public class PathService {
 
   private final SectionService sectionService;
   private final StationService stationService;
-  private final FareCalculator fareCalculator;
+  private final MemberService memberService;
+  private final FareCalculator fareCalculator = new FareCalculator();
 
   public FindPathResponse findPath(
       final Long source,
       final Long target,
-      final PathSearchType type
+      final PathSearchType type,
+      final String memberEmail
+
   ) {
     verifySourceIsSameToTarget(source, target);
 
@@ -29,9 +34,12 @@ public class PathService {
     final var sections = sectionService.findAll();
     final var path = PathFinderComposite.find(sections, type, sourceStation, targetStation);
 
-    final var fare = fareCalculator.calculate(path.getDistance());
+    final var member = memberService.findMemberByEmail(memberEmail)
+        .orElseThrow(() -> new AuthenticationException("유효한 인증 토큰이 아닙니다."));
 
-    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration(), fare);
+    final var fare = fareCalculator.calculate(path, member);
+
+    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration(), fare.getTotalFare());
   }
 
   private void verifySourceIsSameToTarget(Long source, Long target) {

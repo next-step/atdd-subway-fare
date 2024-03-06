@@ -28,7 +28,7 @@ public class PathController {
       @NotNull(message = "도착역 정보를 입력해주세요.") Long target,
       PathSearchType type
   ) {
-    return ResponseEntity.ok().body(pathService.findPath(source, target, type));
+    return ResponseEntity.ok().body(pathService.findPath(source, target, type, loginMember.getEmail()));
   }
 
 }

@@ -1,16 +1,15 @@
 package nextstep.subway.applicaion;
 
-import nextstep.subway.domain.BaseFareCalculator;
-import nextstep.subway.domain.Over10kmSurchargeCalculator;
-import nextstep.subway.domain.Over50kmSurchargeCalculator;
-import org.springframework.stereotype.Component;
+import nextstep.member.domain.Member;
+import nextstep.subway.domain.Fare;
+import nextstep.subway.domain.vo.Path;
 
 @Component
 public class FareCalculator {
 
-  private final BaseFareCalculator basicCalculator = new BaseFareCalculator();
-  private final Over10kmSurchargeCalculator over10kmSurchargeCalculator = new Over10kmSurchargeCalculator();
-  private final Over50kmSurchargeCalculator over50kmSurchargeCalculator = new Over50kmSurchargeCalculator();
+  public Fare calculate(final Path path, final Member member) {
+    return Fare.baseFare();
+  }
 
   public int calculate(final int distance) {
     return basicCalculator.calculate()
