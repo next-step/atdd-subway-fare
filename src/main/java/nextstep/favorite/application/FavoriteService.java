@@ -60,10 +60,10 @@ public class FavoriteService {
     }
 
     private void validatePathExist(FavoriteRequest request, LoginMember loginMember) {
-        if(loginMember == null) {
+        if(!loginMember.isLoggedIn()) {
             throw new AuthenticationException();
         }
 
-        pathService.getPath(new PathRequest(request.getSource(), request.getTarget()), null);
+        pathService.getPath(new PathRequest(request.getSource(), request.getTarget()), loginMember);
     }
 }
