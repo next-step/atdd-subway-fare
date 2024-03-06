@@ -1,5 +1,6 @@
 package nextstep.path.service;
 
+import nextstep.auth.application.UserDetail;
 import nextstep.line.domain.Line;
 import nextstep.line.persistance.LineRepository;
 import nextstep.path.DistanceFareFactory;
@@ -30,7 +31,7 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathsResponse searchPath(long source, long target, PathType pathType) {
+    public PathsResponse searchPath(long source, long target, PathType pathType, UserDetail userDetail) {
         try {
             PathFinder pathFinder = createPathFinder(lineRepository.findAll(), pathType);
             PathsDto pathsDto = pathFinder.findPath(getStation(source), getStation(target));

@@ -9,6 +9,8 @@ import nextstep.line.domain.Color;
 import nextstep.line.domain.Line;
 import nextstep.line.ui.LineRequest;
 import nextstep.line.ui.SectionRequest;
+import nextstep.member.application.dto.MemberRequest;
+import nextstep.member.fixture.MemberSteps;
 import nextstep.path.domain.dto.StationDto;
 import nextstep.path.ui.PathType;
 import nextstep.path.ui.PathsResponse;
@@ -36,12 +38,23 @@ public class PathStepDef implements En {
             List<Map<String, String>> maps = table.asMaps();
             cxt.setUpStation(maps);
         });
+
+
         And("지하철 노선이 등록되어있음", (DataTable table) -> {
             List<LineRequest> lineRequests = table.asMaps()
                     .stream().map(this::lineRequestTransform)
                     .collect(Collectors.toList());
             cxt.setUpLine(lineRequests);
         });
+
+
+        And("이용자가 회원 가입을 한다", (DataTable table) -> {
+            List<MemberRequest> memberRequests = table.asMaps().stream().map(this::memberRequestTransform)
+                    .collect(Collectors.toList());
+            cxt.setUpMember(memberRequests);
+        });
+
+
         And("지하철 노선에 지하철역이 등록되어있음", (DataTable table) -> {
             Map<String, SectionInfo> sectionInfoMap = table.asMaps().stream()
                     .map(this::sectionRequestTransform)
@@ -49,9 +62,22 @@ public class PathStepDef implements En {
 
             cxt.setUpSection(sectionInfoMap);
         });
+
+
         When("{string}에서 {string}까지의 {string} 기준으로 경로 조회를 요청", (String start, String end, String pathType) -> {
             response = PathSteps.getPath(cxt.stationStore.get(start), cxt.stationStore.get(end), convertPathType(pathType));
         });
+
+        When("{string}이 {string}에서 {string}까지의 {string} 기준으로 경로 조회를 요청", (String userType, String start, String end, String pathType) -> {
+            response = PathSteps.getPath(
+                    cxt.stationStore.get(start),
+                    cxt.stationStore.get(end),
+                    convertPathType(pathType),
+                    cxt.userTokenStore.get(userType)
+            );
+        });
+
+
         Then("^최소 시간 기준 경로인 \"([^\"]*)\"를 응답$", (String stringPathList) -> {
             List<StationDto> stationsOnPath = response.getStationDtoList();
             List<String> names = stationsOnPath.stream().map(StationDto::getName).collect(Collectors.toList());
@@ -59,12 +85,15 @@ public class PathStepDef implements En {
             Assertions.assertThat(names).containsExactly(
                     stringPathList.split(","));
         });
+
         And("총 거리 {int}km와 소요 시간 {int}을 함께 응답함", (Integer expectDistance, Integer expectDuration) -> {
             int duration = response.getDuration();
             int distance = response.getDistance();
             Assertions.assertThat(duration).isEqualTo(expectDuration);
             Assertions.assertThat(distance).isEqualTo(expectDistance);
         });
+
+
         And("지하철 이용 요금 {int}원도 함께 응답함", (Integer fare) -> {
             Assertions.assertThat(response.getFare()).isEqualTo(fare);
         });
@@ -102,6 +131,16 @@ public class PathStepDef implements En {
                 Integer.parseInt(entry.get("duration"))
         );
     }
+
+    @DataTableType
+    public MemberRequest memberRequestTransform(Map<String, String> entry) {
+        return new MemberRequest(
+                entry.get("email"),
+                entry.get("password"),
+                Integer.parseInt(entry.get("age"))
+        );
+    }
+
 
     static class SectionInfo {
         String stationName;

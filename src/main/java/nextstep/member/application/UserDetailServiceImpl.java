@@ -18,14 +18,14 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public UserDetail loadUser(String userId) {
         return memberRepository.findByEmail(userId)
-                .map(member -> new UserDetail(member.getEmail(), member.getPassword()))
+                .map(member -> new UserDetail(member.getEmail(), member.getPassword(), member.getAge()))
                 .orElse(UserDetail.EMPTY);
     }
 
     @Override
     public UserDetail saveUser(String userId, String password, int age) {
         Member saved = memberRepository.save(new Member(userId, password, age));
-        return new UserDetail(saved.getEmail(), saved.getPassword());
+        return new UserDetail(saved.getEmail(), saved.getPassword(), age);
     }
 
 }

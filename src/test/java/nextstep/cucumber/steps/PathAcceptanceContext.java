@@ -1,7 +1,10 @@
 package nextstep.cucumber.steps;
 
+import nextstep.member.domain.AgeType;
 import nextstep.line.ui.LineRequest;
 import nextstep.line.ui.SectionRequest;
+import nextstep.member.application.dto.MemberRequest;
+import nextstep.member.fixture.MemberSteps;
 import nextstep.subway.fixture.LineSteps;
 import nextstep.subway.fixture.SectionSteps;
 import nextstep.subway.fixture.StationSteps;
@@ -15,11 +18,14 @@ import static java.util.stream.Collectors.*;
 public class PathAcceptanceContext {
     public Map<String, Long> stationStore = new HashMap<>();
     public Map<String, Long> lineStore = new HashMap<>();
+    public Map<String, String> userTokenStore = new HashMap<>();
+
     List<String> 이호선_역;
     List<String> 오호선_역;
     List<String> 분당선_역;
     String 이호선 = "이호선";
     String 오호선 = "오호선";
+    String token;
 
     public void setUpLine(List<LineRequest> lineRequests){
         for (LineRequest lineRequest : lineRequests) {
@@ -77,9 +83,26 @@ public class PathAcceptanceContext {
     public void cleanUp() {
         stationStore = new HashMap<>();
         lineStore = new HashMap<>();
+        userTokenStore = new HashMap<>();
         이호선_역 = new ArrayList<>();
         오호선_역 = new ArrayList<>();
         분당선_역 = new ArrayList<>();
+        token = null;
     }
 
+
+    public void setUpMember(List<MemberRequest> memberRequests) {
+        userTokenStore = new HashMap<>();
+        for (MemberRequest memberRequest : memberRequests) {
+            MemberSteps.회원_생성_요청(memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge());
+            String token = MemberSteps.토큰_생성(memberRequest.getEmail(), memberRequest.getPassword());
+            if (AgeType.CHILD == AgeType.getAgeType(memberRequest.getAge())) {
+                userTokenStore.put("어린이", token);
+            } else if (AgeType.TEENAGER == AgeType.getAgeType(memberRequest.getAge())){
+                userTokenStore.put("청소년", token);
+            } else {
+                userTokenStore.put("성인", token);
+            }
+        }
+    }
 }

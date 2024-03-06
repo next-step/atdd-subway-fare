@@ -16,15 +16,18 @@ Feature: 지하철 경로 검색
       |               |            |  행당   |
       |               |            |  왕십리    |
       |               |            |  마장   |
-
-
-
-  Scenario: 두 역의 최소 시간 경로를 조회
     And 지하철 노선이 등록되어있음
       | name | color  | upStation | downStation | distance | duration | extraFare |
-      | 분당선 | YELLOW  | 왕십리       | 선릉         | 10       | 10       | 0       |
+      | 분당선 | YELLOW  | 왕십리       | 선릉         | 10       | 10       | 2000       |
       | 이호선  | GREEN   | 시청        | 한양대       | 50       | 10       | 0       |
-      | 오호선  | PURPLE  | 뚝섬        | 마장         | 90       | 100       | 0         |
+      | 오호선  | PURPLE  | 뚝섬        | 마장         | 90       | 100       | 0      |
+    And 이용자가 회원 가입을 한다
+      | email | password | age |
+      | 어린이@naver.com | 1128 | 7|
+      | 청소년@naver.com | 1128 | 18|
+      | 성인@naver.com | 1128 | 20|
+
+  Scenario: 두 역의 최소 시간 경로를 조회
     And 지하철 노선에 지하철역이 등록되어있음
       |   name  |   distance   |   duration   |
       |  이호선   |       10      |     1       |
@@ -35,12 +38,8 @@ Feature: 지하철 경로 검색
     And 총 거리 40km와 소요 시간 4을 함께 응답함
     And 지하철 이용 요금 1850원도 함께 응답함
 
+
   Scenario: 두 역의 노선중 추가 할당 금액이 있는 경우 최소 시간 경로를 조회
-    And 지하철 노선이 등록되어있음
-      | name | color  | upStation | downStation | distance | duration | extraFare |
-      | 분당선 | YELLOW  | 왕십리       | 선릉         | 10       | 10       | 2000       |
-      | 이호선  | GREEN   | 시청        | 한양대       | 50       | 10       | 0       |
-      | 오호선  | PURPLE  | 뚝섬        | 마장         | 90       | 100       | 0         |
     And 지하철 노선에 지하철역이 등록되어있음
       |   name  |   distance   |   duration   |
       |  이호선   |       10      |     1       |
@@ -50,3 +49,15 @@ Feature: 지하철 경로 검색
     Then 최소 시간 기준 경로인 "왕십리,서울숲,압구정로데오,강남구청,선정릉,선릉"를 응답
     And 총 거리 10km와 소요 시간 10을 함께 응답함
     And 지하철 이용 요금 3250원도 함께 응답함
+
+
+  Scenario: 성인 유저가 두 역의 노선중 추가 할당 금액이 있는 경우 최소 시간 경로를 조회
+    And 지하철 노선에 지하철역이 등록되어있음
+      |   name  |   distance   |   duration   |
+      |  이호선   |       10      |     1       |
+      |  오호선   |       10      |     2       |
+      |  분당선   |       2      |      2       |
+    When "어린이"이 "왕십리"에서 "선릉"까지의 "DURATION" 기준으로 경로 조회를 요청
+    Then 최소 시간 기준 경로인 "왕십리,서울숲,압구정로데오,강남구청,선정릉,선릉"를 응답
+    And 총 거리 10km와 소요 시간 10을 함께 응답함
+    And 지하철 이용 요금 1450작원도 함께 응답함

@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.auth.application.UserDetail;
 import nextstep.path.domain.dto.StationDto;
 import nextstep.path.ui.PathType;
 import nextstep.path.ui.PathsResponse;
@@ -23,6 +24,7 @@ public class PathsServiceMockTest {
 
     @Mock
     private PathService pathService;
+    private UserDetail adult = new UserDetail("qwer", "qwer", 20);
 
 
     @DisplayName("출발역으로부터 도착역까지의 경로에 있는 역 목록이 조회된다")
@@ -35,11 +37,11 @@ public class PathsServiceMockTest {
         StationDto 을지로4가 = new StationDto(3, "을지로4가");
         PathsResponse expectPathsResponse = expectPathsResponse(List.of(시청, 을지로입구, 을지로4가));
         // when
-        when(pathService.searchPath(1, 3, PathType.DISTANCE))
+        when(pathService.searchPath(1, 3, PathType.DISTANCE, adult))
                 .thenReturn(expectPathsResponse);
 
         // then
-        assertThat(pathService.searchPath(1, 3, PathType.DISTANCE).getStationDtoList())
+        assertThat(pathService.searchPath(1, 3, PathType.DISTANCE, adult).getStationDtoList())
                 .isEqualTo(expectPathsResponse.getStationDtoList());
     }
 
@@ -48,11 +50,11 @@ public class PathsServiceMockTest {
     public void shouldFailIfCannotFindPath() {
 
         // when
-        when(pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE))
+        when(pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE, adult))
                 .thenThrow(CannotFindPathException.class);
 
         // then
-        assertThrows(CannotFindPathException.class, () -> pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE));
+        assertThrows(CannotFindPathException.class, () -> pathService.searchPath(Integer.MAX_VALUE, Integer.MAX_VALUE, PathType.DISTANCE, adult));
     }
 
 
