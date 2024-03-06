@@ -21,8 +21,8 @@ public class Distance {
         }
     }
 
-    public boolean isCurrentRange(final DistanceRange d) {
-        return d.rangePredicate.test(this);
+    public boolean isCurrentRange(final DistanceRange distanceRange) {
+        return distanceRange.rangePredicate.test(this);
     }
 
     public boolean isLessThan(final int value) {
