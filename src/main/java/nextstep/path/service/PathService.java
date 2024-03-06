@@ -15,23 +15,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
 
 
 @Service
 public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
-    private final LineFareService lineFareService;
 
 
     public PathService(
             StationRepository stationRepository,
-            LineRepository lineRepository,
-            LineFareService lineFareService) {
+            LineRepository lineRepository) {
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
-        this.lineFareService = lineFareService;
     }
 
     public PathsResponse searchPath(long source, long target, PathType pathType) {
