@@ -9,6 +9,7 @@ import nextstep.subway.domain.fareOption.Fare10KmTo50KmDistanceOption;
 import nextstep.subway.domain.fareOption.Fare50KmOverDistanceOption;
 import nextstep.subway.domain.fareOption.FareCalculateOption;
 import nextstep.subway.domain.fareOption.FareDiscountChildrenOption;
+import nextstep.subway.domain.fareOption.FareDiscountInfantsOption;
 import nextstep.subway.domain.fareOption.FareDiscountOption;
 import nextstep.subway.domain.fareOption.FareDiscountTeensOption;
 import nextstep.subway.domain.fareOption.FareExtraFareDistanceOption;
@@ -27,6 +28,7 @@ public class FareCalculatorImpl implements FareCalculator {
             new Fare50KmOverDistanceOption(),
             new FareExtraFareDistanceOption()
         ), List.of(
+            new FareDiscountInfantsOption(),
             new FareDiscountChildrenOption(),
             new FareDiscountTeensOption()
         ));
