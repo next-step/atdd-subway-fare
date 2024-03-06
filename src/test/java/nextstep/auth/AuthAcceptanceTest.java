@@ -46,7 +46,8 @@ class AuthAcceptanceTest extends AcceptanceTest {
         assertThat(accessToken).isNotBlank();
 
         ExtractableResponse<Response> response2 = RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
+                .auth()
+                .oauth2(accessToken)
                 .when().get("/members/me")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value()).extract();

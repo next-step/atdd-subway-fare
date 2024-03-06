@@ -2,7 +2,6 @@ package nextstep.path.domain;
 
 import nextstep.line.domain.Line;
 import nextstep.line.domain.Section;
-import nextstep.path.DistanceFare;
 import nextstep.path.domain.dto.PathsDto;
 import nextstep.station.domain.Station;
 import org.jgrapht.GraphPath;
@@ -39,7 +38,22 @@ public abstract class PathFinder {
         GraphPath<Station, SectionEdge> path = dijkstraShortestPath.getPath(start, end);
         int duration = getDuration(path);
         int distance = getDistance(path);
-        return new PathsDto(distance, duration, dijkstraShortestPath.getPath(start, end).getVertexList());
+        return new PathsDto(
+                distance,
+                duration,
+                dijkstraShortestPath.getPath(start, end).getVertexList(),
+                path.getEdgeList()
+        );
+    }
+
+    public List<SectionEdge> getEdgeList(Station start, Station end) {
+        if (start.equals(end)) {
+            throw new IllegalStateException("시작과 끝이 같은 역입니다");
+        }
+        DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath
+                = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, SectionEdge> path = dijkstraShortestPath.getPath(start, end);
+        return path.getEdgeList();
     }
 
     public boolean isConnected(Station start, Station end) {

@@ -1,5 +1,7 @@
 package nextstep.path.ui;
 
+import nextstep.auth.PathAuthenticationPrincipal;
+import nextstep.auth.application.UserDetail;
 import nextstep.path.service.PathService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,10 @@ public class PathController {
 
     @GetMapping("paths")
     public ResponseEntity<PathsResponse> getPaths(
-            @RequestParam int source, @RequestParam int target, @RequestParam PathType type) {
-        return ResponseEntity.ok(pathService.searchPath(source, target, type));
+            @RequestParam int source,
+            @RequestParam int target,
+            @RequestParam PathType type,
+            @PathAuthenticationPrincipal UserDetail userDetail) {
+        return ResponseEntity.ok(pathService.searchPath(source, target, type, userDetail));
     }
 }

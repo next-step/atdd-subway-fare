@@ -20,6 +20,9 @@ public class LineSections {
     protected LineSections() {
     }
 
+    public LineSections(List<Section> sections) {
+        this.sections = sections;
+    }
 
     public boolean deletable() {
         return this.sections.size() > 1;

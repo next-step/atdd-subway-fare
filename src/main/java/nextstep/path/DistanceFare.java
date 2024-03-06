@@ -1,7 +1,9 @@
 package nextstep.path;
 
+import nextstep.path.domain.Fare;
+
 public interface DistanceFare {
 
-    int calculateFare(int distance);
+    int calculateFare(Fare fare);
 
 }
