@@ -92,7 +92,7 @@ class PathServiceMockTest {
         assertSoftly(softly -> {
             softly.assertThat(response.getDistance()).isEqualTo(강남역_양재역_distance + 남부터미널_양재역_distance);
             softly.assertThat(response.getDuration()).isEqualTo(강남역_양재역_duration + 남부터미널_양재역_duration);
-            softly.assertThat(response.getFare()).isEqualTo(2250L);
+            softly.assertThat(response.getFare()).isEqualTo(1750L);
             softly.assertThat(response.getStations()).extracting("id")
                     .containsExactly(강남역_Id, 양재역_Id, 남부터미널역_Id);
         });

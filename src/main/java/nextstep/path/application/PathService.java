@@ -6,6 +6,7 @@ import nextstep.path.application.dto.PathResponse;
 import nextstep.path.application.dto.PathSearchRequest;
 import nextstep.path.application.fare.FareCalculator;
 import nextstep.path.domain.Path;
+import nextstep.path.domain.PathType;
 import nextstep.path.domain.SubwayMap;
 import nextstep.path.exception.PathNotFoundException;
 import nextstep.path.exception.PathSearchNotValidException;
@@ -38,26 +39,30 @@ public class PathService {
             throw new PathSearchNotValidException("target can not be the same with source");
         }
 
-        final Path shortestPath = getShortestPath(searchRequest).orElseThrow(PathNotFoundException::new);
+        final Path targetShortestPath = getShortestPath(searchRequest.getSource(), searchRequest.getTarget(), searchRequest.getPathType())
+                .orElseThrow(PathNotFoundException::new);
 
-        final long fare = fareCalculator.calculate(shortestPath, searchRequest.getAge());
+        return PathResponse.from(targetShortestPath, calculateFare(searchRequest));
+    }
 
-        return PathResponse.from(shortestPath, fare);
+    private long calculateFare(final PathSearchRequest searchRequest) {
+        final Path distanceShortestPath = getShortestPath(searchRequest.getSource(), searchRequest.getTarget(), PathType.DISTANCE)
+                .orElseThrow(PathNotFoundException::new);
+        return fareCalculator.calculate(distanceShortestPath, searchRequest.getAge());
     }
 
     public boolean isInvalidPath(final PathSearchRequest searchRequest) {
-        return getShortestPath(searchRequest).isEmpty();
+        return getShortestPath(searchRequest.getSource(), searchRequest.getTarget(), searchRequest.getPathType()).isEmpty();
     }
 
-    private Optional<Path> getShortestPath(final PathSearchRequest searchRequest) {
-
+    private Optional<Path> getShortestPath(final Long source, final Long target, final PathType pathType) {
         final List<Line> allLines = lineProvider.getAllLines();
         final Map<Long, Station> stationMap = createStationMapFrom(allLines);
-        final Station sourceStation = stationMap.computeIfAbsent(searchRequest.getSource(), throwStationNotFoundException());
-        final Station targetStation = stationMap.computeIfAbsent(searchRequest.getTarget(), throwStationNotFoundException());
+        final Station sourceStation = stationMap.computeIfAbsent(source, throwStationNotFoundException());
+        final Station targetStation = stationMap.computeIfAbsent(target, throwStationNotFoundException());
 
         final SubwayMap subwayMap = new SubwayMap(allLines);
-        return subwayMap.findShortestPath(sourceStation, targetStation, searchRequest.getPathType());
+        return subwayMap.findShortestPath(sourceStation, targetStation, pathType);
     }
 
     private Map<Long, Station> createStationMapFrom(final List<Line> allLines) {
