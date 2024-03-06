@@ -38,7 +38,7 @@ public class PathService {
             throw new PathSearchNotValidException("target can not be the same with source");
         }
 
-        final Path shortestPath = getShortestDistancePath(searchRequest).orElseThrow(PathNotFoundException::new);
+        final Path shortestPath = getShortestPath(searchRequest).orElseThrow(PathNotFoundException::new);
 
         final long fare = fareCalculator.calculate(shortestPath, searchRequest.getAge());
 
@@ -46,10 +46,10 @@ public class PathService {
     }
 
     public boolean isInvalidPath(final PathSearchRequest searchRequest) {
-        return getShortestDistancePath(searchRequest).isEmpty();
+        return getShortestPath(searchRequest).isEmpty();
     }
 
-    private Optional<Path> getShortestDistancePath(final PathSearchRequest searchRequest) {
+    private Optional<Path> getShortestPath(final PathSearchRequest searchRequest) {
 
         final List<Line> allLines = lineProvider.getAllLines();
         final Map<Long, Station> stationMap = createStationMapFrom(allLines);
