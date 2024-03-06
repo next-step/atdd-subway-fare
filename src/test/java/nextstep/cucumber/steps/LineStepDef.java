@@ -17,8 +17,8 @@ public class LineStepDef implements En {
 	private AcceptanceContext context;
 
 	public LineStepDef() {
-		Given("지하철 노선들을 생성하고", (DataTable table) -> {
-			table.asMaps().stream()
+		Given("지하철 노선들을 생성하고", (DataTable table) ->
+				table.asMaps().stream()
 					.forEach(data -> {
 						ExtractableResponse<Response> response = 노선_생성_요청(
 								data.get("name"),
@@ -28,8 +28,8 @@ public class LineStepDef implements En {
 								Integer.parseInt(data.get("distance"))
 						);
 						context.store.put(data.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
-					});
-		});
+					})
+		);
 	}
 
 

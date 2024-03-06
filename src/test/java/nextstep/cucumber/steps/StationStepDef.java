@@ -25,13 +25,13 @@ public class StationStepDef implements En {
     ExtractableResponse<Response> response;
 
     public StationStepDef() {
-        Given("지하철역들을 생성하고", (DataTable table) -> {
-            table.asMaps().stream()
+        Given("지하철역들을 생성하고", (DataTable table) ->
+                table.asMaps().stream()
                     .forEach(params -> {
                         ExtractableResponse<Response> response = 역_생성_요청(params.get("name"));
                         context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), StationResponse.class));
-                    });
-        });
+                    })
+        );
 
         When("지하철역을 생성하면", () -> {
             Map<String, String> params = new HashMap<>();
