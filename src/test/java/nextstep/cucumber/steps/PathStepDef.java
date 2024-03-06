@@ -122,7 +122,7 @@ public class PathStepDef implements En {
     /**
      * 거리가 50km를 초과하는 구간의 경로 조회
      */
-    When("거리가 50km를 초과하는 {string}과 {string}의 경로를 조회하면", (String source, String target) -> {
+    When("거리가 50km를 초과하는 {string}과 {string}의 최단 시간 경로를 조회하면", (String source, String target) -> {
       String accessToken = context.store.get("성인").toString();
       context.response = 경로_조회_요청(source, target, PathSearchType.DURATION, accessToken);
     });
