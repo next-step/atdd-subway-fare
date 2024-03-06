@@ -23,6 +23,8 @@ public class Line {
     private String name;
     @Column(length = 20, nullable = false)
     private String color;
+    @Column(nullable = false)
+    private int addtionalFee;
 
     protected Line() {
     }
@@ -39,6 +41,15 @@ public class Line {
         this.id = id;
         this.name = name;
         this.color = color;
+
+        Section section = new Section(upStation, downStation, distance, duration, this);
+        this.sections.add(section);
+    }
+
+    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration, int addtionalFee) {
+        this.name = name;
+        this.color = color;
+        this.addtionalFee = addtionalFee;
 
         Section section = new Section(upStation, downStation, distance, duration, this);
         this.sections.add(section);
@@ -93,17 +104,21 @@ public class Line {
         return this.sections.getSections();
     }
 
+    public int getAddtionalFee() {
+        return addtionalFee;
+    }
+
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Line line = (Line) o;
-        return Objects.equals(sections, line.sections) && Objects.equals(id, line.id) && Objects.equals(name, line.name) && Objects.equals(color, line.color);
+    public boolean equals(final Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        final Line line = (Line) object;
+        return addtionalFee == line.addtionalFee && Objects.equals(sections, line.sections) && Objects.equals(id, line.id) && Objects.equals(name, line.name) && Objects.equals(color, line.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sections, id, name, color);
+        return Objects.hash(sections, id, name, color, addtionalFee);
     }
 
     @Override
@@ -113,6 +128,7 @@ public class Line {
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
+                ", addtionalFee=" + addtionalFee +
                 '}';
     }
 }

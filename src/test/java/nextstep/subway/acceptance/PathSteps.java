@@ -3,7 +3,7 @@ package nextstep.subway.acceptance;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.path.PathType;
 import org.springframework.http.HttpStatus;
 
 public class PathSteps {
@@ -14,7 +14,7 @@ public class PathSteps {
         return RestAssured.given().log().all()
                 .queryParam("source", source)
                 .queryParam("target", target)
-                .queryParam("type", PathType.DISTANCE)
+                .queryParam("type", "DISTANCE")
                 .when().get("/paths")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())

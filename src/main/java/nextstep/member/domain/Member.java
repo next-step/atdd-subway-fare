@@ -40,6 +40,7 @@ public class Member implements UserDetails {
         return password;
     }
 
+    @Override
     public Integer getAge() {
         return age;
     }
@@ -53,6 +54,11 @@ public class Member implements UserDetails {
     @Override
     public boolean isSamePassword(final String password) {
         return this.password.equals(password);
+    }
+
+    @Override
+    public boolean isAnonymous() {
+        return false;
     }
 
     @Override

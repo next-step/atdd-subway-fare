@@ -33,7 +33,8 @@ public class LineService {
         final Station upStation = stationService.findStationById(lineRequest.getUpStationId());
         final Station downStation = stationService.findStationById(lineRequest.getDownStationId());
 
-        final Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
+        final Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(),
+                lineRequest.getDuration(), lineRequest.getAdditionalFee());
         final Line savedLine = lineRepository.save(line);
 
         return new LineResponse(savedLine);

@@ -18,7 +18,7 @@ public class LineSteps {
     }
 
     public static ExtractableResponse<Response> 노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId, final int distance, final int duration) {
-        Map<String, String> params = createLineRequestPixture(name, color, upStationId, downStationId, distance, duration);
+        Map<String, String> params = createLineRequestPixture(name, color, upStationId, downStationId, distance, duration, 0);
         return RestAssured
                 .given().log().all().body(params).contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post(LINES_URL)
@@ -26,6 +26,18 @@ public class LineSteps {
                 .statusCode(HttpStatus.CREATED.value())
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 추가요금이_있는_노선이_생성되어_있다(final String name, final String color, final Long upStationId, final Long downStationId, final int distance,
+                                                                     final int duration, final int additionalFee) {
+        Map<String, String> params = createLineRequestPixture(name, color, upStationId, downStationId, distance, duration, additionalFee);
+        return RestAssured
+                .given().log().all().body(params).contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post(LINES_URL)
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract();
+    }
+
 
     public static ExtractableResponse<Response> 노선목록을_조회한다() {
         return RestAssured
@@ -63,8 +75,8 @@ public class LineSteps {
                 .extract();
     }
 
-    public static Map<String, String> createLineRequestPixture(final String name, final String color,
-                                                               final Long upStationId, final Long downStationId, final int distance, final int duration) {
+    public static Map<String, String> createLineRequestPixture(final String name, final String color, final Long upStationId, final Long downStationId,
+                                                               final int distance, final int duration, final int additionalFee) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -72,6 +84,7 @@ public class LineSteps {
         params.put("downStationId", String.valueOf(downStationId));
         params.put("distance", String.valueOf(distance));
         params.put("duration", String.valueOf(duration));
+        params.put("additionalFee", String.valueOf(additionalFee));
         return params;
     }
 

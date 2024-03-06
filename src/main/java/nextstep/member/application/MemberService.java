@@ -2,13 +2,15 @@ package nextstep.member.application;
 
 import nextstep.auth.application.UserDetailService;
 import nextstep.auth.application.UserDetails;
-import nextstep.auth.application.dto.GithubProfileResponse;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
+import nextstep.member.domain.AnonymousMember;
 import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MemberService implements UserDetailService {
@@ -24,9 +26,14 @@ public class MemberService implements UserDetailService {
     }
 
     @Override
-    public UserDetails findByEmail(final String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("등록된 회원이 아닙니다."));
+    public Member findByEmail(final String email) {
+        final Optional<Member> member = memberRepository.findByEmail(email);
+
+        if (email == null) {
+            return new AnonymousMember();
+        }
+
+        return member.orElseGet(AnonymousMember::new);
     }
 
     public MemberResponse findMember(Long id) {
