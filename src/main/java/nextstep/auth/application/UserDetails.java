@@ -5,4 +5,5 @@ public interface UserDetails {
 
     boolean isAnonymous();
 
+    Integer getAge();
 }

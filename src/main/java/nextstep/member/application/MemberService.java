@@ -26,14 +26,14 @@ public class MemberService implements UserDetailService {
     }
 
     @Override
-    public UserDetails findByEmail(final String email) {
+    public Member findByEmail(final String email) {
         final Optional<Member> member = memberRepository.findByEmail(email);
 
-        if (member.isPresent()) {
-            return member.get();
+        if (email == null) {
+            return new AnonymousMember();
         }
 
-        return new AnonymousMember();
+        return member.orElseGet(AnonymousMember::new);
     }
 
     public MemberResponse findMember(Long id) {

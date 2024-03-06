@@ -10,6 +10,7 @@ import nextstep.subway.application.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.path.fee.AgeType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ public class PathServiceMockTest {
         final PathService pathService = new PathService(lineService, stationService);
 
         // When
-        final PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE, new AnonymousMember());
+        final PathResponse pathResponse = pathService.findPath(source, target, PathType.DISTANCE, AgeType.ANONYMOUS);
 
         // Then
         final List<StationResponse> stations = pathResponse.getStations();

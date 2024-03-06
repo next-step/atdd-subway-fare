@@ -5,6 +5,7 @@ import nextstep.member.domain.LoginMember;
 import nextstep.subway.application.PathService;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.domain.path.PathType;
+import nextstep.subway.domain.path.fee.AgeType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,7 @@ public class PathController {
     public ResponseEntity<PathResponse> findPath(@RequestParam Long source, @RequestParam Long target,
                                                  @RequestParam PathType type,
                                                  @AuthenticationPrincipal(required = false) LoginMember loginMember) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type, loginMember));
+        return ResponseEntity.ok(pathService.findPath(source, target, type, AgeType.of(loginMember.getAge())));
     }
 }
 

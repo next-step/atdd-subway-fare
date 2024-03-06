@@ -40,6 +40,7 @@ public class Member implements UserDetails {
         return password;
     }
 
+    @Override
     public Integer getAge() {
         return age;
     }
@@ -58,14 +59,6 @@ public class Member implements UserDetails {
     @Override
     public boolean isAnonymous() {
         return false;
-    }
-
-    public boolean isChildren() {
-        return this.age >= 6 && this.age < 13;
-    }
-
-    public boolean isYouth() {
-        return this.age >= 13 && this.age < 19;
     }
 
     @Override
