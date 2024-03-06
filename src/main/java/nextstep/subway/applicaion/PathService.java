@@ -31,7 +31,7 @@ public class PathService {
         final List<Line> lines = lineRepository.findAll();
 
         Member member = null;
-        if (loginMember != null) {
+        if (loginMember.isLoggedIn()) {
            member = memberService.findMemberByEmail(loginMember.getEmail());
         }
 

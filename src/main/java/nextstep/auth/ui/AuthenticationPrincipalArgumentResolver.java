@@ -1,6 +1,5 @@
 package nextstep.auth.ui;
 
-import nextstep.auth.AuthenticationException;
 import nextstep.auth.application.JwtTokenProvider;
 import nextstep.auth.domain.LoginMember;
 import org.springframework.core.MethodParameter;
@@ -25,7 +24,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
         if (authorization == null || !"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
-            return null;
+            return new LoginMember();
         }
         String token = authorization.split(" ")[1];
 
