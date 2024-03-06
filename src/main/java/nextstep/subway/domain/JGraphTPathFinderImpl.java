@@ -42,11 +42,15 @@ public class JGraphTPathFinderImpl extends PathFinder {
         final Map<String, Station> stationMap = getIdToStationMap(sections);
         final List<Section> edgeSection = getSectionsComposingEdges(sections, stationIds);
 
+        final List<Station> stationsInPath = stationIds.stream().map(stationMap::get).collect(Collectors.toList());
+        final Set<Line> linesInPath = edgeSection.stream().map(Section::getLine).collect(Collectors.toSet());
+
         final int distance = edgeSection.stream().map(Section::getDistance).reduce(0, Integer::sum);
         final int duration = edgeSection.stream().map(Section::getDuration).reduce(0, Integer::sum);
 
         return new PathResponse(
-            stationIds.stream().map(stationMap::get).collect(Collectors.toList()),
+            stationsInPath,
+            linesInPath,
             distance,
             duration
         );

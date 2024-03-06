@@ -50,9 +50,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 응답에서_id_조회(지하철역_생성_요청("양재역"));
         남부터미널역 = 응답에서_id_조회(지하철역_생성_요청("남부터미널역"));
 
-        이호선 = 응답에서_id_조회(지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 교대_강남_거리, 10));
-        신분당선 = 응답에서_id_조회(지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 강남_양재_거리, 10));
-        삼호선 = 응답에서_id_조회(지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 교대_남부터미널_거리, 10));
+        이호선 = 응답에서_id_조회(지하철_노선_생성_요청("2호선", "green", 교대역, 강남역, 교대_강남_거리, 10, 0));
+        신분당선 = 응답에서_id_조회(지하철_노선_생성_요청("신분당선", "red", 강남역, 양재역, 강남_양재_거리, 10, 0));
+        삼호선 = 응답에서_id_조회(지하철_노선_생성_요청("3호선", "orange", 교대역, 남부터미널역, 교대_남부터미널_거리, 10, 0));
 
         지하철_노선에_지하철_구간_생성_요청(삼호선, createSectionCreateParams(남부터미널역, 양재역, 남부터미널_양재_거리));
     }
@@ -103,7 +103,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         final int 강남_선릉_거리 = 20;
         final Long 선릉역 = 응답에서_id_조회(지하철역_생성_요청("선릉역"));
 
-        응답에서_id_조회(지하철_노선_생성_요청("4호선", "cyan", 강남역, 선릉역, 강남_선릉_거리, 10));
+        응답에서_id_조회(지하철_노선_생성_요청("4호선", "cyan", 강남역, 선릉역, 강남_선릉_거리, 10, 0));
 
         // when
         final ExtractableResponse<Response> response = 지하철_경로_조회(남부터미널역, 선릉역, PathSearchType.DISTANCE);
@@ -128,7 +128,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         final Long 가상의역_1 = 응답에서_id_조회(지하철역_생성_요청("가상의역_1"));
         final Long 가상의역_2 = 응답에서_id_조회(지하철역_생성_요청("가상의역_2"));
 
-        응답에서_id_조회(지하철_노선_생성_요청("가상선", "yellow", 가상의역_1, 가상의역_2, 10, 10));
+        응답에서_id_조회(지하철_노선_생성_요청("가상선", "yellow", 가상의역_1, 가상의역_2, 10, 10, 0));
 
         // when
         final ExtractableResponse<Response> response = 지하철_경로_조회(교대역, 가상의역_2, PathSearchType.DISTANCE);

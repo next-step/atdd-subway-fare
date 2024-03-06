@@ -32,7 +32,8 @@ public class LineService {
         final Line line = lineRepository.save(
             new Line(
                 request.getName(),
-                request.getColor()
+                request.getColor(),
+                request.getExtraFare()
             )
         );
 
@@ -92,6 +93,7 @@ public class LineService {
             line.getId(),
             line.getName(),
             line.getColor(),
+            line.getExtraFare(),
             createStationResponses(line)
         );
     }

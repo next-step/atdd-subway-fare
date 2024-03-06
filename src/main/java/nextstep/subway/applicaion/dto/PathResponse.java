@@ -1,12 +1,15 @@
 package nextstep.subway.applicaion.dto;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 
 public class PathResponse {
 
     private List<StationResponse> stations;
+    private Set<LineResponse> lines;
     private int distance;
     private int duration;
 
@@ -15,8 +18,9 @@ public class PathResponse {
     public PathResponse() {
     }
 
-    public PathResponse(List<Station> stations, int distance, int duration) {
+    public PathResponse(List<Station> stations, Set<Line> lines, int distance, int duration ) {
         this.stations = stations.stream().map(StationResponse::new).collect(Collectors.toList());
+        this.lines = lines.stream().map(LineResponse::new).collect(Collectors.toSet());
         this.distance = distance;
         this.duration = duration;
     }
@@ -35,6 +39,10 @@ public class PathResponse {
 
     public int getFare() {
         return fare;
+    }
+
+    public Set<LineResponse> getLines() {
+        return lines;
     }
 
     public void updateFare(int fare) {

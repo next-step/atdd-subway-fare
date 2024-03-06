@@ -15,21 +15,25 @@ public class Line {
     private String name;
     private String color;
 
+    private int extraFare;
+
     @Embedded
     private Sections sections = new Sections();
 
     public Line() {
     }
 
-    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
+    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
         sections.add(new Section(this, upStation, downStation, distance, duration));
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public Long getId() {
@@ -60,10 +64,13 @@ public class Line {
         return sections.getSections();
     }
 
+    public int getExtraFare() {
+        return extraFare;
+    }
+
     public void addSection(Station upStation, Station downStation, int distance, int duration) {
         sections.add(new Section(this, upStation, downStation, distance, duration));
     }
-
 
     public List<Station> getStations() {
         return sections.getStations();
