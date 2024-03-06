@@ -30,6 +30,7 @@ public class PathSteps {
         // paths?source=1&target=3
         MemberSteps.회원_생성_요청("email@naver.com", "!23123", 20);
         String token = MemberSteps.토큰_생성("email@naver.com", "!23123");
+
         return RestAssured.given().log().all()
                 .auth().oauth2(token)
                 .when()

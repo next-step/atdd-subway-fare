@@ -13,8 +13,9 @@ public class PathAuthenticationPrincipalArgument implements HandlerMethodArgumen
 
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailService userDetailService;
-    public PathAuthenticationPrincipalArgument(JwtTokenProvider jwtTokenProvider) {
+    public PathAuthenticationPrincipalArgument(JwtTokenProvider jwtTokenProvider, UserDetailService userDetailService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailService = userDetailService;
     }
 
     @Override

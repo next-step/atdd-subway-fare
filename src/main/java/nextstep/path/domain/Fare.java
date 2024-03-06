@@ -6,14 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.groupingBy;
 
-public class Fare {
+public class Fare implements Discountable {
+
     private int fare = 0;
-
     private final List<LineFare> lineFares;
     private final int distance;
-    private int extraFare = 0;
 
     public Fare(List<LineFare> lineFares, int distance) {
         this.lineFares = lineFares;
@@ -21,11 +19,12 @@ public class Fare {
     }
 
 
-    public void calculateFare(List<DistanceFare> distanceFares) {
+    public void calculateFare(List<DistanceFare> distanceFares, DiscountCondition discountCondition) {
         for (DistanceFare distanceFare : distanceFares) {
             fare += distanceFare.calculateFare(this);
         }
         addExtraFare();
+        this.fare = discount(discountCondition);
     }
 
     private void addExtraFare() {
@@ -41,6 +40,14 @@ public class Fare {
         this.fare += extraFare;
     }
 
+    @Override
+    public int discount(DiscountCondition discountCondition) {
+        if (discountCondition.support()) {
+            return discountCondition.discount(this.fare);
+        }
+        return this.fare;
+    }
+
 
     public int getFare() {
         return fare;
@@ -50,5 +57,4 @@ public class Fare {
     public int getDistance() {
         return distance;
     }
-
 }

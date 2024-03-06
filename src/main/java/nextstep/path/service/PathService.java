@@ -39,7 +39,7 @@ public class PathService {
             List<LineFare> lineFares = sectionEdges.stream().map(SectionEdge::getLineFare).collect(Collectors.toList());
 
             Fare fare = new Fare(lineFares, pathsDto.getDistance());
-            fare.calculateFare(DistanceFareFactory.createDistanceFare());
+            fare.calculateFare(DistanceFareFactory.createDistanceFare(), DiscountConditionFactory.createDiscountCondition(userDetail.getAge()));
 
             return PathsResponse.of(pathsDto, fare.getFare());
         } catch (IllegalArgumentException e) {
