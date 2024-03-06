@@ -12,7 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
+    public AuthenticationPrincipalArgumentResolver(final JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -22,8 +22,24 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authorization = webRequest.getHeader("Authorization");
+    public LoginMember resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        String email = null;
+        try {
+            String authorization = webRequest.getHeader("Authorization");
+
+            String token = validationToken(authorization);
+
+            email = jwtTokenProvider.getPrincipal(token);
+        } catch (AuthenticationException ex) {
+            if (isAuthenticate(parameter)) {
+                throw new AuthenticationException(ex.getMessage());
+            }
+        }
+
+        return new LoginMember(email);
+    }
+
+    private String validationToken(String authorization) {
         if (!StringUtils.hasText(authorization)) {
             throw new AuthenticationException("토큰이 없습니다.");
         }
@@ -37,9 +53,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         if (!jwtTokenProvider.validateToken(token)) {
             throw new AuthenticationException("토큰이 만료되었습니다.");
         }
+        return token;
+    }
 
-        String email = jwtTokenProvider.getPrincipal(token);
-
-        return new LoginMember(email);
+    private boolean isAuthenticate(MethodParameter parameter) {
+        AuthenticationPrincipal parameterAnnotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        return parameterAnnotation.required();
     }
 }

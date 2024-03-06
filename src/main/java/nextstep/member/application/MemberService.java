@@ -33,7 +33,7 @@ public class MemberService implements UserDetailService {
             return member.get();
         }
 
-        return new AnonymousMember("존재 하지 않는 회원입니다.");
+        return new AnonymousMember();
     }
 
     public MemberResponse findMember(Long id) {
