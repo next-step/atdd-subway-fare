@@ -18,8 +18,8 @@ class AgeDiscountHandlerTest {
     @DisplayName("연령별 요금을 할인한 금액을 반환받을 수 있다.")
     void ageDiscountTest(final int age, final long expectedDiscountFare) {
         final AgeDiscountHandler ageDiscountHandler =
-                new KidDiscountHandler()
-                        .next(new TeenDiscountHandler());
+                AgeDiscountHandler.of(AgeRange.of(6, 13), FareDiscountInfo.of(350, 0.5))
+                        .next(AgeDiscountHandler.of(AgeRange.of(13, 19), FareDiscountInfo.of(350, 0.2)));
         final long baseFare = 1350L;
 
         final long discounted = ageDiscountHandler.discount(baseFare, age);

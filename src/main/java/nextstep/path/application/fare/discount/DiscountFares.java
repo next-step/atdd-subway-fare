@@ -1,9 +1,8 @@
 package nextstep.path.application.fare.discount;
 
 import nextstep.path.application.fare.discount.age.AgeDiscountHandler;
-import nextstep.path.application.fare.discount.age.KidDiscountHandler;
-import nextstep.path.application.fare.discount.age.NoneDiscountHandler;
-import nextstep.path.application.fare.discount.age.TeenDiscountHandler;
+import nextstep.path.application.fare.discount.age.AgeRange;
+import nextstep.path.application.fare.discount.age.FareDiscountInfo;
 
 public class DiscountFares {
 
@@ -11,9 +10,8 @@ public class DiscountFares {
 
     public DiscountFares() {
         this.ageDiscountHandler =
-                new NoneDiscountHandler()
-                        .next(new KidDiscountHandler())
-                        .next(new TeenDiscountHandler());
+                AgeDiscountHandler.of(AgeRange.of(6, 13), FareDiscountInfo.of(350, 0.5))
+                        .next(AgeDiscountHandler.of(AgeRange.of(13, 19), FareDiscountInfo.of(350, 0.2)));
     }
 
 
