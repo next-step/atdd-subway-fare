@@ -1,0 +1,38 @@
+package nextstep.cucumber.steps;
+
+import io.cucumber.java8.En;
+import nextstep.cucumber.AcceptanceContext;
+import nextstep.subway.application.dto.StationResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+
+import static nextstep.subway.utils.steps.PathSteps.최단_경로_조회_요청;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class PathStepDef implements En {
+	@Autowired
+	private AcceptanceContext context;
+
+	public PathStepDef() {
+		When("{string}부터 {string}까지의 경로를 조회하면", (String source, String target) -> {
+			context.response = 최단_경로_조회_요청(
+					(((StationResponse) context.store.get(source)).getId()),
+					(((StationResponse) context.store.get(target)).getId())
+			);
+		});
+
+		Then("경로에 있는 역 목록은 {string} 순서대로 구성된다", (String stationName) -> {
+			String[] names = stationName.split(",");
+			Long[] ids = Arrays.stream(names)
+					.map(name -> ((StationResponse) context.store.get(name)).getId())
+					.toArray(Long[]::new);
+
+			assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(ids);
+		});
+
+		Then("경로의 거리는 {string}이다", (String distance) -> {
+			assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(Integer.parseInt(distance));
+		});
+	}
+}
