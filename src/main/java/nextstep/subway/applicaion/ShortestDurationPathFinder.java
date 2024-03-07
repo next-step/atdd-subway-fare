@@ -1,7 +1,9 @@
 package nextstep.subway.applicaion;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -30,7 +32,7 @@ public class ShortestDurationPathFinder implements PathFinder {
       graph.addVertex(section.getDownStation());
 
       // add edge
-      final var edge = new PathWeightedEdge(section.getDistance(), section.getDuration());
+      final var edge = new PathWeightedEdge(section.getLine().getId(), section.getDistance(), section.getDuration());
       graph.addEdge(
           section.getUpStation(),
           section.getDownStation(),
@@ -61,8 +63,12 @@ public class ShortestDurationPathFinder implements PathFinder {
         .mapToInt(PathWeightedEdge::getDuration)
         .sum();
 
+    final List<Long> lines = path.getEdgeList().stream()
+        .map(PathWeightedEdge::getLineId)
+        .collect(Collectors.toList());
+
     return Optional.of(path)
-        .map(it -> Path.from(it.getVertexList(), distance, duration));
+        .map(it -> Path.from(it.getVertexList(), distance, duration, lines));
   }
 
   @Override

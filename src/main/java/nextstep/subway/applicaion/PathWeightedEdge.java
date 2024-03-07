@@ -8,6 +8,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 @AllArgsConstructor
 public class PathWeightedEdge extends DefaultWeightedEdge {
 
+
+  private final long lineId;
   private final int distance;
   private final int duration;
 }

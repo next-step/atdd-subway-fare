@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ShortestDistancePathFinderTest {
+class ShortestDurationPathFinderTest {
 
   Station 강남역;
   Station 역삼역;
@@ -28,13 +28,12 @@ class ShortestDistancePathFinderTest {
   Station 도곡역;
   Station 남포역;
   Station 서면역;
+  List<Section> 구간_목록;
 
   Line 신분당선;
   Line 부산1호선;
 
-  List<Section> 구간_목록;
-
-  ShortestDistancePathFinder pathFinder;
+  ShortestDurationPathFinder pathFinder;
 
   @BeforeEach
   public void setUp() {
@@ -79,18 +78,18 @@ class ShortestDistancePathFinderTest {
     );
   }
 
-  @DisplayName("최단 거리 경로 조회 성공")
+  @DisplayName("최단 시간 경로 조회 성공")
   @Test
-  void 최단_거리_경로_조회_성공() {
+  void 최단_시간_경로_조회_성공() {
     // given
-    pathFinder = new ShortestDistancePathFinder(구간_목록);
+    pathFinder = new ShortestDurationPathFinder(구간_목록);
 
     // when
     final var result = pathFinder.find(매봉역, 역삼역);
 
     // then
     assertThat(result.isPresent()).isTrue();
-    assertThat(result.get().getDistance()).isEqualTo(4);
+    assertThat(result.get().getDuration()).isEqualTo(4);
     assertThat(
         result.get().getVertices().stream()
             .map(StationResponse::getId)
@@ -108,7 +107,7 @@ class ShortestDistancePathFinderTest {
   @Test
   void 연결할_수_없는_경로() {
     // given
-    pathFinder = new ShortestDistancePathFinder(구간_목록);
+    pathFinder = new ShortestDurationPathFinder(구간_목록);
 
     // when
     final var result = pathFinder.find(강남역, 서면역);
@@ -130,7 +129,8 @@ class ShortestDistancePathFinderTest {
         .sample();
   }
 
-  private Section 지하철_구간_생성(Line line, Station upStation, Station downStation, int distance) {
-    return new Section(line, upStation, downStation, distance, 5);
+  private Section 지하철_구간_생성(Line line, Station upStation, Station downStation, int duration) {
+    return new Section(line, upStation, downStation, 5, duration);
+
   }
 }

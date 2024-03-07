@@ -1,10 +1,10 @@
 package nextstep.favorite.domain;
 
-import static com.navercorp.fixturemonkey.api.experimental.JavaGetterMethodPropertySelector.javaGetter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.List;
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.ui.BusinessException;
@@ -23,10 +23,11 @@ class CreateFavoriteValidatorTest {
     // given
     final var 강남역 = FixtureUtil.getFixture(Station.class);
     final var 역삼역 = FixtureUtil.getFixture(Station.class);
-    final var sections = List.of(구간_생성(강남역, 역삼역, 10));
+    final var 서울2호선 = 노선_생성("2호선", "초록");
+    final var 구간_목록 = List.of(구간_생성(서울2호선, 강남역, 역삼역, 10));
 
     // when
-    final var result = catchThrowable(() -> CreateFavoriteValidator.validate(강남역, 역삼역, sections));
+    final var result = catchThrowable(() -> CreateFavoriteValidator.validate(강남역, 역삼역, 구간_목록));
 
     // then
     assertThat(result).isNull();
@@ -38,10 +39,11 @@ class CreateFavoriteValidatorTest {
     // given
     final var 강남역 = FixtureUtil.getFixture(Station.class);
     final var 역삼역 = FixtureUtil.getFixture(Station.class);
-    final var sections = List.of(구간_생성(강남역, 역삼역, 5));
+    final var 서울2호선 = 노선_생성("2호선", "초록");
+    final var 구간_목록 = List.of(구간_생성(서울2호선, 강남역, 역삼역, 5));
 
     // when
-    final var result = catchThrowable(() -> CreateFavoriteValidator.validate(강남역, 강남역, sections));
+    final var result = catchThrowable(() -> CreateFavoriteValidator.validate(강남역, 강남역, 구간_목록));
 
     // then
     assertThat(result).isInstanceOf(BusinessException.class)
@@ -56,9 +58,11 @@ class CreateFavoriteValidatorTest {
     final var 역삼역 = FixtureUtil.getFixture(Station.class);
     final var 서면역 = FixtureUtil.getFixture(Station.class);
     final var 남포역 = FixtureUtil.getFixture(Station.class);
+    final var 서울2호선 = 노선_생성("서울2호선", "초록");
+    final var 부산1호선 = 노선_생성("부산1호선", "주황");
     final var 구간목록 = List.of(
-        구간_생성(강남역, 역삼역, 5),
-        구간_생성(서면역, 남포역, 10)
+        구간_생성(서울2호선, 강남역, 역삼역, 5),
+        구간_생성(부산1호선, 서면역, 남포역, 10)
     );
 
     // when
@@ -69,12 +73,15 @@ class CreateFavoriteValidatorTest {
         .hasMessageContaining("이어지지 않는 경로입니다.");
   }
 
-  private Section 구간_생성(Station source, Station target, int distance) {
-    return FixtureUtil.getBuilder(Section.class)
-        .set(javaGetter(Section::getUpStation), source)
-        .set(javaGetter(Section::getDownStation), target)
-        .set(javaGetter(Section::getDistance), distance)
-        .setNull(javaGetter(Section::getLine))
+  private Line 노선_생성(String name, String color) {
+    return FixtureUtil.getBuilder(Line.class)
+        .set("name", name)
+        .set("color", color)
+        .set("sections", null)
         .sample();
+  }
+
+  private Section 구간_생성(Line line, Station source, Station target, int distance) {
+    return new Section(line, source, target, distance, 5);
   }
 }
