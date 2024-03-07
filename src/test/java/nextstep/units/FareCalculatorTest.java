@@ -17,10 +17,10 @@ public class FareCalculatorTest {
 
     @BeforeEach
     public void setUp() {
-        stubLines.put("1호선", new Line(1L, "blue", "1호선", 0, null));
-        stubLines.put("2호선", new Line(2L, "green", "2호선", 300, null));
-        stubLines.put("3호선", new Line(3L, "brown", "3호선", 600, null));
-        stubLines.put("4호선", new Line(4L, "sky", "4호선", 900, null));
+        stubLines.put("1호선", new Line(1L, "blue", "1호선", 0, null, null, null, 0));
+        stubLines.put("2호선", new Line(2L, "green", "2호선", 300, null, null, null, 0));
+        stubLines.put("3호선", new Line(3L, "brown", "3호선", 600, null, null, null, 0));
+        stubLines.put("4호선", new Line(4L, "sky", "4호선", 900, null, null, null, 0));
     }
 
     /**

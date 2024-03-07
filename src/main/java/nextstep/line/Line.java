@@ -11,6 +11,7 @@ import nextstep.line.section.Sections;
 import nextstep.station.Station;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -30,6 +31,15 @@ public class Line {
 
     @Column
     private int extraFare;
+
+    @Column
+    private LocalTime firstDepartureTime;
+
+    @Column
+    private LocalTime lastDepartureTime;
+
+    @Column
+    private int intervalTime; // minutes
 
     @Embedded
     private Sections sections = new Sections();
@@ -97,11 +107,15 @@ public class Line {
     }
 
     @Builder
-    public Line(Long id, String color, String name, int extraFare, Sections sections) {
+    public Line(Long id, String color, String name, int extraFare, Sections sections, LocalTime firstDepartureTime, LocalTime
+                 lastDepartureTime, int intervalTime) {
         this.id = id;
         this.color = color;
         this.name = name;
         this.extraFare = extraFare;
         this.sections = sections != null ? sections : new Sections();
+        this.firstDepartureTime = firstDepartureTime;
+        this.lastDepartureTime = lastDepartureTime;
+        this.intervalTime = intervalTime;;
     }
 }

@@ -20,14 +20,12 @@ public class LineService {
     private final LineRepository lineRepository;
     private final StationRepository stationRepository;
 
-    private final PathFinder pathFinder;
-
     @Transactional
     public LineResponse create(LineCreateRequest request) {
         Station upstation = stationRepository.findById(request.getUpstationId()).orElseThrow(EntityNotFoundException::new);
         Station downstation = stationRepository.findById(request.getDownstationId()).orElseThrow(EntityNotFoundException::new);
 
-        Line line = LineCreateRequest.toEntity(request);
+        Line line = request.toEntity();
 
         lineRepository.save(line);
         line.initSection(upstation, downstation, request.getDistance(), request.getDuration());
