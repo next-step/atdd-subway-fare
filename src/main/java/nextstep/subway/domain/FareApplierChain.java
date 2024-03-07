@@ -3,11 +3,11 @@ package nextstep.subway.domain;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class FareCalculatorChain extends FareCalculator {
+public class FareApplierChain extends FareApplier {
 
-  private FareCalculator calculator;
+  private FareApplier calculator;
 
-  private FareCalculator nextCalculator;
+  private FareApplier nextCalculator;
 
   @Override
   public Fare calculate(Fare fare) {

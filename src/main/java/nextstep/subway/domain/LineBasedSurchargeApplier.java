@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class LineBasedSurchargeApplier extends FareCalculator {
+public class LineBasedSurchargeApplier extends FareApplier {
 
   private final List<Line> lines;
 

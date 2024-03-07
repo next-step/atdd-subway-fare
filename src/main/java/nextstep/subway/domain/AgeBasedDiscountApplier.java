@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class AgeBasedDiscountApplier extends FareCalculator {
+public class AgeBasedDiscountApplier extends FareApplier {
 
   private final int age;
 

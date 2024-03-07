@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class DistanceBasedSurchargeApplier extends FareCalculator {
+public class DistanceBasedSurchargeApplier extends FareApplier {
 
   private final int distance;
 
