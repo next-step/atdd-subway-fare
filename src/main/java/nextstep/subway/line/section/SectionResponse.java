@@ -1,7 +1,7 @@
 package nextstep.subway.line.section;
 
 
-import nextstep.subway.station.StationResponse;
+import nextstep.subway.station.application.dto.StationResponse;
 
 public class SectionResponse {
     private Long id;

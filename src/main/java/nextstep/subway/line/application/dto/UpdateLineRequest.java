@@ -1,4 +1,4 @@
-package nextstep.subway.line;
+package nextstep.subway.line.application.dto;
 
 public class UpdateLineRequest {
     private String name;

@@ -1,16 +1,23 @@
-package nextstep.subway.line;
+package nextstep.subway.line.application;
 
 
 import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
+import nextstep.subway.line.application.dto.LineRequest;
+import nextstep.subway.line.application.dto.LineResponse;
+import nextstep.subway.line.application.dto.LineSectionResponse;
+import nextstep.subway.line.application.dto.UpdateLineRequest;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.line.section.Section;
 import nextstep.subway.line.section.SectionRequest;
 import nextstep.subway.line.section.SectionResponse;
+import nextstep.subway.path.NewPathResponse;
 import nextstep.subway.path.PathFinder;
 import nextstep.subway.path.PathResponse;
-import nextstep.subway.station.Station;
-import nextstep.subway.station.StationRepository;
-import nextstep.subway.station.StationResponse;
+import nextstep.subway.station.domain.Station;
+import nextstep.subway.station.domain.StationRepository;
+import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -104,5 +111,13 @@ public class LineService {
         List<Line> lines = lineRepository.findAll();
 
         return new PathFinder(lines).shortestPath(sourceStation, targetStation);
+    }
+
+    public NewPathResponse getShortestPath(Long source, Long target, String type) {
+        Station sourceStation = stationRepository.findById(source).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
+        Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
+        List<Line> lines = lineRepository.findAll();
+
+        return new PathFinder(lines).shortestPath(sourceStation, targetStation, type);
     }
 }

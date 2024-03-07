@@ -5,7 +5,7 @@ import io.cucumber.java8.En;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.subway.line.LineRequest;
+import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.section.SectionRequest;
 import nextstep.subway.utils.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
