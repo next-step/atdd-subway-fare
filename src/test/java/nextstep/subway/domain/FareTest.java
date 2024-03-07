@@ -2,6 +2,7 @@ package nextstep.subway.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import nextstep.subway.domain.fare.Fare;
 import org.junit.jupiter.api.Test;
 
 class FareTest {
