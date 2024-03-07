@@ -6,7 +6,6 @@ import static nextstep.subway.domain.fare.AgeBasedDiscountPolicy.INFANT_DISCOUNT
 import static nextstep.subway.domain.fare.AgeBasedDiscountPolicy.JUVENILE_DISCOUNT_POLICY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.jupiter.api.Assertions.*;
 
 import nextstep.subway.domain.fare.AgeBasedDiscountPolicy;
 import org.junit.jupiter.api.DisplayName;
@@ -22,14 +21,11 @@ class AgeBasedDiscountPolicyTest {
     var age = 30;
 
     // when
-    var tenKilometerSurchargeResult = catchThrowable(() -> CHILD_DISCOUNT_POLICY.calculate(fare, age));
-    var fiftyKilometerSurchargeResult = catchThrowable(() -> JUVENILE_DISCOUNT_POLICY.calculate(fare, age));
+    var childDiscountResult = catchThrowable(() -> CHILD_DISCOUNT_POLICY.calculate(fare, age));
 
     // then
-    assertThat(tenKilometerSurchargeResult).isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("추가요금 적용 대상이 아닙니다.");
-    assertThat(fiftyKilometerSurchargeResult).isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("추가요금 적용 대상이 아닙니다.");
+    assertThat(childDiscountResult).isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("할인 적용 대상이 아닙니다.");
   }
 
   @DisplayName("유아에게는 요금을 받지 않는다.")
@@ -88,59 +84,16 @@ class AgeBasedDiscountPolicyTest {
     assertThat(discountAmount).isEqualTo(0);
   }
 
-  @DisplayName("유아에게 적용 가능한 정책")
+  @DisplayName("나이에 매칭되는 할인 정책을 반환한다.")
   @Test
-  void getApplicablePolicy_유아() {
+  void getApplicablePolicy() {
     // given
-    int age = 2;
+    int age = 3;
 
     // when
     var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
 
     // then
-    assertTrue(policy.isPresent());
-    assertThat(policy.get()).isEqualTo(INFANT_DISCOUNT_POLICY);
-  }
-
-  @DisplayName("어린이에게 적용 가능한 정책")
-  @Test
-  void getApplicablePolicy_어린이() {
-    // given
-    int age = 7;
-
-    // when
-    var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
-
-    // then
-    assertTrue(policy.isPresent());
-    assertThat(policy.get()).isEqualTo(CHILD_DISCOUNT_POLICY);
-  }
-
-  @DisplayName("청소년에게 적용 가능한 정책")
-  @Test
-  void getApplicablePolicy_청소년() {
-    // given
-    int age = 17;
-
-    // when
-    var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
-
-    // then
-    assertTrue(policy.isPresent());
-    assertThat(policy.get()).isEqualTo(JUVENILE_DISCOUNT_POLICY);
-  }
-
-  @DisplayName("성인에게 적용 가능한 정책")
-  @Test
-  void getApplicablePolicy_성인() {
-    // given
-    int age = 27;
-
-    // when
-    var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
-
-    // then
-    assertTrue(policy.isPresent());
-    assertThat(policy.get()).isEqualTo(ADULT_DISCOUNT_POLICY);
+    assertThat(policy).isEqualTo(INFANT_DISCOUNT_POLICY);
   }
 }

@@ -9,8 +9,9 @@ public class AgeBasedDiscountApplier extends FareApplier {
 
   @Override
   public Fare calculate(Fare fare) {
-    AgeBasedDiscountPolicy.getApplicablePolicy(age)
-        .ifPresent(policy -> fare.applyDiscount(policy.calculate(fare.getTotalFare(), age)));
+    fare.applyDiscount(
+        AgeBasedDiscountPolicy.getApplicablePolicy(age).calculate(fare.getTotalFare(), age)
+    );
 
     return fare;
   }
