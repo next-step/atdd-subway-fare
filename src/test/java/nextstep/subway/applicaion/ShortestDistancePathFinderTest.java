@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.stream.Collectors;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.applicaion.path.ShortestDistancePathFinder;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;

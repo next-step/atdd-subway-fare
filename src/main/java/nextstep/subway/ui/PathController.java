@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import nextstep.auth.ui.AuthenticationPrincipal;
 import nextstep.member.domain.LoginMember;
-import nextstep.subway.applicaion.PathService;
+import nextstep.subway.applicaion.path.PathService;
 import nextstep.subway.applicaion.dto.FindPathResponse;
 import nextstep.subway.domain.PathSearchType;
 import org.springframework.http.ResponseEntity;

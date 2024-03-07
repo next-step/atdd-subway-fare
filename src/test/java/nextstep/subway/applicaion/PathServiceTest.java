@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.applicaion.path.PathService;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.domain.Section;
