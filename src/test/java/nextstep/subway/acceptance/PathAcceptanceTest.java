@@ -5,6 +5,8 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.LineRequest;
 import nextstep.subway.line.section.SectionRequest;
+import nextstep.subway.path.NewPathResponse;
+import nextstep.subway.path.PathResponse;
 import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
     private Long 신분당선;
     private Long 삼호선;
 
+    /* 교대역   ---   강남역
+         |             |
+       남부터미널역 --- 양재역
+     */
     @Override
     @BeforeEach
     public void setUp() {
@@ -37,6 +43,30 @@ public class PathAcceptanceTest extends AcceptanceTest {
         신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 14L)).jsonPath().getLong("id");
         삼호선 = 지하철_노선_생성(new LineRequest("삼호선", "orange", 양재역, 교대역, 23L)).jsonPath().getLong("id");
         지하철_구간_생성(삼호선, new SectionRequest(양재역, 남부터미널역, 5L));
+    }
+
+    /**
+     * given 환승역으로 이어진 노선을 3개 생성하고
+     * when 출발역과 도착역 정보로 최단 시간 경로를 조회하면
+     * then 출발역과 도착역 사이의 최단 시간 경로 정보를 응답한다.
+     */
+    @Test
+    void shortest_time_or_distance_path() {
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .param("source", 교대역)
+                .param("target", 양재역)
+                .param("type", "DURATION")
+                .get("/paths/new")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
+
+        // then
+        assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(15);
     }
 
     /**
@@ -61,7 +91,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getDouble("distance")).isEqualTo(23);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(23);
     }
 
     /**
