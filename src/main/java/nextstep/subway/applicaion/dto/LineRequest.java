@@ -9,7 +9,7 @@ import nextstep.subway.domain.Line;
 public class LineRequest {
     private String name;
     private String color;
-    private long extraFare;
+    private int extraFare;
     private Long upStationId;
     private Long downStationId;
     private int distance;

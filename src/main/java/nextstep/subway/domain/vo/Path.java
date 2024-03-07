@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Station;
 
 @Getter
@@ -14,9 +15,9 @@ public class Path {
   private List<StationResponse> vertices;
   private int distance;
   private int duration;
-  private List<Long> lines;
+  private List<Line> lines;
 
-  public static Path from(List<Station> vertices, int distance, int duration, List<Long> lines) {
+  public static Path from(List<Station> vertices, int distance, int duration, List<Line> lines) {
     return new Path(
         vertices.stream()
             .map(StationResponse::from)

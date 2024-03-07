@@ -102,7 +102,7 @@ class ShortestDistancePathFinderTest {
         선릉역.getId(),
         역삼역.getId()
     );
-    assertThat(result.get().getLines()).contains(신분당선.getId());
+    assertThat(result.get().getLines()).contains(신분당선);
   }
 
   @DisplayName("연결할 수 없는 경로")

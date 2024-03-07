@@ -14,7 +14,6 @@ import nextstep.member.domain.Member;
 import nextstep.subway.applicaion.dto.StationResponse;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathSearchType;
-import nextstep.subway.domain.vo.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.ui.BusinessException;
@@ -46,7 +45,6 @@ class PathServiceTest {
   Station 서면역;
   Station 남포역;
   List<Section> 구간_목록;
-  Path 경로;
   Member 멤버;
 
   @BeforeEach
@@ -64,7 +62,6 @@ class PathServiceTest {
         구간을_생성(신분당선, 강남역, 역삼역, 10, 10),
         구간을_생성(신분당선, 서면역, 남포역, 5, 5)
     );
-    경로 = FixtureUtil.getFixture(Path.class);
     멤버 = FixtureUtil.getBuilder(Member.class)
         .set(javaGetter(Member::getAge), 20)
         .sample();
@@ -139,8 +136,6 @@ class PathServiceTest {
   @DisplayName("출발역과 도착역이 같음")
   @Test
   void 출발역과_도착역이_같음() {
-
-
     // when
     final var throwable = catchThrowable(() -> pathService.findPath(강남역.getId(), 강남역.getId(), PathSearchType.DISTANCE, 멤버.getEmail()));
 

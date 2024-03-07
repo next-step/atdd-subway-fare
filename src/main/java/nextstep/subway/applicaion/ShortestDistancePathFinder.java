@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -32,7 +33,7 @@ public class ShortestDistancePathFinder implements PathFinder {
       graph.addVertex(section.getDownStation());
 
       // add edge
-      final var edge = new PathWeightedEdge(section.getLine().getId(), section.getDistance(), section.getDuration());
+      final var edge = new PathWeightedEdge(section.getLine(), section.getDistance(), section.getDuration());
       graph.addEdge(
           section.getUpStation(),
           section.getDownStation(),
@@ -63,8 +64,8 @@ public class ShortestDistancePathFinder implements PathFinder {
         .mapToInt(PathWeightedEdge::getDuration)
         .sum();
 
-    final List<Long> lines = path.getEdgeList().stream()
-        .map(PathWeightedEdge::getLineId)
+    final List<Line> lines = path.getEdgeList().stream()
+        .map(PathWeightedEdge::getLine)
         .collect(Collectors.toList());
 
     return Optional.of(path)

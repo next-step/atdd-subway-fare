@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface SectionRepository extends JpaRepository<Section, Long> {
 
   @Override
-  @EntityGraph(attributePaths = {"upStation", "downStation"})
+  @EntityGraph(attributePaths = {"line", "upStation", "downStation"})
   List<Section> findAll();
 }
