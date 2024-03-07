@@ -1,6 +1,8 @@
 package nextstep.subway.domain;
 
+import static nextstep.subway.domain.AgeBasedDiscountPolicy.ADULT_DISCOUNT_POLICY;
 import static nextstep.subway.domain.AgeBasedDiscountPolicy.CHILD_DISCOUNT_POLICY;
+import static nextstep.subway.domain.AgeBasedDiscountPolicy.INFANT_DISCOUNT_POLICY;
 import static nextstep.subway.domain.AgeBasedDiscountPolicy.JUVENILE_DISCOUNT_POLICY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -27,6 +29,20 @@ class AgeBasedDiscountPolicyTest {
         .hasMessageContaining("추가요금 적용 대상이 아닙니다.");
     assertThat(fiftyKilometerSurchargeResult).isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("추가요금 적용 대상이 아닙니다.");
+  }
+
+  @DisplayName("유아에게는 요금을 받지 않는다.")
+  @Test
+  void calculate_유아_할인금액() {
+    // given
+    var fare = 1650;
+    var age = 2;
+
+    // when
+    var discountAmount = INFANT_DISCOUNT_POLICY.calculate(fare, age);
+
+    // then
+    assertThat(discountAmount).isEqualTo(fare);
   }
 
   @DisplayName("어린이 할인금액은 총 요금에서 350원을 제한 값의 50%이다.")
@@ -57,6 +73,34 @@ class AgeBasedDiscountPolicyTest {
     assertThat(discountAmount).isEqualTo(260);
   }
 
+  @DisplayName("성인에게는 할인을 적용하지 않는다.")
+  @Test
+  void calculate_성인_할인금액() {
+    // given
+    var fare = 1650;
+    var age = 31;
+
+    // when
+    var discountAmount = ADULT_DISCOUNT_POLICY.calculate(fare, age);
+
+    // then
+    assertThat(discountAmount).isEqualTo(0);
+  }
+
+  @DisplayName("유아에게 적용 가능한 정책")
+  @Test
+  void getApplicablePolicy_유아() {
+    // given
+    int age = 2;
+
+    // when
+    var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
+
+    // then
+    assertTrue(policy.isPresent());
+    assertThat(policy.get()).isEqualTo(INFANT_DISCOUNT_POLICY);
+  }
+
   @DisplayName("어린이에게 적용 가능한 정책")
   @Test
   void getApplicablePolicy_어린이() {
@@ -64,7 +108,7 @@ class AgeBasedDiscountPolicyTest {
     int age = 7;
 
     // when
-    var policy = AgeBasedDiscountPolicy.getApplicablePolicy(7);
+    var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
 
     // then
     assertTrue(policy.isPresent());
@@ -95,6 +139,7 @@ class AgeBasedDiscountPolicyTest {
     var policy = AgeBasedDiscountPolicy.getApplicablePolicy(age);
 
     // then
-    assertTrue(policy.isEmpty());
+    assertTrue(policy.isPresent());
+    assertThat(policy.get()).isEqualTo(ADULT_DISCOUNT_POLICY);
   }
 }
