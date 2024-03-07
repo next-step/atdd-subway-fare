@@ -40,6 +40,7 @@ public class PathStepDef implements En {
         Long lineId = 지하철_노선_생성(
             arguments.get("name"),
             arguments.get("color"),
+            Long.parseLong(arguments.get("extraFare")),
             context.getLong(arguments.get("upStationName")),
             context.getLong(arguments.get("downStationName")),
             Integer.parseInt(arguments.get("distance")),
@@ -91,8 +92,8 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
-    And("운임은 1250원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1250);
+    And("운임은 1350원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1350);
     });
 
     /**
@@ -115,8 +116,8 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
-    And("운임은 1350원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1350);
+    And("운임은 1550원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1550);
     });
 
     /**
@@ -137,8 +138,8 @@ public class PathStepDef implements En {
       String accessToken = context.store.get("어린이").toString();
       context.response = 경로_조회_요청(source, target, PathSearchType.DURATION, accessToken);
     });
-    Then("운임은 850원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(850);
+    Then("운임은 950원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(950);
     });
 
     /**
