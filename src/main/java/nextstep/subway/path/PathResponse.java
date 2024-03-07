@@ -10,9 +10,12 @@ public class PathResponse {
 
     int distance;
 
-    public PathResponse(List<StationResponse> stations, int distance) {
+    int duration;
+
+    public PathResponse(List<StationResponse> stations, int distance, int duration) {
         this.stations = stations;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public List<StationResponse> getStations() {
@@ -21,5 +24,9 @@ public class PathResponse {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }
