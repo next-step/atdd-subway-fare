@@ -92,8 +92,8 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
-    And("운임은 1350원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1350);
+    And("운임은 1550원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1550);
     });
 
     /**
@@ -116,8 +116,8 @@ public class PathStepDef implements En {
       assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
       assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(duration);
     });
-    And("운임은 1550원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1550);
+    And("운임은 1450원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1450);
     });
 
     /**
@@ -138,8 +138,8 @@ public class PathStepDef implements En {
       String accessToken = context.store.get("어린이").toString();
       context.response = 경로_조회_요청(source, target, PathSearchType.DURATION, accessToken);
     });
-    Then("운임은 950원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(950);
+    Then("운임은 900원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(900);
     });
 
     /**
