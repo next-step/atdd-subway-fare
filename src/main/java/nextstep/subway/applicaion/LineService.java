@@ -66,7 +66,7 @@ public class LineService {
         Line line = lineRepository.findById(id)
             .orElseThrow(() -> new BusinessException("노선 정보를 찾을 수 없습니다."));
 
-        line.updateLine(lineRequest.getName(), lineRequest.getColor());
+        line.updateLine(lineRequest.getName(), lineRequest.getColor(), lineRequest.getExtraFare());
     }
 
     @Transactional

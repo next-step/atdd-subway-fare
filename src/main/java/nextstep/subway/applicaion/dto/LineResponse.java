@@ -11,6 +11,7 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
+    private long extraFare;
     private List<StationResponse> stations;
 
     public static LineResponse from(Line line, List<StationResponse> stations) {
@@ -18,6 +19,7 @@ public class LineResponse {
             line.getId(),
             line.getName(),
             line.getColor(),
+            line.getExtraFare(),
             stations
         );
     }

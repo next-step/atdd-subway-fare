@@ -9,12 +9,13 @@ import nextstep.subway.domain.Line;
 public class LineRequest {
     private String name;
     private String color;
+    private long extraFare;
     private Long upStationId;
     private Long downStationId;
     private int distance;
     private int duration;
 
     public Line to() {
-        return new Line(name, color);
+        return new Line(name, color, extraFare);
     }
 }

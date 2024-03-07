@@ -284,7 +284,7 @@ public class LineServiceTest {
     }
 
     private Line 노선_생성(final String name, final String color) {
-        return lineRepository.save(new Line(name, color));
+        return lineRepository.save(new Line(name, color, 0));
     }
 
     private Station 역_생성(final String name) {
