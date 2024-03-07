@@ -11,4 +11,10 @@ public class SectionEdge extends DefaultWeightedEdge {
     private Section section;
     private int distance;
     private int duration;
+
+    public void setEdge(Section section) {
+        this.section = section;
+        this.distance = section.getDistance();
+        this.duration = section.getDuration();
+    }
 }

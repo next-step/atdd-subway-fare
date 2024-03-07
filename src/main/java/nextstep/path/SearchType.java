@@ -4,7 +4,8 @@ import nextstep.exception.InvalidInputException;
 import nextstep.station.Station;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.AbstractMap;
+import java.util.Comparator;
 
 public enum SearchType {
     DISTANCE {
@@ -23,21 +24,26 @@ public enum SearchType {
     ARRIVAL_TIME {
         @Override
         public Path findPath(PathFinder pathFinder, Station source, Station target, LocalTime departureTime) {
-            List<Path> paths = pathFinder.findKShortestPath(source, target);
-
-            Path fastestPath = null;
-            LocalTime minArrivalTime = null;
-            for (Path path : paths) {
-                ArrivalTimeCalculator arrivalTimeCalculator = new ArrivalTimeCalculator(path.getSections(), departureTime);
-                LocalTime arrivalTime = arrivalTimeCalculator.calculate();
-
-                if (minArrivalTime == null || arrivalTime.isBefore(minArrivalTime)) {
-                    minArrivalTime = arrivalTime;
-                    fastestPath = path;
-                }
-            }
-
-            return fastestPath;
+            return pathFinder.findMultipleShortestPath(source, target).stream()
+                    .map(path -> new AbstractMap.SimpleEntry<>(path, new ArrivalTimeCalculator(path.getSections(), departureTime).calculate()))
+                    .min(Comparator.comparing(AbstractMap.SimpleEntry::getValue))
+                    .map(AbstractMap.SimpleEntry::getKey)
+                    .orElse(null);
+//            List<Path> paths = pathFinder.findKShortestPath(source, target);
+//
+//            Path fastestPath = null;
+//            LocalTime minArrivalTime = null;
+//            for (Path path : paths) {
+//                ArrivalTimeCalculator arrivalTimeCalculator = new ArrivalTimeCalculator(path.getSections(), departureTime);
+//                LocalTime arrivalTime = arrivalTimeCalculator.calculate();
+//
+//                if (minArrivalTime == null || arrivalTime.isBefore(minArrivalTime)) {
+//                    minArrivalTime = arrivalTime;
+//                    fastestPath = path;
+//                }
+//            }
+//
+//            return fastestPath;
         }
     };
 
