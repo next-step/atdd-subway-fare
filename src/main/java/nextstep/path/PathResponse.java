@@ -13,5 +13,5 @@ public class PathResponse {
     private int distance;
     private int duration;
     private int fare;
-
+    private String arrivalTime;
 }

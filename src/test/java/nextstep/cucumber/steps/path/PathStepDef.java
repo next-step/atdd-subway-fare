@@ -58,10 +58,14 @@ public class PathStepDef implements En {
                 int distance = Integer.parseInt(row.get("distance"));
                 int duration = Integer.parseInt(row.get("duration"));
                 int extraFare = Integer.parseInt(row.get("extraFare"));
+                String firstDepartureTime = row.get("firstDepartureTime");
+                String lastDepartureTime = row.get("lastDepartureTime");
+                int intervalTime = Integer.parseInt(row.get("intervalTime"));
 
                 isFirstSectionForLine.putIfAbsent(line, true);
                 if (Boolean.TRUE.equals(isFirstSectionForLine.get(line))) {
-                    LineSteps.노선_생성_요청(line, stations.get(upstation), stations.get(downstation), distance, duration, extraFare);
+                    LineSteps.노선_생성_요청2(line, stations.get(upstation), stations.get(downstation), distance, duration, extraFare,
+                                            firstDepartureTime, lastDepartureTime, intervalTime);
                     isFirstSectionForLine.put(line, false);
                 } else {
                     SectionSteps.구간_추가_요청(lineId, stations.get(upstation), stations.get(downstation), distance, duration);
@@ -153,6 +157,21 @@ public class PathStepDef implements En {
         Then("청소년 사용자의 요금은 {int}원이어야 한다", (Integer expectedFare) -> {
             int fare = PathSteps.parseFare(response);
             assertThat(fare).isEqualTo(expectedFare);
+        });
+
+        When("사용자가 {string}에 {string}에서 {string}까지의 가장 빠른 도착 시간 경로를 조회하면", (String departureTime, String source, String target) -> {
+            response = PathSteps.경로_조회_요청_with_출발시간(stations.get(source), stations.get(target), "ARRIVAL_TIME", departureTime);
+        });
+
+        Then("조회된 가장 빠른 도착 시간 경로는 다음과 같아야 한다", (DataTable table) -> {
+            List<String> expectedStationNames = table.asList();
+            List<String> stationNames = PathSteps.parseStationNames(response);
+            assertThat(stationNames).containsExactlyElementsOf(expectedStationNames);
+        });
+
+        And("가장 빠른 도착 시간은 {string}이어야 한다", (String expectedArrivalTime) -> {
+            String arrivalTime = PathSteps.parseArrivalTime(response);
+            assertThat(arrivalTime).isEqualTo(expectedArrivalTime);
         });
     }
 }

@@ -11,6 +11,8 @@ import nextstep.station.StationResponse;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +22,7 @@ public class PathService {
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
 
-    public PathResponse showShortestPath(Long sourceId, Long targetId, String type, LoginMember loginMember) {
+    public PathResponse showShortestPath(Long sourceId, Long targetId, String type, String time, LoginMember loginMember) {
         if (sourceId.equals(targetId)) {
             throw new InvalidInputException("출발역과 도착역이 동일합니다.");
         }
@@ -28,7 +30,8 @@ public class PathService {
         Station target = stationRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
 
         SearchType searchType = SearchType.from(type);
-        Path path = searchType.findPath(pathFinder, source, target);
+        LocalTime departureTime = parseDepartureTime(searchType, time);
+        Path path = searchType.findPath(pathFinder, source, target, departureTime);
 
         Lines lines = Lines.from(lineRepository.findAll());
 
@@ -38,9 +41,15 @@ public class PathService {
                     .collect(Collectors.toList()),
             path.getDistance(),
             path.getDuration(),
-            path.getFare(lines, loginMember)
+            path.getFare(lines, loginMember),
+            path.getArrivalTime(departureTime).toString()
         );
     }
 
-
+    private LocalTime parseDepartureTime(SearchType searchType, String time) {
+        if (searchType != SearchType.ARRIVAL_TIME && time == null) {
+            return LocalTime.now();
+        }
+        return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+    }
 }

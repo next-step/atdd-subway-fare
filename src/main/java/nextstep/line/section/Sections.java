@@ -28,6 +28,10 @@ public class Sections implements Iterable<Section> {
         return sections.iterator();
     }
 
+    public Section get(int i) {
+        return sections.get(i);
+    }
+
     public int size() {
         return sections.size();
     }

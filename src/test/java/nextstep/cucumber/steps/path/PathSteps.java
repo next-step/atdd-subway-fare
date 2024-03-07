@@ -20,6 +20,19 @@ public class PathSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 경로_조회_요청_with_출발시간(Long sourceId, Long targetId, String type, String departureTime) {
+        return RestAssured.given().log().all()
+                .queryParam("source", sourceId)
+                .queryParam("target", targetId)
+                .queryParam("type", type)
+                .queryParam("time", departureTime)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths")
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 경로_조회_요청_with_로그인(Long sourceId, Long targetId, String type, String accessToken) {
         return RestAssured.given().log().all()
                 .queryParam("source", sourceId)
@@ -47,5 +60,9 @@ public class PathSteps {
 
     public static int parseFare(ExtractableResponse<Response> response) {
         return response.jsonPath().getInt("fare");
+    }
+
+    public static String parseArrivalTime(ExtractableResponse<Response> response) {
+        return response.jsonPath().getString("arrivalTime");
     }
 }
