@@ -137,19 +137,19 @@ public class PathStepDef implements En {
       String accessToken = context.store.get("어린이").toString();
       context.response = 경로_조회_요청(source, target, PathSearchType.DURATION, accessToken);
     });
-    Then("운임은 500원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(900);
+    Then("운임은 850원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(850);
     });
 
     /**
      * 청소년 할인 적용
      */
-    When("청소년이 {string}과 {string}의 경로를 조회하면", (String source, String target) -> {
-      String accessToken = context.store.get("어린이").toString();
+    When("청소년이 {string}과 {string}의 최단 시간 경로를 조회하면", (String source, String target) -> {
+      String accessToken = context.store.get("청소년").toString();
       context.response = 경로_조회_요청(source, target, PathSearchType.DURATION, accessToken);
     });
-    Then("운임은 1440원이다.", () -> {
-      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1440);
+    Then("운임은 1790원이다.", () -> {
+      assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(1790);
     });
 
     /**
