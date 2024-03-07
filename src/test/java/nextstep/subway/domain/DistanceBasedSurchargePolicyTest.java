@@ -1,10 +1,11 @@
 package nextstep.subway.domain;
 
-import static nextstep.subway.domain.DistanceBasedSurchargePolicy.FIFTY_KILOMETER_SURCHARGE_POLICY;
-import static nextstep.subway.domain.DistanceBasedSurchargePolicy.TEN_KILOMETER_SURCHARGE_POLICY;
+import static nextstep.subway.domain.fare.DistanceBasedSurchargePolicy.FIFTY_KILOMETER_SURCHARGE_POLICY;
+import static nextstep.subway.domain.fare.DistanceBasedSurchargePolicy.TEN_KILOMETER_SURCHARGE_POLICY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import nextstep.subway.domain.fare.DistanceBasedSurchargePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

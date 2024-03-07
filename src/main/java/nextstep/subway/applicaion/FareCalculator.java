@@ -1,11 +1,11 @@
 package nextstep.subway.applicaion;
 
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.AgeBasedDiscountApplier;
-import nextstep.subway.domain.DistanceBasedSurchargeApplier;
-import nextstep.subway.domain.Fare;
-import nextstep.subway.domain.FareApplierChain;
-import nextstep.subway.domain.LineBasedSurchargeApplier;
+import nextstep.subway.domain.fare.AgeBasedDiscountApplier;
+import nextstep.subway.domain.fare.DistanceBasedSurchargeApplier;
+import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FareApplierChain;
+import nextstep.subway.domain.fare.LineBasedSurchargeApplier;
 import nextstep.subway.domain.vo.Path;
 
 public class FareCalculator {

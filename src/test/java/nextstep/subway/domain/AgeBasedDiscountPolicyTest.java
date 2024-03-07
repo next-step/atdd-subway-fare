@@ -1,13 +1,14 @@
 package nextstep.subway.domain;
 
-import static nextstep.subway.domain.AgeBasedDiscountPolicy.ADULT_DISCOUNT_POLICY;
-import static nextstep.subway.domain.AgeBasedDiscountPolicy.CHILD_DISCOUNT_POLICY;
-import static nextstep.subway.domain.AgeBasedDiscountPolicy.INFANT_DISCOUNT_POLICY;
-import static nextstep.subway.domain.AgeBasedDiscountPolicy.JUVENILE_DISCOUNT_POLICY;
+import static nextstep.subway.domain.fare.AgeBasedDiscountPolicy.ADULT_DISCOUNT_POLICY;
+import static nextstep.subway.domain.fare.AgeBasedDiscountPolicy.CHILD_DISCOUNT_POLICY;
+import static nextstep.subway.domain.fare.AgeBasedDiscountPolicy.INFANT_DISCOUNT_POLICY;
+import static nextstep.subway.domain.fare.AgeBasedDiscountPolicy.JUVENILE_DISCOUNT_POLICY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 
+import nextstep.subway.domain.fare.AgeBasedDiscountPolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

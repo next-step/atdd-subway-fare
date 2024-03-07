@@ -1,7 +1,8 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
+import nextstep.subway.domain.Line;
 
 @AllArgsConstructor
 public class LineBasedSurchargeApplier extends FareApplier {
