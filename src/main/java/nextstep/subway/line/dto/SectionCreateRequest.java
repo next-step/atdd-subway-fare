@@ -8,10 +8,13 @@ public class SectionCreateRequest {
 
     private int distance;
 
-    public SectionCreateRequest(Long upStationId, Long downStationId, int distance) {
+    private int duration;
+
+    public SectionCreateRequest(Long upStationId, Long downStationId, int distance, int duration) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getUpStationId() {
@@ -24,5 +27,9 @@ public class SectionCreateRequest {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

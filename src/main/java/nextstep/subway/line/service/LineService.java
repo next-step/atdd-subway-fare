@@ -33,7 +33,7 @@ public class LineService {
         Station upStation = stationDataService.findStation(request.getUpStationId());
         Station downStation = stationDataService.findStation(request.getDownStationId());
 
-        line.generateSection(request.getDistance(), upStation, downStation);
+        line.generateSection(request.getDistance(), request.getDuration(), upStation, downStation);
 
         Line savedLine = lineRepository.save(line);
 

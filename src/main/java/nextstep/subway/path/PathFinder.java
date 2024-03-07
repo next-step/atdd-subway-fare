@@ -15,16 +15,30 @@ import java.util.stream.Collectors;
 
 public class PathFinder {
 
+    private final PathFinderStrategy pathFinderStrategy;
+
+    public PathFinder(PathFinderStrategy pathFinderStrategy) {
+        this.pathFinderStrategy = pathFinderStrategy;
+    }
+
     public PathResponse getPath(List<Sections> sectionsList, Station sourceStation, Station targetStation) {
         try {
-            WeightedMultigraph<Station, DefaultWeightedEdge> graph = initGraph(sectionsList);
+            WeightedMultigraph<Station, PathWeightEdge> graph = initGraph(sectionsList);
 
-            GraphPath path = getShortestPath(graph, sourceStation, targetStation);
+            GraphPath<Station, PathWeightEdge> path = getShortestPath(graph, sourceStation, targetStation);
 
             List<Station> stations = path.getVertexList();
-            int distance = (int) path.getWeight();
+            int distance = path.getEdgeList().stream().mapToInt(PathWeightEdge::getDistance).sum();
+            int duration = path.getEdgeList().stream().mapToInt(PathWeightEdge::getDuration).sum();
 
-            return new PathResponse(stations.stream().map(StationResponse::ofEntity).collect(Collectors.toList()), distance);
+            return new PathResponse(
+                    stations
+                            .stream()
+                            .map(StationResponse::ofEntity)
+                            .collect(Collectors.toList()),
+                    distance,
+                    duration
+            );
 
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -32,31 +46,26 @@ public class PathFinder {
         }
     }
 
-    private WeightedMultigraph<Station, DefaultWeightedEdge> initGraph(List<Sections> sectionsList) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+    private WeightedMultigraph<Station, PathWeightEdge> initGraph(List<Sections> sectionsList) {
+        WeightedMultigraph<Station, PathWeightEdge> graph = new WeightedMultigraph<>(PathWeightEdge.class);
 
         for (Sections sections : sectionsList) {
             for (Section section : sections.getSections()) {
                 addStations(graph, section);
-                addEdge(graph, section);
+                pathFinderStrategy.addEdge(graph, section);
             }
         }
 
         return graph;
     }
 
-    private void addEdge(WeightedMultigraph<Station, DefaultWeightedEdge> graph, Section section) {
-        DefaultWeightedEdge edge = graph.addEdge(section.getUpStation(), section.getDownStation());
-        graph.setEdgeWeight(edge, section.getDistance());
-    }
-
-    private void addStations(WeightedMultigraph<Station, DefaultWeightedEdge> graph, Section section) {
+    private void addStations(WeightedMultigraph<Station, PathWeightEdge> graph, Section section) {
         graph.addVertex(section.getUpStation());
         graph.addVertex(section.getDownStation());
     }
 
-    private GraphPath getShortestPath(
-            WeightedMultigraph<Station, DefaultWeightedEdge> graph,
+    private GraphPath<Station, PathWeightEdge> getShortestPath(
+            WeightedMultigraph<Station, PathWeightEdge> graph,
             Station sourceStation,
             Station targetStation
     ) {

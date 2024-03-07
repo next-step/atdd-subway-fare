@@ -20,8 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PathFinderTest {
 
-    PathFinder pathFinder = new PathFinder();
-
     Station 교대역;
     Station 강남역;
     Station 양재역;
@@ -41,15 +39,15 @@ class PathFinderTest {
     void getPath() {
         //given
         Line 이호선 = new Line("2호선", "green");
-        이호선.generateSection(10, 교대역, 강남역);
+        이호선.generateSection(10, 3, 교대역, 강남역);
 
         Line 신분당선 = new Line("신분당선", "red");
-        신분당선.generateSection(10, 강남역, 양재역);
+        신분당선.generateSection(10, 3, 강남역, 양재역);
 
         Line 삼호선 = new Line("3호선", "orange");
-        삼호선.generateSection(2, 교대역, 남부터미널역);
+        삼호선.generateSection(2, 3, 교대역, 남부터미널역);
 
-        삼호선.generateSection(3, 남부터미널역, 양재역);
+        삼호선.generateSection(3, 3, 남부터미널역, 양재역);
 
         List<Sections> sections = Stream.of(이호선, 삼호선, 신분당선).map(Line::getSections).collect(Collectors.toList());
 
