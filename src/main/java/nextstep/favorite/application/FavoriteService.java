@@ -9,6 +9,7 @@ import nextstep.favorite.exception.FavoriteException;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.path.PathService;
+import nextstep.subway.path.PathType;
 import nextstep.subway.station.Station;
 import nextstep.subway.station.service.StationDataService;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class FavoriteService {
     }
 
     private void verifyDisConnectedStations(FavoriteRequest request) {
-        pathService.getPath(request.getSource(), request.getTarget());
+        pathService.getPath(request.getSource(), request.getTarget(), PathType.DISTANCE);
     }
 
     public List<FavoriteResponse> findFavorites() {

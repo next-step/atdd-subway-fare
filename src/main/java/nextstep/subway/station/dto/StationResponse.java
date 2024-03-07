@@ -9,6 +9,10 @@ StationResponse {
     private Long id;
     private String name;
 
+
+    public StationResponse() {
+    }
+
     private StationResponse(Long id, String name) {
         this.id = id;
         this.name = name;
@@ -37,5 +41,13 @@ StationResponse {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "StationResponse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -40,16 +40,16 @@ public class PathAcceptanceTest {
         양재역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("양재역"));
         남부터미널역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("남부터미널역"));
 
-        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 교대역id, 강남역id, 10);
+        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 교대역id, 강남역id, 10, 10);
         이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
 
-        LineCreateRequest 신분당선 = new LineCreateRequest("신분당선", "red", 강남역id, 양재역id, 10);
+        LineCreateRequest 신분당선 = new LineCreateRequest("신분당선", "red", 강남역id, 양재역id, 10, 10);
         신분당선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(신분당선));
 
-        LineCreateRequest 삼호선 = new LineCreateRequest("3호선", "orange", 교대역id, 남부터미널역id, 2);
+        LineCreateRequest 삼호선 = new LineCreateRequest("3호선", "orange", 교대역id, 남부터미널역id, 2, 3);
         삼호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(삼호선));
 
-        SectionCreateRequest 남부터미널양재역 = new SectionCreateRequest(남부터미널역id, 양재역id, 3);
+        SectionCreateRequest 남부터미널양재역 = new SectionCreateRequest(남부터미널역id, 양재역id, 3, 3);
         SectionApiRequester.generateSection(남부터미널양재역, 삼호선id);
     }
 
@@ -58,11 +58,11 @@ public class PathAcceptanceTest {
      * When 경로를 조회하면
      * Then 출발역과 도착역까지의 경로에 있는 역과 거리를 조회한다
      */
-    @DisplayName("출발역과 도착역까지의 경로 조회")
+    @DisplayName("출발역과 도착역까지의 최단 길이 경로 조회")
     @Test
-    void showPaths() {
+    void showDistanceShortestPaths() {
         //when
-        ExtractableResponse<Response> response = PathApiRequester.getPath(교대역id, 양재역id);
+        ExtractableResponse<Response> response = PathApiRequester.getDistanceShortestPath(교대역id, 양재역id);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -76,6 +76,27 @@ public class PathAcceptanceTest {
 
     /**
      * Given 지하철 구간을 등록하고
+     * When 경로를 조회하면
+     * Then 출발역과 도착역까지의 경로에 있는 역과 거리를 조회한다
+     */
+    @DisplayName("출발역과 도착역까지의 최단 시간 경로 조회")
+    @Test
+    void showDurationShortestPaths() {
+        //when
+        ExtractableResponse<Response> response = PathApiRequester.getDurationShortestPath(교대역id, 양재역id);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        List<Long> ids = response.jsonPath().getList("stations", StationResponse.class)
+                .stream().map(StationResponse::getId).collect(Collectors.toList());
+        int distance = response.jsonPath().getInt("duration");
+        assertThat(ids).containsExactly(교대역id, 남부터미널역id, 양재역id);
+        assertThat(distance).isEqualTo(6);
+    }
+
+    /**
+     * Given 지하철 구간을 등록하고
      * When 출발역과 도착역을 같게하여 경로를 조회하면
      * Then 예외가 발생한다
      */
@@ -83,7 +104,7 @@ public class PathAcceptanceTest {
     @Test
     void showSameAsSourceStationAndTargetStation() {
         //when
-        ExtractableResponse<Response> response = PathApiRequester.getPath(교대역id, 교대역id);
+        ExtractableResponse<Response> response = PathApiRequester.getDistanceShortestPath(교대역id, 교대역id);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -101,11 +122,11 @@ public class PathAcceptanceTest {
         //given
         Long 서울역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("서울역"));
         Long 명동역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("명동역"));
-        LineCreateRequest 사호선 = new LineCreateRequest("4호선", "sky", 서울역id, 명동역id, 2);
+        LineCreateRequest 사호선 = new LineCreateRequest("4호선", "sky", 서울역id, 명동역id, 2, 3);
         JsonPathUtil.getId(LineApiRequester.createLineApiCall(사호선));
 
         //when
-        ExtractableResponse<Response> response = PathApiRequester.getPath(교대역id, 서울역id);
+        ExtractableResponse<Response> response = PathApiRequester.getDistanceShortestPath(교대역id, 서울역id);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

@@ -4,6 +4,7 @@ import nextstep.subway.line.LineRepository;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.PathResponse;
 import nextstep.subway.path.PathService;
+import nextstep.subway.path.PathType;
 import nextstep.subway.path.exception.PathException;
 import nextstep.subway.station.Station;
 import nextstep.subway.station.StationRepository;
@@ -47,23 +48,23 @@ class PathServiceTest {
 
         Line 이호선 = new Line("2호선", "green");
         lineRepository.save(이호선);
-        이호선.generateSection(10, 교대역, 강남역);
+        이호선.generateSection(10, 3, 교대역, 강남역);
 
         Line 신분당선 = new Line("신분당선", "red");
         lineRepository.save(신분당선);
-        신분당선.generateSection(10, 강남역, 양재역);
+        신분당선.generateSection(10, 3, 강남역, 양재역);
 
         Line 삼호선 = new Line("3호선", "orange");
         lineRepository.save(삼호선);
-        삼호선.generateSection(2, 교대역, 남부터미널역);
-        삼호선.generateSection(3, 남부터미널역, 양재역);
+        삼호선.generateSection(2, 3, 교대역, 남부터미널역);
+        삼호선.generateSection(3, 3, 남부터미널역, 양재역);
     }
 
     @DisplayName("출발역과 도착역의 최단 경로를 조회한다.")
     @Test
     void getPath() {
         //when
-        PathResponse result = pathService.getPath(교대역.getId(), 양재역.getId());
+        PathResponse result = pathService.getPath(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
 
         //then
         assertThat(result.getStations()).containsExactly(
@@ -78,7 +79,7 @@ class PathServiceTest {
     @DisplayName("출발역과 도착역이 같으면 예외가 발생한다.")
     @Test
     void getPathException() {
-        assertThatThrownBy(() -> pathService.getPath(교대역.getId(), 교대역.getId()))
+        assertThatThrownBy(() -> pathService.getPath(교대역.getId(), 교대역.getId(), PathType.DISTANCE))
                 .isExactlyInstanceOf(PathException.class)
                 .hasMessage("출발역과 도착역이 같습니다.");
     }

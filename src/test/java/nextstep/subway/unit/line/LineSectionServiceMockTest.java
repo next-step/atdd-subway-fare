@@ -42,7 +42,7 @@ public class LineSectionServiceMockTest {
         when(stationDataService.findStation(잠실역id)).thenReturn(잠실역);
         when(stationDataService.findStation(성수역id)).thenReturn(성수역);
 
-        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 성수역id, 10);
+        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 성수역id, 10, 3);
 
         // when
         lineSectionService.saveSection(1L, request);

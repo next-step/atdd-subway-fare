@@ -36,7 +36,7 @@ public class SectionDeleteAcceptanceTest {
         건대입구역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("건대입구역"));
         성수역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("성수역"));
 
-        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 잠실역id, 용산역id, 10);
+        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 잠실역id, 용산역id, 10, 3);
         이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
     }
 
@@ -49,7 +49,7 @@ public class SectionDeleteAcceptanceTest {
     @Test
     void deleteSection() {
         //given
-        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5);
+        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5, 3);
         SectionApiRequester.generateSection(request, 이호선id);
 
         //when
@@ -71,9 +71,9 @@ public class SectionDeleteAcceptanceTest {
     @Test
     void deleteMiddleSection() {
         //given
-        SectionCreateRequest 용산건대입구역 = new SectionCreateRequest(용산역id, 건대입구역id, 5);
+        SectionCreateRequest 용산건대입구역 = new SectionCreateRequest(용산역id, 건대입구역id, 5, 3);
         SectionApiRequester.generateSection(용산건대입구역, 이호선id);
-        SectionCreateRequest 건대입구성수역 = new SectionCreateRequest(건대입구역id, 성수역id, 5);
+        SectionCreateRequest 건대입구성수역 = new SectionCreateRequest(건대입구역id, 성수역id, 5, 3);
         SectionApiRequester.generateSection(건대입구성수역, 이호선id);
 
         //when
@@ -95,7 +95,7 @@ public class SectionDeleteAcceptanceTest {
     @Test
     void deleteUpFinalStation() {
         //given
-        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5);
+        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5, 3);
         SectionApiRequester.generateSection(request, 이호선id);
 
         //when
@@ -118,7 +118,7 @@ public class SectionDeleteAcceptanceTest {
     @Test
     void deleteDownFinalStation() {
         //given
-        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5);
+        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5, 3);
         SectionApiRequester.generateSection(request, 이호선id);
 
         //when
@@ -155,7 +155,7 @@ public class SectionDeleteAcceptanceTest {
     @Test
     void deleteNotExistsStation() {
         //given
-        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5);
+        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5, 3);
         SectionApiRequester.generateSection(request, 이호선id);
         Long 역삼역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("잠실역"));
 
