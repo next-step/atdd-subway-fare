@@ -2,8 +2,8 @@ package nextstep.subway.unit.path;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Sections;
-import nextstep.subway.path.DistancePathFinderStrategy;
-import nextstep.subway.path.DurationPathFinderStrategy;
+import nextstep.subway.path.strategy.DistancePathFinderStrategy;
+import nextstep.subway.path.strategy.DurationPathFinderStrategy;
 import nextstep.subway.path.PathFinder;
 import nextstep.subway.path.PathResponse;
 import nextstep.subway.path.exception.PathException;

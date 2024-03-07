@@ -1,6 +1,9 @@
 package nextstep.subway.path;
 
 import nextstep.subway.path.exception.PathException;
+import nextstep.subway.path.strategy.DistancePathFinderStrategy;
+import nextstep.subway.path.strategy.DurationPathFinderStrategy;
+import nextstep.subway.path.strategy.PathFinderStrategy;
 
 public enum PathType {
     DISTANCE, DURATION;

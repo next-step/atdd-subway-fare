@@ -3,11 +3,11 @@ package nextstep.subway.path;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
 import nextstep.subway.path.exception.PathException;
+import nextstep.subway.path.strategy.PathFinderStrategy;
 import nextstep.subway.station.Station;
 import nextstep.subway.station.dto.StationResponse;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
