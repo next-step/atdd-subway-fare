@@ -12,6 +12,7 @@ public class LineSteps {
     public static LineResponse 지하철_노선_생성(
         final String name,
         final String color,
+        final long extraFare,
         final Long upStationId,
         final Long downStationId,
         final int distance,
@@ -20,6 +21,7 @@ public class LineSteps {
         final var params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
+        params.put("extraFare", extraFare);
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);

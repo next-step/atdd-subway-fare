@@ -1,8 +1,7 @@
 package nextstep.favorite.domain;
 
 import java.util.Collection;
-import nextstep.subway.applicaion.ShortestDistancePathFinder;
-import nextstep.subway.domain.PathSearchType;
+import nextstep.subway.applicaion.path.ShortestDistancePathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
 import nextstep.subway.ui.BusinessException;

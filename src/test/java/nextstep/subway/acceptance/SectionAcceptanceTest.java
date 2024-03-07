@@ -34,7 +34,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
 
         강남역 = 지하철역_생성("강남역").getId();
         양재역 = 지하철역_생성("양재역").getId();
-        신분당선 = 지하철_노선_생성("신분당선", "bg-red-600", 강남역, 양재역, 10, 10).getId();
+        신분당선 = 지하철_노선_생성("신분당선", "bg-red-600", 0, 강남역, 양재역, 10, 10).getId();
     }
 
     /**
@@ -85,7 +85,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         final var 첫번째역 = StationSteps.지하철역_생성("강남역");
         final var 두번째역 = StationSteps.지하철역_생성("논현역");
 
-        final var 노선 = 지하철_노선_생성("신분당선", "빨강", 첫번째역.getId(), 두번째역.getId(), 10, 10);
+        final var 노선 = 지하철_노선_생성("신분당선", "빨강", 0, 첫번째역.getId(), 두번째역.getId(), 10, 10);
 
         // when
         final var params = Map.of(
@@ -117,7 +117,7 @@ class SectionAcceptanceTest extends AcceptanceTest {
         final var 첫번째역 = StationSteps.지하철역_생성("강남역");
         final var 두번째역 = StationSteps.지하철역_생성("논현역");
 
-        final var 노선 = 지하철_노선_생성("신분당선", "빨강", 첫번째역.getId(), 두번째역.getId(), 10, 10);
+        final var 노선 = 지하철_노선_생성("신분당선", "빨강", 0, 첫번째역.getId(), 두번째역.getId(), 10, 10);
 
         final var 세번째역 = StationSteps.지하철역_생성("정자역");
         final var 네번째역 = StationSteps.지하철역_생성("판교역");

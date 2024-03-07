@@ -1,10 +1,12 @@
-package nextstep.subway.applicaion;
+package nextstep.subway.applicaion.path;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.auth.AuthenticationException;
+import nextstep.member.application.MemberService;
+import nextstep.subway.applicaion.FareCalculator;
+import nextstep.subway.applicaion.SectionService;
+import nextstep.subway.applicaion.StationService;
 import nextstep.subway.applicaion.dto.FindPathResponse;
-import nextstep.subway.domain.BaseFareCalculator;
-import nextstep.subway.domain.Over10kmSurchargeCalculator;
-import nextstep.subway.domain.Over50kmSurchargeCalculator;
 import nextstep.subway.domain.PathSearchType;
 import nextstep.subway.ui.BusinessException;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,15 @@ public class PathService {
 
   private final SectionService sectionService;
   private final StationService stationService;
+  private final MemberService memberService;
+  private final FareCalculator fareCalculator = new FareCalculator();
 
   public FindPathResponse findPath(
       final Long source,
       final Long target,
-      final PathSearchType type
+      final PathSearchType type,
+      final String memberEmail
+
   ) {
     verifySourceIsSameToTarget(source, target);
 
@@ -31,19 +37,12 @@ public class PathService {
     final var sections = sectionService.findAll();
     final var path = PathFinderComposite.find(sections, type, sourceStation, targetStation);
 
-    final var fare = calculateFare(path.getDistance());
+    final var member = memberService.findMemberByEmail(memberEmail)
+        .orElseThrow(() -> new AuthenticationException("유효한 인증 토큰이 아닙니다."));
 
-    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration(), fare);
-  }
+    final var fare = fareCalculator.calculate(path, member);
 
-  private int calculateFare(final int distance) {
-    final var basicCalculator = new BaseFareCalculator();
-    final var over10kmSurchargeCalculator = new Over10kmSurchargeCalculator();
-    final var over50kmSurchargeCalculator = new Over50kmSurchargeCalculator();
-
-    return basicCalculator.calculate()
-        + over10kmSurchargeCalculator.calculate(distance)
-        + over50kmSurchargeCalculator.calculate(distance);
+    return new FindPathResponse(path.getVertices(), path.getDistance(), path.getDuration(), fare.getTotalFare());
   }
 
   private void verifySourceIsSameToTarget(Long source, Long target) {

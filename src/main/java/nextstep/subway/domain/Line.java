@@ -30,15 +30,19 @@ public class Line {
     @Column(length = 20, nullable = false)
     private String color;
 
+    @Column(nullable = false)
+    private int extraFare;
+
     @Embedded
     private Sections sections = new Sections();
 
-    public void updateLine(final String name, final String color) {
+    public void updateLine(final String name, final String color, final int extraFare) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(color);
 
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public void addSection(final Section section) {
@@ -61,8 +65,9 @@ public class Line {
         return sections.isEmpty();
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 }

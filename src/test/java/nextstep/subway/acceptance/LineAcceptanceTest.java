@@ -55,8 +55,8 @@ class LineAcceptanceTest extends AcceptanceTest {
         StationResponse 강남역 = StationSteps.지하철역_생성("강남역");
         StationResponse 양재역 = StationSteps.지하철역_생성("양재역");
 
-        LineSteps.지하철_노선_생성("2호선", "green", 역삼역.getId(), 선릉역.getId(), 10, 10);
-        LineSteps.지하철_노선_생성("신분당선", "orange", 강남역.getId(), 양재역.getId(), 10, 10);
+        LineSteps.지하철_노선_생성("2호선", "green", 0, 역삼역.getId(), 선릉역.getId(), 10, 10);
+        LineSteps.지하철_노선_생성("신분당선", "orange", 0, 강남역.getId(), 양재역.getId(), 10, 10);
 
         // when
         ExtractableResponse<Response> response = LineSteps.지하철_노선_목록_조회_요청();
@@ -78,7 +78,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         StationResponse 강남역 = StationSteps.지하철역_생성("강남역");
         StationResponse 양재역 = StationSteps.지하철역_생성("양재역");
 
-        LineResponse line = 지하철_노선_생성("2호선", "green", 강남역.getId(), 양재역.getId(), 10, 10);
+        LineResponse line = 지하철_노선_생성("2호선", "green", 0, 강남역.getId(), 양재역.getId(), 10, 10);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_조회_요청(line.getId());
@@ -100,12 +100,13 @@ class LineAcceptanceTest extends AcceptanceTest {
         StationResponse 강남역 = StationSteps.지하철역_생성("강남역");
         StationResponse 양재역 = StationSteps.지하철역_생성("양재역");
 
-        LineResponse line = 지하철_노선_생성("2호선", "초록", 강남역.getId(), 양재역.getId(), 10, 10);
+        LineResponse line = 지하철_노선_생성("2호선", "초록", 0, 강남역.getId(), 양재역.getId(), 10, 10);
 
         // when
         Map<String, String> params = new HashMap<>();
         params.put("name", "3호선");
         params.put("color", "초록");
+        params.put("extraFare", "300");
         RestAssured
             .given()
             .body(params)
@@ -119,6 +120,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("name")).isEqualTo("3호선");
         assertThat(response.jsonPath().getString("color")).isEqualTo("초록");
+        assertThat(response.jsonPath().getLong("extraFare")).isEqualTo(300);
     }
 
     /**
@@ -133,7 +135,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         StationResponse 강남역 = StationSteps.지하철역_생성("강남역");
         StationResponse 양재역 = StationSteps.지하철역_생성("양재역");
 
-        LineResponse line = 지하철_노선_생성("2호선", "green", 강남역.getId(), 양재역.getId(), 10, 10);
+        LineResponse line = 지하철_노선_생성("2호선", "green", 0, 강남역.getId(), 양재역.getId(), 10, 10);
 
         // when
         ExtractableResponse<Response> response = RestAssured

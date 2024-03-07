@@ -1,4 +1,4 @@
-package nextstep.subway.applicaion;
+package nextstep.subway.applicaion.path;
 
 import java.util.Collection;
 import nextstep.subway.domain.PathFinder;

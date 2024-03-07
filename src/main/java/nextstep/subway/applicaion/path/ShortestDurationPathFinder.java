@@ -1,7 +1,10 @@
-package nextstep.subway.applicaion;
+package nextstep.subway.applicaion.path;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import nextstep.subway.domain.Line;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
@@ -9,11 +12,11 @@ import nextstep.subway.domain.vo.Path;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
-public class ShortestDistancePathFinder implements PathFinder {
+public class ShortestDurationPathFinder implements PathFinder {
 
   private final DijkstraShortestPath<Station, PathWeightedEdge> path;
 
-  public ShortestDistancePathFinder(final Collection<Section> sections) {
+  public ShortestDurationPathFinder(final Collection<Section> sections) {
     path = buildPath(sections);
   }
 
@@ -30,14 +33,14 @@ public class ShortestDistancePathFinder implements PathFinder {
       graph.addVertex(section.getDownStation());
 
       // add edge
-      final var edge = new PathWeightedEdge(section.getDistance(), section.getDuration());
+      final var edge = new PathWeightedEdge(section.getLine(), section.getDistance(), section.getDuration());
       graph.addEdge(
           section.getUpStation(),
           section.getDownStation(),
           edge
       );
 
-      graph.setEdgeWeight(edge, edge.getDistance());
+      graph.setEdgeWeight(edge, edge.getDuration());
     });
 
     return new DijkstraShortestPath<>(graph);
@@ -61,8 +64,12 @@ public class ShortestDistancePathFinder implements PathFinder {
         .mapToInt(PathWeightedEdge::getDuration)
         .sum();
 
+    final List<Line> lines = path.getEdgeList().stream()
+        .map(PathWeightedEdge::getLine)
+        .collect(Collectors.toList());
+
     return Optional.of(path)
-        .map(it -> Path.from(it.getVertexList(), distance, duration));
+        .map(it -> Path.from(it.getVertexList(), distance, duration, lines));
   }
 
   @Override
