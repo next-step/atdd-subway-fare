@@ -44,7 +44,8 @@ public class PathStepDef implements En {
         Then("총 거리는 {string}이고 최소 시간은 {string}이다.", (String distance, String duration) -> {
             PathResponse pathResponse = context.response.as(PathResponse.class);
 
-            assertThat(pathResponse.getDistance()).isEqualTo(Integer.parseInt(distance));
+            assertThat(pathResponse.getDistance()).isEqualTo(Long.parseLong(distance));
+            assertThat(pathResponse.getDuration()).isEqualTo(Long.parseLong(duration));
         });
     }
 }
