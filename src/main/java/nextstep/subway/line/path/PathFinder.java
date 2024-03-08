@@ -23,7 +23,6 @@ public class PathFinder {
         isSameStation(sourceStation, targetStation);
 
         List<Section> sections = allSections();
-
         SimpleWeightedGraph<Station, CustomWeightedEdge> graph = makeSimpleWeightedGraph(allStations(sections), sections, type);
         GraphPath<Station, CustomWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(graph, sourceStation, targetStation);
 

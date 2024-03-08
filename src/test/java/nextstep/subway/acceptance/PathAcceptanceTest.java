@@ -54,6 +54,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(24L);
         assertThat(response.jsonPath().getLong("duration")).isEqualTo(8L);
     }
 
@@ -71,7 +72,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(response.jsonPath().getLong("distance")).isEqualTo(23);
+        assertThat(response.jsonPath().getLong("distance")).isEqualTo(23L);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(10L);
     }
 
     /**

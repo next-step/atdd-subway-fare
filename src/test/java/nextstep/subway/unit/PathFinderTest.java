@@ -40,6 +40,7 @@ public class PathFinderTest {
         PathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역, PathType.DURATION);
 
         assertThat(pathResponse.getStations()).containsExactly(교대역, 강남역, 양재역);
+        assertThat(pathResponse.getDistance()).isEqualTo(24L);
         assertThat(pathResponse.getDuration()).isEqualTo(8L);
     }
 
@@ -50,6 +51,7 @@ public class PathFinderTest {
 
         assertThat(pathResponse.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(pathResponse.getDistance()).isEqualTo(23L);
+        assertThat(pathResponse.getDuration()).isEqualTo(10L);
     }
 
     @DisplayName("에러_최단 거리 경로 조회_출발역 도착역 같음")

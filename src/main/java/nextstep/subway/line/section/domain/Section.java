@@ -51,11 +51,13 @@ public class Section {
     public void moveBackFrom(Section prevSection) {
         this.upStation = prevSection.downStation;
         this.distance = this.distance - prevSection.distance;
+        this.duration = this.duration - prevSection.duration;
     }
 
     public void mergeWith(Section nextSection) {
         this.downStation = nextSection.downStation;
         this.distance = distance + nextSection.distance;
+        this.duration = duration + nextSection.duration;
     }
 
     public Long getId() {
