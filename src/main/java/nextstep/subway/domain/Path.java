@@ -8,12 +8,13 @@ import java.util.List;
 @Getter
 public class Path {
     private List<Station> path;
-    private double distance;
+    private Long distance;
+    private Long duration;
 
     @Builder
-    public Path(List<Station> path, double distance) {
+    public Path(List<Station> path, Long distance, Long duration) {
         this.path = path;
         this.distance = distance;
+        this.duration = duration;
     }
-
 }
