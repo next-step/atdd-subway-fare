@@ -6,7 +6,6 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.Section;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.pathfinder.ShortestDistancePathFinder;
 import nextstep.subway.domain.pathfinder.ShortestDurationPathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,7 +1,6 @@
 package nextstep.cucumber.steps;
 
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.controller.dto.PathResponse;
 import nextstep.subway.controller.dto.StationResponse;
@@ -9,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static nextstep.subway.acceptance.path.PathSteps.최단경로_조회요청;
+import static nextstep.subway.acceptance.path.PathSteps.최소시간경로_조회요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
@@ -20,10 +21,7 @@ public class PathStepDef implements En {
             Long sourceId = ((StationResponse) context.store.get(source)).getId();
             Long targetId = ((StationResponse) context.store.get(target)).getId();
 
-            context.response = RestAssured.given().log().all()
-                    .when().get("/paths?source={sourceId}&target={targetId}&type=DISTANCE", sourceId, targetId)
-                    .then().log().all()
-                    .extract();
+            context.response = 최단경로_조회요청(sourceId, targetId);
         });
 
         Then("{string} 경로가 조회된다", (String pathString) -> {
@@ -35,10 +33,7 @@ public class PathStepDef implements En {
             Long sourceId = ((StationResponse) context.store.get(source)).getId();
             Long targetId = ((StationResponse) context.store.get(target)).getId();
 
-            context.response = RestAssured.given().log().all()
-                    .when().get("/paths?source={sourceId}&target={targetId}&type=DURATION", sourceId, targetId)
-                    .then().log().all()
-                    .extract();
+            context.response = 최소시간경로_조회요청(sourceId, targetId);
         });
 
         Then("총 거리는 {string}이고 최소 시간은 {string}이다.", (String distance, String duration) -> {

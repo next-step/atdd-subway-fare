@@ -3,18 +3,18 @@ package nextstep.cucumber.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.controller.dto.LineResponse;
 import nextstep.subway.controller.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static nextstep.subway.acceptance.line.LineSteps.라인_생성요청;
+import static nextstep.subway.acceptance.sections.SectionSteps.구간_생성요청;
 
 public class LineStepDef implements En {
     @Autowired
@@ -25,21 +25,16 @@ public class LineStepDef implements En {
             List<Map<String, String>> maps = table.asMaps();
             maps.stream()
                     .forEach(param -> {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("name", param.get("name"));
-                        params.put("color", param.get("color"));
-                        params.put("upStationId", ((StationResponse) context.store.get(param.get("upStation"))).getId().toString());
-                        params.put("downStationId", ((StationResponse) context.store.get(param.get("downStation"))).getId().toString());
-                        params.put("distance", param.get("distance"));
-                        params.put("duration", param.get("duration"));
-                        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                                .body(params)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .when()
-                                .post("/lines")
-                                .then().log().all()
-                                .extract();
-                        context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
+                        ExtractableResponse<Response> response = 라인_생성요청(
+                                param.get("name"),
+                                param.get("color"),
+                                ((StationResponse) context.store.get(param.get("upStation"))).getId(),
+                                ((StationResponse) context.store.get(param.get("downStation"))).getId(),
+                                Long.parseLong(param.get("distance")),
+                                Long.parseLong(param.get("duration"))
+                        );
+
+                        context.store.put(param.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
                     });
         });
 
@@ -48,18 +43,13 @@ public class LineStepDef implements En {
             maps.stream()
                     .forEach(param -> {
                         String lineName = param.get("lineName");
-                        Map<String, String> params = new HashMap<>();
-                        params.put("upStationId", ((StationResponse) context.store.get(param.get("upStation"))).getId().toString());
-                        params.put("downStationId", ((StationResponse) context.store.get(param.get("downStation"))).getId().toString());
-                        params.put("distance", param.get("distance"));
-                        params.put("duration", param.get("duration"));
                         LineResponse line = (LineResponse) context.store.get(lineName);
-                        RestAssured.given().log().all()
-                                .body(params)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .when()
-                                .post("/lines/{lineId}/sections", line.getId())
-                                .then().log().all();
+
+                        구간_생성요청(line.getId(),
+                                ((StationResponse) context.store.get(param.get("upStation"))).getId(),
+                                ((StationResponse) context.store.get(param.get("downStation"))).getId(),
+                                Long.parseLong(param.get("distance")),
+                                Long.parseLong(param.get("duration")));
                     });
         });
     }
