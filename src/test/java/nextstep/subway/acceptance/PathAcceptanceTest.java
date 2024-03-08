@@ -98,7 +98,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given
         Long 미금역 = 지하철_역_생성("미금역").jsonPath().getLong("id");
         Long 정자역 = 지하철_역_생성("정자역").jsonPath().getLong("id");
-        Long 분당선 = 지하철_노선_생성(new LineRequest("분당선", "yellow", 미금역, 정자역, 15L)).jsonPath().getLong("id");
+        Long 분당선 = 지하철_노선_생성(new LineRequest("분당선", "yellow", 미금역, 정자역, 15L, 8L)).jsonPath().getLong("id");
 
         // when
         // then

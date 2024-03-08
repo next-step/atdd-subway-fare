@@ -32,10 +32,6 @@ public class Section {
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, Long distance) {
-        this(line, upStation, downStation, distance, 0L);
-    }
-
     public Section(Line line, Station upStation, Station downStation, Long distance, Long duration) {
         this.line = line;
         this.upStation = upStation;

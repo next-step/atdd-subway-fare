@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.application.dto.LineRequest;
+import nextstep.subway.line.path.PathType;
 import nextstep.subway.line.section.dto.SectionRequest;
 import nextstep.subway.utils.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,8 @@ public class StationStepDef implements En {
                 entry.get("색상"),
                 getIdFromStore(entry.get("출발역")),
                 getIdFromStore(entry.get("도착역")),
-                Long.parseLong(entry.get("거리"))
+                Long.parseLong(entry.get("거리")),
+                Long.parseLong(entry.get("소요시간"))
         ));
 
         When("지하철역을 생성하면", () -> {
@@ -93,14 +95,15 @@ public class StationStepDef implements En {
             }
         });
 
-        And("{string}노선에 {string}에서 {string}까지 거리가 {long}인 지하철 구간을 추가한다", (String line, String upStation, String downStation, Long distance) -> {
+        And("{string}노선에 {string}에서 {string}까지 거리가 {long}, 소요 시간이 {long}인 지하철 구간을 추가한다", (String line, String upStation, String downStation, Long distance, Long duration) -> {
             RestAssured
                     .given()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .body(new SectionRequest(
                             getIdFromStore(upStation),
                             getIdFromStore(downStation),
-                            distance)
+                            distance,
+                            duration)
                     )
                     .when().log().all()
                     .post("/lines/" + getIdFromStore(line) + "/sections")
@@ -108,12 +111,13 @@ public class StationStepDef implements En {
                     .statusCode(HttpStatus.CREATED.value());
         });
 
-        When("{string}부터 {string}까지의 최단 경로를 조회하면", (String source, String target) -> {
+        When("{string}부터 {string}까지의 최단 거리 경로를 조회하면", (String source, String target) -> {
             response = RestAssured
                     .given().log().all()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .param("source", getIdFromStore(source))
                     .param("target", getIdFromStore(target))
+                    .param("type", PathType.DISTANCE)
                     .when()
                     .get("/paths")
                     .then().log().all()

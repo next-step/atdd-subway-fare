@@ -2,11 +2,10 @@ package nextstep.subway.unit;
 
 import nextstep.subway.Exception.SubwayException;
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.path.PathResponse;
+import nextstep.subway.line.path.PathFinder;
 import nextstep.subway.line.path.PathType;
 import nextstep.subway.line.section.domain.Section;
-import nextstep.subway.line.path.NewPathResponse;
-import nextstep.subway.line.path.PathFinder;
-import nextstep.subway.line.path.PathResponse;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +37,7 @@ public class PathFinderTest {
     @DisplayName("최단 시간 경로 조회")
     @Test
     void shortestDistancePath() {
-        NewPathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역, PathType.DURATION);
+        PathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역, PathType.DURATION);
 
         assertThat(pathResponse.getStations()).containsExactly(교대역, 강남역, 양재역);
         assertThat(pathResponse.getDuration()).isEqualTo(8L);
@@ -47,24 +46,24 @@ public class PathFinderTest {
     @DisplayName("최단 거리 경로 조회")
     @Test
     void shortestDurationPath() {
-        PathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역);
+        PathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역, PathType.DISTANCE);
 
         assertThat(pathResponse.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(pathResponse.getDistance()).isEqualTo(23L);
     }
 
-    @DisplayName("에러_최단 경로 조회_출발역 도착역 같음")
+    @DisplayName("에러_최단 거리 경로 조회_출발역 도착역 같음")
     @Test
     void error_shortestPath_target_source_same() {
-        assertThatThrownBy(() -> new PathFinder(LINES).shortestPath(교대역, 교대역))
+        assertThatThrownBy(() -> new PathFinder(LINES).shortestPath(교대역, 교대역, PathType.DISTANCE))
                 .isInstanceOf(SubwayException.class)
                 .hasMessage("출발역과 도착역이 같습니다.");
     }
 
-    @DisplayName("에러_최단 경로 조회_출발역 도착역 연결되지 않음")
+    @DisplayName("에러_최단 거리 경로 조회_출발역 도착역 연결되지 않음")
     @Test
     void error_shortestPath_target_source_not_connected() {
-        assertThatThrownBy(() -> new PathFinder(LINES).shortestPath(교대역, 미금역))
+        assertThatThrownBy(() -> new PathFinder(LINES).shortestPath(교대역, 미금역, PathType.DISTANCE))
                 .isInstanceOf(SubwayException.class)
                 .hasMessage("연결되지 않은 역 정보입니다.");
     }

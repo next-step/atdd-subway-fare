@@ -65,7 +65,7 @@ public class SubwaySteps {
                 .param("source", sourceStation)
                 .param("target", targetStation)
                 .param("type", type.name())
-                .get("/paths/new")
+                .get("/paths")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .extract();
@@ -79,7 +79,7 @@ public class SubwaySteps {
                 .param("source", sourceStation)
                 .param("target", targetStation)
                 .param("type", type.name())
-                .get("/paths/new")
+                .get("/paths")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }

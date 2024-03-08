@@ -7,9 +7,7 @@ import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,26 +19,7 @@ public class PathFinder {
         this.lines = lines;
     }
 
-    public PathResponse shortestPath(Station sourceStation, Station targetStation) {
-        if (sourceStation.equals(targetStation)) {
-            throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "출발역과 도착역이 같습니다.");
-        }
-
-        List<Section> sections = allSections();
-        List<Station> stations = allStations(sections);
-
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = makeWeightedMultigraph(stations, sections);
-        DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-
-        GraphPath<Station, DefaultWeightedEdge> shortestPath = dijkstraShortestPath.getPath(sourceStation, targetStation);
-
-        if (shortestPath == null) {
-            throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "연결되지 않은 역 정보입니다.");
-        }
-        return new PathResponse(shortestPath.getVertexList(), (long) dijkstraShortestPath.getPathWeight(sourceStation, targetStation));
-    }
-
-    public NewPathResponse shortestPath(Station sourceStation, Station targetStation, PathType type) {
+    public PathResponse shortestPath(Station sourceStation, Station targetStation, PathType type) {
         isSameStation(sourceStation, targetStation);
 
         List<Section> sections = allSections();
@@ -51,7 +30,7 @@ public class PathFinder {
         if (shortestPath == null) {
             throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "연결되지 않은 역 정보입니다.");
         }
-        return new NewPathResponse(shortestPath.getVertexList(), totalDistance(shortestPath), totalDuration(shortestPath));
+        return new PathResponse(shortestPath.getVertexList(), totalDistance(shortestPath), totalDuration(shortestPath));
     }
 
     private static void isSameStation(Station sourceStation, Station targetStation) {
@@ -59,7 +38,6 @@ public class PathFinder {
             throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "출발역과 도착역이 같습니다.");
         }
     }
-
 
     private List<Section> allSections() {
         return lines.stream()
@@ -72,13 +50,6 @@ public class PathFinder {
                 .flatMap(section -> section.stations().stream())
                 .distinct()
                 .collect(Collectors.toList());
-    }
-
-    private static WeightedMultigraph<Station, DefaultWeightedEdge> makeWeightedMultigraph(List<Station> stations, List<Section> sections) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        stations.forEach(graph::addVertex);
-        sections.forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance()));
-        return graph;
     }
 
     private static SimpleWeightedGraph<Station, CustomWeightedEdge> makeSimpleWeightedGraph(List<Station> stations, List<Section> sections, PathType type) {
@@ -101,6 +72,6 @@ public class PathFinder {
     }
 
     public void isConnected(Station sourceStation, Station targetStation) {
-        shortestPath(sourceStation, targetStation);
+        shortestPath(sourceStation, targetStation, PathType.DISTANCE);
     }
 }

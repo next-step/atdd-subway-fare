@@ -5,11 +5,10 @@ import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.application.dto.LineSectionResponse;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
+import nextstep.subway.line.path.PathResponse;
 import nextstep.subway.line.path.PathType;
 import nextstep.subway.line.section.dto.SectionRequest;
 import nextstep.subway.line.section.dto.SectionResponse;
-import nextstep.subway.line.path.NewPathResponse;
-import nextstep.subway.line.path.PathResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,12 +69,7 @@ public class LineController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> shortestPath(@RequestParam("source") Long source, @RequestParam("target") Long target) {
-        return ResponseEntity.ok().body(lineService.getShortestPath(source, target));
-    }
-
-    @GetMapping("/paths/new")
-    public ResponseEntity<NewPathResponse> shortestPath(@RequestParam("source") Long source, @RequestParam("target") Long target, @RequestParam("type") PathType type) {
+    public ResponseEntity<PathResponse> shortestPath(@RequestParam("source") Long source, @RequestParam("target") Long target, @RequestParam("type") PathType type) {
         return ResponseEntity.ok().body(lineService.getShortestPath(source, target, type));
     }
 }

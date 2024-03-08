@@ -11,10 +11,6 @@ public class LineRequest {
     public LineRequest() {
     }
 
-    public LineRequest(String name, String color, Long upStationId, Long downStationId, Long distance) {
-        this(name, color, upStationId, downStationId, distance, 0L);
-    }
-
     public LineRequest(String name, String color, Long upStationId, Long downStationId, Long distance, Long duration) {
         this.name = name;
         this.color = color;
