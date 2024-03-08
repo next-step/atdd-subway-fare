@@ -9,12 +9,13 @@ import nextstep.subway.line.application.dto.LineSectionResponse;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.line.section.Section;
-import nextstep.subway.line.section.SectionRequest;
-import nextstep.subway.line.section.SectionResponse;
-import nextstep.subway.path.NewPathResponse;
-import nextstep.subway.path.PathFinder;
-import nextstep.subway.path.PathResponse;
+import nextstep.subway.line.path.PathType;
+import nextstep.subway.line.section.domain.Section;
+import nextstep.subway.line.section.dto.SectionRequest;
+import nextstep.subway.line.section.dto.SectionResponse;
+import nextstep.subway.line.path.NewPathResponse;
+import nextstep.subway.line.path.PathFinder;
+import nextstep.subway.line.path.PathResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.subway.station.application.dto.StationResponse;
@@ -47,7 +48,7 @@ public class LineService {
         Station upStation = stationRepository.findById(lineRequest.getUpStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         Station downStation = stationRepository.findById(lineRequest.getDownStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
 
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance());
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
 
         lineRepository.save(line);
         return createLineResponse(line);
@@ -113,7 +114,7 @@ public class LineService {
         return new PathFinder(lines).shortestPath(sourceStation, targetStation);
     }
 
-    public NewPathResponse getShortestPath(Long source, Long target, String type) {
+    public NewPathResponse getShortestPath(Long source, Long target, PathType type) {
         Station sourceStation = stationRepository.findById(source).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         List<Line> lines = lineRepository.findAll();

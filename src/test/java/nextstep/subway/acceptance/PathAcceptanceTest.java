@@ -4,7 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.section.SectionRequest;
+import nextstep.subway.line.path.PathType;
+import nextstep.subway.line.section.dto.SectionRequest;
 import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -49,14 +50,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
      * then 출발역과 도착역 사이의 최단 시간 경로 정보를 응답한다.
      */
     @Test
-    void shortest_time_or_distance_path() {
+    void shortest_time_path() {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .param("source", 교대역)
                 .param("target", 양재역)
-                .param("type", "DURATION")
+                .param("type", PathType.DURATION.name())
                 .get("/paths/new")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
@@ -74,7 +75,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("최단 경로 조회")
     @Test
-    void shortestPath() {
+    void shortest_distance_path() {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given().log().all()

@@ -2,10 +2,11 @@ package nextstep.subway.unit;
 
 import nextstep.subway.Exception.SubwayException;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.section.Section;
-import nextstep.subway.path.NewPathResponse;
-import nextstep.subway.path.PathFinder;
-import nextstep.subway.path.PathResponse;
+import nextstep.subway.line.path.PathType;
+import nextstep.subway.line.section.domain.Section;
+import nextstep.subway.line.path.NewPathResponse;
+import nextstep.subway.line.path.PathFinder;
+import nextstep.subway.line.path.PathResponse;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,16 +35,16 @@ public class PathFinderTest {
         삼호선.addSection(new Section(삼호선, 양재역, 남부터미널역, 5L, 6L));
     }
 
-    @DisplayName("최단 거리 경로 조회")
+    @DisplayName("최단 시간 경로 조회")
     @Test
     void shortestDistancePath() {
-        NewPathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역, "DURATION");
+        NewPathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역, PathType.DURATION);
 
         assertThat(pathResponse.getStations()).containsExactly(교대역, 강남역, 양재역);
-        assertThat(pathResponse.getDistance()).isEqualTo(8L);
+        assertThat(pathResponse.getDuration()).isEqualTo(8L);
     }
 
-    @DisplayName("최단 시간 경로 조회")
+    @DisplayName("최단 거리 경로 조회")
     @Test
     void shortestDurationPath() {
         PathResponse pathResponse = new PathFinder(LINES).shortestPath(교대역, 양재역);

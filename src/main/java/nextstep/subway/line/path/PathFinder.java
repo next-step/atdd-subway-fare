@@ -1,9 +1,9 @@
-package nextstep.subway.path;
+package nextstep.subway.line.path;
 
 import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.section.Section;
+import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -40,17 +40,13 @@ public class PathFinder {
         return new PathResponse(shortestPath.getVertexList(), (long) dijkstraShortestPath.getPathWeight(sourceStation, targetStation));
     }
 
-    public NewPathResponse shortestPath(Station sourceStation, Station targetStation, String type) {
-        if (sourceStation.equals(targetStation)) {
-            throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "출발역과 도착역이 같습니다.");
-        }
+    public NewPathResponse shortestPath(Station sourceStation, Station targetStation, PathType type) {
+        isSameStation(sourceStation, targetStation);
 
         List<Section> sections = allSections();
-        List<Station> stations = allStations(sections);
 
-        SimpleWeightedGraph<Station, CustomWeightedEdge> graph = makeSimpleWeightedGraph(stations, sections, type);
-        DijkstraShortestPath<Station, CustomWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, CustomWeightedEdge> shortestPath = dijkstraShortestPath.getPath(sourceStation, targetStation);
+        SimpleWeightedGraph<Station, CustomWeightedEdge> graph = makeSimpleWeightedGraph(allStations(sections), sections, type);
+        GraphPath<Station, CustomWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(graph, sourceStation, targetStation);
 
         if (shortestPath == null) {
             throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "연결되지 않은 역 정보입니다.");
@@ -58,13 +54,12 @@ public class PathFinder {
         return new NewPathResponse(shortestPath.getVertexList(), totalDistance(shortestPath), totalDuration(shortestPath));
     }
 
-    private long totalDistance(GraphPath<Station, CustomWeightedEdge> shortestPath) {
-        return shortestPath.getEdgeList().stream().mapToLong(value -> (long) value.getDistance()).sum();
+    private static void isSameStation(Station sourceStation, Station targetStation) {
+        if (sourceStation.equals(targetStation)) {
+            throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "출발역과 도착역이 같습니다.");
+        }
     }
 
-    private long totalDuration(GraphPath<Station, CustomWeightedEdge> shortestPath) {
-        return shortestPath.getEdgeList().stream().mapToLong(value -> (long) value.getDuration()).sum();
-    }
 
     private List<Section> allSections() {
         return lines.stream()
@@ -86,15 +81,23 @@ public class PathFinder {
         return graph;
     }
 
-    private static SimpleWeightedGraph<Station, CustomWeightedEdge> makeSimpleWeightedGraph(List<Station> stations, List<Section> sections, String type) {
+    private static SimpleWeightedGraph<Station, CustomWeightedEdge> makeSimpleWeightedGraph(List<Station> stations, List<Section> sections, PathType type) {
         SimpleWeightedGraph<Station, CustomWeightedEdge> graph = new SimpleWeightedGraph<>(CustomWeightedEdge.class);
         stations.forEach(graph::addVertex);
         sections.forEach(section -> {
             CustomWeightedEdge edge = new CustomWeightedEdge(section.getDistance(), section.getDuration());
             graph.addEdge(section.getUpStation(), section.getDownStation(), edge);
-            graph.setEdgeWeight(edge, type.equals("DISTANCE") ? section.getDistance() : section.getDuration());
+            graph.setEdgeWeight(edge, type.isDistance() ? section.getDistance() : section.getDuration());
         });
         return graph;
+    }
+
+    private long totalDistance(GraphPath<Station, CustomWeightedEdge> shortestPath) {
+        return shortestPath.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDistance).sum();
+    }
+
+    private long totalDuration(GraphPath<Station, CustomWeightedEdge> shortestPath) {
+        return shortestPath.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDuration).sum();
     }
 
     public void isConnected(Station sourceStation, Station targetStation) {
