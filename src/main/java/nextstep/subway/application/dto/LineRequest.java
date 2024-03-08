@@ -2,14 +2,11 @@ package nextstep.subway.application.dto;
 
 public class LineRequest {
 	private String name;
-
 	private String color;
-
 	private Long startStationId;
-
 	private Long endStationId;
-
 	private int distance;
+	private int duration;
 
 	public String getName() {
 		return name;
@@ -34,12 +31,13 @@ public class LineRequest {
 	public LineRequest() {
 	}
 
-	public LineRequest(String name, String color, Long startStationId, Long endStationId, int distance) {
+	public LineRequest(String name, String color, Long startStationId, Long endStationId, int distance, int duration) {
 		this.name = name;
 		this.color = color;
 		this.startStationId = startStationId;
 		this.endStationId = endStationId;
 		this.distance = distance;
+		this.duration = duration;
 	}
 
 	public LineRequest(String name, String color) {

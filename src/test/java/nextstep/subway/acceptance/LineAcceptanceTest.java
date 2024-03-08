@@ -28,7 +28,7 @@ public class LineAcceptanceTest {
 	@Test
 	void createLineTest() {
 		// when
-		ExtractableResponse<Response> response = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10);
+		ExtractableResponse<Response> response = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10, 5);
 
 		// then
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -44,8 +44,8 @@ public class LineAcceptanceTest {
 	@Test
 	void getLinesTest() {
 		// given
-		노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10);
-		노선_생성_요청(TEST_LINE_NAME_2, TEST_LINE_COLOR_2, 동대문역, 종로5가역, 10);
+		노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10, 5);
+		노선_생성_요청(TEST_LINE_NAME_2, TEST_LINE_COLOR_2, 동대문역, 종로5가역, 10, 5);
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_전체_조회_요청();
@@ -64,7 +64,7 @@ public class LineAcceptanceTest {
 	@Test
 	void getLineTest() {
 		// given
-		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10).jsonPath().getLong("id");
+		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10, 5).jsonPath().getLong("id");
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_단건_조회_요청(id);
@@ -82,7 +82,7 @@ public class LineAcceptanceTest {
 	@Test
 	void updateLineTest() {
 		// given
-		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10).jsonPath().getLong("id");
+		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10, 5).jsonPath().getLong("id");
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_수정_요청(TEST_LINE_NAME_2, TEST_LINE_COLOR_2, id);
@@ -96,20 +96,20 @@ public class LineAcceptanceTest {
 
 	/**
 	 * Given 지하철 노선을 생성하고
-	 * When 생성한 지하철 노선을 빈 값이 있는 채로 수정하면
-	 * Then 해당 지하철 노선 정보는 수정되지 않고 Bad Request (400) 을 반환한다.
+	 * When 생성한 지하철 노선의 색상을 빈 값으로 수정하면
+	 * Then 해당 지하철 노선 정보는 수정되지 않고 "색상 값이 빈 값일 수 없습니다."라는 메시지를 반환한다.
 	 */
 	@DisplayName("지하철 노선을 수정한다.")
 	@Test
 	void updateLineWithNullThenFailTest() {
 		// given
-		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10).jsonPath().getLong("id");
+		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10, 5).jsonPath().getLong("id");
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_수정_요청(TEST_LINE_NAME_2, "", id);
 
 		// then
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+		assertThat(response.body().jsonPath().getString("message")).isEqualTo("색상 값이 빈 값일 수 없습니다.");
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class LineAcceptanceTest {
 	@Test
 	void deleteLineTest() {
 		// given
-		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10).jsonPath().getLong("id");
+		Long id = 노선_생성_요청(TEST_LINE_NAME_1, TEST_LINE_COLOR_1, 종로3가역, 시청역, 10, 5).jsonPath().getLong("id");
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_삭제_요청(id);

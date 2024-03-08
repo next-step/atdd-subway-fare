@@ -27,7 +27,8 @@ public class LineStepDef implements En {
 								data.get("color"),
 								((StationResponse) context.store.get(data.get("startStation"))).getId(),
 								((StationResponse) context.store.get(data.get("endStation"))).getId(),
-								Integer.parseInt(data.get("distance"))
+								Integer.parseInt(data.get("distance")),
+								Integer.parseInt(data.get("duration"))
 						);
 						context.store.put(data.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
 					})

@@ -12,7 +12,7 @@ public class PathSteps {
 
 	private static final RestApiRequest<PathRequest> apiRequest = new RestApiRequest<>();
 
-	public static ExtractableResponse<Response> 최단_경로_조회_요청(Long source, Long target) {
-		return apiRequest.get(PATH_API_URL, Map.of("source", source, "target", target));
+	public static ExtractableResponse<Response> 최단_경로_조회_요청(Long source, Long target, String type) {
+		return apiRequest.get(PATH_API_URL, Map.of("source", source, "target", target, "type", type));
 	}
 }

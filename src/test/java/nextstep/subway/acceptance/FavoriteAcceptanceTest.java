@@ -30,7 +30,7 @@ public class FavoriteAcceptanceTest {
 		시청역 = 역_생성_요청("시청역").jsonPath().getLong("id");
 		서울역 = 역_생성_요청("서울역").jsonPath().getLong("id");
 
-		LineSteps.노선_생성_요청("분당선", "노랑", 종로3가역, 시청역, 6);
+		LineSteps.노선_생성_요청("분당선", "노랑", 종로3가역, 시청역, 6, 4);
 
 		String email = "aab555586@gmail.com";
 		String password = "password";
@@ -90,7 +90,7 @@ public class FavoriteAcceptanceTest {
 		// given
 		Long 동대문역 = 역_생성_요청("동대문역").jsonPath().getLong("id");
 
-		LineSteps.노선_생성_요청("4호선", "하늘", 동대문역, 서울역, 6);
+		LineSteps.노선_생성_요청("4호선", "하늘", 동대문역, 서울역, 6, 4);
 
 		// when
 		ExtractableResponse<Response> response = 즐겨찾기_생성_요청(accessToken, 종로3가역, 동대문역);

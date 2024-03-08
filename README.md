@@ -41,15 +41,15 @@ private int duration;
 ~~~
 
 ## TODO
-- [ ] 노선추가 & 구간 추가 시 소요시간 정보 추가
+- [ ] 노선 추가 & 구간 추가 시 소요시간 정보 추가
   - [x] 노선 인수 테스트 수정 -> cucumber 전환
-  - [ ] SectionRequest, LineRequest 객체에 소요시간 추가
+  - [x] SectionRequest, LineRequest 객체에 소요시간 추가
   - [ ] Section 객체에 소요시간 추가
-  - [ ]Sections - addSection, addMidSection 메소드 수정
+  - [ ] Sections - addSection, addMidSection 메소드 수정
   - [ ] LineService - saveLine 수정
 
 - [ ] 경로 조회 시 최소 시간 기준으로 조회 기능 추가
-  - [ ] 경로 조회 인수 테스트 수정 
+  - [x] 경로 조회 인수 테스트 수정 
     - type(거리/시간) 별로 조회
   - [ ] 경로 조회 조건에 type 추가
   - [ ] PathFinder 객체에 type 추가 및 type 별 경로 조회 기능 구현
