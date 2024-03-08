@@ -50,16 +50,30 @@ public class PathAcceptanceTest {
                 StationFixture.createStationParams("남부터미널역"),
                 "/stations");
         이호선 = 생성_요청(
-                LineFixture.createLineParams("2호선", "GREEN", 교대역.jsonPath().getLong("id"), 강남역.jsonPath().getLong("id"), 10L),
+                LineFixture.createLineParams("2호선", "GREEN",
+                        교대역.jsonPath().getLong("id"),
+                        강남역.jsonPath().getLong("id"),
+                        10L,
+                        10L),
                 "/lines");
         신분당선 = 생성_요청(
-                LineFixture.createLineParams("신분당선", "RED", 강남역.jsonPath().getLong("id"), 양재역.jsonPath().getLong("id"), 10L),
+                LineFixture.createLineParams("신분당선",
+                        "RED",
+                        강남역.jsonPath().getLong("id"),
+                        양재역.jsonPath().getLong("id"),
+                        10L,
+                        10L),
                 "/lines");
         삼호선 = 생성_요청(
-                LineFixture.createLineParams("3호선", "ORANGE", 교대역.jsonPath().getLong("id"), 남부터미널역.jsonPath().getLong("id"), 2L),
+                LineFixture.createLineParams("3호선",
+                        "ORANGE",
+                        교대역.jsonPath().getLong("id"),
+                        남부터미널역.jsonPath().getLong("id"),
+                        2L,
+                        10L),
                 "/lines");
         생성_요청(
-                SectionFixture.createSectionParams(남부터미널역.jsonPath().getLong("id"), 양재역.jsonPath().getLong("id"), 3L),
+                SectionFixture.createSectionParams(남부터미널역.jsonPath().getLong("id"), 양재역.jsonPath().getLong("id"), 3L, 10L),
                 "/lines/" + 삼호선.jsonPath().getLong("id") + "/sections"
         );
     }
@@ -116,10 +130,10 @@ public class PathAcceptanceTest {
                 "/stations");
 
         생성_요청(
-                LineFixture.createLineParams("신림선", "GRAY", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 10L),
+                LineFixture.createLineParams("신림선", "GRAY", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines");
         생성_요청(
-                LineFixture.createLineParams("4호선", "BLUE", 사당역.jsonPath().getLong("id"), 이수역.jsonPath().getLong("id"), 10L),
+                LineFixture.createLineParams("4호선", "BLUE", 사당역.jsonPath().getLong("id"), 이수역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines");
 
         //when
