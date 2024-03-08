@@ -76,7 +76,7 @@ public class Sections {
                 .map(Section::getDownStation)
                 .filter(downStation -> isEndStation(downStation))
                 .findFirst()
-                .orElseThrow(()-> new NotFoundException("하행역을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("하행역을 찾을 수 없습니다."));
     }
 
     private boolean isEndStation(Station downStation) {
@@ -116,6 +116,7 @@ public class Sections {
                 .upStation(removedSection.getDownStation())
                 .downStation(section.getDownStation())
                 .distance(removedSection.getDistance())
+                .duration(removedSection.getDuration())
                 .line(removedSection.getLine())
                 .build());
     }
@@ -139,6 +140,7 @@ public class Sections {
                 .upStation(changeSection.getDownStation())
                 .downStation(section.getDownStation())
                 .distance(distance)
+                .duration(section.getDuration())
                 .line(changeSection.getLine())
                 .build();
 
@@ -183,6 +185,7 @@ public class Sections {
                 .upStation(previousSection.getUpStation())
                 .downStation(nextSection.getDownStation())
                 .distance(newDistance)
+                .duration(nextSection.getDuration())
                 .build();
 
         sections.remove(previousSection);
