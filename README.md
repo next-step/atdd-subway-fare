@@ -42,9 +42,10 @@ private int duration;
 
 ## TODO
 - [ ] 노선추가 & 구간 추가 시 소요시간 정보 추가
-  - [ ] 노선 인수 테스트 수정 -> cucumber 전환
-  - [ ] Section, SectionRequest, LineRequest 객체에 소요시간 추가
-  - [ ] Sections - addSection, addMidSection 메소드 수정
+  - [x] 노선 인수 테스트 수정 -> cucumber 전환
+  - [ ] SectionRequest, LineRequest 객체에 소요시간 추가
+  - [ ] Section 객체에 소요시간 추가
+  - [ ]Sections - addSection, addMidSection 메소드 수정
   - [ ] LineService - saveLine 수정
 
 - [ ] 경로 조회 시 최소 시간 기준으로 조회 기능 추가
