@@ -27,7 +27,6 @@ public class LineServiceTest {
     private StationRepository stationRepository;
     @Autowired
     private LineRepository lineRepository;
-
     @Autowired
     private LineService lineService;
 
@@ -50,6 +49,7 @@ public class LineServiceTest {
                 .upStation(신림역)
                 .downStation(보라매역)
                 .distance(10L)
+                .duration(10L)
                 .build());
     }
 
@@ -63,6 +63,7 @@ public class LineServiceTest {
                 .upStationId(String.valueOf(보라매역.getId()))
                 .downStationId(String.valueOf(보라매병원역.getId()))
                 .distance(22L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선.getId(), 구간_생성_요청);
 
@@ -80,6 +81,7 @@ public class LineServiceTest {
                 .upStationId(String.valueOf(신림역.getId()))
                 .downStationId(String.valueOf(보라매병원역.getId()))
                 .distance(5L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선.getId(), 구간_생성_요청);
 
@@ -97,6 +99,7 @@ public class LineServiceTest {
                 .upStationId(String.valueOf(보라매병원역.getId()))
                 .downStationId(String.valueOf(신림역.getId()))
                 .distance(10L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선.getId(), 구간_생성_요청);
 
@@ -113,6 +116,7 @@ public class LineServiceTest {
                 .upStation(보라매역)
                 .downStation(보라매병원역)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -133,6 +137,7 @@ public class LineServiceTest {
                 .upStation(보라매역)
                 .downStation(보라매병원역)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -153,6 +158,7 @@ public class LineServiceTest {
                 .upStation(보라매역)
                 .downStation(보라매병원역)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 

@@ -77,6 +77,7 @@ public class LineService {
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(request.getDistance())
+                .duration(request.getDuration())
                 .build();
         line.addSection(section);
 
