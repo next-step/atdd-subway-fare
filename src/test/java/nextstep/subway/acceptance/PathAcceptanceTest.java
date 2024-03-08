@@ -37,10 +37,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철_역_생성("강남역").jsonPath().getLong("id");
         양재역 = 지하철_역_생성("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철_역_생성("남부터미널역").jsonPath().getLong("id");
-        이호선 = 지하철_노선_생성(new LineRequest("이호선", "green", 교대역, 강남역, 10L)).jsonPath().getLong("id");
-        신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 14L)).jsonPath().getLong("id");
-        삼호선 = 지하철_노선_생성(new LineRequest("삼호선", "orange", 양재역, 교대역, 23L)).jsonPath().getLong("id");
-        지하철_구간_생성(삼호선, new SectionRequest(양재역, 남부터미널역, 5L));
+        이호선 = 지하철_노선_생성(new LineRequest("이호선", "green", 교대역, 강남역, 10L, 3L)).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 14L, 5L)).jsonPath().getLong("id");
+        삼호선 = 지하철_노선_생성(new LineRequest("삼호선", "orange", 양재역, 교대역, 23L, 10L)).jsonPath().getLong("id");
+        지하철_구간_생성(삼호선, new SectionRequest(양재역, 남부터미널역, 5L, 6L));
     }
 
     /**
@@ -64,7 +64,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(교대역, 강남역, 양재역);
-        assertThat(response.jsonPath().getLong("duration")).isEqualTo(15);
+        assertThat(response.jsonPath().getLong("duration")).isEqualTo(8L);
     }
 
     /**

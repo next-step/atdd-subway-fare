@@ -23,14 +23,14 @@ public class Line {
     }
 
     public Line(String name, String color, Station upStation, Station downStation, Long distance) {
-        this(null, name, color, upStation, downStation, distance);
+        this(null, name, color, upStation, downStation, distance, 0L);
     }
 
-    public Line(Long id, String name, String color, Station upStation, Station downStation, Long distance) {
+    public Line(Long id, String name, String color, Station upStation, Station downStation, Long distance, Long duration) {
         this.id = id;
         this.name = name;
         this.color = color;
-        addSection(new Section(this, upStation, downStation, distance));
+        addSection(new Section(this, upStation, downStation, distance, duration));
     }
 
     public Long getId() {
