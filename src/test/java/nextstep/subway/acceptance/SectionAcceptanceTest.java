@@ -40,8 +40,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         stationId2 = StationTestUtil.지하철역_생성("B").jsonPath().getLong("id");
         stationId3 = StationTestUtil.지하철역_생성("C").jsonPath().getLong("id");
 
-        distance = 10;
-        lineId = 지하철_노선_생성(new LineRequest("2호선", "green", stationId1, stationId2, distance)).jsonPath().getLong("id");
+        lineId = 지하철_노선_생성(new LineRequest("2호선", "green", stationId1, stationId2, 10, 7)).jsonPath().getLong("id");
     }
 
     /**

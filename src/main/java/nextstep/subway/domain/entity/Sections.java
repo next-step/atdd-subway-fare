@@ -19,7 +19,14 @@ import static nextstep.exception.ExceptionMessage.*;
 public class Sections {
     @JsonValue
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private final List<Section> sections = new ArrayList<>();
+    private List<Section> sections = new ArrayList<>();
+
+    public Sections() {
+    }
+
+    public Sections(List<Section> sectionList) {
+        this.sections = sectionList;
+    }
 
     public void addSection(Section newSection) {
         // 추가하려는 구간의 상행역 하행역이 같으면
@@ -54,18 +61,19 @@ public class Sections {
     private void insertSection(Section newSection, Section basedSection) {
         checkValidation(newSection, basedSection);
         int newDistance = basedSection.getDistance() - newSection.getDistance();
+        int newDuration = basedSection.getDuration() - newSection.getDuration();
 
         this.sections.remove(basedSection);
         this.sections.add(newSection);
 
         // 상행역이 같다면
         if (basedSection.isSameAsUpStation(newSection.getUpStation())) {
-            this.sections.add(new Section(newSection.getDownStation(), basedSection.getDownStation(), newDistance));
+            this.sections.add(new Section(newSection.getDownStation(), basedSection.getDownStation(), newDistance, newDuration));
             return;
         }
         // 하행역이 같다면
         if (basedSection.isSameAsDwonStation(newSection.getDownStation())) {
-            this.sections.add(new Section(basedSection.getUpStation(), newSection.getUpStation(), newDistance));
+            this.sections.add(new Section(basedSection.getUpStation(), newSection.getUpStation(), newDistance, newDuration));
         }
     }
 
@@ -136,6 +144,14 @@ public class Sections {
         return sumOfDistance;
     }
 
+    public int getDuration() {
+        int sumOfDuration = 0;
+        for (Section section : this.sections) {
+            sumOfDuration += section.getDuration();
+        }
+        return sumOfDuration;
+    }
+
     public boolean isRegisteredSection(Section section) {
         boolean isExistUpStation = this.getStations().stream()
                 .anyMatch(station -> station.equals(section.getUpStation()));
@@ -166,7 +182,7 @@ public class Sections {
         // 노선의 중간 역을 제거할 경우
         if (!ObjectUtils.isEmpty(section1) && !ObjectUtils.isEmpty(section2)) {
             // 삭제할 역을 포함한 구간의 상행역 - 하행역 구간 추가
-            Section newSection = new Section(section1.getLine(), section1.getUpStation(), section2.getDownStation(), section1.getDistance() + section2.getDistance());
+            Section newSection = new Section(section1.getLine(), section1.getUpStation(), section2.getDownStation(), section1.getDistance() + section2.getDistance(), section1.getDuration() + section2.getDuration());
             sections.add(newSection);
             // 삭제할 역을 포함한 구간 제거
             sections.remove(section1);

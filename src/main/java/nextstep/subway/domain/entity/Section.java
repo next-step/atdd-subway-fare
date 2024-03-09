@@ -34,17 +34,21 @@ public class Section {
 
     private int distance;
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    private int duration;
+
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public Section(Station upStation, Station downStation, int distance) {
+    public Section(Station upStation, Station downStation, int distance, int duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public List<Station> getStations() {
