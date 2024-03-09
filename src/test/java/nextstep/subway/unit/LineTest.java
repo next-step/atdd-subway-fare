@@ -23,7 +23,7 @@ class LineTest {
     @Test
     @DisplayName("지하철의 노선의 구간을 등록한다.")
     void addSection() {
-        노선.addSection(new Section(노선, 두번째_역, 세번째_역, 1));
+        노선.addSection(new Section(노선, 두번째_역, 세번째_역, 1, 1));
 
         assertThat(노선.getSections().getSize()).isEqualTo(2);
     }
@@ -31,7 +31,7 @@ class LineTest {
     @Test
     @DisplayName("지하철 노선의 구간을 제거한다.")
     void deleteSection() {
-        노선.addSection(new Section(노선, 두번째_역, 세번째_역, 1));
+        노선.addSection(new Section(노선, 두번째_역, 세번째_역, 1, 1));
         노선.deleteSection(세번째_역);
 
         assertFalse(노선.hasStation(세번째_역));

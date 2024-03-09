@@ -47,13 +47,6 @@ public class Section {
 		this.duration = duration;
 	}
 
-	public Section(Line line, Long upStationId, Long downStationId, int distance) {
-		this.line = line;
-		this.upStationId = upStationId;
-		this.downStationId = downStationId;
-		this.distance = distance;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, upStationId, downStationId);

@@ -61,7 +61,7 @@ public class LineService {
 	public void addSection(Long id, SectionRequest sectionRequest) {
 		Line line = findLindById(id);
 
-		Section section = new Section(line, sectionRequest.getUpStationId(), sectionRequest.getDownStationId(), sectionRequest.getDistance());
+		Section section = new Section(line, sectionRequest.getUpStationId(), sectionRequest.getDownStationId(), sectionRequest.getDistance(), sectionRequest.getDuration());
 		line.addSection(section);
 	}
 

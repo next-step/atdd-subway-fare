@@ -14,12 +14,6 @@ public class SectionRequest {
 	public SectionRequest() {
 	}
 
-	public SectionRequest(Long downStationId, Long upStationId, int distance) {
-		this.downStationId = downStationId;
-		this.upStationId = upStationId;
-		this.distance = distance;
-	}
-
 	public SectionRequest(Long downStationId, Long upStationId, int distance, int duration) {
 		this.downStationId = downStationId;
 		this.upStationId = upStationId;
@@ -41,5 +35,9 @@ public class SectionRequest {
 
 	public int getDistance() {
 		return distance;
+	}
+
+	public int getDuration() {
+		return duration;
 	}
 }
