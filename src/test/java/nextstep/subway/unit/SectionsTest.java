@@ -20,7 +20,7 @@ class SectionsTest {
 
     @BeforeEach
     void setup() {
-        노선 = new Line("노선", "파란색", 종로3가역, 시청역, 10);
+        노선 = new Line("노선", "파란색", 종로3가역, 시청역, 10, 5);
         구간리스트 = 노선.getSections();
     }
 

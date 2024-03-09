@@ -45,7 +45,7 @@ public class LineStepDef implements En {
 			String[] names = lineName.split(",");
 
 			assertThat(context.response.statusCode()).isEqualTo(HttpStatus.OK.value());
-			assertThat(context.response.jsonPath().getList("name")).contains(names);
+			assertThat(context.response.jsonPath().getList("name")).containsExactly(names);
 		});
 
 		Then("생성한 {string} 노선의 정보가 조회된다", (String lineName) -> {

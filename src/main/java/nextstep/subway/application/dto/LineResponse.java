@@ -6,12 +6,10 @@ import java.util.List;
 
 public class LineResponse {
 	private Long id;
-
 	private String name;
-
 	private String color;
-
 	private int distance;
+	private int duration;
 
 	private List<StationResponse> staions;
 
@@ -23,6 +21,7 @@ public class LineResponse {
 		this.name = line.getName();
 		this.color = line.getColor();
 		this.distance = line.getDistance();
+		this.duration = line.getDuration();
 		this.staions = stations;
 	}
 
@@ -40,6 +39,10 @@ public class LineResponse {
 
 	public int getDistance() {
 		return distance;
+	}
+
+	public int getDuration() {
+		return duration;
 	}
 
 	public List<StationResponse> getStaions() {

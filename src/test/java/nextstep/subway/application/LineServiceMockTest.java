@@ -39,7 +39,7 @@ public class LineServiceMockTest {
     void setup() {
         lineService = new LineService(lineRepository, stationService);
 
-        노선 = new Line("노선", "빨강", 첫번째_역_id, 두번째_역_id, 1);
+        노선 = new Line("노선", "빨강", 첫번째_역_id, 두번째_역_id, 1, 5);
 
         // given
         given(lineRepository.findById(노선_id))

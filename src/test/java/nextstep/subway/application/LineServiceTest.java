@@ -32,7 +32,7 @@ public class LineServiceTest {
     @BeforeEach
     void setup() {
         // given
-        노선 = lineRepository.save(new Line("노선", "빨강", 첫번째_역_id, 두번째_역_id, 1));
+        노선 = lineRepository.save(new Line("노선", "빨강", 첫번째_역_id, 두번째_역_id, 1, 5));
     }
 
     @Test

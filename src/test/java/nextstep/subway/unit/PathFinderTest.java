@@ -19,8 +19,8 @@ public class PathFinderTest {
 
 	@BeforeEach
 	void setup() {
-		Line 노선1 = new Line("노선1", "파란색", 첫번째_역, 세번째_역, 10);
-		Line 노선2 = new Line("노선2", "빨간색", 첫번째_역, 두번째_역, 5);
+		Line 노선1 = new Line("노선1", "파란색", 첫번째_역, 세번째_역, 10, 5);
+		Line 노선2 = new Line("노선2", "빨간색", 첫번째_역, 두번째_역, 5, 5);
 
 		pathFinder = new PathFinder(List.of(
 				new Section(노선1, 첫번째_역, 세번째_역, 10)
