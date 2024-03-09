@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.common.RestApiRequest;
 import nextstep.subway.application.dto.FavoriteRequest;
+import nextstep.subway.ui.controller.PathType;
 
 public class FavoriteSteps {
 	private static final String FAVORITE_API_URL = "/favorites";
@@ -11,8 +12,8 @@ public class FavoriteSteps {
 
 	private static final RestApiRequest<FavoriteRequest> apiRequest = new RestApiRequest<>();
 
-	public static ExtractableResponse<Response> 즐겨찾기_생성_요청(String accessToken, Long source, Long target) {
-		return apiRequest.post(FAVORITE_API_URL, accessToken, new FavoriteRequest(source, target));
+	public static ExtractableResponse<Response> 즐겨찾기_생성_요청(String accessToken, PathType type, Long source, Long target) {
+		return apiRequest.post(FAVORITE_API_URL, accessToken, new FavoriteRequest(source, target, type));
 	}
 
 	public static ExtractableResponse<Response> 즐겨찾기_전체_조회_요청(String accessToken) {

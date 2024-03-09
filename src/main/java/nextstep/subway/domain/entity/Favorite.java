@@ -1,9 +1,8 @@
 package nextstep.subway.domain.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import nextstep.subway.ui.controller.PathType;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -11,24 +10,28 @@ public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long memberId;
-
+    @Enumerated
+    private PathType pathType;
     private Long source;
-
     private Long target;
 
     protected Favorite() {
     }
 
-    public Favorite(Long memberId, Long source, Long target) {
+    public Favorite(Long memberId, PathType pathType, Long source, Long target) {
         this.memberId = memberId;
+        this.pathType = pathType;
         this.source = source;
         this.target = target;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public PathType getPathType() {
+        return pathType;
     }
 
     public Long getSource() {
