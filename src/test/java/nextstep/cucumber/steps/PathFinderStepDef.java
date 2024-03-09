@@ -123,35 +123,6 @@ public class PathFinderStepDef implements En {
             });
         });
 
-        Then("최단거리의 존재하는 역은 {string}, {string}, {string}이다.", (String first, String second, String third) -> {
-            경로에_포함된_역_목록_검증(컨텍스트.저장된_응답,
-                    컨텍스트.저장소_숫자_가져오기(first),
-                    컨텍스트.저장소_숫자_가져오기(second),
-                    컨텍스트.저장소_숫자_가져오기(third));
-        });
-
-        Then("최단거리의 존재하는 역은 {string}, {string}, {string}, {string}이다.", (
-                String first, String second,
-                String third, String fourth) -> {
-            경로에_포함된_역_목록_검증(컨텍스트.저장된_응답,
-                    컨텍스트.저장소_숫자_가져오기(first),
-                    컨텍스트.저장소_숫자_가져오기(second),
-                    컨텍스트.저장소_숫자_가져오기(third),
-                    컨텍스트.저장소_숫자_가져오기(fourth));
-        });
-
-        Then("최단거리는 {int}km 이다.", (Integer 예상하는_거리) -> {
-            경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, 예상하는_거리);
-        });
-
-        Then("소요 시간은 {int}분 이다.", (Integer 예상하는_시간) -> {
-            경로에_포함된_소요_시간_검증(컨텍스트.저장된_응답, 예상하는_시간);
-        });
-
-        Then("이용 요금은 {int}원 이다.", (Integer 예상하는_금액) -> {
-            경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, 예상하는_금액);
-        });
-
         Then("경로를 조회할 수 없다.", () -> {
             실패하는_지하철_경로_조회_요청((PathFinderRequest) 컨텍스트.저장소_정보_가져오기("조회할_구간"));
         });
