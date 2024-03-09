@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathFinderTest {
+public class PathByDistanceFinderTest {
 	private static final Long 첫번째_역 = 1L;
 	private static final Long 두번째_역 = 2L;
 	private static final Long 세번째_역 = 3L;
