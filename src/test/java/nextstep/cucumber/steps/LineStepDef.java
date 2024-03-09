@@ -22,42 +22,52 @@ public class LineStepDef implements En {
 
     public LineStepDef() {
         Given("지하철 노선들을 생성 요청하고", (DataTable table) -> {
-            List<Map<String, String>> maps = table.asMaps();
-            maps.stream()
-                    .forEach(it -> {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("name", it.get("name"));
-                        params.put("color", it.get("color"));
-                        params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
-                        params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
-                        params.put("distance", it.get("distance"));
-                        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                                .body(params)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .when()
-                                .post("/lines")
-                                .then().log().all()
-                                .extract();
-                        context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
-                    });
+            지하철_노선_생성(table);
         });
         Given("지하철 구간을 등록 요청하고", (DataTable table) -> {
-            List<Map<String, String>> maps = table.asMaps();
-            maps.stream()
-                    .forEach(it -> {
-                        String lineName = it.get("lineName");
-                        Map<String, String> params = new HashMap<>();
-                        params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
-                        params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
-                        params.put("distance", it.get("distance"));
-                        LineResponse line = (LineResponse) context.store.get(lineName);
-                        RestAssured.given().log().all()
-                                .body(params)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .when()
-                                .post("/lines/{lineId}/sections", line.getId())
-                                .then().log().all();
-                    });
+            지하철_구간_등록(table);
         });
+    }
+
+    private void 지하철_구간_등록(DataTable table) {
+        List<Map<String, String>> maps = table.asMaps();
+        maps.stream()
+                .forEach(it -> {
+                    String lineName = it.get("lineName");
+                    Map<String, String> params = new HashMap<>();
+                    params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
+                    params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
+                    params.put("distance", it.get("distance"));
+                    params.put("duration", it.get("duration"));
+                    LineResponse line = (LineResponse) context.store.get(lineName);
+                    RestAssured.given().log().all()
+                            .body(params)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .when()
+                            .post("/lines/{lineId}/sections", line.getId())
+                            .then().log().all();
+                });
+    }
+
+    private void 지하철_노선_생성(DataTable table) {
+        List<Map<String, String>> maps = table.asMaps();
+        maps.stream()
+                .forEach(it -> {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("name", it.get("name"));
+                    params.put("color", it.get("color"));
+                    params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
+                    params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
+                    params.put("distance", it.get("distance"));
+                    params.put("duration", it.get("duration"));
+                    ExtractableResponse<Response> response = RestAssured.given().log().all()
+                            .body(params)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .when()
+                            .post("/lines")
+                            .then().log().all()
+                            .extract();
+                    context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
+                });
     }
 }
