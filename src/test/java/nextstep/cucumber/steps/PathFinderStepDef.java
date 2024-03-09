@@ -117,25 +117,33 @@ public class PathFinderStepDef implements En {
                     경로_조회_타입_찾기(경로_조회_타입)));
         });
 
-        Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 이용 요금을 확인할 수 있다.", (DataTable 데이터_테이블) -> {
+        Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.", (DataTable 데이터_테이블) -> {
             List<List<String>> 행_목록 = 데이터_테이블.asLists(String.class);
             행_목록.forEach(행 -> {
-                String 경로_내_존재하는_역_목록 = 행.get(0);
-
-                List<Long> 역_번호_목록 = new ArrayList<>();
-                Arrays.stream(경로_내_존재하는_역_목록.split(",")).forEach(역_이름 -> {
-                    역_번호_목록.add(컨텍스트.저장소_숫자_가져오기(역_이름.trim()));
-                });
-
-                경로에_포함된_역_목록_검증(컨텍스트.저장된_응답, 역_번호_목록);
+                경로에_포함된_역_목록_검증(컨텍스트.저장된_응답, 역_이름으로_역_번호_찾기(행.get(0)));
                 경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(1)));
                 경로에_포함된_소요_시간_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(2)));
-                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(3)));
+                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, 최종_요금_계산하기(행.get(3)));
             });
         });
 
         Then("경로를 조회할 수 없다.", () -> {
             실패하는_지하철_경로_조회_요청((PathFinderRequest) 컨텍스트.저장소_정보_가져오기("조회할_구간"));
         });
+    }
+
+    private int 최종_요금_계산하기(String 요금_정보) {
+        String[] 운임비용과_환승요금 = 요금_정보.split("\\+");
+
+        return Integer.parseInt(운임비용과_환승요금[0].trim()) + Integer.parseInt(운임비용과_환승요금[1].trim());
+    }
+
+    private List<Long> 역_이름으로_역_번호_찾기(String 역_이름_목록) {
+        List<Long> 역_번호_목록 = new ArrayList<>();
+
+        Arrays.stream(역_이름_목록.split(",")).forEach(역_이름 -> {
+            역_번호_목록.add(컨텍스트.저장소_숫자_가져오기(역_이름.trim()));
+        });
+        return 역_번호_목록;
     }
 }
