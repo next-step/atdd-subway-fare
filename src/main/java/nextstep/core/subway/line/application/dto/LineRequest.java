@@ -13,13 +13,16 @@ public class LineRequest {
 
     private final int duration;
 
-    public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+    private final int additionalFare;
+
+    public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance, int duration, int additionalFare) {
         this.name = name;
         this.color = color;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
         this.duration = duration;
+        this.additionalFare = additionalFare;
     }
 
     public String getName() {
