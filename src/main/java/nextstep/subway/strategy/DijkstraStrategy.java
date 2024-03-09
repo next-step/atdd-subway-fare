@@ -17,7 +17,7 @@ import static nextstep.exception.ExceptionMessage.*;
 
 public class DijkstraStrategy implements PathStrategy {
 
-    private DijkstraShortestPath dijkstraShortestPath;
+    private final DijkstraShortestPath dijkstraShortestPath;
 
     public DijkstraStrategy(List<Section> sections, PathSearchType type) {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
