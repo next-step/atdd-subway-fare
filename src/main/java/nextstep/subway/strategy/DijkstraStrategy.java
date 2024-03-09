@@ -1,6 +1,7 @@
 package nextstep.subway.strategy;
 
 import nextstep.subway.domain.entity.Path;
+import nextstep.subway.domain.entity.PathSearchType;
 import nextstep.subway.domain.entity.Section;
 import nextstep.subway.domain.entity.Station;
 import nextstep.exception.ApplicationException;
@@ -18,9 +19,9 @@ public class DijkstraStrategy implements PathStrategy {
 
     private DijkstraShortestPath dijkstraShortestPath;
 
-    public DijkstraStrategy(List<Section> sections) {
+    public DijkstraStrategy(List<Section> sections, PathSearchType type) {
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
-        createGraph(graph, sections);
+        createGraph(graph, sections, type);
         dijkstraShortestPath = new DijkstraShortestPath(graph);
     }
 
@@ -42,14 +43,14 @@ public class DijkstraStrategy implements PathStrategy {
     }
 
     // graph 에 vertax, edge 추가
-    private void createGraph(WeightedMultigraph<Station, DefaultWeightedEdge> graph, List<Section> sections) {
+    private void createGraph(WeightedMultigraph<Station, DefaultWeightedEdge> graph, List<Section> sections, PathSearchType type) {
         for (Section section : sections) {
             Station upStation = section.getUpStation();
             Station downStation= section.getDownStation();
 
             graph.addVertex(upStation);
             graph.addVertex(downStation);
-            graph.setEdgeWeight(graph.addEdge(upStation, downStation), section.getDistance());
+            graph.setEdgeWeight(graph.addEdge(upStation, downStation), section.getValueByType(type));
         }
     }
 }

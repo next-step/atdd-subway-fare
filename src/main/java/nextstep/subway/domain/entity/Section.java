@@ -66,4 +66,8 @@ public class Section {
         return this.getDownStation().equals(station);
     }
 
+    public int getValueByType(PathSearchType type) {
+        if (type == PathSearchType.DISTANCE) return distance;
+        return duration;
+    }
 }

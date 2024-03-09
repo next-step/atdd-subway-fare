@@ -12,4 +12,5 @@ import java.util.List;
 public class PathResponse {
     private List<StationResponse> stationList;
     private int distance;
+    private int duration;
 }
