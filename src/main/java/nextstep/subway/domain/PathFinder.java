@@ -9,9 +9,9 @@ import org.jgrapht.graph.WeightedMultigraph;
 import java.util.List;
 import java.util.Objects;
 
-public class PathFinder {
-	private WeightedMultigraph<Long, DefaultWeightedEdge> weightedMultigraph;
-	private DijkstraShortestPath dijkstraShortestPath;
+public abstract class PathFinder {
+	protected WeightedMultigraph<Long, DefaultWeightedEdge> weightedMultigraph;
+	protected DijkstraShortestPath dijkstraShortestPath;
 
 	public PathFinder(List<Section> sections) {
 		weightedMultigraph = new WeightedMultigraph(DefaultWeightedEdge.class);
@@ -37,14 +37,9 @@ public class PathFinder {
 		return graphPath.getVertexList();
 	}
 
-	public double getDistance(Long source, Long target) {
+	public double getWieght(Long source, Long target) {
 		return dijkstraShortestPath.getPathWeight(source, target);
 	}
 
-	private void addPath(Section section) {
-		weightedMultigraph.addVertex(section.getDownStationId());
-		weightedMultigraph.addVertex(section.getUpStationId());
-
-		weightedMultigraph.setEdgeWeight(weightedMultigraph.addEdge(section.getDownStationId(), section.getUpStationId()), section.getDistance());
-	}
+	protected abstract void addPath(Section section);
 }

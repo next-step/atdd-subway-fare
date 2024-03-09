@@ -22,10 +22,10 @@ public class PathService {
 		this.sectionService = sectionService;
 	}
 
-	public PathResponse getPath(Long source, Long target) {
-		PathFinder pathFinder = new PathFinder(sectionService.findAll());
+	public PathResponse getPath(Long source, Long target, PathType type) {
+		PathFinder pathFinder = PathFinderFactory.getPathFinder(sectionService.findAll(), type);
 
-		return createPathResponse(pathFinder.getPath(source, target), (int) pathFinder.getDistance(source, target));
+		return createPathResponse(pathFinder.getPath(source, target), type, (int) pathFinder.getWieght(source, target));
 	}
 
 	private PathResponse createPathResponse(List<Long> stations, PathType type, int weight) {
