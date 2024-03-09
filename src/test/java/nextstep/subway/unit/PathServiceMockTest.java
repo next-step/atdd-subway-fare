@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.entity.PathSearchType;
 import nextstep.subway.domain.entity.Section;
 import nextstep.subway.domain.entity.Station;
 import nextstep.subway.domain.response.PathResponse;
@@ -7,6 +8,7 @@ import nextstep.subway.domain.response.StationResponse;
 import nextstep.exception.ApplicationException;
 import nextstep.exception.ExceptionMessage;
 import nextstep.subway.repository.SectionRepository;
+import nextstep.subway.repository.StationRepository;
 import nextstep.subway.service.PathService;
 import nextstep.subway.service.StationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +30,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class PathServiceMockTest {
 
-
     @Mock
     private StationService stationService;
+
+    @Mock
+    private StationRepository stationRepository;
 
     @Mock
     private SectionRepository sectionRepository;
@@ -53,11 +57,11 @@ public class PathServiceMockTest {
 
 
     /**
-     * 교대역    --- *2호선(10)* ---   강남역
+     * 교대역    --- *2호선(10, 10)* ---   강남역
      * |                              |
-     * *3호선(2)*                   *신분당선(10)*
+     * *3호선(2, 7)*                   *신분당선(10, 7)*
      * |                              |
-     * 남부터미널역  --- *3호선(3)* ---   양재
+     * 남부터미널역  --- *3호선(3, 5)* ---   양재
      */
     @BeforeEach
     void setUp() {
@@ -66,10 +70,10 @@ public class PathServiceMockTest {
         양재역 = new Station(양재역ID, "양재역");
         남부터미널역 = new Station(남부터미널역ID, "남부터미널역");
 
-        교대_강남 = new Section(교대역, 강남역, 10);
-        강남_양재 = new Section(강남역, 양재역, 10);
-        교대_남부터미널 = new Section(교대역, 남부터미널역, 2);
-        남부터미널_양재 = new Section(남부터미널역, 양재역, 3);
+        교대_강남 = new Section(교대역, 강남역, 10, 10);
+        강남_양재 = new Section(강남역, 양재역, 10, 7);
+        교대_남부터미널 = new Section(교대역, 남부터미널역, 2, 7);
+        남부터미널_양재 = new Section(남부터미널역, 양재역, 3, 5);
     }
 
     @DisplayName("최단 경로 탐색")
@@ -81,7 +85,7 @@ public class PathServiceMockTest {
         when(sectionRepository.findAll()).thenReturn(List.of(교대_강남, 강남_양재, 교대_남부터미널, 남부터미널_양재));
 
         // when: 출발역 id와 도착역 id를 받으면 최단경로를 반환한다.
-        PathResponse pathResponse = pathService.findShortestPath(교대역ID, 양재역ID);
+        PathResponse pathResponse = pathService.findShortestPath(교대역ID, 양재역ID, PathSearchType.DISTANCE);
         List<String> stationNames = pathResponse.getStationList().stream()
                 .map(StationResponse::getName)
                 .collect(Collectors.toList());
@@ -103,7 +107,7 @@ public class PathServiceMockTest {
         // when, then
         Long source = 교대역ID;
         Long target = 교대역ID;
-        assertThatThrownBy(() ->  pathService.findShortestPath(source, target))
+        assertThatThrownBy(() ->  pathService.findShortestPath(source, target, PathSearchType.DISTANCE))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessage(ExceptionMessage.SAME_SOURCE_TARGET_EXCEPTION.getMessage());
     }
@@ -114,7 +118,7 @@ public class PathServiceMockTest {
         // given
         Station 사당역 = new Station(5L, "사당역");
         Station 이수역 = new Station(6L, "이수역");
-        Section 사당_이수 = new Section(사당역, 이수역, 10);
+        Section 사당_이수 = new Section(사당역, 이수역, 10, 5);
 
         when(stationService.findById(교대역ID)).thenReturn(교대역);
         when(stationService.findById(5L)).thenReturn(사당역);
@@ -123,7 +127,7 @@ public class PathServiceMockTest {
         // when, then
         Long source = 5L; // 사당역 ID
         Long target = 교대역ID;
-        assertThatThrownBy(() ->  pathService.findShortestPath(source, target))
+        assertThatThrownBy(() ->  pathService.findShortestPath(source, target, PathSearchType.DISTANCE))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessage(ExceptionMessage.NOT_CONNECTED_EXCEPTION.getMessage());
     }
@@ -141,9 +145,30 @@ public class PathServiceMockTest {
         // when, then
         Long source = 5L; // 사당역 ID
         Long target = 교대역ID;
-        assertThatThrownBy(() ->  pathService.findShortestPath(source, target))
+        assertThatThrownBy(() ->  pathService.findShortestPath(source, target, PathSearchType.DISTANCE))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessage(ExceptionMessage.NO_EXISTS_STATION_EXCEPTION.getMessage());
+    }
+
+    @DisplayName("최단 경로 탐색 - 소요 시간")
+    @Test
+    void findShortestPath_Duration() {
+        // given
+        when(stationService.findById(교대역ID)).thenReturn(교대역);
+        when(stationService.findById(양재역ID)).thenReturn(양재역);
+        when(sectionRepository.findAll()).thenReturn(List.of(교대_강남, 강남_양재, 교대_남부터미널, 남부터미널_양재));
+
+        // when: 출발역 id와 도착역 id를 받으면 최단경로를 반환한다.
+        PathResponse pathResponse = pathService.findShortestPath(교대역ID, 양재역ID, PathSearchType.DISTANCE);
+        List<String> stationNames = pathResponse.getStationList().stream()
+                .map(StationResponse::getName)
+                .collect(Collectors.toList());
+
+        // then
+        assertAll(
+                () -> assertThat(stationNames).containsExactly("교대역", "남부터미널역", "양재역"),
+                () -> assertThat(pathResponse.getDuration()).isEqualTo(12)
+        );
     }
 
 }
