@@ -3,6 +3,7 @@ package nextstep.cucumber.steps;
 import io.cucumber.java8.En;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.application.dto.StationResponse;
+import nextstep.subway.ui.controller.PathType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class PathStepDef implements En {
 			context.response = 최단_경로_조회_요청(
 					(((StationResponse) context.store.get(source)).getId()),
 					(((StationResponse) context.store.get(target)).getId()),
-					type
+					convertPathType(type)
 			);
 		});
 
@@ -39,5 +40,17 @@ public class PathStepDef implements En {
 		Then("경로의 최소 시간은 {string}이다", (String distance) -> {
 			assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(Integer.parseInt(distance));
 		});
+	}
+
+	private PathType convertPathType(String type) {
+		if("거리".equals(type)) {
+			return PathType.DISTANCE;
+		}
+
+		if("시간".equals(type)) {
+			return PathType.DURATION;
+		}
+
+		return null;
 	}
 }

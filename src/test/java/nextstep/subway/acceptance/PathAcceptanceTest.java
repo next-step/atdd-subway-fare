@@ -2,6 +2,7 @@ package nextstep.subway.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.ui.controller.PathType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.utils.fixture.PathFixture.*;
 import static nextstep.subway.utils.steps.LineSteps.노선_생성_요청;
-import static nextstep.subway.utils.steps.PathSteps.최단_경로_조회_요청;
+import static nextstep.subway.utils.steps.PathSteps.*;
 import static nextstep.subway.utils.steps.SectionSteps.구간_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +40,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 최단_거리_경로_조회() {
 		// when & then
-		최단_거리_경로_조회_성공(최단_경로_조회_요청(수서역, 도곡역, "DISTANCE"), 12, 수서역, 개포동역, 도곡역);
+		최단_거리_경로_조회_성공(최단_경로_조회_요청(수서역, 도곡역, PathType.DISTANCE), 12, 수서역, 개포동역, 도곡역);
 	}
 
 	/**
@@ -56,7 +57,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 최단_시간_경로_조회() {
 		// when & then
-		최단_시간_경로_조회_성공(최단_경로_조회_요청(수서역, 도곡역, "DURATION"), 9, 수서역, 학여울역, 도곡역);
+		최단_시간_경로_조회_성공(최단_경로_조회_요청(수서역, 도곡역, PathType.DURATION), 9, 수서역, 학여울역, 도곡역);
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 노선이_다른_경로_조회() {
 		// when & then
-		최단_거리_경로_조회_성공(최단_경로_조회_요청(학여울역, 개포동역, "DISTANCE"), 10, 학여울역, 도곡역, 개포동역);
+		최단_거리_경로_조회_성공(최단_경로_조회_요청(학여울역, 개포동역, PathType.DISTANCE), 10, 학여울역, 도곡역, 개포동역);
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class PathAcceptanceTest {
 		노선_생성_요청("1-1호선", "파랑", 판교역, 양재역, 8, 1).jsonPath().getLong("id");
 
 		// when & then
-		실패시_코드값_메시지_검증(최단_경로_조회_요청(학여울역, 양재역, "DISTANCE"), HttpStatus.BAD_REQUEST.value(),"경로가 존재하지 않습니다.");
+		실패시_코드값_메시지_검증(최단_경로_조회_요청(학여울역, 양재역, PathType.DISTANCE), HttpStatus.BAD_REQUEST.value(),"경로가 존재하지 않습니다.");
 	}
 
 	/**
@@ -103,7 +104,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 역이_존재하지_않으면_조회_실패() {
 		// when & then
-		실패시_코드값_메시지_검증(최단_경로_조회_요청(수원역, 도곡역, "DISTANCE"), HttpStatus.BAD_REQUEST.value(),"경로에 존재하지 않는 역입니다.");
+		실패시_코드값_메시지_검증(최단_경로_조회_요청(수원역, 도곡역, PathType.DISTANCE), HttpStatus.BAD_REQUEST.value(),"경로에 존재하지 않는 역입니다.");
 	}
 
 	/**
@@ -116,7 +117,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 출발역_도착역_같으면_조회_실패() {
 		// when & then
-		실패시_코드값_메시지_검증(최단_경로_조회_요청(학여울역, 학여울역, "DISTANCE"), HttpStatus.BAD_REQUEST.value(),"출발역과 도착역이 같을 수 없습니다.");
+		실패시_코드값_메시지_검증(최단_경로_조회_요청(학여울역, 학여울역, PathType.DISTANCE), HttpStatus.BAD_REQUEST.value(),"출발역과 도착역이 같을 수 없습니다.");
 	}
 
 	private void 최단_거리_경로_조회_성공(ExtractableResponse<Response> response, int distance, Long... stationIds) {
