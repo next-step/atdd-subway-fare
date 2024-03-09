@@ -107,9 +107,9 @@ public class PathFinderStepDef implements En {
         });
 
         Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 이용 요금을 확인할 수 있다.", (DataTable 데이터_테이블) -> {
-            List<Map<String, String>> 행_목록 = 데이터_테이블.asMaps(String.class, String.class);
+            List<List<String>> 행_목록 = 데이터_테이블.asLists(String.class);
             행_목록.forEach(행 -> {
-                String 경로_내_존재하는_역_목록 = 행.get("경로 내 존재하는 역 목록");
+                String 경로_내_존재하는_역_목록 = 행.get(0);
 
                 List<Long> 역_번호_목록 = new ArrayList<>();
                 Arrays.stream(경로_내_존재하는_역_목록.split(",")).forEach(역_이름 -> {
@@ -117,9 +117,9 @@ public class PathFinderStepDef implements En {
                 });
 
                 경로에_포함된_역_목록_검증(컨텍스트.저장된_응답, 역_번호_목록);
-                경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get("이동 거리")));
-                경로에_포함된_소요_시간_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get("소요 시간")));
-                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get("이용요금")));
+                경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(1)));
+                경로에_포함된_소요_시간_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(2)));
+                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(3)));
             });
         });
 
