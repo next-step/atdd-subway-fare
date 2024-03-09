@@ -1,6 +1,7 @@
 package nextstep.subway.acceptance;
 
 import nextstep.exception.ExceptionResponse;
+import nextstep.subway.domain.entity.PathSearchType;
 import nextstep.subway.domain.request.LineRequest;
 import nextstep.subway.domain.response.PathResponse;
 import nextstep.subway.domain.response.StationResponse;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 import static nextstep.exception.ExceptionMessage.*;
 import static nextstep.subway.utils.LineTestUtil.지하철_노선_생성;
-import static nextstep.subway.utils.PathTestUtil.getShortestPath;
+import static nextstep.subway.utils.PathTestUtil.최소_경로_탐색;
 import static nextstep.subway.utils.SectionTestUtil.지하철_구간_추가;
 import static nextstep.subway.utils.StationTestUtil.지하철역_생성;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,9 +46,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = 지하철역_생성("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철역_생성("남부터미널역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성(new LineRequest("2호선", "green", 교대역, 강남역, 10)).jsonPath().getLong("id");
-        신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 10)).jsonPath().getLong("id");
-        삼호선 = 지하철_노선_생성(new LineRequest("3호선", "orange", 교대역, 남부터미널역, 2)).jsonPath().getLong("id");
+        이호선 = 지하철_노선_생성(new LineRequest("2호선", "green", 교대역, 강남역, 10, 5)).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 10, 7)).jsonPath().getLong("id");
+        삼호선 = 지하철_노선_생성(new LineRequest("3호선", "orange", 교대역, 남부터미널역, 2, 8)).jsonPath().getLong("id");
 
         지하철_구간_추가(삼호선, 남부터미널역, 양재역, 3);
     }
@@ -65,7 +66,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given (setUp)
 
         // when 교대역 ~ 양재 최단경로 구하기
-        PathResponse response = getShortestPath(교대역, 양재역).as(PathResponse.class);
+        PathResponse response = 최소_경로_탐색(교대역, 양재역, PathSearchType.DISTANCE).as(PathResponse.class);
 
         // then
         List<StationResponse> stationList = response.getStationList();
@@ -91,7 +92,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given (setUp)
 
         // when 교대역 ~ 교대역 (동일한 출발역, 도착역)
-        String exceptionMessage = getShortestPath(교대역, 교대역).as(ExceptionResponse.class).getMessage();
+        String exceptionMessage = 최소_경로_탐색(교대역, 교대역, PathSearchType.DISTANCE).as(ExceptionResponse.class).getMessage();
 
         // then
         assertThat(exceptionMessage).isEqualTo(SAME_SOURCE_TARGET_EXCEPTION.getMessage());
@@ -113,10 +114,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // 4호선 (사당역 - 이수역) 추가
         Long 사당역 = 지하철역_생성("사당역").jsonPath().getLong("id");
         Long 이수역 = 지하철역_생성("이수역").jsonPath().getLong("id");
-        Long 사호선 = 지하철_노선_생성(new LineRequest("4호선", "orange", 사당역, 이수역, 2)).jsonPath().getLong("id");
+        Long 사호선 = 지하철_노선_생성(new LineRequest("4호선", "orange", 사당역, 이수역, 2, 5)).jsonPath().getLong("id");
 
         // when 교대역 ~ 사당역
-        String exceptionMessage = getShortestPath(교대역, 사당역).as(ExceptionResponse.class).getMessage();
+        String exceptionMessage = 최소_경로_탐색(교대역, 사당역, PathSearchType.DISTANCE).as(ExceptionResponse.class).getMessage();
 
         // then
         assertThat(exceptionMessage).isEqualTo(NOT_CONNECTED_EXCEPTION.getMessage());
@@ -137,7 +138,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         Long 사당역 = 지하철역_생성("사당역").jsonPath().getLong("id");
 
         // when 교대역 ~ 사당역
-        String exceptionMessage = getShortestPath(교대역, 사당역).as(ExceptionResponse.class).getMessage();
+        String exceptionMessage = 최소_경로_탐색(교대역, 사당역, PathSearchType.DISTANCE).as(ExceptionResponse.class).getMessage();
 
         // then
         assertThat(exceptionMessage).isEqualTo(NO_EXISTS_STATION_EXCEPTION.getMessage());
