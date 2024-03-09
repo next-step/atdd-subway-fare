@@ -1,10 +1,16 @@
 package nextstep.cucumber.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
 import nextstep.core.subway.station.fixture.StationFixture;
 import nextstep.cucumber.util.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static nextstep.core.subway.line.fixture.LineFixture.*;
 import static nextstep.core.subway.line.step.LineSteps.지하철_노선_생성;
@@ -98,6 +104,23 @@ public class PathFinderStepDef implements En {
                     컨텍스트.저장소_숫자_가져오기("오이도역"),
                     컨텍스트.저장소_숫자_가져오기("존재하지_않는_역"),
                     경로_조회_타입_찾기(경로_조회_타입)));
+        });
+
+        Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 이용 요금을 확인할 수 있다.", (DataTable 데이터_테이블) -> {
+            List<Map<String, String>> 행_목록 = 데이터_테이블.asMaps(String.class, String.class);
+            행_목록.forEach(행 -> {
+                String 경로_내_존재하는_역_목록 = 행.get("경로 내 존재하는 역 목록");
+
+                List<Long> 역_번호_목록 = new ArrayList<>();
+                Arrays.stream(경로_내_존재하는_역_목록.split(",")).forEach(역_이름 -> {
+                    역_번호_목록.add(컨텍스트.저장소_숫자_가져오기(역_이름.trim()));
+                });
+
+                경로에_포함된_역_목록_검증(컨텍스트.저장된_응답, 역_번호_목록);
+                경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get("이동 거리")));
+                경로에_포함된_소요_시간_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get("소요 시간")));
+                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get("이용요금")));
+            });
         });
 
         Then("최단거리의 존재하는 역은 {string}, {string}, {string}이다.", (String first, String second, String third) -> {

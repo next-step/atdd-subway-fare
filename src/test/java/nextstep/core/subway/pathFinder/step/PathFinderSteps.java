@@ -58,6 +58,10 @@ public class PathFinderSteps {
         assertThat(convertToStationIds(성공하는_경로_조회_응답)).containsExactly(역_번호_목록);
     }
 
+    public static void 경로에_포함된_역_목록_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, List<Long> 역_번호_목록) {
+        assertThat(convertToStationIds(성공하는_경로_조회_응답)).isEqualTo(역_번호_목록);
+    }
+
     public static void 경로에_포함된_최단거리_검증(ExtractableResponse<Response> 성공하는_경로_조회_응답, int 예상_최단거리) {
         assertThat(convertToDistance(성공하는_경로_조회_응답)).isEqualTo(예상_최단거리);
     }
