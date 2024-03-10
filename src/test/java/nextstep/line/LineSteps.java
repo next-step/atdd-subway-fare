@@ -14,13 +14,14 @@ import java.util.stream.Collectors;
 
 public class LineSteps {
 
-    public static ExtractableResponse<Response> createLine(String name, String color, Long upStationId, Long downStationId, int distance) {
-        Map<String, String> params = new HashMap<>();
+    public static ExtractableResponse<Response> createLine(String name, String color, Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
-        params.put("upStationId", String.valueOf(upStationId));
-        params.put("downStationId", String.valueOf(downStationId));
-        params.put("distance", String.valueOf(distance));
+        params.put("upStationId", upStationId);
+        params.put("downStationId", downStationId);
+        params.put("distance", distance);
+        params.put("duration", duration);
 
         return RestAssured.given().log().all()
                 .body(params)

@@ -30,7 +30,7 @@ public class LineService {
         Station downStation = stationRepository.findById(lineRequest.getDownStationId())
                 .orElseThrow(EntityNotFoundException::new);
 
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance());
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
         Line savedLine = lineRepository.save(line);
 
         return new LineResponse(savedLine);
@@ -69,7 +69,7 @@ public class LineService {
         Station downStation = stationRepository.findById(sectionRequest.getDownStationId())
                 .orElseThrow(EntityNotFoundException::new);
 
-        Section section = new Section(line, upStation, downStation, sectionRequest.getDistance());
+        Section section = new Section(line, upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
         line.addSection(section);
 
         return new LineResponse(line);

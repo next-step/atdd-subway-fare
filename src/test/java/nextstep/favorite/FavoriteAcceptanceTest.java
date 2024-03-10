@@ -44,9 +44,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         양재역 = 역_생성("양재역");
         수내역 = 역_생성("수내역");
         서현역 = 역_생성("서현역");
-        이호선 = 노선_생성("2호선", "green", 교대역, 강남역, 10);
-        신분당선 = 노선_생성("신분당선", "red", 강남역, 양재역, 10);
-        수인분당선 = 노선_생성("수인분당선", "yellow", 수내역, 서현역, 10);
+        이호선 = 노선_생성("2호선", "green", 교대역, 강남역, 10, 5);
+        신분당선 = 노선_생성("신분당선", "red", 강남역, 양재역, 10, 5);
+        수인분당선 = 노선_생성("수인분당선", "yellow", 수내역, 서현역, 10, 5);
 
         회원_생성_요청(EMAIL, PASSWORD, AGE);
         accessToken = 토큰_생성(EMAIL, PASSWORD);
@@ -173,8 +173,8 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         return StationSteps.createStation(name).jsonPath().getLong("id");
     }
 
-    private static Long 노선_생성(String name, String color, Long upStation, Long downStation, int distance) {
-        return LineSteps.createLine(name, color, upStation, downStation, distance).jsonPath().getLong("id");
+    private static Long 노선_생성(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return LineSteps.createLine(name, color, upStation, downStation, distance, duration).jsonPath().getLong("id");
     }
 
 }

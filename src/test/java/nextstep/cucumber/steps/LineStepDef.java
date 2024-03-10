@@ -31,6 +31,7 @@ public class LineStepDef implements En {
                         params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                         params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                         params.put("distance", it.get("distance"));
+                        params.put("duration", it.get("duration"));
                         ExtractableResponse<Response> response = RestAssured.given().log().all()
                                 .body(params)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -51,6 +52,7 @@ public class LineStepDef implements En {
                         params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                         params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                         params.put("distance", it.get("distance"));
+                        params.put("duration", it.get("duration"));
                         LineResponse line = (LineResponse) context.store.get(lineName);
                         RestAssured.given().log().all()
                                 .body(params)

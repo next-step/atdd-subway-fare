@@ -46,11 +46,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
         양재역 = createStation("양재역");
         남부터미널역 = createStation("남부터미널역");
 
-        이호선 = createLine("2호선", "green", 교대역, 강남역, 10);
-        신분당선 = createLine("신분당선", "red", 강남역, 양재역, 10);
-        삼호선 = createLine("3호선", "orange", 교대역, 남부터미널역, 2);
+        이호선 = createLine("2호선", "green", 교대역, 강남역, 10, 5);
+        신분당선 = createLine("신분당선", "red", 강남역, 양재역, 10, 5);
+        삼호선 = createLine("3호선", "orange", 교대역, 남부터미널역, 2, 5);
 
-        SectionSteps.addSection(삼호선, 남부터미널역, 양재역, 3);
+        SectionSteps.addSection(삼호선, 남부터미널역, 양재역, 3 ,5);
     }
 
     /**
@@ -83,8 +83,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
         return StationSteps.createStation(name).jsonPath().getLong("id");
     }
 
-    private static Long createLine(String name, String color, Long upStation, Long downStation, int distance) {
-        return LineSteps.createLine(name, color, upStation, downStation, distance).jsonPath().getLong("id");
+    private static Long createLine(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return LineSteps.createLine(name, color, upStation, downStation, distance, duration).jsonPath().getLong("id");
     }
 
 }
