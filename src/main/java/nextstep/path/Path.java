@@ -8,10 +8,12 @@ public class Path {
 
     private List<Station> stations;
     private int distance;
+    private int duration;
 
-    public Path(List<Station> stations, double distance) {
+    public Path(List<Station> stations, int distance, int duration) {
         this.stations = stations;
-        this.distance = (int) Math.round(distance);
+        this.distance = distance;
+        this.duration = duration;
     }
 
     public List<Station> getStations() {
@@ -20,5 +22,9 @@ public class Path {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

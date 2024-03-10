@@ -11,6 +11,7 @@ import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.path.PathFinder;
+import nextstep.path.PathType;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class FavoriteService {
         this.memberRepository = memberRepository;
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
-        this.pathFinder = new PathFinder();
+        this.pathFinder = PathType.DISTANCE.getPathFinder();
     }
 
     public Long createFavorite(LoginMember loginMember, FavoriteRequest request) {
