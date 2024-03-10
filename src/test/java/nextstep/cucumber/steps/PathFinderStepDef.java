@@ -89,6 +89,13 @@ public class PathFinderStepDef implements En {
                     경로_조회_타입_찾기(경로_조회_타입)));
         });
 
+        When("{string}에서 {string}까지 {string} 기준으로 {string} 인 회원이 경로를 조회할 경우", (String 출발역, String 도착역, String 경로_조회_타입, String 연령_타입) -> {
+            컨텍스트.저장된_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(
+                    컨텍스트.저장소_숫자_가져오기(출발역),
+                    컨텍스트.저장소_숫자_가져오기(도착역),
+                    경로_조회_타입_찾기(경로_조회_타입)));
+        });
+
         When("출발역과 도착역이 동일한 경로를 {string} 기준으로 조회할 경우", (String 경로_조회_타입) -> {
             컨텍스트.저장소_정보_추가하기("조회할_구간", 지하철_경로(
                     컨텍스트.저장소_숫자_가져오기("강남역"),
@@ -117,25 +124,31 @@ public class PathFinderStepDef implements En {
                     경로_조회_타입_찾기(경로_조회_타입)));
         });
 
-        Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 노선 추가 요금이 포함된 요금 정보를 확인할 수 있다.", (DataTable 데이터_테이블) -> {
+        Then("경로 내 존재하는 역, 이동 거리, 소요 시간 정보를 확인할 수 있다.", (DataTable 데이터_테이블) -> {
             List<List<String>> 행_목록 = 데이터_테이블.asLists(String.class);
             행_목록.forEach(행 -> {
                 경로에_포함된_역_목록_검증(컨텍스트.저장된_응답, 역_이름으로_역_번호_찾기(행.get(0)));
                 경로에_포함된_최단거리_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(1)));
                 경로에_포함된_소요_시간_검증(컨텍스트.저장된_응답, Integer.parseInt(행.get(2)));
-                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, 최종_요금_계산하기(행.get(3)));
+            });
+        });
+
+        Then("기본운임 비용, 추가운임 비용, 노선 추가 요금이 포함된 요금 정보를 확인할 수 있다.", (DataTable 데이터_테이블) -> {
+            List<List<String>> 행_목록 = 데이터_테이블.asLists(String.class);
+            행_목록.forEach(행 -> {
+
+                // TODO: 기본운임 비용, 추가운임 비용, 노선 추가 요금을 검증할 수 있도록 수정
+                int 기본운임_비용 = Integer.parseInt(행.get(0));
+                int 추가운임_비용 = Integer.parseInt(행.get(1));
+                int 노선_추가_요금 = Integer.parseInt(행.get(2));
+
+                경로에_포함된_이용_요금_검증(컨텍스트.저장된_응답, 기본운임_비용 + 추가운임_비용 + 노선_추가_요금);
             });
         });
 
         Then("경로를 조회할 수 없다.", () -> {
             실패하는_지하철_경로_조회_요청((PathRequest) 컨텍스트.저장소_정보_가져오기("조회할_구간"));
         });
-    }
-
-    private int 최종_요금_계산하기(String 요금_정보) {
-        String[] 운임비용과_환승요금 = 요금_정보.split("\\+");
-
-        return Integer.parseInt(운임비용과_환승요금[0].trim()) + Integer.parseInt(운임비용과_환승요금[1].trim());
     }
 
     private List<Long> 역_이름으로_역_번호_찾기(String 역_이름_목록) {
