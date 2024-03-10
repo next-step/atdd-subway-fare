@@ -29,21 +29,13 @@ public class PathService {
         Station sourceStation = stationService.getStationById(source);
         Station targetStation = stationService.getStationById(target);
 
-        if (PathType.DISTANCE.equals(pathType)) {
+        if (PathType.DISTANCE == pathType) {
             ShortestDistancePathFinder pathFinder = new ShortestDistancePathFinder(lines);
             Path path = pathFinder.findPath(sourceStation, targetStation);
-            return PathResponse.builder()
-                    .stations(stationsToStationResponses(path.getPath()))
-                    .distance(path.getDistance())
-                    .duration(path.getDuration())
-                    .build();
+            return PathResponse.from(path);
         }
         ShortestDurationPathFinder pathFinder = new ShortestDurationPathFinder(lines);
         Path path = pathFinder.findPath(sourceStation, targetStation);
-        return PathResponse.builder()
-                .stations(stationsToStationResponses(path.getPath()))
-                .distance(path.getDistance())
-                .duration(path.getDuration())
-                .build();
+        return PathResponse.from(path);
     }
 }

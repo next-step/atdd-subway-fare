@@ -38,27 +38,27 @@ public class PathFinder {
         validateSourceAndTargetAreDifferent(source, target);
 
         DijkstraShortestPath<Station, PathWeightedEdge> shortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, PathWeightedEdge> path = shortestPath.getPath(source, target);
+        GraphPath<Station, PathWeightedEdge> graphPath = shortestPath.getPath(source, target);
 
-        validatePathExists(path);
+        validatePathExists(graphPath);
 
         Long distance;
         Long duration;
 
         if (PathType.DURATION == pathType) {
-            distance = path.getEdgeList().stream()
+            distance = graphPath.getEdgeList().stream()
                     .mapToLong(edge -> edge.getDistance())
                     .sum();
             duration = (long) shortestPath.getPathWeight(source, target);
         } else {
-            duration = path.getEdgeList().stream()
+            duration = graphPath.getEdgeList().stream()
                     .mapToLong(edge -> edge.getDuration())
                     .sum();
             distance = (long) shortestPath.getPathWeight(source, target);
         }
 
         return Path.builder()
-                .path(path.getVertexList())
+                .path(graphPath.getVertexList())
                 .distance(distance)
                 .duration(duration)
                 .build();
