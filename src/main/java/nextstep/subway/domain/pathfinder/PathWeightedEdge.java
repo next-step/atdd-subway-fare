@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Getter
-public class CustomWeightedEdge extends DefaultWeightedEdge {
+public class PathWeightedEdge extends DefaultWeightedEdge {
     private Long distance;
     private Long duration;
 
