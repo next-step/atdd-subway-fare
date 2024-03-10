@@ -19,11 +19,11 @@ public class Line {
 
 	}
 
-	public Line(String name, String color, Long startStationId, Long endStationId, int distance) {
+	public Line(String name, String color, Long startStationId, Long endStationId, int distance, int duration) {
 		this.name = name;
 		this.color = color;
-		this.sections = new Sections(startStationId, endStationId, distance);
-		sections.addSection(new Section(this, startStationId, endStationId, distance));
+		this.sections = new Sections(startStationId, endStationId, distance, duration);
+		sections.addSection(new Section(this, startStationId, endStationId, distance, duration));
 	}
 
 	public Long getId() {
@@ -48,6 +48,10 @@ public class Line {
 
 	public int getDistance() {
 		return sections.getDistance();
+	}
+
+	public int getDuration() {
+		return sections.getDuration();
 	}
 
 	public Sections getSections() {

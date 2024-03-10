@@ -27,7 +27,7 @@ public class LineService {
 
 	@Transactional
 	public LineResponse saveLine(LineRequest lineRequest) {
-		Line line = new Line(lineRequest.getName(), lineRequest.getColor(), lineRequest.getStartStationId(), lineRequest.getEndStationId(), lineRequest.getDistance());
+		Line line = new Line(lineRequest.getName(), lineRequest.getColor(), lineRequest.getStartStationId(), lineRequest.getEndStationId(), lineRequest.getDistance(), lineRequest.getDuration());
 
 		return createLineResponse(lineRepository.save(line));
 	}
@@ -61,7 +61,7 @@ public class LineService {
 	public void addSection(Long id, SectionRequest sectionRequest) {
 		Line line = findLindById(id);
 
-		Section section = new Section(line, sectionRequest.getUpStationId(), sectionRequest.getDownStationId(), sectionRequest.getDistance());
+		Section section = new Section(line, sectionRequest.getUpStationId(), sectionRequest.getDownStationId(), sectionRequest.getDistance(), sectionRequest.getDuration());
 		line.addSection(section);
 	}
 

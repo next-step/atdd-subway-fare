@@ -16,11 +16,11 @@ public class PathController {
 	}
 
 	@GetMapping("/paths")
-	ResponseEntity<PathResponse> getLines(@RequestParam Long source, @RequestParam Long target) {
+	ResponseEntity<PathResponse> getPath(@RequestParam Long source, @RequestParam Long target, @RequestParam PathType type) {
 		if(source.equals(target)) {
 			throw new IllegalArgumentException("출발역과 도착역이 같을 수 없습니다.");
 		}
 
-		return ResponseEntity.ok().body(pathService.getPath(source, target));
+		return ResponseEntity.ok().body(pathService.getPath(source, target, type));
 	}
 }

@@ -32,14 +32,14 @@ public class LineServiceTest {
     @BeforeEach
     void setup() {
         // given
-        노선 = lineRepository.save(new Line("노선", "빨강", 첫번째_역_id, 두번째_역_id, 1));
+        노선 = lineRepository.save(new Line("노선", "빨강", 첫번째_역_id, 두번째_역_id, 1, 5));
     }
 
     @Test
     @DisplayName("지하철의 노선의 구간을 등록한다.")
     void addSection() {
         // when
-        lineService.addSection(노선.getId(), new SectionRequest(세번째_역, 두번째_역_id, 1));
+        lineService.addSection(노선.getId(), new SectionRequest(세번째_역, 두번째_역_id, 1, 1));
 
         // then
         assertThat(노선.getDistance()).isEqualTo(2);
@@ -50,7 +50,7 @@ public class LineServiceTest {
     @DisplayName("지하철 노선의 구간을 제거한다.")
     void deleteSection() {
         // given
-        lineService.addSection(노선.getId(), new SectionRequest(세번째_역, 두번째_역_id, 1));
+        lineService.addSection(노선.getId(), new SectionRequest(세번째_역, 두번째_역_id, 1, 1));
 
         // when
         lineService.deleteSection(노선.getId(), 세번째_역);

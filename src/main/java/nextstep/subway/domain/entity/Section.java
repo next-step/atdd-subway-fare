@@ -9,15 +9,12 @@ public class Section {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@ManyToOne
 	Line line;
-
 	private Long upStationId;
-
 	private Long downStationId;
-
 	private int distance;
+	private int duration;
 
 	public Long getId() {
 		return id;
@@ -35,14 +32,19 @@ public class Section {
 		return distance;
 	}
 
+	public int getDuration() {
+		return duration;
+	}
+
 	protected Section() {
 	}
 
-	public Section(Line line, Long upStationId, Long downStationId, int distance) {
+	public Section(Line line, Long upStationId, Long downStationId, int distance, int duration) {
 		this.line = line;
 		this.upStationId = upStationId;
 		this.downStationId = downStationId;
 		this.distance = distance;
+		this.duration = duration;
 	}
 
 	@Override

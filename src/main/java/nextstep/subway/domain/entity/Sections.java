@@ -14,21 +14,20 @@ import java.util.stream.Collectors;
 public class Sections {
 	@OneToMany(mappedBy = "line", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<Section> sections;
-
 	private Long startStationId;
-
 	private Long endStationId;
-
 	private int distance;
+	private int duration;
 
-	public Sections() {
+	protected Sections() {
 	}
 
-	protected Sections(Long startStationId, Long endStationId, int distance) {
+	protected Sections(Long startStationId, Long endStationId, int distance, int duration) {
 		this.sections = new ArrayList<>();
 		this.startStationId = startStationId;
 		this.endStationId = endStationId;
 		this.distance = distance;
+		this.duration = duration;
 	}
 
 	public Long getStartStationId() {
@@ -41,6 +40,10 @@ public class Sections {
 
 	public int getDistance() {
 		return distance;
+	}
+
+	public int getDuration() {
+		return duration;
 	}
 
 	public void addSection(Section section) {
@@ -81,7 +84,7 @@ public class Sections {
 		}
 
 		addSection(section);
-		addSection(new Section(line, section.getDownStationId(), upSection.getDownStationId(), upSection.getDistance() - section.getDistance()));
+		addSection(new Section(line, section.getDownStationId(), upSection.getDownStationId(), (upSection.getDistance() - section.getDistance()), (upSection.getDuration()) - section.getDuration()));
 		deleteSection(upSection);
 	}
 
@@ -120,7 +123,7 @@ public class Sections {
 		Section upSection = getSectionByUpStationId(stationId);
 		Section downSection = getSectionByDownStationId(stationId);
 
-		addSection(new Section(line, downSection.getUpStationId(), upSection.getDownStationId(), upSection.getDistance() + downSection.getDistance()));
+		addSection(new Section(line, downSection.getUpStationId(), upSection.getDownStationId(), (upSection.getDistance() + downSection.getDistance()), (upSection.getDuration()) + downSection.getDuration()));
 		deleteSection(upSection);
 		deleteSection(downSection);
 	}

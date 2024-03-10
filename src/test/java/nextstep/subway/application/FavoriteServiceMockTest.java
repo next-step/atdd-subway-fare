@@ -9,6 +9,7 @@ import nextstep.subway.application.service.PathService;
 import nextstep.subway.application.service.StationService;
 import nextstep.subway.domain.entity.Favorite;
 import nextstep.subway.domain.repository.FavoriteRepository;
+import nextstep.subway.ui.controller.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ public class FavoriteServiceMockTest {
 	private final Long source = 1L;
 	private final Long target = 2L;
 	private final Long memberId = 1L;
-	private final Favorite favorite = new Favorite(memberId, source, target);
+	private final Favorite favorite = new Favorite(memberId, PathType.DISTANCE, source, target);
 	private final Long favoriteId = 1L;
 
 	@BeforeEach
@@ -57,13 +58,13 @@ public class FavoriteServiceMockTest {
 				.willReturn(sourceResponse);
 		given(stationService.findStationById(target))
 				.willReturn(targetResponse);
-		given(pathService.getPath(source, target))
-				.willReturn(new PathResponse(List.of(sourceResponse, targetResponse), 10));
-		given(favoriteRepository.save(new Favorite(memberId, source, target)))
+		given(pathService.getPath(source, target, PathType.DISTANCE))
+				.willReturn(new PathResponse(List.of(sourceResponse, targetResponse), PathType.DISTANCE, 10));
+		given(favoriteRepository.save(new Favorite(memberId, PathType.DISTANCE, source, target)))
 				.willReturn(favorite);
 
 		// when
-		FavoriteResponse response = favoriteService.saveFavorite(memberId, new FavoriteRequest(source, target));
+		FavoriteResponse response = favoriteService.saveFavorite(memberId, new FavoriteRequest(source, target, PathType.DISTANCE));
 
 		// then
 		assertThat(response.getSource().getId()).isEqualTo(source);
