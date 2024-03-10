@@ -48,7 +48,7 @@ public class FareCalculatorTest {
         List<Integer> 추가_요금_목록 = List.of(이호선.getAdditionalFare(), 사호선.getAdditionalFare(), 신분당선.getAdditionalFare(), 삼호선.getAdditionalFare());
 
         // when
-        int 실제_계산된_요금 = fareCalculator.calculateFare(이동_거리, 추가_요금_목록);
+        int 실제_계산된_요금 = fareCalculator.calculateTotalFare(이동_거리, 추가_요금_목록);
 
         // then
         assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_가장_높은_노선_추가_요금);

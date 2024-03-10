@@ -13,8 +13,6 @@ import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -76,12 +74,17 @@ public class PathFinder {
         validatePath(path);
 
         int distance = calculateDistance(path);
+        return new PathFinderResponse(
+                path.getVertexList(),
+                distance, calculateDuration(path),
+                fareCalculator.calculateTotalFare(distance, convertAdditionalFares(path)));
+    }
 
-        Set<Integer> collect = path.getEdgeList().stream()
+    private List<Integer> convertAdditionalFares(GraphPath<Station, PathCompositeWeightEdge> path) {
+        return path.getEdgeList().stream()
                 .map(PathCompositeWeightEdge::getAdditionalFare)
-                .collect(Collectors.toSet());
-
-        return new PathFinderResponse(path.getVertexList(), distance, calculateDuration(path), fareCalculator.calculateFare(distance, collect));
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private int calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {
