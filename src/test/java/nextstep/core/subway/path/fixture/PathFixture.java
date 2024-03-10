@@ -12,6 +12,10 @@ public class PathFixture {
         return new PathRequest(출발역, 도착역, 경로_조회_타입);
     }
 
+    public static PathRequest 지하철_경로(Long 출발역, Long 도착역, String 경로_조회_타입, String 토큰) {
+        return new PathRequest(출발역, 도착역, 경로_조회_타입, 토큰);
+    }
+
     public static String 경로_조회_타입_찾기(String 경로_조회_타입) {
         if(경로_조회_타입.equals("최단거리")) {
             return PathType.DISTANCE.name();

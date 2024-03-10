@@ -26,6 +26,20 @@ public class PathSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 성공하는_회원의_지하철_경로_조회_요청(PathRequest pathRequest) {
+        return given()
+                .header("Authorization", pathRequest.getToken())
+                .param("source", pathRequest.getDepartureStationId())
+                .param("target", pathRequest.getArrivalStationId())
+                .param("type", pathRequest.getPathFinderType())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/paths")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
+    }
+
     public static void 실패하는_지하철_경로_조회_요청(PathRequest pathRequest) {
         given()
                 .param("source", pathRequest.getDepartureStationId())

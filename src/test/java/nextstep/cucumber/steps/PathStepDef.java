@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static nextstep.core.auth.step.AuthSteps.회원생성_후_토큰_발급;
+import static nextstep.core.member.fixture.MemberFixture.*;
 import static nextstep.core.subway.line.fixture.LineFixture.*;
 import static nextstep.core.subway.line.step.LineSteps.지하철_노선_생성;
 import static nextstep.core.subway.path.fixture.PathFixture.경로_조회_타입_찾기;
@@ -20,12 +22,12 @@ import static nextstep.core.subway.section.fixture.SectionFixture.지하철_구�
 import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하철_구간_추가요청;
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
 
-public class PathFinderStepDef implements En {
+public class PathStepDef implements En {
 
     @Autowired
     AcceptanceContext 컨텍스트;
 
-    public PathFinderStepDef() {
+    public PathStepDef() {
 
         /**
          *<지하철 추가 정보>
@@ -82,6 +84,18 @@ public class PathFinderStepDef implements En {
 
         });
 
+        Given("{string} 인 회원을 생성한다.", (String 연령_타입) -> {
+            if (연령_타입.equals("어린이")) {
+                컨텍스트.저장소_정보_추가하기("존슨의 토큰", 회원생성_후_토큰_발급(존슨));
+            }
+            if (연령_타입.equals("청소년")) {
+                컨텍스트.저장소_정보_추가하기("브라운의 토큰", 회원생성_후_토큰_발급(브라운));
+            }
+            if (연령_타입.equals("성인")) {
+                컨텍스트.저장소_정보_추가하기("잭슨의 토큰", 회원생성_후_토큰_발급(잭슨));
+            }
+        });
+
         When("{string}에서 {string}까지 {string} 기준으로 경로를 조회할 경우", (String 출발역, String 도착역, String 경로_조회_타입) -> {
             컨텍스트.저장된_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(
                     컨텍스트.저장소_숫자_가져오기(출발역),
@@ -90,10 +104,23 @@ public class PathFinderStepDef implements En {
         });
 
         When("{string}에서 {string}까지 {string} 기준으로 {string} 인 회원이 경로를 조회할 경우", (String 출발역, String 도착역, String 경로_조회_타입, String 연령_타입) -> {
-            컨텍스트.저장된_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(
+            String 연령에_맞는_토큰 = null;
+
+            if (연령_타입.equals("어린이")) {
+                연령에_맞는_토큰 = 컨텍스트.저장소_정보_가져오기("존슨의 토큰").toString();
+            }
+            if (연령_타입.equals("청소년")) {
+                연령에_맞는_토큰 = 컨텍스트.저장소_정보_가져오기("브라운의 토큰").toString();
+            }
+            if (연령_타입.equals("성인")) {
+                연령에_맞는_토큰 = 컨텍스트.저장소_정보_가져오기("잭슨의 토큰").toString();
+            }
+
+            컨텍스트.저장된_응답 = 성공하는_회원의_지하철_경로_조회_요청(지하철_경로(
                     컨텍스트.저장소_숫자_가져오기(출발역),
                     컨텍스트.저장소_숫자_가져오기(도착역),
-                    경로_조회_타입_찾기(경로_조회_타입)));
+                    경로_조회_타입_찾기(경로_조회_타입),
+                    연령에_맞는_토큰));
         });
 
         When("출발역과 도착역이 동일한 경로를 {string} 기준으로 조회할 경우", (String 경로_조회_타입) -> {
