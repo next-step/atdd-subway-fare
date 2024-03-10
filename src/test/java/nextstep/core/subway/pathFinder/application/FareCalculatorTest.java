@@ -1,16 +1,12 @@
 package nextstep.core.subway.pathFinder.application;
 
 import nextstep.core.subway.line.domain.Line;
-import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,18 +39,18 @@ public class FareCalculatorTest {
     }
 
     @ParameterizedTest
-    @DisplayName("거리에 기반해서 요금이 계산된다.")
+    @DisplayName("거리와 노선 추가 요금(가장 높은 금액만 적용)을 기반해서 요금이 계산된다.")
     @CsvSource(value =
             {"9:1250:800", "10:1250:800", "11:1350:800", "25:1550:800", "46:2050:800",
-            "50:2050:800", "57:2150:800", "58:2150:800", "59:2250:800", "74:2350:800"},delimiter = ':')
-    void 요금_계산(int 이동_거리, int 예상하는_운임_비용, int 예상하는_추가_환승요금) {
+            "50:2050:800", "57:2150:800", "58:2150:800", "59:2250:800", "74:2350:800"}, delimiter = ':')
+    void 요금_계산(int 이동_거리, int 예상하는_운임_비용, int 예상하는_가장_높은_노선_추가_요금) {
         // given
-        Set<Integer> 추가_요금_목록 = Set.of(이호선.getAdditionalFare(), 사호선.getAdditionalFare(), 신분당선.getAdditionalFare(), 삼호선.getAdditionalFare());
+        List<Integer> 추가_요금_목록 = List.of(이호선.getAdditionalFare(), 사호선.getAdditionalFare(), 신분당선.getAdditionalFare(), 삼호선.getAdditionalFare());
 
         // when
         int 실제_계산된_요금 = fareCalculator.calculateFare(이동_거리, 추가_요금_목록);
 
         // then
-        assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_추가_환승요금);
+        assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_가장_높은_노선_추가_요금);
     }
 }

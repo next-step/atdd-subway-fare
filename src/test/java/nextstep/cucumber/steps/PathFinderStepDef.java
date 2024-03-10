@@ -117,7 +117,7 @@ public class PathFinderStepDef implements En {
                     경로_조회_타입_찾기(경로_조회_타입)));
         });
 
-        Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.", (DataTable 데이터_테이블) -> {
+        Then("경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 노선 추가 요금이 포함된 요금 정보를 확인할 수 있다.", (DataTable 데이터_테이블) -> {
             List<List<String>> 행_목록 = 데이터_테이블.asLists(String.class);
             행_목록.forEach(행 -> {
                 경로에_포함된_역_목록_검증(컨텍스트.저장된_응답, 역_이름으로_역_번호_찾기(행.get(0)));
