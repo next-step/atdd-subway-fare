@@ -1,8 +1,8 @@
-package nextstep.subway.line.section;
+package nextstep.subway.line.section.domain;
 
 
-import nextstep.subway.line.Line;
-import nextstep.subway.station.Station;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,14 +26,18 @@ public class Section {
     @Column
     private Long distance;
 
+    @Column
+    private Long duration;
+
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, Long distance) {
+    public Section(Line line, Station upStation, Station downStation, Long distance, Long duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public List<Station> stations() {
@@ -47,11 +51,13 @@ public class Section {
     public void moveBackFrom(Section prevSection) {
         this.upStation = prevSection.downStation;
         this.distance = this.distance - prevSection.distance;
+        this.duration = this.duration - prevSection.duration;
     }
 
     public void mergeWith(Section nextSection) {
         this.downStation = nextSection.downStation;
         this.distance = distance + nextSection.distance;
+        this.duration = duration + nextSection.duration;
     }
 
     public Long getId() {
@@ -74,6 +80,10 @@ public class Section {
         return distance;
     }
 
+    public Long getDuration() {
+        return duration;
+    }
+
     @Override
     public String toString() {
         return "Section{" +
@@ -81,6 +91,7 @@ public class Section {
                 ", upStation=" + upStation +
                 ", downStation=" + downStation +
                 ", distance=" + distance +
+                ", duration=" + duration +
                 '}';
     }
 }

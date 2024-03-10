@@ -1,8 +1,8 @@
 package nextstep.favorite.domain;
 
-import nextstep.subway.line.Line;
-import nextstep.subway.path.PathFinder;
-import nextstep.subway.station.Station;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.path.PathFinder;
+import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,7 +28,7 @@ public class Favorite {
     }
 
     public Favorite(Long id, Long memberId, Station sourceStation, Station targetStation, List<Line> lines) {
-        isConnected(lines, sourceStation, targetStation);
+        isValidPath(lines, sourceStation, targetStation);
 
         this.id = id;
         this.memberId = memberId;
@@ -36,7 +36,7 @@ public class Favorite {
         this.targetStation = targetStation;
     }
 
-    private void isConnected(List<Line> lines, Station sourceStation, Station targetStation) {
+    private void isValidPath(List<Line> lines, Station sourceStation, Station targetStation) {
         new PathFinder(lines).isConnected(sourceStation, targetStation);
     }
 

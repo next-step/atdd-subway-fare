@@ -1,16 +1,23 @@
-package nextstep.subway.line;
+package nextstep.subway.line.application;
 
 
 import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
-import nextstep.subway.line.section.Section;
-import nextstep.subway.line.section.SectionRequest;
-import nextstep.subway.line.section.SectionResponse;
-import nextstep.subway.path.PathFinder;
-import nextstep.subway.path.PathResponse;
-import nextstep.subway.station.Station;
-import nextstep.subway.station.StationRepository;
-import nextstep.subway.station.StationResponse;
+import nextstep.subway.line.application.dto.LineRequest;
+import nextstep.subway.line.application.dto.LineResponse;
+import nextstep.subway.line.application.dto.LineSectionResponse;
+import nextstep.subway.line.application.dto.UpdateLineRequest;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.path.PathResponse;
+import nextstep.subway.line.path.PathFinder;
+import nextstep.subway.line.path.PathType;
+import nextstep.subway.line.section.domain.Section;
+import nextstep.subway.line.section.dto.SectionRequest;
+import nextstep.subway.line.section.dto.SectionResponse;
+import nextstep.subway.station.application.dto.StationResponse;
+import nextstep.subway.station.domain.Station;
+import nextstep.subway.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,7 +47,7 @@ public class LineService {
         Station upStation = stationRepository.findById(lineRequest.getUpStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         Station downStation = stationRepository.findById(lineRequest.getDownStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
 
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance());
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
 
         lineRepository.save(line);
         return createLineResponse(line);
@@ -88,7 +95,7 @@ public class LineService {
         Station upStation = stationRepository.findById(sectionRequest.getUpStationId()).get();
         Station downStation = stationRepository.findById(sectionRequest.getDownStationId()).get();
 
-        Section section = new Section(line, upStation, downStation, sectionRequest.getDistance());
+        Section section = new Section(line, upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
         line.addSection(section);
         return createSectionResponse(section);
     }
@@ -98,11 +105,11 @@ public class LineService {
         line.deleteSection(stationId);
     }
 
-    public PathResponse getShortestPath(Long source, Long target) {
+    public PathResponse getShortestPath(Long source, Long target, PathType type) {
         Station sourceStation = stationRepository.findById(source).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         List<Line> lines = lineRepository.findAll();
 
-        return new PathFinder(lines).shortestPath(sourceStation, targetStation);
+        return new PathFinder(lines).shortestPath(sourceStation, targetStation, type);
     }
 }

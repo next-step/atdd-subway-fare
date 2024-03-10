@@ -1,8 +1,14 @@
-package nextstep.subway.line;
+package nextstep.subway.line.ui;
 
-import nextstep.subway.line.section.SectionRequest;
-import nextstep.subway.line.section.SectionResponse;
-import nextstep.subway.path.PathResponse;
+import nextstep.subway.line.application.LineService;
+import nextstep.subway.line.application.dto.LineRequest;
+import nextstep.subway.line.application.dto.LineResponse;
+import nextstep.subway.line.application.dto.LineSectionResponse;
+import nextstep.subway.line.application.dto.UpdateLineRequest;
+import nextstep.subway.line.path.PathResponse;
+import nextstep.subway.line.path.PathType;
+import nextstep.subway.line.section.dto.SectionRequest;
+import nextstep.subway.line.section.dto.SectionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +69,7 @@ public class LineController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> shortestPath(@RequestParam("source") Long source, @RequestParam("target") Long target) {
-        return ResponseEntity.ok().body(lineService.getShortestPath(source, target));
+    public ResponseEntity<PathResponse> shortestPath(@RequestParam("source") Long source, @RequestParam("target") Long target, @RequestParam("type") PathType type) {
+        return ResponseEntity.ok().body(lineService.getShortestPath(source, target, type));
     }
 }

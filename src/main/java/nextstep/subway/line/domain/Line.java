@@ -1,9 +1,9 @@
-package nextstep.subway.line;
+package nextstep.subway.line.domain;
 
 
-import nextstep.subway.line.section.Section;
-import nextstep.subway.line.section.Sections;
-import nextstep.subway.station.Station;
+import nextstep.subway.line.section.domain.Section;
+import nextstep.subway.line.section.domain.Sections;
+import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
 
@@ -21,16 +21,18 @@ public class Line {
 
     public Line() {
     }
-
+    public Line(String name, String color, Station upStation, Station downStation, Long distance, Long duration) {
+        this(null, name, color, upStation, downStation, distance, duration);
+    }
     public Line(String name, String color, Station upStation, Station downStation, Long distance) {
-        this(null, name, color, upStation, downStation, distance);
+        this(null, name, color, upStation, downStation, distance, 0L);
     }
 
-    public Line(Long id, String name, String color, Station upStation, Station downStation, Long distance) {
+    public Line(Long id, String name, String color, Station upStation, Station downStation, Long distance, Long duration) {
         this.id = id;
         this.name = name;
         this.color = color;
-        addSection(new Section(this, upStation, downStation, distance));
+        addSection(new Section(this, upStation, downStation, distance, duration));
     }
 
     public Long getId() {
