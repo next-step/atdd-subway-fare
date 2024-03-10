@@ -26,12 +26,12 @@ public class Section implements Comparable<Section> {
     private Station downStation;
 
     @Column
-    private Long distance;
+    private int distance;
 
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, Long distance) {
+    public Section(Line line, Station upStation, Station downStation, int distance) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -71,7 +71,7 @@ public class Section implements Comparable<Section> {
         return downStation;
     }
 
-    public Long getDistance() {
+    public int getDistance() {
         return distance;
     }
 

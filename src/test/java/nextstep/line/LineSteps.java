@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class LineSteps {
 
-    public static ExtractableResponse<Response> createLine(String name, String color, Long upStationId, Long downStationId, Long distance) {
+    public static ExtractableResponse<Response> createLine(String name, String color, Long upStationId, Long downStationId, int distance) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);

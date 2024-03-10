@@ -7,18 +7,18 @@ import java.util.List;
 public class Path {
 
     private List<Station> stations;
-    private Long distance;
+    private int distance;
 
-    public Path(List<Station> stations, Double distance) {
+    public Path(List<Station> stations, double distance) {
         this.stations = stations;
-        this.distance = Math.round(distance);
+        this.distance = (int) Math.round(distance);
     }
 
     public List<Station> getStations() {
         return stations;
     }
 
-    public Long getDistance() {
+    public int getDistance() {
         return distance;
     }
 }

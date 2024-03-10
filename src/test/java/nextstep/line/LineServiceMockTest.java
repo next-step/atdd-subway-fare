@@ -37,14 +37,14 @@ public class LineServiceMockTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10L);
+        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10);
 
         when(stationRepository.findById(역삼역아이디)).thenReturn(Optional.of(역삼역));
         when(stationRepository.findById(선릉역아이디)).thenReturn(Optional.of(선릉역));
         when(lineRepository.findById(이호선아이디)).thenReturn(Optional.of(이호선));
 
         // when
-        SectionRequest sectionRequest = new SectionRequest(역삼역아이디, 선릉역아이디, 10L);
+        SectionRequest sectionRequest = new SectionRequest(역삼역아이디, 선릉역아이디, 10);
         lineService.addSection(이호선아이디, sectionRequest);
 
         // then
