@@ -1,5 +1,6 @@
 package nextstep.core.subway.pathFinder.application;
 
+import nextstep.common.annotation.ComponentTest;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import nextstep.core.subway.pathFinder.domain.PathFinderType;
@@ -9,6 +10,7 @@ import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@ComponentTest
 public class PathFinderTest {
 
     List<Line> 모든_노선_목록;
@@ -27,17 +30,25 @@ public class PathFinderTest {
     Station 정왕;
     Station 오이도;
     Station 가산디지털단지;
+    Station 잠실;
+    Station 천호;
+    Station 신설동;
 
     Line 이호선;
     Line 신분당선;
     Line 삼호선;
     Line 사호선;
+    Line 별내선;
+    Line 일호선;
 
     private PathFinder pathFinder;
 
+    @Autowired
+    private FareCalculator fareCalculator;
+
     @BeforeEach
     void 사전_객체_생성() {
-        pathFinder = new PathFinder();
+        pathFinder = new PathFinder(fareCalculator);
     }
 
     @BeforeEach
@@ -47,8 +58,10 @@ public class PathFinderTest {
         신분당선 = new Line("신분당선", "red", 400);
         삼호선 = new Line("삼호선", "orange", 800);
         사호선 = new Line("사호선", "blue", 600);
+        별내선 = new Line("별내선", "pink", 200);
+        일호선 = new Line("일호선", "blue", 300);
 
-        모든_노선_목록 = List.of(이호선, 신분당선, 삼호선, 사호선);
+        모든_노선_목록 = List.of(이호선, 신분당선, 삼호선, 사호선, 별내선, 일호선);
 
         교대 = StationFixture.교대;
         ReflectionTestUtils.setField(교대, "id", 1L);
@@ -71,6 +84,15 @@ public class PathFinderTest {
         가산디지털단지 = StationFixture.가산디지털단지;
         ReflectionTestUtils.setField(가산디지털단지, "id", 7L);
 
+        잠실 = StationFixture.잠실;
+        ReflectionTestUtils.setField(잠실, "id", 8L);
+
+        천호 = StationFixture.천호;
+        ReflectionTestUtils.setField(천호, "id", 9L);
+
+        신설동 = StationFixture.신설동;
+        ReflectionTestUtils.setField(신설동, "id", 10L);
+
     }
 
     @Nested
@@ -80,11 +102,22 @@ public class PathFinderTest {
         class 사전_노선_설정됨 {
 
             /**
-             * 교대역    --- *2호선*(10km, 5min) ---   강남역
-             * |                                       |
-             * *3호선* (2km, 7min)                  *신분당선*(10km, 3min)
-             * |                                       |
-             * 남부터미널역  --- *3호선*(3km, 3min) ---양재역
+             * <지하철 추가 정보>
+             * <p>
+             * 1호선: 300원
+             * 2호선: 0원
+             * 3호선: 800원
+             * 4호선: 600원
+             * 신분당선: 400원
+             * 별내선: 200원
+             * <p>
+             * <지하철 노선도>
+             * <p>
+             * 교대역  --- *2호선*(10km, 5min, 0원) ---      강남역   ---(20km, 10min, 0원) ---  잠실역  --- *1호선(30km, 20min, 300원)* --- 신설동역
+             * |                                             |                                 |
+             * *3호선* (2km, 7min, 800원)          *신분당선*(10km, 3min, 400원)         *별내선*(5km, 5min)
+             * |                                             |                                 |
+             * 남부터미널역  --- *3호선*(3km, 3min, 800원) --- 양재역                           천호역
              * <p>
              * 오이도역 --- *4호선* --- 정왕역
              */
@@ -93,8 +126,13 @@ public class PathFinderTest {
                 이호선.addSection(new Section(교대, 강남, 10, 5, 이호선));
                 신분당선.addSection(new Section(강남, 양재, 10, 3, 신분당선));
                 삼호선.addSection(new Section(교대, 남부터미널, 2, 7, 삼호선));
-                삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
                 사호선.addSection(new Section(정왕, 오이도, 10, 5, 사호선));
+                별내선.addSection(new Section(잠실, 천호, 5, 5, 별내선));
+                일호선.addSection(new Section(잠실, 신설동, 30, 20, 일호선));
+
+                삼호선.addSection(new Section(남부터미널, 양재, 3, 3, 삼호선));
+                이호선.addSection(new Section(강남, 잠실, 20, 10, 이호선));
+
             }
 
             @Nested
@@ -115,7 +153,7 @@ public class PathFinderTest {
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
+                                .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
                     }
 
                     /**
@@ -130,7 +168,7 @@ public class PathFinderTest {
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 10));
+                                .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 10, 1250));
                     }
 
                 }
@@ -206,7 +244,7 @@ public class PathFinderTest {
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(강남, 양재, 남부터미널), 13, 6));
+                                .isEqualTo(new PathFinderResponse(List.of(강남, 양재, 남부터미널), 13, 6, 1350));
                     }
 
                     /**
@@ -221,7 +259,7 @@ public class PathFinderTest {
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(교대, 강남, 양재), 20, 8));
+                                .isEqualTo(new PathFinderResponse(List.of(교대, 강남, 양재), 20, 8, 1450));
                     }
 
                 }

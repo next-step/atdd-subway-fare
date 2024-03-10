@@ -13,25 +13,19 @@ public class PathService {
 
     private final PathFinder pathFinder;
 
-    private final FareCalculator fareCalculator;
-
-    public PathService(LineService lineService, PathFinder pathFinder, FareCalculator fareCalculator) {
+    public PathService(LineService lineService, PathFinder pathFinder) {
         this.lineService = lineService;
         this.pathFinder = pathFinder;
-        this.fareCalculator = fareCalculator;
     }
 
     public PathFinderResponse findOptimalPath(PathFinderRequest pathFinderRequest) {
         validatePathRequest(pathFinderRequest);
 
-        PathFinderResponse optimalPath = pathFinder.findOptimalPath(
+        return pathFinder.findOptimalPath(
                 lineService.findAllLines(),
                 lineService.findStation(pathFinderRequest.getDepartureStationId()),
                 lineService.findStation(pathFinderRequest.getArrivalStationId()),
                 PathFinderType.findType(pathFinderRequest.getPathFinderType()));
-
-        int fare = fareCalculator.calculateFare(optimalPath.getDistance());
-        return PathFinderResponse.setFareInResponse(fare, optimalPath);
     }
 
     public boolean isValidPath(PathFinderRequest pathFinderRequest) {

@@ -16,6 +16,13 @@ import java.util.List;
 
 @Component
 public class PathFinder {
+
+    private final FareCalculator fareCalculator;
+
+    public PathFinder(FareCalculator fareCalculator) {
+        this.fareCalculator = fareCalculator;
+    }
+
     public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
         validateLines(lines, departureStation, arrivalStation);
 
@@ -65,7 +72,9 @@ public class PathFinder {
     private PathFinderResponse createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path) {
         validatePath(path);
 
-        return new PathFinderResponse(path.getVertexList(), calculateDistance(path), calculateDuration(path));
+        int distance = calculateDistance(path);
+
+        return new PathFinderResponse(path.getVertexList(), distance, calculateDuration(path), fareCalculator.calculateFare(distance));
     }
 
     private int calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {

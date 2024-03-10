@@ -1,6 +1,14 @@
 # 지하철 노선도 미션
 [ATDD 강의](https://edu.nextstep.camp/c/R89PYi5H) 실습을 위한 지하철 노선도 애플리케이션
 
+
+## 3단계
+
+### 추가된 요금 정책
+
+### 고민
+1. 기존 `PathService`의 협력 객체 중 `FareCalculator`를 `PathFinder`의 협력 객체로 이동
+
 ## 2단계
 
 ### 경로 조회 시 요금 정보 포함하기

@@ -33,12 +33,9 @@ public class PathServiceMockTest {
     @Mock
     PathFinder pathFinder;
 
-    @Mock
-    FareCalculator fareCalculator;
-
     @BeforeEach
     void 서비스_객체_생성() {
-        pathService = new PathService(lineService, pathFinder, fareCalculator);
+        pathService = new PathService(lineService, pathFinder);
     }
 
     @Nested
@@ -121,8 +118,7 @@ public class PathServiceMockTest {
                 when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
                 when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.valueOf(경로_조회_최단거리_타입)))
-                        .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12));
-                when(fareCalculator.calculateFare(anyInt())).thenReturn(1350);
+                        .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입));
@@ -143,8 +139,7 @@ public class PathServiceMockTest {
                 when(lineService.findStation(교대역_번호)).thenReturn(교대);
                 when(lineService.findStation(양재역_번호)).thenReturn(양재);
                 when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5));
-                when(fareCalculator.calculateFare(anyInt())).thenReturn(1250);
+                when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
 
                 // when
                 PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathFinderRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입));
