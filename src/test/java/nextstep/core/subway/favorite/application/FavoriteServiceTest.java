@@ -117,10 +117,10 @@ public class FavoriteServiceTest {
         오이도역_번호 = 오이도.getId();
         가산디지털단지역_번호 = 가산디지털단지.getId();
 
-        이호선 = lineRepository.save(new Line("이호선", "green"));
-        신분당선 = lineRepository.save(new Line("신분당선", "red"));
-        삼호선 = lineRepository.save(new Line("삼호선", "orange"));
-        사호선 = lineRepository.save(new Line("사호선", "blue"));
+        이호선 = lineRepository.save(new Line("이호선", "green", 0));
+        신분당선 = lineRepository.save(new Line("신분당선", "red", 400));
+        삼호선 = lineRepository.save(new Line("삼호선", "orange", 800));
+        사호선 = lineRepository.save(new Line("사호선", "blue", 600));
 
         sectionRepository.save(new Section(교대, 강남, 10, 10, 이호선));
         sectionRepository.save(new Section(강남, 양재, 10, 10, 신분당선));

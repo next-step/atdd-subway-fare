@@ -17,15 +17,18 @@ public class Line {
 
     private String color;
 
+    private int additionalFare;
+
     @Embedded
     private Sections sections = new Sections();
 
     protected Line() {
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int additionalFare) {
         this.name = name;
         this.color = color;
+        this.additionalFare = additionalFare;
     }
 
     public Line update(String name, String color) {
@@ -87,6 +90,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public int getAdditionalFare() {
+        return additionalFare;
     }
 
     public List<Station> getAllStations() {

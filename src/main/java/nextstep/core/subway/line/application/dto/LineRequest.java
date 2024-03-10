@@ -48,4 +48,8 @@ public class LineRequest {
     public int getDuration() {
         return duration;
     }
+
+    public int getAdditionalFare() {
+        return additionalFare;
+    }
 }

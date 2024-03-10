@@ -12,7 +12,8 @@ public class LineConverter {
     public static Line convertToLine(LineRequest request) {
         return new Line(
                 request.getName(),
-                request.getColor());
+                request.getColor(),
+                request.getAdditionalFare());
     }
 
     public static LineResponse convertToResponse(Line line) {

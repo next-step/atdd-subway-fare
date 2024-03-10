@@ -43,10 +43,10 @@ public class PathFinderTest {
     @BeforeEach
     void 사전_노선_설정() {
 
-        이호선 = new Line("이호선", "green");
-        신분당선 = new Line("신분당선", "red");
-        삼호선 = new Line("삼호선", "orange");
-        사호선 = new Line("사호선", "blue");
+        이호선 = new Line("이호선", "green", 0);
+        신분당선 = new Line("신분당선", "red", 400);
+        삼호선 = new Line("삼호선", "orange", 800);
+        사호선 = new Line("사호선", "blue", 600);
 
         모든_노선_목록 = List.of(이호선, 신분당선, 삼호선, 사호선);
 
