@@ -31,9 +31,12 @@ public class FareCalculatorTest {
     @Autowired
     AdditionalFareCalculator additionalFareCalculator;
 
+    @Autowired
+    AgeFareCalculator ageFareCalculator;
+
     @BeforeEach
     void setUp() {
-        fareCalculator = new FareCalculator(distanceFareCalculator, additionalFareCalculator);
+        fareCalculator = new FareCalculator(distanceFareCalculator, additionalFareCalculator, ageFareCalculator);
     }
 
     @BeforeEach
@@ -58,6 +61,21 @@ public class FareCalculatorTest {
 
         // when
         int 실제_계산된_요금 = fareCalculator.calculateTotalFare(이동_거리, 추가_요금_목록);
+
+        // then
+        assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_가장_높은_노선_추가_요금);
+    }
+
+    @ParameterizedTest
+    @DisplayName("거리, 노선 추가 요금(가장 높은 금액만 적용), 나이를 기반해서 요금이 계산된다.")
+    @CsvSource(value =
+            {"9:450:800:6", "9:450:800:12", "9:720:800:13", "9:720:800:18", "9:1250:800:19"}, delimiter = ':')
+    void 요금_계산(int 이동_거리, int 예상하는_운임_비용, int 예상하는_가장_높은_노선_추가_요금, int 나이) {
+        // given
+        List<Integer> 추가_요금_목록 = List.of(이호선.getAdditionalFare(), 사호선.getAdditionalFare(), 신분당선.getAdditionalFare(), 삼호선.getAdditionalFare());
+
+        // when
+        int 실제_계산된_요금 = fareCalculator.calculateTotalFare(이동_거리, 추가_요금_목록, 나이);
 
         // then
         assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_가장_높은_노선_추가_요금);
