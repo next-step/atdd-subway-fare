@@ -17,22 +17,10 @@ public class PathStepDef implements En {
     private AcceptanceContext context;
 
     public PathStepDef() {
-        Given("{string}과 {string}의 경로를 조회하면", (String source, String target) -> {
-            Long sourceId = ((StationResponse) context.store.get(source)).getId();
-            Long targetId = ((StationResponse) context.store.get(target)).getId();
-            context.response = RestAssured.given().log().all()
-                    .when().get("/paths?source={sourceId}&target={targetId}", sourceId, targetId)
-                    .then().log().all()
-                    .extract();
-        });
 
-        Given("{string}과 {string}의 최단 거리 경로를 조회하면", (String source, String target) -> {
-            getPath(source, target, "DISTANCE");
-        });
+        Given("{string}과 {string}의 최단 거리 경로를 조회하면", (String source, String target) -> getPath(source, target, "DISTANCE"));
 
-        Given("{string}과 {string}의 최소 시간 경로를 조회하면", (String source, String target) -> {
-            getPath(source, target, "DURATION");
-        });
+        Given("{string}과 {string}의 최소 시간 경로를 조회하면", (String source, String target) -> getPath(source, target, "DURATION"));
 
         Then("{string} 경로가 조회된다", (String pathString) -> {
             List<String> split = List.of(pathString.split(","));
