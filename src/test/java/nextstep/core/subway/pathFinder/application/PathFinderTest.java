@@ -146,7 +146,7 @@ public class PathFinderTest {
                     /**
                      * Given 지하철 노선 목록이 생성된다.
                      * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
-                     * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     * Then  경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.
                      */
                     @Test
                     void 강남역에서_남부터미널역까지_경로_조회() {
@@ -155,13 +155,13 @@ public class PathFinderTest {
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
+                                .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350 + 800));
                     }
 
                     /**
                      * Given 지하철 노선 목록이 생성된다.
                      * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
-                     * Then  최단거리 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     * Then  경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.
                      */
                     @Test
                     void 교대역에서_양재역까지_경로_조회() {
@@ -170,7 +170,22 @@ public class PathFinderTest {
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 10, 1250));
+                                .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 10, 1250 + 800));
+                    }
+
+                    /**
+                     * Given 지하철 노선 목록이 생성된다.
+                     * When  출발역과 도착역을 통해 최단거리 기준으로 경로를 조회할 경우
+                     * Then  경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.
+                     */
+                    @Test
+                    void 양재역에서_신설동역까지_경로_조회() {
+                        // when
+                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 양재, 신설동, PathFinderType.DISTANCE);
+
+                        //
+                        assertThat(경로_조회_결과).usingRecursiveComparison()
+                                .isEqualTo(new PathFinderResponse(List.of(양재, 강남, 잠실, 신설동), 60, 33, 2250 + 400));
                     }
 
                 }
@@ -237,7 +252,7 @@ public class PathFinderTest {
                     /**
                      * Given 지하철 노선 목록이 생성된다.
                      * When  출발역과 도착역을 통해 최소 소요시간 기준으로 경로를 조회할 경우
-                     * Then  최소 소요시간 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     * Then  경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.
                      */
                     @Test
                     void 강남역에서_남부터미널역까지_경로_조회() {
@@ -246,13 +261,13 @@ public class PathFinderTest {
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(강남, 양재, 남부터미널), 13, 6, 1350));
+                                .isEqualTo(new PathFinderResponse(List.of(강남, 양재, 남부터미널), 13, 6, 1350 + 800));
                     }
 
                     /**
                      * Given 지하철 노선 목록이 생성된다.
                      * When  출발역과 도착역을 통해 최소 소요시간 기준으로 경로를 조회할 경우
-                     * Then  최소 소요시간 기준으로 존재하는 역 목록과 거리, 소요 시간을 확인할 수 있다.
+                     * Then  경로 내 존재하는 역, 이동 거리, 소요 시간, 운임 비용와 환승요금이 포함된 요금 정보를 확인할 수 있다.
                      */
                     @Test
                     void 교대역에서_양재역까지_경로_조회() {
@@ -261,7 +276,7 @@ public class PathFinderTest {
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(교대, 강남, 양재), 20, 8, 1450));
+                                .isEqualTo(new PathFinderResponse(List.of(교대, 강남, 양재), 20, 8, 1450 + 400));
                     }
 
                 }
