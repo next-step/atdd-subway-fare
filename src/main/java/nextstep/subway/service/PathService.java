@@ -1,7 +1,10 @@
 package nextstep.subway.service;
 
 import nextstep.subway.controller.dto.PathResponse;
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.Line;
+import nextstep.subway.domain.Path;
+import nextstep.subway.domain.PathType;
+import nextstep.subway.domain.Station;
 import nextstep.subway.domain.pathfinder.ShortestDistancePathFinder;
 import nextstep.subway.domain.pathfinder.ShortestDurationPathFinder;
 import nextstep.subway.domain.repository.LineRepository;
@@ -9,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static nextstep.subway.controller.dto.StationResponse.stationsToStationResponses;
 
 @Service
 @Transactional(readOnly = true)

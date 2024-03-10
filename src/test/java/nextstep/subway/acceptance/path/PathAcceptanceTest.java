@@ -28,6 +28,10 @@ public class PathAcceptanceTest {
     private ExtractableResponse<Response> 이호선;
     private ExtractableResponse<Response> 신분당선;
     private ExtractableResponse<Response> 삼호선;
+    private Long 교대역아이디;
+    private Long 강남역아이디;
+    private Long 양재역아이디;
+    private Long 남부터미널역아이디;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -50,31 +54,35 @@ public class PathAcceptanceTest {
         남부터미널역 = 생성_요청(
                 StationFixture.createStationParams("남부터미널역"),
                 "/stations");
+        교대역아이디 = 교대역.jsonPath().getLong("id");
+        강남역아이디 = 강남역.jsonPath().getLong("id");
+        양재역아이디 = 양재역.jsonPath().getLong("id");
+        남부터미널역아이디 = 남부터미널역.jsonPath().getLong("id");
         이호선 = 생성_요청(
                 LineFixture.createLineParams("2호선", "GREEN",
-                        교대역.jsonPath().getLong("id"),
-                        강남역.jsonPath().getLong("id"),
+                        교대역아이디,
+                        강남역아이디,
                         10L,
                         10L),
                 "/lines");
         신분당선 = 생성_요청(
                 LineFixture.createLineParams("신분당선",
                         "RED",
-                        강남역.jsonPath().getLong("id"),
-                        양재역.jsonPath().getLong("id"),
+                        강남역아이디,
+                        양재역아이디,
                         10L,
                         10L),
                 "/lines");
         삼호선 = 생성_요청(
                 LineFixture.createLineParams("3호선",
                         "ORANGE",
-                        교대역.jsonPath().getLong("id"),
-                        남부터미널역.jsonPath().getLong("id"),
+                        교대역아이디,
+                        남부터미널역아이디,
                         2L,
                         10L),
                 "/lines");
         생성_요청(
-                SectionFixture.createSectionParams(남부터미널역.jsonPath().getLong("id"), 양재역.jsonPath().getLong("id"), 3L, 10L),
+                SectionFixture.createSectionParams(남부터미널역아이디, 양재역아이디, 3L, 10L),
                 "/lines/" + 삼호선.jsonPath().getLong("id") + "/sections"
         );
     }
@@ -88,11 +96,12 @@ public class PathAcceptanceTest {
     @DisplayName("지하철 경로를 조회한다.")
     void 지하철_경로_조회한다() {
         //when
-        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths",교대역.jsonPath().getLong("id"),양재역.jsonPath().getLong("id"), PathType.DISTANCE);
+        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths", 교대역아이디, 양재역아이디, PathType.DISTANCE);
 
         //then
         assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get());
-        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getDouble("distance")).isEqualTo(5);
+        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5);
+        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20);
     }
 
     /**
@@ -103,9 +112,9 @@ public class PathAcceptanceTest {
     @DisplayName("출발역과 마지막역을 동일한 역으로 조회하면 에러가 발생한다.")
     void 출발역과_도착역이_같은_경로에러() {
         //when
-        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths",교대역.jsonPath().getLong("id"),교대역.jsonPath().getLong("id"), PathType.DISTANCE);
+        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 교대역아이디, 교대역아이디, PathType.DISTANCE);
         //then
-       assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     /**
@@ -138,7 +147,7 @@ public class PathAcceptanceTest {
                 "/lines");
 
         //when
-        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths",신림역.jsonPath().getLong("id"),사당역.jsonPath().getLong("id"), PathType.DISTANCE);
+        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 신림역.jsonPath().getLong("id"), 사당역.jsonPath().getLong("id"), PathType.DISTANCE);
 
         //then
         assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
