@@ -8,6 +8,7 @@ import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@DisplayName("경로 조회 관련 테스트")
 @ComponentTest
 public class PathFinderTest {
 

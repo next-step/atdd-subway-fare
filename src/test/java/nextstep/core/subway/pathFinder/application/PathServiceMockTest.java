@@ -9,6 +9,7 @@ import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,7 @@ import static nextstep.core.subway.pathFinder.fixture.PathFinderFixture.경로_�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@DisplayName("경로 조회 관련 Mock 테스트")
 @ExtendWith(MockitoExtension.class)
 public class PathServiceMockTest {
 

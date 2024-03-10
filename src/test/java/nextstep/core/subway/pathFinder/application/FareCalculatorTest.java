@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("요금 계산기 관련 테스트")
 public class FareCalculatorTest {
 
     Line 이호선;

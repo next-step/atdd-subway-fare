@@ -9,6 +9,7 @@ import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.domain.StationRepository;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@DisplayName("노선 서비스 레이어 테스트")
 @ApplicationTest
 public class LineServiceTest {
 
