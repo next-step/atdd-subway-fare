@@ -19,7 +19,7 @@ public class PathFinder {
     public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
         validateLines(lines, departureStation, arrivalStation);
 
-        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFormLines(lines, type);
+        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);
 
         return createPathFinderResult(findOptimalPath(departureStation, arrivalStation, pathGraph));
     }
@@ -34,7 +34,7 @@ public class PathFinder {
         return new DijkstraShortestPath<>(graph).getPath(departure, arrival);
     }
 
-    private WeightedMultigraph<Station, PathCompositeWeightEdge> buildPathFormLines(List<Line> lines, PathFinderType type) {
+    private WeightedMultigraph<Station, PathCompositeWeightEdge> buildPathFromLines(List<Line> lines, PathFinderType type) {
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = new WeightedMultigraph<>(PathCompositeWeightEdge.class);
 
         lines.forEach(line -> line.getSortedAllSections().forEach(section -> {
