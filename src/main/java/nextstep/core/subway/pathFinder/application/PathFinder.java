@@ -13,6 +13,9 @@ import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class PathFinder {
@@ -23,7 +26,7 @@ public class PathFinder {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) {
+    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) { // TODO: 매개변수 수 줄이기
         validateLines(lines, departureStation, arrivalStation);
 
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);
@@ -58,7 +61,7 @@ public class PathFinder {
         pathGraph.addVertex(upStation);
         pathGraph.addVertex(downStation);
 
-        PathCompositeWeightEdge weightEdge = new PathCompositeWeightEdge(section.getDistance(), section.getDuration());
+        PathCompositeWeightEdge weightEdge = new PathCompositeWeightEdge(section.getDistance(), section.getDuration(), section.getLine().getAdditionalFare());
         pathGraph.addEdge(upStation, downStation, weightEdge);
 
         if (PathFinderType.DISTANCE == type) {
@@ -74,7 +77,11 @@ public class PathFinder {
 
         int distance = calculateDistance(path);
 
-        return new PathFinderResponse(path.getVertexList(), distance, calculateDuration(path), fareCalculator.calculateFare(distance));
+        Set<Integer> collect = path.getEdgeList().stream()
+                .map(PathCompositeWeightEdge::getAdditionalFare)
+                .collect(Collectors.toSet());
+
+        return new PathFinderResponse(path.getVertexList(), distance, calculateDuration(path), fareCalculator.calculateFare(distance, collect));
     }
 
     private int calculateDistance(GraphPath<Station, PathCompositeWeightEdge> path) {

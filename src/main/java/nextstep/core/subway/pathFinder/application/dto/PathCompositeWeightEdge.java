@@ -6,10 +6,12 @@ public class PathCompositeWeightEdge extends DefaultWeightedEdge {
 
     private final int distance;
     private final int duration;
+    private final int additionalFare;
 
-    public PathCompositeWeightEdge(int distance, int duration) {
+    public PathCompositeWeightEdge(int distance, int duration, int additionalFare) {
         this.distance = distance;
         this.duration = duration;
+        this.additionalFare = additionalFare;
     }
 
     public int getDistance() {
@@ -18,5 +20,9 @@ public class PathCompositeWeightEdge extends DefaultWeightedEdge {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getAdditionalFare() {
+        return additionalFare;
     }
 }

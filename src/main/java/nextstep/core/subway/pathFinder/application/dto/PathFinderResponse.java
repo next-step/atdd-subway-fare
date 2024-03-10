@@ -9,7 +9,7 @@ public class PathFinderResponse {
     private final List<Station> stations;
     private final int distance;
     private final int duration;
-    private int fare;
+    private final int fare;
 
     public PathFinderResponse(List<Station> stations, int distance, int duration, int fare) {
         this.stations = stations;
