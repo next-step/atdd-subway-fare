@@ -9,6 +9,8 @@ import java.util.List;
 @Entity
 public class Line {
 
+    public static final int MIN_ADDITIONAL_FARE = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +30,14 @@ public class Line {
     public Line(String name, String color, int additionalFare) {
         this.name = name;
         this.color = color;
-        this.additionalFare = additionalFare;
+        this.additionalFare = validateAdditionalFare(additionalFare);
+    }
+
+    private int validateAdditionalFare(Integer additionalFare) {
+        if (additionalFare == null || additionalFare < MIN_ADDITIONAL_FARE) {
+            throw new IllegalArgumentException("추가 요금은 0 원 이상이어야 합니다.");
+        }
+        return additionalFare;
     }
 
     public Line update(String name, String color) {

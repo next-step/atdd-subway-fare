@@ -1,15 +1,18 @@
 package nextstep.core.subway.pathFinder.application;
 
+import nextstep.common.annotation.ComponentTest;
 import nextstep.core.subway.line.domain.Line;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ComponentTest
 @DisplayName("요금 계산기 관련 테스트")
 public class FareCalculatorTest {
 
@@ -22,9 +25,15 @@ public class FareCalculatorTest {
 
     FareCalculator fareCalculator;
 
+    @Autowired
+    DistanceFareCalculator distanceFareCalculator;
+
+    @Autowired
+    AdditionalFareCalculator additionalFareCalculator;
+
     @BeforeEach
     void setUp() {
-        fareCalculator = new FareCalculator();
+        fareCalculator = new FareCalculator(distanceFareCalculator, additionalFareCalculator);
     }
 
     @BeforeEach
