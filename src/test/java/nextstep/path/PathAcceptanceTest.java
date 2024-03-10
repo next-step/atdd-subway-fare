@@ -61,7 +61,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void getPath() {
         // when
-        ExtractableResponse<Response> response = PathSteps.getPath(교대역, 양재역);
+        ExtractableResponse<Response> response = PathSteps.getPath(교대역, 양재역, "DISTANCE");
         List<Long> ids = getStations(response);
         Long distance = getDistance(response);
 
