@@ -1,9 +1,9 @@
-package nextstep.core.subway.pathFinder.application;
+package nextstep.core.subway.path.application;
 
 import nextstep.core.subway.line.domain.Line;
-import nextstep.core.subway.pathFinder.application.dto.PathCompositeWeightEdge;
-import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
-import nextstep.core.subway.pathFinder.domain.PathFinderType;
+import nextstep.core.subway.path.application.dto.PathCompositeWeightEdge;
+import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
@@ -24,7 +24,7 @@ public class PathFinder {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathFinderType type) { // TODO: 매개변수 수 줄이기
+    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type) { // TODO: 매개변수 수 줄이기
         validateLines(lines, departureStation, arrivalStation);
 
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);
@@ -42,7 +42,7 @@ public class PathFinder {
         return new DijkstraShortestPath<>(graph).getPath(departure, arrival);
     }
 
-    private WeightedMultigraph<Station, PathCompositeWeightEdge> buildPathFromLines(List<Line> lines, PathFinderType type) {
+    private WeightedMultigraph<Station, PathCompositeWeightEdge> buildPathFromLines(List<Line> lines, PathType type) {
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = new WeightedMultigraph<>(PathCompositeWeightEdge.class);
 
         lines.forEach(line -> line.getSortedAllSections().forEach(section -> {
@@ -52,7 +52,7 @@ public class PathFinder {
         return pathGraph;
     }
 
-    private void buildPathFromSection(PathFinderType type, Section section, WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph) {
+    private void buildPathFromSection(PathType type, Section section, WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph) {
         Station upStation = section.getUpStation();
         Station downStation = section.getDownStation();
 
@@ -62,10 +62,10 @@ public class PathFinder {
         PathCompositeWeightEdge weightEdge = new PathCompositeWeightEdge(section.getDistance(), section.getDuration(), section.getLine().getAdditionalFare());
         pathGraph.addEdge(upStation, downStation, weightEdge);
 
-        if (PathFinderType.DISTANCE == type) {
+        if (PathType.DISTANCE == type) {
             pathGraph.setEdgeWeight(weightEdge, section.getDistance());
         }
-        if (PathFinderType.DURATION == type) {
+        if (PathType.DURATION == type) {
             pathGraph.setEdgeWeight(weightEdge, section.getDuration());
         }
     }

@@ -1,19 +1,19 @@
-package nextstep.core.subway.pathFinder.presentation;
+package nextstep.core.subway.path.presentation;
 
-import nextstep.core.subway.pathFinder.application.PathService;
-import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
-import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.PathService;
+import nextstep.core.subway.path.application.dto.PathRequest;
+import nextstep.core.subway.path.application.dto.PathFinderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PathFinderController {
+public class PathController {
 
     public final PathService pathService;
 
-    public PathFinderController(PathService pathService) {
+    public PathController(PathService pathService) {
         this.pathService = pathService;
     }
 
@@ -21,7 +21,7 @@ public class PathFinderController {
     public ResponseEntity<PathFinderResponse> findOptimalPath(@RequestParam("source") Long departureStationId,
                                                               @RequestParam("target") Long arrivalStationId,
                                                               @RequestParam("type") String pathFinderType) {
-        PathFinderRequest pathFinderRequest = new PathFinderRequest(departureStationId, arrivalStationId, pathFinderType);
-        return ResponseEntity.ok(pathService.findOptimalPath(pathFinderRequest));
+        PathRequest pathRequest = new PathRequest(departureStationId, arrivalStationId, pathFinderType);
+        return ResponseEntity.ok(pathService.findOptimalPath(pathRequest));
     }
 }

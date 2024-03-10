@@ -1,4 +1,4 @@
-package nextstep.core.subway.pathFinder.application.dto;
+package nextstep.core.subway.path.application.dto;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 

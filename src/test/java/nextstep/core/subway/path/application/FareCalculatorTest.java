@@ -1,4 +1,4 @@
-package nextstep.core.subway.pathFinder.application;
+package nextstep.core.subway.path.application;
 
 import nextstep.common.annotation.ComponentTest;
 import nextstep.core.subway.line.domain.Line;

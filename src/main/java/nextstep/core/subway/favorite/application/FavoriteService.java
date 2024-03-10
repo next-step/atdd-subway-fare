@@ -7,7 +7,7 @@ import nextstep.core.subway.favorite.application.dto.FavoriteRequest;
 import nextstep.core.subway.favorite.application.dto.FavoriteResponse;
 import nextstep.core.subway.favorite.domain.Favorite;
 import nextstep.core.subway.favorite.domain.FavoriteRepository;
-import nextstep.core.subway.pathFinder.application.PathService;
+import nextstep.core.subway.path.application.PathService;
 import nextstep.core.subway.station.application.StationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-import static nextstep.core.subway.pathFinder.application.converter.PathFinderConverter.convertToRequest;
+import static nextstep.core.subway.path.application.converter.PathConverter.convertToRequest;
 
 @Transactional(readOnly = true)
 @Service

@@ -1,6 +1,6 @@
-package nextstep.core.subway.pathFinder.application.dto;
+package nextstep.core.subway.path.application.dto;
 
-public class PathFinderRequest {
+public class PathRequest {
 
     public final Long departureStationId;
 
@@ -8,12 +8,12 @@ public class PathFinderRequest {
 
     public String pathFinderType;
 
-    public PathFinderRequest(Long departureStationId, Long arrivalStationId) {
+    public PathRequest(Long departureStationId, Long arrivalStationId) {
         this.departureStationId = departureStationId;
         this.arrivalStationId = arrivalStationId;
     }
 
-    public PathFinderRequest(Long departureStationId, Long arrivalStationId, String pathFinderType) {
+    public PathRequest(Long departureStationId, Long arrivalStationId, String pathFinderType) {
         this.departureStationId = departureStationId;
         this.arrivalStationId = arrivalStationId;
         this.pathFinderType = pathFinderType;

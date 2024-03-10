@@ -12,7 +12,7 @@ import nextstep.core.subway.favorite.domain.Favorite;
 import nextstep.core.subway.favorite.domain.FavoriteRepository;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.line.domain.LineRepository;
-import nextstep.core.subway.pathFinder.application.PathService;
+import nextstep.core.subway.path.application.PathService;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.section.domain.SectionRepository;
 import nextstep.core.subway.station.application.StationService;

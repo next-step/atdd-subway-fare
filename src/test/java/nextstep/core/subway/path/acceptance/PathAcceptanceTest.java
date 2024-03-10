@@ -1,8 +1,8 @@
-package nextstep.core.subway.pathFinder.acceptance;
+package nextstep.core.subway.path.acceptance;
 
 import nextstep.common.utils.AcceptanceTest;
 import nextstep.core.subway.station.fixture.StationFixture;
-import nextstep.core.subway.pathFinder.domain.PathFinderType;
+import nextstep.core.subway.path.domain.PathType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import static nextstep.core.subway.line.fixture.LineFixture.*;
 import static nextstep.core.subway.line.step.LineSteps.지하철_노선_생성;
-import static nextstep.core.subway.pathFinder.fixture.PathFinderFixture.지하철_경로;
-import static nextstep.core.subway.pathFinder.step.PathFinderSteps.*;
+import static nextstep.core.subway.path.fixture.PathFixture.지하철_경로;
+import static nextstep.core.subway.path.step.PathSteps.*;
 import static nextstep.core.subway.section.fixture.SectionFixture.지하철_구간;
 import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하철_구간_추가요청;
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
 
 @DisplayName("경로 조회")
-public class PathFinderAcceptanceTest extends AcceptanceTest {
+public class PathAcceptanceTest extends AcceptanceTest {
 
     Long 교대역;
     Long 강남역;
@@ -70,7 +70,7 @@ public class PathFinderAcceptanceTest extends AcceptanceTest {
         @Test
         void 강남역에서_남부터미널역까지_경로_조회() {
             // when
-            var 성공하는_경로_조회_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(강남역, 남부터미널역, PathFinderType.DISTANCE.name()));
+            var 성공하는_경로_조회_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(강남역, 남부터미널역, PathType.DISTANCE.name()));
 
             // then
             경로에_포함된_역_목록_검증(성공하는_경로_조회_응답, 강남역, 교대역, 남부터미널역);
@@ -85,7 +85,7 @@ public class PathFinderAcceptanceTest extends AcceptanceTest {
         @Test
         void 교대역에서_양재역까지_경로_조회() {
             // when
-            var 성공하는_경로_조회_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(교대역, 양재역,  PathFinderType.DISTANCE.name()));
+            var 성공하는_경로_조회_응답 = 성공하는_지하철_경로_조회_요청(지하철_경로(교대역, 양재역,  PathType.DISTANCE.name()));
 
             // then
             경로에_포함된_역_목록_검증(성공하는_경로_조회_응답, 교대역, 남부터미널역, 양재역);
@@ -109,7 +109,7 @@ public class PathFinderAcceptanceTest extends AcceptanceTest {
             @Test
             void 강남역에서_강남역까지_경로_조회() {
                 // when,then
-                실패하는_지하철_경로_조회_요청(지하철_경로(강남역, 강남역, PathFinderType.DISTANCE.name()));
+                실패하는_지하철_경로_조회_요청(지하철_경로(강남역, 강남역, PathType.DISTANCE.name()));
             }
 
         }
@@ -126,7 +126,7 @@ public class PathFinderAcceptanceTest extends AcceptanceTest {
             @Test
             void 강남역에서_오이도역까지_경로_조회() {
                 // when,then
-                실패하는_지하철_경로_조회_요청(지하철_경로(강남역, 오이도역, PathFinderType.DISTANCE.name()));
+                실패하는_지하철_경로_조회_요청(지하철_경로(강남역, 오이도역, PathType.DISTANCE.name()));
 
             }
 
@@ -142,7 +142,7 @@ public class PathFinderAcceptanceTest extends AcceptanceTest {
                 @Test
                 void 강남역에서_존재하지_않는_역까지_경로_조회() {
                     // when,then
-                    실패하는_지하철_경로_조회_요청(지하철_경로(강남역, 존재하지_않는_역, PathFinderType.DISTANCE.name()));
+                    실패하는_지하철_경로_조회_요청(지하철_경로(강남역, 존재하지_않는_역, PathType.DISTANCE.name()));
                 }
 
 
@@ -155,7 +155,7 @@ public class PathFinderAcceptanceTest extends AcceptanceTest {
                 @Test
                 void 존재하지_않는_역에서_강남역까지_경로_조회() {
                     // when,then
-                    실패하는_지하철_경로_조회_요청(지하철_경로(존재하지_않는_역, 강남역, PathFinderType.DISTANCE.name()));
+                    실패하는_지하철_경로_조회_요청(지하철_경로(존재하지_않는_역, 강남역, PathType.DISTANCE.name()));
                 }
 
             }

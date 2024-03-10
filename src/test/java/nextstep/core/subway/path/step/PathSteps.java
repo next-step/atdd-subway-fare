@@ -1,8 +1,8 @@
-package nextstep.core.subway.pathFinder.step;
+package nextstep.core.subway.path.step;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
+import nextstep.core.subway.path.application.dto.PathRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -11,13 +11,13 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathFinderSteps {
+public class PathSteps {
 
-    public static ExtractableResponse<Response> 성공하는_지하철_경로_조회_요청(PathFinderRequest pathFinderRequest) {
+    public static ExtractableResponse<Response> 성공하는_지하철_경로_조회_요청(PathRequest pathRequest) {
         return given()
-                .param("source", pathFinderRequest.getDepartureStationId())
-                .param("target", pathFinderRequest.getArrivalStationId())
-                .param("type", pathFinderRequest.getPathFinderType())
+                .param("source", pathRequest.getDepartureStationId())
+                .param("target", pathRequest.getArrivalStationId())
+                .param("type", pathRequest.getPathFinderType())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get("/paths")
@@ -26,10 +26,10 @@ public class PathFinderSteps {
                 .extract();
     }
 
-    public static void 실패하는_지하철_경로_조회_요청(PathFinderRequest pathFinderRequest) {
+    public static void 실패하는_지하철_경로_조회_요청(PathRequest pathRequest) {
         given()
-                .param("source", pathFinderRequest.getDepartureStationId())
-                .param("target", pathFinderRequest.getArrivalStationId())
+                .param("source", pathRequest.getDepartureStationId())
+                .param("target", pathRequest.getArrivalStationId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get("/paths")

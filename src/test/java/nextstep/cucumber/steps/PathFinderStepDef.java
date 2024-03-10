@@ -2,7 +2,7 @@ package nextstep.cucumber.steps;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
+import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.station.fixture.StationFixture;
 import nextstep.cucumber.util.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,9 @@ import java.util.List;
 
 import static nextstep.core.subway.line.fixture.LineFixture.*;
 import static nextstep.core.subway.line.step.LineSteps.지하철_노선_생성;
-import static nextstep.core.subway.pathFinder.fixture.PathFinderFixture.경로_조회_타입_찾기;
-import static nextstep.core.subway.pathFinder.fixture.PathFinderFixture.지하철_경로;
-import static nextstep.core.subway.pathFinder.step.PathFinderSteps.*;
+import static nextstep.core.subway.path.fixture.PathFixture.경로_조회_타입_찾기;
+import static nextstep.core.subway.path.fixture.PathFixture.지하철_경로;
+import static nextstep.core.subway.path.step.PathSteps.*;
 import static nextstep.core.subway.section.fixture.SectionFixture.지하철_구간;
 import static nextstep.core.subway.section.step.SectionSteps.성공하는_지하철_구간_추가요청;
 import static nextstep.core.subway.station.step.StationSteps.지하철_역_생성;
@@ -128,7 +128,7 @@ public class PathFinderStepDef implements En {
         });
 
         Then("경로를 조회할 수 없다.", () -> {
-            실패하는_지하철_경로_조회_요청((PathFinderRequest) 컨텍스트.저장소_정보_가져오기("조회할_구간"));
+            실패하는_지하철_경로_조회_요청((PathRequest) 컨텍스트.저장소_정보_가져오기("조회할_구간"));
         });
     }
 

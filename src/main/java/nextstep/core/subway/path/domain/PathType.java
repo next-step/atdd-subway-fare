@@ -1,18 +1,18 @@
-package nextstep.core.subway.pathFinder.domain;
+package nextstep.core.subway.path.domain;
 
 import java.util.Arrays;
 
-public enum PathFinderType {
+public enum PathType {
     DISTANCE("DISTANCE"),
     DURATION("DURATION");
 
     private final String type;
 
-    PathFinderType(String type) {
+    PathType(String type) {
         this.type = type;
     }
 
-    public static PathFinderType findType(String pathFinderType) {
+    public static PathType findType(String pathFinderType) {
         return Arrays.stream(values())
                 .filter(type -> type.name().equals(pathFinderType))
                 .findFirst()

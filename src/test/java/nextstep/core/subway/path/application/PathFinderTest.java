@@ -1,9 +1,9 @@
-package nextstep.core.subway.pathFinder.application;
+package nextstep.core.subway.path.application;
 
 import nextstep.common.annotation.ComponentTest;
 import nextstep.core.subway.line.domain.Line;
-import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
-import nextstep.core.subway.pathFinder.domain.PathFinderType;
+import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
@@ -151,7 +151,7 @@ public class PathFinderTest {
                     @Test
                     void 강남역에서_남부터미널역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.DISTANCE);
+                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.DISTANCE);
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
@@ -166,7 +166,7 @@ public class PathFinderTest {
                     @Test
                     void 교대역에서_양재역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.DISTANCE);
+                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.DISTANCE);
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
@@ -181,7 +181,7 @@ public class PathFinderTest {
                     @Test
                     void 양재역에서_신설동역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 양재, 신설동, PathFinderType.DISTANCE);
+                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 양재, 신설동, PathType.DISTANCE);
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
@@ -204,7 +204,7 @@ public class PathFinderTest {
                         // when, then
                         assertThatExceptionOfType(IllegalArgumentException.class)
                                 .isThrownBy(() -> {
-                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DISTANCE);
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathType.DISTANCE);
                                 })
                                 .withMessageMatching("출발역과 도착역이 연결되어 있지 않습니다.");
                     }
@@ -220,7 +220,7 @@ public class PathFinderTest {
                         // when, then
                         assertThatExceptionOfType(IllegalArgumentException.class)
                                 .isThrownBy(() -> {
-                                    pathFinder.findOptimalPath(모든_노선_목록, 가산디지털단지, 강남, PathFinderType.DISTANCE);
+                                    pathFinder.findOptimalPath(모든_노선_목록, 가산디지털단지, 강남, PathType.DISTANCE);
                                 })
                                 .withMessageMatching("노선에 연결된 출발역이 아닙니다.");
                     }
@@ -236,7 +236,7 @@ public class PathFinderTest {
                         // when, then
                         assertThatExceptionOfType(IllegalArgumentException.class)
                                 .isThrownBy(() -> {
-                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 가산디지털단지, PathFinderType.DISTANCE);
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 가산디지털단지, PathType.DISTANCE);
                                 })
                                 .withMessageMatching("노선에 연결된 도착역이 아닙니다.");
                     }
@@ -257,7 +257,7 @@ public class PathFinderTest {
                     @Test
                     void 강남역에서_남부터미널역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathFinderType.DURATION);
+                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.DURATION);
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
@@ -272,7 +272,7 @@ public class PathFinderTest {
                     @Test
                     void 교대역에서_양재역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathFinderType.DURATION);
+                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.DURATION);
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
@@ -295,7 +295,7 @@ public class PathFinderTest {
                         // when, then
                         assertThatExceptionOfType(IllegalArgumentException.class)
                                 .isThrownBy(() -> {
-                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DURATION);
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathType.DURATION);
                                 })
                                 .withMessageMatching("출발역과 도착역이 연결되어 있지 않습니다.");
                     }
@@ -311,7 +311,7 @@ public class PathFinderTest {
                         // when, then
                         assertThatExceptionOfType(IllegalArgumentException.class)
                                 .isThrownBy(() -> {
-                                    pathFinder.findOptimalPath(모든_노선_목록, 가산디지털단지, 강남, PathFinderType.DURATION);
+                                    pathFinder.findOptimalPath(모든_노선_목록, 가산디지털단지, 강남, PathType.DURATION);
                                 })
                                 .withMessageMatching("노선에 연결된 출발역이 아닙니다.");
                     }
@@ -327,7 +327,7 @@ public class PathFinderTest {
                         // when, then
                         assertThatExceptionOfType(IllegalArgumentException.class)
                                 .isThrownBy(() -> {
-                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 가산디지털단지, PathFinderType.DURATION);
+                                    pathFinder.findOptimalPath(모든_노선_목록, 강남, 가산디지털단지, PathType.DURATION);
                                 })
                                 .withMessageMatching("노선에 연결된 도착역이 아닙니다.");
                     }
@@ -350,7 +350,7 @@ public class PathFinderTest {
                 // when, then
                 assertThatExceptionOfType(IllegalArgumentException.class)
                         .isThrownBy(() -> {
-                            pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DISTANCE);
+                            pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathType.DISTANCE);
                         })
                         .withMessageMatching("노선에 연결된 구간이 하나라도 존재해야 합니다.");
             }
@@ -366,7 +366,7 @@ public class PathFinderTest {
                 // when, then
                 assertThatExceptionOfType(IllegalArgumentException.class)
                         .isThrownBy(() -> {
-                            pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathFinderType.DURATION);
+                            pathFinder.findOptimalPath(모든_노선_목록, 강남, 오이도, PathType.DURATION);
                         })
                         .withMessageMatching("노선에 연결된 구간이 하나라도 존재해야 합니다.");
             }
