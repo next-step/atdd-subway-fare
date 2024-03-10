@@ -1,6 +1,6 @@
 package nextstep.core.subway.pathFinder.presentation;
 
-import nextstep.core.subway.pathFinder.application.PathFinderService;
+import nextstep.core.subway.pathFinder.application.PathService;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderRequest;
 import nextstep.core.subway.pathFinder.application.dto.PathFinderResponse;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PathFinderController {
 
-    public final PathFinderService pathFinderService;
+    public final PathService pathService;
 
-    public PathFinderController(PathFinderService pathFinderService) {
-        this.pathFinderService = pathFinderService;
+    public PathFinderController(PathService pathService) {
+        this.pathService = pathService;
     }
 
     @GetMapping("/paths")
@@ -22,6 +22,6 @@ public class PathFinderController {
                                                               @RequestParam("target") Long arrivalStationId,
                                                               @RequestParam("type") String pathFinderType) {
         PathFinderRequest pathFinderRequest = new PathFinderRequest(departureStationId, arrivalStationId, pathFinderType);
-        return ResponseEntity.ok(pathFinderService.findOptimalPath(pathFinderRequest));
+        return ResponseEntity.ok(pathService.findOptimalPath(pathFinderRequest));
     }
 }

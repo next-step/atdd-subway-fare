@@ -7,7 +7,7 @@ import nextstep.core.subway.favorite.application.dto.FavoriteRequest;
 import nextstep.core.subway.favorite.application.dto.FavoriteResponse;
 import nextstep.core.subway.favorite.domain.Favorite;
 import nextstep.core.subway.favorite.domain.FavoriteRepository;
-import nextstep.core.subway.pathFinder.application.PathFinderService;
+import nextstep.core.subway.pathFinder.application.PathService;
 import nextstep.core.subway.station.application.StationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +22,19 @@ import static nextstep.core.subway.pathFinder.application.converter.PathFinderCo
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
-    private final PathFinderService pathFinderService;
+    private final PathService pathService;
 
     private final StationService stationService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, PathFinderService pathFinderService, StationService stationService) {
+    public FavoriteService(FavoriteRepository favoriteRepository, PathService pathService, StationService stationService) {
         this.favoriteRepository = favoriteRepository;
-        this.pathFinderService = pathFinderService;
+        this.pathService = pathService;
         this.stationService = stationService;
     }
 
     @Transactional
     public Favorite createFavorite(FavoriteRequest request, Long memberId) {
-        if (!pathFinderService.isValidPath(convertToRequest(request))) {
+        if (!pathService.isValidPath(convertToRequest(request))) {
             throw new IllegalArgumentException("출발역과 도착역을 잇는 경로가 없습니다.");
         }
         return favoriteRepository.save(createFavoriteEntity(request, memberId));

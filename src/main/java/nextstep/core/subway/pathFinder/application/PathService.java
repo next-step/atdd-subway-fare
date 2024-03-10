@@ -7,7 +7,7 @@ import nextstep.core.subway.pathFinder.domain.PathFinderType;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PathFinderService {
+public class PathService {
 
     private final LineService lineService;
 
@@ -15,7 +15,7 @@ public class PathFinderService {
 
     private final FareCalculator fareCalculator;
 
-    public PathFinderService(LineService lineService, PathFinder pathFinder, FareCalculator fareCalculator) {
+    public PathService(LineService lineService, PathFinder pathFinder, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.pathFinder = pathFinder;
         this.fareCalculator = fareCalculator;

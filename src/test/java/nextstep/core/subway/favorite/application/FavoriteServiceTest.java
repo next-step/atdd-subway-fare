@@ -12,7 +12,7 @@ import nextstep.core.subway.favorite.domain.Favorite;
 import nextstep.core.subway.favorite.domain.FavoriteRepository;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.line.domain.LineRepository;
-import nextstep.core.subway.pathFinder.application.PathFinderService;
+import nextstep.core.subway.pathFinder.application.PathService;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.section.domain.SectionRepository;
 import nextstep.core.subway.station.application.StationService;
@@ -43,7 +43,7 @@ public class FavoriteServiceTest {
     FavoriteRepository favoriteRepository;
 
     @Autowired
-    PathFinderService pathFinderService;
+    PathService pathService;
 
     @Autowired
     StationService stationService;
@@ -63,7 +63,7 @@ public class FavoriteServiceTest {
 
     @BeforeEach
     void 사전_서비스_객체_생성() {
-        favoriteService = new FavoriteService(favoriteRepository, pathFinderService, stationService);
+        favoriteService = new FavoriteService(favoriteRepository, pathService, stationService);
     }
 
     Station 교대;

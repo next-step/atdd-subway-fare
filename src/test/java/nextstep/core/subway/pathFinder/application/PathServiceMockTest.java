@@ -23,9 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class PathFinderServiceMockTest {
+public class PathServiceMockTest {
 
-    PathFinderService pathFinderService;
+    PathService pathService;
 
     @Mock
     LineService lineService;
@@ -38,7 +38,7 @@ public class PathFinderServiceMockTest {
 
     @BeforeEach
     void 서비스_객체_생성() {
-        pathFinderService = new PathFinderService(lineService, pathFinder, fareCalculator);
+        pathService = new PathService(lineService, pathFinder, fareCalculator);
     }
 
     @Nested
@@ -125,7 +125,7 @@ public class PathFinderServiceMockTest {
                 when(fareCalculator.calculateFare(anyInt())).thenReturn(1350);
 
                 // when
-                PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입));
+                PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입));
 
                 // then
                 assertThat(경로_조회_응답).usingRecursiveComparison()
@@ -147,7 +147,7 @@ public class PathFinderServiceMockTest {
                 when(fareCalculator.calculateFare(anyInt())).thenReturn(1250);
 
                 // when
-                PathFinderResponse 경로_조회_응답 = pathFinderService.findOptimalPath(new PathFinderRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입));
+                PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathFinderRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입));
 
                 // then
                 assertThat(경로_조회_응답).usingRecursiveComparison()
@@ -171,7 +171,7 @@ public class PathFinderServiceMockTest {
                 when(pathFinder.existPathBetweenStations(모든_노선_목록, 강남, 남부터미널)).thenReturn(true);
 
                 // when
-                boolean actual = pathFinderService.isValidPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호));
+                boolean actual = pathService.isValidPath(new PathFinderRequest(강남역_번호, 남부터미널역_번호));
 
 
                 // then
