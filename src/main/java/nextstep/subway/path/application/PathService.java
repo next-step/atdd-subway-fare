@@ -4,9 +4,9 @@ import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
-import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,6 @@ public class PathService {
         Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         List<Line> lines = lineRepository.findAll();
 
-        return new Path(lines).shortestPath(sourceStation, targetStation, type);
+        return new PathResponse(new Path(lines).shortestPath(sourceStation, targetStation, type));
     }
 }
