@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SectionFixture {
-    public static Map<String, Object> createSectionParams(Long upStationId, Long downStationId, Long distance) {
+    public static Map<String, Object> createSectionParams(Long upStationId, Long downStationId, Long distance, Long duration) {
         Map<String, Object> param = new HashMap<>();
         param.put("upStationId", upStationId);
         param.put("downStationId", downStationId);
         param.put("distance", distance);
+        param.put("duration", duration);
         return param;
     }
 

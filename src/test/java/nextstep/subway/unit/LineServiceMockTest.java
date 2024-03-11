@@ -59,6 +59,7 @@ public class LineServiceMockTest {
                 .downStation(보라매역)
                 .color("BLUE")
                 .distance(10L)
+                .duration(10L)
                 .build();
     }
 
@@ -76,6 +77,7 @@ public class LineServiceMockTest {
                 .upStationId(String.valueOf(보라매역.getId()))
                 .downStationId(String.valueOf(보라매병원역.getId()))
                 .distance(22L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선_아이디, 구간_생성_요청);
 
@@ -99,6 +101,7 @@ public class LineServiceMockTest {
                 .upStationId(String.valueOf(보라매역.getId()))
                 .downStationId(String.valueOf(보라매병원역.getId()))
                 .distance(22L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선_아이디, 구간_생성_요청);
 
@@ -123,6 +126,7 @@ public class LineServiceMockTest {
                 .upStationId(String.valueOf(신림역.getId()))
                 .downStationId(String.valueOf(보라매병원역.getId()))
                 .distance(5L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선_아이디, 구간_생성_요청);
 
@@ -147,6 +151,7 @@ public class LineServiceMockTest {
                 .upStationId(String.valueOf(보라매병원역.getId()))
                 .downStationId(String.valueOf(신림역.getId()))
                 .distance(5L)
+                .duration(10L)
                 .build();
         lineService.addSection(신림선_아이디, 구간_생성_요청);
 
@@ -166,6 +171,7 @@ public class LineServiceMockTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -188,6 +194,7 @@ public class LineServiceMockTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -210,6 +217,7 @@ public class LineServiceMockTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 

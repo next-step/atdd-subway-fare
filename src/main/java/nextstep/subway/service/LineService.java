@@ -40,6 +40,7 @@ public class LineService {
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(lineCreateRequest.getDistance())
+                .duration(lineCreateRequest.getDuration())
                 .build();
 
         line = lineRepository.save(line);
@@ -77,6 +78,7 @@ public class LineService {
                 .upStation(upStation)
                 .downStation(downStation)
                 .distance(request.getDistance())
+                .duration(request.getDuration())
                 .build();
         line.addSection(section);
 

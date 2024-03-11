@@ -38,6 +38,7 @@ class LineTest {
                 .downStation(보라매역)
                 .color("BLUE")
                 .distance(10L)
+                .duration(10L)
                 .build();
     }
 
@@ -52,6 +53,7 @@ class LineTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(10L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -70,6 +72,7 @@ class LineTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(5L)
+                .duration(10L)
                 .build();
         신림선.addSection(신림보라매병원구간);
 
@@ -88,6 +91,7 @@ class LineTest {
                 .downStation(신림역)
                 .line(신림선)
                 .distance(5L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매병원신림구간);
 
@@ -116,6 +120,7 @@ class LineTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(11L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -135,6 +140,7 @@ class LineTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(10L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 
@@ -154,6 +160,7 @@ class LineTest {
                 .downStation(보라매병원역)
                 .line(신림선)
                 .distance(10L)
+                .duration(10L)
                 .build();
         신림선.addSection(보라매보라매병원역);
 

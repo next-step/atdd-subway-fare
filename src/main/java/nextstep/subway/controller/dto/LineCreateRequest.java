@@ -20,4 +20,6 @@ public class LineCreateRequest {
     private Long downStationId;
     @NotNull
     private Long distance;
+    @NotNull
+    private Long duration;
 }

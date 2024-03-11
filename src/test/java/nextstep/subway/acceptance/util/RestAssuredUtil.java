@@ -3,6 +3,7 @@ package nextstep.subway.acceptance.util;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.domain.PathType;
 import org.springframework.http.MediaType;
 
 public class RestAssuredUtil {
@@ -22,10 +23,11 @@ public class RestAssuredUtil {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 경로_조회_요청(String path, Long source, Long target) {
+    public static ExtractableResponse<Response> 경로_조회_요청(String path, Long source, Long target, PathType type) {
         return RestAssured.given().log().all()
                 .param("source", source)
                 .param("target", target)
+                .param("type", type)
                 .when().get(path)
                 .then().log().all()
                 .extract();

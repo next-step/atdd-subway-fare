@@ -53,7 +53,7 @@ public class LineAcceptanceTest {
     void createLine() {
         //when
         RestAssuredUtil.생성_요청(
-                LineFixture.createLineParams(신림선, BLUE, 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L), "/lines");
+                LineFixture.createLineParams(신림선, BLUE, 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L, 10L), "/lines");
 
         //then
         ExtractableResponse<Response> findResponse = RestAssuredUtil.조회_요청("/lines");
@@ -74,14 +74,16 @@ public class LineAcceptanceTest {
         Long 신림선_고유번호 = 신림역.jsonPath().getLong("id");
         Long 보라매역_고유번호 = 보라매역.jsonPath().getLong("id");
         Long 신림선_길이 = 10L;
+        Long 신림선_소요시간 = 5L;
         RestAssuredUtil.생성_요청(
-                LineFixture.createLineParams(신림선, BLUE, 신림선_고유번호, 보라매역_고유번호, 신림선_길이), "/lines");
+                LineFixture.createLineParams(신림선, BLUE, 신림선_고유번호, 보라매역_고유번호, 신림선_길이, 신림선_소요시간), "/lines");
 
         Long 판교역_고유번호 = 판교역.jsonPath().getLong("id");
         Long 청계산입구역_고유번호 = 청계산입구역.jsonPath().getLong("id");
         Long 신분당선_길이 = 10L;
+        Long 신분당선_소요시간 = 5L;
         RestAssuredUtil.생성_요청(
-                LineFixture.createLineParams(신분당선, RED, 판교역_고유번호, 청계산입구역_고유번호, 신분당선_길이), "/lines");
+                LineFixture.createLineParams(신분당선, RED, 판교역_고유번호, 청계산입구역_고유번호, 신분당선_길이, 신분당선_소요시간), "/lines");
 
         //when
         ExtractableResponse<Response> lineList = RestAssuredUtil.조회_요청("/lines");
@@ -100,11 +102,12 @@ public class LineAcceptanceTest {
     @Test
     void findLine() {
         //given
-        Long 신림선_고유번호 = 신림역.jsonPath().getLong("id");
+        Long 신림역_고유번호 = 신림역.jsonPath().getLong("id");
         Long 보라매역_고유번호 = 보라매역.jsonPath().getLong("id");
-        Long distance = 10L;
+        Long 신림선길이 = 10L;
+        Long 신림선소요시간 = 10L;
         ExtractableResponse<Response> createResponse = RestAssuredUtil.생성_요청(
-                LineFixture.createLineParams(신림선, BLUE, 신림선_고유번호, 보라매역_고유번호, distance), "/lines");
+                LineFixture.createLineParams(신림선, BLUE, 신림역_고유번호, 보라매역_고유번호, 신림선길이, 신림선소요시간), "/lines");
 
         //when
         ExtractableResponse<Response> findResponse = RestAssuredUtil.조회_요청("/lines/" + createResponse.jsonPath().getLong("id"));
@@ -124,7 +127,7 @@ public class LineAcceptanceTest {
     void updateLine() {
         //given
         ExtractableResponse<Response> createResponse = RestAssuredUtil.생성_요청(
-                LineFixture.createLineParams(신림선, BLUE, 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L), "/lines");
+                LineFixture.createLineParams(신림선, BLUE, 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L, 10L), "/lines");
 
         //when
         String 경강선 = "경강선";
@@ -147,7 +150,7 @@ public class LineAcceptanceTest {
     void deleteLine() {
         //given
         ExtractableResponse<Response> createResponse = RestAssuredUtil.생성_요청(
-                LineFixture.createLineParams(신림선, BLUE, 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L), "/lines");
+                LineFixture.createLineParams(신림선, BLUE, 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L, 10L), "/lines");
 
         //when
         ExtractableResponse<Response> deleteResponse = RestAssuredUtil.삭제_요청("/lines/" + createResponse.jsonPath().getLong("id"));

@@ -41,7 +41,7 @@ public class SectionAcceptanceTest {
                 "/stations");
 
         신림선 = 생성_요청(
-                LineFixture.createLineParams("신림선", "BLUE", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L),
+                LineFixture.createLineParams("신림선", "BLUE", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L, 10L),
                 "/lines");
     }
 
@@ -54,7 +54,7 @@ public class SectionAcceptanceTest {
     void 지하철_구간_마지막역을_추가한다() {
         //when
         ExtractableResponse<Response> 신림선_구간_생성 = 생성_요청(
-                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L),
+                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -74,7 +74,7 @@ public class SectionAcceptanceTest {
     void 지하철_구간_가운데역을_추가한다() {
         //when
         ExtractableResponse<Response> 신림선_구간_생성 = 생성_요청(
-                SectionFixture.createSectionParams(신림역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 9L),
+                SectionFixture.createSectionParams(신림역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 9L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -94,7 +94,7 @@ public class SectionAcceptanceTest {
     void 지하철_구간_처음역을_추가한다() {
         //when
         ExtractableResponse<Response> 신림선_구간_생성 = 생성_요청(
-                SectionFixture.createSectionParams(서원역.jsonPath().getLong("id"), 신림역.jsonPath().getLong("id"), 9L),
+                SectionFixture.createSectionParams(서원역.jsonPath().getLong("id"), 신림역.jsonPath().getLong("id"), 9L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -114,7 +114,7 @@ public class SectionAcceptanceTest {
     void 동일한구간_에러발생() {
         //when
         ExtractableResponse<Response> 신림선_구간_생성 = 생성_요청(
-                SectionFixture.createSectionParams(신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 10L),
+                SectionFixture.createSectionParams(신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -131,7 +131,7 @@ public class SectionAcceptanceTest {
     void 노선길이_초과에러() {
         //when
         ExtractableResponse<Response> 신림선_구간_생성 = 생성_요청(
-                SectionFixture.createSectionParams(신림역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 22L),
+                SectionFixture.createSectionParams(신림역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 22L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -149,7 +149,7 @@ public class SectionAcceptanceTest {
     void 지하철구간_마지막역_삭제() {
         //given
         생성_요청(
-                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L),
+                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -172,7 +172,7 @@ public class SectionAcceptanceTest {
     void 지하철구간_처음역_삭제() {
         //given
         생성_요청(
-                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L),
+                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 
@@ -195,7 +195,7 @@ public class SectionAcceptanceTest {
     void 지하철구간_중간역_삭제() {
         //given
         생성_요청(
-                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L),
+                SectionFixture.createSectionParams(보라매역.jsonPath().getLong("id"), 서원역.jsonPath().getLong("id"), 10L, 10L),
                 "/lines/" + 신림선.jsonPath().getLong("id") + "/sections"
         );
 

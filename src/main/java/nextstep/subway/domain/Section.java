@@ -29,12 +29,16 @@ public class Section implements Comparable<Section>{
     @Column(nullable = false)
     private Long distance;
 
+    @Column(nullable = false)
+    private Long duration;
+
     @Builder
-    public Section(Station upStation, Station downStation, Long distance, Line line) {
+    public Section(Line line, Station upStation, Station downStation, Long distance, Long duration) {
+        this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
-        this.line = line;
+        this.duration = duration;
     }
 
     @Override

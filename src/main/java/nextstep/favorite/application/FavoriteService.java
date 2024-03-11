@@ -10,8 +10,8 @@ import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.domain.Line;
-import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.pathfinder.ShortestDistancePathFinder;
 import nextstep.subway.domain.repository.LineRepository;
 import nextstep.subway.service.StationService;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,7 @@ public class FavoriteService {
     }
 
     private void validFindPath(List<Line> lineList, Station source, Station target) {
-        PathFinder pathFinder = new PathFinder(lineList);
+        ShortestDistancePathFinder pathFinder = new ShortestDistancePathFinder(lineList);
         pathFinder.findPath(source, target);
     }
 }
