@@ -20,40 +20,8 @@ public abstract class PathFinder {
 		dijkstraShortestPath = new DijkstraShortestPath<>(weightedMultigraph);
 	}
 
-	public List<Long> getVertex(Long source, Long target) {
-		GraphPath graphPath;
-
-		try {
-			graphPath = dijkstraShortestPath.getPath(source, target);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("경로에 존재하지 않는 역입니다.");
-		}
-
-		if(Objects.isNull(graphPath)) {
-			throw new IllegalArgumentException("경로가 존재하지 않습니다.");
-		}
-
-		return graphPath.getVertexList();
-	}
-
 	public Path getPath(Long source, Long target) {
-		GraphPath graphPath;
-
-		try {
-			graphPath = dijkstraShortestPath.getPath(source, target);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("경로에 존재하지 않는 역입니다.");
-		}
-
-		if(Objects.isNull(graphPath)) {
-			throw new IllegalArgumentException("경로가 존재하지 않습니다.");
-		}
-
-		return new Path(graphPath);
-	}
-
-	public double getWieght(Long source, Long target) {
-		return dijkstraShortestPath.getPathWeight(source, target);
+		return new Path(dijkstraShortestPath, source, target);
 	}
 
 	protected abstract void addPath(Section section);

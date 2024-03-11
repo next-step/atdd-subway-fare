@@ -59,7 +59,7 @@ public class FavoriteServiceMockTest {
 		given(stationService.findStationById(target))
 				.willReturn(targetResponse);
 		given(pathService.getPath(source, target, PathType.DISTANCE))
-				.willReturn(new PathResponse(List.of(sourceResponse, targetResponse), PathType.DISTANCE, 10));
+				.willReturn(new PathResponse(List.of(sourceResponse, targetResponse), PathType.DISTANCE, 10, 0));
 		given(favoriteRepository.save(new Favorite(memberId, PathType.DISTANCE, source, target)))
 				.willReturn(favorite);
 

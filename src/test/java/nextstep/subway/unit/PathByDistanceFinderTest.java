@@ -2,7 +2,6 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.PathByDistanceFinder;
 import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.SectionWeightedEdge;
 import nextstep.subway.domain.entity.Line;
 import nextstep.subway.domain.entity.Section;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,12 +32,12 @@ public class PathByDistanceFinderTest {
 	@Test
 	@DisplayName("경로 조회")
 	void getVertex() {
-		assertThat(pathFinder.getVertex(첫번째_역, 세번째_역)).containsExactly(첫번째_역, 두번째_역, 세번째_역);
+		assertThat(pathFinder.getPath(첫번째_역, 세번째_역).getVertexs()).containsExactly(첫번째_역, 두번째_역, 세번째_역);
 	}
 
 	@Test
 	@DisplayName("최단 거리 조회")
 	void getDistance() {
-		assertThat(pathFinder.getWieght(첫번째_역, 세번째_역)).isEqualTo(9);
+		assertThat(pathFinder.getPath(첫번째_역, 세번째_역).getWeight()).isEqualTo(9);
 	}
 }

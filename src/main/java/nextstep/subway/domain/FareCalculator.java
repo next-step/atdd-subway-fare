@@ -12,7 +12,7 @@ public class FareCalculator {
         calculateFare();
     }
 
-    public void calculateFare() {
+    private void calculateFare() {
         for(FarePolicy policy : policies) {
             fare += policy.getAdditionalFee();
             fare += policy.getDiscountFee();
