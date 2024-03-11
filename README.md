@@ -85,14 +85,14 @@ And 지하철 이용 요금도 함께 응답함
   - 16km = 10km + 6km = 1450원
 
 ## TODO
-- [ ] 경로 인수 테스트 수정
+- [x] 경로 인수 테스트 수정
   - [ ] 경로 조회 시, 요금 정보 응답 확인
 
-- [ ] 요금 계산 구현
-  - [ ] 요금 계산 객체 - FareCalculator
-    - [ ] 단위 테스트 작성
+- [x] 요금 계산 구현
+  - [x] 요금 계산 객체 - FareCalculator
+    - [x] 단위 테스트 작성
       - 10km
       - 11 ~ 49km
       - 50km
       - 51 ~ km
-    - [ ] calculateFare 구현
+  - [x] calculateFare 구현

@@ -1,6 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.subway.domain.FareCalculator;
+import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathByDistanceFinder;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.entity.Line;
@@ -13,7 +14,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareCalculatorTest {
-    private FareCalculator fareCalculator
+    private PathFinder pathFinder;
+    private FareCalculator fareCalculator;
 
     @BeforeEach
     void setup() {
@@ -21,15 +23,13 @@ public class FareCalculatorTest {
         Line 노선1 = new Line("노선1", "파란색", 1L, 2L, 10, 5);
         Line 노선2 = new Line("노선2", "빨간색", 3L, 4L, 20, 5);
 
-        PathFinder pathFinder = new PathByDistanceFinder(List.of(
+        pathFinder = new PathByDistanceFinder(List.of(
                 new Section(노선1, 1L, 2L, 9, 5),
                 new Section(노선1, 2L, 3L, 7, 10),
                 new Section(노선2, 3L, 4L, 20, 5),
                 new Section(노선2, 4L, 5L, 14, 5),
                 new Section(노선2, 5L, 6L, 9, 9)
         ));
-
-        fareCalculator = new FareCalculator(pathFinder);
     }
 
     /**
@@ -37,7 +37,9 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFare10Km() {
-        assertThat(fareCalculator.getFare(1L, 2L)).isEqualTo(1250);
+        Path path = pathFinder.getPath(1L, 2L);
+        fareCalculator = new FareCalculator(path);
+        assertThat(fareCalculator.getFare()).isEqualTo(1250);
     }
 
     /**
@@ -46,7 +48,9 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFareOver10Km() {
-        assertThat(fareCalculator.getFare(1L, 3L)).isEqualTo(1450);
+        Path path = pathFinder.getPath(1L, 3L);
+        fareCalculator = new FareCalculator(path);
+        assertThat(fareCalculator.getFare()).isEqualTo(1450);
     }
 
     /**
@@ -55,7 +59,9 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFare50Km() {
-        assertThat(fareCalculator.getFare(1L, 5L)).isEqualTo(2050);
+        Path path = pathFinder.getPath(1L, 5L);
+        fareCalculator = new FareCalculator(path);
+        assertThat(fareCalculator.getFare()).isEqualTo(2050);
     }
 
     /**
@@ -64,6 +70,8 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFareOver50Km() {
-        assertThat(fareCalculator.getFare(1L, 6L)).isEqualTo(2250);
+        Path path = pathFinder.getPath(1L, 6L);
+        fareCalculator = new FareCalculator(path);
+        assertThat(fareCalculator.getFare()).isEqualTo(2250);
     }
 }

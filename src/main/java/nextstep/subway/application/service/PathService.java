@@ -25,7 +25,7 @@ public class PathService {
 	public PathResponse getPath(Long source, Long target, PathType type) {
 		PathFinder pathFinder = PathFinderFactory.getPathFinder(sectionService.findAll(), type);
 
-		return createPathResponse(pathFinder.getPath(source, target), type, (int) pathFinder.getWieght(source, target));
+		return createPathResponse(pathFinder.getVertex(source, target), type, (int) pathFinder.getWieght(source, target));
 	}
 
 	private PathResponse createPathResponse(List<Long> stations, PathType type, int weight) {

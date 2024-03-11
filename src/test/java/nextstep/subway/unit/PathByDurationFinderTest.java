@@ -1,6 +1,5 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.PathByDistanceFinder;
 import nextstep.subway.domain.PathByDurationFinder;
 import nextstep.subway.domain.PathFinder;
 import nextstep.subway.domain.entity.Line;
@@ -32,8 +31,8 @@ public class PathByDurationFinderTest {
 	}
 	@Test
 	@DisplayName("경로 조회")
-	void getPath() {
-		assertThat(pathFinder.getPath(첫번째_역, 세번째_역)).containsExactly(첫번째_역, 두번째_역, 세번째_역);
+	void getVertex() {
+		assertThat(pathFinder.getVertex(첫번째_역, 세번째_역)).containsExactly(첫번째_역, 두번째_역, 세번째_역);
 	}
 
 	@Test

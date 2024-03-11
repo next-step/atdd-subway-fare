@@ -14,6 +14,9 @@ public class PathByDurationFinder extends PathFinder{
 		weightedMultigraph.addVertex(section.getDownStationId());
 		weightedMultigraph.addVertex(section.getUpStationId());
 
-		weightedMultigraph.setEdgeWeight(weightedMultigraph.addEdge(section.getDownStationId(), section.getUpStationId()), section.getDuration());
+		SectionWeightedEdge edge = new SectionWeightedEdge(section);
+		weightedMultigraph.addEdge(section.getDownStationId(), section.getUpStationId(), edge);
+
+		weightedMultigraph.setEdgeWeight(edge, section.getDuration());
 	}
 }
