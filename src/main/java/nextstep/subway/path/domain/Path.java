@@ -3,8 +3,8 @@ package nextstep.subway.path.domain;
 import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.section.domain.Section;
 import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 
 public class Path {
     private final List<Line> lines;
+    private final int BASIC_FARE = 1_250;
+    private final int ADDITIONAL_FARE = 100;
+
 
     public Path(List<Line> lines) {
         this.lines = lines;
@@ -30,7 +33,30 @@ public class Path {
         if (shortestPath == null) {
             throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "연결되지 않은 역 정보입니다.");
         }
-        return new PathResponse(shortestPath.getVertexList(), totalDistance(shortestPath), totalDuration(shortestPath));
+        int totalDistance = totalDistance(shortestPath);
+        return new PathResponse(shortestPath.getVertexList(), totalDistance, totalDuration(shortestPath), totalFare(totalDistance));
+    }
+
+    private int totalFare(int totalDistance) {
+        if (totalDistance < 11) {
+            return BASIC_FARE;
+        }
+
+        int totalFare = BASIC_FARE;
+        if (totalDistance < 51) {
+            int distance = totalDistance - 10;
+            totalFare += calculateAdditionalFare(distance, 5);
+            return totalFare;
+        }
+
+        totalFare += 800;
+        int distance = totalDistance - 50;
+        totalFare += calculateAdditionalFare(distance, 8);
+        return totalFare;
+    }
+
+    private int calculateAdditionalFare(int distance, int unit) {
+        return (int) ((Math.ceil((double) distance / unit)) * ADDITIONAL_FARE);
     }
 
     private static void isSameStation(Station sourceStation, Station targetStation) {

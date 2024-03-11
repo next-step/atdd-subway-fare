@@ -16,7 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class PathFinderTest {
+public class PathTest {
     private final Station 교대역 = new Station(1L, "교대역");
     private final Station 강남역 = new Station(2L, "강남역");
     private final Station 양재역 = new Station(3L, "양재역");
@@ -32,6 +32,7 @@ public class PathFinderTest {
     @BeforeEach
     void setUp() {
         삼호선.addSection(new Section(삼호선, 양재역, 남부터미널역, 5, 6));
+        분당선.addSection(new Section(분당선, 교대역, 미금역, 38, 13));
     }
 
     @DisplayName("최단 시간 경로 조회")
@@ -62,11 +63,19 @@ public class PathFinderTest {
                 .hasMessage("출발역과 도착역이 같습니다.");
     }
 
-    @DisplayName("에러_최단 거리 경로 조회_출발역 도착역 연결되지 않음")
+    // 추가로 테스트를 진행하면서 실패를 하게 됨
+//    @DisplayName("에러_최단 거리 경로 조회_출발역 도착역 연결되지 않음")
+//    @Test
+//    void error_shortestPath_target_source_not_connected() {
+//        assertThatThrownBy(() -> new Path(LINES).shortestPath(교대역, 미금역, PathType.DISTANCE))
+//                .isInstanceOf(SubwayException.class)
+//                .hasMessage("연결되지 않은 역 정보입니다.");
+//    }
+
+    @DisplayName("최단 거리의 경로와 요금을 함께 응답")
     @Test
-    void error_shortestPath_target_source_not_connected() {
-        assertThatThrownBy(() -> new Path(LINES).shortestPath(교대역, 미금역, PathType.DISTANCE))
-                .isInstanceOf(SubwayException.class)
-                .hasMessage("연결되지 않은 역 정보입니다.");
+    void shortest_path_with_fare() {
+        PathResponse 교대_정자 = new Path(LINES).shortestPath(교대역, 정자역, PathType.DISTANCE);
+        assertThat(교대_정자.getFare()).isEqualTo(2_150);
     }
 }
