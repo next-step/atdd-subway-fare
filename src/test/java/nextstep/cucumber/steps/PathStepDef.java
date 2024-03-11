@@ -40,6 +40,10 @@ public class PathStepDef implements En {
 		Then("경로의 최소 시간은 {string}이다", (String duration) -> {
 			assertThat(context.response.jsonPath().getInt("weight")).isEqualTo(Integer.parseInt(duration));
 		});
+
+		Then("이용 요금은 {string}원 이다", (String fare) -> {
+			assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(Integer.parseInt(fare));
+		});
 	}
 
 	private PathType convertPathType(String type) {
