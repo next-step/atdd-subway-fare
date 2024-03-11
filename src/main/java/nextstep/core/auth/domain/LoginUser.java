@@ -1,6 +1,6 @@
 package nextstep.core.auth.domain;
 
-public class LoginUser extends UserDetail {
+public class LoginUser implements UserDetail {
     private String email;
 
     public LoginUser(String email) {
@@ -9,5 +9,10 @@ public class LoginUser extends UserDetail {
 
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public boolean isLoggedIn() {
+        return true;
     }
 }

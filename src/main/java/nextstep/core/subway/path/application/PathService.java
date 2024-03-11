@@ -1,7 +1,6 @@
 package nextstep.core.subway.path.application;
 
 import nextstep.core.auth.domain.LoginUser;
-import nextstep.core.auth.domain.NonLoginUser;
 import nextstep.core.auth.domain.UserDetail;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.subway.line.application.LineService;
@@ -28,7 +27,7 @@ public class PathService {
     public PathFinderResponse findOptimalPath(PathRequest pathRequest, UserDetail user) {
         validatePathRequest(pathRequest);
 
-        if (user instanceof NonLoginUser) { // TODO: 더 클린한 코드로 만들 순 없을까?
+        if (user.isLoggedIn()) { // TODO: 더 클린한 코드로 만들 순 없을까?
             return pathFinder.findOptimalPath(
                     lineService.findAllLines(),
                     lineService.findStation(pathRequest.getDepartureStationId()),

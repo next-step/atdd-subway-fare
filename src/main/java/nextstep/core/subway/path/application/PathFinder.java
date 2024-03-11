@@ -24,7 +24,7 @@ public class PathFinder {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type) { // TODO: 매개변수 수 줄이기
+    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type) { // TODO: 매개변수 수를 어떻게 줄일까?
         validateLines(lines, departureStation, arrivalStation);
 
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);

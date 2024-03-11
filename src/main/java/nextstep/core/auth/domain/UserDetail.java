@@ -1,4 +1,5 @@
 package nextstep.core.auth.domain;
 
-public abstract class UserDetail {
+public interface UserDetail {
+    boolean isLoggedIn();
 }
