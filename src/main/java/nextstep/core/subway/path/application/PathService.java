@@ -2,6 +2,7 @@ package nextstep.core.subway.path.application;
 
 import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.auth.domain.UserDetail;
+import nextstep.core.auth.domain.constants.AgeGroup;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
@@ -9,8 +10,10 @@ import nextstep.core.subway.path.application.dto.PathFinderResult;
 import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.domain.PathType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class PathService {
 
     private final LineService lineService;
@@ -37,18 +40,17 @@ public class PathService {
                 lineService.findStation(pathRequest.getArrivalStationId()),
                 PathType.findType(pathRequest.getPathFinderType()));
 
+        return new PathFinderResponse(pathFinderResult, calculateTotalFare(pathFinderResult, user));
+    }
 
+    private int calculateTotalFare(PathFinderResult pathFinderResult, UserDetail user) {
         if (user.isLoggedIn()) {
-            return new PathFinderResponse(
-                    pathFinderResult,
-                    fareCalculator.calculateTotalFare(
-                            pathFinderResult.getDistance(),
-                            pathFinderResult.getAdditionalFares(),
-                            memberService.findMe((LoginUser) user).getAge()));
+            return fareCalculator.calculateTotalFare(
+                    pathFinderResult.getDistance(),
+                    pathFinderResult.getAdditionalFares(),
+                    AgeGroup.findAgeGroup(memberService.findMe((LoginUser) user).getAge()));
         }
-        return new PathFinderResponse(
-                pathFinderResult,
-                fareCalculator.calculateTotalFare(pathFinderResult.getDistance(), pathFinderResult.getAdditionalFares()));
+        return fareCalculator.calculateTotalFare(pathFinderResult.getDistance(), pathFinderResult.getAdditionalFares(), AgeGroup.UNKNOWN);
     }
 
     public boolean isValidPath(PathRequest pathRequest) {

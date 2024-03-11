@@ -1,12 +1,9 @@
 package nextstep.core.subway.path.application;
 
-import nextstep.core.subway.path.application.dto.PathCompositeWeightEdge;
-import nextstep.core.subway.station.domain.Station;
-import org.jgrapht.GraphPath;
+import nextstep.core.auth.domain.constants.AgeGroup;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class FareCalculator {
@@ -21,12 +18,9 @@ public class FareCalculator {
         this.ageFareCalculator = ageFareCalculator;
     }
 
-    public int calculateTotalFare(int distance, List<Integer> additionalFares) {
+    public int calculateTotalFare(int distance, List<Integer> additionalFares, AgeGroup ageGroup) {
         return distanceFareCalculator.calculateDistanceFare(distance) +
-                additionalFareCalculator.findMaxAdditionalFare(additionalFares);
-    }
-
-    public int calculateTotalFare(int distance, List<Integer> additionalFares, int age) {
-        return calculateTotalFare(distance, additionalFares) + ageFareCalculator.calculateAgeDiscount(age);
+                additionalFareCalculator.findMaxAdditionalFare(additionalFares) +
+                ageFareCalculator.calculateAgeDiscount(ageGroup);
     }
 }
