@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Path {
     private final List<Long> vertexs;
     private final List<SectionWeightedEdge> edges;
-    private double weight;
+    private final double weight;
 
     public Path(DijkstraShortestPath dijkstraShortestPath, Long source, Long target) {
         GraphPath graphPath;

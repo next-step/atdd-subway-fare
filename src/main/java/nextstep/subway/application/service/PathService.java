@@ -29,16 +29,17 @@ public class PathService {
 		Path path = pathFinder.getPath(source, target);
 		int fare = new FareCalculator(path).getFare();
 
-		return createPathResponse(path.getVertexs(), type, (int) path.getWeight(), fare);
+		return createPathResponse(path.getVertexs(), type, path.getDistance(), path.getDuration(), fare);
 	}
 
-	private PathResponse createPathResponse(List<Long> stations, PathType type, int weight, int fare) {
+	private PathResponse createPathResponse(List<Long> stations, PathType type, int distance, int duration, int fare) {
 		return new PathResponse(
 				stations.stream()
 						.map(id -> new StationResponse(id, stationService.findStationById(id).getName()))
 						.collect(Collectors.toList()),
 				type,
-				weight,
+				distance,
+				duration,
 				fare);
 	}
 }

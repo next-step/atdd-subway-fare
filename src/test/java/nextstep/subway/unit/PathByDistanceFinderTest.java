@@ -38,6 +38,6 @@ public class PathByDistanceFinderTest {
 	@Test
 	@DisplayName("최단 거리 조회")
 	void getDistance() {
-		assertThat(pathFinder.getPath(첫번째_역, 세번째_역).getWeight()).isEqualTo(9);
+		assertThat(pathFinder.getPath(첫번째_역, 세번째_역).getDistance()).isEqualTo(9);
 	}
 }

@@ -33,12 +33,9 @@ public class PathStepDef implements En {
 			assertThat(context.response.jsonPath().getList("stations.id", Long.class)).containsExactly(ids);
 		});
 
-		Then("경로의 최소 거리는 {string}이다", (String distance) -> {
-			assertThat(context.response.jsonPath().getInt("weight")).isEqualTo(Integer.parseInt(distance));
-		});
-
-		Then("경로의 최소 시간은 {string}이다", (String duration) -> {
-			assertThat(context.response.jsonPath().getInt("weight")).isEqualTo(Integer.parseInt(duration));
+		Then("경로의 소요 거리는 {string}이고 소요 시간은 {string}이다", (String distance, String duration) -> {
+			assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(Integer.parseInt(distance));
+			assertThat(context.response.jsonPath().getInt("duration")).isEqualTo(Integer.parseInt(duration));
 		});
 
 		Then("이용 요금은 {string}원 이다", (String fare) -> {

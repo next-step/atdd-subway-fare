@@ -1,12 +1,10 @@
 package nextstep.subway.domain;
 
 import nextstep.subway.domain.entity.Section;
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
-import java.util.Objects;
 
 public abstract class PathFinder {
 	protected WeightedMultigraph<Long, SectionWeightedEdge> weightedMultigraph;

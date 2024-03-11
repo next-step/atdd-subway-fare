@@ -36,8 +36,8 @@ public class PathByDurationFinderTest {
 	}
 
 	@Test
-	@DisplayName("최단 거리 조회")
+	@DisplayName("최단 시간 조회")
 	void getDistance() {
-		assertThat(pathFinder.getPath(첫번째_역, 세번째_역).getWeight()).isEqualTo(7);
+		assertThat(pathFinder.getPath(첫번째_역, 세번째_역).getDuration()).isEqualTo(7);
 	}
 }

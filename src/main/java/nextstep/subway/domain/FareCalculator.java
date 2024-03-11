@@ -3,7 +3,7 @@ package nextstep.subway.domain;
 import java.util.List;
 
 public class FareCalculator {
-    private List<FarePolicy> policies;
+    private final List<FarePolicy> policies;
     private int fare;
 
     public FareCalculator(Path path) {
