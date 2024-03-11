@@ -6,6 +6,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.farecalculation.FareCalculation;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -57,10 +58,14 @@ public class PathFinder {
             distance = (long) shortestPath.getPathWeight(source, target);
         }
 
+        FareCalculation fareCalculation = new FareCalculation();
+        int fare = fareCalculation.getFareByDistance(distance);
+
         return Path.builder()
                 .path(graphPath.getVertexList())
                 .distance(distance)
                 .duration(duration)
+                .fare(fare)
                 .build();
     }
     private void validateSourceAndTargetAreDifferent(Station source, Station target) {
