@@ -32,6 +32,14 @@ public class PathFinder {
         return createPathFinderResult(findOptimalPath(departureStation, arrivalStation, pathGraph));
     }
 
+    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type, Integer age) {
+        validateLines(lines, departureStation, arrivalStation);
+
+        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);
+
+        return createPathFinderResult(findOptimalPath(departureStation, arrivalStation, pathGraph), age);
+    }
+
     public boolean existPathBetweenStations(List<Line> lines, Station departureStation, Station arrivalStation) {
         return hasFoundPath(findShortestPath(lines, departureStation, arrivalStation));
     }
@@ -78,6 +86,16 @@ public class PathFinder {
                 path.getVertexList(),
                 distance, calculateDuration(path),
                 fareCalculator.calculateTotalFare(distance, convertAdditionalFares(path)));
+    }
+
+    private PathFinderResponse createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path, int age) {
+        validatePath(path);
+
+        int distance = calculateDistance(path);
+        return new PathFinderResponse(
+                path.getVertexList(),
+                distance, calculateDuration(path),
+                fareCalculator.calculateTotalFare(distance, convertAdditionalFares(path), age));
     }
 
     private List<Integer> convertAdditionalFares(GraphPath<Station, PathCompositeWeightEdge> path) {

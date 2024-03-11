@@ -8,6 +8,8 @@ public class PathRequest {
 
     public String pathFinderType;
 
+    public String token;
+
     public PathRequest(Long departureStationId, Long arrivalStationId) {
         this.departureStationId = departureStationId;
         this.arrivalStationId = arrivalStationId;
@@ -17,6 +19,13 @@ public class PathRequest {
         this.departureStationId = departureStationId;
         this.arrivalStationId = arrivalStationId;
         this.pathFinderType = pathFinderType;
+    }
+
+    public PathRequest(Long departureStationId, Long arrivalStationId, String pathFinderType, String token) {
+        this.departureStationId = departureStationId;
+        this.arrivalStationId = arrivalStationId;
+        this.pathFinderType = pathFinderType;
+        this.token = token;
     }
 
     public Long getDepartureStationId() {
@@ -29,5 +38,9 @@ public class PathRequest {
 
     public String getPathFinderType() {
         return pathFinderType;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

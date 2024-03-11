@@ -6,8 +6,13 @@ import nextstep.core.auth.exception.InvalidTokenException;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private final JwtTokenProvider jwtTokenProvider;
@@ -23,9 +28,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authorization = webRequest.getHeader("Authorization");
-        validateAuthorization(authorization);
+        AuthenticationPrincipal annotation = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        boolean required = annotation == null || annotation.required();
 
+        String authorization = webRequest.getHeader("Authorization");
+        if(!required) {
+            if(authorization == null) {
+                return null;
+            }
+        }
+
+        validateAuthorization(authorization);
         return new LoginMember(jwtTokenProvider.getPrincipal(getToken(authorization)));
     }
 

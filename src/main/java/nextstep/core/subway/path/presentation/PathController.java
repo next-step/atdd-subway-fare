@@ -1,5 +1,7 @@
 package nextstep.core.subway.path.presentation;
 
+import nextstep.core.auth.domain.LoginMember;
+import nextstep.core.auth.presentation.AuthenticationPrincipal;
 import nextstep.core.subway.path.application.PathService;
 import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
@@ -20,8 +22,9 @@ public class PathController {
     @GetMapping("/paths")
     public ResponseEntity<PathFinderResponse> findOptimalPath(@RequestParam("source") Long departureStationId,
                                                               @RequestParam("target") Long arrivalStationId,
-                                                              @RequestParam("type") String pathFinderType) {
+                                                              @RequestParam("type") String pathFinderType,
+                                                              @AuthenticationPrincipal(required = false) LoginMember loginMember) {
         PathRequest pathRequest = new PathRequest(departureStationId, arrivalStationId, pathFinderType);
-        return ResponseEntity.ok(pathService.findOptimalPath(pathRequest));
+        return ResponseEntity.ok(pathService.findOptimalPath(pathRequest, loginMember));
     }
 }
