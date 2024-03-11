@@ -24,15 +24,15 @@ public class Section {
     private Station downStation;
 
     @Column
-    private Long distance;
+    private int distance;
 
     @Column
-    private Long duration;
+    private int duration;
 
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, Long distance, Long duration) {
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -76,11 +76,11 @@ public class Section {
         return downStation;
     }
 
-    public Long getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public Long getDuration() {
+    public int getDuration() {
         return duration;
     }
 

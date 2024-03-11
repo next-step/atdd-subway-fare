@@ -7,10 +7,10 @@ public class SectionResponse {
     private Long id;
     private StationResponse upStation;
     private StationResponse downStation;
-    private Long distance;
-    private Long duration;
+    private int distance;
+    private int duration;
 
-    public SectionResponse(Long id, StationResponse upStation, StationResponse downStation, Long distance, Long duration) {
+    public SectionResponse(Long id, StationResponse upStation, StationResponse downStation, int distance, int duration) {
         this.id = id;
         this.upStation = upStation;
         this.downStation = downStation;
@@ -30,11 +30,11 @@ public class SectionResponse {
         return downStation;
     }
 
-    public Long getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public Long getDuration() {
+    public int getDuration() {
         return duration;
     }
 

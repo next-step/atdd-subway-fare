@@ -63,12 +63,12 @@ public class Path {
         return graph;
     }
 
-    private long totalDistance(GraphPath<Station, CustomWeightedEdge> shortestPath) {
-        return shortestPath.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDistance).sum();
+    private int totalDistance(GraphPath<Station, CustomWeightedEdge> shortestPath) {
+        return shortestPath.getEdgeList().stream().mapToInt(CustomWeightedEdge::getDistance).sum();
     }
 
-    private long totalDuration(GraphPath<Station, CustomWeightedEdge> shortestPath) {
-        return shortestPath.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDuration).sum();
+    private int totalDuration(GraphPath<Station, CustomWeightedEdge> shortestPath) {
+        return shortestPath.getEdgeList().stream().mapToInt(CustomWeightedEdge::getDuration).sum();
     }
 
     public void isConnected(Station sourceStation, Station targetStation) {

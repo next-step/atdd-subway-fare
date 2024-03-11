@@ -38,6 +38,6 @@ cucumber가 제공하는 기능을 적절히 활용해보세요.
   - `section`과 `path`패키지를 `subway`하위로 이동
 - [ ] PathFinder 객체의 이름이 PathFinder 보다는 Path나 SubwayMap과 같이 바라볼 수 있을 것 같음. 고민 필요
   - Path vs PathFinder / 명확한 답을 내리기 어렵다
-- [ ] 검증 시 resopnse.jsonPath().getList("...")와 같은 부분의 각 단계를 메서드로 분리하면 재사용도 가능하고 시나리오가 더욱 명확해질 수 있다.
-- [ ] 거리의 타입이 int 대신 long 인 이유는?
+- [x] 검증 시 resopnse.jsonPath().getList("...")와 같은 부분의 각 단계를 메서드로 분리하면 재사용도 가능하고 시나리오가 더욱 명확해질 수 있다.
+- [x] 거리의 타입이 int 대신 long 인 이유는?
   - 표현할 수 있는 값의 범위가 큰 것이 무조건적인 장점일까? 저장할 데이터의 최소/최대 범위를 고려해서 자료형을 정해야 한다.

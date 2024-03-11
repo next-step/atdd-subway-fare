@@ -34,13 +34,13 @@ public class StationStepDef implements En {
 
     public StationStepDef() {
         DataTableType((Map<String, String> entry) -> new LineRequest(
-                entry.get("이름"),
-                entry.get("색상"),
-                findStation(entry.get("출발역")).getId(),
-                findStation(entry.get("도착역")).getId(),
-                Long.parseLong(entry.get("거리")),
-                Long.parseLong(entry.get("소요시간"))
-        ));
+                        entry.get("이름"),
+                        entry.get("색상"),
+                        findStation(entry.get("출발역")).getId(),
+                        findStation(entry.get("도착역")).getId(),
+                        Integer.parseInt(entry.get("거리")),
+                        Integer.parseInt(entry.get("소요시간")))
+        );
 
         When("지하철역을 생성하면", () -> {
             Map<String, String> params = new HashMap<>();
@@ -98,7 +98,7 @@ public class StationStepDef implements En {
             }
         });
 
-        And("{string}노선에 {string}에서 {string}까지 거리가 {long}, 소요 시간이 {long}인 지하철 구간을 추가한다", (String line, String upStation, String downStation, Long distance, Long duration) -> {
+        And("{string}노선에 {string}에서 {string}까지 거리가 {int}, 소요 시간이 {int}인 지하철 구간을 추가한다", (String line, String upStation, String downStation, Integer distance, Integer duration) -> {
             RestAssured
                     .given()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -149,13 +149,13 @@ public class StationStepDef implements En {
                     .extract();
         });
 
-        Then("{string} 경로와 거리 {long}km, 소요시간 {long}분으로 응답한다.", (String stations, Long distance, Long duration) -> {
+        Then("{string} 경로와 거리 {int}km, 소요시간 {int}분으로 응답한다.", (String stations, Integer distance, Integer duration) -> {
             String[] stationArr = stations.replaceAll(" ", "").split(",");
             List<Long> stationIds = Arrays.stream(stationArr).map(s -> findStation(s).getId()).collect(Collectors.toList());
 
             assertThat(response.jsonPath().getList("stations.id", Long.class)).isEqualTo(stationIds);
-            assertThat(response.jsonPath().getLong("distance")).isEqualTo(distance);
-            assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration);
+            assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+            assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
         });
     }
 
@@ -177,7 +177,7 @@ public class StationStepDef implements En {
         acceptanceContext.putLine(request.getName(), new Line(responseObj.getId(), responseObj.getName(), responseObj.getColor(), findStationById(request.getUpStationId()), findStationById(request.getDownStationId()), request.getDistance(), request.getDuration()));
     }
 
-    private void addSection(String line, String upStation, String downStation, Long distance, Long duration) {
+    private void addSection(String line, String upStation, String downStation, int distance, int duration) {
         Section newSection = new Section(findLine(line), findStation(upStation), findStation(downStation), distance, duration);
         acceptanceContext.addSection(line, newSection);
     }
