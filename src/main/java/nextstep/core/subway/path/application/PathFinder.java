@@ -2,7 +2,7 @@ package nextstep.core.subway.path.application;
 
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.path.application.dto.PathCompositeWeightEdge;
-import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.dto.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
@@ -18,26 +18,12 @@ import java.util.stream.Collectors;
 @Component
 public class PathFinder {
 
-    private final FareCalculator fareCalculator;
-
-    public PathFinder(FareCalculator fareCalculator) {
-        this.fareCalculator = fareCalculator;
-    }
-
-    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type) { // TODO: 매개변수 수를 어떻게 줄일까?
+    public PathFinderResult findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type) {
         validateLines(lines, departureStation, arrivalStation);
 
         WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);
 
         return createPathFinderResult(findOptimalPath(departureStation, arrivalStation, pathGraph));
-    }
-
-    public PathFinderResponse findOptimalPath(List<Line> lines, Station departureStation, Station arrivalStation, PathType type, Integer age) {
-        validateLines(lines, departureStation, arrivalStation);
-
-        WeightedMultigraph<Station, PathCompositeWeightEdge> pathGraph = buildPathFromLines(lines, type);
-
-        return createPathFinderResult(findOptimalPath(departureStation, arrivalStation, pathGraph), age);
     }
 
     public boolean existPathBetweenStations(List<Line> lines, Station departureStation, Station arrivalStation) {
@@ -78,27 +64,19 @@ public class PathFinder {
         }
     }
 
-    private PathFinderResponse createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path) {
+    private PathFinderResult createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path) {
         validatePath(path);
 
         int distance = calculateDistance(path);
-        return new PathFinderResponse(
+        return new PathFinderResult(
                 path.getVertexList(),
-                distance, calculateDuration(path),
-                fareCalculator.calculateTotalFare(distance, convertAdditionalFares(path)));
+                distance,
+                calculateDuration(path),
+                mapAdditionalFares(path));
     }
 
-    private PathFinderResponse createPathFinderResult(GraphPath<Station, PathCompositeWeightEdge> path, int age) {
-        validatePath(path);
 
-        int distance = calculateDistance(path);
-        return new PathFinderResponse(
-                path.getVertexList(),
-                distance, calculateDuration(path),
-                fareCalculator.calculateTotalFare(distance, convertAdditionalFares(path), age));
-    }
-
-    private List<Integer> convertAdditionalFares(GraphPath<Station, PathCompositeWeightEdge> path) {
+    private List<Integer> mapAdditionalFares(GraphPath<Station, PathCompositeWeightEdge> path) {
         return path.getEdgeList().stream()
                 .map(PathCompositeWeightEdge::getAdditionalFare)
                 .distinct()

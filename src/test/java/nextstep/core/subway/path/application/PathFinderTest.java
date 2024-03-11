@@ -3,14 +3,12 @@ package nextstep.core.subway.path.application;
 import nextstep.common.annotation.ComponentTest;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.dto.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -43,14 +41,11 @@ public class PathFinderTest {
     Line 별내선;
     Line 일호선;
 
-    private PathFinder pathFinder;
+    private static PathFinder pathFinder;
 
-    @Autowired
-    private FareCalculator fareCalculator;
-
-    @BeforeEach
-    void 사전_객체_생성() {
-        pathFinder = new PathFinder(fareCalculator);
+    @BeforeAll
+    static void 사전_객체_생성() {
+        pathFinder = new PathFinder();
     }
 
     @BeforeEach
@@ -151,11 +146,11 @@ public class PathFinderTest {
                     @Test
                     void 강남역에서_남부터미널역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.DISTANCE);
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.DISTANCE);
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350 + 800));
+                                .isEqualTo(new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12, List.of(0, 800)));
                     }
 
                     /**
@@ -166,11 +161,11 @@ public class PathFinderTest {
                     @Test
                     void 교대역에서_양재역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.DISTANCE);
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.DISTANCE);
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 10, 1250 + 800));
+                                .isEqualTo(new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 10, List.of(800)));
                     }
 
                     /**
@@ -181,11 +176,11 @@ public class PathFinderTest {
                     @Test
                     void 양재역에서_신설동역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 양재, 신설동, PathType.DISTANCE);
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 양재, 신설동, PathType.DISTANCE);
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(양재, 강남, 잠실, 신설동), 60, 33, 2250 + 400));
+                                .isEqualTo(new PathFinderResult(List.of(양재, 강남, 잠실, 신설동), 60, 33, List.of(400, 0, 300)));
                     }
 
                 }
@@ -257,11 +252,11 @@ public class PathFinderTest {
                     @Test
                     void 강남역에서_남부터미널역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.DURATION);
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.DURATION);
 
                         // then
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(강남, 양재, 남부터미널), 13, 6, 1350 + 800));
+                                .isEqualTo(new PathFinderResult(List.of(강남, 양재, 남부터미널), 13, 6, List.of(400, 800)));
                     }
 
                     /**
@@ -272,11 +267,11 @@ public class PathFinderTest {
                     @Test
                     void 교대역에서_양재역까지_경로_조회() {
                         // when
-                        PathFinderResponse 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.DURATION);
+                        PathFinderResult 경로_조회_결과 = pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.DURATION);
 
                         //
                         assertThat(경로_조회_결과).usingRecursiveComparison()
-                                .isEqualTo(new PathFinderResponse(List.of(교대, 강남, 양재), 20, 8, 1450 + 400));
+                                .isEqualTo(new PathFinderResult(List.of(교대, 강남, 양재), 20, 8, List.of(0, 400)));
                     }
 
                 }

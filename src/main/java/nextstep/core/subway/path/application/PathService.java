@@ -5,6 +5,7 @@ import nextstep.core.auth.domain.UserDetail;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.dto.PathFinderResult;
 import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.domain.PathType;
 import org.springframework.stereotype.Service;
@@ -18,29 +19,36 @@ public class PathService {
 
     private final MemberService memberService;
 
-    public PathService(LineService lineService, PathFinder pathFinder, MemberService memberService) {
+    private final FareCalculator fareCalculator;
+
+    public PathService(LineService lineService, PathFinder pathFinder, MemberService memberService, FareCalculator fareCalculator) {
         this.lineService = lineService;
         this.pathFinder = pathFinder;
         this.memberService = memberService;
+        this.fareCalculator = fareCalculator;
     }
 
     public PathFinderResponse findOptimalPath(PathRequest pathRequest, UserDetail user) {
         validatePathRequest(pathRequest);
 
-        if (user.isLoggedIn()) { // TODO: 더 클린한 코드로 만들 순 없을까?
-            return pathFinder.findOptimalPath(
-                    lineService.findAllLines(),
-                    lineService.findStation(pathRequest.getDepartureStationId()),
-                    lineService.findStation(pathRequest.getArrivalStationId()),
-                    PathType.findType(pathRequest.getPathFinderType()));
-        }
-        return pathFinder.findOptimalPath(
+        PathFinderResult pathFinderResult = pathFinder.findOptimalPath(
                 lineService.findAllLines(),
                 lineService.findStation(pathRequest.getDepartureStationId()),
                 lineService.findStation(pathRequest.getArrivalStationId()),
-                PathType.findType(pathRequest.getPathFinderType()),
-                memberService.findMe((LoginUser) user).getAge());
+                PathType.findType(pathRequest.getPathFinderType()));
 
+
+        if (user.isLoggedIn()) {
+            return new PathFinderResponse(
+                    pathFinderResult,
+                    fareCalculator.calculateTotalFare(
+                            pathFinderResult.getDistance(),
+                            pathFinderResult.getAdditionalFares(),
+                            memberService.findMe((LoginUser) user).getAge()));
+        }
+        return new PathFinderResponse(
+                pathFinderResult,
+                fareCalculator.calculateTotalFare(pathFinderResult.getDistance(), pathFinderResult.getAdditionalFares()));
     }
 
     public boolean isValidPath(PathRequest pathRequest) {

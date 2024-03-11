@@ -1,8 +1,12 @@
 package nextstep.core.subway.path.application;
 
+import nextstep.core.subway.path.application.dto.PathCompositeWeightEdge;
+import nextstep.core.subway.station.domain.Station;
+import org.jgrapht.GraphPath;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class FareCalculator {

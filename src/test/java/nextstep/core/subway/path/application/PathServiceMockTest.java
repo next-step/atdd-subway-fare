@@ -7,8 +7,9 @@ import nextstep.core.member.application.dto.MemberResponse;
 import nextstep.core.member.domain.Member;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.line.domain.Line;
-import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.dto.PathFinderResult;
+import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
@@ -44,9 +45,12 @@ public class PathServiceMockTest {
     @Mock
     MemberService memberService;
 
+    @Mock
+    FareCalculator fareCalculator;
+
     @BeforeEach
     void 서비스_객체_생성() {
-        pathService = new PathService(lineService, pathFinder, memberService);
+        pathService = new PathService(lineService, pathFinder, memberService, fareCalculator);
     }
 
     @Nested
@@ -129,20 +133,22 @@ public class PathServiceMockTest {
                 void 강남역에서_남부터미널역까지_경로_조회() {
                     // given
                     LoginUser 로그인된_잭슨_정보 = new LoginUser(잭슨.get이메일());
+                    PathFinderResult 경로_조회_결과 = new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12, List.of(0, 800));
 
                     when(lineService.findStation(강남역_번호)).thenReturn(강남);
                     when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
                     when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                    when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.valueOf(경로_조회_최단거리_타입), 잭슨.get나이()))
-                            .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
+                    when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.valueOf(경로_조회_최단거리_타입)))
+                            .thenReturn(경로_조회_결과);
                     when(memberService.findMe(로그인된_잭슨_정보)).thenReturn(MemberResponse.of(new Member(잭슨.get이메일(), 잭슨.get비밀번호(), 잭슨.get나이())));
+                    when(fareCalculator.calculateTotalFare(anyInt(), anyList(), anyInt())).thenReturn(1250 + 100 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
+                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 100 + 800));
                 }
 
                 /**
@@ -154,20 +160,22 @@ public class PathServiceMockTest {
                 void 교대역에서_양재역까지_경로_조회() {
                     // given
                     LoginUser 로그인된_잭슨_정보 = new LoginUser(잭슨.get이메일());
+                    PathFinderResult 경로_조회_결과 = new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5, List.of(800));
 
                     when(lineService.findStation(교대역_번호)).thenReturn(교대);
                     when(lineService.findStation(양재역_번호)).thenReturn(양재);
                     when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                    when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입), 잭슨.get나이()))
-                            .thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
+                    when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입)))
+                            .thenReturn(경로_조회_결과);
                     when(memberService.findMe(로그인된_잭슨_정보)).thenReturn(MemberResponse.of(new Member(잭슨.get이메일(), 잭슨.get비밀번호(), 잭슨.get나이())));
+                    when(fareCalculator.calculateTotalFare(anyInt(), anyList(), anyInt())).thenReturn(1250 + 0 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
+                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 0 + 800));
                 }
 
             }
@@ -184,19 +192,21 @@ public class PathServiceMockTest {
                 void 강남역에서_남부터미널역까지_경로_조회() {
                     // given
                     NonLoginUser 로그인되지_않은_회원 = new NonLoginUser();
+                    PathFinderResult 경로_조회_결과 = new PathFinderResult(List.of(강남, 교대, 남부터미널), 12, 12, List.of(0, 800));
 
                     when(lineService.findStation(강남역_번호)).thenReturn(강남);
                     when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
                     when(lineService.findAllLines()).thenReturn(모든_노선_목록);
                     when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.valueOf(경로_조회_최단거리_타입)))
-                            .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
+                            .thenReturn(경로_조회_결과);
+                    when(fareCalculator.calculateTotalFare(anyInt(), anyList())).thenReturn(1250 + 100 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
+                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 100 + 800));
                 }
 
                 /**
@@ -208,18 +218,20 @@ public class PathServiceMockTest {
                 void 교대역에서_양재역까지_경로_조회() {
                     // given
                     NonLoginUser 로그인되지_않은_회원 = new NonLoginUser();
+                    PathFinderResult 경로_조회_결과 = new PathFinderResult(List.of(교대, 남부터미널, 양재), 5, 5, List.of(800));
 
                     when(lineService.findStation(교대역_번호)).thenReturn(교대);
                     when(lineService.findStation(양재역_번호)).thenReturn(양재);
                     when(lineService.findAllLines()).thenReturn(모든_노선_목록);
-                    when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
+                    when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입))).thenReturn(경로_조회_결과);
+                    when(fareCalculator.calculateTotalFare(anyInt(), anyList())).thenReturn(1250 + 0 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
+                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 0 + 800));
                 }
 
             }
