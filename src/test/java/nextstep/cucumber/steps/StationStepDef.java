@@ -6,8 +6,13 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.application.dto.LineRequest;
+import nextstep.subway.line.application.dto.LineResponse;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.path.PathType;
+import nextstep.subway.line.section.domain.Section;
 import nextstep.subway.line.section.dto.SectionRequest;
+import nextstep.subway.station.application.dto.StationResponse;
+import nextstep.subway.station.domain.Station;
 import nextstep.subway.utils.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,16 +32,12 @@ public class StationStepDef implements En {
     @Autowired
     private AcceptanceContext acceptanceContext;
 
-    private Long getIdFromStore(String name) {
-        return ((ExtractableResponse<Response>) acceptanceContext.store.get(name)).jsonPath().getLong("id");
-    }
-
     public StationStepDef() {
         DataTableType((Map<String, String> entry) -> new LineRequest(
                 entry.get("이름"),
                 entry.get("색상"),
-                getIdFromStore(entry.get("출발역")),
-                getIdFromStore(entry.get("도착역")),
+                findStation(entry.get("출발역")).getId(),
+                findStation(entry.get("도착역")).getId(),
                 Long.parseLong(entry.get("거리")),
                 Long.parseLong(entry.get("소요시간"))
         ));
@@ -77,7 +78,7 @@ public class StationStepDef implements En {
                         .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract();
-                acceptanceContext.store.put(name, stationResponse);
+                putStation(name, stationResponse);
             }
         });
 
@@ -93,7 +94,7 @@ public class StationStepDef implements En {
                         .then().log().all()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract();
-                acceptanceContext.store.put(request.getName(), lineResponse);
+                putLine(request, lineResponse);
             }
         });
 
@@ -102,15 +103,35 @@ public class StationStepDef implements En {
                     .given()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .body(new SectionRequest(
-                            getIdFromStore(upStation),
-                            getIdFromStore(downStation),
+                            findStation(upStation).getId(),
+                            findStation(downStation).getId(),
                             distance,
                             duration)
                     )
                     .when().log().all()
-                    .post("/lines/" + getIdFromStore(line) + "/sections")
+                    .post("/lines/" + findLine(line).getId() + "/sections")
                     .then()
                     .statusCode(HttpStatus.CREATED.value());
+            addSection(line, upStation, downStation, distance, duration);
+        });
+
+        Given("지하철역이 등록되어 있다", () -> {
+            assertThat(findStation("교대역")).isNotNull();
+            assertThat(findStation("강남역")).isNotNull();
+            assertThat(findStation("양재역")).isNotNull();
+            assertThat(findStation("남부터미널역")).isNotNull();
+        });
+
+        Given("지하철 노선이 등록되어 있다", () -> {
+            assertThat(findLine("이호선")).isNotNull();
+            assertThat(findLine("신분당선")).isNotNull();
+            assertThat(findLine("삼호선")).isNotNull();
+        });
+
+        Given("지하철 노선에 지하철역이 등록되어있다", () -> {
+            assertThat(findLine("이호선").getSections().allStations()).hasSize(2);
+            assertThat(findLine("신분당선").getSections().allStations()).hasSize(2);
+            assertThat(findLine("삼호선").getSections().allStations()).hasSize(3);
         });
 
         When("{string}부터 {string}까지의 {string} 경로를 조회하면", (String source, String target, String type) -> {
@@ -118,8 +139,8 @@ public class StationStepDef implements En {
             response = RestAssured
                     .given().log().all()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .param("source", getIdFromStore(source))
-                    .param("target", getIdFromStore(target))
+                    .param("source", findStation(source).getId())
+                    .param("target", findStation(target).getId())
                     .param("type", pathType)
                     .when()
                     .get("/paths")
@@ -130,11 +151,38 @@ public class StationStepDef implements En {
 
         Then("{string} 경로와 거리 {long}km, 소요시간 {long}분으로 응답한다.", (String stations, Long distance, Long duration) -> {
             String[] stationArr = stations.replaceAll(" ", "").split(",");
-            List<Long> stationIds = Arrays.stream(stationArr).map(this::getIdFromStore).collect(Collectors.toList());
+            List<Long> stationIds = Arrays.stream(stationArr).map(s -> findStation(s).getId()).collect(Collectors.toList());
 
             assertThat(response.jsonPath().getList("stations.id", Long.class)).isEqualTo(stationIds);
             assertThat(response.jsonPath().getLong("distance")).isEqualTo(distance);
             assertThat(response.jsonPath().getLong("duration")).isEqualTo(duration);
         });
+    }
+
+    private void putStation(String name, ExtractableResponse<Response> response) {
+        StationResponse responseObj = response.as(StationResponse.class);
+        acceptanceContext.putStation(name, new Station(responseObj.getId(), responseObj.getName()));
+    }
+
+    private Station findStation(String name) {
+        return acceptanceContext.findStation(name);
+    }
+
+    private Station findStationById(Long id) {
+        return acceptanceContext.findStationById(id);
+    }
+
+    private void putLine(LineRequest request, ExtractableResponse<Response> lineResponse) {
+        LineResponse responseObj = lineResponse.as(LineResponse.class);
+        acceptanceContext.putLine(request.getName(), new Line(responseObj.getId(), responseObj.getName(), responseObj.getColor(), findStationById(request.getUpStationId()), findStationById(request.getDownStationId()), request.getDistance(), request.getDuration()));
+    }
+
+    private void addSection(String line, String upStation, String downStation, Long distance, Long duration) {
+        Section newSection = new Section(findLine(line), findStation(upStation), findStation(downStation), distance, duration);
+        acceptanceContext.addSection(line, newSection);
+    }
+
+    private Line findLine(String name) {
+        return acceptanceContext.findLine(name);
     }
 }

@@ -82,7 +82,7 @@ public class LineService {
     }
 
     private SectionResponse createSectionResponse(Section section) {
-        return new SectionResponse(section.getId(), createStationResponse(section.getUpStation()), createStationResponse(section.getDownStation()), section.getDistance());
+        return new SectionResponse(section.getId(), createStationResponse(section.getUpStation()), createStationResponse(section.getDownStation()), section.getDistance(), section.getDuration());
     }
 
     public LineSectionResponse showLineSections(Long id) {

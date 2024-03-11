@@ -21,11 +21,9 @@ public class Line {
 
     public Line() {
     }
+
     public Line(String name, String color, Station upStation, Station downStation, Long distance, Long duration) {
         this(null, name, color, upStation, downStation, distance, duration);
-    }
-    public Line(String name, String color, Station upStation, Station downStation, Long distance) {
-        this(null, name, color, upStation, downStation, distance, 0L);
     }
 
     public Line(Long id, String name, String color, Station upStation, Station downStation, Long distance, Long duration) {

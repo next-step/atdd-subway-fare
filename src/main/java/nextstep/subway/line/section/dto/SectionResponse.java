@@ -8,12 +8,14 @@ public class SectionResponse {
     private StationResponse upStation;
     private StationResponse downStation;
     private Long distance;
+    private Long duration;
 
-    public SectionResponse(Long id, StationResponse upStation, StationResponse downStation, Long distance) {
+    public SectionResponse(Long id, StationResponse upStation, StationResponse downStation, Long distance, Long duration) {
         this.id = id;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -32,6 +34,10 @@ public class SectionResponse {
         return distance;
     }
 
+    public Long getDuration() {
+        return duration;
+    }
+
     @Override
     public String toString() {
         return "SectionResponse{" +
@@ -39,6 +45,7 @@ public class SectionResponse {
                 ", upStation=" + upStation +
                 ", downStation=" + downStation +
                 ", distance=" + distance +
+                ", duration=" + duration +
                 '}';
     }
 }
