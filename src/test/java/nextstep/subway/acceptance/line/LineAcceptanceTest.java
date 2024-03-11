@@ -43,7 +43,8 @@ public class LineAcceptanceTest {
                 "green",
                 잠실역id,
                 용산역id,
-                10
+                10,
+                3
         );
         ExtractableResponse<Response> response = LineApiRequester.createLineApiCall(이호선);
 
@@ -67,7 +68,8 @@ public class LineAcceptanceTest {
                 "green",
                 잠실역id,
                 용산역id,
-                10
+                10,
+                3
         );
         Long 이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
 
@@ -76,7 +78,8 @@ public class LineAcceptanceTest {
                 "blue",
                 건대입구역id,
                 성수역id,
-                10
+                10,
+                3
         );
         Long 일호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(일호선));
 
@@ -102,7 +105,8 @@ public class LineAcceptanceTest {
                 "green",
                 잠실역id,
                 용산역id,
-                10
+                10,
+                3
         );
         Long 이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
 
@@ -128,7 +132,8 @@ public class LineAcceptanceTest {
                 "green",
                 잠실역id,
                 용산역id,
-                10
+                10,
+                3
         );
         Long 이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
 
@@ -158,7 +163,8 @@ public class LineAcceptanceTest {
                 "green",
                 잠실역id,
                 용산역id,
-                10
+                10,
+                3
         );
         Long 이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
 

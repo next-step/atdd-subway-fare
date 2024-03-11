@@ -14,6 +14,8 @@ public class Section {
 
     private int distance;
 
+    private int duration;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "up_station_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Station upStation;
@@ -29,8 +31,9 @@ public class Section {
     public Section() {
     }
 
-    public Section(int distance, Station upStation, Station downStation, Line line) {
+    public Section(int distance, int duration, Station upStation, Station downStation, Line line) {
         this.distance = distance;
+        this.duration = duration;
         this.upStation = upStation;
         this.downStation = downStation;
         this.line = line;
@@ -42,6 +45,10 @@ public class Section {
 
     public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public Station getUpStation() {

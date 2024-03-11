@@ -36,7 +36,7 @@ public class SectionCreateAcceptanceTest {
         건대입구역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("건대입구역"));
         성수역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("성수역"));
 
-        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 잠실역id, 용산역id, 10);
+        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 잠실역id, 용산역id, 10, 3);
         이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
     }
 
@@ -48,7 +48,7 @@ public class SectionCreateAcceptanceTest {
     @Test
     void generateSection() {
         //when
-        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5);
+        SectionCreateRequest request = new SectionCreateRequest(용산역id, 건대입구역id, 5, 3);
 
         ExtractableResponse<Response> response = SectionApiRequester.generateSection(request, 이호선id);
 
@@ -67,7 +67,7 @@ public class SectionCreateAcceptanceTest {
     @Test
     void generateMiddleSection() {
         //when
-        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 건대입구역id, 4);
+        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 건대입구역id, 4, 3);
 
         ExtractableResponse<Response> response = SectionApiRequester.generateSection(request, 이호선id);
 
@@ -86,7 +86,7 @@ public class SectionCreateAcceptanceTest {
     @Test
     void generateFirstSection() {
         //when
-        SectionCreateRequest request = new SectionCreateRequest(성수역id, 잠실역id, 4);
+        SectionCreateRequest request = new SectionCreateRequest(성수역id, 잠실역id, 4, 3);
 
         ExtractableResponse<Response> response = SectionApiRequester.generateSection(request, 이호선id);
 
@@ -105,7 +105,7 @@ public class SectionCreateAcceptanceTest {
     @Test
     void generateAlreadySection() {
         //when
-        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 용산역id, 5);
+        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 용산역id, 5, 3);
 
         ExtractableResponse<Response> response = SectionApiRequester.generateSection(request, 이호선id);
 
@@ -122,7 +122,7 @@ public class SectionCreateAcceptanceTest {
     @Test
     void generateMiddleSectionException() {
         //when
-        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 건대입구역id, 50);
+        SectionCreateRequest request = new SectionCreateRequest(잠실역id, 건대입구역id, 50, 3);
 
         ExtractableResponse<Response> response = SectionApiRequester.generateSection(request, 이호선id);
 

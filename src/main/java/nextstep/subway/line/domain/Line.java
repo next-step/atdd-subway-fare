@@ -60,8 +60,8 @@ public class Line {
         sections.removeSection(station, this);
     }
 
-    public void generateSection(int distance, Station upStation, Station downStation) {
-        Section section = new Section(distance, upStation, downStation, this);
+    public void generateSection(int distance, int duration, Station upStation, Station downStation) {
+        Section section = new Section(distance, duration, upStation, downStation, this);
         sections.addSection(section);
     }
 }

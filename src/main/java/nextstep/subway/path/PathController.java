@@ -16,8 +16,9 @@ public class PathController {
     @GetMapping("/paths")
     public PathResponse showPath(
             @RequestParam Long source,
-            @RequestParam Long target
+            @RequestParam Long target,
+            @RequestParam PathType type
     ) {
-        return pathService.getPath(source, target);
+        return pathService.getPath(source, target, type);
     }
 }

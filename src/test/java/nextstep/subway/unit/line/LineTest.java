@@ -27,7 +27,7 @@ class LineTest {
     @Test
     void addSection() {
         //when
-        이호선.generateSection(10, 잠실역, 성수역);
+        이호선.generateSection(10, 3, 잠실역, 성수역);
 
         //then
         assertThat(이호선.getSectionList()).hasSize(1);
@@ -37,7 +37,7 @@ class LineTest {
     @Test
     void getStations() {
         //given
-        이호선.generateSection(10, 잠실역, 성수역);
+        이호선.generateSection(10, 3, 잠실역, 성수역);
 
         //when
         List<Station> stations = 이호선.getSections().getStations();
@@ -51,10 +51,10 @@ class LineTest {
     @Test
     void removeSection() {
         //given
-        이호선.generateSection(10, 잠실역, 성수역);
+        이호선.generateSection(10, 3, 잠실역, 성수역);
 
         Station 건대입구역 = new Station(3L, "건대입구역");
-        이호선.generateSection(5, 성수역, 건대입구역);
+        이호선.generateSection(5, 3, 성수역, 건대입구역);
 
         //when
         이호선.deleteSection(건대입구역);

@@ -25,7 +25,7 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathResponse getPath(Long sourceStationId, Long targetStationId) {
+    public PathResponse getPath(Long sourceStationId, Long targetStationId, PathType type) {
         if (sourceStationId.equals(targetStationId)) {
             throw new PathException("출발역과 도착역이 같습니다.");
         }
@@ -33,7 +33,7 @@ public class PathService {
         Station soruceStation = stationDataService.findStation(sourceStationId);
         Station targetStation = stationDataService.findStation(targetStationId);
 
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new PathFinder(type.getPathFinderStrategy());
 
         return pathFinder.getPath(getSectionsList(), soruceStation, targetStation);
     }

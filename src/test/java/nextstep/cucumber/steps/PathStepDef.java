@@ -1,53 +1,60 @@
 package nextstep.cucumber.steps;
 
 import io.cucumber.java8.En;
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.acceptance.line.LineApiRequester;
 import nextstep.subway.acceptance.path.PathApiRequester;
 import nextstep.subway.acceptance.section.SectionApiRequester;
 import nextstep.subway.acceptance.station.StationApiRequester;
 import nextstep.subway.line.dto.LineCreateRequest;
 import nextstep.subway.line.dto.SectionCreateRequest;
+import nextstep.subway.path.PathResponse;
+import nextstep.subway.path.PathType;
 import nextstep.subway.station.dto.StationResponse;
 import nextstep.utils.JsonPathUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
 
-    Long 교대역id;
-    Long 양재역id;
-    Long 남부터미널역id;
-    Long 삼호선id;
-
-    ExtractableResponse<Response> response;
+    @Autowired
+    private AcceptanceContext context;
 
     public PathStepDef() {
-        Given("지하철노선을 생성하고", () -> {
-            교대역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("교대역"));
-            양재역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("양재역"));
-            남부터미널역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("남부터미널역"));
+        Given("{string}과 {string}의 {string} 경로를 조회하면", (String source, String target, String requestType) -> {
+            Long sourceId = ((StationResponse) context.store.get(source)).getId();
+            Long targetId = ((StationResponse) context.store.get(target)).getId();
+            PathType type = requestType.equals("최단거리") ? PathType.DISTANCE : PathType.DURATION;
 
-            LineCreateRequest 삼호선 = new LineCreateRequest("3호선", "orange", 교대역id, 남부터미널역id, 2);
-            삼호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(삼호선));
-
-            SectionCreateRequest 남부터미널양재역 = new SectionCreateRequest(남부터미널역id, 양재역id, 3);
-            SectionApiRequester.generateSection(남부터미널양재역, 삼호선id);
-        });
-        When("출발지와 도착지의 경로를 조회하면", () -> {
-            response = PathApiRequester.getPath(교대역id, 양재역id);
+            context.response = given().log().all()
+                    .accept(MediaType.APPLICATION_JSON_VALUE)
+                    .when().get("/paths?source={sourceId}&target={targetId}&type={type}", sourceId, targetId, type)
+                    .then().log().all()
+                    .extract();
         });
 
-        Then("출발지와 도착지의 경로가 조회된다", () -> {
-            List<Long> ids = response.jsonPath().getList("stations", StationResponse.class)
-                    .stream().map(StationResponse::getId).collect(Collectors.toList());
-            int distance = response.jsonPath().getInt("distance");
-            assertThat(ids).containsExactly(교대역id, 남부터미널역id, 양재역id);
-            assertThat(distance).isEqualTo(5);
+        Then("{string} 경로가 조회된다", (String pathString) -> {
+            List<String> stations = context.response.as(PathResponse.class).getStations().stream()
+                    .map(StationResponse::getName)
+                    .collect(Collectors.toList());
+
+            assertThat(stations).containsExactly(pathString.split(","));
+        });
+
+        Then("총 거리 {int}km와 소요시간 {int}분을 함께 응답한다", (Integer distance, Integer duration) -> {
+            PathResponse response = context.response.as(PathResponse.class);
+
+            assertThat(response.getDistance()).isEqualTo(distance);
+            assertThat(response.getDuration()).isEqualTo(duration);
         });
     }
 }

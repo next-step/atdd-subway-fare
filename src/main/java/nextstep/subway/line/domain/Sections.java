@@ -149,8 +149,10 @@ public class Sections {
         sections.remove(sectionFindByDownStation);
 
         int distance = sectionFindByUpStation.getDistance() + sectionFindByDownStation.getDistance();
+        int duration = sectionFindByUpStation.getDuration() + sectionFindByDownStation.getDuration();
         Section section = new Section(
                 distance,
+                duration,
                 sectionFindByDownStation.getUpStation(),
                 sectionFindByUpStation.getDownStation(),
                 line

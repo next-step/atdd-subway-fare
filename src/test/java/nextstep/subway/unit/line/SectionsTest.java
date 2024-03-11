@@ -28,7 +28,7 @@ public class SectionsTest {
         건대입구역 = new Station(1L, "건대입구역");
         잠실역 = new Station(2L, "잠실역");
         성수역 = new Station(3L, "성수역");
-        이호선.generateSection(10, 건대입구역, 잠실역);
+        이호선.generateSection(10, 3, 건대입구역, 잠실역);
     }
 
     @DisplayName("각 구간의 하행역과 다음 구간의 상행역이 연결되도록 조회한다.")
@@ -36,7 +36,7 @@ public class SectionsTest {
     void getSections() {
         //given
         Station 용산역 = new Station(4L, "용산역");
-        이호선.generateSection(8, 잠실역, 용산역);
+        이호선.generateSection(8, 3, 잠실역, 용산역);
 
         //when
         Sections result = 이호선.getSections();
@@ -50,7 +50,7 @@ public class SectionsTest {
     @Test
     void changePreviousUpStation() {
         //when
-        이호선.generateSection(9, 건대입구역, 성수역);
+        이호선.generateSection(9, 3, 건대입구역, 성수역);
 
         //then
         assertThat(이호선.getStations()).containsExactly(건대입구역, 성수역, 잠실역);
@@ -62,7 +62,7 @@ public class SectionsTest {
     @Test
     void changeUpStationDistanceException() {
         //then
-        assertThatThrownBy(() -> 이호선.generateSection(20, 건대입구역, 성수역))
+        assertThatThrownBy(() -> 이호선.generateSection(20, 3, 건대입구역, 성수역))
                 .isExactlyInstanceOf(SectionException.class)
                 .hasMessage("기존구간의 거리보다 더 길수 없습니다.");
     }
@@ -72,8 +72,8 @@ public class SectionsTest {
     void deleteMiddleSection() {
         //given
         Station 용산역 = new Station("용산역");
-        이호선.generateSection(10, 잠실역, 성수역);
-        이호선.generateSection(10, 성수역, 용산역);
+        이호선.generateSection(10, 3, 잠실역, 성수역);
+        이호선.generateSection(10, 3, 성수역, 용산역);
 
         //when
         이호선.deleteSection(성수역);
@@ -87,7 +87,7 @@ public class SectionsTest {
     @Test
     void deleteUpFinalStation() {
         //given
-        이호선.generateSection(10, 잠실역, 성수역);
+        이호선.generateSection(10, 3, 잠실역, 성수역);
 
         //when
         이호선.deleteSection(건대입구역);
@@ -101,7 +101,7 @@ public class SectionsTest {
     @Test
     void deleteDownFinalStation() {
         //given
-        이호선.generateSection(10, 잠실역, 성수역);
+        이호선.generateSection(10, 3, 잠실역, 성수역);
 
         //when
         이호선.deleteSection(성수역);

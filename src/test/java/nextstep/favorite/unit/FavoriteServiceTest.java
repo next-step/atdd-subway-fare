@@ -61,16 +61,16 @@ public class FavoriteServiceTest {
 
         Line 이호선 = new Line("2호선", "green");
         lineRepository.save(이호선);
-        이호선.generateSection(10, 교대역, 강남역);
+        이호선.generateSection(10, 3, 교대역, 강남역);
 
         Line 신분당선 = new Line("신분당선", "red");
         lineRepository.save(신분당선);
-        신분당선.generateSection(10, 강남역, 양재역);
+        신분당선.generateSection(10, 3, 강남역, 양재역);
 
         Line 삼호선 = new Line("3호선", "orange");
         lineRepository.save(삼호선);
-        삼호선.generateSection(2, 교대역, 남부터미널역);
-        삼호선.generateSection(3, 남부터미널역, 양재역);
+        삼호선.generateSection(2, 3, 교대역, 남부터미널역);
+        삼호선.generateSection(3, 3, 남부터미널역, 양재역);
 
         member = new Member("email@email.com", "1234", 25);
         memberRepository.save(member);

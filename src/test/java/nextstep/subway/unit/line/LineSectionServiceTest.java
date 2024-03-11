@@ -36,7 +36,7 @@ public class LineSectionServiceTest {
         stationRepository.save(잠실역);
         stationRepository.save(성수역);
 
-        SectionCreateRequest request = new SectionCreateRequest(잠실역.getId(), 성수역.getId(), 10);
+        SectionCreateRequest request = new SectionCreateRequest(잠실역.getId(), 성수역.getId(), 10, 3);
 
         // when
         lineSectionService.saveSection(이호선.getId(), request);

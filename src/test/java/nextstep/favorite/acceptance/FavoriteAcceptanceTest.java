@@ -39,16 +39,16 @@ public class FavoriteAcceptanceTest {
         양재역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("양재역"));
         남부터미널역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("남부터미널역"));
 
-        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 교대역id, 강남역id, 10);
+        LineCreateRequest 이호선 = new LineCreateRequest("2호선", "green", 교대역id, 강남역id, 10, 3);
         이호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(이호선));
 
-        LineCreateRequest 신분당선 = new LineCreateRequest("신분당선", "red", 강남역id, 양재역id, 10);
+        LineCreateRequest 신분당선 = new LineCreateRequest("신분당선", "red", 강남역id, 양재역id, 10, 3);
         신분당선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(신분당선));
 
-        LineCreateRequest 삼호선 = new LineCreateRequest("3호선", "orange", 교대역id, 남부터미널역id, 2);
+        LineCreateRequest 삼호선 = new LineCreateRequest("3호선", "orange", 교대역id, 남부터미널역id, 2, 3);
         삼호선id = JsonPathUtil.getId(LineApiRequester.createLineApiCall(삼호선));
 
-        SectionCreateRequest 남부터미널양재역 = new SectionCreateRequest(남부터미널역id, 양재역id, 3);
+        SectionCreateRequest 남부터미널양재역 = new SectionCreateRequest(남부터미널역id, 양재역id, 3, 3);
         SectionApiRequester.generateSection(남부터미널양재역, 삼호선id);
     }
 
