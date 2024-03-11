@@ -102,6 +102,7 @@ public class PathAcceptanceTest {
         assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get());
         assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5);
         assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20);
+        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(1250);
     }
 
     /**
