@@ -1,6 +1,7 @@
 package nextstep.core.subway.path.application;
 
-import nextstep.core.auth.domain.LoginMember;
+import nextstep.core.auth.domain.LoginUser;
+import nextstep.core.auth.domain.NonLoginUser;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.member.application.dto.MemberResponse;
 import nextstep.core.member.domain.Member;
@@ -127,7 +128,7 @@ public class PathServiceMockTest {
                 @Test
                 void 강남역에서_남부터미널역까지_경로_조회() {
                     // given
-                    LoginMember 로그인된_잭슨_정보 = new LoginMember(잭슨.get이메일());
+                    LoginUser 로그인된_잭슨_정보 = new LoginUser(잭슨.get이메일());
 
                     when(lineService.findStation(강남역_번호)).thenReturn(강남);
                     when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
@@ -152,7 +153,7 @@ public class PathServiceMockTest {
                 @Test
                 void 교대역에서_양재역까지_경로_조회() {
                     // given
-                    LoginMember 로그인된_잭슨_정보 = new LoginMember(잭슨.get이메일());
+                    LoginUser 로그인된_잭슨_정보 = new LoginUser(잭슨.get이메일());
 
                     when(lineService.findStation(교대역_번호)).thenReturn(교대);
                     when(lineService.findStation(양재역_번호)).thenReturn(양재);
@@ -182,7 +183,7 @@ public class PathServiceMockTest {
                 @Test
                 void 강남역에서_남부터미널역까지_경로_조회() {
                     // given
-                    LoginMember 로그인되지_않은_회원_정보 = null;
+                    NonLoginUser 로그인되지_않은_회원 = new NonLoginUser();
 
                     when(lineService.findStation(강남역_번호)).thenReturn(강남);
                     when(lineService.findStation(남부터미널역_번호)).thenReturn(남부터미널);
@@ -191,7 +192,7 @@ public class PathServiceMockTest {
                             .thenReturn(new PathFinderResponse(List.of(강남, 교대, 남부터미널), 12, 12, 1350));
 
                     // when
-                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원_정보);
+                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
@@ -206,7 +207,7 @@ public class PathServiceMockTest {
                 @Test
                 void 교대역에서_양재역까지_경로_조회() {
                     // given
-                    LoginMember 로그인되지_않은_회원_정보 = null;
+                    NonLoginUser 로그인되지_않은_회원 = new NonLoginUser();
 
                     when(lineService.findStation(교대역_번호)).thenReturn(교대);
                     when(lineService.findStation(양재역_번호)).thenReturn(양재);
@@ -214,7 +215,7 @@ public class PathServiceMockTest {
                     when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입))).thenReturn(new PathFinderResponse(List.of(교대, 남부터미널, 양재), 5, 5, 1250));
 
                     // when
-                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원_정보);
+                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()

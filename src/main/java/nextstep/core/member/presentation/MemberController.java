@@ -1,6 +1,6 @@
 package nextstep.core.member.presentation;
 
-import nextstep.core.auth.domain.LoginMember;
+import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.auth.presentation.AuthenticationPrincipal;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.member.application.dto.MemberRequest;
@@ -41,8 +41,8 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        return ResponseEntity.ok().body(memberService.findMe(loginMember));
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok().body(memberService.findMe(loginUser));
     }
 }
 

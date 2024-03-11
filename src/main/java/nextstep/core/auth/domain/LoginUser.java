@@ -1,9 +1,9 @@
 package nextstep.core.auth.domain;
 
-public class LoginMember {
+public class LoginUser extends UserDetail {
     private String email;
 
-    public LoginMember(String email) {
+    public LoginUser(String email) {
         this.email = email;
     }
 

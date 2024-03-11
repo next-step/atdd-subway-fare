@@ -1,6 +1,6 @@
 package nextstep.core.subway.favorite.presentation;
 
-import nextstep.core.auth.domain.LoginMember;
+import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.auth.presentation.AuthenticationPrincipal;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.subway.favorite.application.FavoriteService;
@@ -25,22 +25,22 @@ public class FavoriteController {
 
     @PostMapping("/favorites")
     public ResponseEntity<Void> createFavorite(@RequestBody FavoriteRequest request,
-                                               @AuthenticationPrincipal LoginMember loginMember) {
-        Favorite favorite = favoriteService.createFavorite(request, memberService.findMemberByEmail(loginMember.getEmail()).getId());
+                                               @AuthenticationPrincipal LoginUser loginUser) {
+        Favorite favorite = favoriteService.createFavorite(request, memberService.findMemberByEmail(loginUser.getEmail()).getId());
         return ResponseEntity
                 .created(URI.create("/favorites/" + favorite.getId()))
                 .build();
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember) {
-        return ResponseEntity.ok().body(favoriteService.findFavorites(memberService.findMemberByEmail(loginMember.getEmail())));
+    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok().body(favoriteService.findFavorites(memberService.findMemberByEmail(loginUser.getEmail())));
     }
 
     @DeleteMapping("/favorites/{id}")
     public ResponseEntity<Void> deleteFavorite(@PathVariable Long id,
-                                               @AuthenticationPrincipal LoginMember loginMember) {
-        favoriteService.deleteFavorite(id, memberService.findMemberByEmail(loginMember.getEmail()));
+                                               @AuthenticationPrincipal LoginUser loginUser) {
+        favoriteService.deleteFavorite(id, memberService.findMemberByEmail(loginUser.getEmail()));
         return ResponseEntity.noContent().build();
     }
 }
