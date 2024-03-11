@@ -1,9 +1,10 @@
-package nextstep.subway.line.path;
+package nextstep.subway.path.domain;
 
 import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.section.domain.Section;
+import nextstep.subway.section.domain.Section;
+import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -12,10 +13,10 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PathFinder {
+public class Path {
     private final List<Line> lines;
 
-    public PathFinder(List<Line> lines) {
+    public Path(List<Line> lines) {
         this.lines = lines;
     }
 

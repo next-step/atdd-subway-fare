@@ -1,4 +1,4 @@
-package nextstep.subway.line.section.dto;
+package nextstep.subway.section.dto;
 
 
 import nextstep.subway.station.application.dto.StationResponse;

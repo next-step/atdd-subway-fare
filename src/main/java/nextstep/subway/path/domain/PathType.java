@@ -1,4 +1,4 @@
-package nextstep.subway.line.path;
+package nextstep.subway.path.domain;
 
 public enum PathType {
     DISTANCE,

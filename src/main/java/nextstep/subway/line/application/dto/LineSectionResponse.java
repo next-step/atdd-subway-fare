@@ -1,7 +1,7 @@
 package nextstep.subway.line.application.dto;
 
 
-import nextstep.subway.line.section.dto.SectionResponse;
+import nextstep.subway.section.dto.SectionResponse;
 
 import java.util.List;
 

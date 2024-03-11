@@ -1,7 +1,7 @@
 package nextstep.subway.utils;
 
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.line.section.domain.Section;
+import nextstep.subway.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

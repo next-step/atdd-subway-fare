@@ -4,8 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.path.PathType;
-import nextstep.subway.line.section.dto.SectionRequest;
+import nextstep.subway.path.domain.PathType;
+import nextstep.subway.section.dto.SectionRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
