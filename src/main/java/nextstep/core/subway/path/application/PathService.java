@@ -6,7 +6,7 @@ import nextstep.core.auth.domain.constants.AgeGroup;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.subway.fare.application.FareCalculator;
 import nextstep.core.subway.line.application.LineService;
-import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.dto.PathResponse;
 import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
@@ -32,7 +32,7 @@ public class PathService {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathFinderResponse findOptimalPath(PathRequest pathRequest, UserDetail user) {
+    public PathResponse findOptimalPath(PathRequest pathRequest, UserDetail user) {
         validatePathRequest(pathRequest);
 
         PathFinderResult pathFinderResult = pathFinder.findOptimalPath(
@@ -41,7 +41,7 @@ public class PathService {
                 lineService.findStation(pathRequest.getArrivalStationId()),
                 PathType.findType(pathRequest.getPathFinderType()));
 
-        return new PathFinderResponse(pathFinderResult, calculateTotalFare(pathFinderResult, user));
+        return new PathResponse(pathFinderResult, calculateTotalFare(pathFinderResult, user));
     }
 
     private int calculateTotalFare(PathFinderResult result, UserDetail user) {

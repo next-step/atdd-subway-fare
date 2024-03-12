@@ -1,5 +1,7 @@
 package nextstep.core.subway.path.application.dto;
 
+import nextstep.core.subway.favorite.application.dto.FavoriteRequest;
+
 public class PathRequest {
 
     public final Long departureStationId;
@@ -26,6 +28,10 @@ public class PathRequest {
         this.arrivalStationId = arrivalStationId;
         this.pathFinderType = pathFinderType;
         this.token = token;
+    }
+
+    public static PathRequest toRequest(FavoriteRequest request) {
+        return new PathRequest(request.getSource(), request.getTarget());
     }
 
     public Long getDepartureStationId() {

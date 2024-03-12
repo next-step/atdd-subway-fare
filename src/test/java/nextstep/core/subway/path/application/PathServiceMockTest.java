@@ -8,7 +8,7 @@ import nextstep.core.member.domain.Member;
 import nextstep.core.subway.fare.application.FareCalculator;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.line.domain.Line;
-import nextstep.core.subway.path.application.dto.PathFinderResponse;
+import nextstep.core.subway.path.application.dto.PathResponse;
 import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
@@ -145,11 +145,11 @@ public class PathServiceMockTest {
                     when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 100 + 800);
 
                     // when
-                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
+                    PathResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 100 + 800));
+                            .isEqualTo(new PathResponse(경로_조회_결과, 1250 + 100 + 800));
                 }
 
                 /**
@@ -172,11 +172,11 @@ public class PathServiceMockTest {
                     when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 0 + 800);
 
                     // when
-                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
+                    PathResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 0 + 800));
+                            .isEqualTo(new PathResponse(경로_조회_결과, 1250 + 0 + 800));
                 }
 
             }
@@ -203,11 +203,11 @@ public class PathServiceMockTest {
                     when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 100 + 800);
 
                     // when
-                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
+                    PathResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 100 + 800));
+                            .isEqualTo(new PathResponse(경로_조회_결과, 1250 + 100 + 800));
                 }
 
                 /**
@@ -228,11 +228,11 @@ public class PathServiceMockTest {
                     when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 0 + 800);
 
                     // when
-                    PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
+                    PathResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
 
                     // then
                     assertThat(경로_조회_응답).usingRecursiveComparison()
-                            .isEqualTo(new PathFinderResponse(경로_조회_결과, 1250 + 0 + 800));
+                            .isEqualTo(new PathResponse(경로_조회_결과, 1250 + 0 + 800));
                 }
 
             }

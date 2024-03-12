@@ -1,5 +1,7 @@
 package nextstep.core.subway.line.application.dto;
 
+import nextstep.core.subway.line.domain.Line;
+
 public class LineRequest {
     private final String name;
 
@@ -23,6 +25,13 @@ public class LineRequest {
         this.distance = distance;
         this.duration = duration;
         this.additionalFare = additionalFare;
+    }
+
+    public static Line toEntity(LineRequest request) {
+        return new Line(
+                request.getName(),
+                request.getColor(),
+                request.getAdditionalFare());
     }
 
     public String getName() {

@@ -6,13 +6,13 @@ import nextstep.core.subway.station.domain.Station;
 
 import java.util.List;
 
-public class PathFinderResponse {
+public class PathResponse {
     private final List<Station> stations;
     private final int distance;
     private final int duration;
     private final int fare;
 
-    public PathFinderResponse(PathFinderResult result, int fare) {
+    public PathResponse(PathFinderResult result, int fare) {
         this.stations = result.getStations();
         this.distance = result.getDistance();
         this.duration = result.getDuration();
