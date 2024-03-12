@@ -9,12 +9,9 @@ import nextstep.subway.line.application.dto.LineSectionResponse;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.line.path.PathResponse;
-import nextstep.subway.line.path.PathFinder;
-import nextstep.subway.line.path.PathType;
-import nextstep.subway.line.section.domain.Section;
-import nextstep.subway.line.section.dto.SectionRequest;
-import nextstep.subway.line.section.dto.SectionResponse;
+import nextstep.subway.section.domain.Section;
+import nextstep.subway.section.dto.SectionRequest;
+import nextstep.subway.section.dto.SectionResponse;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
@@ -82,7 +79,7 @@ public class LineService {
     }
 
     private SectionResponse createSectionResponse(Section section) {
-        return new SectionResponse(section.getId(), createStationResponse(section.getUpStation()), createStationResponse(section.getDownStation()), section.getDistance());
+        return new SectionResponse(section.getId(), createStationResponse(section.getUpStation()), createStationResponse(section.getDownStation()), section.getDistance(), section.getDuration());
     }
 
     public LineSectionResponse showLineSections(Long id) {
@@ -103,13 +100,5 @@ public class LineService {
     public void deleteSection(Long id, Long stationId) {
         Line line = lineRepository.findById(id).get();
         line.deleteSection(stationId);
-    }
-
-    public PathResponse getShortestPath(Long source, Long target, PathType type) {
-        Station sourceStation = stationRepository.findById(source).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
-        Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
-        List<Line> lines = lineRepository.findAll();
-
-        return new PathFinder(lines).shortestPath(sourceStation, targetStation, type);
     }
 }

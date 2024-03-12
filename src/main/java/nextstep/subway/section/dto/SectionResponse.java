@@ -1,4 +1,4 @@
-package nextstep.subway.line.section.dto;
+package nextstep.subway.section.dto;
 
 
 import nextstep.subway.station.application.dto.StationResponse;
@@ -7,13 +7,15 @@ public class SectionResponse {
     private Long id;
     private StationResponse upStation;
     private StationResponse downStation;
-    private Long distance;
+    private int distance;
+    private int duration;
 
-    public SectionResponse(Long id, StationResponse upStation, StationResponse downStation, Long distance) {
+    public SectionResponse(Long id, StationResponse upStation, StationResponse downStation, int distance, int duration) {
         this.id = id;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -28,8 +30,12 @@ public class SectionResponse {
         return downStation;
     }
 
-    public Long getDistance() {
+    public int getDistance() {
         return distance;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     @Override
@@ -39,6 +45,7 @@ public class SectionResponse {
                 ", upStation=" + upStation +
                 ", downStation=" + downStation +
                 ", distance=" + distance +
+                ", duration=" + duration +
                 '}';
     }
 }
