@@ -1,6 +1,5 @@
 package nextstep.core.subway.path.domain;
 
-import nextstep.core.auth.domain.constants.AgeGroup;
 import nextstep.core.subway.station.domain.Station;
 
 import java.util.List;

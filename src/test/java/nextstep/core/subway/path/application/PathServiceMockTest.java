@@ -2,7 +2,6 @@ package nextstep.core.subway.path.application;
 
 import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.auth.domain.NonLoginUser;
-import nextstep.core.auth.domain.constants.AgeGroup;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.member.application.dto.MemberResponse;
 import nextstep.core.member.domain.Member;
@@ -10,8 +9,8 @@ import nextstep.core.subway.fare.application.FareCalculator;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
-import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.application.dto.PathRequest;
+import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
@@ -122,7 +121,7 @@ public class PathServiceMockTest {
 
         @Nested
         class 최적_경로_찾기 {
-            
+
             @Nested
             class 로그인한_회원_요청 {
 
