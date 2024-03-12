@@ -42,5 +42,10 @@ public class PathStepDef implements En {
             assertThat(pathResponse.getDistance()).isEqualTo(Long.parseLong(distance));
             assertThat(pathResponse.getDuration()).isEqualTo(Long.parseLong(duration));
         });
+
+        And("지하철 요금은 {int}원으로 조회된다.", (Integer fare) -> {
+            PathResponse pathResponse = context.response.as(PathResponse.class);
+            assertThat(pathResponse.getFare()).isEqualTo(fare);
+        });
     }
 }

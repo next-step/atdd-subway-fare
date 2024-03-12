@@ -13,12 +13,14 @@ public class PathResponse {
     private List<StationResponse> stations;
     private Long distance;
     private Long duration;
+    private int fare;
 
     @Builder
-    public PathResponse(List<StationResponse> stations, Long distance, Long duration) {
+    public PathResponse(List<StationResponse> stations, Long distance, Long duration, int fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 
     public static PathResponse from(Path path) {
@@ -26,6 +28,7 @@ public class PathResponse {
                 .stations(stationsToStationResponses(path.getPath()))
                 .distance(path.getDistance())
                 .duration(path.getDuration())
+                .fare(path.getFare())
                 .build();
     }
 }
