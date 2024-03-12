@@ -6,10 +6,11 @@ import nextstep.core.auth.domain.constants.AgeGroup;
 import nextstep.core.member.application.MemberService;
 import nextstep.core.member.application.dto.MemberResponse;
 import nextstep.core.member.domain.Member;
+import nextstep.core.subway.fare.application.FareCalculator;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
-import nextstep.core.subway.path.application.dto.PathFinderResult;
+import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
@@ -142,7 +143,7 @@ public class PathServiceMockTest {
                     when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.valueOf(경로_조회_최단거리_타입)))
                             .thenReturn(경로_조회_결과);
                     when(memberService.findMe(로그인된_잭슨_정보)).thenReturn(MemberResponse.of(new Member(잭슨.get이메일(), 잭슨.get비밀번호(), 잭슨.get나이())));
-                    when(fareCalculator.calculateTotalFare(anyInt(), anyList(), any(AgeGroup.class))).thenReturn(1250 + 100 + 800);
+                    when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 100 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
@@ -169,7 +170,7 @@ public class PathServiceMockTest {
                     when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입)))
                             .thenReturn(경로_조회_결과);
                     when(memberService.findMe(로그인된_잭슨_정보)).thenReturn(MemberResponse.of(new Member(잭슨.get이메일(), 잭슨.get비밀번호(), 잭슨.get나이())));
-                    when(fareCalculator.calculateTotalFare(anyInt(), anyList(), any(AgeGroup.class))).thenReturn(1250 + 0 + 800);
+                    when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 0 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인된_잭슨_정보);
@@ -200,7 +201,7 @@ public class PathServiceMockTest {
                     when(lineService.findAllLines()).thenReturn(모든_노선_목록);
                     when(pathFinder.findOptimalPath(모든_노선_목록, 강남, 남부터미널, PathType.valueOf(경로_조회_최단거리_타입)))
                             .thenReturn(경로_조회_결과);
-                    when(fareCalculator.calculateTotalFare(anyInt(), anyList(), any(AgeGroup.class))).thenReturn(1250 + 100 + 800);
+                    when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 100 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(강남역_번호, 남부터미널역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);
@@ -225,7 +226,7 @@ public class PathServiceMockTest {
                     when(lineService.findStation(양재역_번호)).thenReturn(양재);
                     when(lineService.findAllLines()).thenReturn(모든_노선_목록);
                     when(pathFinder.findOptimalPath(모든_노선_목록, 교대, 양재, PathType.valueOf(경로_조회_최단거리_타입))).thenReturn(경로_조회_결과);
-                    when(fareCalculator.calculateTotalFare(anyInt(), anyList(), any(AgeGroup.class))).thenReturn(1250 + 0 + 800);
+                    when(fareCalculator.calculateTotalFare(any(FareCalculationContext.class))).thenReturn(1250 + 0 + 800);
 
                     // when
                     PathFinderResponse 경로_조회_응답 = pathService.findOptimalPath(new PathRequest(교대역_번호, 양재역_번호, 경로_조회_최단거리_타입), 로그인되지_않은_회원);

@@ -2,14 +2,12 @@ package nextstep.core.subway.path.application;
 
 import nextstep.common.annotation.ComponentTest;
 import nextstep.core.subway.line.domain.Line;
-import nextstep.core.subway.path.application.dto.PathFinderResponse;
-import nextstep.core.subway.path.application.dto.PathFinderResult;
+import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;

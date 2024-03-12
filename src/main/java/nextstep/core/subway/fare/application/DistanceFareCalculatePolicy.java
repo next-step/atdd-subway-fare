@@ -1,9 +1,10 @@
-package nextstep.core.subway.path.application;
+package nextstep.core.subway.fare.application;
 
+import nextstep.core.subway.path.application.FareCalculationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DistanceFareCalculator {
+public class DistanceFareCalculatePolicy implements FareCalculatePolicy {
 
     public static final int BASE_FARE = 1250;
 
@@ -15,7 +16,12 @@ public class DistanceFareCalculator {
 
     public static final int ADDITIONAL_FARE_PER_KM = 100;
 
-    public int calculateDistanceFare(int distance) {
+    @Override
+    public int apply(FareCalculationContext context) {
+        return calculateDistanceFare(context.getDistance());
+    }
+
+    private int calculateDistanceFare(int distance) {
         int fare = BASE_FARE;
 
         if (distance > STANDARD_DISTANCE && distance <= LONG_DISTANCE) {
@@ -31,4 +37,5 @@ public class DistanceFareCalculator {
     private int calculateDistanceOverFare(int distance, int additionalDistance) {
         return (int) (((double) ((distance - 1) / additionalDistance) + 1) * ADDITIONAL_FARE_PER_KM);
     }
+
 }

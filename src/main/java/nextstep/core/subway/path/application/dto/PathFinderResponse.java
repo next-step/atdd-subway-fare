@@ -1,7 +1,7 @@
 package nextstep.core.subway.path.application.dto;
 
 
-import nextstep.core.subway.path.application.PathFinder;
+import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.station.domain.Station;
 
 import java.util.List;

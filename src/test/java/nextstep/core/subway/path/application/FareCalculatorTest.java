@@ -2,6 +2,10 @@ package nextstep.core.subway.path.application;
 
 import nextstep.common.annotation.ComponentTest;
 import nextstep.core.auth.domain.constants.AgeGroup;
+import nextstep.core.subway.fare.application.AdditionalFareCalculatePolicy;
+import nextstep.core.subway.fare.application.AgeFareCalculatePolicy;
+import nextstep.core.subway.fare.application.DistanceFareCalculatePolicy;
+import nextstep.core.subway.fare.application.FareCalculator;
 import nextstep.core.subway.line.domain.Line;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,17 +31,17 @@ public class FareCalculatorTest {
     FareCalculator fareCalculator;
 
     @Autowired
-    DistanceFareCalculator distanceFareCalculator;
+    DistanceFareCalculatePolicy distanceFareCalculatePolicy;
 
     @Autowired
-    AdditionalFareCalculator additionalFareCalculator;
+    AdditionalFareCalculatePolicy additionalFareCalculatePolicy;
 
     @Autowired
-    AgeFareCalculator ageFareCalculator;
+    AgeFareCalculatePolicy ageFareCalculatePolicy;
 
     @BeforeEach
-    void setUp() {
-        fareCalculator = new FareCalculator(distanceFareCalculator, additionalFareCalculator, ageFareCalculator);
+    void 사전_객체_생성() {
+        fareCalculator = new FareCalculator(List.of(distanceFareCalculatePolicy, additionalFareCalculatePolicy, ageFareCalculatePolicy));
     }
 
     @BeforeEach
@@ -61,7 +65,7 @@ public class FareCalculatorTest {
         List<Integer> 추가_요금_목록 = List.of(이호선.getAdditionalFare(), 사호선.getAdditionalFare(), 신분당선.getAdditionalFare(), 삼호선.getAdditionalFare());
 
         // when
-        int 실제_계산된_요금 = fareCalculator.calculateTotalFare(이동_거리, 추가_요금_목록, AgeGroup.UNKNOWN);
+        int 실제_계산된_요금 = fareCalculator.calculateTotalFare(new FareCalculationContext(이동_거리, 추가_요금_목록, AgeGroup.UNKNOWN));
 
         // then
         assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_가장_높은_노선_추가_요금);
@@ -76,7 +80,7 @@ public class FareCalculatorTest {
         List<Integer> 추가_요금_목록 = List.of(이호선.getAdditionalFare(), 사호선.getAdditionalFare(), 신분당선.getAdditionalFare(), 삼호선.getAdditionalFare());
 
         // when
-        int 실제_계산된_요금 = fareCalculator.calculateTotalFare(이동_거리, 추가_요금_목록, AgeGroup.findAgeGroup(나이));
+        int 실제_계산된_요금 = fareCalculator.calculateTotalFare(new FareCalculationContext(이동_거리, 추가_요금_목록, AgeGroup.findAgeGroup(나이)));
 
         // then
         assertThat(실제_계산된_요금).isEqualTo(예상하는_운임_비용 + 예상하는_가장_높은_노선_추가_요금);

@@ -2,7 +2,7 @@ package nextstep.core.subway.path.application;
 
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.path.application.dto.PathCompositeWeightEdge;
-import nextstep.core.subway.path.application.dto.PathFinderResult;
+import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.station.domain.Station;

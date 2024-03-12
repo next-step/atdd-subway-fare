@@ -4,10 +4,11 @@ import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.auth.domain.UserDetail;
 import nextstep.core.auth.domain.constants.AgeGroup;
 import nextstep.core.member.application.MemberService;
+import nextstep.core.subway.fare.application.FareCalculator;
 import nextstep.core.subway.line.application.LineService;
 import nextstep.core.subway.path.application.dto.PathFinderResponse;
-import nextstep.core.subway.path.application.dto.PathFinderResult;
 import nextstep.core.subway.path.application.dto.PathRequest;
+import nextstep.core.subway.path.domain.PathFinderResult;
 import nextstep.core.subway.path.domain.PathType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,14 +44,16 @@ public class PathService {
         return new PathFinderResponse(pathFinderResult, calculateTotalFare(pathFinderResult, user));
     }
 
-    private int calculateTotalFare(PathFinderResult pathFinderResult, UserDetail user) {
+    private int calculateTotalFare(PathFinderResult result, UserDetail user) {
         if (user.isLoggedIn()) {
             return fareCalculator.calculateTotalFare(
-                    pathFinderResult.getDistance(),
-                    pathFinderResult.getAdditionalFares(),
-                    AgeGroup.findAgeGroup(memberService.findMe((LoginUser) user).getAge()));
+                    createFareCalculationContext(result, AgeGroup.findAgeGroup(memberService.findMe((LoginUser) user).getAge())));
         }
-        return fareCalculator.calculateTotalFare(pathFinderResult.getDistance(), pathFinderResult.getAdditionalFares(), AgeGroup.UNKNOWN);
+        return fareCalculator.calculateTotalFare(createFareCalculationContext(result, AgeGroup.UNKNOWN));
+    }
+
+    private FareCalculationContext createFareCalculationContext(PathFinderResult result, AgeGroup ageGroup) {
+        return new FareCalculationContext(result.getDistance(), result.getAdditionalFares(), ageGroup);
     }
 
     public boolean isValidPath(PathRequest pathRequest) {
