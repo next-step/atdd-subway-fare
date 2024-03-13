@@ -7,8 +7,10 @@ import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
+import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,12 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final StationRepository stationRepository;
     private final MemberRepository memberRepository;
-    private final LineRepository lineRepository;
+    private final LineService lineService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, StationRepository stationRepository, LineRepository lineRepository, MemberRepository memberRepository) {
+    public FavoriteService(FavoriteRepository favoriteRepository, StationRepository stationRepository, MemberRepository memberRepository, LineService lineService) {
         this.favoriteRepository = favoriteRepository;
         this.stationRepository = stationRepository;
-        this.lineRepository = lineRepository;
+        this.lineService = lineService;
         this.memberRepository = memberRepository;
     }
 
@@ -34,9 +36,9 @@ public class FavoriteService {
         Member member = memberRepository.findByEmail(loginMember.getEmail()).orElseThrow(IllegalArgumentException::new);
         Station sourceStation = stationRepository.findById(request.getSource()).orElseThrow(IllegalArgumentException::new);
         Station targetStation = stationRepository.findById(request.getTarget()).orElseThrow(IllegalArgumentException::new);
-        List<Line> lines = lineRepository.findAll();
+        List<Section> sectionList = lineService.getSectionList();
 
-        Favorite favorite = new Favorite(member.getId(), sourceStation, targetStation, lines);
+        Favorite favorite = new Favorite(member.getId(), sourceStation, targetStation, sectionList);
         favoriteRepository.save(favorite);
         return favorite.getId();
     }

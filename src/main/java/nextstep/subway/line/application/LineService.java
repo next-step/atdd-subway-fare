@@ -101,4 +101,11 @@ public class LineService {
         Line line = lineRepository.findById(id).get();
         line.deleteSection(stationId);
     }
+
+    public List<Section> getSectionList() {
+        List<Line> lines = lineRepository.findAll();
+        return lines.stream()
+                .flatMap(line -> line.getSections().get().stream())
+                .collect(Collectors.toList());
+    }
 }
