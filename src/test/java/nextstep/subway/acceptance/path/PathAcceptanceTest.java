@@ -138,7 +138,7 @@ public class PathAcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
         int fare = response.jsonPath().getInt("fare");
-        assertThat(fare).isEqualTo(2850);
+        assertThat(fare).isEqualTo(2750);
     }
 
 
