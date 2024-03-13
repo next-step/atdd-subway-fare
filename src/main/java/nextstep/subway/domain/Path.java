@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
+import nextstep.subway.domain.entity.Section;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 public class Path {
     private final List<Long> stations;
-    private final List<SectionWeightedEdge> edges;
+    private List<Section> sections;
 
     public Path(DijkstraShortestPath dijkstraShortestPath, Long source, Long target) {
         GraphPath graphPath;
@@ -22,12 +23,10 @@ public class Path {
             throw new IllegalArgumentException("경로가 존재하지 않습니다.");
         }
         this.stations = graphPath.getVertexList();
-        this.edges = graphPath.getEdgeList();
     }
 
     public Path(List<Long> vertexs, List<Section> sections, double weight) {
         this.stations = vertexs;
-        this.edges = null;
         this.sections = sections;
     }
 
@@ -36,10 +35,14 @@ public class Path {
     }
 
     public int getDistance() {
-        return edges.stream().mapToInt(SectionWeightedEdge::getDistance).sum();
+        return sections.stream()
+                .mapToInt(Section::getDistance)
+                .sum();
     }
 
     public int getDuration() {
-        return edges.stream().mapToInt(SectionWeightedEdge::getDuration).sum();
+        return sections.stream()
+                .mapToInt(Section::getDuration)
+                .sum();
     }
 }
