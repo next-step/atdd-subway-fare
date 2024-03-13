@@ -14,5 +14,6 @@ public class SectionRequest {
 
     private int distance;
 
+    private int duration;
 
 }

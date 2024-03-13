@@ -14,12 +14,14 @@ public class SectionResponse {
     Station upStation;
     Station downStation;
     int distance;
+    int duration;
 
-    public SectionResponse createSectionResponseFromEntity(Section section) {
+    public SectionResponse from(Section section) {
         this.id = section.getId();
         this.upStation = section.getUpStation();
         this.downStation = section.getDownStation();
         this.distance = section.getDistance();
+        this.duration = section.getDuration();
 
         return this;
     }

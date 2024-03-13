@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -34,17 +33,21 @@ public class Section {
 
     private int distance;
 
-    public Section(Line line, Station upStation, Station downStation, int distance) {
+    private int duration;
+
+    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public Section(Station upStation, Station downStation, int distance) {
+    public Section(Station upStation, Station downStation, int distance, int duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public List<Station> getStations() {
@@ -62,4 +65,8 @@ public class Section {
         return this.getDownStation().equals(station);
     }
 
+    public int getValueByType(PathSearchType type) {
+        if (type == PathSearchType.DISTANCE) return distance;
+        return duration;
+    }
 }

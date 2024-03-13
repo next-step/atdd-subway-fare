@@ -9,6 +9,7 @@ import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
+import nextstep.subway.domain.entity.PathSearchType;
 import nextstep.subway.domain.entity.Station;
 import nextstep.subway.repository.StationRepository;
 import nextstep.subway.service.PathService;
@@ -38,7 +39,7 @@ public class FavoriteService {
         Station target = getStation(request.getTarget());
 
         // 경로 확인
-        pathService.findShortestPath(source.getId(), target.getId());
+        pathService.findShortestPath(source.getId(), target.getId(), PathSearchType.DISTANCE);
 
         Favorite favorite = new Favorite(source, target, getMember(userDetails));
         favoriteRepository.save(favorite);

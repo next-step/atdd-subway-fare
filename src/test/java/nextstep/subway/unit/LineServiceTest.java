@@ -41,7 +41,7 @@ class LineServiceTest {
         선릉역 = stationRepository.save(new Station("선릉역"));
 
         line = new Line("이호선", "초록색");
-        Section section = new Section(line, 강남역, 역삼역, 10);
+        Section section = new Section(line, 강남역, 역삼역, 10, 10);
         line.addSection(section);
         line = lineRepository.save(line);
     }
@@ -52,7 +52,7 @@ class LineServiceTest {
 
         // when
         // line.addSection() 호출
-        lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), 10));
+        lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), 10, 7));
 
         // then
         assertThat(line.getSections().getSections()).hasSize(2);
@@ -61,7 +61,7 @@ class LineServiceTest {
     @Test
     void deleteSection() {
         // given
-        lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), 10));
+        lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), 10, 7));
 
         // when
         sectionService.deleteSection(line.getId(), 선릉역.getId());
@@ -74,7 +74,8 @@ class LineServiceTest {
     void getSection() {
         // given
         int distance = 10;
-        LineResponse lineResponse = lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), distance));
+        int duration = 7;
+        LineResponse lineResponse = lineService.addSection(line.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), distance, duration));
 
         // when
         lineResponse.getStations();

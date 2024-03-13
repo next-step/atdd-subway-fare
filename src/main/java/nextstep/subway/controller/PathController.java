@@ -1,5 +1,6 @@
 package nextstep.subway.controller;
 
+import nextstep.subway.domain.entity.PathSearchType;
 import nextstep.subway.domain.response.PathResponse;
 import nextstep.subway.service.PathService;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,8 @@ public class PathController {
 
     @GetMapping("")
     public ResponseEntity<PathResponse> findShortestPath(@RequestParam("source") Long sourceId,
-                                                         @RequestParam("target") Long targetId) {
-        return ResponseEntity.ok().body(pathService.findShortestPath(sourceId, targetId));
+                                                         @RequestParam("target") Long targetId,
+                                                         @RequestParam("type") PathSearchType type) {
+        return ResponseEntity.ok().body(pathService.findShortestPath(sourceId, targetId, type));
     }
 }

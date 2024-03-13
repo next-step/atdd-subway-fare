@@ -23,6 +23,9 @@ public class Line {
     @Column(nullable = false)
     private int distance;
 
+    @Column(nullable = false)
+    private int duration;
+
     @Embedded
     private Sections sections = new Sections();
 
@@ -42,11 +45,13 @@ public class Line {
     public void addSection(Section section) {
         sections.addSection(section);
         this.distance = sections.getDistance();
+        this.duration = sections.getDuration();
     }
 
     public void deleteSection(Section section) {
         sections.deleteSection(section);
         this.distance -= section.getDistance();
+        this.duration -= section.getDuration();
     }
 
     public void updateNameAndColor(String name, String color) {
@@ -57,5 +62,6 @@ public class Line {
     public void deleteStation(Station station) {
         sections.deleteStation(station);
         this.distance = sections.getDistance();
+        this.duration = sections.getDuration();
     }
 }

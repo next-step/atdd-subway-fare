@@ -17,6 +17,7 @@ public class LineResponse {
     private List<SectionResponse> sections;
     private List<StationResponse> stations;
     private int distance;
+    private int duration;
 
     public SectionResponse findSectionByUpStationName(String name) {
         return this.sections.stream()

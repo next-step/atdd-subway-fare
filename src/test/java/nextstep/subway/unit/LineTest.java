@@ -16,16 +16,7 @@ class LineTest {
     void addSection() {
         // line 인스턴스를 만들고
         // addSection 을 호출했을 때
-        Line line = new Line("2호선", "green");
-
-        Station upStation = new Station("강남역");
-        Station downStation = new Station("역삼역");
-        Station newStation = new Station("선릉역");
-
-        int distance = 10;
-
-        line.addSection(new Section(line, upStation, downStation, distance));
-        line.addSection(new Section(line, downStation, newStation, distance));
+        Line line = 이호선_강남역_역삼역_선릉역_추가();
 
         assertAll(
                 () -> assertThat(line.getSectionList()).hasSize(2),
@@ -37,16 +28,7 @@ class LineTest {
     @Test
     void getStations() {
         // line 인스턴스를 만들고
-        Line line = new Line("2호선", "green");
-
-        Station upStation = new Station("강남역");
-        Station downStation = new Station("역삼역");
-        Station newStation = new Station("선릉역");
-
-        int distance = 10;
-
-        line.addSection(new Section(line, upStation, downStation, distance));
-        line.addSection(new Section(line, downStation, newStation, distance));
+        Line line = 이호선_강남역_역삼역_선릉역_추가();
 
         // getStations 를 호출했을 때
         List<Station> stations = line.getStations();
@@ -64,15 +46,7 @@ class LineTest {
     void removeSection() {
         // line 인스턴스를 만들고
         // deleteSection 을 호출했을 때
-        Line line = new Line("2호선", "green");
-
-        Station upStation = new Station("강남역");
-        Station downStation = new Station("역삼역");
-        Station newStation = new Station("선릉역");
-
-        int distance = 10;
-        line.addSection(new Section(line, upStation, downStation, distance));
-        line.addSection(new Section(line, downStation, newStation, distance));
+        Line line = 이호선_강남역_역삼역_선릉역_추가();
 
         List<Section> sections = line.getSections().getSections();
         Section section = sections.get(sections.size() - 1);
@@ -84,4 +58,19 @@ class LineTest {
                 () -> assertThat(line.getDistance()).isEqualTo(10)
         );
     }
+
+    private static Line 이호선_강남역_역삼역_선릉역_추가() {
+        Line line = new Line("2호선", "green");
+
+        Station upStation = new Station("강남역");
+        Station downStation = new Station("역삼역");
+        Station newStation = new Station("선릉역");
+
+        int distance = 10;
+
+        line.addSection(new Section(line, upStation, downStation, distance, 10));
+        line.addSection(new Section(line, downStation, newStation, distance, 7));
+        return line;
+    }
+
 }

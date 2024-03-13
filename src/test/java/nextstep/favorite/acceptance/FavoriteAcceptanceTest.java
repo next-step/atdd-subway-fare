@@ -43,7 +43,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         역삼역 = 지하철역_생성("역삼역").jsonPath().getLong("id");
         선릉역 = 지하철역_생성("선릉역").jsonPath().getLong("id");
 
-        이호선 = 지하철_노선_생성(new LineRequest("2호선", "green", 강남역, 역삼역, 10)).jsonPath().getLong("id");
+        이호선 = 지하철_노선_생성(new LineRequest("2호선", "green", 강남역, 역삼역, 10, 10)).jsonPath().getLong("id");
         지하철_구간_추가(이호선, 역삼역, 선릉역, 10);
     }
 
@@ -141,7 +141,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         long 사당역 = 지하철역_생성("사당역").jsonPath().getLong("id");
         long 이수역 = 지하철역_생성("이수역").jsonPath().getLong("id");
 
-        long 사호선 = 지하철_노선_생성(new LineRequest("4호선", "blue", 사당역, 이수역, 15)).jsonPath().getLong("id");
+        long 사호선 = 지하철_노선_생성(new LineRequest("4호선", "blue", 사당역, 이수역, 15, 5)).jsonPath().getLong("id");
 
         // when
         ExtractableResponse<Response> response = 즐겨찾기_생성_요청(강남역, 이수역, accessToken);

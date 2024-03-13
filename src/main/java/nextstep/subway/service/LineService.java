@@ -35,7 +35,7 @@ public class LineService {
         Station downStation = findStationById(request.getDownStationId());
 
         Line line = lineRepository.save(new Line(request.getName(), request.getColor()));
-        Section section = new Section(line, upStation, downStation, request.getDistance());
+        Section section = new Section(line, upStation, downStation, request.getDistance(), request.getDuration());
         line.addSection(section);
         sectionRepository.save(section);
         return createLineResponse(line);
@@ -74,15 +74,16 @@ public class LineService {
                 line.getId(),
                 line.getName(),
                 line.getColor(),
-                line.getSectionList().stream().map(section -> new SectionResponse().createSectionResponseFromEntity(section)).collect(Collectors.toList()),
+                line.getSectionList().stream().map(section -> new SectionResponse().from(section)).collect(Collectors.toList()),
                 line.getStations().stream().map(station -> new StationResponse().from(station)).collect(Collectors.toList()),
-                line.getDistance()
+                line.getDistance(),
+                line.getDuration()
         );
     }
 
     public SectionResponse findSection(Long id, Long sectionId) {
         Section section = sectionRepository.findByLineIdAndId(id, sectionId);
-        return new SectionResponse().createSectionResponseFromEntity(section);
+        return new SectionResponse().from(section);
     }
 
     @Transactional
@@ -92,7 +93,7 @@ public class LineService {
         Station downStation = stationService.findById(sectionRequest.getDownStationId());
 
         // 중간에 구간 추가
-        Section newSection = new Section(line, upStation, downStation, sectionRequest.getDistance());
+        Section newSection = new Section(line, upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
         line.addSection(newSection);
         return createLineResponse(line);
     }

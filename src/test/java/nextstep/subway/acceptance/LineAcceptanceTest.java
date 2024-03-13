@@ -41,7 +41,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createSubwayLineTest() {
         // when
-        ExtractableResponse<Response> response = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", stationId1, stationId2, 10));
+        ExtractableResponse<Response> response = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", stationId1, stationId2, 10, 10));
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -61,8 +61,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void showSubwayLines() {
         //given
-        지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", stationId1, stationId2, 10));
-        지하철_노선_생성(new LineRequest("분당선", "bg-green-600", stationId1, stationId3, 10));
+        지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", stationId1, stationId2, 10, 10));
+        지하철_노선_생성(new LineRequest("분당선", "bg-green-600", stationId1, stationId3, 10, 10));
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -88,7 +88,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void showSubwayLine() {
         //given
-        long id = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", stationId1, stationId2, 10)).jsonPath().getLong("id");
+        long id = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", stationId1, stationId2, 10, 10)).jsonPath().getLong("id");
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -112,7 +112,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateSubwayLine() {
         //given
-        long id = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", 1L, 2L, 10)).jsonPath().getLong("id");
+        long id = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", 1L, 2L, 10, 10)).jsonPath().getLong("id");
 
         //when
         Map<String, String> params = new HashMap<>();
@@ -143,7 +143,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteSubwayLine() {
         //given
-        long id = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", 1L, 2L, 10)).jsonPath().getLong("id");
+        long id = 지하철_노선_생성(new LineRequest("신분당선", "bg-red-600", 1L, 2L, 10, 10)).jsonPath().getLong("id");
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
