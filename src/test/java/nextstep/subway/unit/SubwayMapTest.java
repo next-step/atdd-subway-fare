@@ -14,11 +14,11 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
-	private Line 노선1 = new Line("노선1", "파란색", 1L, 3L, 10, 5);
-	private Line 노선2 = new Line("노선2", "빨간색", 1L, 2L, 5, 5);
-	private Section 구간1 = new Section(노선1, 1L, 3L, 10, 7);
-	private Section 구간2 = new Section(노선2, 1L, 2L, 5, 5);
-	private Section 구간3 = new Section(노선2, 2L, 3L, 4, 4);
+	private final Line 노선1 = new Line("노선1", "파란색", 1L, 3L, 10, 5);
+	private final Line 노선2 = new Line("노선2", "빨간색", 1L, 2L, 5, 5);
+	private final Section 구간1 = new Section(노선1, 1L, 3L, 10, 7);
+	private final Section 구간2 = new Section(노선2, 1L, 2L, 5, 5);
+	private final Section 구간3 = new Section(노선2, 2L, 3L, 4, 4);
 	private SubwayMap subwayMap;
 
 	@Test

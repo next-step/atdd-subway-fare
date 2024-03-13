@@ -25,7 +25,7 @@ public class Path {
         this.stations = graphPath.getVertexList();
     }
 
-    public Path(List<Long> vertexs, List<Section> sections, double weight) {
+    public Path(List<Long> vertexs, List<Section> sections) {
         this.stations = vertexs;
         this.sections = sections;
     }

@@ -2,8 +2,8 @@ package nextstep.subway.unit;
 
 import nextstep.subway.domain.FareCalculator;
 import nextstep.subway.domain.Path;
-import nextstep.subway.domain.PathByDistanceFinder;
-import nextstep.subway.domain.PathFinder;
+import nextstep.subway.domain.SubwayMap;
+import nextstep.subway.domain.SubwayMapByDistance;
 import nextstep.subway.domain.entity.Line;
 import nextstep.subway.domain.entity.Section;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareCalculatorTest {
-    private PathFinder pathFinder;
+    private SubwayMap subwayMap;
     private FareCalculator fareCalculator;
 
     @BeforeEach
@@ -23,7 +23,7 @@ public class FareCalculatorTest {
         Line 노선1 = new Line("노선1", "파란색", 1L, 2L, 10, 5);
         Line 노선2 = new Line("노선2", "빨간색", 3L, 4L, 20, 5);
 
-        pathFinder = new PathByDistanceFinder(List.of(
+        subwayMap = new SubwayMapByDistance(List.of(
                 new Section(노선1, 1L, 2L, 9, 5),
                 new Section(노선1, 2L, 3L, 7, 10),
                 new Section(노선2, 3L, 4L, 20, 5),
@@ -37,7 +37,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFare10Km() {
-        Path path = pathFinder.getPath(1L, 2L);
+        Path path = subwayMap.getShortesPath(1L, 2L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(1250);
     }
@@ -48,7 +48,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFareOver10Km() {
-        Path path = pathFinder.getPath(1L, 3L);
+        Path path = subwayMap.getShortesPath(1L, 3L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(1450);
     }
@@ -59,7 +59,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFare50Km() {
-        Path path = pathFinder.getPath(1L, 5L);
+        Path path = subwayMap.getShortesPath(1L, 5L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(2050);
     }
@@ -70,7 +70,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFareOver50Km() {
-        Path path = pathFinder.getPath(1L, 6L);
+        Path path = subwayMap.getShortesPath(1L, 6L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(2250);
     }

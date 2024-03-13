@@ -14,7 +14,7 @@ public abstract class SubwayMap {
 	protected WeightedMultigraph<Long, SectionWeightedEdge> weightedMultigraph;
 
 	public SubwayMap(List<Section> sections) {
-		weightedMultigraph = new WeightedMultigraph(SectionWeightedEdge.class);
+		weightedMultigraph = new WeightedMultigraph<>(SectionWeightedEdge.class);
 		this.sections = sections;
 
 		sections.forEach(this::addSection);
@@ -38,9 +38,8 @@ public abstract class SubwayMap {
 
 		return new Path(graphPath.getVertexList(),
 				edges.stream()
-						.map(x-> x.getSection())
-						.collect(Collectors.toList()),
-				dijkstraShortestPath.getPathWeight(source, target));
+						.map(SectionWeightedEdge::getSection)
+						.collect(Collectors.toList()));
 	}
 
 	protected abstract void addSection(Section section);
