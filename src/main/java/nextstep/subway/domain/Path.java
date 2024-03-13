@@ -25,6 +25,12 @@ public class Path {
         this.edges = graphPath.getEdgeList();
     }
 
+    public Path(List<Long> vertexs, List<Section> sections, double weight) {
+        this.stations = vertexs;
+        this.edges = null;
+        this.sections = sections;
+    }
+
     public List<Long> getStations() {
         return stations;
     }
