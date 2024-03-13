@@ -58,8 +58,7 @@ public class PathFinder {
             distance = (long) shortestPath.getPathWeight(source, target);
         }
 
-        FareCalculation fareCalculation = new FareCalculation();
-        int fare = fareCalculation.getFareByDistance(distance);
+        int fare = FareCalculation.getFareByDistance(distance);
 
         return Path.builder()
                 .path(graphPath.getVertexList())

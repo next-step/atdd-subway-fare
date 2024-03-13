@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import static nextstep.subway.acceptance.util.RestAssuredUtil.경로_조회_요청;
 import static nextstep.subway.acceptance.util.RestAssuredUtil.생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @AcceptanceTest
 @DisplayName("지하철 경로 관련 기능")
@@ -99,10 +100,12 @@ public class PathAcceptanceTest {
         ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths", 교대역아이디, 양재역아이디, PathType.DISTANCE);
 
         //then
-        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get());
-        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5);
-        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20);
-        assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(1250);
+        assertAll(
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(1250)
+        );
     }
 
     /**
