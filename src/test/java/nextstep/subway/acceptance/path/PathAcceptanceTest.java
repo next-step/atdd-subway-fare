@@ -56,7 +56,7 @@ public class PathAcceptanceTest {
     /**
      * Given 지하철 구간을 등록하고
      * When 경로를 조회하면
-     * Then 출발역과 도착역까지의 경로에 있는 역과 거리를 조회한다
+     * Then 출발역과 도착역까지의 최단 길이의 경로를 조회한다
      */
     @DisplayName("출발역과 도착역까지의 최단 길이 경로 조회")
     @Test
@@ -77,7 +77,7 @@ public class PathAcceptanceTest {
     /**
      * Given 지하철 구간을 등록하고
      * When 경로를 조회하면
-     * Then 출발역과 도착역까지의 경로에 있는 역과 거리를 조회한다
+     * Then 출발역과 도착역까지의 최단 시간의 경로를 조회한다
      */
     @DisplayName("출발역과 도착역까지의 최단 시간 경로 조회")
     @Test
@@ -94,6 +94,53 @@ public class PathAcceptanceTest {
         assertThat(ids).containsExactly(교대역id, 남부터미널역id, 양재역id);
         assertThat(distance).isEqualTo(6);
     }
+
+    /**
+     * Given 지하철 구간을 등록하고
+     * When 경로를 조회하면
+     * Then 출발역과 도착역까지의 요금을 조회한다
+     */
+    @DisplayName("출발역과 도착역까지의 요금 조회")
+    @Test
+    void showPathFare() {
+        //given
+        Long 성수역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("성수역"));
+        SectionCreateRequest 양재성수역 = new SectionCreateRequest(양재역id, 성수역id, 10, 3);
+        SectionApiRequester.generateSection(양재성수역, 신분당선id);
+
+        //when
+        ExtractableResponse<Response> response = PathApiRequester.getDistanceShortestPath(교대역id, 성수역id);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        int fare = response.jsonPath().getInt("fare");
+        assertThat(fare).isEqualTo(1450);
+    }
+
+    /**
+     * Given 지하철 구간을 등록하고
+     * When 길이가 50 이상인 경로를 조회하면
+     * Then 출발역과 도착역까지의 추가된 요금을 조회한다
+     */
+    @DisplayName("출발역과 도착역까지의 요금 조회")
+    @Test
+    void surchargeTest() {
+        //given
+        Long 성수역id = JsonPathUtil.getId(StationApiRequester.createStationApiCall("성수역"));
+        SectionCreateRequest 양재성수역 = new SectionCreateRequest(양재역id, 성수역id, 100, 3);
+        SectionApiRequester.generateSection(양재성수역, 신분당선id);
+
+        //when
+        ExtractableResponse<Response> response = PathApiRequester.getDistanceShortestPath(교대역id, 성수역id);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        int fare = response.jsonPath().getInt("fare");
+        assertThat(fare).isEqualTo(2750);
+    }
+
 
     /**
      * Given 지하철 구간을 등록하고

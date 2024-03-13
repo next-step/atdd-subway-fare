@@ -37,11 +37,11 @@ public class PathFinder {
                             .map(StationResponse::ofEntity)
                             .collect(Collectors.toList()),
                     distance,
-                    duration
+                    duration,
+                    FareCalculator.calculate(distance)
             );
 
         } catch (RuntimeException e) {
-            e.printStackTrace();
             throw new PathException("연결되어있지 않은 출발역과 도착역의 경로는 조회할 수 없습니다.");
         }
     }
