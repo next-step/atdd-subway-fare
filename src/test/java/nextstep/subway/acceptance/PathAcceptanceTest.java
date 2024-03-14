@@ -57,7 +57,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 최단_시간_경로_조회() {
 		// when & then
-		최단_경로_조회_성공(최단_경로_조회_요청(수서역, 도곡역, PathType.DURATION), 9, 수서역, 학여울역, 도곡역);
+		최단_시간_조회_성공(최단_경로_조회_요청(수서역, 도곡역, PathType.DURATION), 9, 수서역, 학여울역, 도곡역);
 	}
 
 	/**
@@ -120,10 +120,16 @@ public class PathAcceptanceTest {
 		실패시_코드값_메시지_검증(최단_경로_조회_요청(학여울역, 학여울역, PathType.DISTANCE), HttpStatus.BAD_REQUEST.value(),"출발역과 도착역이 같을 수 없습니다.");
 	}
 
-	private void 최단_경로_조회_성공(ExtractableResponse<Response> response, int weight, Long... stationIds) {
+	private void 최단_경로_조회_성공(ExtractableResponse<Response> response, int distance, Long... stationIds) {
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
-		assertThat(response.jsonPath().getInt("weight")).isEqualTo(weight);
+		assertThat(response.jsonPath().getInt("distance")).isEqualTo(distance);
+	}
+
+	private void 최단_시간_조회_성공(ExtractableResponse<Response> response, int duration, Long... stationIds) {
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+		assertThat(response.jsonPath().getList("stations.id", Long.class)).containsExactly(stationIds);
+		assertThat(response.jsonPath().getInt("duration")).isEqualTo(duration);
 	}
 
 	private void 실패시_코드값_메시지_검증(ExtractableResponse<Response> response, int statusCode, String message) {

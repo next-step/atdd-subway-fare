@@ -2,8 +2,7 @@ package nextstep.subway.application.service;
 
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
-import nextstep.subway.domain.PathFinder;
-import nextstep.subway.domain.PathFinderFactory;
+import nextstep.subway.domain.*;
 import nextstep.subway.ui.controller.PathType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,17 +22,21 @@ public class PathService {
 	}
 
 	public PathResponse getPath(Long source, Long target, PathType type) {
-		PathFinder pathFinder = PathFinderFactory.getPathFinder(sectionService.findAll(), type);
+		SubwayMap subwayMap = SubwayMapFactory.getSubwayMap(sectionService.findAll(), type);
+		Path path = subwayMap.getShortesPath(source, target);
+		int fare = new FareCalculator(path).getFare();
 
-		return createPathResponse(pathFinder.getPath(source, target), type, (int) pathFinder.getWieght(source, target));
+		return createPathResponse(path.getStations(), type, path.getDistance(), path.getDuration(), fare);
 	}
 
-	private PathResponse createPathResponse(List<Long> stations, PathType type, int weight) {
+	private PathResponse createPathResponse(List<Long> stations, PathType type, int distance, int duration, int fare) {
 		return new PathResponse(
 				stations.stream()
 						.map(id -> new StationResponse(id, stationService.findStationById(id).getName()))
 						.collect(Collectors.toList()),
 				type,
-				weight);
+				distance,
+				duration,
+				fare);
 	}
 }

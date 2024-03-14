@@ -5,13 +5,13 @@ import nextstep.subway.ui.controller.PathType;
 
 import java.util.List;
 
-public class PathFinderFactory {
-	public static PathFinder getPathFinder(List<Section> sections, PathType type) {
+public class SubwayMapFactory {
+	public static SubwayMap getSubwayMap(List<Section> sections, PathType type) {
 		switch (type) {
 			case DISTANCE:
-				return new PathByDistanceFinder(sections);
+				return new SubwayMapByDistance(sections);
 			case DURATION:
-				return new PathByDurationFinder(sections);
+				return new SubwayMapByDuration(sections);
 			default:
 				throw new IllegalArgumentException("경로 조회 조건이 올바르지 않습니다.");
 		}
