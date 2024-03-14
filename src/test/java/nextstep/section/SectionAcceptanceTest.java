@@ -31,7 +31,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         강남역 = createStation("강남역");
         역삼역 = createStation("역삼역");
         선릉역 = createStation("선릉역");
-        이호선 = createLine("2호선", "green", 강남역, 역삼역, 10L);
+        이호선 = createLine("2호선", "green", 강남역, 역삼역, 10, 5);
     }
 
     /**
@@ -42,7 +42,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addEndSection() {
         // when
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10, 5);
         String locationHeader = response.header("Location");
 
         // then
@@ -58,7 +58,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addMiddleSection() {
         // when
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 강남역, 선릉역, 9L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 강남역, 선릉역, 9, 5);
         String locationHeader = response.header("Location");
 
         // then
@@ -74,7 +74,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void validateSectionDistance() {
         // when
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 강남역, 선릉역, 11L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 강남역, 선릉역, 11, 5);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -89,7 +89,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addStartSection() {
         // when
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 선릉역, 강남역, 10L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 선릉역, 강남역, 10, 5);
         String locationHeader = response.header("Location");
 
         // then
@@ -105,7 +105,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void validateDuplicateStation() {
         // when
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 강남역, 10L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 강남역, 10, 5);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -121,7 +121,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteEndSection() {
         // given
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10, 5);
         String locationHeader = response.header("Location");
 
         // when
@@ -141,7 +141,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteMiddleSection() {
         // given
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10, 5);
         String locationHeader = response.header("Location");
 
         // when
@@ -161,7 +161,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStartSection() {
         // given
-        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10L);
+        ExtractableResponse<Response> response = SectionSteps.addSection(이호선, 역삼역, 선릉역, 10, 5);
         String locationHeader = response.header("Location");
 
         // when
@@ -191,7 +191,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         return StationSteps.createStation(name).jsonPath().getLong("id");
     }
 
-    private static Long createLine(String name, String color, Long upStation, Long downStation, Long distance) {
-        return LineSteps.createLine(name, color, upStation, downStation, distance).jsonPath().getLong("id");
+    private static Long createLine(String name, String color, Long upStation, Long downStation, int distance, int duration) {
+        return LineSteps.createLine(name, color, upStation, downStation, distance, duration).jsonPath().getLong("id");
     }
 }

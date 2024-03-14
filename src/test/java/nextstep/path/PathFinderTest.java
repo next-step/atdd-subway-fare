@@ -42,28 +42,40 @@ public class PathFinderTest {
         수내역 = new Station("수내역");
         정자역 = new Station("정자역");
 
-        이호선 = new Line("2호선", "green", 교대역, 강남역, 10L);
-        신분당선 = new Line("신분당선", "red", 강남역, 양재역, 10L);
-        삼호선 = new Line("3호선", "orange", 교대역, 남부터미널역, 2L);
-        수인분당선 = new Line("수인분당선", "yellow", 수내역, 정자역, 2L);
+        이호선 = new Line("2호선", "green", 교대역, 강남역, 10, 3);
+        신분당선 = new Line("신분당선", "red", 강남역, 양재역, 10, 4);
+        삼호선 = new Line("3호선", "orange", 교대역, 남부터미널역, 2, 5);
+        수인분당선 = new Line("수인분당선", "yellow", 수내역, 정자역, 2, 6);
 
-        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3L));
+        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3, 6));
     }
 
-    @DisplayName("최단 경로를 조회한다")
+    @DisplayName("최단 거리 경로를 조회한다")
     @Test
-    void findPath() {
-        PathFinder pathFinder = new PathFinder();
+    void findPathByDistance() {
+        PathFinder pathFinder = new DistancePathFinder();
         Path path = pathFinder.findPath(Arrays.asList(이호선, 신분당선, 삼호선), 교대역, 양재역);
 
         assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
-        assertThat(path.getDistance()).isEqualTo(5L);
+        assertThat(path.getDistance()).isEqualTo(5);
+        assertThat(path.getDuration()).isEqualTo(11);
+    }
+
+    @DisplayName("최단 시간 경로를 조회한다")
+    @Test
+    void findPathByDuration() {
+        PathFinder pathFinder = new DurationPathFinder();
+        Path path = pathFinder.findPath(Arrays.asList(이호선, 신분당선, 삼호선), 교대역, 양재역);
+
+        assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
+        assertThat(path.getDistance()).isEqualTo(20);
+        assertThat(path.getDuration()).isEqualTo(7);
     }
 
     @DisplayName("출발역과 도착역이 같은 경우 에러를 반환한다.")
     @Test
     void validateEqualsStation() {
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new DistancePathFinder();
 
         assertThatThrownBy(() -> pathFinder.findPath(Arrays.asList(이호선, 신분당선, 삼호선), 교대역, 교대역))
                 .isInstanceOf(SubwayException.class)
@@ -73,7 +85,7 @@ public class PathFinderTest {
     @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우 에러를 반환한다.")
     @Test
     void validatePathExists() {
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new DistancePathFinder();
 
         assertThatThrownBy(() -> pathFinder.findPath(Arrays.asList(이호선, 수인분당선), 강남역, 수내역))
                 .isInstanceOf(SubwayException.class)
@@ -83,7 +95,7 @@ public class PathFinderTest {
     @DisplayName("존재하지 않은 출발역이나 도착역을 조회 할 경우 에러를 반환한다.")
     @Test
     void validateStationExists() {
-        PathFinder pathFinder = new PathFinder();
+        PathFinder pathFinder = new DistancePathFinder();
 
         assertThatThrownBy(() -> pathFinder.findPath(Arrays.asList(이호선), 강남역, 수내역))
                 .isInstanceOf(SubwayException.class)

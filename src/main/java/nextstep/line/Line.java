@@ -26,11 +26,11 @@ public class Line {
     public Line() {
     }
 
-    public Line(String name, String color, Station upStation, Station downStation, Long distance) {
+    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
         this.name = name;
         this.color = color;
 
-        Section section = new Section(this, upStation, downStation, distance);
+        Section section = new Section(this, upStation, downStation, distance, duration);
         sections.addSection(section);
     }
 

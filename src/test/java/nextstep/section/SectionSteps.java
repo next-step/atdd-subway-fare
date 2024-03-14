@@ -10,11 +10,12 @@ import java.util.Map;
 
 public class SectionSteps {
 
-    public static ExtractableResponse<Response> addSection(Long lineId, Long upStationId, Long downStationId, Long distance) {
-        Map<String, Long> params = new HashMap<>();
+    public static ExtractableResponse<Response> addSection(Long lineId, Long upStationId, Long downStationId, int distance, int duration) {
+        Map<String, Object> params = new HashMap<>();
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
 
         return RestAssured.given().log().all()
                 .body(params)

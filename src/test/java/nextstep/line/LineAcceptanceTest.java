@@ -31,7 +31,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void createLine() {
         // when
-        LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10L);
+        LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10, 5);
 
         // then
         List<String> lineNames = LineSteps.getLineNames();
@@ -47,8 +47,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLines() {
         // given
-        LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10L);
-        LineSteps.createLine("분당선", "bg-green-600", 1L, 3L, 10L);
+        LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10, 5);
+        LineSteps.createLine("분당선", "bg-green-600", 1L, 3L, 10, 5);
 
         // when
         List<String> lineNames = LineSteps.getLineNames();
@@ -67,7 +67,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void getLine() {
         // given
-        ExtractableResponse<Response> line = LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10L);
+        ExtractableResponse<Response> line = LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10, 5);
         String locationHeader = line.header("Location");
 
         // when
@@ -86,7 +86,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void updateLine() {
         // given
-        ExtractableResponse<Response> line = LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10L);
+        ExtractableResponse<Response> line = LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10, 5);
         String locationHeader = line.header("Location");
 
         // when
@@ -106,7 +106,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLine() {
         // given
-        ExtractableResponse<Response> line = LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10L);
+        ExtractableResponse<Response> line = LineSteps.createLine("신분당선", "bg-red-600", 1L, 2L, 10, 5);
         String locationHeader = line.header("Location");
 
         // when
