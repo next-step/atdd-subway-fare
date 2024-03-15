@@ -1,6 +1,9 @@
 package nextstep.core.subway.station.application.dto;
 
-import java.util.Objects;
+import nextstep.core.subway.section.domain.Section;
+import nextstep.core.subway.station.domain.Station;
+
+import java.util.*;
 
 public class StationResponse {
 
@@ -11,6 +14,24 @@ public class StationResponse {
     public StationResponse(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public static StationResponse toResponse(Station station) {
+        return new StationResponse(
+                station.getId(),
+                station.getName()
+        );
+    }
+
+    public static List<StationResponse> toResponses(List<Section> sections) {
+        Set<StationResponse> stationResponses = new LinkedHashSet<>();
+
+        sections.forEach(section -> {
+            stationResponses.add(toResponse(section.getUpStation()));
+            stationResponses.add(toResponse(section.getDownStation()));
+        });
+
+        return new ArrayList<>(stationResponses);
     }
 
     public Long getId() {

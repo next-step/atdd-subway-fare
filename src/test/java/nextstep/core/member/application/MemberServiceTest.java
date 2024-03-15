@@ -1,7 +1,7 @@
 package nextstep.core.member.application;
 
 import nextstep.common.annotation.ApplicationTest;
-import nextstep.core.auth.domain.LoginMember;
+import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.member.application.dto.MemberResponse;
 import nextstep.core.member.domain.Member;
 import nextstep.core.member.domain.MemberRepository;
@@ -60,7 +60,7 @@ public class MemberServiceTest {
             @Test
             void 내_이메일로_내_정보_조회() {
                 // when
-                MemberResponse me = memberService.findMe(new LoginMember(EXISTENT_EMAIL));
+                MemberResponse me = memberService.findMe(new LoginUser(EXISTENT_EMAIL));
 
                 // then
                 assertThat(me.getEmail()).isEqualTo(EXISTENT_EMAIL);
@@ -80,7 +80,7 @@ public class MemberServiceTest {
                 // when, then
                 assertThatExceptionOfType(NotFoundMemberException.class)
                         .isThrownBy(() -> {
-                            memberService.findMe(new LoginMember(NON_EXISTENT_EMAIL));
+                            memberService.findMe(new LoginUser(NON_EXISTENT_EMAIL));
                         })
                         .withMessageMatching("회원 정보가 없습니다.");
             }

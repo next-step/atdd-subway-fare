@@ -2,12 +2,12 @@ package nextstep.core.subway.favorite.application;
 
 import nextstep.core.member.domain.Member;
 import nextstep.core.member.exception.NonMatchingMemberException;
-import nextstep.core.subway.favorite.application.converter.FavoriteConverter;
 import nextstep.core.subway.favorite.application.dto.FavoriteRequest;
 import nextstep.core.subway.favorite.application.dto.FavoriteResponse;
 import nextstep.core.subway.favorite.domain.Favorite;
 import nextstep.core.subway.favorite.domain.FavoriteRepository;
-import nextstep.core.subway.pathFinder.application.PathFinderService;
+import nextstep.core.subway.path.application.PathService;
+import nextstep.core.subway.path.application.dto.PathRequest;
 import nextstep.core.subway.station.application.StationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,26 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-import static nextstep.core.subway.pathFinder.application.converter.PathFinderConverter.convertToRequest;
-
 @Transactional(readOnly = true)
 @Service
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
-    private final PathFinderService pathFinderService;
+    private final PathService pathService;
 
     private final StationService stationService;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, PathFinderService pathFinderService, StationService stationService) {
+    public FavoriteService(FavoriteRepository favoriteRepository, PathService pathService, StationService stationService) {
         this.favoriteRepository = favoriteRepository;
-        this.pathFinderService = pathFinderService;
+        this.pathService = pathService;
         this.stationService = stationService;
     }
 
     @Transactional
     public Favorite createFavorite(FavoriteRequest request, Long memberId) {
-        if (!pathFinderService.isValidPath(convertToRequest(request))) {
+        if (!pathService.isValidPath(PathRequest.toRequest(request))) {
             throw new IllegalArgumentException("출발역과 도착역을 잇는 경로가 없습니다.");
         }
         return favoriteRepository.save(createFavoriteEntity(request, memberId));
@@ -42,7 +40,7 @@ public class FavoriteService {
 
     public List<FavoriteResponse> findFavorites(Member member) {
         List<Favorite> favorites = favoriteRepository.findByMember(member.getId());
-        return FavoriteConverter.convertToResponses(favorites);
+        return FavoriteResponse.toResponse(favorites);
     }
 
     @Transactional

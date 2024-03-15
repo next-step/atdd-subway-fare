@@ -1,6 +1,5 @@
 package nextstep.core.subway.line.application;
 
-import nextstep.core.subway.line.application.converter.LineConverter;
 import nextstep.core.subway.line.application.dto.LineRequest;
 import nextstep.core.subway.line.application.dto.LineResponse;
 import nextstep.core.subway.line.domain.Line;
@@ -33,14 +32,14 @@ public class LineService {
 
     @Transactional
     public LineResponse createLine(LineRequest request) {
-        Line line = LineConverter.convertToLine(request);
+        Line line = LineRequest.toEntity(request);
         line.addSection(createSection(request, line));
-        return LineConverter.convertToResponse(lineRepository.save(line));
+        return LineResponse.toResponse(lineRepository.save(line));
     }
 
     public List<LineResponse> findAllLineResponses() {
         return lineRepository.findAll().stream()
-                .map(LineConverter::convertToResponse)
+                .map(LineResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +47,7 @@ public class LineService {
     public void updateLine(Long lineId, LineRequest request) {
         Line line = lineRepository.findById(lineId)
                 .orElseThrow(EntityNotFoundException::new);
-        LineConverter.convertToResponse(updateLine(request, line));
+        LineResponse.toResponse(updateLine(request, line));
     }
 
     @Transactional
@@ -57,7 +56,7 @@ public class LineService {
     }
 
     public LineResponse findLineWithConvertResponse(Long lineId) {
-        return LineConverter.convertToResponse(findLineById(lineId));
+        return LineResponse.toResponse(findLineById(lineId));
     }
 
     @Transactional

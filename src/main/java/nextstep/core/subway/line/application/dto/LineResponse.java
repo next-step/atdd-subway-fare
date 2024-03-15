@@ -1,5 +1,6 @@
 package nextstep.core.subway.line.application.dto;
 
+import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.station.application.dto.StationResponse;
 
 import java.util.List;
@@ -24,6 +25,14 @@ public class LineResponse {
         this.name = name;
         this.color = color;
         this.stations = stations;
+    }
+
+    public static LineResponse toResponse(Line line) {
+        return new LineResponse(
+                line.getId(),
+                line.getName(),
+                line.getColor(),
+                StationResponse.toResponses(line.getSortedAllSections()));
     }
 
     public Long getId() {

@@ -8,6 +8,7 @@ import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.domain.StationRepository;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+@DisplayName("노선 서비스 레이어 Mock 테스트")
 @ExtendWith(MockitoExtension.class)
 public class LineServiceMockTest {
 

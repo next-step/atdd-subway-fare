@@ -3,6 +3,7 @@ package nextstep.core.auth.application;
 import nextstep.core.auth.application.dto.GithubProfileResponse;
 import nextstep.core.auth.application.dto.TokenResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("토큰 서비스 레이어 Mock 테스트")
 @ExtendWith(MockitoExtension.class)
 public class TokenServiceMockTest {
 

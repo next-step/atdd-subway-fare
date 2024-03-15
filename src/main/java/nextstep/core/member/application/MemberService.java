@@ -1,6 +1,6 @@
 package nextstep.core.member.application;
 
-import nextstep.core.auth.domain.LoginMember;
+import nextstep.core.auth.domain.LoginUser;
 import nextstep.core.member.application.dto.MemberRequest;
 import nextstep.core.member.application.dto.MemberResponse;
 import nextstep.core.member.domain.Member;
@@ -42,8 +42,8 @@ public class MemberService {
         return memberRepository.findByEmail(email).orElseThrow(() -> new NotFoundMemberException("회원 정보가 없습니다."));
     }
 
-    public MemberResponse findMe(LoginMember loginMember) {
-        return memberRepository.findByEmail(loginMember.getEmail())
+    public MemberResponse findMe(LoginUser loginUser) {
+        return memberRepository.findByEmail(loginUser.getEmail())
                 .map(MemberResponse::of)
                 .orElseThrow(() -> new NotFoundMemberException("회원 정보가 없습니다."));
     }

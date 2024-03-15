@@ -1,6 +1,5 @@
 package nextstep.core.subway.station.application;
 
-import nextstep.core.subway.station.application.converter.StationConverter;
 import nextstep.core.subway.station.application.dto.StationRequest;
 import nextstep.core.subway.station.application.dto.StationResponse;
 import nextstep.core.subway.station.domain.Station;
@@ -24,12 +23,12 @@ public class StationService {
     @Transactional
     public StationResponse createStation(StationRequest stationRequest) {
         Station station = stationRepository.save(new Station(stationRequest.getName()));
-        return StationConverter.convertToResponse(station);
+        return StationResponse.toResponse(station);
     }
 
     public List<StationResponse> findAllStations() {
         return stationRepository.findAll().stream()
-                .map(StationConverter::convertToResponse)
+                .map(StationResponse::toResponse)
                 .collect(Collectors.toList());
     }
 

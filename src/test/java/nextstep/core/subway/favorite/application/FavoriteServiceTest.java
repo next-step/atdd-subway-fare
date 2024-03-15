@@ -12,7 +12,7 @@ import nextstep.core.subway.favorite.domain.Favorite;
 import nextstep.core.subway.favorite.domain.FavoriteRepository;
 import nextstep.core.subway.line.domain.Line;
 import nextstep.core.subway.line.domain.LineRepository;
-import nextstep.core.subway.pathFinder.application.PathFinderService;
+import nextstep.core.subway.path.application.PathService;
 import nextstep.core.subway.section.domain.Section;
 import nextstep.core.subway.section.domain.SectionRepository;
 import nextstep.core.subway.station.application.StationService;
@@ -43,7 +43,7 @@ public class FavoriteServiceTest {
     FavoriteRepository favoriteRepository;
 
     @Autowired
-    PathFinderService pathFinderService;
+    PathService pathService;
 
     @Autowired
     StationService stationService;
@@ -63,7 +63,7 @@ public class FavoriteServiceTest {
 
     @BeforeEach
     void 사전_서비스_객체_생성() {
-        favoriteService = new FavoriteService(favoriteRepository, pathFinderService, stationService);
+        favoriteService = new FavoriteService(favoriteRepository, pathService, stationService);
     }
 
     Station 교대;
@@ -117,10 +117,10 @@ public class FavoriteServiceTest {
         오이도역_번호 = 오이도.getId();
         가산디지털단지역_번호 = 가산디지털단지.getId();
 
-        이호선 = lineRepository.save(new Line("이호선", "green"));
-        신분당선 = lineRepository.save(new Line("신분당선", "red"));
-        삼호선 = lineRepository.save(new Line("삼호선", "orange"));
-        사호선 = lineRepository.save(new Line("사호선", "blue"));
+        이호선 = lineRepository.save(new Line("이호선", "green", 0));
+        신분당선 = lineRepository.save(new Line("신분당선", "red", 400));
+        삼호선 = lineRepository.save(new Line("삼호선", "orange", 800));
+        사호선 = lineRepository.save(new Line("사호선", "blue", 600));
 
         sectionRepository.save(new Section(교대, 강남, 10, 10, 이호선));
         sectionRepository.save(new Section(강남, 양재, 10, 10, 신분당선));

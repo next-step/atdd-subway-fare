@@ -9,6 +9,7 @@ import nextstep.core.subway.station.domain.Station;
 import nextstep.core.subway.station.domain.StationRepository;
 import nextstep.core.subway.station.fixture.StationFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@DisplayName("노선 서비스 레이어 테스트")
 @ApplicationTest
 public class LineServiceTest {
 
@@ -53,7 +55,7 @@ public class LineServiceTest {
         신천역_번호 = stationRepository.save(this.신천역).getId();
         존재하지_않는_강남역_번호 = 4L;
 
-        이호선_아이디 = lineRepository.save(new Line("이호선", "그린")).getId();
+        이호선_아이디 = lineRepository.save(new Line("이호선", "그린", 0)).getId();
         존재하지_않는_삼호선_아이디= 2L;
     }
 

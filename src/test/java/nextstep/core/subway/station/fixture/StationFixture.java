@@ -19,7 +19,9 @@ public class StationFixture {
     public static final Station 정왕 = new Station("정왕");
     public static final Station 오이도 = new Station("오이도");
     public static final Station 가산디지털단지 = new Station("가산디지털단지");
-
+    public static final Station 잠실 = new Station("잠실");
+    public static final Station 천호 = new Station("천호");
+    public static final Station 신설동 = new Station("신설동");
 
     public static final StationRequest 강남역 = new StationRequest("강남");
     public static final StationRequest 양재역 = new StationRequest("양재");
