@@ -42,12 +42,17 @@ public class PathFinderTest {
         수내역 = new Station("수내역");
         정자역 = new Station("정자역");
 
-        이호선 = new Line("2호선", "green", 교대역, 강남역, 10, 3);
-        신분당선 = new Line("신분당선", "red", 강남역, 양재역, 10, 4);
-        삼호선 = new Line("3호선", "orange", 교대역, 남부터미널역, 2, 5);
-        수인분당선 = new Line("수인분당선", "yellow", 수내역, 정자역, 2, 6);
+        Section 교대_강남_구간 = new Section(교대역, 강남역, 10, 3);
+        Section 강남_양재_구간 = new Section(강남역, 양재역, 10, 4);
+        Section 교대_남부터미널_구간 = new Section(교대역, 남부터미널역, 2, 5);
+        Section 수내_정자_구간 = new Section(수내역, 정자역, 2, 6);
 
-        삼호선.addSection(new Section(삼호선, 남부터미널역, 양재역, 3, 6));
+        이호선 = new Line("2호선", "green", 교대_강남_구간);
+        신분당선 = new Line("신분당선", "red", 강남_양재_구간);
+        삼호선 = new Line("3호선", "orange", 교대_남부터미널_구간);
+        수인분당선 = new Line("수인분당선", "yellow", 수내_정자_구간);
+
+        삼호선.addSection(new Section(남부터미널역, 양재역, 3, 6));
     }
 
     @DisplayName("최단 거리 경로를 조회한다")

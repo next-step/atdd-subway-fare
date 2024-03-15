@@ -1,5 +1,6 @@
 package nextstep.line;
 
+import nextstep.section.Section;
 import nextstep.section.SectionRequest;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
@@ -37,7 +38,8 @@ public class LineServiceMockTest {
         Station 강남역 = new Station("강남역");
         Station 역삼역 = new Station("역삼역");
         Station 선릉역 = new Station("선릉역");
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
 
         when(stationRepository.findById(역삼역아이디)).thenReturn(Optional.of(역삼역));
         when(stationRepository.findById(선릉역아이디)).thenReturn(Optional.of(선릉역));

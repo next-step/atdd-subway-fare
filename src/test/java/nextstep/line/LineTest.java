@@ -28,9 +28,10 @@ class LineTest {
     @DisplayName("지하철 노선 마지막에 구간을 등록한다.")
     @Test
     void addEndSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
 
-        Section section = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section section = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(section);
 
         assertThat(이호선.getOrderedStations()).containsExactly(강남역, 역삼역, 선릉역);
@@ -39,11 +40,12 @@ class LineTest {
     @DisplayName("지하철 노선 가운데에 구간을 등록한다.")
     @Test
     void addMiddleSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
-        Section nextSection = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
+        Section nextSection = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(nextSection);
 
-        Section middleSection = new Section(이호선, 역삼역, 삼성역, 3, 5);
+        Section middleSection = new Section(역삼역, 삼성역, 3, 5);
         이호선.addSection(middleSection);
 
         assertThat(nextSection.getUpStation()).isEqualTo(삼성역);
@@ -53,11 +55,12 @@ class LineTest {
     @DisplayName("지하철 노선 가운데에 구간 등록 시 다음 구간의 거리를 업데이트 한다.")
     @Test
     void updateNextSectionDistance() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
-        Section nextSection = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
+        Section nextSection = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(nextSection);
 
-        Section middleSection = new Section(이호선, 역삼역, 삼성역, 3, 5);
+        Section middleSection = new Section(역삼역, 삼성역, 3, 5);
         이호선.addSection(middleSection);
 
         assertThat(nextSection.getDistance()).isEqualTo(7L);
@@ -66,7 +69,8 @@ class LineTest {
     @DisplayName("지하철 노선의 지하철역 목록을 조회한다.")
     @Test
     void getStations() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
 
         assertThat(이호선.getOrderedStations()).containsExactly(강남역, 역삼역);
     }
@@ -79,8 +83,9 @@ class LineTest {
     @DisplayName("마지막 지하철역을 삭제하면 지하철역 목록 조회 시 생성한 역을 찾을 수 없다.")
     @Test
     void deleteEndSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
-        Section section = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
+        Section section = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(section);
 
         이호선.removeSection(선릉역);
@@ -96,11 +101,12 @@ class LineTest {
     @DisplayName("가운데 지하철역을 삭제하면 지하철역 목록 조회 시 생성한 역을 찾을 수 없다.")
     @Test
     void deleteMiddleSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
-        Section 역삼_선릉 = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
+        Section 역삼_선릉 = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(역삼_선릉);
 
-        Section 선릉_삼성 = new Section(이호선, 선릉역, 삼성역, 10, 5);
+        Section 선릉_삼성 = new Section(선릉역, 삼성역, 10, 5);
         이호선.addSection(선릉_삼성);
 
         이호선.removeSection(선릉역);
@@ -118,8 +124,9 @@ class LineTest {
     @DisplayName("상행 종점 역을 삭제하면 지하철역 목록 조회 시 생성한 역을 찾을 수 없다.")
     @Test
     void deleteStartSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
-        Section section = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
+        Section section = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(section);
 
         이호선.removeSection(강남역);
@@ -134,7 +141,8 @@ class LineTest {
     @DisplayName("구간이 1개인 경우 삭제하면 에러를 반환한다.")
     @Test
     void validateLastSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
 
         assertThrows(SubwayException.class, () -> 이호선.removeSection(강남역));
     }
@@ -147,8 +155,9 @@ class LineTest {
     @DisplayName("존재하지 않는 역을 삭제하면 에러를 반환한다.")
     @Test
     void validatePresent() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
-        Section section = new Section(이호선, 역삼역, 선릉역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
+        Section section = new Section(역삼역, 선릉역, 10, 5);
         이호선.addSection(section);
 
         assertThrows(SubwayException.class, () -> 이호선.removeSection(삼성역));
