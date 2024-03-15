@@ -2,7 +2,10 @@ package nextstep.subway.acceptance.path;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.auth.application.dto.TokenResponse;
 import nextstep.common.annotation.AcceptanceTest;
+import nextstep.member.acceptance.MemberSteps;
+import nextstep.member.acceptance.TokenSteps;
 import nextstep.subway.acceptance.fixture.LineFixture;
 import nextstep.subway.acceptance.fixture.SectionFixture;
 import nextstep.subway.acceptance.fixture.StationFixture;
@@ -33,6 +36,8 @@ public class PathAcceptanceTest {
     private Long 강남역아이디;
     private Long 양재역아이디;
     private Long 남부터미널역아이디;
+    private String email;
+    private String password;
 
     /**
      * 교대역    --- *2호선* ---   강남역
@@ -86,18 +91,82 @@ public class PathAcceptanceTest {
                 SectionFixture.createSectionParams(남부터미널역아이디, 양재역아이디, 3L, 10L),
                 "/lines/" + 삼호선.jsonPath().getLong("id") + "/sections"
         );
+        email = "test@email.com";
+        password = "password1234";
     }
 
 
     /**
-     * when 출발역과 마지막역을 기준으로 조회한다.
+     * given 어린이 회원을 생성하고 토큰을 조회한다.
+     * when 최단거리를 어린이 회원 토큰으로 조회 요청
      * then 출발역과 마지막역 사이의 모든 역을 조회할 수 있다.
      */
     @Test
-    @DisplayName("지하철 경로를 조회한다.")
-    void 지하철_경로_조회한다() {
+    @DisplayName("어린이 회원이 최단 거리 지하철 경로를 조회한다.")
+    void 어린이_지하철_경로_조회한다() {
+        //given
+        MemberSteps.회원_생성_요청(email, password, 1);
+        String accessToken = TokenSteps.토큰_생성요청(email, password).as(TokenResponse.class).getAccessToken();
+
         //when
-        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths", 교대역아이디, 양재역아이디, PathType.DISTANCE);
+        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths",
+                교대역아이디,
+                양재역아이디,
+                PathType.DISTANCE, accessToken);
+
+        //then
+        assertAll(
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(450)
+        );
+    }
+
+    /**
+     * given 청소년 회원을 생성하고 토큰을 조회한다.
+     * when 최단거리를 청소년 회원 토큰으로 조회 요청
+     * then 출발역과 마지막역 사이의 모든 역을 조회할 수 있다.
+     */
+    @Test
+    @DisplayName("청소년 회원이 최단 거리 지하철 경로를 조회한다.")
+    void 청소년_지하철_경로_조회한다() {
+        //given
+        MemberSteps.회원_생성_요청(email, password, 16);
+        String accessToken = TokenSteps.토큰_생성요청(email, password).as(TokenResponse.class).getAccessToken();
+
+        //when
+        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths",
+                교대역아이디,
+                양재역아이디,
+                PathType.DISTANCE, accessToken);
+
+        //then
+        assertAll(
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(720)
+        );
+    }
+
+    /**
+     * given 회원을 생성하고 토큰을 조회한다.
+     * when 최단거리를 청소년 회원 토큰으로 조회 요청
+     * then 출발역과 마지막역 사이의 모든 역을 조회할 수 있다.
+     */
+    @Test
+    @DisplayName("최단 거리 지하철 경로를 조회한다.")
+    void 지하철_경로_조회한다() {
+        //given
+        MemberSteps.회원_생성_요청(email, password, 22);
+        String accessToken = TokenSteps.토큰_생성요청(email, password).as(TokenResponse.class).getAccessToken();
+
+        //when
+        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 경로_조회_요청("/paths",
+                교대역아이디,
+                양재역아이디,
+                PathType.DISTANCE, accessToken);
 
         //then
         assertAll(
@@ -109,20 +178,26 @@ public class PathAcceptanceTest {
     }
 
     /**
+     * given 회원을 생성하고 토큰을 조회한다.
      * when 출발역과 마지막역을 동일한역으로 조회하면
      * then 에러가 발생한다.
      */
     @Test
     @DisplayName("출발역과 마지막역을 동일한 역으로 조회하면 에러가 발생한다.")
     void 출발역과_도착역이_같은_경로에러() {
+        //given
+        MemberSteps.회원_생성_요청(email, password, 13);
+        String accessToken = TokenSteps.토큰_생성요청(email, password).as(TokenResponse.class).getAccessToken();
+
         //when
-        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 교대역아이디, 교대역아이디, PathType.DISTANCE);
+        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 교대역아이디, 교대역아이디, PathType.DISTANCE, accessToken);
         //then
         assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     /**
      * given 서로 연결되어있지 않은 구간을 등록한다.
+     * and 회원을 생성하고 토큰을 조회한다.
      * when 출발역과 마지막역을 구간에 연결되어있지 않은역으로 조회하면
      * then 에러가 발생한다.
      */
@@ -130,6 +205,9 @@ public class PathAcceptanceTest {
     @DisplayName("출발역과 마지막역을 구간에 연결되어있지 역으로 조회하면 에러가 발생한다.")
     void 출발역과_도착역이_구간에_존재하지않으면_에러() {
         //given
+        MemberSteps.회원_생성_요청(email, password, 13);
+        String accessToken = TokenSteps.토큰_생성요청(email, password).as(TokenResponse.class).getAccessToken();
+
         ExtractableResponse<Response> 신림역 = 생성_요청(
                 StationFixture.createStationParams("신림역"),
                 "/stations");
@@ -151,14 +229,15 @@ public class PathAcceptanceTest {
                 "/lines");
 
         //when
-        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 신림역.jsonPath().getLong("id"), 사당역.jsonPath().getLong("id"), PathType.DISTANCE);
+        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 신림역.jsonPath().getLong("id"), 사당역.jsonPath().getLong("id"), PathType.DISTANCE, accessToken);
 
         //then
         assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
     }
 
     /**
-     * given 역을 등록한다.
+     * given 회원을 생성하고 토큰을 조회한다.
      * when 출발역과 마지막역을 존재하지 않은역으로 조회하면
      * then 에러가 발생한다.
      */
@@ -166,9 +245,11 @@ public class PathAcceptanceTest {
     @DisplayName("출발역과 마지막역을 존재하지않는 역으로 조회하면 에러가 발생한다.")
     void 출발역과_도착역이_존재하지않으면_에러() {
         //given
+        MemberSteps.회원_생성_요청(email, password, 13);
+        String accessToken = TokenSteps.토큰_생성요청(email, password).as(TokenResponse.class).getAccessToken();
 
         //when
-        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 888L, 999L, PathType.DISTANCE);
+        ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 888L, 999L, PathType.DISTANCE, accessToken);
         //then
         assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
