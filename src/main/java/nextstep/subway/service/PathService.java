@@ -5,6 +5,7 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
+import nextstep.subway.domain.farecalculation.FareCalculation;
 import nextstep.subway.domain.pathfinder.ShortestDistancePathFinder;
 import nextstep.subway.domain.pathfinder.ShortestDurationPathFinder;
 import nextstep.subway.domain.repository.LineRepository;
@@ -25,18 +26,22 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType pathType) {
+    public PathResponse findPath(Long source, Long target, PathType pathType, int age) {
         List<Line> lines = lineRepository.findAll();
         Station sourceStation = stationService.getStationById(source);
         Station targetStation = stationService.getStationById(target);
 
+        Path path;
         if (PathType.DISTANCE == pathType) {
             ShortestDistancePathFinder pathFinder = new ShortestDistancePathFinder(lines);
-            Path path = pathFinder.findPath(sourceStation, targetStation);
-            return PathResponse.from(path);
+            path = pathFinder.findPath(sourceStation, targetStation);
+        } else {
+            ShortestDurationPathFinder pathFinder = new ShortestDurationPathFinder(lines);
+            path = pathFinder.findPath(sourceStation, targetStation);
         }
-        ShortestDurationPathFinder pathFinder = new ShortestDurationPathFinder(lines);
-        Path path = pathFinder.findPath(sourceStation, targetStation);
-        return PathResponse.from(path);
+
+        int fare = FareCalculation.getFareCalculation(path.getDistance(), age);
+
+        return PathResponse.from(path, fare);
     }
 }

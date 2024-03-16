@@ -13,15 +13,31 @@ public class FareCalculationTest {
 
     @ParameterizedTest
     @CsvSource({
-            "10, 1250, 20",
-            "12, 1350, 20",
-            "51, 2150, 20"
+            "10, 1250",
+            "12, 1350",
+            "51, 2150"
     })
-    void 요금계산(Long distance, int fare, int age) {
+    void 거리_요금계산(Long distance, int fare) {
         //given
 
         //when
-        int fareResult = FareCalculation.getFareByDistance(distance, age);
+        int fareResult = FareCalculation.getFareByDistance(distance);
+
+        //then
+        assertThat(fareResult).isEqualTo(fare);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1250, 20",
+            "1350, 20",
+            "2150, 20"
+    })
+    void 나이_요금계산(int fare, int age) {
+        //given
+
+        //when
+        int fareResult = FareCalculation.getFareByAge(fare, age);
 
         //then
         assertThat(fareResult).isEqualTo(fare);
