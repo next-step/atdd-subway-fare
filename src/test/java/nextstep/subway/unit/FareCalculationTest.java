@@ -13,15 +13,15 @@ public class FareCalculationTest {
 
     @ParameterizedTest
     @CsvSource({
-            "10, 1250",
-            "12, 1350",
-            "51, 2150"
+            "10, 1250, 20",
+            "12, 1350, 20",
+            "51, 2150, 20"
     })
-    void 요금계산(Long distance, int fare) {
+    void 요금계산(Long distance, int fare, int age) {
         //given
 
         //when
-        int fareResult = FareCalculation.getFareByDistance(distance);
+        int fareResult = FareCalculation.getFareByDistance(distance, age);
 
         //then
         assertThat(fareResult).isEqualTo(fare);
