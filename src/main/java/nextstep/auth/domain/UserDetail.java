@@ -13,8 +13,9 @@ public class UserDetail {
     public UserDetail() {
     }
 
-    public UserDetail(String email) {
+    public UserDetail(String email, Integer age) {
         this.email = email;
+        this.age = age;
     }
 
     @Builder
