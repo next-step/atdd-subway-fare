@@ -1,16 +1,25 @@
 package nextstep.subway.domain;
 
 import nextstep.subway.domain.entity.Section;
+import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
 
-public class SubwayMapByDuration extends SubwayMap {
+public class SubwayMapByDuration implements PathFinder{
+	private final SubwayMap subwayMap;
+
 	public SubwayMapByDuration(List<Section> sections) {
-		super(sections);
+		this.subwayMap = new SubwayMap();
+
+		sections.forEach(this::addSection);
+	}
+	@Override
+	public Path getShortestPath(Long source, Long target) {
+		return subwayMap.getShortestPath(source, target);
 	}
 
-	@Override
-	protected void addSection(Section section) {
+	private void addSection(Section section) {
+		WeightedMultigraph weightedMultigraph = subwayMap.getWeightedMultigraph();
 		weightedMultigraph.addVertex(section.getDownStationId());
 		weightedMultigraph.addVertex(section.getUpStationId());
 

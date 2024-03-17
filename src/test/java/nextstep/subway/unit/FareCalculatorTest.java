@@ -1,9 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.FareCalculator;
-import nextstep.subway.domain.Path;
-import nextstep.subway.domain.SubwayMap;
-import nextstep.subway.domain.SubwayMapByDistance;
+import nextstep.subway.domain.*;
 import nextstep.subway.domain.entity.Line;
 import nextstep.subway.domain.entity.Section;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +11,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FareCalculatorTest {
-    private SubwayMap subwayMap;
+    private PathFinder subwayMap;
     private FareCalculator fareCalculator;
 
     @BeforeEach
@@ -37,7 +34,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFare10Km() {
-        Path path = subwayMap.getShortesPath(1L, 2L);
+        Path path = subwayMap.getShortestPath(1L, 2L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(1250);
     }
@@ -48,7 +45,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFareOver10Km() {
-        Path path = subwayMap.getShortesPath(1L, 3L);
+        Path path = subwayMap.getShortestPath(1L, 3L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(1450);
     }
@@ -59,7 +56,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFare50Km() {
-        Path path = subwayMap.getShortesPath(1L, 5L);
+        Path path = subwayMap.getShortestPath(1L, 5L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(2050);
     }
@@ -70,7 +67,7 @@ public class FareCalculatorTest {
      */
     @Test
     void calculateFareOver50Km() {
-        Path path = subwayMap.getShortesPath(1L, 6L);
+        Path path = subwayMap.getShortestPath(1L, 6L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(2250);
     }

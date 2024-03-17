@@ -6,7 +6,7 @@ import nextstep.subway.ui.controller.PathType;
 import java.util.List;
 
 public class SubwayMapFactory {
-	public static SubwayMap getSubwayMap(List<Section> sections, PathType type) {
+	public static PathFinder getSubwayMap(List<Section> sections, PathType type) {
 		switch (type) {
 			case DISTANCE:
 				return new SubwayMapByDistance(sections);

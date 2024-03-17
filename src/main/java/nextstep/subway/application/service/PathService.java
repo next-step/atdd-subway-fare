@@ -22,8 +22,8 @@ public class PathService {
 	}
 
 	public PathResponse getPath(Long source, Long target, PathType type) {
-		SubwayMap subwayMap = SubwayMapFactory.getSubwayMap(sectionService.findAll(), type);
-		Path path = subwayMap.getShortesPath(source, target);
+		PathFinder subwayMap = SubwayMapFactory.getSubwayMap(sectionService.findAll(), type);
+		Path path = subwayMap.getShortestPath(source, target);
 		int fare = new FareCalculator(path).getFare();
 
 		return createPathResponse(path.getStations(), type, path.getDistance(), path.getDuration(), fare);

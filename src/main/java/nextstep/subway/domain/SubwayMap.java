@@ -1,6 +1,5 @@
 package nextstep.subway.domain;
 
-import nextstep.subway.domain.entity.Section;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -9,18 +8,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class SubwayMap {
-	protected List<Section> sections;
-	protected WeightedMultigraph<Long, SectionWeightedEdge> weightedMultigraph;
+public class SubwayMap implements PathFinder {
+	private final WeightedMultigraph<Long, SectionWeightedEdge> weightedMultigraph;
 
-	public SubwayMap(List<Section> sections) {
+	public SubwayMap() {
 		weightedMultigraph = new WeightedMultigraph<>(SectionWeightedEdge.class);
-		this.sections = sections;
-
-		sections.forEach(this::addSection);
 	}
 
-	public Path getShortesPath(Long source, Long target) {
+	public WeightedMultigraph<Long, SectionWeightedEdge> getWeightedMultigraph() {
+		return weightedMultigraph;
+	}
+
+	@Override
+	public Path getShortestPath(Long source, Long target) {
 		DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath<>(weightedMultigraph);
 		GraphPath graphPath;
 
@@ -41,6 +41,4 @@ public abstract class SubwayMap {
 						.map(SectionWeightedEdge::getSection)
 						.collect(Collectors.toList()));
 	}
-
-	protected abstract void addSection(Section section);
 }
