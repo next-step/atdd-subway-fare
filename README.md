@@ -120,9 +120,12 @@ And 지하철 이용 요금도 함께 응답함
 
 ## TODO
 - [ ] 경로 인수 테스트 수정
-  - [ ] 노선별 추가 요금 반영
+  - [x] 노선별 추가 요금 반영
   - [ ] 로그인 사용자 케이스 추가
+- [ ] 추가 요금 정책에 대한 도메인 테스트 추가
+  - [x] 노선별 추가 요금
+  - [ ] 연령별 요금
 - FarePolicy 추가
-  - [ ] LinePolicy
-    - [ ] Line 객체에 additionalFee 변수 추가
+  - [x] LinePolicy
+    - [x] Line 객체에 additionalFee 변수 추가
   - [ ] AgePolicy
