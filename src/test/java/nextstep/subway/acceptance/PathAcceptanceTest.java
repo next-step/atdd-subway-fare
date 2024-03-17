@@ -88,7 +88,7 @@ public class PathAcceptanceTest {
 	@Test
 	void 경로가_존재하지_않으면_조회_실패() {
 		// given
-		노선_생성_요청("1-1호선", "파랑", 판교역, 양재역, 8, 1).jsonPath().getLong("id");
+		노선_생성_요청("1-1호선", "파랑", 판교역, 양재역, 8, 1, 0).jsonPath().getLong("id");
 
 		// when & then
 		실패시_코드값_메시지_검증(최단_경로_조회_요청(학여울역, 양재역, PathType.DISTANCE), HttpStatus.BAD_REQUEST.value(),"경로가 존재하지 않습니다.");

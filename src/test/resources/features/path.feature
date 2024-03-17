@@ -15,10 +15,10 @@ Feature: 지하철 경로 관련 기능
       | 양재역   |
       | 수원역   |
     And 지하철 노선을 생성하고
-      | name  | color  | startStation | endStation | distance | duration |
-      | 분당선 | 노랑    | 도곡역        | 학여울역    | 6       |    4      |
-      | 삼호선 | 주황    | 도곡역        | 개포동역    | 4       |    5      |
-      | 신분당선 | 파랑   | 판교역       | 양재역      | 3       |    1      |
+      | name  | color  | startStation | endStation | distance | duration |additionalFee|
+      | 분당선 | 노랑    | 도곡역        | 학여울역    | 6       |    4       |    0         |
+      | 삼호선 | 주황    | 도곡역        | 개포동역    | 4       |    5       |    200       |
+      | 신분당선 | 파랑   | 판교역       | 양재역      | 3       |    1       |    500       |
     And 지하철 구간을 생성하고
       | downStation| upStation | distance| duration | lineName |
       | 수서역       | 학여울역    | 10     |     5    | 분당선   |
