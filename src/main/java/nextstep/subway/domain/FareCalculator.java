@@ -7,7 +7,7 @@ public class FareCalculator {
     private int fare;
 
     public FareCalculator(Path path) {
-        this.policies = List.of(new DistancePolicy(path.getDistance()));
+        this.policies = List.of(new DistancePolicy(path.getDistance()), new LinePolicy(path.getSections()));
         this.fare = 1250;
         calculateFare();
     }

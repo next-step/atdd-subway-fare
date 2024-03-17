@@ -17,6 +17,10 @@ public class Path {
         return stations;
     }
 
+    public List<Section> getSections() {
+        return sections;
+    }
+
     public int getDistance() {
         return sections.stream()
                 .mapToInt(Section::getDistance)
