@@ -16,14 +16,18 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public Member findMemberById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("회원 정보가 존재하지 않습니다."));
+    }
+
     public MemberResponse createMember(MemberRequest request) {
         Member member = memberRepository.save(request.toMember());
         return MemberResponse.of(member);
     }
 
     public MemberResponse findMember(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(RuntimeException::new);
-        return MemberResponse.of(member);
+        return MemberResponse.of(findMemberById(id));
     }
 
     public void updateMember(Long id, MemberRequest param) {
@@ -33,11 +37,5 @@ public class MemberService {
 
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
-    }
-
-    public MemberResponse findMe(Long id) {
-        return memberRepository.findById(id)
-                .map(MemberResponse::of)
-                .orElseThrow(() -> new EntityNotFoundException("회원 정보가 존재하지 않습니다."));
     }
 }

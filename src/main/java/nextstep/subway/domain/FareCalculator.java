@@ -1,6 +1,6 @@
 package nextstep.subway.domain;
 
-import nextstep.auth.domain.UserDetail;
+import nextstep.member.domain.entity.Member;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ public class FareCalculator {
         calculateFare();
     }
 
-    public FareCalculator(Path path, UserDetail userDetail) {
-        this.policies = List.of(new DistancePolicy(path.getDistance()), new LinePolicy(path.getSections()), new AgePolicy(userDetail.getAge()));
+    public FareCalculator(Path path, Member member) {
+        this.policies = List.of(new DistancePolicy(path.getDistance()), new LinePolicy(path.getSections()), new AgePolicy(member.getAge()));
         this.fare = 1250;
         calculateFare();
     }

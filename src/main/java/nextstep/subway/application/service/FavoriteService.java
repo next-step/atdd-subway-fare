@@ -24,7 +24,7 @@ public class FavoriteService {
     }
 
     public FavoriteResponse saveFavorite(Long memberId, FavoriteRequest request) {
-        validFavoriteRequest(request);
+        validFavoriteRequest(memberId, request);
         Favorite favorite = new Favorite(memberId, request.getPathType(), request.getSource(), request.getTarget());
         return createFavoriteResponse(favoriteRepository.save(favorite));
     }
@@ -46,11 +46,11 @@ public class FavoriteService {
         favoriteRepository.deleteById(id);
     }
 
-    private void validFavoriteRequest(FavoriteRequest request) {
+    private void validFavoriteRequest(Long memberId, FavoriteRequest request) {
         stationService.findStationById(request.getSource());
         stationService.findStationById(request.getTarget());
 
-        pathService.getPath(request.getSource(), request.getTarget(), request.getPathType());
+        pathService.getPath(memberId, request.getSource(), request.getTarget(), request.getPathType());
     }
 
     private FavoriteResponse createFavoriteResponse(Favorite favorite) {

@@ -1,7 +1,7 @@
 package nextstep.subway.domain;
 
 public class DistancePolicy implements FarePolicy{
-    private int distance;
+    private final int distance;
 
     public DistancePolicy(int distance) {
         this.distance = distance;
