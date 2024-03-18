@@ -1,5 +1,6 @@
 package nextstep.subway.unit;
 
+import nextstep.auth.domain.UserDetail;
 import nextstep.subway.domain.*;
 import nextstep.subway.domain.entity.Line;
 import nextstep.subway.domain.entity.Section;
@@ -102,5 +103,23 @@ public class FareCalculatorTest {
         Path path = subwayMap.getShortestPath(6L, 8L);
         fareCalculator = new FareCalculator(path);
         assertThat(fareCalculator.getFare()).isEqualTo(2450);
+    }
+
+    @Test
+    @DisplayName("사용자가 어린이면 운임에서 350원을 공제한 금액의 50%할인이 적용된다.")
+    void whenUserIsChildThenFareIsDiscounted() {
+        Path path = subwayMap.getShortestPath(6L, 8L);
+        UserDetail userDetail = new UserDetail("email@email.com", "password", 12);
+        fareCalculator = new FareCalculator(path, userDetail);
+        assertThat(fareCalculator.getFare()).isEqualTo(1050);
+    }
+
+    @Test
+    @DisplayName("사용자가 청소년이면 운임에서 350원을 공제한 금액의 20%할인이 적용된다.")
+    void whenUserIsTeenagerThenFareIsDiscounted() {
+        Path path = subwayMap.getShortestPath(6L, 8L);
+        UserDetail userDetail = new UserDetail("email@email.com", "password", 18);
+        fareCalculator = new FareCalculator(path, userDetail);
+        assertThat(fareCalculator.getFare()).isEqualTo(1680);
     }
 }
