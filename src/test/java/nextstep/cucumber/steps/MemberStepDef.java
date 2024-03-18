@@ -23,11 +23,8 @@ public class MemberStepDef implements En {
 							String email = params.get("email");
 							String password = params.get("password");
 
-							ExtractableResponse<Response> response = 회원_생성_요청(
-									email,
-									password,
-									Integer.parseInt(params.get("age"))
-							);
+							회원_생성_요청(email, password, Integer.parseInt(params.get("age")));
+
 							context.store.put(email, 토큰_생성_요청(email, password).jsonPath().getString("accessToken"));
 						})
 		);

@@ -4,4 +4,6 @@ public interface FarePolicy {
     int getAdditionalFee();
 
     int getDiscountFee();
+
+    double getDiscountPercent();
 }

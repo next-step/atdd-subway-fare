@@ -24,4 +24,9 @@ public class LinePolicy implements FarePolicy {
 	public int getDiscountFee() {
 		return 0;
 	}
+
+	@Override
+	public double getDiscountPercent() {
+		return 0;
+	}
 }

@@ -17,6 +17,11 @@ public class DistancePolicy implements FarePolicy{
         return 0;
     }
 
+    @Override
+    public double getDiscountPercent() {
+        return 0;
+    }
+
     private int getFeeOver50Km(int distance) {
         int extraDistance = distance - 50;
 
