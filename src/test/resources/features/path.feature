@@ -23,6 +23,12 @@ Feature: 지하철 경로 관련 기능
       | downStation| upStation | distance| duration | lineName |
       | 수서역       | 학여울역    | 10     |     5    | 분당선   |
       | 수서역       | 개포동역    | 8      |     5    | 삼호선   |
+    And 사용자 정보와 토큰 정보를 생성하고
+      |        email        | password | age |
+      | child@email.com     | child    | 8   |
+      | teenager@email.com  | teenager | 13  |
+      | adult@email.com     | adult    | 20  |
+
 
   Scenario: 경로가 다건일 경우, 최단 거리 경로 조회 성공
     When "수서역"부터 "도곡역"까지의 최단 "거리" 경로를 조회하면
@@ -41,6 +47,21 @@ Feature: 지하철 경로 관련 기능
     Then 경로에 있는 역 목록은 "학여울역,도곡역,개포동역" 순서대로 구성된다
     And 경로의 소요 거리는 "10"이고 소요 시간은 "9"이다
     And 이용 요금은 "1450"원 이다
+
+  Scenario: 사용자가 성인인 경우 요금을 정가로 계산한다.
+    Given 사용자 "adult@email.com"은 성인이다
+    When 사용자 "adult@email.com"이 "수서역"부터 "도곡역"까지의 최단 "거리" 경로를 조회하면
+    Then 이용 요금은 "1550"원 이다
+
+  Scenario: 사용자가 청소년인 경우 요금을 20% 할인한다.
+    Given 사용자 "teenager@email.com"은 청소년이다
+    When 사용자 "teenager@email.com"이 "수서역"부터 "도곡역"까지의 최단 "거리" 경로를 조회하면
+    And 이용 요금은 "960"원 이다
+
+  Scenario: 사용자가 어린이인 경우 요금을 20% 할인한다.
+    Given 사용자 "child@email.com"은 어린이다
+    When 사용자 "child@email.com"이 "수서역"부터 "도곡역"까지의 최단 "거리" 경로를 조회하면
+    And 이용 요금은 "600"원 이다
 
   Scenario: 경로가 존재하지 않으면 조회 실패
     When "학여울역"부터 "양재역"까지의 최단 "거리" 경로를 조회하면

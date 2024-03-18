@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class LinePolicy implements FarePolicy {
-	private List<Section> sections;
+	private final List<Section> sections;
 
 	public LinePolicy(List<Section> sections) {
 		this.sections = sections;
