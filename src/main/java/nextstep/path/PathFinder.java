@@ -2,7 +2,7 @@ package nextstep.path;
 
 import nextstep.exception.SubwayException;
 import nextstep.line.Line;
-import nextstep.section.Section;
+import nextstep.path.fare.Fare;
 import nextstep.station.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -22,22 +22,33 @@ public class PathFinder {
     public PathResponse findPath(Station source, Station target, PathType pathType) {
         validateEqualsStation(source, target);
 
-        WeightedMultigraph<Station, PathWeightEdge> graph = createGraph(pathType);
-        validateStationExists(graph, source, target);
-
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-        GraphPath<Station, PathWeightEdge> path = Optional.ofNullable(dijkstraShortestPath.getPath(source, target))
-                .orElseThrow(() -> new SubwayException("출발역과 도착역이 연결이 되어 있지 않습니다."));
+        GraphPath<Station, PathWeightEdge> path = getGraphPath(source, target, pathType);
 
         int distance = path.getEdgeList().stream().mapToInt(PathWeightEdge::getDistance).sum();
         int duration = path.getEdgeList().stream().mapToInt(PathWeightEdge::getDuration).sum();
-        return new PathResponse(path.getVertexList(), distance, duration);
+        int shortestDistance = distance;
+        if (pathType == PathType.DURATION) {
+            shortestDistance = getShortestDistance(source, target);
+        }
+        int fare = Fare.calculate(shortestDistance);
+
+        return new PathResponse(path.getVertexList(), distance, duration, fare);
     }
 
     private void validateEqualsStation(Station source, Station target) {
         if (source.equals(target)) {
             throw new SubwayException("출발역과 도착역이 같습니다.");
         }
+    }
+
+    private GraphPath<Station, PathWeightEdge> getGraphPath(Station source, Station target, PathType pathType) {
+        WeightedMultigraph<Station, PathWeightEdge> graph = createGraph(pathType);
+        validateStationExists(graph, source, target);
+
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+        GraphPath<Station, PathWeightEdge> path = Optional.ofNullable(dijkstraShortestPath.getPath(source, target))
+                .orElseThrow(() -> new SubwayException("출발역과 도착역이 연결이 되어 있지 않습니다."));
+        return path;
     }
 
     private WeightedMultigraph<Station, PathWeightEdge> createGraph(PathType pathType) {
@@ -67,5 +78,10 @@ public class PathFinder {
 
     public void isValidateRoute(Station source, Station target, PathType type) {
         this.findPath(source, target, type);
+    }
+
+    private int getShortestDistance(Station source, Station target) {
+        GraphPath<Station, PathWeightEdge> graphPath = getGraphPath(source, target, PathType.DISTANCE);
+        return graphPath.getEdgeList().stream().mapToInt(PathWeightEdge::getDistance).sum();
     }
 }
