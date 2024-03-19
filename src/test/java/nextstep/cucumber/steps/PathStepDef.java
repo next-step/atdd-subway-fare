@@ -32,6 +32,9 @@ public class PathStepDef implements En {
             assertThat(context.response.jsonPath().getInt("distance")).isEqualTo(distance);
         });
 
+        And("지하철 이용 요금 {int}원을 응답한다", (Integer fare) -> {
+            assertThat(context.response.jsonPath().getInt("fare")).isEqualTo(fare);
+        });
     }
 
     private void getPath(String source, String target, String type) {
