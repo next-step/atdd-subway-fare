@@ -1,25 +1,20 @@
 package nextstep.path;
 
-import nextstep.line.Line;
-import nextstep.station.Station;
+import nextstep.section.Section;
 
-import java.util.List;
+import java.util.function.Function;
 
 public enum PathType {
 
-    DISTANCE(new DistancePathFinder()), DURATION(new DurationPathFinder());
+    DISTANCE(Section::getDistance), DURATION(Section::getDuration);
 
-    private final PathFinder pathFinder;
+    private final Function<Section, Integer> weightStrategy;
 
-    PathType(PathFinder pathFinder) {
-        this.pathFinder = pathFinder;
+    PathType(final Function<Section, Integer> weightStrategy) {
+        this.weightStrategy = weightStrategy;
     }
 
-    public Path findPath(List<Line> lines, Station source, Station target) {
-        return pathFinder.findPath(lines, source, target);
-    }
-
-    public PathFinder getPathFinder() {
-        return pathFinder;
+    public int getWeight(final Section section) {
+        return weightStrategy.apply(section);
     }
 }

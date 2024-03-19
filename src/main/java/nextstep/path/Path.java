@@ -2,29 +2,31 @@ package nextstep.path;
 
 import nextstep.station.Station;
 
-import java.util.List;
-
 public class Path {
 
-    private List<Station> stations;
-    private int distance;
-    private int duration;
+    private PathFinder pathFinder;
+    private Station sourceStation;
+    private Station targetStation;
+    private PathType type;
 
-    public Path(List<Station> stations, int distance, int duration) {
-        this.stations = stations;
-        this.distance = distance;
-        this.duration = duration;
+    public Path(PathFinder pathFinder, Station sourceStation, Station targetStation) {
+        this.pathFinder = pathFinder;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
+        this.type = PathType.DISTANCE;
     }
 
-    public List<Station> getStations() {
-        return stations;
+    public Path(PathFinder pathFinder, Station sourceStation, Station targetStation, PathType type) {
+        this(pathFinder, sourceStation, targetStation);
+        this.type = type;
     }
 
-    public int getDistance() {
-        return distance;
+    public PathResponse findPath(){
+        PathResponse pathResponse = pathFinder.findPath(sourceStation, targetStation, type);
+        return pathResponse;
     }
 
-    public int getDuration() {
-        return duration;
+    public void isValidateRoute(){
+        pathFinder.isValidateRoute(sourceStation, targetStation, type);
     }
 }
