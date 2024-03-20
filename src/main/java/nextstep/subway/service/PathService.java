@@ -46,20 +46,4 @@ public class PathService {
 
         return PathResponse.from(path, fare);
     }
-
-    private static long additionalFares(List<Line> lines, List<Station> stations) {
-        Map<Line, Long> additionalFares = new HashMap<>();
-        for (Station station : stations) {
-            for (Line line : lines) {
-                if (line.getSections().getOrderedStations().contains(station)) {
-                    additionalFares.put(line, line.getAdditionalFare());
-                }
-            }
-        }
-
-        return additionalFares.values().stream()
-                .mapToLong(Long::longValue)
-                .max()
-                .orElse(0L);
-    }
 }

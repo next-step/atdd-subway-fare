@@ -23,7 +23,7 @@ public class PathController {
             @RequestParam("source") Long source,
             @RequestParam("target") Long target,
             @RequestParam("type") PathType pathType,
-            @AuthenticationPrincipal UserDetail userDetail
+            @AuthenticationPrincipal(required = false) UserDetail userDetail
     ) {
         return ResponseEntity.ok().body(pathService.findPath(source, target, pathType, userDetail.getAge()));
     }
