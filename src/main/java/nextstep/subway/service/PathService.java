@@ -12,7 +12,9 @@ import nextstep.subway.domain.repository.LineRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,8 +42,24 @@ public class PathService {
             path = pathFinder.findPath(sourceStation, targetStation);
         }
 
-        int fare = FareCalculation.getFareCalculation(path.getDistance(), age);
+        int fare = FareCalculation.getFareCalculation(path.getDistance(), age, path.getAdditionalFare());
 
         return PathResponse.from(path, fare);
+    }
+
+    private static long additionalFares(List<Line> lines, List<Station> stations) {
+        Map<Line, Long> additionalFares = new HashMap<>();
+        for (Station station : stations) {
+            for (Line line : lines) {
+                if (line.getSections().getOrderedStations().contains(station)) {
+                    additionalFares.put(line, line.getAdditionalFare());
+                }
+            }
+        }
+
+        return additionalFares.values().stream()
+                .mapToLong(Long::longValue)
+                .max()
+                .orElse(0L);
     }
 }

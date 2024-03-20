@@ -9,9 +9,9 @@ public class FareCalculation {
     private static final double CHILDREN_DISCOUNT_RATE = 0.5;
     private static final double TEENAGE_DISCOUNT_RATE = 0.8;
 
-    public static int getFareCalculation(Long distance, int age) {
+    public static int getFareCalculation(Long distance, int age, Long additionalFare) {
         int fare = getFareByDistance(distance);
-        return getFareByAge(fare, age);
+        return getFareByAge(fare + additionalFare.intValue(), age);
     }
 
     public static int getFareByDistance(Long distance) {

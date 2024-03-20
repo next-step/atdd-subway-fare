@@ -41,6 +41,7 @@ public class LineService {
                 .downStation(downStation)
                 .distance(lineCreateRequest.getDistance())
                 .duration(lineCreateRequest.getDuration())
+                .additionalFare(lineCreateRequest.getAdditionalFare())
                 .build();
 
         line = lineRepository.save(line);
