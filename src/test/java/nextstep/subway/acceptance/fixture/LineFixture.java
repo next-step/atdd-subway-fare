@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LineFixture {
-    public static Map<String, Object> createLineParams(String name, String color, Long upStationId, Long downStationId, Long distance, Long duration) {
+    public static Map<String, Object> createLineParams(String name, String color, Long upStationId, Long downStationId, Long distance, Long duration, Long additionalFare) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -12,6 +12,7 @@ public class LineFixture {
         params.put("downStationId", downStationId);
         params.put("distance", distance);
         params.put("duration", duration);
+        params.put("additionalFare", additionalFare);
         return params;
     }
 

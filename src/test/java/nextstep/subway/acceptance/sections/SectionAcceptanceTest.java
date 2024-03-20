@@ -41,7 +41,7 @@ public class SectionAcceptanceTest {
                 "/stations");
 
         신림선 = 생성_요청(
-                LineFixture.createLineParams("신림선", "BLUE", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L, 10L),
+                LineFixture.createLineParams("신림선", "BLUE", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 20L, 10L, 500L),
                 "/lines");
     }
 

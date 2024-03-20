@@ -50,6 +50,7 @@ public class LineServiceTest {
                 .downStation(보라매역)
                 .distance(10L)
                 .duration(10L)
+                .additionalFare(500L)
                 .build());
     }
 

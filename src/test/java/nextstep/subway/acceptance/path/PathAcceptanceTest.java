@@ -69,7 +69,8 @@ public class PathAcceptanceTest {
                         교대역아이디,
                         강남역아이디,
                         10L,
-                        10L),
+                        10L,
+                        500L),
                 "/lines");
         신분당선 = 생성_요청(
                 LineFixture.createLineParams("신분당선",
@@ -77,7 +78,8 @@ public class PathAcceptanceTest {
                         강남역아이디,
                         양재역아이디,
                         10L,
-                        10L),
+                        10L,
+                        0L),
                 "/lines");
         삼호선 = 생성_요청(
                 LineFixture.createLineParams("3호선",
@@ -85,7 +87,8 @@ public class PathAcceptanceTest {
                         교대역아이디,
                         남부터미널역아이디,
                         2L,
-                        10L),
+                        10L,
+                        900L),
                 "/lines");
         생성_요청(
                 SectionFixture.createSectionParams(남부터미널역아이디, 양재역아이디, 3L, 10L),
@@ -119,7 +122,7 @@ public class PathAcceptanceTest {
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
-                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(450)
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(900)
         );
     }
 
@@ -146,7 +149,7 @@ public class PathAcceptanceTest {
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
-                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(720)
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(1440)
         );
     }
 
@@ -173,7 +176,7 @@ public class PathAcceptanceTest {
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
                 () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
-                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(1250)
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(2150)
         );
     }
 
@@ -222,10 +225,10 @@ public class PathAcceptanceTest {
                 "/stations");
 
         생성_요청(
-                LineFixture.createLineParams("신림선", "GRAY", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 10L, 10L),
+                LineFixture.createLineParams("신림선", "GRAY", 신림역.jsonPath().getLong("id"), 보라매역.jsonPath().getLong("id"), 10L, 10L, 500L),
                 "/lines");
         생성_요청(
-                LineFixture.createLineParams("4호선", "BLUE", 사당역.jsonPath().getLong("id"), 이수역.jsonPath().getLong("id"), 10L, 10L),
+                LineFixture.createLineParams("4호선", "BLUE", 사당역.jsonPath().getLong("id"), 이수역.jsonPath().getLong("id"), 10L, 10L, 900L),
                 "/lines");
 
         //when
