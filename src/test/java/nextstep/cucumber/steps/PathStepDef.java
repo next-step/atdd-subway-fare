@@ -4,12 +4,12 @@ import io.cucumber.java8.En;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.controller.dto.PathResponse;
 import nextstep.subway.controller.dto.StationResponse;
+import nextstep.subway.domain.PathType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static nextstep.subway.acceptance.path.PathSteps.최단경로_조회요청;
-import static nextstep.subway.acceptance.path.PathSteps.최소시간경로_조회요청;
+import static nextstep.subway.acceptance.path.PathSteps.경로_조회요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
@@ -30,7 +30,7 @@ public class PathStepDef implements En {
                 token = context.store.get("adult_token").toString();
             }
 
-            context.response = 최단경로_조회요청(sourceId, targetId, token);
+            context.response = 경로_조회요청(sourceId, targetId, PathType.DISTANCE, token);
         });
 
         When("{string}에서 {string}까지의 최소시간 경로를 {string} 토큰으로 조회를 요청", (String source, String target, String ageType) -> {
@@ -46,7 +46,7 @@ public class PathStepDef implements En {
                 token = context.store.get("adult_token").toString();
             }
 
-            context.response = 최소시간경로_조회요청(sourceId, targetId, token);
+            context.response = 경로_조회요청(sourceId, targetId, PathType.DURATION, token);
         });
 
         Then("{string} 경로가 조회된다.", (String pathString) -> {

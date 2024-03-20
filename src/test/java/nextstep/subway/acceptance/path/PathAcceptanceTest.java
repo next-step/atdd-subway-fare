@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.subway.acceptance.path.PathSteps.로그인하지않은사용자_경로_조회요청;
 import static nextstep.subway.acceptance.util.RestAssuredUtil.경로_조회_요청;
 import static nextstep.subway.acceptance.util.RestAssuredUtil.생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -255,5 +256,22 @@ public class PathAcceptanceTest {
         ExtractableResponse<Response> 조회_요청 = 경로_조회_요청("/paths", 888L, 999L, PathType.DISTANCE, accessToken);
         //then
         assertThat(조회_요청.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    @DisplayName("로그인하지 않은 사용자가 경로조회를 하면 기본 요금으로 조회가 된다.")
+    void 로그인하지않은사용자_경로조회() {
+        //given
+
+        //when
+        ExtractableResponse<Response> 고속터미널역_신사역_경로_조회 = 로그인하지않은사용자_경로_조회요청(교대역아이디, 양재역아이디, PathType.DISTANCE);
+
+        //then
+        assertAll(
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getList("stations")).containsExactly(교대역.jsonPath().get(), 남부터미널역.jsonPath().get(), 양재역.jsonPath().get()),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("distance")).isEqualTo(5),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getLong("duration")).isEqualTo(20),
+                () -> assertThat(고속터미널역_신사역_경로_조회.jsonPath().getInt("fare")).isEqualTo(2150)
+        );
     }
 }
