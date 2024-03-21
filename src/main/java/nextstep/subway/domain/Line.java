@@ -25,8 +25,11 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
+    @Column(nullable = false)
+    private Long additionalFare;
+
     @Builder
-    public Line(String name, String color, Station upStation,Station downStation,Long distance, Long duration) {
+    public Line(String name, String color, Station upStation,Station downStation,Long distance, Long duration, Long additionalFare) {
         this.name = name;
         this.color = color;
         Section section = Section.builder()
@@ -36,6 +39,7 @@ public class Line {
                 .duration(duration)
                 .line(this).build();
         this.sections.addSection(section);
+        this.additionalFare = additionalFare;
     }
 
     public void addSection(Section section) {

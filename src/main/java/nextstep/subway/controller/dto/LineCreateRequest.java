@@ -22,4 +22,6 @@ public class LineCreateRequest {
     private Long distance;
     @NotNull
     private Long duration;
+    @NotNull
+    private Long additionalFare;
 }

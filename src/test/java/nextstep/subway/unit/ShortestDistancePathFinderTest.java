@@ -40,9 +40,9 @@ public class ShortestDistancePathFinderTest {
         양재역 = new Station("양재역");
         남부터미널역 = new Station("남부터미널역");
 
-        이호선 = Line.builder().name("2호선").color("GREEN").upStation(강남역).downStation(교대역).distance(3L).duration(5L).build();
-        신분당선 = Line.builder().name("신분당선").color("RED").upStation(강남역).downStation(양재역).distance(10L).duration(5L).build();
-        삼호선 = Line.builder().name("3호선").color("ORANGE").upStation(교대역).downStation(남부터미널역).distance(2L).duration(5L).build();
+        이호선 = Line.builder().name("2호선").color("GREEN").upStation(강남역).downStation(교대역).distance(3L).duration(5L).additionalFare(0L).build();
+        신분당선 = Line.builder().name("신분당선").color("RED").upStation(강남역).downStation(양재역).distance(10L).duration(5L).additionalFare(500L).build();
+        삼호선 = Line.builder().name("3호선").color("ORANGE").upStation(교대역).downStation(남부터미널역).distance(2L).duration(5L).additionalFare(900L).build();
 
         삼호선.addSection(Section.builder()
                 .line(삼호선)

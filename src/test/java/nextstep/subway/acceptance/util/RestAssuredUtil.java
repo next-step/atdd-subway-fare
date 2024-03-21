@@ -23,8 +23,9 @@ public class RestAssuredUtil {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 경로_조회_요청(String path, Long source, Long target, PathType type) {
+    public static ExtractableResponse<Response> 경로_조회_요청(String path, Long source, Long target, PathType type, String accessToken) {
         return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
                 .param("source", source)
                 .param("target", target)
                 .param("type", type)
@@ -44,7 +45,7 @@ public class RestAssuredUtil {
     }
 
     public static ExtractableResponse<Response> 삭제_요청(String path) {
-            return RestAssured.given().log().all()
+        return RestAssured.given().log().all()
                 .when().delete(path)
                 .then().log().all()
                 .extract();

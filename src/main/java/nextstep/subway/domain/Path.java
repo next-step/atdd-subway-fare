@@ -10,13 +10,13 @@ public class Path {
     private List<Station> path;
     private Long distance;
     private Long duration;
-    private int fare;
+    private Long additionalFare;
 
     @Builder
-    public Path(List<Station> path, Long distance, Long duration, int fare) {
+    public Path(List<Station> path, Long distance, Long duration, Long additionalFare) {
         this.path = path;
         this.distance = distance;
         this.duration = duration;
-        this.fare = fare;
+        this.additionalFare = additionalFare;
     }
 }

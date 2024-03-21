@@ -6,7 +6,6 @@ import nextstep.subway.domain.Line;
 import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
-import nextstep.subway.domain.farecalculation.FareCalculation;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -26,9 +25,11 @@ public class PathFinder {
                     PathWeightedEdge pathWeightedEdge = graph.addEdge(section.getUpStation(), section.getDownStation());
                     if (PathType.DURATION == pathType) {
                         pathWeightedEdge.addDistance(section.getDistance());
+                        pathWeightedEdge.addAdditionalFare(section.getLine().getAdditionalFare());
                         graph.setEdgeWeight(pathWeightedEdge, section.getDuration());
                     } else {
                         pathWeightedEdge.addDuration(section.getDuration());
+                        pathWeightedEdge.addAdditionalFare(section.getLine().getAdditionalFare());
                         graph.setEdgeWeight(pathWeightedEdge, section.getDistance());
                     }
 
@@ -58,16 +59,19 @@ public class PathFinder {
             distance = (long) shortestPath.getPathWeight(source, target);
         }
 
-        FareCalculation fareCalculation = new FareCalculation();
-        int fare = fareCalculation.getFareByDistance(distance);
+        Long additionalFare = graphPath.getEdgeList().stream()
+                .mapToLong(edge -> edge.getAdditionalFare())
+                .max()
+                .orElse(0L);
 
         return Path.builder()
                 .path(graphPath.getVertexList())
                 .distance(distance)
                 .duration(duration)
-                .fare(fare)
+                .additionalFare(additionalFare)
                 .build();
     }
+
     private void validateSourceAndTargetAreDifferent(Station source, Station target) {
         if (source.equals(target)) {
             throw new PathSourceTargetSameException("출발역과 도착역이 같으면 경로를 조회할 수 없습니다.");

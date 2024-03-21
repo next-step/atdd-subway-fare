@@ -48,10 +48,10 @@ public class FavoriteAcceptanceTest{
                 StationFixture.createStationParams("남부터미널역"),
                 "/stations");
         이호선 = 생성_요청(
-                LineFixture.createLineParams("2호선", "GREEN", 교대역.jsonPath().getLong("id"), 강남역.jsonPath().getLong("id"), 10L, 5L),
+                LineFixture.createLineParams("2호선", "GREEN", 교대역.jsonPath().getLong("id"), 강남역.jsonPath().getLong("id"), 10L, 5L, 500L),
                 "/lines");
         삼호선 = 생성_요청(
-                LineFixture.createLineParams("3호선", "ORANGE", 양재역.jsonPath().getLong("id"), 남부터미널역.jsonPath().getLong("id"), 2L, 5L),
+                LineFixture.createLineParams("3호선", "ORANGE", 양재역.jsonPath().getLong("id"), 남부터미널역.jsonPath().getLong("id"), 2L, 5L, 900L),
                 "/lines");
     }
 

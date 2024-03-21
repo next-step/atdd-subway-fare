@@ -23,12 +23,12 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse from(Path path) {
+    public static PathResponse from(Path path, int fare) {
         return PathResponse.builder()
                 .stations(stationsToStationResponses(path.getPath()))
                 .distance(path.getDistance())
                 .duration(path.getDuration())
-                .fare(path.getFare())
+                .fare(fare)
                 .build();
     }
 }
