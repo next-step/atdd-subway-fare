@@ -8,30 +8,30 @@ public class AgePolicy implements FarePolicy {
 	}
 
 	@Override
-	public int getAdditionalFee() {
-		return 0;
+	public int applyAdditionalFare(int fare) {
+		return fare;
 	}
 
 	@Override
-	public int getDiscountFee() {
+	public int applyDiscountFare(int fare) {
 		if(isChild(age) || isTeenager(age)) {
-			return 350;
+			return fare - 350;
 		}
 
-		return 0;
+		return fare;
 	}
 
 	@Override
-	public double getDiscountPercent() {
+	public double applyDiscountPercent(int fare) {
 		if(isChild(age)) {
-			return 0.5;
+			return fare * 0.5;
 		}
 
 		if(isTeenager(age)) {
-			return 0.2;
+			return fare * 0.8;
 		}
 
-		return 0;
+		return fare;
 	}
 
 	private boolean isChild(int age) {

@@ -1,9 +1,9 @@
 package nextstep.subway.domain.fare;
 
 public interface FarePolicy {
-    int getAdditionalFee();
+    int applyAdditionalFare(int fare);
 
-    int getDiscountFee();
+    int applyDiscountFare(int fare);
 
-    double getDiscountPercent();
+    double applyDiscountPercent(int fare);
 }

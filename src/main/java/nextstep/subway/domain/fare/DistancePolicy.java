@@ -8,21 +8,21 @@ public class DistancePolicy implements FarePolicy{
     }
 
     @Override
-    public int getAdditionalFee() {
-        return getFeeOver50Km(distance) + getFeeOver10Km(distance);
+    public int applyAdditionalFare(int fare) {
+        return fare + getFareOver50Km(distance) + getFareOver10Km(distance);
     }
 
     @Override
-    public int getDiscountFee() {
-        return 0;
+    public int applyDiscountFare(int fare) {
+        return fare;
     }
 
     @Override
-    public double getDiscountPercent() {
-        return 0;
+    public double applyDiscountPercent(int fare) {
+        return fare;
     }
 
-    private int getFeeOver50Km(int distance) {
+    private int getFareOver50Km(int distance) {
         int extraDistance = distance - 50;
 
         if(extraDistance <= 0) {
@@ -32,7 +32,7 @@ public class DistancePolicy implements FarePolicy{
         return (int) ((Math.ceil((extraDistance - 1) / 8) + 1) * 100);
     }
 
-    private int getFeeOver10Km(int distance) {
+    private int getFareOver10Km(int distance) {
         if(distance >= 50) {
             return 800;
         }

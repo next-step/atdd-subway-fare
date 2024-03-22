@@ -24,9 +24,9 @@ public class FareCalculator {
 
     private void calculateFare() {
         for(FarePolicy policy : policies) {
-            fare += policy.getAdditionalFee();
-            fare -= policy.getDiscountFee();
-            fare *= 1 - policy.getDiscountPercent();
+            fare = policy.applyAdditionalFare(fare);
+            fare = policy.applyDiscountFare(fare);
+            fare = (int) policy.applyDiscountPercent(fare);
         }
     }
 

@@ -13,20 +13,21 @@ public class LinePolicy implements FarePolicy {
 	}
 
 	@Override
-	public int getAdditionalFee() {
-		return sections.stream()
+	public int applyAdditionalFare(int fare) {
+		return fare +
+				sections.stream()
 				.mapToInt(Section::getLineFee)
 				.max()
 				.orElseThrow(NoSuchElementException::new);
 	}
 
 	@Override
-	public int getDiscountFee() {
-		return 0;
+	public int applyDiscountFare(int fare) {
+		return fare;
 	}
 
 	@Override
-	public double getDiscountPercent() {
-		return 0;
+	public double applyDiscountPercent(int fare) {
+		return fare;
 	}
 }
