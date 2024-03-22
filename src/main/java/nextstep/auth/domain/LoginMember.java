@@ -21,6 +21,6 @@ public class LoginMember {
     }
 
     public boolean isLogin() {
-        return false;
+        return true;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,39 +28,24 @@ public class PathService {
 	}
 
 	public PathResponse getPath(LoginMember loginMember, Long source, Long target, PathType type) {
+		PathFinder subwayMap = SubwayMapFactory.getSubwayMap(sectionService.findAll(), type);
+		Path path = subwayMap.getShortestPath(source, target);
+
 		if(loginMember.isLogin()) {
-			return getPath(loginMember.getId(), source, target, type);
+			return createPathResponse(path, type, new FareCalculator(path, memberService.findMemberById(loginMember.getId())).getFare());
 		}
 
-		return getPath(source, target, type);
+		return createPathResponse(path, type, new FareCalculator(path).getFare());
 	}
 
-	public PathResponse getPath(Long source, Long target, PathType type) {
-		PathFinder subwayMap = SubwayMapFactory.getSubwayMap(sectionService.findAll(), type);
-		Path path = subwayMap.getShortestPath(source, target);
-		int fare = new FareCalculator(path).getFare();
-
-		return createPathResponse(path.getStations(), type, path.getDistance(), path.getDuration(), fare);
-	}
-
-	public PathResponse getPath(Long memberId, Long source, Long target, PathType type) {
-		Member member = memberService.findMemberById(memberId);
-
-		PathFinder subwayMap = SubwayMapFactory.getSubwayMap(sectionService.findAll(), type);
-		Path path = subwayMap.getShortestPath(source, target);
-		int fare = new FareCalculator(path, member).getFare();
-
-		return createPathResponse(path.getStations(), type, path.getDistance(), path.getDuration(), fare);
-	}
-
-	private PathResponse createPathResponse(List<Long> stations, PathType type, int distance, int duration, int fare) {
+	private PathResponse createPathResponse(Path path, PathType type, int fare) {
 		return new PathResponse(
-				stations.stream()
+				path.getStations().stream()
 						.map(id -> new StationResponse(id, stationService.findStationById(id).getName()))
 						.collect(Collectors.toList()),
 				type,
-				distance,
-				duration,
+				path.getDistance(),
+				path.getDuration(),
 				fare);
 	}
 }

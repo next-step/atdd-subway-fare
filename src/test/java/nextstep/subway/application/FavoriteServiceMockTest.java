@@ -1,5 +1,6 @@
 package nextstep.subway.application;
 
+import nextstep.auth.domain.LoginMember;
 import nextstep.subway.application.dto.FavoriteRequest;
 import nextstep.subway.application.dto.FavoriteResponse;
 import nextstep.subway.application.dto.PathResponse;
@@ -39,6 +40,7 @@ public class FavoriteServiceMockTest {
 	private final Long source = 1L;
 	private final Long target = 2L;
 	private final Long memberId = 1L;
+	private final LoginMember loginMember = new LoginMember(memberId, "email@email.com");
 	private final Favorite favorite = new Favorite(memberId, PathType.DISTANCE, source, target);
 	private final Long favoriteId = 1L;
 
@@ -58,13 +60,13 @@ public class FavoriteServiceMockTest {
 				.willReturn(sourceResponse);
 		given(stationService.findStationById(target))
 				.willReturn(targetResponse);
-		given(pathService.getPath(1L, source, target, PathType.DISTANCE))
+		given(pathService.getPath(loginMember, source, target, PathType.DISTANCE))
 				.willReturn(new PathResponse(List.of(sourceResponse, targetResponse), PathType.DISTANCE, 10, 10, 0));
 		given(favoriteRepository.save(new Favorite(memberId, PathType.DISTANCE, source, target)))
 				.willReturn(favorite);
 
 		// when
-		FavoriteResponse response = favoriteService.saveFavorite(memberId, new FavoriteRequest(source, target, PathType.DISTANCE));
+		FavoriteResponse response = favoriteService.saveFavorite(loginMember, new FavoriteRequest(source, target, PathType.DISTANCE));
 
 		// then
 		assertThat(response.getSource().getId()).isEqualTo(source);
