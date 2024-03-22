@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 public class DistancePolicy implements FarePolicy{
     private final int distance;

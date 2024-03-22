@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.path;
 
 import nextstep.subway.domain.entity.Section;
 import nextstep.subway.ui.controller.PathType;

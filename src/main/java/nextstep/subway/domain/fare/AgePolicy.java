@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 public class AgePolicy implements FarePolicy {
 	private final int age;

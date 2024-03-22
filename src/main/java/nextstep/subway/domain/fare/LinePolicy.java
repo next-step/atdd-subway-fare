@@ -1,4 +1,4 @@
-package nextstep.subway.domain;
+package nextstep.subway.domain.fare;
 
 import nextstep.subway.domain.entity.Section;
 

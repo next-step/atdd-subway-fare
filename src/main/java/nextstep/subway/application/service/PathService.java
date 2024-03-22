@@ -2,16 +2,16 @@ package nextstep.subway.application.service;
 
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.application.service.MemberService;
-import nextstep.member.domain.entity.Member;
 import nextstep.subway.application.dto.PathResponse;
 import nextstep.subway.application.dto.StationResponse;
-import nextstep.subway.domain.*;
+import nextstep.subway.domain.fare.FareCalculator;
+import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.PathFinder;
+import nextstep.subway.domain.path.SubwayMapFactory;
 import nextstep.subway.ui.controller.PathType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

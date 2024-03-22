@@ -1,9 +1,12 @@
 package nextstep.subway.unit;
 
 import nextstep.member.domain.entity.Member;
-import nextstep.subway.domain.*;
 import nextstep.subway.domain.entity.Line;
 import nextstep.subway.domain.entity.Section;
+import nextstep.subway.domain.fare.FareCalculator;
+import nextstep.subway.domain.path.Path;
+import nextstep.subway.domain.path.PathFinder;
+import nextstep.subway.domain.path.SubwayMapByDistance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
