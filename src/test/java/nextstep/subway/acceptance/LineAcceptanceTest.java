@@ -67,7 +67,7 @@ public class LineAcceptanceTest {
 	@Test
 	void getLineTest() {
 		// when
-		ExtractableResponse<Response> response = LineSteps.노선_단건_조회_요청(get노선Id(createResponse));
+		ExtractableResponse<Response> response = LineSteps.노선_단건_조회_요청(getLineId(createResponse));
 
 		// then
 		assertThat(response.jsonPath().getString("name")).isEqualTo(TEST_LINE_NAME_1);
@@ -82,7 +82,7 @@ public class LineAcceptanceTest {
 	@Test
 	void updateLineTest() {
 		// given
-		Long id = get노선Id(createResponse);
+		Long id = getLineId(createResponse);
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_수정_요청(TEST_LINE_NAME_2, TEST_LINE_COLOR_2, id);
@@ -103,7 +103,7 @@ public class LineAcceptanceTest {
 	@Test
 	void updateLineWithNullThenFailTest() {
 		// given
-		Long id = get노선Id(createResponse);
+		Long id = getLineId(createResponse);
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_수정_요청(TEST_LINE_NAME_2, "", id);
@@ -121,7 +121,7 @@ public class LineAcceptanceTest {
 	@Test
 	void deleteLineTest() {
 		// given
-		Long id = get노선Id(createResponse);
+		Long id = getLineId(createResponse);
 
 		// when
 		ExtractableResponse<Response> response = LineSteps.노선_삭제_요청(id);
@@ -131,7 +131,7 @@ public class LineAcceptanceTest {
 		assertThat(LineSteps.노선_전체_조회_요청().jsonPath().getList("id")).doesNotContain(id);
 	}
 
-	private Long get노선Id(ExtractableResponse<Response> response) {
+	private Long getLineId(ExtractableResponse<Response> response) {
 		return response.jsonPath().getLong("id");
 	}
 }
