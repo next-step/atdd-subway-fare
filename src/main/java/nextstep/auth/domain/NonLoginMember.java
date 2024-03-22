@@ -7,4 +7,8 @@ public class NonLoginMember extends LoginMember{
     public Long getId() {
         return null;
     }
+
+    public boolean isLogin() {
+        return false;
+    }
 }

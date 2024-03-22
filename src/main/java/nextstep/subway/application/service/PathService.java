@@ -1,5 +1,6 @@
 package nextstep.subway.application.service;
 
+import nextstep.auth.domain.LoginMember;
 import nextstep.member.application.service.MemberService;
 import nextstep.member.domain.entity.Member;
 import nextstep.subway.application.dto.PathResponse;
@@ -23,6 +24,14 @@ public class PathService {
 		this.stationService = stationService;
 		this.sectionService = sectionService;
 		this.memberService = memberService;
+	}
+
+	public PathResponse getPath(LoginMember loginMember, Long source, Long target, PathType type) {
+		if(loginMember.isLogin()) {
+			return getPath(loginMember.getId(), source, target, type);
+		}
+
+		return getPath(source, target, type);
 	}
 
 	public PathResponse getPath(Long source, Long target, PathType type) {
