@@ -26,13 +26,8 @@ public class PathFinder {
 
         int distance = path.getEdgeList().stream().mapToInt(PathWeightEdge::getDistance).sum();
         int duration = path.getEdgeList().stream().mapToInt(PathWeightEdge::getDuration).sum();
-        int shortestDistance = distance;
-        if (pathType == PathType.DURATION) {
-            shortestDistance = getShortestDistance(source, target);
-        }
-        int fare = Fare.calculate(shortestDistance);
 
-        return new Path(path.getVertexList(), distance, duration, fare);
+        return new Path(path.getVertexList(), distance, duration);
     }
 
     private void validateEqualsStation(Station source, Station target) {
@@ -80,7 +75,7 @@ public class PathFinder {
         this.findPath(source, target, PathType.DISTANCE);
     }
 
-    private int getShortestDistance(Station source, Station target) {
+    public int getShortestDistance(Station source, Station target) {
         GraphPath<Station, PathWeightEdge> graphPath = getGraphPath(source, target, PathType.DISTANCE);
         return graphPath.getEdgeList().stream().mapToInt(PathWeightEdge::getDistance).sum();
     }

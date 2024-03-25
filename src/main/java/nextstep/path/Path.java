@@ -9,13 +9,11 @@ public class Path {
     private List<Station> stations;
     private int distance;
     private int duration;
-    private int fare;
 
-    public Path(List<Station> stations, int distance, int duration, int fare) {
+    public Path(List<Station> stations, int distance, int duration) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
-        this.fare = fare;
     }
 
     public List<Station> getStations() {
@@ -30,7 +28,4 @@ public class Path {
         return duration;
     }
 
-    public int getFare() {
-        return fare;
-    }
 }
