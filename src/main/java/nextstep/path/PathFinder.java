@@ -19,7 +19,7 @@ public class PathFinder {
         this.lines = lines;
     }
 
-    public PathResponse findPath(Station source, Station target, PathType pathType) {
+    public Path findPath(Station source, Station target, PathType pathType) {
         validateEqualsStation(source, target);
 
         GraphPath<Station, PathWeightEdge> path = getGraphPath(source, target, pathType);
@@ -32,7 +32,7 @@ public class PathFinder {
         }
         int fare = Fare.calculate(shortestDistance);
 
-        return new PathResponse(path.getVertexList(), distance, duration, fare);
+        return new Path(path.getVertexList(), distance, duration, fare);
     }
 
     private void validateEqualsStation(Station source, Station target) {
@@ -76,8 +76,8 @@ public class PathFinder {
         }
     }
 
-    public void isValidateRoute(Station source, Station target, PathType type) {
-        this.findPath(source, target, type);
+    public void isValidateRoute(Station source, Station target) {
+        this.findPath(source, target, PathType.DISTANCE);
     }
 
     private int getShortestDistance(Station source, Station target) {

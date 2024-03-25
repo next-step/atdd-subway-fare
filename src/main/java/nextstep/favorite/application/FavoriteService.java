@@ -40,8 +40,8 @@ public class FavoriteService {
         Station targetStation = stationRepository.findById(request.getTarget()).orElseThrow(() -> new SubwayException("존재하지 않는 역입니다."));
         List<Line> lines = lineRepository.findAll();
 
-        Path path = new Path(new PathFinder(lines), sourceStation, targetStation);
-        path.isValidateRoute();
+        PathFinder pathFinder = new PathFinder(lines);
+        pathFinder.isValidateRoute(sourceStation, targetStation);
 
         Favorite favorite = new Favorite(sourceStation, targetStation, member);
         return favoriteRepository.save(favorite).getId();

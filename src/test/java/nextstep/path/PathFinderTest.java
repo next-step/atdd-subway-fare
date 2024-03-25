@@ -60,10 +60,9 @@ public class PathFinderTest {
     @Test
     void findPathByDistance() {
         PathFinder pathFinder = new PathFinder(Arrays.asList(이호선, 신분당선, 삼호선));
-        PathResponse path = pathFinder.findPath(교대역, 양재역, PathType.DISTANCE);
+        Path path = pathFinder.findPath(교대역, 양재역, PathType.DISTANCE);
 
-        assertThat(path.getStations().stream().map(stationResponse -> stationResponse.getName()).collect(Collectors.toList()))
-                .containsExactly(교대역.getName(), 남부터미널역.getName(), 양재역.getName());
+        assertThat(path.getStations()).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(path.getDistance()).isEqualTo(5);
         assertThat(path.getDuration()).isEqualTo(11);
     }
@@ -72,10 +71,9 @@ public class PathFinderTest {
     @Test
     void findPathByDuration() {
         PathFinder pathFinder = new PathFinder(Arrays.asList(이호선, 신분당선, 삼호선));
-        PathResponse path = pathFinder.findPath(교대역, 양재역, PathType.DURATION);
+        Path path = pathFinder.findPath(교대역, 양재역, PathType.DURATION);
 
-        assertThat(path.getStations().stream().map(stationResponse -> stationResponse.getName()).collect(Collectors.toList()))
-                .containsExactly(교대역.getName(), 강남역.getName(), 양재역.getName());
+        assertThat(path.getStations()).containsExactly(교대역, 강남역, 양재역);
         assertThat(path.getDistance()).isEqualTo(20);
         assertThat(path.getDuration()).isEqualTo(7);
     }

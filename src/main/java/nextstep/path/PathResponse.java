@@ -13,13 +13,13 @@ public class PathResponse {
     private int duration;
     private int fare;
 
-    public PathResponse(List<Station> stations, int distance, int duration, int fare) {
-        this.stations = stations.stream()
+    public PathResponse(Path path) {
+        this.stations = path.getStations().stream()
                 .map(StationResponse::new)
                 .collect(Collectors.toList());
-        this.distance = distance;
-        this.duration = duration;
-        this.fare = fare;
+        this.distance = path.getDistance();
+        this.duration = path.getDuration();
+        this.fare = path.getFare();
     }
 
     public List<StationResponse> getStations() {
