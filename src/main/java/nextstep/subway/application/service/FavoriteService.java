@@ -1,5 +1,6 @@
 package nextstep.subway.application.service;
 
+import nextstep.auth.domain.LoginMember;
 import nextstep.exception.AuthenticationException;
 import nextstep.subway.application.dto.FavoriteRequest;
 import nextstep.subway.application.dto.FavoriteResponse;
@@ -23,9 +24,9 @@ public class FavoriteService {
         this.pathService = pathService;
     }
 
-    public FavoriteResponse saveFavorite(Long memberId, FavoriteRequest request) {
-        validFavoriteRequest(request);
-        Favorite favorite = new Favorite(memberId, request.getPathType(), request.getSource(), request.getTarget());
+    public FavoriteResponse saveFavorite(LoginMember loginMember, FavoriteRequest request) {
+        validFavoriteRequest(loginMember, request);
+        Favorite favorite = new Favorite(loginMember.getId(), request.getPathType(), request.getSource(), request.getTarget());
         return createFavoriteResponse(favoriteRepository.save(favorite));
     }
 
@@ -46,11 +47,11 @@ public class FavoriteService {
         favoriteRepository.deleteById(id);
     }
 
-    private void validFavoriteRequest(FavoriteRequest request) {
+    private void validFavoriteRequest(LoginMember loginMember, FavoriteRequest request) {
         stationService.findStationById(request.getSource());
         stationService.findStationById(request.getTarget());
 
-        pathService.getPath(request.getSource(), request.getTarget(), request.getPathType());
+        pathService.getPath(loginMember, request.getSource(), request.getTarget(), request.getPathType());
     }
 
     private FavoriteResponse createFavoriteResponse(Favorite favorite) {

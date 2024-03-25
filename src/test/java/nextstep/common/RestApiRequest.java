@@ -28,6 +28,16 @@ public class RestApiRequest<T> {
 				.extract();
 	}
 
+	public ExtractableResponse<Response> get(String path, String accessToken, Map<String, Object> queryParams, Object... pathParams) {
+		return RestAssured.given().log().all()
+				.auth().oauth2(accessToken)
+				.queryParams(queryParams)
+				.when()
+				.get(path, pathParams)
+				.then().log().all()
+				.extract();
+	}
+
 	public ExtractableResponse<Response> get(String path, Map<String, Object> queryParams, Object... pathParams) {
 		return RestAssured.given().log().all()
 				.queryParams(queryParams)

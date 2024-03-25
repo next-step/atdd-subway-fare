@@ -24,6 +24,15 @@ public class PathStepDef implements En {
 			);
 		});
 
+		When("사용자 {string}이 {string}부터 {string}까지의 최단 {string} 경로를 조회하면", (String email, String source, String target, String type) -> {
+			context.response = 최단_경로_조회_요청(
+					context.store.get(email).toString(),
+					(((StationResponse) context.store.get(source)).getId()),
+					(((StationResponse) context.store.get(target)).getId()),
+					convertPathType(type)
+			);
+		});
+
 		Then("경로에 있는 역 목록은 {string} 순서대로 구성된다", (String stationName) -> {
 			String[] names = stationName.split(",");
 			Long[] ids = Arrays.stream(names)

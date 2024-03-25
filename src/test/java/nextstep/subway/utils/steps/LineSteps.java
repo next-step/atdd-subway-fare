@@ -10,8 +10,8 @@ public class LineSteps {
 	private static final String LINE_API_WITH_ID_URL = "/lines/{id}";
 	private static final RestApiRequest<LineRequest> apiRequest = new RestApiRequest<>();
 
-	public static ExtractableResponse<Response> 노선_생성_요청(String name, String color, Long startStationId, Long endStationId, int distance, int duration) {
-		return apiRequest.post(LINE_API_URL, new LineRequest(name, color, startStationId, endStationId, distance, duration));
+	public static ExtractableResponse<Response> 노선_생성_요청(String name, String color, Long startStationId, Long endStationId, int distance, int duration, int additionalFee) {
+		return apiRequest.post(LINE_API_URL, new LineRequest(name, color, startStationId, endStationId, distance, duration, additionalFee));
 	}
 
 	public static ExtractableResponse<Response> 노선_전체_조회_요청() {

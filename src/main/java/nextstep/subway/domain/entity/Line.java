@@ -15,6 +15,8 @@ public class Line {
 	@Embedded
 	private Sections sections;
 
+	private int additionalFee;
+
 	protected Line() {
 
 	}
@@ -23,6 +25,15 @@ public class Line {
 		this.name = name;
 		this.color = color;
 		this.sections = new Sections(startStationId, endStationId, distance, duration);
+		this.additionalFee = 0;
+		sections.addSection(new Section(this, startStationId, endStationId, distance, duration));
+	}
+
+	public Line(String name, String color, Long startStationId, Long endStationId, int distance, int duration, int additionalFee) {
+		this.name = name;
+		this.color = color;
+		this.sections = new Sections(startStationId, endStationId, distance, duration);
+		this.additionalFee = additionalFee;
 		sections.addSection(new Section(this, startStationId, endStationId, distance, duration));
 	}
 
@@ -56,6 +67,10 @@ public class Line {
 
 	public Sections getSections() {
 		return sections;
+	}
+
+	public int getAdditionalFee() {
+		return additionalFee;
 	}
 
 	public void setUpdateInfo(String name, String color) {

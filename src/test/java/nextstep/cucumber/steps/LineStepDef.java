@@ -28,7 +28,8 @@ public class LineStepDef implements En {
 								((StationResponse) context.store.get(data.get("startStation"))).getId(),
 								((StationResponse) context.store.get(data.get("endStation"))).getId(),
 								Integer.parseInt(data.get("distance")),
-								Integer.parseInt(data.get("duration"))
+								Integer.parseInt(data.get("duration")),
+								Integer.parseInt(data.get("additionalFee"))
 						);
 						context.store.put(data.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
 					})

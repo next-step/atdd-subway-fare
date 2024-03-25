@@ -2,6 +2,7 @@ package nextstep.auth;
 
 import nextstep.auth.application.JwtTokenProvider;
 import nextstep.auth.domain.LoginMember;
+import nextstep.auth.domain.NonLoginMember;
 import nextstep.exception.AuthenticationException;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
@@ -25,20 +26,31 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
+        try {
+            validAuthorization(authorization);
+            String token = authorization.split(" ")[1];
 
-        if(!StringUtils.hasText(authorization)) {
+            return new LoginMember(jwtTokenProvider.getId(token), jwtTokenProvider.getPrincipal(token));
+        } catch (AuthenticationException e) {
+            if (!parameter.getParameterAnnotation(AuthenticationPrincipal.class).required()) {
+                return new NonLoginMember();
+            }
+
+            throw e;
+        }
+    }
+
+    private void validAuthorization(String authorization) {
+        if (!StringUtils.hasText(authorization)) {
             throw new AuthenticationException("인증정보가 존재하지 않습니다.");
         }
 
-        if(authorization.trim().equalsIgnoreCase("bearer")) {
+        if (authorization.trim().equalsIgnoreCase("bearer")) {
             throw new AuthenticationException("인증정보가 존재하지 않습니다.");
         }
 
         if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
             throw new AuthenticationException();
         }
-        String token = authorization.split(" ")[1];
-
-        return new LoginMember(jwtTokenProvider.getId(token), jwtTokenProvider.getPrincipal(token));
     }
 }

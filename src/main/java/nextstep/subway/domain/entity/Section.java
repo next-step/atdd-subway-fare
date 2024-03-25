@@ -36,6 +36,10 @@ public class Section {
 		return duration;
 	}
 
+	public int getLineFee() {
+		return line.getAdditionalFee();
+	}
+
 	protected Section() {
 	}
 
@@ -63,4 +67,5 @@ public class Section {
 
 		return false;
 	}
+
 }

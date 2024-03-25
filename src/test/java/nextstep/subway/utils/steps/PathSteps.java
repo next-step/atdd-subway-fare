@@ -16,4 +16,8 @@ public class PathSteps {
 	public static ExtractableResponse<Response> 최단_경로_조회_요청(Long source, Long target, PathType type) {
 		return apiRequest.get(PATH_API_URL, Map.of("source", source, "target", target, "type", type));
 	}
+
+	public static ExtractableResponse<Response> 최단_경로_조회_요청(String accessToken, Long source, Long target, PathType type) {
+		return apiRequest.get(PATH_API_URL, accessToken, Map.of("source", source, "target", target, "type", type));
+	}
 }

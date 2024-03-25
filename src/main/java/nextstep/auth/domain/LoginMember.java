@@ -19,4 +19,8 @@ public class LoginMember {
     public String getEmail() {
         return email;
     }
+
+    public boolean isLogin() {
+        return true;
+    }
 }

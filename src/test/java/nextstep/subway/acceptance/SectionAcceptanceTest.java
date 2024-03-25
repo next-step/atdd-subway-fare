@@ -29,7 +29,7 @@ public class SectionAcceptanceTest {
 	@BeforeEach
 	void createLine() {
 		// given
-		일호선 = 노선_생성_요청("1호선", "파랑", 종로3가역, 시청역, 종로3가역_시청역_길이, 4).jsonPath().getLong("id");
+		일호선 = 노선_생성_요청("1호선", "파랑", 종로3가역, 시청역, 종로3가역_시청역_길이, 4, 0).jsonPath().getLong("id");
 	}
 
 	/**
