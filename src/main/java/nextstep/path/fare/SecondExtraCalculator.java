@@ -2,13 +2,13 @@ package nextstep.path.fare;
 
 public class SecondExtraCalculator extends FareCalculatorHandler {
 
-    private static final int EXTRA_DISTANCE = 50;
+    private static final int BASE_DISTANCE = 50;
     private static final int UNIT = 8;
     private static final int ADDITIONAL_FARE = 100;
 
     @Override
     public int handleFareCalculate(int distance, int fare) {
-        int overFare = calculateOverFare(distance - EXTRA_DISTANCE);
+        int overFare = calculateOverFare(distance - BASE_DISTANCE);
         return fare + overFare;
     }
 
