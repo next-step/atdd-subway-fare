@@ -8,14 +8,10 @@ import io.restassured.response.Response;
 import nextstep.auth.application.dto.TokenRequest;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
-import nextstep.subway.path.domain.PathType;
-import nextstep.subway.station.domain.Station;
 import nextstep.subway.utils.AcceptanceContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

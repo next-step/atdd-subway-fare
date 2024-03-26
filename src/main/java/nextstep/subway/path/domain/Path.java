@@ -41,7 +41,7 @@ public class Path {
     }
 
     private int totalFare(Integer memberAge, int totalDistance, List<Station> vertextList) {
-        int totalFare = FareCalculator.getDistanceFare(totalDistance) + FareCalculator.getLineAdditionalFare(vertextList, sections);
+        int totalFare = FareCalculator.distanceFare(totalDistance) + FareCalculator.lineAdditionalFare(vertextList, sections);
         return FareCalculator.ageDiscount(memberAge, totalFare);
     }
 

@@ -15,7 +15,7 @@ public class FareCalculator {
     private static final int ADDITIONAL_FARE_OVER_UNIT = 8;
 
 
-    public static int getDistanceFare(int totalDistance) {
+    public static int distanceFare(int totalDistance) {
         if (totalDistance <= DISTANCE_UNIT_1) {
             return BASIC_FARE;
         }
@@ -34,7 +34,7 @@ public class FareCalculator {
         return (int) ((Math.ceil((double) distance / unit)) * ADDITIONAL_FARE);
     }
 
-    public static int getLineAdditionalFare(List<Station> vertexList, List<Section> sections) {
+    public static int lineAdditionalFare(List<Station> vertexList, List<Section> sections) {
         int lineAdditionalFare = 0;
         for (int i = 0; i < vertexList.size() - 1; i++) {
             Station upStation = vertexList.get(i);
@@ -50,12 +50,9 @@ public class FareCalculator {
     }
 
     public static int ageDiscount(Integer memberAge, int totalFare) {
-        if (memberAge != null && 5 < memberAge && memberAge < 13) {
-            return (int) ((totalFare - 350) * 0.5);
+        if (memberAge == null){
+            return totalFare;
         }
-        if (memberAge != null && 12 < memberAge && memberAge < 19){
-            return (int) ((totalFare - 350) * 0.8);
-        }
-        return totalFare;
+        return AgeCategory.find(memberAge).discountedFare(totalFare);
     }
 }

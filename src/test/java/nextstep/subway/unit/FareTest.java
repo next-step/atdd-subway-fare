@@ -19,9 +19,9 @@ public class FareTest {
     @DisplayName("거리에 따른 요금 조회")
     @Test
     void distanceFare() {
-        assertThat(FareCalculator.getDistanceFare(10)).isEqualTo(BASIC_FARE);
-        assertThat(FareCalculator.getDistanceFare(50)).isEqualTo(BASIC_FARE + ADDITIONAL_FARE * 8);
-        assertThat(FareCalculator.getDistanceFare(51)).isEqualTo(BASIC_FARE + ADDITIONAL_FARE * 8 + ADDITIONAL_FARE * 1);
+        assertThat(FareCalculator.distanceFare(10)).isEqualTo(BASIC_FARE);
+        assertThat(FareCalculator.distanceFare(50)).isEqualTo(BASIC_FARE + ADDITIONAL_FARE * 8);
+        assertThat(FareCalculator.distanceFare(51)).isEqualTo(BASIC_FARE + ADDITIONAL_FARE * 8 + ADDITIONAL_FARE * 1);
     }
 
     @DisplayName("노선별 추가 요금 조회")
@@ -36,7 +36,7 @@ public class FareTest {
                 .flatMap(line -> line.getSections().get().stream())
                 .collect(Collectors.toList());
 
-        assertThat(FareCalculator.getLineAdditionalFare(List.of(교대역, 강남역, 양재역), sections)).isEqualTo(900);
+        assertThat(FareCalculator.lineAdditionalFare(List.of(교대역, 강남역, 양재역), sections)).isEqualTo(900);
     }
 
     @DisplayName("연령별 할인 요금 조회")
