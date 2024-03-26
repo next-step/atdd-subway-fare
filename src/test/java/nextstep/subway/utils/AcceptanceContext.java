@@ -1,5 +1,6 @@
 package nextstep.subway.utils;
 
+import nextstep.member.application.dto.MemberResponse;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.section.domain.Section;
 import nextstep.subway.station.domain.Station;
@@ -14,6 +15,8 @@ import java.util.Map;
 public class AcceptanceContext {
     private Map<String, Station> stationStore = new HashMap<>();
     private Map<String, Line> lineStore = new HashMap<>();
+    private Map<String, MemberResponse> memberStore = new HashMap<>();
+    private Map<String, String> memberTokenStore = new HashMap<>();
 
     public void putStation(String name, Station station) {
         stationStore.put(name, station);
@@ -21,6 +24,9 @@ public class AcceptanceContext {
 
     public void putLine(String name, Line line) {
         lineStore.put(name, line);
+    }
+    public void putMember(String email, MemberResponse member) {
+        memberStore.put(email, member);
     }
 
     public void addSection(String line, Section newSection) {
@@ -41,5 +47,21 @@ public class AcceptanceContext {
                 .filter(s -> s.getId().equals(id))
                 .findFirst()
                 .orElseThrow();
+    }
+
+    public MemberResponse findMember(String email) {
+        return memberStore.values()
+                .stream()
+                .filter(m -> m.getEmail().equals(email))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    public void putMemberToken(String email, String token) {
+        memberTokenStore.put(email, token);
+    }
+
+    public String findMemberToken(String email) {
+        return memberTokenStore.get(email);
     }
 }
