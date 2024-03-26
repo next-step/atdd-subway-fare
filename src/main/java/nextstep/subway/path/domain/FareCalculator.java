@@ -21,17 +21,24 @@ public class FareCalculator {
         }
 
         if (totalDistance <= DISTANCE_UNIT_2) {
-            return calculateDistanceUnit2(totalDistance);
+            return BASIC_FARE
+                    + calculateAdditionalFare(totalDistance - DISTANCE_UNIT_1, ADDITIONAL_FARE_UNIT_2);
         }
 
-        return calculateOverDistanceUnit(totalDistance);
+        return BASIC_FARE
+                + calculateAdditionalFare(DISTANCE_UNIT_2 - DISTANCE_UNIT_1, ADDITIONAL_FARE_UNIT_2)
+                + calculateAdditionalFare(totalDistance - DISTANCE_UNIT_2, ADDITIONAL_FARE_OVER_UNIT);
     }
 
-    public static int getLineAdditionalFare(List<Station> stations, List<Section> sections) {
+    private static int calculateAdditionalFare(int distance, int unit) {
+        return (int) ((Math.ceil((double) distance / unit)) * ADDITIONAL_FARE);
+    }
+
+    public static int getLineAdditionalFare(List<Station> vertexList, List<Section> sections) {
         int lineAdditionalFare = 0;
-        for (int i = 0; i < stations.size() - 1; i++) {
-            Station upStation = stations.get(i);
-            Station downStation = stations.get(i + 1);
+        for (int i = 0; i < vertexList.size() - 1; i++) {
+            Station upStation = vertexList.get(i);
+            Station downStation = vertexList.get(i + 1);
             int additionalFare = sections.stream()
                     .filter(section -> new HashSet<>(section.stations()).containsAll(List.of(upStation, downStation)))
                     .map(section -> section.getLine().getAdditionalFare())
@@ -40,21 +47,5 @@ public class FareCalculator {
             lineAdditionalFare = Math.max(lineAdditionalFare, additionalFare);
         }
         return lineAdditionalFare;
-    }
-
-    private static int calculateDistanceUnit2(int totalDistance) {
-        int additionalDistance = totalDistance - DISTANCE_UNIT_1;
-        int additionalFare = calculateAdditionalFare(additionalDistance, ADDITIONAL_FARE_UNIT_2);
-        return BASIC_FARE + additionalFare;
-    }
-
-    private static int calculateOverDistanceUnit(int totalDistance) {
-        int additionalDistance = totalDistance - DISTANCE_UNIT_2;
-        int additionalFare1 = calculateAdditionalFare((DISTANCE_UNIT_2 - DISTANCE_UNIT_1), ADDITIONAL_FARE_UNIT_2);
-        return BASIC_FARE + additionalFare1 + calculateAdditionalFare(additionalDistance, ADDITIONAL_FARE_OVER_UNIT);
-    }
-
-    private static int calculateAdditionalFare(int distance, int unit) {
-        return (int) ((Math.ceil((double) distance / unit)) * ADDITIONAL_FARE);
     }
 }

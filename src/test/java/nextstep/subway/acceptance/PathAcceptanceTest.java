@@ -37,9 +37,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철_역_생성("강남역").jsonPath().getLong("id");
         양재역 = 지하철_역_생성("양재역").jsonPath().getLong("id");
         남부터미널역 = 지하철_역_생성("남부터미널역").jsonPath().getLong("id");
-        이호선 = 지하철_노선_생성(new LineRequest("이호선", "green", 교대역, 강남역, 10, 3)).jsonPath().getLong("id");
-        신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 14, 5)).jsonPath().getLong("id");
-        삼호선 = 지하철_노선_생성(new LineRequest("삼호선", "orange", 양재역, 교대역, 23, 10)).jsonPath().getLong("id");
+        이호선 = 지하철_노선_생성(new LineRequest("이호선", "green", 교대역, 강남역, 10, 3, 500)).jsonPath().getLong("id");
+        신분당선 = 지하철_노선_생성(new LineRequest("신분당선", "red", 강남역, 양재역, 14, 5, 900)).jsonPath().getLong("id");
+        삼호선 = 지하철_노선_생성(new LineRequest("삼호선", "orange", 양재역, 교대역, 23, 10, 0)).jsonPath().getLong("id");
         지하철_구간_생성(삼호선, new SectionRequest(양재역, 남부터미널역, 5, 6));
     }
 
@@ -53,6 +53,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
 
     private static long 총_거리(ExtractableResponse<Response> response) {
         return response.jsonPath().getInt("distance");
+    }
+    private static long 총_요금(ExtractableResponse<Response> response) {
+        return response.jsonPath().getInt("fare");
     }
 
     /**
@@ -70,6 +73,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(지하철역_리스트(response)).containsExactly(교대역, 강남역, 양재역);
         assertThat(총_거리(response)).isEqualTo(24);
         assertThat(총_소요_시간(response)).isEqualTo(8);
+        assertThat(총_요금(response)).isEqualTo(1250 + 300 + 900);
     }
 
     /**
@@ -87,6 +91,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(지하철역_리스트(response)).containsExactly(교대역, 남부터미널역, 양재역);
         assertThat(총_거리(response)).isEqualTo(23);
         assertThat(총_소요_시간(response)).isEqualTo(10);
+        assertThat(총_요금(response)).isEqualTo(1250 + 300 + 0);
     }
 
     /**
@@ -113,7 +118,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given
         Long 미금역 = 지하철_역_생성("미금역").jsonPath().getLong("id");
         Long 정자역 = 지하철_역_생성("정자역").jsonPath().getLong("id");
-        Long 분당선 = 지하철_노선_생성(new LineRequest("분당선", "yellow", 미금역, 정자역, 15, 8)).jsonPath().getLong("id");
+        Long 분당선 = 지하철_노선_생성(new LineRequest("분당선", "yellow", 미금역, 정자역, 15, 8, 0)).jsonPath().getLong("id");
 
         // when
         // then

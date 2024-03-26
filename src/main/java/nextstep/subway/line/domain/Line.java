@@ -23,12 +23,11 @@ public class Line {
 
     public Line() {
     }
+
     public Line(String name, String color, Station upStation, Station downStation, int distance, int duration, int additionalFare) {
         this(null, name, color, upStation, downStation, distance, duration, additionalFare);
     }
-    public Line(Long id, String name, String color, Station upStation, Station downStation, int distance, int duration) {
-        this(id, name, color, upStation, downStation, distance, duration, 0);
-    }
+
     public Line(Long id, String name, String color, Station upStation, Station downStation, int distance, int duration, int additionalFare) {
         this.id = id;
         this.name = name;
