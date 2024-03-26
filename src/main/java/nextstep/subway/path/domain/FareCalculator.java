@@ -48,4 +48,14 @@ public class FareCalculator {
         }
         return lineAdditionalFare;
     }
+
+    public static int ageDiscount(Integer memberAge, int totalFare) {
+        if (memberAge != null && 5 < memberAge && memberAge < 13) {
+            return (int) ((totalFare - 350) * 0.5);
+        }
+        if (memberAge != null && 12 < memberAge && memberAge < 19){
+            return (int) ((totalFare - 350) * 0.8);
+        }
+        return totalFare;
+    }
 }

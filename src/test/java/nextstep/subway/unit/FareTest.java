@@ -38,4 +38,12 @@ public class FareTest {
 
         assertThat(FareCalculator.getLineAdditionalFare(List.of(교대역, 강남역, 양재역), sections)).isEqualTo(900);
     }
+
+    @DisplayName("연령별 할인 요금 조회")
+    @Test
+    void ageDiscount() {
+        assertThat(FareCalculator.ageDiscount(19, 1000)).isEqualTo(1000);
+        assertThat(FareCalculator.ageDiscount(13, 1000)).isEqualTo((int) ((1000 - 350) * 0.8));
+        assertThat(FareCalculator.ageDiscount(6, 1000)).isEqualTo((int) ((1000 - 350) * 0.5));
+    }
 }

@@ -20,6 +20,10 @@ public class Path {
     }
 
     public PathResponse shortestPath(Station sourceStation, Station targetStation, PathType type) {
+        return shortestPath(null, sourceStation, targetStation, type);
+    }
+
+    public PathResponse shortestPath(Integer memberAge, Station sourceStation, Station targetStation, PathType type) {
         isSameStation(sourceStation, targetStation);
 
         SimpleWeightedGraph<Station, CustomWeightedEdge> graph = makeSimpleWeightedGraph(allStations(sections), sections, type);
@@ -31,10 +35,14 @@ public class Path {
 
         int totalDistance = totalDistance(shortestPath);
         int totalDuration = totalDuration(shortestPath);
-        int distanceFare = FareCalculator.getDistanceFare(totalDistance);
-        int lineAdditionalFare = FareCalculator.getLineAdditionalFare(shortestPath.getVertexList(), sections);
+        int totalFare = totalFare(memberAge, totalDistance, shortestPath.getVertexList());
 
-        return new PathResponse(shortestPath.getVertexList(), totalDistance, totalDuration, distanceFare + lineAdditionalFare);
+        return new PathResponse(shortestPath.getVertexList(), totalDistance, totalDuration, totalFare);
+    }
+
+    private int totalFare(Integer memberAge, int totalDistance, List<Station> vertextList) {
+        int totalFare = FareCalculator.getDistanceFare(totalDistance) + FareCalculator.getLineAdditionalFare(vertextList, sections);
+        return FareCalculator.ageDiscount(memberAge, totalFare);
     }
 
     private static void isSameStation(Station sourceStation, Station targetStation) {
