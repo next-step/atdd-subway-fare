@@ -44,8 +44,7 @@ public class LineService {
         Station upStation = stationRepository.findById(lineRequest.getUpStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         Station downStation = stationRepository.findById(lineRequest.getDownStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
 
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
-
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration(), lineRequest.getAdditionalFare());
         lineRepository.save(line);
         return createLineResponse(line);
     }

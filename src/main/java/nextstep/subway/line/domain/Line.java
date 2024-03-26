@@ -18,18 +18,22 @@ public class Line {
     private String color;
     @Embedded
     private Sections sections = new Sections();
+    @Column(nullable = false)
+    private int additionalFare;
 
     public Line() {
     }
-
-    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration) {
-        this(null, name, color, upStation, downStation, distance, duration);
+    public Line(String name, String color, Station upStation, Station downStation, int distance, int duration, int additionalFare) {
+        this(null, name, color, upStation, downStation, distance, duration, additionalFare);
     }
-
     public Line(Long id, String name, String color, Station upStation, Station downStation, int distance, int duration) {
+        this(id, name, color, upStation, downStation, distance, duration, 0);
+    }
+    public Line(Long id, String name, String color, Station upStation, Station downStation, int distance, int duration, int additionalFare) {
         this.id = id;
         this.name = name;
         this.color = color;
+        this.additionalFare = additionalFare;
         addSection(new Section(this, upStation, downStation, distance, duration));
     }
 
@@ -47,6 +51,10 @@ public class Line {
 
     public Sections getSections() {
         return sections;
+    }
+
+    public int getAdditionalFare() {
+        return additionalFare;
     }
 
     public void setName(String name) {
@@ -72,6 +80,7 @@ public class Line {
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 ", sections=" + sections +
+                ", additionalFare=" + additionalFare +
                 '}';
     }
 }

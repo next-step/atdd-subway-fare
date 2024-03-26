@@ -32,7 +32,9 @@ public class LineStepDef implements En {
                 findStation(entry.get("출발역")).getId(),
                 findStation(entry.get("도착역")).getId(),
                 Integer.parseInt(entry.get("거리")),
-                Integer.parseInt(entry.get("소요시간")))
+                Integer.parseInt(entry.get("소요시간")),
+                Integer.parseInt(entry.get("추가요금"))
+                )
         );
 
          Given("지하철 노선들을 생성한다", (DataTable dataTable) -> {
@@ -79,6 +81,12 @@ public class LineStepDef implements En {
             assertThat(findLine("신분당선").getSections().allStations()).hasSize(2);
             assertThat(findLine("삼호선").getSections().allStations()).hasSize(3);
         });
+
+        Given("지하철 노선에 추가요금이 등록되어있다", () -> {
+            assertThat(findLine("이호선").getAdditionalFare()).isEqualTo(500);
+            assertThat(findLine("신분당선").getAdditionalFare()).isEqualTo(900);
+            assertThat(findLine("삼호선").getAdditionalFare()).isEqualTo(0);
+        });
     }
 
     private Station findStation(String name) {
@@ -91,7 +99,7 @@ public class LineStepDef implements En {
 
     private void putLine(LineRequest request, ExtractableResponse<Response> lineResponse) {
         LineResponse responseObj = lineResponse.as(LineResponse.class);
-        acceptanceContext.putLine(request.getName(), new Line(responseObj.getId(), responseObj.getName(), responseObj.getColor(), findStationById(request.getUpStationId()), findStationById(request.getDownStationId()), request.getDistance(), request.getDuration()));
+        acceptanceContext.putLine(request.getName(), new Line(responseObj.getId(), responseObj.getName(), responseObj.getColor(), findStationById(request.getUpStationId()), findStationById(request.getDownStationId()), request.getDistance(), request.getDuration(), request.getAdditionalFare()));
     }
 
     private void addSection(String line, String upStation, String downStation, int distance, int duration) {

@@ -30,7 +30,11 @@ public class Path {
         }
 
         int totalDistance = totalDistance(shortestPath);
-        return new PathResponse(shortestPath.getVertexList(), totalDistance, totalDuration(shortestPath), FareCalculator.calculateFare(totalDistance));
+        int totalDuration = totalDuration(shortestPath);
+        int distanceFare = FareCalculator.getDistanceFare(totalDistance);
+        int lineAdditionalFare = FareCalculator.getLineAdditionalFare(shortestPath.getVertexList(), sections);
+
+        return new PathResponse(shortestPath.getVertexList(), totalDistance, totalDuration, distanceFare + lineAdditionalFare);
     }
 
     private static void isSameStation(Station sourceStation, Station targetStation) {
