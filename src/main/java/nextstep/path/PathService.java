@@ -3,6 +3,7 @@ package nextstep.path;
 import nextstep.exception.SubwayException;
 import nextstep.line.Line;
 import nextstep.line.LineRepository;
+import nextstep.path.fare.Fare;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,10 @@ public class PathService {
         Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException("역을 찾을 수 없습니다."));
         List<Line> lines = lineRepository.findAll();
 
-        Path path = type.findPath(lines, sourceStation, targetStation);
-        return new PathResponse(path);
+        SubwayMap subwayMap = new SubwayMap(lines, sourceStation, targetStation);
+        Path path = subwayMap.findPath(type);
+        int fare = subwayMap.calculateFare();
+
+        return new PathResponse(path, fare);
     }
 }

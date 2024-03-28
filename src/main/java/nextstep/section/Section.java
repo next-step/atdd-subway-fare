@@ -14,10 +14,6 @@ public class Section implements Comparable<Section> {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "line_id")
-    private Line line;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "up_station_id")
     private Station upStation;
 
@@ -34,8 +30,7 @@ public class Section implements Comparable<Section> {
     public Section() {
     }
 
-    public Section(Line line, Station upStation, Station downStation, int distance, int duration) {
-        this.line = line;
+    public Section(Station upStation, Station downStation, int distance, int duration) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
@@ -61,10 +56,6 @@ public class Section implements Comparable<Section> {
 
     public Long getId() {
         return id;
-    }
-
-    public Line getLine() {
-        return line;
     }
 
     public Station getUpStation() {

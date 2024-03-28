@@ -10,8 +10,8 @@ import nextstep.line.LineRepository;
 import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
+import nextstep.path.Path;
 import nextstep.path.PathFinder;
-import nextstep.path.PathType;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
 import org.springframework.stereotype.Service;
@@ -26,14 +26,12 @@ public class FavoriteService {
     private final MemberRepository memberRepository;
     private final StationRepository stationRepository;
     private final LineRepository lineRepository;
-    private final PathFinder pathFinder;
 
     public FavoriteService(FavoriteRepository favoriteRepository, MemberRepository memberRepository, StationRepository stationRepository, LineRepository lineRepository) {
         this.favoriteRepository = favoriteRepository;
         this.memberRepository = memberRepository;
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
-        this.pathFinder = PathType.DISTANCE.getPathFinder();
     }
 
     public Long createFavorite(LoginMember loginMember, FavoriteRequest request) {
@@ -42,7 +40,8 @@ public class FavoriteService {
         Station targetStation = stationRepository.findById(request.getTarget()).orElseThrow(() -> new SubwayException("존재하지 않는 역입니다."));
         List<Line> lines = lineRepository.findAll();
 
-        pathFinder.isValidateRoute(lines, sourceStation, targetStation);
+        PathFinder pathFinder = new PathFinder(lines);
+        pathFinder.isValidateRoute(sourceStation, targetStation);
 
         Favorite favorite = new Favorite(sourceStation, targetStation, member);
         return favoriteRepository.save(favorite).getId();

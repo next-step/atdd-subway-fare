@@ -5,6 +5,7 @@ import nextstep.station.Station;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.stream.Stream;
 @Embeddable
 public class Sections {
 
-    @OneToMany(mappedBy = "line", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JoinColumn(name = "line_id")
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     List<Section> sections = new ArrayList<>();
 
     public Sections() {

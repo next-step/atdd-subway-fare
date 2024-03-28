@@ -27,4 +27,5 @@ public class Path {
     public int getDuration() {
         return duration;
     }
+
 }

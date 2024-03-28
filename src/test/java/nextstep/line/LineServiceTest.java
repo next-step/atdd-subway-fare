@@ -1,5 +1,6 @@
 package nextstep.line;
 
+import nextstep.section.Section;
 import nextstep.section.SectionRequest;
 import nextstep.station.Station;
 import nextstep.station.StationRepository;
@@ -42,7 +43,8 @@ public class LineServiceTest {
     @DisplayName("지하철 노선에 구간을 등록한다.")
     @Test
     void addSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
         lineRepository.save(이호선);
 
         SectionRequest sectionRequest = new SectionRequest(역삼역.getId(), 선릉역.getId(), 10, 5);
@@ -55,7 +57,8 @@ public class LineServiceTest {
     @DisplayName("지하철 노선의 지하철역 목록을 조회한다.")
     @Test
     void getStations() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
         lineRepository.save(이호선);
 
         LineResponse lineResponse = lineService.findLineById(이호선.getId());
@@ -66,7 +69,8 @@ public class LineServiceTest {
     @DisplayName("지하철 노선에 구간을 삭제한다.")
     @Test
     void removeSection() {
-        Line 이호선 = new Line("2호선", "green", 강남역, 역삼역, 10, 5);
+        Section 강남_역삼_구간 = new Section(강남역, 역삼역, 10, 5);
+        Line 이호선 = new Line("2호선", "green", 강남_역삼_구간);
         lineRepository.save(이호선);
 
         SectionRequest sectionRequest = new SectionRequest(역삼역.getId(), 선릉역.getId(), 10, 5);
