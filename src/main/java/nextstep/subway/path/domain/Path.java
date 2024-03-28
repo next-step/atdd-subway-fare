@@ -2,7 +2,7 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.Exception.ErrorCode;
 import nextstep.subway.Exception.SubwayException;
-import nextstep.subway.line.domain.Line;
+import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
@@ -13,35 +13,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Path {
-    private final List<Line> lines;
+    private final List<Section> sections;
 
-    public Path(List<Line> lines) {
-        this.lines = lines;
+    public Path(List<Section> sections) {
+        this.sections = sections;
     }
 
-    public GraphPath<Station, CustomWeightedEdge> shortestPath(Station sourceStation, Station targetStation, PathType type) {
+    public PathResponse shortestPath(Station sourceStation, Station targetStation, PathType type) {
+        return shortestPath(null, sourceStation, targetStation, type);
+    }
+
+    public PathResponse shortestPath(Integer memberAge, Station sourceStation, Station targetStation, PathType type) {
         isSameStation(sourceStation, targetStation);
 
-        List<Section> sections = allSections();
         SimpleWeightedGraph<Station, CustomWeightedEdge> graph = makeSimpleWeightedGraph(allStations(sections), sections, type);
         GraphPath<Station, CustomWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(graph, sourceStation, targetStation);
 
         if (shortestPath == null) {
             throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "연결되지 않은 역 정보입니다.");
         }
-        return shortestPath;
+
+        int totalDistance = totalDistance(shortestPath);
+        int totalDuration = totalDuration(shortestPath);
+        int totalFare = totalFare(memberAge, totalDistance, shortestPath.getVertexList());
+
+        return new PathResponse(shortestPath.getVertexList(), totalDistance, totalDuration, totalFare);
+    }
+
+    private int totalFare(Integer memberAge, int totalDistance, List<Station> vertextList) {
+        int totalFare = FareCalculator.distanceFare(totalDistance) + FareCalculator.lineAdditionalFare(vertextList, sections);
+        return FareCalculator.ageDiscount(memberAge, totalFare);
     }
 
     private static void isSameStation(Station sourceStation, Station targetStation) {
         if (sourceStation.equals(targetStation)) {
             throw new SubwayException(ErrorCode.CANNOT_FIND_SHORTEST_PATH, "출발역과 도착역이 같습니다.");
         }
-    }
-
-    private List<Section> allSections() {
-        return lines.stream()
-                .flatMap(line -> line.getSections().get().stream())
-                .collect(Collectors.toList());
     }
 
     private static List<Station> allStations(List<Section> sections) {
@@ -64,5 +71,13 @@ public class Path {
 
     public void isConnected(Station sourceStation, Station targetStation) {
         shortestPath(sourceStation, targetStation, PathType.DISTANCE);
+    }
+
+    private int totalDistance(GraphPath<Station, CustomWeightedEdge> shortestPath) {
+        return shortestPath.getEdgeList().stream().mapToInt(CustomWeightedEdge::getDistance).sum();
+    }
+
+    private int totalDuration(GraphPath<Station, CustomWeightedEdge> shortestPath) {
+        return shortestPath.getEdgeList().stream().mapToInt(CustomWeightedEdge::getDuration).sum();
     }
 }

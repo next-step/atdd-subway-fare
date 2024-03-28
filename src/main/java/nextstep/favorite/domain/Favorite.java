@@ -2,6 +2,7 @@ package nextstep.favorite.domain;
 
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.domain.Path;
+import nextstep.subway.section.domain.Section;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
@@ -23,12 +24,12 @@ public class Favorite {
     public Favorite() {
     }
 
-    public Favorite(Long memberId, Station sourceStation, Station targetStation, List<Line> lines) {
-        this(null, memberId, sourceStation, targetStation, lines);
+    public Favorite(Long memberId, Station sourceStation, Station targetStation, List<Section> sections) {
+        this(null, memberId, sourceStation, targetStation, sections);
     }
 
-    public Favorite(Long id, Long memberId, Station sourceStation, Station targetStation, List<Line> lines) {
-        isValidPath(lines, sourceStation, targetStation);
+    public Favorite(Long id, Long memberId, Station sourceStation, Station targetStation, List<Section> sections) {
+        isValidPath(sections, sourceStation, targetStation);
 
         this.id = id;
         this.memberId = memberId;
@@ -36,8 +37,8 @@ public class Favorite {
         this.targetStation = targetStation;
     }
 
-    private void isValidPath(List<Line> lines, Station sourceStation, Station targetStation) {
-        new Path(lines).isConnected(sourceStation, targetStation);
+    private void isValidPath(List<Section> sectionList, Station sourceStation, Station targetStation) {
+        new Path(sectionList).isConnected(sourceStation, targetStation);
     }
 
     public Long getId() {

@@ -44,8 +44,7 @@ public class LineService {
         Station upStation = stationRepository.findById(lineRequest.getUpStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
         Station downStation = stationRepository.findById(lineRequest.getDownStationId()).orElseThrow(() -> new SubwayException(ErrorCode.STATION_NOT_FOUND, ""));
 
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
-
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration(), lineRequest.getAdditionalFare());
         lineRepository.save(line);
         return createLineResponse(line);
     }
@@ -100,5 +99,12 @@ public class LineService {
     public void deleteSection(Long id, Long stationId) {
         Line line = lineRepository.findById(id).get();
         line.deleteSection(stationId);
+    }
+
+    public List<Section> getSectionList() {
+        List<Line> lines = lineRepository.findAll();
+        return lines.stream()
+                .flatMap(line -> line.getSections().get().stream())
+                .collect(Collectors.toList());
     }
 }
