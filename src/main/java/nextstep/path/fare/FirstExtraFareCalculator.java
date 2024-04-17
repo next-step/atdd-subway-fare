@@ -8,17 +8,18 @@ public class FirstExtraFareCalculator extends FareCalculatorHandler {
     private static final int ADDITIONAL_FARE = 100;
 
     @Override
-    public int handleFareCalculate(int distance, int fare) {
+    public Fare handleFareCalculate(int distance, Fare fare) {
         if (distance <= EXTRA_DISTANCE) {
-            int overFare = calculateOverFare(distance - BASE_DISTANCE);
-            return overFare + fare;
+            Fare overFare = calculateOverFare(distance - BASE_DISTANCE);
+            return fare.plus(overFare);
         }
 
-        int overFare = calculateOverFare(EXTRA_DISTANCE - BASE_DISTANCE);
-        return nextHandler(distance, overFare + fare);
+        Fare overFare = calculateOverFare(EXTRA_DISTANCE - BASE_DISTANCE);
+        return nextHandler(distance, fare.plus(overFare));
     }
 
-    private int calculateOverFare(int distance) {
-        return (int) ((Math.ceil((distance - 1) / UNIT) + 1) * ADDITIONAL_FARE);
+    private Fare calculateOverFare(int distance) {
+        int overFare = (int) ((Math.ceil((distance - 1) / UNIT) + 1) * ADDITIONAL_FARE);
+        return Fare.of(overFare);
     }
 }

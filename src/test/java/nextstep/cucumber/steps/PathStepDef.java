@@ -1,7 +1,6 @@
 package nextstep.cucumber.steps;
 
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.path.PathSteps;
 import nextstep.station.StationResponse;
@@ -40,6 +39,7 @@ public class PathStepDef implements En {
     private void getPath(String source, String target, String type) {
         Long sourceId = ((StationResponse) context.store.get(source)).getId();
         Long targetId = ((StationResponse) context.store.get(target)).getId();
-        context.response = PathSteps.getPath(sourceId, targetId, type);
+        String accessToken = (String) context.store.getOrDefault("accessToken", "");
+        context.response = PathSteps.getPath(sourceId, targetId, type, accessToken);
     }
 }

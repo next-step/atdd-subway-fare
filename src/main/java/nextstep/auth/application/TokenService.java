@@ -24,7 +24,7 @@ public class TokenService {
             throw new AuthenticationException();
         }
 
-        String token = jwtTokenProvider.createToken(user.getEmail());
+        String token = jwtTokenProvider.createToken(user.getEmail(), user.getAge());
 
         return new TokenResponse(token);
     }
@@ -34,7 +34,7 @@ public class TokenService {
         GithubProfileResponse profileResponse = githubClient.requestGithubProfile(accessToken);
 
         UserDetails user = userDetailsService.findOrCreateMember(profileResponse.getEmail(), profileResponse.getAge());
-        String token = jwtTokenProvider.createToken(user.getEmail());
+        String token = jwtTokenProvider.createToken(user.getEmail(), user.getAge());
 
         return new TokenResponse(token);
     }

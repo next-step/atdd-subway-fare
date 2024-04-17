@@ -1,5 +1,6 @@
 package nextstep.exception;
 
+import nextstep.path.fare.NegativeNumberException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +11,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SubwayException.class)
     protected ResponseEntity<ExceptionResponse> handleApplication(SubwayException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(NegativeNumberException.class)
+    protected ResponseEntity<ExceptionResponse> handleApplication(NegativeNumberException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getMessage()));
     }
 }

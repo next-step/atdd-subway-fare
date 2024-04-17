@@ -38,6 +38,7 @@ public class Member implements UserDetails {
         return password;
     }
 
+    @Override
     public Integer getAge() {
         return age;
     }

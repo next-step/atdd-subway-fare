@@ -1,10 +1,11 @@
-package nextstep.member.domain;
+package nextstep.auth.application;
 
-public class LoginMember {
+public class TokenInfo {
+
     private String email;
     private Integer age;
 
-    public LoginMember(String email, Integer age) {
+    public TokenInfo(String email, Integer age) {
         this.email = email;
         this.age = age;
     }
@@ -17,3 +18,4 @@ public class LoginMember {
         return age;
     }
 }
+

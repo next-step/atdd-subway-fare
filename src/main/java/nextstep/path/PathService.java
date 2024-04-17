@@ -23,14 +23,14 @@ public class PathService {
         this.lineRepository = lineRepository;
     }
 
-    public PathResponse findPath(Long source, Long target, PathType type) {
+    public PathResponse findPath(Long source, Long target, PathType type, Integer age) {
         Station sourceStation = stationRepository.findById(source).orElseThrow(() -> new SubwayException("역을 찾을 수 없습니다."));
         Station targetStation = stationRepository.findById(target).orElseThrow(() -> new SubwayException("역을 찾을 수 없습니다."));
         List<Line> lines = lineRepository.findAll();
 
-        SubwayMap subwayMap = new SubwayMap(lines, sourceStation, targetStation);
-        Path path = subwayMap.findPath(type);
-        int fare = subwayMap.calculateFare();
+        SubwayMap subwayMap = new SubwayMap(lines);
+        Path path = subwayMap.findPath(sourceStation, targetStation, type);
+        Fare fare = subwayMap.calculateFare(sourceStation, targetStation, path.getUsedLine(), age);
 
         return new PathResponse(path, fare);
     }

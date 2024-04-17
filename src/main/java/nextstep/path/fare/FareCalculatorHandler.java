@@ -9,13 +9,13 @@ public abstract class FareCalculatorHandler {
         return fareCalculatorHandler;
     }
 
-    public abstract int handleFareCalculate(int distance, int fare);
+    public abstract Fare handleFareCalculate(int distance, Fare fare);
 
-    public int nextHandler(int distance, int fare) {
+    public Fare nextHandler(int distance, Fare fare) {
         if (nextHandler != null) {
             return nextHandler.handleFareCalculate(distance, fare);
         }
-        return 0;
+        return Fare.of(0);
     }
 
 }

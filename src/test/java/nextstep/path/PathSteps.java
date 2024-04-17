@@ -7,8 +7,9 @@ import org.springframework.http.MediaType;
 
 public class PathSteps {
 
-    public static ExtractableResponse<Response> getPath(Long source, Long target, String type) {
+    public static ExtractableResponse<Response> getPath(Long source, Long target, String type, String accessToken) {
         return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
                 .queryParam("source", source)
                 .queryParam("target", target)
                 .queryParam("type", type)

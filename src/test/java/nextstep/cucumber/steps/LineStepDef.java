@@ -32,6 +32,7 @@ public class LineStepDef implements En {
                         params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                         params.put("distance", it.get("distance"));
                         params.put("duration", it.get("duration"));
+                        params.put("extraFare", it.get("extraFare"));
                         ExtractableResponse<Response> response = RestAssured.given().log().all()
                                 .body(params)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)

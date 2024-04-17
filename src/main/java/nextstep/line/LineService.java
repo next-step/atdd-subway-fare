@@ -31,7 +31,7 @@ public class LineService {
                 .orElseThrow(EntityNotFoundException::new);
 
         Section section = new Section(upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), section);
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), lineRequest.getExtraFare(), section);
         Line savedLine = lineRepository.save(line);
 
         return new LineResponse(savedLine);

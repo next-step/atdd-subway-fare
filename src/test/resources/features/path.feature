@@ -13,10 +13,10 @@ Feature: 지하철역 경로 찾기 기능
       | 양재역      |
       | 남부터미널역 |
     And 지하철 노선들을 생성 요청하고
-      | name   | color  | upStation | downStation   | distance | duration |
-      | 2호선   | green  | 교대역     | 강남역         | 10       | 3        |
-      | 신분당선 | red    | 강남역     | 양재역         | 10       | 4        |
-      | 3호선   | orange | 교대역     | 남부터미널역     | 5       | 5        |
+      | name   | color  | upStation | downStation   | distance | duration | extraFare |
+      | 2호선   | green  | 교대역     | 강남역         | 10       | 3        | 500       |
+      | 신분당선 | red    | 강남역     | 양재역         | 10       | 4        | 1000      |
+      | 3호선   | orange | 교대역     | 남부터미널역     | 5       | 5        | 0         |
     And 지하철 구간을 등록 요청하고
       | lineName  | upStation  | downStation | distance | duration |
       | 3호선      | 남부터미널역 | 양재역        | 7        | 6       |
@@ -31,4 +31,18 @@ Feature: 지하철역 경로 찾기 기능
     When "교대역"과 "양재역"의 최소 시간 경로를 조회하면
     Then "교대역,강남역,양재역" 경로가 조회된다
     And 총 거리 20km와 소요 시간 7분을 응답한다
-    And 지하철 이용 요금 1350원을 응답한다
+    And 지하철 이용 요금 2350원을 응답한다
+
+  Scenario: 청소년으로 로그인 한 뒤 두 역의 최단 거리 경로를 조회한다
+    Given 청소년으로 로그인 하고
+    When "교대역"과 "남부터미널역"의 최단 거리 경로를 조회하면
+    Then "교대역,남부터미널역" 경로가 조회된다
+    And 총 거리 5km와 소요 시간 5분을 응답한다
+    And 지하철 이용 요금 720원을 응답한다
+
+  Scenario: 어린이로 로그인 한 뒤 두 역의 최단 거리 경로를 조회한다
+    Given 어린이로 로그인 하고
+    When "교대역"과 "남부터미널역"의 최단 거리 경로를 조회하면
+    Then "교대역,남부터미널역" 경로가 조회된다
+    And 총 거리 5km와 소요 시간 5분을 응답한다
+    And 지하철 이용 요금 450원을 응답한다

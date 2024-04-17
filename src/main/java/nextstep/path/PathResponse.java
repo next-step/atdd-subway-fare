@@ -1,5 +1,6 @@
 package nextstep.path;
 
+import nextstep.path.fare.Fare;
 import nextstep.station.StationResponse;
 
 import java.util.List;
@@ -12,13 +13,13 @@ public class PathResponse {
     private int duration;
     private int fare;
 
-    public PathResponse(Path path, int fare) {
+    public PathResponse(Path path, Fare fare) {
         this.stations = path.getStations().stream()
                 .map(StationResponse::new)
                 .collect(Collectors.toList());
         this.distance = path.getDistance();
         this.duration = path.getDuration();
-        this.fare = fare;
+        this.fare = fare.getValue();
     }
 
     public List<StationResponse> getStations() {
