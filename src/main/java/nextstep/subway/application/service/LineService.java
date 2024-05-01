@@ -32,7 +32,15 @@ public class LineService {
             lineCreateRequest.getName(),
             lineCreateRequest.getColor()
         ));
-        line.addSection(Section.of(line, upStation, downStation, lineCreateRequest.getDistance()));
+        line.addSection(
+            Section.of(
+                line,
+                upStation,
+                downStation,
+                lineCreateRequest.getDistance(),
+                lineCreateRequest.getDuration()
+            )
+        );
         return new LineResponse(line);
     }
 
@@ -67,7 +75,13 @@ public class LineService {
         Station upStation = stationService.getStationById(addSectionRequest.getUpStationId());
         Station downStation = stationService.getStationById(addSectionRequest.getDownStationId());
         line.addSection(
-            Section.of(line, upStation, downStation, addSectionRequest.getDistance())
+            Section.of(
+                line,
+                upStation,
+                downStation,
+                addSectionRequest.getDistance(),
+                addSectionRequest.getDuration()
+            )
         );
         return new LineResponse(line);
     }

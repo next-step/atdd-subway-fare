@@ -8,6 +8,7 @@ import nextstep.subway.domain.entity.Line;
 import nextstep.subway.domain.entity.Path;
 import nextstep.subway.domain.entity.PathFinder;
 import nextstep.subway.domain.entity.Station;
+import nextstep.subway.domain.enums.PathSearchType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +20,18 @@ public class PathService {
     private final StationService stationService;
     private final LineService lineService;
 
-    public PathResponse findPath(Long sourceStationId, Long targetStationId) {
+    public PathResponse findPath(Long sourceStationId, Long targetStationId, PathSearchType type) {
         Station source = stationService.getStationById(sourceStationId);
         Station target = stationService.getStationById(targetStationId);
         List<Line> lines = lineService.getLines();
         PathFinder pathFinder = new PathFinder(lines);
-        Path shortestPath = pathFinder.findShortestPath(source, target)
+        Path shortestPath = pathFinder.findShortestPath(source, target, type)
             .orElseThrow(() -> new CanNotFindPathException("Unable to find the shortest path."));
-        return new PathResponse(shortestPath);
+        return new PathResponse(
+            shortestPath.getStationDtoOfPath(target),
+            shortestPath.getDistance(),
+            shortestPath.getDuration()
+        );
     }
 
 

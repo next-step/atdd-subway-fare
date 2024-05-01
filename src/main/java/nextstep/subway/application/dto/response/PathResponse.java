@@ -1,10 +1,8 @@
 package nextstep.subway.application.dto.response;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nextstep.subway.domain.entity.Path;
 import nextstep.subway.domain.entity.Station;
 
 @NoArgsConstructor
@@ -28,14 +26,11 @@ public class PathResponse {
 
     private List<StationDto> stations;
     private long distance;
+    private long duration;
 
-    public PathResponse(Path shortestPath) {
-        this.stations = shortestPath.getStations().stream()
-            .map(StationDto::new)
-            .collect(Collectors.toList());
-        this.distance = (long) shortestPath.getDistance();
-
+    public PathResponse(List<StationDto> stations, long distance, long duration) {
+        this.stations = stations;
+        this.distance = distance;
+        this.duration = duration;
     }
-
-
 }

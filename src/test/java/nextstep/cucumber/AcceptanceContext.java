@@ -13,4 +13,8 @@ public class AcceptanceContext {
 
     public Map<String, Object> store = new HashMap<>();
     public ExtractableResponse<Response> response;
+
+    public <T> T getValueFromStore(String name, Class<T> responseType) {
+        return responseType.cast(this.store.get(name));
+    }
 }

@@ -140,4 +140,12 @@ public class Sections {
     public List<Section> getAllSections() {
         return this.sections;
     }
+
+    public long getDistance() {
+        return this.sections.stream().mapToLong(Section::getDistance).sum();
+    }
+
+    public long getDuration() {
+        return this.sections.stream().mapToLong(Section::getDuration).sum();
+    }
 }
