@@ -1,7 +1,7 @@
 package nextstep.subway.line.application;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.line.application.dto.AppendLineSectionRequest;
+import nextstep.subway.line.application.dto.LineSectionRequest;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.application.StationReader;
@@ -17,7 +17,7 @@ public class LineSectionService {
   private final StationReader stationReader;
 
   @Transactional
-  public Line appendLineSection(Long lineId, AppendLineSectionRequest request) {
+  public Line appendLineSection(Long lineId, LineSectionRequest request) {
     Line line = lineReader.readById(lineId);
     LineSection lineSection = lineSectionMapper.map(request);
     line.addLineSection(lineSection);

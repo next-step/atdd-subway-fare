@@ -7,7 +7,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
-import nextstep.subway.line.application.dto.AppendLineSectionRequest;
+import nextstep.subway.line.application.dto.LineSectionRequest;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.domain.Station;
@@ -19,8 +19,8 @@ public class LineSectionAcceptanceSteps {
   private LineSectionAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 노선_구간_등록_요청(Line line, LineSection lineSection) {
-    AppendLineSectionRequest request =
-        new AppendLineSectionRequest(
+    LineSectionRequest request =
+        new LineSectionRequest(
             lineSection.getUpStation().getId(),
             lineSection.getDownStation().getId(),
             lineSection.getDistance());

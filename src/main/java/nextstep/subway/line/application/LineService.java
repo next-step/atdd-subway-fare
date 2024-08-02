@@ -2,7 +2,7 @@ package nextstep.subway.line.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.line.application.dto.CreateLineRequest;
+import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineSection;
@@ -19,7 +19,7 @@ public class LineService {
   private final LineSectionMapper lineSectionMapper;
 
   @Transactional
-  public Line saveLine(CreateLineRequest request) {
+  public Line saveLine(LineRequest request) {
     Line line = lineAppender.append(request.toLine());
     LineSection lineSection = lineSectionMapper.map(request.toAddLineSection());
     line.addLineSection(lineSection);

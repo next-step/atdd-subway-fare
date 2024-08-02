@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.line.application.LineService;
-import nextstep.subway.line.application.dto.CreateLineRequest;
+import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
 import nextstep.subway.line.domain.Line;
@@ -17,7 +17,7 @@ public class LineController {
   private final LineService lineService;
 
   @PostMapping("/lines")
-  public ResponseEntity<LineResponse> createLine(@RequestBody CreateLineRequest request) {
+  public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest request) {
     Line line = lineService.saveLine(request);
     return ResponseEntity.created(URI.create("/lines/" + line.getId()))
         .body(LineResponse.from(line));

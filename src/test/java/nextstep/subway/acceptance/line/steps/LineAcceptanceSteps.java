@@ -7,7 +7,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.line.application.dto.CreateLineRequest;
+import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
 import nextstep.subway.line.domain.Line;
@@ -22,8 +22,8 @@ public class LineAcceptanceSteps {
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
     LineSection section = line.getLineSections().getFirst();
-    CreateLineRequest request =
-        new CreateLineRequest(
+    LineRequest request =
+        new LineRequest(
             line.getName(),
             line.getColor(),
             section.getUpStation().getId(),
