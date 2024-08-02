@@ -6,13 +6,14 @@ import nextstep.support.DatabaseCleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BeforeStepDefinitions implements En {
-    @Autowired private DatabaseCleanup databaseCleanup;
-    @Autowired private DataLoader dataLoader;
+  @Autowired private DatabaseCleanup databaseCleanup;
+  @Autowired private DataLoader dataLoader;
 
-    public BeforeStepDefinitions() {
-        Before(() -> {
-            databaseCleanup.execute();
-            dataLoader.loadData();
+  public BeforeStepDefinitions() {
+    Before(
+        () -> {
+          databaseCleanup.execute();
+          dataLoader.loadData();
         });
-    }
+  }
 }
