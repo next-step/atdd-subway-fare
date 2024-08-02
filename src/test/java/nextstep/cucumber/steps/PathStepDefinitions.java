@@ -1,0 +1,42 @@
+package nextstep.cucumber.steps;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.restassured.RestAssured;
+import java.util.List;
+import nextstep.cucumber.support.AcceptanceContext;
+import nextstep.subway.station.application.dto.StationResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+
+@SuppressWarnings("NonAsciiCharacters")
+public class PathStepDefinitions {
+  @Autowired private AcceptanceContext context;
+
+  @When("{string}에서 {string}까지 최단 거리 경로를 조회하면")
+  public void 교대역_에서_강남역_까지_최단_거리_경로를_조회하면(String source, String target) {
+    Long sourceId = ((StationResponse) context.store.get(source)).getId();
+    Long targetId = ((StationResponse) context.store.get(target)).getId();
+    context.response =
+        RestAssured.given()
+            .log()
+            .all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParams("source", sourceId, "target", targetId)
+            .when()
+            .get("/paths")
+            .then()
+            .log()
+            .all()
+            .extract();
+  }
+
+  @Then("{string} 경로가 조회된다")
+  public void 경로가_조회된다(String pathString) {
+    List<String> expectedNames = List.of(pathString.split(","));
+    List<String> actualNames = context.response.jsonPath().getList("stations.name", String.class);
+    assertThat(actualNames).containsExactlyElementsOf(expectedNames);
+  }
+}
