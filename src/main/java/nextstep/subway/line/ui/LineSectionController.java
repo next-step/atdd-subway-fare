@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import nextstep.subway.line.application.LineSectionService;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.application.dto.LineSectionRequest;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class LineSectionController {
   @PostMapping("/lines/{lineId}/sections")
   public ResponseEntity<LineResponse> appendLineSection(
       @PathVariable Long lineId, @RequestBody LineSectionRequest request) {
-    Line2 line = lineSectionService.appendLineSection(lineId, request);
+    Line line = lineSectionService.appendLineSection(lineId, request);
     return ResponseEntity.created(URI.create("/lines/" + lineId + "/sections"))
         .body(LineResponse.from(line));
   }

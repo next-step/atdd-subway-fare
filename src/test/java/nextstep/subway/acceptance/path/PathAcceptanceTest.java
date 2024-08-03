@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisplayName("경로 조회 기능 인수테스트")
 class PathAcceptanceTest extends AcceptanceTest {
   @Autowired StationRepository stationRepository;
-  @Autowired LineRepository2 lineRepository;
+  @Autowired LineRepository lineRepository;
 
   private Station 교대역;
   private Station 양재역;
@@ -46,20 +46,20 @@ class PathAcceptanceTest extends AcceptanceTest {
     Station 남부터미널 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine2().lineSections(new LineSections2(LineSection2.of(교대역, 강남역, 10, 1))).build());
+        aLine().lineSections(new LineSections(LineSection.of(교대역, 강남역, 10, 1))).build());
     lineRepository.save(
-        aLine2()
+        aLine()
             .name("신분당선")
             .color("bg-red-600")
-            .lineSections(new LineSections2(LineSection2.of(강남역, 양재역, 10, 1)))
+            .lineSections(new LineSections(LineSection.of(강남역, 양재역, 10, 1)))
             .build());
     lineRepository.save(
-        aLine2()
+        aLine()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(
-                new LineSections2(
-                    LineSection2.of(교대역, 남부터미널, 2, 2), LineSection2.of(남부터미널, 양재역, 3, 3)))
+                new LineSections(
+                    LineSection.of(교대역, 남부터미널, 2, 2), LineSection.of(남부터미널, 양재역, 3, 3)))
             .build());
   }
 

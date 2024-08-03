@@ -25,21 +25,23 @@ public class LineSection {
   private Station downStation;
 
   private int distance;
+  private int duration;
 
   @Builder
-  public LineSection(Long id, Station upStation, Station downStation, int distance) {
+  public LineSection(Long id, Station upStation, Station downStation, int distance, int duration) {
     this.id = id;
     this.upStation = upStation;
     this.downStation = downStation;
     this.distance = distance;
+    this.duration = duration;
   }
 
-  public LineSection(Station upStation, Station downStation, int distance) {
-    this(null, upStation, downStation, distance);
+  public LineSection(Station upStation, Station downStation, int distance, int duration) {
+    this(null, upStation, downStation, distance, duration);
   }
 
-  public static LineSection of(Station upStation, Station downStation, int distance) {
-    return new LineSection(upStation, downStation, distance);
+  public static LineSection of(Station upStation, Station downStation, int distance, int duration) {
+    return new LineSection(upStation, downStation, distance, duration);
   }
 
   public boolean canPrepend(LineSection lineSection) {
@@ -54,11 +56,17 @@ public class LineSection {
     if (lineSection.distance >= distance) {
       return false;
     }
+    if (lineSection.duration >= duration) {
+      return false;
+    }
     return upStation.isSame(lineSection.getUpStation());
   }
 
   public boolean canSplitDown(LineSection lineSection) {
     if (lineSection.distance >= distance) {
+      return false;
+    }
+    if (lineSection.duration >= duration) {
       return false;
     }
     return downStation.isSame(lineSection.getDownStation());
@@ -67,20 +75,30 @@ public class LineSection {
   public boolean isSame(LineSection lineSection) {
     return upStation.isSame(lineSection.getUpStation())
         && downStation.isSame(lineSection.getDownStation())
-        && distance == lineSection.getDistance();
+        && distance == lineSection.getDistance()
+        && duration == lineSection.getDuration();
   }
 
   public List<LineSection> split(LineSection lineSection) {
     if (canSplitUp(lineSection)) {
       return List.of(
-          LineSection.of(upStation, lineSection.getDownStation(), lineSection.distance),
           LineSection.of(
-              lineSection.getDownStation(), downStation, distance - lineSection.distance));
+              upStation, lineSection.getDownStation(), lineSection.distance, lineSection.duration),
+          LineSection.of(
+              lineSection.getDownStation(),
+              downStation,
+              distance - lineSection.distance,
+              duration - lineSection.duration));
     }
     if (canSplitDown(lineSection)) {
       return List.of(
-          LineSection.of(upStation, lineSection.getUpStation(), distance - lineSection.distance),
-          LineSection.of(lineSection.getUpStation(), downStation, lineSection.distance));
+          LineSection.of(
+              upStation,
+              lineSection.upStation,
+              distance - lineSection.distance,
+              duration - lineSection.duration),
+          LineSection.of(
+              lineSection.upStation, downStation, lineSection.distance, lineSection.duration));
     }
     throw new IllegalArgumentException("LineSection#split 가 가능하지 않습니다.");
   }
@@ -92,11 +110,17 @@ public class LineSection {
   public LineSection merge(LineSection lineSection) {
     if (canAppend(lineSection)) {
       return LineSection.of(
-          upStation, lineSection.getDownStation(), distance + lineSection.distance);
+          upStation,
+          lineSection.getDownStation(),
+          distance + lineSection.distance,
+          duration + lineSection.duration);
     }
     if (canPrepend(lineSection)) {
       return LineSection.of(
-          lineSection.getUpStation(), downStation, distance + lineSection.distance);
+          lineSection.getUpStation(),
+          downStation,
+          distance + lineSection.distance,
+          duration + lineSection.duration);
     }
     throw new IllegalArgumentException("LineSection#merge 가 가능하지 않습니다.");
   }

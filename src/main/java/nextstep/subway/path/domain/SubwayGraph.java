@@ -1,7 +1,7 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -25,7 +25,7 @@ public class SubwayGraph {
     graph.addVertex(station);
   }
 
-  public void addLineSection(LineSection2 lineSection) {
+  public void addLineSection(LineSection lineSection) {
     Station upStation = lineSection.getUpStation();
     Station downStation = lineSection.getDownStation();
     validate(upStation, downStation);
@@ -41,7 +41,7 @@ public class SubwayGraph {
     }
   }
 
-  public void addLine(Line2 line) {
+  public void addLine(Line line) {
     line.getStations().forEach(this::addStation);
     line.getLineSections().getSections().forEach(this::addLineSection);
   }

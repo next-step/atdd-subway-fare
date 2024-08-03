@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.application.dto.StationResponse;
 
 @Getter
@@ -24,12 +24,12 @@ public class LineResponse {
     this.stations = stations;
   }
 
-  public static LineResponse from(Line2 line) {
+  public static LineResponse from(Line line) {
     return new LineResponse(
         line.getId(), line.getName(), line.getColor(), StationResponse.listOf(line.getStations()));
   }
 
-  public static List<LineResponse> listOf(List<Line2> lines) {
+  public static List<LineResponse> listOf(List<Line> lines) {
     return lines.stream().map(LineResponse::from).collect(Collectors.toList());
   }
 }

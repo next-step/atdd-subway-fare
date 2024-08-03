@@ -31,12 +31,13 @@ public class LineSections {
     this.sections.addAll(Arrays.asList(lineSections));
   }
 
-  public LineSections(Station upStation, Station downStation, int distance) {
-    this(LineSection.of(upStation, downStation, distance));
+  public LineSections(Station upStation, Station downStation, int distance, int duration) {
+    this(LineSection.of(upStation, downStation, distance, duration));
   }
 
-  public static LineSections of(Station upStation, Station downStation, int distance) {
-    return new LineSections(upStation, downStation, distance);
+  public static LineSections of(
+      Station upStation, Station downStation, int distance, int duration) {
+    return new LineSections(upStation, downStation, distance, duration);
   }
 
   public int size() {

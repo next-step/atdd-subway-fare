@@ -3,8 +3,8 @@ package nextstep.subway.unit.path.domain;
 import static nextstep.Fixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import nextstep.subway.path.domain.LineSectionEdge;
 import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.SubwayGraph;
@@ -57,7 +57,7 @@ class SubwayGraphTest {
     graph.addStation(교대역);
     graph.addStation(강남역);
 
-    graph.addLineSection(LineSection2.of(교대역, 강남역, 10, 1));
+    graph.addLineSection(LineSection.of(교대역, 강남역, 10, 1));
 
     assertThat(graph.isSame(new SubwayGraph())).isFalse();
   }
@@ -68,7 +68,7 @@ class SubwayGraphTest {
     SubwayGraph graph = new SubwayGraph();
     graph.addStation(교대역);
     graph.addStation(강남역);
-    LineSection2 교대_강남_구간 = LineSection2.of(교대역, 강남역, 10, 1);
+    LineSection 교대_강남_구간 = LineSection.of(교대역, 강남역, 10, 1);
     graph.addLineSection(교대_강남_구간);
 
     graph.addLineSection(교대_강남_구간);
@@ -88,7 +88,7 @@ class SubwayGraphTest {
   @Test
   void addLineSectionShouldThrowExceptionWhenStationNotExist() {
     SubwayGraph graph = new SubwayGraph();
-    LineSection2 section = LineSection2.of(교대역, 강남역, 10, 1);
+    LineSection section = LineSection.of(교대역, 강남역, 10, 1);
     assertThatExceptionOfType(IllegalArgumentException.class)
         .isThrownBy(() -> graph.addLineSection(section));
   }
@@ -97,7 +97,7 @@ class SubwayGraphTest {
   @Test
   void addLine() {
     SubwayGraph graph = new SubwayGraph();
-    Line2 이호선 = 이호선2();
+    Line 이호선 = 이호선();
     Station 역삼역 = 역삼역();
 
     graph.addLine(이호선);
@@ -107,7 +107,7 @@ class SubwayGraphTest {
                 new SubwayGraph(
                     WeightedMultigraph.<Station, LineSectionEdge>builder(LineSectionEdge.class)
                         .addVertices(강남역, 역삼역)
-                        .addEdge(강남역, 역삼역, LineSectionEdge.of(강남_역삼_구간2()), 10)
+                        .addEdge(강남역, 역삼역, LineSectionEdge.of(강남_역삼_구간()), 10)
                         .build())))
         .isTrue();
   }
@@ -124,10 +124,10 @@ class SubwayGraphTest {
       graph.addStation(강남역);
       graph.addStation(양재역);
       graph.addStation(남부터미널역);
-      graph.addLineSection(LineSection2.of(교대역, 강남역, 10, 1));
-      graph.addLineSection(LineSection2.of(강남역, 양재역, 10, 1));
-      graph.addLineSection(LineSection2.of(교대역, 남부터미널역, 2, 2));
-      graph.addLineSection(LineSection2.of(남부터미널역, 양재역, 3, 3));
+      graph.addLineSection(LineSection.of(교대역, 강남역, 10, 1));
+      graph.addLineSection(LineSection.of(강남역, 양재역, 10, 1));
+      graph.addLineSection(LineSection.of(교대역, 남부터미널역, 2, 2));
+      graph.addLineSection(LineSection.of(남부터미널역, 양재역, 3, 3));
     }
 
     @DisplayName("최단 거리 경로를 조회한다.")

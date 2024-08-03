@@ -13,27 +13,27 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LineService {
   private final LineSectionMapper lineSectionMapper;
-  private final LineRepository2 lineRepository;
+  private final LineRepository lineRepository;
 
   @Transactional
-  public Line2 saveLine(LineRequest request) {
-    Line2 line = lineRepository.save(request.toLine());
-    LineSection2 lineSection = lineSectionMapper.map(request.toLineSection());
+  public Line saveLine(LineRequest request) {
+    Line line = lineRepository.save(request.toLine());
+    LineSection lineSection = lineSectionMapper.map(request.toLineSection());
     line.addLineSection(lineSection);
     return line;
   }
 
-  public List<Line2> findAllLines() {
+  public List<Line> findAllLines() {
     return lineRepository.findAll();
   }
 
-  public Line2 findLineById(Long id) {
+  public Line findLineById(Long id) {
     return lineRepository.findById(id).orElseThrow(() -> new LineNotFoundException(id));
   }
 
   @Transactional
-  public Line2 updateLineById(Long id, UpdateLineRequest request) {
-    Line2 line = findLineById(id);
+  public Line updateLineById(Long id, UpdateLineRequest request) {
+    Line line = findLineById(id);
     line.changeName(request.getName());
     line.changeColor(request.getColor());
     return line;

@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
-import nextstep.subway.line.domain.Line2;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.LineSection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,8 +20,8 @@ import org.springframework.http.MediaType;
 public class LineAcceptanceSteps {
   private LineAcceptanceSteps() {}
 
-  public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line2 line) {
-    LineSection2 section = line.getLineSections().getFirst();
+  public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line line) {
+    LineSection section = line.getLineSections().getFirst();
     LineRequest request =
         new LineRequest(
             line.getName(),
@@ -64,7 +64,7 @@ public class LineAcceptanceSteps {
     return RestAssured.given().log().all().when().get(uri).then().log().all().extract();
   }
 
-  public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line2 line) {
+  public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line line) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     assertThat(response.as(LineResponse.class)).isEqualTo(LineResponse.from(line));
   }

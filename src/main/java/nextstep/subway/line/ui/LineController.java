@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.application.dto.*;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,20 +17,20 @@ public class LineController {
 
   @PostMapping
   public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest request) {
-    Line2 line = lineService.saveLine(request);
+    Line line = lineService.saveLine(request);
     return ResponseEntity.created(URI.create("/lines/" + line.getId()))
         .body(LineResponse.from(line));
   }
 
   @GetMapping
   public ResponseEntity<List<LineResponse>> showLines() {
-    List<Line2> lines = lineService.findAllLines();
+    List<Line> lines = lineService.findAllLines();
     return ResponseEntity.ok().body(LineResponse.listOf(lines));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<LineResponse> showLine(@PathVariable Long id) {
-    Line2 line = lineService.findLineById(id);
+    Line line = lineService.findLineById(id);
     return ResponseEntity.ok().body(LineResponse.from(line));
   }
 

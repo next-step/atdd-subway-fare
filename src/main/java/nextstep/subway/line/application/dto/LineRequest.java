@@ -2,7 +2,7 @@ package nextstep.subway.line.application.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 
 @Getter
 public class LineRequest {
@@ -29,8 +29,8 @@ public class LineRequest {
     this.duration = duration;
   }
 
-  public Line2 toLine() {
-    return new Line2(name, color);
+  public Line toLine() {
+    return new Line(name, color);
   }
 
   public LineSectionRequest toLineSection() {

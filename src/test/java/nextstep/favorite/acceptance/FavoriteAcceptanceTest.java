@@ -21,7 +21,7 @@ import org.springframework.http.HttpHeaders;
 @DisplayName("즐겨찾기 관련 기능 인수 테스트")
 class FavoriteAcceptanceTest extends AcceptanceTest {
   @Autowired private StationRepository stationRepository;
-  @Autowired private LineRepository2 lineRepository;
+  @Autowired private LineRepository lineRepository;
 
   private Station 교대역;
   private Station 남부터미널역;
@@ -36,12 +36,12 @@ class FavoriteAcceptanceTest extends AcceptanceTest {
     남부터미널역 = stationRepository.save(남부터미널역());
     양재역 = stationRepository.save(양재역());
     lineRepository.save(
-        aLine2()
+        aLine()
             .name("3호선")
             .color("bg-orange-600")
             .lineSections(
-                new LineSections2(
-                    LineSection2.of(교대역, 남부터미널역, 2, 2), LineSection2.of(남부터미널역, 양재역, 3, 3)))
+                new LineSections(
+                    LineSection.of(교대역, 남부터미널역, 2, 2), LineSection.of(남부터미널역, 양재역, 3, 3)))
             .build());
   }
 

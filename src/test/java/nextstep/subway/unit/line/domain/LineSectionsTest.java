@@ -32,35 +32,37 @@ class LineSectionsTest {
     @Test
     void shouldAddWhenEmpty() {
       LineSections sections = new LineSections();
-      LineSection section = LineSection.of(강남역, 역삼역, 10);
+      LineSection section = LineSection.of(강남역, 역삼역, 10, 1);
 
       sections.add(section);
 
       assertThat(sections.size()).isEqualTo(1);
       assertThat(sections.getFirst().isSame(section)).isTrue();
       assertThat(sections.getFirst().getDistance()).isEqualTo(section.getDistance());
+      assertThat(sections.getFirst().getDuration()).isEqualTo(section.getDuration());
     }
 
     @DisplayName("기존 구간 뒤에 새로운 구간을 추가한다.")
     @Test
     void addShouldAppend() {
-      LineSections sections = new LineSections(강남역, 역삼역, 10);
-      LineSection section = LineSection.of(역삼역, 선릉역, 20);
+      LineSections sections = new LineSections(강남역, 역삼역, 10, 1);
+      LineSection section = LineSection.of(역삼역, 선릉역, 20, 2);
 
       sections.add(section);
 
       assertThat(sections.size()).isEqualTo(2);
       assertThat(sections.getLast().isSame(section)).isTrue();
       assertThat(sections.getLast().getDistance()).isEqualTo(section.getDistance());
+      assertThat(sections.getLast().getDuration()).isEqualTo(section.getDuration());
     }
 
     @DisplayName("기존 구간 뒤에 새로운 구간을 추가할 때 이미 등록되어 있는 역은 등록될 수 없다.")
     @Test
-    void appendShouldThrowCycleException() {
+    void appendShouldThrowAlreadyExistsException() {
       LineSections sections =
           new LineSections(
-              Arrays.asList(LineSection.of(강남역, 역삼역, 10), LineSection.of(역삼역, 선릉역, 20)));
-      LineSection section = LineSection.of(선릉역, 역삼역, 30);
+              Arrays.asList(LineSection.of(강남역, 역삼역, 10, 1), LineSection.of(역삼역, 선릉역, 20, 2)));
+      LineSection section = LineSection.of(선릉역, 역삼역, 30, 3);
       assertThatExceptionOfType(LineSectionAlreadyExistsException.class)
           .isThrownBy(() -> sections.add(section));
     }
@@ -68,23 +70,23 @@ class LineSectionsTest {
     @DisplayName("기존 구간 앞에 새로운 구간을 추가한다.")
     @Test
     void addShouldPrepend() {
-      LineSections sections = new LineSections(역삼역, 선릉역, 20);
-      LineSection section = LineSection.of(강남역, 역삼역, 10);
+      LineSections sections = new LineSections(역삼역, 선릉역, 20, 2);
+      LineSection section = LineSection.of(강남역, 역삼역, 10, 1);
 
       sections.add(section);
 
       assertThat(sections.size()).isEqualTo(2);
       assertThat(sections.getFirst().isSame(section)).isTrue();
       assertThat(sections.getFirst().getDistance()).isEqualTo(section.getDistance());
+      assertThat(sections.getFirst().getDuration()).isEqualTo(section.getDuration());
     }
 
     @DisplayName("기존 구간 앞에 새로운 구간을 추가할 때 이미 등록된 있는 역은 등록될 수 없다.")
     @Test
-    void prependShouldThrowCycleException() {
+    void prependShouldThrowAlreadyExistsException() {
       LineSections sections =
-          new LineSections(
-              Arrays.asList(LineSection.of(강남역, 역삼역, 10), LineSection.of(역삼역, 선릉역, 20)));
-      LineSection section = LineSection.of(역삼역, 강남역, 30);
+          new LineSections(LineSection.of(강남역, 역삼역, 10, 1), LineSection.of(역삼역, 선릉역, 20, 2));
+      LineSection section = LineSection.of(역삼역, 강남역, 30, 3);
       assertThatExceptionOfType(LineSectionAlreadyExistsException.class)
           .isThrownBy(() -> sections.add(section));
     }
@@ -92,24 +94,35 @@ class LineSectionsTest {
     @DisplayName("상행역이 같은 구간을 추가하는 경우 가운데 하행역이 추가된다.")
     @Test
     void addShouldInsertWhenUpStationsAreTheSame() {
-      LineSections sections = new LineSections(강남역, 선릉역, 30);
-      LineSection section = LineSection.of(강남역, 역삼역, 10);
+      LineSections sections = new LineSections(강남역, 선릉역, 30, 3);
+      LineSection section = LineSection.of(강남역, 역삼역, 10, 1);
 
       sections.add(section);
 
       assertThat(sections.size()).isEqualTo(2);
       assertThat(sections.getFirst().isSame(section)).isTrue();
       assertThat(sections.getFirst().getDistance()).isEqualTo(section.getDistance());
-      assertThat(sections.getLast().isSame(LineSection.of(역삼역, 선릉역, 20))).isTrue();
+      assertThat(sections.getLast().isSame(LineSection.of(역삼역, 선릉역, 20, 2))).isTrue();
       assertThat(sections.getLast().getDistance()).isEqualTo(20);
+      assertThat(sections.getLast().getDuration()).isEqualTo(2);
     }
 
     @DisplayName("상행역이 같은 구간을 추가하는 경우 구간 길이가 이전 구간 길이보다 길거나 같으면 예외 처리된다.")
     @ParameterizedTest
     @ValueSource(ints = {10, 11, 20})
     void addShouldNotInsertWhenUpStationsAreTheSameButDistanceTooLong(int distance) {
-      LineSections sections = new LineSections(강남역, 선릉역, 10);
-      LineSection section = LineSection.of(강남역, 역삼역, distance);
+      LineSections sections = new LineSections(강남역, 선릉역, 10, 2);
+      LineSection section = LineSection.of(강남역, 역삼역, distance, 1);
+      assertThatExceptionOfType(CannotAddLineSectionException.class)
+          .isThrownBy(() -> sections.add(section));
+    }
+
+    @DisplayName("상행역이 같은 구간을 추가하는 경우 소요시간이 이전 구간 시간보다 길거나 같으면 예외 처리된다.")
+    @ParameterizedTest
+    @ValueSource(ints = {10, 11, 20})
+    void addShouldThrowExceptionWhenDurationIsTooLong(int duration) {
+      LineSections sections = new LineSections(강남역, 선릉역, 20, 10);
+      LineSection section = LineSection.of(강남역, 역삼역, 10, duration);
       assertThatExceptionOfType(CannotAddLineSectionException.class)
           .isThrownBy(() -> sections.add(section));
     }
@@ -117,27 +130,39 @@ class LineSectionsTest {
     @DisplayName("하행역이 같은 구간을 추가하는 경우 가운데 상행역이 추가된다.")
     @Test
     void addShouldInsertWhenDownStationsAreTheSame() {
-      LineSections sections = new LineSections(강남역, 선릉역, 30);
-      LineSection section = LineSection.of(역삼역, 선릉역, 20);
+      LineSections sections = new LineSections(강남역, 선릉역, 30, 3);
+      LineSection section = LineSection.of(역삼역, 선릉역, 20, 2);
 
       sections.add(section);
 
       assertThat(sections.size()).isEqualTo(2);
-      assertThat(sections.getFirst().isSame(LineSection.of(강남역, 역삼역, 10))).isTrue();
+      assertThat(sections.getFirst().isSame(LineSection.of(강남역, 역삼역, 10, 1))).isTrue();
       assertThat(sections.getFirst().getDistance()).isEqualTo(10);
+      assertThat(sections.getFirst().getDuration()).isEqualTo(1);
       assertThat(sections.getLast().isSame(section)).isTrue();
       assertThat(sections.getLast().getDistance()).isEqualTo(section.getDistance());
+      assertThat(sections.getLast().getDuration()).isEqualTo(section.getDuration());
     }
 
     @DisplayName("하행역이 같은 구간을 추가하는 경우 구간 길이가 이전 구간 길이보다 길거나 같으면 예외 처리된다.")
     @ParameterizedTest
     @ValueSource(ints = {10, 11, 20})
     void addShouldNotInsertWhenDownStationsAreTheSameButDistanceTooLong(int distance) {
-      LineSections sections = new LineSections(강남역, 선릉역, 10);
-      LineSection section = LineSection.of(역삼역, 선릉역, distance);
+      LineSections sections = new LineSections(강남역, 선릉역, 10, 5);
+      LineSection section = LineSection.of(역삼역, 선릉역, distance, 1);
       assertThatExceptionOfType(CannotAddLineSectionException.class)
           .isThrownBy(() -> sections.add(section));
     }
+  }
+
+  @DisplayName("하행역이 같은 구간을 추가하는 경우 소요시간이 이전 구간 소요시간 보다 길거나 같으면 예외 처리된다.")
+  @ParameterizedTest
+  @ValueSource(ints = {10, 11, 20})
+  void addShouldThrowExceptionWhenDurationTooLong(int duration) {
+    LineSections sections = new LineSections(강남역, 선릉역, 20, 10);
+    LineSection section = LineSection.of(역삼역, 선릉역, 10, duration);
+    assertThatExceptionOfType(CannotAddLineSectionException.class)
+        .isThrownBy(() -> sections.add(section));
   }
 
   @DisplayName("구간 제거 단위 테스트")
@@ -146,7 +171,7 @@ class LineSectionsTest {
     @DisplayName("노선에 역이 등록되어 있지 않은 경우 예외를 던진다.")
     @Test
     void shouldThrowExceptionWhenStationNotFound() {
-      LineSections sections = new LineSections(LineSection.of(강남역, 역삼역, 10));
+      LineSections sections = new LineSections(LineSection.of(강남역, 역삼역, 10, 1));
       assertThatExceptionOfType(StationNotFoundInLineException.class)
           .isThrownBy(() -> sections.remove(선릉역));
     }
@@ -154,7 +179,7 @@ class LineSectionsTest {
     @DisplayName("노선에 구간이 하나만 있는 경우 예외를 던진다.")
     @Test
     void shouldThrowExceptionWhenLastSection() {
-      LineSections sections = new LineSections(LineSection.of(강남역, 역삼역, 10));
+      LineSections sections = new LineSections(LineSection.of(강남역, 역삼역, 10, 1));
       assertThatExceptionOfType(CannotRemoveLastLineSectionException.class)
           .isThrownBy(() -> sections.remove(역삼역));
     }
@@ -163,36 +188,36 @@ class LineSectionsTest {
     @Test
     void shouldRemoveTerminalDownStation() {
       LineSections sections =
-          new LineSections(LineSection.of(강남역, 역삼역, 10), LineSection.of(역삼역, 선릉역, 20));
+          new LineSections(LineSection.of(강남역, 역삼역, 10, 1), LineSection.of(역삼역, 선릉역, 20, 2));
 
       sections.remove(선릉역);
 
       assertThat(sections.size()).isEqualTo(1);
-      assertThat(sections.getFirst().isSame(LineSection.of(강남역, 역삼역, 10))).isTrue();
+      assertThat(sections.getFirst().isSame(LineSection.of(강남역, 역삼역, 10, 1))).isTrue();
     }
 
     @DisplayName("상행 종점역을 제거한다.")
     @Test
     void shouldRemoveTerminalUpStation() {
       LineSections sections =
-          new LineSections(LineSection.of(강남역, 역삼역, 10), LineSection.of(역삼역, 선릉역, 20));
+          new LineSections(LineSection.of(강남역, 역삼역, 10, 1), LineSection.of(역삼역, 선릉역, 20, 2));
 
       sections.remove(강남역);
 
       assertThat(sections.size()).isEqualTo(1);
-      assertThat(sections.getLast().isSame(LineSection.of(역삼역, 선릉역, 20))).isTrue();
+      assertThat(sections.getLast().isSame(LineSection.of(역삼역, 선릉역, 20, 2))).isTrue();
     }
 
     @DisplayName("중간역을 제거한다.")
     @Test
     void shouldRemoveMiddleStation() {
       LineSections sections =
-          new LineSections(LineSection.of(강남역, 역삼역, 10), LineSection.of(역삼역, 선릉역, 20));
+          new LineSections(LineSection.of(강남역, 역삼역, 10, 1), LineSection.of(역삼역, 선릉역, 20, 2));
 
       sections.remove(역삼역);
 
       assertThat(sections.size()).isEqualTo(1);
-      assertThat(sections.getFirst().isSame(LineSection.of(강남역, 선릉역, 30))).isTrue();
+      assertThat(sections.getFirst().isSame(LineSection.of(강남역, 선릉역, 30, 3))).isTrue();
     }
   }
 }

@@ -16,16 +16,16 @@ public class LineSectionService {
   private final LineService lineService;
 
   @Transactional
-  public Line2 appendLineSection(Long lineId, LineSectionRequest request) {
-    Line2 line = lineService.findLineById(lineId);
-    LineSection2 lineSection = lineSectionMapper.map(request);
+  public Line appendLineSection(Long lineId, LineSectionRequest request) {
+    Line line = lineService.findLineById(lineId);
+    LineSection lineSection = lineSectionMapper.map(request);
     line.addLineSection(lineSection);
     return line;
   }
 
   @Transactional
   public void removeLineSection(Long lineId, Long stationId) {
-    Line2 line = lineService.findLineById(lineId);
+    Line line = lineService.findLineById(lineId);
     Station station = stationReader.readById(stationId);
     line.remove(station);
   }

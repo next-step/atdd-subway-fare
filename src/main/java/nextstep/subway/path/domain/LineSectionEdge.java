@@ -1,18 +1,18 @@
 package nextstep.subway.path.domain;
 
 import lombok.Getter;
-import nextstep.subway.line.domain.LineSection2;
+import nextstep.subway.line.domain.LineSection;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Getter
 public class LineSectionEdge extends DefaultWeightedEdge {
-  private final LineSection2 lineSection;
+  private final LineSection lineSection;
 
-  public LineSectionEdge(LineSection2 lineSection) {
+  public LineSectionEdge(LineSection lineSection) {
     this.lineSection = lineSection;
   }
 
-  public static LineSectionEdge of(LineSection2 lineSection) {
+  public static LineSectionEdge of(LineSection lineSection) {
     return new LineSectionEdge(lineSection);
   }
 

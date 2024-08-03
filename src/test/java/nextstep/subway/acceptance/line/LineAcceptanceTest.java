@@ -5,7 +5,7 @@ import static nextstep.subway.acceptance.line.steps.LineAcceptanceSteps.*;
 
 import java.util.Arrays;
 import java.util.Collections;
-import nextstep.subway.line.domain.Line2;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.support.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 노선을 생성한다.")
   @Test
   void createLine() {
-    var response = 지하철_노선_생성_요청(이호선2());
+    var response = 지하철_노선_생성_요청(이호선());
 
     지하철_노선_생성됨(response);
     지하철_노선_목록에_포함됨(지하철_노선_목록_조회_요청(), Collections.singletonList(response));
@@ -44,8 +44,8 @@ class LineAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 노선 목록을 조회한다.")
   @Test
   void showLines() {
-    var 이호선_생성_응답 = 지하철_노선_생성_요청(이호선2());
-    var 신분당선_생성_응답 = 지하철_노선_생성_요청(신분당선2());
+    var 이호선_생성_응답 = 지하철_노선_생성_요청(이호선());
+    var 신분당선_생성_응답 = 지하철_노선_생성_요청(신분당선());
 
     var response = 지하철_노선_목록_조회_요청();
 
@@ -56,7 +56,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 노선을 조회한다.")
   @Test
   void showLine() {
-    Line2 이호선 = 이호선2();
+    Line 이호선 = 이호선();
     var 노선_생성_응답 = 지하철_노선_생성_요청(이호선);
     String uri = 노선_생성_응답.header(HttpHeaders.LOCATION);
 
@@ -71,7 +71,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   void updateLine() {
     String newName = "다른분당선";
     String newColor = "bg-orange-600";
-    var 노선_생성_응답 = 지하철_노선_생성_요청(신분당선2());
+    var 노선_생성_응답 = 지하철_노선_생성_요청(신분당선());
     String uri = 노선_생성_응답.header(HttpHeaders.LOCATION);
 
     지하철_노선_수정_요청(uri, newName, newColor);
@@ -83,7 +83,7 @@ class LineAcceptanceTest extends AcceptanceTest {
   @DisplayName("지하철 노선을 삭제한다.")
   @Test
   void deleteLine() {
-    var 노선_생성_응답 = 지하철_노선_생성_요청(이호선2());
+    var 노선_생성_응답 = 지하철_노선_생성_요청(이호선());
     String uri = 노선_생성_응답.header(HttpHeaders.LOCATION);
 
     var response = 지하철_삭제_요청(uri);
