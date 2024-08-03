@@ -1,14 +1,13 @@
 package nextstep.subway.line.domain;
 
+import java.util.Arrays;
+import java.util.List;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import nextstep.subway.station.domain.Station;
-
-import javax.persistence.*;
-import java.util.Arrays;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
