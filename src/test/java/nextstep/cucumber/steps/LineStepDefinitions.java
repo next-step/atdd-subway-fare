@@ -9,10 +9,7 @@ import io.restassured.RestAssured;
 import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.support.AcceptanceContext;
-import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.application.dto.LineRequest2;
-import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.line.application.dto.LineSectionRequest;
+import nextstep.subway.line.application.dto.*;
 import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -35,6 +32,7 @@ public class LineStepDefinitions {
                   .upStationId(upStationId)
                   .downStationId(downStationId)
                   .distance(Integer.parseInt(row.get("distance")))
+                  .duration(Integer.parseInt(row.get("duration")))
                   .build();
           var response =
               RestAssured.given()
@@ -60,7 +58,10 @@ public class LineStepDefinitions {
           Long downStationId = ((StationResponse) context.store.get(it.get("downStation"))).getId();
           LineSectionRequest request =
               new LineSectionRequest(
-                  upStationId, downStationId, Integer.parseInt(it.get("distance")));
+                  upStationId,
+                  downStationId,
+                  Integer.parseInt(it.get("distance")),
+                  Integer.parseInt(it.get("duration")));
           LineResponse line = (LineResponse) context.store.get(it.get("line"));
           RestAssured.given()
               .log()
@@ -83,8 +84,8 @@ public class LineStepDefinitions {
           Long upStationId = ((StationResponse) context.store.get(row.get("upStation"))).getId();
           Long downStationId =
               ((StationResponse) context.store.get(row.get("downStation"))).getId();
-          LineRequest2 request =
-              LineRequest2.builder()
+          LineRequest request =
+              LineRequest.builder()
                   .name(row.get("name"))
                   .color(row.get("color"))
                   .upStationId(upStationId)
@@ -99,7 +100,7 @@ public class LineStepDefinitions {
                   .body(request)
                   .contentType(MediaType.APPLICATION_JSON_VALUE)
                   .when()
-                  .post("/new/lines")
+                  .post("/lines")
                   .then()
                   .log()
                   .all()

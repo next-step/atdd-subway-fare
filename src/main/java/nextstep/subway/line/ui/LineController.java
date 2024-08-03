@@ -3,7 +3,7 @@ package nextstep.subway.line.ui;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.line.application.LineService2;
+import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.application.dto.*;
 import nextstep.subway.line.domain.Line2;
 import org.springframework.http.ResponseEntity;
@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/lines")
 @RequiredArgsConstructor
 public class LineController {
-  private final LineService2 lineService;
+  private final LineService lineService;
 
   @PostMapping
-  public ResponseEntity<LineResponse2> createLine(@RequestBody LineRequest2 request) {
+  public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest request) {
     Line2 line = lineService.saveLine(request);
     return ResponseEntity.created(URI.create("/lines/" + line.getId()))
-        .body(LineResponse2.from(line));
+        .body(LineResponse.from(line));
   }
 
   @GetMapping
-  public ResponseEntity<List<LineResponse2>> showLines() {
+  public ResponseEntity<List<LineResponse>> showLines() {
     List<Line2> lines = lineService.findAllLines();
-    return ResponseEntity.ok().body(LineResponse2.listOf(lines));
+    return ResponseEntity.ok().body(LineResponse.listOf(lines));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<LineResponse2> showLine(@PathVariable Long id) {
+  public ResponseEntity<LineResponse> showLine(@PathVariable Long id) {
     Line2 line = lineService.findLineById(id);
-    return ResponseEntity.ok().body(LineResponse2.from(line));
+    return ResponseEntity.ok().body(LineResponse.from(line));
   }
 
   @PutMapping("/{id}")
