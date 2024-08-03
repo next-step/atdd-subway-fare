@@ -1,5 +1,8 @@
 package nextstep.subway.acceptance.line;
 
+import static nextstep.Fixtures.*;
+import static nextstep.subway.acceptance.line.steps.LineSectionAcceptanceSteps.*;
+
 import nextstep.subway.line.domain.Line2;
 import nextstep.subway.line.domain.LineRepository2;
 import nextstep.subway.line.domain.LineSection2;
@@ -13,9 +16,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
-import static nextstep.Fixtures.*;
-import static nextstep.subway.acceptance.line.steps.LineSectionAcceptanceSteps.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayName("지하철 구간 관리 기능 인수테스트")
