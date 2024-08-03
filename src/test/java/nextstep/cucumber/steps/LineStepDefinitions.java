@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 import nextstep.cucumber.support.AcceptanceContext;
 import nextstep.subway.line.application.dto.LineRequest;
+import nextstep.subway.line.application.dto.LineRequest2;
 import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.line.application.dto.LineSectionRequest;
-import nextstep.subway.line.application.dto.NewLineRequest;
 import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -83,8 +83,8 @@ public class LineStepDefinitions {
           Long upStationId = ((StationResponse) context.store.get(row.get("upStation"))).getId();
           Long downStationId =
               ((StationResponse) context.store.get(row.get("downStation"))).getId();
-          NewLineRequest request =
-              NewLineRequest.builder()
+          LineRequest2 request =
+              LineRequest2.builder()
                   .name(row.get("name"))
                   .color(row.get("color"))
                   .upStationId(upStationId)
@@ -111,7 +111,7 @@ public class LineStepDefinitions {
   @Then("지하철 노선 목록 조회 시 {string}을 찾을 수 있다")
   public void 지하철_노선_목록_조회_시_생성한_노선을_찾을_수_있다(String line) {
     var response =
-        RestAssured.given().log().all().when().get("/new/lines").then().log().all().extract();
+        RestAssured.given().log().all().when().get("/lines").then().log().all().extract();
     List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
     LineResponse expectedLine = (LineResponse) context.store.get(line);
     assertThat(actualLines).contains(expectedLine);

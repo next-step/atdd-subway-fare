@@ -7,6 +7,7 @@ import nextstep.member.domain.Member.MemberBuilder;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Line.LineBuilder;
 import nextstep.subway.line.domain.LineSection;
+import nextstep.subway.line.domain.LineSection2;
 import nextstep.subway.line.domain.LineSections;
 import nextstep.subway.station.domain.Station;
 
@@ -66,6 +67,15 @@ public class Fixtures {
 
   public static LineSection 강남_역삼_구간() {
     return LineSection.builder().upStation(강남역()).downStation(역삼역()).distance(10).build();
+  }
+
+  public static LineSection2 강남_역삼_구간2() {
+    return LineSection2.builder()
+        .upStation(강남역())
+        .downStation(역삼역())
+        .distance(10)
+        .distance(1)
+        .build();
   }
 
   public static LineSection 역삼_선릉_구간() {

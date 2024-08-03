@@ -1,16 +1,17 @@
 package nextstep.subway.unit.line.application;
 
+import nextstep.subway.line.application.LineService2;
 import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.station.application.StationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class LineServiceMockTest {
+class LineServiceTest2 {
   @Mock private LineRepository lineRepository;
-  @Mock private StationService stationService;
+  @InjectMocks private LineService2 lineService;
 
   @Test
   void addSection() {
