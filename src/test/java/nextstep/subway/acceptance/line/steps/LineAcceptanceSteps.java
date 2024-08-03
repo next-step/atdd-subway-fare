@@ -7,9 +7,8 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import java.util.stream.Collectors;
-import nextstep.subway.line.application.dto.LineRequest2;
+import nextstep.subway.line.application.dto.LineRequest;
 import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.line.application.dto.LineResponse2;
 import nextstep.subway.line.application.dto.UpdateLineRequest;
 import nextstep.subway.line.domain.Line2;
 import nextstep.subway.line.domain.LineSection2;
@@ -23,8 +22,8 @@ public class LineAcceptanceSteps {
 
   public static ExtractableResponse<Response> 지하철_노선_생성_요청(Line2 line) {
     LineSection2 section = line.getLineSections().getFirst();
-    LineRequest2 request =
-        new LineRequest2(
+    LineRequest request =
+        new LineRequest(
             line.getName(),
             line.getColor(),
             section.getUpStation().getId(),
@@ -55,9 +54,9 @@ public class LineAcceptanceSteps {
 
   public static void 지하철_노선_목록에_포함됨(
       ExtractableResponse<Response> response, List<ExtractableResponse<Response>> createResponses) {
-    List<LineResponse2> actualLines = response.jsonPath().getList(".", LineResponse2.class);
-    List<LineResponse2> expectedLines =
-        createResponses.stream().map(it -> it.as(LineResponse2.class)).collect(Collectors.toList());
+    List<LineResponse> actualLines = response.jsonPath().getList(".", LineResponse.class);
+    List<LineResponse> expectedLines =
+        createResponses.stream().map(it -> it.as(LineResponse.class)).collect(Collectors.toList());
     assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
@@ -67,7 +66,7 @@ public class LineAcceptanceSteps {
 
   public static void 지하철_노선_조회됨(ExtractableResponse<Response> response, Line2 line) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    assertThat(response.as(LineResponse2.class)).isEqualTo(LineResponse2.from(line));
+    assertThat(response.as(LineResponse.class)).isEqualTo(LineResponse.from(line));
   }
 
   public static ExtractableResponse<Response> 지하철_노선_수정_요청(String uri, String name, String color) {
