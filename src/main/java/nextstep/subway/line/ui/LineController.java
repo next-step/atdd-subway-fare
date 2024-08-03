@@ -3,46 +3,45 @@ package nextstep.subway.line.ui;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.line.application.LineService;
-import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.line.application.dto.UpdateLineRequest;
-import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.application.LineService2;
+import nextstep.subway.line.application.dto.*;
+import nextstep.subway.line.domain.Line2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/lines")
 @RequiredArgsConstructor
 public class LineController {
-  private final LineService lineService;
+  private final LineService2 lineService;
 
-  @PostMapping("/lines")
-  public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest request) {
-    Line line = lineService.saveLine(request);
+  @PostMapping
+  public ResponseEntity<LineResponse2> createLine(@RequestBody LineRequest2 request) {
+    Line2 line = lineService.saveLine(request);
     return ResponseEntity.created(URI.create("/lines/" + line.getId()))
-        .body(LineResponse.from(line));
+        .body(LineResponse2.from(line));
   }
 
-  @GetMapping("/lines")
-  public ResponseEntity<List<LineResponse>> showLines() {
-    List<Line> lines = lineService.findAllLines();
-    return ResponseEntity.ok().body(LineResponse.listOf(lines));
+  @GetMapping
+  public ResponseEntity<List<LineResponse2>> showLines() {
+    List<Line2> lines = lineService.findAllLines();
+    return ResponseEntity.ok().body(LineResponse2.listOf(lines));
   }
 
-  @GetMapping("/lines/{id}")
-  public ResponseEntity<LineResponse> showLine(@PathVariable Long id) {
-    Line line = lineService.findLineById(id);
-    return ResponseEntity.ok().body(LineResponse.from(line));
+  @GetMapping("/{id}")
+  public ResponseEntity<LineResponse2> showLine(@PathVariable Long id) {
+    Line2 line = lineService.findLineById(id);
+    return ResponseEntity.ok().body(LineResponse2.from(line));
   }
 
-  @PutMapping("/lines/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<Void> updateLine(
       @PathVariable Long id, @RequestBody UpdateLineRequest request) {
     lineService.updateLineById(id, request);
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping("/lines/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteLine(@PathVariable Long id) {
     lineService.deleteLineById(id);
     return ResponseEntity.noContent().build();
