@@ -61,7 +61,7 @@ public class LineAcceptanceSteps {
     assertThat(actualLines).containsExactlyInAnyOrderElementsOf(expectedLines);
   }
 
-  public static ExtractableResponse<Response> 지하철_노선_조회_요청2(String uri) {
+  public static ExtractableResponse<Response> 지하철_노선_조회_요청(String uri) {
     return RestAssured.given().log().all().when().get(uri).then().log().all().extract();
   }
 
@@ -85,7 +85,7 @@ public class LineAcceptanceSteps {
   }
 
   public static void 지하철_노선_수정됨2(String uri, String newName, String newColor) {
-    LineResponse updatedLine = 지하철_노선_조회_요청2(uri).as(LineResponse.class);
+    LineResponse updatedLine = 지하철_노선_조회_요청(uri).as(LineResponse.class);
     assertThat(updatedLine.getName()).isEqualTo(newName);
     assertThat(updatedLine.getColor()).isEqualTo(newColor);
   }

@@ -60,7 +60,7 @@ class LineAcceptanceTest extends AcceptanceTest {
     var 노선_생성_응답 = 지하철_노선_생성_요청2(이호선);
     String uri = 노선_생성_응답.header(HttpHeaders.LOCATION);
 
-    var response = 지하철_노선_조회_요청2(uri);
+    var response = 지하철_노선_조회_요청(uri);
 
     지하철_노선_조회됨2(response, 이호선);
   }
