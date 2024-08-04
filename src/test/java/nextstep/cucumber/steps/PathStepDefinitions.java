@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import java.util.List;
 import nextstep.cucumber.support.AcceptanceContext;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,9 +25,27 @@ public class PathStepDefinitions {
             .log()
             .all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParams("source", sourceId, "target", targetId)
+            .queryParams("source", sourceId, "target", targetId, "type", PathType.DISTANCE.name())
             .when()
-            .get("/paths")
+            .get("/new/paths")
+            .then()
+            .log()
+            .all()
+            .extract();
+  }
+
+  @When("{string}에서 {string}까지 최소 시간 경로를 조회하면")
+  public void 교대역_에서_양재역_까지_최소_시간_경로를_조회하면(String source, String target) {
+    Long sourceId = ((StationResponse) context.store.get(source)).getId();
+    Long targetId = ((StationResponse) context.store.get(target)).getId();
+    context.response =
+        RestAssured.given()
+            .log()
+            .all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParams("source", sourceId, "target", targetId, "type", PathType.DURATION.name())
+            .when()
+            .get("/new/paths")
             .then()
             .log()
             .all()
