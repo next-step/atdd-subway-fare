@@ -39,4 +39,12 @@ public class PathStepDefinitions {
     List<String> actualNames = context.response.jsonPath().getList("stations.name", String.class);
     assertThat(actualNames).containsExactlyElementsOf(expectedNames);
   }
+
+  @Then("총 거리는 {int}km이며 총 소요 시간은 {int}분이다")
+  public void 총_거리는_x_km이며_총_소요_시간은_x_분이다(int distance, int duration) {
+    long actualDistance = context.response.jsonPath().getLong("distance");
+    long actualDuration = context.response.jsonPath().getLong("duration");
+    assertThat(actualDistance).isEqualTo(distance);
+    assertThat(actualDuration).isEqualTo(duration);
+  }
 }

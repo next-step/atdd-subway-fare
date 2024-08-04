@@ -18,38 +18,6 @@ import org.springframework.http.MediaType;
 public class LineStepDefinitions {
   @Autowired private AcceptanceContext context;
 
-  @Given("노선들을 생성하고")
-  public void 노선들을_생성하고(List<Map<String, String>> rows) {
-    rows.forEach(
-        row -> {
-          Long upStationId = ((StationResponse) context.store.get(row.get("upStation"))).getId();
-          Long downStationId =
-              ((StationResponse) context.store.get(row.get("downStation"))).getId();
-          LineRequest request =
-              LineRequest.builder()
-                  .name(row.get("name"))
-                  .color(row.get("color"))
-                  .upStationId(upStationId)
-                  .downStationId(downStationId)
-                  .distance(Integer.parseInt(row.get("distance")))
-                  .duration(Integer.parseInt(row.get("duration")))
-                  .build();
-          var response =
-              RestAssured.given()
-                  .log()
-                  .all()
-                  .body(request)
-                  .contentType(MediaType.APPLICATION_JSON_VALUE)
-                  .when()
-                  .post("/lines")
-                  .then()
-                  .log()
-                  .all()
-                  .extract();
-          context.store.put(request.getName(), response.as(LineResponse.class));
-        });
-  }
-
   @Given("구간들을 등록하고")
   public void 구간들을_등록하고(List<Map<String, String>> rows) {
     rows.forEach(
@@ -77,8 +45,8 @@ public class LineStepDefinitions {
         });
   }
 
-  @When("new 노선들을 생성하고")
-  public void new_노선들을_생성하고(List<Map<String, String>> rows) {
+  @When("노선들을 생성하고")
+  public void 노선들을_생성하고(List<Map<String, String>> rows) {
     rows.forEach(
         row -> {
           Long upStationId = ((StationResponse) context.store.get(row.get("upStation"))).getId();
