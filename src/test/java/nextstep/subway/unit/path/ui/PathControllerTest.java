@@ -11,9 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
-import nextstep.subway.path.application.PathService;
-import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.application.PathService2;
+import nextstep.subway.path.application.dto.PathRequest2;
+import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("NonAsciiCharacters")
 class PathControllerTest {
   @Autowired private MockMvc mockMvc;
-  @MockBean private PathService pathService;
+  @MockBean private PathService2 pathService;
   @MockBean private JwtTokenProvider jwtTokenProvider;
 
   @Test
@@ -36,14 +37,15 @@ class PathControllerTest {
   void findPath() throws Exception {
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
-    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId());
-    given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5));
+    PathRequest2 request = PathRequest2.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+    given(pathService.findPath(request)).willReturn(Path2.of(List.of(교대역, 양재역), 5, 10));
 
     mockMvc
         .perform(
             get("/paths")
                 .param("source", String.valueOf(교대역.getId()))
-                .param("target", String.valueOf(양재역.getId())))
+                .param("target", String.valueOf(양재역.getId()))
+                .param("type", PathType.DISTANCE.name()))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.stations", hasSize(2)))
@@ -51,6 +53,7 @@ class PathControllerTest {
         .andExpect(jsonPath("$.stations[0].name").value(교대역.getName()))
         .andExpect(jsonPath("$.stations[1].id").value(양재역.getId()))
         .andExpect(jsonPath("$.stations[1].name").value(양재역.getName()))
-        .andExpect(jsonPath("$.distance").value(5));
+        .andExpect(jsonPath("$.distance").value(5))
+        .andExpect(jsonPath("$.duration").value(10));
   }
 }

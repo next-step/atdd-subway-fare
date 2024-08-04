@@ -7,6 +7,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.domain.Station;
 import org.springframework.http.MediaType;
 
@@ -20,7 +21,13 @@ public class PathAcceptanceSteps {
         .log()
         .all()
         .accept(MediaType.APPLICATION_JSON_VALUE)
-        .queryParams("source", request.getSource(), "target", request.getTarget())
+        .queryParams(
+            "source",
+            request.getSource(),
+            "target",
+            request.getTarget(),
+            "type",
+            PathType.DISTANCE.name())
         .when()
         .get("/paths")
         .then()
