@@ -11,9 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import nextstep.auth.application.JwtTokenProvider;
-import nextstep.subway.path.application.PathService2;
-import nextstep.subway.path.application.dto.PathRequest2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.domain.Path;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.ui.PathController;
 import nextstep.subway.station.domain.Station;
@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("NonAsciiCharacters")
 class PathControllerTest {
   @Autowired private MockMvc mockMvc;
-  @MockBean private PathService2 pathService;
+  @MockBean private PathService pathService;
   @MockBean private JwtTokenProvider jwtTokenProvider;
 
   @Test
@@ -37,8 +37,8 @@ class PathControllerTest {
   void findPath() throws Exception {
     Station 교대역 = 교대역();
     Station 양재역 = 양재역();
-    PathRequest2 request = PathRequest2.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
-    given(pathService.findPath(request)).willReturn(Path2.of(List.of(교대역, 양재역), 5, 10));
+    PathRequest request = PathRequest.of(교대역.getId(), 양재역.getId(), PathType.DISTANCE);
+    given(pathService.findPath(request)).willReturn(Path.of(List.of(교대역, 양재역), 5, 10));
 
     mockMvc
         .perform(

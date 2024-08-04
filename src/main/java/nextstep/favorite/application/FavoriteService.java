@@ -15,6 +15,7 @@ import nextstep.member.domain.Member;
 import nextstep.subway.path.application.PathService;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.PathType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,7 +47,9 @@ public class FavoriteService {
   }
 
   private boolean isValidPath(FavoriteRequest request) {
-    Path path = pathService.findPath(PathRequest.of(request.getSource(), request.getTarget()));
+    Path path =
+        pathService.findPath(
+            PathRequest.of(request.getSource(), request.getTarget(), PathType.DISTANCE));
     return !path.getStations().isEmpty();
   }
 

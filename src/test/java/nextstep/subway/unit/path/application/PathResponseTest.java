@@ -20,7 +20,7 @@ class PathResponseTest {
     Station 교대역 = 교대역();
     Station 남부터미널역 = 남부터미널역();
     Station 양재역 = 양재역();
-    Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), 5);
+    Path path = Path.of(Arrays.asList(교대역, 남부터미널역, 양재역), 5, 10);
 
     PathResponse response = PathResponse.from(path);
 
@@ -28,5 +28,6 @@ class PathResponseTest {
         .containsExactly(
             StationResponse.from(교대역), StationResponse.from(남부터미널역), StationResponse.from(양재역));
     assertThat(response.getDistance()).isEqualTo(5);
+    assertThat(response.getDuration()).isEqualTo(10);
   }
 }

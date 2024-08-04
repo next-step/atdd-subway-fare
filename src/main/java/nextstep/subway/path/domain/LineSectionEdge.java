@@ -15,9 +15,4 @@ public class LineSectionEdge extends DefaultWeightedEdge {
   public static LineSectionEdge of(LineSection lineSection) {
     return new LineSectionEdge(lineSection);
   }
-
-  @Override
-  protected double getWeight() {
-    return lineSection.getDistance();
-  }
 }

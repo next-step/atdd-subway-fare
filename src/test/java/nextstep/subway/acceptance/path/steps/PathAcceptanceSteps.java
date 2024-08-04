@@ -16,7 +16,7 @@ public class PathAcceptanceSteps {
   private PathAcceptanceSteps() {}
 
   public static ExtractableResponse<Response> 경로_조회_요청(Station source, Station target) {
-    PathRequest request = new PathRequest(source.getId(), target.getId());
+    PathRequest request = PathRequest.of(source.getId(), target.getId(), PathType.DISTANCE);
     return RestAssured.given()
         .log()
         .all()
@@ -27,7 +27,7 @@ public class PathAcceptanceSteps {
             "target",
             request.getTarget(),
             "type",
-            PathType.DISTANCE.name())
+            request.getType().name())
         .when()
         .get("/paths")
         .then()

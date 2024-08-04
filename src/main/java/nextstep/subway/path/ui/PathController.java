@@ -1,10 +1,10 @@
 package nextstep.subway.path.ui;
 
 import lombok.RequiredArgsConstructor;
-import nextstep.subway.path.application.PathService2;
-import nextstep.subway.path.application.dto.PathRequest2;
-import nextstep.subway.path.application.dto.PathResponse2;
-import nextstep.subway.path.domain.Path2;
+import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.domain.Path;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class PathController {
-  private final PathService2 pathService;
+  private final PathService pathService;
 
   @GetMapping("/paths")
-  public ResponseEntity<PathResponse2> findPath(@ModelAttribute PathRequest2 request) {
-    Path2 path = pathService.findPath(request);
-    return ResponseEntity.ok(PathResponse2.from(path));
+  public ResponseEntity<PathResponse> findPath(@ModelAttribute PathRequest request) {
+    Path path = pathService.findPath(request);
+    return ResponseEntity.ok(PathResponse.from(path));
   }
 }
