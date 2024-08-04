@@ -27,15 +27,17 @@ public class LineStepDef implements En {
                 params.put("name", param.get("name"));
                 params.put("color", param.get("color"));
                 params.put("upStationId",
-                    ((StationResponse) context.store.get(param.get("upStation"))).getId().toString());
+                    context.getValueFromStore(param.get("upStation"), StationResponse.class).getId().toString());
                 params.put("downStationId",
-                    ((StationResponse) context.store.get(param.get("downStation"))).getId().toString());
+                    context.getValueFromStore(param.get("downStation"), StationResponse.class).getId().toString());
                 params.put("distance", param.get("distance"));
+                params.put("duration", param.get("duration"));
                 ExtractableResponse<Response> response = 지하철_노선_생성_요청(params);
                 context.store.put(params.get("name").toString(), response.as(LineResponse.class));
             });
         });
 
     }
+
 
 }

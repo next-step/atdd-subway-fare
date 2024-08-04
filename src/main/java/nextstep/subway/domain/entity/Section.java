@@ -35,15 +35,18 @@ public class Section implements Comparable<Section> {
 
     private long distance;
 
-    public Section(Line line, Station upStation, Station downStation, long distance) {
+    private long duration;
+
+    public Section(Line line, Station upStation, Station downStation, long distance, long duration) {
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
-    public static Section of(Line line, Station upStation, Station downStation, long distance) {
-        return new Section(line, upStation, downStation, distance);
+    public static Section of(Line line, Station upStation, Station downStation, long distance, long duration) {
+        return new Section(line, upStation, downStation, distance, duration);
     }
 
     @Override

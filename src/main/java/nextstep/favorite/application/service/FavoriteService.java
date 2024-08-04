@@ -14,8 +14,8 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberDetailCustom;
 import nextstep.member.domain.MemberRepository;
 import nextstep.subway.application.service.StationService;
-import nextstep.subway.domain.entity.PathFinder;
 import nextstep.subway.domain.entity.Station;
+import nextstep.subway.domain.entity.SubwayMap;
 import nextstep.subway.domain.repository.LineRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +36,8 @@ public class FavoriteService {
         Station source = stationService.getStationById(request.getSource());
         Station target = stationService.getStationById(request.getTarget());
         Member member = getMember(memberDetailCustom);
-        PathFinder pathFinder = new PathFinder(lineRepository.findAll());
-        if (!pathFinder.isValidPath(source, target)) {
+        SubwayMap subwayMap = new SubwayMap(lineRepository.findAll());
+        if (!subwayMap.isValidPath(source, target)) {
             throw new BadRequestException("invalid favorite info");
         }
         Favorite favorite = favoriteRepository.save(Favorite.of(member.getId(), source, target));

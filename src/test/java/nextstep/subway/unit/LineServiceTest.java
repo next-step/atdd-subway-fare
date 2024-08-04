@@ -69,9 +69,9 @@ class LineServiceTest {
         이호선 = lineRepository.save(LineFixture.giveOne(1L, 이호선_이름, 이호선_색));
         일호선 = lineRepository.save(LineFixture.giveOne(2L, 일호선_이름, 일호선_색));
 
-        강남역_교대역_구간 = SectionFixture.giveOne(1L, 이호선, 강남역, 교대역, 10L);
-        교대역_낙성대역_구간 = SectionFixture.giveOne(2L, 이호선, 교대역, 낙성대역, 10L);
-        서울역_청량리역_구간 = SectionFixture.giveOne(3L, 일호선, 서울역, 청량리역, 10L);
+        강남역_교대역_구간 = SectionFixture.giveOne(1L, 이호선, 강남역, 교대역, 10L, 10L);
+        교대역_낙성대역_구간 = SectionFixture.giveOne(2L, 이호선, 교대역, 낙성대역, 10L, 10L);
+        서울역_청량리역_구간 = SectionFixture.giveOne(3L, 일호선, 서울역, 청량리역, 10L, 10L);
     }
 
     @DisplayName("노선의 구간 추가 서비스 단위 테스트")
@@ -81,7 +81,7 @@ class LineServiceTest {
         Line 이호선 = 강남역_교대역_구간_이호선();
 
         // when
-        AddSectionRequest 교대역_낙성대역_구간_추가_요청 = new AddSectionRequest(교대역.getId(), 낙성대역.getId(), 10L);
+        AddSectionRequest 교대역_낙성대역_구간_추가_요청 = new AddSectionRequest(교대역.getId(), 낙성대역.getId(), 10L, 10L);
         LineResponse result = lineService.addSection(이호선.getId(), 교대역_낙성대역_구간_추가_요청);
 
         // then

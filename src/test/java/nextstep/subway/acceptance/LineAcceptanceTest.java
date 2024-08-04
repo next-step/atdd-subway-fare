@@ -60,7 +60,8 @@ class LineAcceptanceTest {
                 COLOR_ONE,
                 강남역_아이디,
                 교대역_아이디,
-                DISTANCE
+                DISTANCE,
+                10L
             ));
 
         // then
