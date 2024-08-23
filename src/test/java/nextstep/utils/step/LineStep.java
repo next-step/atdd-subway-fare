@@ -32,9 +32,9 @@ public class LineStep {
         return response.body().as(LinesResponse.class);
     }
 
-    public static LineResponse 지하철_노선_생성(String name, String color, Long upStationId, Long downStationId, Long distance, Long duration) {
+    public static LineResponse 지하철_노선_생성(String name, String color, Long upStationId, Long downStationId, Long distance, Long duration, Long additionalFare) {
         CreateLineRequest createLineRequest = CreateLineRequest.of(name, color, upStationId,
-                downStationId, distance, duration);
+                downStationId, distance, duration, additionalFare);
 
         ExtractableResponse<Response> createdResponse = RestAssured.given().log().all()
                 .body(createLineRequest)

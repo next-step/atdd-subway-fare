@@ -165,6 +165,18 @@ public class Sections {
                 .orElseThrow(() -> new SectionException(String.valueOf(SECTION_NOT_FOUND)));
     }
 
+    public Long getTotalDistance() {
+        return sections.stream()
+                .mapToLong(Section::getDistance)
+                .sum();
+    }
+
+    public Long getTotalDuration() {
+        return sections.stream()
+                .mapToLong(Section::getDuration)
+                .sum();
+    }
+
     public void checkDuplicateSectionByStation(final Station upStation, final Station downStation) {
         boolean isUpStationExist = getSectionByUpStation(upStation);
         boolean isDownStationExist = getSectionByDownStation(downStation);

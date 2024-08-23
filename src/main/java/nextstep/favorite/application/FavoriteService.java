@@ -6,6 +6,7 @@ import nextstep.favorite.application.dto.FavoriteResponse;
 import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.member.application.MemberService;
+import nextstep.member.domain.AnonymousLoginMember;
 import nextstep.member.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.path.service.PathFinder;
@@ -37,7 +38,7 @@ public class FavoriteService {
     @Transactional
     public Long createFavorite(final LoginMember loginMember, final FavoriteRequest favoriteRequest) {
         Member member = memberService.findMemberByEmail(loginMember.getEmail());
-        pathFinder.retrieveStationPath(DISTANCE.getValue(), favoriteRequest.getSource(), favoriteRequest.getTarget());
+        pathFinder.retrieveStationPath(new AnonymousLoginMember(), DISTANCE.getValue(), favoriteRequest.getSource(), favoriteRequest.getTarget());
         Station sourceStation = stationService.getStationByIdOrThrow(favoriteRequest.getSource());
         Station targetStation = stationService.getStationByIdOrThrow(favoriteRequest.getTarget());
         Favorite favorite = Favorite.of(member, sourceStation, targetStation);

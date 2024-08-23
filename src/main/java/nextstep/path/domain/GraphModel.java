@@ -1,9 +1,11 @@
 package nextstep.path.domain;
 
 import nextstep.line.entity.Line;
+import nextstep.member.domain.Member;
 import nextstep.path.dto.Path;
 import nextstep.path.exception.PathException;
 import nextstep.section.entity.Section;
+import nextstep.section.entity.Sections;
 import nextstep.station.entity.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -33,15 +35,13 @@ public class GraphModel {
         return new GraphModel(source, target);
     }
 
-    public Path findPath(final List<Line> lines, final String type) {
+    public Path findPath(final Member member, final List<Line> lines, final String type) {
         createGraphModel(lines, type);
         GraphPath<Long, DefaultWeightedEdge> graphPath = findShortestPath();
         List<Station> stations = getStations(lines, graphPath.getVertexList());
-        List<Section> sections = getSections(graphPath.getEdgeList());
-        Long totalDistance = getTotalDistance(sections);
-        Long totalDuration = getTotalDuration(sections);
+        Sections sections = getSections(graphPath.getEdgeList());
 
-        return Path.of(stations, totalDistance, totalDuration);
+        return Path.of(member, lines, stations, sections);
     }
 
     public void createGraphModel(final List<Line> lines, final String type) {
@@ -103,10 +103,11 @@ public class GraphModel {
         return stationList;
     }
 
-    private List<Section> getSections(List<DefaultWeightedEdge> defaultWeightedEdges) {
-        return defaultWeightedEdges.stream()
+    private Sections getSections(List<DefaultWeightedEdge> defaultWeightedEdges) {
+        List<Section> sections = defaultWeightedEdges.stream()
                 .map(edgeToSectionMap::get)
                 .collect(Collectors.toList());
+        return new Sections(sections);
     }
 
     private Long getTotalDistance(List<Section> sections) {

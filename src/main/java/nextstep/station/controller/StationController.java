@@ -1,5 +1,8 @@
 package nextstep.station.controller;
 
+import nextstep.auth.ui.AuthenticationLogin;
+import nextstep.auth.ui.AuthenticationPrincipal;
+import nextstep.member.domain.LoginMember;
 import nextstep.path.service.PathFinder;
 import nextstep.station.dto.StationRequest;
 import nextstep.station.dto.StationResponse;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class StationController {
@@ -39,10 +43,12 @@ public class StationController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<Object> retrieveStationPath(@RequestParam("source") Long source,
-                                                      @RequestParam("target") Long target,
-                                                      @RequestParam("type") String type) {
-        return ResponseEntity.ok().body(pathFinder.retrieveStationPath(type, source, target));
+    public ResponseEntity<Object> retrieveStationPath(
+            @AuthenticationLogin LoginMember loginMember,
+            @RequestParam("source") Long source,
+            @RequestParam("target") Long target,
+            @RequestParam("type") String type) {
+        return ResponseEntity.ok().body(pathFinder.retrieveStationPath(loginMember, type, source, target));
     }
 }
 

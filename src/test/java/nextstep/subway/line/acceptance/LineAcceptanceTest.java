@@ -31,7 +31,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
         // when
         var 원본_지하철_노선 = LineResponse.of("신분당선", "Red", 10L, 지하철_역_목록);
-        var 생성된_지하철_노선 = 지하철_노선_생성("신분당선", "Red", 지하철_역_목록.get(0).getId(), 지하철_역_목록.get(1).getId(), 10L, 5L);
+        var 생성된_지하철_노선 = 지하철_노선_생성("신분당선", "Red", 지하철_역_목록.get(0).getId(), 지하철_역_목록.get(1).getId(), 10L, 5L, 0L);
         원본_지하철_노선.setId(생성된_지하철_노선.getId());
 
         // then
@@ -47,8 +47,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         var 생성된_지하철_역_목록 = 여러_개의_지하철_역_생성(List.of("강남역", "역삼역", "선릉역", "논현역"));
 
-        var 비교할_지하철_노선_목록 = new LinesResponse(List.of((지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L)),
-                지하철_노선_생성("분당선", "Red", 생성된_지하철_역_목록.get(2).getId(), 생성된_지하철_역_목록.get(3).getId(), 20L, 5L)));
+        var 비교할_지하철_노선_목록 = new LinesResponse(List.of((지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L, 0L)),
+                지하철_노선_생성("분당선", "Red", 생성된_지하철_역_목록.get(2).getId(), 생성된_지하철_역_목록.get(3).getId(), 20L, 5L, 0L)));
 
         // when
         var 지하철_노선_목록 = 지하철_전체_노선_조회();
@@ -73,7 +73,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // when
         var 생성된_지하철_역_목록 = 여러_개의_지하철_역_생성(List.of("강남역", "역삼역", "선릉역", "논현역"));
         var 비교할_지하철_노선_목록 = new LinesResponse();
-        var 지하철_노선_1 = 지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L);
+        var 지하철_노선_1 = 지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L, 0L);
         비교할_지하철_노선_목록.getLineResponses().add(지하철_노선_1);
 
         // when
@@ -93,7 +93,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     public void modifyStation() {
         // given
         var 생성된_지하철_역_목록 = 여러_개의_지하철_역_생성(List.of("강남역", "역삼역", "선릉역", "논현역"));
-        var 지하철_노선_1 = 지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L);
+        var 지하철_노선_1 = 지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L, 0L);
 
         ModifyLineRequest 지하철_노선_변경_요청 = ModifyLineRequest.of("바꾼_신분당선", "Blue");
 
@@ -115,7 +115,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     public void deleteStation() {
         // given
         var 생성된_지하철_역_목록 = 여러_개의_지하철_역_생성(List.of("강남역", "역삼역", "선릉역", "논현역"));
-        var 지하철_노선_1 = 지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L);
+        var 지하철_노선_1 = 지하철_노선_생성("신분당선", "Red", 생성된_지하철_역_목록.get(0).getId(), 생성된_지하철_역_목록.get(1).getId(), 10L, 5L, 0L);
 
         // when
         지하철_노선_삭제(지하철_노선_1.getId());

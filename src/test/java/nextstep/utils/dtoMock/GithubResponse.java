@@ -6,7 +6,11 @@ public enum GithubResponse {
     사용자1("aofijeowifjaoief", "access_token_1", "email1@email.com", 20, "password"),
     사용자2("fau3nfin93dmn", "access_token_2", "email2@email.com", 30, "password"),
     사용자3("afnm93fmdodf", "access_token_3", "email3@email.com", 40, "password"),
-    사용자4("fm04fndkaladmd", "access_token_4", "email4@email.com", 50, "password");
+    사용자4("fm04fndkaladmd", "access_token_4", "email4@email.com", 50, "password"),
+    사용자_8세("fm04fndkaladmd", "access_token_4", "email4@email.com", 8, "password"),
+    사용자_18세("fm04fndkaladmd", "access_token_4", "email4@email.com", 18, "password"),
+    사용자_20세("fm04fndkaladmd", "access_token_4", "email4@email.com", 20, "password");
+
 
     private String code;
     private String accessToken;

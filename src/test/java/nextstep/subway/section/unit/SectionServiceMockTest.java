@@ -48,6 +48,8 @@ public class SectionServiceMockTest {
     private Section 강남역_선릉역_구간;
     private Line 신분당선;
 
+    Long 기본_노선_추가요금 = 0L;
+
     @BeforeEach
     public void setup() {
         stationService = new StationService(stationRepository, lineService);
@@ -61,7 +63,7 @@ public class SectionServiceMockTest {
 
         강남역_선릉역_구간 = Section.of(강남역, 선릉역, 1L, 5L);
         신분당선_구간.addSection(강남역_선릉역_구간);
-        신분당선 = Line.of(1L, "신분당선", "Red", 10L, 신분당선_구간);
+        신분당선 = Line.of(1L, "신분당선", "Red", 10L, 신분당선_구간, 기본_노선_추가요금);
     }
 
     @Test

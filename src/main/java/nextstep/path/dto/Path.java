@@ -1,6 +1,9 @@
 package nextstep.path.dto;
 
+import nextstep.line.entity.Line;
+import nextstep.member.domain.Member;
 import nextstep.path.exception.PathException;
+import nextstep.section.entity.Sections;
 import nextstep.station.dto.StationResponse;
 import nextstep.station.entity.Station;
 
@@ -10,35 +13,29 @@ import java.util.List;
 import static nextstep.common.constant.ErrorCode.PATH_NOT_FOUND;
 
 public class Path {
+    private final Member member;
+    private final List<Line> lines;
     private final List<Station> stations;
+    private final Sections sections;
     private final Long totalDistance;
     private final Long totalDuration;
-    private final Long totalPrice;
+    private Long totalPrice;
 
-
-    public Path(List<Station> stations, Long totalDistance, Long totalDuration, Long totalPrice) {
+    public Path(Member member, List<Line> lines, List<Station> stations, Sections sections, Long totalDistance, Long totalDuration, Long totalPrice) {
+        this.member = member;
+        this.lines = lines;
         this.stations = stations;
+        this.sections = sections;
         this.totalDistance = totalDistance;
         this.totalDuration = totalDuration;
         this.totalPrice = totalPrice;
     }
 
-    public static Path of(final List<Station> stations, final Long totalDistance, final Long totalDuration) {
+    public static Path of(final Member member, final List<Line> lines, final List<Station> stations, final Sections sections) {
+        Long totalDistance = sections.getTotalDistance();
+        Long totalDuration = sections.getTotalDuration();
 
-        return new Path(stations, totalDistance, totalDuration, calculateOverFare(totalDistance));
-    }
-
-    public static Long calculateOverFare(final Long distance) {
-        if (distance <= 10) {
-            return 1250L;
-        }
-        int overFare = 5;
-
-        if (distance > 50) {
-            overFare = 8;
-        }
-
-        return (long) ((Math.ceil((distance - 11) / overFare) + 1) * 100) + 1250L;
+        return new Path(member, lines, stations, sections, totalDistance, totalDuration, null);
     }
 
     public PathResponse createPathResponse() {
@@ -52,11 +49,22 @@ public class Path {
         }
 
         return PathResponse.of(stationResponses, totalDistance, totalDuration, totalPrice);
+    }
 
+    public Member getMember() {
+        return member;
+    }
+
+    public List<Line> getLines() {
+        return lines;
     }
 
     public List<Station> getStations() {
         return stations;
+    }
+
+    public Sections getSections() {
+        return sections;
     }
 
     public Long getTotalDistance() {
@@ -71,5 +79,8 @@ public class Path {
         return totalPrice;
     }
 
+    public void setTotalPrice(final Long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }
 

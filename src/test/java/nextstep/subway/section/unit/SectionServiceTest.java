@@ -45,7 +45,7 @@ public class SectionServiceTest extends AcceptanceTest {
         언주역 = 지하철_역_등록("언주역");
         논현역 = 지하철_역_등록("논현역");
 
-        신분당선 = 지하철_노선_생성("신분당선", "Red", 강남역.getId(), 선릉역.getId(), 10L, 5L);
+        신분당선 = 지하철_노선_생성("신분당선", "Red", 강남역.getId(), 선릉역.getId(), 10L, 5L, 0L);
     }
 
     @Test

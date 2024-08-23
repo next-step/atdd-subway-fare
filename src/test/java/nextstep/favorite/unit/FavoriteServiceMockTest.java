@@ -15,6 +15,7 @@ import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.auth.exception.UnAuthorizedException;
 import nextstep.member.exception.MemberException;
+import nextstep.path.service.CalculateFareService;
 import nextstep.path.service.DijkstraShortestPathService;
 import nextstep.path.service.PathFinder;
 import nextstep.path.service.PathService;
@@ -64,6 +65,7 @@ public class FavoriteServiceMockTest {
     private MemberService memberService;
     private PathService pathService;
     private PathFinder pathFinder;
+    private CalculateFareService calculateFareService;
 
     private Station 강남역;
     private Station 역삼역;
@@ -74,6 +76,8 @@ public class FavoriteServiceMockTest {
     private Member 사용자;
     private LoginMember 로그인멤버;
 
+    private Long 기본_노선_추가요금 = 0L;
+
     @BeforeEach
     public void setup() {
         stationService = new StationService(stationRepository, lineService);
@@ -81,7 +85,8 @@ public class FavoriteServiceMockTest {
         sectionService = new SectionService(sectionRepository, stationService, lineService);
         memberService = new MemberServiceImpl(memberRepository);
         pathService = new DijkstraShortestPathService();
-        pathFinder = new PathFinder(stationService, lineService, pathService);
+        calculateFareService = new CalculateFareService();
+        pathFinder = new PathFinder(stationService, lineService, pathService, memberService, calculateFareService);
         favoriteService = new FavoriteService(favoriteRepository, memberService, stationService, pathFinder);
 
         강남역 = Station.of(1L, "강남역");
@@ -89,7 +94,7 @@ public class FavoriteServiceMockTest {
 
         강남역_역삼역_구간 = Section.of(1L, 강남역, 역삼역, 1L, 5L);
         신분당선_구간.addSection(강남역_역삼역_구간);
-        신분당선 = Line.of(1L, "신분당선", "Red", 10L, 신분당선_구간);
+        신분당선 = Line.of(1L, "신분당선", "Red", 10L, 신분당선_구간, 기본_노선_추가요금);
 
         사용자 = Member.of(1L, EMAIL, PASSWORD, AGE);
         로그인멤버 = new LoginMember(EMAIL);

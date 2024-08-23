@@ -1,6 +1,7 @@
 package nextstep.subway.path.unit;
 
 import nextstep.line.entity.Line;
+import nextstep.member.domain.Member;
 import nextstep.path.domain.GraphModel;
 import nextstep.path.dto.Path;
 import nextstep.path.exception.PathException;
@@ -30,10 +31,19 @@ public class GraphModelTest {
     Station 논현역;
     Section 강남역_역삼역_구간;
 
+    Sections 구간들;
+    Line 신분당선;
+    GraphModel 그래프_기본_모델;
+    List<Line> 지하철_리스트;
+
+    Long 기본_노선_추가요금 = 0L;
     Long 신분당선_기본_거리 = 15L;
     Long 총_거리 = 5L;
     Long 총_시간 = 10L;
-    Long 총_비용 = 1250L;
+    Long 총_비용 = null;
+
+    Member 로그인_사용자_비할인대상;
+
 
     @BeforeEach
     public void setup() {
@@ -42,21 +52,25 @@ public class GraphModelTest {
         논현역 = Station.of(3L, "논현역");
 
         강남역_역삼역_구간 = Section.of(강남역, 역삼역, 총_거리, 총_시간);
+
+        구간들 = new Sections(List.of(강남역_역삼역_구간));
+        신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들, 기본_노선_추가요금);
+
+        그래프_기본_모델 = GraphModel.of(1L, 2L);
+
+        지하철_리스트 = Collections.singletonList(신분당선);
+        로그인_사용자_비할인대상 = Member.of(1L, "test@test.com", "password", 20);
+
     }
 
     @DisplayName("[createGraphModel] graph를 distance 기준으로 생성한다.")
     @Test
     void createGraphModel_distance_success() {
-        // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when
-        graphModel.createGraphModel(Collections.singletonList(신분당선), DISTANCE.getValue());
+        그래프_기본_모델.createGraphModel(Collections.singletonList(신분당선), DISTANCE.getValue());
 
         // then
-        WeightedMultigraph<Long, DefaultWeightedEdge> graph = graphModel.getGraph();
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = 그래프_기본_모델.getGraph();
         DefaultWeightedEdge edge = graph.getEdge(강남역.getId(), 역삼역.getId());
 
         assertAll(
@@ -71,16 +85,11 @@ public class GraphModelTest {
     @DisplayName("[createGraphModel] graph를 duration 기준으로 생성한다.")
     @Test
     void createGraphModel_duration_success() {
-        // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when
-        graphModel.createGraphModel(Collections.singletonList(신분당선), DURATION.getValue());
+        그래프_기본_모델.createGraphModel(Collections.singletonList(신분당선), DURATION.getValue());
 
         // then
-        WeightedMultigraph<Long, DefaultWeightedEdge> graph = graphModel.getGraph();
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = 그래프_기본_모델.getGraph();
         DefaultWeightedEdge edge = graph.getEdge(강남역.getId(), 역삼역.getId());
 
         assertAll(
@@ -98,22 +107,18 @@ public class GraphModelTest {
         // given
         var 강남역_강남역_구간 = Section.of(강남역, 강남역, 5L, 5L);
         var 구간들 = new Sections(List.of(강남역_강남역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var graphModel = GraphModel.of(1L, 2L);
+        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들, 기본_노선_추가요금);
 
         // when & then
-        Assertions.assertThrows(PathException.class, () -> graphModel.createGraphModel(Collections.singletonList(신분당선), DISTANCE.getValue()))
+        Assertions.assertThrows(PathException.class, () -> 그래프_기본_모델.createGraphModel(Collections.singletonList(신분당선), DISTANCE.getValue()))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 
     @DisplayName("[createGraphModel] Linelist가 비어있으면 예외가 발생한다.")
     @Test
     void createGraphModel_fail2() {
-        // given
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when & then
-        Assertions.assertThrows(PathException.class, () -> graphModel.createGraphModel(List.of(), DISTANCE.getValue()))
+        Assertions.assertThrows(PathException.class, () -> 그래프_기본_모델.createGraphModel(List.of(), DISTANCE.getValue()))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 
@@ -122,11 +127,10 @@ public class GraphModelTest {
     void createGraphModel_fail3() {
         // given
         var 구간들 = new Sections(List.of());
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var graphModel = GraphModel.of(1L, 2L);
+        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들, 기본_노선_추가요금);
 
         // when & then
-        Assertions.assertThrows(PathException.class, () -> graphModel.createGraphModel(Collections.singletonList(신분당선), DISTANCE.getValue()))
+        Assertions.assertThrows(PathException.class, () -> 그래프_기본_모델.createGraphModel(Collections.singletonList(신분당선), DISTANCE.getValue()))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 
@@ -134,14 +138,10 @@ public class GraphModelTest {
     @Test
     void findPath_distance_success() {
         // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var 지하철_리스트 = Collections.singletonList(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
-        graphModel.createGraphModel(지하철_리스트, DISTANCE.getValue());
+        그래프_기본_모델.createGraphModel(지하철_리스트, DISTANCE.getValue());
 
         // when
-        Path path = graphModel.findPath(지하철_리스트, DISTANCE.getValue());
+        Path path = 그래프_기본_모델.findPath(로그인_사용자_비할인대상, 지하철_리스트, DISTANCE.getValue());
 
         // then
         assertAll(
@@ -161,17 +161,16 @@ public class GraphModelTest {
         var 강남역_논현역_구간_시간 = 2L;
         var 논현역_역삼역_구간_거리 = 5L;
         var 논현역_역삼역_구간_시간 = 1L;
-        var 강남역_논현역_역삼역_총_비용 = 1450L;
+        Long 강남역_논현역_역삼역_총_비용 = null;
         var 강남역_논현역_구간 = Section.of(강남역, 논현역, 강남역_논현역_구간_거리, 강남역_논현역_구간_시간);
         var 논현역_역삼역_구간 = Section.of(논현역, 역삼역, 논현역_역삼역_구간_거리, 논현역_역삼역_구간_시간);
         var 구간들 = new Sections(List.of(강남역_역삼역_구간, 강남역_논현역_구간, 논현역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var 지하철_리스트 = Collections.singletonList(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
-        graphModel.createGraphModel(지하철_리스트, DURATION.getValue());
+        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들, 기본_노선_추가요금);
+        지하철_리스트 = Collections.singletonList(신분당선);
+        그래프_기본_모델.createGraphModel(지하철_리스트, DURATION.getValue());
 
         // when
-        Path path = graphModel.findPath(지하철_리스트, DURATION.getValue());
+        Path path = 그래프_기본_모델.findPath(로그인_사용자_비할인대상, 지하철_리스트, DURATION.getValue());
 
         // then
         assertAll(
@@ -187,15 +186,11 @@ public class GraphModelTest {
     @Test
     void findPath_fail1() {
         // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var 지하철_리스트 = Collections.singletonList(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
-        graphModel.createGraphModel(지하철_리스트, DISTANCE.getValue());
+        그래프_기본_모델.createGraphModel(지하철_리스트, DISTANCE.getValue());
 
         // when & then
         assertAll(
-                () -> assertThrows(PathException.class, () -> graphModel.findPath(List.of(), DISTANCE.getValue()))
+                () -> assertThrows(PathException.class, () -> 그래프_기본_모델.findPath(로그인_사용자_비할인대상, List.of(), DISTANCE.getValue()))
                         .getMessage().equals(PATH_NOT_FOUND.getDescription())
         );
     }
@@ -203,14 +198,8 @@ public class GraphModelTest {
     @DisplayName("[getStationList] lineList와 stationId를 통해 StationList를 생성한다.")
     @Test
     void getStationList_success() {
-        // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var 지하철_리스트 = Collections.singletonList(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when
-        var 생성된_StationList = graphModel.getStations(지하철_리스트, List.of(강남역.getId(), 역삼역.getId()));
+        var 생성된_StationList = 그래프_기본_모델.getStations(지하철_리스트, List.of(강남역.getId(), 역삼역.getId()));
 
         // then
         assertAll(
@@ -221,30 +210,19 @@ public class GraphModelTest {
     @DisplayName("[getStationList] lineList에 StationId가 없다면 예외가 발생한다.")
     @Test
     void getStationList_fail2() {
-        // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var 지하철_리스트 = Collections.singletonList(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when & then
-        assertThrows(PathException.class, () -> graphModel.getStations(지하철_리스트, List.of(강남역.getId(), 논현역.getId())))
+        assertThrows(PathException.class, () -> 그래프_기본_모델.getStations(지하철_리스트, List.of(강남역.getId(), 논현역.getId())))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 
     @DisplayName("[addSectionsToGraph] line을 graph의 Edge에 distance 기준으로 추가한다.")
     @Test
     public void addSectionsToGraph_distance_success() {
-        // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when
-        graphModel.addSectionsToGraph(신분당선, DISTANCE.getValue());
+        그래프_기본_모델.addSectionsToGraph(신분당선, DISTANCE.getValue());
 
         // then
-        WeightedMultigraph<Long, DefaultWeightedEdge> graph = graphModel.getGraph();
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = 그래프_기본_모델.getGraph();
         DefaultWeightedEdge edge = graph.getEdge(강남역.getId(), 역삼역.getId());
 
         assertAll(
@@ -259,16 +237,11 @@ public class GraphModelTest {
     @DisplayName("[addSectionsToGraph] line을 graph의 Edge에 duration 기준으로 추가한다.")
     @Test
     public void addSectionsToGraph_duration_success() {
-        // given
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when
-        graphModel.addSectionsToGraph(신분당선, DURATION.getValue());
+        그래프_기본_모델.addSectionsToGraph(신분당선, DURATION.getValue());
 
         // then
-        WeightedMultigraph<Long, DefaultWeightedEdge> graph = graphModel.getGraph();
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = 그래프_기본_모델.getGraph();
         DefaultWeightedEdge edge = graph.getEdge(강남역.getId(), 역삼역.getId());
 
         assertAll(
@@ -285,7 +258,7 @@ public class GraphModelTest {
     public void addSectionsToGraph_fail() {
         // given
         var 빈_구간들 = new Sections(List.of());
-        var 빈_구간을_가진_신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 빈_구간들);
+        var 빈_구간을_가진_신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 빈_구간들, 기본_노선_추가요금);
         GraphModel graphModel = GraphModel.of(1L, 2L);
 
         // when & then
@@ -299,7 +272,7 @@ public class GraphModelTest {
         // given
         var 강남역_강남역_구간 = Section.of(강남역, 강남역, 5L, 5L);
         var 구간들 = new Sections(List.of(강남역_강남역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
+        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들, 기본_노선_추가요금);
         var graphModel = GraphModel.of(1L, 2L);
 
         // when & then
@@ -311,12 +284,11 @@ public class GraphModelTest {
     @Test
     public void addEdge_success() {
         // given
-        var graphModel = GraphModel.of(1L, 2L);
         Section section = Section.of(1L, 강남역, 역삼역, 총_거리, 총_시간);
-        graphModel.addEdge(강남역.getId(), 역삼역.getId(), section, DISTANCE.getValue());
+        그래프_기본_모델.addEdge(강남역.getId(), 역삼역.getId(), section, DISTANCE.getValue());
 
         // when
-        WeightedMultigraph<Long, DefaultWeightedEdge> graph = graphModel.getGraph();
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph = 그래프_기본_모델.getGraph();
         DefaultWeightedEdge edge = graph.getEdge(강남역.getId(), 역삼역.getId());
 
         // then
@@ -332,11 +304,10 @@ public class GraphModelTest {
     @Test
     public void addEdge_fail() {
         // given
-        var graphModel = GraphModel.of(1L, 2L);
         Section section = Section.of(1L, 강남역, 역삼역, 20L, 20L);
 
         // then
-        Assertions.assertThrows(PathException.class, () -> graphModel.addEdge(4L, 4L, section, DISTANCE.getValue()))
+        Assertions.assertThrows(PathException.class, () -> 그래프_기본_모델.addEdge(4L, 4L, section, DISTANCE.getValue()))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 
@@ -369,14 +340,10 @@ public class GraphModelTest {
     @Test
     void getStation_success() {
         // given
-        var 강남역_역삼역_구간 = Section.of(강남역, 역삼역, 5L, 5L);
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
         var 지하철_목록 = List.of(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
 
         // when
-        var 찾은_역 = graphModel.getStation(지하철_목록, 강남역.getId());
+        var 찾은_역 = 그래프_기본_모델.getStation(지하철_목록, 강남역.getId());
 
         // then
         assertAll(
@@ -388,14 +355,10 @@ public class GraphModelTest {
     @Test
     void getStation_success2() {
         // given
-        var 강남역_역삼역_구간 = Section.of(강남역, 역삼역, 5L, 5L);
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
         var 지하철_목록 = List.of(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
 
         // when
-        var 찾은_역 = graphModel.getStation(지하철_목록, 역삼역.getId());
+        var 찾은_역 = 그래프_기본_모델.getStation(지하철_목록, 역삼역.getId());
 
         // then
         assertAll(
@@ -407,25 +370,18 @@ public class GraphModelTest {
     @Test
     void getStation_fail1() {
         // given
-        var 강남역_역삼역_구간 = Section.of(강남역, 역삼역, 5L, 5L);
-        var 구간들 = new Sections(List.of(강남역_역삼역_구간));
-        var 신분당선 = Line.of(1L, "신분당선", "red", 신분당선_기본_거리, 구간들);
         var 지하철_목록 = List.of(신분당선);
-        var graphModel = GraphModel.of(1L, 2L);
 
         // when & then
-        assertThrows(PathException.class, () -> graphModel.getStation(지하철_목록, 3L))
+        assertThrows(PathException.class, () -> 그래프_기본_모델.getStation(지하철_목록, 3L))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 
     @DisplayName("[getStation] lineList가 비어 있으면 예외가 발생한다.")
     @Test
     void getStation_fail2() {
-        // given
-        var graphModel = GraphModel.of(1L, 2L);
-
         // when & then
-        assertThrows(PathException.class, () -> graphModel.getStation(List.of(), 3L))
+        assertThrows(PathException.class, () -> 그래프_기본_모델.getStation(List.of(), 3L))
                 .getMessage().equals(PATH_NOT_FOUND.getDescription());
     }
 }

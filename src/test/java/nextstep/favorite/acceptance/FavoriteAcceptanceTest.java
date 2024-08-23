@@ -38,7 +38,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     public void setup() {
         강남역 = 지하철_역_등록("강남역");
         역삼역 = 지하철_역_등록("역삼역");
-        이호선 = 지하철_노선_생성("2호선", "green", 강남역.getId(), 역삼역.getId(), 10L, 5L).getId();
+        이호선 = 지하철_노선_생성("2호선", "green", 강남역.getId(), 역삼역.getId(), 10L, 5L, 0L).getId();
 
         즐겨찾기_요청_강남역_역삼역 = FavoriteRequest.of(강남역.getId(), 역삼역.getId());
 

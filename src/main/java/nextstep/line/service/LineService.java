@@ -42,7 +42,7 @@ public class LineService {
         Sections sections = new Sections();
         sections.addSection(section);
 
-        Line line = Line.of(createLineRequest.getName(), createLineRequest.getColor(), createLineRequest.getDistance(), sections);
+        Line line = Line.of(createLineRequest.getName(), createLineRequest.getColor(), createLineRequest.getDistance(), sections, createLineRequest.getAdditionalFare());
         lineRepository.save(line);
 
         StationResponse upStationResponse = StationResponse.of(upStation.getId(), upStation.getName());
