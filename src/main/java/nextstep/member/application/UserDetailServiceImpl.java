@@ -2,6 +2,7 @@ package nextstep.member.application;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.auth.application.UserDetailService;
+import nextstep.auth.domain.LoginMember;
 import nextstep.auth.domain.UserDetails;
 import nextstep.common.exception.MemberNotFoundException;
 import nextstep.member.domain.Member;
@@ -34,5 +35,11 @@ public class UserDetailServiceImpl implements UserDetailService {
                     return userDetails;
                 });
 
+    }
+
+    @Override
+    public int getUserAge(LoginMember loginMember) {
+        var member = memberRepository.findByEmail(loginMember.getEmail()).orElse((null));
+        return member == null ? 20 : member.getAge();
     }
 }

@@ -12,4 +12,5 @@ public class LineRequest {
     private final Long downStationId;
     private final int distance;
     private final int duration;
+    private final int extraFare;
 }

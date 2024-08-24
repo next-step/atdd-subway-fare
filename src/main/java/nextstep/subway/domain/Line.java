@@ -21,16 +21,20 @@ public class Line {
     @Column(length = 20, nullable = false)
     private String color;
 
+    @Column
+    private int extraFare;
+
     @Embedded
     private Sections sections = new Sections();
 
-    public Line(String name, String color) {
+    public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
+        this.extraFare = extraFare;
     }
 
     public static Line createLine(Station upStation, Station downStation, LineRequest lineRequest) {
-        Line createdLine = new Line(lineRequest.getName(), lineRequest.getColor());
+        Line createdLine = new Line(lineRequest.getName(), lineRequest.getColor(), lineRequest.getExtraFare());
 
         createdLine.addSection(Section.createSection(
                 createdLine,

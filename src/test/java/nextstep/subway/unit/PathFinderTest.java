@@ -29,6 +29,8 @@ class PathFinderTest {
     private Station 판교역;
     private Station 정자역;
 
+    private List<Section> allSections;
+
     private PathFinder pathFinder;
     private WeightedMultigraph<Station, DefaultWeightedEdge> graph;
 
@@ -50,8 +52,8 @@ class PathFinderTest {
 
         List<Station> allStations = Arrays.asList(강남역, 신논현역, 신사역, 판교역, 정자역);
 
-        Line 신분당선 = new Line("신분당선", "bg-red-600");
-        Line 다른노선 = new Line("다른노선", "bg-blue-600");
+        Line 신분당선 = new Line("신분당선", "bg-red-600", 800);
+        Line 다른노선 = new Line("다른노선", "bg-blue-600", 0);
 
         Section section1 = Section.createSection(신분당선, 강남역, 신논현역, 10, 60);
         Section section2 = Section.createSection(신분당선, 신논현역, 신사역, 15, 60);
@@ -59,7 +61,7 @@ class PathFinderTest {
         Section section4 = Section.createSection(다른노선, 판교역, 정자역, 25, 60);
         Section section5 = Section.createSection(다른노선, 신논현역, 판교역, 30, 60);
 
-        List<Section> allSections = Arrays.asList(section1, section2, section3, section4, section5);
+        allSections = Arrays.asList(section1, section2, section3, section4, section5);
 
         pathFinder = PathFinderFactory.createPathFinder(allSections, allStations, PathType.DISTANCE);
         graph = pathFinder.getGraph();
@@ -91,10 +93,10 @@ class PathFinderTest {
         Station 강남역 = graph.vertexSet().stream().filter(s -> s.getId().equals(강남역_ID)).findFirst().orElseThrow();
         Station 정자역 = graph.vertexSet().stream().filter(s -> s.getId().equals(정자역_ID)).findFirst().orElseThrow();
 
-        PathResult shortestPath = pathFinder.getShortestPath(강남역, 정자역, PathType.DISTANCE);
+        Path shortestPath = pathFinder.getShortestPath(allSections, 강남역, 정자역, PathType.DISTANCE, 20);
 
         assertThat(shortestPath).isNotNull();
-        assertThat(shortestPath.getPathStations()).extracting(Station::getId)
+        assertThat(shortestPath.getStations()).extracting(Station::getId)
                 .containsExactly(강남역_ID, 신논현역_ID, 판교역_ID, 정자역_ID);
     }
 
@@ -109,7 +111,7 @@ class PathFinderTest {
         Station 강남역 = graph.vertexSet().stream().filter(s -> s.getId().equals(강남역_ID)).findFirst().orElseThrow();
 
         PathNotFoundException exception = assertThrows(PathNotFoundException.class, () -> {
-            pathFinder.getShortestPath(강남역, 고립역, PathType.DISTANCE);
+            pathFinder.getShortestPath(allSections, 강남역, 고립역, PathType.DISTANCE, 20);
         });
 
         assertThat(exception.getMessage()).contains(강남역_ID.toString(), 고립역_ID.toString());
@@ -121,7 +123,7 @@ class PathFinderTest {
         Station 강남역 = graph.vertexSet().stream().filter(s -> s.getId().equals(강남역_ID)).findFirst().orElseThrow();
 
         PathNotFoundException exception = assertThrows(PathNotFoundException.class, () -> {
-            pathFinder.getShortestPath(강남역, 강남역, PathType.DISTANCE);
+            pathFinder.getShortestPath(allSections, 강남역, 강남역, PathType.DISTANCE, 20);
         });
 
         assertThat(exception.getMessage())

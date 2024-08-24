@@ -31,7 +31,7 @@ class SectionsTest {
         신사역 = new Station("신사역");
         판교역 = new Station("판교역");
         정자역 = new Station("정자역");
-        신분당선 = new Line("신분당선", "bg-red-600");
+        신분당선 = new Line("신분당선", "bg-red-600", 800);
         새로운구간 = Section.createSection(
                 신분당선,
                 강남역,

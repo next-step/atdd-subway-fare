@@ -50,7 +50,8 @@ public class SectionServiceMockTest {
                 강남역_ID,
                 신논현역_ID,
                 10,
-                60
+                60,
+                800
         );
         Line 신분당선 = Line.createLine(강남역, 신논현역, lineRequest);
 

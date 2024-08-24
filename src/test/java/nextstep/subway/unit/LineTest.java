@@ -29,7 +29,7 @@ class LineTest {
         신사역 = new Station("신사역");
         판교역 = new Station("판교역");
         정자역 = new Station("정자역");
-        신분당선 = new Line("신분당선", "bg-red-600");
+        신분당선 = new Line("신분당선", "bg-red-600", 800);
         새로운구간 = Section.createSection(
                 신분당선,
                 강남역,
@@ -43,7 +43,7 @@ class LineTest {
     @DisplayName("지하철 노선 생성")
     void createLineWithStations() {
         // given
-        LineRequest lineRequest = new LineRequest("신분당선", "bg-red-600", 10L,9L,9, 60);
+        LineRequest lineRequest = new LineRequest("신분당선", "bg-red-600", 10L,9L,9, 60, 800);
 
         // when
         Line line = Line.createLine(강남역, 판교역, lineRequest);
@@ -58,7 +58,7 @@ class LineTest {
     @DisplayName("지하철 노선 이름 변경")
     void changeName() {
         // given
-        Line line = new Line("신분당선", "bg-red-600");
+        Line line = new Line("신분당선", "bg-red-600", 800);
         String newName = "새로운 신분당선";
 
         // when
@@ -72,7 +72,7 @@ class LineTest {
     @DisplayName("지하철 노선 색상 변경")
     void changeColor() {
         // given
-        Line line = new Line("신분당선", "bg-red-600");
+        Line line = new Line("신분당선", "bg-red-600", 800);
         String newColor = "bg-blue-600";
 
         // when

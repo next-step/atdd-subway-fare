@@ -9,6 +9,7 @@ import java.util.Map;
 public class SharedContext {
     private final Map<String, Long> stationIds = new HashMap<>();
     private final Map<String, Long> lineIds = new HashMap<>();
+    private final Map<String, Long> memberIds = new HashMap<>();
 
     public void addStationId(String stationName, Long id) {
         stationIds.put(stationName, id);
@@ -24,5 +25,9 @@ public class SharedContext {
 
     public Long getLineId(String lineName) {
         return lineIds.get(lineName);
+    }
+
+    public void addMemberId(String email, Long id) {
+        memberIds.put(email, id);
     }
 }

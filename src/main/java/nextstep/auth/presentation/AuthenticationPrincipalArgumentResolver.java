@@ -25,7 +25,15 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        AuthenticationPrincipal authenticationPrincipal = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         String authorization = webRequest.getHeader(AUTHORIZATION_HEADER);
+        if (authorization == null || !authorization.startsWith(BEARER_TYPE)) {
+            if (authenticationPrincipal.required()) {
+                throw new AuthenticationException();
+            }
+            return LoginMember.createAnonymous();
+        }
+
         String[] parts = authorization.split(" ");
 
         if (parts.length < 2 || !BEARER_TYPE.equalsIgnoreCase(parts[0])) {

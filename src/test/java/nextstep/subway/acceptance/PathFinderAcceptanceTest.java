@@ -45,9 +45,9 @@ public class PathFinderAcceptanceTest {
         교대역_ID = 지하철_역_생성("교대역").body().jsonPath().getLong("id");
         남부터미널역_ID = 지하철_역_생성("남부터미널역").body().jsonPath().getLong("id");
 
-        신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 양재역_ID, 20, 75);
-        _2호선_request = new LineRequest("2호선", "bg-red-600", 교대역_ID, 강남역_ID, 15, 120);
-        _3호선_request = new LineRequest("3호선", "bg-red-600", 교대역_ID, 남부터미널역_ID, 20, 130);
+        신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 양재역_ID, 20, 75, 800);
+        _2호선_request = new LineRequest("2호선", "bg-red-600", 교대역_ID, 강남역_ID, 15, 120, 0);
+        _3호선_request = new LineRequest("3호선", "bg-red-600", 교대역_ID, 남부터미널역_ID, 20, 130, 0);
 
         신분당선_ID = 지하철_노선_생성(신분당선_request).body().jsonPath().getLong("id");
         _2호선_ID = 지하철_노선_생성(_2호선_request).body().jsonPath().getLong("id");

@@ -36,7 +36,7 @@ public class SectionAcceptanceTest {
         신사역_ID = 지하철_역_생성("신사역").body().jsonPath().getLong("id");
         신논현역_ID = 지하철_역_생성("신논현역").body().jsonPath().getLong("id");
 
-        신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 신사역_ID, 20, 60);
+        신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 신사역_ID, 20, 60, 800);
         신분당선_ID = LineSteps.지하철_노선_생성(신분당선_request).body().jsonPath().getLong("id");
     }
 

@@ -49,7 +49,7 @@ public class FavoriteAcceptanceTest {
         양재역_ID = 지하철_역_생성("양재역").body().jsonPath().getLong("id");
         교대역_ID = 지하철_역_생성("교대역").body().jsonPath().getLong("id");
 
-        LineRequest 신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 양재역_ID, 10, 75);
+        LineRequest 신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 양재역_ID, 10, 75, 800);
         신분당선_ID = 지하철_노선_생성(신분당선_request).body().jsonPath().getLong("id");
 
         SectionRequest 신분당성_구간_request = new SectionRequest(강남역_ID, 신사역_ID, 5, 70);

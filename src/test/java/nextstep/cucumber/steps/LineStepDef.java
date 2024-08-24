@@ -27,6 +27,7 @@ public class LineStepDef implements En {
                 String downStation = row.get("하행역");
                 int distance = Integer.parseInt(row.get("거리"));
                 int duration = Integer.parseInt(row.get("시간"));
+                int extraFare = Integer.parseInt(row.get("추가요금"));
                 String color = row.get("색상");
 
                 LineRequest lineRequest = new LineRequest(
@@ -35,7 +36,8 @@ public class LineStepDef implements En {
                         sharedContext.getStationId(upStation),
                         sharedContext.getStationId(downStation),
                         distance,
-                        duration
+                        duration,
+                        extraFare
                 );
                 지하철_노선_생성(lineRequest);
             }
@@ -48,6 +50,7 @@ public class LineStepDef implements En {
                 String downStation = row.get("하행역");
                 int distance = Integer.parseInt(row.get("거리"));
                 int duration = Integer.parseInt(row.get("시간"));
+                int extraFare = Integer.parseInt(row.get("추가요금"));
                 String color = row.get("색상");
 
                 LineRequest lineRequest = new LineRequest(
@@ -56,7 +59,8 @@ public class LineStepDef implements En {
                         sharedContext.getStationId(upStation),
                         sharedContext.getStationId(downStation),
                         distance,
-                        duration
+                        duration,
+                        extraFare
                 );
                 지하철_노선_생성(lineRequest);
             }

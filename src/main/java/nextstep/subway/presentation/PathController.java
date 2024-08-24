@@ -1,6 +1,8 @@
 package nextstep.subway.presentation;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.auth.domain.LoginMember;
+import nextstep.auth.presentation.AuthenticationPrincipal;
 import nextstep.subway.application.PathResponse;
 import nextstep.subway.application.PathService;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +22,10 @@ public class PathController {
     public ResponseEntity<PathResponse> createPath(
             @RequestParam Long source,
             @RequestParam Long target,
-            @RequestParam(defaultValue = "DISTANCE") String type) {
-        PathResponse pathResponse = pathService.getPath(source, target, type);
+            @RequestParam(defaultValue = "DISTANCE") String type,
+            @AuthenticationPrincipal(required=false) LoginMember loginMember
+    ) {
+        PathResponse pathResponse = pathService.getPath(source, target, type, loginMember);
         return ResponseEntity.ok().body(pathResponse);
     }
 }

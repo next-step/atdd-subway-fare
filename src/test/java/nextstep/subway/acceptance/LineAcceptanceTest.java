@@ -31,7 +31,7 @@ public class LineAcceptanceTest {
         강남역_ID = 지하철_역_생성("강남역").body().jsonPath().getLong("id");
         신논현역_ID = 지하철_역_생성("신논현역").body().jsonPath().getLong("id");
         신사역_ID = 지하철_역_생성("신사역").body().jsonPath().getLong("id");
-        신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 신논현역_ID, 10, 60);
+        신분당선_request = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 신논현역_ID, 10, 60, 800);
     }
 
     /**
@@ -43,7 +43,7 @@ public class LineAcceptanceTest {
     @DisplayName("지하철 노선을 생성한다.")
     void createLine() {
         // given
-        LineRequest newLine = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 신논현역_ID, 10, 60);
+        LineRequest newLine = new LineRequest("신분당선", "bg-red-600", 강남역_ID, 신논현역_ID, 10, 60, 800);
 
         // when
         ExtractableResponse<Response> response = 지하철_노선_생성(newLine);
@@ -63,7 +63,7 @@ public class LineAcceptanceTest {
     @DisplayName("지하철 노선 목록을 조회한다.")
     void retrieveAllLines() {
         // given
-        LineRequest _5호선_request = new LineRequest("5호선", "bg-purple-400", 강남역_ID, 신사역_ID, 10, 60);
+        LineRequest _5호선_request = new LineRequest("5호선", "bg-purple-400", 강남역_ID, 신사역_ID, 10, 60, 800);
 
         지하철_노선_생성(신분당선_request);
         지하철_노선_생성(_5호선_request);
@@ -84,7 +84,7 @@ public class LineAcceptanceTest {
     @DisplayName("지하철 노선을 조회한다.")
     void retrieveLine() {
         // given
-        LineRequest _5호선_request = new LineRequest("5호선", "bg-purple-400", 강남역_ID, 신사역_ID, 10, 60);
+        LineRequest _5호선_request = new LineRequest("5호선", "bg-purple-400", 강남역_ID, 신사역_ID, 10, 60, 0);
         지하철_노선_생성(신분당선_request);
 
         ExtractableResponse<Response> response = 지하철_노선_생성(_5호선_request);

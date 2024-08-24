@@ -29,7 +29,7 @@ public class SectionServiceTest {
     @Test
     void addSection() {
         // given
-        Line 신분당선 = lineRepository.save(new Line("신분당선", "bg-red-600"));
+        Line 신분당선 = lineRepository.save(new Line("신분당선", "bg-red-600", 800));
         Station 강남역 = stationRepository.save(new Station("강남역"));
         Station 신논현역 = stationRepository.save(new Station("신논현역"));
 

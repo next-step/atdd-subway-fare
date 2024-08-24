@@ -2,7 +2,7 @@ package nextstep.subway.application;
 
 import lombok.Builder;
 import lombok.Getter;
-import nextstep.subway.domain.PathResult;
+import nextstep.subway.domain.Path;
 import nextstep.subway.domain.PathType;
 import nextstep.subway.domain.Station;
 
@@ -17,14 +17,14 @@ public class PathResponse {
     private int amount;
     private int fare;
 
-    public static PathResponse of(PathResult pathResult, PathType pathType) {
-        List<Station> stations = pathResult.getPathStations();
+    public static PathResponse of(Path path, PathType pathType) {
+        List<Station> stations = path.getStations();
         List<StationResponse> stationResponses = stations.stream().map(StationResponse::of).collect(Collectors.toList());
         return PathResponse.builder()
                 .stations(stationResponses)
                 .pathType(pathType)
-                .amount(pathResult.getTotalPathWeight())
-                .fare(pathResult.getTotalFare())
+                .amount(path.getTotalWeight())
+                .fare(path.getFare())
                 .build();
     }
 }
