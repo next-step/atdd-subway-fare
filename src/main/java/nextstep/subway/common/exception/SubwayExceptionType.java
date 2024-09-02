@@ -35,7 +35,8 @@ public enum SubwayExceptionType {
     UNAUTHORIZED_FAVORITE_ACCESS(HttpStatus.FORBIDDEN.value(), "Unauthorized access to favorite. memberId: %s, favoriteId: %s"),
 
     INVALID_DISTANCE(HttpStatus.BAD_REQUEST.value(), "Invalid Distance. distance: %s"),
-    INVALID_DURATION(HttpStatus.BAD_REQUEST.value(), "Invalid Distance. duration: %s");
+    INVALID_DURATION(HttpStatus.BAD_REQUEST.value(), "Invalid Duration. duration: %s"),
+    INVALID_FARE(HttpStatus.BAD_REQUEST.value(), "Invalid Fare. fare: %s");
 
     private final int code;
     private final String message;

@@ -1,4 +1,4 @@
-package nextstep.auth.unit;
+package nextstep.auth.infrastructure.oauth.github;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

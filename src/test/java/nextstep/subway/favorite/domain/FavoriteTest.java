@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.favorite.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -12,9 +12,12 @@ import java.util.stream.Collectors;
 import nextstep.subway.path.domain.PathType;
 import org.springframework.http.HttpStatus;
 
+import static nextstep.auth.acceptance.AuthSteps.로그인_후_토큰_반환;
+import static nextstep.member.acceptance.MemberSteps.회원_생성_요청;
 import static nextstep.subway.acceptance.line.LineUtils.responseToStationNames;
 import static nextstep.subway.acceptance.line.LineUtils.지하철노선_생성_후_ID_반환;
 import static nextstep.subway.acceptance.line.SectionUtils.지하철구간_생성;
+import static nextstep.subway.acceptance.path.PathUtils.로그인후_지하철역_경로조회;
 import static nextstep.subway.acceptance.path.PathUtils.지하철역_경로조회;
 import static nextstep.subway.acceptance.station.StationUtils.지하철역_생성_후_id_추출;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +26,8 @@ public class PathStepDef implements En {
 
     private final Map<String, Long> stationIds = new HashMap<>();
     private final Map<String, Long> lineIds = new HashMap<>();
+    private final Map<String, String> memberTokens = new HashMap<>();
+
     private ExtractableResponse<Response> response;
 
     public PathStepDef() {
@@ -44,7 +49,8 @@ public class PathStepDef implements En {
                 Long endId = stationIds.get(line.get("종착역"));
                 Long distance = Long.parseLong(line.get("거리"));
                 Long duration = Long.parseLong(line.get("소요시간"));
-                Long id = 지하철노선_생성_후_ID_반환(name, color, startId, endId, distance, duration);
+                Long additionalFare = Long.parseLong(line.get("추가요금"));
+                Long id = 지하철노선_생성_후_ID_반환(name, color, startId, endId, distance, duration, additionalFare);
                 lineIds.put(name, id);
             }
         });
@@ -65,9 +71,27 @@ public class PathStepDef implements En {
             stationIds.put(stationName, id);
         });
 
+        Given("사용자가 회원가입을 한다.", (DataTable dataTable) -> {
+            List<Map<String, String>> users = dataTable.asMaps();
+            for (Map<String, String> user : users) {
+                String email = user.get("이메일");
+                String password = user.get("비밀번호");
+                int age = Integer.parseInt(user.get("나이"));
+                회원_생성_요청(email, password, age);
+            }
+        });
+
+        Given("사용자가 로그인을 한다.", (DataTable dataTable) -> {
+            Map<String, String> user = dataTable.asMaps().get(0);
+            String email = user.get("이메일");
+            String password = user.get("비밀번호");
+            String token = 로그인_후_토큰_반환(email, password);
+            memberTokens.put(email, token);
+        });
+
         When("사용자가 {string}에서 {string}까지의 경로를 조회하면", (String start, String end) -> {
-            Long startId = stationIds.getOrDefault(start, -1L);
-            Long endId = stationIds.getOrDefault(end, -1L);
+            Long startId = stationIds.getOrDefault(start, 1L);
+            Long endId = stationIds.getOrDefault(end, 3L);
             response = 지하철역_경로조회(startId, endId, PathType.DISTANCE);
         });
 
@@ -75,6 +99,14 @@ public class PathStepDef implements En {
             Long startId = stationIds.getOrDefault(start, 1L);
             Long endId = stationIds.getOrDefault(end, 3L);
             response = 지하철역_경로조회(startId, endId, PathType.DURATION);
+        });
+
+        When("사용자 {string}가 {string}에서 {string}까지의 경로를 조회하면", (String email, String start, String end) -> {
+            Long startId = stationIds.getOrDefault(start, 1L);
+            Long endId = stationIds.getOrDefault(end, 3L);
+
+            String accessToken = memberTokens.get(email);
+            response = 로그인후_지하철역_경로조회(startId, endId, PathType.DISTANCE, accessToken);
         });
 
         Then("최단 경로가 다음과 같이 조회된다", (io.cucumber.datatable.DataTable dataTable) -> {

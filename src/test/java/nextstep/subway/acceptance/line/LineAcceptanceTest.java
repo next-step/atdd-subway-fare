@@ -38,6 +38,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     private Long 강남역_id;
     private Long 역삼역_id;
 
+    private Long 신분당선_id;
+
     @BeforeEach
     public void setUp() {
         super.setUp();
@@ -46,17 +48,20 @@ public class LineAcceptanceTest extends AcceptanceTest {
         논현역_id = 지하철역_생성_후_id_추출(논현역);
         강남역_id = 지하철역_생성_후_id_추출(강남역);
         역삼역_id = 지하철역_생성_후_id_추출(역삼역);
+
+        신분당선_id = 지하철노선_생성_후_ID_반환(신분당선, "bg-red-600", 신사역_id, 논현역_id, 10L, 2L, 0L);
     }
 
     /**
-     * When 새로운 지하철 노선을 입력하고, 관리자가 노선을 생성하면 Then 해당 노선이 생성된다. Then 노선 목록에 포함된다.
+     * When 새로운 지하철 노선을 입력하고, 관리자가 노선을 생성하면
+     * Then 해당 노선이 생성된다.
+     * Then 노선 목록에 포함된다.
      */
     @DisplayName("지하철 노선을 생성한다.")
     @Test
     void createLine() {
         // when
-        ExtractableResponse<Response> 신분당선_생성_응답 = 지하철노선_생성(신분당선, "bg-red-600", 신사역_id, 논현역_id,
-            10L, 2L);
+        ExtractableResponse<Response> 신분당선_생성_응답 = 지하철노선_생성(신분당선, "bg-red-600", 신사역_id, 논현역_id, 10L, 2L, 0L);
         assertThat(신분당선_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
         //then
@@ -65,18 +70,15 @@ public class LineAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 여러개의 지하철 노선이 등록되어 있고 When 지하철 노선 목록을 조회하면 Then 모든 지하철 노선 목록이 조회된다.
+     * Given 여러개의 지하철 노선이 등록되어 있고
+     * When 지하철 노선 목록을 조회하면
+     * Then 모든 지하철 노선 목록이 조회된다.
      */
     @DisplayName("지하철 노선 목록을 조회한다.")
     @Test
     void showLines() {
         //given
-        ExtractableResponse<Response> 신분당선_생성_응답 = 지하철노선_생성(신분당선, "bg-red-600", 신사역_id, 논현역_id,
-            10L, 2L);
-        assertThat(신분당선_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-
-        ExtractableResponse<Response> 이호선_생성_응답 = 지하철노선_생성(이호선, "bg-red-600", 역삼역_id, 강남역_id, 10L, 2L);
-        assertThat(이호선_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        지하철노선_생성_후_검증(이호선, "bg-red-600", 역삼역_id, 강남역_id, 10L, 2L, 0L);
 
         //when
         List<String> 지하철노선명_목록 = responseToNames(지하철노선_목록조회());
@@ -87,14 +89,13 @@ public class LineAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 특정 지하철 노선이 등록되어 있고 When 해당 노선을 조회하면 Then 해당 지하철 노선 목록이 조회된다.
+     * Given 특정 지하철 노선이 등록되어 있고
+     * When 해당 노선을 조회하면
+     * Then 해당 지하철 노선 목록이 조회된다.
      */
     @DisplayName("지하철 노선을 조회한다.")
     @Test
     void showLine() {
-        //given
-        Long 신분당선_id = 지하철노선_생성_후_ID_반환(신분당선, "bg-red-600", 신사역_id, 논현역_id, 10L, 2L);
-
         //when
         ExtractableResponse<Response> 지하철노선_조회_응답 = 지하철노선_조회(신분당선_id);
 
@@ -107,14 +108,13 @@ public class LineAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 특정 지하철 노선이 등록되어 있고 When 해당 노선을 수정하면 Then 해당 노선의 정보가 수정된다.
+     * Given 특정 지하철 노선이 등록되어 있고
+     * When 해당 노선을 수정하면
+     * Then 해당 노선의 정보가 수정된다.
      */
     @DisplayName("지하철 노선을 수정한다.")
     @Test
     void updateLine() {
-        //given
-        Long 신분당선_id = 지하철노선_생성_후_ID_반환(신분당선, "bg-red-600", 신사역_id, 논현역_id, 10L, 2L);
-
         //when
         ExtractableResponse<Response> 지하철노선_수정_응답 = 지하철노선_수정(신분당선_id, 일호선, "bg-blue-600");
 
@@ -127,14 +127,15 @@ public class LineAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 특정 지하철 노선이 등록되어 있고 When 해당 노선을 삭제하면 Then 해당 노선이 삭제되고 노선 목록에서 제외된다.
+     * Given 특정 지하철 노선이 등록되어 있고
+     * When 해당 노선을 삭제하면
+     * Then 해당 노선이 삭제되고 노선 목록에서 제외된다.
      */
     @DisplayName("지하철 노선을 삭제한다.")
     @Test
     void deleteLine() {
         //given
-        ExtractableResponse<Response> 지하철노선_생성_응답 = 지하철노선_생성_후_검증(신분당선, "bg-red-600", 신사역_id,
-            논현역_id, 10L, 2L);
+        ExtractableResponse<Response> 지하철노선_생성_응답 = 지하철노선_생성_후_검증(이호선, "bg-red-600", 역삼역_id, 강남역_id, 10L, 2L, 0L);
 
         //when
         ExtractableResponse<Response> 지하철노선_삭제_응답 = 지하철노선_삭제(responseToLocation(지하철노선_생성_응답));
@@ -144,7 +145,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
         //then
         List<String> 지하철노선_목록 = responseToNames(지하철노선_목록조회());
-        assertThat(지하철노선_목록).doesNotContain(신분당선);
+        assertThat(지하철노선_목록).doesNotContain(이호선);
 
     }
 

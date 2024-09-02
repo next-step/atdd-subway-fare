@@ -27,7 +27,7 @@ public class LineService {
     public LineResponse saveLine(LineRequest lineRequest) {
 
         Line line = lineRepository.save(
-            new Line(lineRequest.getName(), lineRequest.getColor(), new LineSections()));
+            new Line(lineRequest.getName(), lineRequest.getColor(), new LineSections(), lineRequest.getAdditionalFare()));
         LineSection lineSection = new LineSection(
             line,
             stationRepository.findByIdOrThrow(lineRequest.getUpStationId()),

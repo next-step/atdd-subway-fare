@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.line.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +33,7 @@ public class LineServiceTest {
     @Test
     void addSection() {
         // given
-        Line 신분당선 = lineRepository.save(new Line("신분당선", "red", new LineSections()));
+        Line 신분당선 = lineRepository.save(new Line("신분당선", "red", new LineSections(), 0L));
         Station 신사역 = stationRepository.save(new Station("신사역"));
         Station 논현역 = stationRepository.save(new Station("논현역"));
         Station 신논현역 = stationRepository.save(new Station("신논현역"));

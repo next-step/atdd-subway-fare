@@ -1,9 +1,10 @@
-package nextstep.auth.unit;
+package nextstep.auth.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import io.cucumber.java.sl.In;
 import nextstep.auth.application.EmailPasswordAuthenticationService;
 import nextstep.auth.application.UserDetailsService;
 import nextstep.auth.application.dto.EmailPasswordAuthRequest;
@@ -29,6 +30,7 @@ class EmailPasswordAuthenticationServiceTest {
     private static final String PASSWORD = "password";
     private static final String WRONG_PASSWORD = "wrongpassword";
     private static final String TOKEN = "generated.token";
+    private static final Integer AGE = 10;
 
     @Mock
     private UserDetailsService userDetailsService;
@@ -43,7 +45,7 @@ class EmailPasswordAuthenticationServiceTest {
 
     @BeforeEach
     void setUp() {
-        Member member = new Member(EMAIL, PASSWORD, 10);
+        Member member = new Member(EMAIL, PASSWORD, AGE);
         userDetails = new MemberUserDetails(member);
     }
 
@@ -54,7 +56,7 @@ class EmailPasswordAuthenticationServiceTest {
         EmailPasswordAuthRequest request = new EmailPasswordAuthRequest(EMAIL, PASSWORD);
 
         when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
-        when(tokenGenerator.createToken(EMAIL)).thenReturn(TOKEN);
+        when(tokenGenerator.createToken(EMAIL, AGE)).thenReturn(TOKEN);
 
         // When
         TokenResponse response = authService.authenticate(request);

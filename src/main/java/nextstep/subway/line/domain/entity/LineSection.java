@@ -67,4 +67,7 @@ public class LineSection {
     public Distance getDiffDistance(Long other) {
         return new Distance(this.distance.getDistance() - other);
     }
+
+    public Long getLineAdditionalFare() {
+        return line.getAdditionalFare(); }
 }

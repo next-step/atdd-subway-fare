@@ -17,8 +17,9 @@ public class JwtTokenProvider implements TokenGenerator {
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
 
-    public String createToken(String principal) {
+    public String createToken(String principal, Integer age) {
         Claims claims = Jwts.claims().setSubject(principal);
+        claims.put("age", age);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -32,6 +33,10 @@ public class JwtTokenProvider implements TokenGenerator {
 
     public String getPrincipal(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public int getAge(String token) {
+        return (int) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("age");
     }
 
     public boolean validateToken(String token) {

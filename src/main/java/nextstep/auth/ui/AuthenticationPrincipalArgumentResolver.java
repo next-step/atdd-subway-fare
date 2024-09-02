@@ -24,13 +24,14 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authorization = webRequest.getHeader("Authorization");
-        if (!"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
-            throw new AuthenticationException();
+        if (authorization == null || !"bearer".equalsIgnoreCase(authorization.split(" ")[0])) {
+            return null;
         }
         String token = authorization.split(" ")[1];
 
         String email = jwtTokenProvider.getPrincipal(token);
+        int age = jwtTokenProvider.getAge(token);
 
-        return new LoginMember(email);
+        return new LoginMember(email, age);
     }
 }

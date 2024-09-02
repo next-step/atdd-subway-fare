@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.line.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -43,7 +43,7 @@ public class LineServiceMockTest {
         when(stationRepository.findByIdOrThrow(논현역_id)).thenReturn(new Station("논현역"));
         when(stationRepository.findByIdOrThrow(신논현역_id)).thenReturn(new Station("신논현역"));
         when(lineRepository.findByIdOrThrow(신분당선_id)).thenReturn(
-            new Line("신분당선", "red", new LineSections()));
+            new Line("신분당선", "red", new LineSections(), 0L));
         lineSectionService.saveSection(신분당선_id, new SectionRequest(신사역_id, 논현역_id, 10L, 2L));
 
         // when

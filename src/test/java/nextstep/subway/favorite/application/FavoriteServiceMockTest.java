@@ -1,4 +1,4 @@
-package nextstep.subway.unit;
+package nextstep.subway.favorite.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -84,9 +84,9 @@ class FavoriteServiceMockTest {
         양재역 = new Station("양재역");
         남부터미널역 = new Station("남부터미널역");
 
-        Line 이호선 = new Line("이호선", "bg-red-600", new LineSections());
-        Line 신분당선 = new Line("신분당선", "bg-green-600", new LineSections());
-        Line 삼호선 = new Line("삼호선", "bg-orange-600", new LineSections());
+        Line 이호선 = new Line("이호선", "bg-red-600", new LineSections(), 0L);
+        Line 신분당선 = new Line("신분당선", "bg-green-600", new LineSections(), 0L);
+        Line 삼호선 = new Line("삼호선", "bg-orange-600", new LineSections(), 0L);
 
         이호선.addSection(new LineSection(이호선, 교대역, 강남역, 10L, 2L));
         신분당선.addSection(new LineSection(신분당선, 강남역, 양재역, 10L, 2L));
@@ -94,7 +94,7 @@ class FavoriteServiceMockTest {
         삼호선.addSection(new LineSection(삼호선, 남부터미널역, 양재역, 10L, 2L));
 
         member = new Member(email, password, 30);
-        loginMember = new LoginMember(email);
+        loginMember = new LoginMember(email, 20);
 
         favoriteRequest = new FavoriteRequest(교대역_id, 강남역_id);
         favorite = new Favorite(member, 교대역, 강남역);

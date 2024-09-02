@@ -28,10 +28,14 @@ public class Line {
     @Embedded
     private LineSections lineSections;
 
-    public Line(String name, String color, LineSections lineSections) {
+    @Embedded
+    private AdditionalFare additionalFare;
+
+    public Line(String name, String color, LineSections lineSections, Long additionalFare) {
         this.name = name;
         this.color = color;
         this.lineSections = lineSections;
+        this.additionalFare = new AdditionalFare(additionalFare);
     }
 
     public void update(String name, String color) {
@@ -47,4 +51,7 @@ public class Line {
         lineSections.deleteSection(station);
     }
 
+    public Long getAdditionalFare() {
+        return additionalFare.getAdditionalFare();
+    }
 }

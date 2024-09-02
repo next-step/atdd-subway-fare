@@ -17,4 +17,9 @@ public class MemberUserDetails implements UserDetails {
     public String getPassword() {
         return member.getPassword();
     }
+
+    @Override
+    public Integer getAge() {
+        return member.getAge();
+    }
 }

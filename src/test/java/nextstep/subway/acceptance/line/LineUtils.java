@@ -20,9 +20,9 @@ public class LineUtils {
     public static final String 삼호선 = "삼호선";
 
     public static ExtractableResponse<Response> 지하철노선_생성(String name, String color,
-        Long upStationId, Long downStationId, Long distance, Long duration) {
+        Long upStationId, Long downStationId, Long distance, Long duration, Long additionalFare) {
         Map<String, Object> params = createParams(name, color, upStationId, downStationId,
-            distance, duration);
+            distance, duration, additionalFare);
 
         ExtractableResponse<Response> response =
             RestAssured.given().log().all()
@@ -36,17 +36,17 @@ public class LineUtils {
     }
 
     public static ExtractableResponse<Response> 지하철노선_생성_후_검증(String name, String color,
-        Long upStationId, Long downStationId, Long distance, Long duration) {
+        Long upStationId, Long downStationId, Long distance, Long duration, Long additionalFare) {
         ExtractableResponse<Response> 지하철노선_생성_응답 = 지하철노선_생성(name, color, upStationId,
-            downStationId, distance, duration);
+            downStationId, distance, duration, additionalFare);
         assertThat(지하철노선_생성_응답.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
         return 지하철노선_생성_응답;
     }
 
     public static Long 지하철노선_생성_후_ID_반환(String name, String color, Long upStationId,
-        Long downStationId, Long distance, Long duration) {
-        return responseToId(지하철노선_생성_후_검증(name, color, upStationId, downStationId, distance, duration));
+        Long downStationId, Long distance, Long duration, Long additionalFare) {
+        return responseToId(지하철노선_생성_후_검증(name, color, upStationId, downStationId, distance, duration, additionalFare));
     }
 
     public static ExtractableResponse<Response> 지하철노선_목록조회() {
@@ -86,7 +86,7 @@ public class LineUtils {
     }
 
     private static Map<String, Object> createParams(String name, String color, Long upStationId,
-        Long downStationId, Long distance, Long duration) {
+        Long downStationId, Long distance, Long duration, Long additionalFare) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -94,6 +94,7 @@ public class LineUtils {
         params.put("downStationId", downStationId);
         params.put("distance", distance);
         params.put("duration", duration);
+        params.put("additionalFare", additionalFare);
         return params;
     }
 

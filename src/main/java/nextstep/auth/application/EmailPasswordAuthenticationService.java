@@ -22,7 +22,7 @@ public class EmailPasswordAuthenticationService {
             throw new AuthenticationException();
         }
 
-        String token = tokenGenerator.createToken(userDetails.getUsername());
+        String token = tokenGenerator.createToken(userDetails.getUsername(), userDetails.getAge());
         return new TokenResponse(token);
     }
 }

@@ -1,11 +1,10 @@
-package nextstep.member.unit;
+package nextstep.member.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import nextstep.auth.domain.UserDetails;
-import nextstep.member.auth.MemberUserDetailsService;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import nextstep.member.exception.MemberNotFoundException;
