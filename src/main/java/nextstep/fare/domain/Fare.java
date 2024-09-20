@@ -4,18 +4,19 @@ import java.util.Objects;
 
 public class Fare {
 
-    private static final Long BASE_FARE = 1250L;
-    private static final Long ADDITIONAL_FARE = 100L;
+    private static final long BASE_FARE = 1250L;
+    private static final long ADDITIONAL_FARE = 100L;
 
     private static final int MINIMUM_DISTANCE = 1;
     private static final int BASE_FARE_DISTANCE_LIMIT = 10;
     private static final int EXTENDED_FARE_DISTANCE_LIMIT = 50;
     private static final int ADDITIONAL_FARE_INTERVAL = 5;
     private static final int REDUCED_ADDITIONAL_FARE_INTERVAL = 8;
+    private static final int FARE_ADJUSTMENT = 1;
 
-    private final Long fare;
+    private final long fare;
 
-    public Fare(Long fare) {
+    public Fare(final long fare) {
         this.fare = fare;
     }
 
@@ -30,29 +31,32 @@ public class Fare {
         }
     }
 
-    private static Long calculateFare(final int distance) {
+    private static long calculateFare(final int distance) {
         if (distance <= BASE_FARE_DISTANCE_LIMIT) {
             return BASE_FARE;
         }
         if (distance <= EXTENDED_FARE_DISTANCE_LIMIT) {
-            return calculateAdditionalFare(distance);
+            return calculateAdditionalFareForExtendedDistance(distance);
         }
-        return calculateReducedAdditionalFare(distance);
+        return calculateAdditionalFareForLongDistance(distance);
     }
 
-    private static Long calculateAdditionalFare(final int distance) {
-        int additionalDistance = Math.min(distance, EXTENDED_FARE_DISTANCE_LIMIT) - BASE_FARE_DISTANCE_LIMIT - 1;
-        return BASE_FARE + ADDITIONAL_FARE
-                + (additionalDistance / ADDITIONAL_FARE_INTERVAL) * ADDITIONAL_FARE;
+    private static long calculateAdditionalFareForExtendedDistance(final int distance) {
+        int additionalDistance = Math.min(distance, EXTENDED_FARE_DISTANCE_LIMIT) - BASE_FARE_DISTANCE_LIMIT - FARE_ADJUSTMENT;
+        return BASE_FARE + calculateAdditionalFare(additionalDistance, ADDITIONAL_FARE_INTERVAL);
     }
 
-    private static Long calculateReducedAdditionalFare(final int distance) {
-        int additionalDistance = distance - EXTENDED_FARE_DISTANCE_LIMIT - 1;
-        return calculateAdditionalFare(distance)
-                + ADDITIONAL_FARE + (additionalDistance / REDUCED_ADDITIONAL_FARE_INTERVAL) * ADDITIONAL_FARE;
+    private static long calculateAdditionalFareForLongDistance(final int distance) {
+        int additionalDistance = distance - EXTENDED_FARE_DISTANCE_LIMIT - FARE_ADJUSTMENT;
+        return calculateAdditionalFareForExtendedDistance(distance)
+                + calculateAdditionalFare(additionalDistance, REDUCED_ADDITIONAL_FARE_INTERVAL);
     }
 
-    public Long getFare() {
+    private static long calculateAdditionalFare(final int additionalDistance, final int fareInterval) {
+        return ADDITIONAL_FARE + (additionalDistance / fareInterval) * ADDITIONAL_FARE;
+    }
+
+    public long getFare() {
         return fare;
     }
 

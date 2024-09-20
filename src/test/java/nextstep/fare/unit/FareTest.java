@@ -20,8 +20,11 @@ public class FareTest {
     @DisplayName("요금 생성 함수는, 1미만의 거리가 입력되면 예외가 발생한다.")
     @Test
     void createFareExceptionTest() {
+        // given
+        int lessThenMinimumDistance = 0;
+
         // when
-        ThrowingCallable actual = () -> Fare.from(0);
+        ThrowingCallable actual = () -> Fare.from(lessThenMinimumDistance);
 
         // then
         assertThatThrownBy(actual).isInstanceOf(LessThanMinimumDistanceException.class);
@@ -30,7 +33,7 @@ public class FareTest {
     @DisplayName("요금 생성 함수는, 거리 1에서 10까지는 기본 요금을 생성한다.")
     @ValueSource(ints = {1, 5, 10})
     @ParameterizedTest
-    void calculateFareTest(int distance) {
+    void createBaseFareTest(int distance) {
         assertFareForDistance(distance, BASE_FARE);
     }
 
@@ -42,7 +45,7 @@ public class FareTest {
             "50, 2050"
     })
     @ParameterizedTest
-    void calculateAdditionalTest(int distance, Long expected) {
+    void createAdditionalFareForExtendedDistanceTest(int distance, long expected) {
         assertFareForDistance(distance, expected);
     }
 
@@ -55,12 +58,11 @@ public class FareTest {
             "67, 2350"
     })
     @ParameterizedTest
-    void calculateReducedAdditionalFare(int distance, Long expected) {
+    void createAdditionalFareForLongDistanceTest(int distance, long expected) {
         assertFareForDistance(distance, expected);
     }
 
-    // 중복된 요금 검증 로직 분리
-    private void assertFareForDistance(int distance, Long expectedFare) {
+    private void assertFareForDistance(int distance, long expectedFare) {
         // when
         Fare fare = Fare.from(distance);
 
