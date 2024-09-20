@@ -1,7 +1,7 @@
-package nextstep.path.unit;
+package nextstep.fare.unit;
 
-import nextstep.path.domain.Fare;
-import nextstep.path.domain.LessThanMinimumDistanceException;
+import nextstep.fare.domain.Fare;
+import nextstep.fare.domain.LessThanMinimumDistanceException;
 import org.assertj.core.api.ThrowableAssert.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package nextstep.path.domain;
+package nextstep.fare.domain;
 
 import java.util.Objects;
 

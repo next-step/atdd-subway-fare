@@ -1,6 +1,6 @@
 package nextstep.path.application.dto;
 
-import nextstep.path.domain.Fare;
+import nextstep.fare.domain.Fare;
 import nextstep.station.application.dto.StationResponse;
 
 import java.util.List;

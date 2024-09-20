@@ -1,4 +1,4 @@
-package nextstep.path.domain;
+package nextstep.fare.domain;
 
 public class LessThanMinimumDistanceException extends IllegalStateException {
 
