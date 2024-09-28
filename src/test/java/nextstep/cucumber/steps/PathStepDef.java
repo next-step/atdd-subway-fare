@@ -72,10 +72,23 @@ public class PathStepDef implements En {
     context.response = PathCommonApi.findLinePath(upStationId, downStationId, "DURATION");
   }
 
+  @When("{string}에서 {string}까지의 최단 거리 경로 조회를 요청")
+  public void 출발역에서_도착역까지의_최단_거리_기준_경로_조회(String upStation, String downStation) {
+    Long upStationId = ((StationResponse) context.store.get(upStation)).getId();
+    Long downStationId = ((StationResponse) context.store.get(downStation)).getId();
+    context.response = PathCommonApi.findLinePath(upStationId, downStationId, "DISTANCE");
+  }
+
   @Then("최소 시간 기준 경로를 응답")
   public void 최소_시간_경로_응답(DataTable dataTable) {
     Map<String, String> data = dataTable.asMap();
     assertThat(context.response.jsonPath().getLong("transitTime")).isEqualTo(Long.parseLong(data.get("transitTime")));
+  }
+
+  @Then("최단 거리 기준 경로를 응답")
+  public void 최단_거리_경로_응답(DataTable dataTable) {
+    Map<String, String> data = dataTable.asMap();
+    assertThat(context.response.jsonPath().getLong("distance")).isEqualTo(Long.parseLong(data.get("distance")));
   }
 
   @Then("총 거리와 소요 시간을 함께 응답함")
@@ -83,5 +96,13 @@ public class PathStepDef implements En {
     PathResponse pathResponse = context.response.as(PathResponse.class);
     assertThat(pathResponse.getDistance()).isNotNull();
     assertThat(pathResponse.getTransitTime()).isNotNull();
+  }
+
+  @Then("지하철 이용 요금도 함께 응답함")
+  public void 지하철_이용_요금도_함께_응답(DataTable dataTable) {
+    Map<String, String> data = dataTable.asMap();
+    PathResponse pathResponse = context.response.as(PathResponse.class);
+    assertThat(pathResponse.getFare()).isNotNull();
+    assertThat(pathResponse.getFare()).isEqualTo(Long.parseLong(data.get("fare")));
   }
 }
