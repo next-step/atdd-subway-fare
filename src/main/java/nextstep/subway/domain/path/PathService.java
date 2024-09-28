@@ -48,7 +48,7 @@ public class PathService {
 
         // 거리, 소요시간을 구하는 방식을 서비스에서 분기로 처리하면 코드가 너무 더러워질 것 같아
         // pathFinder가 각 데이터를 반환하는 방식으로 변경
-        return new PathResponse(stationResponses, pathFinder.getDistance(), pathFinder.getTransitTime());
+        return new PathResponse(stationResponses, pathFinder.getDistance(), pathFinder.getTransitTime(), pathFinder.getFare());
     }
 
     private PathFinder getPathFinder(String type) {

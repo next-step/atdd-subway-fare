@@ -46,4 +46,15 @@ public class LeastDistanceFinder extends PathFinder {
                 .mapToLong(sectionEdge -> sectionEdge.getSection().getTransitTime())
                 .sum();
     }
+
+    @Override
+    Long getFare() {
+        List<SectionEdge> edgeList = path.getEdgeList();
+
+        if (edgeList.isEmpty()) {
+            return null;
+        }
+
+        return calculateFare((long) path.getWeight());
+    }
 }
