@@ -6,6 +6,7 @@ import nextstep.subway.domain.path.LeastTimeFinder;
 import nextstep.subway.domain.path.PathFinder;
 import nextstep.subway.domain.section.Section;
 import nextstep.subway.domain.station.Station;
+import nextstep.subway.utils.SubwayFixture;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static nextstep.subway.utils.SubwayFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("경로 조회기능 단위 테스트")
@@ -32,16 +34,16 @@ public class PathTest {
 
     @BeforeEach
     void setUp() {
-        교대역 = new Station(1L, "교대역");
-        강남역 = new Station(2L, "강남역");
-        양재역 = new Station(3L, "양재역");
-        남부터미널역 = new Station(4L, "남부터미널역");
-        석남역 = new Station(5L, "석남역");
+        교대역 = createStation(1L, "교대역");
+        강남역 = createStation(2L, "강남역");
+        양재역 = createStation(3L, "양재역");
+        남부터미널역 = createStation(4L, "남부터미널역");
+        석남역 = createStation(5L, "석남역");
 
-        이호선 = new Line("2호선", "green", new Section(교대역, 강남역, 10, 8));
-        신분당선 = new Line("신분당선", "green", new Section(강남역, 양재역, 10, 10));
-        삼호선 = new Line("3호선", "green", new Section(교대역, 남부터미널역, 2, 4));
-        삼호선.addSection(new Section(남부터미널역, 양재역, 3, 10));
+        이호선 = createLine("2호선", "green", createSection(교대역, 강남역, 10, 8));
+        신분당선 = createLine("신분당선", "green", createSection(강남역, 양재역, 10, 10));
+        삼호선 = createLine("3호선", "green", createSection(교대역, 남부터미널역, 2, 4));
+        삼호선.addSection(createSection(남부터미널역, 양재역, 3, 10));
 
         구간_목록 = List.of(이호선, 신분당선, 삼호선).stream()
                 .map(Line::getSections)
