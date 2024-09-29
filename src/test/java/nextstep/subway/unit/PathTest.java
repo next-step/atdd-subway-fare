@@ -75,6 +75,25 @@ public class PathTest {
             assertThat(stations.size()).isEqualTo(3);
             assertThat(transitTime).isEqualTo(14);
         }
+
+        @DisplayName("연결된 역에 대해 경로를 탐색하면 경로와 함께 요금 정보를 반환한다.")
+        @Test
+        void fare() {
+            // 경로 탐색
+            PathFinder pathFinder = new LeastDistanceFinder();
+            GraphPath graphPath = pathFinder.findPath(교대역, 양재역, 구간_목록).get();
+            List stations = graphPath.getVertexList();
+            Long distance = (long) graphPath.getWeight();
+
+            // pathFinder의 getFare() 메서드를 직접 사용하기 위해 pathFinder 내부의 추상 메서드의 접근제어자를 public으로 변경
+            // 테스트를 위해 default 접근 제어자를 public으로 변경하는 것이 과연 올바른 일일까?
+            Long fare = pathFinder.getFare();
+
+            assertThat(stations.size()).isEqualTo(3);
+            assertThat(distance).isEqualTo(5L);
+            assertThat(fare).isNotNull();
+            assertThat(fare).isEqualTo(1250L);
+        }
     }
 
     @DisplayName("경로 탐색 실패 케이스")

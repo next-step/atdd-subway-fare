@@ -39,11 +39,11 @@ public abstract class PathFinder {
 
     abstract void setUpWeightedEdges(List<Section> edges);
 
-    abstract Long getDistance();
+    public abstract Long getDistance();
 
-    abstract Long getTransitTime();
+    public abstract Long getTransitTime();
 
-    abstract Long getFare();
+    public abstract Long getFare();
 
     long calculateFare(long distance) {
         long fare = 1250L;
