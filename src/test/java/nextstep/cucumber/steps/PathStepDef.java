@@ -46,8 +46,8 @@ public class PathStepDef implements En {
     context.response = PathCommonApi.findLinePath(sameStationId, sameStationId, "DISTANCE");
   }
 
-  @Then("지하철역 경로 탐색에 실패하고, 에러 Http Status를 반환한다.")
-  public void 지하철역_경로_탐색에_실패하고_에러_http_status를_반환한다() {
+  @Then("지하철역 경로 탐색에 실패한다.")
+  public void 지하철역_경로_탐색에_실패한다() {
     assertThat(context.response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
   }
 
