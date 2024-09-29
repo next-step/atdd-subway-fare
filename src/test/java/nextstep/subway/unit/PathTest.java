@@ -4,6 +4,7 @@ import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.LeastDistanceFinder;
 import nextstep.subway.domain.path.LeastTimeFinder;
 import nextstep.subway.domain.path.PathFinder;
+import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.section.Section;
 import nextstep.subway.domain.station.Station;
 import nextstep.subway.utils.SubwayFixture;
@@ -123,6 +124,22 @@ public class PathTest {
             PathFinder pathFinder = new LeastDistanceFinder();
             assertThatThrownBy(() -> pathFinder.findPath(교대역, 교대역, 구간_목록).get().getVertexList())
                     .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @DisplayName("경로 탐색 구현체 주입 테스트")
+    @Nested
+    class pathFinderTest {
+        @DisplayName("최소 시간 경로 탐색 구현체를 주입받는다.")
+        @Test
+        void getLeastTimeFinder() {
+            assertThat(PathType.from("DURATION").findPathFinder()).isInstanceOf(LeastTimeFinder.class);
+        }
+
+        @DisplayName("최단 경로 탐색 구현체를 주입받는다.")
+        @Test
+        void getLeastDistanceFinder() {
+            assertThat(PathType.from("DISTANCE").findPathFinder()).isInstanceOf(LeastDistanceFinder.class);
         }
     }
 }
