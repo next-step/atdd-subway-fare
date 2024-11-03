@@ -5,7 +5,7 @@ import java.util.Map;
 import nextstep.auth.domain.LoginMember;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.line.Fare;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.line.LineRepository;
 import nextstep.subway.domain.path.dto.PathResponse;

@@ -1,7 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.line.Fare;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.section.Section;
 import nextstep.subway.domain.station.Station;

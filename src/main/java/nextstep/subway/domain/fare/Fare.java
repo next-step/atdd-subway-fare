@@ -1,10 +1,10 @@
-package nextstep.subway.domain.line;
+package nextstep.subway.domain.fare;
 
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberType;
+import nextstep.subway.domain.line.Line;
 
 import java.util.List;
-import java.util.Optional;
 
 public class Fare {
     private static final long DEFAULT_FARE = 1250L;

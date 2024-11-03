@@ -1,6 +1,6 @@
 package nextstep.subway.unit;
 
-import nextstep.subway.domain.line.Fare;
+import nextstep.subway.domain.fare.Fare;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.LeastDistanceFinder;
 import nextstep.subway.domain.path.LeastTimeFinder;
@@ -8,7 +8,6 @@ import nextstep.subway.domain.path.PathFinder;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.section.Section;
 import nextstep.subway.domain.station.Station;
-import nextstep.subway.utils.SubwayFixture;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
