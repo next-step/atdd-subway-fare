@@ -2,10 +2,12 @@ package nextstep.subway.domain.path;
 
 import java.util.Map;
 
-import nextstep.auth.domain.LoginMember;
+import nextstep.auth.domain.Account;
 import nextstep.member.application.MemberService;
 import nextstep.member.domain.Member;
 import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FarePolicyContext;
+import nextstep.subway.domain.fare.FarePolicyManager;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.line.LineRepository;
 import nextstep.subway.domain.path.dto.PathResponse;
@@ -26,16 +28,18 @@ public class PathService {
     private StationRepository stationRepository;
     private LineRepository lineRepository;
     private Map<String, PathFinder> finders;
+    private FarePolicyManager farePolicyManager;
 
-    public PathService(MemberService memberService, StationRepository stationRepository, LineRepository lineRepository, Map<String, PathFinder> finders) {
+    public PathService(MemberService memberService, StationRepository stationRepository, LineRepository lineRepository, Map<String, PathFinder> finders, FarePolicyManager farePolicyManager) {
         this.memberService = memberService;
         this.stationRepository = stationRepository;
         this.lineRepository = lineRepository;
         this.finders = finders;
+        this.farePolicyManager = farePolicyManager;
     }
 
-    public PathResponse findPath(Long source, Long tartget, String type, LoginMember loginMember) {
-        Member member = memberService.findMemberByEmail(loginMember.getEmail()).orElse(null);
+    public PathResponse findPath(Long source, Long tartget, String type, Account account) {
+        Member member = memberService.findMemberByEmail(account.getEmail()).orElse(null);
 
         List<Line> lines = lineRepository.findAll();
         List<Section> sections = lines.stream()
@@ -56,10 +60,13 @@ public class PathService {
 
         Long distance = pathFinder.getDistance();
         Long transitTime = pathFinder.getTransitTime();
-        Fare fare = new Fare();
-        fare.calculateDistanceBasedFare(distance, lines, member);
 
-        return new PathResponse(stationResponses, distance, transitTime, fare.getFare());
+        // 기본 요금을 가진 fare객체 생성
+        Fare fare = new Fare();
+        FarePolicyContext context = new FarePolicyContext(distance, lines, member);
+        Fare resultFare = farePolicyManager.calculateFare(context, fare);
+
+        return new PathResponse(stationResponses, distance, transitTime, resultFare.getFare());
     }
 
     public Station findByStationId(Long stationId) {
