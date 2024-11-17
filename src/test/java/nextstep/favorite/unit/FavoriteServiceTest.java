@@ -102,7 +102,7 @@ public class FavoriteServiceTest {
         void 즐겨찾기_생성() {
             //given
             var 신규_즐겨찾기 = new FavoriteRequest(교대역.getId(), 양재역.getId());
-            var 로그인_정보 =  new LoginMember("testemail@test.com");
+            var 로그인_정보 = new LoginMember("testemail@test.com");
 
             //when
             var 즐겨찾기_생성_결과 = favoriteService.createFavorite(신규_즐겨찾기, 로그인_정보);
@@ -116,7 +116,7 @@ public class FavoriteServiceTest {
         void 즐겨찾기_조회() {
             즐겨찾기_생성();
 
-            var 로그인_정보 =  new LoginMember("testemail@test.com");
+            var 로그인_정보 = new LoginMember("testemail@test.com");
             var 즐겨찾기_목록 = favoriteService.findFavorites(로그인_정보);
 
             assertThat(즐겨찾기_목록.size()).isGreaterThan(0);
@@ -127,7 +127,7 @@ public class FavoriteServiceTest {
         void 즐겨찾기_삭제() {
             //given
             var 신규_즐겨찾기 = new FavoriteRequest(교대역.getId(), 양재역.getId());
-            var 로그인_정보 =  new LoginMember("testemail@test.com");
+            var 로그인_정보 = new LoginMember("testemail@test.com");
             var 즐겨찾기_생성_결과 = favoriteService.createFavorite(신규_즐겨찾기, 로그인_정보);
 
             //when

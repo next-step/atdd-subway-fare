@@ -1,8 +1,8 @@
 package nextstep.member.application;
 
+import nextstep.auth.domain.Account;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
-import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -40,8 +40,8 @@ public class MemberService {
         return memberRepository.findByEmail(email);
     }
 
-    public MemberResponse findMe(LoginMember loginMember) {
-        return memberRepository.findByEmail(loginMember.getEmail())
+    public MemberResponse findMe(Account account) {
+        return memberRepository.findByEmail(account.getEmail())
                 .map(it -> MemberResponse.of(it))
                 .orElseThrow(RuntimeException::new);
     }

@@ -1,6 +1,6 @@
 package nextstep.favorite.domain;
 
-import nextstep.auth.domain.LoginMember;
+import nextstep.auth.domain.Account;
 import nextstep.member.domain.Member;
 import nextstep.subway.domain.station.Station;
 
@@ -49,8 +49,8 @@ public class Favorite {
         return member;
     }
 
-    public boolean isNotRegister(LoginMember loginMember) {
-        return !this.member.getEmail().equals(loginMember.getEmail());
+    public boolean isNotRegister(Account account) {
+        return !this.member.getEmail().equals(account.getEmail());
     }
 
     public boolean isSamePath(Station source, Station target) {

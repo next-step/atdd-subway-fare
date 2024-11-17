@@ -2,6 +2,7 @@ package nextstep.auth.ui;
 
 import nextstep.auth.AuthenticationException;
 import nextstep.auth.application.JwtTokenProvider;
+import nextstep.auth.domain.GuestMember;
 import nextstep.auth.domain.LoginMember;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -30,8 +31,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         // 비로그인 유저 요청을 허용한 경우 인증 헤더가 null인 경우만 비회원 객체를 반환
         if (annotation.acceptGuestRequest()) {
             if (authorization == null) {
-                // 비로그인 상태
-                return new LoginMember("");
+                return new GuestMember();
             }
         }
 

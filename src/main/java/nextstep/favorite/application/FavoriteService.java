@@ -1,12 +1,12 @@
 package nextstep.favorite.application;
 
+import nextstep.auth.domain.Account;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.dto.FavoriteResponse;
 import nextstep.favorite.domain.Favorite;
 import nextstep.favorite.domain.FavoriteRepository;
 import nextstep.auth.AuthenticationException;
 import nextstep.member.application.MemberService;
-import nextstep.auth.domain.LoginMember;
 import nextstep.member.domain.Member;
 import nextstep.subway.domain.path.PathService;
 import nextstep.subway.domain.station.Station;
@@ -30,13 +30,13 @@ public class FavoriteService {
         this.pathService = pathService;
     }
 
-    public FavoriteResponse createFavorite(FavoriteRequest request, LoginMember loginMember) {
-        Member member = memberService.findMemberByEmail(loginMember.getEmail())
+    public FavoriteResponse createFavorite(FavoriteRequest request, Account account) {
+        Member member = memberService.findMemberByEmail(account.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원의 요청입니다."));
 
         Station sourceStation = stationService.findByStationId(request.getSource());
         Station targetStation = stationService.findByStationId(request.getTarget());
-        pathService.findPath(sourceStation.getId(), targetStation.getId(), "DISTANCE", loginMember);
+        pathService.findPath(sourceStation.getId(), targetStation.getId(), "DISTANCE", account);
 
         favoriteRepository.findAllByMember(member).stream()
                 .filter(favorite -> favorite.isSamePath(sourceStation, targetStation))
@@ -49,17 +49,17 @@ public class FavoriteService {
         return FavoriteResponse.of(save);
     }
 
-    public List<FavoriteResponse> findFavorites(LoginMember loginMember) {
-        Member member = memberService.findMemberByEmail(loginMember.getEmail())
+    public List<FavoriteResponse> findFavorites(Account account) {
+        Member member = memberService.findMemberByEmail(account.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원의 요청입니다."));
         return favoriteRepository.findAllByMember(member).stream()
                 .map(FavoriteResponse::of)
                 .collect(Collectors.toList());
     }
 
-    public void deleteFavorite(Long id, LoginMember loginMember) {
+    public void deleteFavorite(Long id, Account account) {
         favoriteRepository.findById(id).ifPresent(favorite -> {
-            if (favorite.isNotRegister(loginMember)) {
+            if (favorite.isNotRegister(account)) {
                 throw new AuthenticationException();
             }
         });
