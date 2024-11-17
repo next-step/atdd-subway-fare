@@ -1,7 +1,7 @@
 package nextstep.subway.unit;
 
 import nextstep.member.domain.Member;
-import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.*;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.section.Section;
 import nextstep.subway.domain.station.Station;
@@ -54,74 +54,96 @@ public class FareTest {
         @DisplayName("10km 이내는 기본 운임만 부과된다.")
         @Test
         void distanceFareCase1() {
-            Fare fare = new Fare();
-            fare.calculateDistanceBasedFare(9);
+            Fare initFare = new Fare();
+            FarePolicy farePolicy = new DistanceFarePolicy();
+            FarePolicyContext context = new FarePolicyContext(9L, null, null);
+            Fare fare = farePolicy.invoke(context, initFare);
+
             assertThat(fare.getFare()).isEqualTo(1250L);
         }
 
         @DisplayName("10km 초과 ~ 50km까지 5km마다 100원이 추가 부과된다.")
         @Test
         void distanceFareCase2() {
-            Fare fare = new Fare();
-            fare.calculateDistanceBasedFare(15);
+            Fare initFare = new Fare();
+            FarePolicy farePolicy = new DistanceFarePolicy();
+            FarePolicyContext context = new FarePolicyContext(15L, null, null);
+            Fare fare = farePolicy.invoke(context, initFare);
+
             assertThat(fare.getFare()).isEqualTo(1350L);
 
-            fare = new Fare();
-            fare.calculateDistanceBasedFare(35);
+            initFare = new Fare();
+            context = new FarePolicyContext(35L, null, null);
+            fare = farePolicy.invoke(context, initFare);
             assertThat(fare.getFare()).isEqualTo(1750L);
 
-            fare = new Fare();
-            fare.calculateDistanceBasedFare(50);
+            initFare = new Fare();
+            context = new FarePolicyContext(50L, null, null);
+            fare = farePolicy.invoke(context, initFare);
             assertThat(fare.getFare()).isEqualTo(2050L);
         }
 
         @DisplayName("50Km 초과 시 8km마다 100이 추가 부과된다.")
         @Test
         void distanceFareCase3() {
-            Fare fare = new Fare();
-            fare.calculateDistanceBasedFare(50);
+            Fare initFare = new Fare();
+            FarePolicy farePolicy = new DistanceFarePolicy();
+            FarePolicyContext context = new FarePolicyContext(50L, null, null);
+            Fare fare = farePolicy.invoke(context, initFare);
             assertThat(fare.getFare()).isEqualTo(2050L);
 
-            fare = new Fare();
-            fare.calculateDistanceBasedFare(55);
+            initFare = new Fare();
+            context = new FarePolicyContext(55L, null, null);
+            fare = farePolicy.invoke(context, initFare);
             assertThat(fare.getFare()).isEqualTo(2150L);
 
-            fare = new Fare();
-            fare.calculateDistanceBasedFare(58);
+            initFare = new Fare();
+            context = new FarePolicyContext(58L, null, null);
+            fare = farePolicy.invoke(context, initFare);
             assertThat(fare.getFare()).isEqualTo(2150L);
 
-            fare = new Fare();
-            fare.calculateDistanceBasedFare(59);
+            initFare = new Fare();
+            context = new FarePolicyContext(59L, null, null);
+            fare = farePolicy.invoke(context, initFare);
             assertThat(fare.getFare()).isEqualTo(2250L);
         }
 
         @DisplayName("경로 조회 시 추가 요금이 있는 노선이 포함되는 경우 가장 높은 추가 요금을 가진 노선의 요금만 반영된다.")
         @Test
         void additionalFare() {
-            Fare fare = new Fare();
+            Fare initFare = new Fare();
+            FarePolicy farePolicy = new AdditionalFarePolicy();
             List<Line> lines = List.of(이호선, 신분당선, 삼호선);
-            fare.calculateDistanceBasedFare(35, lines);
+            FarePolicyContext context = new FarePolicyContext(null, lines, null);
+            Fare fare = farePolicy.invoke(context, initFare);
+
             assertThat(fare.getFare()).isEqualTo(2130);
         }
 
         @DisplayName("경로 조회 시 청소년 로그인 사용자의 경우 350원을 공제한 금액의 20% 할인이 적용된다.")
         @Test
         void teenagerDiscount() {
-            Fare fare = new Fare();
-            List<Line> lines = List.of(이호선, 신분당선, 삼호선);
+            Fare initFare = new Fare();
+            FarePolicy farePolicy = new AgeDiscountFarePolicy();
+
             Member member = new Member("testemail@email.com", "testpassword", 13);
-            fare.calculateDistanceBasedFare(35, lines, member);
-            assertThat(fare.getFare()).isEqualTo(1424);
+            FarePolicyContext context = new FarePolicyContext(null, null, member);
+
+            Fare fare = farePolicy.invoke(context, initFare);
+            assertThat(fare.getFare()).isEqualTo(720);
         }
 
         @DisplayName("경로 조회 시 청소년 로그인 사용자의 경우 350원을 공제한 금액의 50% 할인이 적용된다.")
         @Test
         void childrenDiscount() {
-            Fare fare = new Fare();
-            List<Line> lines = List.of(이호선, 신분당선, 삼호선);
+            Fare initFare = new Fare();
+            FarePolicy farePolicy = new AgeDiscountFarePolicy();
+
             Member member = new Member("testemail@email.com", "testpassword", 12);
-            fare.calculateDistanceBasedFare(35, lines, member);
-            assertThat(fare.getFare()).isEqualTo(890);
+            FarePolicyContext context = new FarePolicyContext(null, null, member);
+
+            Fare fare = farePolicy.invoke(context, initFare);
+            assertThat(fare.getFare()).isEqualTo(450);
         }
     }
 }

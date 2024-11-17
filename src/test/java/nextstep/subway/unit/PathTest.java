@@ -1,6 +1,8 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.fare.DistanceFarePolicy;
 import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FarePolicyContext;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.LeastDistanceFinder;
 import nextstep.subway.domain.path.LeastTimeFinder;
@@ -88,8 +90,10 @@ public class PathTest {
             List stations = graphPath.getVertexList();
             Long distance = (long) graphPath.getWeight();
 
-            Fare fare = new Fare();
-            fare.calculateDistanceBasedFare(distance);
+            Fare initFare = new Fare();
+            DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy();
+            FarePolicyContext context = new FarePolicyContext(distance, null, null);
+            Fare fare = distanceFarePolicy.invoke(context, initFare);
 
             assertThat(stations.size()).isEqualTo(3);
             assertThat(distance).isEqualTo(5L);
