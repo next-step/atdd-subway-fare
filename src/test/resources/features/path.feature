@@ -1,6 +1,10 @@
 Feature: 지하철역 경로 탐색 관련 기능
   Background: 지하철 노선 초기 데이터 설정
-    Given 지하철역을 생성하고
+    Given 연령별 회원을 등록하고
+    | email | password | age |
+    | testemail@email.com | 1234 | 8 |
+    | testemail1@email.com | 1234 | 13 |
+    And 지하철역을 생성하고
     | name |
     | 교대역  |
     | 강남역  |
@@ -9,14 +13,14 @@ Feature: 지하철역 경로 탐색 관련 기능
     | 남부터미널역|
     | 석남역   |
     And 지하철 노선을 생성하고
-    | name | color | upStation | downStation | distance | transitTime |
-    | 2호선  | green | 교대역       | 강남역         | 10       | 6           |
-    | 신분당선 | red   | 강남역       | 양재역         | 4        | 3           |
-    | 3호선  | orange| 교대역       | 남부터미널역      | 6        | 2           |
+    | name | color | upStation | downStation | distance | transitTime | additionalFare |
+    | 2호선  | green | 교대역       | 강남역         | 20       | 6           | 500            |
+    | 신분당선 | red   | 강남역       | 양재역         | 14        | 3           | 880            |
+    | 3호선  | orange| 교대역       | 남부터미널역      | 16        | 2           | 250            |
     And 구간을 추가한다
     | name | upStation | downStation | distance | transitTime |
-    | 2호선  | 강남역       | 역삼역         | 2        | 5           |
-    | 3호선  | 남부터미널역    | 양재역         | 3        | 4           |
+    | 2호선  | 강남역       | 역삼역         | 12        | 5           |
+    | 3호선  | 남부터미널역    | 양재역         | 13        | 4           |
 
   Scenario: 지하철 경로 탐색에 성공한다.
     When "남부터미널역"과 "역삼역"의 경로 탐색을 수행하면
@@ -43,7 +47,21 @@ Feature: 지하철역 경로 탐색 관련 기능
   Scenario: 두 역의 최단 거리 경로를 조회
     When "교대역"에서 "양재역"까지의 최단 거리 경로 조회를 요청
     Then 최단 거리 기준 경로를 응답
-    | distance | 9 |
+    | distance | 29 |
     And 총 거리와 소요 시간을 함께 응답함
     And 지하철 이용 요금도 함께 응답함
-    | fare | 1250 |
+    | fare | 2530 |
+
+  Scenario: 청소년 사용자가 경로를 조회
+    When 청소년 사용자가 "교대역"에서 "양재역"까지의 최단 거리 경로 조회를 요청
+    Then 최단 거리 기준 경로를 응답
+    | distance | 29 |
+    And 20퍼센트 할인된 요금도 함께 응답함
+    | fare | 1744 |
+
+  Scenario: 어린이 사용자가 경로를 조회
+    When 어린이 사용자가 "교대역"에서 "양재역"까지의 최단 거리 경로 조회를 요청
+    Then 최단 거리 기준 경로를 응답
+    | distance | 29 |
+    And 50퍼센트 할인된 요금도 함께 응답함
+    | fare | 1090 |

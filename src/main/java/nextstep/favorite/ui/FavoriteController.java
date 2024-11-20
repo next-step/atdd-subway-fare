@@ -1,9 +1,9 @@
 package nextstep.favorite.ui;
 
+import nextstep.auth.domain.Account;
 import nextstep.favorite.application.FavoriteService;
 import nextstep.favorite.application.dto.FavoriteRequest;
 import nextstep.favorite.application.dto.FavoriteResponse;
-import nextstep.auth.domain.LoginMember;
 import nextstep.auth.ui.AuthenticationPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +20,22 @@ public class FavoriteController {
     }
 
     @PostMapping("/favorites")
-    public ResponseEntity<FavoriteResponse> createFavorite(@RequestBody FavoriteRequest favoriteRequest, @AuthenticationPrincipal LoginMember loginMember) {
-        FavoriteResponse response = favoriteService.createFavorite(favoriteRequest, loginMember);
+    public ResponseEntity<FavoriteResponse> createFavorite(@RequestBody FavoriteRequest favoriteRequest, @AuthenticationPrincipal Account account) {
+        FavoriteResponse response = favoriteService.createFavorite(favoriteRequest, account);
         return ResponseEntity
                 .created(URI.create("/favorites/" + response.getId()))
                 .body(response);
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember) {
-        List<FavoriteResponse> favorites = favoriteService.findFavorites(loginMember);
+    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal Account account) {
+        List<FavoriteResponse> favorites = favoriteService.findFavorites(account);
         return ResponseEntity.ok().body(favorites);
     }
 
     @DeleteMapping("/favorites/{id}")
-    public ResponseEntity deleteFavorite(@PathVariable Long id, @AuthenticationPrincipal LoginMember loginMember) {
-        favoriteService.deleteFavorite(id, loginMember);
+    public ResponseEntity deleteFavorite(@PathVariable Long id, @AuthenticationPrincipal Account account) {
+        favoriteService.deleteFavorite(id, account);
         return ResponseEntity.noContent().build();
     }
 }

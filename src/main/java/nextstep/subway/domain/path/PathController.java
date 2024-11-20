@@ -1,5 +1,7 @@
 package nextstep.subway.domain.path;
 
+import nextstep.auth.domain.Account;
+import nextstep.auth.ui.AuthenticationPrincipal;
 import nextstep.subway.domain.path.dto.PathResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,10 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findLinePath(@RequestParam Long source, @RequestParam Long target, @RequestParam String type) {
-        return ResponseEntity.ok(pathService.findPath(source, target, type));
+    public ResponseEntity<PathResponse> findLinePath(@AuthenticationPrincipal(acceptGuestRequest = true) Account account,
+                                                     @RequestParam Long source,
+                                                     @RequestParam Long target,
+                                                     @RequestParam String type) {
+        return ResponseEntity.ok(pathService.findPath(source, target, type, account));
     }
 }

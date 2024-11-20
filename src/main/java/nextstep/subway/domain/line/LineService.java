@@ -30,7 +30,7 @@ public class LineService {
         Station upwardStation = stationService.findByStationId(request.getUpwardStationId());
         Station downwardStation = stationService.findByStationId(request.getDownwardStationId());
 
-        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), new Section(upwardStation, downwardStation, request.getDistance(), request.getTransitTime())));
+        Line line = lineRepository.save(new Line(request.getName(), request.getColor(), new Section(upwardStation, downwardStation, request.getDistance(), request.getTransitTime()), request.getAdditionalFare()));
 
         return LineResponse.of(line);
     }

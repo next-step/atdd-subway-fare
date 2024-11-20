@@ -28,7 +28,8 @@ public class LineStepDef implements En {
           ((StationResponse) context.store.get(e.get("upStation"))).getId(),
           ((StationResponse) context.store.get(e.get("downStation"))).getId(),
           Integer.parseInt(e.get("distance")),
-          Integer.parseInt(e.get("transitTime")));
+          Integer.parseInt(e.get("transitTime")),
+          Long.parseLong(e.get("additionalFare")));
       var lineId = LineCommonApi.createLine(request).jsonPath().getLong("id");
       context.store.put(e.get("name"), lineId);
     });

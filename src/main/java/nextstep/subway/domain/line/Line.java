@@ -18,6 +18,8 @@ public class Line {
     private String color;
     @Embedded
     private Sections sections = new Sections();
+    @Column
+    private Long additionalFare;
 
     public Line() {
     }
@@ -26,6 +28,14 @@ public class Line {
         this.name = name;
         this.color = color;
         sections.add(section);
+        this.additionalFare = 0L;
+    }
+
+    public Line(String name, String color, Section section, Long additionalFare) {
+        this.name = name;
+        this.color = color;
+        sections.add(section);
+        this.additionalFare = additionalFare;
     }
 
     public void update(String name, String color) {
@@ -59,5 +69,9 @@ public class Line {
 
     public List<Station> getStations() {
         return sections.getStations();
+    }
+
+    public Long getAdditionalFare() {
+        return additionalFare;
     }
 }

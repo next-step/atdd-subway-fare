@@ -1,10 +1,10 @@
 package nextstep.member.ui;
 
+import nextstep.auth.domain.Account;
 import nextstep.auth.ui.AuthenticationPrincipal;
 import nextstep.member.application.MemberService;
 import nextstep.member.application.dto.MemberRequest;
 import nextstep.member.application.dto.MemberResponse;
-import nextstep.auth.domain.LoginMember;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,8 +43,8 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        MemberResponse memberResponse = memberService.findMe(loginMember);
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal Account account) {
+        MemberResponse memberResponse = memberService.findMe(account);
         return ResponseEntity.ok().body(memberResponse);
     }
 }

@@ -42,30 +42,4 @@ public abstract class PathFinder {
     public abstract Long getDistance();
 
     public abstract Long getTransitTime();
-
-    public abstract Long getFare();
-
-    long calculateFare(long distance) {
-        long fare = 1250L;
-        if (distance <= 10) {
-            return fare;
-        }
-
-        if (distance > 10 && distance <= 50) {
-            long until50km = distance - 10;
-            fare += (long) ((Math.ceil((until50km - 1) / 5) + 1) * 100);
-        }
-
-        if (distance > 50) {
-            // 50km까지 요금
-            long until50km = 40;
-            fare += (long) ((Math.ceil((until50km - 1) / 5) + 1) * 100);
-
-            // 50km 초과 요금
-            long over50km = distance - 50;
-            fare += (long) ((Math.ceil((over50km - 1) / 8) + 1) * 100);
-        }
-
-        return fare;
-    }
 }

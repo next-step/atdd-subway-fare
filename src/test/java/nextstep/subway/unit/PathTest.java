@@ -1,5 +1,8 @@
 package nextstep.subway.unit;
 
+import nextstep.subway.domain.fare.DistanceFarePolicy;
+import nextstep.subway.domain.fare.Fare;
+import nextstep.subway.domain.fare.FarePolicyContext;
 import nextstep.subway.domain.line.Line;
 import nextstep.subway.domain.path.LeastDistanceFinder;
 import nextstep.subway.domain.path.LeastTimeFinder;
@@ -7,7 +10,6 @@ import nextstep.subway.domain.path.PathFinder;
 import nextstep.subway.domain.path.PathType;
 import nextstep.subway.domain.section.Section;
 import nextstep.subway.domain.station.Station;
-import nextstep.subway.utils.SubwayFixture;
 import org.jgrapht.GraphPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -88,14 +90,15 @@ public class PathTest {
             List stations = graphPath.getVertexList();
             Long distance = (long) graphPath.getWeight();
 
-            // pathFinder의 getFare() 메서드를 직접 사용하기 위해 pathFinder 내부의 추상 메서드의 접근제어자를 public으로 변경
-            // 테스트를 위해 default 접근 제어자를 public으로 변경하는 것이 과연 올바른 일일까?
-            Long fare = pathFinder.getFare();
+            Fare initFare = new Fare();
+            DistanceFarePolicy distanceFarePolicy = new DistanceFarePolicy();
+            FarePolicyContext context = new FarePolicyContext(distance, null, null);
+            Fare fare = distanceFarePolicy.invoke(context, initFare);
 
             assertThat(stations.size()).isEqualTo(3);
             assertThat(distance).isEqualTo(5L);
-            assertThat(fare).isNotNull();
-            assertThat(fare).isEqualTo(1250L);
+            assertThat(fare.getFare()).isNotNull();
+            assertThat(fare.getFare()).isEqualTo(1250L);
         }
     }
 

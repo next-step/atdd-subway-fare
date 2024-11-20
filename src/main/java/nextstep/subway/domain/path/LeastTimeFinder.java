@@ -46,17 +46,4 @@ public class LeastTimeFinder extends PathFinder {
 
         return (long) path.getWeight();
     }
-
-    @Override
-    public Long getFare() {
-        List<SectionEdge> edgeList = path.getEdgeList();
-
-        if (edgeList.isEmpty()) {
-            return null;
-        }
-
-        return calculateFare(edgeList.stream()
-                .mapToLong(sectionEdge -> sectionEdge.getSection().getDistance())
-                .sum());
-    }
 }

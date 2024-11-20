@@ -13,6 +13,10 @@ public class SubwayFixture {
         return new Line(name, color, section);
     }
 
+    public static Line createLine(String name, String color, Long additionalFare, Section section) {
+        return new Line(name, color, section, additionalFare);
+    }
+
     public static Section createSection(Station upStation, Station downStation) {
         return new Section(upStation, downStation, (int) (Math.random() * 100 + 1), (int) (Math.random() * 100 + 1));
     }
